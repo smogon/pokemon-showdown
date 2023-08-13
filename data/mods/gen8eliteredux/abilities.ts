@@ -26,6 +26,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
 		
 	},
+	battlebond: {
+		inherit: true,
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect?.effectType !== 'Move') {
+				return;
+			}
+			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
+				this.add('-activate', source, 'ability: Battle Bond');
+				source.formeChange('Greninja-Ash', this.effect, true);
+			}
+		},
+		onModifyMovePriority: -1,
+		onModifyMove(move, attacker) {
+			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
+				!attacker.transformed) {
+				move.multihit = 3;
+			}
+		},
+	},
 	baddreams: {
 		inherit: true,
 		onResidual(pokemon) {
@@ -203,6 +222,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "This Pokemon cannot be made to flinch. Immune to Intimidate and Scare. Focus Blast's Accuracy becomes 90",
 
 	},
+	intrepidsword: {
+		inherit: true,
+		onStart(pokemon) {
+			this.boost({atk: 1}, pokemon);
+		},
+		rating: 4,
+	},
 	keeneye: {
 		inherit: true,
 		onModifyAccuracy(accuracy) {
@@ -228,6 +254,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		desc: "This Pokemon is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability. The effects of Gravity, Ingrain, Smack Down, Thousand Arrows, and Iron Ball nullify the immunity. Thousand Arrows can hit this Pokemon as if it did not have this Ability. While levitating, the power of this Pokemon's Flying-type moves are multiplied by 1.25",
 		shortDesc: "This Pokemon is immune to Ground; Gravity/Ingrain/Smack Down/Iron Ball nullify it. 25% boost to Flying moves",
+	},
+	libero: {
+		inherit: true,
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
+			}
+		},
+		onSwitchIn() {},
+		rating: 4.5,
 	},
 	lightningrod: {
 		inherit: true,
@@ -457,6 +496,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	protean: {
+		inherit: true,
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
+			}
+		},
+		onSwitchIn() {},
+		rating: 4.5,
+	},
 	receiver: {
 		inherit: true,
 		onAllyFaint(ally) {
@@ -567,6 +619,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
 		desc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
 
+	},
+	snowwarning: {
+		inherit: true,
+		onStart(source) {
+			this.field.setWeather('hail');
+		},
+		rating: 4,
 	},
 	static: {
 		inherit: true,
