@@ -4238,7 +4238,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Scizor",
 		types: ["Bug", "Steel"],
 		baseStats: {hp: 70, atk: 130, def: 100, spa: 55, spd: 80, spe: 65},
-		abilities: {0: "Regenerator", 1: "Grip Pincer", H: "Intimidate", I1: "Hyper Cutter", I2: "Hyper Cutter", I3: "Buginize"},
+		abilities: {0: "Regenerator", 1: "Grip Pincer", H: "Intimidate", I1: "Technician", I2: "Hyper Cutter", I3: "Buginize"},
 		heightm: 1.8,
 		weightkg: 118,
 		color: "Red",
