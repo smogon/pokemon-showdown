@@ -1383,7 +1383,7 @@ export const Formats: FormatList = [
 			'Mewtwo', 'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Spectrier', 'Sneasler', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta-Base', 'Arena Trap', 'Moody', 'Serene Grace', 'Shadow Tag', 'Damp Rock', 'Heat Rock', 'Baton Pass', 'Beat Up', 'Last Respects',
 		],
-		restricted: ['Dynamic Punch', 'Flail', 'Fury Cutter', 'Grass Knot', 'Heavy Slam', 'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Reversal', 'Spit Up', 'Stored Power', 'Zap Cannon'],
+		restricted: ['Dynamic Punch', 'Flail', 'Flip Turn', 'Fury Cutter', 'Grass Knot', 'Heavy Slam', 'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Reversal', 'Spit Up', 'Stored Power', 'Volt Switch', 'Zap Cannon'],
 		onValidateTeam(team) {
 			const itemTable = new Set<string>();
 			for (const set of team) {
@@ -1426,7 +1426,7 @@ export const Formats: FormatList = [
 			const freezeMove = move.secondaries?.some(secondary => secondary.status === 'frz') || move.id === 'triattack';
 			if (this.ruleTable.isRestricted(`move:${move.id}`) ||
 				((accuracyLoweringMove || move.ohko || move.multihit || move.id === 'beatup' || move.flags['charge'] ||
-					move.priority > 0 || move.damageCallback || flinchMove || freezeMove || move.selfSwitch) &&
+					move.priority > 0 || move.damageCallback || flinchMove || freezeMove) &&
 				!this.ruleTable.has(`+move:${move.id}`))) {
 				problems.push(`The move ${move.name} can't be used as an item.`);
 			}
