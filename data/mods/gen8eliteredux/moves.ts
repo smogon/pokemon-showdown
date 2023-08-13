@@ -1122,11 +1122,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	howl: {
 		inherit: true,
-		flags: {snatch: 1},
-		boosts: {
-			atk: 1,
-		},
-		target: "self",
+		isNonstandard: null,
 	},
 	hydrovortex: {
 		inherit: true,

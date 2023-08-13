@@ -179,6 +179,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		shortDesc: "This Pokemon's allies receive 1/2 damage from other Pokemon's attacks.",
 	},
+	heatproof: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.id === 'brn') {
+				return false;
+			}
+		},
+		desc: "The power of Fire-type attacks against this Pokemon is halved. This Pokemon takes no burn damage and ignores burn's damage reduction.",
+		shortDesc: "The power of Fire-type attacks against this Pokemon is halved; no burn damage.",
+	},
 	hypercutter: {
 		inherit: true,
 		onModifyCritRatio(critRatio) {
@@ -243,10 +253,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	keeneye: {
 		inherit: true,
 		onModifyAccuracy(accuracy) {
-			return this.chainModify(1.1);
+			return this.chainModify(1.2);
 		},
-		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage. This Pokemon has their Accuracy multiplied by 1.1",
-		shortDesc: "10% accuracy boost. This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
+		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage. This Pokemon has their Accuracy multiplied by 1.2",
+		shortDesc: "20% accuracy boost. This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
 		
 	},
 	levitate: {
@@ -896,6 +906,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// 		}
 	// 	},
 	// },
+	victorystar: {
+		inherit: true,
+		onAnyModifyAccuracyPriority: -1,
+		onAnyModifyAccuracy(accuracy, target, source) {
+			if (source.isAlly(this.effectState.target) && typeof accuracy === 'number') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		shortDesc: "This Pokemon and its allies' moves have their accuracy multiplied by 1.2.",
+
+	},
 	waterveil: {
 		inherit: true,
 		onStart(source) {

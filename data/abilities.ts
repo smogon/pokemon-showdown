@@ -5304,14 +5304,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Flying') {
 				this.debug('Antarctic Bird boost');
-				return this.chainModify(1.5);	
+				return this.chainModify([5325, 4096]);
 				}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Flying') {
 				this.debug('Antarctic Bird boost');
-				return this.chainModify(1.5);	
+				return this.chainModify([5325, 4096]);
 			}
 		},
 		name: "Antarctic Bird",
@@ -5562,12 +5562,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (!move.secondaries) move.secondaries = [];
 				for (const secondary of move.secondaries) {
 					if (secondary.volatileStatus === 'confusion' && secondary.chance) { 
-						secondary.chance += 20;
+						secondary.chance += 50;
 						return;
 					} 
 				}
 				move.secondaries.push({
-					chance: 20,
+					chance: 50,
 					volatileStatus: 'confusion',
 				});
 			}
@@ -6870,6 +6870,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				move.target = 'allAdjacentFoes';
 			}
 		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Amplifier boost');
+				return this.chainModify(1.2);
+			}
+		},
 		name: "Amplifier",
 		rating: 4,
 		num: 391,
@@ -6944,6 +6951,20 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.type === 'Fire') {
 				move.forceSTAB = true;
 			}
+		},
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Fire';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		name: "Solar Flare",
 		rating: 4,

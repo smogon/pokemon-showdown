@@ -1548,7 +1548,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	blueflare: {
 		num: 551,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 130,
 		category: "Special",
 		isNonstandard: "Past",
@@ -1619,7 +1619,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	boltstrike: {
 		num: 550,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 130,
 		category: "Physical",
 		isNonstandard: "Past",
@@ -1672,7 +1672,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	bonerush: {
 		num: 198,
 		accuracy: 100,
-		basePower: 25,
+		basePower: 15,
 		category: "Physical",
 		name: "Bone Rush",
 		pp: 10,
@@ -5582,12 +5582,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onHit(target, source, move) {
 			for (const ally of target.adjacentAllies()) {
-				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
+				this.damage(ally.baseMaxhp / 4, ally, source, this.dex.conditions.get('Flame Burst'));
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
 			for (const ally of target.adjacentAllies()) {
-				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
+				this.damage(ally.baseMaxhp / 4, ally, source, this.dex.conditions.get('Flame Burst'));
 			}
 		},
 		secondary: null,
@@ -6182,7 +6182,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	freezedry: {
 		num: 573,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 70,
 		category: "Special",
 		name: "Freeze-Dry",
 		pp: 20,
@@ -13231,7 +13231,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	originpulse: {
 		num: 618,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 110,
 		category: "Special",
 		name: "Origin Pulse",
@@ -14126,8 +14126,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	precipiceblades: {
 		num: 619,
-		accuracy: 85,
-		basePower: 120,
+		accuracy: 100,
+		basePower: 130,
 		category: "Physical",
 		name: "Precipice Blades",
 		pp: 10,
@@ -15820,7 +15820,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	sacredfire: {
 		num: 221,
-		accuracy: 95,
+		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
 		isNonstandard: "Past",
@@ -16522,7 +16522,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	sheercold: {
 		num: 329,
 		accuracy: 80,
-		basePower: 120,
+		basePower: 100,
 		category: "Special",
 		name: "Sheer Cold",
 		pp: 5,
@@ -17535,7 +17535,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	snipeshot: {
 		num: 745,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 90,
 		category: "Special",
 		name: "Snipe Shot",
 		pp: 15,
@@ -20753,10 +20753,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'psn' || target.status === 'tox') {
-				return this.chainModify(2);
+		basePowerCallback(pokemon, target, move) {
+			if (target.status || target.hasAbility('comatose')) {
+				this.debug('BP doubled from status condition');
+				return move.basePower * 2;
 			}
+			return move.basePower;
 		},
 		secondary: null,
 		target: "normal",
@@ -21005,7 +21007,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	watershuriken: {
 		num: 594,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 15,
 		basePowerCallback(pokemon, target, move) {
 			if (pokemon.species.name === 'Greninja-Ash' && pokemon.hasAbility('battlebond') &&
 				!pokemon.transformed) {

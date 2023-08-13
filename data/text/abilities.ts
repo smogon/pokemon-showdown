@@ -2193,7 +2193,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	//Elite Redux
 	antarcticbird: {
 		name: "Antarctic Bird",
-		shortDesc: "This Pokemon's Ice and Flying type moves are boosted by 50%"
+		shortDesc: "This Pokemon's Ice and Flying type moves are boosted by 30%"
 	},
 	burnate: {
 		name: "Burnate",
@@ -2261,7 +2261,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	loudbang: {
 		name: "Loud Bang",
-		shortDesc: "This pokemon's sound-based moves have 20% chance to confuse",
+		shortDesc: "This pokemon's sound-based moves have 50% chance to confuse",
 	},
 	leadcoat: {
 		name: "Lead Coat",
@@ -2616,7 +2616,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	amplifier: {
 		name: "Amplifier",
-		shortDesc: "This Pokemon's single-target pulse sound now hit both foes."
+		shortDesc: "This Pokemon's sound moves are boosted by 20% and hit both foes."
 
 	},
 	icedew: {
