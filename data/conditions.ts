@@ -642,11 +642,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
 			if (pokemon.hasType('Rock') && this.field.isWeather('sandstorm')) {
+				if (this.effectState.effectSource && this.effectState.effectSource === 'Ability') return this.modify(spd, 1.2);
 				return this.modify(spd, 1.5);
 			}
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
+				this.effectState.effectSource = 'Ability';
 				if (this.gen === 8) {
 					if (source?.hasItem('smoothrock')) {
 						this.effectState.duration = 12;
