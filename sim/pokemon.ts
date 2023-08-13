@@ -33,6 +33,7 @@ interface Attacker {
 export interface EffectState {
 	// TODO: set this to be an actual number after converting data/ to .ts
 	duration?: number | any;
+	effectSource?: 'Move' | 'Ability' | 'Condition' | null;
 	[k: string]: any;
 }
 

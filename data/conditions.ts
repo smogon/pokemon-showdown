@@ -472,6 +472,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Water') {
+				if  (this.effectState.effectSource && this.effectState.effectSource === 'Ability') return this.chainModify(1.2)
 				this.debug('rain water boost');
 				return this.chainModify(1.5);
 			}
@@ -482,6 +483,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
+				this.effectState.effectSource = 'Ability';
 				if (this.gen === 8) {
 					if (source?.hasItem('damprock')) {
 						this.effectState.duration = 12;
@@ -552,6 +554,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Fire') {
+				if  (this.effectState.effectSource && this.effectState.effectSource === 'Ability') return this.chainModify(1.2);
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
 			}
@@ -562,6 +565,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
+				this.effectState.effectSource = 'Ability';
 				if (this.gen === 8) {
 					if (source?.hasItem('heatrock')) {
 						this.effectState.duration = 12;
