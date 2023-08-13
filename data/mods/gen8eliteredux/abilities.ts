@@ -86,6 +86,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Fire-type attack, and 1.2 otherwise.",
 
 	},
+	chlorophyll: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		desc: "If Sunny Day is active, this Pokemon's Speed is boosted by 1.5. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Sunny Day is active, this Pokemon's Speed is boosted by 1.5.",
+	},
+
 	colorchange: {
 		onFoePrepareHit(source, target, move) {
 			let bestType;
@@ -570,6 +581,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon's Speed is raised by 2 stages for each of its stat stages that is lowered by an opposing Pokemon.",
 		shortDesc: "This Pokemon's Speed is raised by 2 for each of its stats that is lowered by a foe.",
 	},
+	sandrush: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather('sandstorm')) {
+				return this.chainModify(1.5);
+			}
+		},
+		desc: "If Sandstorm is active, this Pokemon's Speed is boosted by 1.5. This Pokemon takes no damage from Sandstorm.",
+		shortDesc: "If Sandstorm is active, this Pokemon's Speed is boosted by 1.5; immunity to Sandstorm.",
+		
+	},
 	sapsipper: {
 		inherit: true,
 		onTryHit(target, source, move) {
@@ -620,6 +642,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
 
 	},
+	slushrush: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather('hail')) {
+				return this.chainModify(1.5);
+			}
+		},
+		desc: "If Hail is active, this Pokemon's Speed is boosted by 1.5. This Pokemon takes no damage from Hail.",
+		shortDesc: "If Hail is active, this Pokemon's Speed is boosted by 1.5; immunity to Hail.",
+		
+	},
 	snowwarning: {
 		inherit: true,
 		onStart(source) {
@@ -659,6 +692,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	surgesurfer: {
+		inherit: true,
+		onModifySpe(spe) {
+			if (this.field.isTerrain('electricterrain')) {
+				return this.chainModify(1.5);
+			}
+		},
+		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is boosted by 1.5.",
+
+	},
 	swarm: {
 		inherit: true,
 		onModifyAtkPriority: 5,
@@ -688,6 +731,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Boost Pokemon's Bug moves by 20%, 50% when below 1/3 HP",
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Bug-type attack, and 1.2 otherwise.",
 
+	},
+	swiftswim: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		desc: "If Rain Dance is active, this Pokemon's Speed is boosted by 1.5. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Rain Dance is active, this Pokemon's Speed is boosted by 1.5.",
 	},
 	teravolt: {
 		inherit: true,

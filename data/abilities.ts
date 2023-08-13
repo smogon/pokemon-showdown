@@ -6781,7 +6781,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		//Chlorophyll
 		onModifySpe(spe, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				return this.chainModify(2);
+				return this.chainModify(1.5);
 			}
 		},
 		//Harvest
