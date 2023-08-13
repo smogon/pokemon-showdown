@@ -3567,7 +3567,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Crabhammer", "High Horsepower", "Knock Off", "Protect", "Rock Slide", "Substitute"],
+                "movepool": ["Crabhammer", "High Horsepower", "Knock Off", "Protect", "Rock Slide"],
                 "teraTypes": ["Dark", "Ground", "Water"]
             },
             {
