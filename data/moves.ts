@@ -6308,8 +6308,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: null,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower;
+		}, // this prevents crash when pokemon.js calls for basePowerCallback
 		target: "normal",
-		type: "Normal",
+		type: "Dark",
 		zMove: {basePower: 160},
 		maxMove: {basePower: 130},
 		contestType: "Cute",
@@ -15268,6 +15271,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: null,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower;
+		}, // this prevents crash when pokemon.js calls for basePowerCallback
 		target: "normal",
 		type: "Normal",
 		zMove: {basePower: 160},
