@@ -137,10 +137,11 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let uberCount = 0;
 		let nuCount = 0;
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData))[0];
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !this.randomData[species.id]?.moves) continue;
+			if (!species.exists) continue;
+
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
 			// to face each other.
