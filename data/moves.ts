@@ -9318,7 +9318,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		category: "Special",
 		name: "Hyperspace Hole",
 		pp: 5,
-		priority: 0,
+		priority: 1,
 		flags: {mirror: 1, bypasssub: 1},
 		breaksProtect: true,
 		secondary: null,
