@@ -14523,7 +14523,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 230,
 		color: "Yellow",
 		eggGroups: ["Undiscovered"],
-		requiredItem: "Ultranecrozium Z",
+		requiredMove: "Photon Geyser",
 		battleOnly: ["Necrozma-Dawn-Wings", "Necrozma-Dusk-Mane"],
 	},
 	magearna: {
