@@ -440,7 +440,7 @@ export const commands: Chat.ChatCommands = {
 		if (!toID(args[0]) && !toID(args[1])) return this.parse('/help franticfusions');
 		const {dex, targets} = this.splitFormat(target, true);
 		this.runBroadcast();
-		if (targets.length === 3) return this.parse('/help franticfusions');
+		if (targets.length > 2) return this.parse('/help franticfusions');
 		const species = Utils.deepClone(dex.species.get(targets[0]));
 		const fusion = dex.species.get(targets[1]);
 		if (!species.exists || species.gen > dex.gen) {
