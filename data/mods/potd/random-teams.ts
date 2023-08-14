@@ -31,7 +31,9 @@ export class RandomPOTDTeams extends RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
+
+		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
 		// Remove PotD from baseSpeciesPool
 		if (baseSpeciesPool.includes(potd.baseSpecies)) {
@@ -61,6 +63,10 @@ export class RandomPOTDTeams extends RandomTeams {
 			}
 			let species = this.sample(currentSpeciesPool);
 			if (!species.exists) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[species.baseSpecies]) continue;
+
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
