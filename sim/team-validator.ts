@@ -77,6 +77,16 @@ export class PokemonSources {
 	 */
 	limitedEggMoves?: ID[] | null;
 	/**
+	 * Moves that should be in limitedEggMoves that would otherwise be skipped
+	 * because they can be learned via Gen 1-2 tradeback
+	 */
+	possiblyLimitedEggMoves?: ID[] | null;
+	/**
+	 * Moves that can be learned via Pomeg glitch and does not require a
+	 * particular parent to learn
+	 */
+	pomegEggMoves?: ID[] | null;
+	/**
 	 * Some Pokemon evolve by having a move in their learnset (like Piloswine
 	 * with Ancient Power). These can only carry three other moves from their
 	 * prevo, because the fourth move must be the evo move. This restriction
@@ -110,6 +120,9 @@ export class PokemonSources {
 	}
 	add(source: PokemonSource, limitedEggMove?: ID | null) {
 		if (this.sources[this.sources.length - 1] !== source) this.sources.push(source);
+		if (limitedEggMove && source.substr(0, 3) === '1ET') {
+			this.possiblyLimitedEggMoves = [limitedEggMove];
+		}
 		if (limitedEggMove && this.limitedEggMoves !== null) {
 			this.limitedEggMoves = [limitedEggMove];
 		} else if (limitedEggMove === null) {
@@ -183,6 +196,33 @@ export class PokemonSources {
 				this.limitedEggMoves = other.limitedEggMoves;
 			} else {
 				this.limitedEggMoves.push(...other.limitedEggMoves);
+			}
+		}
+		if (other.possiblyLimitedEggMoves) {
+			if (!this.possiblyLimitedEggMoves) {
+				this.possiblyLimitedEggMoves = other.possiblyLimitedEggMoves;
+			} else {
+				this.possiblyLimitedEggMoves.push(...other.possiblyLimitedEggMoves);
+			}
+		}
+		if (other.pomegEggMoves) {
+			if (!this.pomegEggMoves) {
+				this.pomegEggMoves = other.pomegEggMoves;
+			} else {
+				this.pomegEggMoves.push(...other.pomegEggMoves);
+			}
+		}
+		let eggTradebackLegal = false;
+		for (const source of this.sources) {
+			if (source.substr(0, 3) === '1ET') {
+				eggTradebackLegal = true;
+				break;
+			}
+		}
+		if (!eggTradebackLegal && this.possiblyLimitedEggMoves) {
+			for (const eggMove of this.possiblyLimitedEggMoves) {
+				if (!this.limitedEggMoves) this.limitedEggMoves = [];
+				if (!this.limitedEggMoves.includes(eggMove)) this.limitedEggMoves.push(eggMove);
 			}
 		}
 		this.moveEvoCarryCount += other.moveEvoCarryCount;
@@ -725,14 +765,14 @@ export class TeamValidator {
 		let eventOnlyData;
 
 		if (!setSources.sourcesBefore && setSources.sources.length) {
-			let legal = false;
+			const legalSources = [];
 			for (const source of setSources.sources) {
 				if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
-				legal = true;
-				break;
+				legalSources.push(source);
 			}
-
-			if (!legal) {
+			if (legalSources.length) {
+				setSources.sources = legalSources;
+			} else {
 				let nonEggSource = null;
 				for (const source of setSources.sources) {
 					if (source.charAt(1) !== 'E') {
@@ -1231,16 +1271,17 @@ export class TeamValidator {
 		const fathers: ID[] = [];
 		// Gen 6+ don't have egg move incompatibilities
 		// (except for certain cases with baby Pokemon not handled here)
-		if (!getAll && eggGen >= 6) return true;
+		if (!getAll && eggGen >= 6 && species.gender !== 'F') return true;
 
-		const eggMoves = setSources.limitedEggMoves;
+		let eggMoves = setSources.limitedEggMoves;
+		if (eggGen === 3) eggMoves = eggMoves?.filter(eggMove => !setSources.pomegEggMoves?.includes(eggMove));
 		// must have 2 or more egg moves to have egg move incompatibilities
 		if (!eggMoves) {
 			// happens often in gen 1-6 LC if your only egg moves are level-up moves,
 			// which aren't limited and so aren't in `limitedEggMoves`
 			return getAll ? ['*'] : true;
 		}
-		if (!getAll && eggMoves.length <= 1) return true;
+		if (!getAll && eggMoves.length <= 1 && species.gender !== 'F') return true;
 
 		// gen 1 eggs come from gen 2 breeding
 		const dex = this.dex.gen === 1 ? this.dex.mod('gen2') : this.dex;
@@ -1323,6 +1364,7 @@ export class TeamValidator {
 				learnset = this.dex.species.getLearnset(curSpecies.id);
 				if (learnset && learnset[move]) {
 					for (const moveSource of learnset[move]) {
+						if (eggGen > 8 && parseInt(moveSource.charAt(0)) <= 8) continue;
 						if (parseInt(moveSource.charAt(0)) > eggGen) continue;
 						const canLearnFromSmeargle = moveSource.charAt(1) === 'E' && canBreedWithSmeargle;
 						if (!'ESDV'.includes(moveSource.charAt(1)) || canLearnFromSmeargle) {
@@ -2365,6 +2407,7 @@ export class TeamValidator {
 							// falls through to LMT check below
 						} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
 							// Pomeg Glitch
+							learned = learnedGen + 'Epomeg';
 						} else if ((!species.gender || species.gender === 'F') &&
 							learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
 							// available as egg move
@@ -2378,7 +2421,8 @@ export class TeamValidator {
 					}
 
 					// Gen 8+ egg moves can be taught to any pokemon from any source
-					if (learnedGen >= 8 && learned.charAt(1) === 'E' || 'LMTR'.includes(learned.charAt(1))) {
+					if (learnedGen >= 8 && learned.charAt(1) === 'E' && learned.slice(1) !== 'Eany' &&
+						learned.slice(1) !== 'Epomeg' || 'LMTR'.includes(learned.charAt(1))) {
 						if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
 							// current-gen level-up, TM or tutor moves:
 							//   always available
@@ -2404,14 +2448,22 @@ export class TeamValidator {
 						//   only if hatched from an egg
 						let limitedEggMove: ID | null | undefined = undefined;
 						if (learned.slice(1) === 'Eany') {
-							limitedEggMove = null;
+							if (species.gender === 'F') {
+								limitedEggMove = move.id;
+							} else {
+								limitedEggMove = null;
+							}
+						} else if (learned.slice(1) === 'Epomeg') {
+							// Pomeg glitched moves have to be from an egg but since they aren't true egg moves,
+							// there should be no breeding restrictions
+							moveSources.pomegEggMoves = [move.id];
 						} else if (learnedGen < 6) {
 							limitedEggMove = move.id;
 						}
 						learned = learnedGen + 'E' + (species.prevo ? species.id : '');
 						if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 							// can tradeback
-							moveSources.add('1ET' + learned.slice(2));
+							moveSources.add('1ET' + learned.slice(2), limitedEggMove);
 						}
 						moveSources.add(learned, limitedEggMove);
 					} else if (learned.charAt(1) === 'S') {
