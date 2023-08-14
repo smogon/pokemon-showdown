@@ -438,6 +438,8 @@ export const commands: Chat.ChatCommands = {
 	franticfusions(target, room, user, connection, cmd) {
 		const args = target.split(',');
 		if (!toID(args[0]) && !toID(args[1])) return this.parse('/help franticfusions');
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen && !args[2]) target = `${target},gen${targetGen}`;
 		const {dex, targets} = this.splitFormat(target, true);
 		this.runBroadcast();
 		if (targets.length > 2) return this.parse('/help franticfusions');
