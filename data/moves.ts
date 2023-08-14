@@ -8996,7 +8996,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "High Horsepower",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, kick: 1},
 		secondary: null,
 		target: "normal",
 		type: "Ground",
