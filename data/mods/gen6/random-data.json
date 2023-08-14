@@ -1324,9 +1324,6 @@
         "moves": ["dazzlinggleam", "energyball", "healingwish", "hiddenpowerfire", "hiddenpowerice", "synthesis"],
         "doublesMoves": ["gigadrain", "protect", "solarbeam", "sunnyday", "weatherball"]
     },
-    "cherrimsunshine": {
-        "doublesMoves": ["gigadrain", "protect", "solarbeam", "sunnyday", "weatherball"]
-    },
     "gastrodon": {
         "level": 86,
         "moves": ["clearsmog", "earthquake", "icebeam", "recover", "scald", "toxic"],

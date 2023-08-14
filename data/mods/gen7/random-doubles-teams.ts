@@ -1346,7 +1346,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 
 		const seed = this.prng.seed;
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
-		const pokemon = [];
+		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		// For Monotype
 		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
@@ -1366,12 +1366,29 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
 		for (const restrict of [true, false]) {
 			if (pokemon.length >= this.maxTeamSize) break;
-			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
-			while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-				const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 
-				// Check if the forme has moves for random battle
-				if (!this.randomDoublesData[species.id]?.moves) continue;
+			const pokemonList = Object.keys(this.randomDoublesData);
+			const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+			while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
+				const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
+				const currentSpeciesPool: Species[] = [];
+				// Check if the base species has a mega forme available
+				let canMega = false;
+				for (const poke of pokemonPool) {
+					const species = this.dex.species.get(poke);
+					if (!hasMega && species.baseSpecies === baseSpecies && species.isMega) canMega = true;
+				}
+				for (const poke of pokemonPool) {
+					const species = this.dex.species.get(poke);
+					if (species.baseSpecies === baseSpecies) {
+						// Prevent multiple megas
+						if (hasMega && species.isMega) continue;
+						// Prevent base forme, if a mega is available
+						if (canMega && !species.isMega) continue;
+						currentSpeciesPool.push(species);
+					}
+				}
+				const species = this.sample(currentSpeciesPool);
 				if (!species.exists) continue;
 
 				// Limit to one of each species (Species Clause)
@@ -1379,31 +1396,6 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 
 				// Limit one Mega per team
 				if (hasMega && species.isMega) continue;
-
-				// Adjust rate for species with multiple sets
-				switch (species.baseSpecies) {
-				case 'Arceus': case 'Silvally':
-					if (this.randomChance(8, 9) && !isMonotype) continue;
-					break;
-				case 'Oricorio':
-					if (this.randomChance(3, 4)) continue;
-					break;
-				case 'Castform': case 'Floette':
-					if (this.randomChance(2, 3)) continue;
-					break;
-				case 'Aegislash': case 'Basculin': case 'Gourgeist': case 'Groudon': case 'Kyogre': case 'Meloetta':
-					if (this.randomChance(1, 2)) continue;
-					break;
-				case 'Greninja':
-					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
-					break;
-				}
-				if (species.otherFormes && !hasMega && (
-					species.otherFormes.includes(species.name + '-Mega') ||
-					species.otherFormes.includes(species.name + '-Mega-X')
-				)) {
-					continue;
-				}
 
 				const tier = species.tier;
 				const types = species.types;
