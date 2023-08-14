@@ -6889,6 +6889,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (target.getStat('atk') > target.getStat('spa')) {
 					if (!this.boost({atk: 1})) {
 						this.add('-immune', target, '[from] ability: Ice Dew');
+					}
 				} else {
 					if (!this.boost({spa: 1})) {
 						this.add('-immune', target, '[from] ability: Ice Dew');
@@ -6896,8 +6897,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 				return null;
 				}
-			}
-		},
+			},
 		onAllyTryHitSide(target, source, move) {
 			if (source === this.effectState.target || !target.isAlly(source)) return;
 			if (move.type === 'Ice') {

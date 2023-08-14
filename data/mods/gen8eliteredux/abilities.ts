@@ -296,6 +296,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.getStat('atk') > target.getStat('spa')) {
 					if (!this.boost({atk: 1})) {
 						this.add('-immune', target, '[from] ability: Lightning Rod');
+					}
 				} else {
 					if (!this.boost({spa: 1})) {
 						this.add('-immune', target, '[from] ability: Lightning Rod');
@@ -304,7 +305,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 				}
 			}
-		},
 	},
 	limber: {
 		inherit: true,
@@ -609,6 +609,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.getStat('atk') > target.getStat('spa')) {
 					if (!this.boost({atk: 1})) {
 						this.add('-immune', target, '[from] ability: Sap Sipper');
+					}
 				} else {
 					if (!this.boost({spa: 1})) {
 						this.add('-immune', target, '[from] ability: Sap Sipper');
@@ -616,8 +617,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				return null;
 				}
-			}
-		},
+			},
 		onAllyTryHitSide(target, source, move) {
 			if (source === this.effectState.target || !target.isAlly(source)) return;
 			if (move.type === 'Grass') {
@@ -692,6 +692,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.getStat('atk') > target.getStat('spa')) {
 					if (!this.boost({atk: 1})) {
 						this.add('-immune', target, '[from] ability: Storm Drain');
+					}
 				} else {
 					if (!this.boost({spa: 1})) {
 						this.add('-immune', target, '[from] ability: Storm Drain');
@@ -700,7 +701,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 				}
 			}
-		},
 	},
 	surgesurfer: {
 		inherit: true,
