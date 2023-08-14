@@ -18975,6 +18975,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			helpinghand: ["8M", "8V", "3S0"],
 			hiddenpower: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			highhorsepower: ["8M"],
+			horndrill: ['7L53'],
 			hyperbeam: ["8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			irondefense: ["8M", "7T", "6T", "5T", "4T"],
 			knockoff: ["7T", "6T", "5T", "4T"],
