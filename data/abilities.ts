@@ -568,8 +568,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	commander: {
 		onUpdate(pokemon) {
+			if (this.gameType !== 'doubles') return;
 			const ally = pokemon.allies()[0];
-			if (!ally || pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
+			if (!ally || pokemon.transformed ||
+				pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
 				// Handle any edge cases
 				if (pokemon.getVolatile('commanding')) pokemon.removeVolatile('commanding');
 				return;
