@@ -2567,6 +2567,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				const fusion = this.dex.species.get(set.name);
+				if (fusion.exists) {
+					set.name = fusion.name;
+				} else {
+					set.name = species.baseSpecies;
+					if (species.baseSpecies === 'Unown') set.species = 'Unown';
+				}
 				if (fusion.name === species.name) continue;
 				donors.add(fusion.name);
 			}
