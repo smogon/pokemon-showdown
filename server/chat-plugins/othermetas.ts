@@ -438,18 +438,13 @@ export const commands: Chat.ChatCommands = {
 	franticfusions(target, room, user, connection, cmd) {
 		const args = target.split(',');
 		if (!toID(args[0]) && !toID(args[1])) return this.parse('/help franticfusions');
-		this.runBroadcast();
 		const targetGen = parseInt(cmd[cmd.length - 1]);
-		if (targetGen && !args[2]) args[2] = `gen${targetGen}`;
-		let dex = Dex;
-		if (args[2] && toID(args[2]) in Dex.dexes) {
-			dex = Dex.dexes[toID(args[2])];
-		} else if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-		}
-		const species = Utils.deepClone(dex.species.get(args[0]));
-		const fusion = dex.species.get(args[1]);
+		if (targetGen && !args[2]) target = `${target},gen${targetGen}`;
+		const {dex, targets} = this.splitFormat(target, true);
+		this.runBroadcast();
+		if (targets.length > 2) return this.parse('/help franticfusions');
+		const species = Utils.deepClone(dex.species.get(targets[0]));
+		const fusion = dex.species.get(targets[1]);
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
