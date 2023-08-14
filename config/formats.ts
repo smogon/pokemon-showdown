@@ -173,12 +173,8 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Monothreat (Water)",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3710724/">Monotype Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3715794/">Monotype Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714063/">Monotype Viability Rankings</a>`,
-		],
+		name: "[Gen 9] Monothreat Water",
+		desc: `Monotype where every Pok&eacute;mon is required to be part Water.`,
 
 		mod: 'gen9',
 		searchShow: false,
