@@ -174,6 +174,18 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 9] Monothreat (Water)",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3710724/">Monotype Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3715794/">Monotype Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714063/">Monotype Viability Rankings</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Water'],
+	},
+	{
 		name: "[Gen 9] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
