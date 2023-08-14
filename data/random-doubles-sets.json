@@ -3407,7 +3407,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Follow Me", "Helping Hand", "Protect", "Super Fang", "Taunt", "Thunder Wave", "U-turn"],
+                "movepool": ["Encore", "Follow Me", "Helping Hand", "Population Bomb", "Protect", "Taunt", "Thunder Wave", "U-turn"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -3567,7 +3567,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Crabhammer", "High Horsepower", "Knock Off", "Protect", "Rock Slide", "Substitute"],
+                "movepool": ["Crabhammer", "High Horsepower", "Knock Off", "Protect", "Rock Slide"],
                 "teraTypes": ["Dark", "Ground", "Water"]
             },
             {

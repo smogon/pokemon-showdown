@@ -33,13 +33,11 @@ interface BattleFactorySet {
 }
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
-	stabCounter: number;
 	ironFist: number;
 
 	constructor() {
 		super();
 		this.damagingMoves = new Set();
-		this.stabCounter = 0;
 		this.ironFist = 0;
 	}
 
@@ -55,60 +53,60 @@ type MoveEnforcementChecker = (
 ) => boolean;
 
 // Moves that restore HP:
-const RecoveryMove = [
+const RECOVERY_MOVES = [
 	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
 ];
 // Moves that drop stats:
-const ContraryMoves = [
+const CONTRARY_MOVES = [
 	'armorcannon', 'closecombat', 'leafstorm', 'makeitrain', 'overheat', 'spinout', 'superpower', 'vcreate',
 ];
 // Moves that boost Attack:
-const PhysicalSetup = [
+const PHYSICAL_SETUP = [
 	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'swordsdance', 'tidyup', 'victorydance',
 ];
 // Moves which boost Special Attack:
-const SpecialSetup = [
+const SPECIAL_SETUP = [
 	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow', 'torchsong',
 ];
 // Moves that boost Attack AND Special Attack:
-const MixedSetup = [
+const MIXED_SETUP = [
 	'clangoroussoul', 'growth', 'happyhour', 'holdhands', 'noretreat', 'shellsmash', 'workup',
 ];
 // Some moves that only boost Speed:
-const SpeedSetup = [
+const SPEED_SETUP = [
 	'agility', 'autotomize', 'rockpolish',
 ];
 // Conglomerate for ease of access
-const Setup = [
+const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
 	'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance', 'rockpolish',
 	'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup', 'victorydance',
 ];
-const SpeedControl = [
+const SPEED_CONTROL = [
 	'electroweb', 'glare', 'icywind', 'lowsweep', 'quash', 'rocktomb', 'stringshot', 'tailwind', 'thunderwave', 'trickroom',
 ];
 // Moves that shouldn't be the only STAB moves:
-const NoStab = [
+const NO_STAB = [
 	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'clearsmog', 'covet',
 	'dragontail', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'iceshard', 'icywind', 'incinerate',
 	'machpunch', 'meteorbeam', 'mortalspin', 'nuzzle', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct',
 	'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
-const Hazards = [
+const HAZARDS = [
 	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
 ];
 // Protect and its variants
-const ProtectMove = [
+const PROTECT_MOVES = [
 	'banefulbunker', 'protect', 'spikyshield',
 ];
 // Moves that switch the user out
-const PivotingMoves = [
+const PIVOT_MOVES = [
 	'chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch',
 ];
 
 // Moves that should be paired together when possible
-const MovePairs = [
+const MOVE_PAIRS = [
 	['lightscreen', 'reflect'],
 	['sleeptalk', 'rest'],
 	['protect', 'wish'],
@@ -116,15 +114,15 @@ const MovePairs = [
 ];
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
-const priorityPokemon = [
+const PRIORITY_POKEMON = [
 	'banette', 'breloom', 'brutebonnet', 'cacturne', 'ceruledge', 'honchkrow', 'lycanrocdusk', 'mimikyu', 'scizor',
 ];
 
 /** Pokemon who should never be in the lead slot */
-const noLeadPokemon = [
+const NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Rillaboom', 'Zacian', 'Zamazenta',
 ];
-const doublesNoLeadPokemon = [
+const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
 
@@ -155,7 +153,7 @@ export class RandomTeams {
 		format = Dex.formats.get(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
-		this.noStab = NoStab;
+		this.noStab = NO_STAB;
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;
@@ -373,9 +371,9 @@ export class RandomTeams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power:
 			if (move.basePower || move.basePowerCallback) {
-				if (!this.noStab.includes(moveid) || priorityPokemon.includes(species.id) && move.priority > 0) {
+				if (!this.noStab.includes(moveid) || PRIORITY_POKEMON.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
-					if (types.includes(moveType)) counter.stabCounter++;
+					if (types.includes(moveType)) counter.add('stab');
 					if (teraType === moveType) counter.add('stabtera');
 					counter.damagingMoves.add(move);
 				}
@@ -397,14 +395,14 @@ export class RandomTeams {
 			if (move.accuracy && move.accuracy !== true && move.accuracy < 90) counter.add('inaccurate');
 
 			// Moves that change stats:
-			if (RecoveryMove.includes(moveid)) counter.add('recovery');
-			if (ContraryMoves.includes(moveid)) counter.add('contrary');
-			if (PhysicalSetup.includes(moveid)) counter.add('physicalsetup');
-			if (SpecialSetup.includes(moveid)) counter.add('specialsetup');
-			if (MixedSetup.includes(moveid)) counter.add('mixedsetup');
-			if (SpeedSetup.includes(moveid)) counter.add('speedsetup');
-			if (Setup.includes(moveid)) counter.add('setup');
-			if (Hazards.includes(moveid)) counter.add('hazards');
+			if (RECOVERY_MOVES.includes(moveid)) counter.add('recovery');
+			if (CONTRARY_MOVES.includes(moveid)) counter.add('contrary');
+			if (PHYSICAL_SETUP.includes(moveid)) counter.add('physicalsetup');
+			if (SPECIAL_SETUP.includes(moveid)) counter.add('specialsetup');
+			if (MIXED_SETUP.includes(moveid)) counter.add('mixedsetup');
+			if (SPEED_SETUP.includes(moveid)) counter.add('speedsetup');
+			if (SETUP.includes(moveid)) counter.add('setup');
+			if (HAZARDS.includes(moveid)) counter.add('hazards');
 		}
 
 		counter.set('Physical', Math.floor(categories['Physical']));
@@ -430,7 +428,7 @@ export class RandomTeams {
 		// If we have two unfilled moves and only one unpaired move, cull the unpaired move.
 		if (moves.size === this.maxMoveCount - 2) {
 			const unpairedMoves = [...movePool];
-			for (const pair of MovePairs) {
+			for (const pair of MOVE_PAIRS) {
 				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[0]));
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[1]));
@@ -443,7 +441,7 @@ export class RandomTeams {
 
 		// These moves are paired, and shouldn't appear if there is not room for them both.
 		if (moves.size === this.maxMoveCount - 1) {
-			for (const pair of MovePairs) {
+			for (const pair of MOVE_PAIRS) {
 				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
 					this.fastPop(movePool, movePool.indexOf(pair[0]));
 					this.fastPop(movePool, movePool.indexOf(pair[1]));
@@ -485,99 +483,96 @@ export class RandomTeams {
 		}
 
 		if (isDoubles) {
-			// In order of decreasing generalizability
-			this.incompatibleMoves(moves, movePool, SpeedControl, SpeedControl);
-			this.incompatibleMoves(moves, movePool, Hazards, Hazards);
-			this.incompatibleMoves(moves, movePool, 'rockslide', 'stoneedge');
-			this.incompatibleMoves(moves, movePool, Setup, ['fakeout', 'helpinghand']);
-			this.incompatibleMoves(moves, movePool, ProtectMove, 'wideguard');
-			this.incompatibleMoves(moves, movePool, ['fierydance', 'fireblast'], 'heatwave');
-			this.incompatibleMoves(moves, movePool, 'dazzlinggleam', ['fleurcannon', 'moonblast']);
-			this.incompatibleMoves(moves, movePool, 'poisongas', 'toxicspikes');
-			this.incompatibleMoves(moves, movePool, RecoveryMove, 'healpulse');
-			this.incompatibleMoves(moves, movePool, 'haze', ['icywind', 'rocktomb']);
-			this.incompatibleMoves(moves, movePool, 'disable', 'encore');
-			this.incompatibleMoves(moves, movePool, 'freezedry', 'icebeam');
-			this.incompatibleMoves(moves, movePool, 'bodyslam', 'doubleedge');
-			this.incompatibleMoves(moves, movePool, 'energyball', 'leafstorm');
-			this.incompatibleMoves(moves, movePool, 'earthpower', 'sandsearstorm');
-			this.incompatibleMoves(moves, movePool, 'drumbeating', 'woodhammer');
-			this.incompatibleMoves(moves, movePool, 'boomburst', 'hyperdrill');
+			const doublesIncompatiblePairs = [
+				// In order of decreasing generalizability
+				[SPEED_CONTROL, SPEED_CONTROL],
+				[HAZARDS, HAZARDS],
+				['rockslide', 'stoneedge'],
+				[SETUP, ['fakeout', 'helpinghand']],
+				[PROTECT_MOVES, 'wideguard'],
+				[['fierydance', 'fireblast'], 'heatwave'],
+				['dazzlinggleam', ['fleurcannon', 'moonblast']],
+				['poisongas', 'toxicspikes'],
+				[RECOVERY_MOVES, 'healpulse'],
+				['haze', ['icywind', 'rocktomb']],
+				['disable', 'encore'],
+				['freezedry', 'icebeam'],
+				['bodyslam', 'doubleedge'],
+				['energyball', 'leafstorm'],
+				['earthpower', 'sandsearstorm'],
+				['drumbeating', 'woodhammer'],
+				['boomburst', 'hyperdrill'],
+			];
 
-			if (role !== 'Offensive Protect') {
-				this.incompatibleMoves(moves, movePool, ProtectMove, 'uturn');
-			}
+			for (const pair of doublesIncompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
+
+			if (role !== 'Offensive Protect') this.incompatibleMoves(moves, movePool, PROTECT_MOVES, 'uturn');
 		}
 
-		// These moves don't mesh well with other aspects of the set
-		this.incompatibleMoves(moves, movePool, statusMoves, ['healingwish', 'switcheroo', 'trick']);
-		this.incompatibleMoves(moves, movePool, Setup, PivotingMoves);
-		this.incompatibleMoves(moves, movePool, Setup, Hazards);
-		this.incompatibleMoves(moves, movePool, Setup, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']);
-		this.incompatibleMoves(moves, movePool, PhysicalSetup, PhysicalSetup);
-		this.incompatibleMoves(moves, movePool, SpecialSetup, 'thunderwave');
-		this.incompatibleMoves(moves, movePool, 'substitute', PivotingMoves);
-		this.incompatibleMoves(moves, movePool, SpeedSetup, ['aquajet', 'rest', 'trickroom']);
-		this.incompatibleMoves(moves, movePool, 'curse', 'rapidspin');
-		this.incompatibleMoves(moves, movePool, 'dragondance', 'dracometeor');
-		this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
+		// General incompatibilities
+		const incompatiblePairs = [
+			// These moves don't mesh well with other aspects of the set
+			[statusMoves, ['healingwish', 'switcheroo', 'trick']],
+			[SETUP, PIVOT_MOVES],
+			[SETUP, HAZARDS],
+			[SETUP, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']],
+			[PHYSICAL_SETUP, PHYSICAL_SETUP],
+			[SPECIAL_SETUP, 'thunderwave'],
+			['substitute', PIVOT_MOVES],
+			[SPEED_SETUP, ['aquajet', 'rest', 'trickroom']],
+			['curse', 'rapidspin'],
+			['dragondance', 'dracometeor'],
+			['healingwish', 'uturn'],
 
+			// These attacks are redundant with each other
+			['psychic', 'psyshock'],
+			['surf', 'hydropump'],
+			['liquidation', 'wavecrash'],
+			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
+			[['knockoff', 'bite'], 'foulplay'],
+			['doubleedge', 'headbutt'],
+			['fireblast', ['fierydance', 'flamethrower']],
+			['lavaplume', 'magmastorm'],
+			['thunderpunch', 'wildcharge'],
+			['gunkshot', ['direclaw', 'poisonjab']],
+			['aurasphere', 'focusblast'],
+			['closecombat', 'drainpunch'],
+			['bugbite', 'pounce'],
+			['bittermalice', 'shadowball'],
+			[['dragonpulse', 'spacialrend'], 'dracometeor'],
 
-		// These attacks are redundant with each other
-		this.incompatibleMoves(moves, movePool, 'psychic', 'psyshock');
-		this.incompatibleMoves(moves, movePool, 'surf', 'hydropump');
-		this.incompatibleMoves(moves, movePool, 'liquidation', 'wavecrash');
-		this.incompatibleMoves(moves, movePool, ['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']);
-		this.incompatibleMoves(moves, movePool, ['knockoff', 'bite'], 'foulplay');
-		this.incompatibleMoves(moves, movePool, 'doubleedge', 'headbutt');
-		this.incompatibleMoves(moves, movePool, 'fireblast', ['fierydance', 'flamethrower']);
-		this.incompatibleMoves(moves, movePool, 'lavaplume', 'magmastorm');
-		this.incompatibleMoves(moves, movePool, 'thunderpunch', 'wildcharge');
-		this.incompatibleMoves(moves, movePool, 'gunkshot', ['direclaw', 'poisonjab']);
-		this.incompatibleMoves(moves, movePool, 'aurasphere', 'focusblast');
-		this.incompatibleMoves(moves, movePool, 'closecombat', 'drainpunch');
-		this.incompatibleMoves(moves, movePool, 'bugbite', 'pounce');
-		this.incompatibleMoves(moves, movePool, 'bittermalice', 'shadowball');
-		this.incompatibleMoves(moves, movePool, ['dragonpulse', 'spacialrend'], 'dracometeor');
-		if (!types.includes('Ice')) {
-			this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
-		}
+			// These status moves are redundant with each other
+			['taunt', 'disable'],
+			['toxic', 'willowisp'],
+			[['thunderwave', 'toxic', 'willowisp'], 'toxicspikes'],
+			['thunderwave', 'yawn'],
 
+			// This space reserved for assorted hardcodes that otherwise make little sense out of context
+			// Landorus
+			['nastyplot', 'rockslide'],
+			// Persian
+			['switcheroo', 'fakeout'],
+			// Beartic
+			['snowscape', 'swordsdance'],
+			// Magnezone
+			['bodypress', 'mirrorcoat'],
+			// Amoonguss, though this can work well as a general rule later
+			['toxic', 'clearsmog'],
+			// Chansey and Blissey
+			['healbell', 'stealthrock'],
+		];
 
-		// These status moves are redundant with each other
-		if (!isDoubles) {
-			this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
-		}
-		this.incompatibleMoves(moves, movePool, 'taunt', 'disable');
-		this.incompatibleMoves(moves, movePool, 'toxic', 'willowisp');
-		this.incompatibleMoves(moves, movePool, ['thunderwave', 'toxic', 'willowisp'], 'toxicspikes');
-		this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
+		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
+
+		if (!types.includes('Ice')) this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
+
+		if (!isDoubles) this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
-		if (species.id === "dugtrio") {
-			this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
-		}
-		if (species.id === "cyclizar") {
-			this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
-		}
-		// Landorus
-		this.incompatibleMoves(moves, movePool, 'nastyplot', 'rockslide');
-		// Persian
-		this.incompatibleMoves(moves, movePool, 'switcheroo', 'fakeout');
-		// Beartic
-		this.incompatibleMoves(moves, movePool, 'snowscape', 'swordsdance');
-		// Magnezone
-		this.incompatibleMoves(moves, movePool, 'bodypress', 'mirrorcoat');
-		// Amoonguss, though this can work well as a general rule later
-		this.incompatibleMoves(moves, movePool, 'toxic', 'clearsmog');
-		// Dudunsparce
+		if (species.id === "dugtrio") this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
+		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
-		// Luvdisc
-		if (species.id === 'luvdisc' && !isDoubles) {
-			this.incompatibleMoves(moves, movePool, 'charm', ['icebeam', 'icywind']);
-		}
-		// Chansey and Blissey
-		this.incompatibleMoves(moves, movePool, 'healbell', 'stealthrock');
+		if (species.id === 'luvdisc' && !isDoubles) this.incompatibleMoves(moves, movePool, 'charm', ['icebeam', 'icywind']);
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
@@ -772,7 +767,7 @@ export class RandomTeams {
 		}
 
 		// Enforce STAB priority
-		if (['Bulky Attacker', 'Bulky Setup', 'Doubles Wallbreaker'].includes(role) || priorityPokemon.includes(species.id)) {
+		if (['Bulky Attacker', 'Bulky Setup', 'Doubles Wallbreaker'].includes(role) || PRIORITY_POKEMON.includes(species.id)) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -825,7 +820,7 @@ export class RandomTeams {
 		}
 
 		// If no STAB move was added, add a STAB move
-		if (!counter.stabCounter) {
+		if (!counter.get('stab')) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -843,7 +838,7 @@ export class RandomTeams {
 
 		// Enforce recovery
 		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup'].includes(role)) {
-			const recoveryMoves = movePool.filter(moveid => RecoveryMove.includes(moveid));
+			const recoveryMoves = movePool.filter(moveid => RECOVERY_MOVES.includes(moveid));
 			if (recoveryMoves.length) {
 				const moveid = this.sample(recoveryMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -854,14 +849,14 @@ export class RandomTeams {
 		// Enforce setup
 		if (role.includes('Setup') || role === 'Tera Blast user') {
 			// First, try to add a non-Speed setup move
-			const nonSpeedSetupMoves = movePool.filter(moveid => Setup.includes(moveid) && !SpeedSetup.includes(moveid));
+			const nonSpeedSetupMoves = movePool.filter(moveid => SETUP.includes(moveid) && !SPEED_SETUP.includes(moveid));
 			if (nonSpeedSetupMoves.length) {
 				const moveid = this.sample(nonSpeedSetupMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			} else {
 				// No non-Speed setup moves, so add any (Speed) setup move
-				const setupMoves = movePool.filter(moveid => Setup.includes(moveid));
+				const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
 				if (setupMoves.length) {
 					const moveid = this.sample(setupMoves);
 					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -887,7 +882,7 @@ export class RandomTeams {
 
 		// Enforce Protect
 		if (role.includes('Protect')) {
-			const protectMoves = movePool.filter(moveid => ProtectMove.includes(moveid));
+			const protectMoves = movePool.filter(moveid => PROTECT_MOVES.includes(moveid));
 			if (protectMoves.length) {
 				const moveid = this.sample(protectMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -946,7 +941,7 @@ export class RandomTeams {
 			const moveid = this.sample(movePool);
 			counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
-			for (const pair of MovePairs) {
+			for (const pair of MOVE_PAIRS) {
 				if (moveid === pair[0] && movePool.includes(pair[1])) {
 					counter = this.addMove(pair[1], moves, types, abilities, teamDetails, species, isLead, isDoubles,
 						movePool, teraType, role);
@@ -974,7 +969,7 @@ export class RandomTeams {
 		role: RandomTeamsTypes.Role,
 	): boolean {
 		if ([
-			'Armor Tail', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
+			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
 			'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
@@ -982,8 +977,6 @@ export class RandomTeams {
 		// Abilities which are primarily useful for certain moves
 		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
-		case 'Battle Bond':
-			return !isDoubles;
 		case 'Chlorophyll':
 			return (!moves.has('sunnyday') && !teamDetails.sun && species.id !== 'lilligant');
 		case 'Cloud Nine':
@@ -1017,6 +1010,8 @@ export class RandomTeams {
 			return !counter.ironFist;
 		case 'Justified':
 			return !counter.get('Physical');
+		case 'Libero': case 'Protean':
+			return role === 'Offensive Protect' || (species.id === 'meowscarada' && role === 'Fast Attacker');
 		case 'Mold Breaker':
 			return (abilities.has('Sharpness') || abilities.has('Unburden'));
 		case 'Moxie':
@@ -1027,8 +1022,6 @@ export class RandomTeams {
 			return !counter.get('Grass');
 		case 'Prankster':
 			return !counter.get('Status');
-		case 'Protean':
-			return role === 'Offensive Protect';
 		case 'Reckless':
 			return !counter.get('recoil');
 		case 'Rock Head':
@@ -1380,7 +1373,9 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (!counter.get('Status') && role !== 'Fast Attacker' && role !== 'Wallbreaker') return 'Assault Vest';
+		if (!counter.get('Status') && !['Fast Attacker', 'Wallbreaker', 'Tera Blast user'].includes(role)) {
+			return 'Assault Vest';
+		}
 		if (counter.get('speedsetup') && this.dex.getEffectiveness('Ground', species) < 1) return 'Weakness Policy';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'palkia') return 'Lustrous Orb';
@@ -1419,7 +1414,7 @@ export class RandomTeams {
 		if (species.id === 'pawmot' && moves.has('nuzzle')) return 'Leppa Berry';
 		if (
 			['Fast Bulky Setup', 'Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
-			types.includes('Dark') && moves.has('suckerpunch') && !priorityPokemon.includes(species.id) &&
+			types.includes('Dark') && moves.has('suckerpunch') && !PRIORITY_POKEMON.includes(species.id) &&
 			counter.get('physicalsetup') && counter.get('Dark')
 		) return 'Black Glasses';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
@@ -1591,38 +1586,31 @@ export class RandomTeams {
 		type: string,
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
-		isDoubles = false,
+		pokemonList: string[]
 	) {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool = [];
-		const baseSpeciesPool: string[] = [];
-		if (isDoubles) {
-			for (const pokemon of Object.keys(this.randomDoublesSets)) {
-				let species = this.dex.species.get(pokemon);
-				if (species.gen > this.gen || exclude.includes(species.id)) continue;
-				if (isMonotype) {
+		const baseSpeciesPool = [];
+		const baseSpeciesCount: {[k: string]: number} = {};
+		for (const pokemon of pokemonList) {
+			let species = this.dex.species.get(pokemon);
+			if (exclude.includes(species.id)) continue;
+			if (isMonotype) {
+				if (!species.types.includes(type)) continue;
+				if (typeof species.battleOnly === 'string') {
+					species = this.dex.species.get(species.battleOnly);
 					if (!species.types.includes(type)) continue;
-					if (typeof species.battleOnly === 'string') {
-						species = this.dex.species.get(species.battleOnly);
-						if (!species.types.includes(type)) continue;
-					}
 				}
-				pokemonPool.push(pokemon);
-				if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
 			}
-		} else {
-			for (const pokemon of Object.keys(this.randomSets)) {
-				let species = this.dex.species.get(pokemon);
-				if (species.gen > this.gen || exclude.includes(species.id)) continue;
-				if (isMonotype) {
-					if (!species.types.includes(type)) continue;
-					if (typeof species.battleOnly === 'string') {
-						species = this.dex.species.get(species.battleOnly);
-						if (!species.types.includes(type)) continue;
-					}
-				}
-				pokemonPool.push(pokemon);
-				if (!baseSpeciesPool.includes(species.baseSpecies)) baseSpeciesPool.push(species.baseSpecies);
+			pokemonPool.push(pokemon);
+			baseSpeciesCount[species.baseSpecies] = (baseSpeciesCount[species.baseSpecies] || 0) + 1;
+		}
+		// Include base species 1x if 1-3 formes, 2x if 4-6 formes, 3x if 7+ formes
+		for (const baseSpecies of Object.keys(baseSpeciesCount)) {
+			for (let i = 0; i < Math.min(Math.ceil(baseSpeciesCount[baseSpecies] / 3), 3); i++) {
+				baseSpeciesPool.push(baseSpecies);
+				// Squawkabilly has 4 formes, but only 2 functionally different formes, so only include it 1x
+				if (baseSpecies === 'Squawkabilly') break;
 			}
 		}
 		return [pokemonPool, baseSpeciesPool];
@@ -1654,7 +1642,9 @@ export class RandomTeams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, isDoubles);
+
+		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
 		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
@@ -1666,6 +1656,10 @@ export class RandomTeams {
 			}
 			let species = this.sample(currentSpeciesPool);
 			if (!species.exists) continue;
+
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[species.baseSpecies]) continue;
+
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
@@ -1730,8 +1724,8 @@ export class RandomTeams {
 
 			if (leadsRemaining) {
 				if (
-					isDoubles && doublesNoLeadPokemon.includes(species.baseSpecies) ||
-					!isDoubles && noLeadPokemon.includes(species.baseSpecies)
+					isDoubles && DOUBLES_NO_LEAD_POKEMON.includes(species.baseSpecies) ||
+					!isDoubles && NO_LEAD_POKEMON.includes(species.baseSpecies)
 				) {
 					if (pokemon.length + leadsRemaining === this.maxTeamSize) continue;
 					set = this.randomSet(species, teamDetails, false, isDoubles);
