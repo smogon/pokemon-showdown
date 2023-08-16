@@ -5300,6 +5300,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			pokemon.faint();
 			return damage;
 		},
+		selfdestruct: "ifHit",
 		category: "Special",
 		name: "Final Gambit",
 		pp: 5,
