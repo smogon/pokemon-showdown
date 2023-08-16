@@ -15,7 +15,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			megapunch: ["3L1"],
 			psychic: ["3L1"],
 			rage: ["3L1"],
-
 			razorwind: ["3L1"],
 			rest: ["3L1"],
 			seismictoss: ["3L1"],

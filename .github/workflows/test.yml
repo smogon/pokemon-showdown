@@ -27,9 +27,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        
+
     - run: npm ci
-    
+
     - name: Determine which files to lint (if pull request)
       if: ${{ github.event_name == 'pull_request' }}
       id: changed-files
@@ -43,6 +43,15 @@ jobs:
           ./server/**/*.tsx
           ./sim/**/*.ts
           ./tools/set-import/*.ts
+        files_ignore: |
+          ./logs/
+          ./node_modules/
+          ./dist/
+          ./data/**/learnsets.ts
+          ./tools/set-import/importer.js
+          ./tools/set-import/sets
+          ./tools/modlog/converter.js
+          ./server/global-variables.d.ts
 
     - name: Determine whether test/sim or test/random-battles need to run (if pull request)
       if: ${{ github.event_name == 'pull_request' }}
