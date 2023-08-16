@@ -21688,7 +21688,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Excalibur",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, contact: 1},
 		critRatio: 2,
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Dragon') return 1;

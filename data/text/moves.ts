@@ -7444,4 +7444,22 @@ export const MovesText: {[k: string]: MoveText} = {
 			shortDesc: "Nearly always goes first. Always crits.",
 		},
 	},
+
+	//ER Moves
+	aquafang: {
+		name: "Aqua Fang",
+		desc: "Has a 10% chance to make the target flinch.",
+		shortDesc: "10% chance to make the target flinch.",
+	},
+	deathroll: {
+		name: "Deathroll",
+		desc: "Has a 20% chance to confuse the target.",
+		shortDesc: "Has a 20% chance to confuse the target.",
+	},
+	excalibur: {
+		name: "Deathroll",
+		desc: "This move's type effectiveness against Dragon is changed to be super effective no matter what this move's type is..",
+		shortDesc: "Super effective against Dragon types.",
+	},
+
 };
