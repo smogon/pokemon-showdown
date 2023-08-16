@@ -5592,7 +5592,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	coilup: {
 		onStart(pokemon) {
 			this.effectState.coiled = true;
-			this.add('-activite', pokemon, 'Coil Up');
+			this.add('-activate', pokemon, 'Coil Up');
 		},
 		onModifyPriority(priority, source, target, move) {
 			if (this.effectState.coiled && move.flags['bite']) {
@@ -6213,7 +6213,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (source && source !== target && move && move.type === 'Electric' && !source.forceSwitchFlag && move.totalDamage) {
 				const ebRecoilDamage = this.clampIntRange(Math.round(move.totalDamage * 0.10), 1)
-				this.add('-activite', source, 'Electric Burst');
+				this.add('-activate', source, 'Electric Burst');
 				this.damage(ebRecoilDamage, source, source, 'recoil');
 			}
 		},
