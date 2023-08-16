@@ -25,111 +25,111 @@ export const Formats: FormatList = [
 	{
 		section: "Elite Redux Singles",
 	},
-	// {
-	// 	name: "[Gen 8] Elite Redux Random Battle WIP",
-	// 	desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
-	// 	mod: 'gen8eliteredux',
-	// 	team: 'random',
-	// 	ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-	// 	//ER Scripts
-	// 	onValidateSet(set) {
-	// 		const species = this.dex.species.get(set.species);
-	// 		const innateList = Object.keys(species.abilities)
-	// 			.filter(key => key.includes('I'))
-	// 			.map(key => species.abilities[key as 'I1' | 'I2' | 'I3'])
-	// 		for (const innateName of innateList) {
-	// 			//Checks if set ability is an innate, which is not allowed
-	// 			if (set.ability == innateName){ 
-	// 				return [`${set.name} already has ${innateName} as Innate. Please select from Abilities`];
-	// 			} 
+	{
+		name: "[Gen 8] Elite Redux Random Battle WIP",
+		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
+		mod: 'gen8eliteredux',
+		team: 'random',
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
+		//ER Scripts
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const innateList = Object.keys(species.abilities)
+				.filter(key => key.includes('I'))
+				.map(key => species.abilities[key as 'I1' | 'I2' | 'I3'])
+			for (const innateName of innateList) {
+				//Checks if set ability is an innate, which is not allowed
+				if (set.ability == innateName){ 
+					return [`${set.name} already has ${innateName} as Innate. Please select from Abilities`];
+				} 
 
-	// 			//Checks if innate is banned
-	// 			const banReason = this.ruleTable.check('ability:' + this.toID(innateName));
-	// 			if (banReason) {
-	// 				return [`${set.name}'s ability ${innateName} is ${banReason}.`];
-	// 			}
-	// 		}
-	// 	},
-	// 	onBegin() {
-	// 		for (const pokemon of this.getAllPokemon()) {
-	// 			// if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
-	// 			// 	continue;  
-	// 			// }
-	// 			pokemon.m.innates = Object.keys(pokemon.species.abilities)
-	// 				.filter(key => key.includes('I'))
-	// 				.map(key => this.toID(pokemon.species.abilities[key as "I1" | "I2" | "I3"]))
-	// 				.filter(ability => ability !== pokemon.ability);
-	// 		}
-	// 	},
-	// 	onBeforeSwitchIn(pokemon) {
-	// 		// Abilities that must be applied before both sides trigger onSwitchIn to correctly
-	// 		// handle switch-in ability-to-ability interactions, e.g. Intimidate counters
-	// 		//TODO: Update needBeforeSwitchInIDs for new abilities
-	// 		const neededBeforeSwitchInIDs = [
-	// 			'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
-	// 			'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
-	// 		];
-	// 		if (pokemon.m.innates) {
-	// 			for (const innate of pokemon.m.innates) {
-	// 				if (!neededBeforeSwitchInIDs.includes(innate)) continue;
-	// 				if (pokemon.hasAbility(innate)) continue;
-	// 				pokemon.addVolatile("ability:" + innate, pokemon);
-	// 			}
-	// 		}
-	// 	},
-	// 	onSwitchInPriority: 2,
-	// 	onSwitchIn(pokemon) {
-	// 		if (pokemon.m.innates) {
-	// 			for (const innate of pokemon.m.innates) {
-	// 				if (pokemon.hasAbility(innate)) continue;
-	// 				pokemon.addVolatile("ability:" + innate, pokemon);
-	// 			}
-	// 		}
-	// 	},
-	// 	onSwitchOut(pokemon) {
-	// 		for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
-	// 			pokemon.removeVolatile(innate);
-	// 		}
-	// 	},
-	// 	onFaint(pokemon) {
-	// 		for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
-	// 			const innateEffect = this.dex.conditions.get(innate) as Effect;
-	// 			this.singleEvent('End', innateEffect, null, pokemon);
-	// 		}
-	// 	},
-	// 	onAfterMega(pokemon) {
-	// 		//clear original pokemon innates
-	// 		for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
-	// 			pokemon.removeVolatile(innate);
-	// 		}
-	// 		//initialize mega innates
-	// 		pokemon.m.innates = Object.keys(pokemon.species.abilities)
-	// 		.filter(key => key.includes('I'))
-	// 		.map(key => this.toID(pokemon.species.abilities[key as "I1" | "I2" | "I3"]))
-	// 		.filter(ability => ability !== pokemon.ability);
+				//Checks if innate is banned
+				const banReason = this.ruleTable.check('ability:' + this.toID(innateName));
+				if (banReason) {
+					return [`${set.name}'s ability ${innateName} is ${banReason}.`];
+				}
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				// if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
+				// 	continue;  
+				// }
+				pokemon.m.innates = Object.keys(pokemon.species.abilities)
+					.filter(key => key.includes('I'))
+					.map(key => this.toID(pokemon.species.abilities[key as "I1" | "I2" | "I3"]))
+					.filter(ability => ability !== pokemon.ability);
+			}
+		},
+		onBeforeSwitchIn(pokemon) {
+			// Abilities that must be applied before both sides trigger onSwitchIn to correctly
+			// handle switch-in ability-to-ability interactions, e.g. Intimidate counters
+			//TODO: Update needBeforeSwitchInIDs for new abilities
+			const neededBeforeSwitchInIDs = [
+				'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
+				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
+			];
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (!neededBeforeSwitchInIDs.includes(innate)) continue;
+					if (pokemon.hasAbility(innate)) continue;
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (pokemon.hasAbility(innate)) continue;
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+		},
+		onFaint(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				const innateEffect = this.dex.conditions.get(innate) as Effect;
+				this.singleEvent('End', innateEffect, null, pokemon);
+			}
+		},
+		onAfterMega(pokemon) {
+			//clear original pokemon innates
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+			//initialize mega innates
+			pokemon.m.innates = Object.keys(pokemon.species.abilities)
+			.filter(key => key.includes('I'))
+			.map(key => this.toID(pokemon.species.abilities[key as "I1" | "I2" | "I3"]))
+			.filter(ability => ability !== pokemon.ability);
 
-	// 		//before switch in innate load
-	// 		const neededBeforeSwitchInIDs = [
-	// 			'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
-	// 			'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
-	// 		];
-	// 		if (pokemon.m.innates) {
-	// 			for (const innate of pokemon.m.innates) {
-	// 				if (!neededBeforeSwitchInIDs.includes(innate)) continue;
-	// 				if (pokemon.hasAbility(innate)) continue;
-	// 				pokemon.addVolatile("ability:" + innate, pokemon);
-	// 			}
-	// 		}
-	// 		//after switch in innate load
-	// 		if (pokemon.m.innates) {
-	// 			for (const innate of pokemon.m.innates) {
-	// 				if (pokemon.hasAbility(innate)) continue;
-	// 				pokemon.addVolatile("ability:" + innate, pokemon);
-	// 			}
-	// 		}
+			//before switch in innate load
+			const neededBeforeSwitchInIDs = [
+				'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
+				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
+			];
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (!neededBeforeSwitchInIDs.includes(innate)) continue;
+					if (pokemon.hasAbility(innate)) continue;
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
+			//after switch in innate load
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (pokemon.hasAbility(innate)) continue;
+					pokemon.addVolatile("ability:" + innate, pokemon);
+				}
+			}
 
-	// 	},
-	// },
+		},
+	},
 	{
 		name: "[Gen 8] Elite Redux OU",
 		desc: `Testing for ER Innates`,
