@@ -2364,13 +2364,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, source, pokemon) {
 			if (['bloodmoon'].includes(pokemon.effectiveWeather())) {
-				if (source.storedStats.spa >= source.storedStats.atk) this.chainModify(1.5);
+				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.5);
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, source, pokemon) {
 			if (['bloodmoon'].includes(pokemon.effectiveWeather())) {
-				if (source.storedStats.atk > source.storedStats.spa) this.chainModify(1.5);
+				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.5);
 			}
 		},
 		onWeather(target, source, effect) {
@@ -4133,13 +4133,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, source, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				if (source.storedStats.spa >= source.storedStats.atk) this.chainModify(1.5);
+				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.5);
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, source, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				if (source.storedStats.atk > source.storedStats.spa) this.chainModify(1.5);
+				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.5);
 			}
 		},
 		onWeather(target, source, effect) {
@@ -5027,13 +5027,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, source, pokemon) {
 			if (['foghorn'].includes(pokemon.effectiveWeather())) {
-				if (source.storedStats.spa >= source.storedStats.atk) this.chainModify(1.2);
+				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.2);
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, source, pokemon) {
 			if (['foghorn'].includes(pokemon.effectiveWeather())) {
-				if (source.storedStats.atk > source.storedStats.spa) this.chainModify(1.2);
+				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.2);
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target.hasItem('ringtarget')) return;
+			if (target !== source && move.ignoreImmunity === true) {
+				this.add('-immune', target, '[from] ability: Warp Mist');
+				this.debug('Warp Mist negate immunity');
+				move.ignoreImmunity = false;
 			}
 		},
 		name: "Warp Mist",
@@ -5339,7 +5347,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 		name: "Mountaineer",
 		rating: 3,
-		num: -2,
+		num: -1002,
 	},
 	rebound: {
 		isNonstandard: "CAP",
@@ -5372,13 +5380,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		isBreakable: true,
 		rating: 3,
-		num: -3,
+		num: -1003,
 	},
 	persistent: {
 		isNonstandard: "CAP",
 		name: "Persistent",
 		// implemented in the corresponding move
 		rating: 3,
-		num: -4,
+		num: -1004,
 	},
 };

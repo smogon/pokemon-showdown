@@ -150,7 +150,7 @@ export const Formats: FormatList = [
 			'Baton Pass', 'Last Respects',
 		],
 	},
-	{
+	/* {
 		name: "[Gen 9] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 
@@ -165,7 +165,7 @@ export const Formats: FormatList = [
 			'Mimikyu', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Scream Tail', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned',
 			'Moody', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Acupressure', 'Perish Song',
 		],
-	},
+	}, */
 	{
 		name: "[Gen 9] Anything Goes",
 
@@ -680,7 +680,7 @@ export const Formats: FormatList = [
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
-	{
+	/* {
 		section: "Other Metagames",
 		column: 2,
 	},
@@ -700,7 +700,7 @@ export const Formats: FormatList = [
 			'Parental Bond', 'Poison Heal', 'Pure Power', 'Shadow Tag', 'Simple', 'Speed Boost', 'Stakeout', 'Unburden', 'Water Bubble', 'Wonder Guard',
 			'King\'s Rock', 'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail',
 		],
-	},
+	}, */
 	/* {
 		name: "[Gen 9] Balanced Hackmons",
 		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,

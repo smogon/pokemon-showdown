@@ -2493,15 +2493,6 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
-	castformsunny: {
-		isNonstandard: "Future",
-	},
-	castformrainy: {
-		isNonstandard: "Future",
-	},
-	castformsnowy: {
-		isNonstandard: "Future",
-	},
 	castformgutsy: {
 		isNonstandard: "Future",
 	},
@@ -2523,7 +2514,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	castformspooky: {
 		isNonstandard: "Future",
 	},
-	castformwhirly: {
+	castformsunny: {
+		isNonstandard: "Future",
+	},
+	castformrainy: {
 		isNonstandard: "Future",
 	},
 	castformallergy: {
@@ -2535,6 +2529,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	castformzenny: {
 		isNonstandard: "Future",
 	},
+	castformsnowy: {
+		isNonstandard: "Future",
+	},
 	castformsorcery: {
 		isNonstandard: "Future",
 	},
@@ -2542,6 +2539,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Future",
 	},
 	castformlovely: {
+		isNonstandard: "Future",
+	},
+	castformwhirly: {
 		isNonstandard: "Future",
 	},
 	kecleon: {

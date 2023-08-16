@@ -7051,6 +7051,20 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	whirligig: {
+		name: "Whirligig",
+		spritenum: 64,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
+				return false;
+			}
+			return true;
+		},
+		forcedForme: "Castform-Whirly",
+		itemUser: ["Castform-Whirly"],
+		num: -1,
+		gen: 9,
+	},
 	whiteherb: {
 		name: "White Herb",
 		spritenum: 535,
