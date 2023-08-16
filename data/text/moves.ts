@@ -7458,7 +7458,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	excalibur: {
 		name: "Deathroll",
-		desc: "This move's type effectiveness against Dragon is changed to be super effective no matter what this move's type is..",
+		desc: "This move's type effectiveness against Dragon is changed to be super effective no matter what this move's type is.",
 		shortDesc: "Super effective against Dragon types.",
 	},
 

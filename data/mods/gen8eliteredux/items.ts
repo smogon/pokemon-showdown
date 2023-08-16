@@ -658,6 +658,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	thickclub: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	toxicplate: {
 		inherit: true,
 		isNonstandard: null,
