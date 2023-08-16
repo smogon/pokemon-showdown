@@ -196,6 +196,13 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen7lc');
 	});
 
+	it("should allow Pomeg glitch with event egg moves", function () {
+		team = [
+			{species: 'zigzagoon', level: 5, ability: 'pickup', moves: ['bellydrum', 'extremespeed'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen3ou');
+	});
+
 	it.skip('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
 		team = [
 			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},

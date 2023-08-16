@@ -2306,9 +2306,9 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		},
 		eventData: [
 			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "surf"], pokeball: "pokeball", eventEgg: true},
-			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "wish"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "teeterdance"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "followme"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "wish"], pokeball: "pokeball", eventEgg: true},
+			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "teeterdance"], pokeball: "pokeball", eventEgg: true},
+			{generation: 3, level: 5, shiny: 1, moves: ["thundershock", "charm", "followme"], pokeball: "pokeball", eventEgg: true},
 			{generation: 4, level: 1, moves: ["volttackle", "thunderbolt", "grassknot", "return"], pokeball: "pokeball"},
 			{generation: 4, level: 30, shiny: true, gender: "M", nature: "Jolly", moves: ["charge", "volttackle", "endeavor", "endure"], pokeball: "cherishball"},
 			{generation: 9, level: 30, shiny: true, gender: "M", nature: "Jolly", moves: ["charge", "volttackle", "endure", "helpinghand"], pokeball: "cherishball"},
@@ -5471,7 +5471,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["cutecharm"], moves: ["sing", "charm", "defensecurl", "tickle"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["cutecharm"], moves: ["sing", "charm", "defensecurl", "tickle"], pokeball: "pokeball", eventEgg: true},
 		],
 	},
 	jigglypuff: {
@@ -6129,7 +6129,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		},
 		eventData: [
 			{generation: 3, level: 26, gender: "M", nature: "Quirky", ivs: {hp: 23, atk: 24, def: 20, spa: 21, spd: 9, spe: 16}, moves: ["poisonpowder", "stunspore", "sleeppowder", "acid"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["absorb", "leechseed"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["absorb", "leechseed"], pokeball: "pokeball", eventEgg: true},
 		],
 		encounters: [
 			{generation: 1, level: 12},
@@ -7179,7 +7179,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zapcannon: ["7V"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["scratch", "growl", "petaldance"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["scratch", "growl", "petaldance"], pokeball: "pokeball", eventEgg: true},
 			{generation: 3, level: 5, moves: ["scratch", "growl"], pokeball: "pokeball"},
 			{generation: 3, level: 10, gender: "M", moves: ["scratch", "growl", "bite"], pokeball: "pokeball"},
 			{generation: 3, level: 22, moves: ["sing", "slash", "payday", "bite"]},
@@ -7777,7 +7777,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		},
 		eventData: [
 			{generation: 3, level: 27, gender: "M", nature: "Lax", ivs: {hp: 31, atk: 16, def: 12, spa: 29, spd: 31, spe: 14}, abilities: ["damp"], moves: ["tailwhip", "confusion", "disable", "screech"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["watersport", "scratch", "tailwhip", "mudsport"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["watersport", "scratch", "tailwhip", "mudsport"], pokeball: "pokeball", eventEgg: true},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -8614,7 +8614,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			whirlpool: ["8M", "7V", "4M"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "sweetkiss"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "sweetkiss"], pokeball: "pokeball", eventEgg: true},
 		],
 		encounters: [
 			{generation: 1, level: 5},
@@ -9639,7 +9639,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wringout: ["7L50", "6L47", "5L47", "4L47"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["vinewhip", "teeterdance"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["vinewhip", "teeterdance"], pokeball: "pokeball", eventEgg: true},
 			{generation: 3, level: 10, gender: "M", moves: ["vinewhip", "growth"], pokeball: "pokeball"},
 		],
 		encounters: [
@@ -27021,7 +27021,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			tickle: ["3S0"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["splash", "charm", "encore", "tickle"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["splash", "charm", "encore", "tickle"], pokeball: "pokeball", eventEgg: true},
 		],
 	},
 	wobbuffet: {
@@ -29488,7 +29488,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			whirlpool: ["8M", "7V", "4M"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["tackle", "mudsport"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["tackle", "mudsport"], pokeball: "pokeball", eventEgg: true},
 			{generation: 7, level: 50, gender: "F", nature: "Serious", abilities: ["hustle"], moves: ["tackle", "powergem"], pokeball: "ultraball"},
 		],
 	},
@@ -34056,7 +34056,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			workup: ["7M", "5M"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["peck", "growl", "focusenergy", "featherdance"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["peck", "growl", "focusenergy", "featherdance"], pokeball: "pokeball", eventEgg: true},
 		],
 		encounters: [
 			{generation: 3, level: 4},
@@ -34412,8 +34412,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["9M", "8M", "7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["growl", "wish"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["growl", "charm"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["growl", "wish"], pokeball: "pokeball", eventEgg: true},
+			{generation: 3, level: 5, shiny: 1, moves: ["growl", "charm"], pokeball: "pokeball", eventEgg: true},
 			{generation: 3, level: 20, moves: ["sing", "shockwave", "reflect", "confusion"]},
 			{generation: 6, level: 1, isHidden: true, moves: ["growl", "encore"], pokeball: "pokeball"},
 		],
@@ -34866,7 +34866,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			watersport: ["7L14", "6L14", "5L19", "4L19", "3L19"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "mudsport"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "mudsport"], pokeball: "pokeball", eventEgg: true},
 			{generation: 3, level: 10, gender: "M", moves: ["bubble", "quickattack"], pokeball: "pokeball"},
 		],
 		encounters: [
@@ -35759,7 +35759,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "7T", "6T", "5T", "5D", "4T"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["pound", "uproar", "teeterdance"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["pound", "uproar", "teeterdance"], pokeball: "pokeball", eventEgg: true},
 		],
 	},
 	loudred: {
@@ -36403,7 +36403,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 		},
 		eventData: [
 			{generation: 3, level: 5, shiny: 1, abilities: ["cutecharm"], moves: ["tackle", "growl", "tailwhip", "payday"], pokeball: "pokeball", eventEgg: true},
-			{generation: 3, level: 5, shiny: 1, abilities: ["cutecharm"], moves: ["growl", "tackle", "tailwhip", "rollout"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["cutecharm"], moves: ["growl", "tackle", "tailwhip", "rollout"], pokeball: "pokeball", eventEgg: true},
 			{generation: 3, level: 10, gender: "M", abilities: ["cutecharm"], moves: ["growl", "tackle", "tailwhip", "attract"], pokeball: "pokeball"},
 		],
 		encounters: [
@@ -37498,7 +37498,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["growl", "thunderwave", "watersport"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["growl", "thunderwave", "watersport"], pokeball: "pokeball", eventEgg: true},
 			{generation: 3, level: 10, gender: "M", moves: ["growl", "thunderwave", "quickattack"], pokeball: "pokeball"},
 		],
 	},
@@ -37585,7 +37585,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			wish: ["7E", "6E", "5E", "4E", "3E"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["growl", "thunderwave", "mudsport"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["growl", "thunderwave", "mudsport"], pokeball: "pokeball", eventEgg: true},
 			{generation: 3, level: 10, gender: "M", moves: ["growl", "thunderwave", "quickattack"], pokeball: "pokeball"},
 		],
 	},
@@ -38861,7 +38861,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["9M", "9E", "7T", "7L26", "7E", "6T", "6L26", "6E", "5T", "5L26", "5E", "4T", "4L26", "4E"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["owntempo"], moves: ["splash", "uproar"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["owntempo"], moves: ["splash", "uproar"], pokeball: "pokeball", eventEgg: true},
 		],
 	},
 	grumpig: {
@@ -39091,7 +39091,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["7T", "6T", "5T", "4T"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["tackle", "uproar", "sing"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["tackle", "uproar", "sing"], pokeball: "pokeball", eventEgg: true},
 		],
 	},
 	trapinch: {
@@ -39456,7 +39456,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			worryseed: ["7T", "7E", "6T", "6E", "5T", "5E", "4T"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["poisonsting", "leer", "absorb", "encore"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["poisonsting", "leer", "absorb", "encore"], pokeball: "pokeball", eventEgg: true},
 		],
 	},
 	cacturne: {
@@ -40464,7 +40464,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			xscissor: ["8M", "7M", "6M", "5M", "4M"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "watersport"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["bubble", "watersport"], pokeball: "pokeball", eventEgg: true},
 		],
 	},
 	crawdaunt: {
@@ -42278,8 +42278,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "7T", "7E", "6T", "6E", "5T", "5E", "4T", "4E"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["pressure"], moves: ["scratch", "leer", "wish"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, abilities: ["pressure"], moves: ["scratch", "leer", "spite"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, abilities: ["pressure"], moves: ["scratch", "leer", "wish"], pokeball: "pokeball", eventEgg: true},
+			{generation: 3, level: 5, shiny: 1, abilities: ["pressure"], moves: ["scratch", "leer", "spite"], pokeball: "pokeball", eventEgg: true},
 			{generation: 3, level: 35, abilities: ["pressure"], moves: ["razorwind", "bite", "swordsdance", "spite"], pokeball: "pokeball"},
 			{generation: 3, level: 70, abilities: ["pressure"], moves: ["doubleteam", "slash", "futuresight", "perishsong"], pokeball: "pokeball"},
 		],
@@ -43145,8 +43145,8 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["9M", "9L35", "8M", "8L35", "7T", "7L34", "6T", "6L34", "5T", "5L35", "4T", "4L35"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["rage", "bite", "wish"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["rage", "bite", "irondefense"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, moves: ["rage", "bite", "wish"], pokeball: "pokeball", eventEgg: true},
+			{generation: 3, level: 5, shiny: 1, moves: ["rage", "bite", "irondefense"], pokeball: "pokeball", eventEgg: true},
 			{generation: 5, level: 1, shiny: true, moves: ["rage"], pokeball: "pokeball"},
 			{generation: 6, level: 1, moves: ["rage", "thrash"], pokeball: "pokeball"},
 		],
