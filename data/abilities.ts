@@ -5229,7 +5229,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Power Fists",
-		rating: 4,
+		rating: 3.5,
 		num: 303,
 		gen: 8,
 	}, 
@@ -5254,7 +5254,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Rampage",
-		rating: 3,
+		rating: 2,
 		num: 307,
 		gen: 8,
 	},
@@ -5284,7 +5284,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Vengeance",
-		rating: 3,
+		rating: 2,
 		num: 308,
 		gen: 8,
 	},
@@ -5293,7 +5293,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.flags['punch']) return priority + 1;
 		},
 		name: "Blitz Boxer",
-		rating: 3,
+		rating: 4,
 		num: 309,
 		gen: 8,
 	},
@@ -5424,7 +5424,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Exploit Weakness",
-		rating: 3,
+		rating: 2,
 		num: 315,
 		gen: 8,
 	},
@@ -5460,7 +5460,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			move.forceSTAB = true;
 		},
 		name: "Mystic Power",
-		rating: 5,
+		rating: 4.5,
 		num: 317,
 		gen: 8,
 	}, 
@@ -5473,7 +5473,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.basePower <= 25) return priority + 1;
 		},
 		name: "Perfectionist",
-		rating: 4,
+		rating: 3.5,
 		num: 318,
 		gen: 8,
 	},
@@ -5573,7 +5573,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Loud Bang",
-		rating: 3.5,
+		rating: 2,
 		num: 325,
 		gen: 8,
 	},
@@ -5765,7 +5765,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.heal(pokemon.baseMaxhp / 16);
 		},
 		name: "Self Sufficient",
-		rating: 3,
+		rating: 4,
 		num: 337,
 		gen: 8,
 	},
@@ -5848,7 +5848,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Dragon Slayer",
-		rating: 3.5,
+		rating: 2.5,
 		num: 343,
 		gen: 8,
 	},
@@ -5908,7 +5908,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		name: "Primal Armor",
-		rating: 3,
+		rating: 4,
 		num: 347,
 		gen: 8,
 	},
@@ -5973,7 +5973,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return false;
 		},
 		name: "Juggernaut",
-		rating: 3,
+		rating: 3.5,
 		num: 350,
 		gen: 8,
 	},
@@ -6122,7 +6122,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.boost({[bestStat]: 1}, pokemon);
 		},
 		name: "Majestic Moth",
-		rating: 5,
+		rating: 4.5,
 		num: 359,
 		gen: 8,
 	},
@@ -6148,7 +6148,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.damage(damage, source, target);
 		},
 		name: "Soul Linker",
-		rating: 3,
+		rating: 4,
 		num: 360,
 		gen: 8,
 	},
@@ -6162,7 +6162,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 		},
 		name: "Sweet Dreams",
-		rating: 3,
+		rating: 2,
 		num: 361,
 		gen: 8,
 
@@ -6176,7 +6176,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.accuracy === true) move.accuracy = 95; 
 		},
 		name: "Bad Luck",
-		rating: 3,
+		rating: 2,
 		num: 362,
 		gen: 8,
 	},
@@ -6272,7 +6272,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},	
 		name: "Spider Lair",
-		rating: 5,
+		rating: 4.5,
 		num: 367,
 		gen: 8,
 	},
@@ -6357,7 +6357,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Psychic Mind",
-		rating: 3,
+		rating: 3.5,
 		num: 371,
 		gen: 8,
 	},
@@ -6422,7 +6422,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Multi Headed",
-		rating: 5,
+		rating: 4.5,
 		num: 362,
 		gen: 8,
 	},
@@ -6465,7 +6465,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Violent Rush",
-		rating: 3,
+		rating: 3.5,
 		num: 365,
 		gen: 8,
 
@@ -6475,7 +6475,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move?.type === 'Fire' && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 		name: "Flaming Soul",
-		rating: 3,
+		rating: 1.5,
 		num: 366,
 		gen: 8,
 	},
@@ -6535,7 +6535,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Bone Zone",
-		rating: 4.5,
+		rating: 4,
 		num: 368,
 		gen: 8,
 	},
@@ -6547,7 +6547,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Weather Control",
-		rating: 2,
+		rating: 3,
 		num: 369,
 		gen: 8,
 	},
@@ -6576,7 +6576,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 		},
 		name: "Sea Guardian",
-		rating: 4,
+		rating: 3.5,
 		num: 371,
 		gen: 8,
 	},
@@ -6671,7 +6671,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move?.type === 'Ice' && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 		name: "Frozen Soul",
-		rating: 3,
+		rating: 1.5,
 		num: 377,
 		gen: 8,
 	},
@@ -6701,7 +6701,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 379,
 		gen: 8,
 	},
-	//TODO: Fix Power Core and Juggernaut Damage Calcs
 	powercore: {
 		onModifyAtk(atk, attacker, defender, move) {
 			return this.chainModify(((atk + (attacker.getStat('def') * .25)) / (atk ? atk : 1)));
@@ -6710,7 +6709,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return this.chainModify(((spa + (attacker.getStat('spd') * .25)) / (spa ? spa : 1)));
 		},
 		name: "Power Core",
-		rating: 3,
+		rating: 3.5,
 		num: 380,
 		gen: 8,
 	},
@@ -6740,7 +6739,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Giant Wings",
-		rating: 4,
+		rating: 3,
 		num: 384,
 		gen: 8,
 	},
@@ -6839,7 +6838,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (move.flags['punch']) return critRatio + 1;
 		},
 		name: "Precise Fist",
-		rating: 4,
+		rating: 2.5,
 		num: 388,
 		gen: 8,
 	},
@@ -6848,7 +6847,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			move.accuracy = true;
 		},
 		name: "Deadeye",
-		rating: 4,
+		rating: 3.5,
 		num: 389,
 		gen: 8,
 	},
@@ -6860,7 +6859,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Artillery",
-		rating: 4,
+		rating: 1.5,
 		num: 390,
 		gen: 8,
 	},
@@ -6878,7 +6877,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Amplifier",
-		rating: 4,
+		rating: 3.5,
 		num: 391,
 		gen: 8,
 	},
@@ -6921,7 +6920,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 		},
 		name: "Sun Worship",
-		rating: 4,
+		rating: 3,
 		num: 393,
 		gen: 8,
 	},
@@ -6995,7 +6994,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Expert Hunter",
-		rating: 4,
+		rating: 4.5,
 		num: 396,
 		gen: 8,
 	},
