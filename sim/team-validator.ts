@@ -86,6 +86,7 @@ export class PokemonSources {
 	 * particular parent to learn
 	 */
 	pomegEggMoves?: ID[] | null;
+	pomegEventEgg?: string;
 	/**
 	 * Some Pokemon evolve by having a move in their learnset (like Piloswine
 	 * with Ancient Power). These can only carry three other moves from their
@@ -152,6 +153,14 @@ export class PokemonSources {
 		return max;
 	}
 	intersectWith(other: PokemonSources) {
+		if (this.pomegEventEgg && other.pomegEggMoves && other.pomegEggMoves.length) {
+			const newSources = [];
+			for (const source of other.sources) {
+				newSources.push(source.substr(0, 2) === '3E' ? this.pomegEventEgg : source);
+			}
+			other.sources = newSources;
+		}
+		if (other.pomegEventEgg) this.pomegEventEgg = other.pomegEventEgg;
 		if (other.sourcesBefore || this.sourcesBefore) {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
@@ -2476,6 +2485,10 @@ export class TeamValidator {
 							moveSources.add('1ST' + learned.slice(2) + ' ' + species.id);
 						}
 						moveSources.add(learned + ' ' + species.id);
+						const eventLearnset = dex.species.getLearnsetData(species.id);
+						if (eventLearnset.eventData && eventLearnset.eventData[parseInt(learned.charAt(2))].eventEgg && learnedGen === 3) {
+							moveSources.pomegEventEgg = learned + ' ' + species.id;
+						}
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
 						//   only if that was the source
