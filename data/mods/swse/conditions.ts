@@ -466,7 +466,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('heatrock')) {
+			if (source?.hasItem('weatherballoon')) {
 				return 8;
 			}
 			return 5;
@@ -484,6 +484,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (move.type === 'Water') {
 				this.debug('Sunny Day water suppress');
 				return this.chainModify(0.5);
+			}
+		},
+		onModifySpDPriority: 10,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.hasType('Grass') && pokemon!.hasItem('utilityumbrella')) {
+				return this.modify(spd, 1.25);
 			}
 		},
 		onFieldStart(battle, source, effect) {
@@ -512,7 +518,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('damprock')) {
+			if (source?.hasItem('weatherballoon')) {
 				return 8;
 			}
 			return 5;
@@ -526,6 +532,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (move.type === 'Fire') {
 				this.debug('rain fire suppress');
 				return this.chainModify(0.5);
+			}
+		},
+		onModifyDefPriority: 10,
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasType('Grass') && pokemon!.hasItem('utilityumbrella')) {
+				return this.modify(def, 1.25);
 			}
 		},
 		onFieldStart(field, source, effect) {
@@ -550,7 +562,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('icyrock')) {
+			if (source?.hasItem('weatherballoon')) {
 				return 8;
 			}
 			return 5;
@@ -580,7 +592,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('icyrock')) {
+			if (source?.hasItem('weatherballoon')) {
 				return 8;
 			}
 			return 5;

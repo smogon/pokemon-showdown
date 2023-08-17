@@ -39,6 +39,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 0.1,
 		num: 0,
 	},
+	absolutezero: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.field.isWeather(['hail', 'snow'])) {
+				if (move.type === 'Ice') {
+					this.debug('Absolute Zero boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (this.field.isWeather(['hail', 'snow']) && move.secondaries) {
+				this.debug('Absolute Zero 2x secondary chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance *= 2;
+				}
+			}
+			if (move.self?.chance) move.self.chance *= 2;
+		},
+		name: "Absolute Zero",
+		rating: 3,
+		num: -16,
+	},
 	adaptability: {
 		onModifyMove(move) {
 			move.stab = 2;
@@ -1486,6 +1510,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 		num: 206,
 	},
+	glacialarmor: {
+		onModifyDef(def, pokemon) {
+			if (this.field.isWeather(['hail', 'snow'])) {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (this.field.isWeather(['hail', 'snow'])) {
+				return this.chainModify(2);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		name: "Glacial Armor",
+		rating: 2,
+		num: -15,
+	},
 	gluttony: {
 		name: "Gluttony",
 		rating: 1.5,
@@ -1688,7 +1730,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Haunting",
 		rating: 3,
-		num: -16,
+		num: -17,
 	},
 	hayfever: {
 		onStart(source) {
@@ -2381,7 +2423,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Malice",
 		rating: 3,
-		num: -15,
+		num: -18,
 	},
 	marvelscale: {
 		onModifyDefPriority: 6,
@@ -5046,7 +5088,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Warp Mist",
 		rating: 2,
-		num: -17,
+		num: -19,
 	},
 	waterabsorb: {
 		onTryHit(target, source, move) {
