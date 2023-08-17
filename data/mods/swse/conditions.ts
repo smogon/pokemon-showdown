@@ -488,7 +488,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasType('Grass') && pokemon!.hasItem('utilityumbrella')) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.hasType('Grass')) {
 				return this.modify(spd, 1.25);
 			}
 		},
@@ -536,7 +537,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Grass') && pokemon!.hasItem('utilityumbrella')) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.hasType('Grass')) {
 				return this.modify(def, 1.25);
 			}
 		},
