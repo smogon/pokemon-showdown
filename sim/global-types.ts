@@ -85,7 +85,7 @@ interface EventInfo {
 	from?: string;
 	/** Japan-only events can't be transferred to international games in Gen 1 */
 	japan?: boolean;
-	/** For Gen 3 event eggs to allow Pomeg glitched moves */
+	/** For Emerald event eggs to allow Pomeg glitched moves */
 	eventEgg?: boolean;
 }
 
