@@ -2499,7 +2499,7 @@ export class TeamValidator {
 						}
 						moveSources.add(learned + ' ' + species.id);
 						const eventLearnset = dex.species.getLearnsetData(species.id);
-						if (eventLearnset.eventData && eventLearnset.eventData[parseInt(learned.charAt(2))].eventEgg && learnedGen === 3) {
+						if (eventLearnset.eventData?.[parseInt(learned.charAt(2))].eventEgg && learnedGen === 3) {
 							moveSources.pomegEventEgg = learned + ' ' + species.id;
 						}
 					} else if (learned.charAt(1) === 'D') {
