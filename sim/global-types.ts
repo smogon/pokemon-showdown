@@ -85,6 +85,8 @@ interface EventInfo {
 	from?: string;
 	/** Japan-only events can't be transferred to international games in Gen 1 */
 	japan?: boolean;
+	/** For Emerald event eggs to allow Pomeg glitched moves */
+	emeraldEventEgg?: boolean;
 }
 
 type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
@@ -541,7 +543,7 @@ namespace RandomTeamsTypes {
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
 		teraType?: string;
-		role?: string;
+		role?: Role;
 	}
 	export interface RandomFactorySet {
 		name: string;
@@ -559,4 +561,19 @@ namespace RandomTeamsTypes {
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
 	}
+	export interface RandomSetData {
+		role: Role;
+		movepool: string[];
+		teraTypes?: string[];
+		preferredTypes?: string;
+	}
+	export interface RandomSpeciesData {
+		level?: number;
+		sets: RandomSetData[];
+	}
+	export type Role = '' | 'Fast Attacker' | 'Setup Sweeper' | 'Wallbreaker' | 'Tera Blast user' |
+	'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
+	'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |
+	'Doubles Bulky Setup' | 'Offensive Protect' | 'Bulky Protect' | 'Doubles Support' | 'Choice Item user' |
+	'Z-Move user' | 'Staller';
 }

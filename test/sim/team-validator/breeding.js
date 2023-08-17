@@ -163,6 +163,46 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen5ou');
 	});
 
+	it("should disallow low-level female-only Pokemon with illegal (level up) egg moves/egg move combinations", function () {
+		team = [
+			{species: 'tinkatink', level: 5, ability: 'moldbreaker', moves: ['knockoff'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen9lc');
+
+		team = [
+			{species: 'tinkatink', level: 5, ability: 'moldbreaker', moves: ['covet', 'fakeout'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen9lc');
+	});
+
+	it("should disallow illegal (level up) egg move combinations involving moves that can't be tradebacked", function () {
+		team = [
+			{species: 'chansey', level: 5, moves: ['healbell', 'softboiled'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen2ou');
+	});
+
+	it("should disallow illegal (level up) egg moves/egg move combinations involving Pomeg glitch and Gen 4 abilities", function () {
+		team = [
+			{species: 'smoochum', level: 5, ability: 'forewarn', moves: ['powdersnow'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen4lc');
+	});
+
+	it("should allow previously illegal level up egg moves in Gen 7", function () {
+		team = [
+			{species: 'smoochum', level: 5, ability: 'hydration', moves: ['powdersnow'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen7lc');
+	});
+
+	it("should allow Pomeg glitch with event egg moves", function () {
+		team = [
+			{species: 'zigzagoon', level: 5, ability: 'pickup', moves: ['bellydrum', 'extremespeed'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen3ou');
+	});
+
 	it.skip('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
 		team = [
 			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},

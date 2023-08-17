@@ -238,9 +238,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	getItem(
 		ability: string,
-		types: Set<string>,
+		types: string[],
 		moves: Set<string>,
 		counter: MoveCounter,
+		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species
 	) {
 		// First, the high-priority items
@@ -281,7 +282,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			['fireblast', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
 			Array.from(moves).some(m => {
 				const moveData = this.dex.moves.get(m);
-				return moveData.category === 'Special' && types.has(moveData.type);
+				return moveData.category === 'Special' && types.includes(moveData.type);
 			})
 		)) {
 			return 'Choice Band';
@@ -552,7 +553,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
 
-		const item = this.getItem(ability, types, moves, counter, species);
+		const item = this.getItem(ability, species.types, moves, counter, teamDetails, species);
 		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
@@ -607,11 +608,17 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData));
+		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
+			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
+			const currentSpeciesPool: Species[] = [];
+			for (const poke of pokemonPool) {
+				const species = this.dex.species.get(poke);
+				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
+			}
+			const species = this.sample(currentSpeciesPool);
+			if (!species.exists) continue;
 
-		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !this.randomData[species.id]?.moves) continue;
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
