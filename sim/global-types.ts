@@ -86,7 +86,7 @@ interface EventInfo {
 	/** Japan-only events can't be transferred to international games in Gen 1 */
 	japan?: boolean;
 	/** For Emerald event eggs to allow Pomeg glitched moves */
-	eventEgg?: boolean;
+	emeraldEventEgg?: boolean;
 }
 
 type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
