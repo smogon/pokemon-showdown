@@ -5,8 +5,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	absolutezero: {
 		name: "Absolute Zero",
-		desc: "If Hail is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3, and have their secondary effect chance doubled.",
-		shortDesc: "This Pokemon's Ice attacks do 1.3x in Sandstorm; 2x status chance",
+		desc: "If Hail is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3, and have their secondary effect chance doubled. This Pokemon takes no damage from Sandstorm.",
+		shortDesc: "This Pokemon's Ice attacks do 1.3x in Hail and have 2x status chance. Hail immunity.",
 	},
 	adaptability: {
 		name: "Adaptability",
