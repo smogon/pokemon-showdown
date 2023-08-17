@@ -6583,7 +6583,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Glalie-Mega",
 		baseSpecies: "Glalie",
 		forme: "Mega",
-		types: ["Ice"],
+		types: ["Ice", "Rock"],
 		baseStats: {hp: 80, atk: 130, def: 80, spa: 120, spd: 80, spe: 110},
 		abilities: {0: "Moody", 1: "Rock Head", H: "Whiteout", I1: "Snow Warning", I2: "Refrigerate", I3: "Levitate"},
 		heightm: 2.1,
@@ -10134,7 +10134,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	cofagrigus: {
 		num: 563,
 		name: "Cofagrigus",
-		types: ["Ghost"],
+		types: ["Ghost", "Steel"],
 		baseStats: {hp: 58, atk: 50, def: 145, spa: 95, spd: 105, spe: 30},
 		abilities: {0: "Mummy", 1: "Shadow Shield", H: "Shadow Tag", I1: "Vengeance", I2: "Cursed Body", I3: "Haunted Spirit"},
 		heightm: 1.7,
