@@ -1,5 +1,37 @@
+import {Dex, toID} from '../../../sim/dex';
+
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 8,
+	actions: {
+		inherit: true,
+		canMegaEvo(pokemon: Pokemon) {
+			let species = pokemon.baseSpecies;
+			let altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
+			const item = pokemon.getItem();
+
+			console.log(`Mega Debug - Species: ${species}, altForme: ${altForme}`)
+
+			//Necrozma Check
+			if (['Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings'].some(a => a === species.name)) {
+				species = this.dex.species.get(species.name);
+				altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
+			}
+
+			console.log(`Base Moves: ${pokemon.baseMoves}`);
+			// Mega Rayquaza
+			if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past') || this.battle.format.mod.includes('redux')) &&
+				altForme?.isMega && altForme?.requiredMove &&
+				pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
+					console.log(`Returning ${altForme.name}!`)
+				return altForme.name;
+			}
+			// a hacked-in Megazard X can mega evolve into Megazard Y, but not into Megazard X
+			if (item.megaEvolves === species.baseSpecies && item.megaStone !== species.name) {
+				return item.megaStone;
+			}
+			return null;
+		}
+	},
 	field: {
 		suppressingWeather() {
 			for (const pokemon of this.battle.getAllActive()) {
@@ -153,6 +185,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		 * This function handles all changes to stats, ability, type, species, etc.
 		 * as well as sending all relevant messages sent to the client.
 		 */
+
+		
 		formeChange(speciesId, source, isPermanent, message) {
 			if (!source) source = this.battle.effect;
 
