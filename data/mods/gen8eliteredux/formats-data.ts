@@ -4549,7 +4549,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
-	kingdrite: {
+	kingdramega: {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
