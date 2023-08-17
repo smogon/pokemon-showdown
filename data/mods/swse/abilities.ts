@@ -63,9 +63,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			if (move.self?.chance) move.self.chance *= 2;
 		},
-		/* onImmunity(type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
-		}, */
+		},
 		name: "Absolute Zero",
 		rating: 3,
 		num: -16,
