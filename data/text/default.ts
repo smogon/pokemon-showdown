@@ -264,13 +264,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 	},
 
 	// weather
-	sandstorm: {
-		weatherName: "Sandstorm",
-		start: "  A sandstorm kicked up!",
-		end: "  The sandstorm subsided.",
-		upkeep: "  (The sandstorm is raging.)",
-		damage: "  [POKEMON] is buffeted by the sandstorm!",
-	},
+	// climate
 	sunnyday: {
 		weatherName: "Sun",
 		start: "  The sunlight turned harsh!",
@@ -296,6 +290,29 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		end: "  The snow stopped.",
 		upkeep: "  (The snow is falling down.)",
 	},
+	bloodmoon: {
+		weatherName: "Blood Moon",
+		start: "  A blood moon rises!",
+		end: "  The blood moon passed.",
+		upkeep: "  (It's the hour of the blood moon.)",
+	},
+	foghorn: {
+		weatherName: "Fog",
+		start: "  Fog fills the battlefield!",
+		end: "  The fog disappeared.",
+		upkeep: "  (The fog is deep...)",
+	},
+
+	// irritant
+	sandstorm: {
+		weatherName: "Sandstorm",
+		start: "  A sandstorm kicked up!",
+		end: "  The sandstorm subsided.",
+		upkeep: "  (The sandstorm is raging.)",
+		damage: "  [POKEMON] is buffeted by the sandstorm!",
+	},
+
+	// extra weather
 	desolateland: {
 		weatherName: "Intense Sun",
 		start: "  The sunlight turned extremely harsh!",

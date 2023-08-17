@@ -2043,6 +2043,10 @@ export class Pokemon {
 		case 'raindance':
 		case 'desolateland':
 		case 'primordialsea':
+		case 'hail':
+		case 'snow':
+		case 'bloodmoon':
+		case 'foghorn':
 			if (this.hasItem('utilityumbrella')) return '';
 		}
 		return weather;

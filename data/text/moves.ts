@@ -4194,7 +4194,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	moonlight: {
 		name: "Moonlight",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if a non-climate Weathergy is in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Blood Moon, 1/8 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Hail, Snow, or Foghorn, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
@@ -4214,7 +4214,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	morningsun: {
 		name: "Morning Sun",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if a non-climate Weathergy is in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sunny Day, 1/8 of its maximum HP if the weather is Blood Moon, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Hail, Snow, or Foghorn, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
@@ -7214,7 +7214,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	weatherball: {
 		name: "Weather Ball",
-		desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Snow, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, this move remains Normal type and does not double in power.",
+		desc: "Power doubles if a Weathergy is active, and this move's type changes to match. If the user is holding Utility Umbrella and uses Weather Ball during a climate Weathergy, this move remains Normal type and does not double in power.",
 		shortDesc: "Power doubles and type varies in each weather.",
 		gen8: {
 			desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Hail, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, this move remains Normal type and does not double in power.",

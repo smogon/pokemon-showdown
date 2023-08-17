@@ -42,6 +42,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	absolutezero: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['hail', 'snow'])) {
 				if (move.type === 'Ice') {
 					this.debug('Absolute Zero boost');
@@ -50,15 +51,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onModifyMovePriority: -2,
-		onModifyMove(move) {
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['hail', 'snow']) && move.secondaries) {
-				this.debug('Absolute Zero 2x secondary chance');
-				for (const secondary of move.secondaries) {
-					if (secondary.chance) secondary.chance *= 2;
+				if (move.type === 'Ice') {
+					this.debug('Absolute Zero 2x secondary chance');
+					for (const secondary of move.secondaries) {
+						if (secondary.chance) secondary.chance *= 2;
+					}
 				}
 			}
 			if (move.self?.chance) move.self.chance *= 2;
 		},
+		/* onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		}, */
 		name: "Absolute Zero",
 		rating: 3,
 		num: -16,
@@ -1381,6 +1388,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			case 'snow':
 				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
 				break;
+			case 'bloodmoon':
+				if (pokemon.species.id !== 'castformshady') forme = 'Castform-Shady';
+				break;
+			case 'foghorn':
+				if (pokemon.species.id !== 'castform') forme = 'Castform';
+				break;
+			case 'sandstorm':
+				if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
+				break;
 			default:
 				if (pokemon.species.id !== 'castform') forme = 'Castform';
 				break;
@@ -1512,11 +1528,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	glacialarmor: {
 		onModifyDef(def, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['hail', 'snow'])) {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpD(spd, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isWeather(['hail', 'snow'])) {
 				return this.chainModify(2);
 			}

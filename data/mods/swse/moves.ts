@@ -12393,15 +12393,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon) {
 			let factor = 0.5;
 			switch (pokemon.effectiveWeather()) {
+			case 'bloodmoon':
+				factor = 0.667;
+				break;
 			case 'sunnyday':
 			case 'desolateland':
-				factor = 0.667;
+				factor = 0.125;
 				break;
 			case 'raindance':
 			case 'primordialsea':
-			case 'sandstorm':
 			case 'hail':
 			case 'snow':
+			case 'foghorn':
 				factor = 0.25;
 				break;
 			}
@@ -12434,11 +12437,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'desolateland':
 				factor = 0.667;
 				break;
+			case 'bloodmoon':
+				factor = 0.125;
+				break;
 			case 'raindance':
 			case 'primordialsea':
-			case 'sandstorm':
 			case 'hail':
 			case 'snow':
+			case 'foghorn':
 				factor = 0.25;
 				break;
 			}
@@ -19166,9 +19172,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				break;
 			case 'raindance':
 			case 'primordialsea':
-			case 'sandstorm':
 			case 'hail':
 			case 'snow':
+			case 'bloodmoon':
+			case 'foghorn':
 				factor = 0.25;
 				break;
 			}
@@ -21060,12 +21067,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'primordialsea':
 				move.type = 'Water';
 				break;
-			case 'sandstorm':
-				move.type = 'Rock';
-				break;
 			case 'hail':
 			case 'snow':
 				move.type = 'Ice';
+				break;
+			case 'bloodmoon':
+				move.type = 'Dark';
+				break;
+			case 'foghorn':
+				move.type = 'Normal';
+				break;
+			case 'sandstorm':
+				move.type = 'Rock';
 				break;
 			}
 		},
@@ -21079,11 +21092,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'primordialsea':
 				move.basePower *= 2;
 				break;
-			case 'sandstorm':
-				move.basePower *= 2;
-				break;
 			case 'hail':
 			case 'snow':
+				move.basePower *= 2;
+				break;
+			case 'bloodmoon':
+				move.basePower *= 2;
+				break;
+			case 'foghorn':
+				move.basePower *= 2;
+				break;
+			case 'sandstorm':
 				move.basePower *= 2;
 				break;
 			}

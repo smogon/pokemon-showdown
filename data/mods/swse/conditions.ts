@@ -583,6 +583,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
+			if (target.hasItem('utilityumbrella')) return;
 			this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
@@ -601,6 +602,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (pokemon.hasType('Ice') && this.field.isWeather('snow')) {
 				return this.modify(def, 1.5);
 			}
@@ -640,6 +642,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onModifyPriority(priority, pokemon, target, move) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (move?.type === 'Dark' && move.category === 'Status') return priority + 1;
 		},
 		onFieldStart(field, source, effect) {
@@ -671,6 +674,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifyAccuracyPriority: -2,
 		onModifyAccuracy(accuracy, target, source, move) {
+			if (source.hasItem('utilityumbrella')) return;
 			if (typeof accuracy === 'number' && move?.type !== 'Normal') {
 				// This one piece of code took over 5 hours to do because it was reading move as move: Pokemon and not move: ActiveMove
 				this.debug('Fog accuracy decrease');
@@ -678,7 +682,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onModifyMovePriority: -5,
-		onModifyMove(move) {
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
 				move.ignoreImmunity['Normal'] = true;

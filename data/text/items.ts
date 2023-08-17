@@ -2234,8 +2234,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	utilityumbrella: {
 		name: "Utility Umbrella",
-		desc: "The holder ignores rain- and sun-based effects. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
-		shortDesc: "The holder ignores rain- and sun-based effects.",
+		desc: "The holder ignores climate Weathergy effects. Damage and accuracy calculations from attacks used by the holder are affected by climate Weathergy, but not attacks used against the holder.",
+		shortDesc: "The holder ignores climate Weathergy effects.",
 	},
 	venusaurite: {
 		name: "Venusaurite",
@@ -2277,6 +2277,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Weakness Policy",
 		desc: "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use.",
 	},
+	weatherballoon: {
+		name: "Weather Balloon",
+		desc: "Holder's climate Weathergies last 8 turns instead of 5.",
+	},
 	wepearberry: {
 		name: "Wepear Berry",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
@@ -2284,6 +2288,11 @@ export const ItemsText: {[k: string]: ItemText} = {
 	whippeddream: {
 		name: "Whipped Dream",
 		desc: "Evolves Swirlix into Slurpuff when traded.",
+	},
+	whirligig: {
+		name: "Whirligig",
+		desc: "If held by a Castform, this item allows it to transform into Castform-Whirly in battle during Magnetize.",
+		shortDesc: "Allows Castform to enter Castform-Whirly form."
 	},
 	whiteherb: {
 		name: "White Herb",

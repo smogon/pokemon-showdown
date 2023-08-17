@@ -6873,19 +6873,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem()) return;
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
 				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onUpdate(pokemon) {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
 				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveWeather())) {
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
 				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 			}
 			this.effectState.inactive = true;
@@ -7028,6 +7028,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 639,
 		gen: 6,
 	},
+	weatherballoon: {
+		name: "Weather Balloon",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -2,
+		gen: 10,
+	},
 	wepearberry: {
 		name: "Wepear Berry",
 		spritenum: 533,
@@ -7063,7 +7072,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		forcedForme: "Castform-Whirly",
 		itemUser: ["Castform-Whirly"],
 		num: -1,
-		gen: 9,
+		gen: 10,
 	},
 	whiteherb: {
 		name: "White Herb",
@@ -7513,7 +7522,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
-		num: -1,
+		num: -1001,
 		gen: 6,
 		isNonstandard: "CAP",
 	},
@@ -7537,7 +7546,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		forcedForme: "Venomicon-Epilogue",
 		itemUser: ["Venomicon-Epilogue"],
-		num: -2,
+		num: -1002,
 		gen: 8,
 		isNonstandard: "CAP",
 	},
