@@ -6455,12 +6455,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	violentrush: {
 		onModifyAtk(atk, source, target, move) {
-			if (!source.activeTurns) {
+			if (source.activeMoveActions === 0) {
 				return this.chainModify(1.2);
 			}
 		},
 		onModifySpe(spe, source) {
-			if (!source.activeTurns) {
+			if (source.activeMoveActions === 0) {
 				return this.chainModify(1.5);
 			}
 		},
