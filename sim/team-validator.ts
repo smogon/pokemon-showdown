@@ -87,6 +87,12 @@ export class PokemonSources {
 	 */
 	pomegEggMoves?: ID[] | null;
 	/**
+	 * Event egg source that may be used with the Pomeg glitch
+	 *
+	 * `null` = definitely not an event egg that can be used with the Pomeg glitch
+	 */
+	pomegEventEgg?: string | null;
+	/**
 	 * Some Pokemon evolve by having a move in their learnset (like Piloswine
 	 * with Ancient Power). These can only carry three other moves from their
 	 * prevo, because the fourth move must be the evo move. This restriction
@@ -152,6 +158,22 @@ export class PokemonSources {
 		return max;
 	}
 	intersectWith(other: PokemonSources) {
+		if (this.pomegEventEgg && other.pomegEggMoves) {
+			const newSources = [];
+			for (const source of other.sources) {
+				newSources.push(source.substr(0, 2) === '3E' ? this.pomegEventEgg : source);
+			}
+			other.sources = newSources;
+		} else if (other.pomegEventEgg && this.pomegEventEgg !== null) {
+			const newSources = [];
+			for (const source of this.sources) {
+				newSources.push(source.substr(0, 2) === '3E' ? other.pomegEventEgg : source);
+			}
+			this.sources = newSources;
+			this.pomegEventEgg = other.pomegEventEgg;
+		} else if (!other.pomegEggMoves && !other.sourcesBefore) {
+			this.pomegEventEgg = null;
+		}
 		if (other.sourcesBefore || this.sourcesBefore) {
 			// having sourcesBefore is the equivalent of having everything before that gen
 			// in sources, so we fill the other array in preparation for intersection
@@ -2476,6 +2498,10 @@ export class TeamValidator {
 							moveSources.add('1ST' + learned.slice(2) + ' ' + species.id);
 						}
 						moveSources.add(learned + ' ' + species.id);
+						const eventLearnset = dex.species.getLearnsetData(species.id);
+						if (eventLearnset.eventData?.[parseInt(learned.charAt(2))].emeraldEventEgg && learnedGen === 3) {
+							moveSources.pomegEventEgg = learned + ' ' + species.id;
+						}
 					} else if (learned.charAt(1) === 'D') {
 						// DW moves:
 						//   only if that was the source
