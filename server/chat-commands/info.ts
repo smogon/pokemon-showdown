@@ -866,8 +866,31 @@ export const commands: Chat.ChatCommands = {
 	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
-	weakness(target, room, user) {
-		if (!target) return this.parse('/help weakness');
+	async weakness(target, room, user) {
+		if (!target) {
+			if (room?.battle?.playerTable) {
+				const friendlyChannel = room.battle.playerTable[user.id].channelIndex;
+				const foeUsers = room.battle.players
+					.filter(({channelIndex}) => channelIndex !== friendlyChannel)
+					.map(({id}) => Users.get(id))
+					.filter(Boolean) as User[];
+
+				const activeFoePokemon = await Promise.all(
+					foeUsers.map((foeUser) => room.battle!.getActivePokemon(foeUser)).filter(Boolean)
+				).then((resultList) => resultList.flat());
+
+				const activeFoePokemonSpeciesSet = new Set(
+					activeFoePokemon.map((pokemon) => pokemon.illusion?.speciesState?.id || pokemon.species.id)
+				);
+
+				const firstTruthyResult = Array.from(activeFoePokemonSpeciesSet)
+					.map((pokemonSpecies) => this.parse(`/weakness ${pokemonSpecies}`))
+					.find(Boolean);
+
+				return firstTruthyResult;
+			}
+			return this.parse('/help weakness');
+		}
 		if (!this.runBroadcast()) return;
 		const {format, dex, targets} = this.splitFormat(target.split(/[,/]/).map(toID));
 
@@ -963,6 +986,7 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(buffer.join('<br />'));
 	},
 	weaknesshelp: [
+		`/weakness - Provides resistances, weaknesses, and immunities for active Pok\u00e9mon on the opposing side, ignoring abilities.`,
 		`/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.`,
 		`/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
 		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
@@ -1043,9 +1067,48 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	cover: 'coverage',
-	coverage(target, room, user) {
+	async coverage(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!target) return this.parse("/help coverage");
+
+		const runWithInferredTargets = async (extraTargetText?: string) => {
+			if (room?.battle?.playerTable) {
+				const friendlyChannel = room.battle.playerTable[user.id].channelIndex;
+				const foeUsers = room.battle.players
+					.filter(({channelIndex}) => channelIndex !== friendlyChannel)
+					.map(({id}) => Users.get(id))
+					.filter(Boolean) as User[];
+
+				const activeFoePokemon = await Promise.all(
+					foeUsers.map((foeUser) => room.battle!.getActivePokemon(foeUser)).filter(Boolean)
+				).then((resultList) => resultList.flat());
+
+				if (activeFoePokemon) {
+					const typeSpeciesMap: {[key: string]: Set<string>} = {};
+					for (const nextPokemon of activeFoePokemon) {
+						const apparentType = nextPokemon.illusion?.apparentType || nextPokemon.apparentType;
+						const formattedType = apparentType.split('/').sort().join(', ');
+						const apparentSpecies = nextPokemon.illusion?.speciesState?.id || nextPokemon.species.id;
+						typeSpeciesMap[formattedType] ??= new Set();
+						typeSpeciesMap[formattedType].add(apparentSpecies);
+					}
+
+					const results = [];
+					for (const [typeGroup, speciesSet] of Object.entries(typeSpeciesMap)) {
+						const speciesGroupTag = Array.from(speciesSet)
+							.map((species) => species[0].toUpperCase() + species.slice(1))
+							.join(', ');
+						this.sendReply(`[ ${speciesGroupTag} ]`);
+						const result = this.parse(`/coverage ${extraTargetText ? extraTargetText + ', ' : ''}${typeGroup}`);
+						results.push(result);
+					}
+
+					return results.find(Boolean);
+				}
+			}
+			return this.parse('/help coverage');
+		};
+
+		if (!target) return runWithInferredTargets();
 
 		const {dex, targets} = this.splitFormat(target.split(/[,+/]/));
 		const sources: (string | Move)[] = [];
@@ -1107,7 +1170,8 @@ export const commands: Chat.ChatCommands = {
 				if (eff > bestCoverage[type]) bestCoverage[type] = eff;
 			}
 		}
-		if (sources.length === 0) return this.errorReply("No moves using a type table for determining damage were specified.");
+
+		if (sources.length === 0) return runWithInferredTargets(target);
 		if (sources.length > 4) return this.errorReply("Specify a maximum of 4 moves or types.");
 
 		// converts to fractional effectiveness, 0 for immune
@@ -1236,6 +1300,7 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	coveragehelp: [
+		`/coverage - Provides the best effectiveness match-up defending against STAB moves from the active Pok\u00e9mon on the opposing side.`,
 		`/coverage [move 1], [move 2] ... - Provides the best effectiveness match-up against all defending types for given moves or attacking types`,
 		`!coverage [move 1], [move 2] ... - Shows this information to everyone.`,
 		`Adding the parameter 'all' or 'table' will display the information with a table of all type combinations.`,
