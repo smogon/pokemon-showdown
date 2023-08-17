@@ -625,8 +625,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	kangaskhanmega: {
-		tier: "Uber",
-		doublesTier: "DUber",
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	horsea: {
 		tier: "LC",
@@ -2780,7 +2780,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	kyuremblack: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	kyuremwhite: {
@@ -2802,23 +2802,23 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	meloettapirouette: {
 	},
 	genesect: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	genesectburn: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	genesectchill: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	genesectdouse: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	genesectshock: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	chespin: {
