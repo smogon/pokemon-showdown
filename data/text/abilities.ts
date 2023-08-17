@@ -2506,7 +2506,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	flamingsoul: {
 		name: "Flaming Soul",
-		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.", 
+		shortDesc: "If this Pokemon is at full HP, its Fire-type moves have their priority increased by 1.", 
 	},
 	sagepower: {
 		name: "Sage Power",
