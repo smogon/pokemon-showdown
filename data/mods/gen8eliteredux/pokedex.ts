@@ -3396,7 +3396,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	typhlosion: {
 		num: 157,
 		name: "Typhlosion",
-		types: ["Fire"],
+		types: ["Fire", "Ground"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
 		abilities: {0: "Earthbound", 1: "Berserk", H: "Pyromancy", I1: "Blaze", I2: "Sand Rush", I3: "Flaming Soul"},
