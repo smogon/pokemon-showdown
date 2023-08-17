@@ -3257,7 +3257,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Dragonite",
 		types: ["Dragon", "Flying"],
 		baseStats: {hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80},
-		abilities: {0: "Dragon's Maw", 1: "Aerilate", H: "Prism Scales", I1: "Multiscsale", I2: "Overwhelm", I3: "Rampage"},
+		abilities: {0: "Dragon's Maw", 1: "Aerilate", H: "Prism Scales", I1: "Multiscale", I2: "Overwhelm", I3: "Rampage"},
 		heightm: 2.2,
 		weightkg: 210,
 		color: "Brown",
