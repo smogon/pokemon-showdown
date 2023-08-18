@@ -460,7 +460,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 130,
 		},
-		num: 795,
+		num: 581,
 		gen: 5,
 	},
 	bigroot: {
