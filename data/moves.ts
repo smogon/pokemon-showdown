@@ -1678,12 +1678,11 @@ name: "Breakneck Blitz",
 pp: .625,
 priority: 7,
 flags: {contact: 1, protect: 1, mirror: 1},
-recoil: [50, 100],
+recoil: [25, 100],
 hasCrashDamage: true,
 onMoveFail(target, source, move) {
 this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('High Jump Kick'));
 },
-recoil: [25, 100],
 secondary: null,
 target: "randomNormal",
 type: "Normal",
@@ -9258,9 +9257,6 @@ name: "Metal Burst",
 pp: 1.25,
 priority: 0,
 flags: {protect: 1, mirror: 1},
-onEffectiveness(typeMod, target, type) {
-if (type === 'Steel') return 1;
-},
 onEffectiveness(typeMod, target, type) {
 if (type === 'Steel') return 1;
 },
