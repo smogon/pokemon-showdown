@@ -2516,7 +2516,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	bonezone: {
 		name: "Bone Zone",
 		shortDesc: "This Pokemon's bone moves ignore immunities and deal 2x damage if not very effective ",
-	},	weathercontrol: {
+	},	
+	weathercontrol: {
 		name: "Weather Control",
 		shortDesc: "Opponent's weather-based moves are negated"
 

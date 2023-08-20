@@ -56,6 +56,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	bigpecks: {
+		inherit: true, 
+		onTryBoost(boost, target, source, effect) {},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		shortDesc: "This Pokemon's contact moves have their power multiplied by 1.3.",
+	},
 	blaze: {
 		inherit: true,
 		onModifyAtkPriority: 5,
