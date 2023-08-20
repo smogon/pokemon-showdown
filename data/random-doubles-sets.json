@@ -733,11 +733,6 @@
         "level": 86,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["High Horsepower", "Ice Spinner", "Knock Off", "Rapid Spin", "Stealth Rock"],
-                "teraTypes": ["Dark"]
-            },
-            {
                 "role": "Doubles Support",
                 "movepool": ["High Horsepower", "Ice Shard", "Knock Off", "Rapid Spin", "Stone Edge"],
                 "teraTypes": ["Dragon", "Water"]
