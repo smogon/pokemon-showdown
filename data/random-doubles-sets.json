@@ -2031,7 +2031,7 @@
                 "teraTypes": ["Electric", "Grass"]
             },
             {
-                "role": "Offensive Protect",
+                "role": "Bulky Protect",
                 "movepool": ["Grass Knot", "Protect", "Snarl", "Taunt", "Thunder Wave", "Thunderbolt"],
                 "teraTypes": ["Steel"]
             }
