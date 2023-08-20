@@ -340,7 +340,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!unmodifiedMove.flags['contact'] && unmodifiedMove.category === 'Physical') {
 				return this.chainModify(1.2);
 			}
-		}
+		},
+		shortDesc: "This pokemon makes no contact. Contactless moves boosted by 1.2",
 	},
 	magmaarmor: {
 		inherit: true,
