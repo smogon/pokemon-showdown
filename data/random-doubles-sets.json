@@ -114,7 +114,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Encore", "Grass Knot", "Hydro Pump", "Ice Beam", "Icy Wind", "Psyshock"],
+                "movepool": ["Encore", "Grass Knot", "Hydro Pump", "Ice Beam", "Icy Wind", "Protect", "Psyshock"],
                 "teraTypes": ["Grass", "Water"]
             },
             {
@@ -144,8 +144,8 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Extreme Speed", "Flare Blitz", "Howl", "Morning Sun", "Snarl", "Will-O-Wisp"],
-                "teraTypes": ["Fire", "Steel", "Water"]
+                "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Howl", "Morning Sun", "Snarl", "Will-O-Wisp"],
+                "teraTypes": ["Fighting", "Normal", "Steel", "Water"]
             }
         ]
     },
@@ -218,8 +218,8 @@
         "level": 82,
         "sets": [
             {
-                "role": "Doubles Support",
-                "movepool": ["Clear Smog", "Encore", "Protect", "Shadow Ball", "Sludge Bomb"],
+                "role": "Offensive Protect",
+                "movepool": ["Encore", "Protect", "Shadow Ball", "Sludge Bomb"],
                 "teraTypes": ["Ghost"]
             },
             {
@@ -364,7 +364,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Fake Tears", "Helping Hand", "Shadow Ball", "Thunder Wave", "Thunderbolt"],
+                "movepool": ["Fake Tears", "Helping Hand", "Protect", "Shadow Ball", "Thunder Wave", "Thunderbolt"],
                 "teraTypes": ["Flying", "Ghost"]
             },
             {
@@ -389,7 +389,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Freeze-Dry", "Hurricane", "Ice Beam", "Protect", "Roost", "Tailwind"],
+                "movepool": ["Brave Bird", "Freeze-Dry", "Ice Beam", "Protect", "Roost", "Tailwind"],
                 "teraTypes": ["Ground", "Steel"]
             }
         ]
@@ -684,7 +684,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Bullet Punch", "Close Combat", "Defog", "Feint", "Tailwind", "U-turn"],
+                "movepool": ["Bullet Punch", "Close Combat", "Defog", "Tailwind", "U-turn"],
                 "teraTypes": ["Fire", "Water"]
             },
             {
@@ -2032,11 +2032,11 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Grass Knot", "Nasty Plot", "Sludge Bomb", "Wildbolt Storm"],
+                "movepool": ["Grass Knot", "Nasty Plot", "Protect", "Wildbolt Storm"],
                 "teraTypes": ["Electric", "Grass"]
             },
             {
-                "role": "Doubles Support",
+                "role": "Offensive Protect",
                 "movepool": ["Grass Knot", "Protect", "Snarl", "Taunt", "Thunder Wave", "Thunderbolt"],
                 "teraTypes": ["Steel"]
             }
@@ -2286,13 +2286,8 @@
         "level": 83,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Dazzling Gleam", "Foul Play", "Spikes", "Thunder Wave"],
-                "teraTypes": ["Flying", "Water"]
-            },
-            {
                 "role": "Doubles Support",
-                "movepool": ["Dazzling Gleam", "Light Screen", "Reflect", "Thunder Wave"],
+                "movepool": ["Dazzling Gleam", "Foul Play", "Light Screen", "Reflect", "Spikes", "Thunder Wave"],
                 "teraTypes": ["Flying", "Water"]
             }
         ]
@@ -2526,8 +2521,8 @@
         "level": 86,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Encore", "Fake Out", "Fire Blast", "Incinerate", "Poison Gas", "Protect", "Sludge Bomb"],
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Encore", "Fake Out", "Fire Blast", "Heat Wave", "Incinerate", "Poison Gas", "Protect", "Sludge Bomb"],
                 "teraTypes": ["Fire", "Flying", "Water"]
             }
         ]
@@ -3037,7 +3032,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Close Combat", "Icicle Crash", "Protect", "Stomping Tantrum"],
+                "movepool": ["Close Combat", "Heavy Slam", "Icicle Crash", "Protect", "Stomping Tantrum"],
                 "teraTypes": ["Fighting", "Steel"]
             }
         ]

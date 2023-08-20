@@ -1441,6 +1441,11 @@
                 "role": "Fast Attacker",
                 "movepool": ["Leaf Blade", "Night Slash", "Psycho Cut", "Sacred Sword", "Swords Dance"],
                 "teraTypes": ["Dark", "Fighting", "Grass"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Agility", "Night Slash", "Psycho Cut", "Sacred Sword"],
+                "teraTypes": ["Dark", "Fighting"]
             }
         ]
     },
@@ -3868,7 +3873,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Bulk Up", "Close Combat", "Earthquake", "Ice Spinner", "Rapid Spin"],
-                "teraTypes": ["Fighting", "Ground"]
+                "teraTypes": ["Ground", "Steel"]
             },
             {
                 "role": "Bulky Attacker",
