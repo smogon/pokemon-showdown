@@ -1399,7 +1399,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Foul Play", "Helping Hand", "Psychic", "Stealth Rock", "Thunder Wave", "U-turn"],
+                "movepool": ["Encore", "Foul Play", "Helping Hand", "Mystical Power", "Stealth Rock", "Thunder Wave", "U-turn"],
                 "teraTypes": ["Dark", "Poison", "Steel"]
             }
         ]
