@@ -1441,11 +1441,6 @@
                 "role": "Fast Attacker",
                 "movepool": ["Leaf Blade", "Night Slash", "Psycho Cut", "Sacred Sword", "Swords Dance"],
                 "teraTypes": ["Dark", "Fighting", "Grass"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Agility", "Night Slash", "Psycho Cut", "Sacred Sword"],
-                "teraTypes": ["Dark", "Fighting"]
             }
         ]
     },
