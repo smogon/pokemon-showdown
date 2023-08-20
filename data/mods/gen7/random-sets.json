@@ -1100,8 +1100,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["aquajet", "icepunch", "liquidation", "swordsdance"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["aquajet", "icepunch", "liquidation", "swordsdance"]
             }
         ]
     },
