@@ -644,7 +644,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Iron Head", "Rapid Spin", "Thunder Wave", "Volt Switch"],
+                "movepool": ["Iron Head", "Rapid Spin", "Thunder Wave", "Toxic Spikes", "Volt Switch"],
                 "teraTypes": ["Fire", "Water"]
             },
             {
