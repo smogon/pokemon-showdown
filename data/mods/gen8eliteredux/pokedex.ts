@@ -6529,7 +6529,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Absol-Mega",
 		baseSpecies: "Absol",
 		forme: "Mega",
-		types: ["Dark"],
+		types: ["Dark", "Fairy"],
 		baseStats: {hp: 65, atk: 160, def: 60, spa: 125, spd: 60, spe: 115},
 		abilities: {0: "Magic Bounce", I1: "Super Luck", I2: "Keen Edge", I3: "Magic Guard"},
 		heightm: 1.2,
