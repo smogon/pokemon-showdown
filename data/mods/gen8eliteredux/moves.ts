@@ -25,6 +25,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 		gen: 8,
 	},
+	aquaring: {
+		inherit: true, 
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Aqua Ring');
+			},
+			onResidualOrder: 6,
+			onResidual(pokemon) {
+				this.heal(pokemon.baseMaxhp / 8);
+			},
+		},
+		desc: "The user has 1/8 of its maximum HP, rounded down, restored at the end of each turn while it remains active. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user uses Baton Pass, the replacement will receive the healing effect.",
+		shortDesc: "User recovers 1/8 max HP per turn.",
+
+	},
 	aromatherapy: {
 		inherit: true,
 		isNonstandard: null,
