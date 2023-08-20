@@ -6309,7 +6309,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: null,
 		basePowerCallback(pokemon, target, move) {
-			return move.basePower;
+			return 95;
 		}, // this prevents crash when pokemon.js calls for basePowerCallback
 		target: "normal",
 		type: "Dark",
@@ -15272,7 +15272,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		secondary: null,
 		basePowerCallback(pokemon, target, move) {
-			return move.basePower;
+			return 95;
 		}, // this prevents crash when pokemon.js calls for basePowerCallback
 		target: "normal",
 		type: "Normal",
