@@ -194,9 +194,9 @@ function getRBYMoves(species: string | Species) {
 		buf += `<br/><b>Exclusive moves</b>: `;
 		buf += data.exclusiveMoves.map(formatMove).sort().join(", ");
 	}
-	if (data.essentialMove) {
-		buf += `<br/><b>Essential move</b>: `;
-		buf += formatMove(data.essentialMove);
+	if (data.essentialMoves) {
+		buf += `<br/><b>Essential move${Chat.plural(data.essentialMoves)}</b>: `;
+		buf += data.essentialMoves.map(formatMove).sort().join(", ");
 	}
 	if (
 		!data.moves && !data.comboMoves &&

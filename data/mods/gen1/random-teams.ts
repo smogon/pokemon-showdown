@@ -10,7 +10,7 @@ interface HackmonsCupEntry {
 interface Gen1RandomBattleSpecies {
 	level?: number;
 	moves?: ID[];
-	essentialMove?: ID;
+	essentialMoves?: ID[];
 	exclusiveMoves?: ID[];
 	comboMoves?: ID[];
 }
@@ -301,9 +301,11 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			moves.add(this.sample(data.exclusiveMoves));
 		}
 
-		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
-		if (moves.size < this.maxMoveCount && data.essentialMove) {
-			moves.add(data.essentialMove);
+		// Add the mandatory moves.
+		if (moves.size < this.maxMoveCount && data.essentialMoves) {
+			while (moves.size < this.maxMoveCount && data.essentialMoves.length) {
+				moves.add(this.sampleNoReplace(data.essentialMoves));
+			}
 		}
 
 		while (moves.size < this.maxMoveCount && movePool.length) {
@@ -324,12 +326,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				}
 
 				for (const moveid of moves) {
-					if (moveid === data.essentialMove) continue;
 					const move = this.dex.moves.get(moveid);
-					if (
-						(!data.essentialMove || moveid !== data.essentialMove) &&
-						this.shouldCullMove(move, types, moves, counter).cull
-					) {
+					if (this.shouldCullMove(move, types, moves, counter).cull) {
 						moves.delete(moveid);
 						break;
 					}
