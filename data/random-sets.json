@@ -2713,7 +2713,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Body Slam", "Earthquake", "Gunk Shot", "Play Rough", "Rapid Spin", "Sucker Punch", "Superpower", "U-turn", "Wood Hammer"],
-                "teraTypes": ["Fairy", "Fighting", "Grass", "Ground", "Normal", "Poison"]
+                "teraTypes": ["Fairy", "Fighting", "Grass", "Ground", "Poison"]
             }
         ]
     },
