@@ -646,6 +646,11 @@
                 "role": "Doubles Support",
                 "movepool": ["Bug Bite", "Rapid Spin", "Stealth Rock", "Toxic Spikes", "Volt Switch"],
                 "teraTypes": ["Fire", "Water"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Body Press", "Bug Bite", "Explosion", "Iron Head"],
+                "teraTypes": ["Fighting", "Fire"]
             }
         ]
     },
