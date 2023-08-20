@@ -6264,16 +6264,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	spiderlair: {
-		onSwitchIn(source) { //duration handled in data/moves.js:stickyweb
-			const hasWebs = source.side.foe.sideConditions['stickyweb']
+		onStart(source) { //duration handled in data/moves.js:stickyweb
+			const hasWebs = source.side.foe.sideConditions['stickyweb'];
 			if (!hasWebs) { //I don't think Spider Lair checks for Magic Bounce, so I get away with addSideCondition here (maybe???)
 				this.add('-activate', source, 'ability: Spider Lair');
 				source.side.foe.addSideCondition('stickyweb', source, source.getAbility())
+
 			}
 		},	
 		name: "Spider Lair",
 		rating: 4.5,
-		num: 367,
+		num: 900,
 		gen: 8,
 	},
 	fatalprecision: {
@@ -6519,7 +6520,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Sage Power",
 		rating: 4.5,
-		num: 367,
+		num: 368,
 		gen: 8,
 	},
 	bonezone: {
