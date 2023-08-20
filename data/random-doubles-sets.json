@@ -1609,7 +1609,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Extreme Speed", "Flare Blitz", "Liquidation", "Stomping Tantrum", "Swords Dance"],
+                "movepool": ["Extreme Speed", "Flare Blitz", "Liquidation", "Protect", "Swords Dance"],
                 "teraTypes": ["Fire", "Normal", "Water"]
             }
         ]
