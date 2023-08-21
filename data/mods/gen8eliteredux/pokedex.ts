@@ -5439,7 +5439,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Slaking",
 		types: ["Normal"],
 		baseStats: {hp: 130, atk: 150, def: 100, spa: 75, spd: 95, spe: 100},
-		abilities: {0: "Traunt", 1: "Stall", I1: "Comatose", I2: "Unaware", I3: "Mold Breaker"},
+		abilities: {0: "Truant", 1: "Stall", I1: "Comatose", I2: "Unaware", I3: "Mold Breaker"},
 		heightm: 2,
 		weightkg: 130.5,
 		color: "Brown",
