@@ -1343,7 +1343,7 @@ export class RandomTeams {
 			species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 230))
 		) return 'Focus Sash';
 		if (
-			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].some(m => role === m) &&
+			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
 			moves.has('fakeout') || moves.has('incinerate')
 		) {
 			return (this.dex.getEffectiveness('Rock', species) >= 1) ? 'Heavy-Duty Boots' : 'Clear Amulet';
