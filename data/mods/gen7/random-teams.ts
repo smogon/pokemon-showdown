@@ -118,7 +118,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
 			Flying: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Flying') && ['aerodactylmega', 'charizardmega', 'mantine'].every(m => species.id !== m) &&
+				!counter.get('Flying') && ['aerodactylmega', 'charizardmegay', 'mantine'].every(m => species.id !== m) &&
 				!movePool.includes('hiddenpowerflying')
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
@@ -359,8 +359,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['destinybond', 'whirlwind'],
 			// Liepard
 			['copycat', 'uturn'],
-			// Seviper
-			['switcheroo', 'suckerpunch'],
+			// Spinda and Seviper
+			[['feintattack', 'switcheroo'], 'suckerpunch'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -716,8 +716,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 	): boolean {
 		switch (ability) {
 		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter':
-		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Sand Veil':
-		case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
+		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Pressure':
+		case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return ['doubleedge', 'hypervoice', 'return'].every(m => !moves.has(m));
@@ -768,7 +768,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return !counter.get('Grass');
 		case 'Power Construct':
 			return species.forme === '10%';
-		case 'Pressure': case 'Synchronize':
+		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil') || !!species.isMega);
 		case 'Regenerator':
 			return species.id === 'mienshao' || species.id === 'reuniclus';
@@ -850,6 +850,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
 		if (species.id === 'raticatealola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
+		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
@@ -865,6 +866,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce'))) return 'Moxie';
+		if (
+			['dusknoir', 'raikou', 'suicune', 'vespiquen', 'wailord'].includes(species.id)
+		) return 'Pressure';
 		if (abilities.has('Regenerator') && role === 'AV Pivot') return 'Regenerator';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
 		if (abilities.has('Sniper') && moves.has('focusenergy')) return 'Sniper';
@@ -1059,7 +1063,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (['protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			this.dex.getEffectiveness('Ground', species) >= 2 &&
-			ability !== 'Levitate'
+			ability !== 'Levitate' && species.id !== 'golemalola'
 		) {
 			return 'Air Balloon';
 		}
@@ -1203,7 +1207,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (hp % 2 === 0) break;
 			} else {
 				// Maximize number of Stealth Rock switch-ins
-				if (srWeakness <= 0 || ability === 'Regenerator' || ['Leftovers', 'Life Orb'].includes(item)) break;
+				if (srWeakness <= 0 || ability === 'Regenerator' || ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
 				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
 				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
 				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;

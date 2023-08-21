@@ -554,7 +554,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Aqua Jet", "Belly Drum", "Ice Spinner", "Liquidation", "Play Rough", "Superpower"],
+                "movepool": ["Aqua Jet", "Ice Spinner", "Liquidation", "Play Rough", "Superpower"],
+                "teraTypes": ["Water"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Aqua Jet", "Belly Drum", "Liquidation", "Play Rough"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -2713,7 +2718,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Body Slam", "Earthquake", "Gunk Shot", "Play Rough", "Rapid Spin", "Sucker Punch", "Superpower", "U-turn", "Wood Hammer"],
-                "teraTypes": ["Fairy", "Fighting", "Grass", "Ground", "Normal", "Poison"]
+                "teraTypes": ["Fairy", "Fighting", "Grass", "Ground", "Poison"]
             }
         ]
     },
@@ -3868,7 +3873,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Bulk Up", "Close Combat", "Earthquake", "Ice Spinner", "Rapid Spin"],
-                "teraTypes": ["Fighting", "Ground"]
+                "teraTypes": ["Ground", "Steel"]
             },
             {
                 "role": "Bulky Attacker",
