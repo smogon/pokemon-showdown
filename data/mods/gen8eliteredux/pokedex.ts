@@ -3316,7 +3316,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ["Psychic"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
-		abilities: {0: "Magis Guard", 1: "Mystic Power", H: "Imposter", I1: "Psychic Mind", I2: "Unaware", I3: "Prankster"},
+		abilities: {0: "Magic Guard", 1: "Mystic Power", H: "Imposter", I1: "Psychic Mind", I2: "Unaware", I3: "Prankster"},
 		heightm: 0.4,
 		weightkg: 4,
 		color: "Pink",
