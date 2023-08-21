@@ -1339,7 +1339,7 @@ export class RandomTeams {
 			) ? 'Booster Energy' : 'Life Orb';
 		}
 		if (isLead && (species.id === 'glimmora' ||
-			(['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].some(m => role === m) &&
+			(['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
 			species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 230))
 		) return 'Focus Sash';
 		if (
