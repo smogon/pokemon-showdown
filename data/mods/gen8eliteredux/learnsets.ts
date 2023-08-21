@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-//TODO: Update Learnsets - Quiver Dance + Elite Redux Additions
 export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	bulbasaur: {
 		learnset: {
@@ -10753,6 +10752,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			jumpkick: ['7L35'],
 			lowkick: ["8M", "7T", "6T", "5T"],
 			megahorn: ["8M", "8L1", "8V", "7L1", "6L1", "5L1", "4L1"],
+			megakick: ['7L0'],
 			mimic: ["7V", "3T"],
 			mysticalfire: ["8M"],
 			naturalgift: ["4M"],
@@ -45537,7 +45537,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			gravity: ["7T", "6T", "5T", "4T"],
 			hammerarm: ["8L42", "8S7", "7L49", "7S6", "6L1", "6S5", "5L81", "4L81"],
 			headbutt: ["4T"],
-			headsmash: ['7L1'],
+			headsmash: ['7L58'],
 			heavyslam: ["8M"],
 			hiddenpower: ["7M", "6M", "5M", "4M", "3M"],
 			hyperbeam: ["8M", "8L72", "7M", "7L67", "6M", "6L67", "5M", "5L89", "4M", "4L89", "3M", "3L65", "3S1"],
@@ -45564,6 +45564,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			rocksmash: ["6M", "5M", "4M", "3M"],
 			rockthrow: ["8L1", "7L1", "6L1", "5L9", "4L9", "4S2", "3L9", "3S0"],
 			rocktomb: ["8M", "7M", "6M", "5M", "4M", "3M"],
+			rockwrecker: ['7L64'],
 			rollout: ["4T", "3T"],
 			round: ["8M", "7M", "6M", "5M"],
 			safeguard: ["8M", "7M", "6M", "5M", "4M", "3M"],
