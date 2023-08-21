@@ -2957,7 +2957,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "NFE",
 	},
 	aegislash: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	aegislashblade: {
