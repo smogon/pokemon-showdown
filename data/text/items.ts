@@ -122,6 +122,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Berry Sweet",
 		desc: "Evolves Milcery into Alcremie when held and spun around.",
 	},
+	bignugget: {
+		name: "Big Nugget",
+		desc: "A big nugget of pure gold that gives off a lustrous gleam.",
+	},
 	bigroot: {
 		name: "Big Root",
 		desc: "Holder gains 1.3x HP from draining/Aqua Ring/Ingrain/Leech Seed/Strength Sap.",
