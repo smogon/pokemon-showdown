@@ -261,6 +261,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		rating: 4,
 	},
+	ironfist: {
+		inherit: true,
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.3.",
+		shortDesc: "This Pokemon's punch-based attacks have 1.3x power. Sucker Punch is not boosted.",
+
+	},
 	keeneye: {
 		inherit: true,
 		onModifyAccuracy(accuracy) {
