@@ -2551,7 +2551,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	striker: {
 		name: "Striker",
-		shortDesc: "This Pokemon's kicking moves are boosted by 40%",
+		shortDesc: "This Pokemon's kicking moves are boosted by 30%",
 
 	},
 	frozensoul: {
