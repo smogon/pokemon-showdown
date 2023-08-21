@@ -764,6 +764,11 @@ export class RandomTeams {
 				counter = this.addMove('tailwind', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
+			// Enforce Thunder Wave on Prankster users as well
+			if (movePool.includes('thunderwave') && abilities.has('Prankster')) {
+				counter = this.addMove('thunderwave', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
 		}
 
 		// Enforce STAB priority
@@ -1118,6 +1123,7 @@ export class RandomTeams {
 			if (species.id === 'altaria') return 'Cloud Nine';
 			if (species.id === 'bellibolt') return 'Electromorphosis';
 			if (species.id === 'armarouge') return 'Flash Fire';
+			if (species.id === 'florges') return 'Flower Veil';
 			if (species.baseSpecies === 'Maushold' && role === 'Doubles Support') return 'Friend Guard';
 			if (species.id === 'talonflame') return 'Gale Wings';
 			if (species.id === 'tropius') return 'Harvest';
@@ -1127,7 +1133,6 @@ export class RandomTeams {
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
 			if (species.id === 'gumshoos') return 'Strong Jaw';
 			if (species.id === 'magnezone') return 'Sturdy';
-			if (species.id === 'florges') return 'Symbiosis';
 			if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
 			if (species.id === 'drifblim') return 'Unburden';
 			if (abilities.has('Intimidate')) return 'Intimidate';
@@ -1318,12 +1323,13 @@ export class RandomTeams {
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if ((role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute')) return 'Leftovers';
+		if (
+			(role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute') || species.id === 'eternatus'
+		) return 'Leftovers';
 		if (species.id === 'sylveon') return 'Pixie Plate';
-		if ((species.id === 'sneasler' || species.id === 'toxicroak') && moves.has('fakeout')) return 'Clear Amulet';
 		if (
 			(offensiveRole || (role === 'Tera Blast user' && species.baseStats.spe >= 80 && !moves.has('trickroom'))) &&
-			(!moves.has('fakeout') || role === 'Doubles Wallbreaker') &&
+			!moves.has('fakeout') && !moves.has('incinerate') &&
 			(!moves.has('uturn') || types.includes('Bug') || species.baseStats.atk >= 120 || ability === 'Libero') &&
 			(!moves.has('icywind') || species.id === 'ironbundle')
 		) {
@@ -1331,6 +1337,16 @@ export class RandomTeams {
 				(ability === 'Quark Drive' || ability === 'Protosynthesis') &&
 				['firstimpression', 'uturn', 'voltswitch'].every(m => !moves.has(m)) && species.id !== 'ironvaliant'
 			) ? 'Booster Energy' : 'Life Orb';
+		}
+		if (isLead && (species.id === 'glimmora' ||
+			(['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
+			species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 230))
+		) return 'Focus Sash';
+		if (
+			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
+			moves.has('fakeout') || moves.has('incinerate')
+		) {
+			return (this.dex.getEffectiveness('Rock', species) >= 1) ? 'Heavy-Duty Boots' : 'Clear Amulet';
 		}
 		if (!counter.get('Status')) return 'Assault Vest';
 		if (species.id === 'pawmot') return 'Leppa Berry';

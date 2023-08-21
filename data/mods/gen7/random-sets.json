@@ -745,6 +745,10 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["drainpunch", "earthquake", "fakeout", "return", "suckerpunch"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["drainpunch", "earthquake", "fakeout", "return", "suckerpunch"]
             }
         ]
     },
@@ -1091,8 +1095,12 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aquajet", "crunch", "dragondance", "earthquake", "icepunch", "liquidation", "swordsdance"],
+                "movepool": ["crunch", "dragondance", "earthquake", "icepunch", "liquidation"],
                 "preferredTypes": ["Ice"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["aquajet", "crunch", "icepunch", "liquidation", "swordsdance"]
             }
         ]
     },
@@ -1123,8 +1131,12 @@
         "level": 97,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["defog", "knockoff", "lightscreen", "reflect", "roost", "toxic", "uturn"]
+                "role": "Bulky Support",
+                "movepool": ["knockoff", "lightscreen", "reflect", "roost", "toxic", "uturn"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["defog", "encore", "knockoff", "roost", "toxic", "uturn"]
             }
         ]
     },
@@ -1240,7 +1252,7 @@
                 "movepool": ["acrobatics", "leechseed", "strengthsap", "substitute"]
             },
             {
-                "role": "Fast Support",
+                "role": "Bulky Attacker",
                 "movepool": ["acrobatics", "encore", "sleeppowder", "strengthsap", "toxic", "uturn"]
             }
         ]
@@ -2228,7 +2240,7 @@
         "sets": [
             {
                 "role": "Z-Move user",
-                "movepool": ["encore", "return", "suckerpunch", "superpower"],
+                "movepool": ["encore", "feintattack", "return", "suckerpunch", "superpower"],
                 "preferredTypes": ["Normal"]
             }
         ]
@@ -3094,8 +3106,8 @@
         "level": 86,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["dazzlinggleam", "painsplit", "shadowball", "substitute", "taunt", "willowisp"]
+                "role": "Bulky Attacker",
+                "movepool": ["dazzlinggleam", "painsplit", "shadowball", "taunt", "willowisp"]
             },
             {
                 "role": "Wallbreaker",
@@ -3352,7 +3364,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "gigadrain", "hiddenpowerfire", "knockoff", "leafstorm", "leechseed", "rockslide", "sleeppowder", "synthesis"]
+                "movepool": ["earthquake", "hiddenpowerfire", "knockoff", "leafstorm", "leechseed", "powerwhip", "rockslide", "sleeppowder", "synthesis"]
             },
             {
                 "role": "AV Pivot",
@@ -3746,7 +3758,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Fast Support",
                 "movepool": ["airslash", "earthpower", "leechseed", "rest", "seedflare", "substitute"],
                 "preferredTypes": ["Flying"]
             }
@@ -4806,7 +4818,7 @@
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["bugbuzz", "fireblast", "gigadrain", "hiddenpowerrock", "hurricane", "quiverdance", "roost"],
+                "movepool": ["bugbuzz", "fireblast", "gigadrain", "hurricane", "quiverdance", "roost"],
                 "preferredTypes": ["Bug", "Fire", "Flying"]
             }
         ]
@@ -5230,6 +5242,10 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["ironhead", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["ironhead", "sacredsword", "shadowclaw", "shadowsneak", "toxic"]
             }
         ]
     },
