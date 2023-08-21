@@ -867,7 +867,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce'))) return 'Moxie';
 		if (
-			['articuno', 'dusknoir', 'raikou', 'suicune', 'vespiquen', 'wailord'].some(m => species.id === m)
+			['dusknoir', 'raikou', 'suicune', 'vespiquen', 'wailord'].some(m => species.id === m)
 		) return 'Pressure';
 		if (abilities.has('Regenerator') && role === 'AV Pivot') return 'Regenerator';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
