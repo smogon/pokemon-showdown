@@ -1682,9 +1682,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	teleport: {
 		inherit: true,
-		priority: 0,
-		selfSwitch: false,
-		onTry: false,
 	},
 	toxic: {
 		inherit: true,
