@@ -2114,7 +2114,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	regigigas: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DUU",
 	},
 	giratina: {
