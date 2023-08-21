@@ -46267,6 +46267,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderwave: ["9M", "8M", "7M", "6M", "5M", "4M", "3T"],
 			toxic: ["7M", "6M", "5M", "4M", "3M"],
 			uproar: ["8M", "7T", "6T", "5T", "4T"],
+			vcreate: ['7L100'],
 			willowisp: ["9M"],
 			zenheadbutt: ["9M"],
 		},
