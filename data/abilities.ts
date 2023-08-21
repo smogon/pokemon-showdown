@@ -6404,8 +6404,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
 			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
-			const twoHeaded = ['doduo', 'weezing', 'girafarig', 'mawile', 'zweilous', 'doublade', 'binacle'];
-			const threeHeaded = ['dugtrio', 'dugtrioalola', 'magneton', 'dodrio', 'exeggutor', 'exeggutoralola','mawilemega','combee','magnezone','barbaracle','hydregion'];
+			const twoHeaded = ['doduo', 'weezing', 'girafarig', 'mawile', 'zweilous', 'doublade', 'binacle', 'zweilous'];
+			const threeHeaded = ['dugtrio', 'dugtrioalola', 'magneton', 'dodrio', 'exeggutor', 'exeggutoralola','mawilemega','combee','magnezone','barbaracle','hydreigon'];
 			if (twoHeaded.includes(source.species.id)) {
 				move.multihit = 2;
 				move.multihitType = 'headed';
