@@ -454,6 +454,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 8,
 		isNonstandard: "Past",
 	},
+	bignugget: {
+		name: "Big Nugget",
+		spritenum: 314, // placeholder
+		fling: {
+			basePower: 130,
+		},
+		num: 581,
+		gen: 5,
+	},
 	bigroot: {
 		name: "Big Root",
 		spritenum: 29,
