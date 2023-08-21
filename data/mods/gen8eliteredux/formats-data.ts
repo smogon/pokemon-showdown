@@ -427,6 +427,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
+	slowkinggalar: {
+		tier: 'OU',
+		doublesTier: 'DOU'
+	},
 	magnemite: {
 		tier: "LC",
 	},
@@ -4920,4 +4924,20 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
+	basculinwhitestriped: {
+		isNonstandard: 'Future',
+		tier: 'Illegal'
+	},
+	zapdosgalar: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	moltresgalar: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	articunogalar: {
+		tier: "OU",
+		doublesTier: "DOU",
+	}
 };
