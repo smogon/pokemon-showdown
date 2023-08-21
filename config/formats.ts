@@ -173,12 +173,12 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Monothreat Water",
-		desc: `Monotype where every Pok&eacute;mon is required to be part Water.`,
+		name: "[Gen 9] Monothreat Psychic",
+		desc: `Monotype where every Pok&eacute;mon is required to be part Psychic.`,
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Water'],
+		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Psychic'],
 	},
 	{
 		name: "[Gen 9] 1v1",
