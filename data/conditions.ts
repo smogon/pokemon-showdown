@@ -463,10 +463,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'RainDance',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
-			if (source?.hasItem('damprock')) {
+		durationCallback(source, pokemon, effect) {
+			if (effect && effect?.effectType === 'Ability') {
+				if (source.hasItem('damprock')) return 12;
 				return 8;
 			}
+			if (source.hasItem('damprock')) return 8;
 			return 5;
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
@@ -484,13 +486,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				this.effectState.effectSource = 'Ability';
-				if (this.gen === 8) {
-					if (source?.hasItem('damprock')) {
-						this.effectState.duration = 12;
-
-					}
-					this.effectState.duration = 8;
-				}
 				this.add('-weather', 'RainDance', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'RainDance');
@@ -541,10 +536,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'SunnyDay',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
-			if (source?.hasItem('heatrock')) {
+		durationCallback(source, pokemon, effect) {
+			if (effect && effect?.effectType === 'Ability') {
+				if (source.hasItem('damprock')) return 12;
 				return 8;
 			}
+			if (source.hasItem('damprock')) return 8;
 			return 5;
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
@@ -566,13 +563,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				this.effectState.effectSource = 'Ability';
-				if (this.gen === 8) {
-					if (source?.hasItem('heatrock')) {
-						this.effectState.duration = 12;
-
-					}
-					this.effectState.duration = 8;
-				}
 				this.add('-weather', 'SunnyDay', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'SunnyDay');
@@ -631,10 +621,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'Sandstorm',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
-			if (source?.hasItem('smoothrock')) {
+		durationCallback(source, pokemon, effect) {
+			if (effect && effect?.effectType === 'Ability') {
+				if (source.hasItem('damprock')) return 12;
 				return 8;
 			}
+			if (source.hasItem('damprock')) return 8;
 			return 5;
 		},
 		// This should be applied directly to the stat before any of the other modifiers are chained
@@ -649,13 +641,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				this.effectState.effectSource = 'Ability';
-				if (this.gen === 8) {
-					if (source?.hasItem('smoothrock')) {
-						this.effectState.duration = 12;
-
-					}
-					this.effectState.duration = 8;
-				}
 				this.add('-weather', 'Sandstorm', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Sandstorm');
@@ -677,21 +662,17 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'Hail',
 		effectType: 'Weather',
 		duration: 5,
-		durationCallback(source, effect) {
-			if (source?.hasItem('icyrock')) {
+		durationCallback(source, pokemon, effect) {
+			if (effect && effect?.effectType === 'Ability') {
+				if (source.hasItem('icyrock')) return 12;
 				return 8;
 			}
+			if (source.hasItem('icyrock')) return 8;
 			return 5;
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
-				if (this.gen === 8) {
-					if (source?.hasItem('icyrock')) {
-						this.effectState.duration = 12;
-
-					}
-					this.effectState.duration = 8;
-				}
+				this.effectState.effectSource = 'Ability';
 				this.add('-weather', 'Hail', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Hail');
