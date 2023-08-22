@@ -265,6 +265,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
+		// This is added before the essential moves so that combos containing three moves can roll an exclusive move
 		if (moves.size < this.maxMoveCount && data.exclusiveMoves) {
 			moves.add(this.sample(data.exclusiveMoves));
 		}
