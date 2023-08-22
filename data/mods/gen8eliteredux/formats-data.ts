@@ -2780,7 +2780,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	kyurem: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DUU",
 	},
 	kyuremblack: {
