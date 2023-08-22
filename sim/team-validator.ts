@@ -2292,7 +2292,7 @@ export class TeamValidator {
 		const backupSources = setSources.sources;
 		const backupSourcesBefore = setSources.sourcesBefore;
 		setSources.intersectWith(moveSources);
-		if (!setSources.size()) {
+		if (this.format.mod !== 'gen8eliteredux' && !setSources.size()) {
 			// pretend this pokemon didn't have this move:
 			// prevents a crash if OMs override `checkCanLearn` to keep validating after an error
 			setSources.sources = backupSources;
