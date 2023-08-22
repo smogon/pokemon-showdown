@@ -327,6 +327,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	keeberry: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	kingdrite: {
 		inherit: true,
 		isNonstandard: null,
