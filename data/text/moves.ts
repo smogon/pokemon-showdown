@@ -522,8 +522,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	bleakwindstorm: {
 		name: "Bleakwind Storm",
-		desc: "Has a 30% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "30% chance to lower the foe(s) Speed by 1.",
+		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy.",
+		shortDesc: "Target: 30% -1 Speed. Can't miss in rain",
 	},
 	blizzard: {
 		name: "Blizzard",
@@ -5380,8 +5380,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sandsearstorm: {
 		name: "Sandsear Storm",
-		desc: "Has a 20% chance to burn the target.",
-		shortDesc: "20% chance to burn foe(s).",
+		desc: "Has a 20% chance to burn the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy.",
+		shortDesc: "20% chance to burn foe(s). Can't miss in rain.",
 	},
 	sandstorm: {
 		name: "Sandstorm",
@@ -7300,8 +7300,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	wildboltstorm: {
 		name: "Wildbolt Storm",
-		desc: "Has a 20% chance to paralyze the target.",
-		shortDesc: "20% chance to paralyze foe(s).",
+		desc: "Has a 20% chance to paralyze the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy.",
+		shortDesc: "20% chance to paralyze foe(s). Can't miss in rain.",
 	},
 	wildcharge: {
 		name: "Wild Charge",
