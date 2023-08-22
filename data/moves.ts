@@ -4028,7 +4028,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	dracometeor: {
 		num: 434,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 130,
 		category: "Special",
 		name: "Draco Meteor",
@@ -5729,7 +5729,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	fleurcannon: {
 		num: 705,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 130,
 		category: "Special",
 		name: "Fleur Cannon",
@@ -10281,7 +10281,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	leafstorm: {
 		num: 437,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 130,
 		category: "Special",
 		name: "Leaf Storm",
@@ -13279,7 +13279,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	overheat: {
 		num: 315,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 130,
 		category: "Special",
 		name: "Overheat",
