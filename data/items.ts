@@ -101,6 +101,21 @@ num: 846,
 gen: 7,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 aguavberry: {
 name: "Aguav Berry",
 spritenum: 5,
@@ -266,6 +281,7 @@ num: 199,
 gen: 4,
 },
 
+
 belueberry: {
 name: "Belue Berry",
 spritenum: 21,
@@ -388,6 +404,36 @@ num: 281,
 gen: 4,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 blueorb: {
 name: "Blue Orb",
 spritenum: 41,
@@ -482,6 +528,70 @@ num: 213,
 gen: 2,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 cellbattery: {
 name: "Cell Battery",
 spritenum: 60,
@@ -515,6 +625,36 @@ return this.chainModify([4915, 4096]);
 num: 249,
 gen: 2,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 chartiberry: {
 name: "Charti Berry",
@@ -563,6 +703,15 @@ num: 149,
 gen: 3,
 },
 
+
+
+
+
+
+
+
+
+
 chestoberry: {
 name: "Chesto Berry",
 spritenum: 65,
@@ -609,6 +758,33 @@ onEat() { },
 num: 200,
 gen: 4,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 choiceband: {
 name: "Choice Band",
@@ -878,6 +1054,83 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
+damprock: {
+name: "Damp Rock",
+spritenum: 88,
+fling: {
+basePower: 60,
+},
+num: 285,
+gen: 4,
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 deepseascale: {
 name: "Deep Sea Scale",
 spritenum: 93,
@@ -930,6 +1183,57 @@ num: 280,
 gen: 4,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 dracoplate: {
 name: "Draco Plate",
 spritenum: 105,
@@ -968,6 +1272,38 @@ num: 250,
 gen: 2,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 dragonscale: {
 name: "Dragon Scale",
 spritenum: 108,
@@ -978,6 +1314,19 @@ num: 235,
 gen: 2,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 dreadplate: {
 name: "Dread Plate",
@@ -1000,6 +1349,14 @@ num: 312,
 gen: 4,
 isNonstandard: "Unobtainable",
 },
+
+
+
+
+
+
+
+
 
 dubiousdisc: {
 name: "Dubious Disc",
@@ -1026,6 +1383,24 @@ gen: 3,
 isNonstandard: "Past",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 earthplate: {
 name: "Earth Plate",
 spritenum: 117,
@@ -1047,6 +1422,18 @@ num: 305,
 gen: 4,
 isNonstandard: "Unobtainable",
 },
+
+
+
+
+
+
+
+
+
+
+
+
 
 ejectbutton: {
 name: "Eject Button",
@@ -1115,6 +1502,38 @@ gen: 4,
 isNonstandard: "Past",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 electricseed: {
 name: "Electric Seed",
 spritenum: 664,
@@ -1137,6 +1556,19 @@ def: 1,
 num: 881,
 gen: 7,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 enigmaberry: {
 name: "Enigma Berry",
@@ -1199,6 +1631,104 @@ num: 268,
 gen: 4,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 figyberry: {
 name: "Figy Berry",
 spritenum: 140,
@@ -1225,6 +1755,61 @@ pokemon.addVolatile('confusion');
 num: 159,
 gen: 3,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 fistplate: {
 name: "Fist Plate",
@@ -1310,6 +1895,51 @@ gen: 8,
 isNonstandard: "Past",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 focusband: {
 name: "Focus Band",
 spritenum: 150,
@@ -1389,6 +2019,14 @@ gen: 8,
 isNonstandard: "Past",
 },
 
+
+
+
+
+
+
+
+
 fullincense: {
 name: "Full Incense",
 spritenum: 155,
@@ -1423,6 +2061,21 @@ gen: 8,
 isNonstandard: "Unobtainable",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ganlonberry: {
 name: "Ganlon Berry",
 spritenum: 158,
@@ -1444,6 +2097,111 @@ num: 202,
 gen: 3,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 goldbottlecap: {
 name: "Gold Bottle Cap",
 spritenum: 697,
@@ -1453,6 +2211,51 @@ basePower: 30,
 num: 796,
 gen: 7,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 grassyseed: {
 name: "Grassy Seed",
@@ -1476,6 +2279,14 @@ def: 1,
 num: 884,
 gen: 7,
 },
+
+
+
+
+
+
+
+
 
 grepaberry: {
 name: "Grepa Berry",
@@ -1541,6 +2352,66 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 habanberry: {
 name: "Haban Berry",
 spritenum: 185,
@@ -1582,6 +2453,14 @@ num: 238,
 gen: 2,
 },
 
+
+
+
+
+
+
+
+
 heatrock: {
 name: "Heat Rock",
 spritenum: 193,
@@ -1591,6 +2470,14 @@ basePower: 60,
 num: 284,
 gen: 4,
 },
+
+
+
+
+
+
+
+
 
 heavydutyboots: {
 name: "Heavy-Duty Boots",
@@ -1614,6 +2501,21 @@ gen: 3,
 isNonstandard: "Past",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 hondewberry: {
 name: "Hondew Berry",
 spritenum: 213,
@@ -1626,6 +2528,21 @@ onEat: false,
 num: 172,
 gen: 3,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 iapapaberry: {
 name: "Iapapa Berry",
@@ -1654,6 +2571,48 @@ num: 163,
 gen: 3,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 icicleplate: {
 name: "Icicle Plate",
 spritenum: 220,
@@ -1676,6 +2635,19 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 icyrock: {
 name: "Icy Rock",
 spritenum: 221,
@@ -1685,6 +2657,18 @@ basePower: 40,
 num: 282,
 gen: 4,
 },
+
+
+
+
+
+
+
+
+
+
+
+
 
 insectplate: {
 name: "Insect Plate",
@@ -1866,6 +2850,21 @@ num: 170,
 gen: 3,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 kingsrock: {
 name: "King's Rock",
 spritenum: 236,
@@ -1889,6 +2888,18 @@ volatileStatus: 'flinch',
 num: 221,
 gen: 2,
 },
+
+
+
+
+
+
+
+
+
+
+
+
 
 laggingtail: {
 name: "Lagging Tail",
@@ -1922,6 +2933,36 @@ num: 206,
 gen: 3,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 laxincense: {
 name: "Lax Incense",
 spritenum: 240,
@@ -1938,6 +2979,16 @@ num: 255,
 gen: 3,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
+
 
 leek: {
 name: "Leek",
@@ -1996,6 +3047,14 @@ this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]')
 num: 154,
 gen: 3,
 },
+
+
+
+
+
+
+
+
 
 liechiberry: {
 name: "Liechi Berry",
@@ -2084,6 +3143,29 @@ num: 1886,
 gen: 9,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 lovesweet: {
 name: "Love Sweet",
 spritenum: 705,
@@ -2094,6 +3176,21 @@ num: 1110,
 gen: 8,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 luckypunch: {
 name: "Lucky Punch",
@@ -2155,6 +3252,26 @@ num: 648,
 gen: 6,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 lustrousglobe: {
 name: "Lustrous Globe",
 spritenum: 265, // TODO
@@ -2194,6 +3311,26 @@ num: 136,
 gen: 4,
 isNonstandard: "Unobtainable",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 machobrace: {
 name: "Macho Brace",
@@ -2297,6 +3434,21 @@ num: 1861,
 gen: 9,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 marangaberry: {
 name: "Maranga Berry",
 spritenum: 597,
@@ -2317,6 +3469,41 @@ num: 688,
 gen: 6,
 isNonstandard: "Unobtainable",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 meadowplate: {
 name: "Meadow Plate",
@@ -2339,6 +3526,21 @@ num: 301,
 gen: 4,
 isNonstandard: "Unobtainable",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 mentalherb: {
 name: "Mental Herb",
@@ -2378,6 +3580,21 @@ return;
 num: 219,
 gen: 3,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 metalcoat: {
 name: "Metal Coat",
@@ -2457,6 +3674,48 @@ num: 277,
 gen: 4,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 micleberry: {
 name: "Micle Berry",
 spritenum: 290,
@@ -2490,6 +3749,18 @@ num: 209,
 gen: 4,
 isNonstandard: "Unobtainable",
 },
+
+
+
+
+
+
+
+
+
+
+
+
 
 mindplate: {
 name: "Mind Plate",
@@ -2578,6 +3849,24 @@ num: 883,
 gen: 7,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 muscleband: {
 name: "Muscle Band",
 spritenum: 297,
@@ -2624,6 +3913,22 @@ gen: 3,
 isNonstandard: "Past",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 nevermeltice: {
 name: "Never-Melt Ice",
 spritenum: 305,
@@ -2653,6 +3958,31 @@ num: 178,
 gen: 3,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 occaberry: {
 name: "Occa Berry",
@@ -2730,6 +4060,16 @@ num: 155,
 gen: 3,
 },
 
+
+
+
+
+
+
+
+
+
+
 pamtreberry: {
 name: "Pamtre Berry",
 spritenum: 323,
@@ -2743,6 +4083,15 @@ num: 180,
 gen: 3,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
 
 passhoberry: {
 name: "Passho Berry",
@@ -2857,6 +4206,45 @@ num: 204,
 gen: 3,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+},
+
 pinapberry: {
 name: "Pinap Berry",
 spritenum: 337,
@@ -2870,6 +4258,21 @@ num: 168,
 gen: 3,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 whippeddream: {
 name: "Whipped Dream",
@@ -2920,6 +4323,59 @@ return this.chainModify([4915, 4096]);
 num: 245,
 gen: 2,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 pomegberry: {
 name: "Pomeg Berry",
@@ -3036,6 +4492,26 @@ num: 294,
 gen: 4,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 prismscale: {
 name: "Prism Scale",
 spritenum: 365,
@@ -3069,6 +4545,38 @@ gen: 4,
 isNonstandard: "Past",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 psychicseed: {
 name: "Psychic Seed",
 spritenum: 665,
@@ -3091,6 +4599,19 @@ spd: 1,
 num: 882,
 gen: 7,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 punchingglove: {
 name: "Punching Glove",
@@ -3122,6 +4643,14 @@ onEat: false,
 num: 171,
 gen: 3,
 },
+
+
+
+
+
+
+
+
 
 quickclaw: {
 onFractionalPriorityPriority: -2,
@@ -3311,6 +4840,25 @@ gen: 6,
 isNonstandard: "Past",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 rindoberry: {
 name: "Rindo Berry",
 spritenum: 409,
@@ -3347,6 +4895,21 @@ num: 543,
 gen: 5,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 rockincense: {
 name: "Rock Incense",
 spritenum: 416,
@@ -3363,6 +4926,36 @@ num: 315,
 gen: 4,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 rockyhelmet: {
 name: "Rocky Helmet",
@@ -3508,6 +5101,21 @@ gen: 8,
 isNonstandard: "Unobtainable",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 sachet: {
 name: "Sachet",
 spritenum: 691,
@@ -3518,6 +5126,15 @@ num: 647,
 gen: 6,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
 
 safetygoggles: {
 name: "Safety Goggles",
@@ -3570,6 +5187,51 @@ num: 203,
 gen: 3,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 scopelens: {
 name: "Scope Lens",
 spritenum: 429,
@@ -3616,6 +5278,21 @@ num: 244,
 gen: 2,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 shedshell: {
 name: "Shed Shell",
 spritenum: 437,
@@ -3645,6 +5322,33 @@ this.heal(move.totalDamage / 8, pokemon);
 num: 253,
 gen: 3,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 shucaberry: {
 name: "Shuca Berry",
@@ -3759,6 +5463,21 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 smoothrock: {
 name: "Smooth Rock",
 spritenum: 453,
@@ -3768,6 +5487,18 @@ basePower: 10,
 num: 283,
 gen: 4,
 },
+
+
+
+
+
+
+
+
+
+
+
+
 
 snowball: {
 name: "Snowball",
@@ -3802,6 +5533,18 @@ return this.chainModify([4915, 4096]);
 num: 237,
 gen: 2,
 },
+
+
+
+
+
+
+
+
+
+
+
+
 
 souldew: {
 name: "Soul Dew",
@@ -3898,6 +5641,15 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
+
+
+
+
+
+
+
+
+
 starfberry: {
 name: "Starf Berry",
 spritenum: 472,
@@ -3941,6 +5693,66 @@ num: 1114,
 gen: 8,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 stick: {
 name: "Stick",
@@ -4004,6 +5816,15 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
+
+
+
+
+
+
+
+
+
 strawberrysweet: {
 name: "Strawberry Sweet",
 spritenum: 704,
@@ -4014,6 +5835,31 @@ num: 1109,
 gen: 8,
 isNonstandard: "Past",
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 sweetapple: {
 name: "Sweet Apple",
@@ -4062,6 +5908,18 @@ onEat() { },
 num: 194,
 gen: 4,
 },
+
+
+
+
+
+
+
+
+
+
+
+
 
 tartapple: {
 name: "Tart Apple",
@@ -4119,6 +5977,24 @@ num: 1118,
 gen: 8,
 },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 toxicorb: {
 name: "Toxic Orb",
 spritenum: 515,
@@ -4172,6 +6048,41 @@ return this.chainModify([4915, 4096]);
 num: 248,
 gen: 2,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 upgrade: {
 name: "Up-Grade",
@@ -4237,6 +6148,61 @@ onEat() { },
 num: 186,
 gen: 4,
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 watmelberry: {
 name: "Watmel Berry",
