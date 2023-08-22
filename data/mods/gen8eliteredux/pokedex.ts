@@ -6184,7 +6184,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ["Rock", "Psychic"],
 		gender: "N",
 		baseStats: {hp: 90, atk: 125, def: 115, spa: 55, spd: 65, spe: 70},
-		abilities: {0: "Solar Flare", 1: "Drought", H: "Sun Worship", I1: "Levitate", I2: "Sturdy", I3: "Burnate"},
+		abilities: {0: "Victory Star", 1: "Drought", H: "Sun Worship", I1: "Levitate", I2: "Sturdy", I3: "Solar Flare"},
 		heightm: 1.2,
 		weightkg: 154,
 		color: "Red",
