@@ -33291,6 +33291,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			nightmare: ["7V", "3T"],
 			ominouswind: ["4T"],
 			overheat: ["8M", "7M", "6M", "5M", "4M", "3M"],
+			playrough: ['7L1'],
 			pluck: ["5M", "4M"],
 			protect: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
 			psychic: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
