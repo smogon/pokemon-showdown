@@ -18,36 +18,6 @@ num: 1881,
 gen: 9,
 },
 
-abomasite: {
-name: "Abomasite",
-spritenum: 575,
-megaStone: "Abomasnow-Mega",
-megaEvolves: "Abomasnow",
-itemUser: ["Abomasnow"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 674,
-gen: 6,
-isNonstandard: "Past",
-},
-
-absolite: {
-name: "Absolite",
-spritenum: 576,
-megaStone: "Absol-Mega",
-megaEvolves: "Absol",
-itemUser: ["Absol"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 677,
-gen: 6,
-isNonstandard: "Past",
-},
-
 absorbbulb: {
 name: "Absorb Bulb",
 spritenum: 2,
@@ -131,36 +101,6 @@ num: 846,
 gen: 7,
 },
 
-aerodactylite: {
-name: "Aerodactylite",
-spritenum: 577,
-megaStone: "Aerodactyl-Mega",
-megaEvolves: "Aerodactyl",
-itemUser: ["Aerodactyl"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 672,
-gen: 6,
-isNonstandard: "Past",
-},
-
-aggronite: {
-name: "Aggronite",
-spritenum: 578,
-megaStone: "Aggron-Mega",
-megaEvolves: "Aggron",
-itemUser: ["Aggron"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 667,
-gen: 6,
-isNonstandard: "Past",
-},
-
 aguavberry: {
 name: "Aguav Berry",
 spritenum: 5,
@@ -217,63 +157,6 @@ this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon
 },
 num: 541,
 gen: 5,
-},
-
-alakazite: {
-name: "Alakazite",
-spritenum: 579,
-megaStone: "Alakazam-Mega",
-megaEvolves: "Alakazam",
-itemUser: ["Alakazam"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 679,
-gen: 6,
-isNonstandard: "Past",
-},
-
-aloraichiumz: {
-name: "Aloraichium Z",
-spritenum: 655,
-onTakeItem: false,
-zMove: "Stoked Sparksurfer",
-zMoveFrom: "Thunderbolt",
-itemUser: ["Raichu-Alola"],
-num: 803,
-gen: 7,
-isNonstandard: "Past",
-},
-
-altarianite: {
-name: "Altarianite",
-spritenum: 615,
-megaStone: "Altaria-Mega",
-megaEvolves: "Altaria",
-itemUser: ["Altaria"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 755,
-gen: 6,
-isNonstandard: "Past",
-},
-
-ampharosite: {
-name: "Ampharosite",
-spritenum: 580,
-megaStone: "Ampharos-Mega",
-megaEvolves: "Ampharos",
-itemUser: ["Ampharos"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 658,
-gen: 6,
-isNonstandard: "Past",
 },
 
 apicotberry: {
@@ -351,21 +234,6 @@ num: 640,
 gen: 6,
 },
 
-audinite: {
-name: "Audinite",
-spritenum: 617,
-megaStone: "Audino-Mega",
-megaEvolves: "Audino",
-itemUser: ["Audino"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 757,
-gen: 6,
-isNonstandard: "Past",
-},
-
 auspiciousarmor: {
 name: "Auspicious Armor",
 spritenum: 0, // TODO
@@ -396,44 +264,6 @@ return this.chainModify(0.5);
 onEat() { },
 num: 199,
 gen: 4,
-},
-
-banettite: {
-name: "Banettite",
-spritenum: 582,
-megaStone: "Banette-Mega",
-megaEvolves: "Banette",
-itemUser: ["Banette"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 668,
-gen: 6,
-isNonstandard: "Past",
-},
-
-beastball: {
-name: "Beast Ball",
-spritenum: 661,
-num: 851,
-gen: 7,
-isPokeball: true,
-},
-
-beedrillite: {
-name: "Beedrillite",
-spritenum: 628,
-megaStone: "Beedrill-Mega",
-megaEvolves: "Beedrill",
-itemUser: ["Beedrill"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 770,
-gen: 6,
-isNonstandard: "Past",
 },
 
 belueberry: {
@@ -558,36 +388,6 @@ num: 281,
 gen: 4,
 },
 
-blastoisinite: {
-name: "Blastoisinite",
-spritenum: 583,
-megaStone: "Blastoise-Mega",
-megaEvolves: "Blastoise",
-itemUser: ["Blastoise"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 661,
-gen: 6,
-isNonstandard: "Past",
-},
-
-blazikenite: {
-name: "Blazikenite",
-spritenum: 584,
-megaStone: "Blaziken-Mega",
-megaEvolves: "Blaziken",
-itemUser: ["Blaziken"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 664,
-gen: 6,
-isNonstandard: "Past",
-},
-
 blueorb: {
 name: "Blue Orb",
 spritenum: 41,
@@ -682,83 +482,6 @@ num: 213,
 gen: 2,
 },
 
-buggem: {
-name: "Bug Gem",
-spritenum: 53,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Bug' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 558,
-gen: 5,
-isNonstandard: "Past",
-},
-
-bugmemory: {
-name: "Bug Memory",
-spritenum: 673,
-onMemory: 'Bug',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Bug",
-itemUser: ["Silvally-Bug"],
-num: 909,
-gen: 7,
-isNonstandard: "Past",
-},
-
-buginiumz: {
-name: "Buginium Z",
-spritenum: 642,
-onPlate: 'Bug',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Bug",
-forcedForme: "Arceus-Bug",
-num: 787,
-gen: 7,
-isNonstandard: "Past",
-},
-
-burndrive: {
-name: "Burn Drive",
-spritenum: 54,
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
-return false;
-}
-return true;
-},
-onDrive: 'Fire',
-forcedForme: "Genesect-Burn",
-itemUser: ["Genesect-Burn"],
-num: 118,
-gen: 5,
-isNonstandard: "Past",
-},
-
-cameruptite: {
-name: "Cameruptite",
-spritenum: 625,
-megaStone: "Camerupt-Mega",
-megaEvolves: "Camerupt",
-itemUser: ["Camerupt"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 767,
-gen: 6,
-isNonstandard: "Past",
-},
-
 cellbattery: {
 name: "Cell Battery",
 spritenum: 60,
@@ -791,36 +514,6 @@ return this.chainModify([4915, 4096]);
 },
 num: 249,
 gen: 2,
-},
-
-charizarditex: {
-name: "Charizardite X",
-spritenum: 585,
-megaStone: "Charizard-Mega-X",
-megaEvolves: "Charizard",
-itemUser: ["Charizard"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 660,
-gen: 6,
-isNonstandard: "Past",
-},
-
-charizarditey: {
-name: "Charizardite Y",
-spritenum: 586,
-megaStone: "Charizard-Mega-Y",
-megaEvolves: "Charizard",
-itemUser: ["Charizard"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 678,
-gen: 6,
-isNonstandard: "Past",
 },
 
 chartiberry: {
@@ -870,15 +563,6 @@ num: 149,
 gen: 3,
 },
 
-cherishball: {
-name: "Cherish Ball",
-spritenum: 64,
-num: 16,
-gen: 4,
-isPokeball: true,
-isNonstandard: "Unobtainable",
-},
-
 chestoberry: {
 name: "Chesto Berry",
 spritenum: 65,
@@ -924,33 +608,6 @@ return this.chainModify(0.5);
 onEat() { },
 num: 200,
 gen: 4,
-},
-
-chilldrive: {
-name: "Chill Drive",
-spritenum: 67,
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
-return false;
-}
-return true;
-},
-onDrive: 'Ice',
-forcedForme: "Genesect-Chill",
-itemUser: ["Genesect-Chill"],
-num: 119,
-gen: 5,
-isNonstandard: "Past",
-},
-
-chippedpot: {
-name: "Chipped Pot",
-spritenum: 720,
-fling: {
-basePower: 80,
-},
-num: 1254,
-gen: 8,
 },
 
 choiceband: {
@@ -1221,83 +878,6 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
-damprock: {
-name: "Damp Rock",
-spritenum: 88,
-fling: {
-basePower: 60,
-},
-num: 285,
-gen: 4,
-},
-
-darkgem: {
-name: "Dark Gem",
-spritenum: 89,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Dark' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 562,
-gen: 5,
-isNonstandard: "Past",
-},
-
-darkmemory: {
-name: "Dark Memory",
-spritenum: 683,
-onMemory: 'Dark',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Dark",
-itemUser: ["Silvally-Dark"],
-num: 919,
-gen: 7,
-isNonstandard: "Past",
-},
-
-darkiniumz: {
-name: "Darkinium Z",
-spritenum: 646,
-onPlate: 'Dark',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Dark",
-forcedForme: "Arceus-Dark",
-num: 791,
-gen: 7,
-isNonstandard: "Past",
-},
-
-dawnstone: {
-name: "Dawn Stone",
-spritenum: 92,
-fling: {
-basePower: 80,
-},
-num: 109,
-gen: 4,
-},
-
-decidiumz: {
-name: "Decidium Z",
-spritenum: 650,
-onTakeItem: false,
-zMove: "Sinister Arrow Raid",
-zMoveFrom: "Spirit Shackle",
-itemUser: ["Decidueye"],
-num: 798,
-gen: 7,
-isNonstandard: "Past",
-},
-
 deepseascale: {
 name: "Deep Sea Scale",
 spritenum: 93,
@@ -1350,57 +930,6 @@ num: 280,
 gen: 4,
 },
 
-diancite: {
-name: "Diancite",
-spritenum: 624,
-megaStone: "Diancie-Mega",
-megaEvolves: "Diancie",
-itemUser: ["Diancie"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 764,
-gen: 6,
-isNonstandard: "Past",
-},
-
-diveball: {
-name: "Dive Ball",
-spritenum: 101,
-num: 7,
-gen: 3,
-isPokeball: true,
-},
-
-domefossil: {
-name: "Dome Fossil",
-spritenum: 102,
-fling: {
-basePower: 100,
-},
-num: 102,
-gen: 3,
-isNonstandard: "Past",
-},
-
-dousedrive: {
-name: "Douse Drive",
-spritenum: 103,
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
-return false;
-}
-return true;
-},
-onDrive: 'Water',
-forcedForme: "Genesect-Douse",
-itemUser: ["Genesect-Douse"],
-num: 116,
-gen: 5,
-isNonstandard: "Past",
-},
-
 dracoplate: {
 name: "Draco Plate",
 spritenum: 105,
@@ -1439,38 +968,6 @@ num: 250,
 gen: 2,
 },
 
-dragongem: {
-name: "Dragon Gem",
-spritenum: 107,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Dragon' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 561,
-gen: 5,
-isNonstandard: "Past",
-},
-
-dragonmemory: {
-name: "Dragon Memory",
-spritenum: 682,
-onMemory: 'Dragon',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Dragon",
-itemUser: ["Silvally-Dragon"],
-num: 918,
-gen: 7,
-isNonstandard: "Past",
-},
-
 dragonscale: {
 name: "Dragon Scale",
 spritenum: 108,
@@ -1479,19 +976,6 @@ basePower: 30,
 },
 num: 235,
 gen: 2,
-isNonstandard: "Past",
-},
-
-dragoniumz: {
-name: "Dragonium Z",
-spritenum: 645,
-onPlate: 'Dragon',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Dragon",
-forcedForme: "Arceus-Dragon",
-num: 790,
-gen: 7,
 isNonstandard: "Past",
 },
 
@@ -1515,14 +999,6 @@ forcedForme: "Arceus-Dark",
 num: 312,
 gen: 4,
 isNonstandard: "Unobtainable",
-},
-
-dreamball: {
-name: "Dream Ball",
-spritenum: 111,
-num: 576,
-gen: 5,
-isPokeball: true,
 },
 
 dubiousdisc: {
@@ -1550,24 +1026,6 @@ gen: 3,
 isNonstandard: "Past",
 },
 
-duskball: {
-name: "Dusk Ball",
-spritenum: 115,
-num: 13,
-gen: 4,
-isPokeball: true,
-},
-
-duskstone: {
-name: "Dusk Stone",
-spritenum: 116,
-fling: {
-basePower: 80,
-},
-num: 108,
-gen: 4,
-},
-
 earthplate: {
 name: "Earth Plate",
 spritenum: 117,
@@ -1588,18 +1046,6 @@ forcedForme: "Arceus-Ground",
 num: 305,
 gen: 4,
 isNonstandard: "Unobtainable",
-},
-
-eeviumz: {
-name: "Eevium Z",
-spritenum: 657,
-onTakeItem: false,
-zMove: "Extreme Evoboost",
-zMoveFrom: "Last Resort",
-itemUser: ["Eevee"],
-num: 805,
-gen: 7,
-isNonstandard: "Past",
 },
 
 ejectbutton: {
@@ -1669,38 +1115,6 @@ gen: 4,
 isNonstandard: "Past",
 },
 
-electricgem: {
-name: "Electric Gem",
-spritenum: 120,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-if (move.type === 'Electric' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 550,
-gen: 5,
-isNonstandard: "Past",
-},
-
-electricmemory: {
-name: "Electric Memory",
-spritenum: 679,
-onMemory: 'Electric',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Electric",
-itemUser: ["Silvally-Electric"],
-num: 915,
-gen: 7,
-isNonstandard: "Past",
-},
-
 electricseed: {
 name: "Electric Seed",
 spritenum: 664,
@@ -1722,19 +1136,6 @@ def: 1,
 },
 num: 881,
 gen: 7,
-},
-
-electriumz: {
-name: "Electrium Z",
-spritenum: 634,
-onPlate: 'Electric',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Electric",
-forcedForme: "Arceus-Electric",
-num: 779,
-gen: 7,
-isNonstandard: "Past",
 },
 
 enigmaberry: {
@@ -1798,104 +1199,6 @@ num: 268,
 gen: 4,
 },
 
-fairiumz: {
-name: "Fairium Z",
-spritenum: 648,
-onPlate: 'Fairy',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Fairy",
-forcedForme: "Arceus-Fairy",
-num: 793,
-gen: 7,
-isNonstandard: "Past",
-},
-
-fairygem: {
-name: "Fairy Gem",
-spritenum: 611,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Fairy' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 715,
-gen: 6,
-isNonstandard: "Past",
-},
-
-fairymemory: {
-name: "Fairy Memory",
-spritenum: 684,
-onMemory: 'Fairy',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Fairy",
-itemUser: ["Silvally-Fairy"],
-num: 920,
-gen: 7,
-isNonstandard: "Past",
-},
-
-fastball: {
-name: "Fast Ball",
-spritenum: 137,
-num: 492,
-gen: 2,
-isPokeball: true,
-},
-
-fightinggem: {
-name: "Fighting Gem",
-spritenum: 139,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Fighting' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 553,
-gen: 5,
-isNonstandard: "Past",
-},
-
-fightingmemory: {
-name: "Fighting Memory",
-spritenum: 668,
-onMemory: 'Fighting',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Fighting",
-itemUser: ["Silvally-Fighting"],
-num: 904,
-gen: 7,
-isNonstandard: "Past",
-},
-
-fightiniumz: {
-name: "Fightinium Z",
-spritenum: 637,
-onPlate: 'Fighting',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Fighting",
-forcedForme: "Arceus-Fighting",
-num: 782,
-gen: 7,
-isNonstandard: "Past",
-},
-
 figyberry: {
 name: "Figy Berry",
 spritenum: 140,
@@ -1921,61 +1224,6 @@ pokemon.addVolatile('confusion');
 },
 num: 159,
 gen: 3,
-},
-
-firegem: {
-name: "Fire Gem",
-spritenum: 141,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-if (move.type === 'Fire' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 548,
-gen: 5,
-isNonstandard: "Past",
-},
-
-firememory: {
-name: "Fire Memory",
-spritenum: 676,
-onMemory: 'Fire',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Fire",
-itemUser: ["Silvally-Fire"],
-num: 912,
-gen: 7,
-isNonstandard: "Past",
-},
-
-firestone: {
-name: "Fire Stone",
-spritenum: 142,
-fling: {
-basePower: 30,
-},
-num: 82,
-gen: 1,
-},
-
-firiumz: {
-name: "Firium Z",
-spritenum: 632,
-onPlate: 'Fire',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Fire",
-forcedForme: "Arceus-Fire",
-num: 777,
-gen: 7,
-isNonstandard: "Past",
 },
 
 fistplate: {
@@ -2062,51 +1310,6 @@ gen: 8,
 isNonstandard: "Past",
 },
 
-flyinggem: {
-name: "Flying Gem",
-spritenum: 149,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Flying' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 556,
-gen: 5,
-isNonstandard: "Past",
-},
-
-flyingmemory: {
-name: "Flying Memory",
-spritenum: 669,
-onMemory: 'Flying',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Flying",
-itemUser: ["Silvally-Flying"],
-num: 905,
-gen: 7,
-isNonstandard: "Past",
-},
-
-flyiniumz: {
-name: "Flyinium Z",
-spritenum: 640,
-onPlate: 'Flying',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Flying",
-forcedForme: "Arceus-Flying",
-num: 785,
-gen: 7,
-isNonstandard: "Past",
-},
-
 focusband: {
 name: "Focus Band",
 spritenum: 150,
@@ -2186,14 +1389,6 @@ gen: 8,
 isNonstandard: "Past",
 },
 
-friendball: {
-name: "Friend Ball",
-spritenum: 153,
-num: 497,
-gen: 2,
-isPokeball: true,
-},
-
 fullincense: {
 name: "Full Incense",
 spritenum: 155,
@@ -2228,21 +1423,6 @@ gen: 8,
 isNonstandard: "Unobtainable",
 },
 
-galladite: {
-name: "Galladite",
-spritenum: 616,
-megaStone: "Gallade-Mega",
-megaEvolves: "Gallade",
-itemUser: ["Gallade"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 756,
-gen: 6,
-isNonstandard: "Past",
-},
-
 ganlonberry: {
 name: "Ganlon Berry",
 spritenum: 158,
@@ -2264,111 +1444,6 @@ num: 202,
 gen: 3,
 },
 
-garchompite: {
-name: "Garchompite",
-spritenum: 589,
-megaStone: "Garchomp-Mega",
-megaEvolves: "Garchomp",
-itemUser: ["Garchomp"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 683,
-gen: 6,
-isNonstandard: "Past",
-},
-
-gardevoirite: {
-name: "Gardevoirite",
-spritenum: 587,
-megaStone: "Gardevoir-Mega",
-megaEvolves: "Gardevoir",
-itemUser: ["Gardevoir"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 657,
-gen: 6,
-isNonstandard: "Past",
-},
-
-gengarite: {
-name: "Gengarite",
-spritenum: 588,
-megaStone: "Gengar-Mega",
-megaEvolves: "Gengar",
-itemUser: ["Gengar"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 656,
-gen: 6,
-isNonstandard: "Past",
-},
-
-ghostgem: {
-name: "Ghost Gem",
-spritenum: 161,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Ghost' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 560,
-gen: 5,
-isNonstandard: "Past",
-},
-
-ghostmemory: {
-name: "Ghost Memory",
-spritenum: 674,
-onMemory: 'Ghost',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Ghost",
-itemUser: ["Silvally-Ghost"],
-num: 910,
-gen: 7,
-isNonstandard: "Past",
-},
-
-ghostiumz: {
-name: "Ghostium Z",
-spritenum: 644,
-onPlate: 'Ghost',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Ghost",
-forcedForme: "Arceus-Ghost",
-num: 789,
-gen: 7,
-isNonstandard: "Past",
-},
-
-glalitite: {
-name: "Glalitite",
-spritenum: 623,
-megaStone: "Glalie-Mega",
-megaEvolves: "Glalie",
-itemUser: ["Glalie"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 763,
-gen: 6,
-isNonstandard: "Past",
-},
-
 goldbottlecap: {
 name: "Gold Bottle Cap",
 spritenum: 697,
@@ -2377,51 +1452,6 @@ basePower: 30,
 },
 num: 796,
 gen: 7,
-},
-
-grassgem: {
-name: "Grass Gem",
-spritenum: 172,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-if (move.type === 'Grass' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 551,
-gen: 5,
-isNonstandard: "Past",
-},
-
-grassmemory: {
-name: "Grass Memory",
-spritenum: 678,
-onMemory: 'Grass',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Grass",
-itemUser: ["Silvally-Grass"],
-num: 914,
-gen: 7,
-isNonstandard: "Past",
-},
-
-grassiumz: {
-name: "Grassium Z",
-spritenum: 635,
-onPlate: 'Grass',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Grass",
-forcedForme: "Arceus-Grass",
-num: 780,
-gen: 7,
-isNonstandard: "Past",
 },
 
 grassyseed: {
@@ -2445,14 +1475,6 @@ def: 1,
 },
 num: 884,
 gen: 7,
-},
-
-greatball: {
-name: "Great Ball",
-spritenum: 174,
-num: 3,
-gen: 1,
-isPokeball: true,
 },
 
 grepaberry: {
@@ -2519,66 +1541,6 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
-groundgem: {
-name: "Ground Gem",
-spritenum: 182,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Ground' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 555,
-gen: 5,
-isNonstandard: "Past",
-},
-
-groundmemory: {
-name: "Ground Memory",
-spritenum: 671,
-onMemory: 'Ground',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Ground",
-itemUser: ["Silvally-Ground"],
-num: 907,
-gen: 7,
-isNonstandard: "Past",
-},
-
-groundiumz: {
-name: "Groundium Z",
-spritenum: 639,
-onPlate: 'Ground',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Ground",
-forcedForme: "Arceus-Ground",
-num: 784,
-gen: 7,
-isNonstandard: "Past",
-},
-
-gyaradosite: {
-name: "Gyaradosite",
-spritenum: 589,
-megaStone: "Gyarados-Mega",
-megaEvolves: "Gyarados",
-itemUser: ["Gyarados"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 676,
-gen: 6,
-isNonstandard: "Past",
-},
-
 habanberry: {
 name: "Haban Berry",
 spritenum: 185,
@@ -2620,14 +1582,6 @@ num: 238,
 gen: 2,
 },
 
-healball: {
-name: "Heal Ball",
-spritenum: 188,
-num: 14,
-gen: 4,
-isPokeball: true,
-},
-
 heatrock: {
 name: "Heat Rock",
 spritenum: 193,
@@ -2636,14 +1590,6 @@ basePower: 60,
 },
 num: 284,
 gen: 4,
-},
-
-heavyball: {
-name: "Heavy Ball",
-spritenum: 194,
-num: 495,
-gen: 2,
-isPokeball: true,
 },
 
 heavydutyboots: {
@@ -2668,21 +1614,6 @@ gen: 3,
 isNonstandard: "Past",
 },
 
-heracronite: {
-name: "Heracronite",
-spritenum: 590,
-megaStone: "Heracross-Mega",
-megaEvolves: "Heracross",
-itemUser: ["Heracross"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 680,
-gen: 6,
-isNonstandard: "Past",
-},
-
 hondewberry: {
 name: "Hondew Berry",
 spritenum: 213,
@@ -2694,21 +1625,6 @@ type: "Ground",
 onEat: false,
 num: 172,
 gen: 3,
-},
-
-houndoominite: {
-name: "Houndoominite",
-spritenum: 591,
-megaStone: "Houndoom-Mega",
-megaEvolves: "Houndoom",
-itemUser: ["Houndoom"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 666,
-gen: 6,
-isNonstandard: "Past",
 },
 
 iapapaberry: {
@@ -2738,48 +1654,6 @@ num: 163,
 gen: 3,
 },
 
-icegem: {
-name: "Ice Gem",
-spritenum: 218,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Ice' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 552,
-gen: 5,
-isNonstandard: "Past",
-},
-
-icememory: {
-name: "Ice Memory",
-spritenum: 681,
-onMemory: 'Ice',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Ice",
-itemUser: ["Silvally-Ice"],
-num: 917,
-gen: 7,
-isNonstandard: "Past",
-},
-
-icestone: {
-name: "Ice Stone",
-spritenum: 693,
-fling: {
-basePower: 30,
-},
-num: 849,
-gen: 7,
-},
-
 icicleplate: {
 name: "Icicle Plate",
 spritenum: 220,
@@ -2802,19 +1676,6 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
-iciumz: {
-name: "Icium Z",
-spritenum: 636,
-onPlate: 'Ice',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Ice",
-forcedForme: "Arceus-Ice",
-num: 781,
-gen: 7,
-isNonstandard: "Past",
-},
-
 icyrock: {
 name: "Icy Rock",
 spritenum: 221,
@@ -2823,18 +1684,6 @@ basePower: 40,
 },
 num: 282,
 gen: 4,
-},
-
-inciniumz: {
-name: "Incinium Z",
-spritenum: 651,
-onTakeItem: false,
-zMove: "Malicious Moonsault",
-zMoveFrom: "Darkest Lariat",
-itemUser: ["Incineroar"],
-num: 799,
-gen: 7,
-isNonstandard: "Past",
 },
 
 insectplate: {
@@ -3017,21 +1866,6 @@ num: 170,
 gen: 3,
 },
 
-kangaskhanite: {
-name: "Kangaskhanite",
-spritenum: 592,
-megaStone: "Kangaskhan-Mega",
-megaEvolves: "Kangaskhan",
-itemUser: ["Kangaskhan"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 675,
-gen: 6,
-isNonstandard: "Past",
-},
-
 kingsrock: {
 name: "King's Rock",
 spritenum: 236,
@@ -3054,18 +1888,6 @@ volatileStatus: 'flinch',
 },
 num: 221,
 gen: 2,
-},
-
-kommoniumz: {
-name: "Kommonium Z",
-spritenum: 690,
-onTakeItem: false,
-zMove: "Clangorous Soulblaze",
-zMoveFrom: "Clanging Scales",
-itemUser: ["Kommo-o", "Kommo-o-Totem"],
-num: 926,
-gen: 7,
-isNonstandard: "Past",
 },
 
 laggingtail: {
@@ -3100,36 +1922,6 @@ num: 206,
 gen: 3,
 },
 
-latiasite: {
-name: "Latiasite",
-spritenum: 629,
-megaStone: "Latias-Mega",
-megaEvolves: "Latias",
-itemUser: ["Latias"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 684,
-gen: 6,
-isNonstandard: "Past",
-},
-
-latiosite: {
-name: "Latiosite",
-spritenum: 630,
-megaStone: "Latios-Mega",
-megaEvolves: "Latios",
-itemUser: ["Latios"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 685,
-gen: 6,
-isNonstandard: "Past",
-},
-
 laxincense: {
 name: "Lax Incense",
 spritenum: 240,
@@ -3145,16 +1937,6 @@ return this.chainModify([3686, 4096]);
 num: 255,
 gen: 3,
 isNonstandard: "Past",
-},
-
-leafstone: {
-name: "Leaf Stone",
-spritenum: 241,
-fling: {
-basePower: 30,
-},
-num: 85,
-gen: 1,
 },
 
 leek: {
@@ -3213,14 +1995,6 @@ this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]')
 },
 num: 154,
 gen: 3,
-},
-
-levelball: {
-name: "Level Ball",
-spritenum: 246,
-num: 493,
-gen: 2,
-isPokeball: true,
 },
 
 liechiberry: {
@@ -3310,29 +2084,6 @@ num: 1886,
 gen: 9,
 },
 
-lopunnite: {
-name: "Lopunnite",
-spritenum: 626,
-megaStone: "Lopunny-Mega",
-megaEvolves: "Lopunny",
-itemUser: ["Lopunny"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 768,
-gen: 6,
-isNonstandard: "Past",
-},
-
-loveball: {
-name: "Love Ball",
-spritenum: 258,
-num: 496,
-gen: 2,
-isPokeball: true,
-},
-
 lovesweet: {
 name: "Love Sweet",
 spritenum: 705,
@@ -3341,21 +2092,6 @@ basePower: 10,
 },
 num: 1110,
 gen: 8,
-isNonstandard: "Past",
-},
-
-lucarionite: {
-name: "Lucarionite",
-spritenum: 594,
-megaStone: "Lucario-Mega",
-megaEvolves: "Lucario",
-itemUser: ["Lucario"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 673,
-gen: 6,
 isNonstandard: "Past",
 },
 
@@ -3419,26 +2155,6 @@ num: 648,
 gen: 6,
 },
 
-lunaliumz: {
-name: "Lunalium Z",
-spritenum: 686,
-onTakeItem: false,
-zMove: "Menacing Moonraze Maelstrom",
-zMoveFrom: "Moongeist Beam",
-itemUser: ["Lunala", "Necrozma-Dawn-Wings"],
-num: 922,
-gen: 7,
-isNonstandard: "Past",
-},
-
-lureball: {
-name: "Lure Ball",
-spritenum: 264,
-num: 494,
-gen: 2,
-isPokeball: true,
-},
-
 lustrousglobe: {
 name: "Lustrous Globe",
 spritenum: 265, // TODO
@@ -3477,26 +2193,6 @@ itemUser: ["Palkia"],
 num: 136,
 gen: 4,
 isNonstandard: "Unobtainable",
-},
-
-luxuryball: {
-name: "Luxury Ball",
-spritenum: 266,
-num: 11,
-gen: 3,
-isPokeball: true,
-},
-
-lycaniumz: {
-name: "Lycanium Z",
-spritenum: 689,
-onTakeItem: false,
-zMove: "Splintered Stormshards",
-zMoveFrom: "Stone Edge",
-itemUser: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
-num: 925,
-gen: 7,
-isNonstandard: "Past",
 },
 
 machobrace: {
@@ -3601,21 +2297,6 @@ num: 1861,
 gen: 9,
 },
 
-manectite: {
-name: "Manectite",
-spritenum: 596,
-megaStone: "Manectric-Mega",
-megaEvolves: "Manectric",
-itemUser: ["Manectric"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 682,
-gen: 6,
-isNonstandard: "Past",
-},
-
 marangaberry: {
 name: "Maranga Berry",
 spritenum: 597,
@@ -3635,41 +2316,6 @@ this.boost({spd: 1});
 num: 688,
 gen: 6,
 isNonstandard: "Unobtainable",
-},
-
-marshadiumz: {
-name: "Marshadium Z",
-spritenum: 654,
-onTakeItem: false,
-zMove: "Soul-Stealing 7-Star Strike",
-zMoveFrom: "Spectral Thief",
-itemUser: ["Marshadow"],
-num: 802,
-gen: 7,
-isNonstandard: "Past",
-},
-
-masterball: {
-name: "Master Ball",
-spritenum: 276,
-num: 1,
-gen: 1,
-isPokeball: true,
-},
-
-mawilite: {
-name: "Mawilite",
-spritenum: 598,
-megaStone: "Mawile-Mega",
-megaEvolves: "Mawile",
-itemUser: ["Mawile"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 681,
-gen: 6,
-isNonstandard: "Past",
 },
 
 meadowplate: {
@@ -3692,21 +2338,6 @@ forcedForme: "Arceus-Grass",
 num: 301,
 gen: 4,
 isNonstandard: "Unobtainable",
-},
-
-medichamite: {
-name: "Medichamite",
-spritenum: 599,
-megaStone: "Medicham-Mega",
-megaEvolves: "Medicham",
-itemUser: ["Medicham"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 665,
-gen: 6,
-isNonstandard: "Past",
 },
 
 mentalherb: {
@@ -3746,21 +2377,6 @@ return;
 },
 num: 219,
 gen: 3,
-},
-
-metagrossite: {
-name: "Metagrossite",
-spritenum: 618,
-megaStone: "Metagross-Mega",
-megaEvolves: "Metagross",
-itemUser: ["Metagross"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 758,
-gen: 6,
-isNonstandard: "Past",
 },
 
 metalcoat: {
@@ -3841,48 +2457,6 @@ num: 277,
 gen: 4,
 },
 
-mewniumz: {
-name: "Mewnium Z",
-spritenum: 658,
-onTakeItem: false,
-zMove: "Genesis Supernova",
-zMoveFrom: "Psychic",
-itemUser: ["Mew"],
-num: 806,
-gen: 7,
-isNonstandard: "Past",
-},
-
-mewtwonitex: {
-name: "Mewtwonite X",
-spritenum: 600,
-megaStone: "Mewtwo-Mega-X",
-megaEvolves: "Mewtwo",
-itemUser: ["Mewtwo"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 662,
-gen: 6,
-isNonstandard: "Past",
-},
-
-mewtwonitey: {
-name: "Mewtwonite Y",
-spritenum: 601,
-megaStone: "Mewtwo-Mega-Y",
-megaEvolves: "Mewtwo",
-itemUser: ["Mewtwo"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 663,
-gen: 6,
-isNonstandard: "Past",
-},
-
 micleberry: {
 name: "Micle Berry",
 spritenum: 290,
@@ -3915,18 +2489,6 @@ return this.chainModify([4915, 4096]);
 num: 209,
 gen: 4,
 isNonstandard: "Unobtainable",
-},
-
-mimikiumz: {
-name: "Mimikium Z",
-spritenum: 688,
-onTakeItem: false,
-zMove: "Let's Snuggle Forever",
-zMoveFrom: "Play Rough",
-itemUser: ["Mimikyu", "Mimikyu-Busted", "Mimikyu-Totem", "Mimikyu-Busted-Totem"],
-num: 924,
-isNonstandard: "Past",
-gen: 7,
 },
 
 mindplate: {
@@ -4016,24 +2578,6 @@ num: 883,
 gen: 7,
 },
 
-moonball: {
-name: "Moon Ball",
-spritenum: 294,
-num: 498,
-gen: 2,
-isPokeball: true,
-},
-
-moonstone: {
-name: "Moon Stone",
-spritenum: 295,
-fling: {
-basePower: 30,
-},
-num: 81,
-gen: 1,
-},
-
 muscleband: {
 name: "Muscle Band",
 spritenum: 297,
@@ -4080,22 +2624,6 @@ gen: 3,
 isNonstandard: "Past",
 },
 
-nestball: {
-name: "Nest Ball",
-spritenum: 303,
-num: 8,
-gen: 3,
-isPokeball: true,
-},
-
-netball: {
-name: "Net Ball",
-spritenum: 304,
-num: 6,
-gen: 3,
-isPokeball: true,
-},
-
 nevermeltice: {
 name: "Never-Melt Ice",
 spritenum: 305,
@@ -4123,31 +2651,6 @@ type: "Dragon",
 onEat: false,
 num: 178,
 gen: 3,
-isNonstandard: "Past",
-},
-
-normalgem: {
-name: "Normal Gem",
-spritenum: 307,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-if (move.type === 'Normal' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 564,
-gen: 5,
-},
-
-normaliumz: {
-name: "Normalium Z",
-spritenum: 631,
-onTakeItem: false,
-zMove: true,
-zMoveType: "Normal",
-num: 776,
-gen: 7,
 isNonstandard: "Past",
 },
 
@@ -4227,16 +2730,6 @@ num: 155,
 gen: 3,
 },
 
-ovalstone: {
-name: "Oval Stone",
-spritenum: 321,
-fling: {
-basePower: 80,
-},
-num: 110,
-gen: 4,
-},
-
 pamtreberry: {
 name: "Pamtre Berry",
 spritenum: 323,
@@ -4249,15 +2742,6 @@ onEat: false,
 num: 180,
 gen: 3,
 isNonstandard: "Past",
-},
-
-parkball: {
-name: "Park Ball",
-spritenum: 325,
-num: 500,
-gen: 4,
-isPokeball: true,
-isNonstandard: "Unobtainable",
 },
 
 passhoberry: {
@@ -4373,45 +2857,6 @@ num: 204,
 gen: 3,
 },
 
-pidgeotite: {
-name: "Pidgeotite",
-spritenum: 622,
-megaStone: "Pidgeot-Mega",
-megaEvolves: "Pidgeot",
-itemUser: ["Pidgeot"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 762,
-gen: 6,
-isNonstandard: "Past",
-},
-
-pikaniumz: {
-name: "Pikanium Z",
-spritenum: 649,
-onTakeItem: false,
-zMove: "Catastropika",
-zMoveFrom: "Volt Tackle",
-itemUser: ["Pikachu"],
-num: 794,
-gen: 7,
-isNonstandard: "Past",
-},
-
-pikashuniumz: {
-name: "Pikashunium Z",
-spritenum: 659,
-onTakeItem: false,
-zMove: "10,000,000 Volt Thunderbolt",
-zMoveFrom: "Thunderbolt",
-itemUser: ["Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner"],
-num: 836,
-isNonstandard: "Past",
-gen: 7,
-},
-
 pinapberry: {
 name: "Pinap Berry",
 spritenum: 337,
@@ -4423,21 +2868,6 @@ type: "Grass",
 onEat: false,
 num: 168,
 gen: 3,
-isNonstandard: "Past",
-},
-
-pinsirite: {
-name: "Pinsirite",
-spritenum: 602,
-megaStone: "Pinsir-Mega",
-megaEvolves: "Pinsir",
-itemUser: ["Pinsir"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 671,
-gen: 6,
 isNonstandard: "Past",
 },
 
@@ -4489,59 +2919,6 @@ return this.chainModify([4915, 4096]);
 },
 num: 245,
 gen: 2,
-},
-
-poisongem: {
-name: "Poison Gem",
-spritenum: 344,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Poison' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 554,
-gen: 5,
-isNonstandard: "Past",
-},
-
-poisonmemory: {
-name: "Poison Memory",
-spritenum: 670,
-onMemory: 'Poison',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Poison",
-itemUser: ["Silvally-Poison"],
-num: 906,
-gen: 7,
-isNonstandard: "Past",
-},
-
-poisoniumz: {
-name: "Poisonium Z",
-spritenum: 638,
-onPlate: 'Poison',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Poison",
-forcedForme: "Arceus-Poison",
-num: 783,
-gen: 7,
-isNonstandard: "Past",
-},
-
-pokeball: {
-name: "Poke Ball",
-spritenum: 345,
-num: 4,
-gen: 1,
-isPokeball: true,
 },
 
 pomegberry: {
@@ -4659,26 +3036,6 @@ num: 294,
 gen: 4,
 },
 
-premierball: {
-name: "Premier Ball",
-spritenum: 363,
-num: 12,
-gen: 3,
-isPokeball: true,
-},
-
-primariumz: {
-name: "Primarium Z",
-spritenum: 652,
-onTakeItem: false,
-zMove: "Oceanic Operetta",
-zMoveFrom: "Sparkling Aria",
-itemUser: ["Primarina"],
-num: 800,
-gen: 7,
-isNonstandard: "Past",
-},
-
 prismscale: {
 name: "Prism Scale",
 spritenum: 365,
@@ -4712,38 +3069,6 @@ gen: 4,
 isNonstandard: "Past",
 },
 
-psychicgem: {
-name: "Psychic Gem",
-spritenum: 369,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Psychic' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 557,
-gen: 5,
-isNonstandard: "Past",
-},
-
-psychicmemory: {
-name: "Psychic Memory",
-spritenum: 680,
-onMemory: 'Psychic',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Psychic",
-itemUser: ["Silvally-Psychic"],
-num: 916,
-gen: 7,
-isNonstandard: "Past",
-},
-
 psychicseed: {
 name: "Psychic Seed",
 spritenum: 665,
@@ -4765,19 +3090,6 @@ spd: 1,
 },
 num: 882,
 gen: 7,
-},
-
-psychiumz: {
-name: "Psychium Z",
-spritenum: 641,
-onPlate: 'Psychic',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Psychic",
-forcedForme: "Arceus-Psychic",
-num: 786,
-gen: 7,
-isNonstandard: "Past",
 },
 
 punchingglove: {
@@ -4809,14 +3121,6 @@ type: "Poison",
 onEat: false,
 num: 171,
 gen: 3,
-},
-
-quickball: {
-name: "Quick Ball",
-spritenum: 372,
-num: 15,
-gen: 4,
-isPokeball: true,
 },
 
 quickclaw: {
@@ -5007,25 +3311,6 @@ gen: 6,
 isNonstandard: "Past",
 },
 
-repeatball: {
-name: "Repeat Ball",
-spritenum: 401,
-num: 9,
-gen: 3,
-isPokeball: true,
-},
-
-ribbonsweet: {
-name: "Ribbon Sweet",
-spritenum: 710,
-fling: {
-basePower: 10,
-},
-num: 1115,
-gen: 8,
-isNonstandard: "Past",
-},
-
 rindoberry: {
 name: "Rindo Berry",
 spritenum: 409,
@@ -5062,21 +3347,6 @@ num: 543,
 gen: 5,
 },
 
-rockgem: {
-name: "Rock Gem",
-spritenum: 415,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Rock' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 559,
-gen: 5,
-isNonstandard: "Past",
-},
-
 rockincense: {
 name: "Rock Incense",
 spritenum: 416,
@@ -5091,36 +3361,6 @@ return this.chainModify([4915, 4096]);
 },
 num: 315,
 gen: 4,
-isNonstandard: "Past",
-},
-
-rockmemory: {
-name: "Rock Memory",
-spritenum: 672,
-onMemory: 'Rock',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Rock",
-itemUser: ["Silvally-Rock"],
-num: 908,
-gen: 7,
-isNonstandard: "Past",
-},
-
-rockiumz: {
-name: "Rockium Z",
-spritenum: 643,
-onPlate: 'Rock',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Rock",
-forcedForme: "Arceus-Rock",
-num: 788,
-gen: 7,
 isNonstandard: "Past",
 },
 
@@ -5268,21 +3508,6 @@ gen: 8,
 isNonstandard: "Unobtainable",
 },
 
-sablenite: {
-name: "Sablenite",
-spritenum: 614,
-megaStone: "Sableye-Mega",
-megaEvolves: "Sableye",
-itemUser: ["Sableye"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 754,
-gen: 6,
-isNonstandard: "Past",
-},
-
 sachet: {
 name: "Sachet",
 spritenum: 691,
@@ -5292,15 +3517,6 @@ basePower: 80,
 num: 647,
 gen: 6,
 isNonstandard: "Past",
-},
-
-safariball: {
-name: "Safari Ball",
-spritenum: 425,
-num: 5,
-gen: 1,
-isPokeball: true,
-isNonstandard: "Unobtainable",
 },
 
 safetygoggles: {
@@ -5354,51 +3570,6 @@ num: 203,
 gen: 3,
 },
 
-salamencite: {
-name: "Salamencite",
-spritenum: 627,
-megaStone: "Salamence-Mega",
-megaEvolves: "Salamence",
-itemUser: ["Salamence"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 769,
-gen: 6,
-isNonstandard: "Past",
-},
-
-sceptilite: {
-name: "Sceptilite",
-spritenum: 613,
-megaStone: "Sceptile-Mega",
-megaEvolves: "Sceptile",
-itemUser: ["Sceptile"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 753,
-gen: 6,
-isNonstandard: "Past",
-},
-
-scizorite: {
-name: "Scizorite",
-spritenum: 605,
-megaStone: "Scizor-Mega",
-megaEvolves: "Scizor",
-itemUser: ["Scizor"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 670,
-gen: 6,
-isNonstandard: "Past",
-},
-
 scopelens: {
 name: "Scope Lens",
 spritenum: 429,
@@ -5445,21 +3616,6 @@ num: 244,
 gen: 2,
 },
 
-sharpedonite: {
-name: "Sharpedonite",
-spritenum: 619,
-megaStone: "Sharpedo-Mega",
-megaEvolves: "Sharpedo",
-itemUser: ["Sharpedo"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 759,
-gen: 6,
-isNonstandard: "Past",
-},
-
 shedshell: {
 name: "Shed Shell",
 spritenum: 437,
@@ -5488,33 +3644,6 @@ this.heal(move.totalDamage / 8, pokemon);
 },
 num: 253,
 gen: 3,
-},
-
-shinystone: {
-name: "Shiny Stone",
-spritenum: 439,
-fling: {
-basePower: 80,
-},
-num: 107,
-gen: 4,
-},
-
-shockdrive: {
-name: "Shock Drive",
-spritenum: 442,
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
-return false;
-}
-return true;
-},
-onDrive: 'Electric',
-forcedForme: "Genesect-Shock",
-itemUser: ["Genesect-Shock"],
-num: 117,
-gen: 5,
-isNonstandard: "Past",
 },
 
 shucaberry: {
@@ -5630,21 +3759,6 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
-slowbronite: {
-name: "Slowbronite",
-spritenum: 620,
-megaStone: "Slowbro-Mega",
-megaEvolves: "Slowbro",
-itemUser: ["Slowbro"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 760,
-gen: 6,
-isNonstandard: "Past",
-},
-
 smoothrock: {
 name: "Smooth Rock",
 spritenum: 453,
@@ -5653,18 +3767,6 @@ basePower: 10,
 },
 num: 283,
 gen: 4,
-},
-
-snorliumz: {
-name: "Snorlium Z",
-spritenum: 656,
-onTakeItem: false,
-zMove: "Pulverizing Pancake",
-zMoveFrom: "Giga Impact",
-itemUser: ["Snorlax"],
-num: 804,
-gen: 7,
-isNonstandard: "Past",
 },
 
 snowball: {
@@ -5699,18 +3801,6 @@ return this.chainModify([4915, 4096]);
 },
 num: 237,
 gen: 2,
-},
-
-solganiumz: {
-name: "Solganium Z",
-spritenum: 685,
-onTakeItem: false,
-zMove: "Searing Sunraze Smash",
-zMoveFrom: "Sunsteel Strike",
-itemUser: ["Solgaleo", "Necrozma-Dusk-Mane"],
-num: 921,
-gen: 7,
-isNonstandard: "Past",
 },
 
 souldew: {
@@ -5808,15 +3898,6 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
-sportball: {
-name: "Sport Ball",
-spritenum: 465,
-num: 499,
-gen: 2,
-isPokeball: true,
-isNonstandard: "Unobtainable",
-},
-
 starfberry: {
 name: "Starf Berry",
 spritenum: 472,
@@ -5858,66 +3939,6 @@ basePower: 10,
 },
 num: 1114,
 gen: 8,
-isNonstandard: "Past",
-},
-
-steelixite: {
-name: "Steelixite",
-spritenum: 621,
-megaStone: "Steelix-Mega",
-megaEvolves: "Steelix",
-itemUser: ["Steelix"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 761,
-gen: 6,
-isNonstandard: "Past",
-},
-
-steelgem: {
-name: "Steel Gem",
-spritenum: 473,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status') return;
-if (move.type === 'Steel' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 563,
-gen: 5,
-isNonstandard: "Past",
-},
-
-steelmemory: {
-name: "Steel Memory",
-spritenum: 675,
-onMemory: 'Steel',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Steel",
-itemUser: ["Silvally-Steel"],
-num: 911,
-gen: 7,
-isNonstandard: "Past",
-},
-
-steeliumz: {
-name: "Steelium Z",
-spritenum: 647,
-onPlate: 'Steel',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Steel",
-forcedForme: "Arceus-Steel",
-num: 792,
-gen: 7,
 isNonstandard: "Past",
 },
 
@@ -5983,15 +4004,6 @@ gen: 4,
 isNonstandard: "Unobtainable",
 },
 
-strangeball: {
-name: "Strange Ball",
-spritenum: 303, // TODO
-num: 1785,
-gen: 8,
-isPokeball: true,
-isNonstandard: "Unobtainable",
-},
-
 strawberrysweet: {
 name: "Strawberry Sweet",
 spritenum: 704,
@@ -6000,31 +4012,6 @@ basePower: 10,
 },
 num: 1109,
 gen: 8,
-isNonstandard: "Past",
-},
-
-sunstone: {
-name: "Sun Stone",
-spritenum: 480,
-fling: {
-basePower: 30,
-},
-num: 80,
-gen: 2,
-},
-
-swampertite: {
-name: "Swampertite",
-spritenum: 612,
-megaStone: "Swampert-Mega",
-megaEvolves: "Swampert",
-itemUser: ["Swampert"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 752,
-gen: 6,
 isNonstandard: "Past",
 },
 
@@ -6074,18 +4061,6 @@ return this.chainModify(0.5);
 onEat() { },
 num: 194,
 gen: 4,
-},
-
-tapuniumz: {
-name: "Tapunium Z",
-spritenum: 653,
-onTakeItem: false,
-zMove: "Guardian of Alola",
-zMoveFrom: "Nature's Madness",
-itemUser: ["Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini"],
-num: 801,
-gen: 7,
-isNonstandard: "Past",
 },
 
 tartapple: {
@@ -6144,24 +4119,6 @@ num: 1118,
 gen: 8,
 },
 
-thunderstone: {
-name: "Thunder Stone",
-spritenum: 492,
-fling: {
-basePower: 30,
-},
-num: 83,
-gen: 1,
-},
-
-timerball: {
-name: "Timer Ball",
-spritenum: 494,
-num: 10,
-gen: 3,
-isPokeball: true,
-},
-
 toxicorb: {
 name: "Toxic Orb",
 spritenum: 515,
@@ -6216,41 +4173,6 @@ num: 248,
 gen: 2,
 },
 
-tyranitarite: {
-name: "Tyranitarite",
-spritenum: 607,
-megaStone: "Tyranitar-Mega",
-megaEvolves: "Tyranitar",
-itemUser: ["Tyranitar"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 669,
-gen: 6,
-isNonstandard: "Past",
-},
-
-ultraball: {
-name: "Ultra Ball",
-spritenum: 521,
-num: 2,
-gen: 1,
-isPokeball: true,
-},
-
-ultranecroziumz: {
-name: "Ultranecrozium Z",
-spritenum: 687,
-onTakeItem: false,
-zMove: "Light That Burns the Sky",
-zMoveFrom: "Photon Geyser",
-itemUser: ["Necrozma-Ultra"],
-num: 923,
-gen: 7,
-isNonstandard: "Past",
-},
-
 upgrade: {
 name: "Up-Grade",
 spritenum: 523,
@@ -6292,21 +4214,6 @@ num: 1123,
 gen: 8,
 },
 
-venusaurite: {
-name: "Venusaurite",
-spritenum: 608,
-megaStone: "Venusaur-Mega",
-megaEvolves: "Venusaur",
-itemUser: ["Venusaur"],
-onTakeItem(item, source) {
-if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-return true;
-},
-num: 659,
-gen: 6,
-isNonstandard: "Past",
-},
-
 wacanberry: {
 name: "Wacan Berry",
 spritenum: 526,
@@ -6329,61 +4236,6 @@ return this.chainModify(0.5);
 onEat() { },
 num: 186,
 gen: 4,
-},
-
-watergem: {
-name: "Water Gem",
-spritenum: 528,
-isGem: true,
-onSourceTryPrimaryHit(target, source, move) {
-if (target === source || move.category === 'Status' || move.flags['pledgecombo']) return;
-if (move.type === 'Water' && source.useItem()) {
-source.addVolatile('gem');
-}
-},
-num: 549,
-gen: 5,
-isNonstandard: "Past",
-},
-
-watermemory: {
-name: "Water Memory",
-spritenum: 677,
-onMemory: 'Water',
-onTakeItem(item, pokemon, source) {
-if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-return false;
-}
-return true;
-},
-forcedForme: "Silvally-Water",
-itemUser: ["Silvally-Water"],
-num: 913,
-gen: 7,
-isNonstandard: "Past",
-},
-
-waterstone: {
-name: "Water Stone",
-spritenum: 529,
-fling: {
-basePower: 30,
-},
-num: 84,
-gen: 1,
-},
-
-wateriumz: {
-name: "Waterium Z",
-spritenum: 633,
-onPlate: 'Water',
-onTakeItem: false,
-zMove: true,
-zMoveType: "Water",
-forcedForme: "Arceus-Water",
-num: 778,
-gen: 7,
-isNonstandard: "Past",
 },
 
 watmelberry: {
