@@ -2221,7 +2221,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	groundshock: {
 		name: "Ground Shock",
-		shortDesc: "This Pokemon cam hit Ground types with Electric attacks."
+		shortDesc: "This Pokemon can hit Ground types with Electric attacks."
 	},
 	ancientidol: {
 		name: "Ancient Idol",
