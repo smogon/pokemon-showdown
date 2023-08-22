@@ -523,7 +523,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	bleakwindstorm: {
 		name: "Bleakwind Storm",
 		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy.",
-		shortDesc: "Target(s): 30% -1 Speed. Can't miss in rain",
+		shortDesc: "30% to lower foe(s) Speed by 1. Can't miss in rain.",
 	},
 	blizzard: {
 		name: "Blizzard",
