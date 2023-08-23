@@ -235,6 +235,7 @@ if (this.randomChance(16, 100) && damage >= target.hp && effect && effect.effect
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
+}
 },
 
 
