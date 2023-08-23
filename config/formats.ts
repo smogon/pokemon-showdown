@@ -135,7 +135,7 @@ export const Formats: FormatList = [
 		desc: `Testing for ER Innates`,
 		mod: 'gen8eliteredux',
 		ruleset: ['Standard'],
-		banlist: ['Uber', 'AG', 'King\'s Rock', 'Baton Pass', 'Shadow Tag', 'Arena Trap', 'Aeroblast', 'Alakazite',],
+		banlist: ['Uber', 'AG', 'King\'s Rock', 'Baton Pass', 'Shadow Tag', 'Arena Trap', 'Aeroblast', 'Alakazite', 'Moody'],
 
 
 
@@ -526,7 +526,7 @@ export const Formats: FormatList = [
 		mod: 'gen8eliteredux',
 		rated: false, 
 		ruleset: ['Standard', 'Same Type Clause'],
-		banlist: ['Uber', 'AG', 'King\'s Rock', 'Baton Pass'],
+		banlist: ['Uber', 'AG', 'King\'s Rock', 'Baton Pass', 'Moody'],
 
 
 
@@ -832,7 +832,7 @@ export const Formats: FormatList = [
 		mod: 'gen8eliteredux',
 		gameType: 'doubles',
 		ruleset: ['Standard Doubles'],
-		banlist: ['DUber', 'Shadow Tag'],
+		banlist: ['DUber', 'Shadow Tag', 'Arena Trap'],
 
 			//ER Scripts
 			onValidateSet(set) {
