@@ -423,6 +423,10 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 	},
+	slowbrogalar: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
 	slowking: {
 		tier: "OU",
 		doublesTier: "DOU",
