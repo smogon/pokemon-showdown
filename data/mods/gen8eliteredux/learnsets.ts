@@ -12817,6 +12817,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["9M", "8V", "7T"],
 			torment: ["7M"],
 			toxic: ["9L26", "8V", "7M"],
+			toxicspikes: ['7L1'],
 			venomdrench: ["7L1"],
 			venoshock: ["9M", "7M"],
 			wickedblow: ['7L1'],
@@ -26608,6 +26609,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			rockclimb: ["4M"],
 			rocksmash: ["7V", "6M", "5M", "4M", "3M"],
 			round: ["7M", "6M", "5M"],
+			risingvoltage: ['7M'],
 			safeguard: ["7M", "6M", "5M"],
 			secretpower: ["6M", "4M", "3M"],
 			seismictoss: ["3T"],
@@ -66604,7 +66606,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		learnset: {
 			ancientpower: ["8L1", "7L15", "6L15", "5L15"],
 			blizzard: ["8M", "8L56", "7M", "7L78", "6M", "6L78", "5M", "5L78"],
-			bluefare: ['7L100'],
+			blueflare: ['7L100'],
 			bodypress: ["8M"],
 			boltstrike: ['7L100'],
 			boomburst: ['7L92'],
@@ -66702,7 +66704,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		learnset: {
 			ancientpower: ["8L1", "7L15", "6L15", "5L15"],
 			blizzard: ["8M", "8L56", "7M", "7L78", "6M", "6L78", "5M", "5L78"],
-			bluefare: ['7L100'],
+			blueflare: ['7L100'],
 			bodypress: ["8M"],
 			boltstrike: ['7L100'],
 			boomburst: ['7L92'],
