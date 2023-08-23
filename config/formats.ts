@@ -2055,6 +2055,11 @@ export const Formats: FormatList = [
 		mod: 'sharedpower',
 		team: 'random',
 		ruleset: ['[Gen 9] Random Battle', 'Team Preview', 'Camomons Mod', 'Inverse Mod', 'Scalemons Mod'],
+		onValidateRule() {
+			if (this.format.gameType !== 'singles') {
+				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+			}
+		},
 		onBeforeSwitchIn(pokemon) {
 			let format = this.format;
 			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
@@ -2078,6 +2083,7 @@ export const Formats: FormatList = [
 				pokemon.addVolatile(effect);
 			}
 		},
+
 	},
 	{
 		name: "[Gen 9] Computer-Generated Teams",
