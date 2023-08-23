@@ -227,28 +227,6 @@ num: 640,
 gen: 6,
 },
 
-captainsarmband: {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-},
-
 cellbattery: {
 name: "Cell Battery",
 spritenum: 60,
