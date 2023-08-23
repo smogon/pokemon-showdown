@@ -6142,10 +6142,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	soullinker: { 
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			this.damage(damage, source, target);
+			if (target.hp > 0) this.damage(damage, source, target);
 		},
 		onFoeDamagingHit(damage, target, source, move) {
-			this.damage(damage, source, target);
+			if (target.hp > 0) this.damage(damage, source, target);
 		},
 		name: "Soul Linker",
 		rating: 4,

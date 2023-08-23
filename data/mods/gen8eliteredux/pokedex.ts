@@ -8360,7 +8360,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ["Normal", "Electric"],
 		gender: "N",
 		baseStats: {hp: 85, atk: 80, def: 70, spa: 135, spd: 75, spe: 90},
-		abilities: {0: "Downlaod", 1: "Sighting System", H: "Twist. Dimension", I1: "Analytic", I2: "Adaptability", I3: "Levitate"},
+		abilities: {0: "Download", 1: "Sighting System", H: "Twist. Dimension", I1: "Analytic", I2: "Adaptability", I3: "Levitate"},
 		heightm: 0.9,
 		weightkg: 34,
 		color: "Red",
