@@ -5162,13 +5162,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	whiteout: {
 		onModifySpAPriority: 5,
-		onModifySpA(spa, pokemon) {
-			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+		onModifySpA(spa, pokemon, target, move) {
+			if (['hail', 'snow'].includes(pokemon.effectiveWeather()) && move.type === 'Ice') {
 				return this.chainModify(1.5);
 			}
 		},
-		onModifyAtk(atk, pokemon) {
-			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+		onModifyAtk(atk, pokemon, target, move) {
+			if (['hail', 'snow'].includes(pokemon.effectiveWeather()) && move.type === 'Ice') {
 				return this.chainModify(1.5);
 			}
 		},

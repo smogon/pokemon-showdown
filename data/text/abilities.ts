@@ -2154,7 +2154,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	whiteout: {
 		name: "whiteout",
-		shortDesc: "This pokemon's moves are boosted by 50% under Hail",
+		shortDesc: "This pokemon's Ice moves are boosted by 50% under Hail",
 
 	},
 	pyromancy: {
