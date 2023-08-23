@@ -228,6 +228,25 @@ gen: 6,
 },
 
 captainsarmband: {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 },
 
 cellbattery: {
