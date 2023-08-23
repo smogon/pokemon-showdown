@@ -1170,36 +1170,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	kingsshield: {
 		inherit: true,
 		isNonstandard: null,
-		condition: {
-			duration: 1,
-			onStart(target) {
-				this.add('-singleturn', target, 'Protect');
-			},
-			onTryHitPriority: 3,
-			onTryHit(target, source, move) {
-				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
-				this.add('-activate', target, 'move: Protect');
-				const lockedmove = source.getVolatile('lockedmove');
-				if (lockedmove) {
-					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
-					}
-				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
-				}
-				return this.NOT_FAIL;
-			},
-			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
-				}
-			},
-		},
 	},
 	letssnuggleforever: {
 		inherit: true,
@@ -1457,8 +1427,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	rapidspin: {
 		inherit: true,
-		basePower: 20,
-		secondary: null,
+		basePower: 60,
 	},
 	razorwind: {
 		inherit: true,
