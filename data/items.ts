@@ -235,13 +235,12 @@ if (this.randomChance(5, 100) && damage >= target.hp && effect && effect.effectT
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
-}
-onResidualOrder: 5,
 onResidualSubOrder: 4,
 onResidual(pokemon) {
 this.heal(pokemon.baseMaxhp / 13.34);
-}
 },
+
+
 
 
 
