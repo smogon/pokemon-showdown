@@ -6435,7 +6435,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Banette",
 		types: ["Ghost", "Normal"],
 		baseStats: {hp: 84, atk: 125, def: 85, spa: 65, spd: 83, spe: 93},
-		abilities: {0: "Cursed Body", 1: "Scare", H: "Insomnia", I1: "Vengeance", I2: "Haunted Spirit", I3: "Levitate"},
+		abilities: {0: "Cursed Body", 1: "Vengeance", H: "Insomnia", I1: "Scare", I2: "Haunted Spirit", I3: "Soul Eater"},
 		heightm: 1.1,
 		weightkg: 12.5,
 		color: "Black",
