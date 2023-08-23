@@ -92,6 +92,27 @@ num: 640,
 gen: 6,
 },
 
+assaultvest: {
+name: "Assault Vest",
+spritenum: 581,
+fling: {
+basePower: 80,
+},
+onModifySpDPriority: 1,
+onModifySpD(spd) {
+return this.chainModify(1.5);
+},
+onDisableMove(pokemon) {
+for (const moveSlot of pokemon.moveSlots) {
+if (this.dex.moves.get(moveSlot.move).category === 'Status') {
+pokemon.disableMove(moveSlot.id);
+}
+}
+},
+num: 640,
+gen: 6,
+},
+
 babiriberry: {
 name: "Babiri Berry",
 spritenum: 17,
@@ -104,7 +125,6 @@ onSourceModifyDamage(damage, source, target, move) {
 if (move.type === 'Steel' && target.getMoveHitData(move).typeMod > 0) {
 const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 if (hitSub) return;
-
 if (target.eatItem()) {
 this.debug('-50% reduction');
 this.add('-enditem', target, this.effect, '[weaken]');
@@ -127,7 +147,7 @@ onTryHealPriority: 1,
 onTryHeal(damage, target, source, effect) {
 const heals = ['drain', 'leechseed', 'ingrain', 'aquaring', 'strengthsap'];
 if (heals.includes(effect.id)) {
-return this.chainModify([5324, 4096]);
+return this.chainModify([100, 30]);
 }
 },
 num: 296,
@@ -154,7 +174,7 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move && move.type === 'Fighting') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 241,
@@ -170,7 +190,7 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move && move.type === 'Dark') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 240,
@@ -187,9 +207,9 @@ onResidualOrder: 5,
 onResidualSubOrder: 4,
 onResidual(pokemon) {
 if (pokemon.hasType('Poison')) {
-this.heal(pokemon.baseMaxhp / 16);
+this.heal(pokemon.baseMaxhp / 13.34);
 } else {
-this.damage(pokemon.baseMaxhp / 8);
+this.damage(pokemon.baseMaxhp / 3);
 }
 },
 num: 281,
@@ -207,6 +227,49 @@ num: 1121,
 gen: 8,
 },
 
+bulletproofvest: {
+name: "Bullet Proof Vest",
+spritenum: 581,
+fling: {
+basePower: 80,
+},
+onModifySpDPriority: 1,
+onModifySpD(def) {
+return this.chainModify(1.5);
+},
+onDisableMove(pokemon) {
+for (const moveSlot of pokemon.moveSlots) {
+if (this.dex.moves.get(moveSlot.move).category === 'Status') {
+pokemon.disableMove(moveSlot.id);
+}
+}
+},
+num: 640,
+gen: 6,
+},
+
+captainsarmband: {
+name: "Captains Armband",
+onFractionalPriorityPriority: -2,
+onFractionalPriority(priority, pokemon, target, move) {
+if (move.category === "Status" && pokemon.hasAbility("myceliummight")) return;
+if (priority <= 0 && this.randomChance(1, 4)) {
+this.add('-activate', pokemon, 'item: Quick Claw');
+return 0.1;
+}
+onResidualOrder: 5,
+onResidualSubOrder: 4,
+onResidual(pokemon) {
+this.heal(pokemon.baseMaxhp / 13.34);
+},
+onDamagePriority: -40,
+onDamage(damage, target, source, effect) {
+if (this.randomChance(16, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
+this.add("-activate", target, "item: Focus Band");
+return target.hp - 1;
+}
+},
+
 cellbattery: {
 name: "Cell Battery",
 spritenum: 60,
@@ -220,6 +283,7 @@ target.useItem();
 },
 boosts: {
 atk: 1,
+spa: 1,
 },
 num: 546,
 gen: 5,
@@ -234,7 +298,7 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move && move.type === 'Fire') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 249,
@@ -347,7 +411,6 @@ onSourceModifyDamage(damage, source, target, move) {
 if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0) {
 const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 if (hitSub) return;
-
 if (target.eatItem()) {
 this.debug('-50% reduction');
 this.add('-enditem', target, this.effect, '[weaken]');
@@ -457,7 +520,7 @@ onFractionalPriorityPriority: -2,
 onFractionalPriority(priority, pokemon) {
 if (
 priority <= 0 &&
-(pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+(pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony))
 ) {
 if (pokemon.eatItem()) {
@@ -491,7 +554,7 @@ basePower: 70,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move && move.type === 'Dragon') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 250,
@@ -554,6 +617,30 @@ num: 1119,
 gen: 8,
 },
 
+electricseed: {
+name: "Electric Seed",
+spritenum: 664,
+fling: {
+basePower: 10,
+},
+onStart(pokemon) {
+if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain')) {
+pokemon.useItem();
+}
+},
+onTerrainChange(pokemon) {
+if (this.field.isTerrain('electricterrain')) {
+pokemon.useItem();
+}
+},
+boosts: {
+def: 1,
+spd: 1,
+},
+num: 881,
+gen: 7,
+},
+
 enigmaberry: {
 name: "Enigma Berry",
 spritenum: 124,
@@ -565,7 +652,7 @@ type: "Bug",
 onHit(target, source, move) {
 if (move && target.getMoveHitData(move).typeMod > 0) {
 if (target.eatItem()) {
-this.heal(target.baseMaxhp / 4);
+this.heal(target.baseMaxhp / 3);
 }
 }
 },
@@ -600,6 +687,28 @@ num: 538,
 gen: 5,
 },
 
+eviomax: {
+name: "Eviomax",
+spritenum: 130,
+fling: {
+basePower: 40,
+},
+onModifyDefPriority: 2,
+onModifyDef(def, pokemon) {
+if (pokemon.baseSpecies.fe) {
+return this.chainModify(1.25);
+}
+},
+onModifySpDPriority: 2,
+onModifySpD(spd, pokemon) {
+if (pokemon.baseSpecies.fe) {
+return this.chainModify(1.25);
+}
+},
+num: 538,
+gen: 5,
+},
+
 expertbelt: {
 name: "Expert Belt",
 spritenum: 132,
@@ -608,7 +717,7 @@ basePower: 10,
 },
 onModifyDamage(damage, source, target, move) {
 if (move && target.getMoveHitData(move).typeMod > 0) {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 268,
@@ -652,7 +761,7 @@ basePower: 10,
 },
 onDamagePriority: -40,
 onDamage(damage, target, source, effect) {
-if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
+if (this.randomChance(16, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
@@ -688,7 +797,7 @@ basePower: 100,
 type: "Ice",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -718,6 +827,7 @@ pokemon.useItem();
 },
 boosts: {
 def: 1,
+spd: 1,
 },
 num: 884,
 gen: 7,
@@ -746,7 +856,6 @@ onSourceModifyDamage(damage, source, target, move) {
 if (move.type === 'Dragon' && target.getMoveHitData(move).typeMod > 0) {
 const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 if (hitSub) return;
-
 if (target.eatItem()) {
 this.debug('-50% reduction');
 this.add('-enditem', target, this.effect, '[weaken]');
@@ -768,7 +877,7 @@ basePower: 100,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move && move.type === 'Rock') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 238,
@@ -858,7 +967,6 @@ onSourceModifyDamage(damage, source, target, move) {
 if (move.type === 'Ghost' && target.getMoveHitData(move).typeMod > 0) {
 const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 if (hitSub) return;
-
 if (target.eatItem()) {
 this.debug('-50% reduction');
 this.add('-enditem', target, this.effect, '[weaken]');
@@ -933,7 +1041,7 @@ for (const secondary of move.secondaries) {
 if (secondary.volatileStatus === 'flinch') return;
 }
 move.secondaries.push({
-chance: 10,
+chance: 11,
 volatileStatus: 'flinch',
 });
 }
@@ -962,7 +1070,7 @@ basePower: 100,
 type: "Flying",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -983,7 +1091,7 @@ basePower: 10,
 onResidualOrder: 5,
 onResidualSubOrder: 4,
 onResidual(pokemon) {
-this.heal(pokemon.baseMaxhp / 16);
+this.heal(pokemon.baseMaxhp / 13.34);
 },
 num: 234,
 gen: 2,
@@ -1024,7 +1132,7 @@ basePower: 100,
 type: "Grass",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -1043,11 +1151,11 @@ fling: {
 basePower: 30,
 },
 onModifyDamage(damage, source, target, move) {
-return this.chainModify([5324, 4096]);
+return this.chainModify([100, 30]);
 },
 onAfterMoveSecondarySelf(source, target, move) {
 if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag) {
-this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
+this.damage(source.baseMaxhp / 5, source, source, this.dex.items.get('lifeorb'));
 }
 },
 num: 270,
@@ -1112,7 +1220,7 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Electric') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 242,
@@ -1128,7 +1236,7 @@ basePower: 80,
 type: "Ghost",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -1215,29 +1323,11 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Steel') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 233,
 gen: 2,
-},
-
-metalpowder: {
-name: "Metal Powder",
-fling: {
-basePower: 10,
-},
-spritenum: 287,
-onModifyDefPriority: 2,
-onModifyDef(def, pokemon) {
-if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
-return this.chainModify(2);
-}
-},
-itemUser: ["Ditto"],
-num: 257,
-gen: 2,
-isNonstandard: "Past",
 },
 
 micleberry: {
@@ -1249,7 +1339,7 @@ basePower: 100,
 type: "Rock",
 },
 onResidual(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -1264,7 +1354,7 @@ if (!move.ohko) {
 this.add('-enditem', source, 'Micle Berry');
 source.removeVolatile('micleberry');
 if (typeof accuracy === 'number') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 25]);
 }
 }
 },
@@ -1283,7 +1373,7 @@ spritenum: 292,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Grass') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 239,
@@ -1333,6 +1423,7 @@ pokemon.useItem();
 }
 },
 boosts: {
+def: 1,
 spd: 1,
 },
 num: 883,
@@ -1348,7 +1439,7 @@ basePower: 10,
 onBasePowerPriority: 16,
 onBasePower(basePower, user, target, move) {
 if (move.category === 'Physical') {
-return this.chainModify([4505, 4096]);
+return this.chainModify([100, 10]);
 }
 },
 num: 266,
@@ -1364,7 +1455,7 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Water') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 243,
@@ -1380,7 +1471,7 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Ice') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 246,
@@ -1399,7 +1490,6 @@ onSourceModifyDamage(damage, source, target, move) {
 if (move.type === 'Fire' && target.getMoveHitData(move).typeMod > 0) {
 const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 if (hitSub) return;
-
 if (target.eatItem()) {
 this.debug('-50% reduction');
 this.add('-enditem', target, this.effect, '[weaken]');
@@ -1429,7 +1519,7 @@ onTryEatItem(item, pokemon) {
 if (!this.runEvent('TryHeal', pokemon)) return false;
 },
 onEat(pokemon) {
-this.heal(10);
+this.heal(25);
 },
 num: 155,
 gen: 3,
@@ -1537,7 +1627,7 @@ status: 'psn',
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Poison') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 245,
@@ -1590,6 +1680,7 @@ pokemon.useItem();
 }
 },
 boosts: {
+def: 1,
 spd: 1,
 },
 num: 882,
@@ -1603,7 +1694,7 @@ onBasePowerPriority: 23,
 onBasePower(basePower, attacker, defender, move) {
 if (move.flags['punch']) {
 this.debug('Punching Glove boost');
-return this.chainModify([4506, 4096]);
+return this.chainModify([100, 10]);
 }
 },
 onModifyMovePriority: 1,
@@ -1618,7 +1709,7 @@ quickclaw: {
 onFractionalPriorityPriority: -2,
 onFractionalPriority(priority, pokemon, target, move) {
 if (move.category === "Status" && pokemon.hasAbility("myceliummight")) return;
-if (priority <= 0 && this.randomChance(1, 5)) {
+if (priority <= 0 && this.randomChance(1, 4)) {
 this.add('-activate', pokemon, 'item: Quick Claw');
 return 0.1;
 }
@@ -1630,6 +1721,28 @@ basePower: 80,
 },
 num: 217,
 gen: 2,
+},
+
+rawstberry: {
+name: "Rawst Berry",
+spritenum: 381,
+isBerry: true,
+naturalGift: {
+basePower: 80,
+type: "Grass",
+},
+onUpdate(pokemon) {
+if (pokemon.status === 'brn') {
+pokemon.eatItem();
+}
+},
+onEat(pokemon) {
+if (pokemon.status === 'brn') {
+pokemon.cureStatus();
+}
+},
+num: 152,
+gen: 3,
 },
 
 redcard: {
@@ -1667,7 +1780,6 @@ onSourceModifyDamage(damage, source, target, move) {
 if (move.type === 'Grass' && target.getMoveHitData(move).typeMod > 0) {
 const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 if (hitSub) return;
-
 if (target.eatItem()) {
 this.debug('-50% reduction');
 this.add('-enditem', target, this.effect, '[weaken]');
@@ -1700,7 +1812,7 @@ basePower: 60,
 onDamagingHitOrder: 2,
 onDamagingHit(damage, target, source, move) {
 if (this.checkMoveMakesContact(move, source, target)) {
-this.damage(source.baseMaxhp / 6, source, target);
+this.damage(source.baseMaxhp / 5, source, target);
 }
 },
 num: 540,
@@ -1725,7 +1837,7 @@ pokemon.useItem(pokemon);
 }
 },
 boosts: {
-spe: -1,
+spe: -2,
 },
 num: 1122,
 gen: 8,
@@ -1743,7 +1855,6 @@ onSourceModifyDamage(damage, source, target, move) {
 if (move.type === 'Fairy' && target.getMoveHitData(move).typeMod > 0) {
 const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 if (hitSub) return;
-
 if (target.eatItem()) {
 this.debug('-50% reduction');
 this.add('-enditem', target, this.effect, '[weaken]');
@@ -1805,7 +1916,7 @@ basePower: 100,
 type: "Fighting",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -1839,7 +1950,7 @@ basePower: 50,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move && move.type === 'Flying') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 244,
@@ -1869,7 +1980,7 @@ basePower: 30,
 onAfterMoveSecondarySelfPriority: -1,
 onAfterMoveSecondarySelf(pokemon, target, move) {
 if (move.totalDamage && !pokemon.forceSwitchFlag) {
-this.heal(move.totalDamage / 8, pokemon);
+this.heal(move.totalDamage / 5, pokemon);
 }
 },
 num: 253,
@@ -1910,7 +2021,7 @@ basePower: 10,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Normal') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 251,
@@ -1926,7 +2037,7 @@ basePower: 10,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Bug') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 222,
@@ -1979,6 +2090,7 @@ target.useItem();
 },
 boosts: {
 atk: 1,
+spa: 1,
 },
 num: 649,
 gen: 6,
@@ -1993,7 +2105,7 @@ basePower: 10,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Ground') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 237,
@@ -2009,7 +2121,7 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Ghost') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 247,
@@ -2025,7 +2137,7 @@ basePower: 100,
 type: "Psychic",
 },
 onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 pokemon.eatItem();
 }
@@ -2072,6 +2184,25 @@ num: 288,
 gen: 4,
 },
 
+superspicycurry: {
+name: "Superspicy Curry",
+spritenum: 34,
+fling: {
+basePower: 30,
+},
+onResidualOrder: 5,
+onResidualSubOrder: 4,
+onResidual(pokemon) {
+if (pokemon.hasType('fire')) {
+this.heal(pokemon.baseMaxhp / 13.34);
+} else {
+this.damage(pokemon.baseMaxhp / 3);
+}
+},
+num: 281,
+gen: 4,
+},
+
 tangaberry: {
 name: "Tanga Berry",
 spritenum: 487,
@@ -2097,6 +2228,16 @@ num: 194,
 gen: 4,
 },
 
+terrainextender: {
+name: "Terrain Extender",
+spritenum: 662,
+fling: {
+basePower: 60,
+},
+num: 879,
+gen: 7,
+},
+
 throatspray: {
 name: "Throat Spray",
 spritenum: 713,
@@ -2109,6 +2250,7 @@ target.useItem();
 }
 },
 boosts: {
+atk: 1,
 spa: 1,
 },
 num: 1118,
@@ -2140,7 +2282,7 @@ basePower: 30,
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move.type === 'Psychic') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 248,
@@ -2227,7 +2369,7 @@ onPlate: 'Fairy',
 onBasePowerPriority: 15,
 onBasePower(basePower, user, target, move) {
 if (move && move.type === 'Fairy') {
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 onTakeItem(item, pokemon, source) {
@@ -2291,38 +2433,11 @@ basePower: 10,
 onSourceModifyAccuracyPriority: -2,
 onSourceModifyAccuracy(accuracy) {
 if (typeof accuracy === 'number') {
-return this.chainModify([4505, 4096]);
+return this.chainModify([100, 10]);
 }
 },
 num: 265,
 gen: 4,
-},
-
-wikiberry: {
-name: "Wiki Berry",
-spritenum: 538,
-isBerry: true,
-naturalGift: {
-basePower: 80,
-type: "Rock",
-},
-onUpdate(pokemon) {
-if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
-pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
-pokemon.eatItem();
-}
-},
-onTryEatItem(item, pokemon) {
-if (!this.runEvent('TryHeal', pokemon)) return false;
-},
-onEat(pokemon) {
-this.heal(pokemon.baseMaxhp / 3);
-if (pokemon.getNature().minus === 'spa') {
-pokemon.addVolatile('confusion');
-}
-},
-num: 160,
-gen: 3,
 },
 
 wiseglasses: {
@@ -2334,7 +2449,7 @@ basePower: 10,
 onBasePowerPriority: 16,
 onBasePower(basePower, user, target, move) {
 if (move.category === 'Special') {
-return this.chainModify([4505, 4096]);
+return this.chainModify([100, 10]);
 }
 },
 num: 267,
@@ -2353,7 +2468,6 @@ onSourceModifyDamage(damage, source, target, move) {
 if (move.type === 'Ice' && target.getMoveHitData(move).typeMod > 0) {
 const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 if (hitSub) return;
-
 if (target.eatItem()) {
 this.debug('-50% reduction');
 this.add('-enditem', target, this.effect, '[weaken]');
@@ -2376,7 +2490,7 @@ onSourceModifyAccuracyPriority: -2,
 onSourceModifyAccuracy(accuracy, target) {
 if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
 this.debug('Zoom Lens boosting accuracy');
-return this.chainModify([4915, 4096]);
+return this.chainModify([100, 20]);
 }
 },
 num: 276,
@@ -3530,29 +3644,6 @@ itemUser: ["Silvally-Electric"],
 num: 915,
 gen: 7,
 isNonstandard: "Past",
-},
-
-electricseed: {
-name: "Electric Seed",
-spritenum: 664,
-fling: {
-basePower: 10,
-},
-onStart(pokemon) {
-if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain')) {
-pokemon.useItem();
-}
-},
-onTerrainChange(pokemon) {
-if (this.field.isTerrain('electricterrain')) {
-pokemon.useItem();
-}
-},
-boosts: {
-def: 1,
-},
-num: 881,
-gen: 7,
 },
 
 electriumz: {
@@ -4943,6 +5034,24 @@ gen: 6,
 isNonstandard: "Past",
 },
 
+metalpowder: {
+name: "Metal Powder",
+fling: {
+basePower: 10,
+},
+spritenum: 287,
+onModifyDefPriority: 2,
+onModifyDef(def, pokemon) {
+if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
+return this.chainModify(2);
+}
+},
+itemUser: ["Ditto"],
+num: 257,
+gen: 2,
+isNonstandard: "Past",
+},
+
 metronome: {
 name: "Metronome",
 spritenum: 289,
@@ -5592,28 +5701,6 @@ basePower: 100,
 },
 num: 106,
 gen: 4,
-},
-
-rawstberry: {
-name: "Rawst Berry",
-spritenum: 381,
-isBerry: true,
-naturalGift: {
-basePower: 80,
-type: "Grass",
-},
-onUpdate(pokemon) {
-if (pokemon.status === 'brn') {
-pokemon.eatItem();
-}
-},
-onEat(pokemon) {
-if (pokemon.status === 'brn') {
-pokemon.cureStatus();
-}
-},
-num: 152,
-gen: 3,
 },
 
 razorclaw: {
@@ -6349,16 +6436,6 @@ num: 1117,
 gen: 8,
 },
 
-terrainextender: {
-name: "Terrain Extender",
-spritenum: 662,
-fling: {
-basePower: 60,
-},
-num: 879,
-gen: 7,
-},
-
 thickclub: {
 name: "Thick Club",
 spritenum: 491,
@@ -6576,6 +6653,33 @@ onEat: false,
 num: 167,
 gen: 3,
 isNonstandard: "Past",
+},
+
+wikiberry: {
+name: "Wiki Berry",
+spritenum: 538,
+isBerry: true,
+naturalGift: {
+basePower: 80,
+type: "Rock",
+},
+onUpdate(pokemon) {
+if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
+pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
+pokemon.eatItem();
+}
+},
+onTryEatItem(item, pokemon) {
+if (!this.runEvent('TryHeal', pokemon)) return false;
+},
+onEat(pokemon) {
+this.heal(pokemon.baseMaxhp / 3);
+if (pokemon.getNature().minus === 'spa') {
+pokemon.addVolatile('confusion');
+}
+},
+num: 160,
+gen: 3,
 },
 
 zapplate: {
