@@ -2452,4 +2452,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return this.checkCanLearn(move, species, setSources, set);
 		},
 	},
+	regeneratorclause: {
+		effectType: 'ValidatorRule',
+		name: "Regenerator Clause",
+		desc: `Prevents teams from having more than two Pok&eacute;mon with Regenerator.`,
+		//modified in gen8eliteredux/ruleset.ts
+	},
 };

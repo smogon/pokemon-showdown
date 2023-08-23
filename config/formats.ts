@@ -135,7 +135,7 @@ export const Formats: FormatList = [
 		desc: `Testing for ER Innates`,
 		mod: 'gen8eliteredux',
 		ruleset: ['Standard'],
-		banlist: ['Uber', 'AG', 'King\'s Rock', 'Baton Pass', 'Shadow Tag', 'Arena Trap', 'Aeroblast', 'Alakazite'],
+		banlist: ['Uber', 'AG', 'King\'s Rock', 'Baton Pass', 'Shadow Tag', 'Arena Trap', 'Aeroblast', 'Alakazite',],
 
 
 
