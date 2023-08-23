@@ -231,11 +231,14 @@ captainsarmband: {
 name: "Captains Armband",
 onDamagePriority: -40,
 onDamage(damage, target, source, effect) {
-if (this.randomChance(16, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
+if (this.randomChance(5, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
 this.add("-activate", target, "item: Focus Band");
 return target.hp - 1;
 }
-}
+onResidualOrder: 5,
+onResidualSubOrder: 4,
+onResidual(pokemon) {
+this.heal(pokemon.baseMaxhp / 13.34);
 },
 
 
@@ -243,11 +246,7 @@ return target.hp - 1;
 
 
 
-
-
-
-
-
+},
 
 cellbattery: {
 name: "Cell Battery",
