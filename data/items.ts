@@ -227,28 +227,6 @@ num: 640,
 gen: 6,
 },
 
-captainsarmband: {
-name: "Captains Armband",
-onDamagePriority: -40,
-onDamage(damage, target, source, effect) {
-if (this.randomChance(16, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
-this.add("-activate", target, "item: Focus Band");
-return target.hp - 1;
-}
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
 cellbattery: {
 name: "Cell Battery",
 spritenum: 60,
