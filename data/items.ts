@@ -228,25 +228,25 @@ gen: 6,
 },
 
 captainsarmband: {
-name: "Captains Armband",
-onFractionalPriorityPriority: -2,
-onFractionalPriority(priority, pokemon, target, move) {
-if (move.category === "Status" && pokemon.hasAbility("myceliummight")) return;
-if (priority <= 0 && this.randomChance(1, 4)) {
-this.add('-activate', pokemon, 'item: Quick Claw');
-return 0.1;
-}
-onResidualOrder: 5,
-onResidualSubOrder: 4,
-onResidual(pokemon) {
-this.heal(pokemon.baseMaxhp / 13.34);
-},
-onDamagePriority: -40,
-onDamage(damage, target, source, effect) {
-if (this.randomChance(16, 100) && damage >= target.hp && effect && effect.effectType === 'Move') {
-this.add("-activate", target, "item: Focus Band");
-return target.hp - 1;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 },
 
 cellbattery: {
