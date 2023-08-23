@@ -618,6 +618,23 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	souldew: {
+		inherit: true,
+		onBasePower() {},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 2,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.num === 380 || pokemon.baseSpecies.num === 381) {
+				return this.chainModify(1.5);
+			}
+		},
+		isNonstandard: null,
+	},
 	spelonberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
