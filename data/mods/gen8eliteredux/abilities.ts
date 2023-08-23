@@ -125,7 +125,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					bestTypeMod = typeMod
 				}
 			}
-			if (bestType && !target.getTypes().includes(bestType)) {
+			if (source !== target && bestType && !target.getTypes().includes(bestType)) {
 				if (!target.setType(bestType)) return;
 				this.add('-start', target, 'typechange', bestType, '[from] ability: Color Change');
 			}
