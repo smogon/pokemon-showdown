@@ -227,26 +227,6 @@ num: 640,
 gen: 6,
 },
 
-captainsarmband: {
-name: "Captains Armband",
-onResidualOrder: 5,
-onResidualSubOrder: 4,
-onResidual(pokemon) {
-this.heal(pokemon.baseMaxhp / 13.34);
-},
-
-
-
-
-
-
-
-
-
-
-
-},
-
 cellbattery: {
 name: "Cell Battery",
 spritenum: 60,
