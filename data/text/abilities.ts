@@ -2648,7 +2648,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	//Elite Redux's Opportunist renamed to 'Expert Hunter' to avoid name confict with gen 9's Opportunist
 	experthunter: { 
 		name: "Expert Hunter",
-		shortDesc: "This Pokemon goes hirst against foes below 50% HP."
+		shortDesc: "This Pokemon goes first against foes below 50% HP."
 
 	},
 
