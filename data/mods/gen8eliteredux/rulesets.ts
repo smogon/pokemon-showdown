@@ -2,7 +2,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 	standard: {
 		inherit: true,
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Regenerator Clause'
+			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Dynamax Clause', 'Regenerator Clause', 'Seismic Toss Clause'
 		],
 	},
 	standarddoubles: {
@@ -85,5 +85,22 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				return [`You may only have up to 2 Pokemon with Regenerator. Your team currently has ${regenCount}`];
 			}
 		}
+	},
+	seismictossclause: {
+		inherit: true,
+		onValidateSet(set) {
+			const multihitAbilities = ['Multi Headed', 'Hyper Aggressive', 'Parental Bond'];
+			const species = this.dex.species.get(set.species);
+			const innateList = Object.keys(species.abilities)
+				.filter(key => key.includes('I'))
+				.map(key => species.abilities[key as 'I1' | 'I2' | 'I3'])
+			const activeAbilities = [set.ability, ...innateList];
+			for (const abilityName of activeAbilities) {
+				if (abilityName && multihitAbilities.includes(abilityName) && set.moves.some(a => a === 'Seismic Toss')) {
+					return [`${set.name} cannot have both Seismic Toss and ${abilityName}.`];
+				}
+			}
+		}
+
 	},
 }

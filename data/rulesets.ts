@@ -2458,4 +2458,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: `Prevents teams from having more than two Pok&eacute;mon with Regenerator.`,
 		//modified in gen8eliteredux/ruleset.ts
 	},
+
+	seismictossclause: {
+		effectType: 'ValidatorRule',
+		name: "Seismic Toss Clause",
+		desc: `Prevents a Pokemon from having Seismic Toss and a multi-hitting ability.`,
+		//modified in gen8eliteredux/ruleset.ts
+
+	}
 };
