@@ -85,6 +85,8 @@ interface EventInfo {
 	from?: string;
 	/** Japan-only events can't be transferred to international games in Gen 1 */
 	japan?: boolean;
+	/** For Emerald event eggs to allow Pomeg glitched moves */
+	emeraldEventEgg?: boolean;
 }
 
 type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
@@ -168,6 +170,7 @@ type ModdedSpeciesFormatsData = import('./dex-species').ModdedSpeciesFormatsData
 type LearnsetData = import('./dex-species').LearnsetData;
 type ModdedLearnsetData = import('./dex-species').ModdedLearnsetData;
 type Species = import('./dex-species').Species;
+type PokemonGoData = import('./dex-species').PokemonGoData;
 
 type FormatData = import('./dex-formats').FormatData;
 type FormatList = import('./dex-formats').FormatList;
@@ -214,7 +217,7 @@ interface BattleScriptsData {
 interface ModdedBattleActions {
 	inherit?: true;
 	afterMoveSecondaryEvent?: (this: BattleActions, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined;
-	calcRecoilDamage?: (this: BattleActions, damageDealt: number, move: Move) => number;
+	calcRecoilDamage?: (this: BattleActions, damageDealt: number, move: Move, pokemon: Pokemon) => number;
 	canMegaEvo?: (this: BattleActions, pokemon: Pokemon) => string | undefined | null;
 	canUltraBurst?: (this: BattleActions, pokemon: Pokemon) => string | null;
 	canZMove?: (this: BattleActions, pokemon: Pokemon) => ZMoveOptions | void;
@@ -540,7 +543,7 @@ namespace RandomTeamsTypes {
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
 		teraType?: string;
-		role?: string;
+		role?: Role;
 	}
 	export interface RandomFactorySet {
 		name: string;
@@ -558,4 +561,19 @@ namespace RandomTeamsTypes {
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
 	}
+	export interface RandomSetData {
+		role: Role;
+		movepool: string[];
+		teraTypes?: string[];
+		preferredTypes?: string;
+	}
+	export interface RandomSpeciesData {
+		level?: number;
+		sets: RandomSetData[];
+	}
+	export type Role = '' | 'Fast Attacker' | 'Setup Sweeper' | 'Wallbreaker' | 'Tera Blast user' |
+	'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
+	'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |
+	'Doubles Bulky Setup' | 'Offensive Protect' | 'Bulky Protect' | 'Doubles Support' | 'Choice Item user' |
+	'Z-Move user' | 'Staller';
 }

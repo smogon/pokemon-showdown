@@ -568,8 +568,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	commander: {
 		onUpdate(pokemon) {
+			if (this.gameType !== 'doubles') return;
 			const ally = pokemon.allies()[0];
-			if (!ally || pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
+			if (!ally || pokemon.transformed ||
+				pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
 				// Handle any edge cases
 				if (pokemon.getVolatile('commanding')) pokemon.removeVolatile('commanding');
 				return;
@@ -799,8 +801,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	dauntlessshield: {
 		onStart(pokemon) {
-			if (this.effectState.shieldBoost) return;
-			this.effectState.shieldBoost = true;
+			if (pokemon.shieldBoost) return;
+			pokemon.shieldBoost = true;
 			this.boost({def: 1}, pokemon);
 		},
 		name: "Dauntless Shield",
@@ -1979,8 +1981,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	intrepidsword: {
 		onStart(pokemon) {
-			if (this.effectState.swordBoost) return;
-			this.effectState.swordBoost = true;
+			if (pokemon.swordBoost) return;
+			pokemon.swordBoost = true;
 			this.boost({atk: 1}, pokemon);
 		},
 		name: "Intrepid Sword",

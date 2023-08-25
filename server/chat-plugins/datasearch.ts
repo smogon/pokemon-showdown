@@ -106,11 +106,15 @@ export const commands: Chat.ChatCommands = {
 				target = split.join(',');
 			}
 		}
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
 		if (!target.includes('mod=')) {
-			const dex = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex;
+			const dex = defaultFormat.dex;
 			if (dex) target += `, mod=${dex.currentMod}`;
 		}
-		if (cmd === 'nds') target += ', natdex';
+		if (cmd === 'nds' ||
+			(defaultFormat.format && Dex.formats.getRuleTable(defaultFormat.format).has('standardnatdex'))) {
+			target += ', natdex';
+		}
 		const response = await runSearch({
 			target,
 			cmd: 'dexsearch',
@@ -1259,9 +1263,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
 			const formatStr = format ? format[1].name : 'gen9ou';
-			const validator = TeamValidator.get(
-				`${formatStr}${nationalSearch && !Dex.formats.getRuleTable(Dex.formats.get(formatStr)).has('standardnatdex') ? '@@@standardnatdex' : ''}`
-			);
+			const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(formatStr));
+			const additionalRules = [];
+			if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
+			if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
+			const validator = TeamValidator.get(`${formatStr}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => mod.moves.get(x))) {
 				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
@@ -1485,7 +1491,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
 			if (target === 'slices' || target === 'slice') target = 'slicing';
-			if (target === 'sheerforce') target = 'secondary';
+			if (toID(target) === 'sheerforce') target = 'secondary';
 			if (target === 'bounceable' || toID(target) === 'magiccoat' || toID(target) === 'magicbounce') target = 'reflectable';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
@@ -2115,14 +2121,11 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	let gen = 0;
 	let randomOutput = 0;
 
-	target = target.trim();
 	const targetSplit = target.split(',');
-	const lastCommaIndex = target.lastIndexOf(',');
-	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
-	if (lastArgumentSubstr === 'all') {
+	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
 		if (!canAll) return {error: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
-		target = target.substr(0, lastCommaIndex);
+		targetSplit.pop();
 	}
 
 	const sanitizedTargets = [];
@@ -2399,28 +2402,25 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	let gen = 0;
 	let randomOutput = 0;
 
-	target = target.trim();
-	const target_split = target.split(',');
-	const lastCommaIndex = target.lastIndexOf(',');
-	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
-	if (lastArgumentSubstr === 'all') {
+	const targetSplit = target.split(',');
+	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
 		if (!canAll) return {error: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
-		target = target.substr(0, lastCommaIndex);
+		targetSplit.pop();
 	}
 
-	const sanitized_targets = [];
-	for (const index of target_split.keys()) {
-		const local_target = target_split[index].trim();
+	const sanitizedTargets = [];
+	for (const index of targetSplit.keys()) {
+		const localTarget = targetSplit[index].trim();
 		// Check if the target contains "random<digit>".
-		if (local_target.startsWith('random') && cmd === 'randability') {
+		if (localTarget.startsWith('random') && cmd === 'randability') {
 			// Validation for this is in the /randpoke command
-			randomOutput = parseInt(local_target.substr(6));
+			randomOutput = parseInt(localTarget.substr(6));
 		} else {
-			sanitized_targets.push(local_target);
+			sanitizedTargets.push(localTarget);
 		}
 	}
-	target = sanitized_targets.join(',');
+	target = sanitizedTargets.join(',');
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
 	const rawSearch = target.replace(/(max ?)?gen \d/g, match => toID(match)).split(' ');

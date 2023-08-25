@@ -945,9 +945,9 @@ export class BattleActions {
 			this.battle.add('-hitcount', targets[0], hit - 1);
 		}
 
-		if (move.recoil && move.totalDamage) {
+		if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
 			const hpBeforeRecoil = pokemon.hp;
-			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
+			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
 			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 			}
@@ -1271,7 +1271,7 @@ export class BattleActions {
 				this.battle.faint(source, source, move);
 			}
 			if (moveData.selfSwitch) {
-				if (this.battle.canSwitch(source.side)) {
+				if (this.battle.canSwitch(source.side) && !source.volatiles['commanded']) {
 					didSomething = true;
 				} else {
 					didSomething = this.combineResults(didSomething, false);
@@ -1291,7 +1291,7 @@ export class BattleActions {
 				}
 			}
 			this.battle.debug('move failed because it did nothing');
-		} else if (move.selfSwitch && source.hp) {
+		} else if (move.selfSwitch && source.hp && !source.volatiles['commanded']) {
 			source.switchFlag = move.id;
 		}
 
@@ -1359,7 +1359,8 @@ export class BattleActions {
 		return retVal === true ? undefined : retVal;
 	}
 
-	calcRecoilDamage(damageDealt: number, move: Move): number {
+	calcRecoilDamage(damageDealt: number, move: Move, pokemon: Pokemon): number {
+		if (move.id === 'chloroblast') return Math.round(pokemon.maxhp / 2);
 		return this.battle.clampIntRange(Math.round(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 	}
 
@@ -1853,10 +1854,7 @@ export class BattleActions {
 	}
 
 	canTerastallize(pokemon: Pokemon) {
-		if (
-			pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra" ||
-			pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow() || this.dex.gen !== 9
-		) {
+		if (pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow() || this.dex.gen !== 9) {
 			return null;
 		}
 		return pokemon.teraType;

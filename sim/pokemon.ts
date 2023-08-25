@@ -238,6 +238,10 @@ export class Pokemon {
 	activeMoveActions: number;
 	previouslySwitchedIn: number;
 	truantTurn: boolean;
+	// Gen 9 only
+	swordBoost: boolean;
+	shieldBoost: boolean;
+
 	/** Have this pokemon's Start events run yet? (Start events run every switch-in) */
 	isStarted: boolean;
 	duringMove: boolean;
@@ -441,6 +445,8 @@ export class Pokemon {
 		this.activeMoveActions = 0;
 		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
+		this.swordBoost = false;
+		this.shieldBoost = false;
 		this.isStarted = false;
 		this.duringMove = false;
 
@@ -1345,6 +1351,7 @@ export class Pokemon {
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
 			if (source.effectType === 'Item') {
+				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {
 					this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
