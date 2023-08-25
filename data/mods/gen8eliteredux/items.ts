@@ -634,6 +634,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		isNonstandard: null,
+		desc: "If held by a Latias or a Latios, its Sp. Atk and Sp. Def are 1.5x.",
 	},
 	spelonberry: {
 		inherit: true,
