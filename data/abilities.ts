@@ -5261,7 +5261,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	vengeance: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ghost') {
+			if (move && move.type === 'Ghost') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Vengeance boost');
 					return this.chainModify(1.5);	
@@ -5273,7 +5273,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ghost') {
+			if (move && move.type === 'Ghost') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Vengeance boost');
 					return this.chainModify(1.5);	
@@ -5980,7 +5980,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	shortcircuit: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Electric') {
+			if (move && move.type === 'Electric') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Short Circuit boost');
 					return this.chainModify(1.5);	
@@ -5992,7 +5992,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Electric') {
+			if (move && move.type === 'Electric') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Short Circuit boost');
 					return this.chainModify(1.5);	
@@ -6614,7 +6614,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	flock: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Flying') {
+			if (move && move.type === 'Flying') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Flock Circuit boost');
 					return this.chainModify(1.5);	
@@ -6626,7 +6626,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Flying') {
+			if (move && move.type === 'Flying') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Flock Circuit boost');
 					return this.chainModify(1.5);	
