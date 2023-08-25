@@ -6873,19 +6873,22 @@ export const Items: {[k: string]: ModdedItemData} = {
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem()) return;
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow',
+				'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
 				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onUpdate(pokemon) {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow',
+				'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
 				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail',
+				'snow', 'bloodmoon', 'foghorn'].includes(this.field.effectiveWeather())) {
 				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
 			}
 			this.effectState.inactive = true;

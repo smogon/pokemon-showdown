@@ -2292,7 +2292,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	whirligig: {
 		name: "Whirligig",
 		desc: "If held by a Castform, this item allows it to transform into Castform-Whirly in battle during Magnetize.",
-		shortDesc: "Allows Castform to enter Castform-Whirly form."
+		shortDesc: "Allows Castform to enter Castform-Whirly form.",
 	},
 	whiteherb: {
 		name: "White Herb",

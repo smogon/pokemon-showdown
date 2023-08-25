@@ -4,5 +4,5 @@ export const Scripts: ModdedBattleScriptsData = {
 		canTerastallize(pokemon) {
 			return null;
 		},
-	}
+	},
 };
