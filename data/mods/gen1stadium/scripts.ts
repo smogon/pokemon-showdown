@@ -36,7 +36,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.modifyStat!(statName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[statName]] / 100);
 					}
 				}
-				if (this.modifiedStats![statName] > 999){
+				if (this.modifiedStats![statName] > 999) {
 					this.modifiedStats![statName] = 999;
 				}
 			}
