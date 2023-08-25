@@ -2639,7 +2639,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isNonstandard: "Past",
 		name: "Comet Punch",
 		pp: 15,
-		priority: 0,
+		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		multihit: [2, 5],
 		secondary: null,
