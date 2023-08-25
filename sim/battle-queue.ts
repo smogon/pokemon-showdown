@@ -282,7 +282,7 @@ export class BattleQueue {
 		this.insertChoice(action);
 	}
 
-	addChoice(choices: ActionChoice | ActionChoice[], sleeporfreezegen1=false) {
+	addChoice(choices: ActionChoice | ActionChoice[], sleeporfreezegen1 = false) {
 		if (!Array.isArray(choices)) choices = [choices];
 		for (const choice of choices) {
 			const resolvedChoices = this.resolveAction(choice);
