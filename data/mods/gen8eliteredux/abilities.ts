@@ -1,3 +1,5 @@
+import { TriumvirateModeTrivia } from "../../../server/chat-plugins/trivia/trivia";
+
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	angerpoint: {
 		inherit: true,
@@ -365,6 +367,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 		shortDesc: "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it. 30% less damage from Ice and Water attacks",
 
+	},
+	merciless: {
+		inherit: true,
+		onModifyCritRatio(critRatio, source, target) {
+			if (target && ['psn', 'tox', 'par'].includes(target.status) || target.boosts['spe'] < 0) return 5;
+		},
+		shortDesc: "All attacks crit foes who are Poisoned, Paralyzed, or with hindered speed.",
 	},
 	mountaineer: {
 		inherit: true,
@@ -792,7 +801,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Water') {
+			if (move && move.type === 'Water') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Torrent boost');
 					return this.chainModify(1.5);	
@@ -804,7 +813,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Water') {
+			if (move && move.type === 'Water') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Torrent boost');
 					return this.chainModify(1.5);	
