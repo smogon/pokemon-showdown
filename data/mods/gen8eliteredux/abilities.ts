@@ -703,6 +703,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		rating: 4,
 	},
+	solarpower: {
+		inherit: true,
+		onWeather() {},
+	},
 	static: {
 		inherit: true,
 		onModifyMove(move) {
