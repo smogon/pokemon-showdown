@@ -73,7 +73,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
+			if (move && move.type === 'Fire') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Blaze boost');
 					return this.chainModify(1.5);	
@@ -85,7 +85,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fire') {
+			if (move && move.type === 'Fire') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Blaze boost');
 					return this.chainModify(1.5);	
@@ -495,7 +495,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Grass') {
+			if (move && move.type === 'Grass') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Overgrow boost');
 					return this.chainModify(1.5);	
@@ -507,7 +507,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Grass') {
+			if (move && move.type === 'Grass') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Overgrow boost');
 					return this.chainModify(1.5);	
@@ -753,7 +753,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Bug') {
+			if (move && move.type === 'Bug') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Swarm boost');
 					return this.chainModify(1.5);	
@@ -765,7 +765,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Bug') {
+			if (move && move.type === 'Bug') {
 				if (attacker.hp <= attacker.maxhp / 3) {
 					this.debug('Full Swarm boost');
 					return this.chainModify(1.5);	
