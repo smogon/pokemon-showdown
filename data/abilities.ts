@@ -5593,11 +5593,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			this.effectState.coiled = true;
 			this.add('-activate', pokemon, 'Coil Up');
+			// console.log(`On Start: EffectState: ${this.effectState.coiled}`);
 		},
 		onModifyPriority(priority, source, target, move) {
+			if (!this.effectState.coiled) return;
+			if (this.effectState.coiled && move.flags['bite']) {
+				return priority + 1
+			}
+		},
+		onAfterMove(attacker, defender, move) {
+			if (!this.effectState.coiled) return;
 			if (this.effectState.coiled && move.flags['bite']) {
 				this.effectState.coiled = false;
-				return priority + 1
 			}
 		},
 		name: "Coil Up",
