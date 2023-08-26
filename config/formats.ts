@@ -1526,7 +1526,7 @@ export const Formats: FormatList = [
 		onAfterSubDamage(damage, target, source, move) {
 			const forte = source.m.forte;
 			if (move?.category !== 'Status' && forte) {
-				this.singleEvent('AfterSubDamage', forte, null, target, source, move);
+				this.singleEvent('AfterSubDamage', forte, null, target, source, move, damage);
 			}
 		},
 		onModifySecondaries(secondaries, target, source, move) {
