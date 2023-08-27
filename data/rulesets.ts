@@ -2603,7 +2603,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'Protean Palace Mod: Each Pok\u00e9mon type changes to the same type as the first move they use while active that does not match their native type.');
 		},
 		onSwitchIn(pokemon) {
-			if(!pokemon.hasAbility('libero') && !pokemon.hasAbility('protean')) {
+			if (!pokemon.hasAbility('libero') && !pokemon.hasAbility('protean')) {
 				const effect = 'ability:' + this.dex.abilities.get('Protean');
 				pokemon.addVolatile(effect);
 			}
