@@ -79,7 +79,6 @@ describe('Pollen Puff', function () {
 			battle.makeChoices();
 			battle.makeChoices('move pollenpuff -2, move sleeptalk', 'move healblock, move falseswipe 2');
 			assert.false.fullHP(battle.p1.active[1], `Roggenrola should not have healed from Pollen Puff`);
-			common.saveReplay(battle);
 		});
 
 		it(`should prevent the user from successfully using Pollen Puff into an ally if the user becomes affected by Heal Block mid-turn`, function () {
