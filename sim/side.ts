@@ -518,6 +518,10 @@ export class Side {
 			if (!this.battle.validTargetLoc(targetLoc, pokemon, targetType)) {
 				return this.emitChoiceError(`Can't move: Invalid target for ${move.name}`);
 			}
+			// Heal Block only prevents Pollen Puff from targeting an ally when the user has Heal Block
+			if (move.id === 'pollenpuff' && pokemon.volatiles['healblock'] && targetLoc < 0 && !zMove) {
+				return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} because of Heal Block!`);
+			}
 		} else {
 			if (targetLoc) {
 				return this.emitChoiceError(`Can't move: You can't choose a target for ${move.name}`);
