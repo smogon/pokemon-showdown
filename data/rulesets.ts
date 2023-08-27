@@ -2598,7 +2598,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	proteanpalacemod: {
 		effectType: 'Rule',
 		name: "Protean Palace Mod",
-		desc: `Each Pok&eacute;mon type changes to the same type as the first move they use while active that does not match their native type.`,
+		desc: `Each Pok&eacute;mon innately has Protean.`,
 		onBegin() {
 			this.add('rule', 'Protean Palace Mod: Every Pok\u00e9mon innately has Protean.');
 		},
