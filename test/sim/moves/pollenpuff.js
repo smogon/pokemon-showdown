@@ -50,8 +50,8 @@ describe('Pollen Puff', function () {
 			]]);
 
 			battle.makeChoices();
-			assert.cantMove(() => battle.choose('p1', 'move pollenpuff -2, move sleeptalk'), 'Bunnelby', 'Pollen Puff');
-			assert.false.cantMove(() => battle.choose('p1', 'move pollenpuff 1, move sleeptalk'), 'Bunnelby', 'Pollen Puff');
+			assert.cantMove(() => battle.choose('p1', 'move pollenpuff -2, move sleeptalk'));
+			assert.false.cantMove(() => battle.choose('p1', 'move pollenpuff 1, move sleeptalk'));
 		});
 
 		it(`should not prevent the user from targeting an ally with Z-Pollen Puff while the user is affected by Heal Block`, function () {
@@ -64,7 +64,7 @@ describe('Pollen Puff', function () {
 			]]);
 
 			battle.makeChoices();
-			assert.false.cantMove(() => battle.choose('p1', 'move pollenpuff zmove -2, move sleeptalk'), 'Bunnelby', 'Pollen Puff');
+			assert.false.cantMove(() => battle.choose('p1', 'move pollenpuff zmove -2, move sleeptalk'));
 		});
 
 		it(`should not prevent the user from targeting an ally with Pollen Puff while the target is affected by Heal Block at move selection, but it should fail at move execution`, function () {
