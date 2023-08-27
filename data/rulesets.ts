@@ -2604,7 +2604,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.hasAbility('libero') && !pokemon.hasAbility('protean')) {
-				const effect = 'ability:' + this.dex.abilities.get('Protean');
+				const effect = 'ability:protean';
 				pokemon.addVolatile(effect);
 			}
 		},
