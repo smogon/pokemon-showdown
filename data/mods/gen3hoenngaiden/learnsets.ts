@@ -379,7 +379,6 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			frustration: ["3L1"],
 			furyattack: ["3L1"],
 			growl: ["3L1"],
-			heatwave: ["3L1"],
 			hiddenpower: ["3L1"],
 			mirrormove: ["3L1"],
 			mudslap: ["3L1"],
