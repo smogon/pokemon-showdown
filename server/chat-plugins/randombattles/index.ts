@@ -182,10 +182,6 @@ function getRBYMoves(species: string | Species) {
 	const data = getData(species, 'gen1randombattle');
 	if (!data) return false;
 	let buf = ``;
-	if (data.moves) {
-		buf += `<br/><b>Randomized moves</b>: `;
-		buf += data.moves.map(formatMove).sort().join(", ");
-	}
 	if (data.comboMoves) {
 		buf += `<br/><b>Combo moves</b>: `;
 		buf += data.comboMoves.map(formatMove).sort().join(", ");
@@ -194,9 +190,13 @@ function getRBYMoves(species: string | Species) {
 		buf += `<br/><b>Exclusive moves</b>: `;
 		buf += data.exclusiveMoves.map(formatMove).sort().join(", ");
 	}
-	if (data.essentialMove) {
-		buf += `<br/><b>Essential move</b>: `;
-		buf += formatMove(data.essentialMove);
+	if (data.essentialMoves) {
+		buf += `<br/><b>Essential move${Chat.plural(data.essentialMoves)}</b>: `;
+		buf += data.essentialMoves.map(formatMove).sort().join(", ");
+	}
+	if (data.moves) {
+		buf += `<br/><b>Randomized moves</b>: `;
+		buf += data.moves.map(formatMove).sort().join(", ");
 	}
 	if (
 		!data.moves && !data.comboMoves &&
