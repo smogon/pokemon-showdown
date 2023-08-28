@@ -1557,6 +1557,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({atk: 1}, target, target, null, false, true);
 			}
 		},
+		isBreakable: true,
 		name: "Guard Dog",
 		rating: 2,
 		num: 275,
@@ -5053,6 +5054,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({atk: 1}, pokemon, pokemon);
 			}
 		},
+		isBreakable: true,
 		name: "Wind Rider",
 		rating: 3.5,
 		// We do not want Brambleghast to get Infiltrator in Randbats
