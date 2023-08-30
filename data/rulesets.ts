@@ -2609,6 +2609,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				this.actions.terastallize(pokemon);
 			} else {
 				delete pokemon.terastallized;
+				this.add('-endTerastallize', pokemon);
 			}
 		},
 		onSwitchOut(pokemon) {
