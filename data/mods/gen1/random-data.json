@@ -352,7 +352,7 @@
     "tentacruel": {
         "level": 73,
         "moves": ["blizzard", "hyperbeam", "swordsdance"],
-        "exclusiveMoves": ["hydropump", "hydropump", "surf"]
+        "exclusiveMoves": ["hydropump", "surf", "surf"]
     },
     "geodude": {
         "level": 88,
