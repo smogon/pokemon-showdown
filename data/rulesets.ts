@@ -2620,7 +2620,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: "Tera Switch Mod",
 		desc: `The Pok\u00e9mon automatically switches in and out of its base typing and its designated Tera typing at the end of each turn.`,
 		onBegin() {
-			this.add('rule', 'Tera Switch Mod: The Pokémon automatically switches in and out of its base typing and its designated Tera typing at the end of each turn ');
+			this.add('rule', 'Tera Switch Mod: The Pokémon automatically switches in and out of its base typing and its designated Tera typing at the end of each turn');
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
