@@ -2545,7 +2545,6 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: "Frantic Fusions Mod",
 		desc: `Pok&eacute;mon nicknamed after another Pok&eacute;mon get their stats buffed by 1/4 of that Pok&eacute;mon's stats, barring HP, and access to their abilities.`,
-		ruleset: ['!Obtainable Abilities'],
 		onBegin() {
 			this.add('rule', 'Frantic Fusions Mod: Pok\u00e9mon nicknamed after another Pok\u00e9mon get buffed stats and more abilities.');
 		},
@@ -2568,6 +2567,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				const fusion = this.dex.species.get(set.name);
+				if (fusion.exists) {
+					set.name = fusion.name;
+				} else {
+					set.name = species.baseSpecies;
+					if (species.baseSpecies === 'Unown') set.species = 'Unown';
+				}
 				if (fusion.name === species.name) continue;
 				donors.add(fusion.name);
 			}
@@ -2596,10 +2601,24 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return newSpecies;
 		},
 	},
+  proteanpalacemod: {
+		effectType: 'Rule',
+		name: "Protean Palace Mod",
+		desc: `Each Pok&eacute;mon innately has Protean.`,
+		onBegin() {
+			this.add('rule', 'Protean Palace Mod: Every Pok\u00e9mon innately has Protean.');
+		},
+		onSwitchIn(pokemon) {
+			if (!pokemon.hasAbility(['libero', 'protean'])) {
+				const effect = 'ability:protean';
+				pokemon.addVolatile(effect);
+			}
+		},
+	},
 	teraswitchmod: {
 		effectType: 'Rule',
 		name: "Tera Switch Mod",
-		desc: `The Pokémon automatically switches in and out of its base typing and its designated Tera typing at the end of each turn.`,
+		desc: `The Pok\u00e9mon automatically switches in and out of its base typing and its designated Tera typing at the end of each turn.`,
 		onBegin() {
 			this.add('rule', 'Tera Switch Mod: The Pokémon automatically switches in and out of its base typing and its designated Tera typing at the end of each turn ');
 		},

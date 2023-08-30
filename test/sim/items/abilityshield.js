@@ -199,6 +199,18 @@ describe('Ability Shield', function () {
 		assert.notEqual(battle.p1.active[0].ability, 'levitate', `Holder should not trace ability`);
 	});
 
+	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9635572
+	it(`should not prevent Imposter from changing the holder's ability`, function () {
+		battle = common.createBattle([[
+			{species: 'ditto', ability: 'imposter', item: 'abilityshield', moves: ['transform']},
+		], [
+			{species: 'scorbunny', ability: 'libero', moves: ['agility']},
+		]]);
+
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].ability, 'libero', `Ditto should copy Libero`);
+	});
+
 	// TODO Add future tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?
 	//
 	//      No confirmed research yet for these, but presumably Neutralizing Gas & Mold

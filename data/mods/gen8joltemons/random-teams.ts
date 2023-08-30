@@ -14,6 +14,8 @@ export class RandomJoltemonsTeams extends RandomGen8Teams {
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isDoubles: boolean,
+		preferredType: string,
+		role: RandomTeamsTypes.Role,
 		isNoDynamax: boolean
 	): boolean {
 		if ([

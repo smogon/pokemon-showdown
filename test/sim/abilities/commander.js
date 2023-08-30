@@ -21,7 +21,7 @@ describe('Commander', function () {
 		assert.cantMove(() => battle.p2.choose('move swordsdance', 'move sleeptalk'));
 	});
 
-	it(`should not work if either Pokemon is Transformed`, function () {
+	it(`should not work if either Pokemon is Transformed into Dondozo/Tatsugiri`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', moves: ['sleeptalk']},
 			{species: 'dondozo', moves: ['sleeptalk']},
@@ -32,7 +32,27 @@ describe('Commander', function () {
 
 		battle.makeChoices('auto', 'move sleeptalk, move transform 2');
 		const mewDondozo = battle.p2.active[1];
-		assert.false(!!mewDondozo.volatiles['commanding']);
+		assert.false(!!mewDondozo.volatiles['commanded']);
+	});
+
+	it(`should not work if Tatsugiri is Transformed, and should work if Dondozo is Transformed`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
+		], [
+			{species: 'roggenrola', moves: ['sleeptalk']},
+			{species: 'tatsugiri', ability: 'commander', moves: ['transform']},
+			{species: 'dondozo', moves: ['transform']},
+		]]);
+
+		battle.makeChoices('auto', 'move sleeptalk, move transform 2');
+		battle.makeChoices('auto', 'switch 3, move sleeptalk');
+		const dondozo = battle.p2.active[0];
+		assert.false(!!dondozo.volatiles['commanded'], `Transformed Tatsugiri should not trigger Commander`);
+
+		battle.makeChoices('auto', 'move transform 1, switch 3');
+		battle.makeChoices('auto', 'move sleeptalk, switch 3');
+		assert(!!dondozo.volatiles['commanded'], `Transformed Dondozo should trigger Commander`);
 	});
 
 	it.skip(`should cause Tatsugiri to dodge all moves, including moves which normally bypass semi-invulnerability`, function () {
@@ -118,5 +138,20 @@ describe('Commander', function () {
 
 		const secondDondozo = battle.p2.active[1];
 		assert(!!secondDondozo.volatiles['commanded']);
+	});
+
+	it(`should not work in Multi Battles`, function () {
+		battle = common.createBattle({gameType: 'multi'}, [[
+			{species: 'diggersby', moves: ['sleeptalk']},
+		], [
+			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
+		], [
+			{species: 'cubone', moves: ['sleeptalk']},
+		], [
+			{species: 'dondozo', moves: ['sleeptalk']},
+		]]);
+
+		const dondozo = battle.p4.active[0];
+		assert.false(!!dondozo.volatiles['commanded']);
 	});
 });

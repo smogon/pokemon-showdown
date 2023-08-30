@@ -4,29 +4,97 @@
 'use strict';
 
 const assert = require('../assert');
-const {testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove} = require('./tools');
+const {testTeam, testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove, validateLearnset} = require('./tools');
 
 describe('[Gen 7] Random Battle (slow)', () => {
 	const options = {format: 'gen7randombattle'};
-	const dataJSON = require(`../../dist/data/mods/gen7/random-data.json`);
+	const setsJSON = require(`../../dist/data/mods/gen7/random-sets.json`);
 	const dex = Dex.forFormat(options.format);
-	const generator = Teams.getGenerator(options.format);
 
-	it('All moves on all sets should be obtainable', () => {
-		const rounds = 500;
-		for (const pokemon of Object.keys(dataJSON)) {
-			const species = dex.species.get(pokemon);
-			const data = dataJSON[pokemon];
-			if (!data.moves || species.isNonstandard) continue;
-			const remainingMoves = new Set(data.moves);
-			for (let i = 0; i < rounds; i++) {
-				// Test lead 1/6 of the time
-				const set = generator.randomSet(species, {}, i % 6 === 0);
-				for (const move of set.moves) remainingMoves.delete(move);
-				if (!remainingMoves.size) break;
+	describe("New set format", () => {
+		const filename = '../../data/mods/gen7/random-sets.json';
+		it(`${filename} should have valid set data`, () => {
+			const setsJSON = require(filename);
+			const validRoles = [
+				"Fast Attacker", "Setup Sweeper", "Wallbreaker", "Z-Move user", "Bulky Attacker",
+				"Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot",
+			];
+			for (const [id, sets] of Object.entries(setsJSON)) {
+				const species = Dex.species.get(id);
+				assert(species.exists, `Misspelled species ID: ${id}`);
+				assert(Array.isArray(sets.sets));
+				for (const set of sets.sets) {
+					assert(validRoles.includes(set.role), `Set for ${species.name} has invalid role: ${set.role}`);
+					for (const move of set.movepool) {
+						const dexMove = Dex.moves.get(move);
+						assert(dexMove.exists, `${species.name} has invalid move: ${move}`);
+						assert(move === dexMove.id || move.startsWith('hiddenpower'), `${species.name} has misformatted move: ${move}`);
+						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen7'), `${species.name} can't learn ${move}`);
+					}
+					for (let i = 0; i < set.movepool.length - 1; i++) {
+						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
+					}
+					if (set.preferredTypes) {
+						for (const type of set.preferredTypes) {
+							const dexType = Dex.types.get(type);
+							assert(dexType.exists, `${species.name} has invalid Preferred Type: ${type}`);
+							assert.equal(type, dexType.name, `${species.name} has misformatted Preferred Type: ${type}`);
+						}
+						for (let i = 0; i < set.preferredTypes.length - 1; i++) {
+							assert(set.preferredTypes[i + 1] > set.preferredTypes[i], `${species} preferredTypes should be sorted alphabetically`);
+						}
+					}
+				}
 			}
-			assert.false(remainingMoves.size,
-				`The following moves on ${species.name} are unused: ${[...remainingMoves].join(', ')}`);
+		});
+	});
+
+	it('all Pokemon should have 4 moves, except for Ditto and Unown', function () {
+		// This test takes more than 2000ms
+		testTeam({...options, rounds: 100}, team => {
+			for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.length === 4);
+		});
+	});
+
+	it('all moves on all sets should be obtainable', function () {
+		const generator = Teams.getGenerator(options.format);
+		const rounds = 100;
+		for (const pokemon of Object.keys(setsJSON)) {
+			const species = dex.species.get(pokemon);
+			const sets = setsJSON[pokemon]["sets"];
+			const types = species.types;
+			const abilities = new Set(Object.values(species.abilities));
+			if (species.unreleasedHidden) abilities.delete(species.abilities.H);
+			for (const set of sets) {
+				const role = set.role;
+				const moves = new Set(set.movepool.map(m => dex.moves.get(m).id));
+				const preferredTypes = set.preferredTypes;
+				let teamDetails = {};
+				// Go through all possible teamDetails combinations, if necessary
+				for (let j = 0; j < rounds; j++) {
+					// Generate a moveset as the lead, teamDetails is always empty for this
+					const preferredType = preferredTypes ? preferredTypes[j % preferredTypes.length] : '';
+					const movePool = set.movepool.map(m => dex.moves.get(m).id);
+					const moveSet = generator.randomMoveset(types, abilities, {}, species, true, false, movePool, preferredType, role);
+					for (const move of moveSet) moves.delete(move);
+					if (!moves.size) break;
+					// Generate a moveset for each combination of relevant teamDetails
+					for (let i = 0; i < 8; i++) {
+						const defog = i % 2;
+						const stealthRock = Math.floor(i / 2) % 2;
+						const stickyWeb = Math.floor(i / 4) % 2;
+						teamDetails = {defog, stealthRock, stickyWeb};
+						// randomMoveset() deletes moves from the movepool, so recreate it every time
+						const movePool = set.movepool.map(m => dex.moves.get(m).id);
+						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, false, movePool, preferredType, role);
+						for (const move of moveSet) moves.delete(move);
+						if (!moves.size) break;
+					}
+					if (!moves.size) break;
+				}
+				if (moves.size) console.log(moves, species);
+				assert(!moves.size, species);
+			}
 		}
 	});
 
@@ -44,29 +112,6 @@ describe('[Gen 7] Random Battle (slow)', () => {
 		testSet('typhlosion', options, set => {
 			assert(set.moves.includes('eruption'), `Typhlosion: got ${set.moves}`);
 		});
-	});
-
-	it('should not generate Pursuit as the only Dark STAB move', () => {
-		const darkTypesWithPursuit = Object.keys(dataJSON)
-			.filter(pkmn => dex.species.get(pkmn).types.includes('Dark') && dataJSON[pkmn].moves?.includes('pursuit'));
-		for (const pokemon of darkTypesWithPursuit) {
-			testSet(pokemon, options, set => {
-				if (!set.moves.includes('pursuit')) return;
-				const darkStab = set.moves.filter(m => {
-					const move = dex.moves.get(m);
-					if (move.type !== 'Dark') return false;
-					return move.category !== 'Status';
-				});
-				assert(darkStab.length > 1, `${pokemon}: got ${set.moves}`);
-			});
-		}
-	});
-
-	it('should not generate Roar + Protect', () => {
-		testNotBothMoves('heatran', options, 'roar', 'protect');
-		testNotBothMoves('vaporeon', options, 'roar', 'protect');
-		testNotBothMoves('walrein', options, 'roar', 'protect');
-		testNotBothMoves('bastiodon', options, 'roar', 'protect');
 	});
 
 	it('should not generate Dragon Tail as the only STAB move', () => {
