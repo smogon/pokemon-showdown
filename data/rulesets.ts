@@ -2601,7 +2601,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return newSpecies;
 		},
 	},
-  proteanpalacemod: {
+	proteanpalacemod: {
 		effectType: 'Rule',
 		name: "Protean Palace Mod",
 		desc: `Each Pok&eacute;mon innately has Protean.`,
