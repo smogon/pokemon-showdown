@@ -73,7 +73,7 @@ export const PM = new QueryProcessManager<{
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = require('./config-loader');
+	global.Config = require('./config-loader').Config;
 
 	global.Monitor = {
 		crashlog(error: Error, source = 'A team validator process', details: AnyObject | null = null) {
