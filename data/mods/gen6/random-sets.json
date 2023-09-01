@@ -4585,7 +4585,7 @@
                 "movepool": ["closecombat", "leafblade", "stoneedge", "swordsdance"]
             },
             {
-                "role": "",
+                "role": "Setup Sweeper",
                 "movepool": ["calmmind", "focusblast", "gigadrain", "hiddenpowerrock"],
                 "preferredTypes": ["Fighting"]
             }

@@ -16,7 +16,7 @@ describe('[Gen 6] Random Battle (slow)', () => {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			const validRoles = [
-				"Fast Attacker", "Setup Sweeper", "Wallbreaker", "Z-Move user", "Bulky Attacker",
+				"Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker",
 				"Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot",
 			];
 			for (const [id, sets] of Object.entries(setsJSON)) {

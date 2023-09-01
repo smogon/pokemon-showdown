@@ -451,7 +451,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		// Enforce setup
-		if (role.includes('Setup') || role === 'Z-Move user') {
+		if (role.includes('Setup')) {
 			// Prioritise other setup moves over Flame Charge
 			const setupMoves = movePool.filter(moveid => SETUP.includes(moveid) && moveid !== 'flamecharge');
 			if (setupMoves.length) {
@@ -482,7 +482,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		// Enforce coverage move
-		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker', 'Z-Move user'].includes(role)) {
+		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
 				const currentAttackType = counter.damagingMoves.values().next().value.type;
@@ -667,7 +667,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
 		if (species.id === 'ninetales') return 'Drought';
-		if (species.id === 'talonflame' && role === 'Z-Move user') return 'Gale Wings';
 		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
 		if (species.id === 'raticatealola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
@@ -678,7 +677,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (species.id === 'tsareena') return 'Queenly Majesty';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
-		if (species.id === 'kommoo' && role === 'Z-Move user') return 'Soundproof';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'zangoose') return 'Toxic Boost';
@@ -752,31 +750,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		preferredType: string,
 		role: RandomTeamsTypes.Role,
 	): string | undefined {
-		// Z-Moves
-		if (role === 'Z-Move user') {
-			// Specific Z-Crystals
-			if (species.baseSpecies === 'Arceus' && species.requiredItems) return species.requiredItems[1];
-			if (species.name === 'Raichu-Alola') return 'Aloraichium Z';
-			if (species.name === 'Decidueye') return 'Decidium Z';
-			if (species.name === 'Kommo-o') return 'Kommonium Z';
-			if (species.name === 'Lunala') return 'Lunalium Z';
-			if (species.baseSpecies === 'Lycanroc') return 'Lycanium Z';
-			if (species.name === 'Marshadow') return 'Marshadium Z';
-			if (species.name === 'Mew') return 'Mewnium Z';
-			if (species.name === 'Mimikyu') return 'Mimikium Z';
-			if (species.name === 'Necrozma-Dusk-Mane' || species.name === 'Necrozma-Dawn-Wings') {
-				if (moves.has('autotomize') && moves.has('sunsteelstrike')) return 'Solganium Z';
-				if (moves.has('autotomize') && moves.has('moongeistbeam')) return 'Lunalium Z';
-				return 'Ultranecrozium Z';
-			}
-			// General Z-Crystals
-			if (preferredType === 'Normal') return 'Normalium Z';
-			if (preferredType) return this.dex.species.get(`Arceus-${preferredType}`).requiredItems![1];
-		}
-		if (species.requiredItems) {
-			if (species.baseSpecies === 'Arceus') return species.requiredItems[0];
-			return this.sample(species.requiredItems);
-		}
+		if (species.requiredItems) return this.sample(species.requiredItems);
 		if (role === 'AV Pivot') return 'Assault Vest';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
 		if (species.baseSpecies === 'Marowak') return 'Thick Club';
@@ -933,18 +907,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets = [];
-		// Check if the Pokemon has a Z-Move user set
-		let canZMove = false;
-		for (const set of sets) {
-			if (!teamDetails.zMove && set.role === 'Z-Move user') canZMove = true;
-		}
-		for (const set of sets) {
-			// Prevent multiple Z-Move users
-			if (teamDetails.zMove && set.role === 'Z-Move user') continue;
-			// Prevent Setup Sweeper and Bulky Setup if Z-Move user is available
-			if (canZMove && ['Setup Sweeper', 'Bulky Setup'].includes(set.role)) continue;
-			possibleSets.push(set);
-		}
+		for (const set of sets) possibleSets.push(set);
 		const set = this.sampleIfArray(possibleSets);
 		const role = set.role;
 		const movePool: string[] = Array.from(set.movepool);
@@ -1001,8 +964,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			if (move.startsWith('hiddenpower')) hasHiddenPower = true;
 		}
 
-		// Fix IVs for non-Bottle Cap-able sets
-		if (hasHiddenPower && level < 100) {
+		if (hasHiddenPower) {
 			let hpType;
 			for (const move of moves) {
 				if (move.startsWith('hiddenpower')) hpType = move.substr(11);
@@ -1055,12 +1017,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const shuffledMoves = Array.from(moves);
 		this.prng.shuffle(shuffledMoves);
 
-		// Z-Conversion Porygon-Z should have Shadow Ball first if no Recover, otherwise Thunderbolt
-		if (species.id === 'porygonz' && role === 'Z-Move user') {
-			const firstMove = (moves.has('shadowball') ? 'shadowball' : 'thunderbolt');
-			this.fastPop(shuffledMoves, shuffledMoves.indexOf(firstMove));
-			shuffledMoves.unshift(firstMove);
-		}
 		return {
 			name: species.baseSpecies,
 			species: forme,
