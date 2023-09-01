@@ -532,11 +532,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter':
-		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Pressure':
-		case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
+		case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter': case 'Ice Body': case 'Magician':
+		case 'Moody': case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast':
 			return true;
-		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
+		case 'Aerilate': case 'Pixilate': case 'Refrigerate':
 			return ['doubleedge', 'hypervoice', 'return'].every(m => !moves.has(m));
 		case 'Chlorophyll':
 			// Petal Dance is for Lilligant
@@ -595,11 +594,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Serene Grace':
 			return (!counter.get('serenegrace') || species.name === 'Blissey');
 		case 'Sheer Force':
-			return (
-				!counter.get('sheerforce') ||
-				moves.has('doubleedge') || abilities.has('Guts') ||
-				!!species.isMega || species.id === 'toucannon'
-			);
+			return (!counter.get('sheerforce') || moves.has('doubleedge') || abilities.has('Guts') || !!species.isMega);
 		case 'Simple':
 			return !counter.get('setup');
 		case 'Slush Rush':
@@ -652,11 +647,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Hard-code abilities here
-		if (species.id === 'gurdurr' || (
+		if (
 			abilities.has('Guts') &&
 			!abilities.has('Quick Feet') &&
 			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
-		)) return 'Guts';
+		) return 'Guts';
 
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
 		if (species.id === 'ninetales') return 'Drought';
@@ -666,7 +661,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
-		if (species.id === 'tsareena') return 'Queenly Majesty';
+		if (['dusknoir', 'vespiquen', 'wailord'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
@@ -674,15 +669,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'porygon2') return 'Trace';
 
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
-		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce'))) return 'Moxie';
-		if (
-			['dusknoir', 'raikou', 'suicune', 'vespiquen', 'wailord'].includes(species.id)
-		) return 'Pressure';
+		if (abilities.has('Moxie') && (counter.get('Physical') > 3)) return 'Moxie';
 		if (abilities.has('Regenerator') && role === 'AV Pivot') return 'Regenerator';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
 		if (abilities.has('Sniper') && moves.has('focusenergy')) return 'Sniper';
-		if (abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
-		if (abilities.has('Weak Armor') && types.has('Water') && counter.get('setup')) return 'Weak Armor';
+		if (abilities.has('Unburden') && ['acrobatics', 'bellydrum'].some(m => moves.has(m))) return 'Unburden';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
