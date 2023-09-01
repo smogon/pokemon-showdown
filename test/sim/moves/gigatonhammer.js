@@ -23,7 +23,7 @@ describe('Gigaton Hammer', function () {
 		assert.cantMove(() => battle.p1.chooseMove('gigatonhammer'), 'Tinkaton', 'Gigaton Hammer', true);
 	});
 
-	it.only(`should be able to be used twice in one turn`, function () {
+	it(`should be able to be used twice in one turn`, function () {
 		battle = common.createBattle([[
 			{species: 'Tinkaton', moves: ['gigatonhammer']},
 		], [
@@ -32,6 +32,5 @@ describe('Gigaton Hammer', function () {
 		const oranguru = battle.p2.active[0];
 		battle.makeChoices();
 		assert.fainted(oranguru);
-		console.log(battle.getDebugLog());
 	});
 });
