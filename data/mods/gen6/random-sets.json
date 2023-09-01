@@ -785,8 +785,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["facade", "flamecharge", "flareblitz", "quickattack", "superpower"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["facade", "flamecharge", "flareblitz", "quickattack", "superpower"]
             }
         ]
     },
@@ -1542,8 +1541,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "hydropump", "icebeam", "rest", "scald", "substitute"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["calmmind", "hydropump", "icebeam", "rest", "scald", "substitute"]
             },
             {
                 "role": "Staller",
@@ -1604,8 +1602,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["leafstorm", "nastyplot", "psychic", "recover"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["leafstorm", "nastyplot", "psychic", "recover"]
             }
         ]
     },
@@ -4586,8 +4583,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "focusblast", "gigadrain", "hiddenpowerrock"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["calmmind", "focusblast", "gigadrain", "hiddenpowerrock"]
             }
         ]
     },
