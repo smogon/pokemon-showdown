@@ -623,7 +623,8 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["bodyslam", "crunch", "earthquake", "poweruppunch", "return", "suckerpunch"]
+                "movepool": ["bodyslam", "crunch", "earthquake", "poweruppunch", "return", "suckerpunch"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },

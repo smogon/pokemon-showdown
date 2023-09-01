@@ -73,10 +73,10 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
 				['megahorn', 'pinmissile'].some(m => movePool.includes(m)) ||
-				!counter.get('Bug') && (abilities.has('Tinted Lens') || abilities.has('Adaptability'))
+				!counter.get('Bug') && abilities.has('Tinted Lens')
 			),
 			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
-			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon') && !abilities.has('Aerilate'),
+			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fairy: (movePool, moves, abilities, types, counter) => !counter.get('Fairy'),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
@@ -590,8 +590,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return (!counter.get('sheerforce') || moves.has('doubleedge') || abilities.has('Guts') || !!species.isMega);
 		case 'Simple':
 			return !counter.get('setup');
-		case 'Slush Rush':
-			return !teamDetails.hail;
 		case 'Snow Warning':
 			// Aurorus
 			return moves.has('hypervoice');
@@ -852,8 +850,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
-			(this.dex.getEffectiveness('Rock', species) < 2 || species.id === 'ninjask') &&
-			ability !== 'Sturdy'
+			this.dex.getEffectiveness('Rock', species) < 2 && ability !== 'Sturdy'
 		) return 'Life Orb';
 		return 'Leftovers';
 	}
