@@ -249,6 +249,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			['copycat', 'uturn'],
 			// Seviper
 			['switcheroo', 'suckerpunch'],
+			// Jirachi
+			['bodyslam', 'healingwish']
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -264,6 +266,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const statusInflictingMoves = ['thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (!abilities.has('Prankster')) {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
+		}
+
+		// Force Protect and U-turn on Beedrill-Mega
+		if (species.id === 'beedrillmega') {
+			this.incompatibleMoves(moves, movePool, 'drillrun', 'knockoff');
 		}
 	}
 
@@ -826,7 +833,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			(ability === 'Rough Skin') || (species.id !== 'hooh' &&
 			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
 		) return 'Rocky Helmet';
-		if (['protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
+		if (['kingsshield', 'protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			this.dex.getEffectiveness('Ground', species) >= 2 &&
 			ability !== 'Levitate'
