@@ -456,16 +456,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		// Enforce setup
 		if (role.includes('Setup')) {
 			// Prioritise other setup moves over Flame Charge
-			const setupMoves = movePool.filter(moveid => SETUP.includes(moveid) && moveid !== 'flamecharge');
+			const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
 			if (setupMoves.length) {
 				const moveid = this.sample(setupMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
-			} else {
-				if (movePool.includes('flamecharge')) {
-					counter = this.addMove('flamecharge', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, preferredType, role);
-				}
 			}
 		}
 
