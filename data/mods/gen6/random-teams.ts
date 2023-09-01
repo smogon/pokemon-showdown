@@ -569,10 +569,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			// Dynamic Punch bit is for Golurk
 			return (!counter.get(toID(ability)) || moves.has('dynamicpunch'));
 		case 'Lightning Rod':
-			return (
-				types.has('Ground') || species.id === 'marowakalola' ||
-				((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking')
-			);
+			return (types.has('Ground') || ((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking'));
 		case 'Magic Guard': case 'Speed Boost':
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Mold Breaker':
@@ -617,7 +614,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Swarm':
 			return (!counter.get('Bug') || !!species.isMega);
 		case 'Technician':
-			return (!counter.get('technician') || moves.has('tailslap') || !!species.isMega || species.id === 'persianalola');
+			return (!counter.get('technician') || moves.has('tailslap') || !!species.isMega);
 		case 'Tinted Lens':
 			return (['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker');
 		case 'Torrent':
@@ -663,8 +660,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
 		if (species.id === 'ninetales') return 'Drought';
-		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
-		if (species.id === 'raticatealola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
 		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
