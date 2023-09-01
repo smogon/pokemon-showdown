@@ -569,9 +569,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Magic Guard': case 'Speed Boost':
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Mold Breaker':
-			return (
-				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force')
-			);
+			return (species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force'));
 		case 'Oblivious': case 'Prankster':
 			return !counter.get('Status');
 		case 'Overgrow':
@@ -922,11 +920,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			ivs.atk = 0;
 		}
 
-		if (ability === 'Beast Boost' && !counter.get('Special')) {
-			evs.spa = 0;
-			ivs.spa = 0;
-		}
-
 		// We use a special variable to track Hidden Power
 		// so that we can check for all Hidden Powers at once
 		let hasHiddenPower = false;
@@ -952,8 +945,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if (moves.has('substitute') && (item === 'Sitrus Berry' || (ability === 'Power Construct' && item !== 'Leftovers'))) {
-				// Two Substitutes should activate Sitrus Berry or Power Construct
+			if (moves.has('substitute') && item === 'Sitrus Berry') {
+				// Two Substitutes should activate Sitrus Berry
 				if (hp % 4 === 0) break;
 			} else if (moves.has('bellydrum') && item === 'Sitrus Berry') {
 				// Belly Drum should activate Sitrus Berry
@@ -968,16 +961,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			evs.hp -= 4;
 		}
 
-		// Ensure Nihilego's Beast Boost gives it Special Attack boosts instead of Special Defense
-		if (forme === 'Nihilego') {
-			while (evs.spd > 1) {
-				const spa = Math.floor(Math.floor(2 * species.baseStats.spa + ivs.spa + Math.floor(evs.spa / 4)) * level / 100 + 5);
-				const spd = Math.floor(Math.floor(2 * species.baseStats.spd + ivs.spd + Math.floor(evs.spd / 4)) * level / 100 + 5);
-				if (spa >= spd) break;
-				evs.spd -= 4;
-			}
-		}
-
 		if (['gyroball', 'metalburst', 'trickroom'].some(m => moves.has(m))) {
 			evs.spe = 0;
 			ivs.spe = (hasHiddenPower && level < 100) ? ivs.spe - 30 : 0;
@@ -990,7 +973,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.baseSpecies === 'Greninja' ? 'M' : species.gender,
+			gender: species.gender,
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,
