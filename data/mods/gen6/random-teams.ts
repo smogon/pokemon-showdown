@@ -755,7 +755,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 		if (moves.has('psychoshift')) return 'Flame Orb';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
-			return (types.includes('Fire') || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
+			return species.name === 'Conkeldurr' ? 'Flame Orb' : 'Toxic Orb';
 		}
 		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
 			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
