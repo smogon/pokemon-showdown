@@ -6,7 +6,7 @@ import {toID} from '../../../sim/dex';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
-	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'recycle', 'roost', 'slackoff', 'softboiled', 'synthesis',
+	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'slackoff', 'softboiled', 'synthesis',
 ];
 // Moves that boost Attack:
 const PHYSICAL_SETUP = [
@@ -678,7 +678,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'zangoose') return 'Toxic Boost';
 		if (species.id === 'porygon2') return 'Trace';
 
-		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (abilities.has('Moxie') && (counter.get('Physical') > 3 || moves.has('bounce'))) return 'Moxie';
 		if (
@@ -749,16 +748,16 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.requiredItems) return this.sample(species.requiredItems);
 		if (role === 'AV Pivot') return 'Assault Vest';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
-		if (species.baseSpecies === 'Marowak') return 'Thick Club';
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
+		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
+		if (species.name === 'Talonflame') return 'Sharp Beak';
 		if (species.name === 'Unfezant' || moves.has('focusenergy')) return 'Scope Lens';
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (species.name === 'Shuckle') return 'Mental Herb';
-		if (
-			ability === 'Harvest' || ability === 'Cheek Pouch' || (ability === 'Emergency Exit' && !!counter.get('Status'))
-		) return 'Sitrus Berry';
+		if (ability === 'Harvest' || ability === 'Cheek Pouch') return 'Sitrus Berry';
 		if (species.name === 'Ditto') return 'Choice Scarf';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if (ability === 'Speed Boost') return 'Life Orb';
@@ -770,13 +769,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
-		if (moves.has('bellydrum') || moves.has('recycle')) {
-			if (ability === 'Gluttony') {
-				return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
-			} else {
-				return 'Sitrus Berry';
-			}
-		}
+		if (moves.has('bellydrum')) return 'Sitrus Berry';
 		if (moves.has('geomancy') || moves.has('skyattack')) return 'Power Herb';
 		if (moves.has('shellsmash')) {
 			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
@@ -788,9 +781,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		}
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
-		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
+		if (ability === 'Unburden') return 'Sitrus Berry';
 		if (moves.has('acrobatics')) return '';
-		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
+		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
 		}
@@ -854,7 +847,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (['protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			this.dex.getEffectiveness('Ground', species) >= 2 &&
-			ability !== 'Levitate' && species.id !== 'golemalola'
+			ability !== 'Levitate'
 		) {
 			return 'Air Balloon';
 		}
@@ -981,7 +974,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			if (moves.has('substitute') && (item === 'Sitrus Berry' || (ability === 'Power Construct' && item !== 'Leftovers'))) {
 				// Two Substitutes should activate Sitrus Berry or Power Construct
 				if (hp % 4 === 0) break;
-			} else if (moves.has('bellydrum') && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
+			} else if (moves.has('bellydrum') && item === 'Sitrus Berry') {
 				// Belly Drum should activate Sitrus Berry
 				if (hp % 2 === 0) break;
 			} else {

@@ -7,12 +7,12 @@ const assert = require('../assert');
 const {testTeam, testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove, validateLearnset} = require('./tools');
 
 describe('[Gen 6] Random Battle (slow)', () => {
-	const options = {format: 'gen7randombattle'};
-	const setsJSON = require(`../../dist/data/mods/gen7/random-sets.json`);
+	const options = {format: 'gen6randombattle'};
+	const setsJSON = require(`../../dist/data/mods/gen6/random-sets.json`);
 	const dex = Dex.forFormat(options.format);
 
 	describe("New set format", () => {
-		const filename = '../../data/mods/gen7/random-sets.json';
+		const filename = '../../data/mods/gen6/random-sets.json';
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			const validRoles = [
