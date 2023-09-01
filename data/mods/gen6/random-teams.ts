@@ -546,8 +546,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Competitive':
 			return !counter.get('Special');
 		case 'Compound Eyes': case 'No Guard':
-			// Shadow Punch bit is for Golurk
-			return (!counter.get('inaccurate') || moves.has('shadowpunch'));
+			return !counter.get('inaccurate');
 		case 'Contrary': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
 		case 'Defiant': case 'Justified': case 'Moxie':
@@ -565,8 +564,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			// Slam part is for Tauros
 			return (moves.has('bodyslam') || species.id === 'staraptor');
 		case 'Iron Fist':
-			// Dynamic Punch bit is for Golurk
-			return (!counter.get(toID(ability)) || moves.has('dynamicpunch'));
+			return (!counter.get(toID(ability)) || species.id === 'golurk');
 		case 'Lightning Rod':
 			return (types.has('Ground') || ((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking'));
 		case 'Magic Guard': case 'Speed Boost':
