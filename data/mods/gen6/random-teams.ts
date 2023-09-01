@@ -100,7 +100,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Rock') && (species.baseStats.atk >= 100 || abilities.has('Rock Head'))
+				!counter.get('Rock') && (species.baseStats.atk >= 95 || abilities.has('Rock Head'))
 			),
 			Steel: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Steel') && species.baseStats.atk >= 100
