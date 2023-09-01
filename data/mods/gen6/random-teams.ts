@@ -223,7 +223,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			['psychic', 'psyshock'],
 			['scald', ['hydropump', 'originpulse', 'waterpulse']],
 			['return', ['bodyslam', 'doubleedge']],
-			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
+			[['fierydance', 'lavaplume'], ['fireblast', 'magmastorm']],
 			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
 			['hornleech', 'woodhammer'],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
@@ -233,7 +233,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			['stoneedge', 'headsmash'],
 			['dracometeor', 'dragonpulse'],
 			['dragonclaw', 'outrage'],
-			['knockoff', ['darkestlariat', 'darkpulse', 'foulplay']],
+			['knockoff', ['darkpulse', 'foulplay']],
 
 			// Status move incompatibilities
 			['toxic', 'toxicspikes'],
@@ -247,8 +247,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			['destinybond', 'whirlwind'],
 			// Liepard
 			['copycat', 'uturn'],
-			// Spinda and Seviper
-			[['feintattack', 'switcheroo'], 'suckerpunch'],
+			// Seviper
+			['switcheroo', 'suckerpunch'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -577,8 +577,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return !counter.get('Status');
 		case 'Overgrow':
 			return !counter.get('Grass');
-		case 'Power Construct':
-			return species.forme === '10%';
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil') || !!species.isMega);
 		case 'Regenerator':
