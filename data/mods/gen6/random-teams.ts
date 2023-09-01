@@ -453,7 +453,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		// Enforce setup
 		if (role.includes('Setup')) {
-			// Prioritise other setup moves over Flame Charge
 			const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
 			if (setupMoves.length) {
 				const moveid = this.sample(setupMoves);
