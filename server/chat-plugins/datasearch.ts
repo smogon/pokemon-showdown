@@ -1373,9 +1373,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
-		'allyanim', 'bypasssub', 'bite', 'bullet', 'cantusetwice', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore', 'failinstruct',
-		'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'mirror', 'mustpressure', 'noassist', 'nonsky', 'noparentalbond', 'nosleeptalk',
-		'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing', 'snatch', 'sound', 'wind',
+		'allyanim', 'bypasssub', 'bite', 'bullet', 'cantusetwice', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore',
+		'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'mirror', 'mustpressure', 'noassist', 'nonsky', 'noparentalbond',
+		'nosleeptalk', 'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing', 'snatch', 'sound', 'wind',
 
 		// Not flags directly from move data, but still useful to sort by
 		'highcrit', 'multihit', 'ohko', 'protection', 'secondary',
