@@ -1148,8 +1148,8 @@
         "level": 90,
         "sets": [
             {
-                "role": "Fast Support",
-                "movepool": ["defog", "foulplay", "haze", "roost", "thunderwave"]
+                "role": "Staller",
+                "movepool": ["bravebird", "defog", "foulplay", "haze", "roost", "thunderwave"]
             }
         ]
     },

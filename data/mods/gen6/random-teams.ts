@@ -6,7 +6,7 @@ import {toID} from '../../../sim/dex';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
-	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'recycle', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
+	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'recycle', 'roost', 'slackoff', 'softboiled', 'synthesis',
 ];
 // Moves that boost Attack:
 const PHYSICAL_SETUP = [
@@ -22,16 +22,16 @@ const SPEED_SETUP = [
 ];
 // Conglomerate for ease of access
 const SETUP = [
-	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'celebrate', 'coil', 'conversion', 'curse', 'dragondance',
-	'electricterrain', 'flamecharge', 'focusenergy', 'geomancy', 'growth', 'happyhour', 'holdhands', 'honeclaws', 'howl', 'irondefense', 'meditate',
-	'nastyplot', 'poweruppunch', 'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'workup',
+	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
+	'focusenergy', 'geomancy', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'poweruppunch',
+	'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
-	'accelerock', 'aquajet', 'bulletpunch', 'clearsmog', 'dragontail', 'eruption', 'explosion',
-	'fakeout', 'firstimpression', 'flamecharge', 'futuresight', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'nuzzle',
-	'pluck', 'poweruppunch', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack',
-	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'aquajet', 'bulletpunch', 'clearsmog', 'dragontail', 'eruption', 'explosion', 'fakeout', 'flamecharge',
+	'futuresight', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'nuzzle', 'pluck', 'poweruppunch', 'pursuit',
+	'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack', 'skydrop', 'snarl',
+	'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const HAZARDS = [
@@ -39,7 +39,7 @@ const HAZARDS = [
 ];
 // Protect and its variants
 const PROTECT_MOVES = [
-	'banefulbunker', 'kingsshield', 'protect', 'spikyshield',
+	'kingsshield', 'protect', 'spikyshield',
 ];
 // Moves that switch the user out
 const PIVOT_MOVES = [
@@ -59,7 +59,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'aegislashblade', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'golisopod', 'honchkrow', 'mimikyu', 'scizor', 'scizormega', 'shedinja',
+	'aegislashblade', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'honchkrow', 'mimikyu', 'scizor', 'scizormega', 'shedinja',
 ];
 
 export class RandomGen6Teams extends RandomGen7Teams {
@@ -82,7 +82,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
 			Flying: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Flying') && ['aerodactylmega', 'charizardmegay', 'mantine'].every(m => species.id !== m) &&
+				!counter.get('Flying') && ['aerodactylmega', 'charizardmegay', 'mantine', 'murkrow'].every(m => species.id !== m) &&
 				!movePool.includes('hiddenpowerflying')
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
@@ -98,7 +98,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (
-					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
+					types.has('Fighting') || movePool.includes('calmmind')
 				)
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (
@@ -264,10 +264,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		const statusInflictingMoves = ['thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (!abilities.has('Prankster')) {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
-		}
-		// Z-Conversion Porygon-Z
-		if (species.id === 'porygonz') {
-			this.incompatibleMoves(moves, movePool, 'shadowball', 'recover');
 		}
 	}
 
