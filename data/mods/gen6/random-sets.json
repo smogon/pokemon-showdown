@@ -2919,7 +2919,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["dazzlinggleam", "mysticalfire", "nastyplot", "shadowball", "thunderbolt", "trick"]
+                "movepool": ["dazzlinggleam", "nastyplot", "shadowball", "thunderbolt", "trick"]
             }
         ]
     },

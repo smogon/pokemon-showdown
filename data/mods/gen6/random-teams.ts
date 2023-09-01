@@ -250,7 +250,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			// Seviper
 			['switcheroo', 'suckerpunch'],
 			// Jirachi
-			['bodyslam', 'healingwish']
+			['bodyslam', 'healingwish'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -608,7 +608,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
 		case 'Sturdy':
-			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix');
+			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix' && !!counter.get('sheerforce'));
 		case 'Swarm':
 			return (!counter.get('Bug') || !!species.isMega);
 		case 'Technician':
