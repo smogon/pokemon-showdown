@@ -587,7 +587,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Scrappy':
 			return !types.has('Normal');
 		case 'Serene Grace':
-			return (!counter.get('serenegrace') || species.name === 'Blissey');
+			return !counter.get('serenegrace');
 		case 'Sheer Force':
 			return (!counter.get('sheerforce') || moves.has('doubleedge') || abilities.has('Guts') || !!species.isMega);
 		case 'Simple':
