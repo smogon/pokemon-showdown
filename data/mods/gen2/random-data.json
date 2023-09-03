@@ -193,7 +193,7 @@
         "moves": ["transform"]
     },
     "vaporeon": {
-        "moves": ["growth", "icebeam", "rest", "sleeptalk", "surf"]
+        "moves": ["growth", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
     },
     "jolteon": {
         "moves": ["batonpass", "growth", "hiddenpowerice", "substitute", "thunderbolt", "thunderwave"]
