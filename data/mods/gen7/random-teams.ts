@@ -17,7 +17,7 @@ interface BattleFactorySet {
 	ivs?: Partial<StatsTable>;
 }
 
-const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
+export const ZeroAttackHPIVs: {[k: string]: SparseStatsTable} = {
 	grass: {hp: 30, spa: 30},
 	fire: {spa: 30, spe: 30},
 	ice: {def: 30},
@@ -1281,7 +1281,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		for (const restrict of [true, false]) {
 			if (pokemon.length >= this.maxTeamSize) break;
 
-			const pokemonList = (this.gen === 7) ? Object.keys(this.randomSets) : Object.keys(this.randomData);
+			const pokemonList = Object.keys(this.randomSets);
 			const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 			while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 				const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
@@ -1304,18 +1304,13 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				}
 				const species = this.sample(currentSpeciesPool);
 
-				// Check if the forme has moves for random battle
-				// Gen 7 is using the new set format, while Gen 6 is still using the old format
 				if (this.gen === 7) {
-					if (!this.randomSets[species.id]) continue;
 					// If the team has a Z-Move user, reject Pokemon that only have the Z-Move user role
 					if (
 						this.randomSets[species.id]["sets"].length === 1 &&
 						this.randomSets[species.id]["sets"][0]["role"] === 'Z-Move user' &&
 						teamDetails.zMove
 					) continue;
-				} else {
-					if (!this.randomData[species.id]?.moves) continue;
 				}
 				if (!species.exists) continue;
 
