@@ -2111,7 +2111,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["defog", "earthquake", "fireblast", "outrage", "roost"]
+                "movepool": ["defog", "dracometeor", "earthquake", "fireblast", "roost"]
             }
         ]
     },
