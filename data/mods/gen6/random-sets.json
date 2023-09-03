@@ -1754,7 +1754,11 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["defog", "hurricane", "knockoff", "roost", "scald", "uturn"]
+                "movepool": ["defog", "hurricane", "knockoff", "roost", "scald", "toxic", "uturn"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["defog", "knockoff", "roost", "scald", "toxic", "uturn"]
             }
         ]
     },
