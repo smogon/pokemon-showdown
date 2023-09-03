@@ -701,7 +701,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				}
 			}
 
-			// Updateeam details
+			// Update team details
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
 			if (set.ability === 'Sand Stream') teamDetails.sand = 1;
 			if (set.moves.includes('spikes')) teamDetails.spikes = 1;
