@@ -312,7 +312,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Power Abuse"},
 	},
 
-	//TheJesuchristoOsAma
+	// TheJesuchristoOsAma
 	arceus: {
 		inherit: true,
 		abilities: {0: "The Grace of Jesus Christ"},
