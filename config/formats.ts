@@ -234,8 +234,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
 		banlist: [
-			'PU', 'Basculin-White-Striped', 'Beartic', 'Electrode', 'Fraxure', 'Frogadier', 'Girafarig', 'Glaceon',
-			'Golduck', 'Grumpig', 'Leafeon', 'Qwilfish-Hisui', 'Sneasel-Hisui', 'Squawkabilly', 'Vigoroth',
+			'PU', 'Beartic', 'Electrode', 'Fraxure', 'Frogadier', 'Girafarig', 'Glaceon', 'Golduck', 'Grumpig',
+			'Indeedee-F', 'Leafeon', 'Qwilfish-Hisui', 'Sawsbuck', 'Sneasel-Hisui', 'Squawkabilly', 'Vigoroth',
 		],
 	},
 	{
