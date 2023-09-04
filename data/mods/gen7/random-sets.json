@@ -2881,8 +2881,9 @@
                 "movepool": ["closecombat", "grassknot", "machpunch", "overheat", "stealthrock"]
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["fireblast", "focusblast", "grassknot", "nastyplot", "vacuumwave"]
+                "role": "Z-Move user",
+                "movepool": ["fireblast", "focusblast", "grassknot", "nastyplot", "vacuumwave"],
+                "preferredTypes": ["Fighting"]
             },
             {
                 "role": "Fast Attacker",
