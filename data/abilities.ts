@@ -1105,6 +1105,62 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 280,
 	},
+	embodyaspect: {
+		onStart(pokemon) {
+			if (pokemon.transformed) return;
+			if (pokemon.species.baseSpecies !== 'Ogerpon') return;
+			pokemon.addVolatile('embodyaspect');
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['embodyaspect'];
+			this.add('-end', pokemon, 'Embody Aspect', '[silent]');
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon, source, effect) {
+				this.add('-activate', pokemon, 'ability: Embody Aspect');
+				let boostedStat;
+				switch (pokemon.species.forme) {
+				case 'cornerstone': boostedStat = 'def'; break;
+				case 'hearthflame': boostedStat = 'atk'; break;
+				case 'wellspring': boostedStat = 'spd'; break;
+				default: boostedStat = 'spe'; break;
+				}
+				this.effectState.boostedStat = boostedStat;
+				this.add('-start', pokemon, 'embodyaspect' + this.effectState.boostedStat);
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, source, target, move) {
+				if (this.effectState.boostedStat !== 'atk') return;
+				this.debug('Embody Aspect atk boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifyDefPriority: 6,
+			onModifyDef(def, target, source, move) {
+				if (this.effectState.boostedStat !== 'def') return;
+				this.debug('Embody Aspect def boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpDPriority: 6,
+			onModifySpD(relayVar, target, source, move) {
+				if (this.effectState.boostedStat !== 'spd') return;
+				this.debug('boostedStat spd boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpe(spe, pokemon) {
+				if (this.effectState.boostedStat !== 'spe') return;
+				this.debug('Embody Aspect spe boost');
+				return this.chainModify(1.5);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Embody Aspect');
+			},
+		},
+		isPermanent: true,
+		name: "Embody Aspect",
+		rating: 3,
+		num: 281,
+	},
 	emergencyexit: {
 		onEmergencyExit(target) {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
