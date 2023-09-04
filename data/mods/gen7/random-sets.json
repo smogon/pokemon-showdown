@@ -750,7 +750,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["drainpunch", "doubleedge", "earthquake", "fakeout", "return", "suckerpunch"]
+                "movepool": ["doubleedge", "drainpunch", "earthquake", "fakeout", "return", "suckerpunch"]
             },
             {
                 "role": "AV Pivot",
