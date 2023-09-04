@@ -173,12 +173,12 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Monothreat Dark",
-		desc: `Monotype where every Pok&eacute;mon is required to be part Dark.`,
+		name: "[Gen 9] Monothreat Fairy",
+		desc: `Monotype where every Pok&eacute;mon is required to be part Fairy.`,
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Dark'],
+		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Fairy'],
 	},
 	{
 		name: "[Gen 9] 1v1",
