@@ -1286,9 +1286,12 @@ export class TeamValidator {
 		return this.validateEvent(set, setSources, eventData, eventSpecies, because as any) as any;
 	}
 
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, pokemonBlacklist: ID[]): boolean;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, pokemonBlacklist: ID[], getAll: true): ID[] | null;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, pokemonBlacklist: ID[], getAll = false) {
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
+		pokemonBlacklist: ID[]): boolean;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
+		pokemonBlacklist: ID[], getAll: true): ID[] | null;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
+		pokemonBlacklist: ID[], getAll = false) {
 		if (!pokemonBlacklist.includes(species.id)) pokemonBlacklist.push(species.id);
 		// tradebacks have an eggGen of 2 even though the source is 1ET
 		const eggGen = Math.max(parseInt(source.charAt(0)), 2);
@@ -1340,7 +1343,8 @@ export class TeamValidator {
 			if (!dex.species.getLearnset(father.id)) continue;
 			// something is clearly wrong if its only possible father is itself
 			// (exceptions: ExtremeSpeed Dragonite, Self-destruct Snorlax)
-			if ((pokemonBlacklist.includes(father.id) || species.id === father.id) && !['dragonite', 'snorlax'].includes(father.id)) continue;
+			if ((pokemonBlacklist.includes(father.id) || species.id === father.id) &&
+				!['dragonite', 'snorlax'].includes(father.id)) continue;
 			// don't check NFE Pokémon - their evolutions will know all their moves and more
 			// exception: Combee/Salandit, because their evos can't be fathers
 			if (father.evos.length) {
@@ -1416,7 +1420,7 @@ export class TeamValidator {
 			if (!allEggSources) {
 				allEggSources = eggSources;
 			} else {
-				allEggSources = allEggSources.filter(source => eggSources.includes(source))
+				allEggSources = allEggSources.filter(source => eggSources.includes(source));
 			}
 			if (!canLearn || !allEggSources.length) return false;
 			if (canLearn === 2) {

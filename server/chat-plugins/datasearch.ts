@@ -2676,7 +2676,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	if (setSources.sources.length) {
 		setSources.sources = setSources.sources.map(source => {
 			if (source.charAt(1) !== 'E') return source;
-			const fathers = validator.findEggMoveFathers(source, species, setSources, true);
+			const fathers = validator.findEggMoveFathers(source, species, setSources, [], true);
 			if (!fathers) return '';
 			return source + ':' + fathers.join(',');
 		}).filter(Boolean);
