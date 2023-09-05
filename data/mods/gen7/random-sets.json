@@ -966,7 +966,8 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "doubleedge", "earthquake", "pursuit", "roost", "stealthrock", "stoneedge"]
+                "movepool": ["defog", "doubleedge", "earthquake", "pursuit", "roost", "stealthrock", "stoneedge"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
