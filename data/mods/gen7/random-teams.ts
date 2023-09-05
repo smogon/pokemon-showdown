@@ -798,7 +798,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
 		case 'Sturdy':
-			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix');
+			return (!!counter.get('recoil') && !counter.get('recovery') ||
+				(species.id === 'steelix' && role === 'Wallbreaker'));
 		case 'Swarm':
 			return (!counter.get('Bug') || !!species.isMega);
 		case 'Technician':
