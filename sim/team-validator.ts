@@ -1343,8 +1343,7 @@ export class TeamValidator {
 			if (!dex.species.getLearnset(father.id)) continue;
 			// something is clearly wrong if its only possible father is itself
 			// (exceptions: ExtremeSpeed Dragonite, Self-destruct Snorlax)
-			if ((pokemonBlacklist.includes(father.id) || species.id === father.id) &&
-				!['dragonite', 'snorlax'].includes(father.id)) continue;
+			if (pokemonBlacklist.includes(father.id) && !['dragonite', 'snorlax'].includes(father.id)) continue;
 			// don't check NFE Pokémon - their evolutions will know all their moves and more
 			// exception: Combee/Salandit, because their evos can't be fathers
 			if (father.evos.length) {
@@ -1382,7 +1381,6 @@ export class TeamValidator {
 		if (species.id === 'smeargle') return true;
 		const canBreedWithSmeargle = species.eggGroups.includes('Field');
 
-		let eggMoveCount = 0;
 		let restrictiveMoveCount = 0;
 		let allEggSources;
 		const limitedEggMoves: ID[] = [];
@@ -1417,24 +1415,21 @@ export class TeamValidator {
 			}
 
 			if (canLearn === 3) continue;
+			if (!canLearn) return false;
 			if (!allEggSources) {
 				allEggSources = eggSources;
 			} else {
 				allEggSources = allEggSources.filter(source => eggSources.includes(source));
 			}
-			if (!canLearn || !allEggSources.length) return false;
-			if (canLearn === 2) {
-				eggMoveCount++;
-				limitedEggMoves.push(move);
-			}
+			if (canLearn === 2) limitedEggMoves.push(move);
 			if (canLearn === 1) {
 				restrictiveMoveCount++;
 				if (restrictiveMoveCount > 1) return false;
 			}
-			if (eggMoveCount && restrictiveMoveCount) return false;
+			if (limitedEggMoves.length && restrictiveMoveCount) return false;
 		}
 		pokemonBlacklist.push(species.id);
-		if (allEggSources && eggMoveCount > 1) {
+		if (allEggSources && limitedEggMoves.length > 1) {
 			let canChainbreed = false;
 			for (const fatherEggGroup of species.eggGroups) {
 				if (!baseSpecies.eggGroups.includes(fatherEggGroup)) {
@@ -1442,13 +1437,10 @@ export class TeamValidator {
 					break;
 				}
 			}
-			if (!canChainbreed && eggMoveCount === moves.length) return false;
+			if (!canChainbreed && limitedEggMoves.length === moves.length) return false;
 			const setSources = new PokemonSources();
 			setSources.limitedEggMoves = limitedEggMoves;
-			for (const source of allEggSources) {
-				if (this.findEggMoveFathers(source, species, setSources, pokemonBlacklist)) return true;
-			}
-			return false;
+			return this.findEggMoveFathers(allEggSources[0], species, setSources, pokemonBlacklist);
 		}
 		return true;
 	}
