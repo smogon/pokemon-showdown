@@ -377,9 +377,10 @@ export class TeamValidator {
 				problems = problems.concat(setProblems);
 			}
 			if (options.removeNicknames) {
+				const useCrossSpeciesNicknames = format.name.includes('Cross Evolution') || ruleTable.has('franticfusionsmod');
 				const species = dex.species.get(set.species);
 				let crossSpecies: Species;
-				if (format.name === '[Gen 9] Cross Evolution' && (crossSpecies = dex.species.get(set.name)).exists) {
+				if (useCrossSpeciesNicknames && (crossSpecies = dex.species.get(set.name)).exists) {
 					set.name = crossSpecies.name;
 				} else {
 					set.name = species.baseSpecies;
