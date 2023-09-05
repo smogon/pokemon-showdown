@@ -1273,7 +1273,7 @@ export class TeamValidator {
 				isHidden: !!this.dex.mod('gen5').species.get(species.id).abilities['H'],
 			};
 		} else if (source.charAt(1) === 'E') {
-			if (this.findEggMoveFathers(source, species, setSources)) {
+			if (this.findEggMoveFathers(source, species, setSources, [])) {
 				return undefined;
 			}
 			if (because) throw new Error(`Wrong place to get an egg incompatibility message`);
@@ -1286,9 +1286,10 @@ export class TeamValidator {
 		return this.validateEvent(set, setSources, eventData, eventSpecies, because as any) as any;
 	}
 
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources): boolean;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, getAll: true): ID[] | null;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, getAll = false) {
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, pokemonBlacklist: ID[]): boolean;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, pokemonBlacklist: ID[], getAll: true): ID[] | null;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, pokemonBlacklist: ID[], getAll = false) {
+		if (!pokemonBlacklist.includes(species.id)) pokemonBlacklist.push(species.id);
 		// tradebacks have an eggGen of 2 even though the source is 1ET
 		const eggGen = Math.max(parseInt(source.charAt(0)), 2);
 		const fathers: ID[] = [];
@@ -1339,7 +1340,7 @@ export class TeamValidator {
 			if (!dex.species.getLearnset(father.id)) continue;
 			// something is clearly wrong if its only possible father is itself
 			// (exceptions: ExtremeSpeed Dragonite, Self-destruct Snorlax)
-			if (species.id === father.id && !['dragonite', 'snorlax'].includes(father.id)) continue;
+			if ((pokemonBlacklist.includes(father.id) || species.id === father.id) && !['dragonite', 'snorlax'].includes(father.id)) continue;
 			// don't check NFE Pokémon - their evolutions will know all their moves and more
 			// exception: Combee/Salandit, because their evos can't be fathers
 			if (father.evos.length) {
@@ -1351,7 +1352,7 @@ export class TeamValidator {
 			if (!father.eggGroups.some(eggGroup => eggGroups.includes(eggGroup))) continue;
 
 			// father must be able to learn the move
-			if (!this.fatherCanLearn(father, eggMoves, eggGen)) continue;
+			if (!this.fatherCanLearn(species, father, eggMoves, eggGen, pokemonBlacklist)) continue;
 
 			// father found!
 			if (!getAll) return true;
@@ -1365,12 +1366,12 @@ export class TeamValidator {
 	 * We could, if we wanted, do a complete move validation of the father's
 	 * moveset to see if it's valid. This would recurse and be NP-Hard so
 	 * instead we won't. We'll instead use a simplified algorithm: The father
-	 * can learn the moveset if it has at most one egg/event move.
-	 *
-	 * `eggGen` should be 5 or earlier. Later gens should never call this
-	 * function (the answer is always yes).
+	 * is allowed to have multiple egg moves and a maximum of one move from
+	 * any other restrictive source; recursion is done only if there are less
+	 * egg moves to validate or if the father has an egg group it doesn't
+	 * share with the egg Pokemon.
 	 */
-	fatherCanLearn(species: Species, moves: ID[], eggGen: number) {
+	fatherCanLearn(baseSpecies: Species, species: Species, moves: ID[], eggGen: number, pokemonBlacklist: ID[]) {
 		let learnset = this.dex.species.getLearnset(species.id);
 		if (!learnset) return false;
 
@@ -1378,10 +1379,14 @@ export class TeamValidator {
 		const canBreedWithSmeargle = species.eggGroups.includes('Field');
 
 		let eggMoveCount = 0;
+		let restrictiveMoveCount = 0;
+		let allEggSources;
+		const limitedEggMoves: ID[] = [];
 		for (const move of moves) {
 			let curSpecies: Species | null = species;
-			/** 1 = can learn from egg, 2 = can learn unrestricted */
-			let canLearn: 0 | 1 | 2 = 0;
+			/** 1 = restrictive source other than egg, 2 = can learn from egg, 3 = can learn unrestricted */
+			let canLearn: 0 | 1 | 2 | 3 = 0;
+			const eggSources: any[] = [];
 
 			while (curSpecies) {
 				learnset = this.dex.species.getLearnset(curSpecies.id);
@@ -1391,22 +1396,55 @@ export class TeamValidator {
 						if (parseInt(moveSource.charAt(0)) > eggGen) continue;
 						const canLearnFromSmeargle = moveSource.charAt(1) === 'E' && canBreedWithSmeargle;
 						if (!'ESDV'.includes(moveSource.charAt(1)) || canLearnFromSmeargle) {
-							canLearn = 2;
+							canLearn = 3;
 							break;
 						} else {
-							canLearn = 1;
+							if (moveSource.charAt(1) === 'E') {
+								canLearn = 2;
+								eggSources.push(moveSource);
+							} else if (!canLearn) {
+								canLearn = 1;
+							}
 						}
 					}
 				}
-				if (canLearn === 2) break;
+				if (canLearn === 3) break;
 				curSpecies = this.learnsetParent(curSpecies);
 			}
 
-			if (!canLearn) return false;
-			if (canLearn === 1) {
-				eggMoveCount++;
-				if (eggMoveCount > 1) return false;
+			if (canLearn === 3) continue;
+			if (!allEggSources) {
+				allEggSources = eggSources;
+			} else {
+				allEggSources = allEggSources.filter(source => eggSources.includes(source))
 			}
+			if (!canLearn || !allEggSources.length) return false;
+			if (canLearn === 2) {
+				eggMoveCount++;
+				limitedEggMoves.push(move);
+			}
+			if (canLearn === 1) {
+				restrictiveMoveCount++;
+				if (restrictiveMoveCount > 1) return false;
+			}
+			if (eggMoveCount && restrictiveMoveCount) return false;
+		}
+		pokemonBlacklist.push(species.id);
+		if (allEggSources && eggMoveCount > 1) {
+			let canChainbreed = false;
+			for (const fatherEggGroup of species.eggGroups) {
+				if (!baseSpecies.eggGroups.includes(fatherEggGroup)) {
+					canChainbreed = true;
+					break;
+				}
+			}
+			if (!canChainbreed && eggMoveCount === moves.length) return false;
+			const setSources = new PokemonSources();
+			setSources.limitedEggMoves = limitedEggMoves;
+			for (const source of allEggSources) {
+				if (this.findEggMoveFathers(source, species, setSources, pokemonBlacklist)) return true;
+			}
+			return false;
 		}
 		return true;
 	}
