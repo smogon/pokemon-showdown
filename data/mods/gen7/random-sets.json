@@ -2343,7 +2343,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["moonlight", "moonblast", "powergem", "psychic", "stealthrock", "toxic"]
+                "movepool": ["moonblast", "moonlight", "powergem", "psychic", "stealthrock", "toxic"]
             }
         ]
     },
