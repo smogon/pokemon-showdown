@@ -368,7 +368,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
 		if (!types.includes('Normal')) {
-			this.incompatibleMoves(moves, movePool, SETUP, 'Explosion');
+			this.incompatibleMoves(moves, movePool, SETUP, 'explosion');
 		}
 
 		if (!types.includes('Dark') && preferredType !== 'Dark') {
