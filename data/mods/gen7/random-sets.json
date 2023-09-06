@@ -526,7 +526,7 @@
         "level": 96,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Setup Sweeper",
                 "movepool": ["bravebird", "knockoff", "leafblade", "return", "swordsdance"]
             }
         ]
