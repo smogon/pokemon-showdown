@@ -3069,7 +3069,7 @@ export class RandomGen8Teams {
 
 			const species = this.dex.species.get(specie);
 			if (!species.exists) continue;
-			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
+			// if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[species.baseSpecies]) continue;
