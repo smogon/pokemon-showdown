@@ -3049,16 +3049,19 @@ export class RandomGen8Teams {
 		 * with probability equal to w1/(w1+w2), which is what we want. See e.g. here https://arxiv.org/pdf/1012.0256.pdf,
 		 * original paper is behind a paywall.
 		 */
-		let shuffledSpecies = [];
+		const shuffledSpecies = [];
 		for (const speciesName of pokemonPool) {
-			let sortObject = {speciesName: speciesName, score: Math.pow(this.prng.next(),1/this.randomBSSFactorySets[speciesName].usage)};
+			const sortObject = {
+				speciesName: speciesName,
+				score: Math.pow(this.prng.next(), 1 / this.randomBSSFactorySets[speciesName].usage),
+			};
 			shuffledSpecies.push(sortObject);
 		}
-		shuffledSpecies.sort((a,b)=>a.score-b.score);
+		shuffledSpecies.sort((a, b) => a.score - b.score);
 
 		while (shuffledSpecies.length && pokemon.length < this.maxTeamSize) {
 			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
-			let specie = shuffledSpecies.pop()!.speciesName
+			const specie = shuffledSpecies.pop()!.speciesName;
 			const species = this.dex.species.get(specie);
 			if (!species.exists) continue;
 
