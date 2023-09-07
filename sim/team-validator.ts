@@ -1273,7 +1273,7 @@ export class TeamValidator {
 				isHidden: !!this.dex.mod('gen5').species.get(species.id).abilities['H'],
 			};
 		} else if (source.charAt(1) === 'E') {
-			if (this.findEggMoveFathers(source, species, setSources, [])) {
+			if (this.findEggMoveFathers(source, species, setSources)) {
 				return undefined;
 			}
 			if (because) throw new Error(`Wrong place to get an egg incompatibility message`);
@@ -1287,11 +1287,11 @@ export class TeamValidator {
 	}
 
 	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
-		pokemonBlacklist: ID[]): boolean;
+		getAll?: false, pokemonBlacklist?: ID[], noRecurse?: true): boolean;
+	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources, getAll?: true): ID[] | null;
 	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
-		pokemonBlacklist: ID[], getAll: true): ID[] | null;
-	findEggMoveFathers(source: PokemonSource, species: Species, setSources: PokemonSources,
-		pokemonBlacklist: ID[], getAll = false) {
+		getAll?: boolean, pokemonBlacklist?: ID[], noRecurse?: boolean) {
+		if (!pokemonBlacklist) pokemonBlacklist = [];
 		if (!pokemonBlacklist.includes(species.id)) pokemonBlacklist.push(species.id);
 		// tradebacks have an eggGen of 2 even though the source is 1ET
 		const eggGen = Math.max(parseInt(source.charAt(0)), 2);
@@ -1355,7 +1355,7 @@ export class TeamValidator {
 			if (!father.eggGroups.some(eggGroup => eggGroups.includes(eggGroup))) continue;
 
 			// father must be able to learn the move
-			if (!this.fatherCanLearn(species, father, eggMoves, eggGen, pokemonBlacklist)) continue;
+			if (!this.fatherCanLearn(species, father, eggMoves, eggGen, pokemonBlacklist, noRecurse)) continue;
 
 			// father found!
 			if (!getAll) return true;
@@ -1372,9 +1372,11 @@ export class TeamValidator {
 	 * is allowed to have multiple egg moves and a maximum of one move from
 	 * any other restrictive source; recursion is done only if there are less
 	 * egg moves to validate or if the father has an egg group it doesn't
-	 * share with the egg Pokemon.
+	 * share with the egg Pokemon. Recursion is also limited to two iterations
+	 * of calling findEggMoveFathers.
 	 */
-	fatherCanLearn(baseSpecies: Species, species: Species, moves: ID[], eggGen: number, pokemonBlacklist: ID[]) {
+	fatherCanLearn(baseSpecies: Species, species: Species, moves: ID[], eggGen: number, pokemonBlacklist: ID[],
+		noRecurse: boolean | undefined) {
 		let learnset = this.dex.species.getLearnset(species.id);
 		if (!learnset) return false;
 
@@ -1430,6 +1432,7 @@ export class TeamValidator {
 		}
 		pokemonBlacklist.push(species.id);
 		if (allEggSources && limitedEggMoves.length > 1) {
+			if (noRecurse) return false;
 			let canChainbreed = false;
 			for (const fatherEggGroup of species.eggGroups) {
 				if (!baseSpecies.eggGroups.includes(fatherEggGroup)) {
@@ -1440,7 +1443,7 @@ export class TeamValidator {
 			if (!canChainbreed && limitedEggMoves.length === moves.length) return false;
 			const setSources = new PokemonSources();
 			setSources.limitedEggMoves = limitedEggMoves;
-			return this.findEggMoveFathers(allEggSources[0], species, setSources, pokemonBlacklist);
+			return this.findEggMoveFathers(allEggSources[0], species, setSources, false, pokemonBlacklist, true);
 		}
 		return true;
 	}
