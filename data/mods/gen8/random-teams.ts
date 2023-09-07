@@ -3045,30 +3045,25 @@ export class RandomGen8Teams {
 			levitate: ['Ground'],
 		};
 
-		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			// Weighted random sampling
-			let maxUsage = 0;
-			const sets: {[k: string]: number} = {};
-			for (const specie of pokemonPool) {
-				if (teamData.baseFormes[this.dex.species.get(specie).baseSpecies]) continue; // Species Clause
-				const usage: number = this.randomBSSFactorySets[specie].usage;
-				sets[specie] = usage + maxUsage;
-				maxUsage += usage;
-			}
+		/**
+		 * Weighted random shuffle
+		 * Uses the fact that for two uniform variables x1 and x2, x1^(1/w1) is larger than x2^(1/w2)
+		 * with probability equal to w1/(w1+w2), which is what we want. See e.g. here https://arxiv.org/pdf/1012.0256.pdf,
+		 * original paper is behind a paywall.
+		 */
+		let shuffledSpecies = [];
+		for (const speciesName of pokemonPool) {
+			let sortObject = {speciesName: speciesName, score: Math.pow(this.prng.next(),1/this.randomBSSFactorySets[speciesName].usage)};
+			shuffledSpecies.push(sortObject);
+		}
+		shuffledSpecies.sort((a,b)=>a.score-b.score);
 
-			const usage = this.random(1, maxUsage);
-			let last = 0;
-			let specie;
-			for (const key of Object.keys(sets)) {
-				 if (usage > last && usage <= sets[key]) {
-					 specie = key;
-					 break;
-				 }
-				 last = sets[key];
-			}
-
+		while (shuffledSpecies.length && pokemon.length < this.maxTeamSize) {
+			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
+			let specie = shuffledSpecies.pop()!.speciesName
 			const species = this.dex.species.get(specie);
 			if (!species.exists) continue;
+
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -3151,7 +3146,7 @@ export class RandomGen8Teams {
 				}
 			}
 		}
-		if (pokemon.length < this.maxTeamSize) return this.randomBSSFactoryTeam(side, ++depth);
+		if (!teamData.forceResult && pokemon.length < this.maxTeamSize) return this.randomBSSFactoryTeam(side, ++depth);
 
 		// Quality control
 		if (!teamData.forceResult) {
