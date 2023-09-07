@@ -456,7 +456,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	bignugget: {
 		name: "Big Nugget",
-		spritenum: 314, // placeholder
+		spritenum: 27,
 		fling: {
 			basePower: 130,
 		},
