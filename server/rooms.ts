@@ -993,7 +993,7 @@ export abstract class BasicRoom {
 		this.users[user.id] = user;
 		this.userCount++;
 		this.checkAutoModchat(user);
-		
+
 		this.game?.onJoin?.(user, connection);
 		Chat.runHandlers('onRoomJoin', this, user, connection);
 		return true;
