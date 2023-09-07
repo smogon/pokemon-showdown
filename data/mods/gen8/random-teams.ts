@@ -3148,8 +3148,8 @@ export class RandomGen8Teams {
 		}
 		if (!teamData.forceResult && pokemon.length < this.maxTeamSize) return this.randomBSSFactoryTeam(side, ++depth);
 
-		// Quality control
-		if (!teamData.forceResult) {
+		// Quality control we cannot afford for non-monotype
+		if (!teamData.forceResult && !this.forceMonotype) {
 			for (const requiredFamily of requiredMoveFamilies) {
 				if (!teamData.has[requiredFamily]) return this.randomBSSFactoryTeam(side, ++depth);
 			}
