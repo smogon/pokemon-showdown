@@ -3029,8 +3029,6 @@ export class RandomGen8Teams {
 			typeCount: {}, typeComboCount: {}, baseFormes: {}, has: {}, forceResult: forceResult,
 			weaknesses: {}, resistances: {},
 		};
-		const requiredMoveFamilies: string[] = [];
-		const requiredMoves: {[k: string]: string} = {};
 		const weatherAbilitiesSet: {[k: string]: string} = {
 			drizzle: 'raindance',
 			drought: 'sunnyday',
@@ -3123,9 +3121,6 @@ export class RandomGen8Teams {
 				} else {
 					teamData.has[moveId] = 1;
 				}
-				if (moveId in requiredMoves) {
-					teamData.has[requiredMoves[moveId]] = 1;
-				}
 			}
 
 			for (const typeName of this.dex.types.names()) {
@@ -3150,9 +3145,6 @@ export class RandomGen8Teams {
 
 		// Quality control we cannot afford for non-monotype
 		if (!teamData.forceResult && !this.forceMonotype) {
-			for (const requiredFamily of requiredMoveFamilies) {
-				if (!teamData.has[requiredFamily]) return this.randomBSSFactoryTeam(side, ++depth);
-			}
 			for (const type in teamData.weaknesses) {
 				if (teamData.weaknesses[type] >= 3) return this.randomBSSFactoryTeam(side, ++depth);
 			}
