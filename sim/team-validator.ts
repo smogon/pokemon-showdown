@@ -2404,6 +2404,14 @@ export class TeamValidator {
 						cantLearnReason = `can only be learned in gens without Hidden Abilities.`;
 						continue;
 					}
+
+					const ability = dex.abilities.get(set.ability);
+					if (dex.gen < 6 && ability.gen > learnedGen && !checkingPrevo) {
+						// You can evolve a transfered mon to reroll for its new Ability.
+						cantLearnReason = `is learned in gen ${learnedGen}, but the Ability ${ability.name} did not exist then.`;
+						continue;
+					}
+
 					if (!species.isNonstandard) {
 						// HMs can't be transferred
 						if (dex.gen >= 4 && learnedGen <= 3 && [
