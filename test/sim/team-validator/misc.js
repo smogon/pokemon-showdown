@@ -98,6 +98,19 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen8cap');
 	});
 
+	it("should prevent Pokemon from having a Gen 3 tutor move and a Gen 4 ability together without evolving", function () {
+		let team = [
+			{species: 'hitmonchan', ability: 'ironfist', moves: ['dynamicpunch'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen4ou');
+
+		// Clefairy can learn Softboiled and evolve into Magic Guard Clefable
+		team = [
+			{species: 'clefable', ability: 'magicguard', moves: ['softboiled'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen4ou');
+	});
+
 	// Based on research by Anubis: https://www.smogon.com/forums/posts/9713378
 	describe(`Hackmons formes`, function () {
 		it(`should reject battle-only formes in Gen 9, even in Hackmons`, function () {
