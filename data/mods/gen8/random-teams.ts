@@ -3146,7 +3146,7 @@ export class RandomGen8Teams {
 		}
 		if (!teamData.forceResult && pokemon.length < this.maxTeamSize) return this.randomBSSFactoryTeam(side, ++depth);
 
-		// Quality control we cannot afford for non-monotype
+		// Quality control we cannot afford for monotype
 		if (!teamData.forceResult && !this.forceMonotype) {
 			for (const type in teamData.weaknesses) {
 				if (teamData.weaknesses[type] >= 3) return this.randomBSSFactoryTeam(side, ++depth);
