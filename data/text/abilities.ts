@@ -640,6 +640,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Honey Gather",
 		shortDesc: "No competitive use.",
 	},
+	hospitality: {
+		name: "Hospitality",
+		
+		activate: "  [TARGET] drank down all the matcha that [POKEMON] made!",
+	},
 	hugepower: {
 		name: "Huge Power",
 		shortDesc: "This Pokemon's Attack is doubled.",
@@ -1791,6 +1796,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	superluck: {
 		name: "Super Luck",
 		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
+	},
+	supersweetsyrup: {
+		name: "Supersweet Syrup",
+
+		start: "  A supersweet aroma is wafting from the syrup covering [POKEMON]!",
 	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
