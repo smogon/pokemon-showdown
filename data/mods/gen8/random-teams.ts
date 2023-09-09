@@ -3042,7 +3042,7 @@ export class RandomGen8Teams {
 			thickfat: ['Ice', 'Fire'],
 			levitate: ['Ground'],
 		};
-
+		const limitFactor = Math.ceil(this.maxTeamSize / 6)
 		/**
 		 * Weighted random shuffle
 		 * Uses the fact that for two uniform variables x1 and x2, x1^(1/w1) is larger than x2^(1/w2)
@@ -3074,7 +3074,7 @@ export class RandomGen8Teams {
 			const types = species.types;
 			let skip = false;
 			for (const type of types) {
-				if (teamData.typeCount[type] > 1 && this.randomChance(4, 5)) {
+				if (teamData.typeCount[type] >= 2 * limitFactor && this.randomChance(4, 5)) {
 					skip = true;
 					break;
 				}
@@ -3090,7 +3090,7 @@ export class RandomGen8Teams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (typeCombo in teamData.typeComboCount) continue;
+			if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 
 			const itemData = this.dex.items.get(set.item);
 			if (teamData.has[itemData.id]) continue; // Item Clause
@@ -3106,8 +3106,12 @@ export class RandomGen8Teams {
 					teamData.typeCount[type] = 1;
 				}
 			}
-			teamData.typeComboCount[typeCombo] = 1;
-
+			if (typeCombo in teamData.typeComboCount){
+				teamData.typeComboCount[typeCombo]++;
+			} else {
+				teamData.typeComboCount[typeCombo] = 1;
+			}
+			
 			teamData.baseFormes[species.baseSpecies] = 1;
 
 			teamData.has[itemData.id] = 1;
@@ -3149,7 +3153,7 @@ export class RandomGen8Teams {
 		// Quality control we cannot afford for monotype
 		if (!teamData.forceResult && !this.forceMonotype) {
 			for (const type in teamData.weaknesses) {
-				if (teamData.weaknesses[type] >= 3) return this.randomBSSFactoryTeam(side, ++depth);
+				if (teamData.weaknesses[type] >= 3 * limitFactor) return this.randomBSSFactoryTeam(side, ++depth);
 			}
 		}
 
