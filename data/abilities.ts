@@ -2411,6 +2411,26 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 0,
 		num: 250,
 	},
+	mindseye: {
+		onNegateImmunity(pokemon, type) {
+			if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			if (boost.accuracy && boost.accuracy < 0) {
+				delete boost.accuracy;
+				if (!(effect as ActiveMove).secondaries) {
+					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Mind's Eye", "[of] " + target);
+				}
+			}
+		},
+		onModifyMove(move) {
+			move.ignoreEvasion = true;
+		},
+		name: "Mind's Eye",
+		rating: 0,
+		num: 58,
+	},
 	minus: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
