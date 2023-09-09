@@ -292,7 +292,7 @@
     },
     "chansey": {
         "level": 84,
-        "moves": ["healbell", "seismictoss", "softboiled", "stealthrock", "toxic"]
+        "moves": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "toxic"]
     },
     "kangaskhan": {
         "level": 85,
