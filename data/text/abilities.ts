@@ -642,7 +642,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	hospitality: {
 		name: "Hospitality",
-		
+
 		activate: "  [TARGET] drank down all the matcha that [POKEMON] made!",
 	},
 	hugepower: {
