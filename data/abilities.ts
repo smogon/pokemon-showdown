@@ -4716,18 +4716,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 137,
 	},
 	toxicchain: {
-		onModifyMove(move) {
-			// This is modeled on Poison Touch, which itself is implemented incorrectly
-			// It is Shield Dust-negated / doesn't work on Substitute but not a full-on secondary
-			if (move.category === 'Status') return;
-			if (!move.secondaries) {
-				move.secondaries = [];
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Toxic Chain's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+
+			if (this.randomChance(3, 10)) {
+				target.trySetStatus('tox', source);
 			}
-			move.secondaries.push({
-				chance: 30,
-				status: 'tox',
-				ability: this.dex.abilities.get('toxicchain'),
-			});
 		},
 		name: "Toxic Chain",
 		rating: 2,
