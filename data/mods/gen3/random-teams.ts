@@ -68,7 +68,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				cull: (
 					counter.setupType !== 'Special' ||
 					(counter.get('Special') + counter.get('specialpool') < 2 && !moves.has('batonpass') &&
-					!moves.has('refresh') && !restTalk)
+					!moves.has('refresh') && !restTalk) ||
+					!counter.get('Special')
 				),
 				isSetup: true,
 			};
