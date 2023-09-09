@@ -4388,6 +4388,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	supersweetsyrup: {
 		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Supersweet Syrup');
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {
