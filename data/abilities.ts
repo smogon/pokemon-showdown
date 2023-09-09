@@ -4714,6 +4714,24 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 137,
 	},
+	toxicchain: {
+		onModifyMove(move) {
+			// This is modeled on Poison Touch, which itself is implemented incorrectly
+			// It is Shield Dust-negated / doesn't work on Substitute but not a full-on secondary
+			if (move.category === 'Status') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				status: 'tox',
+				ability: this.dex.abilities.get('toxicchain'),
+			});
+		},
+		name: "Toxic Chain",
+		rating: 2,
+		num: 143,
+	},
 	toxicdebris: {
 		onDamagingHit(damage, target, source, move) {
 			const side = source.isAlly(target) ? source.side.foe : source.side;
