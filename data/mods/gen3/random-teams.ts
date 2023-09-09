@@ -458,7 +458,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				const requiresStab = (
 					!counter.get('stab') &&
 					!moves.has('seismictoss') && !moves.has('nightshade') &&
-					species.id !== 'castform' && species.id !== 'umbreon' &&
+					species.id !== 'umbreon' &&
 					// If a Flying-type has Psychic, it doesn't need STAB
 					!(moves.has('psychic') && types.has('Flying')) &&
 					!(types.has('Ghost') && species.baseStats.spa > species.baseStats.atk) &&
