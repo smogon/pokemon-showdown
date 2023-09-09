@@ -1738,6 +1738,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 0,
 		num: 118,
 	},
+	hospitality: {
+		onStart(pokemon) {
+			for (const ally of pokemon.adjacentAllies()) {
+				if (this.heal(ally.baseMaxhp / 3)) {
+					this.add('-activate', ally, 'ability: Hospitality', '[of] ' + pokemon);
+				}
+			}
+		},
+		name: "Hospitality",
+		rating: 0,
+		num: 118,
+	},
 	hugepower: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
@@ -4371,6 +4383,25 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return critRatio + 1;
 		},
 		name: "Super Luck",
+		rating: 1.5,
+		num: 105,
+	},
+	supersweetsyrup: {
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Supersweet Syrup', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({evasion: -1}, target, pokemon, null, true);
+				}
+			}
+		},
+		name: "Supersweet Syrup",
 		rating: 1.5,
 		num: 105,
 	},
