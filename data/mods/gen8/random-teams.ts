@@ -3073,10 +3073,12 @@ export class RandomGen8Teams {
 			// Limit 2 of any type (most of the time)
 			const types = species.types;
 			let skip = false;
-			for (const type of types) {
-				if (teamData.typeCount[type] >= 2 * limitFactor && this.randomChance(4, 5)) {
-					skip = true;
-					break;
+			if (!this.forceMonotype){
+				for (const type of types) {
+					if (teamData.typeCount[type] >= 2 * limitFactor && this.randomChance(4, 5)) {
+						skip = true;
+						break;
+					}
 				}
 			}
 			if (skip) continue;
@@ -3090,7 +3092,7 @@ export class RandomGen8Teams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
+			if (!this.forceMonotype && teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 
 			const itemData = this.dex.items.get(set.item);
 			if (teamData.has[itemData.id]) continue; // Item Clause
