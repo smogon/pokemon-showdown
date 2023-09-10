@@ -203,17 +203,22 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen3ou');
 	});
 
+	it('should allow complex chainbred sets', function () {
+		team = [
+			{species: 'toxicroak', ability: 'dryskin', moves: ['bulletpunch', 'crosschop', 'fakeout'], evs: {hp: 4}},
+		];
+		assert.legalTeam(team, 'gen5ou');
+
+		team = [
+			{species: 'corphish', ability: 'hypercutter', moves: ['dragondance', 'metalclaw'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen4ou');
+	});
+
 	it.skip('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
 		team = [
 			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
-	});
-
-	it.skip('should accept this chainbreed on Toxicroak', function () {
-		team = [
-			{species: 'toxicroak', ability: 'dryskin', moves: ['bulletpunch', 'crosschop', 'fakeout'], evs: {hp: 4}},
-		];
-		assert.legalTeam(team, 'gen5ou');
 	});
 });
