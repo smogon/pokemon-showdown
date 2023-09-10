@@ -1521,6 +1521,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Cute",
 	},
+	bloodmoon: {
+		num: 1000, // TODO
+		accuracy: 100,
+		basePower: 160,
+		category: "Physical",
+		name: "Blood Moon",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, cantusetwice: 1},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
 	bloomdoom: {
 		num: 644,
 		accuracy: true,
@@ -9868,6 +9881,35 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
+	ivycudgel: {
+		num: 1000, // TODO
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		name: "Ivy Cudgel",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onModifyType(move, pokemon) {
+			switch (pokemon.species.name) {
+			case 'Ogerpon':
+				move.type = 'Grass';
+				break;
+			case 'Ogerpon-Hearthflame':
+				move.type = 'Fire';
+				break;
+			case 'Ogerpon-Wellspring':
+				move.type = 'Water';
+				break;
+			case 'Ogerpon-Cornerstone':
+				move.type = 'Rock';
+				break;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
 	jawlock: {
 		num: 746,
 		accuracy: 100,
@@ -11140,6 +11182,23 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Fighting",
 		zMove: {boost: {def: 1}},
 		contestType: "Cool",
+	},
+	matchagotcha: {
+		num: 1000, // TODO
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Matcha Gotcha",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		drain: [1, 2],
+		secondary: {
+			chance: 30,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Grass",
 	},
 	maxairstream: {
 		num: 766,
@@ -19181,6 +19240,36 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Grass",
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Clever",
+	},
+	syrupbomb: {
+		num: 1000, // TODO
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Syrup Bomb",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		condition: {
+			noCopy: true,
+			duration: 3,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Syrup Bomb');
+			},
+			onResidualOrder: 14,
+			onResidual() {
+				this.boost({spe: -1});
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Syrup Bomb');
+			},
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'syrupbomb',
+		},
+		target: "normal",
+		type: "Grass",
 	},
 	tackle: {
 		num: 33,
