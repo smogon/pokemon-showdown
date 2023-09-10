@@ -203,6 +203,13 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen3ou');
 	});
 
+	it("should disallow illegal egg move combinations containing past gen universal moves", function () {
+		team = [
+			{species: 'salamence', ability: 'intimidate', moves: ['defensecurl', 'thrash'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen5ou');
+	});
+
 	it.skip('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
 		team = [
 			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},

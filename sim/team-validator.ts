@@ -78,9 +78,14 @@ export class PokemonSources {
 	limitedEggMoves?: ID[] | null;
 	/**
 	 * Moves that should be in limitedEggMoves that would otherwise be skipped
-	 * because they can be learned via Gen 1-2 tradeback
+	 * because they can be learned universally in a past generation
 	 */
 	possiblyLimitedEggMoves?: ID[] | null;
+	/**
+	 * Moves that should be in limitedEggMoves that would otherwise be skipped
+	 * because they can be learned via Gen 1-2 tradeback
+	 */
+	tradebackLimitedEggMoves?: ID[] | null;
 	/**
 	 * Moves that can be learned via Pomeg glitch and does not require a
 	 * particular parent to learn
@@ -126,8 +131,12 @@ export class PokemonSources {
 	}
 	add(source: PokemonSource, limitedEggMove?: ID | null) {
 		if (this.sources[this.sources.length - 1] !== source) this.sources.push(source);
-		if (limitedEggMove && source.substr(0, 3) === '1ET') {
-			this.possiblyLimitedEggMoves = [limitedEggMove];
+		if (limitedEggMove) {
+			if (source.substr(0, 3) === '1ET') {
+				this.tradebackLimitedEggMoves = [limitedEggMove];
+			} else if (parseInt(source.charAt(0)) >= 3) {
+				this.possiblyLimitedEggMoves = [limitedEggMove];
+			}
 		}
 		if (limitedEggMove && this.limitedEggMoves !== null) {
 			this.limitedEggMoves = [limitedEggMove];
@@ -227,11 +236,24 @@ export class PokemonSources {
 				this.possiblyLimitedEggMoves.push(...other.possiblyLimitedEggMoves);
 			}
 		}
+		if (other.tradebackLimitedEggMoves) {
+			if (!this.tradebackLimitedEggMoves) {
+				this.tradebackLimitedEggMoves = other.tradebackLimitedEggMoves;
+			} else {
+				this.tradebackLimitedEggMoves.push(...other.tradebackLimitedEggMoves);
+			}
+		}
 		if (other.pomegEggMoves) {
 			if (!this.pomegEggMoves) {
 				this.pomegEggMoves = other.pomegEggMoves;
 			} else {
 				this.pomegEggMoves.push(...other.pomegEggMoves);
+			}
+		}
+		if (!this.sourcesBefore && this.possiblyLimitedEggMoves) {
+			for (const eggMove of this.possiblyLimitedEggMoves) {
+				if (!this.limitedEggMoves) this.limitedEggMoves = [];
+				if (!this.limitedEggMoves.includes(eggMove)) this.limitedEggMoves.push(eggMove);
 			}
 		}
 		let eggTradebackLegal = false;
@@ -241,8 +263,8 @@ export class PokemonSources {
 				break;
 			}
 		}
-		if (!eggTradebackLegal && this.possiblyLimitedEggMoves) {
-			for (const eggMove of this.possiblyLimitedEggMoves) {
+		if (!eggTradebackLegal && this.tradebackLimitedEggMoves) {
+			for (const eggMove of this.tradebackLimitedEggMoves) {
 				if (!this.limitedEggMoves) this.limitedEggMoves = [];
 				if (!this.limitedEggMoves.includes(eggMove)) this.limitedEggMoves.push(eggMove);
 			}
