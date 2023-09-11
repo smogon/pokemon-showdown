@@ -1625,6 +1625,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
+	ursalunabloodmoon: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 	slugma: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -5067,6 +5071,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
+	dipplin: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 	silicobra: {
 		tier: "LC",
 	},
@@ -5844,5 +5852,29 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RUBL",
+	},
+	poltchageist: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sinistcha: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	okidogi: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	munkidori: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	fezandipiti: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ogerpon: {
+		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 };
