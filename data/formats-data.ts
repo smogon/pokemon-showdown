@@ -3814,7 +3814,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	tornadustherian: {
 		tier: "UU",
 		doublesTier: "(DUU)",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	thundurus: {
 		tier: "RU",
