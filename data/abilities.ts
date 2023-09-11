@@ -3014,17 +3014,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 38,
 	},
 	poisontouch: {
-		// upokecenter says this is implemented as an added secondary effect
-		onModifyMove(move) {
-			if (!move?.flags['contact'] || move.target === 'self') return;
-			if (!move.secondaries) {
-				move.secondaries = [];
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (this.checkMoveMakesContact(move, target, source)) {
+				if (this.randomChance(3, 10)) {
+					target.trySetStatus('psn', source);
+				}
 			}
-			move.secondaries.push({
-				chance: 30,
-				status: 'psn',
-				ability: this.dex.abilities.get('poisontouch'),
-			});
 		},
 		name: "Poison Touch",
 		rating: 2,
