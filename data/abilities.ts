@@ -2424,7 +2424,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 250,
 	},
 	mindseye: {
-		onNegateImmunity(pokemon, type) {
+		onFoeNegateImmunity(pokemon, type) {
 			if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
 		},
 		onTryBoost(boost, target, source, effect) {
