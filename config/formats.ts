@@ -288,14 +288,14 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Battle Stadium Singles Regulation C",
 
-		mod: 'gen9',
+		mod: 'gen9predlc',
 		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
 	},
 	{
 		name: "[Gen 9] Battle Stadium Singles Regulation D",
 
-		mod: 'gen9',
+		mod: 'gen9predlc',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
@@ -391,7 +391,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] VGC 2023 Regulation C",
 
-		mod: 'gen9',
+		mod: 'gen9predlc',
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Paldea Pokedex', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
@@ -399,7 +399,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] VGC 2023 Regulation D",
 
-		mod: 'gen9',
+		mod: 'gen9predlc',
 		gameType: 'doubles',
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
 		banlist: ['Walking Wake', 'Iron Leaves'],
