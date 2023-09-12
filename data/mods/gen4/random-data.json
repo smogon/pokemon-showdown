@@ -13,7 +13,7 @@
     },
     "butterfree": {
         "level": 93,
-        "moves": ["bugbuzz", "safeguard", "sleeppowder", "stunspore", "uturn"]
+        "moves": ["bugbuzz", "sleeppowder", "stunspore", "uturn"]
     },
     "beedrill": {
         "level": 96,
@@ -21,7 +21,7 @@
     },
     "pidgeot": {
         "level": 88,
-        "moves": ["bravebird", "doubleedge", "heatwave", "pursuit", "quickattack", "uturn"]
+        "moves": ["bravebird", "doubleedge", "heatwave", "pursuit", "quickattack", "return", "roost", "uturn"]
     },
     "raticate": {
         "level": 86,
@@ -69,7 +69,7 @@
     },
     "vileplume": {
         "level": 88,
-        "moves": ["energyball", "hiddenpowerfire", "moonlight", "sleeppowder", "sludgebomb", "solarbeam", "sunnyday"]
+        "moves": ["energyball", "hiddenpowerfire", "moonlight", "sleeppowder", "sludgebomb"]
     },
     "parasect": {
         "level": 95,
@@ -141,7 +141,7 @@
     },
     "dewgong": {
         "level": 90,
-        "moves": ["encore", "icebeam", "raindance", "rest", "surf", "toxic"]
+        "moves": ["encore", "icebeam", "rest", "sleeptalk", "surf", "toxic"]
     },
     "muk": {
         "level": 88,
@@ -169,7 +169,7 @@
     },
     "exeggutor": {
         "level": 87,
-        "moves": ["explosion", "hiddenpowerfire", "leafstorm", "psychic", "sleeppowder", "solarbeam", "sunnyday", "synthesis"]
+        "moves": ["explosion", "hiddenpowerfire", "leafstorm", "psychic", "sleeppowder", "synthesis"]
     },
     "marowak": {
         "level": 88,
@@ -329,7 +329,7 @@
     },
     "bellossom": {
         "level": 90,
-        "moves": ["hiddenpowerfire", "leafstorm", "moonlight", "sleeppowder", "sludgebomb", "solarbeam", "sunnyday"]
+        "moves": ["hiddenpowerfire", "leafstorm", "moonlight", "sleeppowder", "sludgebomb"]
     },
     "azumarill": {
         "level": 84,
@@ -389,7 +389,7 @@
     },
     "steelix": {
         "level": 84,
-        "moves": ["earthquake", "explosion", "gyroball", "roar", "stealthrock", "stoneedge", "toxic"]
+        "moves": ["earthquake", "explosion", "ironhead", "roar", "stealthrock", "stoneedge", "toxic"]
     },
     "granbull": {
         "level": 88,
@@ -581,7 +581,7 @@
     },
     "hariyama": {
         "level": 84,
-        "moves": ["bulletpunch", "closecombat", "facade", "fakeout", "focuspunch", "icepunch", "payback", "stoneedge", "substitute"]
+        "moves": ["bulletpunch", "closecombat", "facade", "fakeout", "icepunch", "payback", "stoneedge"]
     },
     "delcatty": {
         "level": 98,
@@ -849,7 +849,7 @@
     },
     "bastiodon": {
         "level": 91,
-        "moves": ["earthquake", "metalburst", "protect", "roar", "rockslide", "stealthrock", "toxic"]
+        "moves": ["metalburst", "protect", "roar", "rockslide", "stealthrock", "toxic"]
     },
     "wormadam": {
         "level": 97,
@@ -861,7 +861,7 @@
     },
     "wormadamtrash": {
         "level": 87,
-        "moves": ["gyroball", "protect", "stealthrock", "toxic"]
+        "moves": ["flashcannon", "protect", "stealthrock", "toxic"]
     },
     "mothim": {
         "level": 91,
@@ -873,7 +873,7 @@
     },
     "pachirisu": {
         "level": 96,
-        "moves": ["discharge", "lightscreen", "superfang", "toxic", "uturn"]
+        "moves": ["discharge", "superfang", "toxic", "uturn"]
     },
     "floatzel": {
         "level": 86,
@@ -921,7 +921,7 @@
     },
     "bronzong": {
         "level": 80,
-        "moves": ["earthquake", "explosion", "gyroball", "lightscreen", "payback", "reflect", "stealthrock", "toxic"]
+        "moves": ["earthquake", "explosion", "ironhead", "lightscreen", "payback", "reflect", "stealthrock", "toxic"]
     },
     "chatot": {
         "level": 91,
@@ -941,7 +941,7 @@
     },
     "hippowdon": {
         "level": 80,
-        "moves": ["earthquake", "icefang", "roar", "slackoff", "stealthrock", "stoneedge", "toxic"]
+        "moves": ["earthquake", "roar", "slackoff", "stealthrock", "stoneedge", "toxic"]
     },
     "drapion": {
         "level": 84,
@@ -949,7 +949,7 @@
     },
     "toxicroak": {
         "level": 84,
-        "moves": ["crosschop", "focuspunch", "icepunch", "substitute", "suckerpunch", "swordsdance"]
+        "moves": ["crosschop", "icepunch", "substitute", "suckerpunch", "swordsdance"]
     },
     "carnivine": {
         "level": 94,
@@ -1029,7 +1029,7 @@
     },
     "dusknoir": {
         "level": 84,
-        "moves": ["earthquake", "focuspunch", "icebeam", "painsplit", "shadowsneak", "substitute", "willowisp"]
+        "moves": ["earthquake", "focuspunch", "icepunch", "painsplit", "shadowsneak", "substitute", "willowisp"]
     },
     "froslass": {
         "level": 82,

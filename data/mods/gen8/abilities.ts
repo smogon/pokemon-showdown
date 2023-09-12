@@ -579,7 +579,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	mirrorarmor: {
 		inherit: true,
-		rating: 2,
+		rating: 2.5,
 	},
 	mistysurge: {
 		inherit: true,

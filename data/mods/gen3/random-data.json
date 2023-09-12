@@ -245,7 +245,7 @@
     },
     "gyarados": {
         "level": 76,
-        "moves": ["doubleedge", "dragondance", "earthquake", "hiddenpowerflying", "hydropump", "taunt"]
+        "moves": ["doubleedge", "dragondance", "earthquake", "hiddenpowerflying", "hydropump"]
     },
     "lapras": {
         "level": 81,
@@ -325,7 +325,7 @@
     },
     "noctowl": {
         "level": 91,
-        "moves": ["hypnosis", "psychic", "reflect", "toxic", "whirlwind"]
+        "moves": ["hiddenpowerfire", "hypnosis", "psychic", "reflect", "toxic", "whirlwind"]
     },
     "ledian": {
         "level": 94,
@@ -401,7 +401,7 @@
     },
     "murkrow": {
         "level": 90,
-        "moves": ["doubleedge", "drillpeck", "hiddenpowerfighting", "hiddenpowerground", "meanlook", "perishsong", "protect", "shadowball", "substitute"]
+        "moves": ["doubleedge", "drillpeck", "hiddenpowerfighting", "hiddenpowerground", "shadowball", "substitute"]
     },
     "slowking": {
         "level": 84,
@@ -585,7 +585,7 @@
     },
     "dustox": {
         "level": 93,
-        "moves": ["hiddenpowerground", "lightscreen", "moonlight", "sludgebomb", "toxic", "whirlwind"]
+        "moves": ["hiddenpowerground", "moonlight", "sludgebomb", "toxic", "whirlwind"]
     },
     "ludicolo": {
         "level": 82,
@@ -625,7 +625,7 @@
     },
     "ninjask": {
         "level": 84,
-        "moves": ["aerialace", "batonpass", "hiddenpowerrock", "protect", "silverwind", "substitute", "swordsdance"]
+        "moves": ["aerialace", "batonpass", "protect", "silverwind", "substitute", "swordsdance"]
     },
     "shedinja": {
         "level": 91,
@@ -733,7 +733,7 @@
     },
     "seviper": {
         "level": 89,
-        "moves": ["crunch", "doubleedge", "earthquake", "flamethrower", "hiddenpowergrass", "sludgebomb"]
+        "moves": ["crunch", "earthquake", "flamethrower", "hiddenpowergrass", "sludgebomb"]
     },
     "lunatone": {
         "level": 84,
@@ -769,7 +769,7 @@
     },
     "castform": {
         "level": 91,
-        "moves": ["flamethrower", "icebeam", "substitute", "thunderbolt", "thunderwave"]
+        "moves": ["flamethrower", "icebeam", "return", "substitute", "thunderbolt", "thunderwave"]
     },
     "kecleon": {
         "level": 90,
@@ -857,7 +857,7 @@
     },
     "rayquaza": {
         "level": 72,
-        "moves": ["dragondance", "earthquake", "extremespeed", "hiddenpowerflying", "overheat", "rockslide"]
+        "moves": ["dragondance", "earthquake", "extremespeed", "hiddenpowerflying", "rockslide"]
     },
     "jirachi": {
         "level": 75,

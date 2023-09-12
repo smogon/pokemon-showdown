@@ -43,7 +43,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Ice') && (!types.has('Water') || !counter.get('Water'))
+				(!counter.get('Ice') && (!types.has('Water') || !counter.get('Water'))) || movePool.includes('blizzard')
 			),
 			Rock: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Rock') && (movePool.includes('headsmash') || movePool.includes('stoneedge'))
@@ -83,7 +83,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'eruption': case 'waterspout':
 			return {cull: counter.get('Physical') + counter.get('Special') < 4};
 		case 'focuspunch':
-			return {cull: !moves.has('substitute') || counter.damagingMoves.size < 2 || moves.has('hammerarm')};
+			return {cull: (
+				!moves.has('substitute') || counter.damagingMoves.size < 2 ||
+				moves.has('hammerarm') || moves.has('focusblast')
+			)};
 		case 'lightscreen':
 			if (movePool.length > 1) {
 				const screen = movePool.indexOf('reflect');
