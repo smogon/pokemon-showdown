@@ -18197,6 +18197,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 39.8,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Wellspring Mask",
 	},
 	ogerponhearthflame: {
 		num: 1017,
@@ -18211,6 +18212,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 39.8,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Hearthflame Mask",
 	},
 	ogerponcornerstone: {
 		num: 1017,
@@ -18225,6 +18227,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 39.8,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		requiredItem: "Cornerstone Mask",
 	},
 	ogerpontealtera: {
 		num: 1017,

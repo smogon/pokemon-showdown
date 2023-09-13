@@ -1366,7 +1366,10 @@ export class Pokemon {
 						this.battle.add('-primal', this, species.requiredItem);
 					}
 				} else {
-					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
+					// So a Mega Evolution message isn't sent while we're waiting on Ogerpon text
+					if (source.megaEvolves) {
+						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
+					}
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 				}
 			} else if (source.effectType === 'Status') {

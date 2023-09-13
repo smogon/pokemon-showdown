@@ -1870,7 +1870,11 @@ export class BattleActions {
 	}
 
 	terastallize(pokemon: Pokemon) {
-		const type = pokemon.teraType;
+		let type = pokemon.teraType;
+		if (pokemon.species.baseSpecies === 'Ogerpon') {
+			// Can't hack the tera types to something else, so just force it here
+			type = pokemon.getTypes(true, true)[1] || pokemon.getTypes(true, true)[0];
+		}
 
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
@@ -1880,7 +1884,7 @@ export class BattleActions {
 		pokemon.addedType = '';
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
-		if (pokemon.species.name.startsWith('Ogerpon')) {
+		if (pokemon.species.baseSpecies === 'Ogerpon') {
 			pokemon.formeChange(pokemon.species.id + 'tera', pokemon.getItem(), true);
 		}
 		this.battle.runEvent('AfterTerastallization', pokemon);

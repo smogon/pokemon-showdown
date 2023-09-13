@@ -1097,6 +1097,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 198,
 		gen: 4,
 	},
+	cornerstonemask: {
+		name: "Cornerstone Mask",
+		spritenum: 0, // TODO
+		forcedForme: "Ogerpon-Cornerstone",
+		itemUser: ["Ogerpon-Cornerstone"],
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		num: 1000, // TODO
+		gen: 9,
+	},
 	cornnberry: {
 		name: "Cornn Berry",
 		spritenum: 81,
@@ -2489,6 +2501,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 14,
 		gen: 4,
 		isPokeball: true,
+	},
+	hearthflamemask: {
+		name: "Hearthflame Mask",
+		spritenum: 0, // TODO
+		forcedForme: "Ogerpon-Hearthflame",
+		itemUser: ["Ogerpon-Hearthflame"],
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		num: 1000, // TODO
+		gen: 9,
 	},
 	heatrock: {
 		name: "Heat Rock",
@@ -5746,6 +5770,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1117,
 		gen: 8,
 	},
+	tealmask: {
+		name: "Teal Mask",
+		spritenum: 0, // TODO
+		forcedForme: "Ogerpon",
+		itemUser: ["Ogerpon"],
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		num: 1000, // TODO
+		gen: 9,
+	},
 	terrainextender: {
 		name: "Terrain Extender",
 		spritenum: 662,
@@ -7060,6 +7096,18 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 639,
 		gen: 6,
+	},
+	wellspringmask: {
+		name: "Wellspring Mask",
+		spritenum: 0, // TODO
+		forcedForme: "Ogerpon-Wellspring",
+		itemUser: ["Ogerpon-Wellspring"],
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		num: 1000, // TODO
+		gen: 9,
 	},
 	wepearberry: {
 		name: "Wepear Berry",
