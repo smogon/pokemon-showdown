@@ -15,6 +15,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	darkvoid: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	doomdesire: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	forestscurse: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -30,6 +38,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	matchagotcha: {
 		inherit: true,
 		isNonstandard: "Future",
+	},
+	seedflare: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	strangesteam: {
 		inherit: true,

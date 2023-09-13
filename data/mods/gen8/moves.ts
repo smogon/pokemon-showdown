@@ -141,11 +141,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "randomNormal",
 	},
-	decorate: {
+	darkvoid: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
-	doomdesire: {
+	decorate: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -537,6 +537,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	secretsword: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	seedflare: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	shadowbone: {
 		inherit: true,
