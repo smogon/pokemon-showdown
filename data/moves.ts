@@ -11185,11 +11185,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	matchagotcha: {
 		num: 1000, // TODO
-		accuracy: 100,
+		accuracy: 90,
 		basePower: 80,
 		category: "Special",
 		name: "Matcha Gotcha",
-		pp: 10,
+		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
 		drain: [1, 2],
@@ -19243,8 +19243,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	syrupbomb: {
 		num: 1000, // TODO
-		accuracy: 100,
-		basePower: 80,
+		accuracy: 85,
+		basePower: 60,
 		category: "Special",
 		name: "Syrup Bomb",
 		pp: 10,
