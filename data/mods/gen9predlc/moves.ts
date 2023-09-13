@@ -19,6 +19,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	grassyglide: {
+		inherit: true,
+		basePower: 60,
+	},
 	ivycudgel: {
 		inherit: true,
 		isNonstandard: "Future",
