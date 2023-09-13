@@ -3775,8 +3775,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	matchagotcha: {
 		name: "Matcha Gotcha",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Has a 30% chance to burn the target.",
-		shortDesc: "User recovers 50% of damage dealt. 30% brn.",
+		desc: "Has a 20% chance to burn the target. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		shortDesc: "20% burn. User recovers 50% of damage dealt.",
 	},
 	maxairstream: {
 		name: "Max Airstream",
