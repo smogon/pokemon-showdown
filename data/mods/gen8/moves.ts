@@ -26,10 +26,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
-	aurawheel: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	auroraveil: {
 		inherit: true,
 		onTry() {
@@ -107,14 +103,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1,
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1,
 		},
-	},
-	clangingscales: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	clangoroussoul: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	conversion: {
 		inherit: true,
@@ -218,10 +206,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-	},
-	forestscurse: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	freezeshock: {
 		inherit: true,
@@ -598,11 +582,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	stormthrow: {
+	spiderweb: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
-	strangesteam: {
+	stormthrow: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -613,6 +597,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sunsteelstrike: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	tailglow: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	technoblast: {
 		inherit: true,
