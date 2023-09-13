@@ -1111,7 +1111,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Embody Aspect (Cornerstone)",
 		rating: 3.5,
-		num: 281,
+		num: 304,
 	},
 	embodyaspecthearthflame: {
 		onStart(pokemon) {
@@ -1119,7 +1119,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Embody Aspect (Hearthflame)",
 		rating: 3.5,
-		num: 281,
+		num: 303,
 	},
 	embodyaspectteal: {
 		onStart(pokemon) {
@@ -1127,7 +1127,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Embody Aspect (Teal)",
 		rating: 3.5,
-		num: 281,
+		num: 301,
 	},
 	embodyaspectwellspring: {
 		onStart(pokemon) {
@@ -1135,7 +1135,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Embody Aspect (Wellspring)",
 		rating: 3.5,
-		num: 281,
+		num: 302,
 	},
 	emergencyexit: {
 		onEmergencyExit(target) {
@@ -1724,7 +1724,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Hospitality",
 		rating: 0,
-		num: 118,
+		num: 299,
 	},
 	hugepower: {
 		onModifyAtkPriority: 5,
@@ -2417,7 +2417,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Mind's Eye",
 		rating: 0,
-		num: 58,
+		num: 300,
 	},
 	minus: {
 		onModifySpAPriority: 5,
@@ -4380,7 +4380,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Supersweet Syrup",
 		rating: 1.5,
-		num: 105,
+		num: 306,
 	},
 	supremeoverlord: {
 		onStart(pokemon) {
@@ -4702,7 +4702,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Toxic Chain",
 		rating: 2,
-		num: 143,
+		num: 305,
 	},
 	toxicdebris: {
 		onDamagingHit(damage, target, source, move) {
