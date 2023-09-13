@@ -9932,7 +9932,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		secondary: null,
-		hasSheerForce: true,
 		target: "normal",
 		type: "Water",
 		contestType: "Cool",
@@ -11186,13 +11185,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Matcha Gotcha",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1},
+		flags: {protect: 1, mirror: 1, defrost: 1},
 		drain: [1, 2],
 		secondary: {
-			chance: 30,
+			chance: 20,
 			status: 'brn',
 		},
-		target: "normal",
+		target: "allAdjacentFoes",
 		type: "Grass",
 	},
 	maxairstream: {
@@ -19243,7 +19242,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Syrup Bomb",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, bullet: 1},
 		condition: {
 			noCopy: true,
 			duration: 3,
