@@ -294,6 +294,7 @@ export class BattleQueue {
 			}
 		}
 	}
+	
 	willAct() {
 		for (const action of this.list) {
 			if (['move', 'switch', 'instaswitch', 'shift'].includes(action.choice)) {
