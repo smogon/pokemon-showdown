@@ -326,10 +326,10 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	vulpix: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	vulpixalola: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	ninetales: {
 		tier: "OU",
@@ -1406,7 +1406,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	aipom: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	ambipom: {
 		tier: "OU",
@@ -1422,7 +1422,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	yanma: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	yanmega: {
 		tier: "OU",
@@ -1499,7 +1499,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	gligar: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	gliscor: {
 		tier: "OU",
@@ -1574,7 +1574,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	ursaluna: {
 		tier: "UU",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 		natDexTier: "Uber",
 	},
 	ursalunabloodmoon: {
@@ -2928,7 +2928,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UUBL",
 	},
 	darkrai: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 		natDexTier: "Uber",
 	},
@@ -2938,7 +2938,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	shayminsky: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 		natDexTier: "Uber",
 	},
@@ -4307,7 +4307,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	cutiefly: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	ribombee: {
 		tier: "OU",
