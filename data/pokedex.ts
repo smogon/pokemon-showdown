@@ -18198,6 +18198,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Green",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Wellspring Mask",
+		changesFrom: "Ogerpon",
 	},
 	ogerponhearthflame: {
 		num: 1017,
@@ -18213,6 +18214,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Red",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Hearthflame Mask",
+		changesFrom: "Ogerpon",
 	},
 	ogerponcornerstone: {
 		num: 1017,
@@ -18228,6 +18230,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Cornerstone Mask",
+		changesFrom: "Ogerpon",
 	},
 	ogerpontealtera: {
 		num: 1017,
@@ -18285,7 +18288,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Grass", "Rock"],
 		gender: "F",
 		baseStats: {hp: 80, atk: 120, def: 84, spa: 60, spd: 96, spe: 110},
-		abilities: {0: "Cornerstone (Cornerstone)"},
+		abilities: {0: "Embody Aspect (Cornerstone)"},
 		heightm: 1.2,
 		weightkg: 39.8,
 		color: "Gray",
