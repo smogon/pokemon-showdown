@@ -558,6 +558,10 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "Prevents the target from switching out. The target can still switch out if it uses Baton Pass. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field, unless it uses Baton Pass, in which case the target will remain trapped.",
 		},
 	},
+	bloodmoon: {
+		name: "Blood Moon",
+		shortDesc: "Cannot be used twice in a row.",
+	},
 	bloomdoom: {
 		name: "Bloom Doom",
 		shortDesc: "Power is equal to the base move's Z-Power.",

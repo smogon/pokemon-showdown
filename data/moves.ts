@@ -1522,17 +1522,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Cute",
 	},
 	bloodmoon: {
-		num: 1000, // TODO
+		num: 901,
 		accuracy: 100,
-		basePower: 160,
-		category: "Physical",
+		basePower: 140,
+		category: "Special",
 		name: "Blood Moon",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, cantusetwice: 1},
 		secondary: null,
 		target: "normal",
-		type: "Steel",
+		type: "Normal",
 	},
 	bloomdoom: {
 		num: 644,
@@ -9882,7 +9882,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Cool",
 	},
 	ivycudgel: {
-		num: 1000, // TODO
+		num: 904,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
@@ -11184,7 +11184,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Cool",
 	},
 	matchagotcha: {
-		num: 1000, // TODO
+		num: 902,
 		accuracy: 90,
 		basePower: 80,
 		category: "Special",
@@ -19242,7 +19242,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		contestType: "Clever",
 	},
 	syrupbomb: {
-		num: 1000, // TODO
+		num: 903,
 		accuracy: 85,
 		basePower: 60,
 		category: "Special",
