@@ -1717,6 +1717,21 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
+	fairyfeather: {
+		name: "Fairy Feather",
+		spritenum: 187, // I think this is funny also TODO
+		fling: {
+			basePower: 10,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Fairy') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: 12, // TODO
+		gen: 9,
+	},
 	fairygem: {
 		name: "Fairy Gem",
 		spritenum: 611,
@@ -5665,6 +5680,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1116,
 		gen: 8,
+	},
+	syrupyapple: {
+		name: "Syrupy Apple",
+		spritenum: 711, // TODO
+		fling: {
+			basePower: 30,
+		},
+		num: 12, // TODO
+		gen: 9,
 	},
 	tamatoberry: {
 		name: "Tamato Berry",
