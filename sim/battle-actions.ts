@@ -1870,7 +1870,7 @@ export class BattleActions {
 	}
 
 	terastallize(pokemon: Pokemon) {
-		let type = pokemon.teraType;
+		const type = pokemon.teraType;
 
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
