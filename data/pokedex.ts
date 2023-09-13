@@ -18250,7 +18250,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 39.8,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
-		requiredItem: "Teal Mask",
 		battleOnly: "Ogerpon",
 		forceTeraType: "Grass",
 	},

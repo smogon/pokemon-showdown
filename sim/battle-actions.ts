@@ -1863,7 +1863,8 @@ export class BattleActions {
 	}
 
 	canTerastallize(pokemon: Pokemon) {
-		if (pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow() || this.dex.gen !== 9) {
+		if (pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow() || this.dex.gen !== 9 ||
+			(pokemon.species.baseSpecies === 'Ogerpon' && pokemon.transformed)) {
 			return null;
 		}
 		return pokemon.teraType;

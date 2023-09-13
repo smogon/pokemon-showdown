@@ -5779,18 +5779,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1117,
 		gen: 8,
 	},
-	tealmask: {
-		name: "Teal Mask",
-		spritenum: 758,
-		forcedForme: "Ogerpon",
-		itemUser: ["Ogerpon"],
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
-			return true;
-		},
-		num: 2405,
-		gen: 9,
-	},
 	terrainextender: {
 		name: "Terrain Extender",
 		spritenum: 662,
