@@ -18285,7 +18285,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		types: ["Grass", "Rock"],
 		gender: "F",
 		baseStats: {hp: 80, atk: 120, def: 84, spa: 60, spd: 96, spe: 110},
-		abilities: {0: "Cornerstone (Hearthflame)"},
+		abilities: {0: "Cornerstone (Cornerstone)"},
 		heightm: 1.2,
 		weightkg: 39.8,
 		color: "Gray",
