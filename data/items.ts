@@ -1099,7 +1099,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	cornerstonemask: {
 		name: "Cornerstone Mask",
-		spritenum: 759,
+		spritenum: 758,
 		forcedForme: "Ogerpon-Cornerstone",
 		itemUser: ["Ogerpon-Cornerstone"],
 		onTakeItem(item, source) {
@@ -2504,7 +2504,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	hearthflamemask: {
 		name: "Hearthflame Mask",
-		spritenum: 761,
+		spritenum: 760,
 		forcedForme: "Ogerpon-Hearthflame",
 		itemUser: ["Ogerpon-Hearthflame"],
 		onTakeItem(item, source) {
@@ -7105,7 +7105,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	wellspringmask: {
 		name: "Wellspring Mask",
-		spritenum: 760,
+		spritenum: 759,
 		forcedForme: "Ogerpon-Wellspring",
 		itemUser: ["Ogerpon-Wellspring"],
 		onTakeItem(item, source) {
