@@ -1096,7 +1096,7 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	masterpieceteacup: {
 		name: "Masterpiece Teacup",
-		desc: "Evolves Poltchageist-Masterpiece into Sinistcha-Masterpiece when used.",
+		desc: "Evolves Poltchageist-Artisan into Sinistcha-Masterpiece when used.",
 	},
 	mawilite: {
 		name: "Mawilite",
