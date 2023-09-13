@@ -90318,7 +90318,7 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 			withdraw: ["9L1"],
 		},
 	},
-	poltchageistmasterpiece: {
+	poltchageistartisan: {
 		learnset: {
 			absorb: ["9L6"],
 			astonish: ["9L1"],
