@@ -2400,9 +2400,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 250,
 	},
 	mindseye: {
-		onFoeNegateImmunity(pokemon, type) {
-			if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
-		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			if (boost.accuracy && boost.accuracy < 0) {
@@ -2412,8 +2409,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 		},
+		onModifyMovePriority: -5,
 		onModifyMove(move) {
 			move.ignoreEvasion = true;
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
+			}
 		},
 		name: "Mind's Eye",
 		rating: 0,
