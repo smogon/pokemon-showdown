@@ -1871,10 +1871,6 @@ export class BattleActions {
 
 	terastallize(pokemon: Pokemon) {
 		let type = pokemon.teraType;
-		if (pokemon.species.baseSpecies === 'Ogerpon') {
-			// Can't hack the tera types to something else, so just force it here
-			type = pokemon.getTypes(true, true)[1] || pokemon.getTypes(true, true)[0];
-		}
 
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;

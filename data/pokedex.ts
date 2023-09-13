@@ -18184,6 +18184,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone", "Ogerpon-Teal-Tera", "Ogerpon-Wellspring-Tera", "Ogerpon-Hearthflame-Tera", "Ogerpon-Cornerstone-Tera"],
 		formeOrder: ["Ogerpon", "Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone", "Ogerpon-Teal-Tera", "Ogerpon-Wellspring-Tera", "Ogerpon-Hearthflame-Tera", "Ogerpon-Cornerstone-Tera"],
+		forceTeraType: "Grass",
 	},
 	ogerponwellspring: {
 		num: 1017,
@@ -18200,6 +18201,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Wellspring Mask",
 		changesFrom: "Ogerpon",
+		forceTeraType: "Water",
 	},
 	ogerponhearthflame: {
 		num: 1017,
@@ -18216,6 +18218,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Hearthflame Mask",
 		changesFrom: "Ogerpon",
+		forceTeraType: "Fire",
 	},
 	ogerponcornerstone: {
 		num: 1017,
@@ -18232,6 +18235,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Cornerstone Mask",
 		changesFrom: "Ogerpon",
+		forceTeraType: "Rock",
 	},
 	ogerpontealtera: {
 		num: 1017,
@@ -18248,6 +18252,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Teal Mask",
 		battleOnly: "Ogerpon",
+		forceTeraType: "Grass",
 	},
 	ogerponwellspringtera: {
 		num: 1017,
@@ -18264,6 +18269,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Wellspring Mask",
 		battleOnly: "Ogerpon-Wellspring",
+		forceTeraType: "Water",
 	},
 	ogerponhearthflametera: {
 		num: 1017,
@@ -18280,6 +18286,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Hearthflame Mask",
 		battleOnly: "Ogerpon-Hearthflame",
+		forceTeraType: "Fire",
 	},
 	ogerponcornerstonetera: {
 		num: 1017,
@@ -18296,6 +18303,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		requiredItem: "Cornerstone Mask",
 		battleOnly: "Ogerpon-Cornerstone",
+		forceTeraType: "Rock",
 	},
 	missingno: {
 		num: 0,
