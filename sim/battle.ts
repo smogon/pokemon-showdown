@@ -2834,11 +2834,7 @@ export class Battle {
 			if (choice) this.inputLog.push(`>${side.id} ${choice}`);
 		}
 		for (const side of this.sides) {
-			if (this.gen === 1 && (side.pokemon[0].getStatus().toString() === "slp" || side.pokemon[0].getStatus().toString() === "frz")) {
-				this.queue.addChoice(side.choice.actions, true);
-			} else {
-				this.queue.addChoice(side.choice.actions);
-			}
+			this.queue.addChoice(side.choice.actions);
 		}
 		this.clearRequest();
 
