@@ -1105,60 +1105,36 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 280,
 	},
-	embodyaspect: {
+	embodyaspectcornerstone: {
 		onStart(pokemon) {
-			if (pokemon.transformed) return;
-			if (pokemon.species.baseSpecies !== 'Ogerpon') return;
-			pokemon.addVolatile('embodyaspect');
+			this.boost({def: 1}, pokemon);
 		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['embodyaspect'];
-			this.add('-end', pokemon, 'Embody Aspect', '[silent]');
+		name: "Embody Aspect (Cornerstone)",
+		rating: 3.5,
+		num: 281,
+	},
+	embodyaspecthearthflame: {
+		onStart(pokemon) {
+			this.boost({atk: 1}, pokemon);
 		},
-		condition: {
-			noCopy: true,
-			onStart(pokemon, source, effect) {
-				this.add('-activate', pokemon, 'ability: Embody Aspect');
-				let boostedStat;
-				switch (pokemon.species.forme) {
-				case 'cornerstone': boostedStat = 'def'; break;
-				case 'hearthflame': boostedStat = 'atk'; break;
-				case 'wellspring': boostedStat = 'spd'; break;
-				default: boostedStat = 'spe'; break;
-				}
-				this.effectState.boostedStat = boostedStat;
-				this.add('-start', pokemon, 'embodyaspect' + this.effectState.boostedStat);
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.boostedStat !== 'atk') return;
-				this.debug('Embody Aspect atk boost');
-				return this.chainModify([5325, 4096]);
-			},
-			onModifyDefPriority: 6,
-			onModifyDef(def, target, source, move) {
-				if (this.effectState.boostedStat !== 'def') return;
-				this.debug('Embody Aspect def boost');
-				return this.chainModify([5325, 4096]);
-			},
-			onModifySpDPriority: 6,
-			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.boostedStat !== 'spd') return;
-				this.debug('boostedStat spd boost');
-				return this.chainModify([5325, 4096]);
-			},
-			onModifySpe(spe, pokemon) {
-				if (this.effectState.boostedStat !== 'spe') return;
-				this.debug('Embody Aspect spe boost');
-				return this.chainModify(1.5);
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Embody Aspect');
-			},
+		name: "Embody Aspect (Hearthflame)",
+		rating: 3.5,
+		num: 281,
+	},
+	embodyaspectteal: {
+		onStart(pokemon) {
+			this.boost({spe: 1}, pokemon);
 		},
-		isPermanent: true,
-		name: "Embody Aspect",
-		rating: 3,
+		name: "Embody Aspect (Teal)",
+		rating: 3.5,
+		num: 281,
+	},
+	embodyaspectwellspring: {
+		onStart(pokemon) {
+			this.boost({spd: 1}, pokemon);
+		},
+		name: "Embody Aspect (Wellspring)",
+		rating: 3.5,
 		num: 281,
 	},
 	emergencyexit: {

@@ -6570,7 +6570,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	syrupbomb: {
 		name: "Syrup Bomb",
-		
+
 		start: "  [POKEMON] got covered in sticky candy syrup!",
 	},
 	tackle: {

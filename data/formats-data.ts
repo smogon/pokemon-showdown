@@ -5760,6 +5760,21 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 		natDexTier: "OU",
 	},
+	ogerponwellspring: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
+	ogerponhearthflame: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
+	ogerponcornerstone: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
 	missingno: {
 		isNonstandard: "Custom",
 		tier: "Illegal",

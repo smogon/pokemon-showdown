@@ -4344,7 +4344,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Teddiursa",
 		evoLevel: 30,
-		evos: ["Ursaluna", "Ursaluna-Bloodmoon"],
+		evos: ["Ursaluna"],
 		eggGroups: ["Field"],
 	},
 	slugma: {
@@ -18128,7 +18128,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.2,
 		weightkg: 2.2,
 		color: "Green",
-		prevo: "Poltchageist-Poltchageist",
+		prevo: "Poltchageist-Masterpiece",
 		evoType: "useItem",
 		evoItem: "Chipped Pot",
 		eggGroups: ["Undiscovered"],
@@ -18181,8 +18181,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 39.8,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
-		otherFormes: ["Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone"],
-		formeOrder: ["Ogerpon", "Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone"],
+		otherFormes: ["Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone", "Ogerpon-Teal-Tera", "Ogerpon-Wellspring-Tera", "Ogerpon-Hearthflame-Tera", "Ogerpon-Cornerstone-Tera"],
+		formeOrder: ["Ogerpon", "Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone", "Ogerpon-Teal-Tera", "Ogerpon-Wellspring-Tera", "Ogerpon-Hearthflame-Tera", "Ogerpon-Cornerstone-Tera"],
 	},
 	ogerponwellspring: {
 		num: 1017,
