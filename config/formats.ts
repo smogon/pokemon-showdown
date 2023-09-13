@@ -770,8 +770,8 @@ export const Formats: FormatList = [
 			'Iron Valiant', 'Koraidon', 'Komala', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Numel', 'Palafin', 'Palkia', 'Palkia-Origin',
 			'Persian-Alola', 'Rayquaza', 'Regieleki', 'Slaking', 'Spectrier', 'Toxapex', 'Ursaluna', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta', 'Zamazenta-Crowned', 'Arena Trap', 'Contrary', 'Huge Power', 'Ice Scales', 'Illusion', 'Magnet Pull', 'Moody', 'Poison Heal', 'Pure Power',
-			'Shadow Tag', 'Stakeout', 'Stench', 'Speed Boost', 'Damp Rock', 'Eviolite', 'Heat Rock', 'King\'s Rock', 'Quick Claw', 'Baton Pass', 'Last Respects',
-			'Revival Blessing', 'Shed Tail',
+			'Shadow Tag', 'Stakeout', 'Stench', 'Speed Boost', 'Unburden', 'Damp Rock', 'Eviolite', 'Heat Rock', 'King\'s Rock', 'Quick Claw', 'Baton Pass',
+			'Last Respects', 'Revival Blessing', 'Shed Tail',
 		],
 	},
 	{
