@@ -1880,6 +1880,9 @@ export class BattleActions {
 		pokemon.addedType = '';
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
+		if (pokemon.species.name.startsWith('Ogerpon')) {
+			pokemon.formeChange(pokemon.species.id + 'tera', pokemon.getItem(), true);
+		}
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
 

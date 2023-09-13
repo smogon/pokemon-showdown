@@ -31,10 +31,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Future",
 	},
-	spiderweb: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	strangesteam: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -44,6 +40,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Future",
 	},
 	tailglow: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	takeheart: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
