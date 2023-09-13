@@ -1099,14 +1099,14 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	cornerstonemask: {
 		name: "Cornerstone Mask",
-		spritenum: 0, // TODO
+		spritenum: 759,
 		forcedForme: "Ogerpon-Cornerstone",
 		itemUser: ["Ogerpon-Cornerstone"],
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
 			return true;
 		},
-		num: 1000, // TODO
+		num: 2406,
 		gen: 9,
 	},
 	cornnberry: {
@@ -1731,7 +1731,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	fairyfeather: {
 		name: "Fairy Feather",
-		spritenum: 187, // I think this is funny also TODO
+		spritenum: 754,
 		fling: {
 			basePower: 10,
 		},
@@ -1741,7 +1741,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				return this.chainModify([4915, 4096]);
 			}
 		},
-		num: 12, // TODO
+		num: 2401,
 		gen: 9,
 	},
 	fairygem: {
@@ -2504,14 +2504,14 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	hearthflamemask: {
 		name: "Hearthflame Mask",
-		spritenum: 0, // TODO
+		spritenum: 761,
 		forcedForme: "Ogerpon-Hearthflame",
 		itemUser: ["Ogerpon-Hearthflame"],
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
 			return true;
 		},
-		num: 1000, // TODO
+		num: 2408,
 		gen: 9,
 	},
 	heatrock: {
@@ -3477,6 +3477,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1,
 		gen: 1,
 		isPokeball: true,
+	},
+	masterpieceteacup: {
+		name: "Masterpiece Teacup",
+		spritenum: 757,
+		fling: {
+			basePower: 80,
+		},
+		num: 2404,
+		gen: 9,
 	},
 	mawilite: {
 		name: "Mawilite",
@@ -5707,11 +5716,11 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	syrupyapple: {
 		name: "Syrupy Apple",
-		spritenum: 711, // TODO
+		spritenum: 755,
 		fling: {
 			basePower: 30,
 		},
-		num: 12, // TODO
+		num: 2402,
 		gen: 9,
 	},
 	tamatoberry: {
@@ -5772,14 +5781,14 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	tealmask: {
 		name: "Teal Mask",
-		spritenum: 0, // TODO
+		spritenum: 758,
 		forcedForme: "Ogerpon",
 		itemUser: ["Ogerpon"],
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
 			return true;
 		},
-		num: 1000, // TODO
+		num: 2405,
 		gen: 9,
 	},
 	terrainextender: {
@@ -6923,6 +6932,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
+	unremarkableteacup: {
+		name: "Unremarkable Teacup",
+		spritenum: 756,
+		fling: {
+			basePower: 80,
+		},
+		num: 2403,
+		gen: 9,
+	},
 	upgrade: {
 		name: "Up-Grade",
 		spritenum: 523,
@@ -7099,14 +7117,14 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	wellspringmask: {
 		name: "Wellspring Mask",
-		spritenum: 0, // TODO
+		spritenum: 760,
 		forcedForme: "Ogerpon-Wellspring",
 		itemUser: ["Ogerpon-Wellspring"],
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
 			return true;
 		},
-		num: 1000, // TODO
+		num: 2407,
 		gen: 9,
 	},
 	wepearberry: {
