@@ -9884,22 +9884,19 @@ export const Moves: {[moveid: string]: MoveData} = {
 	ivycudgel: {
 		num: 904,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 100,
 		category: "Physical",
 		name: "Ivy Cudgel",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1},
 		onModifyType(move, pokemon) {
 			switch (pokemon.species.name) {
-			case 'Ogerpon': case 'Ogerpon-Teal-Tera':
-				move.type = 'Grass';
+			case 'Ogerpon-Wellspring': case 'Ogerpon-Wellspring-Tera':
+				move.type = 'Water';
 				break;
 			case 'Ogerpon-Hearthflame': case 'Ogerpon-Hearthflame-Tera':
 				move.type = 'Fire';
-				break;
-			case 'Ogerpon-Wellspring': case 'Ogerpon-Wellspring-Tera':
-				move.type = 'Water';
 				break;
 			case 'Ogerpon-Cornerstone': case 'Ogerpon-Cornerstone-Tera':
 				move.type = 'Rock';
@@ -9908,7 +9905,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Grass",
 	},
 	jawlock: {
 		num: 746,
