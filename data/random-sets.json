@@ -2712,13 +2712,18 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["High Jump Kick", "Knock Off", "Poison Jab", "Stone Edge", "Swords Dance", "U-turn"],
+                "movepool": ["High Jump Kick", "Knock Off", "Poison Jab", "Stone Edge", "U-turn"],
                 "teraTypes": ["Dark"]
             },
             {
                 "role": "AV Pivot",
                 "movepool": ["Close Combat", "Fake Out", "Knock Off", "U-turn"],
                 "teraTypes": ["Dark", "Steel"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Knock Off", "Poison Jab", "Stone Edge", "Swords Dance"],
+                "teraTypes": ["Dark"]
             }
         ]
     },
