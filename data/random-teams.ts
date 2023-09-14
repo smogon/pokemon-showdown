@@ -560,7 +560,7 @@ export class RandomTeams {
 			['toxic', 'clearsmog'],
 			// Chansey and Blissey
 			['healbell', 'stealthrock'],
-			// Azelf
+			// Azelf and Zoroarks
 			['trick', 'uturn'],
 		];
 
