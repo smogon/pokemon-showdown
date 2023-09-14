@@ -622,6 +622,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	toxicthread: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	trickortreat: {
 		inherit: true,
 		isNonstandard: null,
