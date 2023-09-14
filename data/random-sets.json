@@ -285,7 +285,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Earthquake", "Explosion", "Rock Polish", "Stone Edge"],
-                "teraTypes": ["Grass", "Steel", "Ground"]
+                "teraTypes": ["Grass", "Ground", "Steel"]
             },
             {
                 "role": "Bulky Attacker",
