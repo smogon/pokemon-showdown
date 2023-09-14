@@ -267,7 +267,7 @@ describe('Dex data', function () {
 		6: 721,
 		7: 807,
 		8: 664,
-		9: 478,
+		9: 587,
 	};
 	const formes = {
 		// Gens 1 and 2 have no alternate formes
@@ -302,14 +302,15 @@ describe('Dex data', function () {
 	formes[8] = 17 + 5 + 1 + 1 + 1 + 3 + 3 + 7 + 14 + 8 +
 	  1 + 1 + 1 + 2 + 1 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 +
 	  (4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 2 + 3 + 1 + 2) - 1; // FIXME Rockruff
-	// Pikachu (8) + Origin (3) + Therian (4) + Alola (7) + Galar (7) + Paldea (4) + Hisui (16) +
-	// Rotom (5) + Arceus (17) + Basculin (2) + Meloetta (1) + Greninja (1) + Vivillon (2) + Hoopa (1) +
-	// Oricorio (3) + Lycanroc (2) + Mimikyu (1) + Magearna (1) + Toxtricity (1) + Antique (2) +
-	// Eiscue (1) + Indeedee (1) + Crowned (2) + Urshifu (1) + Zarude (1) + Calyrex (2) + Oinkologne (1) +
-	// Dudunsparce (1) + Palafin (1) + Maushold (1) + Squawkabilly (3) + Gimmighoul (1) + Basculegion (1)
-	formes[9] = 8 + 3 + 4 + 7 + 7 + 4 + 16 + 5 + 17 + 2 + 1 +
-	  1 + 2 + 1 + 3 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 + 1 +
-	  2 + 1 + 1 + 1 + 1 + 3 + 1 + 1;
+	// Pikachu (8) + Origin (3) + Therian (4) + Alola (15) + Galar (7) + Paldea (4) + Hisui (16) +
+	// Rotom (5) + Shaymin (1) + Arceus (17) + Basculin (2) + Meloetta (1) + Greninja (1) + Vivillon (2) +
+	// Hoopa (1) + Oricorio (3) + Lycanroc (2) + Mimikyu (1) + Magearna (1) + Toxtricity (1) + Antique (2) +
+	// Eiscue (1) + Indeedee (1) + Cramorant (2) + Morpeko (1) + Crowned (2) + Urshifu (1) + Zarude (1) +
+	// Calyrex (2) + Oinkologne (1) + Ursaluna (1) + Dudunsparce (1) + Palafin (1) + Maushold (1) +
+	// Squawkabilly (3) + Gimmighoul (1) + Basculegion (1) + Masterpiece (2) + Ogerpon (7)
+	formes[9] = 8 + 3 + 4 + 15 + 7 + 4 + 16 + 5 + 1 + 17 + 2 +
+	  1 + 1 + 2 + 1 + 3 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 +
+	  2 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 3 + 1 + 1 + 2 + 7;
 
 	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
 		it(`Gen ${gen} should have ${species[gen]} species and ${formes[gen]} formes`, () => {

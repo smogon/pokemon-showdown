@@ -520,8 +520,12 @@ export class TeamValidator {
 			name = `${set.name} (${set.species})`;
 		}
 
-		if (!set.teraType && this.gen === 9) {
-			set.teraType = species.types[0];
+		if (this.gen === 9) {
+			if (species.forceTeraType) {
+				set.teraType = species.forceTeraType;
+			} else if (!set.teraType) {
+				set.teraType = species.types[0];
+			}
 		}
 
 		if (!set.level) set.level = ruleTable.defaultLevel;

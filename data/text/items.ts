@@ -300,6 +300,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Colbur Berry",
 		desc: "Halves damage taken from a supereffective Dark-type attack. Single use.",
 	},
+	cornerstonemask: {
+		name: "Cornerstone Mask",
+		desc: "Ogerpon-Cornerstone can Terastallize to acquire Embody Aspect (Cornerstone).",
+	},
 	cornnberry: {
 		name: "Cornn Berry",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
@@ -505,6 +509,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	fairiumz: {
 		name: "Fairium Z",
 		desc: "If holder has a Fairy move, this item allows it to use a Fairy Z-Move.",
+	},
+	fairyfeather: {
+		name: "Fairy Feather",
+		desc: "Holder's Fairy-type attacks have 1.2x power.",
 	},
 	fairygem: {
 		name: "Fairy Gem",
@@ -766,6 +774,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	healball: {
 		name: "Heal Ball",
 		desc: "A remedial Poke Ball that restores the caught Pokemon's HP and status problem.",
+	},
+	hearthflamemask: {
+		name: "Hearthflame Mask",
+		desc: "Ogerpon-Hearthflame can Terastallize to acquire Embody Aspect (Hearthflame).",
 	},
 	heatrock: {
 		name: "Heat Rock",
@@ -1081,6 +1093,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	masterball: {
 		name: "Master Ball",
 		desc: "The best Ball with the ultimate performance. It will catch any wild Pokemon.",
+	},
+	masterpieceteacup: {
+		name: "Masterpiece Teacup",
+		desc: "Evolves Poltchageist-Artisan into Sinistcha-Masterpiece when used.",
 	},
 	mawilite: {
 		name: "Mawilite",
@@ -1762,6 +1778,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Sweet Apple",
 		desc: "Evolves Applin into Appletun when used.",
 	},
+	syrupyapple: {
+		name: "Syrupy Apple",
+		desc: "Evolves Applin into Dipplin when used.",
+	},
 	tamatoberry: {
 		name: "Tamato Berry",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
@@ -2232,6 +2252,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		transform: "  Bright light is about to burst out of [POKEMON]!",
 		activate: "[POKEMON] regained its true power through Ultra Burst!",
 	},
+	unremarkableteacup: {
+		name: "Unremarkable Teacup",
+		desc: "Evolves Poltchageist into Sinistcha when used.",
+	},
 	upgrade: {
 		name: "Up-Grade",
 		desc: "Evolves Porygon into Porygon2 when traded.",
@@ -2280,6 +2304,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 	weaknesspolicy: {
 		name: "Weakness Policy",
 		desc: "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use.",
+	},
+	wellspringmask: {
+		name: "Wellspring Mask",
+		desc: "Ogerpon-Wellspring can Terastallize to acquire Embody Aspect (Wellspring).",
 	},
 	wepearberry: {
 		name: "Wepear Berry",
