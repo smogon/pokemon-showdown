@@ -560,9 +560,7 @@ export class RandomTeams {
 			['toxic', 'clearsmog'],
 			// Chansey and Blissey
 			['healbell', 'stealthrock'],
-			// Mesprit
-			['healingwish', 'uturn'],
-			// Azelf
+			// Azelf and Zoroarks
 			['trick', 'uturn'],
 		];
 
@@ -580,6 +578,7 @@ export class RandomTeams {
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 		if (species.id === 'jirachi') this.incompatibleMoves(moves, movePool, 'bodyslam', 'healingwish');
 		if (species.baseSpecies !== 'Basculin') this.incompatibleMoves(moves, movePool, 'aquajet', 'flipturn');
+		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
@@ -793,7 +792,10 @@ export class RandomTeams {
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
-				if (types.includes(moveType) && move.priority > 0 && (move.basePower || move.basePowerCallback)) {
+				if (
+					types.includes(moveType) && (move.priority > 0 || (moveid === 'grassyglide' && abilities.has('Grassy Surge'))) &&
+					(move.basePower || move.basePowerCallback)
+				) {
 					priorityMoves.push(moveid);
 				}
 			}
@@ -990,9 +992,9 @@ export class RandomTeams {
 		role: RandomTeamsTypes.Role,
 	): boolean {
 		if ([
-			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
-			'Marvel Scale', 'Moody', 'Neutralizing Gas', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Snow Cloak',
-			'Steadfast', 'Steam Engine',
+			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Galvanize', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
+			'Marvel Scale', 'Misty Surge', 'Moody', 'Neutralizing Gas', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil',
+			'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -1015,7 +1017,7 @@ export class RandomTeams {
 			return (species.id === 'magcargo' && role === 'Setup Sweeper');
 		case 'Flash Fire':
 			return (
-				['Flame Body', 'Intimidate', 'Rock Head', 'Weak Armor'].some(m => abilities.has(m)) &&
+				['Drought', 'Flame Body', 'Intimidate', 'Rock Head', 'Weak Armor'].some(m => abilities.has(m)) &&
 				this.dex.getEffectiveness('Fire', species) < 0
 			);
 		case 'Guts':
@@ -1042,6 +1044,8 @@ export class RandomTeams {
 			return (!counter.get('Physical') || moves.has('stealthrock'));
 		case 'Natural Cure':
 			return species.id === 'pawmot';
+		case 'Overcoat': case 'Sweet Veil':
+			return types.includes('Grass');
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Prankster':
@@ -1076,8 +1080,6 @@ export class RandomTeams {
 			return !!counter.get('recoil');
 		case 'Swarm':
 			return (!counter.get('Bug') || !!counter.get('recovery'));
-		case 'Sweet Veil':
-			return types.includes('Grass');
 		case 'Swift Swim':
 			return (!moves.has('raindance') && !teamDetails.rain);
 		case 'Synchronize':
@@ -1087,7 +1089,7 @@ export class RandomTeams {
 		case 'Tinted Lens':
 			const hbraviaryCase = (species.id === 'braviaryhisui' && (role === 'Setup Sweeper' || role === 'Doubles Wallbreaker'));
 			const yanmegaCase = (species.id === 'yanmega' && role === 'Tera Blast user');
-			return (yanmegaCase || hbraviaryCase);
+			return (yanmegaCase || hbraviaryCase || species.id === 'illumise');
 		case 'Unaware':
 			return (species.id === 'clefable' && role !== 'Bulky Support');
 		case 'Unburden':
@@ -1096,7 +1098,7 @@ export class RandomTeams {
 			if (abilities.has('Iron Fist') && counter.ironFist >= 2) return true;
 			return (this.dex.getEffectiveness('Electric', species) < -1);
 		case 'Water Absorb':
-			return (species.id === 'quagsire' || moves.has('raindance'));
+			return (species.id === 'politoed' || species.id === 'quagsire' || moves.has('raindance'));
 		case 'Weak Armor':
 			return (moves.has('shellsmash') && species.id !== 'magcargo');
 		}
@@ -1125,6 +1127,8 @@ export class RandomTeams {
 		// Hard-code abilities here
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'scovillain') return 'Chlorophyll';
+		if (species.id === 'empoleon') return 'Competitive';
+		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'breloom') return 'Technician';
@@ -1274,15 +1278,13 @@ export class RandomTeams {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
+		if (species.id === 'scyther') return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
+		if (species.nfe || species.id === 'dipplin') return 'Eviolite';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (
-			(ability === 'Sheer Force' && counter.get('sheerforce'))
-		) {
-			return 'Life Orb';
-		}
+		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (ability === 'Anger Shell') return this.sample(['Rindo Berry', 'Passho Berry', 'Scope Lens', 'Sitrus Berry']);
 		if (moves.has('courtchange')) return 'Heavy-Duty Boots';
 		if (moves.has('populationbomb')) return 'Wide Lens';
@@ -1298,8 +1300,6 @@ export class RandomTeams {
 		) {
 			return 'Chesto Berry';
 		}
-		if (species.id === 'scyther') return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
-		if (species.nfe || species.id === 'dipplin') return 'Eviolite';
 		if (
 			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.includes('Flying') || !isDoubles)
 		) return 'Heavy-Duty Boots';
