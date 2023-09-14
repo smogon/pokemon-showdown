@@ -1690,13 +1690,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.nfe) {
+			if (pokemon.baseSpecies.nfe || pokemon.baseSpecies.id === 'dipplin') {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.nfe) {
+			if (pokemon.baseSpecies.nfe || pokemon.baseSpecies.id === 'dipplin') {
 				return this.chainModify(1.5);
 			}
 		},
