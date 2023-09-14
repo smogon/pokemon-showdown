@@ -4042,7 +4042,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Blood Moon", "Calm Mind", "Earth Power", "Moonlight", "Yawn"],
+                "movepool": ["Blood Moon", "Calm Mind", "Earth Power", "Moonlight"],
                 "teraTypes": ["Ghost", "Normal", "Poison"]
             }
         ]

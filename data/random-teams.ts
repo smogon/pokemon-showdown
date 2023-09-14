@@ -579,7 +579,7 @@ export class RandomTeams {
 		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 		if (species.id === 'jirachi') this.incompatibleMoves(moves, movePool, 'bodyslam', 'healingwish');
-		if (species.baseSpecies !== 'basculin') this.incompatibleMoves(moves, movePool, 'aquajet', 'flipturn');
+		if (species.baseSpecies !== 'Basculin') this.incompatibleMoves(moves, movePool, 'aquajet', 'flipturn');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
