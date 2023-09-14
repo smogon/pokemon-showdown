@@ -1890,7 +1890,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					if (possibleTarget.species.baseSpecies !== 'Ogerpon') {
 						pokemon.illusion = possibleTarget;
 					}
-					pokemon.illusion = possibleTarget;
 					break;
 				}
 			}
