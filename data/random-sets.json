@@ -839,7 +839,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Energy Ball", "Sludge Bomb", "Sunny Day", "Weather Ball"],
+                "movepool": ["Giga Drain", "Sludge Bomb", "Sunny Day", "Weather Ball"],
                 "teraTypes": ["Fire"]
             }
         ]
