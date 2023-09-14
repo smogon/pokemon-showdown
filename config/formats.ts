@@ -947,7 +947,7 @@ export const Formats: FormatList = [
 			'Arceus', 'Azumarill', 'Basculegion', 'Basculegion-F', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Cloyster', 'Darkrai',
 			'Dialga', 'Dialga-Origin', 'Dragapult', 'Dragonite', 'Enamorus-Base', 'Eternatus', 'Flutter Mane', 'Garchomp', 'Giratina', 'Giratina-Origin',
 			'Groudon', 'Iron Bundle', 'Komala', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Lilligant-Hisui', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia',
-			'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Spectrier', 'Ursaluna', 'Urshifu-Base', 'Walking Wake', 'Zacian', 'Zacian-Crowned',
+			'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Spectrier', 'Ursaluna-Base', 'Urshifu-Base', 'Walking Wake', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta', 'Zamazenta-Crowned', 'Zoroark-Hisui', 'Arena Trap', 'Moody', 'Shadow Tag', 'Damp Rock', 'King\'s Rock', 'Baton Pass', 'Shed Tail',
 		],
 		restricted: [
