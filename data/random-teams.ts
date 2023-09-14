@@ -1129,6 +1129,7 @@ export class RandomTeams {
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
+		if (species.id === 'dipplin') return 'Sticky Hold';
 
 		if (!isDoubles) {
 			if (species.id === 'hypno') return 'Insomnia';
