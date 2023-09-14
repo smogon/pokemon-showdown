@@ -573,7 +573,7 @@ export class RandomTeams {
 
 		if (!isDoubles) this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 
-		if (!types.includes('Dark') && teraType !== 'Dark') this.incompatibleMoves(moves, movePool, 'knockoff', 'suckerpunch')
+		if (!types.includes('Dark') && teraType !== 'Dark') this.incompatibleMoves(moves, movePool, 'knockoff', 'suckerpunch');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		if (species.id === "dugtrio") this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
@@ -785,7 +785,10 @@ export class RandomTeams {
 		}
 
 		// Enforce STAB priority
-		if (['Bulky Attacker', 'Bulky Setup', 'Wallbreaker', 'Doubles Wallbreaker'].includes(role) || PRIORITY_POKEMON.includes(species.id)) {
+		if (
+			['Bulky Attacker', 'Bulky Setup', 'Wallbreaker', 'Doubles Wallbreaker'].includes(role) ||
+			PRIORITY_POKEMON.includes(species.id)
+		) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -1009,7 +1012,7 @@ export class RandomTeams {
 		case 'Defiant':
 			return (!counter.get('Physical') || (abilities.has('Prankster') && (moves.has('thunderwave') || moves.has('taunt'))));
 		case 'Flame Body':
-			return (species.id === 'magcargo' && role === 'Setup Sweeper')
+			return (species.id === 'magcargo' && role === 'Setup Sweeper');
 		case 'Flash Fire':
 			return (
 				['Flame Body', 'Intimidate', 'Rock Head', 'Weak Armor'].some(m => abilities.has(m)) &&
@@ -1083,7 +1086,7 @@ export class RandomTeams {
 			return (!counter.get('technician') || abilities.has('Punk Rock') || abilities.has('Fur Coat'));
 		case 'Tinted Lens':
 			const hbraviaryCase = (species.id === 'braviaryhisui' && (role === 'Setup Sweeper' || role === 'Doubles Wallbreaker'));
-			const yanmegaCase = (species.id === 'yanmega' && role === 'Tera Blast user')
+			const yanmegaCase = (species.id === 'yanmega' && role === 'Tera Blast user');
 			return (yanmegaCase || hbraviaryCase);
 		case 'Unaware':
 			return (species.id === 'clefable' && role !== 'Bulky Support');
@@ -1140,7 +1143,6 @@ export class RandomTeams {
 			if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
 			if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
 			if (abilities.has('Soundproof') && (moves.has('substitute') || moves.has('clangoroussoul'))) return 'Soundproof';
-			
 		}
 
 		if (isDoubles) {
@@ -1603,7 +1605,9 @@ export class RandomTeams {
 			ivs.atk = 0;
 		}
 
-		if (moves.has('gyroball') || moves.has('trickroom') || (moves.has('flipturn') && moves.has('wish') && moves.has('scald'))) {
+		if (
+			moves.has('gyroball') || moves.has('trickroom') || (moves.has('flipturn') && moves.has('wish') && moves.has('scald'))
+		) {
 			evs.spe = 0;
 			ivs.spe = 0;
 		}
