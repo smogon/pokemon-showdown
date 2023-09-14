@@ -5873,4 +5873,32 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
+	ogerponwellspring: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ogerponhearthflame: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ogerponcornerstone: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ogerpontealtera: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ogerponwellspringtera: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ogerponhearthflametera: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	ogerponcornerstonetera: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 };
