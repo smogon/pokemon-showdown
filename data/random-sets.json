@@ -809,7 +809,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Encore", "Focus Blast", "Hydro Pump", "Hypnosis", "Ice Beam", "Rest", "Surf"],
+                "movepool": ["Encore", "Focus Blast", "Haze", "Hydro Pump", "Hypnosis", "Ice Beam", "Rest", "Surf"],
                 "teraTypes": ["Steel"]
             }
         ]
