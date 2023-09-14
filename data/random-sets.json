@@ -1538,7 +1538,7 @@
         "level": 79,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Bulky Support",
                 "movepool": ["Body Slam", "Fire Punch", "Healing Wish", "Iron Head", "Protect", "U-turn", "Wish"],
                 "teraTypes": ["Water"]
             }
@@ -1558,12 +1558,12 @@
         "level": 82,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["Close Combat", "Grass Knot", "Gunk Shot", "Knock Off", "Mach Punch", "Overheat", "Stone Edge"],
                 "teraTypes": ["Dark", "Fighting", "Fire"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Fast Support",
                 "movepool": ["Close Combat", "Flare Blitz", "Gunk Shot", "Knock Off", "Mach Punch", "Stone Edge", "Swords Dance", "U-turn"],
                 "teraTypes": ["Dark", "Fighting", "Fire"]
             }
@@ -2023,7 +2023,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Encore", "Knock Off", "Light Screen", "Psychic", "Reflect", "Stealth Rock", "Thunder Wave", "U-turn", "Yawn"],
                 "teraTypes": ["Electric", "Steel"]
             }
@@ -3293,7 +3293,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Moonblast", "Sticky Web", "Stun Spore", "U-turn"],
-                "teraTypes": ["Fighting", "Ghost"]
+                "teraTypes": ["Ghost"]
             },
             {
                 "role": "Tera Blast user",
@@ -4491,7 +4491,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Setup Sweeper",
+                "role": "Fast Attacker",
                 "movepool": ["Gunk Shot", "High Horsepower", "Iron Head", "Shift Gear"],
                 "teraTypes": ["Ground"]
             },
@@ -5061,7 +5061,7 @@
                 "teraTypes": ["Water"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["Ivy Cudgel", "Knock Off", "Play Rough", "Swords Dance", "Wood Hammer"],
                 "teraTypes": ["Water"]
             }
