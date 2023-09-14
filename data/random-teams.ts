@@ -1096,7 +1096,7 @@ export class RandomTeams {
 			if (abilities.has('Iron Fist') && counter.ironFist >= 2) return true;
 			return (this.dex.getEffectiveness('Electric', species) < -1);
 		case 'Water Absorb':
-			return species.id === 'quagsire';
+			return (species.id === 'quagsire' || moves.has('raindance'));
 		case 'Weak Armor':
 			return (moves.has('shellsmash') && species.id !== 'magcargo');
 		}
@@ -1277,7 +1277,6 @@ export class RandomTeams {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
 		if (
-			(ability === 'Magic Guard' && counter.damagingMoves.size > 1) ||
 			(ability === 'Sheer Force' && counter.get('sheerforce'))
 		) {
 			return 'Life Orb';
