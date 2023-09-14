@@ -526,7 +526,6 @@ export class RandomTeams {
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
 			['surf', 'hydropump'],
-			['flipturn', 'aquajet'],
 			['liquidation', 'wavecrash'],
 			['gigadrain', 'leafstorm'],
 			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
@@ -580,6 +579,7 @@ export class RandomTeams {
 		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 		if (species.id === 'jirachi') this.incompatibleMoves(moves, movePool, 'bodyslam', 'healingwish');
+		if (species.baseSpecies !== 'basculin') this.incompatibleMoves(moves, movePool, 'aquajet', 'flipturn');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
@@ -1298,7 +1298,7 @@ export class RandomTeams {
 		}
 		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if (species.id === 'scyther') return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
-		if (species.nfe) return 'Eviolite';
+		if (species.nfe || species.id === 'dipplin') return 'Eviolite';
 		if (
 			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.includes('Flying') || !isDoubles)
 		) return 'Heavy-Duty Boots';

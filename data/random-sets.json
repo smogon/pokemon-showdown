@@ -464,7 +464,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Close Combat", "Dual Wingbeat", "Defog", "U-turn"],
+                "movepool": ["Close Combat", "Defog", "Dual Wingbeat", "U-turn"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -4978,7 +4978,7 @@
         ]
     },
     "dipplin": {
-        "level": 92,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
