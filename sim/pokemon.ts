@@ -253,7 +253,12 @@ export class Pokemon {
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
-	canTerastallize: string | null;
+	/**
+	 * A Pokemon's Tera type if it can Terastallize
+	 * false if it is temporarily unable to tera and should have its ability restored upon switching out
+	 * null if its inability to tera is permanent
+	 */
+	canTerastallize: string | false | null;
 	teraType: string;
 	baseTypes: string[];
 	terastallized?: string;
@@ -1284,6 +1289,10 @@ export class Pokemon {
 			}
 		}
 
+		// Pokemon transformed into Ogerpon cannot Terastallize
+		// restoring their ability to tera after they untransform is handled ELSEWHERE
+		if (this.species.baseSpecies === 'Ogerpon') this.canTerastallize = false;
+
 		return true;
 	}
 
@@ -1421,6 +1430,7 @@ export class Pokemon {
 		this.ability = this.baseAbility;
 		this.hpType = this.baseHpType;
 		this.hpPower = this.baseHpPower;
+		if (this.canTerastallize === false) this.canTerastallize = this.teraType;
 		for (const i in this.volatiles) {
 			if (this.volatiles[i].linkedStatus) {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);

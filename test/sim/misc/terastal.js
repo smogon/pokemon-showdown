@@ -190,7 +190,7 @@ describe("Terastallization", function () {
 		assert.bounded(damage, [127, 151], "Actual damage: " + damage);
 	});
 
-	it.skip(`should allow hacked Megas to Terastallize in Hackmons play`, function () {
+	it(`should allow hacked Megas to Terastallize in Hackmons play`, function () {
 		battle = common.createBattle({formatid: 'gen9purehackmons@@@!teampreview'}, [[
 			{species: 'Mewtwo-Mega-X', moves: ['sleeptalk'], teraType: 'Fairy'},
 		], [
