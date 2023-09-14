@@ -5087,7 +5087,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Ivy Cudgel", "Superpower", "Swrods Dance", "Wood Hammer"],
+                "movepool": ["Ivy Cudgel", "Superpower", "Swords Dance", "Wood Hammer"],
                 "teraTypes": ["Rock"]
             }
         ]
