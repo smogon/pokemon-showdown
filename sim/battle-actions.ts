@@ -1864,16 +1864,18 @@ export class BattleActions {
 
 	canTerastallize(pokemon: Pokemon) {
 		if (pokemon.getItem().zMove || pokemon.canMegaEvo || pokemon.side.canDynamaxNow() ||
-			this.dex.gen !== 9 || (pokemon.species.baseSpecies === 'Ogerpon' && pokemon.transformed) ||
-			pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
+			this.dex.gen !== 9 || (pokemon.species.baseSpecies === 'Ogerpon' && pokemon.transformed)) {
 			return null;
 		}
 		return pokemon.teraType;
 	}
 
 	terastallize(pokemon: Pokemon) {
-		const type = pokemon.teraType;
+		if (pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
+			this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
+		}
 
+		const type = pokemon.teraType;
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
 		for (const ally of pokemon.side.pokemon) {
