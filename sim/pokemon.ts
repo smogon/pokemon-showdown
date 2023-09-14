@@ -254,9 +254,8 @@ export class Pokemon {
 	canUltraBurst: string | null | undefined;
 	readonly canGigantamax: string | null;
 	/**
-	 * A Pokemon's Tera type if it can Terastallize
-	 * false if it is temporarily unable to tera and should have its ability restored upon switching out
-	 * null if its inability to tera is permanent
+	 * A Pokemon's Tera type if it can Terastallize, false if it is temporarily unable to tera and should have its
+	 * ability restored upon switching out, or null if its inability to tera is permanent.
 	 */
 	canTerastallize: string | false | null;
 	teraType: string;
