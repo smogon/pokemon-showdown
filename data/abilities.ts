@@ -1717,9 +1717,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	hospitality: {
 		onStart(pokemon) {
 			for (const ally of pokemon.adjacentAllies()) {
-				if (this.heal(ally.baseMaxhp / 4)) {
-					this.add('-activate', ally, 'ability: Hospitality', '[of] ' + pokemon);
-				}
+				this.heal(ally.baseMaxhp / 4, ally, pokemon);
 			}
 		},
 		name: "Hospitality",
