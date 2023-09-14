@@ -69,7 +69,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Ice Spinner", "Rapid Spin", "Spikes", "Swords Dance"],
+                "movepool": ["Earthquake", "Ice Spinner", "Iron Head", "Rapid Spin", "Spikes", "Swords Dance"],
                 "teraTypes": ["Flying", "Water"]
             },
             {
