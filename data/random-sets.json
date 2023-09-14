@@ -69,7 +69,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Ice Spinner", "Rapid Spin", "Spikes", "Swords Dance"],
+                "movepool": ["Earthquake", "Ice Spinner", "Iron Head", "Rapid Spin", "Spikes", "Swords Dance"],
                 "teraTypes": ["Flying", "Water"]
             },
             {
@@ -839,7 +839,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Energy Ball", "Sludge Bomb", "Sunny Day", "Weather Ball"],
+                "movepool": ["Giga Drain", "Sludge Bomb", "Sunny Day", "Weather Ball"],
                 "teraTypes": ["Fire"]
             }
         ]
@@ -1538,7 +1538,7 @@
         "level": 79,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Bulky Support",
                 "movepool": ["Body Slam", "Fire Punch", "Healing Wish", "Iron Head", "Protect", "U-turn", "Wish"],
                 "teraTypes": ["Water"]
             }
@@ -1558,12 +1558,12 @@
         "level": 82,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["Close Combat", "Grass Knot", "Gunk Shot", "Knock Off", "Mach Punch", "Overheat", "Stone Edge"],
                 "teraTypes": ["Dark", "Fighting", "Fire"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Fast Support",
                 "movepool": ["Close Combat", "Flare Blitz", "Gunk Shot", "Knock Off", "Mach Punch", "Stone Edge", "Swords Dance", "U-turn"],
                 "teraTypes": ["Dark", "Fighting", "Fire"]
             }
@@ -2023,7 +2023,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Encore", "Knock Off", "Light Screen", "Psychic", "Reflect", "Stealth Rock", "Thunder Wave", "U-turn", "Yawn"],
                 "teraTypes": ["Electric", "Steel"]
             }
@@ -2712,13 +2712,18 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["High Jump Kick", "Knock Off", "Poison Jab", "Stone Edge", "Swords Dance", "U-turn"],
+                "movepool": ["High Jump Kick", "Knock Off", "Poison Jab", "Stone Edge", "U-turn"],
                 "teraTypes": ["Dark"]
             },
             {
                 "role": "AV Pivot",
                 "movepool": ["Close Combat", "Fake Out", "Knock Off", "U-turn"],
                 "teraTypes": ["Dark", "Steel"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Close Combat", "Knock Off", "Poison Jab", "Stone Edge", "Swords Dance"],
+                "teraTypes": ["Dark"]
             }
         ]
     },
@@ -3293,7 +3298,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Moonblast", "Sticky Web", "Stun Spore", "U-turn"],
-                "teraTypes": ["Fighting", "Ghost"]
+                "teraTypes": ["Ghost"]
             },
             {
                 "role": "Tera Blast user",
@@ -4491,7 +4496,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Setup Sweeper",
+                "role": "Fast Attacker",
                 "movepool": ["Gunk Shot", "High Horsepower", "Iron Head", "Shift Gear"],
                 "teraTypes": ["Ground"]
             },
@@ -5061,7 +5066,7 @@
                 "teraTypes": ["Water"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["Ivy Cudgel", "Knock Off", "Play Rough", "Swords Dance", "Wood Hammer"],
                 "teraTypes": ["Water"]
             }
