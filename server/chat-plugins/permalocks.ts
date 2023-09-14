@@ -163,10 +163,13 @@ export const Nominations = new class {
 		// todo fix when on good comp
 		return context.closePage(`permalocks-view-${entry.primaryID}`);
 	}
-	display(nom: Nomination) {
+	display(nom: Nomination, canEdit?: boolean) {
 		let buf = `<div class="infobox">`;
-		buf += `<strong><a href="/view-permalocks-view-${nom.primaryID}" target="_replace">${nom.primaryID}</a>`;
-		buf += `</strong> (submitted by ${nom.by})<br />`;
+		let title = nom.primaryID as string;
+		if (canEdit) {
+			title = `<a href="/view-permalocks-view-${nom.primaryID}" target="_replace">${nom.primaryID}</a>`;
+		}
+		buf += `<strong>${title}</strong> (submitted by ${nom.by})<br />`;
 		buf += `Submitted ${Chat.toTimestamp(new Date(nom.date), {human: true})}<br />`;
 		buf += `${Chat.count(nom.alts, 'alts')}, ${Chat.count(nom.ips, 'IPs')}`;
 		buf += `</div>`;
@@ -301,7 +304,7 @@ export const Nominations = new class {
 		};
 		return Config.standings;
 	}
-	displayAll() {
+	displayAll(canEdit: boolean) {
 		let buf = `<div class="pad">`;
 		buf += `<button class="button" name="send" value="/perma noms" style="float:right"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<h3>Pending perma nominations</h3><hr />`;
@@ -310,7 +313,7 @@ export const Nominations = new class {
 			return buf;
 		}
 		for (const nom of this.noms) {
-			buf += this.display(nom);
+			buf += this.display(nom, canEdit);
 			buf += `<br />`;
 		}
 		return buf;
@@ -371,7 +374,7 @@ export const commands: Chat.ChatCommands = {
 			return Nominations.add(target, this.connection);
 		},
 		list() {
-			this.checkCan('rangeban');
+			this.checkCan('lock');
 			return this.parse(`/j view-permalocks-list`);
 		},
 		nom() {
@@ -506,9 +509,9 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	permalocks: {
 		list(query, user, conn) {
-			this.checkCan('rangeban');
+			this.checkCan('lock');
 			this.title = '[Permalock Nominations]';
-			return Nominations.displayAll();
+			return Nominations.displayAll(user.can('rangeban'));
 		},
 		view(query, user) {
 			this.checkCan('rangeban');
