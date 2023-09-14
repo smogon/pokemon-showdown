@@ -660,7 +660,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Hospitality",
 		shortDesc: "On switch-in, this Pokemon restores 1/4 of its ally's maximum HP, rounded down.",
 
-		activate: "  [TARGET] drank down all the matcha that [POKEMON] made!",
+		heal: "  [POKEMON] drank down all the matcha that [SOURCE] made!",
 	},
 	hugepower: {
 		name: "Huge Power",
