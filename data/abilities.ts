@@ -1102,7 +1102,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			target.addVolatile('charge');
 		},
 		name: "Electromorphosis",
-		rating: 2.5,
+		rating: 3,
 		num: 280,
 	},
 	embodyaspectcornerstone: {
@@ -4704,7 +4704,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Toxic Chain",
-		rating: 2,
+		rating: 4.5,
 		num: 305,
 	},
 	toxicdebris: {
