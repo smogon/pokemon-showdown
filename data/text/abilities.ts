@@ -435,6 +435,22 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		start: "  Being hit by [MOVE] charged [POKEMON] with power!",
 	},
+	embodyaspectcornerstone: {
+		name: "Embody Aspect (Cornerstone)",
+		shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
+	},
+	embodyaspecthearthflame: {
+		name: "Embody Aspect (Hearthflame)",
+		shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
+	},
+	embodyaspectteal: {
+		name: "Embody Aspect (Teal)",
+		shortDesc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+	},
+	embodyaspectwellspring: {
+		name: "Embody Aspect (Wellspring)",
+		shortDesc: "On switch-in, this Pokemon's Special Defense is raised by 1 stage.",
+	},
 	emergencyexit: {
 		name: "Emergency Exit",
 		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage bringing it to 1/2 or less of its maximum HP, it immediately switches out to a chosen ally. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability. This effect applies to both direct and indirect damage, except Curse and Substitute on use, Belly Drum, Pain Split, and confusion damage.",
@@ -639,6 +655,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	honeygather: {
 		name: "Honey Gather",
 		shortDesc: "No competitive use.",
+	},
+	hospitality: {
+		name: "Hospitality",
+		shortDesc: "On switch-in, this Pokemon restores 1/4 of its ally's maximum HP, rounded down.",
+
+		activate: "  [TARGET] drank down all the matcha that [POKEMON] made!",
 	},
 	hugepower: {
 		name: "Huge Power",
@@ -951,6 +973,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon's types change to match the Terrain. Type reverts when Terrain ends.",
 
 		activate: "  [POKEMON] returned to its original type!",
+	},
+	mindseye: {
+		name: "Mind's Eye",
+		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves. Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage.",
+		shortDesc: "Fighting, Normal moves hit Ghost. Accuracy can't be lowered, ignores evasiveness.",
 	},
 	minus: {
 		name: "Minus",
@@ -1792,6 +1819,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Super Luck",
 		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
 	},
+	supersweetsyrup: {
+		name: "Supersweet Syrup",
+		shortDesc: "On switch-in, this Pokemon lowers the evasiveness of opponents by 1 stage.",
+
+		start: "  A supersweet aroma is wafting from the syrup covering [POKEMON]!",
+	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
 		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
@@ -1938,6 +1971,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Toxic Boost",
 		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5.",
 		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
+	},
+	toxicchain: {
+		name: "Toxic Chain",
+		desc: "This Pokemon's moves have a 30% chance of badly poisoning. This effect comes after a move's inherent secondary effect chance.",
+		shortDesc: "This Pokemon's moves have a 30% chance of badly poisoning.",
 	},
 	toxicdebris: {
 		name: "Toxic Debris",
