@@ -5853,7 +5853,15 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
+	poltchageistartisan: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
 	sinistcha: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+	},
+	sinistchamasterpiece: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
