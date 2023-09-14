@@ -68,12 +68,19 @@ export const Smogon = new class {
 
 export const Nominations = new class {
 	noms: Nomination[] = [];
+	icons: Record<string, string> = {};
 	constructor() {
 		this.load();
 	}
 	load() {
 		try {
-			this.noms = JSON.parse(FS('config/chat-plugins/permas.json').readSync());
+			let data = JSON.parse(FS('config/chat-plugins/permas.json').readSync());
+			if (Array.isArray(data)) {
+				data = {noms: data, icons: {}};
+				FS('config/chat-plugins/permas.json').writeSync(JSON.stringify(data));
+			}
+			this.noms = data.noms;
+			this.icons = data.icons;
 		} catch {}
 	}
 	fetchModlog(id: string) {
@@ -401,8 +408,9 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage("The link to the perma has not been set - the post could not be made.");
 			}
 			let postBuf = `[b][url="https://${Config.routes.root}/users/${primary}"]${primary}[/url][/b]`;
-			postBuf += ` was added to ${standings[standing]} by ${user.name} (${postReason}). `;
-			postBuf += `Nominated by ${nom.by}.\n`;
+			const icon = Nominations.icons[user.id] ? `:${Nominations.icons[user.id]}: - ` : ``;
+			postBuf += ` was added to ${standings[standing]} by ${user.name} (${icon}${postReason}).\n`;
+			postBuf += `Nominated by ${nom.by}.\n[spoiler=Nomination notes]${nom.info}[/spoiler]\n`;
 			postBuf += `${nom.alts.length ? `[spoiler=Alts]${nom.alts.join(', ')}[/spoiler]` : ""}\n`;
 			if (nom.ips.length) {
 				postBuf += `[spoiler=IPs]`;
@@ -500,6 +508,28 @@ export const commands: Chat.ChatCommands = {
 		resolve(target) {
 			this.checkCan('rangeban');
 			Nominations.close(target, this);
+		},
+		seticon(target, room, user) {
+			this.checkCan('rangeban');
+			let [monName, targetId] = target.split(',');
+			if (!targetId) targetId = user.id;
+			const mon = Dex.species.get(monName);
+			if (!mon.exists) {
+				return this.errorReply(`Species ${monName} does not exist.`);
+			}
+			Nominations.icons[targetId] = mon.id;
+			Nominations.save();
+			this.sendReply(`|html|Updated ${targetId === user.id ? 'your' : `${targetId}'s`} permalock post icon to <psicon pokemon='${mon.id}' />`);
+		},
+		deleteicon(target, room, user) {
+			this.checkCan('rangeban');
+			const targetID = toID(target);
+			if (!Nominations.icons[targetID]) {
+				return this.errorReply(`${targetID} does not have an icon set.`);
+			}
+			delete Nominations.icons[targetID];
+			Nominations.save();
+			this.sendReply(`Removed ${targetID}'s permalock post icon.`);
 		},
 		help: [
 			'/perma nom OR /perma - Open the page to make a nomination for a permanent punishment. Requires: % @ &',
