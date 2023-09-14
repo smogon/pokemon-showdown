@@ -1274,6 +1274,7 @@ export class RandomTeams {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
+		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
@@ -1297,7 +1298,6 @@ export class RandomTeams {
 		) {
 			return 'Chesto Berry';
 		}
-		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if (species.id === 'scyther') return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
 		if (species.nfe || species.id === 'dipplin') return 'Eviolite';
 		if (
