@@ -1103,7 +1103,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Ogerpon-Cornerstone",
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 1017 && (move.type === 'Grass' || move.type === 'Rock')) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Cornerstone')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -2514,7 +2514,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Ogerpon-Hearthflame",
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 1017 && (move.type === 'Grass' || move.type === 'Fire')) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Hearthflame')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -7121,7 +7121,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Ogerpon-Wellspring",
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 1017 && (move.type === 'Grass' || move.type === 'Water')) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Wellspring')) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
