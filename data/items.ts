@@ -1101,6 +1101,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Cornerstone Mask",
 		spritenum: 758,
 		forcedForme: "Ogerpon-Cornerstone",
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 1017 && (move.type === 'Grass' || move.type === 'Rock')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		itemUser: ["Ogerpon-Cornerstone"],
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
@@ -2506,6 +2512,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Hearthflame Mask",
 		spritenum: 760,
 		forcedForme: "Ogerpon-Hearthflame",
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 1017 && (move.type === 'Grass' || move.type === 'Fire')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		itemUser: ["Ogerpon-Hearthflame"],
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
@@ -7107,6 +7119,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		name: "Wellspring Mask",
 		spritenum: 759,
 		forcedForme: "Ogerpon-Wellspring",
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.num === 1017 && (move.type === 'Grass' || move.type === 'Water')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
 		itemUser: ["Ogerpon-Wellspring"],
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
