@@ -439,7 +439,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Fire Blast", "Pain Split", "Sludge Bomb", "Toxic Spikes", "Will-O-Wisp"],
+                "movepool": ["Fire Blast", "Gunk Shot", "Pain Split", "Toxic Spikes", "Will-O-Wisp"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -449,7 +449,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Defog", "Fire Blast", "Pain Split", "Sludge Bomb", "Strange Steam", "Will-O-Wisp"],
+                "movepool": ["Defog", "Fire Blast", "Gunk Shot", "Pain Split", "Strange Steam", "Will-O-Wisp"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -809,7 +809,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Encore", "Focus Blast", "Hydro Pump", "Hypnosis", "Ice Beam", "Rest", "Surf"],
+                "movepool": ["Encore", "Haze", "Hydro Pump", "Hypnosis", "Ice Beam", "Rest", "Surf"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3609,6 +3609,11 @@
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Glare", "Rest", "Stealth Rock", "Stone Edge"],
                 "teraTypes": ["Dragon", "Water"]
+            },
+            {
+                "role": "Fast Bulky Setup",
+                "movepool": ["Coil", "Earthquake", "Rock Blast", "Scale Shot"],
+                "teraTypes": ["Dragon"]
             }
         ]
     },
@@ -4987,7 +4992,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Draco Meteor", "Dragon Tail", "Giga Drain", "Leaf Storm", "Recover", "Sucker Punch"],
+                "movepool": ["Draco Meteor", "Dragon Tail", "Giga Drain", "Recover", "Sucker Punch"],
                 "teraTypes": ["Steel"]
             }
         ]
