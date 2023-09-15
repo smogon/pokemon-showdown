@@ -387,6 +387,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	heatproof: {
 		inherit: true,
+		onSourceModifyAtk() {},
+		onSourceModifySpA() {},
+		onSourceBasePowerPriority: 18,
+		onSourceBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Heatproof BP weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		rating: 2,
 	},
 	heavymetal: {
