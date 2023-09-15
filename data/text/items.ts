@@ -632,10 +632,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Friend Ball",
 		desc: "A Poke Ball that makes caught Pokemon more friendly.",
 	},
-	frostorb: {
-		name: "Frost Orb",
-		desc: "At the end of every turn, this item attempts to give the holder frostbite.",
-	},
 	fullincense: {
 		name: "Full Incense",
 		desc: "Holder moves last in its priority bracket.",
@@ -2281,10 +2277,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Weakness Policy",
 		desc: "If holder is hit super effectively, raises Attack, Sp. Atk by 2 stages. Single use.",
 	},
-	weatherballoon: {
-		name: "Weather Balloon",
-		desc: "Holder's climate Weathergies last 8 turns instead of 5.",
-	},
 	wepearberry: {
 		name: "Wepear Berry",
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
@@ -2292,11 +2284,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 	whippeddream: {
 		name: "Whipped Dream",
 		desc: "Evolves Swirlix into Slurpuff when traded.",
-	},
-	whirligig: {
-		name: "Whirligig",
-		desc: "If held by a Castform, this item allows it to transform into Castform-Whirly in battle during Magnetize.",
-		shortDesc: "Allows Castform to enter Castform-Whirly form.",
 	},
 	whiteherb: {
 		name: "White Herb",
@@ -2393,7 +2380,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 
 	// CAP items
-
 	crucibellite: {
 		name: "Crucibellite",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
@@ -2401,5 +2387,20 @@ export const ItemsText: {[k: string]: ItemText} = {
 	vilevial: {
 		name: "Vile Vial",
 		desc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
+	},
+
+	// swse
+	frostorb: {
+		name: "Frost Orb",
+		desc: "At the end of every turn, this item attempts to give the holder frostbite.",
+	},
+	weatherballoon: {
+		name: "Weather Balloon",
+		desc: "Holder's Climate Weathergies last 8 turns instead of 5.",
+	},
+	whirligig: {
+		name: "Whirligig",
+		desc: "If held by a Castform, this item allows it to transform into Castform-Whirly in battle during Magnetosphere.",
+		shortDesc: "Allows Castform to enter Castform-Whirly form.",
 	},
 };

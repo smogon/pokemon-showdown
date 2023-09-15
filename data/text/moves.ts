@@ -252,8 +252,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	attract: {
 		name: "Attract",
-		desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if both the user and the target are the same gender, if either is genderless, or if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
-		shortDesc: "A target of the opposite gender gets infatuated.",
+		desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
+		shortDesc: "Infatuates the target.",
 		gen5: {
 			desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if both the user and the target are the same gender, if either is genderless, or if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability are immune.",
 		},
@@ -2466,7 +2466,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	gmaxcuddle: {
 		name: "G-Max Cuddle",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes infatuated, even if they have a substitute. This effect does not happen for a target if both it and the user are the same gender, if either is genderless, or if the target is already infatuated.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes infatuated, even if they have a substitute. This effect does not happen for a target if the target is already infatuated.",
 		shortDesc: "Base move affects power. Foes: infatuated.",
 	},
 	gmaxdepletion: {

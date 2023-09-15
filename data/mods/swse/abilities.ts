@@ -39,37 +39,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 0.1,
 		num: 0,
 	},
-	absolutezero: {
-		onBasePowerPriority: 21,
-		onBasePower(basePower, attacker, defender, move) {
-			if (attacker.hasItem('utilityumbrella')) return;
-			if (this.field.isClimateWeather(['hail', 'snow'])) {
-				if (move.type === 'Ice') {
-					this.debug('Absolute Zero boost');
-					return this.chainModify(1.3);
-				}
-			}
-		},
-		onModifyMovePriority: -2,
-		onModifyMove(move, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isClimateWeather(['hail', 'snow']) && move.secondaries) {
-				if (move.type === 'Ice') {
-					this.debug('Absolute Zero 2x secondary chance');
-					for (const secondary of move.secondaries) {
-						if (secondary.chance) secondary.chance *= 2;
-					}
-				}
-			}
-			if (move.self?.chance) move.self.chance *= 2;
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
-		},
-		name: "Absolute Zero",
-		rating: 3,
-		num: -16,
-	},
 	adaptability: {
 		onModifyMove(move) {
 			move.stab = 2;
@@ -215,14 +184,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Anticipation",
 		rating: 0.5,
 		num: 107,
-	},
-	arcanum: {
-		onStart(source) {
-			this.field.setEnergyWeather('dragonforce');
-		},
-		name: "Arcanum",
-		rating: 3,
-		num: -11,
 	},
 	arenatrap: {
 		onFoeTrapPokemon(pokemon) {
@@ -668,14 +629,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: 14,
 	},
-	condensation: {
-		onStart(source) {
-			this.field.setClimateWeather('foghorn');
-		},
-		name: "Condensation",
-		rating: 3,
-		num: -2,
-	},
 	contrary: {
 		onChangeBoost(boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
@@ -1096,14 +1049,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: 87,
 	},
-	dustdevil: {
-		onStart(source) {
-			this.field.setIrritantWeather('duststorm');
-		},
-		name: "Dust Devil",
-		rating: 3,
-		num: -3,
-	},
 	earlybird: {
 		name: "Early Bird",
 		// Implemented in statuses.js
@@ -1173,14 +1118,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 1,
 		num: 194,
 	},
-	eventide: {
-		onStart(source) {
-			this.field.setClimateWeather('bloodmoon');
-		},
-		name: "Eventide",
-		rating: 3,
-		num: -1,
-	},
 	fairyaura: {
 		onStart(pokemon) {
 			if (this.suppressingAbility(pokemon)) return;
@@ -1196,14 +1133,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Fairy Aura",
 		rating: 3,
 		num: 187,
-	},
-	ferroflux: {
-		onStart(source) {
-			this.field.setEnergyWeather('magnetize');
-		},
-		name: "Ferroflux",
-		rating: 3,
-		num: -13,
 	},
 	filter: {
 		onSourceModifyDamage(damage, source, target, move) {
@@ -1490,14 +1419,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 		num: 169,
 	},
-	galeforce: {
-		onStart(source) {
-			this.field.setClearingWeather('strongwinds');
-		},
-		name: "Galeforce",
-		rating: 3,
-		num: -14,
-	},
 	galewings: {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
@@ -1525,26 +1446,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Galvanize",
 		rating: 4,
 		num: 206,
-	},
-	glacialarmor: {
-		onModifyDef(def, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isClimateWeather(['hail', 'snow'])) {
-				return this.chainModify(2);
-			}
-		},
-		onModifySpD(spd, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
-			if (this.field.isClimateWeather(['hail', 'snow'])) {
-				return this.chainModify(2);
-			}
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
-		},
-		name: "Glacial Armor",
-		rating: 2,
-		num: -15,
 	},
 	gluttony: {
 		name: "Gluttony",
@@ -1739,24 +1640,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		rating: 2.5,
 		num: 139,
-	},
-	haunting: {
-		onModifySpe(spe, pokemon) {
-			if (this.field.isClimateWeather(['bloodmoon', 'haunt'])) {
-				return this.chainModify(2);
-			}
-		},
-		name: "Haunting",
-		rating: 3,
-		num: -17,
-	},
-	hayfever: {
-		onStart(source) {
-			this.field.setIrritantWeather('pollinate');
-		},
-		name: "Hay Fever",
-		rating: 3,
-		num: -4,
 	},
 	healer: {
 		name: "Healer",
@@ -2030,14 +1913,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Imposter",
 		rating: 5,
 		num: 150,
-	},
-	incantation: {
-		onStart(source) {
-			this.field.setIrritantWeather('sprinkle');
-		},
-		name: "Incantation",
-		rating: 3,
-		num: -7,
 	},
 	infiltrator: {
 		onModifyMove(move) {
@@ -2419,29 +2294,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Magnet Pull",
 		rating: 4,
 		num: 42,
-	},
-	malice: {
-		onModifySpAPriority: 5,
-		onModifySpA(spa, source, pokemon) {
-			if (['bloodmoon'].includes(pokemon.effectiveClimateWeather())) {
-				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.5);
-			}
-		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, source, pokemon) {
-			if (['bloodmoon'].includes(pokemon.effectiveClimateWeather())) {
-				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.5);
-			}
-		},
-		onClimateWeather(target, source, effect) {
-			if (target.hasItem('utilityumbrella')) return;
-			if (effect.id === 'bloodmoon') {
-				this.damage(target.baseMaxhp / 8, target, target);
-			}
-		},
-		name: "Malice",
-		rating: 3,
-		num: -18,
 	},
 	marvelscale: {
 		onModifyDefPriority: 6,
@@ -3185,14 +3037,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2,
 		num: 143,
 	},
-	pollution: {
-		onStart(source) {
-			this.field.setIrritantWeather('smogspread');
-		},
-		name: "Pollution",
-		rating: 3,
-		num: -6,
-	},
 	powerconstruct: {
 		onResidualOrder: 29,
 		onResidual(pokemon) {
@@ -3914,22 +3758,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2,
 		num: 251,
 	},
-	seance: {
-		onStart(source) {
-			this.field.setEnergyWeather('haunt');
-		},
-		name: "Se\u0301ance",
-		rating: 3,
-		num: -9,
-	},
-	secretion: {
-		onStart(source) {
-			this.field.setIrritantWeather('swarmsignal');
-		},
-		name: "Secretion",
-		rating: 3,
-		num: -5,
-	},
 	seedsower: {
 		onDamagingHit(damage, target, source, move) {
 			this.field.setTerrain('grassyterrain');
@@ -4318,14 +4146,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 		num: 176,
 	},
-	standoff: {
-		onStart(source) {
-			this.field.setEnergyWeather('auraprojection');
-		},
-		name: "Stand Off",
-		rating: 3,
-		num: -8,
-	},
 	static: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
@@ -4444,14 +4264,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Storm Drain",
 		rating: 3,
 		num: 114,
-	},
-	stormfront: {
-		onStart(source) {
-			this.field.setEnergyWeather('supercell');
-		},
-		name: "Stormfront",
-		rating: 3,
-		num: -12,
 	},
 	strongjaw: {
 		onBasePowerPriority: 19,
@@ -4859,14 +4671,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2.5,
 		num: 36,
 	},
-	transcendence: {
-		onStart(source) {
-			this.field.setEnergyWeather('cosmicrays');
-		},
-		name: "Transcendence",
-		rating: 3,
-		num: -10,
-	},
 	transistor: {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
@@ -5082,31 +4886,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Wandering Spirit",
 		rating: 2.5,
 		num: 254,
-	},
-	warpmist: {
-		onModifySpAPriority: 5,
-		onModifySpA(spa, source, pokemon) {
-			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
-				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.2);
-			}
-		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, source, pokemon) {
-			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
-				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.2);
-			}
-		},
-		onTryHit(target, source, move) {
-			if (target.hasItem('ringtarget')) return;
-			if (target !== source && move.ignoreImmunity === true) {
-				this.add('-immune', target, '[from] ability: Warp Mist');
-				this.debug('Warp Mist negate immunity');
-				move.ignoreImmunity = false;
-			}
-		},
-		name: "Warp Mist",
-		rating: 2,
-		num: -19,
 	},
 	waterabsorb: {
 		onTryHit(target, source, move) {
@@ -5407,7 +5186,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 		name: "Mountaineer",
 		rating: 3,
-		num: -1002,
+		num: 1001,
 	},
 	rebound: {
 		isNonstandard: "CAP",
@@ -5440,13 +5219,236 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		isBreakable: true,
 		rating: 3,
-		num: -1003,
+		num: 1002,
 	},
 	persistent: {
 		isNonstandard: "CAP",
 		name: "Persistent",
 		// implemented in the corresponding move
 		rating: 3,
-		num: -1004,
+		num: 1003,
+	},
+
+	// swse
+	absolutezero: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('utilityumbrella')) return;
+			if (this.field.isClimateWeather(['hail', 'snow'])) {
+				if (move.type === 'Ice') {
+					this.debug('Absolute Zero boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		onModifyMovePriority: -2,
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (this.field.isClimateWeather(['hail', 'snow']) && move.secondaries) {
+				if (move.type === 'Ice') {
+					this.debug('Absolute Zero 2x secondary chance');
+					for (const secondary of move.secondaries) {
+						if (secondary.chance) secondary.chance *= 2;
+					}
+				}
+			}
+			if (move.self?.chance) move.self.chance *= 2;
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		name: "Absolute Zero",
+		rating: 3,
+		num: -16,
+	},
+	arcanum: {
+		onStart(source) {
+			this.field.setEnergyWeather('dragonforce');
+		},
+		name: "Arcanum",
+		rating: 3,
+		num: -11,
+	},
+	condensation: {
+		onStart(source) {
+			this.field.setClimateWeather('foghorn');
+		},
+		name: "Condensation",
+		rating: 3,
+		num: -2,
+	},
+	dustdevil: {
+		onStart(source) {
+			this.field.setIrritantWeather('duststorm');
+		},
+		name: "Dust Devil",
+		rating: 3,
+		num: -3,
+	},
+	eventide: {
+		onStart(source) {
+			this.field.setClimateWeather('bloodmoon');
+		},
+		name: "Eventide",
+		rating: 3,
+		num: -1,
+	},
+	ferroflux: {
+		onStart(source) {
+			this.field.setEnergyWeather('magnetize');
+		},
+		name: "Ferroflux",
+		rating: 3,
+		num: -13,
+	},
+	galeforce: {
+		onStart(source) {
+			this.field.setClearingWeather('strongwinds');
+		},
+		name: "Galeforce",
+		rating: 3,
+		num: -14,
+	},
+	glacialarmor: {
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (this.field.isClimateWeather(['hail', 'snow'])) {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (this.field.isClimateWeather(['hail', 'snow'])) {
+				return this.chainModify(2);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		name: "Glacial Armor",
+		rating: 2,
+		num: -15,
+	},
+	haunting: {
+		onModifySpe(spe, pokemon) {
+			if (this.field.isClimateWeather(['bloodmoon', 'haunt'])) {
+				return this.chainModify(2);
+			}
+		},
+		name: "Haunting",
+		rating: 3,
+		num: -17,
+	},
+	hayfever: {
+		onStart(source) {
+			this.field.setIrritantWeather('pollinate');
+		},
+		name: "Hay Fever",
+		rating: 3,
+		num: -4,
+	},
+	incantation: {
+		onStart(source) {
+			this.field.setIrritantWeather('sprinkle');
+		},
+		name: "Incantation",
+		rating: 3,
+		num: -7,
+	},
+	malice: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa, source, pokemon) {
+			if (['bloodmoon'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.5);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, source, pokemon) {
+			if (['bloodmoon'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.5);
+			}
+		},
+		onClimateWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
+			if (effect.id === 'bloodmoon') {
+				this.damage(target.baseMaxhp / 8, target, target);
+			}
+		},
+		name: "Malice",
+		rating: 3,
+		num: -18,
+	},
+	pollution: {
+		onStart(source) {
+			this.field.setIrritantWeather('smogspread');
+		},
+		name: "Pollution",
+		rating: 3,
+		num: -6,
+	},
+	seance: {
+		onStart(source) {
+			this.field.setEnergyWeather('haunt');
+		},
+		name: "Se\u0301ance",
+		rating: 3,
+		num: -9,
+	},
+	secretion: {
+		onStart(source) {
+			this.field.setIrritantWeather('swarmsignal');
+		},
+		name: "Secretion",
+		rating: 3,
+		num: -5,
+	},
+	standoff: {
+		onStart(source) {
+			this.field.setEnergyWeather('auraprojection');
+		},
+		name: "Stand Off",
+		rating: 3,
+		num: -8,
+	},
+	stormfront: {
+		onStart(source) {
+			this.field.setEnergyWeather('supercell');
+		},
+		name: "Stormfront",
+		rating: 3,
+		num: -12,
+	},
+	transcendence: {
+		onStart(source) {
+			this.field.setEnergyWeather('cosmicrays');
+		},
+		name: "Transcendence",
+		rating: 3,
+		num: -10,
+	},
+	warpmist: { // does NOT fucking work
+		onModifySpAPriority: 5,
+		onModifySpA(spa, source, pokemon) {
+			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.2);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, source, pokemon) {
+			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.2);
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target.hasItem('ringtarget')) return;
+			if (target !== source && move.ignoreImmunity === true) {
+				this.add('-immune', target, '[from] ability: Warp Mist');
+				this.debug('Warp Mist negate immunity');
+				move.ignoreImmunity = false;
+			}
+		},
+		name: "Warp Mist",
+		rating: 2,
+		num: -19,
 	},
 };

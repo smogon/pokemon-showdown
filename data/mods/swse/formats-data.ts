@@ -9,17 +9,17 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "NFE",
 	},
-	veOUsaur: {
+	venusaur: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
-	veOUsaurmega: {
+	venusaurmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
-	veOUsaurgmax: {
+	venusaurgmax: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 	},
@@ -7031,7 +7031,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
-	sOUgglow: {
+	snugglow: {
 		isNonstandard: "CAP",
 		tier: "CAP LC",
 	},

@@ -2063,21 +2063,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 2,
 		isPokeball: true,
 	},
-	frostorb: {
-		name: "Frost Orb",
-		spritenum: 145,
-		fling: {
-			basePower: 30,
-			status: 'frb',
-		},
-		onResidualOrder: 28,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			pokemon.trySetStatus('frb', pokemon);
-		},
-		num: -1,
-		gen: 9,
-	},
 	fullincense: {
 		name: "Full Incense",
 		spritenum: 155,
@@ -7046,15 +7031,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 639,
 		gen: 6,
 	},
-	weatherballoon: {
-		name: "Weather Balloon",
-		spritenum: 6,
-		fling: {
-			basePower: 10,
-		},
-		num: -2,
-		gen: 10,
-	},
 	wepearberry: {
 		name: "Wepear Berry",
 		spritenum: 533,
@@ -7077,19 +7053,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 646,
 		gen: 6,
 		isNonstandard: "Past",
-	},
-	whirligig: {
-		name: "Whirligig",
-		spritenum: 64,
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
-				return false;
-			}
-			return true;
-		},
-		itemUser: ["Castform"],
-		num: -1,
-		gen: 10,
 	},
 	whiteherb: {
 		name: "White Herb",
@@ -7539,7 +7502,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
-		num: -1001,
+		num: 1001,
 		gen: 6,
 		isNonstandard: "CAP",
 	},
@@ -7563,8 +7526,47 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		forcedForme: "Venomicon-Epilogue",
 		itemUser: ["Venomicon-Epilogue"],
-		num: -1002,
+		num: 1002,
 		gen: 8,
 		isNonstandard: "CAP",
+	},
+
+	// swse
+	frostorb: {
+		name: "Frost Orb",
+		spritenum: 145,
+		fling: {
+			basePower: 30,
+			status: 'frb',
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			pokemon.trySetStatus('frb', pokemon);
+		},
+		num: -2,
+		gen: 9,
+	},
+	weatherballoon: {
+		name: "Weather Balloon",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -3,
+		gen: 10,
+	},
+	whirligig: {
+		name: "Whirligig",
+		spritenum: 64,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
+				return false;
+			}
+			return true;
+		},
+		itemUser: ["Castform"],
+		num: -4,
+		gen: 10,
 	},
 };

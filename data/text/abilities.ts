@@ -3,11 +3,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "No Ability",
 		shortDesc: "Does nothing.",
 	},
-	absolutezero: {
-		name: "Absolute Zero",
-		desc: "If Hail is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3, and have their secondary effect chance doubled. This Pokemon takes no damage from Sandstorm.",
-		shortDesc: "This Pokemon's Ice attacks do 1.3x in Hail and have 2x status chance. Hail immunity.",
-	},
 	adaptability: {
 		name: "Adaptability",
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5.",
@@ -71,10 +66,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		},
 
 		activate: "  [POKEMON] shuddered!",
-	},
-	arcanum: {
-		name: "Arcanum",
-		shortDesc: "On switch-in, this Pokemon summons Dragon Force.",
 	},
 	arenatrap: {
 		name: "Arena Trap",
@@ -261,10 +252,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Compound Eyes",
 		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
 	},
-	condensation: {
-		name: "Condensation",
-		shortDesc: "On switch-in, this Pokemon summons Foghorn.",
-	},
 	contrary: {
 		name: "Contrary",
 		shortDesc: "If this Pokemon has a stat stage raised it is lowered instead, and vice versa.",
@@ -303,8 +290,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	cutecharm: {
 		name: "Cute Charm",
-		desc: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
-		shortDesc: "30% chance of infatuating Pokemon of the opposite gender if they make contact.",
+		desc: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated.",
+		shortDesc: "30% chance of infatuating Pokemon if they make contact.",
 		gen4: {
 			desc: "There is a 30% chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -417,10 +404,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		damage: "  ([POKEMON] was hurt by its Dry Skin.)",
 	},
-	dustdevil: {
-		name: "Dust Devil",
-		shortDesc: "On switch-in, this Pokemon summons Dust Storm.",
-	},
 	earlybird: {
 		name: "Early Bird",
 		shortDesc: "This Pokemon's sleep counter drops by 2 instead of 1.",
@@ -457,20 +440,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "When this Pokemon has more than 1/2 its maximum HP and takes damage bringing it to 1/2 or less of its maximum HP, it immediately switches out to a chosen ally. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability. This effect applies to both direct and indirect damage, except Curse and Substitute on use, Belly Drum, Pain Split, and confusion damage.",
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
 	},
-	eventide: {
-		name: "Eventide",
-		shortDesc: "On switch-in, this Pokemon summons Blood Moon.",
-	},
 	fairyaura: {
 		name: "Fairy Aura",
 		desc: "While this Pokemon is active, the power of Fairy-type moves used by active Pokemon is multiplied by 1.33.",
 		shortDesc: "While this Pokemon is active, a Fairy move used by any Pokemon has 1.33x power.",
 
 		start: "  [POKEMON] is radiating a fairy aura!",
-	},
-	ferroflux: {
-		name: "Ferroflux",
-		shortDesc: "On switch-in, this Pokemon summons Magnetize.",
 	},
 	filter: {
 		name: "Filter",
@@ -570,10 +545,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Fur Coat",
 		shortDesc: "This Pokemon's Defense is doubled.",
 	},
-	galeforce: {
-		name: "Galeforce",
-		shortDesc: "On switch-in, this Pokemon summons Strong Winds.",
-	},
 	galewings: {
 		name: "Gale Wings",
 		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
@@ -585,10 +556,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Galvanize",
 		desc: "This Pokemon's Normal-type moves become Electric-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power.",
-	},
-	glacialarmor: {
-		name: "Glacial Armor",
-		shortDesc: "This Pokemon's Defense and Special Defense are doubled in Hail; immunity to it.",
 	},
 	gluttony: {
 		name: "Gluttony",
@@ -649,15 +616,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "If last item used is a Berry, 50% chance to restore it each end of turn. 100% in Sun.",
 
 		addItem: "  [POKEMON] harvested one [ITEM]!",
-	},
-	haunting: {
-		name: "Haunting",
-		desc: "If Blood Moon is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Blood Moon is active, this Pokemon's Speed is doubled.",
-	},
-	hayfever: {
-		name: "Hay Fever",
-		shortDesc: "On switch-in, this Pokemon summons Pollinate.",
 	},
 	healer: {
 		name: "Healer",
@@ -749,10 +707,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Imposter",
 		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it. If there is no Pokemon at that position, this Pokemon does not Transform.",
 		shortDesc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it.",
-	},
-	incantation: {
-		name: "Incantation",
-		shortDesc: "On switch-in, this Pokemon summons Sprinkle.",
 	},
 	infiltrator: {
 		name: "Infiltrator",
@@ -977,11 +931,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			desc: "Prevents Steel-type Pokemon from choosing to switch out, other than this Pokemon.",
 			shortDesc: "Prevents Steel-type Pokemon from choosing to switch out, other than this Pokemon.",
 		},
-	},
-	malice: {
-		name: "Malice",
-		desc: "If Blood Moon is active, this Pokemon's highest attacking stat is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Blood Moon is active, this Pokemon's attacks do 1.5x damage; loses 1/8 max HP per turn.",
 	},
 	marvelscale: {
 		name: "Marvel Scale",
@@ -1279,10 +1228,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "This Pokemon's contact moves have a 30% chance of poisoning. This effect comes after a move's inherent secondary effect chance.",
 		shortDesc: "This Pokemon's contact moves have a 30% chance of poisoning.",
 	},
-	pollution: {
-		name: "Pollution",
-		shortDesc: "On switch-in, this Pokemon summons Smog Spread.",
-	},
 	powerconstruct: {
 		name: "Power Construct",
 		desc: "If this Pokemon is a Zygarde in its 10% or 50% Forme, it changes to Complete Forme when it has 1/2 or less of its maximum HP at the end of the turn.",
@@ -1561,14 +1506,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Screen Cleaner",
 		shortDesc: "On switch-in, the effects of Aurora Veil, Light Screen, and Reflect end for both sides.",
 	},
-	seance: {
-		name: "Se\u0301ance",
-		shortDesc: "On switch-in, this Pokemon summons Haunt.",
-	},
-	secretion: {
-		name: "Secretion",
-		shortDesc: "On switch-in, this Pokemon summons Swarm Signal.",
-	},
 	seedsower: {
 		name: "Seed Sower",
 		shortDesc: "When this Pokemon is hit by an attack, the effect of Grassy Terrain begins.",
@@ -1770,10 +1707,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		transform: "Changed to Blade Forme!",
 		transformEnd: "Changed to Shield Forme!",
 	},
-	standoff: {
-		name: "Stand Off",
-		shortDesc: "On switch-in, this Pokemon summons Aura Projection.",
-	},
 	static: {
 		name: "Static",
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed.",
@@ -1832,10 +1765,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		},
 
 		activate: "#lightningrod",
-	},
-	stormfront: {
-		name: "Stormfront",
-		shortDesc: "On switch-in, this Pokemon summons Supercell.",
 	},
 	strongjaw: {
 		name: "Strong Jaw",
@@ -2039,10 +1968,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		changeAbility: "  [POKEMON] traced [SOURCE]'s [ABILITY]!",
 	},
-	transcendence: {
-		name: "Transcendence",
-		shortDesc: "On switch-in, this Pokemon summons Cosmic Rays.",
-	},
 	transistor: {
 		name: "Transistor",
 		shortDesc: "This Pokemon's offensive stat is multiplied by 1.3 while using an Electric-type attack.",
@@ -2132,11 +2057,6 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		},
 
 		activate: "#skillswap",
-	},
-	warpmist: {
-		name: "Warp Mist",
-		desc: "This Pokemon can't have its type immunities bypassed. If Foghorn is active, its highest attacking stat is multiplied by 1.2",
-		shortDesc: "Overrides ignoring type immunity. 1.2 attack power in Fog.",
 	},
 	waterabsorb: {
 		name: "Water Absorb",
@@ -2245,5 +2165,87 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "When used, Gravity/Heal Block/Safeguard/Tailwind/Room effects last 2 more turns.",
 
 		activate: "  [POKEMON] extends [MOVE] by 2 turns!",
+	},
+
+	// swse
+	absolutezero: {
+		name: "Absolute Zero",
+		desc: "If Hail is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3, and have their secondary effect chance doubled. This Pokemon takes no damage from Sandstorm.",
+		shortDesc: "This Pokemon's Ice attacks do 1.3x in Hail and have 2x status chance. Hail immunity.",
+	},
+	arcanum: {
+		name: "Arcanum",
+		shortDesc: "On switch-in, this Pokemon summons Dragon Force.",
+	},
+	condensation: {
+		name: "Condensation",
+		shortDesc: "On switch-in, this Pokemon summons Fog.",
+	},
+	dustdevil: {
+		name: "Dust Devil",
+		shortDesc: "On switch-in, this Pokemon summons Dust Storm.",
+	},
+	eventide: {
+		name: "Eventide",
+		shortDesc: "On switch-in, this Pokemon summons Blood Moon.",
+	},
+	ferroflux: {
+		name: "Ferroflux",
+		shortDesc: "On switch-in, this Pokemon summons Magnetosphere.",
+	},
+	galeforce: {
+		name: "Galeforce",
+		shortDesc: "On switch-in, this Pokemon summons Strong Winds.",
+	},
+	glacialarmor: {
+		name: "Glacial Armor",
+		shortDesc: "This Pokemon's Defense and Special Defense are doubled in Hail; immunity to it.",
+	},
+	haunting: {
+		name: "Haunting",
+		desc: "If Blood Moon is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Blood Moon is active, this Pokemon's Speed is doubled.",
+	},
+	hayfever: {
+		name: "Hay Fever",
+		shortDesc: "On switch-in, this Pokemon summons Pollen Storm.",
+	},
+	incantation: {
+		name: "Incantation",
+		shortDesc: "On switch-in, this Pokemon summons Fairy Dust.",
+	},
+	malice: {
+		name: "Malice",
+		desc: "If Blood Moon is active, this Pokemon's highest attacking stat is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Blood Moon is active, this Pokemon's attacks do 1.5x damage; loses 1/8 max HP per turn.",
+	},
+	pollution: {
+		name: "Pollution",
+		shortDesc: "On switch-in, this Pokemon summons Smog.",
+	},
+	seance: {
+		name: "Se\u0301ance",
+		shortDesc: "On switch-in, this Pokemon summons Cursed Winds.",
+	},
+	secretion: {
+		name: "Secretion",
+		shortDesc: "On switch-in, this Pokemon summons Pheromones.",
+	},
+	standoff: {
+		name: "Stand Off",
+		shortDesc: "On switch-in, this Pokemon summons Battle Aura.",
+	},
+	stormfront: {
+		name: "Stormfront",
+		shortDesc: "On switch-in, this Pokemon summons Thunderstorm.",
+	},
+	transcendence: {
+		name: "Transcendence",
+		shortDesc: "On switch-in, this Pokemon summons Psychic Field.",
+	},
+	warpmist: {
+		name: "Warp Mist",
+		desc: "This Pokemon can't have its type immunities bypassed. If Fog is active, its highest attacking stat is multiplied by 1.2",
+		shortDesc: "Overrides ignoring type immunity. 1.2 attack power in Fog.",
 	},
 };
