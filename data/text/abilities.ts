@@ -644,8 +644,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	heatproof: {
 		name: "Heatproof",
-		desc: "The power of Fire-type attacks against this Pokemon is halved. This Pokemon takes half of the usual burn damage, rounded down.",
-		shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
+		desc: "If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon takes half of the usual burn damage, rounded down.",
+		shortDesc: "Fire damage against this Pokemon is dealt with 1/2 offensive stat; 1/2 burn damage.",
+		gen8: {
+			desc: "The power of Fire-type attacks against this Pokemon is halved. This Pokemon takes half of the usual burn damage, rounded down.",
+			shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
+		},
 	},
 	heavymetal: {
 		name: "Heavy Metal",
