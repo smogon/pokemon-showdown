@@ -1736,8 +1736,8 @@ export class BattleActions {
 		baseDamage = this.battle.randomizer(baseDamage);
 
 		// STAB
-		if (move.forceSTAB || (type !== '???' &&
-			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type))))) {
+		if (move.forceSTAB ||
+			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type)))) {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
@@ -1778,6 +1778,9 @@ export class BattleActions {
 			if (this.battle.gen < 6 || move.id !== 'facade') {
 				baseDamage = this.battle.modify(baseDamage, 0.5);
 			}
+		}
+		if (pokemon.status === 'frb' && move.category === 'Special') {
+			baseDamage = this.battle.modify(baseDamage, 0.5);
 		}
 
 		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers

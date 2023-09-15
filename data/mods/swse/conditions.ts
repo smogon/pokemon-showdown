@@ -158,6 +158,24 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
 		},
 	},
+	frb: {
+		name: 'frb',
+		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.id === 'frostorb') {
+				this.add('-status', target, 'frb', '[from] item: Frost Orb');
+			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'frb', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'frb');
+			}
+		},
+		// Damage reduction is handled directly in the sim/battle.js damage function
+		onResidualOrder: 10,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 16);
+		},
+	},
 	confusion: {
 		name: 'confusion',
 		// this is a volatile status
@@ -682,8 +700,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onModifyMovePriority: -5,
-		onModifyMove(move, pokemon) {
-			if (pokemon.hasItem('utilityumbrella')) return;
+		onModifyMove(move, target, pokemon) {
+			if (target.hasItem('utilityumbrella')) return;
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
 				move.ignoreImmunity['Normal'] = true;

@@ -1368,7 +1368,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3.5,
 		num: 218,
 	},
-	forecast: { //only works with climate weather rn
+	forecast: { // only works with climate weather rn
 		onStart(pokemon) {
 			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
 		},

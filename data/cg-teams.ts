@@ -483,6 +483,7 @@ export default class TeamGenerator {
 		case 'psn': return 1.5;
 		case 'tox': return 4;
 		case 'slp': return 4;
+		case 'frb': return 1.5;
 		}
 		return 1;
 	}

@@ -463,7 +463,8 @@ export class Battle {
 		for (const pokemon of actives) {
 			this.runEvent(eventid, pokemon, null, effect, relayVar);
 		}
-		if ((eventid === 'ClimateWeather' || eventid === 'IrritantWeather' || eventid === 'EnergyWeather' || eventid === 'ClearingWeather') && this.gen >= 7) {
+		if ((eventid === 'ClimateWeather' || eventid === 'IrritantWeather' ||
+		eventid === 'EnergyWeather' || eventid === 'ClearingWeather') && this.gen >= 7) {
 			// TODO: further research when updates happen
 			this.eachEvent('Update');
 		}
@@ -953,7 +954,8 @@ export class Battle {
 			return handlers;
 		}
 		// events usually run through EachEvent should never have any handlers besides `on${eventName}` so don't check for them
-		const prefixedHandlers = !['BeforeTurn', 'Update', 'ClimateWeather', 'ClimateWeatherChange', 'IrritantWeather', 'IrritantWeatherChange', 'EnergyWeather', 'EnergyWeatherChange', 'ClearingWeather', 'ClearingWeatherChange', 'TerrainChange'].includes(eventName);
+		const prefixedHandlers = !['BeforeTurn', 'Update', 'ClimateWeather', 'ClimateWeatherChange', 'IrritantWeather',
+			'IrritantWeatherChange', 'EnergyWeather', 'EnergyWeatherChange', 'ClearingWeather', 'ClearingWeatherChange', 'TerrainChange'].includes(eventName);
 		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
 			handlers = this.findPokemonEventHandlers(target, `on${eventName}`);
 			if (prefixedHandlers) {
@@ -1977,7 +1979,9 @@ export class Battle {
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
-				if ((effect.effectType === 'ClimateWeather' || effect.effectType === 'IrritantWeather' || effect.effectType === 'EnergyWeather' || effect.effectType === 'ClearingWeather') && !target.runStatusImmunity(effect.id)) {
+				if ((effect.effectType === 'ClimateWeather' || effect.effectType === 'IrritantWeather' ||
+				effect.effectType === 'EnergyWeather' ||
+				effect.effectType === 'ClearingWeather') && !target.runStatusImmunity(effect.id)) {
 					this.debug('Weather immunity');
 					retVals[i] = 0;
 					continue;

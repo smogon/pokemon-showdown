@@ -21041,7 +21041,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 	},
-	weatherball: { //only works with climate weather rn
+	weatherball: { // only works with climate weather rn
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
@@ -21060,12 +21060,18 @@ export const Moves: {[moveid: string]: MoveData} = {
 			case 'primordialsea':
 				move.type = 'Water';
 				break;
-			case 'sandstorm':
-				move.type = 'Rock';
-				break;
 			case 'hail':
 			case 'snow':
 				move.type = 'Ice';
+				break;
+			case 'bloodmoon':
+				move.type = 'Dark';
+				break;
+			case 'foghorn':
+				move.type = 'Normal';
+				break;
+			case 'sandstorm':
+				move.type = 'Rock';
 				break;
 			}
 		},
@@ -21079,11 +21085,17 @@ export const Moves: {[moveid: string]: MoveData} = {
 			case 'primordialsea':
 				move.basePower *= 2;
 				break;
-			case 'sandstorm':
-				move.basePower *= 2;
-				break;
 			case 'hail':
 			case 'snow':
+				move.basePower *= 2;
+				break;
+			case 'bloodmoon':
+				move.basePower *= 2;
+				break;
+			case 'foghorn':
+				move.basePower *= 2;
+				break;
+			case 'sandstorm':
 				move.basePower *= 2;
 				break;
 			}

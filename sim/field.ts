@@ -48,7 +48,9 @@ export class Field {
 		return State.serializeField(this);
 	}
 
-	setClimateWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setClimateWeather(
+		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+	) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -100,7 +102,9 @@ export class Field {
 		return true;
 	}
 
-	setIrritantWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setIrritantWeather(
+		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+	) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -152,7 +156,9 @@ export class Field {
 		return true;
 	}
 
-	setEnergyWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setEnergyWeather(
+		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+	) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -204,7 +210,9 @@ export class Field {
 		return true;
 	}
 
-	setClearingWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setClearingWeather(
+		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+	) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;

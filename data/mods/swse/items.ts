@@ -2063,6 +2063,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 2,
 		isPokeball: true,
 	},
+	frostorb: {
+		name: "Frost Orb",
+		spritenum: 145,
+		fling: {
+			basePower: 30,
+			status: 'frb',
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			pokemon.trySetStatus('frb', pokemon);
+		},
+		num: -1,
+		gen: 9,
+	},
 	fullincense: {
 		name: "Full Incense",
 		spritenum: 155,
@@ -4979,7 +4994,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			basePower: 80,
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
+			if (type === 'sandstorm' || type === 'powder') return false;
 		},
 		onTryHit(pokemon, source, move) {
 			if (move.flags['powder'] && pokemon !== source && this.dex.getImmunity('powder', pokemon)) {
@@ -7072,8 +7087,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 			return true;
 		},
-		forcedForme: "Castform-Whirly",
-		itemUser: ["Castform-Whirly"],
+		itemUser: ["Castform"],
 		num: -1,
 		gen: 10,
 	},

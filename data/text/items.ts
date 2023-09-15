@@ -632,6 +632,10 @@ export const ItemsText: {[k: string]: ItemText} = {
 		name: "Friend Ball",
 		desc: "A Poke Ball that makes caught Pokemon more friendly.",
 	},
+	frostorb: {
+		name: "Frost Orb",
+		desc: "At the end of every turn, this item attempts to give the holder frostbite.",
+	},
 	fullincense: {
 		name: "Full Incense",
 		desc: "Holder moves last in its priority bracket.",

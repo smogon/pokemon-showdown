@@ -214,6 +214,14 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		endFromItem: "  [POKEMON]'s [ITEM] woke it up!",
 		cant: "[POKEMON] is fast asleep.",
 	},
+	frb: {
+		start: "  [POKEMON] got frostbite!",
+		startFromItem: "  [POKEMON] got frostbite from the [ITEM]!",
+		alreadyStarted: "  [POKEMON] is already frostbitten!",
+		end: "  [POKEMON]'s frostbite was healed!",
+		endFromItem: "  [POKEMON]'s [ITEM] healed its frostbite!",
+		damage: "  [POKEMON] was hurt by its frostbite!",
+	},
 
 	// misc effects
 	confusion: {

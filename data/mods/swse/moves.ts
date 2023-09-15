@@ -21048,7 +21048,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Water",
 	},
-	weatherball: { //only works with climate weather rn
+	weatherball: { // only works with climate weather rn
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
