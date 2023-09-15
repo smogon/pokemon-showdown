@@ -274,11 +274,11 @@ export const Formats: FormatList = [
 		tournamentShow: false,
 		ruleset: ['Standard', '!Evasion Items Clause'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin',
-			'Groudon', 'Hoopa-Unbound', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin',
-			'Rayquaza', 'Spectrier', 'Ursaluna', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Moody', 'Shadow Tag', 'Toxic Debris', 'Acupressure', 'Aromatic Mist',
-			'Baton Pass', 'Court Change', 'Final Gambit', 'Flatter', 'Follow Me', 'Heal Pulse', 'Last Respects', 'Poison Fang', 'Rage Powder', 'Spicy Extract', 'Swagger',
-			'Toxic', 'Toxic Spikes',
+			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Darkrai', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane', 'Giratina',
+			'Giratina-Origin', 'Groudon', 'Hoopa-Unbound', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Palafin',
+			'Palkia', 'Palkia-Origin', 'Rayquaza', 'Shaymin-Sky', 'Spectrier', 'Ursaluna', 'Ursaluna-Bloodmoon', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned',
+			'Moody', 'Shadow Tag', 'Toxic Chain', 'Toxic Debris', 'Acupressure', 'Aromatic Mist', 'Baton Pass', 'Court Change', 'Final Gambit', 'Flatter',
+			'Follow Me', 'Heal Pulse', 'Last Respects', 'Poison Fang', 'Rage Powder', 'Spicy Extract', 'Swagger', 'Toxic', 'Toxic Spikes',
 		],
 	},
 	{
