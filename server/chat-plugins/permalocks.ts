@@ -101,7 +101,7 @@ export const Nominations = new class {
 		usRoom.send(`|uhtml|permanoms|${this.getDisplayButton()}`);
 		Chat.refreshPageFor('permalocks', usRoom);
 	}
-	async add(target: string, connection: Connection, context?: Chat.CommandContext) {
+	async add(target: string, connection: Connection) {
 		const user = connection.user;
 		const [primary, rawAlts, rawIps, type, details] = Utils.splitFirst(target, '|', 4).map(f => f.trim());
 		const primaryID = toID(primary);
@@ -151,9 +151,7 @@ export const Nominations = new class {
 		Utils.sortBy(this.noms, nom => -nom.date);
 		this.save();
 		this.notifyStaff();
-		if (context) {
-			context.privateGlobalModAction(`${user.name} submitted a perma nomination for ${primaryID}`);
-		}
+		Rooms.get('staff')?.addByUser(user, `${user.name} submitted a perma nomination for ${primaryID}`);
 	}
 	find(id: string) {
 		return this.noms.find(f => f.primaryID === id);
@@ -381,7 +379,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		submit(target, room, user) {
 			this.checkCan('lock');
-			return Nominations.add(target, this.connection, this);
+			return Nominations.add(target, this.connection);
 		},
 		list() {
 			this.checkCan('lock');
