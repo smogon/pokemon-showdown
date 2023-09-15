@@ -1196,7 +1196,8 @@ export class Pokemon {
 		const species = pokemon.species;
 		if (pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
-			species.name === 'Eternatus-Eternamax' || (species.baseSpecies === 'Ogerpon' && this.terastallized)) {
+			species.name === 'Eternatus-Eternamax' || (species.baseSpecies === 'Ogerpon' &&
+			(this.terastallized || pokemon.terastallized))) {
 			return false;
 		}
 
@@ -1292,7 +1293,7 @@ export class Pokemon {
 
 		// Pokemon transformed into Ogerpon cannot Terastallize
 		// restoring their ability to tera after they untransform is handled ELSEWHERE
-		if (this.species.baseSpecies === 'Ogerpon') this.canTerastallize = false;
+		if (this.species.baseSpecies === 'Ogerpon' && this.canTerastallize) this.canTerastallize = false;
 
 		return true;
 	}
