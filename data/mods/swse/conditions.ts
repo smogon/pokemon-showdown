@@ -526,7 +526,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'SunnyDay', '[upkeep]');
-			this.eachEvent('Weather');
+			this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -571,7 +571,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'RainDance', '[upkeep]');
-			this.eachEvent('Weather');
+			this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -598,7 +598,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'Hail', '[upkeep]');
-			if (this.field.isClimateWeather('hail')) this.eachEvent('Weather');
+			if (this.field.isClimateWeather('hail')) this.eachEvent('ClimateWeather');
 		},
 		onClimateWeather(target) {
 			if (target.hasItem('utilityumbrella')) return;
@@ -636,7 +636,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'Snow', '[upkeep]');
-			this.eachEvent('Weather');
+			this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -674,7 +674,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'BloodMoon', '[upkeep]');
-			this.eachEvent('Weather');
+			this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -718,7 +718,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'Foghorn', '[upkeep]');
-			this.eachEvent('Weather');
+			this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -756,7 +756,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'Sandstorm', '[upkeep]');
-			if (this.field.isIrritantWeather('sandstorm')) this.eachEvent('Weather');
+			if (this.field.isIrritantWeather('sandstorm')) this.eachEvent('IrritantWeather');
 		},
 		onIrritantWeather(target) {
 			this.damage(target.baseMaxhp / 16);
@@ -766,7 +766,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 
-	// energy
+	// Energy Weathergy
 
 	// extra weathers
 
@@ -787,7 +787,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'DeltaStream', '[upkeep]');
-			this.eachEvent('Weather');
+			this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -823,7 +823,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'DesolateLand', '[upkeep]');
-			this.eachEvent('Weather');
+			this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -855,7 +855,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'PrimordialSea', '[upkeep]');
-			this.eachEvent('Weather');
+			this.eachEvent('ClimateWeather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
