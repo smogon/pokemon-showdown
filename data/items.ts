@@ -1178,7 +1178,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 210,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	damprock: {
 		name: "Damp Rock",
@@ -1680,7 +1679,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 208,
 		gen: 3,
-		isNonstandard: "Unobtainable",
 	},
 	eviolite: {
 		name: "Eviolite",
@@ -2783,7 +2781,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 211,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	jawfossil: {
 		name: "Jaw Fossil",
@@ -2862,7 +2859,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 687,
 		gen: 6,
-		isNonstandard: "Unobtainable",
 	},
 	kelpsyberry: {
 		name: "Kelpsy Berry",
@@ -3458,7 +3454,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 688,
 		gen: 6,
-		isNonstandard: "Unobtainable",
 	},
 	marshadiumz: {
 		name: "Marshadium Z",
@@ -3732,7 +3727,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 209,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	mimikiumz: {
 		name: "Mimikium Z",
@@ -4969,7 +4963,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 212,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	rustedshield: {
 		name: "Rusted Shield",
