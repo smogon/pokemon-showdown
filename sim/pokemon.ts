@@ -241,6 +241,7 @@ export class Pokemon {
 	// Gen 9 only
 	swordBoost: boolean;
 	shieldBoost: boolean;
+	syrupTriggered: boolean;
 
 	/** Have this pokemon's Start events run yet? (Start events run every switch-in) */
 	isStarted: boolean;
@@ -447,6 +448,7 @@ export class Pokemon {
 		this.truantTurn = false;
 		this.swordBoost = false;
 		this.shieldBoost = false;
+		this.syrupTriggered = false;
 		this.isStarted = false;
 		this.duringMove = false;
 
