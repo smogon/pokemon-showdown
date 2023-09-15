@@ -88,12 +88,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-ability', pokemon, 'Air Lock');
 				this.effectState.switchingIn = false;
 			}
-			this.eachEvent('WeatherChange', this.effect);
+			this.eachEvent('ClimateWeatherChange', this.effect);
 		},
 		onEnd(pokemon) {
-			this.eachEvent('WeatherChange', this.effect);
+			this.eachEvent('ClimateWeatherChange', this.effect);
 		},
-		suppressWeather: true,
+		suppressClimateWeather: true,
 		name: "Air Lock",
 		rating: 1.5,
 		num: 76,
@@ -478,7 +478,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	chlorophyll: {
 		onModifySpe(spe, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
 				return this.chainModify(2);
 			}
 		},
@@ -516,12 +516,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-ability', pokemon, 'Cloud Nine');
 				this.effectState.switchingIn = false;
 			}
-			this.eachEvent('WeatherChange', this.effect);
+			this.eachEvent('ClimateWeatherChange', this.effect);
 		},
 		onEnd(pokemon) {
-			this.eachEvent('WeatherChange', this.effect);
+			this.eachEvent('ClimateWeatherChange', this.effect);
 		},
-		suppressWeather: true,
+		suppressClimateWeather: true,
 		name: "Cloud Nine",
 		rating: 1.5,
 		num: 13,
@@ -868,22 +868,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	deltastream: {
 		onStart(source) {
-			this.field.setWeather('deltastream');
+			this.field.setClimateWeather('deltastream');
 		},
-		onAnySetWeather(target, source, weather) {
+		onAnySetClimateWeather(target, source, climateWeather) {
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getWeather().id === 'deltastream' && !strongWeathers.includes(weather.id)) return false;
+			if (this.field.getClimateWeather().id === 'deltastream' && !strongWeathers.includes(climateWeather.id)) return false;
 		},
 		onEnd(pokemon) {
-			if (this.field.weatherState.source !== pokemon) return;
+			if (this.field.climateWeatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (target.hasAbility('deltastream')) {
-					this.field.weatherState.source = target;
+					this.field.climateWeatherState.source = target;
 					return;
 				}
 			}
-			this.field.clearWeather();
+			this.field.clearClimateWeather();
 		},
 		name: "Delta Stream",
 		rating: 4,
@@ -891,22 +891,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	desolateland: {
 		onStart(source) {
-			this.field.setWeather('desolateland');
+			this.field.setClimateWeather('desolateland');
 		},
-		onAnySetWeather(target, source, weather) {
+		onAnySetClimateWeather(target, source, climateWeather) {
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getWeather().id === 'desolateland' && !strongWeathers.includes(weather.id)) return false;
+			if (this.field.getClimateWeather().id === 'desolateland' && !strongWeathers.includes(climateWeather.id)) return false;
 		},
 		onEnd(pokemon) {
-			if (this.field.weatherState.source !== pokemon) return;
+			if (this.field.climateWeatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (target.hasAbility('desolateland')) {
-					this.field.weatherState.source = target;
+					this.field.climateWeatherState.source = target;
 					return;
 				}
 			}
-			this.field.clearWeather();
+			this.field.clearClimateWeather();
 		},
 		name: "Desolate Land",
 		rating: 4.5,
@@ -1003,7 +1003,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
 				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
-			this.field.setWeather('raindance');
+			this.field.setClimateWeather('raindance');
 		},
 		name: "Drizzle",
 		rating: 4,
@@ -1015,7 +1015,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'groudon') return;
 				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
-			this.field.setWeather('sunnyday');
+			this.field.setClimateWeather('sunnyday');
 		},
 		name: "Drought",
 		rating: 4,
@@ -1036,7 +1036,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(1.25);
 			}
 		},
-		onWeather(target, source, effect) {
+		onClimateWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 8);
@@ -1212,12 +1212,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	flowergift: {
 		onStart(pokemon) {
-			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
 		},
-		onWeatherChange(pokemon) {
+		onClimateWeatherChange(pokemon) {
 			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
 			if (!pokemon.hp) return;
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
 				if (pokemon.species.id !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '[msg]');
 				}
@@ -1230,14 +1230,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk, pokemon) {
 			if (this.effectState.target.baseSpecies.baseSpecies !== 'Cherrim') return;
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
 		onAllyModifySpDPriority: 4,
 		onAllyModifySpD(spd, pokemon) {
 			if (this.effectState.target.baseSpecies.baseSpecies !== 'Cherrim') return;
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1299,12 +1299,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	forecast: {
 		onStart(pokemon) {
-			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
 		},
-		onWeatherChange(pokemon) {
+		onClimateWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveClimateWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
 				if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
@@ -1621,7 +1621,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.randomChance(1, 2)) {
+			if (this.field.isClimateWeather(['sunnyday', 'desolateland']) || this.randomChance(1, 2)) {
 				if (pokemon.hp && !pokemon.item && this.dex.items.get(pokemon.lastItem).isBerry) {
 					pokemon.setItem(pokemon.lastItem);
 					pokemon.lastItem = '';
@@ -1719,7 +1719,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
 		onResidual(pokemon) {
-			if (pokemon.status && ['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+			if (pokemon.status && ['raindance', 'primordialsea'].includes(pokemon.effectiveClimateWeather())) {
 				this.debug('hydration');
 				this.add('-activate', pokemon, 'ability: Hydration');
 				pokemon.cureStatus();
@@ -1745,7 +1745,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 52,
 	},
 	icebody: {
-		onWeather(target, source, effect) {
+		onClimateWeather(target, source, effect) {
 			if (effect.id === 'hail' || effect.id === 'snow') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -1759,7 +1759,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	iceface: {
 		onStart(pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) &&
+			if (this.field.isClimateWeather(['hail', 'snow']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
@@ -1799,11 +1799,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange('Eiscue-Noice', this.effect, true);
 			}
 		},
-		onWeatherChange(pokemon, source, sourceEffect) {
+		onClimateWeatherChange(pokemon, source, sourceEffect) {
 			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
-			if ((sourceEffect as Ability)?.suppressWeather) return;
+			if ((sourceEffect as Ability)?.suppressClimateWeather) return;
 			if (!pokemon.hp) return;
-			if (this.field.isWeather(['hail', 'snow']) &&
+			if (this.field.isClimateWeather(['hail', 'snow']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
@@ -2049,7 +2049,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	leafguard: {
 		onSetStatus(status, target, source, effect) {
-			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveClimateWeather())) {
 				if ((effect as Move)?.status) {
 					this.add('-immune', target, '[from] ability: Leaf Guard');
 				}
@@ -2057,7 +2057,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onTryAddVolatile(status, target) {
-			if (status.id === 'yawn' && ['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
+			if (status.id === 'yawn' && ['sunnyday', 'desolateland'].includes(target.effectiveClimateWeather())) {
 				this.add('-immune', target, '[from] ability: Leaf Guard');
 				return null;
 			}
@@ -2756,15 +2756,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	orichalcumpulse: {
 		onStart(pokemon) {
-			if (this.field.setWeather('sunnyday')) {
+			if (this.field.setClimateWeather('sunnyday')) {
 				this.add('-activate', pokemon, 'Orichalcum Pulse', '[source]');
-			} else if (this.field.isWeather('sunnyday')) {
+			} else if (this.field.isClimateWeather('sunnyday')) {
 				this.add('-activate', pokemon, 'ability: Orichalcum Pulse');
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
 				this.debug('Orichalcum boost');
 				return this.chainModify([5461, 4096]);
 			}
@@ -3100,22 +3100,22 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	primordialsea: {
 		onStart(source) {
-			this.field.setWeather('primordialsea');
+			this.field.setClimateWeather('primordialsea');
 		},
-		onAnySetWeather(target, source, weather) {
+		onAnySetClimateWeather(target, source, climateWeather) {
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
-			if (this.field.getWeather().id === 'primordialsea' && !strongWeathers.includes(weather.id)) return false;
+			if (this.field.getClimateWeather().id === 'primordialsea' && !strongWeathers.includes(climateWeather.id)) return false;
 		},
 		onEnd(pokemon) {
-			if (this.field.weatherState.source !== pokemon) return;
+			if (this.field.climateWeatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (target.hasAbility('primordialsea')) {
-					this.field.weatherState.source = target;
+					this.field.climateWeatherState.source = target;
 					return;
 				}
 			}
-			this.field.clearWeather();
+			this.field.clearClimateWeather();
 		},
 		name: "Primordial Sea",
 		rating: 4.5,
@@ -3162,12 +3162,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	protosynthesis: {
 		onStart(pokemon) {
-			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
 		},
-		onWeatherChange(pokemon) {
+		onClimateWeatherChange(pokemon) {
 			if (pokemon.transformed) return;
 			// Protosynthesis is not affected by Utility Umbrella
-			if (this.field.isWeather('sunnyday')) {
+			if (this.field.isClimateWeather('sunnyday')) {
 				pokemon.addVolatile('protosynthesis');
 			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
 				pokemon.removeVolatile('protosynthesis');
@@ -3403,7 +3403,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 95,
 	},
 	raindish: {
-		onWeather(target, source, effect) {
+		onClimateWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
 				this.heal(target.baseMaxhp / 16);
@@ -3595,7 +3595,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	sandforce: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.field.isWeather('sandstorm')) {
+			if (this.field.isClimateWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([5325, 4096]);
@@ -3611,7 +3611,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	sandrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather('sandstorm')) {
+			if (this.field.isClimateWeather('sandstorm')) {
 				return this.chainModify(2);
 			}
 		},
@@ -3624,7 +3624,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	sandspit: {
 		onDamagingHit(damage, target, source, move) {
-			this.field.setWeather('sandstorm');
+			this.field.setClimateWeather('sandstorm');
 		},
 		name: "Sand Spit",
 		rating: 1,
@@ -3632,7 +3632,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	sandstream: {
 		onStart(source) {
-			this.field.setWeather('sandstorm');
+			this.field.setClimateWeather('sandstorm');
 		},
 		name: "Sand Stream",
 		rating: 4,
@@ -3645,7 +3645,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather('sandstorm')) {
+			if (this.field.isClimateWeather('sandstorm')) {
 				this.debug('Sand Veil - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -3963,7 +3963,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	slushrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow'])) {
+			if (this.field.isClimateWeather(['hail', 'snow'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -3989,7 +3989,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather(['hail', 'snow'])) {
+			if (this.field.isClimateWeather(['hail', 'snow'])) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -4001,7 +4001,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	snowwarning: {
 		onStart(source) {
-			this.field.setWeather('hail');
+			this.field.setClimateWeather('snow');
 		},
 		name: "Snow Warning",
 		rating: 4,
@@ -4010,11 +4010,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	solarpower: {
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
-		onWeather(target, source, effect) {
+		onClimateWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
 				this.damage(target.baseMaxhp / 8, target, target);
@@ -4375,7 +4375,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	swiftswim: {
 		onModifySpe(spe, pokemon) {
-			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveClimateWeather())) {
 				return this.chainModify(2);
 			}
 		},

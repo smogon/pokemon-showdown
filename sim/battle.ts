@@ -463,7 +463,7 @@ export class Battle {
 		for (const pokemon of actives) {
 			this.runEvent(eventid, pokemon, null, effect, relayVar);
 		}
-		if (eventid === 'Weather' && this.gen >= 7) {
+		if ((eventid === 'ClimateWeather' || eventid === 'IrritantWeather' || eventid === 'EnergyWeather' || eventid === 'ClearingWeather') && this.gen >= 7) {
 			// TODO: further research when updates happen
 			this.eachEvent('Update');
 		}
@@ -559,10 +559,31 @@ export class Battle {
 			return relayVar;
 		}
 		if (
-			effect.effectType === 'Weather' && eventid !== 'FieldStart' && eventid !== 'FieldResidual' &&
-			eventid !== 'FieldEnd' && this.field.suppressingWeather()
+			effect.effectType === 'ClimateWeather' && eventid !== 'FieldStart' && eventid !== 'FieldResidual' &&
+			eventid !== 'FieldEnd' && this.field.suppressingClimateWeather()
 		) {
 			this.debug(eventid + ' handler suppressed by Air Lock');
+			return relayVar;
+		}
+		if (
+			effect.effectType === 'IrritantWeather' && eventid !== 'FieldStart' && eventid !== 'FieldResidual' &&
+			eventid !== 'FieldEnd' && this.field.suppressingIrritantWeather()
+		) {
+			this.debug(eventid + ' handler suppressed by some Irritant blocking thing');
+			return relayVar;
+		}
+		if (
+			effect.effectType === 'EnergyWeather' && eventid !== 'FieldStart' && eventid !== 'FieldResidual' &&
+			eventid !== 'FieldEnd' && this.field.suppressingEnergyWeather()
+		) {
+			this.debug(eventid + ' handler suppressed by some Energy blocking thing');
+			return relayVar;
+		}
+		if (
+			effect.effectType === 'ClearingWeather' && eventid !== 'FieldStart' && eventid !== 'FieldResidual' &&
+			eventid !== 'FieldEnd' && this.field.suppressingClearingWeather()
+		) {
+			this.debug(eventid + ' handler suppressed by some Clearing blocking thing');
 			return relayVar;
 		}
 
@@ -830,9 +851,24 @@ export class Battle {
 				}
 				continue;
 			}
-			if ((effect.effectType === 'Weather' || eventid === 'Weather') &&
-				eventid !== 'Residual' && eventid !== 'End' && this.field.suppressingWeather()) {
+			if ((effect.effectType === 'ClimateWeather' || eventid === 'ClimateWeather') &&
+				eventid !== 'Residual' && eventid !== 'End' && this.field.suppressingClimateWeather()) {
 				this.debug(eventid + ' handler suppressed by Air Lock');
+				continue;
+			}
+			if ((effect.effectType === 'IrritantWeather' || eventid === 'IrritantWeather') &&
+				eventid !== 'Residual' && eventid !== 'End' && this.field.suppressingIrritantWeather()) {
+				this.debug(eventid + ' handler suppressed by some Irritant blocking thing');
+				continue;
+			}
+			if ((effect.effectType === 'EnergyWeather' || eventid === 'EnergyWeather') &&
+				eventid !== 'Residual' && eventid !== 'End' && this.field.suppressingEnergyWeather()) {
+				this.debug(eventid + ' handler suppressed by some Energy blocking thing');
+				continue;
+			}
+			if ((effect.effectType === 'ClearingWeather' || eventid === 'ClearingWeather') &&
+				eventid !== 'Residual' && eventid !== 'End' && this.field.suppressingClearingWeather()) {
+				this.debug(eventid + ' handler suppressed by some Clearing blocking thing');
 				continue;
 			}
 			let returnVal;
@@ -917,7 +953,7 @@ export class Battle {
 			return handlers;
 		}
 		// events usually run through EachEvent should never have any handlers besides `on${eventName}` so don't check for them
-		const prefixedHandlers = !['BeforeTurn', 'Update', 'Weather', 'WeatherChange', 'TerrainChange'].includes(eventName);
+		const prefixedHandlers = !['BeforeTurn', 'Update', 'ClimateWeather', 'ClimateWeatherChange', 'IrritantWeather', 'IrritantWeatherChange', 'EnergyWeather', 'EnergyWeatherChange', 'ClearingWeather', 'ClearingWeatherChange', 'TerrainChange'].includes(eventName);
 		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
 			handlers = this.findPokemonEventHandlers(target, `on${eventName}`);
 			if (prefixedHandlers) {
@@ -1058,13 +1094,40 @@ export class Battle {
 				}, callbackName));
 			}
 		}
-		const weather = field.getWeather();
+		const climateWeather = field.getClimateWeather();
 		// @ts-ignore - dynamic lookup
-		callback = weather[callbackName];
-		if (callback !== undefined || (getKey && this.field.weatherState[getKey])) {
+		callback = climateWeather[callbackName];
+		if (callback !== undefined || (getKey && this.field.climateWeatherState[getKey])) {
 			handlers.push(this.resolvePriority({
-				effect: weather, callback, state: this.field.weatherState,
-				end: customHolder ? null : field.clearWeather, effectHolder: customHolder || field,
+				effect: climateWeather, callback, state: this.field.climateWeatherState,
+				end: customHolder ? null : field.clearClimateWeather, effectHolder: customHolder || field,
+			}, callbackName));
+		}
+		const irritantWeather = field.getIrritantWeather();
+		// @ts-ignore - dynamic lookup
+		callback = irritantWeather[callbackName];
+		if (callback !== undefined || (getKey && this.field.irritantWeatherState[getKey])) {
+			handlers.push(this.resolvePriority({
+				effect: irritantWeather, callback, state: this.field.irritantWeatherState,
+				end: customHolder ? null : field.clearIrritantWeather, effectHolder: customHolder || field,
+			}, callbackName));
+		}
+		const energyWeather = field.getEnergyWeather();
+		// @ts-ignore - dynamic lookup
+		callback = energyWeather[callbackName];
+		if (callback !== undefined || (getKey && this.field.energyWeatherState[getKey])) {
+			handlers.push(this.resolvePriority({
+				effect: energyWeather, callback, state: this.field.energyWeatherState,
+				end: customHolder ? null : field.clearEnergyWeather, effectHolder: customHolder || field,
+			}, callbackName));
+		}
+		const clearingWeather = field.getClearingWeather();
+		// @ts-ignore - dynamic lookup
+		callback = clearingWeather[callbackName];
+		if (callback !== undefined || (getKey && this.field.clearingWeatherState[getKey])) {
+			handlers.push(this.resolvePriority({
+				effect: clearingWeather, callback, state: this.field.clearingWeatherState,
+				end: customHolder ? null : field.clearClearingWeather, effectHolder: customHolder || field,
 			}, callbackName));
 		}
 		const terrain = field.getTerrain();
@@ -1914,8 +1977,8 @@ export class Battle {
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
-				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
-					this.debug('weather immunity');
+				if ((effect.effectType === 'ClimateWeather' || effect.effectType === 'IrritantWeather' || effect.effectType === 'EnergyWeather' || effect.effectType === 'ClearingWeather') && !target.runStatusImmunity(effect.id)) {
+					this.debug('Weather immunity');
 					retVals[i] = 0;
 					continue;
 				}

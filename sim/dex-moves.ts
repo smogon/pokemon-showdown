@@ -76,7 +76,10 @@ export interface HitEffect {
 	// set field conditions
 	pseudoWeather?: string;
 	terrain?: string;
-	weather?: string;
+	climateWeather?: string;
+	irritantWeather?: string;
+	energyWeather?: string;
+	clearingWeather?: string;
 }
 
 export interface SecondaryEffect extends HitEffect {
@@ -309,7 +312,10 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	readonly effectType: 'Move';
 	readonly id: ID;
 	num: number;
-	weather?: ID;
+	climateWeather?: ID;
+	irritantWeather?: ID;
+	energyWeather?: ID;
+	clearingWeather?: ID;
 	status?: ID;
 	hit: number;
 	moveHitData?: MoveHitData;

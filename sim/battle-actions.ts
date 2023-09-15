@@ -1228,8 +1228,20 @@ export class BattleActions {
 					hitResult = target.side.addSlotCondition(target, moveData.slotCondition, source, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
-				if (moveData.weather) {
-					hitResult = this.battle.field.setWeather(moveData.weather, source, move);
+				if (moveData.climateWeather) {
+					hitResult = this.battle.field.setClimateWeather(moveData.climateWeather, source, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.irritantWeather) {
+					hitResult = this.battle.field.setIrritantWeather(moveData.irritantWeather, source, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.energyWeather) {
+					hitResult = this.battle.field.setEnergyWeather(moveData.energyWeather, source, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.clearingWeather) {
+					hitResult = this.battle.field.setClearingWeather(moveData.clearingWeather, source, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (moveData.terrain) {
@@ -1709,7 +1721,10 @@ export class BattleActions {
 		}
 
 		// weather modifier
-		baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('ClimateWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('IrritantWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('EnergyWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('ClearingWeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
 		const isCrit = target.getMoveHitData(move).crit;

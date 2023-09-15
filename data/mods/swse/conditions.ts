@@ -459,11 +459,11 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 
 	// weather is implemented here since it's so important to the game
 
-	// climate
+	// Climate Weathergy
 
 	sunnyday: {
 		name: 'SunnyDay',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 5,
 		durationCallback(source, effect) {
 			if (source?.hasItem('weatherballoon')) {
@@ -471,7 +471,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			return 5;
 		},
-		onWeatherModifyDamage(damage, attacker, defender, move) {
+		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.id === 'hydrosteam' && !attacker.hasItem('utilityumbrella')) {
 				this.debug('Sunny Day Hydro Steam boost');
 				return this.chainModify(1.5);
@@ -516,7 +516,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	raindance: {
 		name: 'RainDance',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 5,
 		durationCallback(source, effect) {
 			if (source?.hasItem('weatherballoon')) {
@@ -524,7 +524,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			return 5;
 		},
-		onWeatherModifyDamage(damage, attacker, defender, move) {
+		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Water') {
 				this.debug('rain water boost');
@@ -561,7 +561,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	hail: {
 		name: 'Hail',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 5,
 		durationCallback(source, effect) {
 			if (source?.hasItem('weatherballoon')) {
@@ -580,9 +580,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'Hail', '[upkeep]');
-			if (this.field.isWeather('hail')) this.eachEvent('Weather');
+			if (this.field.isClimateWeather('hail')) this.eachEvent('Weather');
 		},
-		onWeather(target) {
+		onClimateWeather(target) {
 			if (target.hasItem('utilityumbrella')) return;
 			this.damage(target.baseMaxhp / 16);
 		},
@@ -592,7 +592,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	snow: {
 		name: 'Snow',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 5,
 		durationCallback(source, effect) {
 			if (source?.hasItem('weatherballoon')) {
@@ -603,7 +603,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
-			if (pokemon.hasType('Ice') && this.field.isWeather('snow')) {
+			if (pokemon.hasType('Ice') && this.field.isClimateWeather('snow')) {
 				return this.modify(def, 1.5);
 			}
 		},
@@ -618,7 +618,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'Snow', '[upkeep]');
-			if (this.field.isWeather('snow')) this.eachEvent('Weather');
+			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -626,7 +626,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	bloodmoon: {
 		name: 'BloodMoon',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 5,
 		durationCallback(source, effect) {
 			if (source?.hasItem('weatherballoon')) {
@@ -664,7 +664,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	foghorn: {
 		name: 'Foghorn',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 5,
 		durationCallback(source, effect) {
 			if (source?.hasItem('weatherballoon')) {
@@ -707,11 +707,11 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 
-	// irritant
+	// Irritant Weathergy
 
 	sandstorm: {
 		name: 'Sandstorm',
-		effectType: 'Weather',
+		effectType: 'IrritantWeather',
 		duration: 5,
 		durationCallback(source, effect) {
 			if (source?.hasItem('smoothrock')) {
@@ -723,7 +723,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		// So we give it increased priority.
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasType('Rock') && this.field.isWeather('sandstorm')) {
+			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm')) {
 				return this.modify(spd, 1.5);
 			}
 		},
@@ -738,9 +738,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'Sandstorm', '[upkeep]');
-			if (this.field.isWeather('sandstorm')) this.eachEvent('Weather');
+			if (this.field.isIrritantWeather('sandstorm')) this.eachEvent('Weather');
 		},
-		onWeather(target) {
+		onIrritantWeather(target) {
 			this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
@@ -754,7 +754,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 
 	deltastream: {
 		name: 'DeltaStream',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 0,
 		onEffectivenessPriority: -1,
 		onEffectiveness(typeMod, target, type, move) {
@@ -777,7 +777,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	desolateland: {
 		name: 'DesolateLand',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 0,
 		onTryMovePriority: 1,
 		onTryMove(attacker, defender, move) {
@@ -788,7 +788,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				return null;
 			}
 		},
-		onWeatherModifyDamage(damage, attacker, defender, move) {
+		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
@@ -813,7 +813,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 	primordialsea: {
 		name: 'PrimordialSea',
-		effectType: 'Weather',
+		effectType: 'ClimateWeather',
 		duration: 0,
 		onTryMovePriority: 1,
 		onTryMove(attacker, defender, move) {
@@ -824,7 +824,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				return null;
 			}
 		},
-		onWeatherModifyDamage(damage, attacker, defender, move) {
+		onClimateWeatherModifyDamage(damage, attacker, defender, move) {
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.type === 'Water') {
 				this.debug('Rain water boost');

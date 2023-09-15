@@ -812,7 +812,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		sideCondition: 'auroraveil',
 		onTry() {
-			return this.field.isWeather(['hail', 'snow']);
+			return this.field.isClimateWeather(['hail', 'snow']);
 		},
 		condition: {
 			duration: 5,
@@ -1471,7 +1471,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, wind: 1},
 		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+			if (target && ['raindance', 'primordialsea'].includes(target.effectiveClimateWeather())) {
 				move.accuracy = true;
 			}
 		},
@@ -1494,7 +1494,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, wind: 1},
 		onModifyMove(move) {
-			if (this.field.isWeather(['hail', 'snow'])) move.accuracy = true;
+			if (this.field.isClimateWeather(['hail', 'snow'])) move.accuracy = true;
 		},
 		secondary: {
 			chance: 10,
@@ -2364,7 +2364,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		// TODO show prepare message before the "POKEMON used MOVE!" message
 		// This happens even before sleep shows its "POKEMON is fast asleep." message
-		weather: 'snow',
+		climateWeather: 'snow',
 		selfSwitch: true,
 		secondary: null,
 		target: "all",
@@ -7961,7 +7961,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		onModifyMove(move, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) move.boosts = {atk: 2, spa: 2};
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) move.boosts = {atk: 2, spa: 2};
 		},
 		boosts: {
 			atk: 1,
@@ -8176,7 +8176,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		weather: 'hail',
+		climateWeather: 'hail',
 		secondary: null,
 		target: "all",
 		type: "Ice",
@@ -9132,7 +9132,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, distance: 1, wind: 1},
 		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
+			switch (target?.effectiveClimateWeather()) {
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;
@@ -11216,7 +11216,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setWeather('sunnyday');
+				this.field.setClimateWeather('sunnyday');
 			},
 		},
 		target: "adjacentFoe",
@@ -11260,7 +11260,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setWeather('raindance');
+				this.field.setClimateWeather('raindance');
 			},
 		},
 		target: "adjacentFoe",
@@ -11331,7 +11331,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setWeather('hail');
+				this.field.setClimateWeather('hail');
 			},
 		},
 		target: "adjacentFoe",
@@ -11507,7 +11507,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setWeather('sandstorm');
+				this.field.setClimateWeather('sandstorm');
 			},
 		},
 		target: "adjacentFoe",
@@ -12393,7 +12393,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveClimateWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -12430,7 +12430,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveClimateWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -14910,7 +14910,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {},
-		weather: 'RainDance',
+		climateWeather: 'RainDance',
 		secondary: null,
 		target: "all",
 		type: "Water",
@@ -15955,7 +15955,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, wind: 1},
 		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+			if (target && ['raindance', 'primordialsea'].includes(target.effectiveClimateWeather())) {
 				move.accuracy = true;
 			}
 		},
@@ -15975,7 +15975,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {wind: 1},
-		weather: 'Sandstorm',
+		climateWeather: 'Sandstorm',
 		secondary: null,
 		target: "all",
 		type: "Rock",
@@ -16687,7 +16687,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			if (this.field.isWeather('sandstorm')) {
+			if (this.field.isClimateWeather('sandstorm')) {
 				factor = 0.667;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -17556,7 +17556,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		weather: 'snow',
+		climateWeather: 'snow',
 		secondary: null,
 		target: "all",
 		type: "Ice",
@@ -17615,7 +17615,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(attacker.effectiveClimateWeather())) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -17628,7 +17628,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onBasePower(basePower, pokemon, target) {
 			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow'];
-			if (weakWeathers.includes(pokemon.effectiveWeather())) {
+			if (weakWeathers.includes(pokemon.effectiveClimateWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
@@ -17652,7 +17652,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(attacker.effectiveClimateWeather())) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -17665,7 +17665,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onBasePower(basePower, pokemon, target) {
 			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow'];
-			if (weakWeathers.includes(pokemon.effectiveWeather())) {
+			if (weakWeathers.includes(pokemon.effectiveClimateWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
 			}
@@ -18849,7 +18849,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {},
-		weather: 'sunnyday',
+		climateWeather: 'sunnyday',
 		secondary: null,
 		target: "all",
 		type: "Fire",
@@ -19159,7 +19159,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveClimateWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
 				factor = 0.667;
@@ -19791,7 +19791,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
+			switch (target?.effectiveClimateWeather()) {
 			case 'raindance':
 			case 'primordialsea':
 				move.accuracy = true;
@@ -21041,7 +21041,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 	},
-	weatherball: {
+	weatherball: { //only works with climate weather rn
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
@@ -21051,7 +21051,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
 		onModifyType(move, pokemon) {
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveClimateWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
 				move.type = 'Fire';
@@ -21070,7 +21070,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			switch (pokemon.effectiveWeather()) {
+			switch (pokemon.effectiveClimateWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
 				move.basePower *= 2;
@@ -21219,7 +21219,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, wind: 1},
 		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
+			if (target && ['raindance', 'primordialsea'].includes(target.effectiveClimateWeather())) {
 				move.accuracy = true;
 			}
 		},

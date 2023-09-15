@@ -13,8 +13,14 @@ export class Field {
 	readonly battle: Battle;
 	readonly id: ID;
 
-	weather: ID;
-	weatherState: EffectState;
+	climateWeather: ID;
+	climateWeatherState: EffectState;
+	irritantWeather: ID;
+	irritantWeatherState: EffectState;
+	energyWeather: ID;
+	energyWeatherState: EffectState;
+	clearingWeather: ID;
+	clearingWeatherState: EffectState;
 	terrain: ID;
 	terrainState: EffectState;
 	pseudoWeather: {[id: string]: EffectState};
@@ -25,8 +31,14 @@ export class Field {
 		if (fieldScripts) Object.assign(this, fieldScripts);
 		this.id = '';
 
-		this.weather = '';
-		this.weatherState = {id: ''};
+		this.climateWeather = '';
+		this.climateWeatherState = {id: ''};
+		this.irritantWeather = '';
+		this.irritantWeatherState = {id: ''};
+		this.energyWeather = '';
+		this.energyWeatherState = {id: ''};
+		this.clearingWeather = '';
+		this.clearingWeatherState = {id: ''};
 		this.terrain = '';
 		this.terrainState = {id: ''};
 		this.pseudoWeather = {};
@@ -36,15 +48,15 @@ export class Field {
 		return State.serializeField(this);
 	}
 
-	setWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+	setClimateWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 
-		if (this.weather === status.id) {
+		if (this.climateWeather === status.id) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				if (this.battle.gen > 5 || this.weatherState.duration === 0) {
+				if (this.battle.gen > 5 || this.climateWeatherState.duration === 0) {
 					return false;
 				}
 			} else if (this.battle.gen > 2 || status.id === 'sandstorm') {
@@ -52,61 +64,262 @@ export class Field {
 			}
 		}
 		if (source) {
-			const result = this.battle.runEvent('SetWeather', source, source, status);
+			const result = this.battle.runEvent('SetClimateWeather', source, source, status);
 			if (!result) {
 				if (result === false) {
-					if ((sourceEffect as Move)?.weather) {
-						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
+					if ((sourceEffect as Move)?.climateWeather) {
+						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.climateWeather);
 					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
-						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
+						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.climateWeather, '[fail]');
 					}
 				}
 				return null;
 			}
 		}
-		const prevWeather = this.weather;
-		const prevWeatherState = this.weatherState;
-		this.weather = status.id;
-		this.weatherState = {id: status.id};
+		const prevClimateWeather = this.climateWeather;
+		const prevClimateWeatherState = this.climateWeatherState;
+		this.climateWeather = status.id;
+		this.climateWeatherState = {id: status.id};
 		if (source) {
-			this.weatherState.source = source;
-			this.weatherState.sourceSlot = source.getSlot();
+			this.climateWeatherState.source = source;
+			this.climateWeatherState.sourceSlot = source.getSlot();
 		}
 		if (status.duration) {
-			this.weatherState.duration = status.duration;
+			this.climateWeatherState.duration = status.duration;
 		}
 		if (status.durationCallback) {
-			if (!source) throw new Error(`setting weather without a source`);
-			this.weatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			if (!source) throw new Error(`setting climateWeather without a source`);
+			this.climateWeatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)) {
-			this.weather = prevWeather;
-			this.weatherState = prevWeatherState;
+		if (!this.battle.singleEvent('FieldStart', status, this.climateWeatherState, this, source, sourceEffect)) {
+			this.climateWeather = prevClimateWeather;
+			this.climateWeatherState = prevClimateWeatherState;
 			return false;
 		}
-		this.battle.eachEvent('WeatherChange', sourceEffect);
+		this.battle.eachEvent('climateWeatherChange', sourceEffect);
 		return true;
 	}
 
-	clearWeather() {
-		if (!this.weather) return false;
-		const prevWeather = this.getWeather();
-		this.battle.singleEvent('FieldEnd', prevWeather, this.weatherState, this);
-		this.weather = '';
-		this.weatherState = {id: ''};
-		this.battle.eachEvent('WeatherChange');
+	setIrritantWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		status = this.battle.dex.conditions.get(status);
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (source === 'debug') source = this.battle.sides[0].active[0];
+
+		if (this.irritantWeather === status.id) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				if (this.battle.gen > 5 || this.irritantWeatherState.duration === 0) {
+					return false;
+				}
+			} else if (this.battle.gen > 2 || status.id === 'sandstorm') {
+				return false;
+			}
+		}
+		if (source) {
+			const result = this.battle.runEvent('SetIrritantWeather', source, source, status);
+			if (!result) {
+				if (result === false) {
+					if ((sourceEffect as Move)?.irritantWeather) {
+						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.irritantWeather);
+					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.irritantWeather, '[fail]');
+					}
+				}
+				return null;
+			}
+		}
+		const prevIrritantWeather = this.irritantWeather;
+		const prevIrritantWeatherState = this.irritantWeatherState;
+		this.irritantWeather = status.id;
+		this.irritantWeatherState = {id: status.id};
+		if (source) {
+			this.irritantWeatherState.source = source;
+			this.irritantWeatherState.sourceSlot = source.getSlot();
+		}
+		if (status.duration) {
+			this.irritantWeatherState.duration = status.duration;
+		}
+		if (status.durationCallback) {
+			if (!source) throw new Error(`setting irritantWeather without a source`);
+			this.irritantWeatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+		}
+		if (!this.battle.singleEvent('FieldStart', status, this.irritantWeatherState, this, source, sourceEffect)) {
+			this.irritantWeather = prevIrritantWeather;
+			this.irritantWeatherState = prevIrritantWeatherState;
+			return false;
+		}
+		this.battle.eachEvent('irritantWeatherChange', sourceEffect);
 		return true;
 	}
 
-	effectiveWeather() {
-		if (this.suppressingWeather()) return '';
-		return this.weather;
+	setEnergyWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		status = this.battle.dex.conditions.get(status);
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (source === 'debug') source = this.battle.sides[0].active[0];
+
+		if (this.energyWeather === status.id) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				if (this.battle.gen > 5 || this.energyWeatherState.duration === 0) {
+					return false;
+				}
+			} else if (this.battle.gen > 2 || status.id === 'sandstorm') {
+				return false;
+			}
+		}
+		if (source) {
+			const result = this.battle.runEvent('SetEnergyWeather', source, source, status);
+			if (!result) {
+				if (result === false) {
+					if ((sourceEffect as Move)?.energyWeather) {
+						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.energyWeather);
+					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.energyWeather, '[fail]');
+					}
+				}
+				return null;
+			}
+		}
+		const prevEnergyWeather = this.energyWeather;
+		const prevEnergyWeatherState = this.energyWeatherState;
+		this.energyWeather = status.id;
+		this.energyWeatherState = {id: status.id};
+		if (source) {
+			this.energyWeatherState.source = source;
+			this.energyWeatherState.sourceSlot = source.getSlot();
+		}
+		if (status.duration) {
+			this.energyWeatherState.duration = status.duration;
+		}
+		if (status.durationCallback) {
+			if (!source) throw new Error(`setting energyWeather without a source`);
+			this.energyWeatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+		}
+		if (!this.battle.singleEvent('FieldStart', status, this.energyWeatherState, this, source, sourceEffect)) {
+			this.energyWeather = prevEnergyWeather;
+			this.energyWeatherState = prevEnergyWeatherState;
+			return false;
+		}
+		this.battle.eachEvent('energyWeatherChange', sourceEffect);
+		return true;
 	}
 
-	suppressingWeather() {
+	setClearingWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+		status = this.battle.dex.conditions.get(status);
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (source === 'debug') source = this.battle.sides[0].active[0];
+
+		if (this.clearingWeather === status.id) {
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				if (this.battle.gen > 5 || this.clearingWeatherState.duration === 0) {
+					return false;
+				}
+			} else if (this.battle.gen > 2 || status.id === 'sandstorm') {
+				return false;
+			}
+		}
+		if (source) {
+			const result = this.battle.runEvent('SetClearingWeather', source, source, status);
+			if (!result) {
+				if (result === false) {
+					if ((sourceEffect as Move)?.clearingWeather) {
+						this.battle.add('-fail', source, sourceEffect, '[from] ' + this.clearingWeather);
+					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+						this.battle.add('-ability', source, sourceEffect, '[from] ' + this.clearingWeather, '[fail]');
+					}
+				}
+				return null;
+			}
+		}
+		const prevClearingWeather = this.clearingWeather;
+		const prevClearingWeatherState = this.clearingWeatherState;
+		this.clearingWeather = status.id;
+		this.clearingWeatherState = {id: status.id};
+		if (source) {
+			this.clearingWeatherState.source = source;
+			this.clearingWeatherState.sourceSlot = source.getSlot();
+		}
+		if (status.duration) {
+			this.clearingWeatherState.duration = status.duration;
+		}
+		if (status.durationCallback) {
+			if (!source) throw new Error(`setting clearingWeather without a source`);
+			this.clearingWeatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+		}
+		if (!this.battle.singleEvent('FieldStart', status, this.clearingWeatherState, this, source, sourceEffect)) {
+			this.clearingWeather = prevClearingWeather;
+			this.clearingWeatherState = prevClearingWeatherState;
+			return false;
+		}
+		this.battle.eachEvent('clearingWeatherChange', sourceEffect);
+		return true;
+	}
+
+	clearClimateWeather() {
+		if (!this.climateWeather) return false;
+		const prevClimateWeather = this.getClimateWeather();
+		this.battle.singleEvent('FieldEnd', prevClimateWeather, this.climateWeatherState, this);
+		this.climateWeather = '';
+		this.climateWeatherState = {id: ''};
+		this.battle.eachEvent('climateWeatherChange');
+		return true;
+	}
+
+	clearIrritantWeather() {
+		if (!this.irritantWeather) return false;
+		const prevIrritantWeather = this.getIrritantWeather();
+		this.battle.singleEvent('FieldEnd', prevIrritantWeather, this.irritantWeatherState, this);
+		this.irritantWeather = '';
+		this.irritantWeatherState = {id: ''};
+		this.battle.eachEvent('irritantWeatherChange');
+		return true;
+	}
+
+	clearEnergyWeather() {
+		if (!this.energyWeather) return false;
+		const prevEnergyWeather = this.getEnergyWeather();
+		this.battle.singleEvent('FieldEnd', prevEnergyWeather, this.energyWeatherState, this);
+		this.energyWeather = '';
+		this.energyWeatherState = {id: ''};
+		this.battle.eachEvent('energyWeatherChange');
+		return true;
+	}
+
+	clearClearingWeather() {
+		if (!this.clearingWeather) return false;
+		const prevClearingWeather = this.getClearingWeather();
+		this.battle.singleEvent('FieldEnd', prevClearingWeather, this.clearingWeatherState, this);
+		this.clearingWeather = '';
+		this.clearingWeatherState = {id: ''};
+		this.battle.eachEvent('clearingWeatherChange');
+		return true;
+	}
+
+	effectiveClimateWeather() {
+		if (this.suppressingClimateWeather()) return '';
+		return this.climateWeather;
+	}
+
+	effectiveIrritantWeather() {
+		if (this.suppressingIrritantWeather()) return '';
+		return this.irritantWeather;
+	}
+
+	effectiveEnergyWeather() {
+		if (this.suppressingEnergyWeather()) return '';
+		return this.energyWeather;
+	}
+
+	effectiveClearingWeather() {
+		if (this.suppressingClearingWeather()) return '';
+		return this.clearingWeather;
+	}
+
+	suppressingClimateWeather() {
 		for (const side of this.battle.sides) {
 			for (const pokemon of side.active) {
-				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() && pokemon.getAbility().suppressWeather) {
+				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() && pokemon.getAbility().suppressClimateWeather) {
 					return true;
 				}
 			}
@@ -114,16 +327,85 @@ export class Field {
 		return false;
 	}
 
-	isWeather(weather: string | string[]) {
-		const ourWeather = this.effectiveWeather();
-		if (!Array.isArray(weather)) {
-			return ourWeather === toID(weather);
+	suppressingIrritantWeather() {
+		for (const side of this.battle.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() && pokemon.getAbility().suppressIrritantWeather) {
+					return true;
+				}
+			}
 		}
-		return weather.map(toID).includes(ourWeather);
+		return false;
 	}
 
-	getWeather() {
-		return this.battle.dex.conditions.getByID(this.weather);
+	suppressingEnergyWeather() {
+		for (const side of this.battle.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() && pokemon.getAbility().suppressEnergyWeather) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	suppressingClearingWeather() {
+		for (const side of this.battle.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() && pokemon.getAbility().suppressClearingWeather) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	isClimateWeather(climateWeather: string | string[]) {
+		const ourClimateWeather = this.effectiveClimateWeather();
+		if (!Array.isArray(climateWeather)) {
+			return ourClimateWeather === toID(climateWeather);
+		}
+		return climateWeather.map(toID).includes(ourClimateWeather);
+	}
+
+	isIrritantWeather(irritantWeather: string | string[]) {
+		const ourIrritantWeather = this.effectiveIrritantWeather();
+		if (!Array.isArray(irritantWeather)) {
+			return ourIrritantWeather === toID(irritantWeather);
+		}
+		return irritantWeather.map(toID).includes(ourIrritantWeather);
+	}
+
+	isEnergyWeather(energyWeather: string | string[]) {
+		const ourEnergyWeather = this.effectiveEnergyWeather();
+		if (!Array.isArray(energyWeather)) {
+			return ourEnergyWeather === toID(energyWeather);
+		}
+		return energyWeather.map(toID).includes(ourEnergyWeather);
+	}
+
+	isClearingWeather(clearingWeather: string | string[]) {
+		const ourClearingWeather = this.effectiveClearingWeather();
+		if (!Array.isArray(clearingWeather)) {
+			return ourClearingWeather === toID(clearingWeather);
+		}
+		return clearingWeather.map(toID).includes(ourClearingWeather);
+	}
+
+	getClimateWeather() {
+		return this.battle.dex.conditions.getByID(this.climateWeather);
+	}
+
+	getIrritantWeather() {
+		return this.battle.dex.conditions.getByID(this.irritantWeather);
+	}
+
+	getEnergyWeather() {
+		return this.battle.dex.conditions.getByID(this.energyWeather);
+	}
+
+	getClearingWeather() {
+		return this.battle.dex.conditions.getByID(this.clearingWeather);
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
