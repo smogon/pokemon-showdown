@@ -7545,7 +7545,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			pokemon.trySetStatus('frb', pokemon);
 		},
 		num: -2,
-		gen: 9,
+		gen: 10,
 	},
 	weatherballoon: {
 		name: "Weather Balloon",
