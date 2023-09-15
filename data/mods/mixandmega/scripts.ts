@@ -59,8 +59,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		for (const pokemon of this.getAllPokemon()) {
 			const item = pokemon.getItem();
-			if (['adamantcrystal', 'griseouscore', 'lustrousglobe', 'vilevial'].includes(item.id) &&
-				item.forcedForme !== pokemon.species.name) {
+			if ([
+				'adamantcrystal', 'griseouscore', 'lustrousglobe', 'wellspringmask',
+				'cornerstonemask', 'hearthflamemask', 'vilevial',
+			].includes(item.id) && item.forcedForme !== pokemon.species.name) {
 				// @ts-ignore
 				const rawSpecies = this.actions.getMixedSpecies(pokemon.m.originalSpecies, item.forcedForme!, pokemon);
 				const species = pokemon.setSpecies(rawSpecies);
@@ -426,6 +428,47 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			pokemon.canMegaEvo = null;
 			return true;
+		},
+		terastallize(pokemon) {
+			if (pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
+			}
+
+			let type = pokemon.teraType;
+			if (pokemon.species.baseSpecies !== 'Ogerpon' && pokemon.getItem().name.endsWith('Mask')) {
+				type = this.dex.species.get(pokemon.getItem().forcedForme).forceTeraType!;
+			}
+			this.battle.add('-terastallize', pokemon, type);
+			pokemon.terastallized = type;
+			for (const ally of pokemon.side.pokemon) {
+				ally.canTerastallize = null;
+			}
+			pokemon.addedType = '';
+			pokemon.knownType = true;
+			pokemon.apparentType = type;
+			if (pokemon.species.baseSpecies === 'Ogerpon') {
+				const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
+				pokemon.formeChange(pokemon.species.id + tera, pokemon.getItem(), true);
+			} else {
+				if (pokemon.getItem().name.endsWith('Mask')) {
+					// @ts-ignore
+					const species: Species = this.getMixedSpecies(pokemon.m.originalSpecies,
+						pokemon.getItem().forcedForme! + '-Tera', pokemon);
+					const oSpecies = this.dex.species.get(pokemon.m.originalSpecies);
+					// @ts-ignore
+					const originalTeraSpecies = this.dex.species.get(species.originalSpecies);
+					pokemon.formeChange(species, pokemon.getItem(), true);
+					this.battle.add('-start', pokemon, originalTeraSpecies.requiredItem, '[silent]');
+					if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
+						this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+					}
+				}
+			}
+			if (pokemon.species.baseSpecies === 'Ogerpon') {
+				const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
+				pokemon.formeChange(pokemon.species.id + tera, pokemon.getItem(), true);
+			}
+			this.battle.runEvent('AfterTerastallization', pokemon);
 		},
 		getMixedSpecies(originalForme, megaForme, pokemon) {
 			const originalSpecies = this.dex.species.get(originalForme);

@@ -273,6 +273,7 @@ interface ModdedBattleActions {
 		moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	) => [SpreadMoveDamage, SpreadMoveTargets];
 	targetTypeChoices?: (this: BattleActions, targetType: string) => boolean;
+	terastallize?: (this: BattleActions, pokemon: Pokemon) => void;
 	tryMoveHit?: (
 		this: BattleActions, target: Pokemon, pokemon: Pokemon, move: ActiveMove
 	) => number | undefined | false | '';
