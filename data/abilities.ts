@@ -1736,7 +1736,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	hungerswitch: {
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (pokemon.species.baseSpecies !== 'Morpeko' || pokemon.transformed) return;
+			if (pokemon.species.baseSpecies !== 'Morpeko' || pokemon.transformed || pokemon.terastallized) return;
 			const targetForme = pokemon.species.name === 'Morpeko' ? 'Morpeko-Hangry' : 'Morpeko';
 			pokemon.formeChange(targetForme);
 		},
