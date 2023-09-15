@@ -643,7 +643,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 	bloodmoon: {
-		name: 'BloodMoon',
+		name: 'bloodmoon',
 		effectType: 'ClimateWeather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -661,9 +661,16 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			if (pokemon.hasItem('utilityumbrella')) return;
+			if (this.field.climateWeatherState.boosted && move?.category === 'Status') {
+				move.pranksterBoosted = true;
+				return priority + 1;
+			}
 			if (move?.type === 'Dark' && move.category === 'Status') return priority + 1;
 		},
 		onFieldStart(field, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.climateWeatherState.boosted = true;
+			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
 				this.add('-weather', 'BloodMoon', '[from] ability: ' + effect.name, '[of] ' + source);
@@ -767,6 +774,51 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 
 	// Energy Weathergy
+
+	// Clearing Weathergy
+
+	strongwinds: {
+		name: 'Strong Winds',
+		effectType: 'ClearingWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('Portble Turbine')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifySpePriority: 10,
+		onModifySpe(spe, pokemon) {
+			if(pokemon.hasType('Flying') && this.field.isClearingWeather('strongwinds')) {
+				return this.modify(spe, 1.25);
+			}
+		},
+		onAnyAccuracy(accuracy, target, source, move) {
+			if(move.flags['wind'] && this.field.isClearingWeather('strongwinds')) {
+				return true;
+			}
+			return accuracy;
+		},
+		onFieldStart(field, source, effect) {
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'StrongWinds', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'StrongWinds');
+			}
+			this.field.clearClimateWeather;
+			this.field.clearEnergyWeather;
+			this.field.clearIrritantWeather;
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'StrongWinds', '[upkeep]');
+			this.eachEvent('ClearingWeather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 
 	// extra weathers
 
