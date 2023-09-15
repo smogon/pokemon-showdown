@@ -520,12 +520,8 @@ export class TeamValidator {
 			name = `${set.name} (${set.species})`;
 		}
 
-		if (this.gen === 9) {
-			if (species.forceTeraType) {
-				set.teraType = species.forceTeraType;
-			} else if (!set.teraType) {
-				set.teraType = species.types[0];
-			}
+		if (!set.teraType && this.gen === 9) {
+			set.teraType = species.types[0];
 		}
 
 		if (!set.level) set.level = ruleTable.defaultLevel;
@@ -623,6 +619,9 @@ export class TeamValidator {
 			} else {
 				set.hpType = type.name;
 			}
+		}
+		if (species.forceTeraType) {
+			set.teraType = species.forceTeraType;
 		}
 		if (set.teraType) {
 			const type = dex.types.get(set.teraType);
