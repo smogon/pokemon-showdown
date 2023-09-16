@@ -439,7 +439,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Fire Blast", "Gunk Shot", "Pain Split", "Toxic Spikes", "Will-O-Wisp"],
+                "movepool": ["Fire Blast", "Gunk Shot", "Pain Split", "Sludge Bomb", "Toxic Spikes", "Will-O-Wisp"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -836,11 +836,6 @@
                 "role": "Wallbreaker",
                 "movepool": ["Dazzling Gleam", "Earth Power", "Leaf Storm", "Sludge Bomb"],
                 "teraTypes": ["Fairy", "Grass", "Ground", "Poison"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Giga Drain", "Sludge Bomb", "Sunny Day", "Weather Ball"],
-                "teraTypes": ["Fire"]
             }
         ]
     },
@@ -1550,7 +1545,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Headlong Rush", "Shell Smash", "Stone Edge", "Wood Hammer"],
-                "teraTypes": ["Ground", "Water"]
+                "teraTypes": ["Ground", "Rock", "Water"]
             }
         ]
     },
@@ -5032,8 +5027,13 @@
         "sets": [
             {
                 "role": "AV Pivot",
-                "movepool": ["Brave Bird", "Gunk Shot", "Heat Wave", "Play Rough", "U-turn"],
-                "teraTypes": ["Flying", "Ground"]
+                "movepool": ["Beat Up", "Gunk Shot", "Heat Wave", "Play Rough", "U-turn"],
+                "teraTypes": ["Dark", "Steel", "Water"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Beat Up", "Double Kick", "Gunk Shot", "Play Rough", "Roost", "U-turn"],
+                "teraTypes": ["Dark", "Steel", "Water"]
             },
             {
                 "role": "Tera Blast user",
@@ -5051,11 +5051,6 @@
                 "teraTypes": ["Grass"]
             },
             {
-                "role": "Wallbreaker",
-                "movepool": ["Knock Off", "Superpower", "U-turn", "Wood Hammer"],
-                "teraTypes": ["Grass"]
-            },
-            {
                 "role": "Setup Sweeper",
                 "movepool": ["Ivy Cudgel", "Knock Off", "Superpower", "Swords Dance"],
                 "teraTypes": ["Grass"]
@@ -5066,7 +5061,7 @@
         "level": 80,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Encore", "Ivy Cudgel", "Spikes", "Synthesis", "U-turn", "Wood Hammer"],
                 "teraTypes": ["Water"]
             },
@@ -5091,7 +5086,7 @@
         "level": 80,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Encore", "Ivy Cudgel", "Spikes", "Superpower", "Synthesis", "Wood Hammer"],
                 "teraTypes": ["Rock"]
             },
