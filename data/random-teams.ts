@@ -534,7 +534,7 @@ export class RandomTeams {
 			['fireblast', ['fierydance', 'flamethrower']],
 			['lavaplume', 'magmastorm'],
 			['thunderpunch', 'wildcharge'],
-			['gunkshot', ['direclaw', 'poisonjab']],
+			['gunkshot', ['direclaw', 'poisonjab', 'sludgebomb']],
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
 			['bugbite', 'pounce'],
