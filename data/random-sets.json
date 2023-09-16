@@ -5032,7 +5032,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Beat Up", "Double Kick", "Gunk Shot", "Play Rough", "Roost"],
+                "movepool": ["Beat Up", "Double Kick", "Gunk Shot", "Play Rough", "Roost", "U-turn"],
                 "teraTypes": ["Dark", "Steel", "Water"]
             }
             {
