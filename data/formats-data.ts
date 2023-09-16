@@ -5177,7 +5177,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	dragapult: {
 		tier: "OU",
 		doublesTier: "DUU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	zacian: {
 		tier: "Uber",
