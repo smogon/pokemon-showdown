@@ -515,9 +515,12 @@ export const commands: Chat.ChatCommands = {
 			if (!mon.exists) {
 				return this.errorReply(`Species ${monName} does not exist.`);
 			}
-			Nominations.icons[targetId] = mon.id;
+			Nominations.icons[targetId] = mon.name.toLowerCase();
 			Nominations.save();
-			this.sendReply(`|html|Updated ${targetId === user.id ? 'your' : `${targetId}'s`} permalock post icon to <psicon pokemon='${mon.id}' />`);
+			this.sendReply(
+				`|html|Updated ${targetId === user.id ? 'your' : `${targetId}'s`} permalock post icon to ` +
+				`<psicon pokemon='${mon.name.toLowerCase()}' />`
+			);
 		},
 		deleteicon(target, room, user) {
 			this.checkCan('rangeban');
