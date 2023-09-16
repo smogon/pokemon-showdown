@@ -5027,9 +5027,14 @@
         "sets": [
             {
                 "role": "AV Pivot",
-                "movepool": ["Brave Bird", "Gunk Shot", "Heat Wave", "Play Rough", "U-turn"],
-                "teraTypes": ["Flying", "Ground"]
+                "movepool": ["Beat Up", "Gunk Shot", "Heat Wave", "Play Rough", "U-turn"],
+                "teraTypes": ["Dark", "Steel", "Water"]
             },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Beat Up", "Double Kick", "Gunk Shot", "Play Rough", "Roost"],
+                "teraTypes": ["Dark", "Steel", "Water"]
+            }
             {
                 "role": "Tera Blast user",
                 "movepool": ["Gunk Shot", "Play Rough", "Swords Dance", "Tera Blast"],
