@@ -1545,7 +1545,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Headlong Rush", "Shell Smash", "Stone Edge", "Wood Hammer"],
-                "teraTypes": ["Ground", "Water", "Rock"]
+                "teraTypes": ["Ground", "Rock", "Water"]
             }
         ]
     },
