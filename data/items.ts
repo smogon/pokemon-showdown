@@ -1100,6 +1100,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	cornerstonemask: {
 		name: "Cornerstone Mask",
 		spritenum: 758,
+		fling: {
+			basePower: 60,
+		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.name.startsWith('Ogerpon-Cornerstone')) {
@@ -2509,6 +2512,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	hearthflamemask: {
 		name: "Hearthflame Mask",
 		spritenum: 760,
+		fling: {
+			basePower: 60,
+		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.name.startsWith('Ogerpon-Hearthflame')) {
@@ -7111,6 +7117,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	wellspringmask: {
 		name: "Wellspring Mask",
 		spritenum: 759,
+		fling: {
+			basePower: 60,
+		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.name.startsWith('Ogerpon-Wellspring')) {
