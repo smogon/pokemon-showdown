@@ -843,7 +843,7 @@ export const Formats: FormatList = [
 			'Comatose', 'Contrary', 'Gorilla Tactics', 'Hadron Engine', 'Huge Power', 'Illusion', 'Innards Out', 'Libero', 'Magnet Pull', 'Moody',
 			'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond', 'Poison Heal', 'Protean', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble',
 			'Wonder Guard', 'Baton Pass', 'Belly Drum', 'Ceaseless Edge', 'Dire Claw', 'Imprison', 'Last Respects', 'Quiver Dance', 'Rage Fist',
-			'Revival Blessing', 'Shed Tail', 'Substitute', 'Shell Smash',
+			'Revival Blessing', 'Shed Tail', 'Substitute', 'Shell Smash', 'Tail Glow,
 		],
 	},
 	{
