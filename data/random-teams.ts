@@ -1850,7 +1850,7 @@ export class RandomTeams {
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
 			}
-			if (set.role === 'Tera Blast user' || species.name.startsWith("Ogerpon")) teamDetails.teraBlast = 1;
+			if (set.role === 'Tera Blast user' || species.baseSpecies === "Ogerpon") teamDetails.teraBlast = 1;
 		}
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
