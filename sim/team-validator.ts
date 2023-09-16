@@ -650,6 +650,9 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
+		if (species.forceTeraType) {
+			set.teraType = species.forceTeraType;
+		}
 		if (set.teraType) {
 			const type = dex.types.get(set.teraType);
 			if (!type.exists) {
@@ -1418,7 +1421,7 @@ export class TeamValidator {
 		for (const move of moves) {
 			let curSpecies: Species | null = species;
 			const eggSources = new PokemonSources();
-
+      
 			while (curSpecies) {
 				const eggPokemon = curSpecies.prevo ? curSpecies.id : '';
 				learnset = this.dex.species.getLearnset(curSpecies.id);

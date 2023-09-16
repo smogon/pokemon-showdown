@@ -56,7 +56,7 @@ describe('[Gen 9] Random Battle (slow)', () => {
 					}
 					if (!moves.size) break;
 				}
-				assert(!moves.size);
+				assert.false(moves.size, `The following moves on ${species.name} are unused: ${[...moves].join(', ')}`);
 			}
 		}
 	});

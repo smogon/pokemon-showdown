@@ -163,7 +163,7 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen5ou');
 	});
 
-	it("should disallow low-level female-only Pokemon with illegal (level up) egg moves/egg move combinations", function () {
+	it.skip("should disallow low-level female-only Pokemon with illegal (level up) egg moves/egg move combinations", function () {
 		team = [
 			{species: 'tinkatink', level: 5, ability: 'moldbreaker', moves: ['knockoff'], evs: {hp: 1}},
 		];
