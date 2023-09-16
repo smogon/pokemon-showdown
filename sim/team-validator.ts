@@ -1421,7 +1421,6 @@ export class TeamValidator {
 		for (const move of moves) {
 			let curSpecies: Species | null = species;
 			const eggSources = new PokemonSources();
-			
 			while (curSpecies) {
 				const eggPokemon = curSpecies.prevo ? curSpecies.id : '';
 				learnset = this.dex.species.getLearnset(curSpecies.id);
