@@ -438,18 +438,26 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	embodyaspectcornerstone: {
 		name: "Embody Aspect (Cornerstone)",
 		shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
+
+		boost: "  The Cornerstone Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Defense rose!",
 	},
 	embodyaspecthearthflame: {
 		name: "Embody Aspect (Hearthflame)",
 		shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
+
+		boost: "  The Hearthflame Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Attack rose!",
 	},
 	embodyaspectteal: {
 		name: "Embody Aspect (Teal)",
 		shortDesc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+
+		boost: "  The Teal Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Speed rose!",
 	},
 	embodyaspectwellspring: {
 		name: "Embody Aspect (Wellspring)",
 		shortDesc: "On switch-in, this Pokemon's Special Defense is raised by 1 stage.",
+
+		boost: "  The Wellspring Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Sp. Def rose!",
 	},
 	emergencyexit: {
 		name: "Emergency Exit",
