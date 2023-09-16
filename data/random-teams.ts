@@ -534,7 +534,7 @@ export class RandomTeams {
 			['fireblast', ['fierydance', 'flamethrower']],
 			['lavaplume', 'magmastorm'],
 			['thunderpunch', 'wildcharge'],
-			['gunkshot', ['direclaw', 'poisonjab']],
+			['gunkshot', ['direclaw', 'poisonjab', 'sludgebomb']],
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
 			['bugbite', 'pounce'],
@@ -1291,7 +1291,7 @@ export class RandomTeams {
 		if (moves.has('scaleshot')) return 'Loaded Dice';
 		if (moves.has('stuffcheeks')) return this.randomChance(1, 2) ? 'Liechi Berry' : 'Salac Berry';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
-		if (moves.has('shellsmash')) return 'White Herb';
+		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
 		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return ability === 'Grassy Surge' ? 'Grassy Seed' : '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (
@@ -1424,6 +1424,7 @@ export class RandomTeams {
 			return 'Assault Vest';
 		}
 		if (counter.get('speedsetup') && role === 'Bulky Setup') return 'Weakness Policy';
+		if (species.id === 'golem') return 'Custap Berry';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
@@ -1709,6 +1710,9 @@ export class RandomTeams {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
+			// Treat Ogerpon formes like the Tera Blast user role; reject if team has one already
+			if (species.baseSpecies === 'Ogerpon' && teamDetails.teraBlast) continue;
+
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
@@ -1846,7 +1850,7 @@ export class RandomTeams {
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
 			}
-			if (set.role === 'Tera Blast user') teamDetails.teraBlast = 1;
+			if (set.role === 'Tera Blast user' || species.baseSpecies === "Ogerpon") teamDetails.teraBlast = 1;
 		}
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
