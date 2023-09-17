@@ -5633,9 +5633,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: -12,
 	},
-	surveillance: { // THIS SHOULD BE +1 STAGE LMAOOOOO +2 IS SO BROKEN ITS CRAZY
+	surveillance: {
 		onStart(pokemon) {
-			this.boost({accuracy: 2}, pokemon);
+			this.boost({accuracy: 1}, pokemon);
 		},
 		name: "Surveillance",
 		rating: 4,
