@@ -5374,6 +5374,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: -13,
 	},
+	fieldworker: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Fieldworker boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Fieldworker boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Fieldworker",
+		rating: 3,
+		num: -33,
+	},
 	forked: {
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
@@ -5613,6 +5632,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: -12,
 	},
+	surveillance: { // THIS SHOULD BE +1 STAGE LMAOOOOO +2 IS SO BROKEN ITS CRAZY
+		onStart(pokemon) {
+			this.boost({accuracy: 2}, pokemon);
+		},
+		name: "Surveillance",
+		rating: 4,
+		num: -34,
+	},
 	transcendence: {
 		onStart(source) {
 			this.field.setEnergyWeather('cosmicrays');
@@ -5620,6 +5647,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Transcendence",
 		rating: 3,
 		num: -10,
+	},
+	vegetate: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Grass';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Vegetate",
+		rating: 3,
+		num: -32,
 	},
 	warpmist: { // does NOT fucking work
 		onModifySpAPriority: 5,

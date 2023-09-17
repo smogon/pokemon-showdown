@@ -8701,7 +8701,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 50.5,
 		color: "White",
 		eggGroups: ["Monster", "Grass"],
-		requiredAbility: "Evergreen",
 		changesFrom: "Snover",
 	},
 	abomasnow: {
@@ -8747,7 +8746,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "White",
 		evoLevel: 40,
 		eggGroups: ["Monster", "Grass"],
-		requiredAbility: "Evergreen",
 		changesFrom: "Abomasnow",
 	},
 	weavile: {
