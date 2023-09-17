@@ -506,7 +506,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2,
 		num: 29,
 	},
-	cloudnine: {
+	cloudnine: { // updated
 		onSwitchIn(pokemon) {
 			this.effectState.switchingIn = true;
 		},
@@ -642,9 +642,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4.5,
 		num: 126,
 	},
-	corrosion: {
+	corrosion: { // updated
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
 		name: "Corrosion",
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!this.field.isIrritantWeather(['smog'])) return;
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Poison'] = true;
+			}
+		},
 		rating: 2.5,
 		num: 212,
 	},
@@ -912,7 +920,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4.5,
 		num: 190,
 	},
-	disguise: {
+	disguise: { // updated
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (
@@ -951,7 +959,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
-				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
 			}
 		},
 		isBreakable: true,
@@ -1146,13 +1153,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: 111,
 	},
-	flamebody: {
+	flamebody: { // updated
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('brn', target);
 				}
 			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
 		},
 		name: "Flame Body",
 		rating: 2,
@@ -1419,9 +1429,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 		num: 169,
 	},
-	galewings: {
+	galewings: { // updated
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
+			if (move.type !== 'Flying') return; 
+			if (pokemon.hp === pokemon.maxhp || this.field.isClearingWeather('strongwinds')) return priority + 1;
 		},
 		name: "Gale Wings",
 		rating: 1.5,
@@ -1524,10 +1535,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4.5,
 		num: 255,
 	},
-	grasspelt: {
+	grasspelt: { // updated
 		onModifyDefPriority: 6,
 		onModifyDef(pokemon) {
-			if (this.field.isTerrain('grassyterrain')) return this.chainModify(1.5);
+			if (this.field.isTerrain('grassyterrain') || this.field.isIrritantWeather('pollinate'))
+			return this.chainModify(1.5);
 		},
 		isBreakable: true,
 		name: "Grass Pelt",
@@ -2262,7 +2274,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 1,
 		num: 170,
 	},
-	magmaarmor: {
+	magmaarmor: { // updated
 		onUpdate(pokemon) {
 			if (pokemon.status === 'frz') {
 				this.add('-activate', pokemon, 'ability: Magma Armor');
@@ -3602,10 +3614,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 0,
 		num: 50,
 	},
-	sandforce: {
+	sandforce: { // updated
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.field.isIrritantWeather('sandstorm')) {
+			if (this.field.isIrritantWeather(['sandstorm', 'duststorm'])) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([5325, 4096]);
@@ -3619,9 +3631,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2,
 		num: 159,
 	},
-	sandrush: {
+	sandrush: { // updated
 		onModifySpe(spe, pokemon) {
-			if (this.field.isIrritantWeather('sandstorm')) {
+			if (this.field.isIrritantWeather(['sandstorm', 'duststorm'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -3648,14 +3660,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 		num: 45,
 	},
-	sandveil: {
+	sandveil: { // udpated
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isIrritantWeather('sandstorm')) {
+			if (this.field.isIrritantWeather(['sandstorm', 'duststorm'])) {
 				this.debug('Sand Veil - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -4017,7 +4029,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4,
 		num: 117,
 	},
-	solarpower: {
+	solarpower: { // updated
 		onModifySpAPriority: 5,
 		onModifySpA(spa, source, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
@@ -4166,7 +4178,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 1,
 		num: 80,
 	},
-	steamengine: {
+	steamengine: { // updated
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (!this.boost({spe: 6})) {
+					this.add('-immune', target, '[from] ability: Steam Engine');
+				}
+				return null;
+			}
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (['Water', 'Fire'].includes(move.type)) {
 				this.boost({spe: 6});
