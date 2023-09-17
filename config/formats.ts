@@ -233,7 +233,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU'],
+		banlist: ['PU', 'Gurdurr', 'Indeedee-F'],
 	},
 	{
 		name: "[Gen 9] LC UU",
