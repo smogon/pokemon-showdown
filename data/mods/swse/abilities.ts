@@ -647,7 +647,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Corrosion",
 		onModifyMovePriority: -5,
 		onModifyMove(move) {
-			if (!this.field.isIrritantWeather(['smog'])) return;
+			if (!this.field.isIrritantWeather('smog')) return;
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
 				move.ignoreImmunity['Poison'] = true;
@@ -5296,7 +5296,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: -11,
 	},
 	bloomspring: {
-		onClimateWeather(target, source, effect) {
+		onIrritantWeather(target, source, effect) {
 			if (target.hasItem('safetygoggles')) return;
 			if (effect.id === 'pollinate') {
 				this.heal(target.baseMaxhp / 16);
@@ -5306,6 +5306,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 1.5,
 		num: -20,
 	},
+	carboncapture: {
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('safetygoggles')) return;
+			if (effect.id === 'smogspread') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'smogspread') return false;
+		},
+		name: "Carbon Capture",
+		rating: 2,
+		num: -22,
+	},
 	condensation: {
 		onStart(source) {
 			this.field.setClimateWeather('foghorn');
@@ -5314,6 +5328,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: -2,
 	},
+	druidry: { // incomplete
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('safetygoggles')) return;
+			if (effect.id === 'sprinkle') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		// need to add strong winds triggering grassy terrain instead of misty terrain
+		name: "Druidry",
+		rating: 2,
+		num: -23,
+	},
 	dustdevil: {
 		onStart(source) {
 			this.field.setIrritantWeather('duststorm');
@@ -5321,6 +5347,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Dust Devil",
 		rating: 3,
 		num: -3,
+	},
+	energizer: {
+		onModifySpe(spe, pokemon) {
+			if (this.field.isEnergyWeather('supercell')) {
+				return this.chainModify(2);
+			}
+		},
+		name: "Energizer",
+		rating: 2.5,
+		num: -29,
 	},
 	eventide: {
 		onStart(source) {
@@ -5337,6 +5373,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Ferroflux",
 		rating: 3,
 		num: -13,
+	},
+	forked: {
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (pokemon.status && ['supercell'].includes(pokemon.effectiveEnergyWeather())) {
+				this.debug('forked');
+				this.add('-activate', pokemon, 'ability: Forked');
+				pokemon.cureStatus();
+			}
+		},
+		name: "Forked",
+		rating: 1.5,
+		num: -30,
 	},
 	galeforce: {
 		onStart(source) {
@@ -5365,6 +5415,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Glacial Armor",
 		rating: 2,
 		num: -15,
+	},
+	gravitysling: {
+		onModifySpe(spe, pokemon) {
+			if (this.field.isEnergyWeather('magnetize')) {
+				return this.chainModify(2);
+			}
+		},
+		name: "Gravity Sling",
+		rating: 2,
+		num: -31,
 	},
 	haunting: {
 		onModifySpe(spe, pokemon) {
@@ -5415,6 +5475,36 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: -18,
 	},
+	masterinstinct: {
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, source) {
+			if (source.hasItem('energynullifier')) return;
+			if (typeof accuracy !== 'number') return;
+			if (this.field.isEnergyWeather('auraprojection')) {
+				this.debug('Master Instinct accuracy boost');
+				return this.chainModify(1.2);
+			}
+		},
+		name: "Master Instinct",
+		rating: 2,
+		num: -25,
+	},
+	nesting: {
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('safetygoggles')) return;
+			if (effect.id === 'swarmsignal') {
+				if (target.allies().some(ally => ally.hasType('Bug'))) {
+					this.heal(target.baseMaxhp / 8);
+				}
+				else {
+					this.heal(target.baseMaxhp / 16);
+				}
+			}
+		},
+		name: "Nesting",
+		rating: 1.5,
+		num: -21,
+	},
 	pollution: {
 		onStart(source) {
 			this.field.setIrritantWeather('smogspread');
@@ -5422,6 +5512,36 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Pollution",
 		rating: 3,
 		num: -6,
+	},
+	powerabove: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('energynullifier')) return;
+			if (this.field.isIrritantWeather('dragonforce')) {
+				if (move.type === 'Dragon' || move.type === 'Fire' || move.type === 'Electric' || move.type === 'Ice') {
+					this.debug('Power Above boost');
+					return this.chainModify([5325, 4096]);
+				}
+			}
+		},
+		name: "Power Above",
+		rating: 2.5,
+		num: -28,
+	},
+	powerwithin: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('safetygoggles')) return;
+			if (this.field.isIrritantWeather('sprinkle')) {
+				if (move.type === 'Fairy' || move.type === 'Grass' || move.type === 'Fire' || move.type === 'Water') {
+					this.debug('Power Within boost');
+					return this.chainModify([5325, 4096]);
+				}
+			}
+		},
+		name: "Power Within",
+		rating: 2.5,
+		num: -24,
 	},
 	seance: {
 		onStart(source) {
@@ -5438,6 +5558,44 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Secretion",
 		rating: 3,
 		num: -5,
+	},
+	smokeandmirrors: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('energynullifier')) return;
+			if (this.field.isEnergyWeather('cosmicrays')) {
+				if (move.category === 'Special') {
+					this.debug('Smoke and Mirrors boost');
+					return this.chainModify(1.2);
+				}
+			}
+		},
+		onModifyMovePriority: -2,
+		onModifyMove(move, source) {
+			if (move.secondaries) {
+				if (source.hasItem('energynullifier')) return;
+				if (this.field.isEnergyWeather('cosmicrays')) {
+					this.debug('S&M 2x confuse chance');
+					for (const secondary of move.secondaries) {
+						if (secondary.chance && secondary.status === 'confusion') secondary.chance *= 2;
+					}
+				}
+			}
+		},
+		name: "Smoke and Mirrors",
+		rating: 2.5,
+		num: -27,
+	},
+	souldrain: { // incomplete. says it drains from the opponents-is this true?
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('energynullifier')) return;
+			if (effect.id === 'haunt') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		name: "Soul Drain",
+		rating: 2,
+		num: -26,
 	},
 	standoff: {
 		onStart(source) {
