@@ -1537,8 +1537,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	grasspelt: { // updated
 		onModifyDefPriority: 6,
-		onModifyDef(pokemon) {
-			if (this.field.isTerrain('grassyterrain') || this.field.isIrritantWeather('pollinate'))
+		onModifyDef(pokemon, source) {
+			if (this.field.isTerrain('grassyterrain') || (!source.hasItem('safetygoggles')) && this.field.isIrritantWeather('pollinate'))
 			return this.chainModify(1.5);
 		},
 		isBreakable: true,
@@ -1767,6 +1767,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	icebody: {
 		onClimateWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'hail' || effect.id === 'snow') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -1780,6 +1781,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	iceface: {
 		onStart(pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isClimateWeather(['hail', 'snow']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
@@ -3617,6 +3619,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	sandforce: { // updated
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('safetygoggles')) return;
 			if (this.field.isIrritantWeather(['sandstorm', 'duststorm'])) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
@@ -3665,7 +3668,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (type === 'sandstorm') return false;
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy) {
+		onModifyAccuracy(accuracy, source) {
+			if (source.hasItem('volatilespray')) return;
 			if (typeof accuracy !== 'number') return;
 			if (this.field.isIrritantWeather(['sandstorm', 'duststorm'])) {
 				this.debug('Sand Veil - decreasing accuracy');
@@ -4009,7 +4013,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (type === 'hail') return false;
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy) {
+		onModifyAccuracy(accuracy, source) {
+			if (source.hasItem('utilityumbrella')) return;
 			if (typeof accuracy !== 'number') return;
 			if (this.field.isClimateWeather(['hail', 'snow'])) {
 				this.debug('Snow Cloak - decreasing accuracy');
@@ -5289,6 +5294,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Arcanum",
 		rating: 3,
 		num: -11,
+	},
+	bloomspring: {
+		onClimateWeather(target, source, effect) {
+			if (target.hasItem('safetygoggles')) return;
+			if (effect.id === 'pollinate') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		name: "Bloomspring",
+		rating: 1.5,
+		num: -20,
 	},
 	condensation: {
 		onStart(source) {

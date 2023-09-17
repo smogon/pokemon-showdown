@@ -739,7 +739,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'IrritantWeather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('smoothrock')) {
+			if (source?.hasItem('volatilespray')) {
 				return 8;
 			}
 			return 5;
@@ -748,6 +748,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		// So we give it increased priority.
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
+			if (pokemon.hasItem('safetygoggles')) return;
 			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm')) {
 				return this.modify(spd, 1.5);
 			}

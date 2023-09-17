@@ -7532,6 +7532,24 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 
 	// swse
+	energychannelizer: {
+		name: "Energy Channelizer",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -7,
+		gen: 9,
+	},
+	energynullifier: {
+		name: "Energy Nullifier",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -4,
+		gen: 9,
+	},
 	frostorb: {
 		name: "Frost Orb",
 		spritenum: 145,
@@ -7545,7 +7563,25 @@ export const Items: {[k: string]: ModdedItemData} = {
 			pokemon.trySetStatus('frb', pokemon);
 		},
 		num: -2,
-		gen: 10,
+		gen: 9,
+	},
+	portableturbine: {
+		name: "Portable Turbine",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -8,
+		gen: 9,
+	},
+	volatilespray: {
+		name: "Volatile Spray",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -5,
+		gen: 9,
 	},
 	weatherballoon: {
 		name: "Weather Balloon",
@@ -7554,7 +7590,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			basePower: 10,
 		},
 		num: -3,
-		gen: 10,
+		gen: 9,
 	},
 	whirligig: {
 		name: "Whirligig",
@@ -7567,6 +7603,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		itemUser: ["Castform"],
 		num: -4,
-		gen: 10,
+		gen: 9,
 	},
 };
