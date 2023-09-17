@@ -1303,10 +1303,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
 		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
-		const isRegionalForm = ["Alola", "Galar", "Hisui", "Paldea"].includes(dex[mon].forme) &&
-			dex[mon].name !== "Pikachu-Alola";
+		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(dex[mon].forme) || dex[mon].forme.startsWith("Paldea")) &&
+			dex[mon].baseSpecies !== "Pikachu";
+		const maskForm = dex[mon].baseSpecies === "Ogerpon" && !dex[mon].forme.endsWith("Tera");
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isRegionalForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
+		if (!isRegionalForm && !maskForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
 			getSortValue(mon) === getSortValue(dex[mon].baseSpecies)) continue;
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
