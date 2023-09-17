@@ -35,6 +35,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Future",
 	},
+	jetpunch: {
+		inherit: true,
+		hasSheerForce: true,
+	},
 	matchagotcha: {
 		inherit: true,
 		isNonstandard: "Future",
