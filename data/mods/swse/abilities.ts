@@ -5431,6 +5431,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
+		isBreakable: true,
 		name: "Glacial Armor",
 		rating: 2,
 		num: -15,
