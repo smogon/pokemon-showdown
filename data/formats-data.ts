@@ -1577,7 +1577,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ursaluna: {
 		tier: "UU",
 		doublesTier: "DOU",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	ursalunabloodmoon: {
 		tier: "OU",
