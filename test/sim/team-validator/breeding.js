@@ -203,6 +203,13 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen3ou');
 	});
 
+	it("should disallow illegal egg move combinations containing past gen universal moves", function () {
+		team = [
+			{species: 'salamence', ability: 'intimidate', moves: ['defensecurl', 'thrash'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen5ou');
+	});
+
 	it('should allow complex chainbred sets', function () {
 		team = [
 			{species: 'toxicroak', ability: 'dryskin', moves: ['bulletpunch', 'crosschop', 'fakeout'], evs: {hp: 4}},
