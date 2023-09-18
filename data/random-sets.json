@@ -4762,7 +4762,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Draco Meteor", "Flamethrower", "Hurricane", "Hydro Pump"],
+                "movepool": ["Draco Meteor", "Flamethrower", "Flip Turn", "Hydro Pump"],
                 "teraTypes": ["Fire", "Water"]
             },
             {
