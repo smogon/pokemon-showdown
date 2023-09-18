@@ -78,9 +78,14 @@ export class PokemonSources {
 	limitedEggMoves?: ID[] | null;
 	/**
 	 * Moves that should be in limitedEggMoves that would otherwise be skipped
-	 * because they can be learned via Gen 1-2 tradeback
+	 * because they can be learned universally in a past generation
 	 */
 	possiblyLimitedEggMoves?: ID[] | null;
+	/**
+	 * Moves that should be in limitedEggMoves that would otherwise be skipped
+	 * because they can be learned via Gen 1-2 tradeback
+	 */
+	tradebackLimitedEggMoves?: ID[] | null;
 	/**
 	 * Moves that can be learned via Pomeg glitch and does not require a
 	 * particular parent to learn
@@ -126,8 +131,10 @@ export class PokemonSources {
 	}
 	add(source: PokemonSource, limitedEggMove?: ID | null) {
 		if (this.sources[this.sources.length - 1] !== source) this.sources.push(source);
-		if (limitedEggMove && source.substr(0, 3) === '1ET') {
-			this.possiblyLimitedEggMoves = [limitedEggMove];
+		if (limitedEggMove) {
+			if (source.substr(0, 3) === '1ET') {
+				this.tradebackLimitedEggMoves = [limitedEggMove];
+			}
 		}
 		if (limitedEggMove && this.limitedEggMoves !== null) {
 			this.limitedEggMoves = [limitedEggMove];
@@ -227,11 +234,34 @@ export class PokemonSources {
 				this.possiblyLimitedEggMoves.push(...other.possiblyLimitedEggMoves);
 			}
 		}
+		if (other.tradebackLimitedEggMoves) {
+			if (!this.tradebackLimitedEggMoves) {
+				this.tradebackLimitedEggMoves = other.tradebackLimitedEggMoves;
+			} else {
+				this.tradebackLimitedEggMoves.push(...other.tradebackLimitedEggMoves);
+			}
+		}
 		if (other.pomegEggMoves) {
 			if (!this.pomegEggMoves) {
 				this.pomegEggMoves = other.pomegEggMoves;
 			} else {
 				this.pomegEggMoves.push(...other.pomegEggMoves);
+			}
+		}
+		if (this.possiblyLimitedEggMoves) {
+			const eggSources = this.sources.filter(source => source.charAt(1) === 'E');
+			let minEggGen = parseInt(eggSources[0]);
+			for (const source of eggSources) {
+				minEggGen = Math.min(minEggGen, parseInt(source.charAt(0)));
+			}
+			if (minEggGen) {
+				for (const eggMoveAndGen of this.possiblyLimitedEggMoves) {
+					if (!this.limitedEggMoves) this.limitedEggMoves = [];
+					if (parseInt(eggMoveAndGen.charAt(0)) < minEggGen) {
+						const eggMove = toID(eggMoveAndGen.substr(1));
+						if (!this.limitedEggMoves.includes(eggMove)) this.limitedEggMoves.push(eggMove);
+					}
+				}
 			}
 		}
 		let eggTradebackLegal = false;
@@ -241,8 +271,8 @@ export class PokemonSources {
 				break;
 			}
 		}
-		if (!eggTradebackLegal && this.possiblyLimitedEggMoves) {
-			for (const eggMove of this.possiblyLimitedEggMoves) {
+		if (!eggTradebackLegal && this.tradebackLimitedEggMoves) {
+			for (const eggMove of this.tradebackLimitedEggMoves) {
 				if (!this.limitedEggMoves) this.limitedEggMoves = [];
 				if (!this.limitedEggMoves.includes(eggMove)) this.limitedEggMoves.push(eggMove);
 			}
@@ -1386,16 +1416,13 @@ export class TeamValidator {
 		if (species.id === 'smeargle') return true;
 		const canBreedWithSmeargle = species.eggGroups.includes('Field');
 
-		let restrictiveMoveCount = 0;
-		let allEggSources;
-		const limitedEggMoves: ID[] = [];
+		const allEggSources = new PokemonSources();
+		allEggSources.sourcesBefore = eggGen;
 		for (const move of moves) {
 			let curSpecies: Species | null = species;
-			/** 1 = restrictive source other than egg, 2 = can learn from egg, 3 = can learn unrestricted */
-			let canLearn: 0 | 1 | 2 | 3 = 0;
-			const eggSources: any[] = [];
-
+			const eggSources = new PokemonSources();
 			while (curSpecies) {
+				const eggPokemon = curSpecies.prevo ? curSpecies.id : '';
 				learnset = this.dex.species.getLearnset(curSpecies.id);
 				if (learnset && learnset[move]) {
 					for (const moveSource of learnset[move]) {
@@ -1403,38 +1430,33 @@ export class TeamValidator {
 						if (parseInt(moveSource.charAt(0)) > eggGen) continue;
 						const canLearnFromSmeargle = moveSource.charAt(1) === 'E' && canBreedWithSmeargle;
 						if (!'ESDV'.includes(moveSource.charAt(1)) || canLearnFromSmeargle) {
-							canLearn = 3;
+							eggSources.addGen(parseInt(moveSource.charAt(0)));
 							break;
 						} else {
 							if (moveSource.charAt(1) === 'E') {
-								canLearn = 2;
-								eggSources.push(moveSource);
-							} else if (!canLearn) {
-								canLearn = 1;
+								eggSources.add(moveSource + eggPokemon, move);
+								if (eggGen === 2 && this.dex.moves.getByID(move).gen === 1) eggSources.add('1ET' + eggPokemon, move);
+							} else {
+								eggSources.add(moveSource + eggPokemon);
 							}
 						}
 					}
 				}
-				if (canLearn === 3) break;
+				if (eggSources.sourcesBefore === eggGen) break;
 				curSpecies = this.learnsetParent(curSpecies);
 			}
 
-			if (canLearn === 3) continue;
-			if (!canLearn) return false;
-			if (!allEggSources) {
-				allEggSources = eggSources;
-			} else {
-				allEggSources = allEggSources.filter(source => eggSources.includes(source));
+			if (eggSources.sourcesBefore === eggGen) continue;
+			if (!eggSources.sourcesBefore && !eggSources.sources.length) return false;
+			const onlyEggSources = eggSources.sources.filter(source => source.charAt(1) === 'E');
+			if (eggGen >= 3 && onlyEggSources.length && eggSources.limitedEggMoves === null && eggSources.sourcesBefore) {
+				eggSources.possiblyLimitedEggMoves = [toID(eggSources.sourcesBefore + move)];
 			}
-			if (canLearn === 2) limitedEggMoves.push(move);
-			if (canLearn === 1) {
-				restrictiveMoveCount++;
-				if (restrictiveMoveCount > 1) return false;
-			}
-			if (limitedEggMoves.length && restrictiveMoveCount) return false;
+			allEggSources.intersectWith(eggSources);
+			if (!allEggSources.sources.length && !eggSources.sourcesBefore) return false;
 		}
 		pokemonBlacklist.push(species.id);
-		if (allEggSources && limitedEggMoves.length > 1) {
+		if (allEggSources.limitedEggMoves && allEggSources.limitedEggMoves.length > 1) {
 			if (noRecurse) return false;
 			let canChainbreed = false;
 			for (const fatherEggGroup of species.eggGroups) {
@@ -1443,10 +1465,10 @@ export class TeamValidator {
 					break;
 				}
 			}
-			if (!canChainbreed && limitedEggMoves.length === moves.length) return false;
+			if (!canChainbreed && allEggSources.limitedEggMoves.length === moves.length) return false;
 			const setSources = new PokemonSources();
-			setSources.limitedEggMoves = limitedEggMoves;
-			return this.findEggMoveFathers(allEggSources[0], species, setSources, false, pokemonBlacklist, true);
+			setSources.limitedEggMoves = allEggSources.limitedEggMoves;
+			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, false, pokemonBlacklist, true);
 		}
 		return true;
 	}
@@ -2656,6 +2678,10 @@ export class TeamValidator {
 		if (!moveSources.size()) {
 			if (cantLearnReason) return `'s move ${move.name} ${cantLearnReason}`;
 			return ` can't learn ${move.name}.`;
+		}
+		const eggSources = moveSources.sources.filter(source => source.charAt(1) === 'E');
+		if (dex.gen >= 3 && eggSources.length && moveSources.limitedEggMoves === null && moveSources.sourcesBefore) {
+			moveSources.possiblyLimitedEggMoves = [toID(moveSources.sourcesBefore + move.id)];
 		}
 		const backupSources = setSources.sources;
 		const backupSourcesBefore = setSources.sourcesBefore;
