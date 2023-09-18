@@ -93,7 +93,7 @@ export const Nominations = new class {
 		}, undefined, true);
 	}
 	save() {
-		FS('config/chat-plugins/permas.json').writeUpdate(() => JSON.stringify(this.noms));
+		FS('config/chat-plugins/permas.json').writeUpdate(() => JSON.stringify({noms: this.noms, icons: this.icons}));
 	}
 	notifyStaff() {
 		const usRoom = Rooms.get('upperstaff');
