@@ -74,7 +74,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Ice Shard", "Ice Spinner", "Knock Off", "Swords Dance"],
+                "movepool": ["Earthquake", "Ice Shard", "Ice Spinner", "Knock Off", "Rapid Spin", "Swords Dance"],
                 "teraTypes": ["Ground"]
             }
         ]
@@ -1571,11 +1571,6 @@
                 "role": "Bulky Support",
                 "movepool": ["Flip Turn", "Ice Beam", "Knock Off", "Roost", "Stealth Rock", "Surf", "Yawn"],
                 "teraTypes": ["Flying", "Grass"]
-            },
-            {
-                "role": "AV Pivot",
-                "movepool": ["Flash Cannon", "Flip Turn", "Grass Knot", "Hydro Pump", "Ice Beam", "Knock Off"],
-                "teraTypes": ["Flying", "Grass"]
             }
         ]
     },
@@ -2170,7 +2165,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Energy Ball", "Hydro Pump", "Ice Beam", "Surf", "Tail Glow"],
-                "teraTypes": ["Grass", "Steel", "Water"]
+                "teraTypes": ["Grass", "Water"]
             }
         ]
     },
@@ -3207,7 +3202,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Defog", "Knock Off", "Leaf Blade", "Roost", "Sucker Punch", "Swords Dance", "Triple Arrows", "U-turn"],
+                "movepool": ["Knock Off", "Leaf Blade", "Roost", "Sucker Punch", "Swords Dance", "Triple Arrows", "U-turn"],
+                "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Defog", "Leaf Blade", "Roost", "Triple Arrows"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3641,7 +3641,7 @@
                 "teraTypes": ["Normal"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Setup Sweeper",
                 "movepool": ["Boomburst", "Gunk Shot", "Overdrive", "Shift Gear"],
                 "teraTypes": ["Normal"]
             }
@@ -3669,6 +3669,11 @@
                 "role": "Wallbreaker",
                 "movepool": ["Dazzling Gleam", "Mystical Fire", "Psychic", "Psyshock", "Trick", "Trick Room"],
                 "teraTypes": ["Fairy", "Fire", "Psychic"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Draining Kiss", "Mystical Fire", "Psychic", "Psyshock"],
+                "teraTypes": ["Fairy", "Steel"]
             }
         ]
     },
@@ -4676,7 +4681,7 @@
                 "teraTypes": ["Ground", "Steel"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["Close Combat", "Headlong Rush", "Ice Spinner", "Knock Off", "Rapid Spin", "Stealth Rock"],
                 "teraTypes": ["Ground", "Steel"]
             }
@@ -4757,7 +4762,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Draco Meteor", "Flamethrower", "Hurricane", "Hydro Pump"],
+                "movepool": ["Draco Meteor", "Flamethrower", "Flip Turn", "Hydro Pump"],
                 "teraTypes": ["Fire", "Water"]
             },
             {
