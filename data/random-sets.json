@@ -3641,7 +3641,7 @@
                 "teraTypes": ["Normal"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Setup Sweeper",
                 "movepool": ["Boomburst", "Gunk Shot", "Overdrive", "Shift Gear"],
                 "teraTypes": ["Normal"]
             }
