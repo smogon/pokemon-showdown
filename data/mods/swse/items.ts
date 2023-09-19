@@ -4999,13 +4999,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
 			if (['sandstorm', 'duststorm', 'pollinate',
-			'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
+				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
 				this.runEvent('IrritantWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
 			if (['sandstorm', 'duststorm', 'pollinate',
-			'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
+				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
 				this.runEvent('IrritantWeatherChange', pokemon, pokemon, this.effect);
 			}
 			this.effectState.inactive = true;
