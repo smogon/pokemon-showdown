@@ -141,7 +141,7 @@
     },
     "dewgong": {
         "level": 90,
-        "moves": ["encore", "icebeam", "rest", "sleeptalk", "surf", "toxic"]
+        "moves": ["encore", "icebeam", "raindance", "rest", "surf", "toxic"]
     },
     "muk": {
         "level": 88,
