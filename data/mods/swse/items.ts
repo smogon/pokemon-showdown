@@ -4987,6 +4987,29 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return null;
 			}
 		},
+		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem()) return;
+			if (['sandstorm', 'duststorm', 'pollinate',
+				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
+				this.runEvent('IrritantWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.inactive) return;
+			this.effectState.inactive = false;
+			if (['sandstorm', 'duststorm', 'pollinate',
+			'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
+				this.runEvent('IrritantWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onEnd(pokemon) {
+			if (['sandstorm', 'duststorm', 'pollinate',
+			'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
+				this.runEvent('IrritantWeatherChange', pokemon, pokemon, this.effect);
+			}
+			this.effectState.inactive = true;
+		},
 		num: 650,
 		gen: 6,
 	},
@@ -6873,7 +6896,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem()) return;
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow',
+			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
 				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
@@ -6881,14 +6904,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onUpdate(pokemon) {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail', 'snow',
+			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
 				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'hail',
-				'snow', 'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
+			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
+				'bloodmoon', 'foghorn'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 			this.effectState.inactive = true;
@@ -7546,6 +7569,29 @@ export const Items: {[k: string]: ModdedItemData} = {
 		spritenum: 6,
 		fling: {
 			basePower: 10,
+		},
+		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem()) return;
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.inactive) return;
+			this.effectState.inactive = false;
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onEnd(pokemon) {
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+			this.effectState.inactive = true;
 		},
 		num: -4,
 		gen: 9,

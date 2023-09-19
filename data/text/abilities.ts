@@ -205,10 +205,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	chlorophyll: {
 		name: "Chlorophyll",
-		desc: "If Sunny Day is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
+		desc: "If Sun is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Sun is active, this Pokemon's Speed is doubled.",
 		gen7: {
-			desc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
+			desc: "If Sun is active, this Pokemon's Speed is doubled.",
 		},
 	},
 	clearbody: {
@@ -217,7 +217,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	cloudnine: {
 		name: "Cloud Nine",
-		shortDesc: "While this Pokemon is active, the effects of weather conditions are disabled.",
+		shortDesc: "While this Pokemon is active, the effects of Climate Weathergy conditions are disabled.",
 
 		start: "#airlock",
 	},
@@ -264,7 +264,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	corrosion: {
 		name: "Corrosion",
-		shortDesc: "This Pokemon can poison or badly poison a Pokemon regardless of its typing.",
+		desc: "This Pokemon can poison or badly poison a Pokemon regardless of its typing. If Smog is active, this Pokemon can hit Steel types with Poison-type moves.",
+		shortDesc: "Can poison Steel-types. Poison moves hit Steel.",
 	},
 	costar: {
 		name: "Costar",
@@ -362,13 +363,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	desolateland: {
 		name: "Desolate Land",
-		desc: "On switch-in, the weather becomes Desolate Land, which includes all the effects of Sunny Day and prevents damaging Water-type moves from executing. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Delta Stream or Primordial Sea Abilities.",
+		desc: "On switch-in, the weather becomes Desolate Land, which includes all the effects of Sun and prevents damaging Water-type moves from executing. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Delta Stream or Primordial Sea Abilities.",
 		shortDesc: "On switch-in, extremely harsh sunlight begins until this Ability is not active in battle.",
 	},
 	disguise: {
 		name: "Disguise",
-		desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken, it changes to Busted Form, and it loses 1/8 of its max HP. Confusion damage also breaks the disguise.",
-		shortDesc: "(Mimikyu only) The first hit it takes is blocked, and it takes 1/8 HP damage instead.",
+		desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken, it changes to Busted Form. Confusion damage also breaks the disguise.",
+		shortDesc: "(Mimikyu only) First hit deals 0 damage, breaks disguise.",
 		gen7: {
 			desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Busted Form. Confusion damage also breaks the disguise.",
 			shortDesc: "(Mimikyu only) First hit deals 0 damage, breaks disguise.",
@@ -388,18 +389,18 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	drizzle: {
 		name: "Drizzle",
-		shortDesc: "On switch-in, this Pokemon summons Rain Dance.",
+		shortDesc: "On switch-in, this Pokemon summons Rain.",
 	},
 	drought: {
 		name: "Drought",
-		shortDesc: "On switch-in, this Pokemon summons Sunny Day.",
+		shortDesc: "On switch-in, this Pokemon summons Sun.",
 	},
 	dryskin: {
 		name: "Dry Skin",
-		desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day. The weather effects are prevented if this Pokemon is holding a Utility Umbrella.",
+		desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if Rain is active, and loses 1/8 of its maximum HP, rounded down, if Sun is active. The Weathergy effects are prevented if this Pokemon is holding a Utility Umbrella.",
 		shortDesc: "This Pokemon is healed 1/4 by Water, 1/8 by Rain; is hurt 1.25x by Fire, 1/8 by Sun.",
 		gen7: {
-			desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day.",
+			desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain, and loses 1/8 of its maximum HP, rounded down, if the weather is Sun.",
 		},
 
 		damage: "  ([POKEMON] was hurt by its Dry Skin.)",
@@ -453,7 +454,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	flamebody: {
 		name: "Flame Body",
-		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned.",
+		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned. This Pokemon takes no damage from Hail.",
 		gen4: {
 			desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -482,14 +483,14 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	flowergift: {
 		name: "Flower Gift",
-		desc: "If this Pokemon is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If user is Cherrim and Sunny Day is active, it and allies' Attack and Sp. Def are 1.5x.",
+		desc: "If this Pokemon is a Cherrim and Sun is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If user is Cherrim and Sun is active, it and allies' Attack and Sp. Def are 1.5x.",
 		gen7: {
-			desc: "If this Pokemon is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5.",
+			desc: "If this Pokemon is a Cherrim and Sun is active, it changes to Sunshine Form and the Attack and Special Defense of it and its allies are multiplied by 1.5.",
 		},
 		gen4: {
-			desc: "If Sunny Day is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
-			shortDesc: "If Sunny Day is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x.",
+			desc: "If Sun is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
+			shortDesc: "If Sun is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x.",
 		},
 	},
 	flowerveil: {
@@ -506,8 +507,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	forecast: {
 		name: "Forecast",
-		desc: "If this Pokemon is a Castform, its type changes to the current Weathergy's type. This effect is prevented if this Pokemon is holding a Utility Umbrella and the weather is Rain Dance or Sunny Day.",
-		shortDesc: "Castform's type changes to the current weather condition's type.",
+		desc: "If this Pokemon is a Castform, its type changes to the current Weathergy's type.",
+		shortDesc: "Castform's type changes to the current Weathergy's type.",
 		gen7: {
 			desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm.",
 		},
@@ -547,7 +548,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	galewings: {
 		name: "Gale Wings",
-		shortDesc: "If this Pokemon is at full HP, its Flying-type moves have their priority increased by 1.",
+		shortDesc: "If this Pokemon is at full HP or Strong Winds is active, its Flying-type moves have their priority increased by 1.",
 		gen6: {
 			shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		},
@@ -577,7 +578,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	grasspelt: {
 		name: "Grass Pelt",
-		shortDesc: "If Grassy Terrain is active, this Pokemon's Defense is multiplied by 1.5.",
+		shortDesc: "If Grassy Terrain or Pollen is active, this Pokemon's Defense is multiplied by 1.5.",
 	},
 	grassysurge: {
 		name: "Grassy Surge",
@@ -612,7 +613,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	harvest: {
 		name: "Harvest",
-		desc: "If the last item this Pokemon used is a Berry, there is a 50% chance it gets restored at the end of each turn. If Sunny Day is active, this chance is 100%.",
+		desc: "If the last item this Pokemon used is a Berry, there is a 50% chance it gets restored at the end of each turn. If Sun is active, this chance is 100%.",
 		shortDesc: "If last item used is a Berry, 50% chance to restore it each end of turn. 100% in Sun.",
 
 		addItem: "  [POKEMON] harvested one [ITEM]!",
@@ -656,10 +657,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	hydration: {
 		name: "Hydration",
-		desc: "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain Dance is active. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "This Pokemon has its status cured at the end of each turn if Rain Dance is active.",
+		desc: "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain is active. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "This Pokemon has its status cured at the end of each turn if Rain is active.",
 		gen7: {
-			desc: "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain Dance is active.",
+			desc: "This Pokemon has its non-volatile status condition cured at the end of each turn if Rain is active.",
 		},
 	},
 	hypercutter: {
@@ -668,8 +669,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	icebody: {
 		name: "Ice Body",
-		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
-		shortDesc: "If Snow is active, this Pokemon heals 1/16 of its max HP each turn.",
+		desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn.",
 		gen8: {
 			desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail.",
 			shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn; immunity to Hail.",
@@ -677,8 +678,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	iceface: {
 		name: "Ice Face",
-		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Snow begins or when Eiscue switches in while Snow is active. Confusion damage also breaks the ice face.",
-		shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. Effect is restored in Snow.",
+		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail begins or when Eiscue switches in while Hail is active. Confusion damage also breaks the ice face.",
+		shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. Effect is restored in Hail.",
 		gen8: {
 			desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail begins or when Eiscue switches in while Hail is active. Confusion damage also breaks the ice face.",
 			shortDesc: "If Eiscue, the first physical hit it takes deals 0 damage. This effect is restored in Hail.",
@@ -799,14 +800,14 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	leafguard: {
 		name: "Leaf Guard",
-		desc: "If Sunny Day is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
+		desc: "If Sun is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Sun is active, this Pokemon cannot be statused and Rest will fail for it.",
 		gen7: {
-			desc: "If Sunny Day is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it.",
+			desc: "If Sun is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it.",
 		},
 		gen4: {
-			desc: "If Sunny Day is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, but can use Rest normally.",
-			shortDesc: "If Sunny Day is active, this Pokemon cannot be statused, but Rest works normally.",
+			desc: "If Sun is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, but can use Rest normally.",
+			shortDesc: "If Sun is active, this Pokemon cannot be statused, but Rest works normally.",
 		},
 	},
 	levitate: {
@@ -1107,7 +1108,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	orichalcumpulse: {
 		name: "Orichalcum Pulse",
-		shortDesc: "On switch-in, summons Sunny Day. During Sunny Day, Attack is 1.3333x.",
+		shortDesc: "On switch-in, summons Sun. During Sun, Attack is 1.3333x.",
 
 		start: "  [POKEMON] turned the sunlight harsh, sending its ancient pulse into a frenzy!",
 		activate: "  [POKEMON] basked in the sunlight, sending its ancient pulse into a frenzy!",
@@ -1282,7 +1283,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	primordialsea: {
 		name: "Primordial Sea",
-		desc: "On switch-in, the weather becomes Primordial Sea, which includes all the effects of Rain Dance and prevents damaging Fire-type moves from executing. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Delta Stream or Desolate Land Abilities.",
+		desc: "On switch-in, the weather becomes Primordial Sea, which includes all the effects of Rain and prevents damaging Fire-type moves from executing. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Delta Stream or Desolate Land Abilities.",
 		shortDesc: "On switch-in, heavy rain begins until this Ability is not active in battle.",
 	},
 	prismarmor: {
@@ -1304,8 +1305,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	protosynthesis: {
 		name: "Protosynthesis",
-		desc: "If Sunny Day is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Sunny Day, a held Booster Energy will not activate and the effect ends when Sunny Day is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
-		shortDesc: "Sunny Day active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
+		desc: "If Sun is active or this Pokemon uses a held Booster Energy, this Pokemon's highest stat is multiplied by 1.3, or by 1.5 if the highest stat is Speed. Stat stage changes are considered at the time this Ability activates. If multiple stats are tied, Attack, Defense, Special Attack, Special Defense, and Speed are prioritized in that order. If this effect was started by Sun, a held Booster Energy will not activate and the effect ends when Sun is no longer active. If this effect was started by a held Booster Energy, it ends when this Pokemon is no longer active.",
+		shortDesc: "Sun active or Booster Energy used: highest stat is 1.3x, or 1.5x if Speed.",
 
 		activate: "  The harsh sunlight activated [POKEMON]'s Protosynthesis!",
 		activateFromItem: "  [POKEMON] used its Booster Energy to activate Protosynthesis!",
@@ -1363,10 +1364,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	raindish: {
 		name: "Rain Dish",
-		desc: "If Rain Dance is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Rain Dance is active, this Pokemon heals 1/16 of its max HP each turn.",
+		desc: "If Rain is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Rain is active, this Pokemon heals 1/16 of its max HP each turn.",
 		gen7: {
-			desc: "If Rain Dance is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
+			desc: "If Rain is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
 		},
 	},
 	rattled: {
@@ -1456,12 +1457,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	sandforce: {
 		name: "Sand Force",
-		desc: "If Sandstorm is active, this Pokemon's Ground-, Rock-, and Steel-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Sandstorm.",
+		desc: "If Sandstorm is active, this Pokemon's Ground-, Rock-, and Steel-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Sandstorm. These effects are prevented if this Pokemon is holding Safety Goggles.",
 		shortDesc: "This Pokemon's Ground/Rock/Steel attacks do 1.3x in Sandstorm; immunity to it.",
 	},
 	sandrush: {
 		name: "Sand Rush",
-		desc: "If Sandstorm is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Sandstorm.",
+		desc: "If Sandstorm is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Sandstorm. These effects are prevented if this Pokemon is holding Safety Goggles.",
 		shortDesc: "If Sandstorm is active, this Pokemon's Speed is doubled; immunity to Sandstorm.",
 	},
 	sandspit: {
@@ -1621,7 +1622,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	slushrush: {
 		name: "Slush Rush",
-		shortDesc: "If Snow is active, this Pokemon's Speed is doubled.",
+		desc: "If Hail is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Hail is active, this Pokemon's Speed is doubled.",
 		gen8: {
 			shortDesc: "If Hail is active, this Pokemon's Speed is doubled.",
 		},
@@ -1641,17 +1643,17 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	snowwarning: {
 		name: "Snow Warning",
-		shortDesc: "On switch-in, this Pokemon summons Snow.",
+		shortDesc: "On switch-in, this Pokemon summons Hail.",
 		gen8: {
 			shortDesc: "On switch-in, this Pokemon summons Hail.",
 		},
 	},
 	solarpower: {
 		name: "Solar Power",
-		desc: "If Sunny Day is active, this Pokemon's highest attacking stat is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Sunny Day is active, this Pokemon's attacks do 1.5x damage; loses 1/8 max HP per turn.",
+		desc: "If Sun is active, this Pokemon's highest attacking stat is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Sun is active, this Pokemon's attacks do 1.5x damage; loses 1/8 max HP per turn.",
 		gen7: {
-			desc: "If Sunny Day is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn.",
+			desc: "If Sun is active, this Pokemon's Special Attack is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn.",
 		},
 	},
 	solidrock: {
@@ -1724,8 +1726,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	steamengine: {
 		name: "Steam Engine",
-		desc: "This Pokemon's Speed is raised by 6 stages after it is damaged by a Fire- or Water-type move.",
-		shortDesc: "This Pokemon's Speed is raised by 6 stages after it is damaged by Fire/Water moves.",
+		desc: "This Pokemon's Speed is raised by 6 stages after it is hit by a Fire- or Water-type move. This Pokemon is immune to Water-type attacks",
+		shortDesc: "This Pokemon's Speed is raised by 6 stages after it is hit by Fire/Water moves; Water immunity.",
 	},
 	steelworker: {
 		name: "Steelworker",
@@ -1821,10 +1823,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	swiftswim: {
 		name: "Swift Swim",
-		desc: "If Rain Dance is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
+		desc: "If Rain is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "If Rain is active, this Pokemon's Speed is doubled.",
 		gen7: {
-			desc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
+			desc: "If Rain is active, this Pokemon's Speed is doubled.",
 		},
 	},
 	swordofruin: {
@@ -2170,20 +2172,40 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	// swse
 	absolutezero: {
 		name: "Absolute Zero",
-		desc: "If Hail is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3, and have their secondary effect chance doubled. This Pokemon takes no damage from Sandstorm.",
+		desc: "If Hail is active, this Pokemon's Ice-type attacks have their power multiplied by 1.3 and have their secondary effect chance doubled. This Pokemon takes no damage from Hail. These effects are prevented if this Pokemon is holding a Utility Umbrella.",
 		shortDesc: "This Pokemon's Ice attacks do 1.3x in Hail and have 2x status chance. Hail immunity.",
 	},
 	arcanum: {
 		name: "Arcanum",
 		shortDesc: "On switch-in, this Pokemon summons Dragon Force.",
 	},
+	bloomspring: {
+		name: "Bloomspring",
+		desc: "If Pollen is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding Safety Goggles.",
+		shortDesc: "If Pollen is active, this Pokemon heals 1/16 of its max HP each turn.",
+	},
+	carboncapture: {
+		name: "Carbon Capture",
+		desc: "If Smog is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon cannot be poisoned by Smog. These effects are prevented if this Pokemon is holding Safety Goggles.",
+		shortDesc: "If Smog is active, this Pokemon heals 1/16 of its max HP each turn; immunity to it.",
+	},
 	condensation: {
 		name: "Condensation",
 		shortDesc: "On switch-in, this Pokemon summons Fog.",
 	},
+	druidry: {
+		name: "Druidry",
+		desc: "If Fairy Dust is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding Safety Goggles. If Strong Winds Fairy Dust is activated while this Pokemon is on the field, Grassy Terrain is set up instead of Misty Terrain.",
+		shortDesc: "If Fairy Dust is active, this Pokemon heals 1/16 of its max HP each turn. Sets up Grassy Terrain in Strong Winds Fairy Dust.",
+	},
 	dustdevil: {
 		name: "Dust Devil",
 		shortDesc: "On switch-in, this Pokemon summons Dust Storm.",
+	},
+	energizer: {
+		name: "Energizer",
+		desc: "If Thunderstorm is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding Safety Goggles.",
+		shortDesc: "If Thunderstorm is active, this Pokemon's Speed is doubled.",
 	},
 	eventide: {
 		name: "Eventide",
@@ -2193,6 +2215,15 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Ferroflux",
 		shortDesc: "On switch-in, this Pokemon summons Magnetosphere.",
 	},
+	fieldworker: {
+		name: "Fieldworker",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using a Grass-type attack.",
+	},
+	forked: {
+		name: "Forked",
+		desc: "This Pokemon has its non-volatile status condition cured at the end of each turn if Thunderstorm is active. This effect is prevented if this Pokemon is holding an Energy Nullifier.",
+		shortDesc: "This Pokemon has its status cured at the end of each turn if Thunderstorm is active.",
+	},
 	galeforce: {
 		name: "Galeforce",
 		shortDesc: "On switch-in, this Pokemon summons Strong Winds.",
@@ -2200,6 +2231,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	glacialarmor: {
 		name: "Glacial Armor",
 		shortDesc: "This Pokemon's Defense and Special Defense are doubled in Hail; immunity to it.",
+	},
+	gravitysling: {
+		name: "Gravity Sling",
+		desc: "If Magnetosphere is active, this Pokemon's Speed is doubled. This effect is prevented if this Pokemon is holding an Energy Nullifier.",
+		shortDesc: "If Magnetosphere is active, this Pokemon's Speed is doubled.",
 	},
 	haunting: {
 		name: "Haunting",
@@ -2219,9 +2255,28 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "If Blood Moon is active, this Pokemon's highest attacking stat is multiplied by 1.5 and it loses 1/8 of its maximum HP, rounded down, at the end of each turn. These effects are prevented if the Pokemon is holding a Utility Umbrella.",
 		shortDesc: "If Blood Moon is active, this Pokemon's attacks do 1.5x damage; loses 1/8 max HP per turn.",
 	},
+	masterinstinct: {
+		name: "Victory Star",
+		shortDesc: "If Battle Aura is active, This Pokemon's moves have their accuracy multiplied by 1.2.",
+	},
+	nesting: {
+		name: "Nesting",
+		desc: "If Pheromones is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. If this Pokemon's ally is a Bug-type, this Pokemon restores 1/8 of its maximum HP. These effects are prevented if this Pokemon is holding Safety Goggles.",
+		shortDesc: "If Pheromones is active, this Pokemon heals 1/16 of its max HP each turn; 1/8 if ally is Bug-type.",
+	},
 	pollution: {
 		name: "Pollution",
 		shortDesc: "On switch-in, this Pokemon summons Smog.",
+	},
+	powerabove: {
+		name: "Power Above",
+		desc: "If Fairy Dust is active, this Pokemon's Fairy-, Grass-, Fire-, and Water-type attacks have their power multiplied by 1.3. This effect is prevented if this Pokemon is holding Safety Goggles.",
+		shortDesc: "This Pokemon's Fairy/Grass/Fire/Water attacks do 1.3x in Fairy Dust.",
+	},
+	powerwithin: {
+		name: "Power Within",
+		desc: "If Dragon Force is active, this Pokemon's Dragon-, Fire-, Electric-, and Ice-type attacks have their power multiplied by 1.3. This effect is prevented if this Pokemon is holding an Energy Nullifier.",
+		shortDesc: "This Pokemon's Dragon/Fire/Electric/Ice attacks do 1.3x in Dragon Force.",
 	},
 	seance: {
 		name: "Se\u0301ance",
@@ -2231,6 +2286,16 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Secretion",
 		shortDesc: "On switch-in, this Pokemon summons Pheromones.",
 	},
+	smokeandmirrors: {
+		name: "Smoke and Mirrors",
+		desc: "If Psychic Field is active, this Pokemon's Special attacks have their power multiplied by 1.2 and have their Confusion chance doubled. These effects are prevented if this Pokemon is holding an Energy Nullifier.",
+		shortDesc: "This Pokemon's Special attacks do 1.2x and have doubled confuse chance in Psychic Field.",
+	},
+	souldrain: { // incomplete
+		name: "Soul Drain",
+		desc: "If Cursed Winds is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding an Energy Nullifier.",
+		shortDesc: "If Cursed Winds is active, this Pokemon heals 1/16 of its max HP each turn.",
+	},
 	standoff: {
 		name: "Stand Off",
 		shortDesc: "On switch-in, this Pokemon summons Battle Aura.",
@@ -2239,9 +2304,18 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Stormfront",
 		shortDesc: "On switch-in, this Pokemon summons Thunderstorm.",
 	},
+	surveillance: {
+		name: "Surveillance",
+		shortDesc: "On switch-in, this Pokemon's Accuracy is raised by 1 stage.",
+	},
 	transcendence: {
 		name: "Transcendence",
 		shortDesc: "On switch-in, this Pokemon summons Psychic Field.",
+	},
+	vegetate: {
+		name: "Vegetate",
+		desc: "This Pokemon's Normal-type moves become Grass-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
+		shortDesc: "This Pokemon's Normal-type moves become Grass type and have 1.2x power.",
 	},
 	warpmist: {
 		name: "Warp Mist",

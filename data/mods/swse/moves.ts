@@ -16685,7 +16685,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			if (!pokemon.hasItem('utilityumbrella') && ['sandstorm', 'duststorm'].includes(pokemon.effectiveClimateWeather())) {
+			if (!pokemon.hasItem('safetygoggles') && ['sandstorm', 'duststorm'].includes(pokemon.effectiveClimateWeather())) {
 				factor = 0.667;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
@@ -19147,7 +19147,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 		contestType: "Clever",
 	},
-	synthesis: {
+	synthesis: { // updated
 		num: 235,
 		accuracy: true,
 		basePower: 0,
@@ -21823,7 +21823,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Initiative",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		onHit(target, source) {
 			const outcomes = [
 				'sleepTarget', // nat12
@@ -21839,75 +21839,72 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'sleepUser', // nat2
 				'healTarget', // nat1
 			];
-	
 			const randomOutcome = this.sample(outcomes);
-	
 			switch (randomOutcome) {
-				case 'healTarget':
-					this.heal(target.maxhp / 4, target, target);
-					this.add('-heal', source, target.getHealth, '[from] move: Initiative');
-					this.debug("heal target");
-					break;
-				case 'paralyzeTarget':
-					target.trySetStatus('par');
-					this.debug("paralyze target");
-					break;
-				case 'sleepTarget':
-					target.trySetStatus('slp');
-					this.debug("sleep target");
-					break;
-				case 'confuseTarget':
-					target.addVolatile('confusion');
-					this.debug("confuse target");
-					break;
-				case 'disableRandomMoveTarget': // just sets normal disable right now
-					const randomMoveSlotTarget = this.sample(target.moveSlots);
-					if (randomMoveSlotTarget) {
-						randomMoveSlotTarget.disabled = 'hidden';
-						target.addVolatile('disable');
-						this.debug("disable target");
-					}
-					break;
-				/* case 'hurtTarget':
-					this.damage(target.baseMaxhp / 4, source, target)
-					this.debug("damage target");
-					break; */
-				case 'healUser':
-					this.heal(source.maxhp / 4, source, source);
-					this.add('-heal', source, source.getHealth, '[from] move: Initiative');
-					this.debug("heal user");
-					break;
-				case 'paralyzeUser':
-					source.trySetStatus('par');
-					this.debug("paralyze user");
-					break;
-				case 'sleepUser':
-					source.setStatus('slp');
-					this.debug("sleep user");
-					break;
-				case 'confuseUser':
-					source.addVolatile('confusion');
-					this.debug("confuse user");
-					break;
-				case 'disableRandomMoveUser': // just sets normal disabled right now
-					const randomMoveSlotUser = this.sample(source.moveSlots);
-					if (randomMoveSlotUser) {
-						randomMoveSlotUser.disabled = 'hidden';
-						source.addVolatile('disable');
-						this.debug("disable user");
-					}
-					break;
-				case 'hurtUser':
-					this.damage(source.baseMaxhp / 4, source, source)
-					this.debug("damage user");
-					break;
-				default:
-					break;
+			case 'healTarget':
+				this.heal(target.maxhp / 4, target, target);
+				this.add('-heal', source, target.getHealth, '[from] move: Initiative');
+				this.debug("heal target");
+				break;
+			case 'paralyzeTarget':
+				target.trySetStatus('par');
+				this.debug("paralyze target");
+				break;
+			case 'sleepTarget':
+				target.trySetStatus('slp');
+				this.debug("sleep target");
+				break;
+			case 'confuseTarget':
+				target.addVolatile('confusion');
+				this.debug("confuse target");
+				break;
+			case 'disableRandomMoveTarget': // just sets normal disable right now
+				const randomMoveSlotTarget = this.sample(target.moveSlots);
+				if (randomMoveSlotTarget) {
+					randomMoveSlotTarget.disabled = 'hidden';
+					target.addVolatile('disable');
+					this.debug("disable target");
+				}
+				break;
+			/* case 'hurtTarget':
+				this.damage(target.baseMaxhp / 4, source, target);
+				this.debug("damage target");
+				break; */
+			case 'healUser':
+				this.heal(source.maxhp / 4, source, source);
+				this.add('-heal', source, source.getHealth, '[from] move: Initiative');
+				this.debug("heal user");
+				break;
+			case 'paralyzeUser':
+				source.trySetStatus('par');
+				this.debug("paralyze user");
+				break;
+			case 'sleepUser':
+				source.setStatus('slp');
+				this.debug("sleep user");
+				break;
+			case 'confuseUser':
+				source.addVolatile('confusion');
+				this.debug("confuse user");
+				break;
+			case 'disableRandomMoveUser': // just sets normal disabled right now
+				const randomMoveSlotUser = this.sample(source.moveSlots);
+				if (randomMoveSlotUser) {
+					randomMoveSlotUser.disabled = 'hidden';
+					source.addVolatile('disable');
+					this.debug("disable user");
+				}
+				break;
+			case 'hurtUser':
+				this.damage(source.baseMaxhp / 4, source, source);
+				this.debug("damage user");
+				break;
+			default:
+				break;
 			}
 		},
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
 	},
-	
 };

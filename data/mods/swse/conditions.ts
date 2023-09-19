@@ -587,6 +587,20 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			return 5;
 		},
+		onModifyDefPriority: 10,
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.hasType('Ice') && this.field.isClimateWeather('hail')) {
+				return this.modify(def, 1.15);
+			}
+		},
+		onModifySpDPriority: 10,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (pokemon.hasType('Ice') && this.field.isClimateWeather('hail')) {
+				return this.modify(spd, 1.15);
+			}
+		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -790,12 +804,12 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifySpePriority: 10,
 		onModifySpe(spe, pokemon) {
-			if(pokemon.hasType('Flying') && this.field.isClearingWeather('strongwinds')) {
+			if (pokemon.hasType('Flying') && this.field.isClearingWeather('strongwinds')) {
 				return this.modify(spe, 1.25);
 			}
 		},
 		onAnyAccuracy(accuracy, target, source, move) {
-			if(move.flags['wind'] && this.field.isClearingWeather('strongwinds')) {
+			if (move.flags['wind'] && this.field.isClearingWeather('strongwinds')) {
 				return true;
 			}
 			return accuracy;
@@ -806,7 +820,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-weather', 'StrongWinds', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
 				this.add('-weather', 'StrongWinds');
-			}
+			} // currently the below does not function
 			this.field.clearClimateWeather;
 			this.field.clearEnergyWeather;
 			this.field.clearIrritantWeather;

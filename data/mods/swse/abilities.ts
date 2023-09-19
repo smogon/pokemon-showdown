@@ -1431,7 +1431,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	galewings: { // updated
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move.type !== 'Flying') return; 
+			if (move.type !== 'Flying') return;
 			if (pokemon.hp === pokemon.maxhp || this.field.isClearingWeather('strongwinds')) return priority + 1;
 		},
 		name: "Gale Wings",
@@ -1538,8 +1538,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	grasspelt: { // updated
 		onModifyDefPriority: 6,
 		onModifyDef(pokemon, source) {
-			if (this.field.isTerrain('grassyterrain') || (!source.hasItem('safetygoggles')) && this.field.isIrritantWeather('pollinate'))
-			return this.chainModify(1.5);
+			if (this.field.isTerrain('grassyterrain') ||
+			(!source.hasItem('safetygoggles')) && this.field.isIrritantWeather('pollinate')) {
+				return this.chainModify(1.5);
+			}
 		},
 		isBreakable: true,
 		name: "Grass Pelt",
@@ -5515,8 +5517,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (effect.id === 'swarmsignal') {
 				if (target.allies().some(ally => ally.hasType('Bug'))) {
 					this.heal(target.baseMaxhp / 8);
-				}
-				else {
+				} else {
 					this.heal(target.baseMaxhp / 16);
 				}
 			}
@@ -5536,21 +5537,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	powerabove: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (attacker.hasItem('energynullifier')) return;
-			if (this.field.isIrritantWeather('dragonforce')) {
-				if (move.type === 'Dragon' || move.type === 'Fire' || move.type === 'Electric' || move.type === 'Ice') {
-					this.debug('Power Above boost');
-					return this.chainModify([5325, 4096]);
-				}
-			}
-		},
-		name: "Power Above",
-		rating: 2.5,
-		num: -28,
-	},
-	powerwithin: {
-		onBasePowerPriority: 21,
-		onBasePower(basePower, attacker, defender, move) {
 			if (attacker.hasItem('safetygoggles')) return;
 			if (this.field.isIrritantWeather('sprinkle')) {
 				if (move.type === 'Fairy' || move.type === 'Grass' || move.type === 'Fire' || move.type === 'Water') {
@@ -5559,9 +5545,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		name: "Power Within",
+		name: "Power Above",
 		rating: 2.5,
 		num: -24,
+	},
+	powerwithin: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('energynullifier')) return;
+			if (this.field.isIrritantWeather('dragonforce')) {
+				if (move.type === 'Dragon' || move.type === 'Fire' || move.type === 'Electric' || move.type === 'Ice') {
+					this.debug('Power Above boost');
+					return this.chainModify([5325, 4096]);
+				}
+			}
+		},
+		name: "Power Within",
+		rating: 2.5,
+		num: -28,
 	},
 	seance: {
 		onStart(source) {
