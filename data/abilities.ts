@@ -3595,7 +3595,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	sandforce: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.field.isClimateWeather('sandstorm')) {
+			if (this.field.isIrritantWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([5325, 4096]);
@@ -3611,7 +3611,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	sandrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isClimateWeather('sandstorm')) {
+			if (this.field.isIrritantWeather('sandstorm')) {
 				return this.chainModify(2);
 			}
 		},
@@ -3624,7 +3624,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	sandspit: {
 		onDamagingHit(damage, target, source, move) {
-			this.field.setClimateWeather('sandstorm');
+			this.field.setIrritantWeather('sandstorm');
 		},
 		name: "Sand Spit",
 		rating: 1,
@@ -3632,7 +3632,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	sandstream: {
 		onStart(source) {
-			this.field.setClimateWeather('sandstorm');
+			this.field.setIrritantWeather('sandstorm');
 		},
 		name: "Sand Stream",
 		rating: 4,
@@ -3645,7 +3645,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isClimateWeather('sandstorm')) {
+			if (this.field.isIrritantWeather('sandstorm')) {
 				this.debug('Sand Veil - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}

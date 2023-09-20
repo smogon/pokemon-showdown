@@ -33,6 +33,7 @@ interface Attacker {
 export interface EffectState {
 	// TODO: set this to be an actual number after converting data/ to .ts
 	duration?: number | any;
+	boosted?: boolean;
 	[k: string]: any;
 }
 
@@ -2053,7 +2054,7 @@ export class Pokemon {
 	}
 
 	effectiveIrritantWeather() {
-		const weather = this.battle.field.effectiveClimateWeather();
+		const weather = this.battle.field.effectiveIrritantWeather();
 		switch (weather) {
 		case 'sandstorm':
 		case 'duststorm':
@@ -2067,7 +2068,7 @@ export class Pokemon {
 	}
 
 	effectiveEnergyWeather() {
-		const weather = this.battle.field.effectiveClimateWeather();
+		const weather = this.battle.field.effectiveEnergyWeather();
 		switch (weather) {
 		case 'auraprojection':
 		case 'haunt':

@@ -11507,7 +11507,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		self: {
 			onHit(source) {
 				if (!source.volatiles['dynamax']) return;
-				this.field.setClimateWeather('sandstorm');
+				this.field.setIrritantWeather('sandstorm');
 			},
 		},
 		target: "adjacentFoe",
@@ -15975,7 +15975,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {wind: 1},
-		climateWeather: 'Sandstorm',
+		irritantWeather: 'Sandstorm',
 		secondary: null,
 		target: "all",
 		type: "Rock",
@@ -16687,7 +16687,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
 			let factor = 0.5;
-			if (this.field.isClimateWeather('sandstorm')) {
+			if (this.field.isIrritantWeather('sandstorm')) {
 				factor = 0.667;
 			}
 			const success = !!this.heal(this.modify(pokemon.maxhp, factor));

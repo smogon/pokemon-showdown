@@ -98,7 +98,7 @@ export class Field {
 			this.climateWeatherState = prevClimateWeatherState;
 			return false;
 		}
-		this.battle.eachEvent('climateWeatherChange', sourceEffect);
+		this.battle.eachEvent('ClimateWeatherChange', sourceEffect);
 		return true;
 	}
 
@@ -152,7 +152,7 @@ export class Field {
 			this.irritantWeatherState = prevIrritantWeatherState;
 			return false;
 		}
-		this.battle.eachEvent('irritantWeatherChange', sourceEffect);
+		this.battle.eachEvent('IrritantWeatherChange', sourceEffect);
 		return true;
 	}
 
@@ -206,7 +206,7 @@ export class Field {
 			this.energyWeatherState = prevEnergyWeatherState;
 			return false;
 		}
-		this.battle.eachEvent('energyWeatherChange', sourceEffect);
+		this.battle.eachEvent('EnergyWeatherChange', sourceEffect);
 		return true;
 	}
 
@@ -260,7 +260,7 @@ export class Field {
 			this.clearingWeatherState = prevClearingWeatherState;
 			return false;
 		}
-		this.battle.eachEvent('clearingWeatherChange', sourceEffect);
+		this.battle.eachEvent('ClearingWeatherChange', sourceEffect);
 		return true;
 	}
 
@@ -269,8 +269,8 @@ export class Field {
 		const prevClimateWeather = this.getClimateWeather();
 		this.battle.singleEvent('FieldEnd', prevClimateWeather, this.climateWeatherState, this);
 		this.climateWeather = '';
-		this.climateWeatherState = {id: ''};
-		this.battle.eachEvent('climateWeatherChange');
+		this.climateWeatherState = {id: '', boosted: false};
+		this.battle.eachEvent('ClimateWeatherChange');
 		return true;
 	}
 
@@ -279,8 +279,8 @@ export class Field {
 		const prevIrritantWeather = this.getIrritantWeather();
 		this.battle.singleEvent('FieldEnd', prevIrritantWeather, this.irritantWeatherState, this);
 		this.irritantWeather = '';
-		this.irritantWeatherState = {id: ''};
-		this.battle.eachEvent('irritantWeatherChange');
+		this.irritantWeatherState = {id: '', boosted: false};
+		this.battle.eachEvent('IrritantWeatherChange');
 		return true;
 	}
 
@@ -289,8 +289,8 @@ export class Field {
 		const prevEnergyWeather = this.getEnergyWeather();
 		this.battle.singleEvent('FieldEnd', prevEnergyWeather, this.energyWeatherState, this);
 		this.energyWeather = '';
-		this.energyWeatherState = {id: ''};
-		this.battle.eachEvent('energyWeatherChange');
+		this.energyWeatherState = {id: '', boosted: false};
+		this.battle.eachEvent('EnergyWeatherChange');
 		return true;
 	}
 
@@ -300,7 +300,7 @@ export class Field {
 		this.battle.singleEvent('FieldEnd', prevClearingWeather, this.clearingWeatherState, this);
 		this.clearingWeather = '';
 		this.clearingWeatherState = {id: ''};
-		this.battle.eachEvent('clearingWeatherChange');
+		this.battle.eachEvent('ClearingWeatherChange');
 		return true;
 	}
 

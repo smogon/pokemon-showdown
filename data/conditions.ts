@@ -625,7 +625,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		// So we give it increased priority.
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasType('Rock') && this.field.isClimateWeather('sandstorm')) {
+			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm')) {
 				return this.modify(spd, 1.5);
 			}
 		},
@@ -640,9 +640,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-weather', 'Sandstorm', '[upkeep]');
-			if (this.field.isClimateWeather('sandstorm')) this.eachEvent('Weather');
+			if (this.field.isIrritantWeather('sandstorm')) this.eachEvent('Weather');
 		},
-		onClimateWeather(target) {
+		onIrritantWeather(target) {
 			this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
