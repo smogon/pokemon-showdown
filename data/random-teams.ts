@@ -1133,7 +1133,7 @@ export class RandomTeams {
 		if (species.id === 'empoleon') return 'Competitive';
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
-		if (species.id === 'copperajah' && moves.has('Heavy Slam')) return 'Heavy Metal';
+		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
@@ -1172,6 +1172,7 @@ export class RandomTeams {
 			if (species.id === 'blissey') return 'Healer';
 			if (species.id === 'sinistcha') return 'Hospitality';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
+			if (species.id === 'kommoo') return 'Overcoat'
 			if (species.id === 'barraskewda') return 'Propeller Tail';
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
 			if (species.id === 'ribombee') return 'Shield Dust';
@@ -1362,7 +1363,7 @@ export class RandomTeams {
 		}
 		if (
 			((counter.get('Special') >= 4 && (moves.has('voltswitch') || role === 'Doubles Wallbreaker')) || (
-				counter.get('Special') >= 3 && moves.has('uturn')
+				counter.get('Special') >= 3 && (moves.has('uturn') || moves.has('flipturn'))
 			)) && !moves.has('acidspray') && !moves.has('electroweb')
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Specs';
