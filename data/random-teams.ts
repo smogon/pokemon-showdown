@@ -1172,7 +1172,7 @@ export class RandomTeams {
 			if (species.id === 'blissey') return 'Healer';
 			if (species.id === 'sinistcha') return 'Hospitality';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
-			if (species.id === 'kommoo') return 'Overcoat'
+			if (species.id === 'kommoo') return 'Overcoat';
 			if (species.id === 'barraskewda') return 'Propeller Tail';
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
 			if (species.id === 'ribombee') return 'Shield Dust';
