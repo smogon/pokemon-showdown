@@ -1015,7 +1015,7 @@ export class RandomTeams {
 		case 'Defiant':
 			return (!counter.get('Physical') || (abilities.has('Prankster') && (moves.has('thunderwave') || moves.has('taunt'))));
 		case 'Flame Body':
-			return (species.id === 'magcargo' && moves.has('Shell Smash'));
+			return (species.id === 'magcargo' && moves.has('shellsmash'));
 		case 'Flash Fire':
 			return (
 				['Drought', 'Flame Body', 'Intimidate', 'Rock Head', 'Weak Armor'].some(m => abilities.has(m)) &&
@@ -1133,6 +1133,7 @@ export class RandomTeams {
 		if (species.id === 'empoleon') return 'Competitive';
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
+		if (species.id === 'copperajah' && moves.has('Heavy Slam')) return 'Heavy Metal';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
@@ -1144,7 +1145,6 @@ export class RandomTeams {
 			if (species.id === 'vespiquen') return 'Pressure';
 			if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 			if (species.id === 'klawf' && role === 'Setup Sweeper') return 'Anger Shell';
-			if (species.id === 'copperajah' && role === 'Bulky Attacker') return 'Heavy Metal';
 			if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
 			if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
 			if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
@@ -1155,10 +1155,8 @@ export class RandomTeams {
 
 		if (isDoubles) {
 			if (species.id === 'farigiraf') return 'Armor Tail';
-			if (species.id === 'oinkolognef') return 'Aroma Veil';
 			if (species.id === 'dragapult') return 'Clear Body';
 			if (species.id === 'altaria') return 'Cloud Nine';
-			if (species.id === 'bellibolt') return 'Electromorphosis';
 			if (species.id === 'armarouge' || species.id === 'chandelure') return 'Flash Fire';
 			if (species.id === 'florges') return 'Flower Veil';
 			if (
@@ -1180,7 +1178,7 @@ export class RandomTeams {
 			if (species.id === 'gumshoos') return 'Strong Jaw';
 			if (species.id === 'magnezone') return 'Sturdy';
 			if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
-			if (species.id === 'clefable' && moves.has('followme')) return 'Unaware';
+			if (species.id === 'clefable' && role === 'Doubles Support') return 'Unaware';
 			if (species.id === 'drifblim') return 'Unburden';
 			if (abilities.has('Intimidate')) return 'Intimidate';
 

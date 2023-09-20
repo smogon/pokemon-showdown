@@ -113,7 +113,7 @@
                 "teraTypes": ["Fire", "Steel", "Water"]
             },
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Support",
                 "movepool": ["Encore", "Fire Blast", "Follow Me", "Heal Pulse", "Helping Hand", "Life Dew", "Moonblast"],
                 "teraTypes": ["Fire", "Steel", "Water"]
             }
@@ -664,7 +664,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Helping Hand", "Knock Off", "Pollen Puff", "Tailwind", "Thunder Wave", "Toxic Spikes", "Will-O-Wisp"],
+                "movepool": ["Encore", "Helping Hand", "Pollen Puff", "Tailwind", "Thunder Wave", "Toxic Spikes", "Will-O-Wisp"],
                 "teraTypes": ["Fairy", "Steel"]
             },
             {
@@ -1524,7 +1524,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Double Hit", "Fake Out", "Knock Off", "Protect", "U-turn"],
+                "movepool": ["Double Hit", "Fake Out", "Knock Off", "Protect"],
                 "teraTypes": ["Normal"]
             }
         ]
@@ -3372,12 +3372,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Coil", "Drill Run", "Rest", "Stone Edge"],
+                "movepool": ["Coil", "High Horsepower", "Rest", "Stone Edge"],
                 "teraTypes": ["Dragon", "Steel"]
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Drill Run", "Glare", "Rest", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Glare", "High Horsepower", "Rest", "Stealth Rock", "Stone Edge"],
                 "teraTypes": ["Dragon", "Steel"]
             }
         ]
@@ -4542,12 +4542,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Protect", "Rock Slide", "Stealth Rock", "Stomping Tantrum", "Thunder Punch", "Thunder Wave", "Volt Switch"],
+                "movepool": ["High Horsepower", "Protect", "Rock Slide", "Stealth Rock", "Thunder Punch", "Thunder Wave", "Volt Switch"],
                 "teraTypes": ["Flying", "Grass"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Dragon Dance", "Ice Punch", "Protect", "Rock Slide", "Stomping Tantrum", "Wild Charge"],
+                "movepool": ["Dragon Dance", "High Horsepower", "Ice Punch", "Protect", "Rock Slide", "Wild Charge"],
                 "teraTypes": ["Grass", "Rock"]
             }
         ]
@@ -4577,7 +4577,7 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Earthquake", "Glaive Rush", "Ice Shard", "Icicle Crash"],
+                "movepool": ["Glaive Rush", "High Horsepower", "Ice Shard", "Icicle Crash"],
                 "teraTypes": ["Dragon", "Ground"]
             },
             {
