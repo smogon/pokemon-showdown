@@ -615,20 +615,17 @@ export abstract class Searcher {
 			buf += LogViewer.error(`Logs for month '${month}' do not exist on room ${roomid}.`);
 			return buf;
 		} else if (user) {
-			let total = 0;
-			for (const day in results) {
-				if (isNaN(results[day][user])) continue;
-				total += results[day][user];
-			}
-			buf += `<br />Total linecount: ${total}<hr />`;
-			buf += '<ol>';
+			buf += '<hr /><ol>';
 			const sortedDays = Utils.sortBy(Object.keys(results), day => ({reverse: day}));
+			let total = 0;
 			for (const day of sortedDays) {
 				const dayResults = results[day][user];
 				if (isNaN(dayResults)) continue;
+				total += dayResults;
 				buf += `<li>[<a roomid="view-chatlog-${roomid}--${day}">${day}</a>]: `;
 				buf += `${Chat.count(dayResults, 'lines')}</li>`;
 			}
+			buf = buf.replace('{total}', `${total}`);
 		} else {
 			buf += '<hr /><ol>';
 			// squish the results together
