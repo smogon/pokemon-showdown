@@ -354,7 +354,6 @@ export const DefaultText: {[k: string]: DefaultText} = {
 
 	// Energy
 
-
 	// Clearing
 	strongwinds: {
 		weatherName: "Strong Winds",
