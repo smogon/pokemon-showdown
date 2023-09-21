@@ -950,17 +950,17 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			} // currently the below does not function
 			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
 				'bloodmoon', 'foghorn', 'deltastream'].includes(field.effectiveClimateWeather())) {
-				this.field.clearClimateWeather;
+				this.field.clearClimateWeather();
 				this.debug('Cleared Climate Weathers');
 			}
 			if (['sandstorm', 'duststorm', 'pollinate',
 				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
-				this.field.clearIrritantWeather;
+				this.field.clearIrritantWeather();
 				this.debug('Cleared Irritant Weathers');
 			}
 			if (['auraprojection', 'haunt', 'comsicrays',
 				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
-				this.field.clearEnergyWeather;
+				this.field.clearEnergyWeather();
 				this.debug('Cleared Energy Weathers');
 			}
 		},
