@@ -193,6 +193,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 	},
 	psn: {
 		start: "  [POKEMON] was poisoned!",
+		startFromWeather: "  [POKEMON] was infected by the poisonous air!",
 		alreadyStarted: "  [POKEMON] is already poisoned!",
 		end: "  [POKEMON] was cured of its poisoning!",
 		endFromItem: "  [POKEMON]'s [ITEM] cured its poison!",
@@ -271,8 +272,8 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		fail: "  [POKEMON] shook its head. It seems like it can't use this move...",
 	},
 
-	// weathergy
-	// climate
+	// Weathergy
+	// Climate
 	sunnyday: {
 		weatherName: "Sun",
 		start: "  The sunlight turned harsh!",
@@ -311,7 +312,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		upkeep: "  (The fog is deep...)",
 	},
 
-	// irritant
+	// Irritant
 	sandstorm: {
 		weatherName: "Sandstorm",
 		start: "  A sandstorm kicked up!",
@@ -319,10 +320,42 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		upkeep: "  (The sandstorm is raging.)",
 		damage: "  [POKEMON] is buffeted by the sandstorm!",
 	},
+	duststorm: {
+		weatherName: "Dust Storm",
+		start: "  A dust devil formed!",
+		end: "  The dust settled.",
+		upkeep: "  (The dust is billowing.)",
+	},
+	pollinate: {
+		weatherName: "Pollen Storm",
+		start: "  Pollen enveloped the air!",
+		end: "  The pheromones faded.",
+		upkeep: "  (The pollen is circulating.)",
+	},
+	swarmsignal: {
+		weatherName: "Pheromones",
+		start: "  Pheromones infested the air!",
+		end: "  The pollen dissipated.",
+		upkeep: "  (The pheromones are spreading.)",
+	},
+	smogspread: {
+		weatherName: "Smog",
+		start: "  Poison contaminated the air!",
+		end: "  The poison abated.",
+		upkeep: "  (The poison persists.)",
+	},
+	sprinkle: {
+		weatherName: "Fairy Dust",
+		start: "  Fairy dust aromatized the battlefield!",
+		end: "  The fairy dust dispelled.",
+		upkeep: "  (The fairy dust is diffusing.)",
+		heal: "  [POKEMON]'s HP was restored.",
+	},
 
-	// energy
+	// Energy
 
-	// strongwinds
+
+	// Clearing
 	strongwinds: {
 		weatherName: "Strong Winds",
 		start: "  A strong wind cleared the battlefield!",

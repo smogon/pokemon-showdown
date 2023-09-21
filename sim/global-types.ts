@@ -474,6 +474,7 @@ interface MovePlines extends Plines {
 	removeItem?: string;
 	startFromItem?: string;
 	startFromZEffect?: string;
+	startFromWeather?: string;
 	switchOut?: string;
 	takeItem?: string;
 	typeChange?: string;
