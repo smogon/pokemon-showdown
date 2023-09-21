@@ -43,7 +43,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Ice') && (!types.has('Water') || !counter.get('Water'))
+				(!counter.get('Ice') && (!types.has('Water') || !counter.get('Water'))) || movePool.includes('blizzard')
 			),
 			Rock: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Rock') && (movePool.includes('headsmash') || movePool.includes('stoneedge'))
@@ -83,7 +83,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'eruption': case 'waterspout':
 			return {cull: counter.get('Physical') + counter.get('Special') < 4};
 		case 'focuspunch':
-			return {cull: !moves.has('substitute') || counter.damagingMoves.size < 2 || moves.has('hammerarm')};
+			return {cull: (
+				!moves.has('substitute') || counter.damagingMoves.size < 2 ||
+				moves.has('hammerarm') || moves.has('focusblast')
+			)};
 		case 'lightscreen':
 			if (movePool.length > 1) {
 				const screen = movePool.indexOf('reflect');
@@ -247,7 +250,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'chargebeam':
 			return {cull: moves.has('thunderbolt') && counter.get('Special') < 3};
 		case 'discharge':
-			return {cull: moves.has('thunderbolt') || moves.has('shadowball')};
+			return {cull: moves.has('thunderbolt')};
 		case 'energyball':
 			return {cull: (
 				moves.has('woodhammer') ||
@@ -348,7 +351,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		species: Species,
 	) {
 		switch (ability) {
-		case 'Anger Point': case 'Ice Body': case 'Steadfast': case 'Unaware':
+		case 'Anger Point': case 'Ice Body': case 'Rain Dish': case 'Steadfast': case 'Unaware':
 			return true;
 		case 'Blaze':
 			return !counter.get('Fire');
@@ -401,6 +404,59 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		return false;
 	}
 
+
+	getAbility(
+		types: Set<string>,
+		moves: Set<string>,
+		abilities: Set<string>,
+		counter: MoveCounter,
+		movePool: string[],
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+	): string {
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
+
+		if (abilityData.length <= 1) return abilityData[0].name;
+
+		// Hard-code abilities here
+		if (abilities.has('Hydration') && moves.has('raindance') && moves.has('rest')) return 'Hydration';
+		if (abilities.has('Swift Swim') && moves.has('raindance')) return 'Swift Swim';
+		if (abilities.has('Technician') && moves.has('machpunch') && types.has('Fighting') && counter.get('stab') < 2) {
+			return 'Technician';
+		}
+		if (species.id === 'jynx') return 'Forewarn';
+
+		let abilityAllowed: Ability[] = [];
+		// Obtain a list of abilities that are allowed (not culled)
+		for (const ability of abilityData) {
+			if (ability.rating >= 1 && !this.shouldCullAbility(
+				ability.name, types, moves, abilities, counter, movePool, teamDetails, species
+			)) {
+				abilityAllowed.push(ability);
+			}
+		}
+
+		// If all abilities are rejected, re-allow all abilities
+		if (!abilityAllowed.length) {
+			for (const ability of abilityData) {
+				if (ability.rating > 0) abilityAllowed.push(ability);
+			}
+			if (!abilityAllowed.length) abilityAllowed = abilityData;
+		}
+
+		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
+		// Sort abilities by rating with an element of randomness
+		if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
+			if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+		} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
+			if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+		}
+
+		// After sorting, choose the first ability
+		return abilityAllowed[0].name;
+	}
+
 	getHighPriorityItem(
 		ability: string,
 		types: Set<string>,
@@ -414,6 +470,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.requiredItems) return this.sample(species.requiredItems);
 		if (species.name === 'Ditto') return this.sample(['Salac Berry', 'Sitrus Berry']);
 		if (species.name === 'Farfetch\u2019d' && counter.get('Physical') < 4) return 'Stick';
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
@@ -456,7 +513,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		moves: Set<string>,
 		counter: MoveCounter,
 		species: Species,
-		isDoubles: boolean,
 		isLead: boolean
 	): string | undefined {
 		if (
@@ -772,42 +828,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 
-		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
-		Utils.sortBy(abilityData, abil => -abil.rating);
-
-		let ability0 = abilityData[0];
-		let ability1 = abilityData[1];
-		if (abilityData[1]) {
-			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
-				[ability0, ability1] = [ability1, ability0];
-			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
-				[ability0, ability1] = [ability1, ability0];
-			}
-			ability = ability0.name;
-
-			while (this.shouldCullAbility(ability, types, moves, abilities, counter, movePool, teamDetails, species)) {
-				if (ability === ability0.name && ability1.rating >= 1) {
-					ability = ability1.name;
-				} else {
-					// Default to the highest rated ability if all are rejected
-					ability = abilityData[0].name;
-					break;
-				}
-			}
-
-			if (abilities.has('Hydration') && moves.has('raindance') && moves.has('rest')) {
-				ability = 'Hydration';
-			} else if (abilities.has('Swift Swim') && moves.has('raindance')) {
-				ability = 'Swift Swim';
-			} else if (abilities.has('Technician') && moves.has('machpunch') && types.has('Fighting') && counter.get('stab') < 2) {
-				ability = 'Technician';
-			}
-		} else {
-			ability = ability0.name;
-		}
+		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
 
 		item = this.getHighPriorityItem(ability, types, moves, counter, teamDetails, species, isLead);
-		if (item === undefined) item = this.getMediumPriorityItem(ability, moves, counter, species, false, isLead);
+		if (item === undefined) item = this.getMediumPriorityItem(ability, moves, counter, species, isLead);
 		if (item === undefined) {
 			item = this.getLowPriorityItem(ability, types, moves, abilities, counter, teamDetails, species);
 		}

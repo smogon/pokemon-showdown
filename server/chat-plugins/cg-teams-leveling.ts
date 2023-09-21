@@ -53,12 +53,12 @@ async function updateStats(battle: RoomBattle, winner: ID) {
 	}
 
 	for (const species of winnerTeam) {
-		await addPokemon?.run([toID(species.name), species.level]);
-		await incrementWins?.run([toID(species.name)]);
+		await addPokemon?.run([toID(species.species), species.level]);
+		await incrementWins?.run([toID(species.species)]);
 	}
 	for (const species of loserTeam) {
-		await addPokemon?.run([toID(species.name), species.level]);
-		await incrementLosses?.run([toID(species.name)]);
+		await addPokemon?.run([toID(species.species), species.level]);
+		await incrementLosses?.run([toID(species.species)]);
 	}
 }
 

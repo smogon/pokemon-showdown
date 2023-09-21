@@ -240,6 +240,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Commander",
 		desc: "If this Pokemon is a Tatsugiri and a Dondozo is an active ally, this Pokemon goes into the Dondozo's mouth. The Dondozo has its Attack, Special Attack, Speed, Defense, and Special Defense raised by 2 stages. During the effect, the Dondozo cannot be switched out, this Pokemon cannot select an action, and attacks targeted at this Pokemon will be avoided but it will still take indirect damage. If this Pokemon faints during the effect, a Pokemon can be switched in as a replacement but the Dondozo remains unable to be switched out. If the Dondozo faints during the effect, this Pokemon regains the ability to select an action.",
 		shortDesc: "If ally is Dondozo: this Pokemon cannot act or be hit, +2 to all Dondozo's stats.",
+
+		activate: "  [POKEMON] was swallowed by [TARGET] and became [TARGET]'s commander!",
 	},
 	competitive: {
 		name: "Competitive",
@@ -432,6 +434,30 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon gains the Charge effect when it takes a hit from an attack.",
 
 		start: "  Being hit by [MOVE] charged [POKEMON] with power!",
+	},
+	embodyaspectcornerstone: {
+		name: "Embody Aspect (Cornerstone)",
+		shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
+
+		boost: "  The Cornerstone Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Defense rose!",
+	},
+	embodyaspecthearthflame: {
+		name: "Embody Aspect (Hearthflame)",
+		shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
+
+		boost: "  The Hearthflame Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Attack rose!",
+	},
+	embodyaspectteal: {
+		name: "Embody Aspect (Teal)",
+		shortDesc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+
+		boost: "  The Teal Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Speed rose!",
+	},
+	embodyaspectwellspring: {
+		name: "Embody Aspect (Wellspring)",
+		shortDesc: "On switch-in, this Pokemon's Special Defense is raised by 1 stage.",
+
+		boost: "  The Wellspring Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Sp. Def rose!",
 	},
 	emergencyexit: {
 		name: "Emergency Exit",
@@ -626,8 +652,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	heatproof: {
 		name: "Heatproof",
-		desc: "The power of Fire-type attacks against this Pokemon is halved. This Pokemon takes half of the usual burn damage, rounded down.",
-		shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
+		desc: "If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon takes half of the usual burn damage, rounded down.",
+		shortDesc: "Fire damage against this Pokemon is dealt with 1/2 offensive stat; 1/2 burn damage.",
+		gen8: {
+			desc: "The power of Fire-type attacks against this Pokemon is halved. This Pokemon takes half of the usual burn damage, rounded down.",
+			shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
+		},
 	},
 	heavymetal: {
 		name: "Heavy Metal",
@@ -637,6 +667,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	honeygather: {
 		name: "Honey Gather",
 		shortDesc: "No competitive use.",
+	},
+	hospitality: {
+		name: "Hospitality",
+		shortDesc: "On switch-in, this Pokemon restores 1/4 of its ally's maximum HP, rounded down.",
+
+		heal: "  [POKEMON] drank down all the matcha that [SOURCE] made!",
 	},
 	hugepower: {
 		name: "Huge Power",
@@ -949,6 +985,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon's types change to match the Terrain. Type reverts when Terrain ends.",
 
 		activate: "  [POKEMON] returned to its original type!",
+	},
+	mindseye: {
+		name: "Mind's Eye",
+		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves. Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage.",
+		shortDesc: "Fighting, Normal moves hit Ghost. Accuracy can't be lowered, ignores evasiveness.",
 	},
 	minus: {
 		name: "Minus",
@@ -1790,6 +1831,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Super Luck",
 		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
 	},
+	supersweetsyrup: {
+		name: "Supersweet Syrup",
+		shortDesc: "On switch-in, this Pokemon lowers the evasiveness of opponents 1 stage. Once per battle.",
+
+		start: "  A supersweet aroma is wafting from the syrup covering [POKEMON]!",
+	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
 		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
@@ -1937,6 +1984,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5.",
 		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
 	},
+	toxicchain: {
+		name: "Toxic Chain",
+		desc: "This Pokemon's moves have a 30% chance of badly poisoning. This effect comes after a move's inherent secondary effect chance.",
+		shortDesc: "This Pokemon's moves have a 30% chance of badly poisoning.",
+	},
 	toxicdebris: {
 		name: "Toxic Debris",
 		shortDesc: "If this Pokemon is hit by a physical attack, Toxic Spikes are set on the opposing side.",
@@ -1968,7 +2020,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	transistor: {
 		name: "Transistor",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.3 while using an Electric-type attack.",
+		gen8: {
+			shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.",
+		},
 	},
 	triage: {
 		name: "Triage",

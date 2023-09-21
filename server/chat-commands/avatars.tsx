@@ -77,7 +77,7 @@ export const Avatars = new class {
 		return validatedAvatar;
 	}
 	canUse(userid: ID, avatar: string): AvatarID | null {
-		avatar = avatar.toLowerCase().replace(/[^a-z0-9-.]+/g, '');
+		avatar = avatar.toLowerCase().replace(/[^a-z0-9-.#]+/g, '');
 		if (OFFICIAL_AVATARS.has(avatar)) return avatar;
 
 		const customs = customAvatars[userid]?.allowed;
@@ -762,6 +762,7 @@ export const commands: Chat.ChatCommands = {
 		`/groupavatar [username], [avatar] - Gives a user an allowed (group) avatar.`,
 		`/removeavatar [username], [avatar] - Removes access to an avatar from a user.`,
 		`/removeavatar [username] - Removes access to all custom avatars from a user.`,
+		`/moveavatars [oldname], [newname] - Moves access to all custom avatars from oldname to newname.`,
 		AVATAR_FORMATS_MESSAGE,
 	],
 
