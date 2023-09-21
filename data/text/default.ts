@@ -271,7 +271,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		fail: "  [POKEMON] shook its head. It seems like it can't use this move...",
 	},
 
-	// weather
+	// weathergy
 	// climate
 	sunnyday: {
 		weatherName: "Sun",
@@ -306,7 +306,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 	},
 	foghorn: {
 		weatherName: "Fog",
-		start: "  Fog fills the battlefield!",
+		start: "  Fog filled the battlefield!",
 		end: "  The fog disappeared.",
 		upkeep: "  (The fog is deep...)",
 	},
@@ -318,6 +318,16 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		end: "  The sandstorm subsided.",
 		upkeep: "  (The sandstorm is raging.)",
 		damage: "  [POKEMON] is buffeted by the sandstorm!",
+	},
+
+	// energy
+
+	// strongwinds
+	strongwinds: {
+		weatherName: "Strong Winds",
+		start: "  A strong wind cleared the battlefield!",
+		end: "  The winds died down.",
+		upkeep: "  (The wind blows strong.)",
 	},
 
 	// extra weather

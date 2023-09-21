@@ -12395,6 +12395,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'hail':
 			case 'snow':
 			case 'foghorn':
+			case 'deltastream':
 				factor = 0.25;
 				break;
 			case 'bloodmoon':
@@ -12435,6 +12436,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'hail':
 			case 'snow':
 			case 'foghorn':
+			case 'deltastream':
 				factor = 0.25;
 				break;
 			case 'bloodmoon':
@@ -13690,7 +13692,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Clever",
 	},
-	poisonjab: {
+	poisonjab: { // updated
 		num: 398,
 		accuracy: 100,
 		basePower: 80,
@@ -13698,7 +13700,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Poison Jab",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, punch: 1, protect: 1, mirror: 1},
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -17626,7 +17628,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn'];
+			const weakWeathers = ['raindance', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn', 'deltastream'];
 			if (weakWeathers.includes(pokemon.effectiveClimateWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -17663,7 +17665,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn'];
+			const weakWeathers = ['raindance', 'primordialsea', 'hail', 'snow', 'bloodmoon', 'foghorn', 'deltastream'];
 			if (weakWeathers.includes(pokemon.effectiveClimateWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -19169,6 +19171,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'snow':
 			case 'bloodmoon':
 			case 'foghorn':
+			case 'deltastream':
 				factor = 0.25;
 				break;
 			}
@@ -21717,6 +21720,90 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "all",
 		type: "Ghost",
 	},
+	initiative: {
+		num: -100,
+		accuracy: true,
+		basePower: 0,
+		category: 'Status',
+		name: "Initiative",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1},
+		onHit(target, source) {
+			const outcomes = [
+				'sleepTarget', // nat12
+				'paralyzeTarget', // nat11
+				'confuseTarget', // nat10
+				'disableMoveTarget', // nat9
+				'healUser', // nat8
+				'hurtTarget', // nat7
+				'disableMoveUser', // nat6
+				'confuseUser', // nat5
+				'hurtUser', // nat4
+				'healTarget', // nat3
+				'paralyzeUser', // nat2
+				'sleepUser', // nat1
+			];
+			const randomOutcome = this.sample(outcomes);
+			switch (randomOutcome) {
+			case 'healTarget':
+				this.heal(target.maxhp / 4, target, target);
+				this.add('-heal', source, target.getHealth, '[from] move: Initiative');
+				this.debug("heal target");
+				break;
+			case 'paralyzeTarget':
+				target.trySetStatus('par');
+				this.debug("paralyze target");
+				break;
+			case 'sleepTarget':
+				target.trySetStatus('slp');
+				this.debug("sleep target");
+				break;
+			case 'confuseTarget':
+				target.addVolatile('confusion');
+				this.debug("confuse target");
+				break;
+			case 'disableMoveTarget':
+				target.addVolatile('disable');
+				this.debug("confuse target");
+				break;
+			case 'hurtTarget':
+				this.damage(target.baseMaxhp / 4, source, target);
+				this.debug("damage target");
+				break;
+			case 'healUser':
+				this.heal(source.maxhp / 4, source, source);
+				this.add('-heal', source, source.getHealth, '[from] move: Initiative');
+				this.debug("heal user");
+				break;
+			case 'paralyzeUser':
+				source.trySetStatus('par');
+				this.debug("paralyze user");
+				break;
+			case 'sleepUser':
+				source.setStatus('slp');
+				this.debug("sleep user");
+				break;
+			case 'confuseUser':
+				source.addVolatile('confusion');
+				this.debug("confuse user");
+				break;
+			case 'disableMoveUser':
+				source.addVolatile('disable');
+				this.debug("disable user");
+				break;
+			case 'hurtUser':
+				this.damage(source.baseMaxhp / 4, source, source);
+				this.debug("damage user");
+				break;
+			default:
+				break;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+	},
 	magnetize: {
 		num: -13,
 		accuracy: true,
@@ -21814,97 +21901,5 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Bug",
-	},
-	initiative: {
-		num: -100,
-		accuracy: true,
-		basePower: 0,
-		category: 'Status',
-		name: "Initiative",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, reflectable: 1},
-		onHit(target, source) {
-			const outcomes = [
-				'sleepTarget', // nat12
-				'paralyzeTarget', // nat11
-				'confuseTarget', // nat10
-				'disableRandomMoveTarget', // nat9
-				'healUser', // nat8
-				// 'hurtTarget', // nat7
-				'hurtUser', // nat6
-				'disableRandomMoveUser', // nat5
-				'confuseUser', // nat4
-				'paralyzeUser', // nat3
-				'sleepUser', // nat2
-				'healTarget', // nat1
-			];
-			const randomOutcome = this.sample(outcomes);
-			switch (randomOutcome) {
-			case 'healTarget':
-				this.heal(target.maxhp / 4, target, target);
-				this.add('-heal', source, target.getHealth, '[from] move: Initiative');
-				this.debug("heal target");
-				break;
-			case 'paralyzeTarget':
-				target.trySetStatus('par');
-				this.debug("paralyze target");
-				break;
-			case 'sleepTarget':
-				target.trySetStatus('slp');
-				this.debug("sleep target");
-				break;
-			case 'confuseTarget':
-				target.addVolatile('confusion');
-				this.debug("confuse target");
-				break;
-			case 'disableRandomMoveTarget': // just sets normal disable right now
-				const randomMoveSlotTarget = this.sample(target.moveSlots);
-				if (randomMoveSlotTarget) {
-					randomMoveSlotTarget.disabled = 'hidden';
-					target.addVolatile('disable');
-					this.debug("disable target");
-				}
-				break;
-			/* case 'hurtTarget':
-				this.damage(target.baseMaxhp / 4, source, target);
-				this.debug("damage target");
-				break; */
-			case 'healUser':
-				this.heal(source.maxhp / 4, source, source);
-				this.add('-heal', source, source.getHealth, '[from] move: Initiative');
-				this.debug("heal user");
-				break;
-			case 'paralyzeUser':
-				source.trySetStatus('par');
-				this.debug("paralyze user");
-				break;
-			case 'sleepUser':
-				source.setStatus('slp');
-				this.debug("sleep user");
-				break;
-			case 'confuseUser':
-				source.addVolatile('confusion');
-				this.debug("confuse user");
-				break;
-			case 'disableRandomMoveUser': // just sets normal disabled right now
-				const randomMoveSlotUser = this.sample(source.moveSlots);
-				if (randomMoveSlotUser) {
-					randomMoveSlotUser.disabled = 'hidden';
-					source.addVolatile('disable');
-					this.debug("disable user");
-				}
-				break;
-			case 'hurtUser':
-				this.damage(source.baseMaxhp / 4, source, source);
-				this.debug("damage user");
-				break;
-			default:
-				break;
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Dragon",
 	},
 };

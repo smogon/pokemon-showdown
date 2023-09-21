@@ -933,7 +933,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				this.add('-clearingWeather', 'StrongWinds');
 			} // currently the below does not function
 			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
-				'bloodmoon', 'foghorn'].includes(field.effectiveClimateWeather())) {
+				'bloodmoon', 'foghorn', 'deltastream'].includes(field.effectiveClimateWeather())) {
 				this.field.clearClimateWeather;
 			}
 			if (['sandstorm', 'duststorm', 'pollinate',

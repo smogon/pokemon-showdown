@@ -2073,6 +2073,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 103,
 	},
 	leafguard: {
+		onClimateWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
+			if (effect.id === 'sunnyday' || effect.id === 'pollinate') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
 		onSetStatus(status, target, source, effect) {
 			if (['sunnyday', 'desolateland'].includes(target.effectiveClimateWeather())) {
 				if ((effect as Move)?.status) {
@@ -5287,7 +5293,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Absolute Zero",
 		rating: 3,
-		num: -16,
+		num: -18,
 	},
 	arcanum: {
 		onStart(source) {
@@ -5295,7 +5301,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Arcanum",
 		rating: 3,
-		num: -11,
+		num: -14,
 	},
 	bloomspring: {
 		onIrritantWeather(target, source, effect) {
@@ -5306,7 +5312,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Bloomspring",
 		rating: 1.5,
-		num: -20,
+		num: -23,
 	},
 	carboncapture: {
 		onIrritantWeather(target, source, effect) {
@@ -5320,7 +5326,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Carbon Capture",
 		rating: 2,
-		num: -22,
+		num: -25,
 	},
 	condensation: {
 		onStart(source) {
@@ -5328,7 +5334,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Condensation",
 		rating: 3,
-		num: -2,
+		num: -5,
 	},
 	druidry: { // incomplete
 		onIrritantWeather(target, source, effect) {
@@ -5340,7 +5346,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		// need to add strong winds triggering grassy terrain instead of misty terrain
 		name: "Druidry",
 		rating: 2,
-		num: -23,
+		num: -26,
 	},
 	dustdevil: {
 		onStart(source) {
@@ -5348,7 +5354,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Dust Devil",
 		rating: 3,
-		num: -3,
+		num: -6,
 	},
 	energizer: {
 		onModifySpe(spe, pokemon) {
@@ -5358,7 +5364,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Energizer",
 		rating: 2.5,
-		num: -29,
+		num: -32,
 	},
 	eventide: {
 		onStart(source) {
@@ -5366,7 +5372,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Eventide",
 		rating: 3,
-		num: -1,
+		num: -4,
 	},
 	ferroflux: {
 		onStart(source) {
@@ -5374,7 +5380,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Ferroflux",
 		rating: 3,
-		num: -13,
+		num: -16,
 	},
 	fieldworker: {
 		onModifyAtkPriority: 5,
@@ -5393,7 +5399,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Fieldworker",
 		rating: 3,
-		num: -33,
+		num: -2,
 	},
 	forked: {
 		onResidualOrder: 5,
@@ -5407,7 +5413,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Forked",
 		rating: 1.5,
-		num: -30,
+		num: -33,
 	},
 	galeforce: {
 		onStart(source) {
@@ -5415,7 +5421,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Galeforce",
 		rating: 3,
-		num: -14,
+		num: -17,
 	},
 	glacialarmor: {
 		onModifyDef(def, pokemon) {
@@ -5436,7 +5442,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 		name: "Glacial Armor",
 		rating: 2,
-		num: -15,
+		num: -19,
 	},
 	gravitysling: {
 		onModifySpe(spe, pokemon) {
@@ -5446,7 +5452,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Gravity Sling",
 		rating: 2,
-		num: -31,
+		num: -34,
 	},
 	haunting: {
 		onModifySpe(spe, pokemon) {
@@ -5456,7 +5462,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Haunting",
 		rating: 3,
-		num: -17,
+		num: -20,
 	},
 	hayfever: {
 		onStart(source) {
@@ -5464,7 +5470,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Hay Fever",
 		rating: 3,
-		num: -4,
+		num: -7,
 	},
 	incantation: {
 		onStart(source) {
@@ -5472,7 +5478,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Incantation",
 		rating: 3,
-		num: -7,
+		num: -10,
 	},
 	malice: {
 		onModifySpAPriority: 5,
@@ -5495,7 +5501,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Malice",
 		rating: 3,
-		num: -18,
+		num: -21,
 	},
 	masterinstinct: {
 		onSourceModifyAccuracyPriority: -1,
@@ -5509,7 +5515,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Master Instinct",
 		rating: 2,
-		num: -25,
+		num: -28,
 	},
 	nesting: {
 		onIrritantWeather(target, source, effect) {
@@ -5524,7 +5530,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Nesting",
 		rating: 1.5,
-		num: -21,
+		num: -24,
 	},
 	pollution: {
 		onStart(source) {
@@ -5532,7 +5538,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Pollution",
 		rating: 3,
-		num: -6,
+		num: -9,
 	},
 	powerabove: {
 		onBasePowerPriority: 21,
@@ -5547,7 +5553,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Power Above",
 		rating: 2.5,
-		num: -24,
+		num: -27,
 	},
 	powerwithin: {
 		onBasePowerPriority: 21,
@@ -5562,7 +5568,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Power Within",
 		rating: 2.5,
-		num: -28,
+		num: -31,
 	},
 	seance: {
 		onStart(source) {
@@ -5570,7 +5576,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Se\u0301ance",
 		rating: 3,
-		num: -9,
+		num: -12,
 	},
 	secretion: {
 		onStart(source) {
@@ -5578,7 +5584,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Secretion",
 		rating: 3,
-		num: -5,
+		num: -8,
 	},
 	smokeandmirrors: {
 		onBasePowerPriority: 21,
@@ -5605,7 +5611,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Smoke and Mirrors",
 		rating: 2.5,
-		num: -27,
+		num: -30,
 	},
 	souldrain: { // incomplete. says it drains from the opponents-is this true?
 		onIrritantWeather(target, source, effect) {
@@ -5616,7 +5622,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Soul Drain",
 		rating: 2,
-		num: -26,
+		num: -29,
 	},
 	standoff: {
 		onStart(source) {
@@ -5624,7 +5630,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Stand Off",
 		rating: 3,
-		num: -8,
+		num: -11,
 	},
 	stormfront: {
 		onStart(source) {
@@ -5632,7 +5638,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Stormfront",
 		rating: 3,
-		num: -12,
+		num: -15,
 	},
 	surveillance: {
 		onStart(pokemon) {
@@ -5640,7 +5646,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Surveillance",
 		rating: 4,
-		num: -34,
+		num: -3,
 	},
 	transcendence: {
 		onStart(source) {
@@ -5648,7 +5654,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Transcendence",
 		rating: 3,
-		num: -10,
+		num: -13,
 	},
 	vegetate: {
 		onModifyTypePriority: -1,
@@ -5668,7 +5674,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Vegetate",
 		rating: 3,
-		num: -32,
+		num: -1,
 	},
 	warpmist: { // does NOT fucking work
 		onModifySpAPriority: 5,
@@ -5693,6 +5699,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Warp Mist",
 		rating: 2,
-		num: -19,
+		num: -22,
 	},
 };

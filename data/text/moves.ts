@@ -2773,7 +2773,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hail: {
 		name: "Hail",
-		desc: "For 5 turns, the weather becomes Hail. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are an Ice type or have the Ice Body, Magic Guard, Overcoat, or Snow Cloak Abilities. Lasts for 8 turns if the user is holding Icy Rock. Fails if the current weather is Hail.",
+		desc: "For 5 turns, the weather becomes Hail. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are an Ice or Steel type. During the effect, the Defense and Special Defense of Ice-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Weather Balloon.. Fails if the current weather is Hail.",
 		shortDesc: "For 5 turns, hail crashes down.",
 		gen4: {
 			desc: "For 5 turns, the weather becomes Hail. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are an Ice type or have the Ice Body, Magic Guard, or Snow Cloak Abilities. Lasts for 8 turns if the user is holding Icy Rock. Fails if the current weather is Hail.",
@@ -5003,7 +5003,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	raindance: {
 		name: "Rain",
-		desc: "For 5 turns, the weather becomes Rain. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Damp Rock. Fails if the current weather is Rain.",
+		desc: "For 5 turns, the weather becomes Rain. During the effect, the damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5, and the Defense of Grass-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Rain.",
 		shortDesc: "For 5 turns, heavy rain powers Water moves.",
 		gen3: {
 			desc: "For 5 turns, the weather becomes Rain. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Rain.",
@@ -5385,7 +5385,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sandstorm: {
 		name: "Sandstorm",
-		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
+		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Sandstorm.",
 		shortDesc: "For 5 turns, a sandstorm rages. Rock: 1.5x SpD.",
 		gen4: {
 			desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
@@ -5944,7 +5944,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	solarbeam: {
 		name: "Solar Beam",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, or Fog and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		gen8: {
 			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sun, the move still requires a turn to charge.",
@@ -5973,7 +5973,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	solarblade: {
 		name: "Solar Blade",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, or Fog and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		gen8: {
 			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sun, the move still requires a turn to charge.",
@@ -6414,7 +6414,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sunnyday: {
 		name: "Sun",
-		desc: "For 5 turns, the weather becomes Sun. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Heat Rock. Fails if the current weather is Sun.",
+		desc: "For 5 turns, the weather becomes Sun. During the effect, the damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5, and the Special Defense of Grass-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Sun.",
 		shortDesc: "For 5 turns, intense sunlight powers Fire moves.",
 		gen3: {
 			desc: "For 5 turns, the weather becomes Sun. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Sun.",
@@ -6546,7 +6546,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	synthesis: {
 		name: "Synthesis",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sun or Desolate Land, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, or Fog, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sun or Desolate Land, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
 			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
@@ -7442,5 +7442,82 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "Will always result in a critical hit.",
 			shortDesc: "Nearly always goes first. Always crits.",
 		},
+	},
+
+	// swse
+	auraprojection: {
+		name: "Aura Projection",
+		desc: "For 5 turns, the weather becomes Battle Aura. During the effect, raises the chance for a critical hit by 1 stage and prevents other Pokemon from lowering Fighting-type Pokemon's stat stages. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Battle Aura.",
+		shortDesc: "For 5 turns, a battle aura raises crit rate by 1.",
+	},
+	bloodmoon: {
+		name: "Blood Moon",
+		desc: "For 5 turns, the weather becomes Blood Moon. During the effect, the damage of supereffective attacks is multiplied by 1.5 and Dark-type Status moves have their priority increased by 1. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Blood Moon.",
+		shortDesc: "For 5 turns, the moon powers supereffective moves.",
+	},
+	cosmicrays: {
+		name: "Cosmic Rays",
+		desc: "For 5 turns, the weather becomes Psychic Field. During the effect, the damage of Psychic-type attacks is multiplied by 1.5 and the damage of Dark-type attacks is multiplied by 0.5. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Psychic Field.",
+		shortDesc: "For 5 turns, a psychic field powers Psychic moves.",
+	},
+	dragonforce: {
+		name: "Dragon Force",
+		desc: "For 5 turns, the weather becomes Dragon Force. During the effect, the damage of supereffective attacks is multiplied by 0.8 and the Attack and Special Attack of Dragon-type Pokemon is multiplied by 1.15. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Dragon Force.",
+		shortDesc: "For 5 turns, the arcane weakens supereffective moves.",
+	},
+	duststorm: {
+		name: "Dust Storm",
+		desc: "For 5 turns, the weather becomes Dust Storm. During the effect, the Speed of Ground-type Pokemon is multiplied by 1.5 and the the damage of Electric-type attacks is multiplied by 0.5. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Dust Storm.",
+		shortDesc: "For 5 turns, dust fills the air. Ground: 1.5x Spe.",
+	},
+	foghorn: {
+		name: "Foghorn",
+		desc: "For 5 turns, the weather becomes Fog. During the effect, Ghost types can be hit with Normal-type moves and non-Normal-type moves have their accuracy multiplied by 0.9. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Fog.",
+		shortDesc: "For 5 turns, fog negates Ghost's normal immunity.",
+	},
+	haunt: {
+		name: "Haunt",
+		desc: "For 5 turns, the weather becomes Cursed Winds. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ghost, Normal, or Dark type, or have the Magic Guard ability. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Cursed Winds.",
+		shortDesc: "For 5 turns, cursed winds drain HP.",
+	},
+	initiative: {
+		name: "Initiative",
+		desc: "If this move is successful, it has an equal chance to apply any of the following effects: put the target to sleep, put the user to sleep, paralyze the target, paralyze the user, confuse the target, confuse the user, disable the target's last move used, disable the user's last move used, hurt the target by 1/4 of its maximum HP, hurt the user by 1/4 of its maximum HP, heal the target by 1/4 of its maximum HP, or heal the user by 1/4 of its maximum HP by 1/4 of its maximum HP.",
+		shortDesc: "Has a random positive or negative effect.",
+	},
+	magnetize: {
+		name: "Magnetize",
+		desc: "For 5 turns, the weather becomes Magnetosphere. During the effect, Steel-type moves and Electric-type moves targeted at Steel-type Pokemon ignore accuracy checks, and the Special Defense of Steel-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Magnetosphere.",
+		shortDesc: "For 5 turns, Steel moves ignore accuracy checks.",
+	},
+	pollinate: {
+		name: "Pollinate",
+		desc: "For 5 turns, the weather becomes Pollen Storm. During the effect, the Attack of non-Grass- and Bug-type Pokemon is multiplied by 0.5. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Pollen Storm.",
+		shortDesc: "For 5 turns, non-Grass/Bug: 0.5x Atk.",
+	},
+	smogspread: {
+		name: "Smog Spread",
+		desc: "For 5 turns, the weather becomes Smog. At the end of each turn except the last, all active Pokemon are poisoned, unless they are a Poison or Steel type. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Smog.",
+		shortDesc: "For 5 turns, smog fills the air. Poisons all active.",
+	},
+	sprinkle: {
+		name: "Sprinkle",
+		desc: "For 5 turns, the weather becomes Fairy Dust. At the end of each turn except the last, all active Pokemon have 1/16 of their maximum HP restored, rounded down. During the effect, the evasion of non-Fairy-type Pokemon is multiplied by 0.75 during accuracy checks, and the Special Defense of Fairy-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Fairy Dust.",
+		shortDesc: "For 5 turns, fairy dust heals. Fairy: 1.25x SpDef.",
+	},
+	strongwinds: {
+		name: "Strong Winds",
+		desc: "For 5 turns, the weather becomes Strong Winds. Clears all active Weathergies on activation. If other Weathergies are activated after Strong Winds, they gain boosted effects for as long as Strong Winds remains active. During the effect, wind moves ignore accuracy checks and the Speed of Flying-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Portable Turbine. Fails if the current weather is Strong Winds.",
+		shortDesc: "Clears weather. For 5 turns, boosts all weather.",
+	},
+	supercell: { // incomplete
+		name: "Supercell",
+		desc: "For 5 turns, the weather becomes Thunderstorm. At the end of each turn except the last, all active Pokemon have a 10% to be struck by lightning. During the effect the Speed of Electric-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Thunderstorm.",
+		shortDesc: "For 5 turns, lightning strikes the field.",
+	},
+	swarmsignal: {
+		name: "Swarm Signal",
+		desc: "For 5 turns, the weather becomes Pheromones. During the effect, the Speed of Bug- and Poison-type Pokemon is multiplied by 1.5 and the accuracy of moves used by Bug- and Poison-type Pokemon is multiplied by 1.3. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Pheromones.",
+		shortDesc: "For 5 turns, Bug/Poison: 1.5x Spe, 1.3x Acc.",
 	},
 };
