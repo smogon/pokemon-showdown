@@ -7555,6 +7555,27 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 
 	// swse
+	avocaberry: {
+		name: "Avoca Berry",
+		spritenum: 381,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ice",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'frb') {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			if (pokemon.status === 'frb') {
+				pokemon.cureStatus();
+			}
+		},
+		num: -1,
+		gen: 9,
+	},
 	energychannelizer: {
 		name: "Energy Channelizer",
 		spritenum: 6,
@@ -7596,6 +7617,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: -4,
 		gen: 9,
 	},
+	charmingtalisman: {
+		name: "Charming Talisman",
+		spritenum: 436,
+		fling: {
+			basePower: 50,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Fairy') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: -3,
+		gen: 9,
+	},
 	frostorb: {
 		name: "Frost Orb",
 		spritenum: 145,
@@ -7609,6 +7645,23 @@ export const Items: {[k: string]: ModdedItemData} = {
 			pokemon.trySetStatus('frb', pokemon);
 		},
 		num: -2,
+		gen: 9,
+	},
+	pikaspresso: {
+		name: "Pikaspresso",
+		spritenum: 788,
+		onUpdate(pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.eatItem();
+			}
+		},
+		onTryEatItem(item, pokemon) {
+			if (!this.runEvent('TryHeal', pokemon)) return false;
+		},
+		onEat(pokemon) {
+			this.heal(pokemon.baseMaxhp / 4);
+		},
+		num: -4,
 		gen: 9,
 	},
 	portableturbine: {
