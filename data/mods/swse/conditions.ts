@@ -498,6 +498,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (move.type === 'Fire') {
 				this.debug('Sunny Day fire boost');
 				if (this.field.climateWeatherState.boosted) {
+					this.debug('Boosted further by Strong Winds');
 					return this.chainModify(1.75);
 				} else {
 					return this.chainModify(1.5);
@@ -506,6 +507,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (move.type === 'Water') {
 				this.debug('Sunny Day water suppress');
 				if (this.field.climateWeatherState.boosted) {
+					this.debug('Suppressed further by Strong Winds');
 					return this.chainModify(0.25);
 				} else {
 					return this.chainModify(0.5);
@@ -522,6 +524,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldStart(battle, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.climateWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -558,6 +561,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (move.type === 'Water') {
 				this.debug('rain water boost');
 				if (this.field.climateWeatherState.boosted) {
+					this.debug('Boosted further by Strong Winds');
 					return this.chainModify(1.75);
 				} else {
 					return this.chainModify(1.5);
@@ -566,6 +570,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (move.type === 'Fire') {
 				this.debug('rain fire suppress');
 				if (this.field.climateWeatherState.boosted) {
+					this.debug('Supressed further by Strong Winds');
 					return this.chainModify(0.25);
 				} else {
 					return this.chainModify(0.5);
@@ -582,6 +587,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.climateWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -626,6 +632,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.climateWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -642,6 +649,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onClimateWeather(target) {
 			if (target.hasItem('utilityumbrella')) return;
 			if (this.field.climateWeatherState.boosted) {
+				this.debug('Boosted further by Strong Winds');
 				this.damage(target.baseMaxhp / 8);
 			} else {
 				if (!target.hasType('Steel')) {
@@ -708,6 +716,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.climateWeatherState.boosted && move?.category === 'Status') {
 				move.pranksterBoosted = true;
+				this.debug('Boosted further by Strong Winds');
 				return priority + 1;
 			}
 			if (move?.type === 'Dark' && move.category === 'Status') return priority + 1;
@@ -715,6 +724,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.climateWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -762,6 +772,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.climateWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -801,6 +812,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 				return this.modify(spd, 1.5);
 			}
 			if ((pokemon.hasType('Steel') || pokemon.hasType('Ground')) && this.field.setIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
+				this.debug('Boosted further by Strong Winds');
 				return this.modify(spd, 1.5);
 			}
 		},
@@ -808,12 +820,14 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onModifyDef(def, pokemon) {
 			if (pokemon.hasItem('safetygoggles')) return;
 			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
+				this.debug('Boosted further by Strong Winds');
 				return this.modify(def, 1.5);
 			}
 		},
 		onFieldStart(field, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.irritantWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -872,9 +886,10 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onModifyMovePriority: -5,
 		onModifyMove(move, target, pokemon) {
 			if (this.field.energyWeatherState.boosted) {
-				if (target.hasItem('safetygoggles')) return;
+				if (target.hasItem('energynullifier')) return;
 				if (!move.ignoreImmunity) move.ignoreImmunity = {};
 				if (move.ignoreImmunity !== true) {
+					this.debug('Boosted further by Strong Winds');
 					move.ignoreImmunity['Fighting'] = true;
 					move.ignoreImmunity['Normal'] = true;
 				}
@@ -883,6 +898,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldStart(field, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.energyWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -935,14 +951,17 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
 				'bloodmoon', 'foghorn', 'deltastream'].includes(field.effectiveClimateWeather())) {
 				this.field.clearClimateWeather;
+				this.debug('Cleared Climate Weathers');
 			}
 			if (['sandstorm', 'duststorm', 'pollinate',
 				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
 				this.field.clearIrritantWeather;
+				this.debug('Cleared Irritant Weathers');
 			}
 			if (['auraprojection', 'haunt', 'comsicrays',
 				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
 				this.field.clearEnergyWeather;
+				this.debug('Cleared Energy Weathers');
 			}
 		},
 		onFieldResidualOrder: 1,
