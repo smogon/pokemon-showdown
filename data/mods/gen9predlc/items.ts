@@ -23,6 +23,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	prismscale: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	razorfang: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	reapercloth: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	rowapberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",
