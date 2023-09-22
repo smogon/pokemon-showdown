@@ -1266,10 +1266,9 @@ export class RandomTeams {
 		if (role === 'AV Pivot') return 'Assault Vest';
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
-		if (species.id === 'ursalunabloodmoon') return 'Silk Scarf';
 		if (moves.has('clangoroussoul') || (species.id === 'toxtricity' && moves.has('shiftgear'))) return 'Throat Spray';
 		if (species.baseSpecies === 'Magearna' && role === 'Tera Blast user') return 'Weakness Policy';
-		if (moves.has('lastrespects')) return 'Choice Scarf';
+		if (moves.has('lastrespects') || moves.has('dragonenergy')) return 'Choice Scarf';
 		if (
 			ability === 'Imposter' ||
 			(species.id === 'magnezone' && moves.has('bodypress') && !isDoubles)
@@ -1340,14 +1339,10 @@ export class RandomTeams {
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
 
+		if (species.id === 'ursalunabloodmoon') return 'Silk Scarf';
 		if (moves.has('covet')) return 'Normal Gem';
-		if (moves.has('thief')) return '';
-		if (moves.has('iciclespear') && ability !== 'Skill Link') return 'Loaded Dice';
 		if (species.id === 'calyrexice') return 'Weakness Policy';
-		if (
-			(['dragonenergy', 'waterspout'].some(m => moves.has(m))) &&
-			counter.get('Physical') + counter.get('Special') === 4
-		) return 'Choice Scarf';
+		if (moves.has('waterspout')) return 'Choice Scarf';
 		if (role === 'Choice Item user') {
 			if (scarfReqs || (counter.get('Physical') < 4 && counter.get('Special') < 3 && !moves.has('memento'))) {
 				return 'Choice Scarf';
@@ -1434,7 +1429,10 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		}
-		if (!counter.get('Status') && !['Fast Attacker', 'Wallbreaker', 'Tera Blast user'].includes(role)) {
+		if (
+			!counter.get('Status') &&
+			(moves.has('rapidspin') || !['Fast Attacker', 'Wallbreaker', 'Tera Blast user'].includes(role))
+		) {
 			return 'Assault Vest';
 		}
 		if (counter.get('speedsetup') && role === 'Bulky Setup') return 'Weakness Policy';
@@ -1450,7 +1448,7 @@ export class RandomTeams {
 		if (
 			(moves.has('chillyreception') || (
 				role === 'Fast Support' &&
-				['defog', 'partingshot', 'mortalspin', 'rapidspin', 'uturn', 'voltswitch'].some(m => moves.has(m)) &&
+				[...PIVOT_MOVES, 'defog', 'mortalspin', 'rapidspin'].some(m => moves.has(m)) &&
 				!types.includes('Flying') && ability !== 'Levitate'
 			))
 		) return 'Heavy-Duty Boots';
@@ -1621,7 +1619,8 @@ export class RandomTeams {
 		}
 
 		if (
-			moves.has('gyroball') || moves.has('trickroom') || (moves.has('flipturn') && moves.has('wish') && moves.has('scald'))
+			moves.has('gyroball') || moves.has('trickroom') ||
+			([...PIVOT_MOVES].some(m => moves.has(m)) && moves.has('wish') && species.baseStats.spe <= 70)
 		) {
 			evs.spe = 0;
 			ivs.spe = 0;

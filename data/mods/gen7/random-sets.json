@@ -877,7 +877,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["crunch", "dragondance", "earthquake", "icefang", "substitute", "waterfall"]
+                "movepool": ["crunch", "dragondance", "earthquake", "substitute", "waterfall"]
             }
         ]
     },
@@ -1272,7 +1272,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthpower", "hiddenpowerfire", "hiddenpowerice", "leafstorm", "sludgebomb"]
+                "movepool": ["earthpower", "hiddenpowerfire", "hiddenpowerice", "hiddenpowerrock", "leafstorm", "sludgebomb"]
             }
         ]
     },
@@ -1577,10 +1577,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["dracometeor", "hydropump", "icebeam", "raindance", "waterfall"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["dracometeor", "focusenergy", "hydropump", "icebeam"]
             }
         ]
     },
@@ -2165,10 +2161,6 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["bugbuzz", "defog", "encore", "roost", "thunderwave", "wish"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["bugbuzz", "charm", "encore", "roost", "substitute", "toxic"]
             }
         ]
     },
@@ -2865,11 +2857,11 @@
         "level": 88,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["earthquake", "stealthrock", "stoneedge", "synthesis", "woodhammer"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Attacker",
                 "movepool": ["earthquake", "rockpolish", "stoneedge", "swordsdance", "woodhammer"]
             }
         ]
@@ -3061,7 +3053,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["dazzlinggleam", "energyball", "healingwish", "hiddenpowerfire", "hiddenpowerground", "hiddenpowerrock"]
+                "movepool": ["dazzlinggleam", "energyball", "healingwish", "hiddenpowerfire", "hiddenpowerground", "hiddenpowerrock", "synthesis"]
             }
         ]
     },
@@ -3670,7 +3662,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthpower", "flashcannon", "lavaplume", "magmastorm", "roar", "stealthrock", "toxic"]
+                "movepool": ["earthpower", "flashcannon", "lavaplume", "magmastorm", "stealthrock", "taunt", "toxic"]
             },
             {
                 "role": "Staller",
