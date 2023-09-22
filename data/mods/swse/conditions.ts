@@ -811,7 +811,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (pokemon.hasType('Rock') && this.field.isIrritantWeather('sandstorm')) {
 				return this.modify(spd, 1.5);
 			}
-			if ((pokemon.hasType('Steel') || pokemon.hasType('Ground')) && this.field.setIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
+			if ((pokemon.hasType('Steel') || pokemon.hasType('Ground')) &&
+				this.field.setIrritantWeather('sandstorm') && this.field.irritantWeatherState.boosted) {
 				this.debug('Boosted further by Strong Winds');
 				return this.modify(spd, 1.5);
 			}

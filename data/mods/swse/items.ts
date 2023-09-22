@@ -6897,7 +6897,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem()) return;
 			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
-			'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
+				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
@@ -6905,13 +6905,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
 			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
-			'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
+				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
 			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
-			'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
+				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 			this.effectState.inactive = true;
