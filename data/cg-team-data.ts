@@ -12,7 +12,11 @@ export const ABILITY_MOVE_BONUSES: {[abilityID: string]: {[moveID: string]: numb
 // Bonuses to move ratings by move type
 export const ABILITY_MOVE_TYPE_BONUSES: {[abilityID: string]: {[typeID: string]: number}} = {
 	darkaura: {Dark: 1.33},
+	dragonsmaw: {Dragon: 1.5},
 	fairyaura: {Fairy: 1.33},
+	steelworker: {Steel: 1.5},
+	steelyspirit: {Steel: 1.5},
+	transistor: {Electric: 1.3},
 
 	// -ate moves
 	pixilate: {Normal: 1.5 * 1.2},
@@ -34,19 +38,12 @@ export const HARDCODED_MOVE_WEIGHTS: {[moveID: string]: number} = {
 	// Useless without Berry + sucks even then
 	belch: 0.2,
 
-	// Power increases in conditions within our control
-	acrobatics: 1.75, // not 2 because of the opportunity cost of forgoing an item
-	facade: 1.5, // not 2 because we forgo an item AND get badly poisoned
-
 	// Power increases in conditions out of our control that may occur
 	avalanche: 1.2,
 	hex: 1.2,
 
 	// screens
 	lightscreen: 3, reflect: 3, auroraveil: 3, // TODO: make sure AVeil always gets Snow?
-
-	// hazard removal
-	defog: 2, rapidspin: 1.2,
 
 	// mess with the opponent
 	taunt: 2, disable: 2, encore: 3,
