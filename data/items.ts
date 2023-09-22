@@ -4464,7 +4464,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 537,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	protectivepads: {
 		name: "Protective Pads",
@@ -4699,7 +4698,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 327,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	razzberry: {
 		name: "Razz Berry",
@@ -4722,7 +4720,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 325,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	redcard: {
 		name: "Red Card",
