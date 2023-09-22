@@ -5696,6 +5696,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-immune', target, '[from] ability: Warp Mist');
 				this.debug('Warp Mist negate immunity');
 				move.ignoreImmunity = false;
+			} else {
+				move.ignoreImmunity = true;
 			}
 		},
 		name: "Warp Mist",
