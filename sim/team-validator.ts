@@ -1453,7 +1453,7 @@ export class TeamValidator {
 				eggSources.possiblyLimitedEggMoves = [toID(eggSources.sourcesBefore + move)];
 			}
 			allEggSources.intersectWith(eggSources);
-			if (!allEggSources.sources.length && !eggSources.sourcesBefore) return false;
+			if (!allEggSources.size()) return false;
 		}
 		pokemonBlacklist.push(species.id);
 		if (allEggSources.limitedEggMoves && allEggSources.limitedEggMoves.length > 1) {
