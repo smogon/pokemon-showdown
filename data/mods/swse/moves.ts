@@ -6109,6 +6109,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-start', pokemon, 'Foresight');
 			},
 			onNegateImmunity(pokemon, type) {
+				if (pokemon.hasAbility('Warp Mist') && this.field.isClimateWeather('Foghorn')) return;
 				if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
 			},
 			onModifyBoost(boosts) {
@@ -12095,6 +12096,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-start', pokemon, 'Miracle Eye');
 			},
 			onNegateImmunity(pokemon, type) {
+				if (pokemon.hasAbility('Warp Mist') && this.field.isClimateWeather('Foghorn')) return;
 				if (pokemon.hasType('Dark') && type === 'Psychic') return false;
 			},
 			onModifyBoost(boosts) {
