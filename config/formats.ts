@@ -656,18 +656,18 @@ export const Formats: FormatList = [
 		column: 1,
 	},
 	{
-		name: "[Gen 9] Paldea Dex Draft",
+		name: "[Gen 9] Draft",
 
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: ['Draft', 'Min Source Gen = 9'],
 	},
 	{
-		name: "[Gen 9] Tera Preview Paldea Dex Draft",
+		name: "[Gen 9] Tera Preview Draft",
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['[Gen 9] Paldea Dex Draft', 'Tera Type Preview'],
+		ruleset: ['[Gen 9] Draft', 'Tera Type Preview'],
 	},
 	{
 		name: "[Gen 9] 6v6 Doubles Draft",
@@ -724,7 +724,7 @@ export const Formats: FormatList = [
 		banlist: ['Dragon Rage', 'Sonic Boom'],
 	},
 	{
-		name: "[Gen 8] Galar Dex Draft",
+		name: "[Gen 8] Draft",
 
 		mod: 'gen8',
 		searchShow: false,
@@ -2692,18 +2692,18 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9 Pre-DLC] Paldea Dex Draft",
+		name: "[Gen 9 Pre-DLC] Draft",
 
 		mod: 'gen9predlc',
 		searchShow: false,
 		ruleset: ['Draft', 'Min Source Gen = 9'],
 	},
 	{
-		name: "[Gen 9 Pre-DLC] Tera Preview Paldea Dex Draft",
+		name: "[Gen 9 Pre-DLC] Tera Preview Draft",
 
 		mod: 'gen9predlc',
 		searchShow: false,
-		ruleset: ['[Gen 9] Paldea Dex Draft', 'Tera Type Preview'],
+		ruleset: ['[Gen 9 Pre-DLC] Draft', 'Tera Type Preview'],
 	},
 	{
 		name: "[Gen 9 Pre-DLC] 6v6 Doubles Draft",
@@ -2733,7 +2733,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9predlc',
 		searchShow: false,
-		ruleset: ['[Gen 9] NatDex Draft', 'Tera Type Preview'],
+		ruleset: ['[Gen 9 Pre-DLC] NatDex Draft', 'Tera Type Preview'],
 	},
 	{
 		name: "[Gen 9 Pre-DLC] NatDex 6v6 Doubles Draft",
@@ -2741,7 +2741,7 @@ export const Formats: FormatList = [
 		mod: 'gen9predlc',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 9] 6v6 Doubles Draft', '+Unobtainable', '+Past', '!! Min Source Gen = 3'],
+		ruleset: ['[Gen 9 Pre-DLC] 6v6 Doubles Draft', '+Unobtainable', '+Past', '!! Min Source Gen = 3'],
 	},
 	{
 		name: "[Gen 9 Pre-DLC] NatDex 4v4 Doubles Draft",
@@ -2749,14 +2749,14 @@ export const Formats: FormatList = [
 		mod: 'gen9predlc',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 9] 4v4 Doubles Draft', '+Unobtainable', '+Past', '!! Min Source Gen = 3'],
+		ruleset: ['[Gen 9 Pre-DLC] 4v4 Doubles Draft', '+Unobtainable', '+Past', '!! Min Source Gen = 3'],
 	},
 	{
 		name: "[Gen 9 Pre-DLC] NatDex LC Draft",
 
 		mod: 'gen9predlc',
 		searchShow: false,
-		ruleset: ['[Gen 9] NatDex Draft', 'Double Item Clause', 'Little Cup'],
+		ruleset: ['[Gen 9 Pre-DLC] NatDex Draft', 'Double Item Clause', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom'],
 	},
 
