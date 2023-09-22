@@ -721,6 +721,8 @@ export default class TeamGenerator {
 				}, 0);
 			}
 			return 0;
+		case 'eviolite':
+			return species.nfe || species.id === 'dipplin' ? 100 : 0;
 
 		// status
 		case 'flameorb':
