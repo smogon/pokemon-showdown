@@ -5690,8 +5690,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onTryHit(target, source, move) {
+			if (move.category === 'Status') return;
 			if (target.hasItem('ringtarget')) return;
-			if (target !== source && move.ignoreImmunity === true) {
+			if (target !== source && move.ignoreImmunity) {
 				this.add('-immune', target, '[from] ability: Warp Mist');
 				this.debug('Warp Mist negate immunity');
 				move.ignoreImmunity = false;
