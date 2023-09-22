@@ -1620,7 +1620,7 @@ export class RandomTeams {
 
 		if (
 			moves.has('gyroball') || moves.has('trickroom') ||
-			([...PIVOT_MOVES].some(m => moves.has(m)) && moves.has('wish') && species.baseStats.spe <= 70)
+			(PIVOT_MOVES.some(m => moves.has(m)) && moves.has('wish') && species.baseStats.spe <= 70)
 		) {
 			evs.spe = 0;
 			ivs.spe = 0;
