@@ -737,6 +737,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				gooey: 'tanglinghair',
 				insomnia: 'vitalspirit',
 				ironbarbs: 'roughskin',
+				keeneye: 'illuminate',
 				libero: 'protean',
 				minus: 'plus',
 				moxie: 'chillingneigh',
