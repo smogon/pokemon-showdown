@@ -1541,7 +1541,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 		const loser = this.p1 === winnerid ? this.p2 : this.p1;
 		const loserPlayer = room.battle!.playerTable[loser];
 		if (loserPlayer.hitDisconnectLimit) { // disconnection means opp wins the set
-			this.room.add(`${this.name(loser)} lost by timing out.`);
+			this.room.add(`${this.name(loser)} lost the series due to inactivity.`);
 			return this.onEnd(winnerid as ID);
 		}
 		if (this.ended) return;
@@ -1558,6 +1558,9 @@ export class BestOfGame extends RoomGames.RoomGame {
 		}
 		this.games[this.games.length - 1].winner = isTie ? '' : winnerid;
 
+		this.room.add(
+			`|html|${winnerid ? `${this.name(winnerid)} won game ${this.games.length}!` : `Game ${this.games.length} was a tie`}`
+		).update();
 		for (const k in this.wins) {
 			if (this.wins[k as 'p1' | 'p2'] >= this.winThreshold) {
 				return this.onEnd(this[k as 'p1' | 'p2']);
