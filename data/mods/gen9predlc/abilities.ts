@@ -1,4 +1,8 @@
 export const Abilities: {[k: string]: ModdedAbilityData} = {
+	hadronengine: {
+		inherit: true,
+		isPermanent: true,
+	},
 	illuminate: {
 		inherit: true,
 		onTryBoost() {},
@@ -9,6 +13,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	mindseye: {
 		inherit: true,
 		isNonstandard: "Future",
+	},
+	orichalcumpulse: {
+		inherit: true,
+		isPermanent: true,
 	},
 	supersweetsyrup: {
 		inherit: true,
