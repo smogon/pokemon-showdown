@@ -1485,7 +1485,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 			if (!name || typeof name === 'number') name = 'unknownf';
 			const url = Chat.plugins.avatars?.Avatars.src(name) || `https://${Config.routes.client}/sprites/trainers/${name}.png`;
 			buf += `<td><center>`;
-			buf += `<img class="trainersprite"${!i ? ' style="transform: scaleX(-1)"' : ""} stylesrc="${url}" />`;
+			buf += `<img class="trainersprite"${!i ? ' style="transform: scaleX(-1)"' : ""} src="${url}" />`;
 			buf += `</center></td>`;
 		}
 
