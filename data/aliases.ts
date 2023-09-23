@@ -15,7 +15,7 @@ export const Aliases: {[alias: string]: string} = {
 	bss: "[Gen 9] Battle Stadium Singles Series 2",
 	vgc: "[Gen 9] VGC 2023 Series 2",
 	bsd: "[Gen 9] VGC 2023 Series 2",
-	randdubs: "[Gen 8] Random Doubles Battle",
+	randdubs: "[Gen 9] Random Doubles Battle",
 	doubles: "[Gen 9] Doubles OU",
 	dou: "[Gen 9] Doubles OU",
 	dubs: "[Gen 9] Doubles OU",
@@ -50,6 +50,7 @@ export const Aliases: {[alias: string]: string} = {
 	camo: "[Gen 9] Camomons",
 	revmons: "[Gen 9] Revelationmons",
 	tcg: "[Gen 9] The Card Game",
+	fotf: "[Gen 9] Force of the Fallen",
 	ffa: "[Gen 9] Free-For-All",
 	ph: "[Gen 9] Pure Hackmons",
 	hackmons: "[Gen 9] Pure Hackmons",
@@ -82,8 +83,8 @@ export const Aliases: {[alias: string]: string} = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Alphabet Cup",
-	lcotm: "[Gen 9] Trademarked",
+	omotm: "[Gen 9] Frantic Fusions",
+	lcotm: "[Gen 7] Pure Hackmons",
 
 	// mega evos
 	fabio: "Ampharos-Mega",

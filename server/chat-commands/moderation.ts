@@ -793,7 +793,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-		this.addModAction(`${name} was banned ${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
+		this.addModAction(`${name} was banned${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
 
 		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
 		const affected = Punishments.roomBan(room, targetUser, time, null, privateReason);
@@ -2094,6 +2094,9 @@ export const commands: Chat.ChatCommands = {
 	bl: 'blacklist',
 	forceblacklist: 'blacklist',
 	forcebl: 'blacklist',
+	permanentblacklist: 'blacklist',
+	permablacklist: 'blacklist',
+	permabl: 'blacklist',
 	blacklist(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (!target) return this.parse('/help blacklist');
@@ -2143,9 +2146,16 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-		this.privateModAction(`${name} was blacklisted from ${room.title} by ${user.name}.${reason ? ` (${reason})` : ''}`);
 
-		const affected = Punishments.roomBlacklist(room, targetUser, null, null, reason);
+		const expireTime = cmd.includes('perma') ? Date.now() + (10 * 365 * 24 * 60 * 60 * 1000) : null;
+		const action = expireTime ? 'PERMABLACKLIST' : 'BLACKLIST';
+
+		this.privateModAction(
+			`${name} was blacklisted from ${room.title} by ${user.name}${expireTime ? ' for ten years' : ''}.` +
+			`${reason ? ` (${reason})` : ''}`
+		);
+
+		const affected = Punishments.roomBlacklist(room, targetUser, expireTime, null, reason);
 
 		if (!room.settings.isPrivate && room.persist) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -2160,15 +2170,16 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (!room.settings.isPrivate && room.persist) {
-			this.globalModlog("BLACKLIST", targetUser, reason);
+			this.globalModlog(action, targetUser, reason);
 		} else {
 			// Room modlog only
-			this.modlog("BLACKLIST", targetUser, reason);
+			this.modlog(action, targetUser, reason);
 		}
 		return true;
 	},
 	blacklisthelp: [
 		`/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # &`,
+		`/permablacklist OR /permabl - blacklist a user for 10 years. Requires: # &`,
 		`/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # &`,
 		`/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # &`,
 		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # &`,
@@ -2327,6 +2338,7 @@ export const commands: Chat.ChatCommands = {
 	ungroupchatbanhelp: [`/ungroupchatban [user] - Allows a groupchatbanned user to use groupchats again. Requires: % @ &`],
 
 	nameblacklist: 'blacklistname',
+	permablacklistname: 'blacklistname',
 	blacklistname(target, room, user) {
 		room = this.requireRoom();
 		if (!target) return this.parse('/help blacklistname');
@@ -2350,6 +2362,8 @@ export const commands: Chat.ChatCommands = {
 		if (duplicates.length) {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
+		const expireTime = this.cmd.includes('perma') ? Date.now() + (10 * 365 * 24 * 60 * 60 * 1000) : null;
+		const action = expireTime ? 'PERMANAMEBLACKLIST' : 'NAMEBLACKLIST';
 
 		for (const userid of targets) {
 			if (!userid) return this.errorReply(`User '${userid}' is not a valid userid.`);
@@ -2357,24 +2371,26 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`/blacklistname - Access denied: ${userid} is of equal or higher authority than you.`);
 			}
 
-			Punishments.roomBlacklist(room, userid, null, null, reason);
+			Punishments.roomBlacklist(room, userid, expireTime, null, reason);
 
 			const trusted = Users.isTrusted(userid);
 			if (trusted && room.settings.isPrivate !== true) {
 				Monitor.log(`[CrisisMonitor] Trusted user ${userid}${(trusted !== userid ? ` (${trusted})` : ``)} was nameblacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 			}
 			if (!room.settings.isPrivate && room.persist) {
-				this.globalModlog("NAMEBLACKLIST", userid, reason);
+				this.globalModlog(action, userid, reason);
 			}
 		}
 
 		this.privateModAction(
-			`${targets.join(', ')}${Chat.plural(targets, " were", " was")} nameblacklisted from ${room.title} by ${user.name}.`
+			`${targets.join(', ')}${Chat.plural(targets, " were", " was")} nameblacklisted from ${room.title} by ${user.name}` +
+			`${expireTime ? ' for ten years' : ''}.`
 		);
 		return true;
 	},
 	blacklistnamehelp: [
 		`/blacklistname OR /nameblacklist [name1, name2, etc.] | reason - Blacklists all name(s) from the room you are in for a year. Requires: # &`,
+		`/permablacklistname [name1, name2, etc.] | reason - Blacklists all name(s) from the room you are in for 10 years. Requires: # &`,
 	],
 
 	unab: 'unblacklist',

@@ -522,8 +522,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	bleakwindstorm: {
 		name: "Bleakwind Storm",
-		desc: "Has a 30% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "30% chance to lower the foe(s) Speed by 1.",
+		desc: "Has a 30% chance to lower the target's Speed by 1 stage. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		shortDesc: "30% to lower foe(s) Speed by 1. Rain: can't miss.",
 	},
 	blizzard: {
 		name: "Blizzard",
@@ -557,6 +557,10 @@ export const MovesText: {[k: string]: MoveText} = {
 		gen3: {
 			desc: "Prevents the target from switching out. The target can still switch out if it uses Baton Pass. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field, unless it uses Baton Pass, in which case the target will remain trapped.",
 		},
+	},
+	bloodmoon: {
+		name: "Blood Moon",
+		shortDesc: "Cannot be used twice in a row.",
 	},
 	bloomdoom: {
 		name: "Bloom Doom",
@@ -3334,6 +3338,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Has a 30% chance to lower the target's Defense by 1 stage.",
 		shortDesc: "30% chance to lower the target's Defense by 1.",
 	},
+	ivycudgel: {
+		name: "Ivy Cudgel",
+		desc: "Has a higher chance for a critical hit. If the user is an Ogerpon holding a mask, this move's type changes to match. Water type for Wellspring Mask, Fire type for Hearthflame Mask, and Rock type for Cornerstone Mask.",
+		shortDesc: "High critical hit ratio. Type depends on user's form.",
+	},
 	jawlock: {
 		name: "Jaw Lock",
 		desc: "Prevents the user and the target from switching out. The user and the target can still switch out if either of them is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
@@ -3763,6 +3772,11 @@ export const MovesText: {[k: string]: MoveText} = {
 
 		start: "  [POKEMON] intends to flip up a mat and block incoming attacks!",
 		block: "  [MOVE] was blocked by the kicked-up mat!",
+	},
+	matchagotcha: {
+		name: "Matcha Gotcha",
+		desc: "Has a 20% chance to burn the target. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. The target thaws out if it is frozen.",
+		shortDesc: "20% burn. Recovers 50% dmg dealt. Thaws foe(s).",
 	},
 	maxairstream: {
 		name: "Max Airstream",
@@ -5380,8 +5394,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sandsearstorm: {
 		name: "Sandsear Storm",
-		desc: "Has a 20% chance to burn the target.",
-		shortDesc: "20% chance to burn foe(s).",
+		desc: "Has a 20% chance to burn the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		shortDesc: "20% chance to burn foe(s). Can't miss in rain.",
 	},
 	sandstorm: {
 		name: "Sandstorm",
@@ -6564,6 +6578,13 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
 		},
 	},
+	syrupbomb: {
+		name: "Syrup Bomb",
+		desc: "If this move is successful, it causes the target's Speed to be lowered by 1 stage at the end of each turn for 3 turns.",
+		shortDesc: "Target's Speed is lowered by 1 stage for 3 turns.",
+
+		start: "  [POKEMON] got covered in sticky candy syrup!",
+	},
 	tackle: {
 		name: "Tackle",
 		shortDesc: "No additional effect.",
@@ -7300,8 +7321,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	wildboltstorm: {
 		name: "Wildbolt Storm",
-		desc: "Has a 20% chance to paralyze the target.",
-		shortDesc: "20% chance to paralyze foe(s).",
+		desc: "Has a 20% chance to paralyze the target. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 80%.",
+		shortDesc: "20% chance to paralyze foe(s). Rain: can't miss.",
 	},
 	wildcharge: {
 		name: "Wild Charge",

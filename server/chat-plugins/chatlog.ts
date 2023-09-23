@@ -615,20 +615,17 @@ export abstract class Searcher {
 			buf += LogViewer.error(`Logs for month '${month}' do not exist on room ${roomid}.`);
 			return buf;
 		} else if (user) {
-			let total = 0;
-			for (const day in results) {
-				if (isNaN(results[day][user])) continue;
-				total += results[day][user];
-			}
-			buf += `<br />Total linecount: ${total}<hr />`;
-			buf += '<ol>';
+			buf += '<hr /><ol>';
 			const sortedDays = Utils.sortBy(Object.keys(results), day => ({reverse: day}));
+			let total = 0;
 			for (const day of sortedDays) {
 				const dayResults = results[day][user];
 				if (isNaN(dayResults)) continue;
+				total += dayResults;
 				buf += `<li>[<a roomid="view-chatlog-${roomid}--${day}">${day}</a>]: `;
 				buf += `${Chat.count(dayResults, 'lines')}</li>`;
 			}
+			buf = buf.replace('{total}', `${total}`);
 		} else {
 			buf += '<hr /><ol>';
 			// squish the results together
@@ -1571,7 +1568,7 @@ export const commands: Chat.ChatCommands = {
 			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
-			"Requires: % @ # &</div>";
+			"Requires: &</div>";
 		return this.sendReplyBox(buffer);
 	},
 	topusers: 'linecount',

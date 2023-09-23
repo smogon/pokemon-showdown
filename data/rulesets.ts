@@ -33,7 +33,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Flat Rules',
 		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
 		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
-		banlist: ['Mythical', 'Restricted Legendary'],
+		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
 	},
 	limittworestricted: {
 		effectType: 'ValidatorRule',
@@ -129,6 +129,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (requireObtainable && item.isNonstandard) {
 				if (this.ruleTable.has(`+item:${item.id}`)) return;
 				return [`${set.name}'s item ${item.name} does not exist in Gen ${this.dex.gen}.`];
+			}
+		},
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra") {
+					pokemon.canTerastallize = null;
+				}
 			}
 		},
 	},
@@ -537,9 +544,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		onTeamPreview() {
 			this.add('clearpoke');
 			for (const pokemon of this.getAllPokemon()) {
-				const details = pokemon.details.replace(', shiny', '')
-					.replace(/(Arceus|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
-					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
+				let details = pokemon.details.replace(', shiny', '');
+				if (!this.ruleTable.has('speciesrevealclause')) {
+					details = details
+						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*')
+						// Still here for National Dex BH
+						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*'); // Hacked-in Crowned formes will be revealed
+				}
 				this.add('poke', pokemon.side.id, details, '');
 			}
 			this.makeRequest('teampreview');
@@ -726,6 +737,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				gooey: 'tanglinghair',
 				insomnia: 'vitalspirit',
 				ironbarbs: 'roughskin',
+				keeneye: 'illuminate',
 				libero: 'protean',
 				minus: 'plus',
 				moxie: 'chillingneigh',
@@ -1641,7 +1653,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
 					const details = pokemon.details.replace(', shiny', '')
-						.replace(/(Arceus|Gourgeist|Pumpkaboo|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
+						.replace(/(Arceus|Greninja|Gourgeist|Pumpkaboo|Silvally|Urshifu)(-[a-zA-Z?-]+)?/g, '$1-*');
 					this.add('poke', pokemon.side.id, details, '');
 				}
 				let buf = 'raw|';
@@ -1661,6 +1673,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Open Team Sheets',
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
+		mutuallyExclusiveWith: 'forceopenteamsheets',
 		onTeamPreview() {
 			const msg = 'uhtml|otsrequest|<button name="send" value="/acceptopenteamsheets" class="button" style="margin-right: 10px;"><strong>Accept Open Team Sheets</strong></button><button name="send" value="/rejectopenteamsheets" class="button" style="margin-top: 10px"><strong>Deny Open Team Sheets</strong></button>';
 			for (const side of this.sides) {
@@ -1677,12 +1690,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Force Open Team Sheets',
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
+		mutuallyExclusiveWith: 'openteamsheets',
 		onTeamPreview() {
 			let buf = 'raw|';
 			for (const side of this.sides) {
 				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
 			}
-			this.add(buf);
+			if (this.rated) {
+				for (const side of this.sides) {
+					this.addSplit(side.id, [buf]);
+				}
+			} else {
+				this.add(buf);
+			}
 		},
 	},
 	aaarestrictedabilities: {
@@ -2017,19 +2037,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 			pokemon.setSpecies(newSpecies, null);
 		},
 	},
-	bonustyperule: {
-		name: "Bonus Type Rule",
+	bonustypemod: {
+		name: "Bonus Type Mod",
 		effectType: "Rule",
-		desc: `Pok&eacute;mon can be nicknamed the name of a type to have that type added onto their current ones.`,
+		desc: `Pok&eacute;mon have their Tera Type added onto their current ones.`,
 		onBegin() {
-			this.add('rule', 'Bonus Type Rule: Pok\u00e9mon can be nicknamed the name of a type to have that type added onto their current ones.');
+			this.add('rule', 'Bonus Type Mod: Pok\u00e9mon have their Tera Type added onto their current ones.');
 		},
 		onModifySpeciesPriority: 1,
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const typesSet = new Set(species.types);
-			const bonusType = this.dex.types.get(target.set.name);
+			const bonusType = this.dex.types.get(target.teraType);
 			if (bonusType.exists) typesSet.add(bonusType.name);
 			return {...species, types: [...typesSet]};
 		},
@@ -2249,6 +2269,29 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	forceofthefallenmod: {
+		effectType: 'Rule',
+		name: 'Force of the Fallen Mod',
+		desc: `Pok&eacute;mon pass the move in their last moveslot to their allies when they are KOed.`,
+		onValidateSet(set, format, setHas, teamHas) {
+			const lastMoveslot = this.dex.moves.get(set.moves[set.moves.length - 1]);
+			if (this.ruleTable.isRestricted(`move:${lastMoveslot.id}`)) {
+				return [`${set.species}'s move ${lastMoveslot.name} cannot be placed in the last moveslot.`];
+			}
+		},
+		onBegin() {
+			this.add('rule', 'Force of the Fallen Mod: Pok&\u00e9mon pass the move in their last moveslot to their allies when they\'re KOed');
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.trueLastMoveSlot = pokemon.baseMoveSlots[pokemon.baseMoveSlots.length - 1];
+			}
+		},
+		onFaint(target) {
+			const allies = target.side.pokemon.filter(ally => ally && target !== ally);
+			for (const ally of allies) {
+				ally.moveSlots = (ally as any).baseMoveSlots = [...ally.baseMoveSlots, target.m.trueLastMoveSlot];
+			}
+		},
+	},
 	categoryswapmod: {
 		effectType: 'Rule',
 		name: 'Category Swap Mod',
@@ -2347,6 +2390,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const set of team) {
 				let species = this.dex.species.get(set.species);
 				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
+				if (
+					(species.baseSpecies === 'Zamazenta' && this.toID(set.item) === 'rustedshield') ||
+					(species.baseSpecies === 'Zacian' && this.toID(set.item) === 'rustedshield')
+				) {
+					species = this.dex.species.get(`${species.baseSpecies}-Crowned`);
+				}
 				if (set.item && this.dex.items.get(set.item).megaStone) {
 					const item = this.dex.items.get(set.item);
 					if (item.megaEvolves === species.baseSpecies) {
@@ -2444,6 +2493,158 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const someCanLearn = matchingSpecies.some(s => this.checkCanLearn(move, s, setSources, set) === null);
 			if (someCanLearn) return null;
 			return this.checkCanLearn(move, species, setSources, set);
+		},
+	},
+	hackmonsformelegality: {
+		effectType: 'ValidatorRule',
+		name: "Hackmons Forme Legality",
+		desc: `Enforces proper forme legality for hackmons-based metagames.`,
+		unbanlist: ['All Pokemon'],
+		banlist: ['CAP', 'LGPE', 'Future'],
+		onChangeSet(set, format, setHas, teamHas) {
+			let species = this.dex.species.get(set.species);
+			if (
+				(species.natDexTier === 'Illegal' || species.forme.includes('Totem')) &&
+				!['Floette-Eternal', 'Greninja-Ash', 'Xerneas-Neutral'].includes(species.name) &&
+				!this.ruleTable.has(`+pokemon:${species.id}`)
+			) {
+				return [`${species.name} is illegal.`];
+			}
+			const problemPokemon = this.dex.species.all().filter(s => (
+				(s.name === 'Xerneas' || s.battleOnly || s.forme === 'Eternamax') &&
+					!(s.isMega || s.isPrimal || ['Greninja-Ash', 'Necrozma-Ultra'].includes(s.name)) &&
+					!(this.ruleTable.has(`+pokemon:${s.id}`) || this.ruleTable.has(`+basepokemon:${this.toID(s.baseSpecies)}`))
+			));
+			if (problemPokemon.includes(species)) {
+				if (species.requiredItem && this.toID(set.item) !== this.toID(species.requiredItem)) {
+					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to hold ${species.requiredItem}.`];
+				}
+				if (species.requiredMove && !set.moves.map(this.toID).includes(this.toID(species.requiredMove))) {
+					return [`${set.name ? `${set.name} (${species.name})` : species.name} is required to have ${species.requiredMove}.`];
+				}
+				set.species = (species.id === 'xerneas' ? 'Xerneas-Neutral' :
+					species.id === 'zygardecomplete' ? 'Zygarde' : species.battleOnly) as string;
+				species = this.dex.species.get(set.species);
+			}
+			for (const moveid of set.moves) {
+				const move = this.dex.moves.get(moveid);
+				if (move.isNonstandard && move.isNonstandard !== 'Unobtainable' && !this.ruleTable.has(`+move:${move.id}`)) {
+					return [`${move.name} is illegal.`];
+				}
+			}
+			const item = this.dex.items.get(set.item);
+			if (item.isNonstandard && item.isNonstandard !== 'Unobtainable' && !this.ruleTable.has(`+item:${item.id}`)) {
+				return [`${item.name} is illegal.`];
+			}
+			if (species.baseSpecies === 'Xerneas' && this.toID(set.ability) !== 'fairyaura') {
+				return [`${set.name ? `${set.name} (${species.name})` : species.name} is ability-locked into Fairy Aura.`];
+			}
+		},
+	},
+	speciesrevealclause: {
+		effectType: 'Rule',
+		name: 'Species Reveal Clause',
+		desc: "Reveals a Pok&eacute;mon's true species in hackmons-based metagames.",
+		// Hardcoded into effect, cannot be disabled, ties into team preview
+		onBegin() {
+			this.add('rule', 'Species Reveal Clause: Reveals a Pok\u00e9mon\'s true species in hackmons-based metagames.');
+		},
+	},
+	franticfusionsmod: {
+		effectType: 'Rule',
+		name: "Frantic Fusions Mod",
+		desc: `Pok&eacute;mon nicknamed after another Pok&eacute;mon get their stats buffed by 1/4 of that Pok&eacute;mon's stats, barring HP, and access to their abilities.`,
+		onBegin() {
+			this.add('rule', 'Frantic Fusions Mod: Pok\u00e9mon nicknamed after another Pok\u00e9mon get buffed stats and more abilities.');
+		},
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			const fusion = this.dex.species.get(set.name);
+			const abilityPool = new Set<string>(Object.values(species.abilities));
+			if (fusion.exists) {
+				for (const ability of Object.values(fusion.abilities)) {
+					abilityPool.add(ability);
+				}
+			}
+			const ability = this.dex.abilities.get(set.ability);
+			if (!abilityPool.has(ability.name)) {
+				return [`${species.name} only has access to the following abilities: ${Array.from(abilityPool).join(', ')}.`];
+			}
+		},
+		onValidateTeam(team, format) {
+			const donors = new Utils.Multiset<string>();
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				const fusion = this.dex.species.get(set.name);
+				if (fusion.exists) {
+					set.name = fusion.name;
+				} else {
+					set.name = species.baseSpecies;
+					if (species.baseSpecies === 'Unown') set.species = 'Unown';
+				}
+				if (fusion.name === species.name) continue;
+				donors.add(fusion.name);
+			}
+			for (const [fusionName, number] of donors) {
+				if (number > 1) {
+					return [`You can only fuse with any Pok\u00e9 once.`, `(You have ${number} Pok\u00e9mon fused with ${fusionName}.)`];
+				}
+				const fusion = this.dex.species.get(fusionName);
+				if (this.ruleTable.isBannedSpecies(fusion) || fusion.battleOnly) {
+					return [`Pok\u00e9mon can't fuse with banned Pok\u00e9mon.`, `(${fusionName} is banned.)`];
+				}
+				if (fusion.isNonstandard &&
+					!(this.ruleTable.has(`+pokemontag:${this.toID(fusion.isNonstandard)}`) ||
+						this.ruleTable.has(`+pokemon:${fusion.id}`) ||
+						this.ruleTable.has(`+basepokemon:${this.toID(fusion.baseSpecies)}`))) {
+					return [`${fusion.name} is marked as ${fusion.isNonstandard}, which is banned.`];
+				}
+			}
+		},
+		onModifySpecies(species, target, source, effect) {
+			if (!target) return;
+			const newSpecies = this.dex.deepClone(species);
+			const fusionName = target.set.name;
+			if (!fusionName || fusionName === newSpecies.name) return;
+			const fusionSpecies = this.dex.deepClone(this.dex.species.get(fusionName));
+			newSpecies.bst = newSpecies.baseStats.hp;
+			for (const stat in newSpecies.baseStats) {
+				if (stat === 'hp') continue;
+				const addition = Math.floor(fusionSpecies.baseStats[stat] / 4);
+				newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] + addition, 1, 255);
+				newSpecies.bst += newSpecies.baseStats[stat];
+			}
+			return newSpecies;
+		},
+	},
+	proteanpalacemod: {
+		effectType: 'Rule',
+		name: "Protean Palace Mod",
+		desc: `Each Pok&eacute;mon innately has Protean.`,
+		onBegin() {
+			this.add('rule', 'Protean Palace Mod: Every Pok\u00e9mon innately has Protean.');
+		},
+		onSwitchIn(pokemon) {
+			if (!pokemon.hasAbility(['libero', 'protean'])) {
+				const effect = 'ability:protean';
+				pokemon.addVolatile(effect);
+			}
+		},
+	},
+	bestof: {
+		effectType: 'ValidatorRule',
+		name: 'Best Of',
+		desc: "Allows players to define a best-of series where the winner of the series is the winner of the majority of games.",
+		hasValue: 'positive-integer',
+		onValidateRule(value) {
+			const num = Number(value);
+			if (num > 9 || num < 3 || num % 2 !== 1) {
+				throw new Error("Series length must be an odd number between three and nine (inclusive).");
+			}
+			if (!['singles', 'doubles'].includes(this.format.gameType)) {
+				throw new Error("Only single and doubles battles can be a Best-of series.");
+			}
+			return value;
 		},
 	},
 };

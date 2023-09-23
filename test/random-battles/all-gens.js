@@ -17,45 +17,83 @@ describe('value rule support (slow)', () => {
 
 		testTeam({format: 'gen8multirandombattle', rounds: 100}, team => assert.equal(team.length, 3));
 		testTeam({format: 'gen8cap1v1', rounds: 100}, team => assert.equal(team.length, 3));
+
+		testTeam({format: 'gen7randombattle', rounds: 100}, team => assert.equal(team.length, 6));
 	});
 
-	// TODO: Support gen 9 set format
-	for (let gen = 1; gen <= 8; gen++) {
+	for (let gen = 1; gen <= 9; gen++) {
 		const formatID = `gen${gen}randombattle`;
-		const dataJSON = require(`../../dist/data/mods/gen${gen}/random-data.json`);
 		const dex = Dex.forFormat(formatID);
 		for (const count of [1, 3, 24]) {
 			// This is tough to test in Gen 1 because we don't know how many moves a Pokémon ought to have,
 			// so we only test 'Max Move Count = 1' in Gen 1.
 			if (gen === 1 && count !== 1) continue;
 			const format = Dex.formats.get(`${formatID}@@@Max Move Count = ${count}`);
+			// New set format
+			if ([6, 7, 9].includes(gen)) {
+				// Due to frontloading of moveset generation, formats with the new set format do not support
+				// Max Move Counts less than 4
+				if (count < 4) continue;
+				const setsJSON = require(`../../dist/data/${gen === 9 ? '' : `mods/gen${gen}/`}random-sets.json`);
 
-			it(`${format.name} should support Max Move Count = ${count}`, () => {
-				testTeam({format, rounds: 50}, team => {
-					for (const set of team) {
-						let species = set.species;
-						// Formes make this test code really complicated, so we skip them
-						// (This is because info about formes isn't passed through)
-						if (dex.species.get(species).otherFormes?.length || dex.species.get(species).forme) continue;
-						if (set.gigantamax && !set.species.endsWith('max')) species += '-Gmax';
+				it(`${format.name} should support Max Move Count = ${count}`, () => {
+					testTeam({format, rounds: 50}, team => {
+						for (const set of team) {
+							let species = set.species;
+							// Formes make this test code really complicated, so we skip them
+							// (This is because info about formes isn't passed through)
+							if (dex.species.get(species).otherFormes?.length || dex.species.get(species).forme) continue;
+							if (set.gigantamax && !set.species.endsWith('max')) species += '-Gmax';
 
-						// If the Pokémon has less than the max in its movepool, we should
-						// just see all those moves
-						let totalMoves = 0;
-						let seenHP = false;
-						for (const move of dataJSON[dex.species.get(species).id].moves) {
-							if (move.startsWith('hiddenpower')) {
-								if (seenHP) continue;
-								seenHP = true;
+							// This is an array because the new set format can have multiple sets, and hence multiple possible
+							// set lengths.
+							const expectedMoves = [];
+							for (const s of setsJSON[dex.species.get(species).id].sets) {
+								let seenHP = false;
+								let totalMoves = 0;
+								for (const move of s.movepool) {
+									if (move.startsWith('hiddenpower')) {
+										if (seenHP) continue;
+										seenHP = true;
+									}
+									totalMoves++;
+								}
+								expectedMoves.push(Math.min(totalMoves, count));
 							}
-							totalMoves++;
-						}
 
-						const expected = Math.min(totalMoves, count);
-						assert.equal(set.moves.length, expected, `${species} should have ${expected} moves (moves=${set.moves})`);
-					}
+							assert(expectedMoves.includes(set.moves.length), `${species} should have ${expectedMoves.toString()} moves (moves=${set.moves})`);
+						}
+					});
 				});
-			});
+			} else {
+				const dataJSON = require(`../../dist/data/mods/gen${gen}/random-data.json`);
+
+				it(`${format.name} should support Max Move Count = ${count}`, () => {
+					testTeam({format, rounds: 50}, team => {
+						for (const set of team) {
+							let species = set.species;
+							// Formes make this test code really complicated, so we skip them
+							// (This is because info about formes isn't passed through)
+							if (dex.species.get(species).otherFormes?.length || dex.species.get(species).forme) continue;
+							if (set.gigantamax && !set.species.endsWith('max')) species += '-Gmax';
+
+							// If the Pokémon has less than the max in its movepool, we should
+							// just see all those moves.
+							let totalMoves = 0;
+							let seenHP = false;
+							for (const move of dataJSON[dex.species.get(species).id].moves) {
+								if (move.startsWith('hiddenpower')) {
+									if (seenHP) continue;
+									seenHP = true;
+								}
+								totalMoves++;
+							}
+							const expected = Math.min(totalMoves, count);
+							assert.equal(set.moves.length, expected, `${species} should have ${expected} moves (moves=${set.moves})`);
+						}
+					});
+				});
+			}
 		}
 	}
 
@@ -76,12 +114,18 @@ describe('value rule support (slow)', () => {
 });
 
 describe("New set format", () => {
-	const files = ['../../data/random-sets.json'];
+	const files = ['../../data/random-sets.json', '../../data/random-doubles-sets.json'];
 	for (const filename of files) {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
-			const validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
-				"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
+			let validRoles = [];
+			if (filename === '../../data/random-sets.json') {
+				validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
+					"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
+			} else {
+				validRoles = ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Tera Blast user",
+					"Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user"];
+			}
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = Dex.species.get(id);
 				assert(species.exists, `Misspelled species ID: ${id}`);
@@ -103,6 +147,9 @@ describe("New set format", () => {
 						const dexType = Dex.types.get(type);
 						assert(dexType.exists, `${species.name} has invalid Tera Type: ${type}`);
 						assert.equal(type, dexType.name, `${species.name} has misformatted Tera Type: ${type}`);
+					}
+					for (let i = 0; i < set.teraTypes.length - 1; i++) {
+						assert(set.teraTypes[i + 1] > set.teraTypes[i], `${species} teraTypes should be sorted alphabetically`);
 					}
 				}
 			}

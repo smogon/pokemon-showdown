@@ -189,4 +189,20 @@ describe("Terastallization", function () {
 		const damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 		assert.bounded(damage, [127, 151], "Actual damage: " + damage);
 	});
+
+	it(`should allow hacked Megas to Terastallize in Hackmons play`, function () {
+		battle = common.createBattle({formatid: 'gen9purehackmons@@@!teampreview'}, [[
+			{species: 'Mewtwo-Mega-X', moves: ['sleeptalk'], teraType: 'Fairy'},
+		], [
+			{species: 'Necrozma-Ultra', moves: ['sleeptalk'], teraType: 'Normal'},
+		]]);
+
+		const mewtwo = battle.p1.active[0];
+		const necrozma = battle.p2.active[0];
+		assert(mewtwo.hasType('Fighting'), 'Mega Mewtwo X should have Fighting-type before Terastallization');
+		assert(necrozma.hasType('Dragon'), 'Ultra Necrozma should have Dragon-type before Terastallization');
+		battle.makeChoices('move sleeptalk terastallize', 'move sleeptalk terastallize');
+		assert(mewtwo.hasType('Fairy'), 'Mega Mewtwo X should be Fairy-type after Terastallization');
+		assert(necrozma.hasType('Normal'), 'Ultra Necrozma should be Normal-type after Terastallization');
+	});
 });

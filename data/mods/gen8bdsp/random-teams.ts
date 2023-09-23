@@ -623,6 +623,8 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return (species.id === 'omastar' && (moves.has('spikes') || moves.has('stealthrock')));
 		case 'Sniper':
 			return counter.get('Water') > 1 && !moves.has('focusenergy');
+		case 'Solar Power':
+			return (!teamDetails.sun || abilities.has('Harvest'));
 		case 'Speed Boost':
 			return moves.has('uturn');
 		case 'Sturdy':

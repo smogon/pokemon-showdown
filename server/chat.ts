@@ -1031,8 +1031,10 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
 		}
 
-		if (this.room && !this.user.can('show', null, this.room)) {
-			this.errorReply(`You need to be voiced to broadcast this command's information.`);
+		if (this.room && !this.user.can('show', null, this.room, this.cmd, this.cmdToken)) {
+			const perm = this.room.settings.permissions?.[`!${this.cmd}`];
+			const atLeast = perm ? `at least rank ${perm}` : 'voiced';
+			this.errorReply(`You need to be ${atLeast} to broadcast this command's information.`);
 			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
 		}
 

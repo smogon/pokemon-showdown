@@ -1,6 +1,5 @@
 import RandomGen2Teams from '../gen2/random-teams';
 import {Utils} from '../../../lib';
-import {MoveCounter} from '../gen8/random-teams';
 
 interface HackmonsCupEntry {
 	types: string[];
@@ -10,7 +9,7 @@ interface HackmonsCupEntry {
 interface Gen1RandomBattleSpecies {
 	level?: number;
 	moves?: ID[];
-	essentialMove?: ID;
+	essentialMoves?: ID[];
 	exclusiveMoves?: ID[];
 	comboMoves?: ID[];
 }
@@ -137,10 +136,11 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let uberCount = 0;
 		let nuCount = 0;
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData))[0];
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !this.randomData[species.id]?.moves) continue;
+			if (!species.exists) continue;
+
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
 			// to face each other.
@@ -247,29 +247,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		return pokemon;
 	}
 
-	shouldCullMove(move: Move, types: Set<string>, moves: Set<string>, counter: MoveCounter): {cull: boolean} {
-		switch (move.id) {
-		// bit redundant to have both, but neither particularly better than the other
-		case 'hydropump':
-			return {cull: moves.has('surf')};
-		case 'surf':
-			return {cull: moves.has('hydropump')};
-
-		// other redundancies that aren't handled within the movesets themselves
-		case 'selfdestruct':
-			return {cull: moves.has('rest')};
-		case 'rest':
-			return {cull: moves.has('selfdestruct')};
-		case 'sharpen': case 'swordsdance':
-			return {cull: counter.get('Special') > counter.get('Physical') || !counter.get('Physical') || moves.has('growth')};
-		case 'growth':
-			return {cull: counter.get('Special') < counter.get('Physical') || !counter.get('Special') || moves.has('swordsdance')};
-		case 'poisonpowder': case 'stunspore': case 'sleeppowder': case 'toxic':
-			return {cull: counter.get('Status') > 1};
-		}
-		return {cull: false};
-	}
-
 	/**
 	 * Random set generation for Gen 1 Random Battles.
 	 */
@@ -280,14 +257,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const data = this.randomData[species.id];
 		const movePool = data.moves?.slice() || [];
 		const moves = new Set<string>();
-		const types = new Set(species.types);
-
-		const counter = new MoveCounter();
-
-		// Moves that boost Attack:
-		const PhysicalSetup = ['swordsdance', 'sharpen'];
-		// Moves which boost Special Attack:
-		const SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
 		if (data.comboMoves && data.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
@@ -296,13 +265,17 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
+		// This is added before the essential moves so that combos containing three moves can roll an exclusive move
 		if (moves.size < this.maxMoveCount && data.exclusiveMoves) {
 			moves.add(this.sample(data.exclusiveMoves));
 		}
 
-		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
-		if (moves.size < this.maxMoveCount && data.essentialMove) {
-			moves.add(data.essentialMove);
+		// Add the mandatory moves.
+		if (moves.size < this.maxMoveCount && data.essentialMoves) {
+			for (const moveid of data.essentialMoves) {
+				moves.add(moveid);
+				if (moves.size === this.maxMoveCount) break;
+			}
 		}
 
 		while (moves.size < this.maxMoveCount && movePool.length) {
@@ -311,30 +284,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				const moveid = this.sampleNoReplace(movePool);
 				moves.add(moveid);
 			}
-
-			// Only do move choosing if we have backup moves in the pool...
-			if (movePool.length) {
-				for (const setMoveid of moves) {
-					const move = this.dex.moves.get(setMoveid);
-					const moveid = move.id;
-					if (!move.damage && !move.damageCallback) counter.add(move.category);
-					if (PhysicalSetup.includes(moveid)) counter.add('physicalsetup');
-					if (SpecialSetup.includes(moveid)) counter.add('specialsetup');
-				}
-
-				for (const moveid of moves) {
-					if (moveid === data.essentialMove) continue;
-					const move = this.dex.moves.get(moveid);
-					if (
-						(!data.essentialMove || moveid !== data.essentialMove) &&
-						this.shouldCullMove(move, types, moves, counter).cull
-					) {
-						moves.delete(moveid);
-						break;
-					}
-					counter.add(move.category);
-				}
-			} // End of the check for more than 4 moves on moveset.
 		}
 
 		const level = this.adjustLevel || data.level || 80;
@@ -363,10 +312,14 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			ivs.atk = 2;
 		}
 
+		// shuffle moves to add more randomness to camomons
+		const shuffledMoves = Array.from(moves);
+		this.prng.shuffle(shuffledMoves);
+
 		return {
 			name: species.name,
 			species: species.name,
-			moves: Array.from(moves),
+			moves: shuffledMoves,
 			ability: 'No Ability',
 			evs,
 			ivs,

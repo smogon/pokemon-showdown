@@ -41,7 +41,7 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 		}
 	}
 	if (!item.megaStone && !item.onPrimal && !item.forcedForme?.endsWith('Epilogue') &&
-		!item.forcedForme?.endsWith('Origin') && !item.name.startsWith('Rusted')) return null;
+		!item.forcedForme?.endsWith('Origin') && !item.name.startsWith('Rusted') && !item.name.endsWith('Mask')) return null;
 	return item;
 }
 
@@ -98,7 +98,7 @@ export const commands: Chat.ChatCommands = {
 		const stone = getMegaStone(stoneName[0], mod);
 		const species = dex.species.get(sep[0]);
 		if (!stone) {
-			throw new Chat.ErrorMessage(`Error: Mega Stone/Primal Orb/Rusted Item/Origin Item not found.`);
+			throw new Chat.ErrorMessage(`Error: Mega Stone/Primal Orb/Rusted Item/Origin Item/Mask not found.`);
 		}
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon not found.`);
 		let baseSpecies: Species;
@@ -122,7 +122,8 @@ export const commands: Chat.ChatCommands = {
 			break;
 		default:
 			const forcedForme = stone.forcedForme;
-			if (forcedForme && (forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+			if (forcedForme &&
+				(forcedForme.startsWith('Ogerpon') || forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
 				megaSpecies = dex.species.get(forcedForme);
 				baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 			} else {
@@ -217,11 +218,15 @@ export const commands: Chat.ChatCommands = {
 		const stone = getMegaStone(targetid, sep[1]);
 		const stones = [];
 		if (!stone) {
-			const species = dex.species.get(targetid.replace(/(?:mega[xy]?|primal|origin|crowned|epilogue)$/, ''));
+			const species = dex.species.get(
+				targetid.replace(/(?:mega[xy]?|primal|origin|crowned|epilogue|cornerstone|wellspring|hearthflame)$/, '')
+			);
 			if (!species.exists) throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
 			if (!species.otherFormes) throw new Chat.ErrorMessage(`Error: Mega Evolution not found.`);
 			for (const poke of species.otherFormes) {
-				if (!/(?:-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
+				if (!/(?:-Cornerstone|-Wellspring|-Hearthflame|-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?)$/.test(poke)) {
+					continue;
+				}
 				const megaPoke = dex.species.get(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
 				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.species.get(targetid))) continue;
@@ -254,7 +259,8 @@ export const commands: Chat.ChatCommands = {
 				break;
 			default:
 				const forcedForme = aStone.forcedForme;
-				if (forcedForme && (forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+				if (forcedForme &&
+					(forcedForme.startsWith('Ogerpon') || forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
 					megaSpecies = dex.species.get(forcedForme);
 					baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 				} else {
@@ -284,10 +290,12 @@ export const commands: Chat.ChatCommands = {
 				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
 			};
 			let tier;
-			if (['redorb', 'blueorb'].includes(aStone.id) || aStone.forcedForme?.endsWith('Origin')) {
+			if (['redorb', 'blueorb'].includes(aStone.id)) {
 				tier = "Orb";
 			} else if (aStone.name === "Dragon Ascent") {
 				tier = "Move";
+			} else if (aStone.name.endsWith('Mask')) {
+				tier = "Mask";
 			} else if (aStone.megaStone) {
 				tier = "Stone";
 			} else {
@@ -299,7 +307,7 @@ export const commands: Chat.ChatCommands = {
 				buf += `<span class="col itemiconcol"></span>`;
 			} else {
 				// temp image support until real images are uploaded
-				const itemName = aStone.forcedForme?.endsWith('Origin') ? aStone.name.split(' ')[0] + ' Orb' : aStone.name;
+				const itemName = aStone.name;
 				buf += `<span class="col itemiconcol"><psicon item="${toID(itemName)}"/></span> `;
 			}
 			if (aStone.name === "Dragon Ascent") {
@@ -424,6 +432,154 @@ export const commands: Chat.ChatCommands = {
 	tiershifthelp: [
 		`/ts OR /tiershift <pokemon>[, generation] - Shows the base stats that a Pok\u00e9mon would have in Tier Shift.`,
 		`Alternatively, you can use /ts[gen number] to see a Pok\u00e9mon's stats in that generation.`,
+	],
+
+	fuse: 'franticfusions',
+	fuse1: 'franticfusions',
+	fuse2: 'franticfusions',
+	fuse3: 'franticfusions',
+	fuse4: 'franticfusions',
+	fuse5: 'franticfusions',
+	fuse6: 'franticfusions',
+	fuse7: 'franticfusions',
+	fuse8: 'franticfusions',
+	franticfusions(target, room, user, connection, cmd) {
+		const args = target.split(',');
+		if (!toID(args[0]) && !toID(args[1])) return this.parse('/help franticfusions');
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen && !args[2]) target = `${target},gen${targetGen}`;
+		const {dex, targets} = this.splitFormat(target, true);
+		this.runBroadcast();
+		if (targets.length > 2) return this.parse('/help franticfusions');
+		const species = Utils.deepClone(dex.species.get(targets[0]));
+		const fusion = dex.species.get(targets[1]);
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : args[0].trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
+		if (fusion.name.length) {
+			if (!fusion.exists || fusion.gen > dex.gen) {
+				const monName = fusion.gen > dex.gen ? fusion.name : args[1].trim();
+				const additionalReason = fusion.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+				throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+			}
+			if (fusion.name === species.name) {
+				throw new Chat.ErrorMessage('Pok\u00e9mon can\'t fuse with themselves.');
+			}
+		}
+		if (fusion.name.length) {
+			species.bst = species.baseStats.hp;
+		} else {
+			species.bst = 0;
+		}
+		for (const statName in species.baseStats) {
+			if (statName === 'hp') continue;
+			if (!fusion.name.length) {
+				species.baseStats[statName] = Math.floor(species.baseStats[statName as StatID] / 4);
+				species.bst += species.baseStats[statName];
+			} else {
+				const addition = Math.floor(fusion.baseStats[statName as StatID] / 4);
+				species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + addition, 1, 255);
+				species.bst += species.baseStats[statName];
+			}
+		}
+		const abilities = new Set<string>([...Object.values(species.abilities), ...Object.values(fusion.abilities)]);
+		let buf = '<div class="message"><ul class="utilichart"><li class="result">';
+		buf += '<span class="col numcol">Fusion</span> ';
+		buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
+		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+		buf += '<span class="col typecol">';
+		if (species.types && fusion.name.length) {
+			for (const type of species.types) {
+				buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+			}
+		}
+		buf += '</span> ';
+		if (dex.gen >= 3) {
+			buf += '<span style="float:left;min-height:26px">';
+			const ability1 = [...abilities.values()][0];
+			abilities.delete(ability1);
+			let ability2;
+			if (abilities.size) {
+				ability2 = [...abilities.values()][0];
+				abilities.delete(ability2);
+			}
+			let ability3;
+			if (abilities.size) {
+				ability3 = [...abilities.values()][0];
+				abilities.delete(ability3);
+			}
+			let ability4;
+			if (abilities.size) {
+				ability4 = [...abilities.values()][0];
+				abilities.delete(ability4);
+			}
+			let ability5;
+			if (abilities.size) {
+				ability5 = [...abilities.values()][0];
+				abilities.delete(ability5);
+			}
+			let ability6;
+			if (abilities.size) {
+				ability6 = [...abilities.values()][0];
+				abilities.delete(ability6);
+			}
+			let ability7;
+			if (abilities.size) {
+				ability7 = [...abilities.values()][0];
+				abilities.delete(ability7);
+			}
+			if (ability1) {
+				if (ability2) {
+					buf += '<span class="col twoabilitycol">' + ability1 + '<br />' + ability2 + '</span>';
+				} else {
+					buf += '<span class="col abilitycol">' + ability1 + '</span>';
+				}
+			}
+			if (ability3) {
+				if (ability4) {
+					buf += '<span class="col twoabilitycol">' + ability3 + '<br />' + ability4 + '</span>';
+				} else {
+					buf += '<span class="col abilitycol">' + ability3 + '</span>';
+				}
+			}
+			if (ability5) {
+				if (ability6) {
+					buf += '<span class="col twoabilitycol">' + ability5 + '<br />' + ability6 + '</span>';
+				} else {
+					buf += '<span class="col abilitycol">' + ability5 + '</span>';
+				}
+			}
+			if (ability7) {
+				buf += '<span class="col abilitycol">' + ability7 + '</span>';
+			}
+			buf += '</span>';
+		}
+		buf += '<span style="float:left;min-height:26px">';
+		if (fusion.name.length) {
+			buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
+		} else {
+			buf += '<span class="col statcol"><em>HP</em><br />0</span> ';
+		}
+		buf += '<span class="col statcol"><em>Atk</em><br />' + species.baseStats.atk + '</span> ';
+		buf += '<span class="col statcol"><em>Def</em><br />' + species.baseStats.def + '</span> ';
+		if (dex.gen <= 1) {
+			buf += '<span class="col statcol"><em>Spc</em><br />' + species.baseStats.spa + '</span> ';
+		} else {
+			buf += '<span class="col statcol"><em>SpA</em><br />' + species.baseStats.spa + '</span> ';
+			buf += '<span class="col statcol"><em>SpD</em><br />' + species.baseStats.spd + '</span> ';
+		}
+		buf += '<span class="col statcol"><em>Spe</em><br />' + species.baseStats.spe + '</span> ';
+		buf += '<span class="col bstcol"><em>BST<br />' + species.bst + '</em></span> ';
+		buf += '</span>';
+		buf += '</li><li style="clear:both"></li></ul></div>';
+		this.sendReply(`|raw|${buf}`);
+	},
+	franticfusionshelp: [
+		`/fuse <pokemon>, <fusion>[, generation] - Shows the stats and abilities that <pokemon> would get when fused with <fusion>.`,
+		`/fuse <pokemon>[, generation] - Shows the stats and abilities that <pokemon> donates.`,
+		`Alternatively, you can use /fuse[gen number] to see a Pok\u00e9mon's stats in that generation.`,
 	],
 
 	scale: 'scalemons',

@@ -1503,7 +1503,11 @@ export class Battle {
 				}
 				this.runEvent('DisableMove', pokemon);
 				for (const moveSlot of pokemon.moveSlots) {
-					this.singleEvent('DisableMove', this.dex.getActiveMove(moveSlot.id), null, pokemon);
+					const activeMove = this.dex.getActiveMove(moveSlot.id);
+					this.singleEvent('DisableMove', activeMove, null, pokemon);
+					if (activeMove.flags['cantusetwice'] && pokemon.lastMove?.id === moveSlot.id) {
+						pokemon.disableMove(pokemon.lastMove.id);
+					}
 				}
 
 				// If it was an illusion, it's not any more
@@ -2733,7 +2737,8 @@ export class Battle {
 				if (!reviveSwitch) switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' && !pokemon.skipBeforeSwitchOutEventFlag) {
+					if (pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
+							!pokemon.skipBeforeSwitchOutEventFlag) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
 						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut

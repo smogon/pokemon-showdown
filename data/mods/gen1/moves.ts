@@ -627,9 +627,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: null,
 		onHit(target) {
 			if (target.hp === target.maxhp) return false;
-			// Fail when health is 255 or 511 less than max
-			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
-				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
+			// Fail when health is 255 or 511 less than max, unless it is divisible by 256
+			if (
+				target.hp === target.maxhp ||
+				((target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) && target.hp % 256 !== 0)
+			) {
+				this.hint(
+					"In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256, " +
+					"unless the current hp is also divisible by 256."
+				);
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
@@ -664,9 +670,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTry() {},
 		onHit(target, source, move) {
 			if (target.hp === target.maxhp) return false;
-			// Fail when health is 255 or 511 less than max
-			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) {
-				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
+			// Fail when health is 255 or 511 less than max, unless it is divisible by 256
+			if (
+				target.hp === target.maxhp ||
+				((target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) && target.hp % 256 !== 0)
+			) {
+				this.hint(
+					"In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256, " +
+					"unless the current hp is also divisible by 256."
+				);
 				return false;
 			}
 			if (!target.setStatus('slp', source, move)) return false;
@@ -762,9 +774,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: null,
 		onHit(target) {
 			if (target.hp === target.maxhp) return false;
-			// Fail when health is 255 or 511 less than max
-			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
-				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
+			// Fail when health is 255 or 511 less than max, unless it is divisible by 256
+			if (
+				target.hp === target.maxhp ||
+				((target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511)) && target.hp % 256 !== 0)
+			) {
+				this.hint(
+					"In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256, " +
+					"unless the current hp is also divisible by 256."
+				);
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);

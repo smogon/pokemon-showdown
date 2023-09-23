@@ -1,7 +1,10 @@
 export const Items: {[itemid: string]: ItemData} = {
 	abilityshield: {
 		name: "Ability Shield",
-		spritenum: 0, // TODO
+		spritenum: 746,
+		fling: {
+			basePower: 30,
+		},
 		ignoreKlutz: true,
 		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
 		// and in Neutralizing Gas itself within data/abilities.ts
@@ -63,7 +66,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	adamantcrystal: {
 		name: "Adamant Crystal",
-		spritenum: 4, // TODO
+		spritenum: 741,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
@@ -345,7 +348,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	auspiciousarmor: {
 		name: "Auspicious Armor",
-		spritenum: 0, // TODO
+		spritenum: 753,
+		fling: {
+			basePower: 30,
+		},
 		num: 2344,
 		gen: 9,
 	},
@@ -447,6 +453,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1111,
 		gen: 8,
 		isNonstandard: "Past",
+	},
+	bignugget: {
+		name: "Big Nugget",
+		spritenum: 27,
+		fling: {
+			basePower: 130,
+		},
+		num: 581,
+		gen: 5,
 	},
 	bigroot: {
 		name: "Big Root",
@@ -595,7 +610,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	boosterenergy: {
 		name: "Booster Energy",
-		spritenum: 0, // TODO
+		spritenum: 745,
+		fling: {
+			basePower: 30,
+		},
 		onUpdate(pokemon) {
 			if (pokemon.transformed) return;
 			if (this.queue.peek(true)?.choice === 'runSwitch') return;
@@ -1000,7 +1018,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	clearamulet: {
 		name: "Clear Amulet",
-		spritenum: 0, // TODO
+		spritenum: 747,
+		fling: {
+			basePower: 30,
+		},
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
@@ -1076,6 +1097,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 198,
 		gen: 4,
 	},
+	cornerstonemask: {
+		name: "Cornerstone Mask",
+		spritenum: 758,
+		fling: {
+			basePower: 60,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Cornerstone')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		forcedForme: "Ogerpon-Cornerstone",
+		itemUser: ["Ogerpon-Cornerstone"],
+		num: 2406,
+		gen: 9,
+	},
 	cornnberry: {
 		name: "Cornn Berry",
 		spritenum: 81,
@@ -1101,10 +1143,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	covertcloak: {
 		name: "Covert Cloak",
+		spritenum: 750,
 		fling: {
-			basePower: 10,
+			basePower: 30,
 		},
-		spritenum: 0, // TODO
 		onModifySecondaries(secondaries) {
 			this.debug('Covert Cloak prevent secondary');
 			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
@@ -1145,7 +1187,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 210,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	damprock: {
 		name: "Damp Rock",
@@ -1647,7 +1688,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 208,
 		gen: 3,
-		isNonstandard: "Unobtainable",
 	},
 	eviolite: {
 		name: "Eviolite",
@@ -1657,13 +1697,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.nfe) {
+			if (pokemon.baseSpecies.nfe || pokemon.baseSpecies.id === 'dipplin') {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.nfe) {
+			if (pokemon.baseSpecies.nfe || pokemon.baseSpecies.id === 'dipplin') {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1695,6 +1735,21 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 793,
 		gen: 7,
 		isNonstandard: "Past",
+	},
+	fairyfeather: {
+		name: "Fairy Feather",
+		spritenum: 754,
+		fling: {
+			basePower: 10,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Fairy') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: 2401,
+		gen: 9,
 	},
 	fairygem: {
 		name: "Fairy Gem",
@@ -2318,7 +2373,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	griseouscore: {
 		name: "Griseous Core",
-		spritenum: 180, // TODO
+		spritenum: 743,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
@@ -2453,6 +2508,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 14,
 		gen: 4,
 		isPokeball: true,
+	},
+	hearthflamemask: {
+		name: "Hearthflame Mask",
+		spritenum: 760,
+		fling: {
+			basePower: 60,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Hearthflame')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		forcedForme: "Ogerpon-Hearthflame",
+		itemUser: ["Ogerpon-Hearthflame"],
+		num: 2408,
+		gen: 9,
 	},
 	heatrock: {
 		name: "Heat Rock",
@@ -2723,7 +2799,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 211,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	jawfossil: {
 		name: "Jaw Fossil",
@@ -2802,7 +2877,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 687,
 		gen: 6,
-		isNonstandard: "Unobtainable",
 	},
 	kelpsyberry: {
 		name: "Kelpsy Berry",
@@ -3081,7 +3155,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	loadeddice: {
 		name: "Loaded Dice",
-		spritenum: 0, // TODO
+		spritenum: 751,
+		fling: {
+			basePower: 30,
+		},
 		// partially implemented in sim/battle-actions.ts:BattleActions#hitStepMoveHitLoop
 		onModifyMove(move) {
 			if (move.multiaccuracy) {
@@ -3213,7 +3290,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	lustrousglobe: {
 		name: "Lustrous Globe",
-		spritenum: 265, // TODO
+		spritenum: 742,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
@@ -3356,7 +3433,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	maliciousarmor: {
 		name: "Malicious Armor",
-		spritenum: 0, // TODO
+		spritenum: 744,
+		fling: {
+			basePower: 30,
+		},
 		num: 1861,
 		gen: 9,
 	},
@@ -3392,7 +3472,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 688,
 		gen: 6,
-		isNonstandard: "Unobtainable",
 	},
 	marshadiumz: {
 		name: "Marshadium Z",
@@ -3411,6 +3490,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1,
 		gen: 1,
 		isPokeball: true,
+	},
+	masterpieceteacup: {
+		name: "Masterpiece Teacup",
+		spritenum: 757,
+		fling: {
+			basePower: 80,
+		},
+		num: 2404,
+		gen: 9,
 	},
 	mawilite: {
 		name: "Mawilite",
@@ -3657,7 +3745,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 209,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	mimikiumz: {
 		name: "Mimikium Z",
@@ -3707,10 +3794,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	mirrorherb: {
 		name: "Mirror Herb",
+		spritenum: 748,
 		fling: {
-			basePower: 10,
+			basePower: 30,
 		},
-		spritenum: 0, // TODO
 		onFoeAfterBoost(boost, target, source, effect) {
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			const boostPlus: SparseBoostsTable = {};
@@ -4377,7 +4464,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 537,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	protectivepads: {
 		name: "Protective Pads",
@@ -4465,7 +4551,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	punchingglove: {
 		name: "Punching Glove",
-		spritenum: 0, // TODO
+		spritenum: 749,
+		fling: {
+			basePower: 30,
+		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
@@ -4609,7 +4698,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 327,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	razzberry: {
 		name: "Razz Berry",
@@ -4632,7 +4720,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 325,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	redcard: {
 		name: "Red Card",
@@ -4891,7 +4978,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 212,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	rustedshield: {
 		name: "Rusted Shield",
@@ -5588,7 +5674,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	strangeball: {
 		name: "Strange Ball",
-		spritenum: 303, // TODO
+		spritenum: 308,
 		num: 1785,
 		gen: 8,
 		isPokeball: true,
@@ -5635,6 +5721,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1116,
 		gen: 8,
+	},
+	syrupyapple: {
+		name: "Syrupy Apple",
+		spritenum: 755,
+		fling: {
+			basePower: 30,
+		},
+		num: 2402,
+		gen: 9,
 	},
 	tamatoberry: {
 		name: "Tamato Berry",
@@ -6833,6 +6928,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
+	unremarkableteacup: {
+		name: "Unremarkable Teacup",
+		spritenum: 756,
+		fling: {
+			basePower: 80,
+		},
+		num: 2403,
+		gen: 9,
+	},
 	upgrade: {
 		name: "Up-Grade",
 		spritenum: 523,
@@ -7006,6 +7110,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 639,
 		gen: 6,
+	},
+	wellspringmask: {
+		name: "Wellspring Mask",
+		spritenum: 759,
+		fling: {
+			basePower: 60,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Wellspring')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		forcedForme: "Ogerpon-Wellspring",
+		itemUser: ["Ogerpon-Wellspring"],
+		num: 2407,
+		gen: 9,
 	},
 	wepearberry: {
 		name: "Wepear Berry",
