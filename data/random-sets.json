@@ -3312,8 +3312,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Knock Off", "Psychic Fangs", "Stealth Rock", "Stone Edge", "Swords Dance"],
-                "teraTypes": ["Fighting", "Rock"]
+                "movepool": ["Close Combat", "Knock Off", "Stealth Rock", "Stone Edge", "Sucker Punch", "Swords Dance"],
+                "teraTypes": ["Fighting"]
             }
         ]
     },
