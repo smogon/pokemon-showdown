@@ -708,14 +708,6 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 9] 6v6 Doubles Draft', '+Unobtainable', '+Past', '!! Min Source Gen = 3'],
 	},
 	{
-		name: "[Gen 9] NatDex 4v4 Doubles Draft",
-
-		mod: 'gen9',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['[Gen 9] 4v4 Doubles Draft', '+Unobtainable', '+Past', '!! Min Source Gen = 3'],
-	},
-	{
 		name: "[Gen 9] NatDex LC Draft",
 
 		mod: 'gen9',
@@ -3121,6 +3113,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		team: 'randomBSSFactory',
+		searchShow: false,
 		ruleset: ['Flat Rules'],
 	},
 	{
