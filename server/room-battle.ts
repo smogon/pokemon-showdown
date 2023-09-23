@@ -1481,7 +1481,8 @@ export class BestOfGame extends RoomGames.RoomGame {
 				buf += `<td></td>`;
 				continue;
 			}
-			const name = (Users.get(userid)?.avatar || 'unknownf') + "";
+			let name = Users.get(userid)?.avatar;
+			if (!name || typeof name === 'number') name = 'unknownf';
 			const url = Chat.plugins.avatars?.Avatars.src(name) || `https://${Config.routes.client}/sprites/trainers/${name}.png`;
 			buf += `<td><center>`;
 			buf += `<img src="${url}" width="80" height="80" />`;
@@ -1635,10 +1636,10 @@ export class BestOfGame extends RoomGames.RoomGame {
 		this.room.add(`|allowleave|`).update();
 		if (winner) {
 			this.winner = winner;
-			this.room.add(Utils.html`|html|<h2>${this.name(winner)} wins!</h2>`);
+			this.room.add(`|win|${winner}`);
 		} else {
 			this.winner = '';
-			this.room.add(`The battle was tied.`);
+			this.room.add(`|tie`);
 		}
 		this.updateDisplay();
 		this.room.update();
