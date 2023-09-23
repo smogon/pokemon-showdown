@@ -592,7 +592,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.removeVolatile('commanding');
 			}
 		},
-		isPermanent: true,
 		name: "Commander",
 		rating: 0,
 		num: 279,
@@ -2718,6 +2717,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			for (const target of this.getAllActive()) {
 				if (target.hasItem('Ability Shield')) {
 					this.add('-block', target, 'item: Ability Shield');
+					continue;
+				}
+				// Can't suppress a Tatsugiri inside of Dondozo already
+				if (!!target.volatiles['commanding']) {
 					continue;
 				}
 				if (target.illusion) {
