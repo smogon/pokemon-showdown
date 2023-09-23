@@ -1476,7 +1476,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 
 		buf += `</tr><tr>`;
 
-		for (const userid of [this.p1, null, this.p2]) {
+		for (const [i, userid] of [this.p1, null, this.p2].entries()) {
 			if (userid === null) {
 				buf += `<td></td>`;
 				continue;
@@ -1485,7 +1485,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 			if (!name || typeof name === 'number') name = 'unknownf';
 			const url = Chat.plugins.avatars?.Avatars.src(name) || `https://${Config.routes.client}/sprites/trainers/${name}.png`;
 			buf += `<td><center>`;
-			buf += `<img src="${url}" width="80" height="80" />`;
+			buf += `<img class="trainersprite"${!i ? ' style="transform: scaleX(-1)"' : ""} stylesrc="${url}" />`;
 			buf += `</center></td>`;
 		}
 
@@ -1636,14 +1636,14 @@ export class BestOfGame extends RoomGames.RoomGame {
 		this.room.add(`|allowleave|`).update();
 		if (winner) {
 			this.winner = winner;
-			this.room.add(`|win|${winner}`);
+			this.room.add(`|win|${this.name(winner)}`);
 		} else {
 			this.winner = '';
 			this.room.add(`|tie`);
 		}
 		this.updateDisplay();
 		this.room.update();
-		this.score = this.getLatestBattle()?.score || null;
+		this.score = [this.wins.p1, this.wins.p2];
 		const parentGame = this.room.parent && this.room.parent.game;
 		// @ts-ignore - Tournaments aren't TS'd yet
 		if (parentGame?.onBattleWin) {
