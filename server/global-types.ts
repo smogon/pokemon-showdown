@@ -51,6 +51,7 @@ namespace Rooms {
 	export type MinorActivity = import('./room-minor-activity').MinorActivity;
 	export type MinorActivityData = import('./room-minor-activity').MinorActivityData;
 	export type RoomBattle = import('./room-battle').RoomBattle;
+	export type BestOfGame = import('./room-battle').BestOfGame;
 	export type Roomlog = import('./roomlogs').Roomlog;
 	export type Room = import('./rooms').Room;
 }

@@ -17,6 +17,7 @@
 import {Utils} from '../../lib';
 import type {UserSettings} from '../users';
 import type {GlobalPermission} from '../user-groups';
+import {BestOfGame} from '../room-battle';
 
 export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 	userdetails(target, user, trustable) {
@@ -777,6 +778,11 @@ export const commands: Chat.ChatCommands = {
 		`!showteam hidestats - show the team you're using in the current battle, without displaying any stat-related information.`,
 		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
 	],
+
+	confirmready(target, room, user) {
+		const game = this.requireGame(BestOfGame);
+		game.confirmReady(user.id);
+	},
 
 	async acceptopenteamsheets(target, room, user, connection, cmd) {
 		room = this.requireRoom();

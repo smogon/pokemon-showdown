@@ -34,7 +34,7 @@ import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
 import {
-	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex,
+	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex, BestOfGame,
 } from "./room-battle";
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity, MinorActivityData} from './room-minor-activity';
@@ -2174,6 +2174,16 @@ export const Rooms = {
 			Ladders.cancelSearches(user);
 		}
 
+		const format = Dex.formats.get(options.format);
+		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
+
+		if (Rooms.global.lockdown === 'pre' && isBestOf) {
+			for (const user of players) {
+				user.popup(`The server will be restarting soon. Best-of-${isBestOf} battles cannot be started at this time.`);
+			}
+			return;
+		}
+
 		if (Rooms.global.lockdown === true) {
 			for (const user of players) {
 				user.popup("The server is restarting. Battles will be available again in a few minutes.");
@@ -2199,7 +2209,6 @@ export const Rooms = {
 			options.ratedMessage = p1Special;
 		}
 
-		const roomid = options.roomid || Rooms.global.prepBattleRoom(options.format);
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
@@ -2209,21 +2218,30 @@ export const Rooms = {
 		const p1name = p1 ? p1.name : "Player 1";
 		const p2name = p2 ? p2.name : "Player 2";
 		let roomTitle;
+		let roomid = options.roomid;
 		if (gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
 		} else if (gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
+		} else if (isBestOf && !options.isSubBattle) {
+			roomTitle = `${format.name} (${p1name} vs ${p2name})`;
+			roomid = `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
 			roomTitle = options.title;
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
+		if (!roomid) roomid = Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
-		const battle = new Rooms.RoomBattle(room, options);
-		room.game = battle;
-		battle.checkPrivacySettings(options);
+		if (options.isSubBattle || !isBestOf) {
+			const battle = new Rooms.RoomBattle(room, options);
+			room.game = battle;
+			battle.checkPrivacySettings(options);
+		} else {
+			room.game = new BestOfGame(room, options);
+		}
 
 		for (const p of players) {
 			if (p) {
@@ -2254,6 +2272,7 @@ export const Rooms = {
 	Roomlogs,
 
 	RoomBattle,
+	BestOfGame,
 	RoomBattlePlayer,
 	RoomBattleTimer,
 	PM: RoomBattlePM,
