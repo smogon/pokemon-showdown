@@ -863,7 +863,8 @@ export const Formats: FormatList = [
 		],
 		restricted: [
 			'Arceus', 'Basculegion-Base', 'Calyrex-Ice', 'Dialga', 'Dragapult', 'Flutter Mane', 'Gengar', 'Gholdengo', 'Giratina', 'Groudon',
-			'Iron Bundle', 'Kilowattrel', 'Mewtwo', 'Palkia', 'Rayquaza', 'Slaking', 'Sneasler', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian',
+			'Iron Bundle', 'Kilowattrel', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Slaking', 'Sneasler', 'Urshifu', 'Urshifu-Rapid-Strike',
+			'Zacian',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
