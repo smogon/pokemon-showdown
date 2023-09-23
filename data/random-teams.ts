@@ -1314,6 +1314,7 @@ export class RandomTeams {
 			return 'Chesto Berry';
 		}
 		if (
+			species.id !== 'yanmega' &&
 			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.includes('Flying') || !isDoubles)
 		) return 'Heavy-Duty Boots';
 	}
