@@ -1446,7 +1446,8 @@ export class BestOfGame extends RoomGames.RoomGame {
 		const p1name = this.name(this.p1);
 		const p2name = this.name(this.p2);
 		let buf = Utils.html`<br /><strong>${p1name} and ${p2name}'s Best-of-${this.bestOf} progress:</strong><br />`;
-		for (const userid of [this.p1, this.p2]) {
+		for (const slot of ['p1', 'p2']) {
+			const userid = this[slot as 'p1' | 'p2'];
 			buf += `<span style="text-align: right">`;
 			buf += `${this.name(userid)}: `;
 			for (let i = 0; i < this.bestOf; i++) {
@@ -1455,7 +1456,9 @@ export class BestOfGame extends RoomGames.RoomGame {
 				} else {
 					buf += `<i class="fa fa-circle-o"></i>`;
 				}
-				if ((i + 1) === this.winThreshold) {
+				const completedGames = this.games.filter(game => game.winner !== null).length;
+				const gamesNeeded = completedGames + (this.winThreshold - this.wins[slot as 'p1' | 'p2']);
+				if ((i + 1) === gamesNeeded) {
 					buf += ` | `;
 				} else {
 					buf += ` `;
