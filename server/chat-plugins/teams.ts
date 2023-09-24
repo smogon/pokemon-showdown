@@ -169,6 +169,7 @@ export const TeamsHandler = new class {
 			connection.popup(`You have too many teams stored. If you wish to upload this team, delete some first.`);
 			return null;
 		}
+		rawTeam = Teams.pack(team);
 		// the && existing doesn't really matter because we've verified it above, this is just for TS
 		if (isUpdate && existing) {
 			const differenceExists = (
