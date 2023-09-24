@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 let battle;
 
-describe.only('Commander', function () {
+describe('Commander', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -163,7 +163,6 @@ describe.only('Commander', function () {
 		], [
 			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
 			{species: 'dondozo', moves: ['sleeptalk']},
-			
 		]]);
 
 		const dondozo = battle.p2.active[1];
