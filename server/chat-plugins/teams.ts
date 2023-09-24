@@ -108,13 +108,14 @@ export const TeamsHandler = new class {
 	}
 
 	async save(
-		connection: Connection,
+		context: Chat.CommandContext,
 		formatName: string,
 		rawTeam: string,
 		teamName: string | null = null,
 		isPrivate = false,
 		isUpdate?: string
 	) {
+		const connection = context.connection;
 		this.validateAccess(connection, true);
 
 		if (Monitor.countPrepBattle(connection.ip, connection)) {
@@ -188,8 +189,8 @@ export const TeamsHandler = new class {
 				connection.popup("Your team's name is too long.");
 				return null;
 			}
-			const filtered = Chat.namefilter(teamName, user);
-			if (filtered?.trim() !== teamName.trim()) {
+			const filtered = context.filter(teamName);
+			if (!filtered || filtered?.trim() !== teamName.trim()) {
 				connection.popup(`Your team's name has a filtered word.`);
 				return null;
 			}
@@ -358,7 +359,7 @@ export const commands: Chat.ChatCommands = {
 			formatid = toID(formatid);
 			teamName = toID(teamName) ? teamName : null!;
 			const id = await TeamsHandler.save(
-				connection, formatid, rawTeam, teamName, !!Number(rawPrivacy), isEdit ? teamID : undefined
+				this, formatid, rawTeam, teamName, !!Number(rawPrivacy), isEdit ? teamID : undefined
 			);
 
 			const page = isEdit ? 'edit' : 'upload';
@@ -442,6 +443,9 @@ export const commands: Chat.ChatCommands = {
 		},
 		search(target, room, user) {
 			return this.parse(`/j view-teams-searchpersonal`);
+		},
+		browse(target, room, user) {
+			return this.parse(`/j view-teams-browse${target ? `-${target}` : ''}`);
 		},
 		help() {
 			return this.parse('/help teams');
