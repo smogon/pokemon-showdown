@@ -2576,8 +2576,13 @@
         "level": 88,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Calm Mind", "Dark Pulse", "Psychic", "Thunderbolt", "Trick"],
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Dark Pulse", "Focus Blast", "Psychic", "Thunderbolt", "Trick"],
+                "teraTypes": ["Dark", "Electric", "Fairy", "Flying", "Ghost", "Ground", "Psychic", "Steel"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Dark Pulse", "Focus Blast", "Psychic", "Trick"],
                 "teraTypes": ["Dark", "Electric", "Fairy", "Flying", "Ghost", "Ground", "Psychic", "Steel"]
             }
         ]
