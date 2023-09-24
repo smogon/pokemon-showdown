@@ -1131,6 +1131,7 @@ export class RandomTeams {
 		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'empoleon') return 'Competitive';
+		if (species.id === 'chandelure') return 'Flash Fire';
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
 		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
