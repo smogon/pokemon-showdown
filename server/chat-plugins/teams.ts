@@ -534,7 +534,7 @@ export const pages: Chat.PageTable = {
 		async edit(query, user, connection) {
 			TeamsHandler.validateAccess(connection);
 			const teamID = toID(query.shift() || "");
-			if (teamID.length) {
+			if (!teamID.length) {
 				return this.errorReply(`Invalid team ID.`);
 			}
 			this.title = `[Edit Team] ${teamID}`;
