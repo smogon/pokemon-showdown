@@ -2309,7 +2309,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["closecombat", "facade", "knockoff", "quickattack", "swordsdance"]
+                "movepool": ["closecombat", "facade", "knockoff", "quickattack", "swordsdance"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },
