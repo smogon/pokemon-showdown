@@ -2578,12 +2578,12 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Dark Pulse", "Focus Blast", "Psychic", "Thunderbolt"],
-                "teraTypes": ["Dark", "Electric", "Fairy", "Flying", "Ghost", "Ground", "Psychic", "Steel"]
+                "teraTypes": ["Dark", "Electric", "Fairy", "Fighting", "Flying", "Ghost", "Ground", "Psychic", "Steel"]
             },
             {
                 "role": "Fast Attacker",
                 "movepool": ["Dark Pulse", "Focus Blast", "Psychic", "Trick"],
-                "teraTypes": ["Dark", "Electric", "Fairy", "Flying", "Ghost", "Ground", "Psychic", "Steel"]
+                "teraTypes": ["Dark", "Fairy", "Fighting", "Flying", "Ghost", "Ground", "Psychic", "Steel"]
             }
         ]
     },
