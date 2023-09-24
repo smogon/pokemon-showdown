@@ -152,6 +152,36 @@ export const TeamsHandler = new class {
 			if (!namedSpecies.exists) {
 				set.name = set.species;
 			}
+			if (!Dex.species.get(set.species).exists) {
+				connection.popup(`Invalid Pokemon ${set.species} in team.`);
+				return null;
+			}
+			if (set.moves.length > 24) {
+				connection.popup("Only 24 moves are allowed per set.");
+				return null;
+			}
+			for (const m of set.moves) {
+				if (!Dex.moves.get(m).exists) {
+					connection.popup(`Invalid move ${m} on ${set.species}.`);
+					return null;
+				}
+			}
+			if (set.ability && !Dex.abilities.get(set.ability).exists) {
+				connection.popup(`Invalid ability ${set.ability} on ${set.species}.`);
+				return null;
+			}
+			if (set.item && !Dex.items.get(set.item).exists) {
+				connection.popup(`Invalid item ${set.item} on ${set.species}.`);
+				return null;
+			}
+			if (set.nature && !Dex.natures.get(set.nature).exists) {
+				connection.popup(`Invalid nature ${set.nature} on ${set.species}.`);
+				return null;
+			}
+			if (set.teraType && !Dex.types.get(set.teraType).exists) {
+				connection.popup(`Invalid Tera Type ${set.nature} on ${set.species}.`);
+				return null;
+			}
 		}
 		if (teamName) {
 			if (teamName.length > 100) {
