@@ -455,6 +455,7 @@ export const commands: Chat.ChatCommands = {
 		`/teams search - Opens the page to search your teams`,
 		`/teams mostviews - Views your teams sorted by most views.`,
 		`/teams view [team ID] - View the team matching the given [team ID]`,
+		`/teams browse - Opens a list of public teams uploaded by other users.`,
 	],
 };
 
@@ -681,7 +682,7 @@ export const pages: Chat.PageTable = {
 			if (count > MAX_SEARCH) {
 				count = MAX_SEARCH;
 			}
-			let queryStr = 'SELECT * FROM teams WHERE private != false';
+			let queryStr = 'SELECT * FROM teams WHERE private != true';
 			let name = sorter;
 			switch (sorter) {
 			case 'views':
@@ -689,7 +690,7 @@ export const pages: Chat.PageTable = {
 				name = 'most viewed';
 				break;
 			case 'latest':
-				queryStr += ` ORDER BY timestamp DESC`;
+				queryStr += ` ORDER BY date DESC`;
 				break;
 			default:
 				return this.errorReply(`Invalid sort term '${sorter}'. Must be either 'views' or 'latest'.`);
@@ -699,7 +700,7 @@ export const pages: Chat.PageTable = {
 			buf += refresh(this);
 			buf += `<br /><a class="button" href="/view-teams-searchpublic">Search</a>`;
 			const opposite = sorter === 'views' ? 'latest' : 'views';
-			buf += `<button name="send" value="/j view-teams-browse-${opposite}-${count}">Sort by ${opposite}</button>`;
+			buf += `<button class="button" name="send" value="/j view-teams-browse-${opposite}-${count}">Sort by ${opposite}</button>`;
 			buf += `<hr />`;
 
 			const results = await TeamsHandler.query<StoredTeam>(queryStr, []);
@@ -712,7 +713,7 @@ export const pages: Chat.PageTable = {
 				buf += `<hr />`;
 			}
 			if (count < MAX_SEARCH) {
-				buf += `<button name="send" value="/j view-teams-browse-${sorter}-${count + 20}">View more</button>`;
+				buf += `<button class="button" name="send" value="/j view-teams-browse-${sorter}-${count + 20}">View more</button>`;
 			}
 			return buf;
 		},
