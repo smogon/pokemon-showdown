@@ -1158,7 +1158,7 @@ export class RandomTeams {
 			if (species.id === 'farigiraf') return 'Armor Tail';
 			if (species.id === 'dragapult') return 'Clear Body';
 			if (species.id === 'altaria') return 'Cloud Nine';
-			if (species.id === 'armarouge' || species.id === 'chandelure') return 'Flash Fire';
+			if (species.id === 'armarouge') return 'Flash Fire';
 			if (species.id === 'florges') return 'Flower Veil';
 			if (
 				species.id === 'clefairy' ||
