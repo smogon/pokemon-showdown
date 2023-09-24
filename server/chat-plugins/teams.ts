@@ -135,26 +135,23 @@ export const TeamsHandler = new class {
 			}
 		}
 
-		const validatorResult = await TeamValidatorAsync.get(`gen${Dex.gen}customgame`).validateTeam(rawTeam, {
-			removeNicknames: true, // less headache to moderate this way
-		});
-		if (!validatorResult.startsWith('1')) {
-			connection.popup(
-				`Your team was rejected for the following reasons:\n\n` +
-				`- ` + validatorResult.slice(1).replace(/\n/g, `\n- `) +
-				'\n\nPlease upload valid teams.'
-			);
-			return null;
-		}
-		// gotta use the validated team so that nicknames are removed
-		rawTeam = validatorResult.slice(1);
-		const team = Teams.unpack(rawTeam);
+		const team = Teams.import(rawTeam);
 		if (!team) {
 			connection.popup('Invalid team:\n\n' + rawTeam);
 			return null;
 		}
 		if (team.length > 24) {
 			connection.popup("Your team has too many Pokemon.");
+		}
+
+		// now, we purge invalid nicknames and make sure it's an actual team
+		// gotta use the validated team so that nicknames are removed
+		for (const set of team) {
+			const namedSpecies = Dex.species.get(set.name);
+			// allow nicknames named after other mons - to support those OMs
+			if (!namedSpecies.exists) {
+				set.name = set.species;
+			}
 		}
 		if (teamName) {
 			if (teamName.length > 100) {
