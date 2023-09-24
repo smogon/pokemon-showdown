@@ -1164,7 +1164,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Bug Buzz", "Charm", "Encore", "Protect", "Thunder Wave"],
+                "movepool": ["Bug Buzz", "Encore", "Tailwind", "Thunder Wave"],
                 "teraTypes": ["Steel", "Water"]
             }
         ]
