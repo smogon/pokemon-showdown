@@ -742,7 +742,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.add('-climateWeather', 'none');
 		},
 	},
-	foghorn: {
+	foghorn: { // i have no clue how to do a temporary type change
 		name: 'Foghorn',
 		effectType: 'ClimateWeather',
 		duration: 5,
@@ -763,6 +763,13 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifyMovePriority: -5,
 		onModifyMove(move, target, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) && this.field.climateWeatherState.boosted) {
+				move.type = '???';
+				move.basePower = move.basePower * 1.5;
+			}
 			if (target.hasItem('utilityumbrella')) return;
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
@@ -844,6 +851,107 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onIrritantWeather(target) {
 			this.damage(target.baseMaxhp / 16);
+		},
+		onFieldEnd() {
+			this.add('-irritantWeather', 'none');
+		},
+	},
+
+	duststorm: {
+		name: 'DustStorm',
+		effectType: 'IrritantWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('volatilespray')) {
+				return 8;
+			}
+			return 5;
+		},
+		onIrritantWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('safetygoggles')) return;
+			if (move.type === 'Electric') {
+				this.debug('duststorm supress electric');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifySpePriority: 10,
+		onModifySpe(spe, pokemon) {
+			if (pokemon.hasItem('safetygoggles')) return;
+			if (pokemon.hasType('Ground') && this.field.isIrritantWeather('duststorm')) {
+				this.debug('duststorm speed boost');
+				return this.modify(spe, 1.5);
+			}
+		},
+		onModifyMovePriority: -5,
+		onModifyMove(move, target, pokemon) {
+			if (target.hasAbility('eartheater')) return;
+			if (this.field.irritantWeatherState.boosted) {
+				if (!move.ignoreImmunity) move.ignoreImmunity = {};
+				if (move.ignoreImmunity !== true) {
+					this.debug('Boosted further by Strong Winds');
+					move.ignoreImmunity['Ground'] = true;
+				}
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.irritantWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-irritantWeather', 'DustStorm', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-irritantWeather', 'DustStorm');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-irritantWeather', 'DustStorm', '[upkeep]');
+			this.eachEvent('IrritantWeather');
+		},
+		onFieldEnd() {
+			this.add('-irritantWeather', 'none');
+		},
+	},
+
+	pollinate: {
+		name: 'Pollinate',
+		effectType: 'IrritantWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('volatilespray')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifySpAPriority: 10,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.hasType('Grass') || pokemon.hasType('Bug')) {
+				return;
+			} else {
+				this.debug('non-grass or bug pokemon spa reduction');
+				return this.modify(spa, 0.5);
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.irritantWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+				this.field.setTerrain('grassyterrain', source);
+				this.debug('strong winds pollen sets grassy terrain');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-irritantWeather', 'Pollinate', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-irritantWeather', 'Pollinate');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-irritantWeather', 'Pollinate', '[upkeep]');
+			this.eachEvent('IrritantWeather');
 		},
 		onFieldEnd() {
 			this.add('-irritantWeather', 'none');
