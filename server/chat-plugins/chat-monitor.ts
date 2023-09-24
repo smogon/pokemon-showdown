@@ -715,9 +715,13 @@ export const commands: Chat.ChatCommands = {
 			const buf = [];
 			for (const monitorName in Chat.monitors) {
 				const monitor = Chat.monitors[monitorName];
-				if (!monitor.monitor) continue;
 				for (const line of Chat.filterWords[monitorName]) {
-					const ret = monitor.monitor.call(this, line, room, user, target, lcMessage, true);
+					let ret;
+					if (monitor.monitor) {
+						ret = monitor.monitor.call(this, line, room, user, target, lcMessage, true);
+					} else {
+						ret = line.regex.exec(target)?.[0];
+					}
 					if (typeof ret === 'string') {
 						buf.push(`${monitorName}: ${ret}`);
 						break;
