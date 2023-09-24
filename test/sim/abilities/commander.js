@@ -159,6 +159,7 @@ describe.only('Commander', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'shuckle', moves: ['sleeptalk']},
 			{species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
 		], [
 			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
 			{species: 'dondozo', moves: ['sleeptalk']},
@@ -167,6 +168,9 @@ describe.only('Commander', function () {
 
 		const dondozo = battle.p2.active[1];
 		assert.false(!!dondozo.volatiles['commanded']);
+
+		battle.makeChoices('move sleeptalk, switch 3', 'auto');
+		assert(!!dondozo.volatiles['commanded']);
 	});
 
 	it(`should not split apart Dondozo and Tatsugiri if Neutralizing Gas switches in`, function () {
