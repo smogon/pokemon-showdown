@@ -461,7 +461,7 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	// support view-team-${teamid}
 	team(query, user, connection) {
-		return Chat.resolvePage(`view-teams-view-${query.join('-')}`, user, connection);
+		return ((pages.teams as Chat.PageTable).view as Chat.PageHandler).call(this, query, user, connection);
 	},
 	teams: {
 		async all(query, user, connection) {
