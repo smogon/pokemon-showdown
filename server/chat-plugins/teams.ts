@@ -225,7 +225,8 @@ export const TeamsHandler = new class {
 		const team = Teams.unpack(teamData.team)!;
 		buf += `<br />`;
 		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
-		if (!isFull) buf += `<br /><a href="/view-teams-view-${teamData.teamid}">View full team</a>`;
+		buf += `<br /><a href="/view-team-${teamData.teamid}">${!isFull ? 'View full team' : 'Shareable link to team'}</a>`;
+		buf += ` <small>(or copy/paste <code>&lt;&lt;view-team-${teamData.teamid}&gt;&gt;</code> in chat to share!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
@@ -428,6 +429,10 @@ export const commands: Chat.ChatCommands = {
 };
 
 export const pages: Chat.PageTable = {
+	// support view-team-${teamid}
+	team(query, user, connection) {
+		return Chat.resolvePage(`view-teams-view-${query.join('-')}`, user, connection);
+	},
 	teams: {
 		async all(query, user, connection) {
 			TeamsHandler.validateAccess(connection);
