@@ -1446,7 +1446,8 @@ export class BestOfGame extends RoomGames.RoomGame {
 		const p1name = this.name(this.p1);
 		const p2name = this.name(this.p2);
 		let buf = Utils.html`<br /><strong>${p1name} and ${p2name}'s Best-of-${this.bestOf} progress:</strong><br />`;
-		for (const userid of [this.p1, this.p2]) {
+		for (const k of ['p1', 'p2'] as const) {
+			const userid = this[k];
 			buf += `<span style="text-align: right">`;
 			buf += `${this.name(userid)}: `;
 			for (let i = 0; i < this.bestOf; i++) {
@@ -1455,7 +1456,9 @@ export class BestOfGame extends RoomGames.RoomGame {
 				} else {
 					buf += `<i class="fa fa-circle-o"></i>`;
 				}
-				if ((i + 1) === this.winThreshold) {
+				const completedGames = this.games.filter(game => game.winner !== null).length;
+				const gamesNeeded = completedGames + (this.winThreshold - this.wins[k]);
+				if ((i + 1) === gamesNeeded) {
 					buf += ` | `;
 				} else {
 					buf += ` `;
@@ -1476,7 +1479,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 
 		buf += `</tr><tr>`;
 
-		for (const userid of [this.p1, null, this.p2]) {
+		for (const [i, userid] of [this.p1, null, this.p2].entries()) {
 			if (userid === null) {
 				buf += `<td></td>`;
 				continue;
@@ -1485,7 +1488,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 			if (!name || typeof name === 'number') name = 'unknownf';
 			const url = Chat.plugins.avatars?.Avatars.src(name) || `https://${Config.routes.client}/sprites/trainers/${name}.png`;
 			buf += `<td><center>`;
-			buf += `<img src="${url}" width="80" height="80" />`;
+			buf += `<img class="trainersprite"${!i ? ' style="transform: scaleX(-1)"' : ""} src="${url}" />`;
 			buf += `</center></td>`;
 		}
 
@@ -1636,14 +1639,14 @@ export class BestOfGame extends RoomGames.RoomGame {
 		this.room.add(`|allowleave|`).update();
 		if (winner) {
 			this.winner = winner;
-			this.room.add(`|win|${winner}`);
+			this.room.add(`|win|${this.name(winner)}`);
 		} else {
 			this.winner = '';
 			this.room.add(`|tie`);
 		}
 		this.updateDisplay();
 		this.room.update();
-		this.score = this.getLatestBattle()?.score || null;
+		this.score = [this.wins.p1, this.wins.p2];
 		const parentGame = this.room.parent && this.room.parent.game;
 		// @ts-ignore - Tournaments aren't TS'd yet
 		if (parentGame?.onBattleWin) {
