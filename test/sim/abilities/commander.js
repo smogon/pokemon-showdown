@@ -154,4 +154,58 @@ describe('Commander', function () {
 		const dondozo = battle.p4.active[0];
 		assert.false(!!dondozo.volatiles['commanded']);
 	});
+
+	it(`should prevent Dondozo and Tatsugiri from combining if Commander is suppressed`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'shuckle', moves: ['sleeptalk']},
+			{species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
+			{species: 'dondozo', moves: ['sleeptalk']},
+		]]);
+
+		const dondozo = battle.p2.active[1];
+		assert.false(!!dondozo.volatiles['commanded']);
+
+		battle.makeChoices('move sleeptalk, switch 3', 'auto');
+		assert(!!dondozo.volatiles['commanded']);
+	});
+
+	it(`should not split apart Dondozo and Tatsugiri if Neutralizing Gas switches in`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'shuckle', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+		], [
+			{species: 'tatsugiri', ability: 'commander', moves: ['dazzlinggleam']},
+			{species: 'dondozo', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('switch 3, move sleeptalk', 'auto');
+		battle.makeChoices();
+
+		const dondozo = battle.p2.active[1];
+		assert(!!dondozo.volatiles['commanded']);
+
+		const shuckle = battle.p1.active[0];
+		assert.fullHP(shuckle, `Shuckle should have never taken damage from Dazzling Gleam`);
+	});
+
+	it.skip(`should activate after hazards run`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'regieleki', moves: ['toxicspikes']},
+			{species: 'registeel', moves: ['sleeptalk']},
+		], [
+			{species: 'shuckle', moves: ['uturn']},
+			{species: 'dondozo', moves: ['sleeptalk']},
+			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices();
+		const tatsugiri = battle.p2.pokemon[0];
+
+		assert(tatsugiri.status, 'psn');
+	});
 });
