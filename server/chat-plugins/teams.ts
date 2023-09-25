@@ -285,10 +285,6 @@ export const TeamsHandler = new class {
 			if (set.item) {
 				teamBuf = teamBuf.replace(set.item, `${set.item} <psicon item="${set.item}" />`);
 			}
-			for (const move of set.moves) {
-				const type = Dex.moves.get(move).type;
-				teamBuf = teamBuf.replace(`- ${move}`, `- <psicon type="${type}" /> ${move}`);
-			}
 			return teamBuf;
 		}).join('<hr />');
 		return buf;
