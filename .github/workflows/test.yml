@@ -21,6 +21,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 100 # assumes PR/push to master is no larger than 100 commits. Other solutions are needlessly complex.
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
