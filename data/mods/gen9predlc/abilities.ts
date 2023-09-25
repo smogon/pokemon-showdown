@@ -1,4 +1,8 @@
 export const Abilities: {[k: string]: ModdedAbilityData} = {
+	commander: {
+		inherit: true,
+		isPermanent: true,
+	},
 	hadronengine: {
 		inherit: true,
 		isPermanent: true,
