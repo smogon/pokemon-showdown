@@ -506,7 +506,7 @@ export default class TeamGenerator {
 			if (ability === 'Poison Touch') weight *= TeamGenerator.statusWeight('psn', 1 - Math.pow(0.7, numberOfHits));
 		}
 		if (move.flags.bite && ability === 'Strong Jaw') weight *= 1.5;
-		// 10% boost for ability to break subs
+		// 5% boost for ability to break subs
 		if (move.flags.bypasssub) weight *= 1.05;
 		if (move.flags.pulse && ability === 'Mega Launcher') weight *= 1.5;
 		if (move.flags.punch && ability === 'Iron Fist') weight *= 1.2;
