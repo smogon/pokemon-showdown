@@ -1696,7 +1696,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			for (const side of this.sides) {
 				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
 			}
-			if (this.rated) {
+			if (this.rated === true) {
 				for (const side of this.sides) {
 					this.addSplit(side.id, [buf]);
 				}
