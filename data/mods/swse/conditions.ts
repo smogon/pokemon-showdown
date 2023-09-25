@@ -958,6 +958,96 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 
+	swarmsignal: {
+		name: 'SwarmSignal',
+		effectType: 'IrritantWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('volatilespray')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifyAccuracyPriority: 10,
+		onModifyAccuracy(acc, pokemon) {
+			if (pokemon.hasType('Poison') || pokemon.hasType('Bug')) {
+				this.debug('pheromones accuracy boost')
+				return this.modify(acc, 1.33);
+			}
+		},
+		onModifySpePriority: 10,
+		onModifySpe(spe, pokemon) {
+			if (pokemon.hasType('Poison') || pokemon.hasType('Bug')) {
+				this.debug('pheromones speed boost')
+				return this.modify(spe, 1.5);
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.irritantWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-irritantWeather', 'SwarmSignal', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-irritantWeather', 'SwarmSignal');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-irritantWeather', 'SwarmSignal', '[upkeep]');
+			this.eachEvent('IrritantWeather');
+		},
+		onIrritantWeather(target) {
+			if (this.field.irritantWeatherState.boosted) {
+				if (target.hasType('Bug') || target.hasType('Poison')) return;
+				target.addVolatile('confusion')
+				this.debug('strong winds pheromones confuses');
+			}
+		},
+		onFieldEnd() {
+			this.add('-irritantWeather', 'none');
+		},
+	},
+
+	smogspread: {
+		name: 'SmogSpread',
+		effectType: 'IrritantWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('volatilespray')) {
+				return 8;
+			}
+			return 5;
+		},
+		onFieldStart(field, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.irritantWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-irritantWeather', 'SmogSpread', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-irritantWeather', 'SmogSpread');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-irritantWeather', 'SmogSpread', '[upkeep]');
+			this.eachEvent('IrritantWeather');
+		},
+		onIrritantWeather(target) {
+			// strong winds effect impemented in sim/pokemon.ts
+			target.setStatus('psn')
+		},
+		onFieldEnd() {
+			this.add('-irritantWeather', 'none');
+		},
+	},
+
+
 	// Energy Weathergy
 
 	auraprojection: {
