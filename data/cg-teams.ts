@@ -196,7 +196,6 @@ export default class TeamGenerator {
 					}
 
 					interimMovePool.sort((a, b) => b.weight - a.weight);
-					console.log(moves.map(m => m.id));
 					moves.splice(0);
 				}
 				movePool = [];
