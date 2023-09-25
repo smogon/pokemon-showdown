@@ -404,6 +404,8 @@ export default class TeamGenerator {
 			if (move.id === 'focusenergy' && ability !== 'Super Luck') {
 				const highCritMoves = movesSoFar.filter(m => m.critRatio && m.critRatio > 1);
 				weight *= 1 + highCritMoves.length * (ability === 'Sniper' ? 2 : 1);
+			} else if (move.id === 'tailwind' && ability === 'Wind Rider' && movesSoFar.some(m => m.category === 'Physical')) {
+				weight *= 2.5; // grants +1 attack, but isn't spammable
 			}
 
 			// protection moves - useful for bulky/stally pokemon

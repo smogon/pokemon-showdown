@@ -44,6 +44,7 @@ export const HARDCODED_MOVE_WEIGHTS: {[moveID: string]: number} = {
 
 	// screens
 	lightscreen: 3, reflect: 3, auroraveil: 3, // TODO: make sure AVeil always gets Snow?
+	tailwind: 2,
 
 	// mess with the opponent
 	taunt: 2, disable: 2, encore: 3,
