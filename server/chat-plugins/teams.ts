@@ -612,7 +612,7 @@ export const pages: Chat.PageTable = {
 			const type = this.pageid.split('-')[2];
 			const isPersonal = type === 'searchpersonal';
 			query = query.join('-').split('--');
-			if (!query.length || (isPersonal && query.length === 1)) {
+			if (!query.map(toID).filter(Boolean).length || (isPersonal && query.length === 1)) {
 				buf += `<hr />`;
 				buf += `<form data-submitsend="/join view-teams-${type}-{owner}--{tier}--{pokemon}--{moves}--{ability}--{gen}">`;
 				buf += `<strong>Search metadata:</strong><br />`;
@@ -626,9 +626,6 @@ export const pages: Chat.PageTable = {
 				buf += `Moves: <input name="moves" /><br /><br />`;
 				buf += `<button class="button notifying" type="submit">Search!</button>`;
 				return buf;
-			}
-			if (!query.map(toID).filter(Boolean).length) {
-				return this.errorReply(`Specify a search.`);
 			}
 			const [rawOwner, rawFormat, rawPokemon, rawMoves, rawAbilities, rawGen] = query;
 			const owner = toID(rawOwner);
