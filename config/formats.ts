@@ -5096,7 +5096,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['[Gen 1] OU', 'APT Clause', 'Sleep Moves Clause'],
+		ruleset: ['[Gen 1] OU', 'APT Clause'],
 		banlist: ['OU', 'UUBL'],
 	},
 	{
@@ -5107,7 +5107,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['[Gen 1] UU', '!APT Clause', '!Sleep Moves Clause'],
+		ruleset: ['[Gen 1] UU', '!APT Clause'],
 		banlist: ['UU', 'NUBL'],
 	},
 	{
