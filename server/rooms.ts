@@ -2225,7 +2225,7 @@ export const Rooms = {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
 		} else if (isBestOf && !options.isSubBattle) {
-			roomTitle = `${format.name} (${p1name} vs ${p2name})`;
+			roomTitle = `${p1name} vs. ${p2name}`;
 			roomid = `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
 			roomTitle = options.title;
