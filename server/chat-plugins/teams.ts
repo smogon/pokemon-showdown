@@ -488,7 +488,8 @@ export const pages: Chat.PageTable = {
 			const teams = await TeamsHandler.list(targetUserid, count, user.id !== targetUserid);
 			let buf = `<div class="ladder pad"><h2>${targetUserid}'s last ${Chat.count(count, "teams")}</h2>`;
 			buf += refresh(this);
-			buf += `<br /><a class="button" href="/view-teams-searchpersonal">Search teams</a><br />`;
+			buf += `<br /><a class="button" href="/view-teams-searchpersonal">Search your teams</a> `;
+			buf += `<a class="button" href="/view-teams-searchpublic">Browse public teams</a><br />`;
 			if (targetUserid === user.id) {
 				buf += `<a class="button" href="/view-teams-upload">Upload new</a>`;
 			}
