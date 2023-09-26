@@ -307,7 +307,6 @@ export const Aliases: {[alias: string]: string} = {
 	enamorust: "Enamorus-Therian",
 	ogerpongrass: "Ogerpon",
 	ogerponteal: "Ogerpon",
-	ogerpontealtera: "Ogerpon-Teal-Tera",
 	ogerpongrasstera: "Ogerpon-Teal-Tera",
 	ogerponrock: "Ogerpon-Cornerstone",
 	ogerponrocktera: "Ogerpon-Cornerstone-Tera",
