@@ -1,6 +1,8 @@
 export const Aliases: {[alias: string]: string} = {
 	// formats
 	randbats: "[Gen 9] Random Battle",
+	cgt: "[Gen 9] Computer-Generated Teams",
+	compgen: "[Gen 9] Computer-Generated Teams", 
 	uber: "[Gen 9] Ubers",
 	anythinggoes: "[Gen 9] Anything Goes",
 	ubers: "[Gen 9] Ubers",
@@ -85,8 +87,6 @@ export const Aliases: {[alias: string]: string} = {
 	mayhem: "[Gen 9] Random Battle Mayhem",
 	omotm: "[Gen 9] Frantic Fusions",
 	lcotm: "[Gen 7] Pure Hackmons",
-	cgt: "[Gen 9] Computer-Generated Teams",
-	compgen: "[Gen 9] Computer-Generated Teams", 
 
 	// mega evos
 	fabio: "Ampharos-Mega",
@@ -314,7 +314,7 @@ export const Aliases: {[alias: string]: string} = {
 	ogerponfire: "Ogerpon-Hearthflame",
 	ogerponfiretera: "Ogerpon-Hearthflame-Tera",
 	ogerponwater: "Ogerpon-Wellspring",
-	ogerponwater: "Ogerpon-Wellspring-Tera",
+	ogerponwatertera: "Ogerpon-Wellspring-Tera",
 	
 	// base formes
 	nidoranfemale: "Nidoran-F",
@@ -372,8 +372,6 @@ export const Aliases: {[alias: string]: string} = {
 	venomiconprologue: "Venomicon",
 	enamorusincarnate: "Enamorus",
 	enamorusincarnation: "Enamorus",
-	ogerponteal: "Ogerpon",
-	ogerpongrass: "Ogerpon",
 
 	// event formes
 	rockruffdusk: "Rockruff",
@@ -601,7 +599,7 @@ export const Aliases: {[alias: string]: string} = {
 	booster: "Booster Energy",
 	boots: "Heavy-Duty Boots",
 	cb: "Choice Band",
-	cc: "Covert Cloak",
+	cloak: "Covert Cloak",
 	ebelt: "Expert Belt",
 	fightgem: "Fighting Gem",
 	flightgem: "Flying Gem",
