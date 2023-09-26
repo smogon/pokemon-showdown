@@ -754,7 +754,7 @@ export const Aliases: {[alias: string]: string} = {
 	cofag: "Cofagrigus",
 	colo: "Colossoil",
 	conk: "Conkeldurr",
-	corvi: "Corviknight",
+	corv: "Corviknight",
 	cress: "Cresselia",
 	croak: "Toxicroak",
 	cruci: "Crucibelle",
