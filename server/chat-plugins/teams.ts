@@ -660,7 +660,7 @@ export const pages: Chat.PageTable = {
 			const abilities = rawAbilities?.split(',').map(toID).filter(Boolean);
 
 			const search = {
-				pokemon, moves, format, owner, abilities, gen,
+				pokemon, moves, format, owner, abilities, gen: gen || undefined,
 			} as TeamSearch;
 			const results = await TeamsHandler.search(search, user, 50, isPersonal);
 
