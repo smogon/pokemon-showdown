@@ -144,7 +144,7 @@ export const TeamsHandler = new class {
 		if (team.length > 24) {
 			connection.popup("Your team has too many Pokemon.");
 		}
-
+		let unownWord = '';
 		// now, we purge invalid nicknames and make sure it's an actual team
 		// gotta use the validated team so that nicknames are removed
 		for (const set of team) {
@@ -156,6 +156,10 @@ export const TeamsHandler = new class {
 			if (!Dex.species.get(set.species).exists) {
 				connection.popup(`Invalid Pokemon ${set.species} in team.`);
 				return null;
+			}
+			const speciesid = toID(set.species);
+			if (speciesid.length <= 6 && speciesid.startsWith('unown')) {
+				unownWord += speciesid.charAt(5) || 'a';
 			}
 			if (set.moves.length > 24) {
 				connection.popup("Only 24 moves are allowed per set.");
@@ -181,6 +185,16 @@ export const TeamsHandler = new class {
 			}
 			if (set.teraType && !Dex.types.get(set.teraType).exists) {
 				connection.popup(`Invalid Tera Type ${set.nature} on ${set.species}.`);
+				return null;
+			}
+		}
+		if (unownWord) {
+			const filtered = Chat.nicknamefilter(unownWord, user);
+			if (!filtered || filtered !== unownWord) {
+				connection.popup(
+					`Your team was rejected for the following reason:\n\n` +
+					`- Your Unowns spell out a banned word: ${unownWord.toUpperCase()}`
+				);
 				return null;
 			}
 		}
