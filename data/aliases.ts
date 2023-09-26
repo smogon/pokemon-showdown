@@ -870,7 +870,7 @@ export const Aliases: {[alias: string]: string} = {
 	smogon: "Koffing",
 	smogonbird: "Talonflame",
 	smoko: "Smokomodo",
-	snael, "Snaelstrom",
+	snael: "Snaelstrom",
 	snips: "Drapion",
 	staka: "Stakataka",
 	steela: "Celesteela",
