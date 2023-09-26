@@ -1603,7 +1603,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 			if (!this.ready![k]) {
 				const diff = (this.nextBattleTimerStart + 60000) - Date.now();
 				this.waitingBattle?.room.add(
-					`|inactive|${this.name(this[k])} has ${Chat.toDurationString(diff + 1000)}` +
+					`|inactive|${this.name(this[k])} has ${Chat.toDurationString(diff + 100)}` +
 					` to confirm battle start!`
 				);
 			}
