@@ -976,7 +976,7 @@ export const Aliases: {[alias: string]: string} = {
 	sr: "Stealth Rock",
 	ssa: "Shell Side Arm",
 	sub: "Substitute",
-	tarrows, "Thousand Arrows",
+	tarrows: "Thousand Arrows",
 	tr: "Trick Room",
 	troom: "Trick Room",
 	tbolt: "Thunderbolt",
