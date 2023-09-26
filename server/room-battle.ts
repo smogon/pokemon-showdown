@@ -1456,7 +1456,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 				} else {
 					buf += `<i class="fa fa-circle-o"></i>`;
 				}
-				if (i != this.bestOf - 1) {
+				if (i !== this.bestOf - 1) {
 					buf += ` `;
 				}
 			}
