@@ -192,6 +192,27 @@ describe('Commander', function () {
 		assert.fullHP(shuckle, `Shuckle should have never taken damage from Dazzling Gleam`);
 	});
 
+	it(`should allow Tatsugiri to move again if Dondozo faints while Neutralizing Gas is active`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'shuckle', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+		], [
+			{species: 'tatsugiri', ability: 'commander', moves: ['dazzlinggleam']},
+			{species: 'dondozo', moves: ['memento']},
+		]]);
+
+		battle.makeChoices('switch 3, move sleeptalk', 'auto');
+		battle.makeChoices();
+
+		const tatsugiri = battle.p2.pokemon[0];
+		assert.false(!!tatsugiri.volatiles['commanding']);
+
+		battle.makeChoices();
+		const shuckle = battle.p1.active[0];
+		assert.false.fullHP(shuckle, `Shuckle should have taken damage from Dazzling Gleam`);
+	});
+
 	it.skip(`should activate after hazards run`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'regieleki', moves: ['toxicspikes']},
