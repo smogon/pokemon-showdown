@@ -1496,7 +1496,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 				continue;
 			}
 			const team = Teams.unpack(this.options[slot as 'p1' | 'p2']?.team || "");
-			if (!team) {
+			if (!team || !this.format.ruleTable?.has('teampreview')) {
 				buf += `<td>`;
 				buf += `<psicon pokemon="unknown" /> `.repeat(3);
 				buf += `<br />`;
