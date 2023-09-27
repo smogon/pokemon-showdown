@@ -261,7 +261,7 @@ export const TeamsHandler = new class {
 	list(userid: ID, count: number, publicOnly = false) {
 		let query = `SELECT * FROM teams WHERE ownerid = $1 `;
 		if (publicOnly) {
-			query += `AND private IS NOT NULL `;
+			query += `AND private IS NULL `;
 		}
 		query += `ORDER BY date DESC LIMIT $2`;
 		return this.query<StoredTeam>(
