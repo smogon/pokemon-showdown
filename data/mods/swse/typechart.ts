@@ -26,6 +26,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 	dark: {
 		damageTaken: {
 			prankster: 3,
+			haunt: 3,
 			Bug: 1,
 			Dark: 2,
 			Dragon: 0,
@@ -194,6 +195,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 	ghost: {
 		damageTaken: {
 			trapped: 3,
+			haunt: 3,
 			Bug: 2,
 			Dark: 1,
 			Dragon: 0,
@@ -295,6 +297,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 	},
 	normal: {
 		damageTaken: {
+			haunt: 3,
 			Bug: 0,
 			Dark: 0,
 			Dragon: 0,

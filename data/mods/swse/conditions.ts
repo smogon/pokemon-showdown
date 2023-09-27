@@ -1047,6 +1047,57 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 	},
 
+	sprinkle: {
+		name: 'Sprinkle',
+		effectType: 'IrritantWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('volatilespray')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifySpDPriority: 10,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.hasType('Fairy')) {
+				this.debug('fairy type SpD boost');
+				return this.modify(spd, 1.5);
+			}
+		},
+		onModifyAccuracyPriority: -1,
+		onModifyAccuracy(accuracy, target) {
+			if (typeof accuracy !== 'number') return;
+			if (target.hasType('Fairy')) return;
+			this.debug('Sprinkle - decreasing evasion'); // actually increases accuracy
+			return this.modify(accuracy, 1.5);
+			
+		},
+		onFieldStart(field, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.irritantWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+				this.field.setTerrain('mistyterrain', source);
+				this.debug('strong winds fairy dust sets misty terrain');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-irritantWeather', 'Sprinkle', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-irritantWeather', 'Sprinkle');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-irritantWeather', 'Sprinkle', '[upkeep]');
+			this.eachEvent('IrritantWeather');
+		},
+		onIrritantWeather(target) {
+			this.heal(target.baseMaxhp / 16);
+		},
+		onFieldEnd() {
+			this.add('-irritantWeather', 'none');
+		},
+	},
 
 	// Energy Weathergy
 
@@ -1109,6 +1160,226 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-energyWeather', 'AuraProjection', '[upkeep]');
+			this.eachEvent('EnergyWeather');
+		},
+		onFieldEnd() {
+			this.add('-energyWeather', 'none');
+		},
+	},
+
+	haunt: {
+		name: 'Haunt',
+		effectType: 'EnergyWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('energynullifier')) {
+				return 8;
+			}
+			return 5;
+		},
+		onBeforeTurn(pokemon) {
+			if (this.field.energyWeatherState.boosted) {
+				if (pokemon.hasType(['Ghost', 'Dark', 'Normal'])) return;
+				const flinch = this.random(10);
+				if (flinch === 0) {
+					pokemon.addVolatile('flinch');
+				}
+			}
+		},
+		onFieldStart(field, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.energyWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-energyWeather', 'Haunt', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-energyWeather', 'Haunt');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-energyWeather', 'Haunt', '[upkeep]');
+			this.eachEvent('EnergyWeather');
+		},
+		onEnergyWeather(target) {
+			target.damage(target.baseMaxhp / 16); // normal, ghost and dark's damage immunity added to typechart.ts
+		},
+		onFieldEnd() {
+			this.add('-energyWeather', 'none');
+		},
+	},
+
+	cosmicrays: {
+		name: 'CosmicRays',
+		effectType: 'EnergyWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('energynullifier')) {
+				return 8;
+			}
+			return 5;
+		},
+		onEnergyWeatherModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Psychic') {
+				this.debug('Cosmic Rays psychic boost');
+					return this.chainModify(1.5);
+			}
+			if (move.type === 'Dark') {
+				this.debug('Cosmic Rays dark suppress');
+					return this.chainModify(0.5);
+			}
+		},
+		onFieldStart(battle, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.energyWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+				this.field.setTerrain('psychicterrain', source);
+				this.debug('strong winds psychic field sets psychic terrain');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-energyWeather', 'CosmicRays', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-energyWeather', 'CosmicRays');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-energyWeather', 'CosmicRays', '[upkeep]');
+			this.eachEvent('EnergyWeather');
+		},
+		onFieldEnd() {
+			this.add('-energyWeather', 'none');
+		},
+	},
+
+	dragonforce: {
+		name: 'DragonForce',
+		effectType: 'EnergyWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('energynullifier')) {
+				return 8;
+			}
+			return 5;
+		},
+		onModifyDamage(damage, attacker, defender, move) {
+			if (move && defender.getMoveHitData(move).typeMod > 0) {
+				this.debug('Dragon Force super-effective supress');
+				return this.chainModify(0.8);
+			}
+		},
+		onModifyAtkPriority: 10,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.hasType('Dragon')) {
+				this.debug('dragon type Atk boost');
+				return this.modify(atk, 1.15);
+			}
+		},
+		onModifySpAPriority: 10,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.hasType('Dragon')) {
+				this.debug('dragon type SpA boost');
+				return this.modify(spa, 1.15);
+			}
+		},
+		onEnergyWeatherModifyDamage(damage, attacker, defender, move) {
+			if (this.field.energyWeatherState.boosted) {
+				if (move.type === 'Dragon') {
+					this.debug('Dragon Force dragon boost');
+					return this.chainModify(1.5);
+				} else {
+					this.debug('Dragon Force non-dragon boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag && !source.hasType('Dragon')) {
+				this.damage(source.baseMaxhp / 10);
+			}
+		},
+		onFieldStart(battle, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.energyWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-energyWeather', 'DragonForce', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-energyWeather', 'DragonForce');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-energyWeather', 'DragonForce', '[upkeep]');
+			this.eachEvent('EnergyWeather');
+		},
+		onFieldEnd() {
+			this.add('-energyWeather', 'none');
+		},
+	},
+
+	supercell: {
+		name: 'Supercell',
+		effectType: 'EnergyWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('energynullifier')) {
+				return 8;
+			}
+			return 5;
+		},
+		onFieldStart(battle, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.energyWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-energyWeather', 'Supercell', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-energyWeather', 'Supercell');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-energyWeather', 'Supercell', '[upkeep]');
+			this.eachEvent('EnergyWeather');
+		},
+		onFieldEnd() {
+			this.add('-energyWeather', 'none');
+		},
+	},
+
+	magnetize: {
+		name: 'Magnetize',
+		effectType: 'EnergyWeather',
+		duration: 5,
+		durationCallback(source, effect) {
+			if (source?.hasItem('energynullifier')) {
+				return 8;
+			}
+			return 5;
+		},
+		onFieldStart(battle, source, effect) {
+			if (this.field.isClearingWeather('strongwinds')) {
+				this.field.energyWeatherState.boosted = true;
+				this.debug('Weather is Strong Winds boosted');
+			}
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-energyWeather', 'Magnetize', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-energyWeather', 'Magnetize');
+			}
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-energyWeather', 'Magnetize', '[upkeep]');
 			this.eachEvent('EnergyWeather');
 		},
 		onFieldEnd() {
