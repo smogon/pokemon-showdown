@@ -1,12 +1,12 @@
 CREATE TABLE teams (
-	teamid TEXT NOT NULL PRIMARY KEY,
+	teamid SERIAL PRIMARY KEY,
 	ownerid TEXT NOT NULL,
 	team TEXT NOT NULL,
 	date TIMESTAMP NOT NULL,
 	format TEXT NOT NULL,
 	views INTEGER NOT NULL,
 	title TEXT,
-	private BOOLEAN
+	private TEXT
 );
 
 CREATE INDEX owner_idx ON teams(ownerid);

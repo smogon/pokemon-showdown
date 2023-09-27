@@ -5,12 +5,12 @@
  */
 
 import {PostgresDatabase, FS, Utils} from '../../lib';
-import * as crypto from 'crypto';
 
 /** Maximum amount of teams a user can have stored at once. */
 const MAX_TEAMS = 200;
 /** Max teams that can be viewed in a search */
 const MAX_SEARCH = 3000;
+const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
 
 export interface StoredTeam {
 	teamid: string;
@@ -19,7 +19,8 @@ export interface StoredTeam {
 	format: ID;
 	title: string | null;
 	date: Date;
-	private: boolean;
+	/** password */
+	private: string | null;
 	views: number;
 }
 
@@ -69,7 +70,7 @@ export const TeamsHandler = new class {
 		if (search.gen) {
 			where.push(`format LIKE 'gen${search.gen}%'`);
 		}
-		if (!includePrivate) where.push('private != true');
+		if (!includePrivate) where.push('private IS NOT NULL');
 
 		const result = await this.query<StoredTeam>(
 			`SELECT * FROM teams${where.length ? ` WHERE ${where.join(' AND ')}` : ''} LIMIT ${count}`,
@@ -112,7 +113,7 @@ export const TeamsHandler = new class {
 		formatName: string,
 		rawTeam: string,
 		teamName: string | null = null,
-		isPrivate = false,
+		isPrivate?: string | null,
 		isUpdate?: string
 	) {
 		const connection = context.connection;
@@ -132,6 +133,10 @@ export const TeamsHandler = new class {
 			existing = await this.get(isUpdate);
 			if (!existing) {
 				connection.popup("You're trying to edit a team that doesn't exist.");
+				return null;
+			}
+			if (context.user.id !== existing.ownerid) {
+				connection.popup("This is not your team.");
 				return null;
 			}
 		}
@@ -238,13 +243,17 @@ export const TeamsHandler = new class {
 				connection.popup("You've already uploaded that team.");
 				return null;
 			}
-			const teamId = crypto.randomBytes(10).toString('hex');
 			const loaded = await this.query(
-				`INSERT INTO teams (teamid, ownerid, team, date, format, views, title, private) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING teamid`,
-				[teamId, user.id, rawTeam, new Date(), format.id, 0, teamName, isPrivate]
+				`INSERT INTO teams (ownerid, team, date, format, views, title, private) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING teamid`,
+				[user.id, rawTeam, new Date(), format.id, 0, teamName, isPrivate]
 			);
 			return loaded?.[0].teamid;
 		}
+	}
+	generatePassword(len = 20) {
+		let pw = '';
+		for (let i = 0; i < len; i++) pw += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+		return pw;
 	}
 	updateViews(teamid: string) {
 		return this.query(`UPDATE teams SET views = views + 1 WHERE teamid = $1`, [teamid]);
@@ -252,7 +261,7 @@ export const TeamsHandler = new class {
 	list(userid: ID, count: number, publicOnly = false) {
 		let query = `SELECT * FROM teams WHERE ownerid = $1 `;
 		if (publicOnly) {
-			query += `AND private = false `;
+			query += `AND private IS NOT NULL `;
 		}
 		query += `ORDER BY date DESC LIMIT $2`;
 		return this.query<StoredTeam>(
@@ -270,8 +279,12 @@ export const TeamsHandler = new class {
 		const team = Teams.unpack(teamData.team)!;
 		buf += `<br />`;
 		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
-		buf += `<br /><a href="/view-team-${teamData.teamid}">${!isFull ? 'View full team' : 'Shareable link to team'}</a>`;
-		buf += ` <small>(or copy/paste <code>&lt;&lt;view-team-${teamData.teamid}&gt;&gt;</code> in chat to share!)</small>`;
+		let link = `view-team-${teamData.teamid}`;
+		if (teamData.private) {
+			link += `-${teamData.private}`;
+		}
+		buf += `<br /><a href="/${link}">${isFull ? 'View full team' : 'Shareable link to team'}</a>`;
+		buf += ` <small>(or copy/paste <code>&lt;&lt;${link}&gt;&gt;</code> in chat to share!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
@@ -368,8 +381,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			formatid = toID(formatid);
 			teamName = toID(teamName) ? teamName : null!;
+			const privacy = toID(rawPrivacy) === '1' ? TeamsHandler.generatePassword() : null;
 			const id = await TeamsHandler.save(
-				this, formatid, rawTeam, teamName, !!Number(rawPrivacy), isEdit ? teamID : undefined
+				this, formatid, rawTeam, teamName, privacy, isEdit ? teamID : undefined
 			);
 
 			const page = isEdit ? 'edit' : 'upload';
@@ -425,16 +439,16 @@ export const commands: Chat.ChatCommands = {
 		async setprivacy(target, room, user, connection) {
 			TeamsHandler.validateAccess(connection, true);
 			const [teamId, rawPrivacy] = target.split(',').map(toID);
-			let privacy: boolean;
+			let privacy: string | null;
 			if (!teamId.length) {
 				return this.popupReply('Invalid team ID.');
 			}
 			// these if checks may seem bit redundant but we want to ensure the user is certain about this
 			// if it might be invalid, we want them to know that
 			if (this.meansYes(rawPrivacy)) {
-				privacy = true;
+				privacy = TeamsHandler.generatePassword();
 			} else if (this.meansNo(rawPrivacy)) {
-				privacy = false;
+				privacy = null;
 			} else {
 				return this.popupReply(`Invalid privacy setting.`);
 			}
@@ -449,7 +463,7 @@ export const commands: Chat.ChatCommands = {
 					this.refreshPage(pageid);
 				}
 			}
-			return this.popupReply(privacy ? `Team set to private.` : `Team set to public.`);
+			return this.popupReply(privacy ? `Team set to private. Password: ${privacy}` : `Team set to public.`);
 		},
 		search(target, room, user) {
 			return this.parse(`/j view-teams-searchpersonal`);
@@ -518,7 +532,7 @@ export const pages: Chat.PageTable = {
 			case 'views':
 				this.title = `[Most Viewed Teams]`;
 				teams = await TeamsHandler.query(
-					`SELECT * FROM teams WHERE private = false ORDER BY views DESC LIMIT $1`, [count]
+					`SELECT * FROM teams WHERE private IS NULL ORDER BY views DESC LIMIT $1`, [count]
 				);
 				title = `Most viewed teams:`;
 				delete buttons.views;
@@ -526,7 +540,7 @@ export const pages: Chat.PageTable = {
 			default:
 				this.title = `[Latest Teams]`;
 				teams = await TeamsHandler.query(
-					`SELECT * FROM teams WHERE private != true ORDER BY date DESC LIMIT $1`, [count]
+					`SELECT * FROM teams WHERE private IS NULL ORDER BY date DESC LIMIT $1`, [count]
 				);
 				title = `Recently uploaded teams:`;
 				delete buttons.latest;
@@ -542,6 +556,7 @@ export const pages: Chat.PageTable = {
 		async view(query, user, connection) {
 			TeamsHandler.validateAccess(connection);
 			const teamid = toID(query.shift() || "");
+			const password = toID(query.shift());
 			this.title = `[View Team]`;
 			if (!teamid.length) {
 				throw new Chat.ErrorMessage(`Invalid team ID.`);
@@ -550,6 +565,10 @@ export const pages: Chat.PageTable = {
 			if (!team) {
 				this.title = `[Invalid Team]`;
 				return this.errorReply(`No team with the ID ${teamid} was found.`);
+			}
+			if (team?.private && user.id !== team.ownerid && password !== team.private) {
+				this.title = `[Private Team]`;
+				return this.errorReply(`That team is private.`);
 			}
 			this.title = `[Team] ${team.teamid}`;
 			if (user.id !== team.ownerid) {
@@ -694,7 +713,7 @@ export const pages: Chat.PageTable = {
 			if (count > MAX_SEARCH) {
 				count = MAX_SEARCH;
 			}
-			let queryStr = 'SELECT * FROM teams WHERE private != true';
+			let queryStr = 'SELECT * FROM teams WHERE private IS NULL';
 			let name = sorter;
 			switch (sorter) {
 			case 'views':
