@@ -686,7 +686,7 @@ export const pages: Chat.PageTable = {
 
 			// empty arrays will be falsy strings so this saves space
 			buf += `Search: ` + Object.entries(search)
-				.filter(([, v]) => !!(v.toString()))
+				.filter(([, v]) => !!(v?.toString()))
 				.map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`)
 				.join(', ');
 
