@@ -70,7 +70,7 @@ export const TeamsHandler = new class {
 		if (search.gen) {
 			where.push(`format LIKE 'gen${search.gen}%'`);
 		}
-		if (!includePrivate) where.push('private IS NOT NULL');
+		if (!includePrivate) where.push('private IS NULL');
 
 		const result = await this.query<StoredTeam>(
 			`SELECT * FROM teams${where.length ? ` WHERE ${where.join(' AND ')}` : ''} LIMIT ${count}`,
