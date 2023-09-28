@@ -587,7 +587,7 @@ export const pages: Chat.PageTable = {
 			buf += `<input name="name" /><br />`;
 
 			buf += `<strong>What's the team's format?</strong><br />`;
-			buf += `<formatselect name="format">[Gen ${Dex.gen} OU]</formatselect><br />`;
+			buf += `<formatselect name="format" value="gen${Dex.gen}ou">[Gen ${Dex.gen} OU]</formatselect><br />`;
 
 			buf += `<strong>Should the team be private? (yes/no)</strong><br />`;
 			buf += `<select name="privacy" /><option value="1">Yes</option><option value="0">No</option></select><br />`;
