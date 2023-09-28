@@ -1297,6 +1297,11 @@ function createTournament(
 		output.errorReply("You cannot have a player cap that is less than 2.");
 		return;
 	}
+	if (name) {
+		output.checkChat(name);
+		if (name.includes('|')) output.errorReply(`The tournament's name cannot include the | symbol.`);
+		return;
+	}
 	const tour = room.game = new Tournament(
 		room, format, createTournamentGenerator(generator, generatorMod, output)!, playerCap, isRated, name
 	);
