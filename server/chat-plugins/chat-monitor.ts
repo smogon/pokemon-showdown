@@ -739,28 +739,16 @@ export const commands: Chat.ChatCommands = {
 				);
 			}
 		},
-		testhelp(target, room, user) {
-			this.checkCan('lock');
-			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
-			const monitorNames = [...Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)];
-			monitorNames.push(
-				...Object.keys(Chat.monitors)
-					.filter(x => Chat.monitors[x].monitor && x.includes('filter'))
-					.map(x => x.replace('filter', ''))
-			);
-			this.sendReplyBox(
-				`<code>/filter test [monitor name] [test string]</code>:<br />` +
-				`Tests whether or not the provided test string would trigger the respective monitor.<br />` +
-				`All usable commands: <code>${monitorNames.sort().map(x => `/filter test ${x}`).join('</code>, <code>')}</code><br />` +
-				`Can only be broadcast in Staff and Upper Staff. Requires: % @ &`
-			);
-		},
+		testhelp: [
+			`/filter test [test string] - Tests whether or not the provided test string would trigger any of the chat monitors.`,
+			`Requires: % @ &`,
+		],
 	},
 	filterhelp: [
 		`/filter add list, word, reason[, optional public reason] - Adds a word to the given filter list. Requires: &`,
 		`/filter remove list, words - Removes words from the given filter list. Requires: &`,
 		`/filter view - Opens the list of filtered words. Requires: % @ &`,
-		`/filter test - Do "/help filter test" for more information. Requires: % @ &`,
+		`/filter test [test string] - Tests whether or not the provided test string would trigger any of the chat monitors. Requires: % @ &`,
 		`You may use / instead of , in /filter add if you want to specify a reason that includes commas.`,
 	],
 	allowname(target, room, user) {
