@@ -1299,13 +1299,13 @@ function createTournament(
 	}
 	if (name?.trim().length) {
 		if (output.checkChat(name) !== name) {
-			return output.errorReply(`You cannot use filtered words in tour names.`);
+			throw new Chat.ErrorMessage(`You cannot use filtered words in tour names.`);
 		}
 
 		if (name.length > MAX_CUSTOM_NAME_LENGTH) {
-			return output.errorReply(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);
+			throw new Chat.ErrorMessage(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);
 		}
-		if (name.includes('|')) return output.errorReply("The tournament's name cannot include the | symbol.");
+		if (name.includes('|')) throw new Chat.ErrorMessage("The tournament's name cannot include the | symbol.");
 	}
 	const tour = room.game = new Tournament(
 		room, format, createTournamentGenerator(generator, generatorMod, output)!, playerCap, isRated, name
