@@ -277,13 +277,13 @@ export const TeamsHandler = new class {
 		buf += `<small>Format: ${Dex.formats.get(teamData.format).name}</small><br />`;
 		buf += `<small>Views: ${teamData.views}</small>`;
 		const team = Teams.unpack(teamData.team)!;
-		buf += `<br />`;
-		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
 		let link = `view-team-${teamData.teamid}`;
 		if (teamData.private) {
 			link += `-${teamData.private}`;
 		}
-		buf += `<br /><a href="/${link}">${isFull ? 'View full team' : 'Shareable link to team'}</a>`;
+		buf += `<br /><a class="subtle" href="/${link}">`;
+		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
+		buf += `</a><br />${isFull ? 'View full team' : 'Shareable link to team'}</a>`;
 		buf += ` <small>(or copy/paste <code>&lt;&lt;${link}&gt;&gt;</code> in chat to share!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
