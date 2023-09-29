@@ -886,6 +886,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onModifyMovePriority: -5,
 		onModifyMove(move, target, pokemon) {
 			if (target.hasItem('safetygoggles')) return;
+			if (target.hasAbility('eartheater')) return;
 			if (this.field.irritantWeatherState.boosted) {
 				if (!move.ignoreImmunity) move.ignoreImmunity = {};
 				if (move.ignoreImmunity !== true) {
@@ -1298,18 +1299,25 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.field.energyWeatherState.boosted) {
 				if (move.type === 'Dragon') {
 					this.debug('Dragon Force dragon boost');
-					return this.chainModify(1.5);
+					return this.chainModify(1.875); //non SW boost + SW boost
 				} else {
 					this.debug('Dragon Force non-dragon boost');
-					return this.chainModify(1.3);
+					return this.chainModify(1.5);
+				}
+			} else {
+				if (move.type === 'Dragon') {
+					this.debug('Dragon Force dragon boost');
+					return this.chainModify(1.25);
 				}
 			}
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (source.hasItem('energynullifier')) return;
-			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag &&
-				!source.hasType('Dragon')) {
-				this.damage(source.baseMaxhp / 10);
+			if (this.field.energyWeatherState.boosted) {
+				if (source.hasItem('energynullifier')) return;
+				if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag &&
+					!source.hasType('Dragon')) {
+					this.damage(source.baseMaxhp / 10);
+				}
 			}
 		},
 		onFieldStart(battle, source, effect) {
@@ -1344,10 +1352,20 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			return 5;
 		},
+		onModifySpePriority: 10,
+		onModifySpe(spe, pokemon) {
+			if (pokemon.hasItem('energynullifier')) return;
+			if (pokemon.hasType('Electric')) {
+				this.debug('thunderstorm speed boost');
+				return this.modify(spe, 1.25);
+			}
+		},
 		onFieldStart(battle, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.energyWeatherState.boosted = true;
 				this.debug('Weather is Strong Winds boosted');
+				this.field.setTerrain('electricterrain', source);
+				this.debug('strong winds thunderstorm sets electric terrain');
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
@@ -1360,6 +1378,11 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onFieldResidual() {
 			this.add('-energyWeather', 'Supercell', '[upkeep]');
 			this.eachEvent('EnergyWeather');
+		},
+		onEnergyWeather(target) {
+			let typeMod = 1;
+			if (target.hasType('Water')) typeMod *= 2;
+			this.damage(typeMod*target.baseMaxhp/10);
 		},
 		onFieldEnd() {
 			this.add('-energyWeather', 'none');
