@@ -84,6 +84,7 @@ interface Handlers {
 	) => void;
 	onRename: (user: User, oldID: ID, newID: ID) => void;
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
+	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
 }
 
 export interface ChatPlugin {

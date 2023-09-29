@@ -216,6 +216,7 @@ class Ladder extends LadderStore {
 		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready));
 		Ladders.challenges.send(user.id, targetUser.id, `/log ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
+		Chat.runHandlers('onChallenge', user, targetUser, ready.formatid);
 		return true;
 	}
 	static async acceptChallenge(connection: Connection, chall: BattleChallenge) {
