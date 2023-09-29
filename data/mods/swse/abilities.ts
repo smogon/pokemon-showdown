@@ -5588,6 +5588,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onSwitchIn(pokemon) {
 			this.effectState.switchingIn = true;
 		},
+		onAnySetClimateWeather(climateWeather) {
+			return false;
+		},
+		onAnySetIrritantWeather(irritantWeather) {
+			return false;
+		},
+		onAnySetEnergyWeather(energyWeather) {
+			return false;
+		},
+		onAnySetClearingWeather(clearingWeather) {
+			return false;
+		},
 		onStart(pokemon) {
 			if (this.effectState.switchingIn) {
 				this.add('-ability', pokemon, 'Nullify');

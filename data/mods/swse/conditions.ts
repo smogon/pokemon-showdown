@@ -886,7 +886,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onModifyMovePriority: -5,
 		onModifyMove(move, target, pokemon) {
 			if (target.hasItem('safetygoggles')) return;
-			if (target.hasAbility('eartheater')) return;
 			if (this.field.irritantWeatherState.boosted) {
 				if (!move.ignoreImmunity) move.ignoreImmunity = {};
 				if (move.ignoreImmunity !== true) {
