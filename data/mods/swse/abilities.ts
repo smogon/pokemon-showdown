@@ -547,7 +547,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Color Change",
-		rating: 0,
+		rating: 3,
 		num: 16,
 	},
 	comatose: {
@@ -753,7 +753,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2,
 		num: 130,
 	},
-	cutecharm: {
+	cutecharm: { // updated
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
 				if (this.randomChance(3, 10)) {
@@ -762,7 +762,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Cute Charm",
-		rating: 0.5,
+		rating: 1,
 		num: 56,
 	},
 	damp: {
@@ -1545,7 +1545,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		isBreakable: true,
 		name: "Grass Pelt",
-		rating: 0.5,
+		rating: 1,
 		num: 179,
 	},
 	grassysurge: {
@@ -2023,12 +2023,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2.5,
 		num: 160,
 	},
-	ironfist: {
+	ironfist: { // updated
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
-				this.debug('Iron Fist boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify(1.5);
 			}
 		},
 		name: "Iron Fist",
@@ -2072,7 +2071,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: -1,
 		num: 103,
 	},
-	leafguard: {
+	leafguard: { // updated
 		onClimateWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'sunnyday' || effect.id === 'pollinate') {
@@ -2806,7 +2805,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 4.5,
 		num: 288,
 	},
-	overcoat: {
+	overcoat: { // incomplete. needs to be updated
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
@@ -4207,7 +4206,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		name: "Steam Engine",
-		rating: 2,
+		rating: 3.5,
 		num: 243,
 	},
 	steelworker: {
@@ -5328,6 +5327,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2,
 		num: -25,
 	},
+	chakra: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fairy') {
+				this.debug('Chakra boost');
+				return this.chainModify(1.3);
+			}
+		},
+		name: "Chakra",
+		rating: 3.5,
+		num: -38,
+	},
 	condensation: {
 		onStart(source) {
 			this.field.setClimateWeather('foghorn');
@@ -5336,14 +5347,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: -5,
 	},
-	druidry: { // incomplete
+	druidry: { // incomplete. sw triggering grassy terrain instead of misty
 		onIrritantWeather(target, source, effect) {
 			if (target.hasItem('safetygoggles')) return;
 			if (effect.id === 'sprinkle') {
 				this.heal(target.baseMaxhp / 16);
 			}
 		},
-		// need to add strong winds triggering grassy terrain instead of misty terrain
 		name: "Druidry",
 		rating: 2,
 		num: -26,
@@ -5355,6 +5365,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Dust Devil",
 		rating: 3,
 		num: -6,
+	},
+	eclipse: {
+		onModifyDef(def, pokemon) {
+			if (['sunnyday'].includes(pokemon.effectiveClimateWeather())) {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (['bloodmoon'].includes(pokemon.effectiveClimateWeather())) {
+				return this.chainModify(2);
+			}
+		},
+		isBreakable: true,
+		name: "Eclipse",
+		rating: 3,
+		num: -35,
 	},
 	energizer: {
 		onModifySpe(spe, pokemon) {
@@ -5373,6 +5399,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Eventide",
 		rating: 3,
 		num: -4,
+	},
+	evergreen: { // incomplete. add snover, utility umbrella
+		onStart(pokemon) {
+			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onClimateWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Abomasnow' || pokemon.transformed) return;
+			let forme = null;
+			switch (pokemon.effectiveClimateWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				if (pokemon.species.id !== 'abomasnowlowland') forme = 'Abomasnow-Lowland';
+				break;
+			case 'hail':
+			case 'snow':
+				if (pokemon.species.id !== 'abomasnow') forme = 'Abomasnow';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+		isPermanent: true,
+		name: "Evergreen",
+		rating: 3,
+		num: -36,
 	},
 	ferroflux: {
 		onStart(source) {
@@ -5427,13 +5479,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyDef(def, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isClimateWeather(['hail', 'snow'])) {
-				return this.chainModify(2);
+				return this.chainModify(1.4);
 			}
 		},
 		onModifySpD(spd, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isClimateWeather(['hail', 'snow'])) {
-				return this.chainModify(2);
+				return this.chainModify(1.4);
 			}
 		},
 		onImmunity(type, pokemon) {
@@ -5532,6 +5584,34 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 1.5,
 		num: -24,
 	},
+	nullify: { // incomplete. add setup denial
+		onSwitchIn(pokemon) {
+			this.effectState.switchingIn = true;
+		},
+		onStart(pokemon) {
+			if (this.effectState.switchingIn) {
+				this.add('-ability', pokemon, 'Nullify');
+				this.effectState.switchingIn = false;
+			}
+			this.eachEvent('ClimateWeatherChange', this.effect);
+			this.eachEvent('IrritantWeatherChange', this.effect);
+			this.eachEvent('EnergyWeatherChange', this.effect);
+			this.eachEvent('ClearingWeatherChange', this.effect);
+		},
+		onEnd(pokemon) {
+			this.eachEvent('ClimateWeatherChange', this.effect);
+			this.eachEvent('IrritantWeatherChange', this.effect);
+			this.eachEvent('EnergyWeatherChange', this.effect);
+			this.eachEvent('ClearingWeatherChange', this.effect);
+		},
+		suppressClimateWeather: true,
+		suppressIrritantWeather: true,
+		suppressEnergyWeather: true,
+		suppressClearingWeather: true,
+		name: "Nullify",
+		rating: 2.5,
+		num: -39,
+	},
 	pollution: {
 		onStart(source) {
 			this.field.setIrritantWeather('smogspread');
@@ -5569,6 +5649,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Power Within",
 		rating: 2.5,
 		num: -31,
+	},
+	rootcontrol: {
+		onStart(pokemon) {
+			pokemon.addVolatile('ingrain');
+		},
+		name: "Root Control",
+		rating: 3.5,
+		num: -37,
 	},
 	seance: {
 		onStart(source) {
@@ -5613,12 +5701,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 2.5,
 		num: -30,
 	},
-	souldrain: { // incomplete. says it drains from the opponents-is this true?
+	souldrain: { // incomplete. add the effect lol
 		onIrritantWeather(target, source, effect) {
 			if (target.hasItem('energynullifier')) return;
-			if (effect.id === 'haunt') {
-				this.heal(target.baseMaxhp / 16);
-			}
 		},
 		name: "Soul Drain",
 		rating: 2,
@@ -5676,7 +5761,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: -1,
 	},
-	warpmist: { // does NOT fucking work
+	warpmist: { // needs testing
 		onModifySpAPriority: 5,
 		onModifySpA(spa, source, pokemon) {
 			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {

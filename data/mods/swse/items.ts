@@ -1159,7 +1159,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 4,
 		isNonstandard: "Unobtainable",
 	},
-	damprock: {
+	damprock: { // updated
 		name: "Damp Rock",
 		spritenum: 88,
 		fling: {
@@ -1167,6 +1167,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		num: 285,
 		gen: 4,
+		isNonstandard: "Past",
 	},
 	darkgem: {
 		name: "Dark Gem",
@@ -1326,14 +1327,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
-	dracoplate: {
+	dracoplate: { // updated
 		name: "Draco Plate",
 		spritenum: 105,
 		onPlate: 'Dragon',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -1413,14 +1414,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	dreadplate: {
+	dreadplate: { // updated
 		name: "Dread Plate",
 		spritenum: 110,
 		onPlate: 'Dark',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -1479,14 +1480,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 108,
 		gen: 4,
 	},
-	earthplate: {
+	earthplate: { // updated
 		name: "Earth Plate",
 		spritenum: 117,
 		onPlate: 'Ground',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Ground') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -1864,14 +1865,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	fistplate: {
+	fistplate: { // updated
 		name: "Fist Plate",
 		spritenum: 143,
 		onPlate: 'Fighting',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -1899,14 +1900,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 273,
 		gen: 4,
 	},
-	flameplate: {
+	flameplate: { // updated
 		name: "Flame Plate",
 		spritenum: 146,
 		onPlate: 'Fire',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -2466,7 +2467,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 4,
 		isPokeball: true,
 	},
-	heatrock: {
+	heatrock: { // updated
 		name: "Heat Rock",
 		spritenum: 193,
 		fling: {
@@ -2474,6 +2475,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		num: 284,
 		gen: 4,
+		isNonstandard: "Past",
 	},
 	heavyball: {
 		name: "Heavy Ball",
@@ -2607,14 +2609,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 849,
 		gen: 7,
 	},
-	icicleplate: {
+	icicleplate: { // updated
 		name: "Icicle Plate",
 		spritenum: 220,
 		onPlate: 'Ice',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -2639,7 +2641,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	icyrock: {
+	icyrock: { // updated
 		name: "Icy Rock",
 		spritenum: 221,
 		fling: {
@@ -2647,6 +2649,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		num: 282,
 		gen: 4,
+		isNonstandard: "Past",
 	},
 	inciniumz: {
 		name: "Incinium Z",
@@ -2659,14 +2662,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	insectplate: {
+	insectplate: { // updated
 		name: "Insect Plate",
 		spritenum: 223,
 		onPlate: 'Bug',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -2697,14 +2700,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 278,
 		gen: 4,
 	},
-	ironplate: {
+	ironplate: { // updated
 		name: "Iron Plate",
 		spritenum: 225,
 		onPlate: 'Steel',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -3444,14 +3447,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	meadowplate: {
+	meadowplate: { // updated
 		name: "Meadow Plate",
 		spritenum: 282,
 		onPlate: 'Grass',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -3688,14 +3691,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: "Past",
 		gen: 7,
 	},
-	mindplate: {
+	mindplate: { // updated
 		name: "Mind Plate",
 		spritenum: 291,
 		onPlate: 'Psychic',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -4167,14 +4170,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	pixieplate: {
+	pixieplate: { // updated
 		name: "Pixie Plate",
 		spritenum: 610,
 		onPlate: 'Fairy',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fairy') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -4972,7 +4975,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isPokeball: true,
 		isNonstandard: "Unobtainable",
 	},
-	safetygoggles: {
+	safetygoggles: { // updated
 		name: "Safety Goggles",
 		spritenum: 604,
 		fling: {
@@ -5281,14 +5284,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 4,
 		isNonstandard: "Past",
 	},
-	skyplate: {
+	skyplate: { // updated
 		name: "Sky Plate",
 		spritenum: 450,
 		onPlate: 'Flying',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Flying') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -5315,7 +5318,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	smoothrock: {
+	smoothrock: { // updated
 		name: "Smooth Rock",
 		spritenum: 453,
 		fling: {
@@ -5323,6 +5326,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		num: 283,
 		gen: 4,
+		isNonstandard: "Past",
 	},
 	snorliumz: {
 		name: "Snorlium Z",
@@ -5426,14 +5430,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 3,
 		isNonstandard: "Past",
 	},
-	splashplate: {
+	splashplate: { // updated
 		name: "Splash Plate",
 		spritenum: 463,
 		onPlate: 'Water',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -5446,14 +5450,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 299,
 		gen: 4,
 	},
-	spookyplate: {
+	spookyplate: { // updated
 		name: "Spooky Plate",
 		spritenum: 464,
 		onPlate: 'Ghost',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -5610,14 +5614,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 288,
 		gen: 4,
 	},
-	stoneplate: {
+	stoneplate: { // updated
 		name: "Stone Plate",
 		spritenum: 477,
 		onPlate: 'Rock',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Rock') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -5810,14 +5814,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 272,
 		gen: 4,
 	},
-	toxicplate: {
+	toxicplate: { // updated
 		name: "Toxic Plate",
 		spritenum: 516,
 		onPlate: 'Poison',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -6887,7 +6891,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 2,
 		isNonstandard: "Past",
 	},
-	utilityumbrella: {
+	utilityumbrella: { // updated
 		name: "Utility Umbrella",
 		spritenum: 718,
 		fling: {
@@ -7196,14 +7200,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: 188,
 		gen: 4,
 	},
-	zapplate: {
+	zapplate: { // updated
 		name: "Zap Plate",
 		spritenum: 572,
 		onPlate: 'Electric',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {

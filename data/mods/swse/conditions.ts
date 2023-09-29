@@ -619,14 +619,14 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onModifyDef(def, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
 			if (pokemon.hasType('Ice') && this.field.isClimateWeather('hail')) {
-				return this.modify(def, 1.15);
+				return this.modify(def, 1.25);
 			}
 		},
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
 			if (pokemon.hasType('Ice') && this.field.isClimateWeather('hail')) {
-				return this.modify(spd, 1.15);
+				return this.modify(spd, 1.25);
 			}
 		},
 		onFieldStart(field, source, effect) {
@@ -850,6 +850,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.field.isIrritantWeather('sandstorm')) this.eachEvent('IrritantWeather');
 		},
 		onIrritantWeather(target) {
+			if (target.hasItem('safetygoggles')) return;
 			this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
@@ -884,7 +885,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifyMovePriority: -5,
 		onModifyMove(move, target, pokemon) {
-			if (target.hasAbility('eartheater')) return;
+			if (target.hasItem('safetygoggles')) return;
 			if (this.field.irritantWeatherState.boosted) {
 				if (!move.ignoreImmunity) move.ignoreImmunity = {};
 				if (move.ignoreImmunity !== true) {
@@ -925,13 +926,24 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 			return 5;
 		},
-		onModifySpAPriority: 10,
-		onModifySpA(spa, pokemon) {
+		onModifyAtkPriority: 10,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.hasItem('safetygoggles')) return;
 			if (pokemon.hasType('Grass') || pokemon.hasType('Bug')) {
 				return;
 			} else {
-				this.debug('non-grass or bug pokemon spa reduction');
-				return this.modify(spa, 0.5);
+				this.debug('non-grass or bug pokemon Atk reduction');
+				return this.modify(atk, 0.75);
+			}
+		},
+		onModifySpAPriority: 10,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.hasItem('safetygoggles')) return;
+			if (pokemon.hasType('Grass') || pokemon.hasType('Bug')) {
+				return;
+			} else {
+				this.debug('non-grass or bug pokemon Spa reduction');
+				return this.modify(spa, 0.75);
 			}
 		},
 		onFieldStart(field, source, effect) {
@@ -970,15 +982,17 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifyAccuracyPriority: 10,
 		onModifyAccuracy(acc, pokemon) {
+			if (pokemon.hasItem('safetygoggles')) return;
 			if (pokemon.hasType('Poison') || pokemon.hasType('Bug')) {
-				this.debug('pheromones accuracy boost')
+				this.debug('pheromones accuracy boost');
 				return this.modify(acc, 1.33);
 			}
 		},
 		onModifySpePriority: 10,
 		onModifySpe(spe, pokemon) {
+			if (pokemon.hasItem('safetygoggles')) return;
 			if (pokemon.hasType('Poison') || pokemon.hasType('Bug')) {
-				this.debug('pheromones speed boost')
+				this.debug('pheromones speed boost');
 				return this.modify(spe, 1.5);
 			}
 		},
@@ -1001,8 +1015,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onIrritantWeather(target) {
 			if (this.field.irritantWeatherState.boosted) {
+				if (target.hasItem('safetygoggles')) return;
 				if (target.hasType('Bug') || target.hasType('Poison')) return;
-				target.addVolatile('confusion')
+				target.addVolatile('confusion');
 				this.debug('strong winds pheromones confuses');
 			}
 		},
@@ -1040,7 +1055,8 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onIrritantWeather(target) {
 			// strong winds effect impemented in sim/pokemon.ts
-			target.setStatus('psn')
+			if (target.hasItem('safetygoggles')) return;
+			target.setStatus('psn');
 		},
 		onFieldEnd() {
 			this.add('-irritantWeather', 'none');
@@ -1059,18 +1075,19 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		},
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
+			if (pokemon.hasItem('safetygoggles')) return;
 			if (pokemon.hasType('Fairy')) {
 				this.debug('fairy type SpD boost');
-				return this.modify(spd, 1.5);
+				return this.modify(spd, 1.25);
 			}
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy, target) {
+		onModifyAccuracy(accuracy, pokemon, target) {
+			if (pokemon.hasItem('safetygoggles')) return;
 			if (typeof accuracy !== 'number') return;
 			if (target.hasType('Fairy')) return;
 			this.debug('Sprinkle - decreasing evasion'); // actually increases accuracy
-			return this.modify(accuracy, 1.5);
-			
+			return this.modify(accuracy, [5461, 4096]);
 		},
 		onFieldStart(field, source, effect) {
 			if (this.field.isClearingWeather('strongwinds')) {
@@ -1092,6 +1109,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.eachEvent('IrritantWeather');
 		},
 		onIrritantWeather(target) {
+			if (target.hasItem('safetygoggles')) return;
 			this.heal(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
@@ -1106,7 +1124,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'EnergyWeather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('energynullifier')) {
+			if (source?.hasItem('energychannelizer')) {
 				return 8;
 			}
 			return 5;
@@ -1172,14 +1190,15 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'EnergyWeather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('energynullifier')) {
+			if (source?.hasItem('energychannelizer')) {
 				return 8;
 			}
 			return 5;
 		},
 		onBeforeTurn(pokemon) {
 			if (this.field.energyWeatherState.boosted) {
-				if (pokemon.hasType(['Ghost', 'Dark', 'Normal'])) return;
+				if (pokemon.hasItem('energynullifier')) return;
+				if (pokemon.hasType(['Ghost', 'Dark'])) return;
 				const flinch = this.random(10);
 				if (flinch === 0) {
 					pokemon.addVolatile('flinch');
@@ -1204,6 +1223,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			this.eachEvent('EnergyWeather');
 		},
 		onEnergyWeather(target) {
+			if (target.hasItem('energynullifier')) return;
 			target.damage(target.baseMaxhp / 16); // normal, ghost and dark's damage immunity added to typechart.ts
 		},
 		onFieldEnd() {
@@ -1216,19 +1236,20 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'EnergyWeather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('energynullifier')) {
+			if (source?.hasItem('energychannelizer')) {
 				return 8;
 			}
 			return 5;
 		},
 		onEnergyWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('energynullifier')) return;
 			if (move.type === 'Psychic') {
 				this.debug('Cosmic Rays psychic boost');
-					return this.chainModify(1.5);
+				return this.chainModify(1.5);
 			}
 			if (move.type === 'Dark') {
 				this.debug('Cosmic Rays dark suppress');
-					return this.chainModify(0.5);
+				return this.chainModify(0.5);
 			}
 		},
 		onFieldStart(battle, source, effect) {
@@ -1260,32 +1281,20 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'EnergyWeather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('energynullifier')) {
+			if (source?.hasItem('energychannelizer')) {
 				return 8;
 			}
 			return 5;
 		},
 		onModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('energynullifier')) return;
 			if (move && defender.getMoveHitData(move).typeMod > 0) {
 				this.debug('Dragon Force super-effective supress');
 				return this.chainModify(0.8);
 			}
 		},
-		onModifyAtkPriority: 10,
-		onModifyAtk(atk, pokemon) {
-			if (pokemon.hasType('Dragon')) {
-				this.debug('dragon type Atk boost');
-				return this.modify(atk, 1.15);
-			}
-		},
-		onModifySpAPriority: 10,
-		onModifySpA(spa, pokemon) {
-			if (pokemon.hasType('Dragon')) {
-				this.debug('dragon type SpA boost');
-				return this.modify(spa, 1.15);
-			}
-		},
 		onEnergyWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('energynullifier')) return;
 			if (this.field.energyWeatherState.boosted) {
 				if (move.type === 'Dragon') {
 					this.debug('Dragon Force dragon boost');
@@ -1297,7 +1306,9 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			}
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag && !source.hasType('Dragon')) {
+			if (source.hasItem('energynullifier')) return;
+			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag &&
+				!source.hasType('Dragon')) {
 				this.damage(source.baseMaxhp / 10);
 			}
 		},
@@ -1328,7 +1339,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'EnergyWeather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('energynullifier')) {
+			if (source?.hasItem('energychannelizer')) {
 				return 8;
 			}
 			return 5;
@@ -1394,7 +1405,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'ClearingWeather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('Portble Turbine')) {
+			if (source?.hasItem('portableturbine')) {
 				return 8;
 			}
 			return 5;

@@ -1014,7 +1014,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoItem: "Moon Stone",
 		eggGroups: ["Fairy"],
 	},
-	vulpix: {
+	vulpix: { // updated
 		num: 37,
 		name: "Vulpix",
 		types: ["Fire"],
@@ -1029,7 +1029,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		otherFormes: ["Vulpix-Alola"],
 		formeOrder: ["Vulpix", "Vulpix-Alola"],
 	},
-	vulpixalola: {
+	vulpixalola: { // updated
 		num: 37,
 		name: "Vulpix-Alola",
 		baseSpecies: "Vulpix",
@@ -1044,7 +1044,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evos: ["Ninetales-Alola"],
 		eggGroups: ["Field"],
 	},
-	ninetales: {
+	ninetales: { // updated
 		num: 38,
 		name: "Ninetales",
 		types: ["Fire", "Ghost"],
@@ -1061,7 +1061,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		otherFormes: ["Ninetales-Alola"],
 		formeOrder: ["Ninetales", "Ninetales-Alola"],
 	},
-	ninetalesalola: {
+	ninetalesalola: { // updated
 		num: 38,
 		name: "Ninetales-Alola",
 		baseSpecies: "Ninetales",
@@ -3029,7 +3029,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Purple",
 		eggGroups: ["Ditto"],
 	},
-	eevee: {
+	eevee: { // updated
 		num: 133,
 		name: "Eevee",
 		types: ["Normal"],
@@ -3074,7 +3074,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Field"],
 		changesFrom: "Eevee",
 	},
-	vaporeon: {
+	vaporeon: { // updated
 		num: 134,
 		name: "Vaporeon",
 		types: ["Water"],
@@ -3089,7 +3089,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoItem: "Water Stone",
 		eggGroups: ["Field"],
 	},
-	jolteon: {
+	jolteon: { // updated
 		num: 135,
 		name: "Jolteon",
 		types: ["Electric"],
@@ -3104,13 +3104,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoItem: "Thunder Stone",
 		eggGroups: ["Field"],
 	},
-	flareon: {
+	flareon: { // updated
 		num: 136,
 		name: "Flareon",
 		types: ["Fire"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 65, atk: 130, def: 60, spa: 95, spd: 110, spe: 65},
-		abilities: {0: "Solar Power", 1: "Guts", H: "Drought"},
+		abilities: {0: "Flash Fire", 1: "Guts", H: "Drought"},
 		heightm: 0.9,
 		weightkg: 25,
 		color: "Red",
@@ -4149,7 +4149,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoLevel: 20,
 		eggGroups: ["Water 1", "Field"],
 	},
-	espeon: {
+	espeon: { // updated
 		num: 196,
 		name: "Espeon",
 		types: ["Psychic"],
@@ -4164,7 +4164,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoCondition: "during the day",
 		eggGroups: ["Field"],
 	},
-	umbreon: {
+	umbreon: { // updated
 		num: 197,
 		name: "Umbreon",
 		types: ["Dark"],
@@ -5420,7 +5420,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Shiftry",
 		types: ["Grass", "Dark"],
 		baseStats: {hp: 90, atk: 100, def: 60, spa: 90, spd: 60, spe: 80},
-		abilities: {0: "Chlorophyll", 1: "Early Bird", H: "Pickpocket"},
+		abilities: {0: "Chlorophyll", 1: "Wind Rider", H: "Pickpocket"},
 		heightm: 1.3,
 		weightkg: 59.6,
 		color: "Brown",
@@ -8879,13 +8879,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoMove: "Ancient Power",
 		eggGroups: ["Bug"],
 	},
-	leafeon: {
+	leafeon: { // updated
 		num: 470,
 		name: "Leafeon",
 		types: ["Grass"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 65, atk: 110, def: 130, spa: 60, spd: 65, spe: 95},
-		abilities: {0: "Leaf Guard", 1: "Chlorophyll", H: "Hay Fever"},
+		abilities: {0: "Chlorophyll", 1: "Leaf Guard", H: "Hay Fever"},
 		heightm: 1,
 		weightkg: 25.5,
 		color: "Green",
@@ -8894,7 +8894,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoItem: "Leaf Stone",
 		eggGroups: ["Field"],
 	},
-	glaceon: {
+	glaceon: { // updated
 		num: 471,
 		name: "Glaceon",
 		types: ["Ice"],
@@ -9095,7 +9095,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ["Electric", "Flying"],
 		gender: "N",
 		baseStats: {hp: 50, atk: 65, def: 107, spa: 107, spd: 105, spe: 86},
-		abilities: {0: "Levitate", 1: "Adaptability", H: "Cloud Nine"},
+		abilities: {0: "Levitate", 1: "Adaptability", H: "Wind Power"},
 		heightm: 0.3,
 		weightkg: 0.3,
 		color: "Red",
@@ -9901,7 +9901,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Watchog",
 		types: ["Normal"],
 		baseStats: {hp: 60, atk: 85, def: 69, spa: 60, spd: 69, spe: 77},
-		abilities: {0: "Illuminate", 1: "Keen Eye", H: "Analytic"},
+		abilities: {0: "Inner Focus", 1: "Keen Eye", H: "Analytic"},
 		heightm: 1.1,
 		weightkg: 27,
 		color: "Brown",
@@ -11275,7 +11275,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Emolga",
 		types: ["Electric", "Flying"],
 		baseStats: {hp: 55, atk: 75, def: 60, spa: 75, spd: 60, spe: 103},
-		abilities: {0: "Static", H: "Motor Drive"},
+		abilities: {0: "Static", 1: "Wind Power", H: "Motor Drive"},
 		heightm: 0.4,
 		weightkg: 5,
 		color: "White",
@@ -11530,7 +11530,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Litwick",
 		types: ["Ghost", "Fire"],
 		baseStats: {hp: 50, atk: 30, def: 55, spa: 65, spd: 55, spe: 20},
-		abilities: {0: "Flame Body", 1: "Infiltrator", H: "Soul Drain"},
+		abilities: {0: "Flash Fire", 1: "Infiltrator", H: "Soul Drain"},
 		heightm: 0.3,
 		weightkg: 3.1,
 		color: "White",
@@ -11542,7 +11542,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Lampent",
 		types: ["Ghost", "Fire"],
 		baseStats: {hp: 60, atk: 40, def: 60, spa: 95, spd: 60, spe: 55},
-		abilities: {0: "Flame Body", 1: "Infiltrator", H: "Soul Drain"},
+		abilities: {0: "Flash Fire", 1: "Infiltrator", H: "Soul Drain"},
 		heightm: 0.6,
 		weightkg: 13,
 		color: "Black",
@@ -11556,7 +11556,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Chandelure",
 		types: ["Ghost", "Fire"],
 		baseStats: {hp: 60, atk: 55, def: 90, spa: 145, spd: 90, spe: 80},
-		abilities: {0: "Flame Body", 1: "Infiltrator", H: "Soul Drain"},
+		abilities: {0: "Flash Fire", 1: "Infiltrator", H: "Soul Drain"},
 		heightm: 1,
 		weightkg: 34.3,
 		color: "Black",
@@ -13173,13 +13173,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoCondition: "at night",
 		eggGroups: ["Monster"],
 	},
-	sylveon: {
+	sylveon: { // updated
 		num: 700,
 		name: "Sylveon",
 		types: ["Fairy"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 95, atk: 65, def: 65, spa: 110, spd: 130, spe: 60},
-		abilities: {0: "Cute Charm", 1: "Pixilate", H: "Incantation"},
+		abilities: {0: "Pixilate", 1: "Healer", H: "Incantation"},
 		heightm: 1,
 		weightkg: 23.5,
 		color: "Pink",
@@ -19396,7 +19396,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Skinka",
 		types: ["Normal"],
 		baseStats: {hp: 55, atk: 55, def: 65, spa: 45, spd: 50, spe: 55},
-		abilities: {0: "Rough Skin", 1: "Adaptability", H: "Protean"},
+		abilities: {0: "Adaptability", 1: "Steadfast", H: "Protean"},
 		weightkg: 325,
 		evos: ["Dredgen", "Stalagen", "Chromagen", "Aerogen", "Caragen", "Bludgen", "Pathagen", "Ectogen", "Legen"],
 		eggGroups: ["Field", "Dragon"],
@@ -19416,7 +19416,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Stalagen",
 		types: ["Rock"],
 		baseStats: {hp: 100, atk: 90, def: 115, spa: 75, spd: 85, spe: 65},
-		abilities: {0: "Sturdy", 1: "Rough Skin", H: "Sand Stream"},
+		abilities: {0: "Rock Head", 1: "Rough Skin", H: "Sand Stream"},
 		weightkg: 525,
 		prevo: "Skinka",
 		eggGroups: ["Field", "Dragon"],
@@ -19446,7 +19446,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Caragen",
 		types: ["Bug"],
 		baseStats: {hp: 75, atk: 110, def: 115, spa: 70, spd: 90, spe: 65},
-		abilities: {0: "Overcoat", 1: "Shield Dust", H: "Secretion"},
+		abilities: {0: "Tinted Lens", 1: "Shield Dust", H: "Secretion"},
 		weightkg: 525,
 		prevo: "Skinka",
 		eggGroups: ["Field", "Dragon"],
@@ -19466,7 +19466,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Pathagen",
 		types: ["Poison"],
 		baseStats: {hp: 90, atk: 70, def: 110, spa: 75, spd: 115, spe: 65},
-		abilities: {0: "Corrosion", 1: "Poison Touch", H: "Pollution"},
+		abilities: {0: "Poison Touch", 1: "Corrosion", H: "Pollution"},
 		weightkg: 525,
 		prevo: "Skinka",
 		eggGroups: ["Field", "Dragon"],
@@ -19475,7 +19475,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		num: 2046,
 		name: "Ectogen",
 		types: ["Ghost"],
-		baseStats: {hp: 70, atk: 80, def: 80, spa: 115, spd: 90, spe: 90},
+		baseStats: {hp: 65, atk: 75, def: 70, spa: 115, spd: 90, spe: 110},
 		abilities: {0: "Shadow Tag", 1: "Cursed Body", H: "Se\u0301ance"},
 		weightkg: 525,
 		prevo: "Skinka",
@@ -19486,7 +19486,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Legen",
 		types: ["Dragon"],
 		baseStats: {hp: 90, atk: 115, def: 75, spa: 70, spd: 65, spe: 110},
-		abilities: {0: "Multiscale", 1: "Moxie", H: "Arcanum"},
+		abilities: {0: "Moxie", 1: "Multiscale", H: "Arcanum"},
 		weightkg: 525,
 		prevo: "Skinka",
 		eggGroups: ["Field", "Dragon"],

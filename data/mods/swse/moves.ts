@@ -493,7 +493,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	armorcannon: {
+	armorcannon: { // updated
 		num: 890,
 		accuracy: 100,
 		basePower: 120,
@@ -501,7 +501,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Armor Cannon",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, pulse: 1, mirror: 1},
 		self: {
 			boosts: {
 				def: -1,
@@ -674,7 +674,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bug",
 		contestType: "Clever",
 	},
-	attract: {
+	attract: { // updated
 		num: 213,
 		accuracy: 100,
 		basePower: 0,
@@ -1352,7 +1352,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 		contestType: "Tough",
 	},
-	bitterblade: {
+	bitterblade: { // updated
 		num: 891,
 		accuracy: 100,
 		basePower: 90,
@@ -1360,7 +1360,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Bitter Blade",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1, slicing: 1},
 		drain: [1, 2],
 		secondary: null,
 		target: "normal",
@@ -2346,7 +2346,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 		contestType: "Beautiful",
 	},
-	chillyreception: {
+	chillyreception: { // updated
 		num: 881,
 		accuracy: true,
 		basePower: 0,
@@ -8160,7 +8160,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
-	hail: {
+	hail: { // updated
 		num: 258,
 		accuracy: true,
 		basePower: 0,
@@ -9723,7 +9723,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bug",
 		contestType: "Cute",
 	},
-	ingrain: {
+	ingrain: { // updated
 		num: 275,
 		accuracy: true,
 		basePower: 0,
@@ -9742,6 +9742,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.heal(pokemon.baseMaxhp / 16);
 			},
 			onTrapPokemon(pokemon) {
+				if (pokemon.hasAbility('rootcontrol')) return;
 				pokemon.tryTrap();
 			},
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
@@ -13702,7 +13703,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Poison Jab",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, punch: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -15968,7 +15969,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "allAdjacentFoes",
 		type: "Ground",
 	},
-	sandstorm: {
+	sandstorm: { // updated
 		num: 201,
 		accuracy: true,
 		basePower: 0,
