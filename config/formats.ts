@@ -254,9 +254,9 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] CAP",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/9437555/">SV CAP Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/9544282/">SV CAP Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/9460153/">SV CAP Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712857/">SV CAP Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3718107/">SV CAP Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714023/">SV CAP Viability Rankings</a>`,
 		],
 
 		mod: 'gen9',
