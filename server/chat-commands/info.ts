@@ -640,32 +640,32 @@ export const commands: Chat.ChatCommands = {
 						if (evo.gen <= dex.gen) {
 							const condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
-								case 'levelExtra':
-									evos.push(`${evo.name} (level-up${condition})`);
-									break;
-								case 'levelFriendship':
-									evos.push(`${evo.name} (level-up with high Friendship${condition})`);
-									break;
-								case 'levelHold':
-									evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
-									break;
-								case 'useItem':
-									evos.push(`${evo.name} (${evo.evoItem})`);
-									break;
-								case 'levelMove':
-									evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
-									break;
-								case 'other':
-									evos.push(`${evo.name} (${evo.evoCondition})`);
-									break;
-								case 'trade':
-									evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
-									break;
-								default:
-									evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
-								}
+							case 'levelExtra':
+								evos.push(`${evo.name} (level-up${condition})`);
+								break;
+							case 'levelFriendship':
+								evos.push(`${evo.name} (level-up with high Friendship${condition})`);
+								break;
+							case 'levelHold':
+								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
+								break;
+							case 'useItem':
+								evos.push(`${evo.name} (${evo.evoItem})`);
+								break;
+							case 'levelMove':
+								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
+								break;
+							case 'other':
+								evos.push(`${evo.name} (${evo.evoCondition})`);
+								break;
+							case 'trade':
+								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
+								break;
+							default:
+								evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
 							}
 						}
+					}
 					if (!preEvolution) {
 						details[`<font color="#686868">Does Not Pre Evolve</font>`] = "";
 					} else {
