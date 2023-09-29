@@ -630,6 +630,7 @@ export const commands: Chat.ChatCommands = {
 					};
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
+					const preEvolution = dex.species.get(newTarget.name).prevo;
 					if (gmaxMove && dex.gen >= 8) details["G-Max Move"] = gmaxMove;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
@@ -639,31 +640,36 @@ export const commands: Chat.ChatCommands = {
 						if (evo.gen <= dex.gen) {
 							const condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
 							switch (evo.evoType) {
-							case 'levelExtra':
-								evos.push(`${evo.name} (level-up${condition})`);
-								break;
-							case 'levelFriendship':
-								evos.push(`${evo.name} (level-up with high Friendship${condition})`);
-								break;
-							case 'levelHold':
-								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
-								break;
-							case 'useItem':
-								evos.push(`${evo.name} (${evo.evoItem})`);
-								break;
-							case 'levelMove':
-								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
-								break;
-							case 'other':
-								evos.push(`${evo.name} (${evo.evoCondition})`);
-								break;
-							case 'trade':
-								evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
-								break;
-							default:
-								evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
+								case 'levelExtra':
+									evos.push(`${evo.name} (level-up${condition})`);
+									break;
+								case 'levelFriendship':
+									evos.push(`${evo.name} (level-up with high Friendship${condition})`);
+									break;
+								case 'levelHold':
+									evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
+									break;
+								case 'useItem':
+									evos.push(`${evo.name} (${evo.evoItem})`);
+									break;
+								case 'levelMove':
+									evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
+									break;
+								case 'other':
+									evos.push(`${evo.name} (${evo.evoCondition})`);
+									break;
+								case 'trade':
+									evos.push(`${evo.name} (trade${evo.evoItem ? ` holding ${evo.evoItem}` : condition})`);
+									break;
+								default:
+									evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
+								}
 							}
 						}
+					if (!preEvolution) {
+						details[`<font color="#686868">Does Not Pre Evolve</font>`] = "";
+					} else {
+						details["Pre-Evolution"] = preEvolution;
 					}
 					if (!evos.length) {
 						details[`<font color="#686868">Does Not Evolve</font>`] = "";
