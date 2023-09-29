@@ -481,7 +481,7 @@ export const commands: Chat.ChatCommands = {
 		`/teams setprivacy [team id], [privacy] - Set the privacy of the team matching the [teamid].`,
 		`/teams delete [team id] - Delete the team matching the [teamid].`,
 		`/teams search - Opens the page to search your teams`,
-		`/teams mostviews - Views your teams sorted by most views.`,
+		`/teams mostviews - Views public teams, sorted by most views.`,
 		`/teams view [team ID] - View the team matching the given [team ID]`,
 		`/teams browse - Opens a list of public teams uploaded by other users.`,
 	],
