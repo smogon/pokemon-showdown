@@ -3070,7 +3070,7 @@ export const pages: Chat.PageTable = {
 				buf += `<div class="message-error">The format '${formatId}' does not exist.</div><br />`;
 			}
 			buf += `<form data-submitsend="/buildformat {format}">`;
-			buf += `Choose your format: <input name="format" /><br />`;
+			buf += `Choose your format: <formatselect name="format">[Gen ${Dex.gen}] Random Battle</formatselect><br />`;
 			buf += `<button type="submit" class="button notifying">Continue</button>`;
 			buf += `</form>`;
 			return buf;
