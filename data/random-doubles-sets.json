@@ -593,7 +593,7 @@
         "level": 79,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Hurricane", "Protect", "Roost", "Tailwind", "Thunderbolt"],
                 "teraTypes": ["Electric", "Steel"]
             },
@@ -618,7 +618,7 @@
         "level": 81,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Brave Bird", "Fire Blast", "Heat Wave", "Protect", "Roost", "Tailwind"],
                 "teraTypes": ["Fire", "Ground"]
             }
@@ -4121,7 +4121,7 @@
                 "teraTypes": ["Fairy", "Ghost", "Grass", "Steel", "Water"]
             },
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Disable", "Poltergeist", "Power Whip", "Protect", "Rapid Spin", "Strength Sap"],
                 "teraTypes": ["Fairy", "Steel", "Water"]
             }
