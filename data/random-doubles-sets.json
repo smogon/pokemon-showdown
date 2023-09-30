@@ -814,7 +814,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Gunk Shot", "Helping Hand", "High Horsepower", "Recover", "Stealth Rock", "Toxic Spikes"],
+                "movepool": ["Gunk Shot", "Helping Hand", "High Horsepower", "Recover", "Toxic Spikes"],
                 "teraTypes": ["Flying", "Ground", "Steel"]
             }
         ]
