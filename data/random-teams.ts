@@ -1364,7 +1364,8 @@ export class RandomTeams {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (
-			(role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute') || species.id === 'eternatus'
+			(role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute') ||
+			species.id === 'eternatus' || species.id === 'toxapex'
 		) return 'Leftovers';
 		if (species.id === 'sylveon') return 'Pixie Plate';
 		if (
