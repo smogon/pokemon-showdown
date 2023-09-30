@@ -312,6 +312,9 @@ export const Aliases: {[alias: string]: string} = {
 	ogerponfiretera: "Ogerpon-Hearthflame-Tera",
 	ogerponwater: "Ogerpon-Wellspring",
 	ogerponwatertera: "Ogerpon-Wellspring-Tera",
+	ursalunab: "Ursaluna-Bloodmoon",
+	calys: "Calyrex-Shadow",
+	calyi: "Calyrex-Ice",
 	
 	// base formes
 	nidoranfemale: "Nidoran-F",
@@ -581,7 +584,9 @@ export const Aliases: {[alias: string]: string} = {
 	propk1: "Pokestar Black Belt",
 
 	// abilities
+	hadron: "Hadron Engine",
 	ngas: "Neutralizing Gas",
+	opulse: "Orichalum Pulse",
 	pheal: "Poison Heal",
 	regen: "Regenerator",
 	stag: "Shadow Tag",
@@ -757,6 +762,7 @@ export const Aliases: {[alias: string]: string} = {
 	dogars: "Koffing",
 	don: "Groudon",
 	doom: "Houndoom",
+	dozo: "Dondozo",
 	drill: "Excadrill",
 	driller: "Excadrill",
 	dug: "Dugtrio",
