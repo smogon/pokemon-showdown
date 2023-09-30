@@ -3457,18 +3457,13 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Clanging Scales", "Clangorous Soul", "Close Combat", "Iron Head"],
-                "teraTypes": ["Dragon", "Steel"]
+                "movepool": ["Boomburst", "Clanging Scales", "Clangorous Soul", "Close Combat", "Iron Head"],
+                "teraTypes": ["Normal", "Steel"]
             },
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Close Combat", "Iron Head", "Scale Shot", "Swords Dance"],
                 "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["Boomburst", "Clanging Scales", "Close Combat", "Poison Jab", "Stealth Rock"],
-                "teraTypes": ["Normal"]
             }
         ]
     },

@@ -1390,6 +1390,9 @@ export class RandomTeams {
 		}
 		if (!counter.get('Status')) return 'Assault Vest';
 		if (species.id === 'pawmot') return 'Leppa Berry';
+		if (
+			role !== 'Doubles Bulky Attacker'  && counter.get('recovery') && PROTECT_MOVES.some(m => moves.has(m))
+		) return 'Leftovers';
 		return 'Sitrus Berry';
 	}
 
@@ -1619,10 +1622,7 @@ export class RandomTeams {
 			ivs.atk = 0;
 		}
 
-		if (
-			moves.has('gyroball') || moves.has('trickroom') ||
-			(PIVOT_MOVES.some(m => moves.has(m)) && moves.has('wish') && species.baseStats.spe <= 70)
-		) {
+		if (moves.has('gyroball') || moves.has('trickroom')) {
 			evs.spe = 0;
 			ivs.spe = 0;
 		}
