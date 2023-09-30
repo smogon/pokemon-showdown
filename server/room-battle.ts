@@ -1446,27 +1446,23 @@ export class BestOfGame extends RoomGames.RoomGame {
 		const p1name = this.name(this.p1);
 		const p2name = this.name(this.p2);
 		let buf = Utils.html`<br /><strong>${p1name} and ${p2name}'s Best-of-${this.bestOf} progress:</strong><br />`;
+		buf += '<table>';
 		for (const k of ['p1', 'p2'] as const) {
 			const userid = this[k];
-			buf += `<span style="text-align: right">`;
-			buf += `${this.name(userid)}: `;
+			buf += `<tr><td>${this.name(userid)}: </td><td>`;
 			for (let i = 0; i < this.bestOf; i++) {
 				if (this.games[i]?.winner === userid) {
 					buf += `<i class="fa fa-circle"></i>`;
 				} else {
 					buf += `<i class="fa fa-circle-o"></i>`;
 				}
-				const completedGames = this.games.filter(game => game.winner !== null).length;
-				const gamesNeeded = completedGames + (this.winThreshold - this.wins[k]);
-				if ((i + 1) === gamesNeeded) {
-					buf += ` | `;
-				} else {
+				if (i !== this.bestOf - 1) {
 					buf += ` `;
 				}
 			}
-			buf += `</span><br />`;
+			buf += `</td></tr>`;
 		}
-		buf += `<br /><br />`;
+		buf += `</table><br /><br />`;
 		buf += `<table><tr>`;
 
 		for (const userid of [this.p1, null, this.p2]) {
@@ -1500,7 +1496,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 				continue;
 			}
 			const team = Teams.unpack(this.options[slot as 'p1' | 'p2']?.team || "");
-			if (!team) {
+			if (!team || !this.format.ruleTable?.has('teampreview')) {
 				buf += `<td>`;
 				buf += `<psicon pokemon="unknown" /> `.repeat(3);
 				buf += `<br />`;
@@ -1603,7 +1599,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 			if (!this.ready![k]) {
 				const diff = (this.nextBattleTimerStart + 60000) - Date.now();
 				this.waitingBattle?.room.add(
-					`|inactive|${this.name(this[k])} has ${Chat.toDurationString(diff + 1000)}` +
+					`|inactive|${this.name(this[k])} has ${Chat.toDurationString(diff + 100)}` +
 					` to confirm battle start!`
 				);
 			}
