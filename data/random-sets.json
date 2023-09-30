@@ -85,7 +85,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Flamethrower", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
-                "teraTypes": ["Fire", "Steel"]
+                "teraTypes": ["Poison", "Steel"]
             },
             {
                 "role": "Setup Sweeper",
@@ -130,7 +130,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Dazzling Gleam", "Fire Blast", "Light Screen", "Protect", "Reflect", "Stealth Rock", "Thunder Wave", "Wish"],
-                "teraTypes": ["Steel"]
+                "teraTypes": ["Poison", "Steel"]
             }
         ]
     },
@@ -4713,7 +4713,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Encore", "Play Rough", "Protect", "Thunder Wave", "Wish"],
-                "teraTypes": ["Steel"]
+                "teraTypes": ["Poison", "Steel"]
             }
         ]
     },
