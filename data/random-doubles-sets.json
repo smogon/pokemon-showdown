@@ -99,7 +99,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Follow Me", "Heal Pulse", "Helping Hand", "Icy Wind", "Life Dew"],
+                "movepool": ["Follow Me", "Heal Pulse", "Helping Hand", "Life Dew", "Moonblast"],
                 "teraTypes": ["Fire", "Steel", "Water"]
             }
         ]
@@ -3127,7 +3127,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Baneful Bunker", "Chilling Water", "Recover", "Toxic", "Toxic Spikes"],
+                "movepool": ["Acid Spray", "Baneful Bunker", "Recover", "Toxic", "Toxic Spikes"],
                 "teraTypes": ["Grass", "Steel"]
             }
         ]
