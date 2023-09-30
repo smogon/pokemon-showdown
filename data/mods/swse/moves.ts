@@ -21047,7 +21047,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Water",
 	},
-	weatherball: { // only works with climate weather rn
+	weatherball: { // incomplete. needs testing
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
@@ -21076,8 +21076,50 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'foghorn':
 				move.type = 'Normal';
 				break;
+			}
+			switch (pokemon.effectiveIrritantWeather()) {
 			case 'sandstorm':
 				move.type = 'Rock';
+				break;
+			case 'duststorm':
+				move.type = 'Ground';
+				break;
+			case 'pollinate':
+				move.type = 'Grass';
+				break;
+			case 'swarmsignal':
+				move.type = 'Bug';
+				break;
+			case 'smogspread':
+				move.type = 'Poison';
+				break;
+			case 'sprinkle':
+				move.type = 'Fairy';
+				break;
+			}
+			switch (pokemon.effectiveEnergyWeather()) {
+			case 'auraprojection':
+				move.type = 'Fighting';
+				break;
+			case 'haunt':
+				move.type = 'Ghost';
+				break;
+			case 'cosmicrays':
+				move.type = 'Psychic';
+				break;
+			case 'dragonforce':
+				move.type = 'Dragon';
+				break;
+			case 'supercell':
+				move.type = 'Electric';
+				break;
+			case 'magnetize':
+				move.type = 'Steel';
+				break;
+			}
+			switch (pokemon.effectiveClearingWeather()) {
+			case 'strongwinds':
+				move.type = 'Flying';
 				break;
 			}
 		},
@@ -21101,7 +21143,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'foghorn':
 				move.basePower *= 2;
 				break;
+			}
+			switch (pokemon.effectiveIrritantWeather()) {
 			case 'sandstorm':
+				move.basePower *= 2;
+				break;
+			case 'duststorm':
+				move.basePower *= 2;
+				break;
+			case 'pollinate':
+				move.basePower *= 2;
+				break;
+			case 'swarmsignal':
+				move.basePower *= 2;
+				break;
+			case 'smogspread':
+				move.basePower *= 2;
+				break;
+			case 'sprinkle':
+				move.basePower *= 2;
+				break;
+			}
+			switch (pokemon.effectiveEnergyWeather()) {
+			case 'auraprojection':
+				move.basePower *= 2;
+				break;
+			case 'haunt':
+				move.basePower *= 2;
+				break;
+			case 'cosmicrays':
+				move.basePower *= 2;
+				break;
+			case 'dragonforce':
+				move.basePower *= 2;
+				break;
+			case 'supercell':
+				move.basePower *= 2;
+				break;
+			case 'magnetize':
+				move.basePower *= 2;
+				break;
+			}
+			switch (pokemon.effectiveClearingWeather()) {
+			case 'strongwinds':
 				move.basePower *= 2;
 				break;
 			}
