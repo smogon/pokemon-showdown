@@ -1623,6 +1623,14 @@ export class BestOfGame extends RoomGames.RoomGame {
 	private name(str: string) {
 		return Users.get(str)?.name || str;
 	}
+	win(targetUser: User | ID) {
+		targetUser = toID(targetUser);
+		if (!this.playerTable[targetUser]) return false;
+		return this.onEnd(targetUser);
+	}
+	tie() {
+		return this.onEnd('');
+	}
 	async onEnd(winner: ID) {
 		this.cleanup();
 		this.room.add(`|allowleave|`).update();
