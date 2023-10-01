@@ -911,7 +911,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
 		} else if (Config.logchallenges) {
 			void this.logBattle(p1score);
-		} else {
+		} else if (!this.options.isSubBattle) {
 			this.logData = null;
 		}
 		// If a replay was saved at any point or we were configured to autosavereplays,
