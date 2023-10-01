@@ -246,9 +246,9 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
-			'Axew', 'Crabrawler', 'Croagunk', 'Diglett-Alola', 'Drifloon', 'Foongus', 'Fuecoco', 'Glimmet', 'Gothita', 'Grimer-Alola',
-			'Grookey', 'Houndour', 'Mareanie', 'Meowth-Base', 'Mudbray', 'Numel', 'Nymble', 'Pawniard', 'Quaxly', 'Shellder', 'Shellos',
-			'Shroodle', 'Teddiursa', 'Tinkatink', 'Toedscool', 'Voltorb-Hisui', 'Wattrel', 'Zorua-Hisui',
+			'Corphish', 'Diglett-Alola', 'Drifloon', 'Foongus', 'Glimmet', 'Gothita', 'Grimer-Alola', 'Grookey', 'Impidimp', 'Koffing',
+			'Larvesta', 'Magnemite', 'Mienfoo', 'Mudbray', 'Numel', 'Pawniard', 'Sandshrew', 'Sandshrew-Alola', 'Shellder', 'Shroodle',
+			'Snover', 'Stunky', 'Timburr', 'Tinkatink', 'Toedscool', 'Voltorb-Hisui', 'Vullaby', 'Wattrel', 'Zorua-Hisui',
 		],
 	},
 	{
