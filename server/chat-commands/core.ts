@@ -1276,7 +1276,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('forcewin');
 		if (
-			!room.battle || 
+			!room.battle &&
 			!(room.game && typeof (room.game as any).tie === 'function' && typeof (room.game as any).win === 'function')
 		) {
 			this.errorReply("/forcewin - This is not a battle room.");
