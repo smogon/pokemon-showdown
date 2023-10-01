@@ -1154,6 +1154,7 @@ export class RandomTeams {
 
 		// doubles, multi, and ffa
 		if (isDoubles) {
+			if (species.id === 'farigiraf') return 'Armor Tail';
 			if (species.id === 'dragapult') return 'Clear Body';
 			if (species.id === 'altaria') return 'Cloud Nine';
 			if (species.id === 'armarouge') return 'Flash Fire';
@@ -1178,7 +1179,6 @@ export class RandomTeams {
 
 		// doubles exclusive
 		if (this.format.gameType === 'doubles') {
-			if (species.id === 'farigiraf') return 'Armor Tail';
 			if (species.id === 'florges') return 'Flower Veil';
 			if (
 				species.id === 'clefairy' ||
