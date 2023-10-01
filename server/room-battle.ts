@@ -1533,7 +1533,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 	onBattleWin(room: Room, winnerid: string) {
 		const loser = this.p1 === winnerid ? this.p2 : this.p1;
 		const loserPlayer = room.battle!.playerTable[loser];
-		if (loserPlayer.hitDisconnectLimit) { // disconnection means opp wins the set
+		if (loserPlayer?.hitDisconnectLimit) { // disconnection means opp wins the set
 			this.room.add(`${this.name(loser)} lost the series due to inactivity.`);
 			return this.onEnd(winnerid as ID);
 		}
