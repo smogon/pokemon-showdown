@@ -894,16 +894,14 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		const p2name = this.p2.name;
 		const p1id = toID(p1name);
 		const p2id = toID(p2name);
+		if (winnerid === p1id) {
+			p1score = 1;
+		} else if (winnerid === p2id) {
+			p1score = 0;
+		}
 		Chat.runHandlers('onBattleEnd', this, winnerid, [p1id, p2id, this.p3?.id, this.p4?.id].filter(Boolean));
-		if (this.room.rated) {
+		if (this.room.rated && !this.options.isSubBattle) {
 			this.room.rated = 0;
-
-			if (winnerid === p1id) {
-				p1score = 1;
-			} else if (winnerid === p2id) {
-				p1score = 0;
-			}
-
 			winner = Users.get(winnerid);
 			if (winner && !winner.registered) {
 				this.room.sendUser(winner, '|askreg|' + winner.id);
@@ -912,11 +910,6 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			void this.logBattle(score, p1rating, p2rating);
 			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
 		} else if (Config.logchallenges) {
-			if (winnerid === p1id) {
-				p1score = 1;
-			} else if (winnerid === p2id) {
-				p1score = 0;
-			}
 			void this.logBattle(p1score);
 		} else {
 			this.logData = null;
@@ -1663,11 +1656,6 @@ export class BestOfGame extends RoomGames.RoomGame {
 
 		const {rated, battle: room} = this.games[this.games.length - 1];
 		const battle = room.battle!;
-		if (winner === this.p1) {
-			p1score = 1;
-		} else if (winner === this.p2) {
-			p1score = 0;
-		}
 		if (rated) {
 			(room as GameRoom).rated = rated; // just in case
 			const winnerUser = Users.get(winner);
@@ -1679,10 +1667,6 @@ export class BestOfGame extends RoomGames.RoomGame {
 			);
 			void battle.logBattle(score, p1rating, p2rating);
 			Chat.runHandlers('onBattleRanked', battle, winner, [p1rating, p2rating], [this.p1, this.p2]);
-		} else if (Config.logchallenges) {
-			void battle.logBattle(p1score);
-		} else {
-			battle.logData = null;
 		}
 	}
 	forfeit(user: User | string, message = '') {
