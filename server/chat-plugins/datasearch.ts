@@ -1311,7 +1311,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			getSortValue(mon) === getSortValue(dex[mon].baseSpecies)) continue;
 		const teraFormeChangesFrom = dex[mon].forme.endsWith("Tera") ? !Array.isArray(dex[mon].battleOnly) ?
 			dex[mon].battleOnly as string : null : null;
-		if (teraFormeChangesFrom && results.includes(teraFormeChangesFrom) && 
+		if (teraFormeChangesFrom && results.includes(teraFormeChangesFrom) &&
 			getSortValue(mon) === getSortValue(teraFormeChangesFrom)) continue;
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
