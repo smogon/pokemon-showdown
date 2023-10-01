@@ -1138,6 +1138,7 @@ export class RandomTeams {
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
 		if (species.id === 'dipplin') return 'Sticky Hold';
 
+		// singles
 		if (!isDoubles) {
 			if (species.id === 'hypno') return 'Insomnia';
 			if (species.id === 'staraptor') return 'Reckless';
@@ -1165,6 +1166,7 @@ export class RandomTeams {
 			if (species.id === 'conkeldurr' && role === 'Doubles Wallbreaker') return 'Guts';
 			if (species.id === 'tropius' || species.id === 'trevenant') return 'Harvest';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
+			if (species.id === 'kommoo') return 'Overcoat';
 			if (species.id === 'barraskewda') return 'Propeller Tail';
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
 			if (species.id === 'ribombee') return 'Shield Dust';
@@ -1177,8 +1179,8 @@ export class RandomTeams {
 			if (this.randomChance(1, 2) && species.id === 'kingambit') return 'Defiant';
 		}
 
-		// doubles exclusive
-		if (this.format.gameType === 'doubles') {
+		// just doubles and multi
+		if (this.format.gameType === 'doubles' || this.format.gameType === 'multi') {
 			if (species.id === 'florges') return 'Flower Veil';
 			if (
 				species.id === 'clefairy' ||
@@ -1186,7 +1188,6 @@ export class RandomTeams {
 			) return 'Friend Guard';
 			if (species.id === 'blissey') return 'Healer';
 			if (species.id === 'sinistcha') return 'Hospitality';
-			if (species.id === 'kommoo') return 'Overcoat';
 			if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
 
 			if (this.randomChance(1, 2) && species.id === 'mukalola') return 'Power of Alchemy';
