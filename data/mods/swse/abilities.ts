@@ -1408,7 +1408,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onClearingWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
-			switch (pokemon.effectiveEnergyWeather()) {
+			switch (pokemon.effectiveClearingWeather()) {
 			case 'strongwinds':
 				if (pokemon.species.id !== 'castformwindy') forme = 'Castform-Windy';
 				break;

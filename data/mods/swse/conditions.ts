@@ -1298,7 +1298,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (defender.hasItem('energynullifier')) return;
 			if (this.field.energyWeatherState.boosted) {
 				if (move.type === 'Dragon') {
-					this.debug('Dragon Force dragon boost');
+					this.debug('Dragon Force SW dragon boost');
 					return this.chainModify(1.875); //non SW boost + SW boost
 				} else {
 					this.debug('Dragon Force non-dragon boost');
@@ -1356,7 +1356,6 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onModifySpe(spe, pokemon) {
 			if (pokemon.hasItem('energynullifier')) return;
 			if (pokemon.hasType('Electric')) {
-				this.debug('thunderstorm speed boost');
 				return this.modify(spe, 1.25);
 			}
 		},

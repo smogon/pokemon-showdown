@@ -21123,73 +21123,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				break;
 			}
 		},
-		onModifyMove(move, pokemon) {
-			switch (pokemon.effectiveClimateWeather()) {
-			case 'sunnyday':
-			case 'desolateland':
-				move.basePower *= 2;
-				break;
-			case 'raindance':
-			case 'primordialsea':
-				move.basePower *= 2;
-				break;
-			case 'hail':
-			case 'snow':
-				move.basePower *= 2;
-				break;
-			case 'bloodmoon':
-				move.basePower *= 2;
-				break;
-			case 'foghorn':
-				move.basePower *= 2;
-				break;
+		basePowerCallback(pokemon, target, move) {
+			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
+			'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather()) ||
+			['sandstorm', 'duststorm', 'pollinate',
+			'swarmsignal', 'smogspread', 'sprinkle',].includes(this.field.effectiveIrritantWeather()) ||
+			['auraprojection', 'haunt', 'cosmicrays',
+			'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather()) ||
+			['strongwinds'].includes(this.field.effectiveClearingWeather())) {
+				return move.basePower * 2;
 			}
-			switch (pokemon.effectiveIrritantWeather()) {
-			case 'sandstorm':
-				move.basePower *= 2;
-				break;
-			case 'duststorm':
-				move.basePower *= 2;
-				break;
-			case 'pollinate':
-				move.basePower *= 2;
-				break;
-			case 'swarmsignal':
-				move.basePower *= 2;
-				break;
-			case 'smogspread':
-				move.basePower *= 2;
-				break;
-			case 'sprinkle':
-				move.basePower *= 2;
-				break;
-			}
-			switch (pokemon.effectiveEnergyWeather()) {
-			case 'auraprojection':
-				move.basePower *= 2;
-				break;
-			case 'haunt':
-				move.basePower *= 2;
-				break;
-			case 'cosmicrays':
-				move.basePower *= 2;
-				break;
-			case 'dragonforce':
-				move.basePower *= 2;
-				break;
-			case 'supercell':
-				move.basePower *= 2;
-				break;
-			case 'magnetize':
-				move.basePower *= 2;
-				break;
-			}
-			switch (pokemon.effectiveClearingWeather()) {
-			case 'strongwinds':
-				move.basePower *= 2;
-				break;
-			}
-			this.debug('BP: ' + move.basePower);
+			return move.basePower;
 		},
 		secondary: null,
 		target: "normal",
