@@ -2177,14 +2177,15 @@ export const Rooms = {
 		const format = Dex.formats.get(options.format);
 		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
 
-		if (Rooms.global.lockdown === 'pre' && isBestOf) {
+		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isSubBattle) {
 			for (const user of players) {
 				user.popup(`The server will be restarting soon. Best-of-${isBestOf} battles cannot be started at this time.`);
 			}
 			return;
 		}
 
-		if (Rooms.global.lockdown === true) {
+		// gotta allow new bo3 child battles to start
+		if (Rooms.global.lockdown === true && !options.isSubBattle) {
 			for (const user of players) {
 				user.popup("The server is restarting. Battles will be available again in a few minutes.");
 			}
