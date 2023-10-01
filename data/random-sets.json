@@ -4817,7 +4817,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Dark Pulse", "Earth Power", "Fire Blast", "Hurricane", "Hydro Pump", "Taunt", "U-turn"],
+                "movepool": ["Dark Pulse", "Earth Power", "Fire Blast", "Hurricane", "Hydro Pump", "U-turn"],
                 "teraTypes": ["Dark", "Flying", "Ground"]
             }
         ]
