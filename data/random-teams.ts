@@ -1177,20 +1177,20 @@ export class RandomTeams {
 			if (abilities.has('Intimidate')) return 'Intimidate';
 
 			if (this.randomChance(1, 2) && species.id === 'kingambit') return 'Defiant';
-		}
 
-		// just doubles and multi
-		if (this.format.gameType === 'doubles' || this.format.gameType === 'multi') {
-			if (species.id === 'florges') return 'Flower Veil';
-			if (
-				species.id === 'clefairy' ||
-				(species.baseSpecies === 'Maushold' && role === 'Doubles Support')
-			) return 'Friend Guard';
-			if (species.id === 'blissey') return 'Healer';
-			if (species.id === 'sinistcha') return 'Hospitality';
-			if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
-
-			if (this.randomChance(1, 2) && species.id === 'mukalola') return 'Power of Alchemy';
+			// just doubles and multi
+			if (this.format.gameType !== 'freeforall') {
+				if (species.id === 'florges') return 'Flower Veil';
+				if (
+					species.id === 'clefairy' ||
+					(species.baseSpecies === 'Maushold' && role === 'Doubles Support')
+				) return 'Friend Guard';
+				if (species.id === 'blissey') return 'Healer';
+				if (species.id === 'sinistcha') return 'Hospitality';
+				if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
+	
+				if (this.randomChance(1, 2) && species.id === 'mukalola') return 'Power of Alchemy';
+			}
 		}
 
 		let abilityAllowed: Ability[] = [];
