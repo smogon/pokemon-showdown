@@ -536,9 +536,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return (!counter.get('sheerforce') || moves.has('doubleedge') || abilities.has('Guts'));
 		case 'Simple':
 			return !counter.get('setup');
-		case 'Snow Warning':
-			// Aurorus
-			return moves.has('hypervoice');
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun);
 		case 'Sturdy':
