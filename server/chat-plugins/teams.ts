@@ -114,7 +114,7 @@ export const TeamsHandler = new class {
 		rawTeam: string,
 		teamName: string | null = null,
 		isPrivate?: string | null,
-		isUpdate?: string
+		isUpdate?: number
 	) {
 		const connection = context.connection;
 		this.validateAccess(connection, true);
@@ -340,14 +340,22 @@ export const TeamsHandler = new class {
 		const result = await this.query<{count: number}>(`SELECT count(*) AS count FROM teams WHERE ownerid = $1`, [id]);
 		return result?.[0]?.count || 0;
 	}
-	async get(teamid: string): Promise<StoredTeam | null> {
+	async get(teamid: number | string): Promise<StoredTeam | null> {
+		teamid = Number(teamid);
+		if (isNaN(teamid)) {
+			throw new Chat.ErrorMessage(`Invalid team ID.`);
+		}
 		const rows = await this.query(
 			`SELECT * FROM teams WHERE teamid = $1`, [teamid],
 		);
 		if (!rows.length) return null;
 		return rows[0] as StoredTeam;
 	}
-	async delete(id: string) {
+	async delete(id: string | number) {
+		id = Number(id);
+		if (isNaN(id)) {
+			throw new Chat.ErrorMessage("Invalid team ID");
+		}
 		await this.query(
 			`DELETE FROM teams WHERE teamid = $1`, [id],
 		);
@@ -366,9 +374,10 @@ export const commands: Chat.ChatCommands = {
 			TeamsHandler.validateAccess(connection, true);
 			const targets = Utils.splitFirst(target, ',', 5);
 			const isEdit = cmd === 'update';
-			const teamID = isEdit ? targets.shift() : undefined;
+			const rawTeamID = isEdit ? targets.shift() : undefined;
 			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
-			if (isEdit && !teamID?.length) {
+			const teamID = Number(rawTeamID);
+			if (isEdit && (!rawTeamID?.length || isNaN(teamID))) {
 				connection.popup("Invalid team ID provided.");
 				return null;
 			}
@@ -423,8 +432,8 @@ export const commands: Chat.ChatCommands = {
 		},
 		async delete(target, room, user, connection) {
 			TeamsHandler.validateAccess(connection, true);
-			const teamid = toID(target);
-			if (!teamid.length) return this.popupReply(`Invalid team ID.`);
+			const teamid = Number(toID(target));
+			if (isNaN(teamid)) return this.popupReply(`Invalid team ID.`);
 			const teamData = await TeamsHandler.get(teamid);
 			if (!teamData) return this.popupReply(`Team not found.`);
 			if (teamData.ownerid !== user.id && !user.can('rangeban')) {
@@ -555,10 +564,11 @@ export const pages: Chat.PageTable = {
 		},
 		async view(query, user, connection) {
 			TeamsHandler.validateAccess(connection);
-			const teamid = toID(query.shift() || "");
+			const rawTeamid = toID(query.shift() || "");
 			const password = toID(query.shift());
 			this.title = `[View Team]`;
-			if (!teamid.length) {
+			const teamid = Number(rawTeamid);
+			if (isNaN(teamid)) {
 				throw new Chat.ErrorMessage(`Invalid team ID.`);
 			}
 			const team = await TeamsHandler.get(teamid);
