@@ -403,11 +403,20 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		// Enforce setup
 		if (role.includes('Setup')) {
-			const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
-			if (setupMoves.length) {
-				const moveid = this.sample(setupMoves);
+			// First, try to add a non-Speed setup move
+			const nonSpeedSetupMoves = movePool.filter(moveid => SETUP.includes(moveid) && !SPEED_SETUP.includes(moveid));
+			if (nonSpeedSetupMoves.length) {
+				const moveid = this.sample(nonSpeedSetupMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
+			} else {
+				// No non-Speed setup moves, so add any (Speed) setup move
+				const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
+				if (setupMoves.length) {
+					const moveid = this.sample(setupMoves);
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, preferredType, role);
+				}
 			}
 		}
 
@@ -481,7 +490,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter': case 'Ice Body': case 'Magician':
+		case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter': case 'Ice Body':
 		case 'Moody': case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast':
 			return true;
 		case 'Chlorophyll':
