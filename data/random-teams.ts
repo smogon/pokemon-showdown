@@ -1138,6 +1138,7 @@ export class RandomTeams {
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
 		if (species.id === 'dipplin') return 'Sticky Hold';
 
+		// singles
 		if (!isDoubles) {
 			if (species.id === 'hypno') return 'Insomnia';
 			if (species.id === 'staraptor') return 'Reckless';
@@ -1152,24 +1153,18 @@ export class RandomTeams {
 			if (abilities.has('Soundproof') && (moves.has('substitute') || moves.has('clangoroussoul'))) return 'Soundproof';
 		}
 
+		// doubles, multi, and ffa
 		if (isDoubles) {
 			if (species.id === 'farigiraf') return 'Armor Tail';
 			if (species.id === 'dragapult') return 'Clear Body';
 			if (species.id === 'altaria') return 'Cloud Nine';
 			if (species.id === 'armarouge') return 'Flash Fire';
-			if (species.id === 'florges') return 'Flower Veil';
-			if (
-				species.id === 'clefairy' ||
-				(species.baseSpecies === 'Maushold' && role === 'Doubles Support')
-			) return 'Friend Guard';
 			if (species.id === 'talonflame') return 'Gale Wings';
 			if (
 				['oinkologne', 'oinkolognef', 'snorlax', 'swalot'].includes(species.id) && role !== 'Doubles Wallbreaker'
 			) return 'Gluttony';
 			if (species.id === 'conkeldurr' && role === 'Doubles Wallbreaker') return 'Guts';
 			if (species.id === 'tropius' || species.id === 'trevenant') return 'Harvest';
-			if (species.id === 'blissey') return 'Healer';
-			if (species.id === 'sinistcha') return 'Hospitality';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
 			if (species.id === 'kommoo') return 'Overcoat';
 			if (species.id === 'barraskewda') return 'Propeller Tail';
@@ -1177,13 +1172,25 @@ export class RandomTeams {
 			if (species.id === 'ribombee') return 'Shield Dust';
 			if (species.id === 'gumshoos') return 'Strong Jaw';
 			if (species.id === 'magnezone') return 'Sturdy';
-			if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
 			if (species.id === 'clefable' && role === 'Doubles Support') return 'Unaware';
 			if (species.id === 'drifblim') return 'Unburden';
 			if (abilities.has('Intimidate')) return 'Intimidate';
 
 			if (this.randomChance(1, 2) && species.id === 'kingambit') return 'Defiant';
-			if (this.randomChance(1, 2) && species.id === 'mukalola') return 'Power of Alchemy';
+
+			// just doubles and multi
+			if (this.format.gameType !== 'freeforall') {
+				if (species.id === 'florges') return 'Flower Veil';
+				if (
+					species.id === 'clefairy' ||
+					(species.baseSpecies === 'Maushold' && role === 'Doubles Support')
+				) return 'Friend Guard';
+				if (species.id === 'blissey') return 'Healer';
+				if (species.id === 'sinistcha') return 'Hospitality';
+				if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
+
+				if (this.randomChance(1, 2) && species.id === 'mukalola') return 'Power of Alchemy';
+			}
 		}
 
 		let abilityAllowed: Ability[] = [];
