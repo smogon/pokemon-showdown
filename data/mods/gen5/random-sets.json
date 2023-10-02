@@ -1250,7 +1250,7 @@
         "level": 100,
         "sets": [
             {
-                "role": "Spinner",
+                "role": "Bulky Support",
                 "movepool": ["icebeam", "iceshard", "rapidspin", "seismictoss", "toxic"]
             }
         ]

@@ -295,8 +295,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce hazard removal on Bulky Support if the team doesn't already have it
-		if (role === 'Bulky Support' && !teamDetails.rapidSpin) {
+		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
+		if (['Bulky Support', 'Spinner'] && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
 				counter = this.addMove('rapidspin', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
@@ -752,7 +752,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (species.id === 'archeops') return 'Expert Belt';
 		if (!counter.get('Status') && (
-			['Fast Support', 'Bulky Support', 'Bulky Attacker'].some(m => role === m) || moves.has('rapidspin')
+			['Fast Support', 'Bulky Support', 'Bulky Attacker', 'Spinner'].some(m => role === m) || moves.has('rapidspin')
 		)) {
 			return 'Assault Vest';
 		}
@@ -811,7 +811,18 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets = [];
-		for (const set of sets) possibleSets.push(set);
+		// Check if the Pokemon has a Spinner set
+		let canSpinner = false;
+		for (const set of sets) {
+			if (!teamDetails.rapidSpin && set.role === 'Spinner') canSpinner = true;
+		}
+		for (const set of sets) {
+			// Prevent Spinner if the team already has removal
+			if (teamDetails.rapidSpin && set.role === 'Spinner') continue;
+			// Enforce Spinner if the team does not have removal
+			if (canSpinner && set.role !== 'Spinner') continue;
+			possibleSets.push(set);
+		}
 		const set = this.sampleIfArray(possibleSets);
 		const role = set.role;
 		const movePool: string[] = Array.from(set.movepool);
