@@ -587,7 +587,7 @@ export const pages: Chat.PageTable = {
 			buf += `<input name="name" /><br />`;
 
 			buf += `<strong>What's the team's format?</strong><br />`;
-			buf += `<formatselect name="format" value="gen${Dex.gen}ou">[Gen ${Dex.gen} OU]</formatselect><br />`;
+			buf += `<formatselect name="format" format="gen${Dex.gen}ou">[Gen ${Dex.gen} OU]</formatselect><br />`;
 
 			buf += `<strong>Should the team be private? (yes/no)</strong><br />`;
 			buf += `<select name="privacy" /><option value="1">Yes</option><option value="0">No</option></select><br />`;
@@ -618,7 +618,7 @@ export const pages: Chat.PageTable = {
 			buf += `<input name="name" value="${data.title || `Untitled ${teamID}`}" /><br />`;
 
 			buf += `<strong>Team format</strong><br />`;
-			buf += `<formatselect name="format" value="${data.format}">`;
+			buf += `<formatselect name="format" format="${data.format}">`;
 			buf += `${Dex.formats.get(data.format).name}</formatselect><br />`;
 
 			buf += `<strong>Team privacy</strong><br />`;
@@ -653,7 +653,7 @@ export const pages: Chat.PageTable = {
 				buf += `<strong>Search metadata:</strong><br />`;
 				buf += `<span style="display: ${isPersonal ? 'none' : ""}">`;
 				buf += `<Team owner: <input name="owner" /></span><br />`;
-				buf += `Team format: <formatselect name="tier">[Gen ${Dex.gen}] OU</formatselect><br /><br />`;
+				buf += `Team format: <formatselect name="tier" format="gen${Dex.gen}ou">[Gen ${Dex.gen}] OU</formatselect><br /><br />`;
 				buf += `<strong>Search in team:</strong> (separate different searches with commas)<br />`;
 				buf += `Generation: <input name="gen" /><br />`;
 				buf += `Pokemon: <input name="pokemon" /><br />`;
