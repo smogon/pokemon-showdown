@@ -7586,7 +7586,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		fling: {
 			basePower: 10,
 		},
-		num: -7,
+		num: -12,
 		gen: 9,
 	},
 	energynullifier: {
@@ -7618,7 +7618,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 			this.effectState.inactive = true;
 		},
-		num: -4,
+		num: -14,
 		gen: 9,
 	},
 	charmingtalisman: {
@@ -7651,30 +7651,28 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: -2,
 		gen: 9,
 	},
-	pikaspresso: {
+	/* pikaspresso: { --need to update sim with drink item--
 		name: "Pikaspresso",
 		spritenum: 788,
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
-				pokemon.eatItem();
+				pokemon.drinkItem();
 			}
 		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+		onTryDrinkItem(item, pokemon) {
 		},
-		onEat(pokemon) {
-			this.heal(pokemon.baseMaxhp / 4);
+		onDrink(pokemon) {
 		},
 		num: -4,
 		gen: 9,
-	},
+	}, */
 	portableturbine: {
 		name: "Portable Turbine",
 		spritenum: 6,
 		fling: {
 			basePower: 10,
 		},
-		num: -8,
+		num: -13,
 		gen: 9,
 	},
 	volatilespray: {
@@ -7683,7 +7681,16 @@ export const Items: {[k: string]: ModdedItemData} = {
 		fling: {
 			basePower: 10,
 		},
-		num: -5,
+		num: -11,
+		gen: 9,
+	},
+	weathervane: { // incomplete
+		name: "Weather Vane",
+		spritenum: 6,
+		fling: {
+			basePower: 20,
+		},
+		num: -15,
 		gen: 9,
 	},
 	weatherballoon: {
@@ -7692,7 +7699,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		fling: {
 			basePower: 10,
 		},
-		num: -3,
+		num: -10,
 		gen: 9,
 	},
 	whirligig: {
@@ -7705,7 +7712,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			return true;
 		},
 		itemUser: ["Castform"],
-		num: -4,
+		num: -16,
 		gen: 9,
 	},
 };
