@@ -1307,7 +1307,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3.5,
 		num: 218,
 	},
-	forecast: { // incompelte. needs testing
+	forecast: { // incomplete. needs testing
 		onStart(pokemon) {
 			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
 			this.singleEvent('IrritantWeatherChange', this.effect, this.effectState, pokemon);
@@ -1332,9 +1332,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				break;
 			case 'bloodmoon':
 				if (pokemon.species.id !== 'castformshady') forme = 'Castform-Shady';
-				break;
-			case 'foghorn':
-				if (pokemon.species.id !== 'castformfoggy') forme = 'Castform-Foggy';
 				break;
 			default:
 				if (pokemon.species.id !== 'castform') forme = 'Castform';

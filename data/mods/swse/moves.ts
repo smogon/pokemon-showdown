@@ -21125,11 +21125,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		basePowerCallback(pokemon, target, move) {
 			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
-			'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather()) ||
+				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather()) ||
 			['sandstorm', 'duststorm', 'pollinate',
-			'swarmsignal', 'smogspread', 'sprinkle',].includes(this.field.effectiveIrritantWeather()) ||
+				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather()) ||
 			['auraprojection', 'haunt', 'cosmicrays',
-			'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather()) ||
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather()) ||
 			['strongwinds'].includes(this.field.effectiveClearingWeather())) {
 				return move.basePower * 2;
 			}

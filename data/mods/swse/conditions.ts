@@ -1299,7 +1299,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 			if (this.field.energyWeatherState.boosted) {
 				if (move.type === 'Dragon') {
 					this.debug('Dragon Force SW dragon boost');
-					return this.chainModify(1.875); //non SW boost + SW boost
+					return this.chainModify(1.875); // non SW boost + SW boost
 				} else {
 					this.debug('Dragon Force non-dragon boost');
 					return this.chainModify(1.5);
@@ -1381,7 +1381,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		onEnergyWeather(target) {
 			let typeMod = 1;
 			if (target.hasType('Water')) typeMod *= 2;
-			this.damage(typeMod*target.baseMaxhp/10);
+			this.damage(typeMod * target.baseMaxhp / 10);
 		},
 		onFieldEnd() {
 			this.add('-energyWeather', 'none');
