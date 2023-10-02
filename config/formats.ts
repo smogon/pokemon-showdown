@@ -413,6 +413,13 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
+		name: "[Gen 9] Kitakami Prologue",
+
+		mod: 'gen9',
+		gameType: 'doubles',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Kitakami Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
+	},
+	{
 		name: "[Gen 9] Doubles Custom Game",
 
 		mod: 'gen9',
