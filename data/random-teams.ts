@@ -1188,7 +1188,7 @@ export class RandomTeams {
 				if (species.id === 'blissey') return 'Healer';
 				if (species.id === 'sinistcha') return 'Hospitality';
 				if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
-	
+
 				if (this.randomChance(1, 2) && species.id === 'mukalola') return 'Power of Alchemy';
 			}
 		}
