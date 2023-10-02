@@ -2,17 +2,61 @@ import RandomGen6Teams from '../gen6/random-teams';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
-import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
+import {MoveCounter} from '../gen8/random-teams';
 
+// Moves that restore HP:
+const RECOVERY_MOVES = [
+	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'slackoff', 'softboiled', 'synthesis',
+];
+// Moves that boost Attack:
+const PHYSICAL_SETUP = [
+	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'screech', 'swordsdance',
+];
+// Moves which boost Special Attack:
+const SPECIAL_SETUP = [
+	'calmmind', 'chargebeam', 'nastyplot', 'quiverdance', 'tailglow',
+];
+// Some moves that only boost Speed:
+const SPEED_SETUP = [
+	'agility', 'autotomize', 'flamecharge', 'rockpolish',
+];
+// Conglomerate for ease of access
+const SETUP = [
+	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
+	'focusenergy', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'quiverdance', 'raindance',
+	'rockpolish', 'shellsmash', 'shiftgear', 'sunnyday', 'swordsdance', 'tailglow', 'workup',
+];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
-	'aquajet', 'bounce', 'chatter', 'clearsmog', 'dragontail', 'eruption', 'explosion', 'fakeout', 'flamecharge',
-	'iceshard', 'icywind', 'incinerate', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'reversal', 'selfdestruct',
-	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'vacuumwave', 'voltswitch', 'waterspout',
+	'aquajet', 'bulletpunch', 'clearsmog', 'dragontail', 'eruption', 'explosion', 'fakeout', 'flamecharge',
+	'futuresight', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'pluck', 'pursuit', 'quickattack',
+	'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack', 'skydrop', 'snarl', 'suckerpunch',
+	'uturn', 'vacuumwave', 'voltswitch', 'waterspout',
+];
+// Hazard-setting moves
+const HAZARDS = [
+	'spikes', 'stealthrock', 'toxicspikes',
+];
+// Moves that switch the user out
+const PIVOT_MOVES = [
+	'uturn', 'voltswitch',
+];
+
+// Moves that should be paired together when possible
+const MOVE_PAIRS = [
+	['lightscreen', 'reflect'],
+	['sleeptalk', 'rest'],
+	['protect', 'wish'],
+	['leechseed', 'substitute'],
+];
+
+/** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
+const PRIORITY_POKEMON = [
+	'bisharp', 'breloom', 'cacturne', 'dusknoir', 'honchkrow', 'scizor', 'shedinja',
 ];
 
 export class RandomGen5Teams extends RandomGen6Teams {
-	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
