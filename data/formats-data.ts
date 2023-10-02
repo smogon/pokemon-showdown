@@ -5764,7 +5764,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ogerponhearthflame: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	ogerponcornerstone: {
 		tier: "OU",
