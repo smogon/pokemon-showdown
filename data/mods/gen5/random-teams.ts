@@ -13,9 +13,9 @@ const PHYSICAL_SETUP = [
 	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'screech', 'swordsdance',
 ];
 // Moves which boost Special Attack:
-const SPECIAL_SETUP = [
-	'calmmind', 'chargebeam', 'nastyplot', 'quiverdance', 'tailglow',
-];
+// const SPECIAL_SETUP = [
+// 	'calmmind', 'chargebeam', 'nastyplot', 'quiverdance', 'tailglow',
+// ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
 	'agility', 'autotomize', 'flamecharge', 'rockpolish',
@@ -61,6 +61,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.noStab = NO_STAB;
+		this.priorityPokemon = PRIORITY_POKEMON;
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
@@ -304,7 +305,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		// Enforce STAB priority
-		if (['Bulky Attacker', 'Bulky Setup'].includes(role) || PRIORITY_POKEMON.includes(species.id)) {
+		if (['Bulky Attacker', 'Bulky Setup'].includes(role) || this.priorityPokemon.includes(species.id)) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -727,7 +728,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		);
 
 		if (
-			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') && !PRIORITY_POKEMON.includes(species.id)
+			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') && !this.priorityPokemon.includes(species.id)
 		) return 'Black Glasses';
 		if (counter.get('Special') === 4) {
 			return (
