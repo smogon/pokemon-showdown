@@ -180,7 +180,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const badWithSetup = ['dragontail', 'haze', 'healbell', 'pursuit', 'toxic'];
 		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
+			.filter(move => move.category === 'Status' && move.id !== 'naturepower')
 			.map(move => move.id);
 
 		// General incompatibilities
