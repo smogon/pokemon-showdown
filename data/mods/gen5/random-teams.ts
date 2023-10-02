@@ -282,8 +282,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Seismic Toss, Spore, and Sticky Web
-		for (const moveid of ['seismictoss', 'spore', 'stickyweb']) {
+		// Enforce Seismic Toss, Spore
+		for (const moveid of ['seismictoss', 'spore']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
@@ -490,8 +490,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				species.baseStats.spe > 100 || moves.has('petaldance') ||
 				(!moves.has('sunnyday') && !teamDetails.sun)
 			);
-		case 'Competitive':
-			return !counter.get('Special');
 		case 'Compound Eyes': case 'No Guard':
 			return !counter.get('inaccurate');
 		case 'Contrary': case 'Skill Link':
@@ -518,10 +516,10 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Mold Breaker':
 			return (species.baseSpecies === 'Basculin' || abilities.has('Sheer Force'));
-		case 'Oblivious': case 'Prankster':
-			return !counter.get('Status');
 		case 'Overgrow':
 			return !counter.get('Grass');
+		case 'Prankster':
+			return !counter.get('Status');
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil'));
 		case 'Regenerator':
