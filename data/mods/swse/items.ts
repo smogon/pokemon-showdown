@@ -7684,11 +7684,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		num: -11,
 		gen: 9,
 	},
-	weathervane: { // incomplete
-		name: "Weather Vane",
+    weathervane: { // incomplete
+        name: 'Weather Vane',
 		spritenum: 6,
-		fling: {
-			basePower: 20,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
+				return false;
+			}
+			return true;
 		},
 		num: -15,
 		gen: 9,
