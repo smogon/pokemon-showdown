@@ -503,6 +503,7 @@ export const pages: Chat.PageTable = {
 	},
 	teams: {
 		async all(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection);
 			const targetUserid = toID(query.shift()) || user.id;
 			let count = Number(query.shift()) || 10;
@@ -528,6 +529,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async filtered(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			const type = query.shift() || "";
 			TeamsHandler.validateAccess(connection);
 			let count = Number(query.shift()) || 50;
@@ -563,6 +565,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async view(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection);
 			const rawTeamid = toID(query.shift() || "");
 			const password = toID(query.shift());
@@ -587,6 +590,7 @@ export const pages: Chat.PageTable = {
 			return `<div class="ladder pad">` + TeamsHandler.renderTeam(team, user) + "</div>";
 		},
 		upload(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection);
 			this.title = `[Upload Team]`;
 			let buf = `<div class="ladder pad"><h2>Upload a team</h2>${refresh(this)}<hr />`;
@@ -610,6 +614,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async edit(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection);
 			const teamID = toID(query.shift() || "");
 			if (!teamID.length) {
@@ -649,6 +654,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async searchpublic(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection, true);
 			this.title = '[Teams] Search';
 			let buf = '<div class="pad">';
@@ -711,6 +717,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async searchpersonal(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			this.pageid = 'view-teams-searchpersonal';
 
 			return ((pages.teams as Chat.PageTable).searchpublic as import('../chat').PageHandler).call(
@@ -718,6 +725,7 @@ export const pages: Chat.PageTable = {
 			);
 		},
 		async browse(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection, true);
 			const sorter = toID(query.shift()) || 'latest';
 			let count = Number(toID(query.shift())) || 50;
