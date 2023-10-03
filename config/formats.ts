@@ -763,55 +763,23 @@ export const Formats: FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 9] Sharing is Caring",
-		desc: `All Pok&eacute;mon on a team share their items.`,
+		name: "[Gen 9] Convergence",
+		desc: `Allows all Pok&eacute;mon that have identical types to share moves and abilities.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3727118/">Sharing is Caring</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714048/">Convergence</a>`,
 		],
 
-		mod: 'sharingiscaring',
-		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		mod: 'gen9',
+		// searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', '!Obtainable Abilities', 'Min Source Gen = 9'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Darkrai', 'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina',
-			'Giratina-Origin', 'Groudon', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Palafin', 'Palkia',
-			'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Spectrier', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned',
-			'Arena Trap', 'Moody', 'Shadow Tag', 'Choice Scarf', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass',
-			'Last Respects', 'Revival Blessing', 'Shed Tail',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Dialga', 'Dialga-Origin', 'Dondozo', 'Eternatus', 'Flutter Mane',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Inteleon', 'Iron Bundle', 'Iron Hands', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Manaphy',
+			'Mewtwo', 'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Slaking', 'Spectrier', 'Urshifu-Base',
+			'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Arena Trap', 'Comatose', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag',
+			'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Extreme Speed', 'Last Respects', 'Quiver Dance', 'Rage Fist', 'Shed Tail',
+			'Shell Smash', 'Spore', 'Transform',
 		],
-		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Sharing is Caring currently does not support ${this.format.gameType} battles.`);
-			}
-		},
-		getSharedItems(pokemon) {
-			const items = new Set<string>();
-			for (const ally of pokemon.side.pokemon) {
-				if (!ally.item) continue;
-				items.add(ally.item);
-			}
-			items.delete(pokemon.item);
-			return items;
-		},
-		onBeforeSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedItems) format = this.dex.formats.get('gen9sharingiscaring');
-			for (const item of format.getSharedItems!(pokemon)) {
-				const effect = 'item:' + item;
-				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
-				if (!pokemon.m.items) pokemon.m.items = [];
-				if (!pokemon.m.items.includes(effect)) pokemon.m.items.push(effect);
-			}
-		},
-		onSwitchInPriority: 2,
-		onSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedItems) format = this.dex.formats.get('gen9sharingiscaring');
-			for (const item of format.getSharedItems!(pokemon)) {
-				const effect = 'item:' + item;
-				delete pokemon.volatiles[effect];
-				pokemon.addVolatile(effect);
-			}
-		},
 	},
 	{
 		name: "[Gen 9] Godly Gift",
@@ -1259,25 +1227,6 @@ export const Formats: FormatList = [
 			'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Roaring Moon', 'Shaymin-Sky', 'Sneasler', 'Spectrier',
 			'Tornadus-Therian', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock',
 			'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
-		],
-	},
-	{
-		name: "[Gen 9] Convergence",
-		desc: `Allows all Pok&eacute;mon that have identical types to share moves and abilities.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714048/">Convergence</a>`,
-		],
-
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Clause Mod', 'Convergence Legality', '!Obtainable Abilities', 'Min Source Gen = 9'],
-		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Dialga', 'Dialga-Origin', 'Dondozo', 'Eternatus', 'Flutter Mane',
-			'Giratina', 'Giratina-Origin', 'Groudon', 'Inteleon', 'Iron Bundle', 'Iron Hands', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Manaphy',
-			'Mewtwo', 'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Slaking', 'Spectrier', 'Urshifu-Base',
-			'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Arena Trap', 'Comatose', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag',
-			'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Extreme Speed', 'Last Respects', 'Quiver Dance', 'Rage Fist', 'Shed Tail',
-			'Shell Smash', 'Spore', 'Transform',
 		],
 	},
 	{
@@ -1806,6 +1755,58 @@ export const Formats: FormatList = [
 					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
 				}
 				const effect = 'ability:' + ability;
+				delete pokemon.volatiles[effect];
+				pokemon.addVolatile(effect);
+			}
+		},
+	},
+	{
+		name: "[Gen 9] Sharing is Caring",
+		desc: `All Pok&eacute;mon on a team share their items.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3727118/">Sharing is Caring</a>`,
+		],
+
+		mod: 'sharingiscaring',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		banlist: [
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Flutter Mane',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Palafin', 'Palkia',
+			'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Spectrier', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned',
+			'Arena Trap', 'Moody', 'Shadow Tag', 'Choice Scarf', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass',
+			'Last Respects', 'Revival Blessing', 'Shed Tail',
+		],
+		onValidateRule() {
+			if (this.format.gameType !== 'singles') {
+				throw new Error(`Sharing is Caring currently does not support ${this.format.gameType} battles.`);
+			}
+		},
+		getSharedItems(pokemon) {
+			const items = new Set<string>();
+			for (const ally of pokemon.side.pokemon) {
+				if (!ally.item) continue;
+				items.add(ally.item);
+			}
+			items.delete(pokemon.item);
+			return items;
+		},
+		onBeforeSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedItems) format = this.dex.formats.get('gen9sharingiscaring');
+			for (const item of format.getSharedItems!(pokemon)) {
+				const effect = 'item:' + item;
+				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
+				if (!pokemon.m.items) pokemon.m.items = [];
+				if (!pokemon.m.items.includes(effect)) pokemon.m.items.push(effect);
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedItems) format = this.dex.formats.get('gen9sharingiscaring');
+			for (const item of format.getSharedItems!(pokemon)) {
+				const effect = 'item:' + item;
 				delete pokemon.volatiles[effect];
 				pokemon.addVolatile(effect);
 			}
