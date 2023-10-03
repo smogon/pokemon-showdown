@@ -1228,8 +1228,20 @@ export class BattleActions {
 					hitResult = target.side.addSlotCondition(target, moveData.slotCondition, source, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
-				if (moveData.weather) {
-					hitResult = this.battle.field.setWeather(moveData.weather, source, move);
+				if (moveData.climateWeather) {
+					hitResult = this.battle.field.setClimateWeather(moveData.climateWeather, source, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.irritantWeather) {
+					hitResult = this.battle.field.setIrritantWeather(moveData.irritantWeather, source, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.energyWeather) {
+					hitResult = this.battle.field.setEnergyWeather(moveData.energyWeather, source, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.clearingWeather) {
+					hitResult = this.battle.field.setClearingWeather(moveData.clearingWeather, source, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (moveData.terrain) {
@@ -1709,7 +1721,10 @@ export class BattleActions {
 		}
 
 		// weather modifier
-		baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('ClimateWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('IrritantWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('EnergyWeatherModifyDamage', pokemon, target, move, baseDamage);
+		baseDamage = this.battle.runEvent('ClearingWeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
 		const isCrit = target.getMoveHitData(move).crit;
@@ -1721,8 +1736,8 @@ export class BattleActions {
 		baseDamage = this.battle.randomizer(baseDamage);
 
 		// STAB
-		if (move.forceSTAB || (type !== '???' &&
-			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type))))) {
+		if (move.forceSTAB ||
+			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type)))) {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
@@ -1763,6 +1778,9 @@ export class BattleActions {
 			if (this.battle.gen < 6 || move.id !== 'facade') {
 				baseDamage = this.battle.modify(baseDamage, 0.5);
 			}
+		}
+		if (pokemon.status === 'frb' && move.category === 'Special') {
+			baseDamage = this.battle.modify(baseDamage, 0.5);
 		}
 
 		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers

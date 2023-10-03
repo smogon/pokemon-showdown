@@ -131,7 +131,7 @@ type ModdedEffectData = EffectData | Partial<EffectData> & {inherit: true};
 
 type EffectType =
 	'Condition' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' |
-	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Terastal' | 'Rule' | 'ValidatorRule';
+	'Nature' | 'Ruleset' | 'ClimateWeather' | 'IrritantWeather' | 'EnergyWeather' | 'ClearingWeather' | 'Status' | 'Terastal' | 'Rule' | 'ValidatorRule';
 
 interface BasicEffect extends EffectData {
 	id: ID;
@@ -220,6 +220,7 @@ interface ModdedBattleActions {
 	canUltraBurst?: (this: BattleActions, pokemon: Pokemon) => string | null;
 	canZMove?: (this: BattleActions, pokemon: Pokemon) => ZMoveOptions | void;
 	canDynamax?: (this: BattleActions, pokemon: Pokemon, skipChecks?: boolean) => DynamaxOptions | void;
+	canTerastallize?: (this: BattleActions, pokemon: Pokemon) => string | null;
 	forceSwitch?: (
 		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
@@ -370,7 +371,10 @@ interface ModdedBattleQueue extends Partial<BattleQueue> {
 }
 
 interface ModdedField extends Partial<Field> {
-	suppressingWeather?: (this: Field) => boolean;
+	suppressingClimateWeather?: (this: Field) => boolean;
+	suppressingIrritantWeather?: (this: Field) => boolean;
+	suppressingEnergyWeather?: (this: Field) => boolean;
+	suppressingClearingWeather?: (this: Field) => boolean;
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
@@ -395,7 +399,10 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	runAction?: (this: Battle, action: Action) => void;
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
 	start?: (this: Battle) => void;
-	suppressingWeather?: (this: Battle) => boolean;
+	suppressingClimateWeather?: (this: Battle) => boolean;
+	suppressingIrritantWeather?: (this: Battle) => boolean;
+	suppressingEnergyWeather?: (this: Battle) => boolean;
+	suppressingClearingWeather?: (this: Battle) => boolean;
 	trunc?: (n: number) => number;
 	win?: (this: Battle, side?: SideID | '' | Side | null) => boolean;
 	faintMessages?: (this: Battle, lastFirst?: boolean, forceCheck?: boolean, checkWin?: boolean) => boolean | undefined;
@@ -467,6 +474,7 @@ interface MovePlines extends Plines {
 	removeItem?: string;
 	startFromItem?: string;
 	startFromZEffect?: string;
+	startFromWeather?: string;
 	switchOut?: string;
 	takeItem?: string;
 	typeChange?: string;
@@ -496,11 +504,25 @@ namespace RandomTeamsTypes {
 	export interface TeamDetails {
 		megaStone?: number;
 		zMove?: number;
-		snow?: number;
-		hail?: number;
-		rain?: number;
-		sand?: number;
 		sun?: number;
+		rain?: number;
+		hail?: number;
+		snow?: number;
+		bloodMoon?: number;
+		fog?: number;
+		sand?: number;
+		dust?: number;
+		pollen?: number;
+		pheromones?: number;
+		smog?: number;
+		fairyDust?: number;
+		battleAura?: number;
+		cursedWinds?: number;
+		psychicField?: number;
+		dragonForce?: number;
+		thunderstorm?: number;
+		magnetosphere?: number;
+		strongWinds?: number;
 		stealthRock?: number;
 		spikes?: number;
 		toxicSpikes?: number;
@@ -516,7 +538,10 @@ namespace RandomTeamsTypes {
 		megaCount?: number;
 		zCount?: number;
 		forceResult: boolean;
-		weather?: string;
+		climateWeather?: string;
+		irritantWeather?: string;
+		energyWeather?: string;
+		clearingWeather?: string;
 		typeCount: {[k: string]: number};
 		typeComboCount: {[k: string]: number};
 		baseFormes: {[k: string]: number};
@@ -541,7 +566,6 @@ namespace RandomTeamsTypes {
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
 		teraType?: string;
-		role?: string;
 	}
 	export interface RandomFactorySet {
 		name: string;

@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const Abilities: {[abilityid: string]: AbilityData} = {
+export const Abilities: {[k: string]: ModdedAbilityData} = {
 	noability: {
 		isNonstandard: "Past",
 		name: "No Ability",
@@ -506,7 +506,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 29,
 	},
-	cloudnine: {
+	cloudnine: { // updated
 		onSwitchIn(pokemon) {
 			this.effectState.switchingIn = true;
 		},
@@ -547,7 +547,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Color Change",
-		rating: 0,
+		rating: 3,
 		num: 16,
 	},
 	comatose: {
@@ -642,9 +642,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4.5,
 		num: 126,
 	},
-	corrosion: {
+	corrosion: { // updated
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
 		name: "Corrosion",
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!this.field.isIrritantWeather('smog')) return;
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Poison'] = true;
+			}
+		},
 		rating: 2.5,
 		num: 212,
 	},
@@ -745,7 +753,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 130,
 	},
-	cutecharm: {
+	cutecharm: { // updated
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
 				if (this.randomChance(3, 10)) {
@@ -754,7 +762,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		name: "Cute Charm",
-		rating: 0.5,
+		rating: 1,
 		num: 56,
 	},
 	damp: {
@@ -912,7 +920,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4.5,
 		num: 190,
 	},
-	disguise: {
+	disguise: { // updated
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (
@@ -951,7 +959,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
-				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
 			}
 		},
 		isBreakable: true,
@@ -1146,13 +1153,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 111,
 	},
-	flamebody: {
+	flamebody: { // updated
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('brn', target);
 				}
 			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
 		},
 		name: "Flame Body",
 		rating: 2,
@@ -1297,9 +1307,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3.5,
 		num: 218,
 	},
-	forecast: {
+	forecast: { // incomplete. needs testing, add weather vane
 		onStart(pokemon) {
 			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
+			this.singleEvent('IrritantWeatherChange', this.effect, this.effectState, pokemon);
+			this.singleEvent('EnergyWeatherChange', this.effect, this.effectState, pokemon);
+			this.singleEvent('ClearingWeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onClimateWeatherChange(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
@@ -1316,6 +1329,85 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			case 'hail':
 			case 'snow':
 				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
+				break;
+			case 'bloodmoon':
+				if (pokemon.species.id !== 'castformshady') forme = 'Castform-Shady';
+				break;
+			default:
+				if (pokemon.species.id !== 'castform') forme = 'Castform';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+		onIrritantWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			let forme = null;
+			switch (pokemon.effectiveIrritantWeather()) {
+			case 'sandstorm':
+				if (pokemon.species.id !== 'castformsandy') forme = 'Castform-Sandy';
+				break;
+			case 'duststorm':
+				if (pokemon.species.id !== 'castformdusty') forme = 'Castform-Dusty';
+				break;
+			case 'pollinate':
+				if (pokemon.species.id !== 'castformallergy') forme = 'Castform-Allergy';
+				break;
+			case 'swarmsignal':
+				if (pokemon.species.id !== 'castformswarmy') forme = 'Castform-Swarmy';
+				break;
+			case 'smogspread':
+				if (pokemon.species.id !== 'castformsmoggy') forme = 'Castform-Smoggy';
+				break;
+			case 'sprinkle':
+				if (pokemon.species.id !== 'castformlovely') forme = 'Castform-Lovely';
+				break;
+			default:
+				if (pokemon.species.id !== 'castform') forme = 'Castform';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+		onEnergyWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			let forme = null;
+			switch (pokemon.effectiveEnergyWeather()) {
+			case 'auraprojection':
+				if (pokemon.species.id !== 'castformgutsy') forme = 'Castform-Gutsy';
+				break;
+			case 'haunt':
+				if (pokemon.species.id !== 'castformspooky') forme = 'Castform-Spooky';
+				break;
+			case 'cosmicrays':
+				if (pokemon.species.id !== 'castformzenny') forme = 'Castform-Zenny';
+				break;
+			case 'dragonforce':
+				if (pokemon.species.id !== 'castformsorcery') forme = 'Castform-Sorcery';
+				break;
+			case 'supercell':
+				if (pokemon.species.id !== 'castformzappy') forme = 'Castform-Zappy';
+				break;
+			case 'magnetize':
+				if (!pokemon.hasItem('whirligig')) return;
+				if (pokemon.species.id !== 'castformwhirly') forme = 'Castform-Whirly';
+				break;
+			default:
+				if (pokemon.species.id !== 'castform') forme = 'Castform';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+		onClearingWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			let forme = null;
+			switch (pokemon.effectiveClearingWeather()) {
+			case 'strongwinds':
+				if (pokemon.species.id !== 'castformwindy') forme = 'Castform-Windy';
 				break;
 			default:
 				if (pokemon.species.id !== 'castform') forme = 'Castform';
@@ -1410,9 +1502,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 169,
 	},
-	galewings: {
+	galewings: { // updated
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
+			if (move.type !== 'Flying') return;
+			if (pokemon.hp === pokemon.maxhp || this.field.isClearingWeather('strongwinds')) return priority + 1;
 		},
 		name: "Gale Wings",
 		rating: 1.5,
@@ -1515,14 +1608,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4.5,
 		num: 255,
 	},
-	grasspelt: {
+	grasspelt: { // updated
 		onModifyDefPriority: 6,
-		onModifyDef(pokemon) {
-			if (this.field.isTerrain('grassyterrain')) return this.chainModify(1.5);
+		onModifyDef(pokemon, source) {
+			if (this.field.isTerrain('grassyterrain') ||
+			(!source.hasItem('safetygoggles')) && this.field.isIrritantWeather('pollinate')) {
+				return this.chainModify(1.5);
+			}
 		},
 		isBreakable: true,
 		name: "Grass Pelt",
-		rating: 0.5,
+		rating: 1,
 		num: 179,
 	},
 	grassysurge: {
@@ -1746,6 +1842,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	icebody: {
 		onClimateWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'hail' || effect.id === 'snow') {
 				this.heal(target.baseMaxhp / 16);
 			}
@@ -1759,6 +1856,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	iceface: {
 		onStart(pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
 			if (this.field.isClimateWeather(['hail', 'snow']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
@@ -1998,12 +2096,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2.5,
 		num: 160,
 	},
-	ironfist: {
+	ironfist: { // updated
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
-				this.debug('Iron Fist boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify(1.5);
 			}
 		},
 		name: "Iron Fist",
@@ -2047,7 +2144,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: -1,
 		num: 103,
 	},
-	leafguard: {
+	leafguard: { // updated
+		onClimateWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
+			if (effect.id === 'sunnyday' || effect.id === 'pollinate') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
 		onSetStatus(status, target, source, effect) {
 			if (['sunnyday', 'desolateland'].includes(target.effectiveClimateWeather())) {
 				if ((effect as Move)?.status) {
@@ -2253,7 +2356,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1,
 		num: 170,
 	},
-	magmaarmor: {
+	magmaarmor: { // updated
 		onUpdate(pokemon) {
 			if (pokemon.status === 'frz') {
 				this.add('-activate', pokemon, 'ability: Magma Armor');
@@ -2262,6 +2365,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'frz') return false;
+			if (type === 'hail') return false;
 		},
 		isBreakable: true,
 		name: "Magma Armor",
@@ -2774,7 +2878,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4.5,
 		num: 288,
 	},
-	overcoat: {
+	overcoat: { // incomplete. needs to be updated
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
@@ -3592,10 +3696,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 0,
 		num: 50,
 	},
-	sandforce: {
+	sandforce: { // updated
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.field.isIrritantWeather('sandstorm')) {
+			if (attacker.hasItem('safetygoggles')) return;
+			if (this.field.isIrritantWeather(['sandstorm', 'duststorm'])) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([5325, 4096]);
@@ -3609,9 +3714,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 2,
 		num: 159,
 	},
-	sandrush: {
+	sandrush: { // updated
 		onModifySpe(spe, pokemon) {
-			if (this.field.isIrritantWeather('sandstorm')) {
+			if (this.field.isIrritantWeather(['sandstorm', 'duststorm'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -3638,14 +3743,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 4,
 		num: 45,
 	},
-	sandveil: {
+	sandveil: { // udpated
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy) {
+		onModifyAccuracy(accuracy, source) {
+			if (source.hasItem('volatilespray')) return;
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isIrritantWeather('sandstorm')) {
+			if (this.field.isIrritantWeather(['sandstorm', 'duststorm'])) {
 				this.debug('Sand Veil - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -3987,7 +4093,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (type === 'hail') return false;
 		},
 		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy) {
+		onModifyAccuracy(accuracy, source) {
+			if (source.hasItem('utilityumbrella')) return;
 			if (typeof accuracy !== 'number') return;
 			if (this.field.isClimateWeather(['hail', 'snow'])) {
 				this.debug('Snow Cloak - decreasing accuracy');
@@ -4001,17 +4108,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	snowwarning: {
 		onStart(source) {
-			this.field.setClimateWeather('snow');
+			this.field.setClimateWeather('hail');
 		},
 		name: "Snow Warning",
 		rating: 4,
 		num: 117,
 	},
-	solarpower: {
+	solarpower: { // updated
 		onModifySpAPriority: 5,
-		onModifySpA(spa, pokemon) {
+		onModifySpA(spa, source, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
-				return this.chainModify(1.5);
+				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.5);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, source, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.5);
 			}
 		},
 		onClimateWeather(target, source, effect) {
@@ -4150,14 +4263,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1,
 		num: 80,
 	},
-	steamengine: {
+	steamengine: { // updated
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (!this.boost({spe: 6})) {
+					this.add('-immune', target, '[from] ability: Steam Engine');
+				}
+				return null;
+			}
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (['Water', 'Fire'].includes(move.type)) {
 				this.boost({spe: 6});
 			}
 		},
 		name: "Steam Engine",
-		rating: 2,
+		rating: 3.5,
 		num: 243,
 	},
 	steelworker: {
@@ -5170,7 +5292,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		isBreakable: true,
 		name: "Mountaineer",
 		rating: 3,
-		num: -2,
+		num: 1001,
 	},
 	rebound: {
 		isNonstandard: "CAP",
@@ -5203,13 +5325,553 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		isBreakable: true,
 		rating: 3,
-		num: -3,
+		num: 1002,
 	},
 	persistent: {
 		isNonstandard: "CAP",
 		name: "Persistent",
 		// implemented in the corresponding move
 		rating: 3,
+		num: 1003,
+	},
+
+	// swse
+	absolutezero: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('utilityumbrella')) return;
+			if (this.field.isClimateWeather(['hail', 'snow'])) {
+				if (move.type === 'Ice') {
+					this.debug('Absolute Zero boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		onModifyMovePriority: -2,
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (this.field.isClimateWeather(['hail', 'snow']) && move.secondaries) {
+				if (move.type === 'Ice') {
+					this.debug('Absolute Zero 2x secondary chance');
+					for (const secondary of move.secondaries) {
+						if (secondary.chance) secondary.chance *= 2;
+					}
+				}
+			}
+			if (move.self?.chance) move.self.chance *= 2;
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		name: "Absolute Zero",
+		rating: 3,
+		num: -18,
+	},
+	arcanum: {
+		onStart(source) {
+			this.field.setEnergyWeather('dragonforce');
+		},
+		name: "Arcanum",
+		rating: 3,
+		num: -14,
+	},
+	bloomspring: {
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('safetygoggles')) return;
+			if (effect.id === 'pollinate') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		name: "Bloomspring",
+		rating: 1.5,
+		num: -23,
+	},
+	carboncapture: {
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('safetygoggles')) return;
+			if (effect.id === 'smogspread') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'smogspread') return false;
+		},
+		name: "Carbon Capture",
+		rating: 2,
+		num: -25,
+	},
+	chakra: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fairy') {
+				this.debug('Chakra boost');
+				return this.chainModify(1.3);
+			}
+		},
+		name: "Chakra",
+		rating: 3.5,
+		num: -38,
+	},
+	condensation: {
+		onStart(source) {
+			this.field.setClimateWeather('foghorn');
+		},
+		name: "Condensation",
+		rating: 3,
+		num: -5,
+	},
+	druidry: { // incomplete. sw triggering grassy terrain instead of misty
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('safetygoggles')) return;
+			if (effect.id === 'sprinkle') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+		name: "Druidry",
+		rating: 2,
+		num: -26,
+	},
+	dustdevil: {
+		onStart(source) {
+			this.field.setIrritantWeather('duststorm');
+		},
+		name: "Dust Devil",
+		rating: 3,
+		num: -6,
+	},
+	eclipse: {
+		onModifyDef(def, pokemon) {
+			if (['sunnyday'].includes(pokemon.effectiveClimateWeather())) {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (['bloodmoon'].includes(pokemon.effectiveClimateWeather())) {
+				return this.chainModify(2);
+			}
+		},
+		isBreakable: true,
+		name: "Eclipse",
+		rating: 3,
+		num: -35,
+	},
+	energizer: {
+		onModifySpe(spe, pokemon) {
+			if (this.field.isEnergyWeather('supercell')) {
+				return this.chainModify(2);
+			}
+		},
+		name: "Energizer",
+		rating: 2.5,
+		num: -32,
+	},
+	eventide: {
+		onStart(source) {
+			this.field.setClimateWeather('bloodmoon');
+		},
+		name: "Eventide",
+		rating: 3,
 		num: -4,
+	},
+	evergreen: { // incomplete. add snover, utility umbrella
+		onStart(pokemon) {
+			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onClimateWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Abomasnow' || pokemon.transformed) return;
+			let forme = null;
+			switch (pokemon.effectiveClimateWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				if (pokemon.species.id !== 'abomasnowlowland') forme = 'Abomasnow-Lowland';
+				break;
+			case 'hail':
+			case 'snow':
+				if (pokemon.species.id !== 'abomasnow') forme = 'Abomasnow';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+		isPermanent: true,
+		name: "Evergreen",
+		rating: 3,
+		num: -36,
+	},
+	ferroflux: {
+		onStart(source) {
+			this.field.setEnergyWeather('magnetize');
+		},
+		name: "Ferroflux",
+		rating: 3,
+		num: -16,
+	},
+	fieldworker: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Fieldworker boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Fieldworker boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Fieldworker",
+		rating: 3,
+		num: -2,
+	},
+	forked: {
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (pokemon.status && ['supercell'].includes(pokemon.effectiveEnergyWeather())) {
+				this.debug('forked');
+				this.add('-activate', pokemon, 'ability: Forked');
+				pokemon.cureStatus();
+			}
+		},
+		name: "Forked",
+		rating: 1.5,
+		num: -33,
+	},
+	galeforce: {
+		onStart(source) {
+			this.field.setClearingWeather('strongwinds');
+		},
+		name: "Galeforce",
+		rating: 3,
+		num: -17,
+	},
+	glacialarmor: {
+		onModifyDef(def, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (this.field.isClimateWeather(['hail', 'snow'])) {
+				return this.chainModify(1.4);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (this.field.isClimateWeather(['hail', 'snow'])) {
+				return this.chainModify(1.4);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		isBreakable: true,
+		name: "Glacial Armor",
+		rating: 2,
+		num: -19,
+	},
+	gravitysling: {
+		onModifySpe(spe, pokemon) {
+			if (this.field.isEnergyWeather('magnetize')) {
+				return this.chainModify(2);
+			}
+		},
+		name: "Gravity Sling",
+		rating: 2,
+		num: -34,
+	},
+	haunting: {
+		onModifySpe(spe, pokemon) {
+			if (this.field.isClimateWeather(['bloodmoon', 'haunt'])) {
+				return this.chainModify(2);
+			}
+		},
+		name: "Haunting",
+		rating: 3,
+		num: -20,
+	},
+	hayfever: {
+		onStart(source) {
+			this.field.setIrritantWeather('pollinate');
+		},
+		name: "Hay Fever",
+		rating: 3,
+		num: -7,
+	},
+	incantation: {
+		onStart(source) {
+			this.field.setIrritantWeather('sprinkle');
+		},
+		name: "Incantation",
+		rating: 3,
+		num: -10,
+	},
+	malice: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa, source, pokemon) {
+			if (['bloodmoon'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.5);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, source, pokemon) {
+			if (['bloodmoon'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.5);
+			}
+		},
+		onClimateWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
+			if (effect.id === 'bloodmoon') {
+				this.damage(target.baseMaxhp / 8, target, target);
+			}
+		},
+		name: "Malice",
+		rating: 3,
+		num: -21,
+	},
+	masterinstinct: {
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, source) {
+			if (source.hasItem('energynullifier')) return;
+			if (typeof accuracy !== 'number') return;
+			if (this.field.isEnergyWeather('auraprojection')) {
+				this.debug('Master Instinct accuracy boost');
+				return this.chainModify(1.2);
+			}
+		},
+		name: "Master Instinct",
+		rating: 2,
+		num: -28,
+	},
+	nesting: {
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('safetygoggles')) return;
+			if (effect.id === 'swarmsignal') {
+				if (target.allies().some(ally => ally.hasType('Bug'))) {
+					this.heal(target.baseMaxhp / 8);
+				} else {
+					this.heal(target.baseMaxhp / 16);
+				}
+			}
+		},
+		name: "Nesting",
+		rating: 1.5,
+		num: -24,
+	},
+	nullify: { // incomplete. needs testing
+		onSwitchIn(pokemon) {
+			this.effectState.switchingIn = true;
+		},
+		onAnySetClimateWeather(climateWeather) {
+			return false;
+		},
+		onAnySetIrritantWeather(irritantWeather) {
+			return false;
+		},
+		onAnySetEnergyWeather(energyWeather) {
+			return false;
+		},
+		onAnySetClearingWeather(clearingWeather) {
+			return false;
+		},
+		onStart(pokemon) {
+			if (this.effectState.switchingIn) {
+				this.add('-ability', pokemon, 'Nullify');
+				this.effectState.switchingIn = false;
+			}
+			this.eachEvent('ClimateWeatherChange', this.effect);
+			this.eachEvent('IrritantWeatherChange', this.effect);
+			this.eachEvent('EnergyWeatherChange', this.effect);
+			this.eachEvent('ClearingWeatherChange', this.effect);
+		},
+		onEnd(pokemon) {
+			this.eachEvent('ClimateWeatherChange', this.effect);
+			this.eachEvent('IrritantWeatherChange', this.effect);
+			this.eachEvent('EnergyWeatherChange', this.effect);
+			this.eachEvent('ClearingWeatherChange', this.effect);
+		},
+		suppressClimateWeather: true,
+		suppressIrritantWeather: true,
+		suppressEnergyWeather: true,
+		suppressClearingWeather: true,
+		name: "Nullify",
+		rating: 2.5,
+		num: -39,
+	},
+	pollution: {
+		onStart(source) {
+			this.field.setIrritantWeather('smogspread');
+		},
+		name: "Pollution",
+		rating: 3,
+		num: -9,
+	},
+	powerabove: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('safetygoggles')) return;
+			if (this.field.isIrritantWeather('sprinkle')) {
+				if (move.type === 'Fairy' || move.type === 'Grass' || move.type === 'Fire' || move.type === 'Water') {
+					this.debug('Power Within boost');
+					return this.chainModify([5325, 4096]);
+				}
+			}
+		},
+		name: "Power Above",
+		rating: 2.5,
+		num: -27,
+	},
+	powerwithin: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('energynullifier')) return;
+			if (this.field.isIrritantWeather('dragonforce')) {
+				if (move.type === 'Dragon' || move.type === 'Fire' || move.type === 'Electric' || move.type === 'Ice') {
+					this.debug('Power Above boost');
+					return this.chainModify([5325, 4096]);
+				}
+			}
+		},
+		name: "Power Within",
+		rating: 2.5,
+		num: -31,
+	},
+	rootcontrol: {
+		onStart(pokemon) {
+			pokemon.addVolatile('ingrain');
+		},
+		name: "Root Control",
+		rating: 3.5,
+		num: -37,
+	},
+	seance: {
+		onStart(source) {
+			this.field.setEnergyWeather('haunt');
+		},
+		name: "Se\u0301ance",
+		rating: 3,
+		num: -12,
+	},
+	secretion: {
+		onStart(source) {
+			this.field.setIrritantWeather('swarmsignal');
+		},
+		name: "Secretion",
+		rating: 3,
+		num: -8,
+	},
+	smokeandmirrors: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hasItem('energynullifier')) return;
+			if (this.field.isEnergyWeather('cosmicrays')) {
+				if (move.category === 'Special') {
+					this.debug('Smoke and Mirrors boost');
+					return this.chainModify(1.2);
+				}
+			}
+		},
+		onModifyMovePriority: -2,
+		onModifyMove(move, source) {
+			if (move.secondaries) {
+				if (source.hasItem('energynullifier')) return;
+				if (this.field.isEnergyWeather('cosmicrays')) {
+					this.debug('S&M 2x confuse chance');
+					for (const secondary of move.secondaries) {
+						if (secondary.chance && secondary.status === 'confusion') secondary.chance *= 2;
+					}
+				}
+			}
+		},
+		name: "Smoke and Mirrors",
+		rating: 2.5,
+		num: -30,
+	},
+	souldrain: { // incomplete. add the effect lol
+		onIrritantWeather(target, source, effect) {
+			if (target.hasItem('energynullifier')) return;
+		},
+		name: "Soul Drain",
+		rating: 2,
+		num: -29,
+	},
+	standoff: {
+		onStart(source) {
+			this.field.setEnergyWeather('auraprojection');
+		},
+		name: "Stand Off",
+		rating: 3,
+		num: -11,
+	},
+	stormfront: {
+		onStart(source) {
+			this.field.setEnergyWeather('supercell');
+		},
+		name: "Stormfront",
+		rating: 3,
+		num: -15,
+	},
+	surveillance: {
+		onStart(pokemon) {
+			this.boost({accuracy: 1}, pokemon);
+		},
+		name: "Surveillance",
+		rating: 4,
+		num: -3,
+	},
+	transcendence: {
+		onStart(source) {
+			this.field.setEnergyWeather('cosmicrays');
+		},
+		name: "Transcendence",
+		rating: 3,
+		num: -13,
+	},
+	vegetate: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Grass';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Vegetate",
+		rating: 3,
+		num: -1,
+	},
+	warpmist: { // needs testing
+		onModifySpAPriority: 5,
+		onModifySpA(spa, source, pokemon) {
+			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.spa >= source.storedStats.atk) return this.chainModify(1.2);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, source, pokemon) {
+			if (['foghorn'].includes(pokemon.effectiveClimateWeather())) {
+				if (source.storedStats.atk > source.storedStats.spa) return this.chainModify(1.2);
+			}
+		},
+		onTryHit(target, source, move) {
+			if (move.category === 'Status') return;
+			if (target.hasItem('ringtarget')) return;
+			if (target !== source && move.ignoreImmunity) {
+				this.add('-immune', target, '[from] ability: Warp Mist');
+				this.debug('Warp Mist negate immunity');
+				move.ignoreImmunity = false;
+			} else {
+				move.ignoreImmunity = true;
+			}
+		},
+		name: "Warp Mist",
+		rating: 2,
+		num: -22,
 	},
 };

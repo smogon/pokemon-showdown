@@ -1,4 +1,4 @@
-export const Items: {[itemid: string]: ItemData} = {
+export const Items: {[k: string]: ModdedItemData} = {
 	abilityshield: {
 		name: "Ability Shield",
 		spritenum: 746,
@@ -1159,7 +1159,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 4,
 		isNonstandard: "Unobtainable",
 	},
-	damprock: {
+	damprock: { // updated
 		name: "Damp Rock",
 		spritenum: 88,
 		fling: {
@@ -1167,6 +1167,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 285,
 		gen: 4,
+		isNonstandard: "Past",
 	},
 	darkgem: {
 		name: "Dark Gem",
@@ -1326,14 +1327,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 5,
 		isNonstandard: "Past",
 	},
-	dracoplate: {
+	dracoplate: { // updated
 		name: "Draco Plate",
 		spritenum: 105,
 		onPlate: 'Dragon',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -1413,14 +1414,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	dreadplate: {
+	dreadplate: { // updated
 		name: "Dread Plate",
 		spritenum: 110,
 		onPlate: 'Dark',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -1479,14 +1480,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 108,
 		gen: 4,
 	},
-	earthplate: {
+	earthplate: { // updated
 		name: "Earth Plate",
 		spritenum: 117,
 		onPlate: 'Ground',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Ground') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -1864,14 +1865,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	fistplate: {
+	fistplate: { // updated
 		name: "Fist Plate",
 		spritenum: 143,
 		onPlate: 'Fighting',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -1899,14 +1900,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 273,
 		gen: 4,
 	},
-	flameplate: {
+	flameplate: { // updated
 		name: "Flame Plate",
 		spritenum: 146,
 		onPlate: 'Fire',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -2466,7 +2467,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 4,
 		isPokeball: true,
 	},
-	heatrock: {
+	heatrock: { // updated
 		name: "Heat Rock",
 		spritenum: 193,
 		fling: {
@@ -2474,6 +2475,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 284,
 		gen: 4,
+		isNonstandard: "Past",
 	},
 	heavyball: {
 		name: "Heavy Ball",
@@ -2607,14 +2609,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 849,
 		gen: 7,
 	},
-	icicleplate: {
+	icicleplate: { // updated
 		name: "Icicle Plate",
 		spritenum: 220,
 		onPlate: 'Ice',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -2639,7 +2641,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	icyrock: {
+	icyrock: { // updated
 		name: "Icy Rock",
 		spritenum: 221,
 		fling: {
@@ -2647,6 +2649,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 282,
 		gen: 4,
+		isNonstandard: "Past",
 	},
 	inciniumz: {
 		name: "Incinium Z",
@@ -2659,14 +2662,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
-	insectplate: {
+	insectplate: { // updated
 		name: "Insect Plate",
 		spritenum: 223,
 		onPlate: 'Bug',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -2697,14 +2700,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 278,
 		gen: 4,
 	},
-	ironplate: {
+	ironplate: { // updated
 		name: "Iron Plate",
 		spritenum: 225,
 		onPlate: 'Steel',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -3444,14 +3447,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	meadowplate: {
+	meadowplate: { // updated
 		name: "Meadow Plate",
 		spritenum: 282,
 		onPlate: 'Grass',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -3688,14 +3691,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		isNonstandard: "Past",
 		gen: 7,
 	},
-	mindplate: {
+	mindplate: { // updated
 		name: "Mind Plate",
 		spritenum: 291,
 		onPlate: 'Psychic',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -4167,14 +4170,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	pixieplate: {
+	pixieplate: { // updated
 		name: "Pixie Plate",
 		spritenum: 610,
 		onPlate: 'Fairy',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fairy') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -4972,20 +4975,43 @@ export const Items: {[itemid: string]: ItemData} = {
 		isPokeball: true,
 		isNonstandard: "Unobtainable",
 	},
-	safetygoggles: {
+	safetygoggles: { // updated
 		name: "Safety Goggles",
 		spritenum: 604,
 		fling: {
 			basePower: 80,
 		},
 		onImmunity(type, pokemon) {
-			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
+			if (type === 'sandstorm' || type === 'powder') return false;
 		},
 		onTryHit(pokemon, source, move) {
 			if (move.flags['powder'] && pokemon !== source && this.dex.getImmunity('powder', pokemon)) {
 				this.add('-activate', pokemon, 'item: Safety Goggles', move.name);
 				return null;
 			}
+		},
+		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem()) return;
+			if (['sandstorm', 'duststorm', 'pollinate',
+				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
+				this.runEvent('IrritantWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.inactive) return;
+			this.effectState.inactive = false;
+			if (['sandstorm', 'duststorm', 'pollinate',
+				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
+				this.runEvent('IrritantWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onEnd(pokemon) {
+			if (['sandstorm', 'duststorm', 'pollinate',
+				'swarmsignal', 'smogspread', 'sprinkle'].includes(this.field.effectiveIrritantWeather())) {
+				this.runEvent('IrritantWeatherChange', pokemon, pokemon, this.effect);
+			}
+			this.effectState.inactive = true;
 		},
 		num: 650,
 		gen: 6,
@@ -5258,14 +5284,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 4,
 		isNonstandard: "Past",
 	},
-	skyplate: {
+	skyplate: { // updated
 		name: "Sky Plate",
 		spritenum: 450,
 		onPlate: 'Flying',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Flying') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -5292,7 +5318,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	smoothrock: {
+	smoothrock: { // updated
 		name: "Smooth Rock",
 		spritenum: 453,
 		fling: {
@@ -5300,6 +5326,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 283,
 		gen: 4,
+		isNonstandard: "Past",
 	},
 	snorliumz: {
 		name: "Snorlium Z",
@@ -5403,14 +5430,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 3,
 		isNonstandard: "Past",
 	},
-	splashplate: {
+	splashplate: { // updated
 		name: "Splash Plate",
 		spritenum: 463,
 		onPlate: 'Water',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -5423,14 +5450,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 299,
 		gen: 4,
 	},
-	spookyplate: {
+	spookyplate: { // updated
 		name: "Spooky Plate",
 		spritenum: 464,
 		onPlate: 'Ghost',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -5587,14 +5614,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 288,
 		gen: 4,
 	},
-	stoneplate: {
+	stoneplate: { // updated
 		name: "Stone Plate",
 		spritenum: 477,
 		onPlate: 'Rock',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Rock') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -5787,14 +5814,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 272,
 		gen: 4,
 	},
-	toxicplate: {
+	toxicplate: { // updated
 		name: "Toxic Plate",
 		spritenum: 516,
 		onPlate: 'Poison',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -6864,7 +6891,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 2,
 		isNonstandard: "Past",
 	},
-	utilityumbrella: {
+	utilityumbrella: { // updated
 		name: "Utility Umbrella",
 		spritenum: 718,
 		fling: {
@@ -6873,19 +6900,22 @@ export const Items: {[itemid: string]: ItemData} = {
 		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem()) return;
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveClimateWeather())) {
+			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
+				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onUpdate(pokemon) {
 			if (!this.effectState.inactive) return;
 			this.effectState.inactive = false;
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveClimateWeather())) {
+			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
+				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 		},
 		onEnd(pokemon) {
-			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea'].includes(this.field.effectiveClimateWeather())) {
+			if (['sunnyday', 'desolateland', 'primordialsea', 'raindance', 'hail', 'snow',
+				'bloodmoon', 'foghorn', 'deltastream'].includes(this.field.effectiveClimateWeather())) {
 				this.runEvent('ClimateWeatherChange', pokemon, pokemon, this.effect);
 			}
 			this.effectState.inactive = true;
@@ -7170,14 +7200,14 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 188,
 		gen: 4,
 	},
-	zapplate: {
+	zapplate: { // updated
 		name: "Zap Plate",
 		spritenum: 572,
 		onPlate: 'Electric',
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onTakeItem(item, pokemon, source) {
@@ -7499,7 +7529,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
-		num: -1,
+		num: 1001,
 		gen: 6,
 		isNonstandard: "CAP",
 	},
@@ -7523,8 +7553,187 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		forcedForme: "Venomicon-Epilogue",
 		itemUser: ["Venomicon-Epilogue"],
-		num: -2,
+		num: 1002,
 		gen: 8,
 		isNonstandard: "CAP",
+	},
+
+	// swse
+	avocaberry: {
+		name: "Avoca Berry",
+		spritenum: 381,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ice",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'frb') {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			if (pokemon.status === 'frb') {
+				pokemon.cureStatus();
+			}
+		},
+		num: -1,
+		gen: 9,
+	},
+	energychannelizer: {
+		name: "Energy Channelizer",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -12,
+		gen: 9,
+	},
+	energynullifier: {
+		name: "Energy Nullifier",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem()) return;
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.inactive) return;
+			this.effectState.inactive = false;
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onEnd(pokemon) {
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+			this.effectState.inactive = true;
+		},
+		num: -14,
+		gen: 9,
+	},
+	charmingtalisman: {
+		name: "Charming Talisman",
+		spritenum: 436,
+		fling: {
+			basePower: 50,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Fairy') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: -3,
+		gen: 9,
+	},
+	frostorb: {
+		name: "Frost Orb",
+		spritenum: 145,
+		fling: {
+			basePower: 30,
+			status: 'frb',
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			pokemon.trySetStatus('frb', pokemon);
+		},
+		num: -2,
+		gen: 9,
+	},
+	pikaspresso: {
+		name: "Pikaspresso",
+		spritenum: 788,
+		onUpdate(pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.useItem();
+			}
+		},
+		boosts: {
+			spe: 2,
+		},
+		onStart (pokemon) {
+			pokemon.addVolatile('pikaspresso');
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Caffeine Crash');
+                this.boost({spe: -2}, pokemon, pokemon);
+            },
+			onModifyPriority (priority, pokemon, target, move) {
+				return priority - 2;
+			},
+			onResidualOrder: 28,
+			onResidualSubOrder: 5,
+            onEnd(pokemon) {
+                this.add('-end', pokemon, 'Caffeine Crash');
+				pokemon.removeVolatile('pikaspresso');
+            },
+		},
+		num: -4,
+		gen: 9,
+	},
+	portableturbine: {
+		name: "Portable Turbine",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -13,
+		gen: 9,
+	},
+	volatilespray: {
+		name: "Volatile Spray",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -11,
+		gen: 9,
+	},
+    weathervane: { // incomplete
+        name: 'Weather Vane',
+		spritenum: 6,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
+				return false;
+			}
+			return true;
+		},
+		num: -15,
+		gen: 9,
+	},
+	weatherballoon: {
+		name: "Weather Balloon",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -10,
+		gen: 9,
+	},
+	whirligig: {
+		name: "Whirligig",
+		spritenum: 64,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
+				return false;
+			}
+			return true;
+		},
+		itemUser: ["Castform"],
+		num: -16,
+		gen: 9,
 	},
 };

@@ -97,7 +97,10 @@ export class BasicEffect implements EffectData {
 	/** Moves only: what status does it set? */
 	status?: ID;
 	/** Moves only: what weather does it set? */
-	weather?: ID;
+	climateWeather?: ID;
+	irritantWeather?: ID;
+	energyWeather?: ID;
+	clearingWeather?: ID;
 	/** ??? */
 	sourceEffect: string;
 
@@ -119,7 +122,10 @@ export class BasicEffect implements EffectData {
 		this.noCopy = !!data.noCopy;
 		this.affectsFainted = !!data.affectsFainted;
 		this.status = data.status as ID || undefined;
-		this.weather = data.weather as ID || undefined;
+		this.climateWeather = data.climateWeather as ID || undefined;
+		this.irritantWeather = data.irritantWeather as ID || undefined;
+		this.energyWeather = data.energyWeather as ID || undefined;
+		this.clearingWeather = data.clearingWeather as ID || undefined;
 		this.sourceEffect = data.sourceEffect || '';
 	}
 

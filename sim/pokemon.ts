@@ -33,6 +33,7 @@ interface Attacker {
 export interface EffectState {
 	// TODO: set this to be an actual number after converting data/ to .ts
 	duration?: number | any;
+	boosted?: boolean;
 	[k: string]: any;
 }
 
@@ -776,7 +777,7 @@ export class Pokemon {
 			}
 			if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
 				const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
-					!(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) &&
+					!(move.id.startsWith('solarb') && this.battle.field.isClimateWeather(['sunnyday', 'desolateland'])) &&
 					!(this.hasItem('powerherb') && move.id !== 'skydrop');
 				if (!isCharging) {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
@@ -1593,7 +1594,8 @@ export class Pokemon {
 		}
 
 		if (!ignoreImmunities && status.id &&
-				!(source?.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))) {
+				!((source?.hasAbility('corrosion') || (this.battle.field.irritantWeatherState.boosted &&
+					this.battle.field.isIrritantWeather('smogspread'))) && ['tox', 'psn'].includes(status.id))) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
@@ -2036,15 +2038,52 @@ export class Pokemon {
 	 * Like Field.effectiveWeather(), but ignores sun and rain if
 	 * the Utility Umbrella is active for the Pokemon.
 	 */
-	effectiveWeather() {
-		const weather = this.battle.field.effectiveWeather();
+	effectiveClimateWeather() {
+		const weather = this.battle.field.effectiveClimateWeather();
 		switch (weather) {
 		case 'sunnyday':
-		case 'raindance':
 		case 'desolateland':
+		case 'raindance':
 		case 'primordialsea':
+		case 'hail':
+		case 'snow':
+		case 'bloodmoon':
+		case 'foghorn':
 			if (this.hasItem('utilityumbrella')) return '';
 		}
+		return weather;
+	}
+
+	effectiveIrritantWeather() {
+		const weather = this.battle.field.effectiveIrritantWeather();
+		switch (weather) {
+		case 'sandstorm':
+		case 'duststorm':
+		case 'pollinate':
+		case 'swarmsignal':
+		case 'smogspread':
+		case 'sprinkle':
+			if (this.hasItem('safetygoggles')) return '';
+		}
+		return weather;
+	}
+
+	effectiveEnergyWeather() {
+		const weather = this.battle.field.effectiveEnergyWeather();
+		switch (weather) {
+		case 'auraprojection':
+		case 'haunt':
+		case 'cosmicrays':
+		case 'dragonforce':
+		case 'supercell':
+		case 'magnetize':
+			if (this.hasItem('energynullifier')) return '';
+		}
+		return weather;
+	}
+
+	effectiveClearingWeather() {
+		const weather = this.battle.field.effectiveClearingWeather();
 		return weather;
 	}
 

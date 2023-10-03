@@ -69,6 +69,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		removeItem: "  [POKEMON] lost its [ITEM]!",
 		activateItem: "  ([POKEMON] used its [ITEM]!)",
 		activateWeaken: "  The [ITEM] weakened the damage to [POKEMON]!",
+		drinkItem: "  ([POKEMON] drank its [ITEM]!)",
 
 		damage: "  ([POKEMON] was hurt!)",
 		damagePercentage: "  ([POKEMON] lost [PERCENTAGE] of its health!)",
@@ -193,6 +194,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 	},
 	psn: {
 		start: "  [POKEMON] was poisoned!",
+		startFromWeather: "  [POKEMON] was infected by the poisonous air!",
 		alreadyStarted: "  [POKEMON] is already poisoned!",
 		end: "  [POKEMON] was cured of its poisoning!",
 		endFromItem: "  [POKEMON]'s [ITEM] cured its poison!",
@@ -213,6 +215,14 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		end: "  [POKEMON] woke up!",
 		endFromItem: "  [POKEMON]'s [ITEM] woke it up!",
 		cant: "[POKEMON] is fast asleep.",
+	},
+	frb: {
+		start: "  [POKEMON] got frostbite!",
+		startFromItem: "  [POKEMON] got frostbite from the [ITEM]!",
+		alreadyStarted: "  [POKEMON] is already frostbitten!",
+		end: "  [POKEMON]'s frostbite was healed!",
+		endFromItem: "  [POKEMON]'s [ITEM] healed its frostbite!",
+		damage: "  [POKEMON] was hurt by its frostbite!",
 	},
 
 	// misc effects
@@ -263,14 +273,8 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		fail: "  [POKEMON] shook its head. It seems like it can't use this move...",
 	},
 
-	// weather
-	sandstorm: {
-		weatherName: "Sandstorm",
-		start: "  A sandstorm kicked up!",
-		end: "  The sandstorm subsided.",
-		upkeep: "  (The sandstorm is raging.)",
-		damage: "  [POKEMON] is buffeted by the sandstorm!",
-	},
+	// Weathergy
+	// Climate
 	sunnyday: {
 		weatherName: "Sun",
 		start: "  The sunlight turned harsh!",
@@ -296,6 +300,70 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		end: "  The snow stopped.",
 		upkeep: "  (The snow is falling down.)",
 	},
+	bloodmoon: {
+		weatherName: "Blood Moon",
+		start: "  A blood moon rises!",
+		end: "  The blood moon passed.",
+		upkeep: "  (It's the hour of the blood moon.)",
+	},
+	foghorn: {
+		weatherName: "Fog",
+		start: "  Fog filled the battlefield!",
+		end: "  The fog disappeared.",
+		upkeep: "  (The fog is deep...)",
+	},
+
+	// Irritant
+	sandstorm: {
+		weatherName: "Sandstorm",
+		start: "  A sandstorm kicked up!",
+		end: "  The sandstorm subsided.",
+		upkeep: "  (The sandstorm is raging.)",
+		damage: "  [POKEMON] is buffeted by the sandstorm!",
+	},
+	duststorm: {
+		weatherName: "Dust Storm",
+		start: "  A dust devil formed!",
+		end: "  The dust settled.",
+		upkeep: "  (The dust is billowing.)",
+	},
+	pollinate: {
+		weatherName: "Pollen Storm",
+		start: "  Pollen enveloped the air!",
+		end: "  The pheromones faded.",
+		upkeep: "  (The pollen is circulating.)",
+	},
+	swarmsignal: {
+		weatherName: "Pheromones",
+		start: "  Pheromones infested the air!",
+		end: "  The pollen dissipated.",
+		upkeep: "  (The pheromones are spreading.)",
+	},
+	smogspread: {
+		weatherName: "Smog",
+		start: "  Poison contaminated the air!",
+		end: "  The poison abated.",
+		upkeep: "  (The poison persists.)",
+	},
+	sprinkle: {
+		weatherName: "Fairy Dust",
+		start: "  Fairy dust aromatized the battlefield!",
+		end: "  The fairy dust dispelled.",
+		upkeep: "  (The fairy dust is diffusing.)",
+		heal: "  [POKEMON]'s HP was restored.",
+	},
+
+	// Energy
+
+	// Clearing
+	strongwinds: {
+		weatherName: "Strong Winds",
+		start: "  A strong wind cleared the battlefield!",
+		end: "  The winds died down.",
+		upkeep: "  (The wind blows strong.)",
+	},
+
+	// extra weather
 	desolateland: {
 		weatherName: "Intense Sun",
 		start: "  The sunlight turned extremely harsh!",

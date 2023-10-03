@@ -252,8 +252,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	attract: {
 		name: "Attract",
-		desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if both the user and the target are the same gender, if either is genderless, or if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
-		shortDesc: "A target of the opposite gender gets infatuated.",
+		desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability or protected by the Aroma Veil Ability are immune.",
+		shortDesc: "Infatuates the target.",
 		gen5: {
 			desc: "Causes the target to become infatuated, making it unable to attack 50% of the time. Fails if both the user and the target are the same gender, if either is genderless, or if the target is already infatuated. The effect ends when either the user or the target is no longer active. Pokemon with the Oblivious Ability are immune.",
 		},
@@ -289,7 +289,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	auroraveil: {
 		name: "Aurora Veil",
 		desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
-		shortDesc: "For 5 turns, damage to allies halved. Snow only.",
+		shortDesc: "For 5 turns, damage to allies halved. Hail only.",
 		gen8: {
 			desc: "For 5 turns, the user and its party members take 0.5x damage from physical and special attacks, or 0.66x damage if in a Double Battle; does not reduce damage further with Reflect or Light Screen. Critical hits ignore this protection. It is removed from the user's side if the user or an ally is successfully hit by Brick Break, Psychic Fangs, or Defog. Brick Break and Psychic Fangs remove the effect before damage is calculated. Lasts for 8 turns if the user is holding Light Clay. Fails unless the weather is Hail.",
 			shortDesc: "For 5 turns, damage to allies is halved. Hail only.",
@@ -527,8 +527,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	blizzard: {
 		name: "Blizzard",
-		desc: "Has a 10% chance to freeze the target. If the weather is Snow, this move does not check accuracy.",
-		shortDesc: "10% chance to freeze foe(s). Can't miss in Snow.",
+		desc: "Has a 10% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
+		shortDesc: "10% chance to freeze foe(s). Can't miss in Hail.",
 		gen8: {
 			desc: "Has a 10% chance to freeze the target. If the weather is Hail, this move does not check accuracy.",
 			shortDesc: "10% chance to freeze foe(s). Can't miss in Hail.",
@@ -867,8 +867,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	chillyreception: {
 		name: "Chilly Reception",
-		desc: "For 5 turns, the weather becomes Snow. The user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		shortDesc: "Starts Snow. User switches out.",
+		desc: "For 5 turns, the weather becomes Hail. The user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
+		shortDesc: "Starts Hail. User switches out.",
 
 		// TODO needs to be implemented
 		activate: "  [POKEMON] is preparing to tell a chillingly bad joke!",
@@ -2466,7 +2466,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	gmaxcuddle: {
 		name: "G-Max Cuddle",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes infatuated, even if they have a substitute. This effect does not happen for a target if both it and the user are the same gender, if either is genderless, or if the target is already infatuated.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, each Pokemon on the opposing side becomes infatuated, even if they have a substitute. This effect does not happen for a target if the target is already infatuated.",
 		shortDesc: "Base move affects power. Foes: infatuated.",
 	},
 	gmaxdepletion: {
@@ -2687,13 +2687,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	growth: {
 		name: "Growth",
-		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages. If the user is holding Utility Umbrella, this move will only raise the user's Attack and Special Attack by 1 stage, even if the weather is Sunny Day or Desolate Land.",
+		desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sun or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages. If the user is holding Utility Umbrella, this move will only raise the user's Attack and Special Attack by 1 stage, even if the weather is Sun or Desolate Land.",
 		shortDesc: "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
 		gen7: {
-			desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages.",
+			desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sun or Desolate Land, this move raises the user's Attack and Special Attack by 2 stages.",
 		},
 		gen5: {
-			desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sunny Day, this move raises the user's Attack and Special Attack by 2 stages.",
+			desc: "Raises the user's Attack and Special Attack by 1 stage. If the weather is Sun, this move raises the user's Attack and Special Attack by 2 stages.",
 		},
 		gen4: {
 			desc: "Raises the user's Special Attack by 1 stage.",
@@ -2773,7 +2773,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hail: {
 		name: "Hail",
-		desc: "For 5 turns, the weather becomes Hail. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are an Ice type or have the Ice Body, Magic Guard, Overcoat, or Snow Cloak Abilities. Lasts for 8 turns if the user is holding Icy Rock. Fails if the current weather is Hail.",
+		desc: "For 5 turns, the weather becomes Hail. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are an Ice or Steel type. During the effect, the Defense and Special Defense of Ice-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Weather Balloon.. Fails if the current weather is Hail.",
 		shortDesc: "For 5 turns, hail crashes down.",
 		gen4: {
 			desc: "For 5 turns, the weather becomes Hail. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are an Ice type or have the Ice Body, Magic Guard, or Snow Cloak Abilities. Lasts for 8 turns if the user is holding Icy Rock. Fails if the current weather is Hail.",
@@ -3075,13 +3075,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hurricane: {
 		name: "Hurricane",
-		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
+		desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain, this move does not check accuracy. If the weather is Desolate Land or Sun, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
 		shortDesc: "30% chance to confuse target. Can't miss in rain.",
 		gen7: {
-			desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain, this move does not check accuracy. If the weather is Desolate Land or Sun, this move's accuracy is 50%.",
 		},
 		gen5: {
-			desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to confuse the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Rain, this move does not check accuracy. If the weather is Sun, this move's accuracy is 50%.",
 		},
 	},
 	hydrocannon: {
@@ -3095,8 +3095,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hydrosteam: {
 		name: "Hydro Steam",
-		desc: "If the current weather is Sunny Day and the user is not holding Utility Umbrella, this move's damage is multiplied by 1.5 instead of halved for being Water type.",
-		shortDesc: "During Sunny Day: 1.5x damage instead of half.",
+		desc: "If the current weather is Sun and the user is not holding Utility Umbrella, this move's damage is multiplied by 1.5 instead of halved for being Water type.",
+		shortDesc: "During Sun: 1.5x damage instead of half.",
 	},
 	hydrovortex: {
 		name: "Hydro Vortex",
@@ -3776,8 +3776,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	maxflare: {
 		name: "Max Flare",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Sunny Day begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
-		shortDesc: "Base move affects power. Starts Sunny Day.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Sun begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
+		shortDesc: "Base move affects power. Starts Sun.",
 	},
 	maxflutterby: {
 		name: "Max Flutterby",
@@ -3786,8 +3786,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	maxgeyser: {
 		name: "Max Geyser",
-		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Rain Dance begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
-		shortDesc: "Base move affects power. Starts Rain Dance.",
+		desc: "Power is equal to the base move's Max Move power. If this move is successful, the effect of Rain begins. This effect does not happen if the user is not Dynamaxed. If this move is used as a base move, it deals damage with a power of 0.",
+		shortDesc: "Base move affects power. Starts Rain.",
 	},
 	maxguard: {
 		name: "Max Guard",
@@ -4194,42 +4194,42 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	moonlight: {
 		name: "Moonlight",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if a non-Climate Weathergy is in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Blood Moon, 1/8 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Hail, Snow, or Foghorn, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen7: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen5: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen4: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded down.",
 		},
 		gen2: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain or Sandstorm, all rounded down.",
 		},
 	},
 	morningsun: {
 		name: "Morning Sun",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if a non-Climate Weathergy is in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sun, 1/8 of its maximum HP if the weather is Blood Moon, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Hail, Snow, or Foghorn, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen7: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen5: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen4: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded down.",
 		},
 		gen2: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain or Sandstorm, all rounded down.",
 		},
 	},
 	mortalspin: {
@@ -5002,14 +5002,14 @@ export const MovesText: {[k: string]: MoveText} = {
 		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
 	},
 	raindance: {
-		name: "Rain Dance",
-		desc: "For 5 turns, the weather becomes Rain Dance. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Damp Rock. Fails if the current weather is Rain Dance.",
+		name: "Rain",
+		desc: "For 5 turns, the weather becomes Rain. During the effect, the damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5, and the Defense of Grass-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Rain.",
 		shortDesc: "For 5 turns, heavy rain powers Water moves.",
 		gen3: {
-			desc: "For 5 turns, the weather becomes Rain Dance. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Rain Dance.",
+			desc: "For 5 turns, the weather becomes Rain. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Rain.",
 		},
 		gen2: {
-			desc: "For 5 turns, the weather becomes Rain Dance, even if the current weather is Rain Dance. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect.",
+			desc: "For 5 turns, the weather becomes Rain, even if the current weather is Rain. The damage of Water-type attacks is multiplied by 1.5 and the damage of Fire-type attacks is multiplied by 0.5 during the effect.",
 		},
 	},
 	rapidspin: {
@@ -5385,7 +5385,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	sandstorm: {
 		name: "Sandstorm",
-		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
+		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard, Overcoat, Sand Force, Sand Rush, or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Sandstorm.",
 		shortDesc: "For 5 turns, a sandstorm rages. Rock: 1.5x SpD.",
 		gen4: {
 			desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Magic Guard or Sand Veil Abilities. During the effect, the Special Defense of Rock-type Pokemon is multiplied by 1.5 when taking damage from a special attack. Lasts for 8 turns if the user is holding Smooth Rock. Fails if the current weather is Sandstorm.",
@@ -5635,8 +5635,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	shoreup: {
 		name: "Shore Up",
-		desc: "The user restores 1/2 of its maximum HP, rounded half down. If the weather is Sandstorm, the user instead restores 2/3 of its maximum HP, rounded half down.",
-		shortDesc: "User restores 1/2 its max HP; 2/3 in Sandstorm.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half down. If Sandstorm or Dust Storm is active, the user instead restores 2/3 of its maximum HP, rounded half down.",
+		shortDesc: "User restores 1/2 its max HP; 2/3 in Sandstorm/Dust Storm.",
 	},
 	signalbeam: {
 		name: "Signal Beam",
@@ -5944,25 +5944,25 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	solarbeam: {
 		name: "Solar Beam",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		gen8: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sun, the move still requires a turn to charge.",
 		},
 		gen7: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain, or Sandstorm. If the user is holding a Power Herb or the weather is Desolate Land or Sun, the move completes in one turn.",
 		},
 		gen5: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain, or Sandstorm. If the user is holding a Power Herb or the weather is Sun, the move completes in one turn.",
 		},
 		gen4: {
-			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Hail, Rain, or Sandstorm. If the user is holding a Power Herb or the weather is Sun, the move completes in one turn.",
 		},
 		gen3: {
-			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Hail, Rain Dance, or Sandstorm. If the weather is Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Hail, Rain, or Sandstorm. If the weather is Sun, the move completes in one turn.",
 		},
 		gen2: {
-			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Rain Dance. If the weather is Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Damage is halved if the weather is Rain. If the weather is Sun, the move completes in one turn.",
 		},
 		gen1: {
 			desc: "This attack charges on the first turn and executes on the second.",
@@ -5973,13 +5973,13 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	solarblade: {
 		name: "Solar Blade",
-		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Sun or Desolate Land, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Sun or Desolate Land, the move still requires a turn to charge.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight.",
 		gen8: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sunny Day, the move still requires a turn to charge.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Primordial Sea, Rain, Sandstorm, or Snow and the user is not holding Utility Umbrella. If the user is holding a Power Herb or the weather is Desolate Land or Sun, the move completes in one turn. If the user is holding Utility Umbrella and the weather is Desolate Land or Sun, the move still requires a turn to charge.",
 		},
 		gen7: {
-			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Desolate Land or Sunny Day, the move completes in one turn.",
+			desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Primordial Sea, Rain, or Sandstorm. If the user is holding a Power Herb or the weather is Desolate Land or Sun, the move completes in one turn.",
 		},
 
 		prepare: "#solarbeam",
@@ -6413,14 +6413,14 @@ export const MovesText: {[k: string]: MoveText} = {
 		},
 	},
 	sunnyday: {
-		name: "Sunny Day",
-		desc: "For 5 turns, the weather becomes Sunny Day. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Heat Rock. Fails if the current weather is Sunny Day.",
+		name: "Sun",
+		desc: "For 5 turns, the weather becomes Sun. During the effect, the damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5, and the Special Defense of Grass-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Sun.",
 		shortDesc: "For 5 turns, intense sunlight powers Fire moves.",
 		gen3: {
-			desc: "For 5 turns, the weather becomes Sunny Day. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Sunny Day.",
+			desc: "For 5 turns, the weather becomes Sun. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect. Fails if the current weather is Sun.",
 		},
 		gen2: {
-			desc: "For 5 turns, the weather becomes Sunny Day, even if the current weather is Sunny Day. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect.",
+			desc: "For 5 turns, the weather becomes Sun, even if the current weather is Sun. The damage of Fire-type attacks is multiplied by 1.5 and the damage of Water-type attacks is multiplied by 0.5 during the effect.",
 		},
 	},
 	sunsteelstrike: {
@@ -6546,22 +6546,22 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	synthesis: {
 		name: "Synthesis",
-		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Primordial Sea, Rain Dance, Sandstorm, or Snow, all rounded half down.",
+		desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Sun or Desolate Land, and 1/4 of its maximum HP if the weather is Rain, Primordial Sea, Hail, Snow, Blood Moon, Fog, or Delta Stream, all rounded half down.",
 		shortDesc: "Heals the user by a weather-dependent amount.",
 		gen8: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect or if the user is holding Utility Umbrella, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen7: {
-			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if Delta Stream or no weather conditions are in effect, 2/3 of its maximum HP if the weather is Desolate Land or Sun, and 1/4 of its maximum HP if the weather is Hail, Primordial Sea, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen5: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded half down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded half down.",
 		},
 		gen4: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Hail, Rain, or Sandstorm, all rounded down.",
 		},
 		gen2: {
-			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
+			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sun, and 1/4 of its maximum HP if the weather is Rain or Sandstorm, all rounded down.",
 		},
 	},
 	tackle: {
@@ -6780,19 +6780,19 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	thunder: {
 		name: "Thunder",
-		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
+		desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain, this move does not check accuracy. If the weather is Desolate Land or Sun, this move's accuracy is 50%. If this move is used against a Pokemon holding Utility Umbrella, this move's accuracy remains at 70%.",
 		shortDesc: "30% chance to paralyze. Can't miss in rain.",
 		gen7: {
-			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain Dance, this move does not check accuracy. If the weather is Desolate Land or Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Primordial Sea or Rain, this move does not check accuracy. If the weather is Desolate Land or Sun, this move's accuracy is 50%.",
 		},
 		gen5: {
-			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop. If the weather is Rain, this move does not check accuracy. If the weather is Sun, this move's accuracy is 50%.",
 		},
 		gen4: {
-			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce or Fly. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Bounce or Fly. If the weather is Rain, this move does not check accuracy. If the weather is Sun, this move's accuracy is 50%.",
 		},
 		gen2: {
-			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Fly. If the weather is Rain Dance, this move does not check accuracy. If the weather is Sunny Day, this move's accuracy is 50%.",
+			desc: "Has a 30% chance to paralyze the target. This move can hit a target using Fly. If the weather is Rain, this move does not check accuracy. If the weather is Sun, this move's accuracy is 50%.",
 		},
 		gen1: {
 			desc: "Has a 10% chance to paralyze the target.",
@@ -7214,16 +7214,16 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	weatherball: {
 		name: "Weather Ball",
-		desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Snow, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, this move remains Normal type and does not double in power.",
+		desc: "Power doubles if a Weathergy is active, and this move's type changes to match. If the user is holding Utility Umbrella and uses Weather Ball during a climate Weathergy, this move remains Normal type and does not double in power.",
 		shortDesc: "Power doubles and type varies in each weather.",
 		gen8: {
-			desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Hail, Water type during Primordial Sea or Rain Dance, Rock type during Sandstorm, and Fire type during Desolate Land or Sunny Day. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain Dance, Desolate Land, or Sunny Day, this move remains Normal type and does not double in power.",
+			desc: "Power doubles if a weather condition other than Delta Stream is active, and this move's type changes to match. Ice type during Hail, Water type during Primordial Sea or Rain, Rock type during Sandstorm, and Fire type during Desolate Land or Sun. If the user is holding Utility Umbrella and uses Weather Ball during Primordial Sea, Rain, Desolate Land, or Sun, this move remains Normal type and does not double in power.",
 		},
 		gen5: {
-			desc: "Power doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
+			desc: "Power doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain, Rock type during Sandstorm, and Fire type during Sun.",
 		},
 		gen3: {
-			desc: "Damage doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
+			desc: "Damage doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain, Rock type during Sandstorm, and Fire type during Sun.",
 			shortDesc: "Damage doubles and type varies during weather.",
 		},
 
@@ -7442,5 +7442,82 @@ export const MovesText: {[k: string]: MoveText} = {
 			desc: "Will always result in a critical hit.",
 			shortDesc: "Nearly always goes first. Always crits.",
 		},
+	},
+
+	// swse
+	auraprojection: {
+		name: "Aura Projection",
+		desc: "For 5 turns, the weather becomes Battle Aura. During the effect, raises the chance for a critical hit by 1 stage and prevents other Pokemon from lowering Fighting-type Pokemon's stat stages. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Battle Aura.",
+		shortDesc: "For 5 turns, a battle aura raises crit rate by 1.",
+	},
+	bloodmoon: {
+		name: "Blood Moon",
+		desc: "For 5 turns, the weather becomes Blood Moon. During the effect, the damage of supereffective attacks is multiplied by 1.5 and Dark-type Status moves have their priority increased by 1. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Blood Moon.",
+		shortDesc: "For 5 turns, the moon powers supereffective moves.",
+	},
+	cosmicrays: {
+		name: "Cosmic Rays",
+		desc: "For 5 turns, the weather becomes Psychic Field. During the effect, the damage of Psychic-type attacks is multiplied by 1.5 and the damage of Dark-type attacks is multiplied by 0.5. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Psychic Field.",
+		shortDesc: "For 5 turns, a psychic field powers Psychic moves.",
+	},
+	dragonforce: {
+		name: "Dragon Force",
+		desc: "For 5 turns, the weather becomes Dragon Force. During the effect, the damage of supereffective attacks is multiplied by 0.8 and the Attack and Special Attack of Dragon-type Pokemon is multiplied by 1.15. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Dragon Force.",
+		shortDesc: "For 5 turns, the arcane weakens supereffective moves.",
+	},
+	duststorm: {
+		name: "Dust Storm",
+		desc: "For 5 turns, the weather becomes Dust Storm. During the effect, the Speed of Ground-type Pokemon is multiplied by 1.5 and the the damage of Electric-type attacks is multiplied by 0.5. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Dust Storm.",
+		shortDesc: "For 5 turns, dust fills the air. Ground: 1.5x Spe.",
+	},
+	foghorn: {
+		name: "Foghorn",
+		desc: "For 5 turns, the weather becomes Fog. During the effect, Ghost types can be hit with Normal-type moves and non-Normal-type moves have their accuracy multiplied by 0.9. Lasts for 8 turns if the user is holding a Weather Balloon. Fails if the current weather is Fog.",
+		shortDesc: "For 5 turns, fog negates Ghost's normal immunity.",
+	},
+	haunt: {
+		name: "Haunt",
+		desc: "For 5 turns, the weather becomes Cursed Winds. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ghost, Normal, or Dark type, or have the Magic Guard ability. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Cursed Winds.",
+		shortDesc: "For 5 turns, cursed winds drain HP.",
+	},
+	initiative: {
+		name: "Initiative",
+		desc: "If this move is successful, it has an equal chance to apply any of the following effects: put the target to sleep, put the user to sleep, paralyze the target, paralyze the user, confuse the target, confuse the user, disable the target's last move used, disable the user's last move used, hurt the target by 1/4 of its maximum HP, hurt the user by 1/4 of its maximum HP, heal the target by 1/4 of its maximum HP, or heal the user by 1/4 of its maximum HP by 1/4 of its maximum HP.",
+		shortDesc: "Has a random positive or negative effect.",
+	},
+	magnetize: {
+		name: "Magnetize",
+		desc: "For 5 turns, the weather becomes Magnetosphere. During the effect, Steel-type moves and Electric-type moves targeted at Steel-type Pokemon ignore accuracy checks, and the Special Defense of Steel-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Magnetosphere.",
+		shortDesc: "For 5 turns, Steel moves ignore accuracy checks.",
+	},
+	pollinate: {
+		name: "Pollinate",
+		desc: "For 5 turns, the weather becomes Pollen Storm. During the effect, the Attack of non-Grass- and Bug-type Pokemon is multiplied by 0.5. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Pollen Storm.",
+		shortDesc: "For 5 turns, non-Grass/Bug: 0.5x Atk.",
+	},
+	smogspread: {
+		name: "Smog Spread",
+		desc: "For 5 turns, the weather becomes Smog. At the end of each turn except the last, all active Pokemon are poisoned, unless they are a Poison or Steel type. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Smog.",
+		shortDesc: "For 5 turns, smog fills the air. Poisons all active.",
+	},
+	sprinkle: {
+		name: "Sprinkle",
+		desc: "For 5 turns, the weather becomes Fairy Dust. At the end of each turn except the last, all active Pokemon have 1/16 of their maximum HP restored, rounded down. During the effect, the evasion of non-Fairy-type Pokemon is multiplied by 0.75 during accuracy checks, and the Special Defense of Fairy-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Fairy Dust.",
+		shortDesc: "For 5 turns, fairy dust heals. Fairy: 1.25x SpDef.",
+	},
+	strongwinds: {
+		name: "Strong Winds",
+		desc: "For 5 turns, the weather becomes Strong Winds. Clears all active Weathergies on activation. If other Weathergies are activated after Strong Winds, they gain boosted effects for as long as Strong Winds remains active. During the effect, wind moves ignore accuracy checks and the Speed of Flying-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding a Portable Turbine. Fails if the current weather is Strong Winds.",
+		shortDesc: "Clears weather. For 5 turns, boosts all weather.",
+	},
+	supercell: { // incomplete
+		name: "Supercell",
+		desc: "For 5 turns, the weather becomes Thunderstorm. At the end of each turn except the last, all active Pokemon have a 10% to be struck by lightning. During the effect the Speed of Electric-type Pokemon is multiplied by 1.25. Lasts for 8 turns if the user is holding an Energy Channelizer. Fails if the current weather is Thunderstorm.",
+		shortDesc: "For 5 turns, lightning strikes the field.",
+	},
+	swarmsignal: {
+		name: "Swarm Signal",
+		desc: "For 5 turns, the weather becomes Pheromones. During the effect, the Speed of Bug- and Poison-type Pokemon is multiplied by 1.5 and the accuracy of moves used by Bug- and Poison-type Pokemon is multiplied by 1.3. Lasts for 8 turns if the user is holding Volatile Spray. Fails if the current weather is Pheromones.",
+		shortDesc: "For 5 turns, Bug/Poison: 1.5x Spe, 1.3x Acc.",
 	},
 };

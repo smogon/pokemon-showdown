@@ -1544,7 +1544,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	safetygoggles: {
 		name: "Safety Goggles",
-		desc: "Holder is immune to powder moves and damage from Sandstorm or Hail.",
+		desc: "Holder is immune to powder moves and damage from Sandstorm. The holder ignores Irritant Weathergy effects. Damage and accuracy calculations from attacks used by the holder are affected by Irritant Weathergy, but not attacks used against the holder.",
+		shortDesc: "The holder is immune to powder moves, Sandstorm; ignores Irritant Weathergy effects.",
 
 		block: "  [POKEMON] is not affected by [MOVE] thanks to its Safety Goggles!",
 	},
@@ -2234,8 +2235,8 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 	utilityumbrella: {
 		name: "Utility Umbrella",
-		desc: "The holder ignores rain- and sun-based effects. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
-		shortDesc: "The holder ignores rain- and sun-based effects.",
+		desc: "The holder ignores Climate Weathergy effects. Damage and accuracy calculations from attacks used by the holder are affected by Climate Weathergy, but not attacks used against the holder.",
+		shortDesc: "The holder ignores Climate Weathergy effects.",
 	},
 	venusaurite: {
 		name: "Venusaurite",
@@ -2380,7 +2381,6 @@ export const ItemsText: {[k: string]: ItemText} = {
 	},
 
 	// CAP items
-
 	crucibellite: {
 		name: "Crucibellite",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
@@ -2388,5 +2388,37 @@ export const ItemsText: {[k: string]: ItemText} = {
 	vilevial: {
 		name: "Vile Vial",
 		desc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
+	},
+
+	// swse
+	energychannelizer: {
+		name: "Energy Channelizer",
+		desc: "Holder's Energy Weathergies last 8 turns instead of 5.",
+	},
+	energynullifier: {
+		name: "Energy Nullifier",
+		desc: "The holder ignores Energy Weathergy effects. Damage and accuracy calculations from attacks used by the holder are affected by Energy Weathergy, but not attacks used against the holder.",
+		shortDesc: "The holder ignores Energy Weathergy effects.",
+	},
+	frostorb: {
+		name: "Frost Orb",
+		desc: "At the end of every turn, this item attempts to give the holder frostbite.",
+	},
+	portableturbine: {
+		name: "Portable Turbine",
+		desc: "Holder's Clearing Weathergies last 8 turns instead of 5.",
+	},
+	volatilespray: {
+		name: "Volatile Spray",
+		desc: "Holder's Irritant Weathergies last 8 turns instead of 5.",
+	},
+	weatherballoon: {
+		name: "Weather Balloon",
+		desc: "Holder's Climate Weathergies last 8 turns instead of 5.",
+	},
+	whirligig: {
+		name: "Whirligig",
+		desc: "If held by a Castform, this item allows it to transform into Castform-Whirly in battle during Magnetosphere.",
+		shortDesc: "Allows Castform to enter Whirly form.",
 	},
 };

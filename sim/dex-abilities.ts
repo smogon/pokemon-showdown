@@ -19,7 +19,10 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
-	readonly suppressWeather: boolean;
+	readonly suppressClimateWeather: boolean;
+	readonly suppressIrritantWeather: boolean;
+	readonly suppressEnergyWeather: boolean;
+	readonly suppressClearingWeather: boolean;
 	declare readonly condition?: ConditionData;
 	declare readonly isPermanent?: boolean;
 	declare readonly isBreakable?: boolean;
@@ -29,7 +32,10 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
-		this.suppressWeather = !!data.suppressWeather;
+		this.suppressClimateWeather = !!data.suppressClimateWeather;
+		this.suppressIrritantWeather = !!data.suppressIrritantWeather;
+		this.suppressEnergyWeather = !!data.suppressEnergyWeather;
+		this.suppressClearingWeather = !!data.suppressClearingWeather;
 		this.rating = data.rating || 0;
 
 		if (!this.gen) {
