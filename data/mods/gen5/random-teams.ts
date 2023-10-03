@@ -616,7 +616,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
-		// Obtain a list of abilities that are allowed (not culled)
 		for (const ability of abilityData) {
 			if (ability.rating >= 1 && !this.shouldCullAbility(
 				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles, preferredType, role
