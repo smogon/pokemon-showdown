@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testHiddenPower, testSet, testAlwaysHasMove} = require('./tools');
+const {testTeam, testSet, testHiddenPower, testAlwaysHasMove, validateLearnset} = require('./tools');
 
 describe('[Gen 5] Random Battle (slow)', () => {
 	const options = {format: 'gen5randombattle'};
@@ -17,7 +17,7 @@ describe('[Gen 5] Random Battle (slow)', () => {
 			const setsJSON = require(filename);
 			const validRoles = [
 				"Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker",
-				"Bulky Setup", "Staller", "Bulky Support", "Fast Support", "Staller",
+				"Bulky Setup", "Staller", "Bulky Support", "Fast Support", "Spinner",
 			];
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = Dex.species.get(id);
@@ -29,7 +29,7 @@ describe('[Gen 5] Random Battle (slow)', () => {
 						const dexMove = Dex.moves.get(move);
 						assert(dexMove.exists, `${species.name} has invalid move: ${move}`);
 						assert(move === dexMove.id || move.startsWith('hiddenpower'), `${species.name} has misformatted move: ${move}`);
-						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen7'), `${species.name} can't learn ${move}`);
+						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen5'), `${species.name} can't learn ${move}`);
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
 						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
@@ -92,7 +92,6 @@ describe('[Gen 5] Random Battle (slow)', () => {
 					}
 					if (!moves.size) break;
 				}
-				if (moves.size) console.log(moves, species);
 				assert(!moves.size, species);
 			}
 		}
