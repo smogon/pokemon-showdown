@@ -112,7 +112,7 @@ class Ladder extends LadderStore {
 		if (isRated && !Ladders.disabled) {
 			const uid = user.id;
 			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames}),
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames, user: uid}),
 				this.getRating(uid),
 			]);
 			if (uid !== user.id) {
@@ -126,7 +126,7 @@ class Ladder extends LadderStore {
 				rating = 1;
 			}
 			const validator = TeamValidatorAsync.get(this.formatid);
-			valResult = await validator.validateTeam(team, {removeNicknames});
+			valResult = await validator.validateTeam(team, {removeNicknames, user: user.id});
 		}
 
 		if (!valResult.startsWith('1')) {
