@@ -179,6 +179,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// Develop additional move lists
 		const badWithSetup = ['dragontail', 'haze', 'healbell', 'pursuit', 'toxic'];
 		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
+		// Nature Power is Earthquake this gen
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status' && move.id !== 'naturepower')
 			.map(move => move.id);
