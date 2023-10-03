@@ -732,7 +732,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		);
 
 		if (
-			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') && !this.priorityPokemon.includes(species.id)
+			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') &&
+			(!this.priorityPokemon.includes(species.id) || counter.get('Dark') >= 2)
 		) return 'Black Glasses';
 		if (counter.get('Special') === 4) {
 			return (
