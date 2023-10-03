@@ -535,7 +535,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Regenerator':
 			return species.id === 'mienshao' || species.id === 'reuniclus';
 		case 'Reckless': case 'Rock Head':
-			return (!counter.get('recoil'));
+			return !counter.get('recoil');
 		case 'Sand Force': case 'Sand Rush':
 			return !teamDetails.sand;
 		case 'Scrappy':
@@ -551,7 +551,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix' && !!counter.get('sheerforce'));
 		case 'Swarm':
-			return (!counter.get('Bug'));
+			return !counter.get('Bug');
 		case 'Technician':
 			return (!counter.get('technician') || moves.has('tailslap'));
 		case 'Tinted Lens':
