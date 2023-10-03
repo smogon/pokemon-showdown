@@ -1090,8 +1090,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["counter", "destinybond", "encore", "mirrorcoat"],
-                "preferredTypes": ["custap"]
+                "movepool": ["counter", "destinybond", "encore", "mirrorcoat"]
             }
         ]
     },
@@ -2554,7 +2553,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["acrobatics", "destinybond", "disable", "shadowball", "substitute", "twave", "willowisp"]
+                "movepool": ["acrobatics", "destinybond", "disable", "shadowball", "substitute", "thunderwave", "willowisp"]
             }
         ]
     },
