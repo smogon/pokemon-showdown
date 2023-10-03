@@ -1882,8 +1882,7 @@ export class Pokemon {
 			this.battle.debug('add volatile [' + status.id + '] interrupted');
 			return result;
 		}
-		this.volatiles[status.id] = {id: status.id};
-		this.volatiles[status.id].target = this;
+		this.volatiles[status.id] = {id: status.id, name: status.name, target: this};
 		if (source) {
 			this.volatiles[status.id].source = source;
 			this.volatiles[status.id].sourceSlot = source.getSlot();

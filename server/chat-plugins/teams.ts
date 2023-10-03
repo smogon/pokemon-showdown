@@ -114,7 +114,7 @@ export const TeamsHandler = new class {
 		rawTeam: string,
 		teamName: string | null = null,
 		isPrivate?: string | null,
-		isUpdate?: string
+		isUpdate?: number
 	) {
 		const connection = context.connection;
 		this.validateAccess(connection, true);
@@ -340,14 +340,22 @@ export const TeamsHandler = new class {
 		const result = await this.query<{count: number}>(`SELECT count(*) AS count FROM teams WHERE ownerid = $1`, [id]);
 		return result?.[0]?.count || 0;
 	}
-	async get(teamid: string): Promise<StoredTeam | null> {
+	async get(teamid: number | string): Promise<StoredTeam | null> {
+		teamid = Number(teamid);
+		if (isNaN(teamid)) {
+			throw new Chat.ErrorMessage(`Invalid team ID.`);
+		}
 		const rows = await this.query(
 			`SELECT * FROM teams WHERE teamid = $1`, [teamid],
 		);
 		if (!rows.length) return null;
 		return rows[0] as StoredTeam;
 	}
-	async delete(id: string) {
+	async delete(id: string | number) {
+		id = Number(id);
+		if (isNaN(id)) {
+			throw new Chat.ErrorMessage("Invalid team ID");
+		}
 		await this.query(
 			`DELETE FROM teams WHERE teamid = $1`, [id],
 		);
@@ -366,9 +374,10 @@ export const commands: Chat.ChatCommands = {
 			TeamsHandler.validateAccess(connection, true);
 			const targets = Utils.splitFirst(target, ',', 5);
 			const isEdit = cmd === 'update';
-			const teamID = isEdit ? targets.shift() : undefined;
+			const rawTeamID = isEdit ? targets.shift() : undefined;
 			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
-			if (isEdit && !teamID?.length) {
+			const teamID = Number(rawTeamID);
+			if (isEdit && (!rawTeamID?.length || isNaN(teamID))) {
 				connection.popup("Invalid team ID provided.");
 				return null;
 			}
@@ -423,8 +432,8 @@ export const commands: Chat.ChatCommands = {
 		},
 		async delete(target, room, user, connection) {
 			TeamsHandler.validateAccess(connection, true);
-			const teamid = toID(target);
-			if (!teamid.length) return this.popupReply(`Invalid team ID.`);
+			const teamid = Number(toID(target));
+			if (isNaN(teamid)) return this.popupReply(`Invalid team ID.`);
 			const teamData = await TeamsHandler.get(teamid);
 			if (!teamData) return this.popupReply(`Team not found.`);
 			if (teamData.ownerid !== user.id && !user.can('rangeban')) {
@@ -494,6 +503,7 @@ export const pages: Chat.PageTable = {
 	},
 	teams: {
 		async all(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection);
 			const targetUserid = toID(query.shift()) || user.id;
 			let count = Number(query.shift()) || 10;
@@ -519,6 +529,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async filtered(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			const type = query.shift() || "";
 			TeamsHandler.validateAccess(connection);
 			let count = Number(query.shift()) || 50;
@@ -554,11 +565,13 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async view(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection);
-			const teamid = toID(query.shift() || "");
+			const rawTeamid = toID(query.shift() || "");
 			const password = toID(query.shift());
 			this.title = `[View Team]`;
-			if (!teamid.length) {
+			const teamid = Number(rawTeamid);
+			if (isNaN(teamid)) {
 				throw new Chat.ErrorMessage(`Invalid team ID.`);
 			}
 			const team = await TeamsHandler.get(teamid);
@@ -577,6 +590,7 @@ export const pages: Chat.PageTable = {
 			return `<div class="ladder pad">` + TeamsHandler.renderTeam(team, user) + "</div>";
 		},
 		upload(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection);
 			this.title = `[Upload Team]`;
 			let buf = `<div class="ladder pad"><h2>Upload a team</h2>${refresh(this)}<hr />`;
@@ -587,7 +601,7 @@ export const pages: Chat.PageTable = {
 			buf += `<input name="name" /><br />`;
 
 			buf += `<strong>What's the team's format?</strong><br />`;
-			buf += `<formatselect name="format" value="gen${Dex.gen}ou">[Gen ${Dex.gen} OU]</formatselect><br />`;
+			buf += `<formatselect name="format" format="gen${Dex.gen}ou">[Gen ${Dex.gen} OU]</formatselect><br />`;
 
 			buf += `<strong>Should the team be private? (yes/no)</strong><br />`;
 			buf += `<select name="privacy" /><option value="1">Yes</option><option value="0">No</option></select><br />`;
@@ -600,6 +614,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async edit(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection);
 			const teamID = toID(query.shift() || "");
 			if (!teamID.length) {
@@ -618,7 +633,7 @@ export const pages: Chat.PageTable = {
 			buf += `<input name="name" value="${data.title || `Untitled ${teamID}`}" /><br />`;
 
 			buf += `<strong>Team format</strong><br />`;
-			buf += `<formatselect name="format" value="${data.format}">`;
+			buf += `<formatselect name="format" format="${data.format}">`;
 			buf += `${Dex.formats.get(data.format).name}</formatselect><br />`;
 
 			buf += `<strong>Team privacy</strong><br />`;
@@ -639,6 +654,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async searchpublic(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection, true);
 			this.title = '[Teams] Search';
 			let buf = '<div class="pad">';
@@ -653,7 +669,7 @@ export const pages: Chat.PageTable = {
 				buf += `<strong>Search metadata:</strong><br />`;
 				buf += `<span style="display: ${isPersonal ? 'none' : ""}">`;
 				buf += `<Team owner: <input name="owner" /></span><br />`;
-				buf += `Team format: <formatselect name="tier">[Gen ${Dex.gen}] OU</formatselect><br /><br />`;
+				buf += `Team format: <formatselect name="tier" format="gen${Dex.gen}ou">[Gen ${Dex.gen}] OU</formatselect><br /><br />`;
 				buf += `<strong>Search in team:</strong> (separate different searches with commas)<br />`;
 				buf += `Generation: <input name="gen" /><br />`;
 				buf += `Pokemon: <input name="pokemon" /><br />`;
@@ -701,6 +717,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async searchpersonal(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			this.pageid = 'view-teams-searchpersonal';
 
 			return ((pages.teams as Chat.PageTable).searchpublic as import('../chat').PageHandler).call(
@@ -708,6 +725,7 @@ export const pages: Chat.PageTable = {
 			);
 		},
 		async browse(query, user, connection) {
+			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 			TeamsHandler.validateAccess(connection, true);
 			const sorter = toID(query.shift()) || 'latest';
 			let count = Number(toID(query.shift())) || 50;

@@ -16,7 +16,7 @@ export class TeamValidatorAsync {
 		this.format = Dex.formats.get(format);
 	}
 
-	validateTeam(team: string, options?: {removeNicknames?: boolean}) {
+	validateTeam(team: string, options?: {removeNicknames?: boolean, user?: ID}) {
 		let formatid = this.format.id;
 		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
 		if (team.length > (25 * 1024 - 6)) { // don't even let it go to the child process
