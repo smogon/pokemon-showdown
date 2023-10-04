@@ -556,7 +556,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Tinted Lens':
 			return (['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker');
 		case 'Torrent':
-			return (!counter.get('Water'));
+			return !counter.get('Water');
 		case 'Unaware':
 			return (role !== 'Bulky Attacker' && role !== 'Bulky Setup');
 		case 'Water Absorb':
@@ -665,7 +665,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role,
 	): string | undefined {
 		if (species.requiredItems) return this.sample(species.requiredItems);
-		if (species.name === 'Farfetch\u2019d') return 'Stick';
+		if (species.id === 'farfetchd') return 'Stick';
 		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
@@ -675,7 +675,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (ability === 'Harvest') return 'Sitrus Berry';
 		if (species.id === 'ditto') return 'Choice Scarf';
 		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
-		if (ability === 'Speed Boost') return 'Life Orb';
+		if (ability === 'Speed Boost' && species.id !== 'ninjask') return 'Life Orb';
 		if (species.nfe) return 'Eviolite';
 		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
@@ -695,7 +695,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (moves.has('acrobatics')) return 'Flying Gem';
-		if (species.id === 'hitmonlee' && ability === 'Unburden') return (moves.has('fakeout')) ? 'Normal Gem' : 'Fighting Gem';
+		if (species.id === 'hitmonlee' && ability === 'Unburden') return moves.has('fakeout') ? 'Normal Gem' : 'Fighting Gem';
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
@@ -722,12 +722,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			!counter.get('priority') && !moves.has('pursuit')
 		);
 
-		const noExpertBeltMoves = this.noStab.filter(moveid => ['Dragon', 'Normal'].includes(this.dex.moves.get(moveid).type));
-		const expertBeltReqs = (
-			!counter.get('Dragon') && !counter.get('Normal') &&
-			noExpertBeltMoves.every(m => !moves.has(m))
-		);
-
 		if (
 			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') &&
 			(!this.priorityPokemon.includes(species.id) || counter.get('Dark') >= 2)
@@ -750,7 +744,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (ability === 'Sturdy' && moves.has('explosion')) return 'Custap Berry';
 		if (types.includes('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
 		if (species.id === 'palkia') return 'Lustrous Orb';
-		if (!counter.get('Status') && role === 'Fast Attacker' && expertBeltReqs) return 'Expert Belt';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
 			(ability === 'Rough Skin') || (species.id !== 'hooh' &&
@@ -776,7 +769,13 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				this.dex.getEffectiveness('Rock', species) < 2
 			) ? 'Life Orb' : 'Leftovers';
 		}
-		if (!counter.get('Status') && (moves.has('uturn') || moves.has('voltswitch')) && expertBeltReqs) return 'Expert Belt';
+		// noStab moves that should reject Expert Belt
+		const noExpertBeltMoves = this.noStab.filter(moveid => ['Dragon', 'Normal'].includes(this.dex.moves.get(moveid).type));
+		const expertBeltReqs = !counter.get('Dragon') && !counter.get('Normal') && noExpertBeltMoves.every(m => !moves.has(m));
+		if (
+			!counter.get('Status') && expertBeltReqs &&
+			(moves.has('uturn') || moves.has('voltswitch') || role === 'Fast Attacker')
+		) return 'Expert Belt';
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
 			this.dex.getEffectiveness('Rock', species) < 2 && ability !== 'Sturdy'
