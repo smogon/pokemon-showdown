@@ -10,7 +10,7 @@ const RECOVERY_MOVES = [
 ];
 // Moves that boost Attack:
 const PHYSICAL_SETUP = [
-	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'screech', 'swordsdance',
+	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'screech', 'swordsdance',
 ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
@@ -19,8 +19,8 @@ const SPEED_SETUP = [
 // Conglomerate for ease of access
 const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'coil', 'curse', 'dragondance', 'flamecharge',
-	'focusenergy', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'quiverdance', 'raindance',
-	'rockpolish', 'shellsmash', 'shiftgear', 'sunnyday', 'swordsdance', 'tailglow', 'workup',
+	'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'quiverdance', 'raindance', 'rockpolish',
+	'shellsmash', 'shiftgear', 'sunnyday', 'swordsdance', 'tailglow', 'workup',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
