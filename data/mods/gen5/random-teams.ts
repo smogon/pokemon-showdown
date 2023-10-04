@@ -488,8 +488,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Hyper Cutter': case 'Ice Body': case 'Moody':
-		case 'Pickpocket': case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
+		case 'Flare Boost': case 'Gluttony': case 'Hyper Cutter': case 'Ice Body': case 'Moody': case 'Pickpocket':
+		case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Unburden': case 'Weak Armor':
 			return true;
 		case 'Chlorophyll':
 			// Petal Dance is for Lilligant
@@ -559,8 +559,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return (!counter.get('Water'));
 		case 'Unaware':
 			return (role !== 'Bulky Support' && role !== 'Staller');
-		case 'Unburden':
-			return (!counter.get('setup') && !moves.has('acrobatics'));
 		case 'Water Absorb':
 			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
 		}
@@ -593,11 +591,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
 		) return 'Guts';
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
-		if (species.id === 'mandibuzz') return 'Overcoat';
 		if (species.id === 'ninetales') return 'Drought';
 		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.id === 'altaria') return 'Natural Cure';
+		if (species.id === 'mandibuzz') return 'Overcoat';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (['vespiquen', 'wailord', 'weavile'].includes(species.id)) return 'Pressure';
@@ -608,7 +606,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		if (abilities.has('Harvest')) return 'Harvest';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
-		if (abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
+		if (abilities.has('Unburden') && ['acrobatics', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
@@ -676,7 +674,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'wobbuffet') return 'Custap Berry';
 		if (ability === 'Harvest') return 'Sitrus Berry';
 		if (species.id === 'ditto') return 'Choice Scarf';
-		if (ability === 'Poison Heal') return 'Toxic Orb';
+		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
 		if (ability === 'Speed Boost') return 'Life Orb';
 		if (species.nfe) return 'Eviolite';
 		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
@@ -692,18 +690,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 		if (moves.has('shellsmash')) return 'White Herb';
 		if (moves.has('psychoshift')) return 'Flame Orb';
-		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
-			return species.id === 'conkeldurr' ? 'Flame Orb' : 'Toxic Orb';
-		}
 		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
 			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		}
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (moves.has('acrobatics')) return 'Flying Gem';
-		if (ability === 'Unburden') {
-			if (species.id === 'hitmonlee') return (moves.has('fakeout')) ? 'Normal Gem' : 'Fighting Gem';
-			return 'Sitrus Berry';
-		}
+		if (species.id === 'hitmonlee' && ability === 'Unburden') return (moves.has('fakeout')) ? 'Normal Gem' : 'Fighting Gem';
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
@@ -773,7 +765,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
-			(!counter.get('recoil') || ability === 'Rock Head') && ability !== 'Regenerator'
+			(!counter.get('recoil') || ability === 'Rock Head')
 		) return 'Focus Sash';
 
 		// Default Items

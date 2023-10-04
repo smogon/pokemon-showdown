@@ -1678,7 +1678,7 @@
         "level": 90,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["fireblast", "focusblast", "hypervoice", "icebeam", "surf"]
             },
             {
@@ -1686,7 +1686,7 @@
                 "movepool": ["doubleedge", "earthquake", "lowkick", "return", "sleeptalk"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "fireblast", "focusblast", "return", "surf", "workup"]
             }
         ]
