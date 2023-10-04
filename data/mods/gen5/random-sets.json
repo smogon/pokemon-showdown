@@ -2380,7 +2380,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["bravebird", "closecombat", "doubleedge", "quickattack", "roost", "uturn"],
+                "movepool": ["bravebird", "closecombat", "doubleedge", "quickattack", "uturn"],
                 "preferredTypes": ["Fighting"]
             }
         ]
