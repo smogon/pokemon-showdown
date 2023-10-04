@@ -82,7 +82,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
-			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
+			Poison: (movePool, moves, abilities, types, counter, species) => (
+				!counter.get('Poison') && (types.has('Grass') || types.has('Ground'))
+			),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
 			),
@@ -90,7 +92,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				!counter.get('Rock') && (species.baseStats.atk >= 95 || abilities.has('Rock Head'))
 			),
 			Steel: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Steel') && species.baseStats.atk >= 100
+				!counter.get('Steel') && ['metagross', 'aggron'].includes(species.id)
 			),
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
@@ -177,7 +179,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		// Develop additional move lists
-		const badWithSetup = ['dragontail', 'haze', 'healbell', 'pursuit', 'toxic'];
+		const badWithSetup = ['healbell', 'pursuit', 'toxic'];
 		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		// Nature Power is Earthquake this gen
 		const statusMoves = this.dex.moves.all()
@@ -192,36 +194,34 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			[SETUP, HAZARDS],
 			[SETUP, badWithSetup],
 			[PHYSICAL_SETUP, PHYSICAL_SETUP],
-			[SPEED_SETUP, ['quickattack', 'suckerpunch']],
 			[['fakeout', 'uturn'], ['switcheroo', 'trick']],
 			['substitute', PIVOT_MOVES],
-			['leechseed', 'dragontail'],
 			['rest', 'substitute'],
-			[PHYSICAL_SETUP, 'dracometeor'],
 
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
-			['scald', 'hydropump'],
-			['return', ['bodyslam', 'doubleedge']],
-			[['fierydance', 'lavaplume'], ['fireblast', 'magmastorm']],
-			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
-			['hornleech', 'woodhammer'],
+			[['scald', 'surf'], 'hydropump'],
+			[['bodyslam', 'return'], ['bodyslam', 'doubleedge']],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
-			['wildcharge', 'thunderbolt'],
-			['gunkshot', 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
-			['stoneedge', 'headsmash'],
-			['dracometeor', 'dragonpulse'],
-			['dragonclaw', 'outrage'],
 
 			// Status move incompatibilities
 			[statusInflictingMoves, statusInflictingMoves],
 			['toxic', 'toxicspikes'],
-			['taunt', 'disable'],
 
 			// Assorted hardcodes go here:
-			// Lunatone
-			['moonlight', 'rockpolish'],
+			// Zebstrika
+			['wildcharge', 'thunderbolt'],
+			// Manectric
+			['flamethrower', 'overheat'],
+			// Meganium
+			['leechseed', 'dragontail'],
+			// Volcarona and Heatran
+			[['fierydance', 'lavaplume'], 'fireblast'],
+			// Walrein
+			['encore', 'roar'],
+			// Lunatone and Aggron
+			[['moonlight', 'thunderwave'], 'rockpolish'],
 			// Smeargle
 			['memento', 'whirlwind'],
 			// Seviper
@@ -491,8 +491,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter': case 'Ice Body':
-		case 'Moody': case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast':
+		case 'Flare Boost': case 'Gluttony': case 'Hyper Cutter': case 'Ice Body': case 'Moody':
+		case 'Pickpocket': case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
 			return true;
 		case 'Chlorophyll':
 			// Petal Dance is for Lilligant
@@ -509,7 +509,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Hustle':
-			return counter.get('Physical') < 2;
+			return (counter.get('Physical') < 2 || species.id === 'delibird');
 		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
 			return (
 				species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain ||
@@ -530,10 +530,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return !counter.get('Grass');
 		case 'Prankster':
 			return !counter.get('Status');
+		case 'Poison Heal':
+			return (species.id === 'breloom' && role === 'Fast Attacker')
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil'));
 		case 'Regenerator':
-			return species.id === 'mienshao' || species.id === 'reuniclus';
+			return ((species.id === 'mienshao' && role !== 'Wallbreaker') || species.id === 'reuniclus');
 		case 'Reckless': case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Force': case 'Sand Rush':
@@ -553,7 +555,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Swarm':
 			return !counter.get('Bug');
 		case 'Technician':
-			return (!counter.get('technician') || moves.has('tailslap'));
+			return (!counter.get('technician') || moves.has('tailslap') || species.id === 'hitmontop');
 		case 'Tinted Lens':
 			return (['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker');
 		case 'Torrent':
@@ -594,25 +596,22 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
 		) return 'Guts';
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
-		// Mandibuzz doesn't want Weak Armor
-		if (species.id === 'mandibuzz') return this.sample(['Big Pecks', 'Overcoat']);
+		if (species.id === 'mandibuzz') return 'Overcoat';
 		if (species.id === 'ninetales') return 'Drought';
 		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.id === 'altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
-		if (['vespiquen', 'wailord'].includes(species.id)) return 'Pressure';
-		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
+		if (['vespiquen', 'wailord', 'weavile'].includes(species.id)) return 'Pressure';
+		if (species.id === 'druddigon') return 'Rough Skin';
 		if (species.id === 'stunfisk') return 'Static';
-		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'zangoose') return 'Toxic Boost';
 		if (species.id === 'porygon2') return 'Trace';
 
-		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
-		// if (abilities.has('Regenerator') && role === 'AV Pivot') return 'Regenerator';
+		if (abilities.has('Harvest')) return 'Harvest';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
-		if (abilities.has('Unburden') && ['acrobatics', 'bellydrum'].some(m => moves.has(m))) return 'Unburden';
+		if (abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
@@ -671,40 +670,43 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role,
 	): string | undefined {
 		if (species.requiredItems) return this.sample(species.requiredItems);
-		if (role === 'AV Pivot') return 'Assault Vest';
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
-		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
-		if (species.name === 'Marowak') return 'Thick Club';
-		if (species.name === 'Pikachu') return 'Light Ball';
-		if (species.name === 'Shedinja' || species.name === 'Smeargle') return 'Focus Sash';
-		if (species.name === 'Unown') return 'Choice Specs';
-		if (species.name === 'Wobbuffet') return 'Custap Berry';
+		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
+		if (species.id === 'marowak') return 'Thick Club';
+		if (species.id === 'pikachu') return 'Light Ball';
+		if (species.id === 'shedinja' || species.id === 'smeargle') return 'Focus Sash';
+		if (species.id === 'unown') return 'Choice Specs';
+		if (species.id === 'wobbuffet') return 'Custap Berry';
 		if (ability === 'Harvest') return 'Sitrus Berry';
-		if (species.name === 'Ditto') return 'Choice Scarf';
+		if (species.id === 'ditto') return 'Choice Scarf';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if (ability === 'Speed Boost') return 'Life Orb';
-		if (species.nfe) return (species.name === 'Scyther' && role === 'Fast Attacker') ? 'Choice Band' : 'Eviolite';
+		if (species.nfe) return 'Eviolite';
 		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
-			if (species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && role !== 'Wallbreaker') {
+			if (
+				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && role !== 'Wallbreaker' && !counter.get('priority')
+			) {
 				return 'Choice Scarf';
 			} else {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
+		if (species.id === 'exploud' && moves.has('sleeptalk')) return 'Choice Band';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
-		if (moves.has('shellsmash')) {
-			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
-		}
+		if (moves.has('shellsmash')) return 'White Herb';
 		if (moves.has('psychoshift')) return 'Flame Orb';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
-			return species.name === 'Conkeldurr' ? 'Flame Orb' : 'Toxic Orb';
+			return species.id === 'conkeldurr' ? 'Flame Orb' : 'Toxic Orb';
 		}
 		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
 			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		}
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
-		if (ability === 'Unburden') return 'Sitrus Berry';
-		if (moves.has('acrobatics')) return '';
+		if (moves.has('acrobatics')) return 'Flying Gem';
+		if (ability === 'Unburden') {
+			if (species.id === 'hitmonlee') return (moves.has('fakeout')) ? 'Normal Gem' : 'Fighting Gem';
+			return 'Sitrus Berry';
+		}
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
@@ -742,7 +744,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
 		if (counter.get('Physical') === 4 && species.id !== 'jirachi' && species.id !== 'spinda' &&
-			['dragontail', 'fakeout', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
+			['dragontail', 'fakeout', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			return (
 				scarfReqs && (species.baseStats.atk >= 100 || ability === 'Pure Power' || ability === 'Huge Power') &&
@@ -750,18 +752,10 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			) ? 'Choice Scarf' : 'Choice Band';
 		}
 
-		if (ability === 'Sturdy' && moves.has('explosion') && !counter.get('speedsetup')) return 'Custap Berry';
+		if (ability === 'Sturdy' && moves.has('explosion')) return 'Custap Berry';
 		if (types.includes('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
-		if (role === 'Bulky Setup' && !!counter.get('speedsetup') && !moves.has('swordsdance')) {
-			return 'Weakness Policy';
-		}
 		if (species.id === 'palkia') return 'Lustrous Orb';
-		if (species.id === 'archeops') return 'Expert Belt';
-		if (!counter.get('Status') && (
-			['Fast Support', 'Bulky Support', 'Bulky Attacker', 'Spinner'].some(m => role === m) || moves.has('rapidspin')
-		)) {
-			return 'Assault Vest';
-		}
+		if (!counter.get('Status') && role === 'Fast Attacker') return 'Expert Belt';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
 			(ability === 'Rough Skin') || (species.id !== 'hooh' &&
