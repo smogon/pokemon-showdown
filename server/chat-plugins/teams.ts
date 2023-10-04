@@ -176,9 +176,9 @@ export const TeamsHandler = new class {
 					return null;
 				}
 			}
-			// i have no idea how people are getting this, but we got enough reports that 
+			// i have no idea how people are getting this, but we got enough reports that
 			// i guess it's worth handling
-			if (toID(set.ability)  === 'none') {
+			if (toID(set.ability) === 'none') {
 				set.ability = 'No Ability';
 			}
 			if (set.ability && !Dex.abilities.get(set.ability).exists) {
