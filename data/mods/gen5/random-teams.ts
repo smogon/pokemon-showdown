@@ -531,7 +531,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Prankster':
 			return !counter.get('Status');
 		case 'Poison Heal':
-			return (species.id === 'breloom' && role === 'Fast Attacker')
+			return (species.id === 'breloom' && role === 'Fast Attacker');
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil'));
 		case 'Regenerator':
