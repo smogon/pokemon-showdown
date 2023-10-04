@@ -12,10 +12,6 @@ const RECOVERY_MOVES = [
 const PHYSICAL_SETUP = [
 	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'screech', 'swordsdance',
 ];
-// Moves which boost Special Attack:
-// const SPECIAL_SETUP = [
-// 	'calmmind', 'chargebeam', 'nastyplot', 'quiverdance', 'tailglow',
-// ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
 	'agility', 'autotomize', 'flamecharge', 'rockpolish',
@@ -189,7 +185,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// General incompatibilities
 		const incompatiblePairs = [
 			// These moves don't mesh well with other aspects of the set
-			[statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']],
+			[statusMoves, ['healingwish', 'switcheroo', 'trick']],
 			[SETUP, PIVOT_MOVES],
 			[SETUP, HAZARDS],
 			[SETUP, badWithSetup],
@@ -207,7 +203,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 			// Status move incompatibilities
 			[statusInflictingMoves, statusInflictingMoves],
-			['toxic', 'toxicspikes'],
 
 			// Assorted hardcodes go here:
 			// Zebstrika
@@ -220,8 +215,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			[['fierydance', 'lavaplume'], 'fireblast'],
 			// Walrein
 			['encore', 'roar'],
-			// Lunatone and Aggron
-			[['moonlight', 'thunderwave'], 'rockpolish'],
+			// Lunatone
+			['moonlight', 'rockpolish'],
 			// Smeargle
 			['memento', 'whirlwind'],
 			// Seviper
@@ -231,6 +226,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
+
+		if (species.id === 'dugtrio') this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
