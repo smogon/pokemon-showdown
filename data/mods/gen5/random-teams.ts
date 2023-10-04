@@ -78,7 +78,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
-			Poison: (movePool, moves, abilities, types, counter, species) => (
+			Poison: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Poison') && (types.has('Grass') || types.has('Ground'))
 			),
 			Psychic: (movePool, moves, abilities, types, counter) => (
@@ -88,7 +88,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				!counter.get('Rock') && (species.baseStats.atk >= 95 || abilities.has('Rock Head'))
 			),
 			Steel: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Steel') && ['metagross', 'aggron'].includes(species.id)
+				!counter.get('Steel') && ['aggron', 'metagross'].includes(species.id)
 			),
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
