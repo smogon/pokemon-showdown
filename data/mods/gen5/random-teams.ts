@@ -552,7 +552,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Technician':
 			return (!counter.get('technician') || moves.has('tailslap'));
 		case 'Tinted Lens':
-			return (['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker');
+			// Night Shade part is for Noctowl
+			return (
+				moves.has('nightshade') ||
+				['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker'
+			);
 		case 'Torrent':
 			return !counter.get('Water');
 		case 'Unaware':
