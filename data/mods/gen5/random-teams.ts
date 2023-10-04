@@ -558,7 +558,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Torrent':
 			return (!counter.get('Water'));
 		case 'Unaware':
-			return (role !== 'Bulky Support' && role !== 'Staller');
+			return (role !== 'Bulky Attacker' && role !== 'Bulky Setup');
 		case 'Water Absorb':
 			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
 		}

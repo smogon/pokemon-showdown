@@ -169,7 +169,7 @@
                 "movepool": ["aromatherapy", "doubleedge", "fireblast", "softboiled", "stealthrock", "thunderwave"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["calmmind", "icebeam", "softboiled", "thunderbolt"]
             }
         ]
@@ -1034,7 +1034,7 @@
         "level": 85,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["earthquake", "icebeam", "recover", "scald", "toxic"]
             }
         ]
