@@ -4171,8 +4171,12 @@
         "level": 76,
         "sets": [
             {
+                "role": "Setup Sweeper",
+                "movepool": ["focusblast", "hiddenpowerflying", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"]
+            },
+            {
                 "role": "Fast Support",
-                "movepool": ["focusblast", "hiddenpowerflying", "hiddenpowerice", "nastyplot", "thunderbolt", "thunderwave", "uturn"]
+                "movepool": ["focusblast", "hiddenpowerflying", "hiddenpowerice", "taunt", "thunderbolt", "thunderwave"]
             }
         ]
     },
