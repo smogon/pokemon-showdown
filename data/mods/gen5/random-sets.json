@@ -3789,7 +3789,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["calmmind", "focusblast", "psychic", "recover", "signalbeam", "trickroom"]
+                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "signalbeam", "trickroom"]
             },
             {
                 "role": "Wallbreaker",
