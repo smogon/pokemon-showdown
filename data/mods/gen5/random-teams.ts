@@ -733,6 +733,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			!counter.get('priority') && !moves.has('pursuit')
 		);
 
+		const noExpertBeltMoves = this.noStab.filter(moveid => ['Dragon', 'Normal'].includes(this.dex.moves.get(moveid).type));
+		const expertBeltReqs = (
+			!counter.get('Dragon') && !counter.get('Normal') &&
+			noExpertBeltMoves.every(m => !moves.has(m))
+		);
+
 		if (
 			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') &&
 			(!this.priorityPokemon.includes(species.id) || counter.get('Dark') >= 2)
@@ -755,7 +761,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (ability === 'Sturdy' && moves.has('explosion')) return 'Custap Berry';
 		if (types.includes('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
 		if (species.id === 'palkia') return 'Lustrous Orb';
-		if (!counter.get('Status') && role === 'Fast Attacker') return 'Expert Belt';
+		if (!counter.get('Status') && role === 'Fast Attacker' && expertBeltReqs) return 'Expert Belt';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
 			(ability === 'Rough Skin') || (species.id !== 'hooh' &&
@@ -781,11 +787,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				this.dex.getEffectiveness('Rock', species) < 2
 			) ? 'Life Orb' : 'Leftovers';
 		}
-		if (!counter.get('Status')) {
-			return (
-				(moves.has('uturn') || moves.has('voltswitch')) && !counter.get('Dragon') && !counter.get('Normal')
-			) ? 'Expert Belt' : 'Life Orb';
-		}
+		if (!counter.get('Status') && (moves.has('uturn') || moves.has('voltswitch')) && expertBeltReqs) return 'Expert Belt';
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
 			this.dex.getEffectiveness('Rock', species) < 2 && ability !== 'Sturdy'
