@@ -758,8 +758,16 @@
         "level": 81,
         "sets": [
             {
+                "role": "Bulky Support",
+                "movepool": ["bodyslam", "crunch", "earthquake", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["bodyslam", "curse", "rest", "sleeptalk"]
+            },
+            {
                 "role": "Bulky Attacker",
-                "movepool": ["bodyslam", "crunch", "curse", "earthquake", "firepunch", "pursuit", "rest"]
+                "movepool": ["bodyslam", "curse", "earthquake", "rest"]
             }
         ]
     },
@@ -1806,7 +1814,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Staller",
                 "movepool": ["crunch", "earthquake", "hydropump", "icebeam", "protect"]
             }
         ]
@@ -2807,7 +2815,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Fast Attacker",
                 "movepool": ["earthquake", "fireblast", "focusblast", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderbolt"],
                 "preferredTypes": ["Electric"]
             }
@@ -3347,12 +3355,13 @@
         "level": 80,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Bulky Attacker",
                 "movepool": ["boltstrike", "uturn", "vcreate", "zenheadbutt"]
             },
             {
-                "role": "Bulky Attacker",
-                "movepool": ["boltstrike", "energyball", "focusblast", "psychic", "trick", "uturn", "vcreate"]
+                "role": "Fast Attacker",
+                "movepool": ["boltstrike", "energyball", "focusblast", "psychic", "trick", "uturn", "vcreate"],
+                "preferredTypes": ["Electric"]
             }
         ]
     },
@@ -3390,11 +3399,11 @@
         "level": 86,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["aquajet", "grassknot", "hydropump", "icebeam", "megahorn", "superpower"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["aquajet", "megahorn", "superpower", "swordsdance", "waterfall"]
             }
         ]
@@ -3736,11 +3745,6 @@
                 "role": "Fast Attacker",
                 "movepool": ["acrobatics", "earthquake", "roost", "stealthrock", "stoneedge", "uturn"],
                 "preferredTypes": ["Ground"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["aquatail", "earthquake", "headsmash", "pluck", "stealthrock", "stoneedge", "uturn"],
-                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -3933,7 +3937,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["energyball", "fireblast", "hiddenpowerfighting", "shadowball", "trick"]
+                "movepool": ["energyball", "fireblast", "hiddenpowerfighting", "shadowball", "trick"],
+                "preferredTypes": ["Grass"]
             },
             {
                 "role": "Bulky Setup",
@@ -4014,10 +4019,6 @@
     "golurk": {
         "level": 85,
         "sets": [
-            {
-                "role": "Fast Attacker",
-                "movepool": ["drainpunch", "earthquake", "icepunch", "rockpolish", "shadowpunch", "stealthrock"]
-            },
             {
                 "role": "Wallbreaker",
                 "movepool": ["dynamicpunch", "earthquake", "icepunch", "rockpolish", "stealthrock", "stoneedge"],
