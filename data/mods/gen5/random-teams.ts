@@ -489,7 +489,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	): boolean {
 		switch (ability) {
 		case 'Flare Boost': case 'Gluttony': case 'Hyper Cutter': case 'Ice Body': case 'Moody': case 'Pickpocket':
-		case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Unburden': case 'Weak Armor':
+		case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
 			return true;
 		case 'Chlorophyll':
 			// Petal Dance is for Lilligant
@@ -522,7 +522,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Magic Guard': case 'Speed Boost':
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Mold Breaker':
-			return (species.baseSpecies === 'Basculin' || abilities.has('Sheer Force'));
+			return (species.baseSpecies === 'Basculin' || species.id === 'rampardos');
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Prankster':
@@ -537,8 +537,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return !counter.get('recoil');
 		case 'Sand Force': case 'Sand Rush':
 			return !teamDetails.sand;
-		case 'Scrappy':
-			return !types.has('Normal');
 		case 'Serene Grace':
 			return !counter.get('serenegrace');
 		case 'Sheer Force':
@@ -552,7 +550,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Swarm':
 			return !counter.get('Bug');
 		case 'Technician':
-			return (!counter.get('technician') || moves.has('tailslap') || species.id === 'hitmontop');
+			return (!counter.get('technician') || moves.has('tailslap'));
 		case 'Tinted Lens':
 			return (['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker');
 		case 'Torrent':
