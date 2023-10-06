@@ -775,10 +775,10 @@ export const Formats: FormatList = [
 		banlist: [
 			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Dialga', 'Dialga-Origin', 'Dondozo', 'Eternatus', 'Flutter Mane',
 			'Giratina', 'Giratina-Origin', 'Groudon', 'Inteleon', 'Iron Bundle', 'Iron Hands', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Manaphy',
-			'Mewtwo', 'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Slaking', 'Spectrier', 'Urshifu-Base',
-			'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Arena Trap', 'Comatose', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag',
-			'Speed Boost', 'Damp Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Extreme Speed', 'Last Respects', 'Quiver Dance', 'Rage Fist', 'Shed Tail',
-			'Shell Smash', 'Spore', 'Transform',
+			'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Slaking', 'Spectrier',
+			'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Walking Wake', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Arena Trap', 'Comatose',
+			'Drizzle', 'Imposter', 'Moody', 'Pure Power', 'Shadow Tag', 'Speed Boost', 'Heat Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Extreme Speed',
+			'Last Respects', 'Quiver Dance', 'Rage Fist', 'Shed Tail', 'Shell Smash', 'Spore', 'Transform',
 		],
 	},
 	{
