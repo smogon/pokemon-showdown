@@ -21617,4 +21617,285 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	// swse
+	auraprojection: {
+		num: -8,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Aura Projection",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		energyWeather: 'AuraProjection',
+		secondary: null,
+		target: "all",
+		type: "Fighting",
+	},
+	bloodmoon: {
+		num: -1,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Blood Moon",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		climateWeather: 'BloodMoon',
+		secondary: null,
+		target: "all",
+		type: "Dark",
+	},
+	cosmicrays: {
+		num: -10,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Cosmic Rays",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		energyWeather: 'CosmicRays',
+		secondary: null,
+		target: "all",
+		type: "Psychic",
+	},
+	dragonforce: {
+		num: -11,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Dragon Force",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		energyWeather: 'DragonForce',
+		secondary: null,
+		target: "all",
+		type: "Dragon",
+	},
+	duststorm: {
+		num: -3,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Dust Storm",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		irritantWeather: 'DustStorm',
+		secondary: null,
+		target: "all",
+		type: "Ground",
+	},
+	foghorn: {
+		num: -2,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Foghorn",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		climateWeather: 'Foghorn',
+		secondary: null,
+		target: "all",
+		type: "Normal",
+	},
+	haunt: {
+		num: -9,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Haunt",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		energyWeather: 'Haunt',
+		secondary: null,
+		target: "all",
+		type: "Ghost",
+	},
+	initiative: {
+		num: -100,
+		accuracy: true,
+		basePower: 0,
+		category: 'Status',
+		name: "Initiative",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1},
+		onHit(target, source) {
+			const outcomes = [
+				'sleepTarget', // nat12
+				'paralyzeTarget', // nat11
+				'confuseTarget', // nat10
+				'disableMoveTarget', // nat9
+				'healUser', // nat8
+				'hurtTarget', // nat7
+				'disableMoveUser', // nat6
+				'confuseUser', // nat5
+				'hurtUser', // nat4
+				'healTarget', // nat3
+				'paralyzeUser', // nat2
+				'sleepUser', // nat1
+			];
+			const randomOutcome = this.sample(outcomes);
+			switch (randomOutcome) {
+			case 'healTarget':
+				this.heal(target.maxhp / 4, target, target);
+				this.add('-heal', source, target.getHealth, '[from] move: Initiative');
+				this.debug("heal target");
+				break;
+			case 'paralyzeTarget':
+				target.trySetStatus('par');
+				this.debug("paralyze target");
+				break;
+			case 'sleepTarget':
+				target.trySetStatus('slp');
+				this.debug("sleep target");
+				break;
+			case 'confuseTarget':
+				target.addVolatile('confusion');
+				this.debug("confuse target");
+				break;
+			case 'disableMoveTarget':
+				target.addVolatile('disable');
+				this.debug("confuse target");
+				break;
+			case 'hurtTarget':
+				this.damage(target.baseMaxhp / 4, source, target);
+				this.debug("damage target");
+				break;
+			case 'healUser':
+				this.heal(source.maxhp / 4, source, source);
+				this.add('-heal', source, source.getHealth, '[from] move: Initiative');
+				this.debug("heal user");
+				break;
+			case 'paralyzeUser':
+				source.trySetStatus('par');
+				this.debug("paralyze user");
+				break;
+			case 'sleepUser':
+				source.setStatus('slp');
+				this.debug("sleep user");
+				break;
+			case 'confuseUser':
+				source.addVolatile('confusion');
+				this.debug("confuse user");
+				break;
+			case 'disableMoveUser':
+				source.addVolatile('disable');
+				this.debug("disable user");
+				break;
+			case 'hurtUser':
+				this.damage(source.baseMaxhp / 4, source, source);
+				this.debug("damage user");
+				break;
+			default:
+				break;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+	},
+	magnetize: {
+		num: -13,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Magnetize",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		energyWeather: 'Magnetize',
+		secondary: null,
+		target: "all",
+		type: "Steel",
+	},
+	pollinate: {
+		num: -4,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Pollinate",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		irritantWeather: 'Pollinate',
+		secondary: null,
+		target: "all",
+		type: "Grass",
+	},
+	smogspread: {
+		num: -6,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Smog Spread",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		irritantWeather: 'SmogSpread',
+		secondary: null,
+		target: "all",
+		type: "Poison",
+	},
+	sprinkle: {
+		num: -7,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Sprinkle",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		irritantWeather: 'Sprinkle',
+		secondary: null,
+		target: "all",
+		type: "Fairy",
+	},
+	strongwinds: {
+		num: -13,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Strong Winds",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		clearingWeather: 'StrongWinds',
+		secondary: null,
+		target: "all",
+		type: "Flying",
+	},
+	supercell: {
+		num: -12,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Supercell",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		energyWeather: 'Supercell',
+		secondary: null,
+		target: "all",
+		type: "Electric",
+	},
+	swarmsignal: {
+		num: -5,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Swarm Signal",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		irritantWeather: 'SwarmSignal',
+		secondary: null,
+		target: "all",
+		type: "Bug",
+	},
 };

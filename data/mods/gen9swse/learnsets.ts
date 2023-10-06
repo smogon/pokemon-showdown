@@ -1865,11 +1865,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		],
 		eventOnly: true,
 	},
-	raticatekaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	spearow: {
 		learnset: {
 			aerialace: ["7M", "7L15", "6M", "6L17", "5M", "5L17", "4M", "4L17", "3M", "3L25", "3S0"],
@@ -12943,11 +12938,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 1, level: 18},
 		],
 	},
-	gastlykaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	haunter: {
 		learnset: {
 			acidspray: ["9M"],
@@ -13057,11 +13047,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 3, level: 20},
 			{generation: 4, level: 16},
 		],
-	},
-	haunterkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	gengar: {
 		learnset: {
@@ -13199,11 +13184,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 6, level: 100, moves: ["meanlook", "hypnosis", "psychic", "hyperbeam"], pokeball: "cherishball"},
 			{generation: 8, level: 80, gender: "M", nature: "Naughty", abilities: ["cursedbody"], ivs: {hp: 30, atk: 30, def: 30, spa: 31, spd: 31, spe: 31}, moves: ["shadowball", "sludgebomb", "dazzlinggleam", "willowisp"], pokeball: "pokeball"},
 		],
-	},
-	gengarkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	onix: {
 		learnset: {
@@ -18132,11 +18112,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 7, level: 9},
 		],
 	},
-	jynxkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	elekid: {
 		learnset: {
 			attract: ["8M", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -19304,11 +19279,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		encounters: [
 			{generation: 1, level: 15},
 		],
-	},
-	lapraskaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	ditto: {
 		learnset: {
@@ -25291,11 +25261,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["8M", "7M", "5M"],
 		},
 	},
-	marillkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	azumarill: {
 		learnset: {
 			amnesia: ["9M", "8M"],
@@ -25401,11 +25366,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 5, level: 5},
 			{generation: 6, level: 16, maxEggMoves: 1},
 		],
-	},
-	azumarillkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	bonsly: {
 		learnset: {
@@ -25586,11 +25546,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["8M"],
 			woodhammer: ["9L1", "8L1", "7L1", "6L1", "5L1", "4L1"],
 		},
-	},
-	sudowoodoamazeall: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	hoppip: {
 		learnset: {
@@ -26043,11 +25998,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M", "5M"],
 		},
 	},
-	ambipomkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	sunkern: {
 		learnset: {
 			absorb: ["9L7", "7L1", "7V", "6L1", "5L1", "4L1", "3L1", "3S0"],
@@ -26254,11 +26204,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["7E", "7V", "6E", "5E", "4E", "3E"],
 			wingattack: ["7L43", "7V", "6L43", "5L43", "4L43", "3L39"],
 		},
-	},
-	yanmakaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	yanmega: {
 		learnset: {
@@ -35998,11 +35943,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 3, level: 100, moves: ["roar", "rest", "sleeptalk", "hypervoice"], pokeball: "pokeball"},
 			{generation: 3, level: 50, moves: ["stomp", "screech", "hyperbeam", "roar"], pokeball: "pokeball"},
 		],
-	},
-	exploudkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	makuhita: {
 		learnset: {
@@ -46029,11 +45969,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["9M", "9L48", "8M", "8L48", "7M", "7L45", "6M", "6L45", "5M", "5L45"],
 		},
 	},
-	shinxkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	luxio: {
 		learnset: {
 			attract: ["8M", "7M", "6M", "5M", "4M"],
@@ -46102,11 +46037,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["9M", "9L31", "8M", "8L31", "7M", "6M", "5M"],
 			wildcharge: ["9M", "9L68", "8M", "8L68", "7M", "7L53", "6M", "6L53", "5M", "5L53"],
 		},
-	},
-	luxiokaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	luxray: {
 		learnset: {
@@ -46183,11 +46113,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			voltswitch: ["9M", "9L33", "8M", "8L33", "7M", "6M", "5M"],
 			wildcharge: ["9M", "9L80", "8M", "8L80", "7M", "7L63", "6M", "6L63", "5M", "5L63"],
 		},
-	},
-	luxraykaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	cranidos: {
 		learnset: {
@@ -47664,11 +47589,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 7, level: 11, pokeball: "pokeball"},
 		],
 	},
-	drifblimamazeall: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	buneary: {
 		learnset: {
 			afteryou: ["8L12", "7T", "7L43", "6T", "6L43", "5T", "5L43"],
@@ -48211,11 +48131,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		encounters: [
 			{generation: 4, level: 29},
 		],
-	},
-	skuntankkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	bronzor: {
 		learnset: {
@@ -49907,11 +49822,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["7T", "6T", "5T", "4T"],
 		},
 	},
-	snoverlowland: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	abomasnow: {
 		learnset: {
 			attract: ["8M", "7M", "6M", "5M", "4M"],
@@ -50010,11 +49920,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 4, level: 38},
 		],
 	},
-	abomasnowlowland: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	rotom: {
 		learnset: {
 			allyswitch: ["8M", "7T"],
@@ -50090,56 +49995,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 6, level: 10, nature: "Quirky", moves: ["shockwave", "astonish", "trick", "thunderwave"], pokeball: "cherishball"},
 			{generation: 7, level: 10, moves: ["uproar", "confide", "disarmingvoice"], pokeball: "cherishball"},
 		],
-	},
-	rotomheat: {
-		learnset: {
-			overheat: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotomwash: {
-		learnset: {
-			hydropump: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotomfrost: {
-		learnset: {
-			blizzard: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotomfan: {
-		learnset: {
-			airslash: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotommow: {
-		learnset: {
-			leafstorm: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotomsol: {
-		learnset: {
-			dragonpulse: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotomsway: {
-		learnset: {
-			psychic: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotombrawl: {
-		learnset: {
-			focusblast: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotomweb: {
-		learnset: {
-			darkpulse: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
-	},
-	rotomjunk: {
-		learnset: {
-			sludgebomb: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
-		},
 	},
 	uxie: {
 		learnset: {
@@ -54396,11 +54251,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 6, level: 30},
 		],
 	},
-	excadrillkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	audino: {
 		learnset: {
 			afteryou: ["8L28", "7T", "7L41", "6T", "6L40", "5T", "5L40"],
@@ -54669,11 +54519,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["8M", "7M", "5M"],
 		},
 	},
-	gurdurrkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	conkeldurr: {
 		learnset: {
 			attract: ["8M", "7M", "6M", "5M"],
@@ -54750,11 +54595,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wakeupslap: ["7L20", "6L20", "5L20"],
 			workup: ["8M", "7M", "5M"],
 		},
-	},
-	conkeldurrkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	tympole: {
 		learnset: {
@@ -61960,11 +61800,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thunderpunch: ["8M", "7T", "6T", "5T", "5D"],
 			toxic: ["7M", "6M", "5M"],
 		},
-	},
-	golettkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	golurk: {
 		learnset: {
@@ -69662,11 +69497,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["7T", "6T"],
 		},
 	},
-	phantumpkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	trevenant: {
 		learnset: {
 			allyswitch: ["8M", "7T"],
@@ -69754,11 +69584,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["7T", "6T"],
 			xscissor: ["8M", "7M", "6M"],
 		},
-	},
-	trevenantkasakde: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	pumpkaboo: {
 		learnset: {
@@ -70656,11 +70481,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 6, level: 50, shiny: true, moves: ["diamondstorm", "moonblast", "reflect", "return"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
-	},
-	dianciekaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	hoopa: {
 		learnset: {
@@ -72372,11 +72192,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["7M"],
 			zenheadbutt: ["9M", "7T"],
 		},
-	},
-	crabominablekaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	oricorio: {
 		learnset: {
@@ -75034,11 +74849,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trick: ["9M", "8M", "7T"],
 		},
 	},
-	palossandkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	pyukumuku: {
 		learnset: {
 			attract: ["8M", "7M"],
@@ -75868,11 +75678,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wavecrash: ["9L44"],
 			wonderroom: ["7T"],
 		},
-	},
-	bruxishkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	drampa: {
 		learnset: {
@@ -88762,609 +88567,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 9, level: 75, perfectIVs: 3, moves: ["psyblade", "leafblade", "megahorn", "swordsdance"]},
 		],
 		eventOnly: true,
-	},
-	llampas: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	danfluff: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	alfalphalops: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	therpal: {
-			learnset: {
-		tackle: ["7L1"],
-		}
-	},
-	aspfault: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	tarmendoa: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	burbwhirl: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	spoutlaw: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	vaquamael: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	chewmunk: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	cheekat: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	specoey: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	opakespiel: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	kwaile: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	quailert: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	quailstion: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	sighlo: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	cooreds: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	probaska: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	histameanie: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	apheed: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	musleafo: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	eecroach: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	eecroachswarm: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	clamtrip: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	stackem: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	rowviar: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	sanook: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	cereboral: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	bagoul: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	tofrug: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	kaskazog: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	ananot: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	ananoop: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	mosster: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	mosskrat: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	mosskrattidebloom: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	catteraxe: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	catatomb: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	skinka: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	dredgen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	stalagen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	
-	chromagen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	
-	aerogen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	
-	caragen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	bludgen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	pathagen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	ectogen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	legen: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	enigmeon: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	desoray: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	pudet: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	woond: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	pramblo: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	glashulimp: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	drout: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	droutdry: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	guruchi: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	porygonω: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	estoe: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	perpetua: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	tooburm: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	detrarc: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	qayagus: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	auditaur: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	oxillery: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	mienflux: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	gneckle: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	rabyoose: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	tamroast: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	tamroastf: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	vitisquash: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	dionysseur: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	umbralu: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	nomobjeka: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	kleptarak: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	kituff: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	beadamup: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	rascoom: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	faebril: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	aeradio: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	botnyak: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	vendrom: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	buwuve: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	wasgrowl: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	worcane: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	probat: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	jemineye: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	oracub: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	bearvoyance: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	folleming: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	drosabell: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	yanmage: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	bloomage: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	obsidious: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	mercryni: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	meraculisk: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	golgre: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	prospectre: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	skideer: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	yuleigh: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	feafurr: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	vaicear: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	phisnooz: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	telemac: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	macedontus: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	crynorawst: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	rotomb: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	tamunk: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	temunk: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	manadza: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	arctikull: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	wicoot: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	Ωrogon: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	orbtholod: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	pestalation: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	revylon: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	leoseace: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	lamentu: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
-	endramodai: {
-		learnset: {
-			tackle: ["7L1"],
-		}
 	},
 	syclar: {
 		learnset: {

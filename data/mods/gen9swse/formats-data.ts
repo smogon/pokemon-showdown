@@ -232,7 +232,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 		natDexTier: "OU",
 	},
-	pikachOUnova: {
+	pikachuunova: {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
@@ -5140,7 +5140,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
-	bOUxishkaskade: {
+	bruxishkaskade: {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
@@ -6384,6 +6384,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Illegal",
 		natDexTier: "OU",
 	},
+	missingno: {
+		isNonstandard: "Future",
+		tier: "Illegal",
+		natDexTier: "Illegal",
+	},
+
+	// swse
 	llampas: {
 		tier: "LC",
 	},
@@ -6443,7 +6450,6 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
-
 	},
 	sighlo: {
 		tier: "LC",
@@ -6455,13 +6461,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
-
 	},
 	histameanie: {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
-
 	},
 	apheed: {
 		tier: "LC",
@@ -7003,7 +7007,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "CAP",
 		tier: "CAP NFE",
 	},
-	auOUmoth: {
+	aurumoth: {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -7051,11 +7055,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
-	cOUcibelle: {
+	crucibelle: {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
-	cOUcibellemega: {
+	crucibellemega: {
 		isNonstandard: "CAP",
 		tier: "CAP",
 	},
@@ -7167,11 +7171,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
-	pokestaOUfo: {
+	pokestarufo: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
-	pokestaOUfo2: {
+	pokestarufo2: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
@@ -7235,7 +7239,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
-	pokestaOUfopropu2: {
+	pokestarufopropu2: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},

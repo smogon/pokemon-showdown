@@ -7527,4 +7527,183 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
+
+	// swse
+	avocaberry: {
+		name: "Avoca Berry",
+		spritenum: 381,
+		isBerry: true,
+		naturalGift: {
+			basePower: 80,
+			type: "Ice",
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'frb') {
+				pokemon.eatItem();
+			}
+		},
+		onEat(pokemon) {
+			if (pokemon.status === 'frb') {
+				pokemon.cureStatus();
+			}
+		},
+		num: -1,
+		gen: 9,
+	},
+	energychannelizer: {
+		name: "Energy Channelizer",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -12,
+		gen: 9,
+	},
+	energynullifier: {
+		name: "Energy Nullifier",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		// Partially implemented in Pokemon.effectiveWeather() in sim/pokemon.ts
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem()) return;
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.inactive) return;
+			this.effectState.inactive = false;
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onEnd(pokemon) {
+			if (['auraprojection', 'haunt', 'comsicrays',
+				'dragonforce', 'supercell', 'magnetize'].includes(this.field.effectiveEnergyWeather())) {
+				this.runEvent('EnergyWeatherChange', pokemon, pokemon, this.effect);
+			}
+			this.effectState.inactive = true;
+		},
+		num: -14,
+		gen: 9,
+	},
+	charmingtalisman: {
+		name: "Charming Talisman",
+		spritenum: 436,
+		fling: {
+			basePower: 50,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Fairy') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: -3,
+		gen: 9,
+	},
+	frostorb: {
+		name: "Frost Orb",
+		spritenum: 145,
+		fling: {
+			basePower: 30,
+			status: 'frb',
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			pokemon.trySetStatus('frb', pokemon);
+		},
+		num: -2,
+		gen: 9,
+	},
+	pikaspresso: {
+		name: "Pikaspresso",
+		spritenum: 788,
+		onUpdate(pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.useItem();
+			}
+		},
+		boosts: {
+			spe: 2,
+		},
+		onStart(pokemon) {
+			pokemon.addVolatile('pikaspresso');
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Caffeine Crash');
+				this.boost({spe: -2}, pokemon, pokemon);
+			},
+			onModifyPriority(priority, pokemon, target, move) {
+				return priority - 2;
+			},
+			onResidualOrder: 28,
+			onResidualSubOrder: 5,
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Caffeine Crash');
+				pokemon.removeVolatile('pikaspresso');
+			},
+		},
+		num: -4,
+		gen: 9,
+	},
+	portableturbine: {
+		name: "Portable Turbine",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -13,
+		gen: 9,
+	},
+	volatilespray: {
+		name: "Volatile Spray",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -11,
+		gen: 9,
+	},
+	weathervane: { // incomplete
+		name: 'Weather Vane',
+		spritenum: 6,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
+				return false;
+			}
+			return true;
+		},
+		num: -15,
+		gen: 9,
+	},
+	weatherballoon: {
+		name: "Weather Balloon",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
+		num: -10,
+		gen: 9,
+	},
+	whirligig: {
+		name: "Whirligig",
+		spritenum: 64,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num === 351) || pokemon.baseSpecies.num === 351) {
+				return false;
+			}
+			return true;
+		},
+		itemUser: ["Castform"],
+		num: -16,
+		gen: 9,
+	},
 };
