@@ -4566,7 +4566,7 @@
                 "teraTypes": ["Fighting"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["Body Press", "Poltergeist", "Rest", "Sleep Talk"],
                 "teraTypes": ["Fighting"]
             },
