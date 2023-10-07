@@ -29,7 +29,7 @@ describe('[Gen 6] Random Battle (slow)', () => {
 						const dexMove = Dex.moves.get(move);
 						assert(dexMove.exists, `${species.name} has invalid move: ${move}`);
 						assert(move === dexMove.id || move.startsWith('hiddenpower'), `${species.name} has misformatted move: ${move}`);
-						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen7'), `${species.name} can't learn ${move}`);
+						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen6'), `${species.name} can't learn ${move}`);
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
 						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
@@ -92,7 +92,6 @@ describe('[Gen 6] Random Battle (slow)', () => {
 					}
 					if (!moves.size) break;
 				}
-				if (moves.size) console.log(moves, species);
 				assert(!moves.size, species);
 			}
 		}
