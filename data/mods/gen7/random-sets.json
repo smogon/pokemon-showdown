@@ -1308,6 +1308,20 @@
             }
         ]
     },
+    "murkrow": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["bravebird", "defog", "haze", "pursuit", "roost", "thunderwave"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["bravebird", "mirrormove", "protect", "suckerpunch"],
+                "preferredTypes": ["Flying"]
+            }
+        ]
+    },
     "slowking": {
         "level": 88,
         "sets": [
@@ -1742,7 +1756,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthpower", "gigadrain", "hiddenpowerfire", "leafstorm", "nastyplot", "psychic", "uturn"]
+                "movepool": ["earthpower", "gigadrain", "hiddenpowerfire", "leafstorm", "nastyplot", "psychic", "uturn"],
+                "preferredTypes": ["Psychic"]
             },
             {
                 "role": "Bulky Support",

@@ -409,7 +409,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Clear Smog", "Fire Blast", "Gunk Shot", "Protect", "Taunt", "Toxic", "Will-O-Wisp"],
+                "movepool": ["Clear Smog", "Fire Blast", "Gunk Shot", "Poison Gas", "Protect", "Taunt", "Will-O-Wisp"],
                 "teraTypes": ["Dark"]
             }
         ]
@@ -419,7 +419,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Fire Blast", "Gunk Shot", "Haze", "Protect", "Strange Steam", "Taunt", "Toxic", "Will-O-Wisp"],
+                "movepool": ["Fire Blast", "Gunk Shot", "Haze", "Poison Gas", "Protect", "Strange Steam", "Taunt", "Will-O-Wisp"],
                 "teraTypes": ["Dark", "Steel"]
             }
         ]
@@ -1369,8 +1369,8 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Precipice Blades", "Protect", "Stealth Rock", "Stone Edge", "Thunder Wave"],
-                "teraTypes": ["Steel"]
+                "movepool": ["Heat Crash", "Precipice Blades", "Protect", "Stone Edge", "Thunder Wave"],
+                "teraTypes": ["Fire"]
             },
             {
                 "role": "Doubles Bulky Setup",
