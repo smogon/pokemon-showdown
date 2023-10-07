@@ -120,7 +120,7 @@ const PRIORITY_POKEMON = [
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
-	'Basculegion', 'Houndstone', 'Rillaboom', 'Zacian', 'Zamazenta',
+	'Rillaboom', 'Zacian', 'Zamazenta',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Roaring Moon', 'Zacian', 'Zamazenta',
@@ -199,10 +199,10 @@ export class RandomTeams {
 				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric') || types.includes('Fighting');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
-			Steel: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => {
-				if (!isDoubles && species.baseStats.atk <= 95 && !movePool.includes('makeitrain')) return false;
-				return !counter.get('Steel');
-			},
+			Steel: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => (
+				!counter.get('Steel') &&
+				(isDoubles || species.baseStats.atk > 95 || movePool.includes('gigatonhammer') || movePool.includes('makeitrain'))
+			),
 			Water: (movePool, moves, abilities, types, counter, species) => {
 				if (types.includes('Ground')) return false;
 				return !counter.get('Water');
@@ -492,7 +492,7 @@ export class RandomTeams {
 				[PROTECT_MOVES, 'wideguard'],
 				[['fierydance', 'fireblast'], 'heatwave'],
 				['dazzlinggleam', ['fleurcannon', 'moonblast']],
-				['poisongas', 'toxicspikes'],
+				['poisongas', ['toxicspikes', 'willowisp']],
 				[RECOVERY_MOVES, 'healpulse'],
 				['lifedew', 'healpulse'],
 				['haze', 'icywind'],
@@ -1146,7 +1146,7 @@ export class RandomTeams {
 			if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 			if (species.id === 'klawf' && role === 'Setup Sweeper') return 'Anger Shell';
 			if (abilities.has('Cud Chew') && moves.has('substitute')) return 'Cud Chew';
-			if (abilities.has('Harvest') && moves.has('substitute')) return 'Harvest';
+			if (abilities.has('Harvest') && (moves.has('protect') || moves.has('substitute'))) return 'Harvest';
 			if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 			if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
 			if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
@@ -1289,7 +1289,7 @@ export class RandomTeams {
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
-				role !== 'Wallbreaker' && role !== 'Doubles Wallbreaker'
+				role !== 'Wallbreaker' && role !== 'Doubles Wallbreaker' && !counter.get('priority')
 			) {
 				return 'Choice Scarf';
 			} else {
