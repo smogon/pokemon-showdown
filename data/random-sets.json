@@ -2054,7 +2054,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Draco Meteor", "Fire Blast", "Heavy Slam", "Stealth Rock", "Thunder Wave"],
+                "movepool": ["Draco Meteor", "Fire Blast", "Heavy Slam", "Stealth Rock", "Thunderbolt", "Thunder Wave"],
                 "teraTypes": ["Dragon", "Fire", "Steel"]
             }
         ]
