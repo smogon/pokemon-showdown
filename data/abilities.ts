@@ -2029,6 +2029,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			return false;
 		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.add('-immune', target, '[from] ability: Insomnia');
+				return null;
+			}
+		},
 		isBreakable: true,
 		name: "Insomnia",
 		rating: 1.5,
@@ -4959,6 +4965,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-immune', target, '[from] ability: Vital Spirit');
 			}
 			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.add('-immune', target, '[from] ability: Vital Spirit');
+				return null;
+			}
 		},
 		isBreakable: true,
 		name: "Vital Spirit",
