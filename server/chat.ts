@@ -891,9 +891,6 @@ export class CommandContext extends MessageContext {
 	}
 
 	privateModAction(msg: string) {
-		if (this.room && !this.room.roomid.endsWith('staff')) {
-			msg = msg.replace(IPTools.ipRegex, '<IP>');
-		}
 		if (this.room) {
 			if (this.room.roomid === 'staff') {
 				this.room.addByUser(this.user, `(${msg})`);
