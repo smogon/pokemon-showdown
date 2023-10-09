@@ -875,6 +875,9 @@ export class CommandContext extends MessageContext {
 
 	/** like privateModAction, but also notify Staff room */
 	privateGlobalModAction(msg: string) {
+		if (this.room && !this.room.roomid.endsWith('staff')) {
+			msg = msg.replace(IPTools.ipRegex, '<IP>');
+		}
 		this.privateModAction(msg);
 		if (this.room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();
