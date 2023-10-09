@@ -141,7 +141,7 @@ export const TeamsHandler = new class {
 			}
 		}
 
-		const team = Teams.import(rawTeam);
+		const team = Teams.import(rawTeam, true);
 		if (!team) {
 			connection.popup('Invalid team:\n\n' + rawTeam);
 			return null;
@@ -387,7 +387,7 @@ export const commands: Chat.ChatCommands = {
 				return null;
 			}
 			if (rawTeam.includes('\n')) {
-				rawTeam = Teams.pack(Teams.import(rawTeam));
+				rawTeam = Teams.pack(Teams.import(rawTeam, true));
 			}
 			if (!rawTeam) {
 				connection.popup("Invalid team.");
