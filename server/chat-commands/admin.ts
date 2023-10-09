@@ -745,6 +745,8 @@ export const commands: Chat.ChatCommands = {
 				void Rooms.PM.respawn();
 				// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
 				void Chat.plugins.datasearch?.PM?.respawn();
+				// update teams global
+				global.Teams = require('../../sim/teams').Teams;
 				// broadcast the new formats list to clients
 				Rooms.global.sendAll(Rooms.global.formatListText);
 				this.sendReply("DONE");
@@ -763,6 +765,8 @@ export const commands: Chat.ChatCommands = {
 
 				this.sendReply("Hotpatching validator...");
 				void TeamValidatorAsync.PM.respawn();
+				// update teams global too while we're at it
+				global.Teams = require('../../sim/teams').Teams;
 				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
 				if (lock['punishments']) {
