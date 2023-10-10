@@ -89015,19 +89015,16 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			tackle: ["9L1"],
 		}
 	},
-	
 	chromagen: {
 		learnset: {
 			tackle: ["9L1"],
 		}
 	},
-	
 	aerogen: {
 		learnset: {
 			tackle: ["9L1"],
 		}
 	},
-	
 	caragen: {
 		learnset: {
 			tackle: ["9L1"],
