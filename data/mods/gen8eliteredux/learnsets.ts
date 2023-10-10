@@ -2156,6 +2156,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			headbutt: ["8V", "7V", "4T"],
 			hiddenpower: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			hyperbeam: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
+			hyperfang: ['7L1'],
 			icefang: ["7L1", "6L1", "5L1", "4L1"],
 			infestation: ["7M", "6M"],
 			irontail: ["8V", "7T", "6T", "5T", "4M", "3M"],
