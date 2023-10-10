@@ -1232,7 +1232,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		forme: "Alola",
 		types: ["Ground", "Steel"],
 		baseStats: {hp: 10, atk: 55, def: 30, spa: 35, spd: 45, spe: 90},
-		abilities: {0: "Sand Veil", 1: "Tangling Hair", H: "Sand Force"},
+		abilities: {0: "Sand Force", 1: "Arena Trap", H: "Steelworker", I1: "Tangling Hair", I2: "Sand Rush"},
 		heightm: 0.2,
 		weightkg: 1,
 		color: "Brown",
