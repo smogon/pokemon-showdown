@@ -8725,7 +8725,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ["Water"],
 		gender: "N",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
-		abilities: {0: "Hydration", 1: "Friend Guard", H: "Healer", I1: "Levitate", I2: "Water Veil", I3: "Hydration"},
+		abilities: {0: "Swift Swim", 1: "Friend Guard", H: "Healer", I1: "Levitate", I2: "Water Veil", I3: "Hydration"},
 		heightm: 0.3,
 		weightkg: 1.4,
 		color: "Blue",
