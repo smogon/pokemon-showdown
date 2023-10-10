@@ -715,7 +715,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				ability: this.dex.abilities.get('static'),
 			});
 		},
-		shortDesc: "Contact moves used by or against this Pokemon have a 30% chance to burn the opponent.",
+		shortDesc: "Contact moves used by or against this Pokemon have a 30% chance to paralyze the opponent.",
 	},
 	stormdrain: {
 		inherit: true,
