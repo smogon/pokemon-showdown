@@ -40,12 +40,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onModifyMovePriority: -1,
-		onModifyMove(move, attacker) {
-			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
-				!attacker.transformed) {
-				move.multihit = 3;
-			}
-		},
+		onModifyMove(move, attacker) {},
 	},
 	baddreams: {
 		inherit: true,

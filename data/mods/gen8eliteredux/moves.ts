@@ -1722,6 +1722,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	watershuriken: {
+		inherit: true,
+		basePowerCallback(pokemon, target, move) {
+			return move.basePower;
+		},
+	},
 	watersport: {
 		inherit: true,
 		isNonstandard: null,
