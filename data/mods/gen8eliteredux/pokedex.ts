@@ -4897,7 +4897,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		forme: "Mega",
 		types: ["Grass", "Dragon"],
 		genderRatio: {M: 0.875, F: 0.125},
-		baseStats: {hp: 70, atk: 110, def: 75, spa: 145, spd: 85, spe: 145},
+		baseStats: {hp: 70, atk: 145, def: 75, spa: 110, spd: 85, spe: 145},
 		abilities: {0: "Big Leaves", I1: "Overgrow", I2: "Speed Force", I3: "Keen Edge"},
 		heightm: 1.9,
 		weightkg: 55.2,
