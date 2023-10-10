@@ -324,7 +324,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				return null;
 				}
-			}
+			},
+			desc: "This Pokemon is immune to Electric-type moves and raises its Highest attack by 1 stage when hit by a Grass-type move.",
+			shortDesc: "This Pokemon's Highest attack is raised 1 stage if hit by an Electic move; Electric immunity.",
 	},
 	limber: {
 		inherit: true,
@@ -654,6 +656,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				
 			}
 		},
+		desc: "This Pokemon is immune to Grass-type moves and raises its Highest attack by 1 stage when hit by a Grass-type move.",
+		shortDesc: "This Pokemon's Highest attack is raised 1 stage if hit by a Grass move; Grass immunity.",
 	},
 	scrappy: {
 		inherit: true,
