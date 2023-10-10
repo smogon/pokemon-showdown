@@ -20232,7 +20232,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	triattack: {
 		num: 161,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 90,
 		category: "Special",
 		name: "Tri Attack",
 		pp: 10,
