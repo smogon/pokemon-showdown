@@ -16548,7 +16548,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	shellsidearm: {
 		num: 801,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 100,
 		category: "Special",
 		name: "Shell Side Arm",
 		pp: 10,
