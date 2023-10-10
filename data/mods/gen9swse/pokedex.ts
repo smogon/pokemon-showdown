@@ -20217,4 +20217,5 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+	// new swse stuff is in base folder!
 };

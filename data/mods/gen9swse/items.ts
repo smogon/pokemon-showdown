@@ -7557,4 +7557,5 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
+	// new swse stuff is in base folder!
 };

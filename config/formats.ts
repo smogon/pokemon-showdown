@@ -1414,6 +1414,7 @@ export const Formats: FormatList = [
 					gooey: 'tanglinghair',
 					insomnia: 'vitalspirit',
 					ironbarbs: 'roughskin',
+					keeneye: 'illuminate',
 					libero: 'protean',
 					minus: 'plus',
 					moxie: 'chillingneigh',

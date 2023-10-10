@@ -94291,4 +94291,5 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 5, level: 47, moves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
 		],
 	},
+	// new swse stuff is in base folder!
 };

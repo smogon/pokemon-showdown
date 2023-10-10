@@ -21651,4 +21651,5 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	// new swse stuff is in base folder!
 };

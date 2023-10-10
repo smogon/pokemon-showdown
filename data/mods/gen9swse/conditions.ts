@@ -458,6 +458,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 	},
 
 	// weather is implemented here since it's so important to the game
+	// new swse stuff is in base folder!
 
 	// Climate Weathergy
 

@@ -5334,4 +5334,5 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 3,
 		num: 1003,
 	},
+	// new swse stuff is in base folder!
 };
