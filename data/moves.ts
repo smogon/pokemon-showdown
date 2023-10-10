@@ -9323,7 +9323,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		breaksProtect: true,
 		secondary: null,
 		target: "normal",
-		type: "Psychic",
+		type: "Ghost",
 		contestType: "Clever",
 	},
 	hypervoice: {
