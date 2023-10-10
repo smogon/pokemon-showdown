@@ -6605,6 +6605,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			throatchop: ["7T"],
 			toxic: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			venoshock: ["7M", "6M", "5M"],
+			willowisp: ['7L1'],
 			worryseed: ["7T", "6T", "5T", "4T"],
 			xscissor: ["8V", "7M", "7L66", "6M", "6L66", "5M", "5L66", "4M", "4L55"],
 		},
