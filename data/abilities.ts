@@ -6399,8 +6399,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	twistdimension: {
 		onStart(source) {
-			this.add('-activate', source, 'ability: Twist. Dimension');
-			this.field.addPseudoWeather('trickroom', source, source.getAbility());
+			if (!this.field.getPseudoWeather('trickroom')) {
+				this.add('-activate', source, 'ability: Twist. Dimension');
+				this.field.addPseudoWeather('trickroom', source, source.getAbility());
+			}
+
 		},
 		name: "Twist. Dimension",
 		rating: 5,
