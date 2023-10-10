@@ -4166,7 +4166,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	dragonpulse: {
 		num: 406,
 		accuracy: 100,
-		basePower: 85,
+		basePower: 90,
 		category: "Special",
 		name: "Dragon Pulse",
 		pp: 10,
