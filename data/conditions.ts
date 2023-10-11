@@ -1129,7 +1129,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
 			this.add('-energyWeather', 'Haunt', '[upkeep]');
-			this.eachEvent('EnergyWeather');
+			if (this.field.isEnergyWeather('haunt')) this.eachEvent('Weather');
 		},
 		onEnergyWeather(target) {
 			if (target.hasItem('energynullifier')) return;
