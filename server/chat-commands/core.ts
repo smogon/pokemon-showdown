@@ -784,7 +784,7 @@ export const commands: Chat.ChatCommands = {
 		game.confirmReady(user.id);
 	},
 
-	async acceptopenteamsheets(target, room, user, connection, cmd) {
+	acceptopenteamsheets(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const battle = room.battle;
 		if (!battle) return this.errorReply(this.tr`Must be in a battle room.`);

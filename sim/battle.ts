@@ -3019,7 +3019,7 @@ export class Battle {
 					}
 				}
 				return newSet;
-			})
+			});
 			if (hideFromSpectators) {
 				for (const s of this.sides) {
 					this.addSplit(s.id, ['showteam', side.id, Teams.pack(team)]);
