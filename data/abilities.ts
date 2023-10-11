@@ -5369,7 +5369,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onClimateWeatherChange(pokemon) {
 			if (pokemon.hasItem('utilityumbrella')) return;
-			if (!(pokemon.baseSpecies.baseSpecies === 'Snover' || pokemon.baseSpecies.baseSpecies === 'Abomasnow') || pokemon.transformed) return;
+			if (!(pokemon.baseSpecies.baseSpecies === 'Snover' || pokemon.baseSpecies.baseSpecies === 'Abomasnow') ||
+			pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveClimateWeather()) {
 			case 'sunnyday':

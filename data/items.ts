@@ -7529,6 +7529,15 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 
 	// swse
+	amazedrive: {
+		name: "Amaze-Drive",
+		spritenum: 113,
+		fling: {
+			basePower: 50,
+		},
+		num: -324,
+		gen: 9,
+	},
 	avocaberry: {
 		name: "Avoca Berry",
 		spritenum: 381,

@@ -1001,7 +1001,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.field.irritantWeatherState.boosted = true;
 				this.debug('Weather is Strong Winds boosted');
 				if (source.hasAbility('druidry')) {
-					this.field.setTerrain('grassyterrain', source)
+					this.field.setTerrain('grassyterrain', source);
 				} else {
 					this.field.setTerrain('mistyterrain', source);
 				}

@@ -58654,7 +58654,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M", "7T", "6T", "5T"],
 		},
 	},
-	solsosiskaskade: {
+	solosiskaskade: {
 		learnset: {
 			tackle: ["9L1"],
 		}
@@ -79502,6 +79502,11 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			zenheadbutt: ["8M"],
 		},
 	},
+	dubwoolkaskade: {
+		learnset: {
+			tackle: ["9L1"],
+		}
+	},
 	chewtle: {
 		learnset: {
 			assurance: ["8M"],
@@ -89095,7 +89100,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			tackle: ["9L1"],
 		}
 	},
-	porygonω: {
+	porygonwubble: {
 		learnset: {
 			tackle: ["9L1"],
 		}
@@ -89370,7 +89375,7 @@ export const Learnsets: {[speciesid: string]: LearnsetData} = {
 			tackle: ["9L1"],
 		}
 	},
-	Ωrogon: {
+	wubblerogon: {
 		learnset: {
 			tackle: ["9L1"],
 		}

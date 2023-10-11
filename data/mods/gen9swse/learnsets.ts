@@ -79262,11 +79262,6 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["8M"],
 		},
 	},
-	dubwoolkaskade: {
-		learnset: {
-			tackle: ["7L1"],
-		}
-	},
 	chewtle: {
 		learnset: {
 			assurance: ["8M"],

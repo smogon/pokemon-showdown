@@ -6635,7 +6635,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
-	porygonω: {
+	porygonwubble: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
@@ -6855,7 +6855,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
-	Ωrogon: {
+	wubblerogon: {
 		isNonstandard: "Future",
 		tier: "Illegal",
 	},
