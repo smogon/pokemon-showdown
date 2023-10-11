@@ -1712,17 +1712,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
 		mutuallyExclusiveWith: 'openteamsheets',
 		onTeamPreview() {
-			let buf = 'raw|';
-			for (const side of this.sides) {
-				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
-			}
-			if (this.rated === true) {
-				for (const side of this.sides) {
-					this.addSplit(side.id, [buf]);
-				}
-			} else {
-				this.add(buf);
-			}
+			this.showOpenTeamSheets(this.rated === true);
 		},
 	},
 	aaarestrictedabilities: {

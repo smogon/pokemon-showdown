@@ -2994,6 +2994,28 @@ export class Battle {
 		return team as PokemonSet[];
 	}
 
+	showOpenTeamSheets(hideFromSpectators = false) {
+		if (this.turn !== 0) return;
+		for (const side of this.sides) {
+			const team = side.team.map(set => {
+				return {
+					...set,
+					shiny: false,
+					evs: null!,
+					ivs: null!,
+					nature: '',
+				};
+			})
+			if (hideFromSpectators) {
+				for (const s of this.sides) {
+					this.addSplit(s.id, ['showteam', side.id, Teams.pack(team)]);
+				}
+			} else {
+				this.add('showteam', side.id, Teams.pack(team));
+			}
+		}
+	}
+
 	setPlayer(slot: SideID, options: PlayerOptions) {
 		let side;
 		let didSomething = true;
