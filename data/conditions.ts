@@ -1000,8 +1000,11 @@ export const Conditions: {[k: string]: ConditionData} = {
 			if (this.field.isClearingWeather('strongwinds')) {
 				this.field.irritantWeatherState.boosted = true;
 				this.debug('Weather is Strong Winds boosted');
-				this.field.setTerrain('mistyterrain', source);
-				this.debug('strong winds fairy dust sets misty terrain');
+				if (source.hasAbility('druidry')) {
+					this.field.setTerrain('grassyterrain', source)
+				} else {
+					this.field.setTerrain('mistyterrain', source);
+				}
 			}
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;

@@ -5310,7 +5310,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -5,
 	},
-	druidry: { // incomplete. sw triggering grassy terrain instead of misty
+	druidry: { // incomplete. needs testing
 		onIrritantWeather(target, source, effect) {
 			if (target.hasItem('safetygoggles')) return;
 			if (effect.id === 'sprinkle') {
@@ -5363,20 +5363,23 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: -4,
 	},
-	evergreen: { // incomplete. add snover, utility umbrella
+	evergreen: { // incomplete. needs testing
 		onStart(pokemon) {
 			this.singleEvent('ClimateWeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onClimateWeatherChange(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Abomasnow' || pokemon.transformed) return;
+			if (pokemon.hasItem('utilityumbrella')) return;
+			if (!(pokemon.baseSpecies.baseSpecies === 'Snover' || pokemon.baseSpecies.baseSpecies === 'Abomasnow') || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveClimateWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
+				if (pokemon.species.id !== 'snoverlowland') forme = 'Snover-Lowland';
 				if (pokemon.species.id !== 'abomasnowlowland') forme = 'Abomasnow-Lowland';
 				break;
 			case 'hail':
 			case 'snow':
+				if (pokemon.species.id !== 'snover') forme = 'Snover';
 				if (pokemon.species.id !== 'abomasnow') forme = 'Abomasnow';
 				break;
 			}
@@ -5471,7 +5474,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	haunting: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isClimateWeather(['bloodmoon', 'haunt'])) {
+			if (this.field.isClimateWeather('bloodmoon') || this.field.isEnergyWeather('haunt')) {
 				return this.chainModify(2);
 			}
 		},
@@ -5677,8 +5680,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: -30,
 	},
 	souldrain: { // incomplete. add the effect lol
-		onIrritantWeather(target, source, effect) {
-			if (target.hasItem('energynullifier')) return;
+		onAnyResidual(pokemon) {
+			for (const target of this.getAllActive()) {
+				if (!pokemon || this.field.isEnergyWeather('haunt')) {
+					this.heal(pokemon.baseMaxhp / 16, pokemon, target);
+				}
+			}
 		},
 		name: "Soul Drain",
 		rating: 2,

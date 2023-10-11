@@ -2295,10 +2295,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "If Psychic Field is active, this Pokemon's Special attacks have their power multiplied by 1.2 and have their Confusion chance doubled. These effects are prevented if this Pokemon is holding an Energy Nullifier.",
 		shortDesc: "This Pokemon's Special attacks do 1.2x and have doubled confuse chance in Psychic Field.",
 	},
-	souldrain: { // incomplete
+	souldrain: {
 		name: "Soul Drain",
-		desc: "If Cursed Winds is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This effect is prevented if this Pokemon is holding an Energy Nullifier.",
-		shortDesc: "If Cursed Winds is active, this Pokemon heals 1/16 of its max HP each turn.",
+		desc: "If Cursed Winds is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn for each adjacent Pokemon who takes residual damage form Cursed Winds.",
+		shortDesc: "This Pokemon heals 1/16 of its max HP for each Pokemon hurt by Cursed Winds.",
 	},
 	standoff: {
 		name: "Stand Off",
