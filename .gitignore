@@ -1,4 +1,5 @@
 /config/*
+/Smogon-Usage-Stats/*
 !/config/formats.ts
 /logs/*
 /test/modlogs
