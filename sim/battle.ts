@@ -2998,13 +2998,27 @@ export class Battle {
 		if (this.turn !== 0) return;
 		for (const side of this.sides) {
 			const team = side.team.map(set => {
-				return {
+				const newSet = {
 					...set,
 					shiny: false,
 					evs: null!,
 					ivs: null!,
 					nature: '',
 				};
+				// This is mainly done so the client doesn't flag Zacian/Zamazenta as illusions
+				// when they use their signature move
+				if ((toID(newSet.species) === 'zacian' && toID(newSet.item) === 'rustedsword') ||
+					(toID(newSet.species) === 'zamazenta' && toID(newSet.item) === 'rustedshield')) {
+					newSet.species = Dex.species.get(set.species + 'crowned').name;
+					const crowned: {[k: string]: string} = {
+						'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
+					};
+					const ironHead = newSet.moves.map(toID).indexOf('ironhead' as ID);
+					if (ironHead >= 0) {
+						newSet.moves[ironHead] = crowned[newSet.species];
+					}
+				}
+				return newSet;
 			})
 			if (hideFromSpectators) {
 				for (const s of this.sides) {
