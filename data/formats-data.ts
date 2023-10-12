@@ -4266,7 +4266,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	vikavolt: {
 		tier: "RU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
 	vikavolttotem: {
