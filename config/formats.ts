@@ -3922,7 +3922,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 8] Doubles OU'],
+		ruleset: ['[Gen 8] Doubles OU', 'Evasion Abilities Clause'],
 		banlist: ['DOU', 'DBL'],
 	},
 	{
