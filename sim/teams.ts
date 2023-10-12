@@ -491,7 +491,7 @@ export const Teams = new class Teams {
 			set.hpType = aggressive ? toID(line) : line;
 		} else if (line.startsWith('Tera Type: ')) {
 			line = line.slice(11);
-			set.teraType = aggressive ? toID(line) : line;
+			set.teraType = aggressive ? line.replace(/[^a-zA-Z0-9]/g, '') : line;
 		} else if (line === 'Gigantamax: Yes') {
 			set.gigantamax = true;
 		} else if (line.startsWith('EVs: ')) {
