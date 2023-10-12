@@ -1228,7 +1228,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	blaziken: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	blazikenmega: {
