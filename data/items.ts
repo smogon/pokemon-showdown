@@ -1032,7 +1032,7 @@ export const Items: {[itemid: string]: ItemData} = {
 					showMsg = true;
 				}
 			}
-			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+			if (showMsg && !(effect as ActiveMove).secondaries && !['octolock', 'syrupbomb'].includes(effect.id)) {
 				this.add('-fail', target, 'unboost', '[from] item: Clear Amulet', '[of] ' + target);
 			}
 		},

@@ -417,7 +417,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (source && target === source) return;
 			if (boost.def && boost.def < 0) {
 				delete boost.def;
-				if (!(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				if (!(effect as ActiveMove).secondaries && !['octolock', 'syrupbomb'].includes(effect.id)) {
 					this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", "[of] " + target);
 				}
 			}
@@ -497,7 +497,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					showMsg = true;
 				}
 			}
-			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+			if (showMsg && !(effect as ActiveMove).secondaries && !['octolock', 'syrupbomb'].includes(effect.id)) {
 				this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] " + target);
 			}
 		},
@@ -1433,7 +1433,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					showMsg = true;
 				}
 			}
-			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+			if (showMsg && !(effect as ActiveMove).secondaries && !['octolock', 'syrupbomb'].includes(effect.id)) {
 				this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", "[of] " + target);
 			}
 		},
@@ -5136,7 +5136,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					showMsg = true;
 				}
 			}
-			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+			if (showMsg && !(effect as ActiveMove).secondaries && !['octolock', 'syrupbomb'].includes(effect.id)) {
 				this.add("-fail", target, "unboost", "[from] ability: White Smoke", "[of] " + target);
 			}
 		},
