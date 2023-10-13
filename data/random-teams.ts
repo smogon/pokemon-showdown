@@ -203,10 +203,7 @@ export class RandomTeams {
 				!counter.get('Steel') &&
 				(isDoubles || species.baseStats.atk > 95 || movePool.includes('gigatonhammer') || movePool.includes('makeitrain'))
 			),
-			Water: (movePool, moves, abilities, types, counter, species) => {
-				if (types.includes('Ground')) return false;
-				return !counter.get('Water');
-			},
+			Water: (movePool, moves, abilities, types, counter, species) => !counter.get('Water'),
 		};
 	}
 
@@ -529,6 +526,7 @@ export class RandomTeams {
 			['surf', 'hydropump'],
 			['liquidation', 'wavecrash'],
 			['gigadrain', 'leafstorm'],
+			['powerwhip', 'hornleech'],
 			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
 			['knockoff', 'foulplay'],
 			['doubleedge', 'headbutt'],
@@ -994,8 +992,8 @@ export class RandomTeams {
 	): boolean {
 		if ([
 			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Galvanize', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
-			'Marvel Scale', 'Misty Surge', 'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Sniper',
-			'Snow Cloak', 'Steadfast', 'Steam Engine',
+			'Misty Surge', 'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Sniper', 'Snow Cloak', 'Steadfast',
+			'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -1039,6 +1037,8 @@ export class RandomTeams {
 			return !counter.get('Physical');
 		case 'Libero': case 'Protean':
 			return role === 'Offensive Protect' || (species.id === 'meowscarada' && role === 'Fast Attacker');
+		case 'Marvel Scale':
+			return isDoubles;
 		case 'Mold Breaker':
 			return (abilities.has('Sharpness') || abilities.has('Unburden'));
 		case 'Moxie':
@@ -1046,7 +1046,7 @@ export class RandomTeams {
 		case 'Natural Cure':
 			return species.id === 'pawmot';
 		case 'Neutralizing Gas':
-			return !isDoubles;
+			return (!isDoubles && species.id === 'weezing');
 		case 'Overcoat': case 'Sweet Veil':
 			return types.includes('Grass');
 		case 'Overgrow':
@@ -1077,6 +1077,8 @@ export class RandomTeams {
 			return (!teamDetails.sun || !counter.get('Special'));
 		case 'Speed Boost':
 			return (species.id === 'yanmega' && !moves.has('protect'));
+		case 'Sticky Hold':
+			return (species.id === 'muk');
 		case 'Sturdy':
 			return !!counter.get('recoil');
 		case 'Swarm':

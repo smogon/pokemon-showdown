@@ -123,7 +123,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["encore", "focusblast", "grassknot", "hiddenpowerice", "nastyplot", "thunderbolt", "voltswitch"]
             }
         ]
@@ -179,7 +179,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["fireblast", "hiddenpowerice", "nastyplot", "solarbeam", "substitute", "willowisp"],
+                "movepool": ["fireblast", "hiddenpowerice", "hypnosis", "nastyplot", "solarbeam", "substitute", "willowisp"],
                 "preferredTypes": ["Grass"]
             }
         ]
@@ -628,8 +628,13 @@
         "level": 86,
         "sets": [
             {
+                "role": "Bulky Attacker",
+                "movepool": ["closecombat", "earthquake", "stealthrock", "stoneedge", "xscissor"],
+                "preferredTypes": ["Rock"]
+            },
+            {
                 "role": "Fast Attacker",
-                "movepool": ["closecombat", "earthquake", "stealthrock", "stoneedge", "swordsdance", "xscissor"],
+                "movepool": ["closecombat", "earthquake", "quickattack", "stoneedge", "swordsdance", "xscissor"],
                 "preferredTypes": ["Rock"]
             }
         ]
@@ -981,6 +986,10 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["aquajet", "doubleedge", "icepunch", "superpower", "waterfall"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["aquajet", "bellydrum", "return", "waterfall"]
             }
         ]
     },
@@ -1288,7 +1297,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["darkpulse", "fireblast", "hiddenpowergrass", "nastyplot", "suckerpunch"]
             }
         ]
@@ -1731,7 +1740,7 @@
         "level": 93,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Bulky Attacker",
                 "movepool": ["firefang", "ironhead", "stealthrock", "suckerpunch", "swordsdance", "thunderpunch"],
                 "preferredTypes": ["Fire"]
             }
