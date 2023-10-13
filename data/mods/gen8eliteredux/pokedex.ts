@@ -12292,7 +12292,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		name: "Heliolisk",
 		types: ["Electric", "Normal"],
 		baseStats: {hp: 62, atk: 55, def: 52, spa: 109, spd: 94, spe: 109},
-		abilities: {0: "Lightinging Rod", 1: "Plus", H: "Solar Power", I1: "Dry Skin", I2: "Electrocytes", I3: "Sand Rush"},
+		abilities: {0: "Lightning Rod", 1: "Plus", H: "Solar Power", I1: "Dry Skin", I2: "Electrocytes", I3: "Sand Rush"},
 		heightm: 1,
 		weightkg: 21,
 		color: "Yellow",
