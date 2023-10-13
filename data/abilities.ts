@@ -5854,7 +5854,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		name: "Dragon Slayer",
+		name: "Dragonslayer",
 		rating: 2.5,
 		num: 343,
 		gen: 8,

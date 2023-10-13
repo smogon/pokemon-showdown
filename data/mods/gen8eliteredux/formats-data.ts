@@ -3149,11 +3149,11 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	hoopa: {
-		tier: "UU",
+		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	hoopaunbound: {
-		tier: "UU",
+		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	volcanion: {
