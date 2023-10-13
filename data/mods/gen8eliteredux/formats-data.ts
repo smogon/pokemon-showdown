@@ -1436,7 +1436,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	aggronmega: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	meditite: {
