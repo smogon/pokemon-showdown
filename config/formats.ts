@@ -136,7 +136,7 @@ export const Formats: FormatList = [
 		mod: 'gen8eliteredux',
 		ruleset: ['Standard'],
 		banlist: 
-		['Uber', 'AG', 'King\'s Rock', 'Baton Pass', 'Shadow Tag', 'Arena Trap', 'Aeroblast', 'Alakazite', 'Blastoisinite', 'Moody'],
+		['Uber', 'AG', 'King\'s Rock', 'Baton Pass', 'Shadow Tag', 'Arena Trap', 'Aeroblast', 'Alakazite', 'Blastoisinite', 'Moody', 'Power Construct'],
 
 
 
