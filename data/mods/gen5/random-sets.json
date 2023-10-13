@@ -635,7 +635,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["closecombat", "earthquake", "quickattack", "stoneedge", "swordsdance", "xscissor"],
-                "preferredTypes": ["Rock"]
+                "preferredTypes": ["Ground"]
             }
         ]
     },
