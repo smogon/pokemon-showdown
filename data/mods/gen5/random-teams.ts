@@ -546,7 +546,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun);
 		case 'Sticky Hold':
-			return (species.id !== 'Accelgor');
+			return species.id !== 'accelgor';
 		case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix' && !!counter.get('sheerforce'));
 		case 'Swarm':
