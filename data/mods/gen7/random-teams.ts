@@ -163,7 +163,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
 		for (const moveid of moves) {
-			const move = this.dex.moves.get(moveid);
+			let move = this.dex.moves.get(moveid);
+			// Nature Power calls Earthquake in Gen 5
+			if (this.gen === 5 && moveid === 'naturepower') move = this.dex.moves.get('earthquake');
 
 			const moveType = this.getMoveType(move, species, abilities, preferredType);
 			if (move.damage || move.damageCallback) {
