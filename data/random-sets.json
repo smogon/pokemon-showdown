@@ -904,7 +904,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Fire Blast", "Hydro Pump", "Ice Beam", "Psychic", "Psyshock", "Slack Off", "Trick Room"],
+                "movepool": ["Fire Blast", "Hydro Pump", "Ice Beam", "Psyshock", "Slack Off", "Trick Room"],
                 "teraTypes": ["Psychic"]
             }
         ]
