@@ -1977,7 +1977,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			target.m.numSwaps++;
 			if (effect && effect.effectType === 'Move' && source.side.pokemon.length < 24 &&
-                source.side !== target.side && target.m.numSwaps < 4) {
+				source.side !== target.side && target.m.numSwaps < 4) {
 				const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
 				// Just in case(tm) and for Shedinja
 				if (hpCost === target.baseMaxhp) {
