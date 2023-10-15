@@ -545,6 +545,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return !counter.get('setup');
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun);
+		case 'Sticky Hold':
+			return species.id !== 'accelgor';
 		case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix' && !!counter.get('sheerforce'));
 		case 'Swarm':
@@ -560,7 +562,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Torrent':
 			return !counter.get('Water');
 		case 'Unaware':
-			return (role !== 'Bulky Attacker' && role !== 'Bulky Setup');
+			return ((role !== 'Bulky Attacker' && role !== 'Bulky Setup') || species.id === 'swoobat');
 		case 'Water Absorb':
 			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
 		}
@@ -748,7 +750,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
-			(ability === 'Rough Skin') || (species.id !== 'hooh' &&
+			(ability === 'Rough Skin') || (species.id !== 'hooh' && role !== 'Wallbreaker' &&
 			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
 		) return 'Rocky Helmet';
 		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
@@ -875,7 +877,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard';
-		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
+		let srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
+		// Crash damage move users want an odd HP to survive two misses
+		if (['highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if (moves.has('substitute') && item === 'Sitrus Berry') {

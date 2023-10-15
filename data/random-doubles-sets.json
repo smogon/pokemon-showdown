@@ -144,7 +144,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Dazzling Gleam", "Disable", "Encore", "Fire Blast", "Heal Pulse", "Helping Hand", "Icy Wind", "Stealth Rock", "Thunder Wave"],
+                "movepool": ["Dazzling Gleam", "Disable", "Encore", "Fire Blast", "Heal Pulse", "Helping Hand", "Icy Wind", "Thunder Wave"],
                 "teraTypes": ["Fire", "Steel"]
             }
         ]
@@ -324,7 +324,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Drain Punch", "Gunk Shot", "Haze", "Helping Hand", "Ice Punch", "Knock Off", "Poison Gas", "Poison Jab", "Shadow Sneak", "Toxic Spikes"],
+                "movepool": ["Drain Punch", "Gunk Shot", "Haze", "Helping Hand", "Ice Punch", "Knock Off", "Poison Gas", "Poison Jab", "Shadow Sneak"],
                 "teraTypes": ["Dark"]
             }
         ]
@@ -919,7 +919,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Bullet Punch", "Close Combat", "Defog", "Tailwind", "U-turn"],
+                "movepool": ["Bullet Punch", "Close Combat", "Tailwind", "U-turn"],
                 "teraTypes": ["Fire", "Water"]
             },
             {
@@ -1009,7 +1009,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Fire Blast", "High Horsepower", "Icy Wind", "Knock Off", "Protect", "Rock Slide", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Fire Blast", "High Horsepower", "Icy Wind", "Knock Off", "Protect", "Rock Slide", "Stone Edge"],
                 "teraTypes": ["Flying", "Steel"]
             }
         ]
@@ -1224,7 +1224,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Brave Bird", "Defog", "Draco Meteor", "Fire Blast", "Helping Hand", "Roost", "Tailwind", "Will-O-Wisp"],
+                "movepool": ["Brave Bird", "Draco Meteor", "Fire Blast", "Helping Hand", "Roost", "Tailwind", "Will-O-Wisp"],
                 "teraTypes": ["Steel"]
             },
             {
@@ -1399,7 +1399,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Iron Head", "Life Dew", "Protect", "Stealth Rock", "Thunder Wave", "U-turn"],
+                "movepool": ["Iron Head", "Life Dew", "Protect", "Thunder Wave", "U-turn"],
                 "teraTypes": ["Dark", "Water"]
             },
             {
@@ -1944,7 +1944,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Earth Power", "Flash Cannon", "Heat Wave", "Protect", "Stealth Rock"],
+                "movepool": ["Earth Power", "Flash Cannon", "Heat Wave", "Protect"],
                 "teraTypes": ["Fire", "Grass", "Steel"]
             },
             {
@@ -1964,7 +1964,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Defog", "Dragon Tail", "Icy Wind", "Rest", "Shadow Ball", "Will-O-Wisp"],
+                "movepool": ["Dragon Tail", "Icy Wind", "Rest", "Shadow Ball", "Will-O-Wisp"],
                 "teraTypes": ["Fairy"]
             }
         ]
@@ -2154,7 +2154,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Icy Wind", "Judgment", "Recover", "Snarl", "Stealth Rock", "Tailwind", "Taunt", "Will-O-Wisp"],
+                "movepool": ["Icy Wind", "Judgment", "Recover", "Snarl", "Tailwind", "Taunt", "Will-O-Wisp"],
                 "teraTypes": ["Fire", "Grass"]
             }
         ]
@@ -2199,7 +2199,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Icy Wind", "Judgment", "Recover", "Snarl", "Stealth Rock", "Tailwind", "Taunt", "Will-O-Wisp"],
+                "movepool": ["Icy Wind", "Judgment", "Recover", "Snarl", "Tailwind", "Taunt", "Will-O-Wisp"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -2369,7 +2369,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Gunk Shot", "High Horsepower", "Knock Off", "Protect", "Stealth Rock", "Stone Edge", "Taunt"],
+                "movepool": ["Gunk Shot", "High Horsepower", "Knock Off", "Protect", "Stone Edge", "Taunt"],
                 "teraTypes": ["Dark", "Ground", "Poison"]
             },
             {
@@ -2422,7 +2422,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Brave Bird", "Defog", "Hydro Pump", "Knock Off", "Protect", "Tailwind"],
+                "movepool": ["Brave Bird", "Hydro Pump", "Knock Off", "Protect", "Tailwind"],
                 "teraTypes": ["Ground"]
             },
             {
@@ -3387,7 +3387,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Brave Bird", "Defog", "Protect", "Surf", "Tailwind"],
+                "movepool": ["Brave Bird", "Protect", "Surf", "Tailwind"],
                 "teraTypes": ["Ground"]
             }
         ]
@@ -3467,7 +3467,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Close Combat", "Fake Out", "Helping Hand", "Iron Head", "Knock Off", "Stealth Rock", "U-turn"],
+                "movepool": ["Close Combat", "Fake Out", "Helping Hand", "Iron Head", "Knock Off", "U-turn"],
                 "teraTypes": ["Fighting", "Steel"]
             },
             {
@@ -3987,7 +3987,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Earth Power", "Energy Ball", "Hyper Voice", "Pollen Puff", "Protect"],
+                "movepool": ["Earth Power", "Energy Ball", "Hyper Voice", "Pollen Puff", "Protect", "Strength Sap"],
                 "teraTypes": ["Grass"]
             }
         ]
@@ -4427,7 +4427,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Earth Power", "Protect", "Spikes", "Stealth Rock", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Earth Power", "Protect", "Stealth Rock", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Electric", "Grass", "Ground"]
             },
             {
@@ -4726,8 +4726,8 @@
         "level": 79,
         "sets": [
             {
-                "role": "Doubles Bulky Setup",
-                "movepool": ["Bulk Up", "Drain Punch", "Gunk Shot", "Knock Off"],
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Bulk Up", "Drain Punch", "Gunk Shot", "Knock Off", "Snarl"],
                 "teraTypes": ["Dark"]
             }
         ]
@@ -4772,7 +4772,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Follow Me", "Horn Leech", "Knock Off", "Spikes", "Spiky Shield"],
+                "movepool": ["Follow Me", "Horn Leech", "Knock Off", "Spiky Shield"],
                 "teraTypes": ["Grass"]
             }
         ]
@@ -4787,7 +4787,7 @@
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Ivy Cudgel", "Spiky Shield", "Swords Dance", "Wood Hammer"],
+                "movepool": ["Horn Leech", "Ivy Cudgel", "Power Whip", "Spiky Shield", "Swords Dance"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -4802,7 +4802,7 @@
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Ivy Cudgel", "Spiky Shield", "Swords Dance", "Wood Hammer"],
+                "movepool": ["Horn Leech", "Ivy Cudgel", "Power Whip", "Spiky Shield", "Swords Dance"],
                 "teraTypes": ["Fire"]
             }
         ]
@@ -4817,7 +4817,7 @@
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Ivy Cudgel", "Power Whip", "Spiky Shield", "Swords Dance"],
+                "movepool": ["Horn Leech", "Ivy Cudgel", "Power Whip", "Spiky Shield", "Swords Dance"],
                 "teraTypes": ["Rock"]
             }
         ]
