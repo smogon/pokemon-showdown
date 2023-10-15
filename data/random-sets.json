@@ -2055,7 +2055,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Encore", "Knock Off", "Light Screen", "Psychic", "Reflect", "Stealth Rock", "Thunder Wave", "U-turn", "Yawn"],
-                "teraTypes": ["Electric", "Steel"]
+                "teraTypes": ["Dark", "Electric", "Steel"]
             }
         ]
     },
@@ -2085,7 +2085,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Explosion", "Fire Blast", "Knock Off", "Psychic", "Stealth Rock", "Taunt", "U-turn"],
-                "teraTypes": ["Fire", "Psychic"]
+                "teraTypes": ["Dark", "Fire", "Psychic"]
             },
             {
                 "role": "Fast Attacker",
