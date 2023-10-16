@@ -620,7 +620,11 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'beauty-gen9', 'bede-masters', 'calem-masters', 'clerk-unite', 'dawn-masters3', 'dendra', 'diantha-masters2',
 	'erbie-unite', 'hilbert-masters2', 'hop-masters', 'jasmine-masters2', 'lisia-masters', 'marnie-masters3', 'matt',
 	'n-masters3', 'paulo-masters', 'phorus-unite', 'pokemaniac-gen9', 'serena-masters3', 'tabitha', 'tina-masters', 'trevor',
-	'whitney-masters', 'youngster-gen9', 'zirco-unite',
+	'whitney-masters', 'youngster-gen9', 'zirco-unite', 'alec-anime', 'bodybuilder-gen9', 'bodybuilderf-gen9',
+	'carmine-festival', 'carmine', 'diamondclanmember', 'dragontamer-gen9', 'elesa-masters2', 'kieran-festival', 'kieran',
+	'laventon2', 'liza-masters', 'mallow-masters', 'musician-gen9', 'nemona-s', 'officeworker-gen9', 'officeworkerf-gen9',
+	'pearlclanmember', 'raifort', 'saguaro', 'salvatore', 'scientist-gen9', 'shauna-masters', 'silver-masters',
+	'steven-masters4', 'tate-masters', 'waiter-gen9', 'waitress-gen9',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -635,6 +639,10 @@ const OFFICIAL_AVATARS_FIFTY = new Set([
 	'rose-zerosuit',
 ]);
 
+const OFFICIAL_AVATARS_HORO = new Set([
+	'florian-bb', 'juliana-bb',
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
@@ -643,6 +651,7 @@ for (const avatar of OFFICIAL_AVATARS_KYLEDOVE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HYOOPPA) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_HORO) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -678,7 +687,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|raw|(${this.tr`Artist: `}ZacWeavile)`);
 			}
 			if (OFFICIAL_AVATARS_KYLEDOVE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/DoveKyle">Kyledove</a>)`);
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/DoveKyle">kyledove</a>)`);
 			}
 			if (OFFICIAL_AVATARS_HYOOPPA.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/hyo_oppa">hyo-oppa</a>)`);
@@ -688,6 +697,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}Fifty Shades of Rez)`);
+			}
+			if (OFFICIAL_AVATARS_HORO.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}Horo)`);
 			}
 		}
 	},

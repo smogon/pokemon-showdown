@@ -1297,6 +1297,16 @@ function createTournament(
 		output.errorReply("You cannot have a player cap that is less than 2.");
 		return;
 	}
+	if (name?.trim().length) {
+		if (output.checkChat(name) !== name) {
+			throw new Chat.ErrorMessage(`You cannot use filtered words in tour names.`);
+		}
+
+		if (name.length > MAX_CUSTOM_NAME_LENGTH) {
+			throw new Chat.ErrorMessage(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);
+		}
+		if (name.includes('|')) throw new Chat.ErrorMessage("The tournament's name cannot include the | symbol.");
+	}
 	const tour = room.game = new Tournament(
 		room, format, createTournamentGenerator(generator, generatorMod, output)!, playerCap, isRated, name
 	);

@@ -84,6 +84,7 @@ interface Handlers {
 	) => void;
 	onRename: (user: User, oldID: ID, newID: ID) => void;
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
+	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
 }
 
 export interface ChatPlugin {
@@ -874,12 +875,18 @@ export class CommandContext extends MessageContext {
 
 	/** like privateModAction, but also notify Staff room */
 	privateGlobalModAction(msg: string) {
+		if (this.room && !this.room.roomid.endsWith('staff')) {
+			msg = msg.replace(IPTools.ipRegex, '<IP>');
+		}
 		this.privateModAction(msg);
 		if (this.room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();
 		}
 	}
 	addGlobalModAction(msg: string) {
+		if (this.room && !this.room.roomid.endsWith('staff')) {
+			msg = msg.replace(IPTools.ipRegex, '<IP>');
+		}
 		this.addModAction(msg);
 		if (this.room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();

@@ -445,7 +445,7 @@ export const Teams = new class Teams {
 		return out;
 	}
 
-	parseExportedTeamLine(line: string, isFirstLine: boolean, set: PokemonSet) {
+	parseExportedTeamLine(line: string, isFirstLine: boolean, set: PokemonSet, aggressive?: boolean) {
 		if (isFirstLine) {
 			let item;
 			[line, item] = line.split(' @ ');
@@ -471,10 +471,10 @@ export const Teams = new class Teams {
 			}
 		} else if (line.startsWith('Trait: ')) {
 			line = line.slice(7);
-			set.ability = line;
+			set.ability = aggressive ? toID(line) : line;
 		} else if (line.startsWith('Ability: ')) {
 			line = line.slice(9);
-			set.ability = line;
+			set.ability = aggressive ? toID(line) : line;
 		} else if (line === 'Shiny: Yes') {
 			set.shiny = true;
 		} else if (line.startsWith('Level: ')) {
@@ -485,13 +485,13 @@ export const Teams = new class Teams {
 			set.happiness = +line;
 		} else if (line.startsWith('Pokeball: ')) {
 			line = line.slice(10);
-			set.pokeball = line;
+			set.pokeball = aggressive ? toID(line) : line;
 		} else if (line.startsWith('Hidden Power: ')) {
 			line = line.slice(14);
-			set.hpType = line;
+			set.hpType = aggressive ? toID(line) : line;
 		} else if (line.startsWith('Tera Type: ')) {
 			line = line.slice(11);
-			set.teraType = line;
+			set.teraType = aggressive ? line.replace(/[^a-zA-Z0-9]/g, '') : line;
 		} else if (line === 'Gigantamax: Yes') {
 			set.gigantamax = true;
 		} else if (line.startsWith('EVs: ')) {
@@ -522,7 +522,7 @@ export const Teams = new class Teams {
 			if (natureIndex === -1) natureIndex = line.indexOf(' nature');
 			if (natureIndex === -1) return;
 			line = line.substr(0, natureIndex);
-			if (line !== 'undefined') set.nature = line;
+			if (line !== 'undefined') set.nature = aggressive ? toID(line) : line;
 		} else if (line.startsWith('-') || line.startsWith('~')) {
 			line = line.slice(line.charAt(1) === ' ' ? 2 : 1);
 			if (line.startsWith('Hidden Power [')) {
@@ -543,18 +543,19 @@ export const Teams = new class Teams {
 		}
 	}
 	/** Accepts a team in any format (JSON, packed, or exported) */
-	import(buffer: string): PokemonSet[] | null {
+	import(buffer: string, aggressive?: boolean): PokemonSet[] | null {
+		const sanitize = aggressive ? toID : Dex.getName;
 		if (buffer.startsWith('[')) {
 			try {
 				const team = JSON.parse(buffer);
 				if (!Array.isArray(team)) throw new Error(`Team should be an Array but isn't`);
 				for (const set of team) {
-					set.name = Dex.getName(set.name);
-					set.species = Dex.getName(set.species);
-					set.item = Dex.getName(set.item);
-					set.ability = Dex.getName(set.ability);
-					set.gender = Dex.getName(set.gender);
-					set.nature = Dex.getName(set.nature);
+					set.name = sanitize(set.name);
+					set.species = sanitize(set.species);
+					set.item = sanitize(set.item);
+					set.ability = sanitize(set.ability);
+					set.gender = sanitize(set.gender);
+					set.nature = sanitize(set.nature);
 					const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 					if (set.evs) {
 						for (const statid in evs) {
@@ -572,7 +573,7 @@ export const Teams = new class Teams {
 					if (!Array.isArray(set.moves)) {
 						set.moves = [];
 					} else {
-						set.moves = set.moves.map(Dex.getName);
+						set.moves = set.moves.map(sanitize);
 					}
 				}
 				return team;
@@ -606,9 +607,9 @@ export const Teams = new class Teams {
 					moves: [],
 				};
 				sets.push(curSet);
-				this.parseExportedTeamLine(line, true, curSet);
+				this.parseExportedTeamLine(line, true, curSet, aggressive);
 			} else {
-				this.parseExportedTeamLine(line, false, curSet);
+				this.parseExportedTeamLine(line, false, curSet, aggressive);
 			}
 		}
 		return sets;

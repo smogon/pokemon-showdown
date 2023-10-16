@@ -105,6 +105,7 @@ export class RandomGen8Teams {
 	format: Format;
 	prng: PRNG;
 	noStab: string[];
+	priorityPokemon: string[];
 	readonly maxTeamSize: number;
 	readonly adjustLevel: number | null;
 	readonly maxMoveCount: number;
@@ -124,6 +125,7 @@ export class RandomGen8Teams {
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.noStab = NO_STAB;
+		this.priorityPokemon = [];
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 		this.maxTeamSize = ruleTable.maxTeamSize;

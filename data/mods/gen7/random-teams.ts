@@ -105,6 +105,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		super(format, prng);
 
 		this.noStab = NO_STAB;
+		this.priorityPokemon = PRIORITY_POKEMON;
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
@@ -162,7 +163,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
 		for (const moveid of moves) {
-			const move = this.dex.moves.get(moveid);
+			let move = this.dex.moves.get(moveid);
+			// Nature Power calls Earthquake in Gen 5
+			if (this.gen === 5 && moveid === 'naturepower') move = this.dex.moves.get('earthquake');
 
 			const moveType = this.getMoveType(move, species, abilities, preferredType);
 			if (move.damage || move.damageCallback) {
@@ -174,7 +177,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				categories[move.category]++;
 			}
 			// Moves that have a low base power:
-			if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60 && moveid !== 'rapidspin')) {
+			if (moveid === 'lowkick' || (move.basePower && move.basePower <= 60 && !['nuzzle', 'rapidspin'].includes(moveid))) {
 				counter.add('technician');
 			}
 			// Moves that hit up to 5 times:
@@ -183,7 +186,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power:
 			if (move.basePower || move.basePowerCallback) {
-				if (!this.noStab.includes(moveid) || PRIORITY_POKEMON.includes(species.id) && move.priority > 0) {
+				if (!this.noStab.includes(moveid) || this.priorityPokemon.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.add('stab');
 					if (preferredType === moveType) counter.add('preferred');
@@ -531,7 +534,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		}
 
 		// Enforce STAB priority
-		if (['Bulky Attacker', 'Bulky Setup'].includes(role) || PRIORITY_POKEMON.includes(species.id)) {
+		if (['Bulky Attacker', 'Bulky Setup'].includes(role) || this.priorityPokemon.includes(species.id)) {
 			const priorityMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -1025,7 +1028,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		);
 
 		if (
-			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') && !PRIORITY_POKEMON.includes(species.id)
+			moves.has('pursuit') && moves.has('suckerpunch') && counter.get('Dark') && !this.priorityPokemon.includes(species.id)
 		) return 'Black Glasses';
 		if (counter.get('Special') === 4) {
 			return (
@@ -1195,7 +1198,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard';
-		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
+		let srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
+		// Crash damage move users want an odd HP to survive two misses
+		if (['highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if (moves.has('substitute') && (item === 'Sitrus Berry' || (ability === 'Power Construct' && item !== 'Leftovers'))) {
