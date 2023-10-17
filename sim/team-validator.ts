@@ -1179,6 +1179,10 @@ export class TeamValidator {
 			set.nature = 'Serious';
 		}
 
+		if (set.gender === '' && !species.gender) {
+			set.gender = ['M', 'F'][Math.floor(Math.random() * 2)];
+		}
+
 		for (const stat in set.evs) {
 			if (set.evs[stat as 'hp'] < 0) {
 				problems.push(`${name} has less than 0 ${allowAVs ? 'Awakening Values' : 'EVs'} in ${Dex.stats.names[stat as 'hp']}.`);
