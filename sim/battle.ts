@@ -3005,15 +3005,18 @@ export class Battle {
 					ivs: null!,
 					nature: '',
 				};
+				// Only display Hidden Power type if the Pokemon has Hidden Power
+				// This is based on how team sheets were written in past VGC formats
+				if (!set.moves.some(m => this.dex.moves.get(m).id === 'hiddenpower')) delete newSet.hpType;
 				// This is mainly done so the client doesn't flag Zacian/Zamazenta as illusions
 				// when they use their signature move
-				if ((toID(newSet.species) === 'zacian' && toID(newSet.item) === 'rustedsword') ||
-					(toID(newSet.species) === 'zamazenta' && toID(newSet.item) === 'rustedshield')) {
+				if ((toID(set.species) === 'zacian' && toID(set.item) === 'rustedsword') ||
+					(toID(set.species) === 'zamazenta' && toID(set.item) === 'rustedshield')) {
 					newSet.species = Dex.species.get(set.species + 'crowned').name;
 					const crowned: {[k: string]: string} = {
 						'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 					};
-					const ironHead = newSet.moves.map(toID).indexOf('ironhead' as ID);
+					const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
 					if (ironHead >= 0) {
 						newSet.moves[ironHead] = crowned[newSet.species];
 					}
