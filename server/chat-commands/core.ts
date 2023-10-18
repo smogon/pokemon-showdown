@@ -784,7 +784,7 @@ export const commands: Chat.ChatCommands = {
 		game.confirmReady(user.id);
 	},
 
-	async acceptopenteamsheets(target, room, user, connection, cmd) {
+	acceptopenteamsheets(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		const battle = room.battle;
 		if (!battle) return this.errorReply(this.tr`Must be in a battle room.`);
@@ -810,15 +810,7 @@ export const commands: Chat.ChatCommands = {
 
 		this.add(this.tr`${user.name} has agreed to open team sheets.`);
 		if (battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
-			let buf = '|uhtml|ots|';
-			for (const curPlayer of battle.players) {
-				const team = await battle.getTeam(curPlayer.id);
-				if (!team) continue;
-				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${curPlayer.name}</summary>${Teams.export(team, {hideStats: true})}</details></div>`;
-			}
-			for (const curPlayer of battle.players) {
-				curPlayer.sendRoom(buf);
-			}
+			void battle.stream.write('>show-openteamsheets');
 		}
 	},
 	acceptopenteamsheetshelp: [`/acceptopenteamsheets - Agrees to an open team sheet opportunity during Team Preview, where all information on a team except stats is shared with the opponent. Requires: \u2606`],

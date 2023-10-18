@@ -2,7 +2,6 @@
 
 import {Utils} from "../lib";
 import {Pokemon} from "../sim/pokemon";
-import {Teams} from "../sim/teams";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
@@ -1694,6 +1693,11 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Open Team Sheets',
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
 		mutuallyExclusiveWith: 'forceopenteamsheets',
+		onValidateRule() {
+			if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
+				throw new Error(`The "Open Team Sheets" rule${this.ruleTable.blame('openteamsheets')} requires Team Preview.`);
+			}
+		},
 		onTeamPreview() {
 			const msg = 'uhtml|otsrequest|<button name="send" value="/acceptopenteamsheets" class="button" style="margin-right: 10px;"><strong>Accept Open Team Sheets</strong></button><button name="send" value="/rejectopenteamsheets" class="button" style="margin-top: 10px"><strong>Deny Open Team Sheets</strong></button>';
 			for (const side of this.sides) {
@@ -1711,18 +1715,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Force Open Team Sheets',
 		desc: "Allows each player to see the Pok&eacute;mon and all non-stat information about them, before they choose their lead Pok&eacute;mon",
 		mutuallyExclusiveWith: 'openteamsheets',
+		onValidateRule() {
+			if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
+				throw new Error(`The "Force Open Team Sheets" rule${this.ruleTable.blame('forceopenteamsheets')} requires Team Preview.`);
+			}
+		},
 		onTeamPreview() {
-			let buf = 'raw|';
-			for (const side of this.sides) {
-				buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${side.name}</summary>${Teams.export(side.team, {hideStats: true})}</details></div>`;
-			}
-			if (this.rated === true) {
-				for (const side of this.sides) {
-					this.addSplit(side.id, [buf]);
-				}
-			} else {
-				this.add(buf);
-			}
+			this.showOpenTeamSheets(this.rated === true);
 		},
 	},
 	aaarestrictedabilities: {
