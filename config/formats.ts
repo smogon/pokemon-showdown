@@ -351,7 +351,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['[Gen 9] Doubles OU'],
+		ruleset: ['[Gen 9] Doubles OU', 'Evasion Abilities Clause'],
 		banlist: ['DOU', 'DBL'],
 	},
 	{
@@ -3526,7 +3526,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['[Gen 8] Doubles OU', 'Evasion Abilities Clause'],
+		ruleset: ['[Gen 8] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
 	},
 	{
