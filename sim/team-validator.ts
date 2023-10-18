@@ -1013,6 +1013,9 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
+			if (set.gender === '' && !species.gender) {
+				set.gender = ['M', 'F'][Math.floor(Math.random() * 2)];
+			}
 			if (adjustLevel) set.level = adjustLevel;
 			return null;
 		}
@@ -1057,6 +1060,9 @@ export class TeamValidator {
 			} else if (!canBottleCap) {
 				set.ivs = TeamValidator.fillStats(dex.types.get(set.hpType).HPivs, 31);
 			}
+		}
+		if (!set.hpType && set.moves.some(m => dex.moves.get(m).id === 'hiddenpower')) {
+			set.hpType = dex.getHiddenPower(set.ivs).type;
 		}
 
 		const cantBreedNorEvolve = (species.eggGroups[0] === 'Undiscovered' && !species.prevo && !species.nfe);
