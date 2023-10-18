@@ -666,9 +666,7 @@ export const commands: Chat.ChatCommands = {
 							}
 						}
 					}
-					if (!preEvolution) {
-						details[`<font color="#686868">Does Not Pre Evolve</font>`] = "";
-					} else {
+					if (preEvolution) {
 						details["Pre-Evolution"] = preEvolution;
 					}
 					if (!evos.length) {
