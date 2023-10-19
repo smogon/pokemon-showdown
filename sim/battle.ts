@@ -2997,14 +2997,18 @@ export class Battle {
 	showOpenTeamSheets(hideFromSpectators = false) {
 		if (this.turn !== 0) return;
 		for (const side of this.sides) {
-			const team = side.team.map(set => {
+			const team = side.pokemon.map(pokemon => {
+				const set = pokemon.set;
 				const newSet = {
 					...set,
-					shiny: false,
+					name: '',
+					gender: pokemon.gender,
 					evs: null!,
 					ivs: null!,
 					nature: '',
 				};
+				delete newSet.shiny;
+				delete newSet.happiness;
 				// Only display Hidden Power type if the Pokemon has Hidden Power
 				// This is based on how team sheets were written in past VGC formats
 				if (!set.moves.some(m => this.dex.moves.get(m).id === 'hiddenpower')) delete newSet.hpType;
