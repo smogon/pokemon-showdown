@@ -762,7 +762,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
 		}
-		if (role === 'Staller') return 'Leftovers';
+		if (role === 'Staller' || species.id === 'spinda') return 'Leftovers';
 	}
 
 	getItem(
@@ -793,7 +793,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
-		if (counter.get('Physical') === 4 && species.id !== 'jirachi' && species.id !== 'spinda' &&
+		if (counter.get('Physical') === 4 && species.id !== 'jirachi' &&
 			['dragontail', 'fakeout', 'flamecharge', 'nuzzle', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			return (

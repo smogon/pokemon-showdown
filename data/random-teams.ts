@@ -115,7 +115,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'breloom', 'brutebonnet', 'honchkrow', 'lycanrocdusk', 'mimikyu', 'scizor',
+	'breloom', 'brutebonnet', 'honchkrow', 'mimikyu', 'scizor',
 ];
 
 /** Pokemon who should never be in the lead slot */
@@ -1168,7 +1168,7 @@ export class RandomTeams {
 			if (species.id === 'conkeldurr' && role === 'Doubles Wallbreaker') return 'Guts';
 			if (species.id === 'tropius' || species.id === 'trevenant') return 'Harvest';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
-			if (species.id === 'kommoo') return 'Overcoat';
+			if (species.id === 'kommoo') return this.sample(['Overcoat', 'Soundproof']);
 			if (species.id === 'barraskewda') return 'Propeller Tail';
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
 			if (species.id === 'ribombee') return 'Shield Dust';

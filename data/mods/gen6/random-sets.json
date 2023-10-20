@@ -2893,7 +2893,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["healingwish", "highjumpkick", "icepunch", "return", "switcheroo"]
             }
         ]
@@ -4150,7 +4150,7 @@
                 "movepool": ["haze", "painsplit", "shadowball", "toxicspikes", "willowisp"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Bulky Setup",
                 "movepool": ["hiddenpowerfighting", "nastyplot", "shadowball", "trickroom"]
             }
         ]
