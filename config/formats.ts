@@ -2633,6 +2633,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Challenge Cup 1v1",
+		desc: `Get a randomized team of level-balanced Pok&eacute;mon with absolutely any legal ability, moves, and item, and choose one to battle.`,
 
 		mod: 'gen9',
 		team: 'randomCC',
@@ -2640,6 +2641,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Challenge Cup 2v2",
+		desc: `Get a randomized team of level-balanced Pok&eacute;mon with absolutely any legal ability, moves, and item, and choose two to battle in a doubles format.`,
 
 		mod: 'gen9',
 		team: 'randomCC',
@@ -2648,6 +2650,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Challenge Cup 6v6",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any legal ability, moves, and item.`,
 
 		mod: 'gen9',
 		team: 'randomCC',
@@ -2941,6 +2944,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 1] Challenge Cup",
+		desc: `Randomized teams of level-balanced Pok&eacute;mon with absolutely any legal moves.`,
 
 		mod: 'gen1',
 		team: 'randomCC',
