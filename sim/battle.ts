@@ -2997,17 +2997,25 @@ export class Battle {
 	showOpenTeamSheets(hideFromSpectators = false) {
 		if (this.turn !== 0) return;
 		for (const side of this.sides) {
-			const team = side.team.map(set => {
-				const newSet = {
-					...set,
-					shiny: false,
+			const team = side.pokemon.map(pokemon => {
+				const set = pokemon.set;
+				const newSet: PokemonSet = {
+					name: '',
+					species: set.species,
+					item: set.item,
+					ability: set.ability,
+					moves: set.moves,
+					nature: '',
+					gender: pokemon.gender,
 					evs: null!,
 					ivs: null!,
-					nature: '',
+					level: set.level,
 				};
+				if (this.gen === 8) newSet.gigantamax = set.gigantamax;
+				if (this.gen === 9) newSet.teraType = set.teraType;
 				// Only display Hidden Power type if the Pokemon has Hidden Power
 				// This is based on how team sheets were written in past VGC formats
-				if (!set.moves.some(m => this.dex.moves.get(m).id === 'hiddenpower')) delete newSet.hpType;
+				if (set.moves.some(m => this.dex.moves.get(m).id === 'hiddenpower')) newSet.hpType = set.hpType;
 				// This is done so the client doesn't flag Zacian/Zamazenta as illusions
 				// when they use their signature move
 				if ((toID(set.species) === 'zacian' && toID(set.item) === 'rustedsword') ||
