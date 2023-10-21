@@ -73,7 +73,7 @@ export const TeamsHandler = new class {
 		if (!includePrivate) where.push('private IS NULL');
 
 		const result = await this.query<StoredTeam>(
-			`SELECT * FROM teams${where.length ? ` WHERE ${where.join(' AND ')}` : ''} LIMIT ${count}`,
+			`SELECT * FROM teams${where.length ? ` WHERE ${where.join(' AND ')}` : ''} ORDER BY date DESC LIMIT ${count}`,
 			args,
 		);
 		return result.filter(row => {
