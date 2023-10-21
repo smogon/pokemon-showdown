@@ -1225,7 +1225,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Body Slam", "Bulk Up", "Earthquake", "Knock Off", "Slack Off"],
-                "teraTypes": ["Ghost", "Ground"]
+                "teraTypes": ["Ghost", "Ground", "Poison"]
             }
         ]
     },
