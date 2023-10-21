@@ -525,6 +525,7 @@ export class RandomTeams {
 			['psychic', 'psyshock'],
 			['surf', 'hydropump'],
 			['liquidation', 'wavecrash'],
+			['aquajet', 'flipturn'],
 			['gigadrain', 'leafstorm'],
 			['powerwhip', 'hornleech'],
 			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
@@ -576,7 +577,6 @@ export class RandomTeams {
 		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 		if (species.id === 'jirachi') this.incompatibleMoves(moves, movePool, 'bodyslam', 'healingwish');
-		if (species.baseSpecies !== 'Basculin') this.incompatibleMoves(moves, movePool, 'aquajet', 'flipturn');
 		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
 	}
 

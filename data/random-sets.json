@@ -1291,6 +1291,11 @@
                 "role": "Bulky Support",
                 "movepool": ["Encore", "Roost", "Thunder Wave", "U-turn"],
                 "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Bug Buzz", "Encore", "Roost", "Thunder Wave"],
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
@@ -2563,8 +2568,8 @@
         "level": 87,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Aqua Jet", "Crunch", "Flip Turn", "Head Smash", "Psychic Fangs", "Wave Crash"],
+                "role": "Wallbreaker",
+                "movepool": ["Aqua Jet", "Double-Edge", "Flip Turn", "Wave Crash"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -2573,8 +2578,8 @@
         "level": 87,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Aqua Jet", "Crunch", "Flip Turn", "Head Smash", "Psychic Fangs", "Wave Crash"],
+                "role": "Wallbreaker",
+                "movepool": ["Aqua Jet", "Double-Edge", "Flip Turn", "Wave Crash"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -4072,7 +4077,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Close Combat", "Glacial Lance", "High Horsepower", "Trick Room", "Zen Headbutt"],
+                "movepool": ["Close Combat", "Glacial Lance", "High Horsepower", "Trick Room"],
                 "teraTypes": ["Fighting", "Ground"]
             }
         ]
