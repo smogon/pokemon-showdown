@@ -762,7 +762,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
 		}
-		if (role === 'Staller' || species.id === 'spinda') return 'Leftovers';
+		if (role === 'Staller') return 'Leftovers';
 	}
 
 	getItem(

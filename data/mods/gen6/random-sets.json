@@ -2094,7 +2094,7 @@
         "level": 97,
         "sets": [
             {
-                "role": "Bulky Setup",
+                "role": "Staller",
                 "movepool": ["icepunch", "rest", "return", "sleeptalk", "suckerpunch", "superpower"],
                 "preferredTypes": ["Fighting"]
             }
