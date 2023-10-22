@@ -792,9 +792,11 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Godly Gift Mod', 'Min Source Gen = 9'],
-		banlist: [
-			'Blissey', 'Calyrex-Shadow', 'Chansey', 'Kingambit', 'Miraidon', 'Ursaluna-Base', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag',
-			'Swift Swim', 'Bright Powder', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
+		banlist: ['Miraidon', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Swift Swim', 'Bright Powder', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail'],
+		restricted: [
+			'Annihilape', 'Arceus', 'Blissey', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chansey', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon',
+			'Iron Bundle', 'Kingambit', 'Koraidon', 'Kyogre', 'Magearna', 'Mewtwo', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki',
+			'Shaymin-Sky', 'Ursaluna', 'Ursaluna-Bloodmoon', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned',
 		],
 	},
 
