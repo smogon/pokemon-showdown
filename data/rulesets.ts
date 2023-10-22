@@ -2416,7 +2416,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
 				if (
 					(species.baseSpecies === 'Zamazenta' && this.toID(set.item) === 'rustedshield') ||
-					(species.baseSpecies === 'Zacian' && this.toID(set.item) === 'rustedshield')
+					(species.baseSpecies === 'Zacian' && this.toID(set.item) === 'rustedsword')
 				) {
 					species = this.dex.species.get(`${species.baseSpecies}-Crowned`);
 				}
@@ -2426,10 +2426,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 						species = this.dex.species.get(item.megaStone);
 					}
 				}
-				if (
-					['ag', 'uber'].includes(this.toID(this.ruleTable.has('standardnatdex') ? species.natDexTier : species.tier)) ||
-					this.toID(set.ability) === 'powerconstruct'
-				) {
+				if (this.ruleTable.isRestrictedSpecies(species)) {
 					gods.add(species.name);
 				}
 			}
@@ -2442,19 +2439,18 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
-				const isNatDex = this.format.ruleTable?.has('standardnatdex');
-				const validator = this.dex.formats.getRuleTable(
-					this.dex.formats.get(`gen${this.gen}${isNatDex && this.gen >= 8 ? 'nationaldex' : 'ou'}`)
-				);
 				if (this.toID(set.ability) === 'powerconstruct') {
 					return true;
 				}
 				if (set.item) {
 					const item = this.dex.items.get(set.item);
 					if (item.megaEvolves === set.species) godSpecies = this.dex.species.get(item.megaStone);
+					if (["Zacian", "Zamazenta"].includes(godSpecies.baseSpecies) && item.id.startsWith('rusted')) {
+						godSpecies = this.dex.species.get(set.species + "-Crowned");
+					}
 				}
-				const isBanned = validator.isBannedSpecies(godSpecies);
-				return isBanned;
+				const isGod = this.ruleTable.isRestrictedSpecies(godSpecies);
+				return isGod;
 			}) || target.side.team[0];
 			const stat = Dex.stats.ids()[target.side.team.indexOf(target.set)];
 			const newSpecies = this.dex.deepClone(species);
