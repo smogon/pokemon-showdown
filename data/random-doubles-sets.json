@@ -2155,7 +2155,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Icy Wind", "Judgment", "Recover", "Snarl", "Tailwind", "Taunt", "Will-O-Wisp"],
-                "teraTypes": ["Fire", "Grass"]
+                "teraTypes": ["Fire", "Steel"]
             }
         ]
     },
@@ -3387,7 +3387,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Brave Bird", "Protect", "Surf", "Tailwind"],
+                "movepool": ["Brave Bird", "Protect", "Roost", "Surf", "Tailwind"],
                 "teraTypes": ["Ground"]
             }
         ]
@@ -4232,12 +4232,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Gunk Shot", "Haze", "Parting Shot", "Poison Gas", "Spin Out", "Taunt"],
+                "movepool": ["Gunk Shot", "Haze", "Iron Head", "Parting Shot", "Poison Gas", "Taunt"],
                 "teraTypes": ["Flying", "Water"]
             },
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Gunk Shot", "High Horsepower", "Protect", "Shift Gear", "Spin Out"],
+                "movepool": ["Gunk Shot", "High Horsepower", "Iron Head", "Protect", "Shift Gear"],
                 "teraTypes": ["Ground"]
             }
         ]
@@ -4407,7 +4407,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Close Combat", "Earthquake", "Headlong Rush", "Ice Spinner", "Knock Off", "Protect", "Rapid Spin", "Rock Slide"],
+                "movepool": ["Close Combat", "Headlong Rush", "Ice Spinner", "Knock Off", "Protect", "Rapid Spin", "Rock Slide"],
                 "teraTypes": ["Fire", "Ground"]
             }
         ]

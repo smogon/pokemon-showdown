@@ -9,10 +9,6 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["earthquake", "hiddenpowerfire", "hiddenpowerice", "leafstorm", "sleeppowder", "sludgebomb", "synthesis"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["earthquake", "powerwhip", "sleeppowder", "swordsdance", "synthesis"]
             }
         ]
     },
@@ -2579,7 +2575,7 @@
         "level": 90,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["healingwish", "icepunch", "jumpkick", "return", "switcheroo"]
             }
         ]
