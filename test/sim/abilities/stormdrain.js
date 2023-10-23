@@ -20,7 +20,7 @@ describe('Storm Drain', function () {
 	});
 
 	it('should redirect Max Geyser', function () {
-		battle = common.createBattle({gameType: 'doubles'});
+		battle = common.gen(8).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleep talk']},
 			{species: 'Manaphy', ability: 'hydration', moves: ['scald']},

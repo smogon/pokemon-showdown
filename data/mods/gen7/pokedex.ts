@@ -132,6 +132,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		evoType: "levelExtra",
 		evoCondition: "near a special magnetic field",
 	},
+	crabominable: {
+		inherit: true,
+		evoType: "levelExtra",
+		evoCondition: "at Mount Lanakila",
+	},
 	lycanroc: {
 		inherit: true,
 		evoCondition: "in Pokemon Sun/Ultra Sun",
@@ -165,13 +170,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 90, atk: 85, def: 80, spa: 105, spd: 80, spe: 110},
 	},
-	justyke: {
+	mumbao: {
 		inherit: true,
-		abilities: {0: "Levitate", 1: "Bulletproof", H: "Justified"},
+		unreleasedHidden: true,
 	},
-	equilibra: {
+	jumbao: {
 		inherit: true,
-		baseStats: {hp: 102, atk: 50, def: 96, spa: 133, spd: 118, spe: 60},
-		abilities: {0: "Levitate", 1: "Bulletproof", H: "Justified"},
+		unreleasedHidden: true,
 	},
 };

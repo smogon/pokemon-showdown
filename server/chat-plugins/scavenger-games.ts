@@ -129,7 +129,8 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd() {
+		onAfterEnd(isReset) {
+			if (isReset) return;
 			const perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
 			if (perfect.length) {
 				this.announce(Utils.html`${Chat.toListString(perfect)} ${perfect.length > 1 ? 'have' : 'has'} completed the hunt without a single wrong answer!`);
@@ -176,7 +177,8 @@ const TWISTS: {[k: string]: Twist} = {
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd() {
+		onAfterEnd(isReset) {
+			if (isReset) return;
 			const noSkip = this.completed.filter(entry => entry.noSkip).map(entry => entry.name);
 			if (noSkip.length) {
 				this.announce(Utils.html`${Chat.toListString(noSkip)} ${noSkip.length > 1 ? 'have' : 'has'} completed the hunt without skipping the last question!`);
@@ -302,6 +304,278 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onEnd() {
 			this.completed = this.preCompleted || [];
+		},
+	},
+
+	timetrial: {
+		name: 'Time Trial',
+		id: 'timetrial',
+		desc: "Time starts when the player starts the hunt!",
+
+		onAfterLoad() {
+			if (this.questions.length === 3) {
+				this.announce('This twist requires at least four questions. Please reset the hunt and make it again.');
+				this.huntLocked = true;
+			}
+			this.altIps = {};
+			this.startTimes = {};
+		},
+
+		onJoin(user: User) {
+			if (!Config.noipchecks) {
+				const altIp = user.ips.find(ip => this.altIps[ip] && this.altsIps[ip].id !== user.id);
+				if (altIp) {
+					user.sendTo(this.room, `You already have started the hunt as ${this.altIps[altIp].name}.`);
+					return true;
+				}
+			}
+			if (!this.startTimes[user.id]) this.startTimes[user.id] = Date.now();
+			if (this.addPlayer(user)) {
+				this.cacheUserIps(user);
+				delete this.leftHunt[user.id];
+				user.sendTo(this.room, "You joined the scavenger hunt! Use the command /scavenge to answer.");
+				this.onSendQuestion(user);
+			} else {
+				user.sendTo(this.room, "You have already joined the hunt.");
+			}
+			return true;
+		},
+
+		onLeave(user) {
+			for (const ip of user.ips) {
+				this.altIps[ip] = {id: user.id, name: user.name};
+			}
+		},
+
+		onAnySubmit(player) {
+			if (this.huntLocked) {
+				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
+				return true;
+			}
+		},
+
+		onComplete(player, time, blitz) {
+			const now = Date.now();
+			const takenTime = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
+			const result = {name: player.name, id: player.id, time: takenTime, blitz};
+			this.completed.push(result);
+			const place = Utils.formatOrder(this.completed.length);
+
+			this.announce(
+				Utils.html`<em>${result.name}</em> is the ${place} player to finish the hunt! (${takenTime}${(blitz ? " - BLITZ" : "")})`
+			);
+			Utils.sortBy(this.completed, entry => entry.time);
+
+			player.destroy(); // remove from user.games;
+			return true;
+		},
+	},
+
+	scavengersfeud: {
+		id: 'scavengersfeud',
+		name: 'Scavengers Feud',
+		desc: 'After completing the hunt, players will guess what the most common incorrect answer for each question is.',
+		onAfterLoad() {
+			this.guesses = {};
+			this.incorrect = this.questions.map(() => ({}));
+
+			this.questions.push({
+				hint: 'Please enter what you think are the most common incorrect answers to each question.  (Enter your guesses in the order of the previous questions, and separate them with a comma)',
+				answer: ['Any'],
+				spoilers: [],
+			});
+		},
+
+		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+			const curr = player.currentQuestion;
+
+			if (!this.incorrect[curr][value]) this.incorrect[curr][value] = [];
+			if (this.incorrect[curr][value].includes(player.id)) return;
+
+			this.incorrect[curr][value].push(player.id);
+		},
+
+		onSubmitPriority: 1,
+		onSubmit(player, jumble, value) {
+			const currentQuestion = player.currentQuestion;
+
+			if (currentQuestion + 1 === this.questions.length) {
+				this.guesses[player.id] = value.split(',').map((part: string) => toID(part));
+
+				this.onComplete(player);
+				return true;
+			}
+		},
+
+		onEnd() {
+			this.questions = this.questions.slice(0, -1); // remove the automatically added last question.
+		},
+
+		onAfterEnd(isReset) {
+			if (isReset) return;
+
+			const buffer = [];
+			for (const [idx, data] of this.incorrect.entries()) {
+				// collate the data for each question
+				let collection = [];
+				for (const str in data) {
+					collection.push({count: data[str].length, value: str});
+				}
+				collection = collection.sort((a, b) => b.count - a.count);
+				const maxValue = collection[0]?.count || 0;
+
+				const matches = collection
+					.filter(pair => pair.count === maxValue)
+					.map(pair => pair.value);
+
+				const matchedPlayers = [];
+				for (const playerid in this.guesses) {
+					const guesses = this.guesses[playerid];
+					if (matches.includes(guesses[idx])) matchedPlayers.push(playerid);
+				}
+
+				// display the data
+				const matchDisplay = matches.length ? matches.join(', ') : 'No wrong answers!';
+				const playerDisplay = matches.length ?
+					matchedPlayers.length ? `- ${matchedPlayers.join(', ')}` : '- No one guessed correctly!' :
+					'';
+				buffer.push(`Q${idx + 1}: ${matchDisplay} ${playerDisplay}`);
+			}
+
+			this.announce(`<h3>Most common incorrect answers:</h3>${buffer.join('<br />')}`);
+		},
+	},
+
+	minesweeper: {
+		id: 'minesweeper',
+		name: 'Minesweeper',
+		desc: 'The huntmaker adds \'mines\' to the hunt using `!(mine)` - players that dodge all mines get extra points, while the huntmaker gets points every time a mine is hit.',
+		onAfterLoad() {
+			this.guesses = this.questions.map(() => []);
+			this.mines = [];
+			for (const question of this.questions) {
+				this.mines.push(question.answer.filter(ans => ans.startsWith('!')));
+				question.answer = question.answer.filter(ans => !ans.startsWith('!'));
+			}
+			if ((this.mines as string[][]).some(mineSet => mineSet.length === 0)) {
+				this.announce('This twist requires at least one mine for each question. Please reset the hunt and make it again.');
+				this.huntLocked = true;
+			}
+		},
+
+		onEditQuestion(questionNumber: number, questionAnswer: string, value: string) {
+			if (questionAnswer === 'question') questionAnswer = 'hint';
+			if (!['hint', 'answer'].includes(questionAnswer)) return false;
+
+			let answer: string[] = [];
+			if (questionAnswer === 'answer') {
+				answer = value.split(';').map(p => p.trim());
+			}
+
+			if (!questionNumber || questionNumber < 1 || questionNumber > this.questions.length || (!answer && !value)) {
+				return false;
+			}
+
+			questionNumber--; // indexOf starts at 0
+
+			if (questionAnswer === 'answer') {
+				// These two lines are the only difference from the original
+				this.mines[questionNumber] = answer.filter(ans => ans.startsWith('!'));
+				this.questions[questionNumber].answer = answer.filter(ans => !ans.startsWith('!'));
+			} else {
+				this.questions[questionNumber].hint = value;
+			}
+
+			this.announce(`The ${questionAnswer} for question ${questionNumber + 1} has been edited.`);
+			if (questionAnswer === 'hint') {
+				for (const p in this.playerTable) {
+					this.playerTable[p].onNotifyChange(questionNumber);
+				}
+			}
+			return true;
+		},
+
+		onAnySubmit(player) {
+			if (this.huntLocked) {
+				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
+				return true;
+			}
+		},
+
+		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+			const curr = player.currentQuestion;
+
+			if (!this.guesses[curr][player.id]) this.guesses[curr][player.id] = new Set();
+			this.guesses[curr][player.id].add(toID(value));
+
+			throw new Chat.ErrorMessage("That is not the answer - try again!");
+		},
+
+		onShowEndBoard(endedBy?: User) {
+			const sliceIndex = this.gameType === 'official' ? 5 : 3;
+			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
+
+			const mines: {mine: string, users: string[]}[][] = [];
+
+			for (let index = 0; index < this.mines.length; index++) {
+				mines[index] = [];
+				for (const mine of this.mines[index]) {
+					mines[index].push({mine: mine.substr(1), users: []});
+				}
+			}
+
+			for (const player of Object.values(this.playerTable)) {
+				if (!player) continue;
+				if (player.mines) {
+					for (const {index, mine} of player.mines) {
+						mines[index].find(obj => obj.mine === mine)?.users.push(player.name);
+					}
+				}
+			}
+
+			for (const mineSet of mines) mineSet.sort();
+
+			this.announce(
+				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
+				`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}` +
+				`${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
+				`<details style="cursor: pointer;"><summary>Solution: </summary><br />` +
+				`${this.questions.map((q, i) => (
+					`${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/>` +
+					`<details style="cursor: pointer;"><summary>Mines: </summary>${mines[i].map(({mine, users}) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`
+				)).join("<br />")}` +
+				`</details>`
+			);
+			return true;
+		},
+
+		onEnd(isReset) {
+			if (isReset) return;
+			for (const [q, guessObj] of this.guesses.entries()) {
+				const mines: string[] = this.mines[q];
+				for (const [playerId, guesses] of Object.entries(guessObj)) {
+					const player = this.playerTable[playerId];
+					if (!player.mines) player.mines = [];
+					(player.mines as {index: number, mine: string}[]).push(...mines
+						.filter(mine => (guesses as Set<string>).has(toID(mine)))
+						.map(mine => ({index: q, mine: mine.substr(1)})));
+				}
+			}
+		},
+
+		onAfterEndPriority: 1,
+		onAfterEnd(isReset) {
+			if (isReset) return;
+			const noMines = [];
+			for (const {name} of this.completed) {
+				const player = this.playerTable[toID(name)];
+				if (!player) continue;
+				if (!player.mines?.length) noMines.push(name);
+			}
+			if (noMines.length) {
+				this.announce(Utils.html`${Chat.toListString(noMines)} ${noMines.length > 1 ? 'have' : 'has'} completed the hunt without hitting a single mine!`);
+				// Points are awarded manually
+			}
 		},
 	},
 };

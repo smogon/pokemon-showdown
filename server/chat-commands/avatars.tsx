@@ -52,7 +52,7 @@ try {
 	if (Config.allowedavatars) {
 		for (const avatar in Config.customavatars) {
 			for (const userid of Config.customavatars[avatar]) {
-				customAvatars[userid] ??= {allowed: [null]};
+				if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
 				customAvatars[userid].allowed.push(avatar);
 			}
 		}
@@ -77,7 +77,7 @@ export const Avatars = new class {
 		return validatedAvatar;
 	}
 	canUse(userid: ID, avatar: string): AvatarID | null {
-		avatar = avatar.toLowerCase().replace(/[^a-z0-9-.]+/g, '');
+		avatar = avatar.toLowerCase().replace(/[^a-z0-9-.#]+/g, '');
 		if (OFFICIAL_AVATARS.has(avatar)) return avatar;
 
 		const customs = customAvatars[userid]?.allowed;
@@ -141,8 +141,9 @@ export const Avatars = new class {
 	/** does not include validation */
 	setDefault(userid: ID, avatar: AvatarID | null) {
 		if (avatar === this.getDefault(userid)) return;
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		const entry = customAvatars[userid];
 
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
 		if (avatar === entry.allowed[0]) {
 			delete entry.default;
 		} else {
@@ -151,11 +152,12 @@ export const Avatars = new class {
 		saveCustomAvatars();
 	}
 	addAllowed(userid: ID, avatar: AvatarID | null) {
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
-		if (entry.allowed.includes(avatar)) return false;
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
 
-		entry.allowed.push(avatar);
-		entry.notNotified = true;
+		if (customAvatars[userid].allowed.includes(avatar)) return false;
+
+		customAvatars[userid].allowed.push(avatar);
+		customAvatars[userid].notNotified = true;
 		this.tryNotify(Users.get(userid));
 		return true;
 	}
@@ -172,7 +174,9 @@ export const Avatars = new class {
 		return true;
 	}
 	addPersonal(userid: ID, avatar: AvatarID | null) {
-		const entry = (customAvatars[userid] ??= {allowed: [null]});
+		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		const entry = customAvatars[userid];
+
 		if (entry.allowed.includes(avatar)) return false;
 
 		entry.timeReceived ||= Date.now();
@@ -531,7 +535,7 @@ const OFFICIAL_AVATARS_BELIOT419 = new Set([
 	'kukui-stand', 'kukui', 'lana', 'lass-gen7', 'lillie-z', 'lillie', 'lusamine-nihilego', 'lusamine',
 	'mallow', 'mina', 'molayne', 'nanu', 'officeworker', 'olivia', 'plumeria', 'pokemonbreeder-gen7',
 	'pokemonbreederf-gen7', 'preschoolers', 'red-gen7', 'risingstar', 'risingstarf', 'ryuki',
-	'samsonoak', 'selene', 'sightseer', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally',
+	'samsonoak', 'selene', 'sightseerf', 'sina', 'sophocles', 'teacher-gen7', 'theroyal', 'wally',
 	'wicke', 'youngathlete', 'youngathletef', 'youngster-gen7',
 ]);
 
@@ -543,16 +547,23 @@ const OFFICIAL_AVATARS_GNOMOWLADNY = new Set([
 
 const OFFICIAL_AVATARS_BRUMIRAGE = new Set([
 	'adaman', 'agatha-lgpe', 'akari', 'allister', 'archie-gen6', 'arezu', 'avery', 'ballguy', 'bea', 'bede',
-	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'cynthia-gen7', 'diantha',
-	'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hop', 'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower',
-	'lian', 'lisia', 'lorelei-lgpe', 'magnolia', 'mai', 'marnie', 'may-contest', 'melony', 'milo', 'mina-lgpe',
-	'mustard', 'mustard-master', 'nessa', 'oleana', 'opal', 'peonia', 'peony', 'pesselle', 'phoebe-gen6', 'piers',
-	'raihan', 'rei', 'rose', 'sabi', 'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert',
-	'tateandliza-gen6', 'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu',
+	'bede-leader', 'brendan-contest', 'burnet-radar', 'calaba', 'calem', 'chase', 'cogita', 'cynthia-gen7',
+	'cynthia-masters', 'diantha', 'doctor-gen8', 'elaine', 'gloria', 'gordie', 'hilda-masters2', 'hop',
+	'irida', 'kabu', 'klara', 'koga-lgpe', 'leon', 'leon-tower', 'lian', 'lisia', 'lorelei-lgpe', 'magnolia',
+	'mai', 'marnie', 'may-contest', 'melony', 'milo', 'mina-lgpe', 'mustard', 'mustard-master', 'nessa',
+	'oleana', 'opal', 'peony', 'pesselle', 'phoebe-gen6', 'piers', 'raihan', 'rei', 'rose', 'sabi', 'sada-ai',
+	'sanqua', 'shielbert', 'sonia', 'sonia-professor', 'sordward', 'sordward-shielbert', 'tateandliza-gen6',
+	'turo-ai', 'victor', 'victor-dojo', 'volo', 'yellgrunt', 'yellgruntf', 'zisu',
 ]);
 
 const OFFICIAL_AVATARS_ZACWEAVILE = new Set([
-	'gloria-dojo', 'shauna',
+	'alain', 'charm', 'coin', 'courtney', 'dulse', 'elio-usum', 'emma', 'essentia', 'gloria-dojo',
+	'magmagrunt', 'magmagruntf', 'marnie-league', 'morgan', 'phyco', 'selene-usum', 'shauna', 'skullgrunt',
+	'skullgruntf', 'soliera', 'zossie', 'arven-v', 'dexio-gen6', 'flannery-gen6', 'green', 'grusha', 'mela',
+	'norman-gen6', 'penny', 'sina-gen6', 'steven-gen6', 'atticus', 'eri', 'giacomo', 'ortega',
+	'ginchiyo-conquest', 'hanbei-conquest', 'hero-conquest', 'hero2-conquest', 'heroine-conquest',
+	'heroine2-conquest', 'kunoichi-conquest', 'kunoichi2-conquest', 'masamune-conquest', 'nobunaga-conquest',
+	'oichi-conquest', 'ranmaru-conquest', 'serena-anime',
 ]);
 
 const OFFICIAL_AVATARS_KYLEDOVE = new Set([
@@ -579,10 +590,57 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'triathletebiker-gen6', 'triathleterunner-gen6', 'triathleteswimmer-gen6', 'tuberf-gen6', 'tuber-gen6', 'twins-gen6',
 	'veteranf-gen6', 'veteran-gen6', 'waitress-gen6', 'worker2-gen6', 'workerf-gen8', 'worker-gen6', 'worker-gen8',
 	'youngcouple-gen6', 'youngster-gen6', 'youngster-gen6xy', 'youngster-gen8',
+	'acetrainer-gen7', 'acetrainerf-gen7', 'bellhop', 'blackbelt-gen7', 'collector-gen7', 'cook-gen7', 'dancer-gen7',
+	'firefighter', 'fisherman-gen7', 'gentleman-gen7', 'golfer', 'janitor-gen7', 'madame-gen7', 'officeworkerf',
+	'pokemoncenterlady', 'policeman-gen7', 'preschooler-gen7', 'preschoolerf-gen7', 'punkgirl-gen7', 'punkguy-gen7',
+	'scientist-gen7', 'sightseer', 'surfer', 'swimmer-gen7', 'swimmerf-gen7', 'swimmerf2-gen7', 'trialguide', 'trialguidef',
+	'ultraforestkartenvoy', 'veteran-gen7', 'veteranf-gen7', 'worker-gen7',
+	'anthea', 'beni', 'beni-ninja', 'birch', 'blaine-lgpe', 'blue-lgpe', 'brigette', 'brock-lgpe', 'caraliss', 'cedricjuniper',
+	'celio', 'charon', 'clover', 'colza', 'concordia', 'cyllene', 'dawn-contest', 'elm', 'erika-lgpe', 'fennel', 'gaeric',
+	'ginter', 'giovanni-lgpe', 'grant', 'ingo-hisui', 'iscan', 'kamado', 'kamado-armor', 'kurt', 'lance-lgpe', 'lanette',
+	'laventon', 'lucas-contest', 'lucy', 'lysandre', 'melli', 'misty-lgpe', 'noland', 'palina', 'plumeria-league', 'rowan',
+	'roxanne-gen6', 'rye', 'sabrina-lgpe', 'scott', 'securitycorps', 'securitycorpsf', 'serena', 'sycamore', 'taohua', 'vessa',
+	'anthe', 'anvin', 'burglar-lgpe', 'channeler-lgpe', 'choy', 'cynthia-anime', 'dagero', 'gentleman-lgpe', 'grace',
+	'hayley', 'jasmine-contest', 'johanna-contest', 'johanna', 'mom-alola', 'mom-hoenn', 'mom-johto', 'mom-unova2', 'oak',
+	'piers-league', 'psychic-lgpe', 'rosa-pokestar', 'tuli', 'worker-lgpe',
+	'acerola-masters', 'bea-masters', 'blue-masters', 'brendan-masters', 'brock-masters', 'burgh-masters', 'caitlin-masters',
+	'cynthia-masters2', 'cyrus-masters', 'dawn-masters', 'dawn-masters2', 'diantha-masters', 'elesa-masters', 'emmet-masters',
+	'erika-masters', 'erika-masters2', 'ethan-masters', 'giovanni-masters', 'gloria-masters', 'grimsley-masters',
+	'guzma-masters', 'hilbert-masters', 'hilda-masters', 'ingo-masters', 'jasmine-masters', 'korrina-masters', 'kris-masters',
+	'lance-masters', 'leaf-masters', 'leon-masters', 'leon-masters2', 'lillie-masters', 'lillie-masters2', 'lillie-masters3',
+	'lusamine-masters', 'lyra-masters', 'lyra-masters2', 'marnie-masters', 'marnie-masters2', 'may-masters', 'may-masters2',
+	'may-masters3', 'misty-masters', 'morty-masters', 'morty-masters2', 'n-masters', 'n-masters2', 'nessa-masters',
+	'raihan-masters', 'red-masters', 'rosa-masters', 'sabrina-masters', 'serena-masters', 'serena-masters2',
+	'siebold-masters', 'skyla-masters', 'sonia-masters', 'steven-masters', 'steven-masters2', 'volkner-masters', 'bellis',
+	'beauty-masters', 'collector-masters', 'punkgirl-masters', 'streetthug-masters', 'swimmer-masters', 'youngster-masters',
+	'akari-isekai', 'allister-masters', 'arven-s', 'brassius', 'clavell-s', 'cynthia-anime2', 'cynthia-masters3', 'florian-s',
+	'geeta', 'hassel', 'hilda-masters3', 'iono', 'iris-masters', 'jacq', 'juliana-s', 'katy', 'kofu', 'larry', 'miriam',
+	'nemona-v', 'poppy', 'red-masters2', 'rei-isekai', 'rika', 'rosa-masters2', 'ryme', 'sada', 'stargrunt-s', 'stargrunt-v',
+	'stargruntf-s', 'stargruntf-v', 'steven-masters3', 'tulip', 'turo', 'tyme', 'wally-masters', 'amelia-shuffle',
+	'beauty-gen9', 'bede-masters', 'calem-masters', 'clerk-unite', 'dawn-masters3', 'dendra', 'diantha-masters2',
+	'erbie-unite', 'hilbert-masters2', 'hop-masters', 'jasmine-masters2', 'lisia-masters', 'marnie-masters3', 'matt',
+	'n-masters3', 'paulo-masters', 'phorus-unite', 'pokemaniac-gen9', 'serena-masters3', 'tabitha', 'tina-masters', 'trevor',
+	'whitney-masters', 'youngster-gen9', 'zirco-unite', 'alec-anime', 'bodybuilder-gen9', 'bodybuilderf-gen9',
+	'carmine-festival', 'carmine', 'diamondclanmember', 'dragontamer-gen9', 'elesa-masters2', 'kieran-festival', 'kieran',
+	'laventon2', 'liza-masters', 'mallow-masters', 'musician-gen9', 'nemona-s', 'officeworker-gen9', 'officeworkerf-gen9',
+	'pearlclanmember', 'raifort', 'saguaro', 'salvatore', 'scientist-gen9', 'shauna-masters', 'silver-masters',
+	'steven-masters4', 'tate-masters', 'waiter-gen9', 'waitress-gen9',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
 	'brendan', 'maxie-gen6', 'may',
+]);
+
+const OFFICIAL_AVATARS_GRAPO = new Set([
+	'glacia', 'peonia', 'skyla-masters2', 'volo-ginkgo',
+]);
+
+const OFFICIAL_AVATARS_FIFTY = new Set([
+	'rose-zerosuit',
+]);
+
+const OFFICIAL_AVATARS_HORO = new Set([
+	'florian-bb', 'juliana-bb',
 ]);
 
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
@@ -591,6 +649,9 @@ for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_ZACWEAVILE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_KYLEDOVE) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HYOOPPA) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_HORO) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -626,10 +687,19 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply(`|raw|(${this.tr`Artist: `}ZacWeavile)`);
 			}
 			if (OFFICIAL_AVATARS_KYLEDOVE.has(avatar)) {
-				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/DoveKyle">Kyledove</a>)`);
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/DoveKyle">kyledove</a>)`);
 			}
 			if (OFFICIAL_AVATARS_HYOOPPA.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/hyo_oppa">hyo-oppa</a>)`);
+			}
+			if (OFFICIAL_AVATARS_GRAPO.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/Grapo_Sprites">Grapo</a>)`);
+			}
+			if (OFFICIAL_AVATARS_FIFTY.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}Fifty Shades of Rez)`);
+			}
+			if (OFFICIAL_AVATARS_HORO.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}Horo)`);
 			}
 		}
 	},
@@ -704,6 +774,7 @@ export const commands: Chat.ChatCommands = {
 		`/groupavatar [username], [avatar] - Gives a user an allowed (group) avatar.`,
 		`/removeavatar [username], [avatar] - Removes access to an avatar from a user.`,
 		`/removeavatar [username] - Removes access to all custom avatars from a user.`,
+		`/moveavatars [oldname], [newname] - Moves access to all custom avatars from oldname to newname.`,
 		AVATAR_FORMATS_MESSAGE,
 	],
 
@@ -909,7 +980,8 @@ export const commands: Chat.ChatCommands = {
 				if (!/[A-Za-z0-9]/.test(arg.charAt(0)) || !/[A-Za-z]/.test(arg)) {
 					throw new Chat.ErrorMessage(`Invalid username "${arg}"`);
 				}
-				(toUpdate[curAvatar] ??= new Set()).add(toID(arg));
+				if (!toUpdate[curAvatar]) toUpdate[curAvatar] = new Set();
+				toUpdate[curAvatar].add(toID(arg));
 			}
 		}
 

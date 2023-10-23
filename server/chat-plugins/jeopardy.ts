@@ -244,7 +244,7 @@ export class Jeopardy extends Rooms.RoomGame<JeopardyGamePlayer> {
 			this.curPlayer = null!;
 		}
 		this.clearBuzzes();
-		this.room.addRaw(`<div class="broadcast-blue">Your question is: ${this.question.question}</div>`);
+		this.room.addRaw(Utils.html`<div class="broadcast-blue">Your question is: ${this.question.question}</div>`);
 		if (!this.finals) {
 			this.canBuzz = false;
 			this.update(true);

@@ -19,7 +19,6 @@
 
 'use strict';
 
-require('ts-node').register();
 const child_process = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -53,7 +52,7 @@ Chat.plural = function (num, plural = 's', singular = '') {
 	return (num !== 1 ? plural : singular);
 };
 
-const importer = require('./importer.js');
+const importer = require('../../dist/tools/set-import/importer.js');
 
 const SETS = path.resolve(__dirname, 'sets');
 (async () => {
@@ -135,4 +134,3 @@ const SETS = path.resolve(__dirname, 'sets');
 	].join('\n');
 	fs.writeFileSync(path.resolve(SETS, 'index.js'), indexjs);
 })().catch(err => console.error(err));
-

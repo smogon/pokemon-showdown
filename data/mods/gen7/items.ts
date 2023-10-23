@@ -60,6 +60,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	bignugget: {
+		inherit: true,
+		fling: {
+			basePower: 30,
+		},
+	},
 	blastoisinite: {
 		inherit: true,
 		isNonstandard: null,
@@ -71,6 +77,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	blueorb: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	blukberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 	buggem: {
 		inherit: true,
@@ -438,6 +448,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	pikashuniumz: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	pinapberry: {
+		inherit: true,
+		isNonstandard: "Unobtainable",
 	},
 	pinsirite: {
 		inherit: true,

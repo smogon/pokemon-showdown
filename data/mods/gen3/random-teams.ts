@@ -1,11 +1,13 @@
 import RandomGen4Teams from '../gen4/random-teams';
 import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../../random-teams';
+import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
 	battleHasWobbuffet: boolean;
+
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -65,7 +67,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return {
 				cull: (
 					counter.setupType !== 'Special' ||
-					(counter.get('Special') + counter.get('specialpool') < 2 && !moves.has('batonpass') && !restTalk)
+					(counter.get('Special') + counter.get('specialpool') < 2 && !moves.has('batonpass') &&
+					!moves.has('refresh') && !restTalk) ||
+					!counter.get('Special')
 				),
 				isSetup: true,
 			};
@@ -77,7 +81,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Not very useful without their supporting moves
 		case 'amnesia': case 'sleeptalk':
-			if (moves.has('roar')) return {cull: true};
+			if (moves.has('roar') || moves.has('whirlwind')) return {cull: true};
 			if (!moves.has('rest')) return {cull: true};
 			if (movePool.length > 1) {
 				const rest = movePool.indexOf('rest');
@@ -168,7 +172,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return {cull: !!counter.setupType || moves.has('rest') || !!teamDetails.rapidSpin};
 		case 'reflect':
 			return {cull: !!counter.setupType || !!counter.get('speedsetup')};
-		case 'roar':
+		case 'roar': case 'whirlwind':
 			return {cull: moves.has('sleeptalk') || moves.has('rest')};
 		case 'seismictoss':
 			return {cull: !!counter.setupType || moves.has('thunderbolt')};
@@ -179,7 +183,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// This cull condition otherwise causes mono-solarbeam Entei
 			return {cull: restOrDD || (species.id !== 'entei' && !moves.has('batonpass') && movePool.includes('calmmind'))};
 		case 'thunderwave':
-			return {cull: !!counter.setupType || moves.has('bodyslam') || moves.has('substitute') || restTalk};
+			return {cull: !!counter.setupType || moves.has('bodyslam') ||
+				moves.has('substitute') && movePool.includes('toxic') || restTalk};
 		case 'toxic':
 			return {cull: (
 				!!counter.setupType ||
@@ -234,14 +239,16 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	getItem(
 		ability: string,
-		types: Set<string>,
+		types: string[],
 		moves: Set<string>,
 		counter: MoveCounter,
+		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species
 	) {
 		// First, the high-priority items
 		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja') return 'Lum Berry';
@@ -273,14 +280,15 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if ((moves.has('substitute') || moves.has('raindance')) && counter.get('Special') >= 3) return 'Petaya Berry';
 		if (counter.get('Physical') >= 4 && !moves.has('fakeout')) return 'Choice Band';
 		if (counter.get('Physical') >= 3 && !moves.has('rapidspin') && (
-			['firepunch', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
+			['fireblast', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
 			Array.from(moves).some(m => {
 				const moveData = this.dex.moves.get(m);
-				return moveData.category === 'Special' && types.has(moveData.type);
+				return moveData.category === 'Special' && types.includes(moveData.type);
 			})
 		)) {
 			return 'Choice Band';
 		}
+		if (moves.has('psychoboost')) return 'White Herb';
 
 		// Default to Leftovers
 		return 'Leftovers';
@@ -303,21 +311,17 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return !counter.get('inaccurate');
 		case 'Hustle':
 			return counter.get('Physical') < 2;
-		case 'Lightning Rod':
-			return species.types.includes('Ground');
 		case 'Overgrow':
 			return !counter.get('Grass');
+		case 'Rain Dish': case 'Swift Swim':
+			return !moves.has('raindance') && !teamDetails['rain'];
 		case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Veil':
 			return !teamDetails['sand'];
-		case 'Serene Grace':
-			return species.id === 'blissey';
-		case 'Sturdy':
-			// Sturdy is bad.
+		case 'Soundproof':
+			// Electrode prefers Static
 			return true;
-		case 'Swift Swim':
-			return !moves.has('raindance') && !teamDetails['rain'];
 		case 'Swarm':
 			return !counter.get('Bug');
 		case 'Torrent':
@@ -329,13 +333,64 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		return false;
 	}
 
+
+	getAbility(
+		types: Set<string>,
+		moves: Set<string>,
+		abilities: Set<string>,
+		counter: MoveCounter,
+		movePool: string[],
+		teamDetails: RandomTeamsTypes.TeamDetails,
+		species: Species,
+	): string {
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
+		Utils.sortBy(abilityData, abil => -abil.rating);
+
+		if (abilityData.length <= 1) return abilityData[0].name;
+
+		// Hard-code abilities here
+		if (species.id === 'snorlax') return 'Immunity';
+		if (species.id === 'blissey') return 'Natural Cure';
+
+		let abilityAllowed: Ability[] = [];
+		// Obtain a list of abilities that are allowed (not culled)
+		for (const ability of abilityData) {
+			if (ability.rating >= 1 && !this.shouldCullAbility(
+				ability.name, types, moves, abilities, counter, movePool, teamDetails, species
+			)) {
+				abilityAllowed.push(ability);
+			}
+		}
+
+		// If all abilities are rejected, re-allow all abilities
+		if (!abilityAllowed.length) {
+			for (const ability of abilityData) {
+				if (ability.rating > 0) abilityAllowed.push(ability);
+			}
+			if (!abilityAllowed.length) abilityAllowed = abilityData;
+		}
+
+		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
+		// Sort abilities by rating with an element of randomness
+		if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
+			if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+		} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
+			if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+		}
+
+		// After sorting, choose the first ability
+		return abilityAllowed[0].name;
+	}
+
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		let forme = species.name;
 
+		const data = this.randomData[species.id];
+
 		if (typeof species.battleOnly === 'string') forme = species.battleOnly;
 
-		const movePool = (species.randomBattleMoves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
 		const rejectedPool = [];
 		const moves = new Set<string>();
 		let ability = '';
@@ -403,7 +458,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				const requiresStab = (
 					!counter.get('stab') &&
 					!moves.has('seismictoss') && !moves.has('nightshade') &&
-					species.id !== 'castform' &&
+					species.id !== 'umbreon' &&
 					// If a Flying-type has Psychic, it doesn't need STAB
 					!(moves.has('psychic') && types.has('Flying')) &&
 					!(types.has('Ghost') && species.baseStats.spa > species.baseStats.atk) &&
@@ -433,7 +488,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					// There may be more important moves that this Pokemon needs
 					if (
 						requiresStab ||
-						(counter.setupType && counter.get(counter.setupType) < 2) ||
+						(counter.setupType && counter.get(counter.setupType) < 2 && !moves.has('refresh')) ||
 						(moves.has('substitute') && movePool.includes('morningsun')) ||
 						['meteormash', 'spore', 'recover'].some(m => movePool.includes(m))
 					) {
@@ -497,46 +552,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a)).filter(a => a.gen === 3);
-		Utils.sortBy(abilityData, abil => -abil.rating);
-		let ability0 = abilityData[0];
-		let ability1 = abilityData[1];
-		if (abilityData[1]) {
-			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
-				[ability0, ability1] = [ability1, ability0];
-			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
-				[ability0, ability1] = [ability1, ability0];
-			}
-			ability = ability0.name;
+		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
 
-			while (this.shouldCullAbility(ability, types, moves, abilities, counter, movePool, teamDetails, species)) {
-				if (ability === ability0.name && ability1.rating > 1) {
-					ability = ability1.name;
-				} else {
-					// Default to the highest rated ability if all are rejected
-					ability = abilityData[0].name;
-					break;
-				}
-			}
-		} else {
-			ability = abilityData[0].name;
-		}
-
-		const item = this.getItem(ability, types, moves, counter, species);
-		const levelScale: {[k: string]: number} = {
-			Uber: 76,
-			OU: 80,
-			UUBL: 82,
-			UU: 84,
-			NUBL: 86,
-			NU: 88,
-			NFE: 90,
-		};
-		const customScale: {[k: string]: number} = {
-			Ditto: 99, Unown: 99,
-		};
-		const tier = species.tier;
-		const level = this.adjustLevel || customScale[species.name] || levelScale[tier] || (species.nfe ? 90 : 80);
+		const item = this.getItem(ability, species.types, moves, counter, teamDetails, species);
+		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
 		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
@@ -587,13 +606,20 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
+		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData));
+		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
+			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
+			const currentSpeciesPool: Species[] = [];
+			for (const poke of pokemonPool) {
+				const species = this.dex.species.get(poke);
+				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
+			}
+			const species = this.sample(currentSpeciesPool);
+			if (!species.exists) continue;
 
-		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
-			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !species.randomBattleMoves) continue;
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
@@ -619,6 +645,19 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					if (typeCount[typeName] >= 2 * limitFactor) {
 						skip = true;
 						break;
+					}
+				}
+				if (skip) continue;
+
+				// Limit three weak to any type
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0) {
+						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
+						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+							skip = true;
+							break;
+						}
 					}
 				}
 				if (skip) continue;
@@ -655,7 +694,15 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				typeComboCount[typeCombo] = 1;
 			}
 
-			// Updateeam details
+			// Increment weakness counter
+			for (const typeName of this.dex.types.names()) {
+				// it's weak to the type
+				if (this.dex.getEffectiveness(typeName, species) > 0) {
+					typeWeaknesses[typeName]++;
+				}
+			}
+
+			// Update team details
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
 			if (set.ability === 'Sand Stream') teamDetails.sand = 1;
 			if (set.moves.includes('spikes')) teamDetails.spikes = 1;

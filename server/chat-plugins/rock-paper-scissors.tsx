@@ -81,7 +81,8 @@ export class RPSGame extends Rooms.RoomGame<RPSPlayer> {
 					{choice || '\u00A0'}
 				</button>
 			))}<br /><br />
-			<button class="button" name="send" value="/rps end">End game</button>
+			<button class="button" name="send" value="/rps end">End game</button><br />
+			<button class="button" name="send" value="/rps pause">Pause game</button>
 		</div>);
 	}
 	getField() {

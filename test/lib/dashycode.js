@@ -1,7 +1,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const Dashycode = require('./../../lib/dashycode');
+const Dashycode = require('./../../dist/lib/dashycode');
 
 describe('Dashycode', function () {
 	const ascii = Array.from({length: 0x80}, (v, i) => i);

@@ -14,7 +14,8 @@
         "checkJs": true,
         "incremental": true,
         "allowUnreachableCode": false,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "useDefineForClassFields": false
     },
     "types": ["node"],
     "exclude": [
@@ -34,10 +35,5 @@
         "./tools/set-import/*.ts",
         "./tools/modlog/*.ts",
         "./translations/**/*.ts",
-    ],
-    "ts-node": {
-        "files": true,
-        "transpileOnly": true,
-        "transpiler": "ts-node/transpilers/swc-experimental",
-    }
+    ]
 }

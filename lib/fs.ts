@@ -25,7 +25,10 @@ import * as fs from 'fs';
 import * as pathModule from 'path';
 import {ReadStream, WriteStream} from './streams';
 
-const ROOT_PATH = pathModule.resolve(__dirname, '..');
+// not sure why it's necessary to use path.sep, but testing with Windows showed it was
+const DIST = `${pathModule.sep}dist${pathModule.sep}`;
+// account for pwd/dist/lib
+const ROOT_PATH = pathModule.resolve(__dirname, __dirname.includes(DIST) ? '..' : '', '..');
 
 interface PendingUpdate {
 	isWriting: boolean; // true: waiting on a call to FS.write, false: waiting on a throttle
@@ -517,5 +520,5 @@ function getFs(path: string) {
 }
 
 export const FS = Object.assign(getFs, {
-	FileReadStream, FSPath,
+	FileReadStream, FSPath, ROOT_PATH,
 });

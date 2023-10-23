@@ -245,6 +245,7 @@ exports.reportjoinsperiod = 0;
  * report battles - shows messages like "OU battle started" in the lobby
  *   This feature can lag larger servers - turn this off if your server is
  *   getting more than 160 or so users.
+ *  @type {boolean | string[] | string}
  */
 exports.reportbattles = true;
 
@@ -272,6 +273,20 @@ exports.nothrottle = false;
  * Removes all ip-based alt checking.
  */
 exports.noipchecks = false;
+
+/**
+ * controls the behavior of the /battlesearch command
+ *
+ * valid values are:
+ *   - true: disables battlesearch entirely
+ *   - false: enables the node.js /battlesearch
+ * 	   (uses either node fs or ripgrep for searching)
+ *   - 'psbattletools': defaults to the psbattletools /battlesearch (normally available as /alternatebattlesearch)
+ * 	   (uses psbattletools, which must be installed, for searching)
+ *
+ * @type {boolean | 'psbattletools'}
+ */
+exports.nobattlesearch = false;
 
 /**
  * allow punishmentmonitor to lock users with multiple roombans.

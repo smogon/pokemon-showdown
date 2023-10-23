@@ -118,11 +118,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onModifyMove() { },
 	},
-	block: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
 	brickbreak: {
 		inherit: true,
 		onTryHit(target, source) {
@@ -183,7 +178,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	covet: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, noassist: 1},
 	},
 	crunch: {
 		inherit: true,
@@ -274,9 +269,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 0,
 					damage: damage,
 					category: "Physical",
-					flags: {},
+					flags: {futuremove: 1},
 					effectType: 'Move',
-					isFutureMove: true,
 					type: '???',
 				},
 			});
@@ -286,17 +280,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	encore: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1},
 		volatileStatus: 'encore',
 		condition: {
 			durationCallback() {
 				return this.random(3, 7);
 			},
 			onStart(target, source) {
-				const noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
 				if (
-					!target.lastMove || noEncore.includes(target.lastMove.id) ||
+					!target.lastMove || target.lastMove.flags['failencore'] ||
 					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
 				) {
 					// it failed
@@ -376,6 +368,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
+	foresight: {
+		inherit: true,
+		accuracy: 100,
+	},
 	furycutter: {
 		inherit: true,
 		onHit(target, source) {
@@ -392,10 +388,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	hiddenpower: {
 		inherit: true,
-		basePower: 0,
-		basePowerCallback(pokemon) {
-			return pokemon.hpPower || 70;
-		},
 		category: "Physical",
 		onModifyMove(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
@@ -437,19 +429,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 100,
 	},
-	meanlook: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
 	megadrain: {
 		inherit: true,
 		pp: 10,
 	},
-	mimic: {
+	memento: {
+		inherit: true,
+		accuracy: true,
+	},
+	mindreader: {
 		inherit: true,
 		accuracy: 100,
-		ignoreAccuracy: true,
+	},
+	mimic: {
+		inherit: true,
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failmimic: 1},
 	},
 	mirrorcoat: {
 		inherit: true,
@@ -509,6 +503,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 60;
 		},
 	},
+	nightmare: {
+		inherit: true,
+		accuracy: true,
+	},
+	odorsleuth: {
+		inherit: true,
+		accuracy: 100,
+	},
 	outrage: {
 		inherit: true,
 		basePower: 90,
@@ -516,11 +518,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	overheat: {
 		inherit: true,
 		flags: {contact: 1, protect: 1, mirror: 1},
-	},
-	painsplit: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
 	},
 	petaldance: {
 		inherit: true,
@@ -534,26 +531,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 20,
 	},
-	roleplay: {
+	sketch: {
 		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
-	skillswap: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
+		flags: {bypasssub: 1, failencore: 1, noassist: 1, failmimic: 1},
 	},
 	sleeptalk: {
 		inherit: true,
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
-				const move = moveSlot.id;
+				const moveid = moveSlot.id;
 				const pp = moveSlot.pp;
-				const NoSleepTalk = ['assist', 'bide', 'focuspunch', 'metronome', 'mirrormove', 'sleeptalk', 'uproar'];
-				if (move && !(NoSleepTalk.includes(move) || this.dex.moves.get(move).flags['charge'])) {
-					moves.push({move: move, pp: pp});
+				const move = this.dex.moves.get(moveid);
+				if (moveid && !move.flags['nosleeptalk'] && !move.flags['charge']) {
+					moves.push({move: moveid, pp: pp});
 				}
 			}
 			if (!moves.length) {
@@ -566,11 +557,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.actions.useMove(randomMove.move, pokemon);
 		},
-	},
-	spiderweb: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
 	},
 	spite: {
 		inherit: true,
@@ -605,6 +591,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
+		flags: {contact: 1, protect: 1, noassist: 1, failencore: 1, failmimic: 1},
 		accuracy: 100,
 		recoil: [1, 4],
 		struggleRecoil: false,
@@ -690,11 +677,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 10,
 	},
-	vitalthrow: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
-	},
 	volttackle: {
 		inherit: true,
 		secondary: null,
@@ -725,11 +707,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (this.field.effectiveWeather()) move.basePower *= 2;
 		},
-	},
-	yawn: {
-		inherit: true,
-		accuracy: 100,
-		ignoreAccuracy: true,
 	},
 	zapcannon: {
 		inherit: true,

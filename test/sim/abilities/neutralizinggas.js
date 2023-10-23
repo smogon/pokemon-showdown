@@ -82,6 +82,20 @@ describe('Neutralizing Gas', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
+	it(`should negate Primal weather Abilities`, function () {
+		battle = common.createBattle([[
+			{species: 'Groudon', item: 'redorb', moves: ['sleeptalk']},
+		], [
+			{species: 'Wynaut', moves: ['sleeptalk']},
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('auto', 'switch 2');
+		assert.false(battle.field.isWeather('desolateland'), `Desolate Land should be negated, turning off the weather`);
+		battle.makeChoices('auto', 'switch 2');
+		assert(battle.field.isWeather('desolateland'), `Desolate Land should be active again`);
+	});
+
 	it('should not activate Imposter if Neutralizing Gas leaves the field', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
@@ -169,7 +183,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(regigigas.getStat('spe'), slowStartSpeed);
 	});
 
-	it.skip(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
+	it(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -187,7 +201,7 @@ describe('Neutralizing Gas', function () {
 
 		// Gluttony now has the opportunity to activate the Aguav Berry again on taking damage
 		battle.makeChoices();
-		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp * 0.33));
+		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp / 3));
 	});
 
 	it(`should not trigger twice if negated then replaced`, function () {

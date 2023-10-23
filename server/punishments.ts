@@ -467,6 +467,9 @@ export const Punishments = new class {
 		for (const row of data.replace('\r', '').split("\n")) {
 			if (!row) continue;
 			const [ip, type, note] = row.trim().split("\t");
+			if (ip === 'IP') {
+				continue; // first row
+			}
 			if (IPTools.ipRegex.test(note)) {
 				// this is handling a bug where data accidentally got reversed
 				// (into note,shared,ip format instead of ip,shared,note format)
@@ -1896,12 +1899,19 @@ export const Punishments = new class {
 						if (punishment.type === 'ROOMBAN') {
 							return punishment;
 						} else if (punishment.type === 'BLACKLIST') {
-							if (Punishments.isSharedIp(ip) && user.autoconfirmed) return;
+							if (Punishments.isSharedIp(ip) && user.autoconfirmed) continue;
 
 							return punishment;
 						}
 					}
 				}
+			}
+		}
+
+		for (const id of user.previousIDs) {
+			punishments = Punishments.roomUserids.nestedGet(roomid, id);
+			for (const p of punishments || []) {
+				if (['ROOMBAN', 'BLACKLIST'].includes(p.type)) return p;
 			}
 		}
 

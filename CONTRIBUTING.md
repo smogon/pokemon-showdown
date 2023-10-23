@@ -8,6 +8,8 @@ Building and running
 
 Our build script does most of the work here: You can mostly just run `./pokemon-showdown` to start a server. (Windows users will have to replace `./whatever` with `node whatever`, every time it appears)
 
+If you are unable to access a local server due to your browser forcing you to use HTTPS, try disabling "DNS over HTTPS" (Firefox) or "Async DNS resolver" (Chrome, in chrome://flags on Windows and Linux). If the problem persists, you can file an issue.
+
 PS has other useful command-line invocations, which you can investigate with `./pokemon-showdown help`.
 
 Unit tests can be run with `npm test`. You can run specific unit tests with `npx mocha -g "text"`, which will run all unit tests whose name contains "text", or you can just edit the unit test from `it` to `it.only`.

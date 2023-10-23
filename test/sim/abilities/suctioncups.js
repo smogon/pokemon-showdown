@@ -27,13 +27,14 @@ describe('Suction Cups', function () {
 		}
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Pangoro', ability: 'moldbreaker', moves: ['circlethrow']}]});
-		battle.setPlayer('p2', {team: [
+	it(`should be suppressed by Mold Breaker`, function () {
+		battle = common.createBattle({forceRandomChance: true}, [[
+			{species: 'Pangoro', ability: 'moldbreaker', moves: ['circlethrow']},
+		], [
 			{species: 'Shuckle', ability: 'suctioncups', item: 'ironball', moves: ['rest']},
 			{species: 'Forretress', ability: 'sturdy', moves: ['rapidspin']},
-		]});
+		]]);
+
 		battle.makeChoices('move circlethrow', 'move rest');
 		assert.species(battle.p2.active[0], 'Forretress');
 	});
