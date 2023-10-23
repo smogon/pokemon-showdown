@@ -1544,8 +1544,12 @@ export class RandomTeams {
 		}
 		const sets = (this as any)[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
 		const possibleSets = [];
+
+		const ruleTable = this.dex.formats.getRuleTable(this.format);
+
 		for (const set of sets) {
-			if (teamDetails.teraBlast && set.role === 'Tera Blast user') {
+			// Prevent Tera Blast user if the team already has one, or if Terastallizion is prevented.
+			if ((teamDetails.teraBlast || ruleTable.has('terastalclause')) && set.role === 'Tera Blast user') {
 				continue;
 			}
 			possibleSets.push(set);
