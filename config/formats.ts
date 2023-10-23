@@ -1052,7 +1052,7 @@ export const Formats: FormatList = [
 				teamHas.abilityMap = Object.create(null);
 				for (const pokemon of Dex.species.all()) {
 					if (pokemon.isNonstandard || (unreleased(pokemon) && !this.ruleTable.has('+unobtainable'))) continue;
-					if (pokemon.requiredAbility || pokemon.requiredItem || pokemon.requiredMove) continue;
+					if (pokemon.battleOnly) continue;
 					if (this.ruleTable.isBannedSpecies(pokemon)) continue;
 
 					for (const key of Object.values(pokemon.abilities)) {
@@ -1091,6 +1091,7 @@ export const Formats: FormatList = [
 			const validSources: string[] = teamHas.abilitySources[this.toID(set.species)] = []; // Evolution families
 
 			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
+			const hpType = set.hpType;
 
 			for (const donor of pokemonWithAbility) {
 				const donorSpecies = this.dex.species.get(donor);
@@ -1101,8 +1102,11 @@ export const Formats: FormatList = [
 
 				set.species = donorSpecies.name;
 				set.name = donorSpecies.baseSpecies;
-				const problems = this.validateSet(set, teamHas) || [];
-				if (!problems.length) {
+				if (species.name === "Iron Leaves" || species.name === "Walking Wake") {
+					set.hpType = "Dark";
+				}
+				const problems = this.validateSet(set, teamHas);
+				if (!problems?.length) {
 					validSources.push(evoFamily);
 					canonicalSource = donorSpecies.name;
 				}
@@ -1113,6 +1117,7 @@ export const Formats: FormatList = [
 
 			set.name = name;
 			set.species = species.name;
+			set.hpType = hpType;
 			if (!validSources.length) {
 				if (pokemonWithAbility.length > 1) return [`${name}'s set is illegal.`];
 				return [`${name} has an illegal set with an ability from ${this.dex.species.get(pokemonWithAbility[0]).name}.`];
@@ -1164,7 +1169,7 @@ export const Formats: FormatList = [
 			// Donor Clause
 			const evoFamilyLists = [];
 			for (const set of team) {
-				const abilitySources = teamHas.abilitySources?.[this.dex.toID(set.species)];
+				const abilitySources = teamHas.abilitySources?.[this.toID(set.species)];
 				if (!abilitySources) continue;
 				let format = this.format;
 				if (!format.getEvoFamily) format = this.dex.formats.get('gen9inheritance');
