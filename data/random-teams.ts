@@ -115,7 +115,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'breloom', 'brutebonnet', 'honchkrow', 'lycanrocdusk', 'mimikyu', 'scizor',
+	'breloom', 'brutebonnet', 'honchkrow', 'mimikyu', 'scizor',
 ];
 
 /** Pokemon who should never be in the lead slot */
@@ -525,6 +525,7 @@ export class RandomTeams {
 			['psychic', 'psyshock'],
 			['surf', 'hydropump'],
 			['liquidation', 'wavecrash'],
+			['aquajet', 'flipturn'],
 			['gigadrain', 'leafstorm'],
 			['powerwhip', 'hornleech'],
 			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
@@ -576,7 +577,6 @@ export class RandomTeams {
 		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
 		if (species.id === 'jirachi') this.incompatibleMoves(moves, movePool, 'bodyslam', 'healingwish');
-		if (species.baseSpecies !== 'Basculin') this.incompatibleMoves(moves, movePool, 'aquajet', 'flipturn');
 		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
 	}
 
@@ -1168,7 +1168,7 @@ export class RandomTeams {
 			if (species.id === 'conkeldurr' && role === 'Doubles Wallbreaker') return 'Guts';
 			if (species.id === 'tropius' || species.id === 'trevenant') return 'Harvest';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
-			if (species.id === 'kommoo') return 'Overcoat';
+			if (species.id === 'kommoo') return this.sample(['Overcoat', 'Soundproof']);
 			if (species.id === 'barraskewda') return 'Propeller Tail';
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
 			if (species.id === 'ribombee') return 'Shield Dust';
