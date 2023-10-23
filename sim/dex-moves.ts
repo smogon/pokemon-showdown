@@ -98,6 +98,7 @@ export interface SecondaryEffect extends HitEffect {
 }
 
 export interface MoveEventMethods {
+	// sorted by the order these events happen in
 	onDisableMove?: (this: Battle, pokemon: Pokemon) => void;
 
 	onModifyPriority?: CommonHandlers['ModifierSourceMove'];
