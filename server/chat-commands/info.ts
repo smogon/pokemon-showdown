@@ -665,6 +665,9 @@ export const commands: Chat.ChatCommands = {
 							}
 						}
 					}
+					if (pokemon.prevo) {
+						details["Pre-Evolution"] = pokemon.prevo;
+					}
 					if (!evos.length) {
 						details[`<font color="#686868">Does Not Evolve</font>`] = "";
 					} else {
