@@ -402,6 +402,7 @@ export const commands: Chat.ChatCommands = {
 
 			const page = isEdit ? 'edit' : 'upload';
 			if (id) {
+				connection.send(`|queryresponse|teamupload|` + JSON.stringify({teamid: id, teamName}));
 				connection.send(`>view-teams-${page}\n|deinit`);
 				this.parse(`/join view-teams-view-${id}-${id}`);
 			} else {
