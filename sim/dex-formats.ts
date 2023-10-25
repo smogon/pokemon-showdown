@@ -387,6 +387,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	) => string | null;
 	declare readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
 	declare readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
+	declare readonly getSharedItems?: (this: Format, pokemon: Pokemon) => Set<string>;
 	declare readonly onChangeSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
 	) => string[] | void;
@@ -812,6 +813,16 @@ export class DexFormats {
 		ruleTable.getTagRules();
 
 		ruleTable.resolveNumbers(format, this.dex);
+
+		const canMegaEvo = this.dex.gen <= 7 || ruleTable.has('+pokemontag:past');
+		if (ruleTable.has('obtainableformes') && canMegaEvo &&
+			ruleTable.isBannedSpecies(this.dex.species.get('rayquazamega')) &&
+			!ruleTable.isBannedSpecies(this.dex.species.get('rayquaza'))
+		) {
+			// Banning Rayquaza-Mega implicitly adds Mega Rayquaza Clause
+			// note that already having it explicitly in the ruleset is ok
+			ruleTable.set('megarayquazaclause', '');
+		}
 
 		for (const rule of ruleTable.keys()) {
 			if ("+*-!".includes(rule.charAt(0))) continue;

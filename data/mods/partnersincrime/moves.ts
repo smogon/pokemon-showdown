@@ -1,45 +1,4 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
-	attract: {
-		inherit: true,
-		condition: {
-			noCopy: true, // doesn't get copied by Baton Pass
-			onStart(pokemon, source, effect) {
-				if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
-					this.debug('incompatible gender');
-					return false;
-				}
-				if (!this.runEvent('Attract', pokemon, source)) {
-					this.debug('Attract event failed');
-					return false;
-				}
-
-				if (effect.id === 'cutecharm' || effect.id === 'ability:cutecharm') {
-					this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
-				} else if (effect.id === 'destinyknot') {
-					this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
-				} else {
-					this.add('-start', pokemon, 'Attract');
-				}
-			},
-			onUpdate(pokemon) {
-				if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['attract']) {
-					this.debug('Removing Attract volatile on ' + pokemon);
-					pokemon.removeVolatile('attract');
-				}
-			},
-			onBeforeMovePriority: 2,
-			onBeforeMove(pokemon, target, move) {
-				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.source);
-				if (this.randomChance(1, 2)) {
-					this.add('cant', pokemon, 'Attract');
-					return false;
-				}
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Attract', '[silent]');
-			},
-		},
-	},
 	gastroacid: {
 		inherit: true,
 		condition: {
@@ -65,7 +24,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
-				if (effect.effectType === 'Move' && !effect.isFutureMove && source.lastMove) {
+				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && source.lastMove) {
 					let move: Move = source.lastMove;
 					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
@@ -73,8 +32,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
 							if (!source.m.curMoves.includes(moveSlot.id) && source.m.trackPP.get(moveSlot.id)) {
-				        source.m.trackPP.set(moveSlot.id, moveSlot.maxpp - moveSlot.pp);
-				      }
+								source.m.trackPP.set(moveSlot.id, moveSlot.maxpp - moveSlot.pp);
+							}
 							this.add('-activate', source, 'move: Grudge', move.name);
 						}
 					}
@@ -115,11 +74,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mimic: {
 		inherit: true,
 		onHit(target, source) {
-			const disallowedMoves = [
-				'behemothbash', 'behemothblade', 'chatter', 'dynamaxcannon', 'mimic', 'sketch', 'struggle', 'transform',
-			];
 			const move = target.lastMove;
-			if (source.transformed || !move || disallowedMoves.includes(move.id) || source.moves.includes(move.id)) {
+			if (source.transformed || !move || move.flags['failmimic'] || source.moves.includes(move.id)) {
 				return false;
 			}
 			if (move.isZ || move.isMax) return false;
@@ -140,47 +96,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.moveSlots[mimicIndex] = mimickedMove;
 			source.m.curMoves[mimicIndex] = mimickedMove.id;
 			this.add('-start', source, 'Mimic', move.name);
-		},
-	},
-	safeguard: {
-		inherit: true,
-		condition: {
-			duration: 5,
-			durationCallback(target, source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
-					return 7;
-				}
-				return 5;
-			},
-			onSetStatus(status, target, source, effect) {
-				if (!effect || !source) return;
-				if (effect.id === 'yawn') return;
-				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
-				if (target !== source) {
-					this.debug('interrupting setStatus');
-					if (effect.id.endsWith('synchronize') || (effect.effectType === 'Move' && !effect.secondaries)) {
-						this.add('-activate', target, 'move: Safeguard');
-					}
-					return null;
-				}
-			},
-			onTryAddVolatile(status, target, source, effect) {
-				if (!effect || !source) return;
-				if (effect.effectType === 'Move' && effect.infiltrates && !target.isAlly(source)) return;
-				if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
-					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
-					return null;
-				}
-			},
-			onSideStart(side) {
-				this.add('-sidestart', side, 'Safeguard');
-			},
-			onSideResidualOrder: 21,
-			onSideResidualSubOrder: 2,
-			onSideEnd(side) {
-				this.add('-sideend', side, 'Safeguard');
-			},
 		},
 	},
 	sketch: {

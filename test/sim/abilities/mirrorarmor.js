@@ -44,4 +44,18 @@ describe("Mirror Armor", function () {
 		assert.statStage(drapion, 'spa', -1);
 		assert.equal(battle.requestState, 'switch');
 	});
+
+	it("should activate, but silently, if the source has fainted", function () {
+		battle = common.createBattle([[
+			{species: 'corviknight', ability: 'mirrorarmor', moves: ['bravebird']},
+		], [
+			{species: 'gossifleur', ability: 'cottondown', moves: ['sleeptalk']},
+			{species: 'wynaut', ability: 'shadowtag', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.statStage(battle.p1.active[0], 'spe', 0);
+		for (const line of battle.log) {
+			assert.false(line.includes("Mirror Armor"), `Expected no Mirror Armor message, but got the following message:\n${line}`);
+		}
+	});
 });

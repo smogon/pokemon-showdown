@@ -34,7 +34,7 @@ import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
 import {
-	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex,
+	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex, BestOfGame,
 } from "./room-battle";
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity, MinorActivityData} from './room-minor-activity';
@@ -721,14 +721,14 @@ export abstract class BasicRoom {
 	}
 	getStaffIntroMessage(user: User) {
 		if (!user.can('mute', null, this)) return ``;
-		let message = ``;
+		const messages = [];
 		if (this.settings.staffMessage) {
-			message += `\n|raw|<div class="infobox">(Staff intro:)<br /><div>` +
+			messages.push(`|raw|<div class="infobox">(Staff intro:)<br /><div>` +
 				this.settings.staffMessage.replace(/\n/g, '') +
-				`</div>`;
+				`</div>`);
 		}
 		if (this.pendingApprovals?.size) {
-			message += `\n|raw|<div class="infobox">`;
+			let message = `|raw|<div class="infobox">`;
 			message += `<details open><summary>(Pending media requests: ${this.pendingApprovals.size})</summary>`;
 			for (const [userid, entry] of this.pendingApprovals) {
 				message += `<div class="infobox">`;
@@ -746,8 +746,13 @@ export abstract class BasicRoom {
 				message += `<hr />`;
 			}
 			message += `</details></div>`;
+			messages.push(message);
 		}
-		return message ? `|raw|${message}` : ``;
+		if (!this.settings.isPrivate && !this.settings.isPersonal &&
+				this.settings.modchat && this.settings.modchat !== 'autoconfirmed') {
+			messages.push(`|raw|<div class="broadcast-red">Modchat currently set to ${this.settings.modchat}</div>`);
+		}
+		return messages.join('\n');
 	}
 	getSubRooms(includeSecret = false) {
 		if (!this.subRooms) return [];
@@ -755,7 +760,7 @@ export abstract class BasicRoom {
 			room => includeSecret ? true : !room.settings.isPrivate && !room.settings.isPersonal
 		);
 	}
-	validateTitle(newTitle: string, newID?: string) {
+	validateTitle(newTitle: string, newID?: string, oldID?: string) {
 		if (!newID) newID = toID(newTitle);
 		// `,` is a delimiter used by a lot of /commands
 		// `|` and `[` are delimiters used by the protocol
@@ -767,7 +772,7 @@ export abstract class BasicRoom {
 			throw new Chat.ErrorMessage(`Room title "${newTitle}" can't contain -`);
 		}
 		if (newID.length > MAX_CHATROOM_ID_LENGTH) throw new Chat.ErrorMessage("The given room title is too long.");
-		if (Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
+		if (newID !== oldID && Rooms.search(newTitle)) throw new Chat.ErrorMessage(`The room '${newTitle}' already exists.`);
 	}
 	setParent(room: Room | null) {
 		if (this.parent === room) return;
@@ -885,13 +890,21 @@ export abstract class BasicRoom {
 	 */
 	rename(newTitle: string, newID?: RoomID, noAlias?: boolean) {
 		if (!newID) newID = toID(newTitle) as RoomID;
-		this.validateTitle(newTitle, newID);
+		const oldID = this.roomid;
+		this.validateTitle(newTitle, newID, oldID);
 		if (this.type === 'chat' && this.game) {
 			throw new Chat.ErrorMessage(`Please finish your game (${this.game.title}) before renaming ${this.roomid}.`);
 		}
-		const oldID = this.roomid;
 		(this as any).roomid = newID;
-		this.title = newTitle;
+		this.title = this.settings.title = newTitle;
+		this.saveSettings();
+		if (newID === oldID) {
+			for (const user of Object.values(this.users)) {
+				user.sendTo(this, `|title|${newTitle}`);
+			}
+			return;
+		}
+
 		Rooms.rooms.delete(oldID);
 		Rooms.rooms.set(newID, this as Room);
 		if (this.battle && oldID) {
@@ -933,8 +946,6 @@ export abstract class BasicRoom {
 
 		this.game?.renameRoom(newID);
 
-		this.saveSettings();
-
 		for (const user of Object.values(this.users)) {
 			user.moveConnections(oldID, newID);
 			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
@@ -951,7 +962,6 @@ export abstract class BasicRoom {
 			}
 		}
 
-		this.settings.title = newTitle;
 		this.saveSettings();
 
 		Punishments.renameRoom(oldID, newID);
@@ -972,6 +982,7 @@ export abstract class BasicRoom {
 		if (!user) return false; // ???
 		if (this.users[user.id]) return false;
 
+		Chat.runHandlers('onBeforeRoomJoin', this, user, connection);
 		if (user.named) {
 			this.reportJoin('j', user.getIdentityWithStatus(this), user);
 		}
@@ -983,7 +994,6 @@ export abstract class BasicRoom {
 		this.userCount++;
 		this.checkAutoModchat(user);
 
-		this.minorActivity?.onConnect?.(user, connection);
 		this.game?.onJoin?.(user, connection);
 		Chat.runHandlers('onRoomJoin', this, user, connection);
 		return true;
@@ -1053,7 +1063,7 @@ export abstract class BasicRoom {
 			if (!time || time < 5) {
 				throw new Error(`Invalid time setting for automodchat (${Utils.visualize(this.settings.autoModchat)})`);
 			}
-			if (this.modchatTimer) clearTimeout(this.modchatTimer);
+			if (this.modchatTimer) return;
 			this.modchatTimer = setTimeout(() => {
 				if (!this.settings.autoModchat) return;
 				const {rank} = this.settings.autoModchat;
@@ -1070,6 +1080,7 @@ export abstract class BasicRoom {
 				// automodchat will always exist
 				this.settings.autoModchat.active = oldSetting || true;
 				this.saveSettings();
+				this.modchatTimer = null;
 			}, time * 60 * 1000);
 		}
 	}
@@ -1309,7 +1320,8 @@ export class GlobalRoomState {
 				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
 				` ON CONFLICT (roomid) DO UPDATE ` +
 				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
-				[room.roomid, log.join('\n'), players, room.title, room.battle.rated, timerData]
+				// for some reason Battle#rated is sometimes a float which Postgres can't handle
+				[room.roomid, log.join('\n'), players, room.title, Math.floor(room.battle.rated), timerData]
 			);
 			room.battle.timer.stop();
 			count++;
@@ -1631,12 +1643,19 @@ export class GlobalRoomState {
 			}
 		}
 		if (Config.reportbattles) {
-			const reportRoom = Rooms.get(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
-			if (reportRoom) {
-				const reportPlayers = players.map(p => p.getIdentity()).join('|');
-				reportRoom
-					.add(`|b|${room.roomid}|${reportPlayers}`)
-					.update();
+			if (typeof Config.reportbattles === 'string') {
+				Config.reportbattles = [Config.reportbattles];
+			} else if (Config.reportbattles === true) {
+				Config.reportbattles = ['lobby'];
+			}
+			for (const roomid of Config.reportbattles) {
+				const reportRoom = Rooms.get(roomid);
+				if (reportRoom) {
+					const reportPlayers = players.map(p => p.getIdentity()).join('|');
+					reportRoom
+						.add(`|b|${room.roomid}|${reportPlayers}`)
+						.update();
+				}
 			}
 		}
 		if (Config.logladderip && options.rated) {
@@ -1987,6 +2006,24 @@ export class GameRoom extends BasicRoom {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
+	onJoin(user: User, connection: Connection) {
+		if (!user) return false; // ???
+		if (this.users[user.id]) return false;
+
+		Chat.runHandlers('onBeforeRoomJoin', this, user, connection);
+		if (user.named) {
+			this.reportJoin('j', user.getIdentityWithStatus(this), user);
+		}
+
+		this.users[user.id] = user;
+		this.userCount++;
+		this.checkAutoModchat(user);
+
+		this.minorActivity?.onConnect?.(user, connection);
+		this.game?.onJoin?.(user, connection);
+		Chat.runHandlers('onRoomJoin', this, user, connection);
+		return true;
+	}
 	/**
 	 * Sends this room's replay to the connection to be uploaded to the replay
 	 * server. To be clear, the replay goes:
@@ -2121,7 +2158,18 @@ export const Rooms = {
 			Ladders.cancelSearches(user);
 		}
 
-		if (Rooms.global.lockdown === true) {
+		const format = Dex.formats.get(options.format);
+		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
+
+		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isSubBattle) {
+			for (const user of players) {
+				user.popup(`The server will be restarting soon. Best-of-${isBestOf} battles cannot be started at this time.`);
+			}
+			return;
+		}
+
+		// gotta allow new bo3 child battles to start
+		if (Rooms.global.lockdown === true && !options.isSubBattle) {
 			for (const user of players) {
 				user.popup("The server is restarting. Battles will be available again in a few minutes.");
 			}
@@ -2146,7 +2194,6 @@ export const Rooms = {
 			options.ratedMessage = p1Special;
 		}
 
-		const roomid = options.roomid || Rooms.global.prepBattleRoom(options.format);
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
@@ -2156,21 +2203,30 @@ export const Rooms = {
 		const p1name = p1 ? p1.name : "Player 1";
 		const p2name = p2 ? p2.name : "Player 2";
 		let roomTitle;
+		let roomid = options.roomid;
 		if (gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
 		} else if (gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
+		} else if (isBestOf && !options.isSubBattle) {
+			roomTitle = `${p1name} vs. ${p2name}`;
+			roomid = `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
 			roomTitle = options.title;
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
+		if (!roomid) roomid = Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
-		const battle = new Rooms.RoomBattle(room, options);
-		room.game = battle;
-		battle.checkPrivacySettings(options);
+		if (options.isSubBattle || !isBestOf) {
+			const battle = new Rooms.RoomBattle(room, options);
+			room.game = battle;
+			battle.checkPrivacySettings(options);
+		} else {
+			room.game = new BestOfGame(room, options);
+		}
 
 		for (const p of players) {
 			if (p) {
@@ -2201,6 +2257,7 @@ export const Rooms = {
 	Roomlogs,
 
 	RoomBattle,
+	BestOfGame,
 	RoomBattlePlayer,
 	RoomBattleTimer,
 	PM: RoomBattlePM,

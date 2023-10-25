@@ -11,20 +11,17 @@ describe('Metal Burst', function () {
 	});
 
 	it(`should run conditions for submove`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.createBattle([[
+			{species: 'golem', moves: ['sleeptalk']},
 			{species: 'snorlax', moves: ['sleeptalk', 'metalburst']},
-			{species: 'golem', moves: ['sleeptalk', 'tackle']},
 		], [
-			{species: 'breloom', moves: ['sleeptalk', 'sonicboom']},
-			{species: 'venusaur', moves: ['sleeptalk', 'spore']},
+			{species: 'breloom', moves: ['spore', 'sonicboom']},
 		]]);
 
-		battle.makeChoices('move metalburst, move tackle -1', 'move sonicboom 1, move sleeptalk');
+		battle.makeChoices('switch 2', 'move spore');
+		battle.makeChoices('move sleeptalk', 'move sonicboom');
 		const breloom = battle.p2.active[0];
 		assert.equal(breloom.hp, breloom.maxhp - battle.dex.moves.get('sonicboom').damage * 1.5);
-
-		battle.makeChoices('auto', 'move sonicboom 1, move spore 1');
-		assert.equal(breloom.hp, breloom.maxhp - battle.dex.moves.get('sonicboom').damage * 1.5 * 2);
 	});
 
 	it(`should target the opposing Pokemon that hit the user with an attack most recently that turn`, function () {

@@ -45,4 +45,24 @@ describe('Rapid Spin', function () {
 		battle.makeChoices();
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
+
+	it(`should not remove hazards if the user has Sheer Force`, function () {
+		battle = common.createBattle([[
+			{species: 'Cobalion', moves: ['stealthrock']},
+		], [
+			{species: 'Armaldo', ability: 'sheerforce', moves: ['rapidspin']},
+		]]);
+		battle.makeChoices();
+		assert(battle.p2.sideConditions['stealthrock']);
+	});
+
+	it(`should remove hazards if the user has Sheer Force [Gen 7]`, function () {
+		battle = common.gen(7).createBattle([[
+			{species: 'Cobalion', moves: ['stealthrock']},
+		], [
+			{species: 'Armaldo', ability: 'sheerforce', moves: ['rapidspin']},
+		]]);
+		battle.makeChoices();
+		assert.false(battle.p2.sideConditions['stealthrock']);
+	});
 });

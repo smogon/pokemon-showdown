@@ -665,6 +665,9 @@ export const commands: Chat.ChatCommands = {
 							}
 						}
 					}
+					if (pokemon.prevo) {
+						details["Pre-Evolution"] = pokemon.prevo;
+					}
 					if (!evos.length) {
 						details[`<font color="#686868">Does Not Evolve</font>`] = "";
 					} else {
@@ -848,6 +851,7 @@ export const commands: Chat.ChatCommands = {
 	dt6: 'details',
 	dt7: 'details',
 	dt8: 'details',
+	dt9: 'details',
 	details(target) {
 		if (!target) return this.parse('/help details');
 		this.run('data');
@@ -1503,7 +1507,7 @@ export const commands: Chat.ChatCommands = {
 	statcalchelp: [
 		`/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.`,
 		`!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.`,
-		`Inputing 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature.`,
+		`Inputting 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature.`,
 		`An actual stat can be given in place of a base stat or EVs. In this case, the minumum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
 	],
 
@@ -1628,7 +1632,8 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://github.com/smogon/pokemon-showdown/commits/master">What's new?</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown">Server source code</a><br />` +
 			`- <a href="https://github.com/smogon/pokemon-showdown-client">Client source code</a><br />` +
-			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a>`
+			`- <a href="https://github.com/Zarel/Pokemon-Showdown-Dex">Dex source code</a><br />` +
+			`- <a href="https://github.com/smogon/pokemon-showdown-loginserver">Login server source code</a>`
 		);
 	},
 	opensourcehelp: [
@@ -1744,13 +1749,10 @@ export const commands: Chat.ChatCommands = {
 		const DEFAULT_CALC_COMMANDS = ['honkalculator', 'honkocalc'];
 		const RANDOMS_CALC_COMMANDS = ['randomscalc', 'randbatscalc', 'rcalc'];
 		const BATTLESPOT_CALC_COMMANDS = ['bsscalc', 'cantsaycalc'];
-		const SUPPORTED_RANDOM_FORMATS = [
-			'gen8randombattle', 'gen8unratedrandombattle', 'gen7randombattle', 'gen6randombattle', 'gen5randombattle', 'gen4randombattle', 'gen3randombattle', 'gen2randombattle', 'gen1randombattle',
-		];
 		const SUPPORTED_BATTLESPOT_FORMATS = [
 			'gen5gbusingles', 'gen5gbudoubles', 'gen6battlespotsingles', 'gen6battlespotdoubles', 'gen6battlespottriples', 'gen7battlespotsingles', 'gen7battlespotdoubles', 'gen7bssfactory',
 		];
-		const isRandomBattle = (room?.battle && SUPPORTED_RANDOM_FORMATS.includes(room.battle.format));
+		const isRandomBattle = room?.battle?.format.endsWith('randombattle');
 		const isBattleSpotBattle = (room?.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) ||
 			room.battle.format.includes("battlespotspecial")));
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
@@ -1787,7 +1789,7 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://www.smogon.com/forums/forums/66/">CAP project discussion forum</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/48782/">What Pok&eacute;mon have been made?</a><br />` +
 			`- <a href="https://www.smogon.com/forums/forums/477">Talk about the metagame here</a><br />` +
-			`- <a href="https://www.smogon.com/forums/threads/3671157/">Sample SS CAP teams</a>`
+			`- <a href="https://www.smogon.com/forums/threads/3718107/">Sample SV CAP teams</a>`
 		);
 	},
 	caphelp: [
@@ -2079,6 +2081,9 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (showAll || ['privacy', 'private'].includes(target)) {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/privacy`}">${this.tr`Pokémon Showdown privacy policy`}</a>`);
+		}
+		if (showAll || ['lostpassword', 'password', 'lostpass'].includes(target)) {
+			buffer.push(`If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">${this.tr`Password Reset Form`}</a>. You will need to make a Smogon account to be able to fill out the form, as password resets are processed through the Smogon forums.`);
 		}
 		if (!buffer.length && target) {
 			this.errorReply(`'${target}' is an invalid FAQ.`);
@@ -2512,11 +2517,11 @@ export const commands: Chat.ChatCommands = {
 		if (!room.settings.requestShowEnabled) {
 			return this.errorReply(`Media approvals are disabled in this room.`);
 		}
-		if (user.can('showmedia', null, room, '/show')) return this.errorReply(`Use !show instead.`);
+		if (user.can('showmedia', null, room, 'show')) return this.errorReply(`Use !show instead.`);
 		if (room.pendingApprovals?.has(user.id)) return this.errorReply('You have a request pending already.');
 		if (!toID(target)) return this.parse(`/help requestshow`);
 
-		let [link, comment] = target.split(',');
+		let [link, comment] = this.splitOne(target);
 		if (!/^https?:\/\//.test(link)) link = `https://${link}`;
 		link = encodeURI(link);
 		let dimensions;
@@ -2529,6 +2534,9 @@ export const commands: Chat.ChatCommands = {
 			} catch {
 				throw new Chat.ErrorMessage('Invalid link.');
 			}
+		}
+		if (comment && this.checkChat(comment) !== comment) {
+			return this.errorReply(`You cannot use filtered words in comments.`);
 		}
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, {
@@ -2543,6 +2551,7 @@ export const commands: Chat.ChatCommands = {
 		room.sendRankedUsers(message, '%');
 		room.sendMods(
 			Utils.html`|uhtml|request-${user.id}|<div class="infobox">${user.name} wants to show <a href="${link}">${link}</a><br>` +
+			(comment ? Utils.html`Comment: ${comment}<br>` : '') +
 			`<button class="button" name="send" value="/approveshow ${user.id}">Approve</button><br>` +
 			`<button class="button" name="send" value="/denyshow ${user.id}">Deny</button></div>`
 		);
@@ -2572,7 +2581,7 @@ export const commands: Chat.ChatCommands = {
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 		} else {
-			buf = await YouTube.generateVideoDisplay(request.link);
+			buf = await YouTube.generateVideoDisplay(request.link, false, true);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
@@ -2635,10 +2644,19 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const [link, comment] = Utils.splitFirst(target, ',').map(f => f.trim());
+		this.checkBroadcast();
+		if (this.broadcastMessage) {
+			if (room) {
+				this.checkCan('show', null, room);
+			} else {
+				this.checkCan('altsself');
+			}
+		}
 
+		this.runBroadcast();
 		let buf;
 		if (YouTube.linkRegex.test(link)) {
-			buf = await YouTube.generateVideoDisplay(link);
+			buf = await YouTube.generateVideoDisplay(link, false, this.broadcasting);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
@@ -2666,15 +2684,6 @@ export const commands: Chat.ChatCommands = {
 			buf += Utils.html`<br />(${comment})</div>`;
 		}
 
-		this.checkBroadcast();
-		if (this.broadcastMessage) {
-			if (room) {
-				this.checkCan('show', null, room);
-			} else {
-				this.checkCan('altsself');
-			}
-		}
-		this.runBroadcast();
 		this.sendReplyBox(buf);
 	},
 	showhelp: [
@@ -3064,7 +3073,7 @@ export const pages: Chat.PageTable = {
 				buf += `<div class="message-error">The format '${formatId}' does not exist.</div><br />`;
 			}
 			buf += `<form data-submitsend="/buildformat {format}">`;
-			buf += `Choose your format: <input name="format" /><br />`;
+			buf += `Choose your format: <formatselect name="format">[Gen ${Dex.gen}] Random Battle</formatselect><br />`;
 			buf += `<button type="submit" class="button notifying">Continue</button>`;
 			buf += `</form>`;
 			return buf;

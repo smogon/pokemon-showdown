@@ -159,7 +159,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	beadsofruin: {
 		name: "Beads of Ruin",
-		shortDesc: "The Special Defense stat of all other active Pokemon is multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Special Defense multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Beads of Ruin weakened the Sp. Def of all surrounding Pokémon!",
 	},
@@ -240,6 +240,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Commander",
 		desc: "If this Pokemon is a Tatsugiri and a Dondozo is an active ally, this Pokemon goes into the Dondozo's mouth. The Dondozo has its Attack, Special Attack, Speed, Defense, and Special Defense raised by 2 stages. During the effect, the Dondozo cannot be switched out, this Pokemon cannot select an action, and attacks targeted at this Pokemon will be avoided but it will still take indirect damage. If this Pokemon faints during the effect, a Pokemon can be switched in as a replacement but the Dondozo remains unable to be switched out. If the Dondozo faints during the effect, this Pokemon regains the ability to select an action.",
 		shortDesc: "If ally is Dondozo: this Pokemon cannot act or be hit, +2 to all Dondozo's stats.",
+
+		activate: "  [POKEMON] was swallowed by [TARGET] and became [TARGET]'s commander!",
 	},
 	competitive: {
 		name: "Competitive",
@@ -432,6 +434,30 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon gains the Charge effect when it takes a hit from an attack.",
 
 		start: "  Being hit by [MOVE] charged [POKEMON] with power!",
+	},
+	embodyaspectcornerstone: {
+		name: "Embody Aspect (Cornerstone)",
+		shortDesc: "On switch-in, this Pokemon's Defense is raised by 1 stage.",
+
+		boost: "  The Cornerstone Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Defense rose!",
+	},
+	embodyaspecthearthflame: {
+		name: "Embody Aspect (Hearthflame)",
+		shortDesc: "On switch-in, this Pokemon's Attack is raised by 1 stage.",
+
+		boost: "  The Hearthflame Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Attack rose!",
+	},
+	embodyaspectteal: {
+		name: "Embody Aspect (Teal)",
+		shortDesc: "On switch-in, this Pokemon's Speed is raised by 1 stage.",
+
+		boost: "  The Teal Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Speed rose!",
+	},
+	embodyaspectwellspring: {
+		name: "Embody Aspect (Wellspring)",
+		shortDesc: "On switch-in, this Pokemon's Special Defense is raised by 1 stage.",
+
+		boost: "  The Wellspring Mask worn by [POKEMON] shone brilliantly, and [POKEMON]'s Sp. Def rose!",
 	},
 	emergencyexit: {
 		name: "Emergency Exit",
@@ -626,8 +652,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	heatproof: {
 		name: "Heatproof",
-		desc: "The power of Fire-type attacks against this Pokemon is halved. This Pokemon takes half of the usual burn damage, rounded down.",
-		shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
+		desc: "If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon. This Pokemon takes half of the usual burn damage, rounded down.",
+		shortDesc: "Fire damage against this Pokemon is dealt with 1/2 offensive stat; 1/2 burn damage.",
+		gen8: {
+			desc: "The power of Fire-type attacks against this Pokemon is halved. This Pokemon takes half of the usual burn damage, rounded down.",
+			shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
+		},
 	},
 	heavymetal: {
 		name: "Heavy Metal",
@@ -637,6 +667,12 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	honeygather: {
 		name: "Honey Gather",
 		shortDesc: "No competitive use.",
+	},
+	hospitality: {
+		name: "Hospitality",
+		shortDesc: "On switch-in, this Pokemon restores 1/4 of its ally's maximum HP, rounded down.",
+
+		heal: "  [POKEMON] drank down all the matcha that [SOURCE] made!",
 	},
 	hugepower: {
 		name: "Huge Power",
@@ -688,7 +724,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	illuminate: {
 		name: "Illuminate",
-		shortDesc: "No competitive use.",
+		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage.",
+		shortDesc: "This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
+		gen8: {
+			shortDesc: "No competitive use.",
+		},
 	},
 	illusion: {
 		name: "Illusion",
@@ -825,7 +865,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	libero: {
 		name: "Libero",
-		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in.",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in, and only if this Pokemon is not Terastallized.",
 		shortDesc: "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
 		gen8: {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
@@ -949,6 +989,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon's types change to match the Terrain. Type reverts when Terrain ends.",
 
 		activate: "  [POKEMON] returned to its original type!",
+	},
+	mindseye: {
+		name: "Mind's Eye",
+		desc: "This Pokemon can hit Ghost types with Normal- and Fighting-type moves. Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage.",
+		shortDesc: "Fighting, Normal moves hit Ghost. Accuracy can't be lowered, ignores evasiveness.",
 	},
 	minus: {
 		name: "Minus",
@@ -1143,10 +1188,16 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	parentalbond: {
 		name: "Parental Bond",
-		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect multi-hit moves or moves that have multiple targets.",
+		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage quartered.",
+		gen8: {
+			desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect Doom Desire, Dragon Darts, Dynamax Cannon, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, any two-turn move, or any Max Move.",
+		},
+		gen7: {
+			desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage quartered. Does not affect Doom Desire, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, any two-turn move, or any Z-Move.",
+		},
 		gen6: {
-			desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect multi-hit moves or moves that have multiple targets.",
+			desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect Doom Desire, Endeavor, Explosion, Final Gambit, Fling, Future Sight, Ice Ball, Rollout, Self-Destruct, any multi-hit move, any move that has multiple targets, or any two-turn move.",
 			shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
 		},
 	},
@@ -1257,8 +1308,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	pressure: {
 		name: "Pressure",
-		desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. Imprison and Snatch also lose one additional PP when used by an opposing Pokemon, but Sticky Web does not.",
+		desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. Imprison, Snatch, and Tera Blast also lose one additional PP when used by an opposing Pokemon, but Sticky Web does not.",
 		shortDesc: "If this Pokemon is the target of a foe's move, that move loses one additional PP.",
+		gen8: {
+			desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. Imprison and Snatch also lose one additional PP when used by an opposing Pokemon, but Sticky Web does not.",
+		},
 		gen5: {
 			desc: "If this Pokemon is the target of an opposing Pokemon's move, that move loses one additional PP. Imprison and Snatch also lose one additional PP when used by an opposing Pokemon.",
 		},
@@ -1284,7 +1338,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	protean: {
 		name: "Protean",
-		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in.",
+		desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type. This effect can only happen once per switch-in, and only if this Pokemon is not Terastallized.",
 		shortDesc: "This Pokemon's type changes to the type of the move it is using. Once per switch-in.",
 		gen8: {
 			desc: "This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type.",
@@ -1316,8 +1370,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	purifyingsalt: {
 		name: "Purifying Salt",
-		desc: "This Pokemon cannot become affected by a non-volatile status condition or Yawn. This Pokemon receives 1/2 damage from Ghost-type moves.",
-		shortDesc: "This Pokemon takes 1/2 damage from Ghost moves and it cannot become statused.",
+		desc: "This Pokemon cannot become affected by a non-volatile status condition or Yawn. If a Pokemon uses a Ghost-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
+		shortDesc: "Ghost damage to this Pokemon dealt with a halved offensive stat; can't be statused.",
 	},
 	quarkdrive: {
 		name: "Quark Drive",
@@ -1542,8 +1596,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	sheerforce: {
 		name: "Sheer Force",
-		desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
+		desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Anger Shell, Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
 		shortDesc: "This Pokemon's attacks with secondary effects have 1.3x power; nullifies the effects.",
+		gen8: {
+			desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Berserk, Color Change, Emergency Exit, Pickpocket, Wimp Out, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
+		},
 		gen6: {
 			desc: "This Pokemon's attacks with secondary effects have their power multiplied by 1.3, but the secondary effects are removed. If a secondary effect was removed, it also removes the user's Life Orb recoil and Shell Bell recovery, and prevents the target's Color Change, Pickpocket, Red Card, Eject Button, Kee Berry, and Maranga Berry from activating.",
 		},
@@ -1778,10 +1835,16 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Super Luck",
 		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
 	},
+	supersweetsyrup: {
+		name: "Supersweet Syrup",
+		shortDesc: "On switch-in, this Pokemon lowers the evasiveness of opponents 1 stage. Once per battle.",
+
+		start: "  A supersweet aroma is wafting from the syrup covering [POKEMON]!",
+	},
 	supremeoverlord: {
 		name: "Supreme Overlord",
 		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.1), where X is the total number of times any Pokemon has fainted on the user's side when this Ability became active, and X cannot be greater than 5.",
-		shortDesc: "This Pokemon's moves have 0.1x more power for each fainted ally, maximum 1.5x.",
+		shortDesc: "This Pokemon's moves have 10% more power for each fainted ally, up to 5 allies.",
 
 		activate: "  [POKEMON] gained strength from the fallen!",
 	},
@@ -1815,7 +1878,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	swordofruin: {
 		name: "Sword of Ruin",
-		shortDesc: "The Defense stat of all other active Pokemon is multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Defense multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Sword of Ruin weakened the Defense of all surrounding Pokémon!",
 	},
@@ -1842,7 +1905,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	tabletsofruin: {
 		name: "Tablets of Ruin",
-		shortDesc: "The Attack stat of all other active Pokemon is multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Attack multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Tablets of Ruin weakened the Attack of all surrounding Pokémon!",
 	},
@@ -1925,6 +1988,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "While this Pokemon is poisoned, the power of its physical attacks is multiplied by 1.5.",
 		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power.",
 	},
+	toxicchain: {
+		name: "Toxic Chain",
+		desc: "This Pokemon's moves have a 30% chance of badly poisoning. This effect comes after a move's inherent secondary effect chance.",
+		shortDesc: "This Pokemon's moves have a 30% chance of badly poisoning.",
+	},
 	toxicdebris: {
 		name: "Toxic Debris",
 		shortDesc: "If this Pokemon is hit by a physical attack, Toxic Spikes are set on the opposing side.",
@@ -1956,7 +2024,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	transistor: {
 		name: "Transistor",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.3 while using an Electric-type attack.",
+		gen8: {
+			shortDesc: "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.",
+		},
 	},
 	triage: {
 		name: "Triage",
@@ -2010,7 +2081,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	vesselofruin: {
 		name: "Vessel of Ruin",
-		shortDesc: "The Special Attack stat of all other active Pokemon is multiplied by 0.75.",
+		shortDesc: "Active Pokemon without this Ability have their Special Attack multiplied by 0.75.",
 
 		start: "  [POKEMON]'s Vessel of Ruin weakened the Sp. Atk of all surrounding Pokémon!",
 	},

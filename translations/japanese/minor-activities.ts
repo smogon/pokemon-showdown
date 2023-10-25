@@ -27,7 +27,7 @@ export const translations: Translations = {
 		"Quiz": "クイズ",
 		"Poll": "投票",
 		"Submit": "提出",
-		"ended": "が終了しました",
+		"ended": "終了",
 		"votes": "票",
 		"delete": "削除",
 		"Poll too long.": "投票が長すぎます。",

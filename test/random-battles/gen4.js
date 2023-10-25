@@ -6,7 +6,7 @@
 const assert = require('../assert');
 const {testSet, testHiddenPower} = require('./tools');
 
-describe('[Gen 4] Random Battle', () => {
+describe('[Gen 4] Random Battle (slow)', () => {
 	const options = {format: 'gen4randombattle'};
 
 	it('should not generate Shaymin-Sky without Air Slash', () => {

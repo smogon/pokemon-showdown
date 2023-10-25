@@ -54,49 +54,69 @@ describe('Dancer', function () {
 		assert.fainted(foeDancer);
 	});
 
-	it('should not copy a move that failed or was blocked by Protect', function () {
-		// hardcoded to RNG seed
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
-			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['dragondance', 'protect', 'teeterdance']},
-			{species: 'Oricorio', level: 99, ability: 'dancer', moves: ['featherdance']},
+	it(`should not copy a move that was blocked by Protect`, function () {
+		battle = common.createBattle([[
+			{species: 'Oricorio', ability: 'dancer', moves: ['protect']},
 		], [
-			{species: 'Oricorio', ability: 'dancer', moves: ['fierydance', 'protect', 'teeterdance']},
-			{species: 'Shedinja', ability: 'wonderguard', moves: ['finalgambit']},
+			{species: 'Wynaut', ability: 'dancer', moves: ['fierydance']},
 		]]);
-		const [p1active, p2active] = [battle.p1.active, battle.p2.active];
-		battle.resetRNG();
-		p1active[0].boostBy({atk: 6, spe: 6});
-		p2active[0].boostBy({atk: -6});
-		p2active[1].boostBy({spe: 6});
-		battle.makeChoices('move dragondance, move featherdance 1', 'move fierydance -2, move finalgambit 1');
-		assert.fullHP(p2active[0]);
-		assert.statStage(p1active[0], 'atk', 6);
-		assert.statStage(p1active[1], 'atk', 0);
-		assert.statStage(p2active[0], 'atk', -6);
-		assert.statStage(p2active[0], 'spe', 0);
-		// Next turn
-		battle.makeChoices('move dragondance, move featherdance 1', 'move protect');
-		assert.statStage(p1active[0], 'atk', 6);
-		assert.statStage(p1active[1], 'atk', 0);
-		// Next turn: Teeter Dance should be copied as long as it hits one thing
-		battle.makeChoices('move protect, move featherdance 1', 'move teeterdance');
-		// Next turn: Teeter Dance should NOT be copied if everything it hits is already confused
-		assert.constant(() => p1active[0].volatiles['confusion'], () => battle.makeChoices('move teeterdance, move featherdance 1', 'move fierydance 1'));
+
+		battle.makeChoices();
+		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it('should not copy a move that missed', function () {
-		battle = common.createBattle({gameType: 'singles', seed: [1, 2, 3, 4]}, [[
-			{species: 'Oricorio', ability: 'dancer', item: 'choicescarf', moves: ['revelationdance']},
+	it(`should not copy Teeter Dance when all targets are confused`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Oricorio', ability: 'dancer', moves: ['sleeptalk', 'protect']},
+			{species: 'Slowbro', ability: 'owntempo', moves: ['sleeptalk']},
 		], [
-			{species: 'Oricorio', ability: 'dancer', item: 'brightpowder', moves: ['dig']},
+			{species: 'Wynaut', ability: 'dancer', item: 'persimberry', moves: ['sleeptalk', 'teeterdance']},
+			{species: 'Slowking', ability: 'owntempo', moves: ['sleeptalk']},
 		]]);
-		const [failDanceSource, evadesPokemon] = [battle.p1.active[0], battle.p2.active[0]];
-		failDanceSource.boostBy({accuracy: -6});
-		evadesPokemon.boostBy({evasion: 6});
-		battle.makeChoices('move revelationdance', 'move dig');
-		assert.fullHP(failDanceSource);
-		battle.makeChoices('move revelationdance', 'move dig');
-		assert.fullHP(failDanceSource);
+
+		const wynaut = battle.p2.active[0];
+		battle.makeChoices('move protect, move sleeptalk', 'move teeterdance, move sleeptalk');
+		assert.holdsItem(wynaut, `Persim Berry should not be consumed, because Dancer did not activate`);
+
+		battle.makeChoices('auto', 'move teeterdance, move sleeptalk');
+		assert(battle.log.some(line => line.includes('Dancer')));
+	});
+
+	it(`should not copy a Dance move that failed for other reasons`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'mew', ability: 'dancer', moves: ['dragondance', 'protect']},
+			{species: 'wynaut', ability: 'dancer', moves: ['featherdance']},
+		], [
+			{species: 'oricoriopau', ability: 'dancer', moves: ['revelationdance', 'protect']},
+			{species: 'shedinja', ability: 'wonderguard', moves: ['finalgambit']},
+		]]);
+		const mew = battle.p1.active[0];
+		const wynaut = battle.p1.active[1];
+		const oricorio = battle.p2.active[0];
+
+		mew.boostBy({atk: 6, spe: 6});
+		oricorio.boostBy({atk: -6});
+
+		battle.makeChoices('move dragondance, move featherdance 1', 'move revelationdance -2, move finalgambit 1');
+		assert.fullHP(oricorio, `Nothing should target Oricorio because Revelation Dance failed from Wonder Guard`);
+		assert.statStage(wynaut, 'atk', 0, `Wynaut's attack should not have changed from either Feather Dance or Dragon Dance, because both failed`);
+	});
+
+	it(`should not copy a move that missed`, function () {
+		battle = common.createBattle([[
+			{species: 'Oricorio', ability: 'dancer', moves: ['revelationdance']},
+		], [
+			{species: 'Wynaut', ability: 'dancer', moves: ['dig']},
+		]]);
+
+		// Modding accuracy so Revelation Dance always misses if Oricorio uses it (Wynaut should in fact never use it though)
+		battle.onEvent('Accuracy', battle.format, function (accuracy, target, pokemon, move) {
+			return pokemon.id === 'wynaut';
+		});
+
+		battle.makeChoices(); // miss on initial use
+		battle.makeChoices(); // miss into semi-invulnerability
+		assert.false(battle.log.some(line => line.includes('Dancer')));
 	});
 
 	it('should copy a move that hit, but did 0 damage', function () {

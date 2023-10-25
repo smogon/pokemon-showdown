@@ -92,16 +92,18 @@ export const Scripts: ModdedBattleScriptsData = {
 						changed = true;
 					}
 				}
-				// Recalculate the modified stat
-				this.modifiedStats![i] = this.storedStats[i];
-				if (this.boosts[i] >= 0) {
-					this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
-				} else {
-					this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
-				}
-				if (delta > 0 && this.modifiedStats![i] > 999) {
-					// Cap the stat at 999
-					this.modifiedStats![i] = 999;
+				if (changed) {
+					// Recalculate the modified stat
+					this.modifiedStats![i] = this.storedStats[i];
+					if (this.boosts[i] >= 0) {
+						this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
+					} else {
+						this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
+					}
+					if (delta > 0 && this.modifiedStats![i] > 999) {
+						// Cap the stat at 999
+						this.modifiedStats![i] = 999;
+					}
 				}
 			}
 			return changed;
@@ -128,8 +130,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				// Rampage moves end without causing confusion
-				delete pokemon.volatiles['lockedmove'];
 				this.battle.clearActiveMove(true);
 				// This is only run for sleep.
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -201,18 +201,18 @@ export const Scripts: ModdedBattleScriptsData = {
 					(!pokemon.side.foe.active[0]?.lastMove || pokemon.side.foe.active[0].lastMove?.id === 'mirrormove')) {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
-					this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
+
+					if (pokemon.volatiles['lockedmove']?.time <= 0) pokemon.removeVolatile('lockedmove');
 
 					// If target fainted
 					if (target && target.hp <= 0) {
 						// We remove recharge
 						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 						delete pokemon.volatiles['partialtrappinglock'];
-						pokemon.removeVolatile('twoturnmove');
-					} else if (pokemon.hp) {
-						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+					} else {
+						if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
+						if (pokemon.hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
-					if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
 
 					// For partial trapping moves, we are saving the target
 					if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
@@ -320,6 +320,21 @@ export const Scripts: ModdedBattleScriptsData = {
 		tryMoveHit(target, pokemon, move) {
 			let damage: number | false | undefined = 0;
 
+			// Add Thrashing effect before the move does damage, or add confusion if Thrash effect is ending
+			if (move?.self?.volatileStatus === 'lockedmove') {
+				if (pokemon.volatiles['lockedmove']) {
+					pokemon.volatiles['lockedmove'].time--;
+					if (!pokemon.volatiles['lockedmove'].time) {
+						// Confusion begins even if already confused.
+						// Remove lockedmove volatile when dealing with after move effects.
+						delete pokemon.volatiles['confusion'];
+						pokemon.addVolatile('confusion', pokemon, this.dex.conditions.get('lockedmove'));
+					}
+				} else {
+					pokemon.addVolatile('lockedmove', pokemon, move);
+				}
+			}
+
 			// First, check if the target is semi-invulnerable
 			let hitResult = this.battle.runEvent('Invulnerability', target, pokemon, move);
 			if (hitResult === false) {
@@ -362,7 +377,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// OHKO moves only have a chance to hit if the user is at least as fast as the target
 			if (move.ohko) {
-				if (target.speed > pokemon.speed) {
+				if (target.getStat('spe') > pokemon.getStat('spe')) {
 					this.battle.add('-immune', target, '[ohko]');
 					return false;
 				}
@@ -373,19 +388,27 @@ export const Scripts: ModdedBattleScriptsData = {
 			const boostTable = [25, 28, 33, 40, 50, 66, 100, 150, 200, 250, 300, 350, 400];
 			if (accuracy !== true) {
 				accuracy = Math.floor(accuracy * 255 / 100);
-				// Check also for accuracy modifiers.
-				if (!move.ignoreAccuracy) {
-					accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
+				// Rage and Thrash/Petal Dance accuracy bug
+				if (pokemon.volatiles['lockedmove']) accuracy = pokemon.volatiles['lockedmove'].accuracy;
+				if (pokemon.volatiles['rage']) accuracy = pokemon.volatiles['rage'].accuracy;
+
+				// This line is just to satisfy TypeScript, accuracy should never be true at this point
+				if (accuracy !== true) {
+					// Check also for accuracy modifiers.
+					if (!move.ignoreAccuracy) {
+						accuracy = Math.floor(accuracy * (boostTable[pokemon.boosts.accuracy + 6] / 100));
+					}
+					if (!move.ignoreEvasion) {
+						accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
+					}
+					accuracy = this.battle.clampIntRange(accuracy, 1, 255);
 				}
-				if (!move.ignoreEvasion) {
-					accuracy = Math.floor(accuracy * (boostTable[-target.boosts.evasion + 6] / 100));
-				}
-				accuracy = Math.min(accuracy, 255);
+				if (pokemon.volatiles['lockedmove']) pokemon.volatiles['lockedmove'].accuracy = accuracy;
+				if (pokemon.volatiles['rage']) pokemon.volatiles['rage'].accuracy = accuracy;
 			}
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			// Moves that target the user do not suffer from the 1/256 miss chance.
 			if (move.target === 'self' && accuracy !== true) accuracy++;
-
 			// 1/256 chance of missing always, no matter what. Besides the aforementioned exceptions.
 			if (accuracy !== true && !this.battle.randomChance(accuracy, 256)) {
 				this.battle.attrLastMove('[miss]');
@@ -557,7 +580,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (moveData.boosts && target.hp) {
 					const willBoost = this.battle.boost(moveData.boosts, target, pokemon, move);
 					if (!willBoost) {
-						if (willBoost === false) this.battle.add('-fail', target);
+						this.battle.add('-fail', target);
 						return false;
 					}
 					didSomething = true;
@@ -649,7 +672,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Here's where self effects are applied.
 			const doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
-			if (moveData.self && (doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
+			if (moveData.self && (moveData.self.volatileStatus !== 'lockedmove') &&
+				(doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 
@@ -726,7 +750,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// If there's a fix move damage, we return that.
-			if (move.damage) {
+			if (move.damage || move.damage === 0) {
 				return move.damage;
 			}
 
@@ -879,7 +903,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Type effectiveness.
 			// In Gen 1, type effectiveness is applied against each of the target's types.
 			for (const targetType of target.types) {
-				const typeMod = this.battle.dex.getEffectiveness(type, targetType);
+				let typeMod = this.battle.dex.getEffectiveness(type, targetType);
+				typeMod = this.battle.runEvent('Effectiveness', this.battle, targetType, move, typeMod);
 				if (typeMod > 0) {
 					// Super effective against targetType
 					damage *= 20;
@@ -923,7 +948,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.conditions.get(effect);
 		if (!target?.hp) return 0;
 		let success = null;
-		boost = this.runEvent('Boost', target, source, effect, {...boost});
+		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
 		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};

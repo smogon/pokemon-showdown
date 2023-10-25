@@ -11,7 +11,7 @@ describe('Quick Claw', function () {
 	});
 
 	it(`[Gen 2] shares its activation roll with every holder on any given turn`, function () {
-		battle = common.gen(2).createBattle([[
+		battle = common.gen(2).createBattle({seed: [1, 2, 3, 27]}, [[
 			{species: 'snorlax', item: 'quickclaw', moves: ['sleeptalk']},
 		], [
 			{species: 'mewtwo', item: 'quickclaw', moves: ['sleeptalk']},

@@ -43,9 +43,12 @@ type GenerationNum = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 export const TIERS = new Set([
 	'ubers', 'ou', 'uu', 'ru', 'nu', 'pu', 'zu', 'lc', 'cap', 'nationaldex',
 	'doublesou', 'battlespotsingles', 'battlespotdoubles', 'battlestadiumsingles',
+	// UGH
+	'battlestadiumsinglesseries2', 'battlestadiumsinglesregulationc',
+	//
 	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', '1v1',
-	'anythinggoes', 'nationaldexag', 'balancedhackmons', 'letsgoou', 'monotype',
-	'purehackmons',
+	'anythinggoes', 'nationaldexag', 'almostanyability', 'balancedhackmons',
+	'letsgoou', 'monotype', 'purehackmons', 'nationaldexmonotype',
 ]);
 const FORMATS = new Map<ID, {gen: GenerationNum, format: Format}>();
 const VALIDATORS = new Map<ID, TeamValidator>();
@@ -146,14 +149,16 @@ function toGen(dex: ModdedDex, name: string): GenerationNum | undefined {
 	const pokemon = dex.species.get(name);
 	if (pokemon.isNonstandard === 'LGPE') return 7;
 	if (!pokemon.exists || (pokemon.isNonstandard && pokemon.isNonstandard !== 'CAP')) return undefined;
+	// CAP mons should have a gen property
+	if (pokemon.gen) return pokemon.gen as GenerationNum;
 
 	const n = pokemon.num;
 	if (n > 905) return 9;
 	if (n > 810) return 8;
-	if (n > 721 || (n <= -23 && n >= -28) || (n <= -120 && n >= -126)) return 7;
-	if (n > 649 || (n <= -8 && n >= -22) || (n <= -106 && n >= -110)) return 6;
-	if (n > 493 || (n <= -12 && n >= -17) || (n <= -111 && n >= -115)) return 5;
-	if (n > 386 || (n <= -1 && n >= -11) || (n <= -101 && n >= -104) || (n <= -116 && n >= -119)) return 4;
+	if (n > 721) return 7;
+	if (n > 649) return 6;
+	if (n > 493) return 5;
+	if (n > 386) return 4;
 	if (n > 251) return 3;
 	if (n > 151) return 2;
 	if (n > 0) return 1;
@@ -397,6 +402,8 @@ const SMOGON = {
 	vgc17: 'vgc2017',
 	vgc18: 'vgc2018',
 	vgc19: 'vgc2019ultraseries',
+	// bssseries1: 'battlestadiumsinglesseries1', // ?
+	bssseries2: 'battlestadiumsinglesseries2',
 } as unknown as {[id: string]: ID};
 
 const getAnalysis = retrying(async (u: string) => {
@@ -423,7 +430,11 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 
 		const analysesByFormat = new Map<Format, smogon.Analysis[]>();
 		for (const [tier, analyses] of analysesByTier.entries()) {
-			const t = toID(tier);
+			let t = toID(tier);
+			// Dumb hack, need to talk to BSS people
+			if (gen === 9 && t === 'battlestadiumsingles') {
+				t = 'battlestadiumsinglesregulationc' as ID;
+			}
 			const f = FORMATS.get(`gen${gen}${SMOGON[t] || t}` as ID);
 			if (f) analysesByFormat.set(f.format, analyses);
 		}

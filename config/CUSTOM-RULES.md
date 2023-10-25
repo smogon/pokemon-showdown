@@ -7,7 +7,7 @@ Pokémon Showdown supports custom rules in three ways:
 
 - Tournaments, using the command `/tour rules RULES` (see the [Tournament command help][tour-help])
 
-- Custom formats on your side server, by editing `config/formats.js`
+- Custom formats on your side server, by editing `config/formats.ts`
 
   [tour-help]: https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489
 

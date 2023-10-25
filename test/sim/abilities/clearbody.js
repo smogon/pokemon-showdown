@@ -82,4 +82,16 @@ describe('Clear Body', function () {
 		battle.makeChoices('switch 2', 'default');
 		assert.statStage(battle.p1.active[0], 'spe', -1);
 	});
+
+	it('should not take priority over a stat being at -6', function () {
+		battle = common.createBattle([[
+			{species: 'Dragapult', ability: 'clearbody', moves: ['bellydrum', 'sleeptalk']},
+		], [
+			{species: 'Malamar', moves: ['topsyturvy', 'growl']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move sleeptalk', 'move growl');
+		assert.statStage(battle.p1.active[0], 'atk', -6);
+		assert(battle.log.includes('|-unboost|p1a: Dragapult|atk|0'));
+	});
 });

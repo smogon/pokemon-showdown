@@ -113,7 +113,7 @@ Some Pokémon change forme in the middle of a battle. These forme changes do res
 
 List of all in-battle forme changes:
 
-- Ash Greninja (Battle Bond)
+- Ash-Greninja (Battle Bond)
 - Mimikyu (Disguise)
 - Cherrim (Flower Gift)
 - Castform (Forecast)

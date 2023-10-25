@@ -164,6 +164,16 @@ export class RoundRobin {
 		match.result = result;
 		match.score = score.slice(0);
 		this.totalPendingMatches--;
+		if (this.matchesPerPlayer) {
+			if (p1.games === this.matchesPerPlayer) {
+				p1.sendRoom(`|tournament|update|{"isJoined":false}`);
+				p1.unlinkUser();
+			}
+			if (p2.games === this.matchesPerPlayer) {
+				p2.sendRoom(`|tournament|update|{"isJoined":false}`);
+				p2.unlinkUser();
+			}
+		}
 	}
 
 	isTournamentEnded() {

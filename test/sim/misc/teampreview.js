@@ -11,10 +11,10 @@ describe('Team Preview', function () {
 	});
 
 	it('should hide formes of certain Pokemon', function () {
-		battle = common.createBattle('gen8anythinggoes', [[
-			{species: 'Arceus-Steel', ability: 'multitype', item: 'steelplate', moves: ['sleeptalk']},
+		battle = common.createBattle([[
 			{species: 'Pumpkaboo-Super', ability: 'pickup', moves: ['sleeptalk']},
 			{species: 'Gourgeist-Small', ability: 'pickup', moves: ['sleeptalk']},
+			{species: 'Dudunsparce-Three-Segment', ability: 'runaway', moves: ['sleeptalk']},
 		], [
 			{species: 'Silvally', ability: 'rkssystem', moves: ['sleeptalk']},
 			{species: 'Urshifu-Rapid-Strike', ability: 'unseenfist', moves: ['sleeptalk']},
@@ -23,7 +23,21 @@ describe('Team Preview', function () {
 		for (const line of battle.log) {
 			if (line.startsWith('|poke|')) {
 				const details = line.split('|')[3];
-				assert(details.match(/(Arceus|Pumpkaboo|Gourgeist|Silvally|Urshifu|Zacian)-\*/), `Forme was not hidden; preview details: ${details}`);
+				assert(details.match(/(Pumpkaboo|Gourgeist|Silvally|Urshifu|Zacian|Dudunsparce)-\*/), `Forme was not hidden; preview details: ${details}`);
+			}
+		}
+	});
+
+	it('should hide Arceus formes [Gen 8]', function () {
+		battle = common.createBattle({formatid: 'gen8anythinggoes'}, [[
+			{species: 'Arceus-Steel', ability: 'multitype', item: 'steelplate', moves: ['sleeptalk']},
+		], [
+			{species: 'Arceus-Fire', ability: 'multitype', item: 'flameplate', moves: ['sleeptalk']},
+		]]);
+		for (const line of battle.log) {
+			if (line.startsWith('|poke|')) {
+				const details = line.split('|')[3];
+				assert(details.match(/Arceus-\*/), `Forme was not hidden; preview details: ${details}`);
 			}
 		}
 	});
