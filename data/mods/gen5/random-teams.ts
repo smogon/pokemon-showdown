@@ -965,6 +965,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Illusion shouldn't be in the last slot
 			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
+			// If Zoroark is in the team, ensure its level is balanced
+			if (pokemon.some(pkmn => pkmn.species === 'Zoroark') && pokemon.length >= (this.maxTeamSize - 1)) {
+				const level = this.adjustLevel || this.randomSets[species.id]["level"] || (species.nfe ? 90 : 80);
+				if ((level < 76 || level > 94) && !this.adjustLevel) continue;
+			}
+
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 			const tier = species.tier;

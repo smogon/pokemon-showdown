@@ -1384,6 +1384,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (set.ability === 'Illusion') {
 					if (pokemon.length < 1) continue;
 					set.level = pokemon[pokemon.length - 1].level;
+					// Ensure its level is balanced
+					if ((set.level < 76 || set.level > 94) && !this.adjustLevel) continue;
 				}
 
 				// Okay, the set passes, add it to our team

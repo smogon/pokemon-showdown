@@ -2508,18 +2508,15 @@ export class RandomGen8Teams {
 
 			// Illusion shouldn't be on the last slot
 			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
-			// The sixth slot should not be very low level if a zoroark is present
+
+			// If Zoroark is in the team, ensure its level is balanced
 			// Also Zacian/Zamazenta/Eternatus are rejected as they make dynamax malfunction, regardless of level
-			if (
-				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
-				pokemon.length >= (this.maxTeamSize - 1) &&
-				(this.getLevel(species,
-							  isDoubles,
-							  this.dex.formats.getRuleTable(this.format).has('dynamaxclause')) < 72 &&
-				!this.adjustLevel ||
-				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name))
-			) {
-				continue;
+			if (pokemon.some(pkmn => pkmn.name === 'Zoroark') && pokemon.length >= (this.maxTeamSize - 1)) {
+				const level = this.getLevel(species, isDoubles, this.dex.formats.getRuleTable(this.format).has('dynamaxclause'));
+				if (
+					(level < 76 || level > 94) && !this.adjustLevel ||
+					['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name)
+				) continue;
 			}
 
 			const types = species.types;
