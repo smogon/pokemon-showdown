@@ -884,10 +884,8 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	chloroblast: {
 		name: "Chloroblast",
-		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
+		desc: "If this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
 		shortDesc: "User loses 50% max HP.",
-
-		damage: "#mindblown",
 	},
 	circlethrow: {
 		name: "Circle Throw",
