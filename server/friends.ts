@@ -59,11 +59,9 @@ export function sendPM(message: string, to: string, from = '&') {
 	const toIdentity = receivingUser ? receivingUser.getIdentity() : ` ${receiverID}`;
 
 	if (from === '&') {
-		return sendingUser?.send(`|pm|&|${toIdentity}|${message}`);
+		return receivingUser?.send(`|pm|&|${toIdentity}|${message}`);
 	}
-	if (receivingUser) {
-		receivingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
-	}
+	receivingUser?.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
 }
 
 function canPM(sender: User, receiver: User | null) {
