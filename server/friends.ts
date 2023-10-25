@@ -50,9 +50,9 @@ export class FailureMessage extends Error {
 	}
 }
 
-export function sendPM(message: string, to: string, from = '&', onlyReceiver = false) {
-	const senderID = toID(to);
-	const receiverID = toID(from);
+export function sendPM(message: string, to: string, from = '&') {
+	const senderID = toID(from);
+	const receiverID = toID(to);
 	const sendingUser = Users.get(senderID);
 	const receivingUser = Users.get(receiverID);
 	const fromIdentity = sendingUser ? sendingUser.getIdentity() : ` ${senderID}`;
