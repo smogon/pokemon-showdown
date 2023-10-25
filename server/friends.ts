@@ -50,7 +50,7 @@ export class FailureMessage extends Error {
 	}
 }
 
-export function sendPM(message: string, to: string, from = '&') {
+export function sendPM(message: string, to: string, from = '&', onlyReceiver = false) {
 	const senderID = toID(to);
 	const receiverID = toID(from);
 	const sendingUser = Users.get(senderID);
@@ -60,9 +60,6 @@ export function sendPM(message: string, to: string, from = '&') {
 
 	if (from === '&') {
 		return sendingUser?.send(`|pm|&|${toIdentity}|${message}`);
-	}
-	if (sendingUser) {
-		sendingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
 	}
 	if (receivingUser) {
 		receivingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
