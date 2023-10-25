@@ -298,6 +298,12 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
+		name: "[Gen 9] Trick Magic",
+
+		mod: 'gen9',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Force Monotype = Ghost', 'Min Source Gen = 9', 'VGC Timer'],
+	},
+	{
 		name: "[Gen 9] Custom Game",
 
 		mod: 'gen9',
