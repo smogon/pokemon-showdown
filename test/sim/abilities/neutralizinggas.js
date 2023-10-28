@@ -287,6 +287,20 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 1);
 	});
 
+	it(`should not reactivate abilities that were protected by Ability Shield`, function () {
+		battle = common.createBattle([[
+			{species: 'Porygon', ability: 'download', item: 'abilityshield', moves: ['sleeptalk']},
+		], [
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		battle.makeChoices('auto', 'switch 2');
+		const porygon = battle.p1.active[0];
+		assert.statStage(porygon, 'spa', 1);
+	});
+
 	describe(`Ability reactivation order`, function () {
 		it(`should cause entrance Abilities to reactivate in order of Speed`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[
