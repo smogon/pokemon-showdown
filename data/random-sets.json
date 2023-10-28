@@ -1283,7 +1283,7 @@
                 "teraTypes": ["Steel", "Water"]
             },
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Encore", "Lunge", "Roost", "Thunder Wave"],
                 "teraTypes": ["Steel", "Water"]
             }
