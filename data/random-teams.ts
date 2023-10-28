@@ -1629,7 +1629,7 @@ export class RandomTeams {
 			if (move.id === 'shellsidearm') return false;
 			// Magearna and doubles Dragonite, though these can work well as a general rule
 			if (
-				move.id === 'terablast' && (moves.has('shiftgear') || species.baseStats.atk >= species.baseStats.spa)
+				move.id === 'terablast' && (moves.has('shiftgear') || species.baseStats.atk > species.baseStats.spa)
 			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
