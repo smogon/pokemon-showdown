@@ -1382,7 +1382,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 				// Zoroark copies the last Pokemon and should not be generated in that slot
 				if (set.ability === 'Illusion' && pokemon.length < 1) continue;
-				
+
 				// Okay, the set passes, add it to our team
 				pokemon.unshift(set);
 
