@@ -354,7 +354,7 @@
         "sets": [
             {
                 "role": "AV Pivot",
-                "movepool": ["Drain Punch", "Gunk Shot", "Ice Punch", "Knock Off", "Poison Jab"],
+                "movepool": ["Drain Punch", "Gunk Shot", "Ice Punch", "Knock Off", "Poison Jab", "Shadow Sneak"],
                 "teraTypes": ["Dark"]
             }
         ]
@@ -1059,7 +1059,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Freeze-Dry", "Memento", "Rapid Spin", "Spikes"],
+                "movepool": ["Brave Bird", "Freeze-Dry", "Rapid Spin", "Spikes"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -1280,6 +1280,11 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Encore", "Roost", "Thunder Wave", "U-turn"],
+                "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Encore", "Lunge", "Roost", "Thunder Wave"],
                 "teraTypes": ["Steel", "Water"]
             }
         ]
@@ -1679,11 +1684,6 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Clear Smog", "Earth Power", "Ice Beam", "Recover", "Stealth Rock"],
-                "teraTypes": ["Poison", "Steel"]
-            },
-            {
-                "role": "Bulky Support",
                 "movepool": ["Clear Smog", "Earthquake", "Ice Beam", "Recover", "Stealth Rock", "Surf"],
                 "teraTypes": ["Poison", "Steel"]
             }
@@ -1981,11 +1981,6 @@
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Pain Split", "Poltergeist", "Shadow Sneak", "Will-O-Wisp"],
                 "teraTypes": ["Dark", "Fairy"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Leech Life", "Poltergeist", "Trick Room"],
-                "teraTypes": ["Dark", "Ghost", "Ground"]
             }
         ]
     },
@@ -2620,6 +2615,7 @@
         ]
     },
     "zoroark": {
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2629,6 +2625,7 @@
         ]
     },
     "zoroarkhisui": {
+        "level": 79,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2667,7 +2664,12 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Double-Edge", "Headbutt", "High Horsepower", "Horn Leech", "Swords Dance"],
+                "movepool": ["Double-Edge", "High Horsepower", "Horn Leech", "Swords Dance"],
+                "teraTypes": ["Ground", "Normal"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Headbutt", "High Horsepower", "Horn Leech", "Swords Dance"],
                 "teraTypes": ["Normal"]
             }
         ]
@@ -4047,8 +4049,8 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Dark Pulse", "Nasty Plot", "Shadow Ball", "Substitute", "Will-O-Wisp"],
-                "teraTypes": ["Dark", "Ghost"]
+                "movepool": ["Dark Pulse", "Draining Kiss", "Nasty Plot", "Shadow Ball", "Substitute", "Will-O-Wisp"],
+                "teraTypes": ["Dark", "Fairy"]
             },
             {
                 "role": "Tera Blast user",

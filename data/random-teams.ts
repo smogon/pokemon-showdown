@@ -203,7 +203,7 @@ export class RandomTeams {
 				!counter.get('Steel') &&
 				(isDoubles || species.baseStats.atk > 95 || movePool.includes('gigatonhammer') || movePool.includes('makeitrain'))
 			),
-			Water: (movePool, moves, abilities, types, counter, species) => !counter.get('Water'),
+			Water: (movePool, moves, abilities, types, counter) => (!counter.get('Water') && !types.includes('Ground')),
 		};
 	}
 
@@ -1022,7 +1022,8 @@ export class RandomTeams {
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Hustle':
-			return (counter.get('Physical') < 2 || moves.has('fakeout'));
+			// some of this is just for Delibird in singles/doubles
+			return (counter.get('Physical') < 2 || moves.has('fakeout') || moves.has('rapidspin'));
 		case 'Infiltrator':
 			return (isDoubles && abilities.has('Clear Body'));
 		case 'Insomnia':
@@ -1527,12 +1528,12 @@ export class RandomTeams {
 	}
 
 	randomSet(
-		species: string | Species,
+		s: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false,
 		isDoubles = false
 	): RandomTeamsTypes.RandomSet {
-		species = this.dex.species.get(species);
+		const species = this.dex.species.get(s);
 		let forme = species.name;
 
 		if (typeof species.battleOnly === 'string') {
@@ -1626,8 +1627,10 @@ export class RandomTeams {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm') return false;
-			// Magearna, though this can work well as a general rule
-			if (move.id === 'terablast' && moves.has('shiftgear')) return false;
+			// Magearna and doubles Dragonite, though these can work well as a general rule
+			if (
+				move.id === 'terablast' && (moves.has('shiftgear') || species.baseStats.atk >= species.baseStats.spa)
+			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 		if (noAttackStatMoves && !moves.has('transform')) {
@@ -1743,26 +1746,6 @@ export class RandomTeams {
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
-			// If Zoroark is in the team, ensure its level is balanced
-			// Level range differs for each forme of Zoroark
-			if (
-				pokemon.some(pkmn => pkmn.species === 'Zoroark') &&
-				pokemon.length >= (this.maxTeamSize - 1) &&
-				(this.getLevel(species, isDoubles) < 76 || this.getLevel(species, isDoubles) > 94) &&
-				!this.adjustLevel
-			) {
-				continue;
-			}
-
-			if (
-				pokemon.some(pkmn => pkmn.species === 'Zoroark-Hisui') &&
-				pokemon.length >= (this.maxTeamSize - 1) &&
-				(this.getLevel(species, isDoubles) < 72 || this.getLevel(species, isDoubles) > 84) &&
-				!this.adjustLevel
-			) {
-				continue;
-			}
-
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
@@ -1820,15 +1803,8 @@ export class RandomTeams {
 				pokemon.push(set);
 			}
 
-			if (pokemon.length === this.maxTeamSize) {
-				// Set Zoroark's level to be the same as the last Pokemon
-				for (const poke of pokemon) {
-					if (poke.ability === 'Illusion') poke.level = pokemon[this.maxTeamSize - 1].level;
-				}
-
-				// Don't bother tracking details for the last Pokemon
-				break;
-			}
+			// Don't bother tracking details for the last Pokemon
+			if (pokemon.length === this.maxTeamSize) break;
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;

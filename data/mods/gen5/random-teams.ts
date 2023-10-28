@@ -678,6 +678,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'wobbuffet') return 'Custap Berry';
 		if (ability === 'Harvest') return 'Sitrus Berry';
 		if (species.id === 'ditto') return 'Choice Scarf';
+		if (species.id === 'exploud' && role === 'Bulky Attacker') return 'Choice Band';
 		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id !== 'ninjask') return 'Life Orb';
 		if (species.nfe) return 'Eviolite';
@@ -690,7 +691,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 			}
 		}
-		if (species.id === 'exploud' && moves.has('sleeptalk')) return 'Choice Band';
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 		if (moves.has('shellsmash')) return 'White Herb';
 		if (moves.has('psychoshift')) return 'Flame Orb';
@@ -1009,15 +1009,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
-			if (pokemon.length === this.maxTeamSize) {
-				// Set Zoroark's level to be the same as the last Pokemon
-				for (const poke of pokemon) {
-					if (poke.ability === 'Illusion') poke.level = pokemon[this.maxTeamSize - 1].level;
-				}
-
-				// Don't bother tracking details for the last Pokemon
-				break;
-			}
+			// Don't bother tracking details for the last Pokemon
+			if (pokemon.length === this.maxTeamSize) break;
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;
