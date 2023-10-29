@@ -218,7 +218,7 @@ describe('Ability Shield', function () {
 			{species: 'scorbunny', ability: 'libero', moves: ['agility']},
 		]]);
 
-		battle.makeChoices();
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
 		assert.equal(battle.p1.active[0].ability, 'embodyaspectteal', `Ogerpon's ability should change to Embody Aspect`);
 	});
 

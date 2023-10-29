@@ -1400,8 +1400,8 @@ export class Pokemon {
 			if (this.illusion) {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
-			// Ogerpon's transformation doesn't override permanent abilities
-			this.setAbility(species.abilities['0'], null, !!source);
+			// Ogerpon's forme change doesn't override permanent abilities
+			if (source || !this.getAbility().isPermanent) this.setAbility(species.abilities['0'], null, true);
 			// However, its ability does reset upon switching out
 			this.baseAbility = toID(species.abilities['0']);
 		}
