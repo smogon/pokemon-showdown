@@ -182,6 +182,11 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 export const commands: Chat.ChatCommands = {
 	rwr: 'randswinrates',
 	randswinrates(target, room, user) {
+		target = toID(target);
+		if (/^(gen|)[0-9]+$/.test(target)) {
+			if (target.startsWith('gen')) target = target.slice(3);
+			target = `gen${target}randombattle`;
+		}
 		return this.parse(`/j view-winrates-${target ? Dex.formats.get(target).id : `gen${Dex.gen}randombattle`}`);
 	},
 	randswinrateshelp: [
