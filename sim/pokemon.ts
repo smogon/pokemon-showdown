@@ -1344,7 +1344,7 @@ export class Pokemon {
 	 * as well as sending all relevant messages sent to the client.
 	 */
 	formeChange(
-		speciesId: string | Species, source: Effect = this.battle.effect,
+		speciesId: string | Species, source: Effect | null = this.battle.effect,
 		isPermanent?: boolean, message?: string
 	) {
 		const rawSpecies = this.battle.dex.species.get(speciesId);
@@ -1364,7 +1364,10 @@ export class Pokemon {
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
-			if (source.effectType === 'Item') {
+			if (!source) {
+				// Tera forme
+				// Ogerpon text goes here
+			} else if (source.effectType === 'Item') {
 				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {
 					this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
@@ -1377,7 +1380,6 @@ export class Pokemon {
 						this.battle.add('-primal', this, species.requiredItem);
 					}
 				} else {
-					// So a Mega Evolution message isn't sent while we're waiting on Ogerpon text
 					if (source.megaEvolves) {
 						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					}
@@ -1388,18 +1390,20 @@ export class Pokemon {
 				this.battle.add('-formechange', this, species.name, message);
 			}
 		} else {
-			if (source.effectType === 'Ability') {
+			if (source?.effectType === 'Ability') {
 				this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
 			} else {
 				this.battle.add('-formechange', this, this.illusion ? this.illusion.species.name : species.name, message);
 			}
 		}
-		if (isPermanent && !['disguise', 'iceface'].includes(source.id)) {
+		if (isPermanent && (!source || !['disguise', 'iceface'].includes(source.id))) {
 			if (this.illusion) {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
-			this.setAbility(species.abilities['0'], null, true);
-			this.baseAbility = this.ability;
+			// Ogerpon's transformation doesn't override permanent abilities
+			this.setAbility(species.abilities['0'], null, !!source);
+			// However, its ability does reset upon switching out
+			this.baseAbility = toID(species.abilities['0']);
 		}
 		if (this.terastallized) {
 			this.knownType = true;
@@ -1812,7 +1816,7 @@ export class Pokemon {
 		if (!isFromFormeChange) {
 			if (ability.isPermanent || this.getAbility().isPermanent) return false;
 		}
-		if (!isTransform) {
+		if (!isFromFormeChange && !isTransform) {
 			const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability);
 			if (!setAbilityEvent) return setAbilityEvent;
 		}
