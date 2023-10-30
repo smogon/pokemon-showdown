@@ -573,6 +573,9 @@ export class RandomTeams {
 		if (!types.includes('Dark') && teraType !== 'Dark') this.incompatibleMoves(moves, movePool, 'knockoff', 'suckerpunch');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
+		if (species.id === 'luvdisc') {
+			this.incompatibleMoves(moves, movePool, ['charm', 'flipturn', 'icebeam'], ['charm', 'flipturn'])
+		}
 		if (species.id === "dugtrio") this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
 		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');

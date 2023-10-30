@@ -753,13 +753,8 @@
         "level": 93,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Defog", "Haze", "Heat Wave", "Hurricane", "Roost"],
-                "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Hurricane", "Hyper Voice", "Roost"],
+                "role": "Bulky Attacker",
+                "movepool": ["Calm Mind", "Defog", "Hurricane", "Hyper Voice", "Roost"],
                 "teraTypes": ["Ground", "Normal", "Steel"]
             }
         ]
@@ -1494,7 +1489,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Charm", "Flip Turn", "Protect", "Surf", "Wish"],
+                "movepool": ["Charm", "Flip Turn", "Ice Beam", "Protect", "Surf", "Wish"],
                 "teraTypes": ["Dragon", "Ghost"]
             }
         ]
@@ -2519,7 +2514,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Knock Off", "Leaf Blade", "Lunge", "Sticky Web"],
+                "movepool": ["Knock Off", "Leaf Blade", "Lunge", "Sticky Web", "Swords Dance"],
                 "teraTypes": ["Ghost", "Rock"]
             },
             {
@@ -3354,7 +3349,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Moonblast", "Sticky Web", "Stun Spore", "U-turn"],
+                "movepool": ["Moonblast", "Psychic", "Sticky Web", "Stun Spore", "U-turn"],
                 "teraTypes": ["Ghost"]
             },
             {
