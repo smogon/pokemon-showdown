@@ -1036,7 +1036,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
-		if (counter.get('Physical') === 4 && species.id !== 'jirachi' && species.id !== 'spinda' &&
+		if (counter.get('Physical') === 4 && species.id !== 'jirachi' &&
 			['dragontail', 'fakeout', 'flamecharge', 'nuzzle', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			return (
@@ -1379,6 +1379,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 				// Limit one Z-Move per team
 				if (item.zMove && teamDetails.zMove) continue;
+
+				// Zoroark copies the last Pokemon and should not be generated in that slot
+				if (set.ability === 'Illusion' && pokemon.length < 1) continue;
 
 				// Okay, the set passes, add it to our team
 				pokemon.unshift(set);
