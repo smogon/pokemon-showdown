@@ -574,7 +574,7 @@ export class RandomTeams {
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		if (species.id === 'luvdisc') {
-			this.incompatibleMoves(moves, movePool, ['charm', 'flipturn', 'icebeam'], ['charm', 'flipturn'])
+			this.incompatibleMoves(moves, movePool, ['charm', 'flipturn', 'icebeam'], ['charm', 'flipturn']);
 		}
 		if (species.id === "dugtrio") this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
 		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
