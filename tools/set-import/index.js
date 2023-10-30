@@ -94,9 +94,9 @@ const SETS = path.resolve(__dirname, 'sets');
 		"name": "@smogon/sets",
 		"version": version,
 		"description": "Set data imported from Smogon.com and used on Pokémon Showdown",
-		"main": "build/index.js",
-		"unpkg": "build/index.js",
-		"types": "build/index.d.ts",
+		"main": "index.js",
+		"unpkg": "index.js",
+		"types": "index.d.ts",
 		"repository": "github:smogon/sets",
 		"publishConfig": {
 			"access": "public",
