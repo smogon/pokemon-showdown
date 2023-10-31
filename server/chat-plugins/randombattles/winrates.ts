@@ -156,7 +156,10 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
 	const format = Dex.formats.get(battle.format);
-	if (format.mod !== `gen${Dex.gen}`) {
+	if (format.mod === 'gen2') {
+		// ladder is inactive, so use a lower threshold
+		eloFloor = 1150;
+	} else if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
 	} else if (format.gameType === 'doubles') {
 		// may need to be raised again if doubles ladder takes off
@@ -182,6 +185,11 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 export const commands: Chat.ChatCommands = {
 	rwr: 'randswinrates',
 	randswinrates(target, room, user) {
+		target = toID(target);
+		if (/^(gen|)[0-9]+$/.test(target)) {
+			if (target.startsWith('gen')) target = target.slice(3);
+			target = `gen${target}randombattle`;
+		}
 		return this.parse(`/j view-winrates-${target ? Dex.formats.get(target).id : `gen${Dex.gen}randombattle`}`);
 	},
 	randswinrateshelp: [

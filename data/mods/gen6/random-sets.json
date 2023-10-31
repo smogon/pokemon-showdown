@@ -3844,7 +3844,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["hiddenpowerice", "knockoff", "leafstorm", "superpower"]
+                "movepool": ["gunkshot", "hiddenpowerice", "knockoff", "leafstorm", "rockslide", "superpower"],
+                "preferredTypes": ["Fighting"]
             },
             {
                 "role": "Setup Sweeper",
@@ -4188,6 +4189,7 @@
         ]
     },
     "zoroark": {
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
