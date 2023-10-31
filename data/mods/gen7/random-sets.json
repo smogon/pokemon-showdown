@@ -2260,9 +2260,12 @@
         "level": 100,
         "sets": [
             {
-                "role": "Z-Move user",
-                "movepool": ["encore", "feintattack", "return", "suckerpunch", "superpower"],
-                "preferredTypes": ["Normal"]
+                "role": "Staller",
+                "movepool": ["icepunch", "return", "suckerpunch", "superpower"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["protect", "rest", "return", "sleeptalk", "superpower", "wish"]
             }
         ]
     },
@@ -2432,33 +2435,12 @@
             }
         ]
     },
-    "castformsunny": {
+    "castform": {
         "level": 100,
         "sets": [
             {
-                "role": "Z-Move user",
-                "movepool": ["fireblast", "icebeam", "solarbeam", "sunnyday"],
-                "preferredTypes": ["Fire"]
-            }
-        ]
-    },
-    "castformrainy": {
-        "level": 100,
-        "sets": [
-            {
-                "role": "Z-Move user",
-                "movepool": ["hurricane", "hydropump", "raindance", "thunder"],
-                "preferredTypes": ["Water"]
-            }
-        ]
-    },
-    "castformsnowy": {
-        "level": 100,
-        "sets": [
-            {
-                "role": "Z-Move user",
-                "movepool": ["blizzard", "fireblast", "hail", "thunderbolt"],
-                "preferredTypes": ["Ice"]
+                "role": "Bulky Attacker",
+                "movepool": ["fireblast", "icebeam", "return", "scald", "thunderbolt", "thunderwave"]
             }
         ]
     },
@@ -4115,7 +4097,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["hiddenpowerice", "knockoff", "leafstorm", "superpower"]
+                "movepool": ["gunkshot", "hiddenpowerice", "knockoff", "leafstorm", "rockslide", "superpower"],
+                "preferredTypes": ["Fighting"]
             },
             {
                 "role": "Setup Sweeper",
@@ -4464,6 +4447,7 @@
         ]
     },
     "zoroark": {
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",

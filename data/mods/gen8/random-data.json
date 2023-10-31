@@ -1436,7 +1436,9 @@
         "doublesMoves": ["drainpunch", "explosion", "gunkshot", "protect", "toxicspikes"]
     },
     "zoroark": {
+        "level": 84,
         "moves": ["darkpulse", "flamethrower", "nastyplot", "sludgebomb", "trick"],
+        "doublesLevel": 84,
         "doublesMoves": ["darkpulse", "flamethrower", "focusblast", "nastyplot", "protect", "sludgebomb"]
     },
     "cinccino": {
