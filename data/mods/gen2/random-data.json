@@ -196,7 +196,7 @@
         "moves": ["growth", "rest", "sleeptalk", "surf"]
     },
     "jolteon": {
-        "moves": ["batonpass", "growth", "hiddenpowerice", "substitute", "thunderbolt", "thunderwave"]
+        "moves": ["batonpass", "growth", "hiddenpowerice", "substitute", "thunderbolt"]
     },
     "flareon": {
         "moves": ["batonpass", "doubleedge", "fireblast", "growth", "hiddenpowergrass"]
@@ -211,7 +211,7 @@
         "moves": ["ancientpower", "curse", "earthquake", "hiddenpowerflying", "rest", "whirlwind"]
     },
     "snorlax": {
-        "moves": ["curse", "doubleedge", "earthquake", "fireblast", "lovelykiss", "rest", "return", "sleeptalk"]
+        "moves": ["curse", "doubleedge", "earthquake", "lovelykiss", "rest", "return", "sleeptalk"]
     },
     "articuno": {
         "moves": ["hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "toxic"]
