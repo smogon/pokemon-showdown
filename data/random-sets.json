@@ -1554,7 +1554,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Body Slam", "Fire Punch", "Healing Wish", "Iron Head", "Protect", "U-turn", "Wish"],
+                "movepool": ["Body Slam", "Fire Punch", "Healing Wish", "Iron Head", "Protect", "Stealth Rock", "U-turn", "Wish"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -1809,6 +1809,11 @@
         "sets": [
             {
                 "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Gunk Shot", "Ice Punch", "Knock Off", "Sucker Punch", "Swords Dance"],
+                "teraTypes": ["Dark"]
+            },
+            {
+                "role": "Setup Sweeper",
                 "movepool": ["Close Combat", "Gunk Shot", "Ice Punch", "Sucker Punch", "Swords Dance"],
                 "teraTypes": ["Dark", "Fighting"]
             }
@@ -4376,6 +4381,11 @@
                 "role": "Wallbreaker",
                 "movepool": ["Armor Cannon", "Aura Sphere", "Energy Ball", "Focus Blast", "Psyshock"],
                 "teraTypes": ["Fighting", "Fire", "Grass", "Psychic"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Armor Cannon", "Aura Sphere", "Calm Mind", "Energy Ball", "Psyshock"],
+                "teraTypes": ["Fighting", "Fire", "Grass"]
             }
         ]
     },
