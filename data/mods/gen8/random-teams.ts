@@ -2508,16 +2508,12 @@ export class RandomGen8Teams {
 
 			// Illusion shouldn't be on the last slot
 			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
-			// The sixth slot should not be very low level if a zoroark is present
-			// Also Zacian/Zamazenta/Eternatus are rejected as they make dynamax malfunction, regardless of level
+			// The sixth slot should not be Zacian/Zamazenta/Eternatus if Zoroark is present,
+			// as they make dynamax malfunction, regardless of level
 			if (
 				pokemon.some(pkmn => pkmn.name === 'Zoroark') &&
 				pokemon.length >= (this.maxTeamSize - 1) &&
-				(this.getLevel(species,
-							  isDoubles,
-							  this.dex.formats.getRuleTable(this.format).has('dynamaxclause')) < 72 &&
-				!this.adjustLevel ||
-				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name))
+				['Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Eternatus'].includes(species.name)
 			) {
 				continue;
 			}
@@ -2564,14 +2560,8 @@ export class RandomGen8Teams {
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
-			if (pokemon.length === this.maxTeamSize) {
-				// Set Zoroark's level to be the same as the last Pokemon
-				const illusion = teamDetails.illusion;
-				if (illusion) pokemon[illusion - 1].level = pokemon[this.maxTeamSize - 1].level;
-
-				// Don't bother tracking details for the last Pokemon
-				break;
-			}
+			// Don't bother tracking details for the last Pokemon
+			if (pokemon.length === this.maxTeamSize) break;
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;
@@ -2612,9 +2602,6 @@ export class RandomGen8Teams {
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
 			}
-
-			// For setting Zoroark's level
-			if (set.ability === 'Illusion') teamDetails.illusion = pokemon.length;
 		}
 		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);

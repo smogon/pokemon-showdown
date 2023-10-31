@@ -803,7 +803,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Helping Hand", "High Horsepower", "Liquidation", "Stealth Rock", "Yawn"],
                 "teraTypes": ["Fire", "Poison", "Steel"]
             }
@@ -964,8 +964,13 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Brave Bird", "Fake Out", "Helping Hand", "Memento", "Rapid Spin", "Tailwind"],
+                "movepool": ["Brave Bird", "Fake Out", "Helping Hand", "Icy Wind", "Memento", "Tailwind"],
                 "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Brave Bird", "Drill Run", "Foul Play", "Ice Shard", "Ice Spinner"],
+                "teraTypes": ["Dark", "Flying", "Ground", "Ice"]
             }
         ]
     },
@@ -1258,7 +1263,7 @@
         "level": 87,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Helping Hand", "High Horsepower", "Icy Wind", "Muddy Water", "Stealth Rock"],
                 "teraTypes": ["Fire", "Steel"]
             }
@@ -2380,6 +2385,7 @@
         ]
     },
     "zoroark": {
+        "level": 84,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -2394,6 +2400,7 @@
         ]
     },
     "zoroarkhisui": {
+        "level": 79,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",

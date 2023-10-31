@@ -1688,7 +1688,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["doubleedge", "earthquake", "lowkick", "return", "sleeptalk"]
+                "movepool": ["doubleedge", "earthquake", "facade", "lowkick"]
             },
             {
                 "role": "Fast Attacker",
@@ -3765,6 +3765,7 @@
         ]
     },
     "zoroark": {
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",

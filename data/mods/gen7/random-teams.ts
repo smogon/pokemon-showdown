@@ -362,8 +362,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['destinybond', 'whirlwind'],
 			// Liepard
 			['copycat', 'uturn'],
-			// Spinda and Seviper
-			[['feintattack', 'switcheroo'], 'suckerpunch'],
+			// Seviper
+			['switcheroo', 'suckerpunch'],
 			// Jirachi
 			['bodyslam', 'healingwish'],
 		];
@@ -1380,11 +1380,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				// Limit one Z-Move per team
 				if (item.zMove && teamDetails.zMove) continue;
 
-				// Zoroark copies the last Pokemon
-				if (set.ability === 'Illusion') {
-					if (pokemon.length < 1) continue;
-					set.level = pokemon[pokemon.length - 1].level;
-				}
+				// Zoroark copies the last Pokemon and should not be generated in that slot
+				if (set.ability === 'Illusion' && pokemon.length < 1) continue;
 
 				// Okay, the set passes, add it to our team
 				pokemon.unshift(set);
