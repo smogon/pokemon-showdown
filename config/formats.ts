@@ -2849,31 +2849,35 @@ export const Formats: FormatList = [
 		column: 4,
 	},
 	{
-		name: "[Gen 5] Ubers",
+		name: "[Gen 6] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286278/">BW2 Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286277/">ORAS Ubers</a>`,
 		],
 
-		mod: 'gen5',
+		mod: 'gen6',
 		// searchShow: false,
-		ruleset: ['Standard', 'Sleep Clause Mod'],
+		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause'],
 	},
 	{
-		name: "[Gen 2] UU (+ Muk)",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3576710/">GSC UU</a>`],
+		name: "[Gen 3] ZU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8034684">ADV ZU</a>`,
+		],
 
-		mod: 'gen2',
-		ruleset: ['[Gen 2] UU', '+Muk'],
+		mod: 'gen3',
+		ruleset: ['Standard', 'Baton Pass Clause'],
+		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL'],
 	},
 	{
-		name: "[Gen 2] NU",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3642565/">GSC NU</a>`],
+		name: "[Gen 3] LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3516575/">ADV LC</a>`,
+		],
 
-		mod: 'gen2',
+		mod: 'gen3',
 		// searchShow: false,
-		ruleset: ['[Gen 2] UU'],
-		banlist: ['UU', 'NUBL'],
-		unbanlist: ['Agility + Baton Pass'],
+		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
+		banlist: ['Chansey', 'Meditite', 'Omanyte', 'Scyther', 'Wynaut', 'Zigzagoon', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
 	},
 
 	// Past Gens OU
@@ -3685,16 +3689,6 @@ export const Formats: FormatList = [
 		column: 4,
 	},
 	{
-		name: "[Gen 6] Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286277/">ORAS Ubers</a>`,
-		],
-
-		mod: 'gen6',
-		searchShow: false,
-		ruleset: ['Standard', 'Swagger Clause', 'Mega Rayquaza Clause'],
-	},
-	{
 		name: "[Gen 6] UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/dex/xy/formats/uu/">ORAS UU Banlist</a>`,
@@ -3956,6 +3950,16 @@ export const Formats: FormatList = [
 	{
 		section: "B2/W2 Singles",
 		column: 4,
+	},
+	{
+		name: "[Gen 5] Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/8286278/">BW2 Ubers</a>`,
+		],
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['Standard', 'Sleep Clause Mod'],
 	},
 	{
 		name: "[Gen 5] UU",
@@ -4377,17 +4381,6 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL'],
 	},
 	{
-		name: "[Gen 3] LC",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3516575/">ADV LC</a>`,
-		],
-
-		mod: 'gen3',
-		searchShow: false,
-		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
-		banlist: ['Chansey', 'Meditite', 'Omanyte', 'Scyther', 'Wynaut', 'Zigzagoon', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
-	},
-	{
 		name: "[Gen 3] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
@@ -4443,6 +4436,16 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 2] OU'],
 		banlist: ['OU', 'UUBL', 'Agility + Baton Pass'],
 		unbanlist: ['Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
+	},
+	{
+		name: "[Gen 2] NU",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3642565/">GSC NU</a>`],
+
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['[Gen 2] UU'],
+		banlist: ['UU', 'NUBL'],
+		unbanlist: ['Agility + Baton Pass'],
 	},
 	{
 		name: "[Gen 2] 1v1",
