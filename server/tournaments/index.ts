@@ -1,6 +1,7 @@
 
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
+import {Swiss} from './generator-swiss';
 import {Utils} from '../../lib';
 import {SampleTeams, teamData} from '../chat-plugins/sample-teams';
 import {PRNG} from '../../sim/prng';
@@ -21,7 +22,7 @@ export interface TournamentRoomSettings {
 	blockRecents?: boolean;
 }
 
-type Generator = RoundRobin | Elimination;
+type Generator = RoundRobin | Elimination | Swiss;
 
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
@@ -40,9 +41,10 @@ const TournamentGenerators = {
 	__proto__: null,
 	roundrobin: RoundRobin,
 	elimination: Elimination,
+	swiss: Swiss,
 };
 
-function usersToNames(users: TournamentPlayer[]) {
+export function usersToNames(users: TournamentPlayer[]) {
 	return users.map(user => user.name);
 }
 
@@ -632,7 +634,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					const inProgressMatch = data.tableHeaders.rows[r].inProgressMatch;
 					if (pendingChallenge || inProgressMatch) {
 						for (const [c, cell] of row.entries()) {
-							if (!cell) continue;
+							if (!cell || cell.namedCell) continue;
 
 							if (pendingChallenge && data.tableHeaders.cols[c] === pendingChallenge.to) {
 								cell.state = 'challenging';
@@ -646,8 +648,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					}
 				}
 			}
-			data.tableHeaders.cols = usersToNames(data.tableHeaders.cols);
-			data.tableHeaders.rows = usersToNames(data.tableHeaders.rows);
 		}
 		return data;
 	}
@@ -1242,7 +1242,7 @@ function getGenerator(generator: string | undefined) {
 	case 'elim': generator = 'elimination'; break;
 	case 'rr': generator = 'roundrobin'; break;
 	}
-	return TournamentGenerators[generator as 'elimination' | 'roundrobin'];
+	return TournamentGenerators[generator as 'elimination' | 'roundrobin' | 'swiss'];
 }
 
 function createTournamentGenerator(
