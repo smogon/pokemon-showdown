@@ -33,11 +33,6 @@ type StatusType = 'online' | 'busy' | 'idle';
 const THROTTLE_DELAY = 600;
 const THROTTLE_DELAY_TRUSTED = 100;
 const THROTTLE_DELAY_PUBLIC_BOT = 25;
-const THROTTLE_BUFFER_LIMIT = 6;
-const THROTTLE_MULTILINE_WARN = 3;
-const THROTTLE_MULTILINE_WARN_STAFF = 6;
-const THROTTLE_MULTILINE_WARN_ADMIN = 25;
-
 const NAMECHANGE_THROTTLE = 2 * 60 * 1000; // 2 minutes
 const NAMES_PER_THROTTLE = 3;
 
@@ -1409,43 +1404,6 @@ export class User extends Chat.MessageContext {
 	 * The user says message in room.
 	 * Returns false if the rest of the user's messages should be discarded.
 	 */
-	chat(message: string, room: Room | null, connection: Connection) {
-		const now = Date.now();
-		const noThrottle = this.hasSysopAccess() || Config.nothrottle;
-
-		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || noThrottle) {
-			// certain commands are exempt from the queue
-			Monitor.activeIp = connection.ip;
-			Chat.parse(message, room, this, connection);
-			Monitor.activeIp = null;
-			if (noThrottle) return;
-			return false; // but end the loop here
-		}
-
-		const throttleDelay = this.isPublicBot ? THROTTLE_DELAY_PUBLIC_BOT : this.trusted ? THROTTLE_DELAY_TRUSTED :
-			THROTTLE_DELAY;
-
-		if (this.chatQueueTimeout) {
-			if (!this.chatQueue) this.chatQueue = []; // this should never happen
-			if (this.chatQueue.length >= THROTTLE_BUFFER_LIMIT - 1) {
-				connection.sendTo(
-					room,
-					`|raw|<strong class="message-throttle-notice">Your message was not sent because you've been typing too quickly.</strong>`
-				);
-				return false;
-			} else {
-				this.chatQueue.push([message, room ? room.roomid : '', connection]);
-			}
-		} else if (now < this.lastChatMessage + throttleDelay) {
-			this.chatQueue = [[message, room ? room.roomid : '', connection]];
-			this.startChatQueue(throttleDelay - (now - this.lastChatMessage));
-		} else {
-			this.lastChatMessage = now;
-			Monitor.activeIp = connection.ip;
-			Chat.parse(message, room, this, connection);
-			Monitor.activeIp = null;
-		}
-	}
 	startChatQueue(delay: number | null = null) {
 		if (delay === null) {
 			delay = (this.isPublicBot ? THROTTLE_DELAY_PUBLIC_BOT : this.trusted ? THROTTLE_DELAY_TRUSTED :
@@ -1453,7 +1411,7 @@ export class User extends Chat.MessageContext {
 		}
 
 		this.chatQueueTimeout = setTimeout(
-			() => this.processChatQueue(),
+			() => void this.processChatQueue(),
 			delay
 		);
 	}
@@ -1464,7 +1422,7 @@ export class User extends Chat.MessageContext {
 			this.chatQueueTimeout = null;
 		}
 	}
-	processChatQueue(): void {
+	async processChatQueue(): Promise<void> {
 		this.chatQueueTimeout = null;
 		if (!this.chatQueue) return;
 		const queueElement = this.chatQueue.shift();
@@ -1484,18 +1442,14 @@ export class User extends Chat.MessageContext {
 
 		const room = Rooms.get(roomid);
 		if (room || !roomid) {
-			Monitor.activeIp = connection.ip;
-			Chat.parse(message, room, this, connection);
-			Monitor.activeIp = null;
-		} else {
-			// room no longer exists; do nothing
-		}
+			await Chat.parse(message, room, this, connection);
+		} // room no longer exists
 
 		const throttleDelay = this.isPublicBot ? THROTTLE_DELAY_PUBLIC_BOT : this.trusted ? THROTTLE_DELAY_TRUSTED :
 			THROTTLE_DELAY;
 
 		if (this.chatQueue.length) {
-			this.chatQueueTimeout = setTimeout(() => this.processChatQueue(), throttleDelay);
+			this.chatQueueTimeout = setTimeout(() => void this.processChatQueue(), throttleDelay);
 		} else {
 			this.chatQueue = null;
 		}
@@ -1695,32 +1649,7 @@ function socketReceive(worker: ProcessManager.StreamWorker, workerid: number, so
 	message = message.slice(pipeIndex + 1);
 
 	const room = Rooms.get(roomId) || null;
-	const multilineMessage = Chat.multiLinePattern.test(message);
-	if (multilineMessage) {
-		user.chat(multilineMessage, room, connection);
-		return;
-	}
-
-	const lines = message.split('\n');
-	if (!lines[lines.length - 1]) lines.pop();
-	// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-	const maxLineCount = (
-		user.can('bypassall') ? THROTTLE_MULTILINE_WARN_ADMIN :
-		(user.isStaff || (room && room.auth.isStaff(user.id))) ?
-			THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN
-	);
-	if (lines.length > maxLineCount && !Config.nothrottle) {
-		connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
-		return;
-	}
-	// Emergency logging
-	if (Config.emergency) {
-		void FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
-	}
-
-	for (const line of lines) {
-		if (user.chat(line, room, connection) === false) break;
-	}
+	void Chat.receive(message, room, connection);
 }
 
 const users = new Map<ID, User>();
@@ -1763,4 +1692,7 @@ export const Users = {
 		void logGhostConnections(7 * 24 * 60 * MINUTES);
 	}, 7 * 24 * 60 * MINUTES),
 	socketConnect,
+	THROTTLE_DELAY,
+	THROTTLE_DELAY_TRUSTED,
+	THROTTLE_DELAY_PUBLIC_BOT,
 };

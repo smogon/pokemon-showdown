@@ -146,6 +146,10 @@ const MAX_MESSAGE_LENGTH = 1000;
 
 const BROADCAST_COOLDOWN = 20 * 1000;
 const MESSAGE_COOLDOWN = 5 * 60 * 1000;
+const THROTTLE_MULTILINE_WARN = 3;
+const THROTTLE_MULTILINE_WARN_STAFF = 6;
+const THROTTLE_BUFFER_LIMIT = 6;
+const THROTTLE_MULTILINE_WARN_ADMIN = 25;
 
 const MAX_PARSE_RECURSION = 10;
 
@@ -1507,7 +1511,7 @@ export class CommandContext extends MessageContext {
 	}
 	refreshPage(pageid: string) {
 		if (this.connection.openPages?.has(pageid)) {
-			this.parse(`/join view-${pageid}`);
+			void this.parse(`/join view-${pageid}`);
 		}
 	}
 	closePage(pageid: string) {
@@ -1879,28 +1883,85 @@ export const Chat = new class {
 	 * @param user - the user that sent the message
 	 * @param connection - the connection the user sent the message from
 	 */
-	parse(message: string, room: Room | null | undefined, user: User, connection: Connection) {
+	async parse(message: string, room: Room | null | undefined, user: User, connection: Connection) {
+		Monitor.activeIp = connection.ip;
 		Chat.loadPlugins();
 
 		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({message, room, user, connection});
 		const start = Date.now();
-		const result = context.parse();
-		if (typeof result?.then === 'function') {
-			void result.then(() => {
-				this.logSlowMessage(start, context);
-			});
-		} else {
-			this.logSlowMessage(start, context);
-		}
+		const result = await context.parse();
+		this.logSlowMessage(start, context);
 		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
 			for (const [handler, numMessages] of room.nthMessageHandlers) {
 				if (room.messagesSent % numMessages === 0) handler(room, message);
 			}
 		}
-
+		Monitor.activeIp = null;
 		return result;
+	}
+
+	async queue(message: string, room: Room | null, connection: Connection) {
+		const user = connection.user;
+		const now = Date.now();
+		const noThrottle = user.hasSysopAccess() || Config.nothrottle;
+
+		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || noThrottle) {
+			// certain commands are exempt from the queue
+			await Chat.parse(message, room, user, connection);
+			if (noThrottle) return;
+			return false; // but end the loop here
+		}
+
+		const throttleDelay = user.isPublicBot ? Users.THROTTLE_DELAY_PUBLIC_BOT : user.trusted ? Users.THROTTLE_DELAY_TRUSTED :
+			Users.THROTTLE_DELAY;
+		if (user.chatQueueTimeout) {
+			if (!user.chatQueue) user.chatQueue = []; // this should never happen
+			if (user.chatQueue.length >= THROTTLE_BUFFER_LIMIT - 1) {
+				connection.sendTo(
+					room,
+					`|raw|<strong class="message-throttle-notice">Your message was not sent because you've been typing too quickly.</strong>`
+				);
+				return false;
+			} else {
+				user.chatQueue.push([message, room ? room.roomid : '', connection]);
+			}
+		} else if (now < user.lastChatMessage + throttleDelay) {
+			user.chatQueue = [[message, room ? room.roomid : '', connection]];
+			user.startChatQueue(throttleDelay - (now - user.lastChatMessage));
+		} else {
+			user.lastChatMessage = now;
+			await Chat.parse(message, room, user, connection);
+		}
+	}
+
+	async receive(message: string, room: Room | null, connection: Connection) {
+		const user = connection.user;
+		const multilineMessage = Chat.multiLinePattern.test(message);
+		if (multilineMessage) {
+			return Chat.queue(multilineMessage, room, connection);
+		}
+
+		const lines = message.split('\n');
+		if (!lines[lines.length - 1]) lines.pop();
+		const maxLineCount = (
+			user.can('bypassall') ? THROTTLE_MULTILINE_WARN_ADMIN :
+			(user.isStaff || (room?.auth.isStaff(user.id))) ?
+				THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN
+		);
+		if (lines.length > maxLineCount && !Config.nothrottle) {
+			connection.popup(`You're sending too many lines at once. Try using a paste service like [[Pastebin]].`);
+			return;
+		}
+		// Emergency logging
+		if (Config.emergency) {
+			void FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${room}|${message}\n`);
+		}
+
+		for (const line of lines) {
+			if ((await Chat.queue(line, room, connection)) === false) break;
+		}
 	}
 	logSlowMessage(start: number, context: CommandContext) {
 		const timeUsed = Date.now() - start;
