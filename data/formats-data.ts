@@ -4626,7 +4626,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	kommoo: {
 		tier: "UUBL",
 		doublesTier: "DOU",
-		natDexTier: "UU",
+		natDexTier: "OU",
 	},
 	kommoototem: {
 		isNonstandard: "Past",
