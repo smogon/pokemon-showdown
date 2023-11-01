@@ -2119,6 +2119,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Partners in Crime Random Battle",
 		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
+
 		mod: 'partnersincrime',
 		gameType: 'doubles',
 		team: 'random',
