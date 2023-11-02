@@ -9,6 +9,7 @@ import {EXPIRY_TIME, SEEN_EXPIRY_TIME, MAX_PENDING} from '.';
 import {Config} from '../config-loader';
 import {GlobalAuth, Auth} from '../user-groups';
 
+if (!global.Config) global.Config = Config;
 const globalAuth = new GlobalAuth(); // for blockpms
 
 function authAtLeast(userid: ID, symbol: GroupSymbol) {

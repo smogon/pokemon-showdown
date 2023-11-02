@@ -84,7 +84,7 @@ export const PrivateMessages = new class {
 		}
 	}
 	private getIdentity(user: User | string) {
-		user = Users.get(user) || user;
+		user = Users.getExact(user) || user;
 		if (typeof user === 'object') {
 			return user.getIdentity();
 		}
