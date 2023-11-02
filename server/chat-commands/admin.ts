@@ -1224,11 +1224,13 @@ export const commands: Chat.ChatCommands = {
 
 		const battleRooms = [...Rooms.rooms.values()].filter(x => x.battle?.rated && !x.battle?.ended);
 		let buf = `Total remaining rated battles: <b>${battleRooms.length}</b>`;
+		if (battleRooms.length > 10) buf += `<details><summary>View all battles</summary>`;
 		for (const battle of battleRooms) {
 			buf += `<br />`;
 			buf += `<a href="${battle.roomid}">${battle.title}</a>`;
 			if (battle.settings.isPrivate) buf += ' (Private)';
 		}
+		if (battleRooms.length > 10) buf += `</details>`;
 		this.sendReplyBox(buf);
 	},
 	remainingbattleshelp: [
