@@ -1490,6 +1490,8 @@ export class GlobalRoomState {
 			const ruleTable = Dex.formats.getRuleTable(format);
 			const level = ruleTable.adjustLevel || ruleTable.adjustLevelDown || ruleTable.maxLevel;
 			if (level === 50) displayCode |= 16;
+			 // 32 was previously used for Multi Battles
+			if (format.bestOfDefault) displayCode |= 64;
 			this.formatList += ',' + displayCode.toString(16);
 		}
 		return this.formatList;
