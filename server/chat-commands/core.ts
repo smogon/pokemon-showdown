@@ -274,7 +274,14 @@ export const commands: Chat.ChatCommands = {
 			this.room = null;
 		} else if (!targetUser) {
 			if (Chat.PrivateMessages.offlineIsEnabled) {
-				return this.parse(`/offlinemsg ${targetUsername},${message}`);
+				if (user.lastCommand === 'pm') {
+					// don't delete lastCommand so they can just keep sending pms
+					return this.parse(`/offlinemsg ${targetUsername},${message}`);
+				}
+				user.lastCommand = 'pm';
+				return this.errorReply(
+					this.tr`User ${targetUsername} is offline. If you still want to PM them, send the message again, or use /offlinemsg.`
+				);
 			}
 			let error = this.tr`User ${targetUsername} not found. Did you misspell their name?`;
 			error = `|pm|${this.user.getIdentity()}| ${targetUsername}|/error ${error}`;
@@ -286,7 +293,17 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (targetUser && !targetUser.connected) {
-			return this.errorReply(this.tr`User ${targetUsername} is offline.`);
+			if (Chat.PrivateMessages.offlineIsEnabled) {
+				if (user.lastCommand === 'pm') {
+					// don't delete lastCommand so they can just keep sending pms
+					return this.parse(`/offlinemsg ${targetUser.id},${message}`);
+				}
+				user.lastCommand = 'pm';
+				return this.errorReply(
+					this.tr`User ${targetUsername} is offline. If you still want to PM them, send the message again, or use /offlinemsg.`
+				);
+			}
+			return this.errorReply(`${targetUsername} is offline.`);
 		}
 
 		return this.parse(message);

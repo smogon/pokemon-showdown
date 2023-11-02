@@ -18,7 +18,7 @@ export const MAX_PENDING = 20;
 // no idea why.
 export const PM = SQL(module, {
 	file: 'databases/offline-pms.db',
-	extension: 'server/private-messages/database.ts',
+	extension: 'dist/server/private-messages/database.js',
 });
 
 export interface ReceivedPM {
