@@ -1380,9 +1380,7 @@ export class Pokemon {
 						this.battle.add('-primal', this, species.requiredItem);
 					}
 				} else {
-					if (source.megaEvolves) {
-						this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
-					}
+					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 				}
 			} else if (source.effectType === 'Status') {
