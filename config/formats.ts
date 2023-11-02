@@ -2853,7 +2853,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 6] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286277/">ORAS Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462707/">ORAS Ubers</a>`,
 		],
 
 		mod: 'gen6',
@@ -3077,9 +3077,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3676539/">SS Ubers Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3675564/">SS Ubers Sample Teams</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3675194/">SS Ubers Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462704/">SS Ubers</a>`,
 		],
 
 		mod: 'gen8',
@@ -3380,7 +3378,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 7] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286276/">USM Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462706/">USM Ubers</a>`,
 		],
 
 		mod: 'gen7',
@@ -3965,7 +3963,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 5] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286278/">BW2 Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462708/">BW2 Ubers</a>`,
 		],
 
 		mod: 'gen5',
@@ -4176,7 +4174,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 4] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286279/">DPP Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462709/">DPP Ubers</a>`,
 		],
 
 		mod: 'gen4',
@@ -4352,7 +4350,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 3] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286280/">ADV Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462710/">ADV Ubers</a>`,
 		],
 
 		mod: 'gen3',
@@ -4434,7 +4432,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 2] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286282/">GSC Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462711/">GSC Ubers</a>`,
 		],
 
 		mod: 'gen2',
@@ -4514,7 +4512,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 1] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/8286283/">RBY Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462712/">RBY Ubers</a>`,
 		],
 
 		mod: 'gen1',
