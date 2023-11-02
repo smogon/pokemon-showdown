@@ -334,7 +334,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (userid.startsWith('guest')) {
 			return this.errorReply('You cannot send offline PMs to guests.');
 		}
-		if (Users.get(userid)) {
+		if (Users.get(userid)?.connected) {
 			this.sendReply(`That user is online, so a normal PM is being sent.`);
 			return this.parse(`/pm ${userid}, ${message}`);
 		}
