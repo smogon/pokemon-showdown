@@ -8,7 +8,7 @@
 const assert = require('assert').strict;
 const {makeUser} = require('../../users-utils');
 
-const {Filters} = require('../../../server/chat-plugins/chat-monitor');
+const {Filters} = require('../../../dist/server/chat-plugins/chat-monitor');
 
 describe('Chat monitor', () => {
 	describe('regex generator', () => {

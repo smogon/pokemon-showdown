@@ -20,7 +20,7 @@ describe('Wandering Spirit', function () {
 	});
 
 	it(`should not activate while Dynamaxed`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'Decidueye', ability: 'overgrow', moves: ['shadowsneak']},
 		], [
 			{species: 'Runerigus', ability: 'wanderingspirit', moves: ['bodypress']},

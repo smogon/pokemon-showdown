@@ -544,7 +544,7 @@ export const commands: Chat.ChatCommands = {
 		// If used in pms, staff, help tickets or battles, log the warn to the global modlog.
 		const globalWarn = (
 			!room || ['staff', 'adminlog'].includes(room.roomid) ||
-			room.roomid.startsWith('help-') || (room.battle && !room.parent)
+			room.roomid.startsWith('help-') || (room.battle && (!room.parent || room.parent.type !== 'chat'))
 		);
 
 		const {targetUser, inputUsername, targetUsername, rest: reason} = this.splitUser(target);
@@ -793,7 +793,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-		this.addModAction(`${name} was banned ${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
+		this.addModAction(`${name} was banned${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
 
 		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
 		const affected = Punishments.roomBan(room, targetUser, time, null, privateReason);
@@ -869,7 +869,7 @@ export const commands: Chat.ChatCommands = {
 
 		if (!targetUser && !Punishments.search(userid).length && !force) {
 			return this.errorReply(
-				`User '${targetUsername}' not found. Use \`\`/forcelock\`\` if you need to to lock them anyway.`
+				`User '${targetUsername}' not found. Use \`\`/force${month ? 'month' : (week ? 'week' : '')}lock\`\` if you need to to lock them anyway.`
 			);
 		}
 		if (reason.length > MAX_REASON_LENGTH) {
@@ -898,7 +898,7 @@ export const commands: Chat.ChatCommands = {
 				Monitor.log(`[CrisisMonitor] ${name} was locked by ${user.name} and demoted from ${from.join(", ")}.`);
 				this.globalModlog("CRISISDEMOTE", targetUser, ` from ${from.join(", ")}`);
 			} else {
-				return this.sendReply(`${name} is a trusted user. If you are sure you would like to lock them use /forcelock.`);
+				return this.sendReply(`${name} is a trusted user. If you are sure you would like to lock them use /force${month ? 'month' : (week ? 'week' : '')}lock.`);
 			}
 		} else if (force && targetUser) {
 			return this.errorReply(`Use /lock; ${name} is not a trusted user and is online.`);
@@ -1200,8 +1200,60 @@ export const commands: Chat.ChatCommands = {
 	},
 	deroomvoiceallhelp: [`/deroomvoiceall - Devoice all roomvoiced users. Requires: # &`],
 
+	// this is a separate command for two reasons
+	// a - yearticketban is preferred over /ht yearban
+	// b - it would be messy to switch
+	//   from both Punishments.punishRange and #punish in /ht ban
+	//   since this takes ips / userids
+	async yearticketban(target, room, user) {
+		this.checkCan('rangeban');
+		target = target.trim();
+		let reason = '';
+		[target, reason] = this.splitOne(target);
+		let isIP = false;
+		let descriptor = '';
+		if (IPTools.ipRangeRegex.test(target)) {
+			isIP = true;
+			if (IPTools.ipRegex.test(target)) {
+				descriptor = 'the IP ';
+			} else {
+				descriptor = 'the IP range ';
+			}
+		} else {
+			target = toID(target);
+		}
+		if (!target) return this.parse(`/help yearticketban`);
+		const expireTime = Date.now() + 365 * 24 * 60 * 60 * 1000;
+		if (isIP) {
+			Punishments.punishRange(target, reason, expireTime, 'TICKETBAN');
+		} else {
+			await Punishments.punish(target as ID, {
+				type: 'TICKETBAN',
+				id: target as ID,
+				expireTime,
+				reason,
+				rest: [],
+			}, true);
+		}
+		this.addGlobalModAction(
+			`${user.name} banned ${descriptor}${target} from opening tickets for a year` +
+			`${reason ? ` (${reason})` : ""}`
+		);
+		this.globalModlog(
+			'YEARTICKETBAN',
+			isIP ? null : target,
+			reason,
+			isIP ? target : undefined
+		);
+	},
+	yearticketbanhelp: [
+		`/yearticketban [IP/userid] - Ban an IP or a userid from opening tickets for a year. `,
+		`Accepts wildcards to ban ranges. Requires: &`,
+	],
+
 	rangeban: 'banip',
-	banip(target, room, user) {
+	yearbanip: 'banip',
+	banip(target, room, user, connection, cmd) {
 		const [ip, reason] = this.splitOne(target);
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help banip');
 		if (!reason) return this.errorReply("/banip requires a ban reason");
@@ -1209,21 +1261,31 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('rangeban');
 		const ipDesc = `IP ${(ip.endsWith('*') ? `range ` : ``)}${ip}`;
 
+		const year = cmd.startsWith('year');
+		const time = year ? Date.now() + 365 * 24 * 60 * 60 * 1000 : null;
+
 		const curPunishment = Punishments.ipSearch(ip, 'BAN');
-		if (curPunishment?.type === 'BAN') {
+		if (curPunishment?.type === 'BAN' && !time) {
 			return this.errorReply(`The ${ipDesc} is already temporarily banned.`);
 		}
-		Punishments.banRange(ip, reason);
+		Punishments.punishRange(ip, reason, time, 'BAN');
 
+		const duration = year ? 'year' : 'hour';
 		if (!this.room || this.room.roomid !== 'staff') {
-			this.sendReply(`You hour-banned the ${ipDesc}.`);
+			this.sendReply(`You ${duration}-banned the ${ipDesc}.`);
 		}
 		this.room = Rooms.get('staff') || null;
-		this.addModAction(`${user.name} hour-banned the ${ipDesc}: ${reason}`);
-		this.globalModlog(`RANGEBAN`, null, `${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`);
+		this.addGlobalModAction(
+			`${user.name} ${duration}-banned the ${ipDesc}: ${reason}`
+		);
+		this.globalModlog(
+			`${year ? "YEAR" : ""}RANGEBAN`,
+			null,
+			`${ip.endsWith('*') ? ip : `[${ip}]`}: ${reason}`
+		);
 	},
 	baniphelp: [
-		`/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
+		`/banip [ip] OR /yearbanip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges.`,
 		`Existing users on the IP will not be banned. Requires: &`,
 	],
 
@@ -1298,11 +1360,7 @@ export const commands: Chat.ChatCommands = {
 		const type = cmd.includes('name') ? 'NAMELOCK' : 'LOCK';
 		Punishments.punishRange(ip, reason, time, type);
 
-		if (year) {
-			this.addGlobalModAction(`${user.name} year-${type.toLowerCase()}ed the ${ipDesc}: ${reason}`);
-		} else {
-			this.addGlobalModAction(`${user.name} hour-${type.toLowerCase()}ed the ${ipDesc}: ${reason}`);
-		}
+		this.addGlobalModAction(`${user.name} ${year ? 'year' : 'hour'}-${type.toLowerCase()}ed the ${ipDesc}: ${reason}`);
 		this.globalModlog(
 			`${year ? 'YEAR' : 'RANGE'}${type}`,
 			null,
@@ -1332,7 +1390,16 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('receiveauthmessages', null, room);
 		target = target.replace(/\n/g, "; ");
-		const targeted = /\[([^\]]+)\]/.exec(target)?.[1] || null;
+		let targeted = /\[([^\]]+)\]/.exec(target)?.[1] || null;
+		if (!targeted) {
+			// allow `name, note` and `name - note` syntax
+			targeted = target.split(/[,-]/)[0]?.trim() || "";
+			if (!targeted || !(
+				Users.get(targeted) || Punishments.search(target).length || IPTools.ipRegex.test(targeted)
+			) || toID(targeted) === toID(target)) {
+				targeted = null;
+			}
+		}
 		let targetUserid, targetIP;
 
 		if (targeted) {
@@ -1862,11 +1929,11 @@ export const commands: Chat.ChatCommands = {
 
 		if (!targetUser && !force) {
 			return this.errorReply(
-				`User '${targetUsername}' not found. Use \`\`/forcenamelock\`\` if you need to namelock them anyway.`
+				`User '${targetUsername}' not found. Use \`\`/force${week ? 'week' : ''}namelock\`\` if you need to namelock them anyway.`
 			);
 		}
 		if (targetUser && targetUser.id !== toID(inputUsername) && !force) {
-			return this.errorReply(`${inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
+			return this.errorReply(`${inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /force${week ? 'week' : ''}namelock.`);
 		}
 		this.checkCan('forcerename', userid);
 		if (targetUser?.namelocked && !week) {
@@ -2023,6 +2090,9 @@ export const commands: Chat.ChatCommands = {
 	bl: 'blacklist',
 	forceblacklist: 'blacklist',
 	forcebl: 'blacklist',
+	permanentblacklist: 'blacklist',
+	permablacklist: 'blacklist',
+	permabl: 'blacklist',
 	blacklist(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		if (!target) return this.parse('/help blacklist');
@@ -2072,9 +2142,16 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-		this.privateModAction(`${name} was blacklisted from ${room.title} by ${user.name}.${reason ? ` (${reason})` : ''}`);
 
-		const affected = Punishments.roomBlacklist(room, targetUser, null, null, reason);
+		const expireTime = cmd.includes('perma') ? Date.now() + (10 * 365 * 24 * 60 * 60 * 1000) : null;
+		const action = expireTime ? 'PERMABLACKLIST' : 'BLACKLIST';
+
+		this.privateModAction(
+			`${name} was blacklisted from ${room.title} by ${user.name}${expireTime ? ' for ten years' : ''}.` +
+			`${reason ? ` (${reason})` : ''}`
+		);
+
+		const affected = Punishments.roomBlacklist(room, targetUser, expireTime, null, reason);
 
 		if (!room.settings.isPrivate && room.persist) {
 			const acAccount = (targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
@@ -2089,15 +2166,16 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (!room.settings.isPrivate && room.persist) {
-			this.globalModlog("BLACKLIST", targetUser, reason);
+			this.globalModlog(action, targetUser, reason);
 		} else {
 			// Room modlog only
-			this.modlog("BLACKLIST", targetUser, reason);
+			this.modlog(action, targetUser, reason);
 		}
 		return true;
 	},
 	blacklisthelp: [
 		`/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # &`,
+		`/permablacklist OR /permabl - blacklist a user for 10 years. Requires: # &`,
 		`/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # &`,
 		`/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # &`,
 		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # &`,
@@ -2256,6 +2334,7 @@ export const commands: Chat.ChatCommands = {
 	ungroupchatbanhelp: [`/ungroupchatban [user] - Allows a groupchatbanned user to use groupchats again. Requires: % @ &`],
 
 	nameblacklist: 'blacklistname',
+	permablacklistname: 'blacklistname',
 	blacklistname(target, room, user) {
 		room = this.requireRoom();
 		if (!target) return this.parse('/help blacklistname');
@@ -2279,6 +2358,8 @@ export const commands: Chat.ChatCommands = {
 		if (duplicates.length) {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);
 		}
+		const expireTime = this.cmd.includes('perma') ? Date.now() + (10 * 365 * 24 * 60 * 60 * 1000) : null;
+		const action = expireTime ? 'PERMANAMEBLACKLIST' : 'NAMEBLACKLIST';
 
 		for (const userid of targets) {
 			if (!userid) return this.errorReply(`User '${userid}' is not a valid userid.`);
@@ -2286,24 +2367,26 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`/blacklistname - Access denied: ${userid} is of equal or higher authority than you.`);
 			}
 
-			Punishments.roomBlacklist(room, userid, null, null, reason);
+			Punishments.roomBlacklist(room, userid, expireTime, null, reason);
 
 			const trusted = Users.isTrusted(userid);
 			if (trusted && room.settings.isPrivate !== true) {
 				Monitor.log(`[CrisisMonitor] Trusted user ${userid}${(trusted !== userid ? ` (${trusted})` : ``)} was nameblacklisted from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 			}
 			if (!room.settings.isPrivate && room.persist) {
-				this.globalModlog("NAMEBLACKLIST", userid, reason);
+				this.globalModlog(action, userid, reason);
 			}
 		}
 
 		this.privateModAction(
-			`${targets.join(', ')}${Chat.plural(targets, " were", " was")} nameblacklisted from ${room.title} by ${user.name}.`
+			`${targets.join(', ')}${Chat.plural(targets, " were", " was")} nameblacklisted from ${room.title} by ${user.name}` +
+			`${expireTime ? ' for ten years' : ''}.`
 		);
 		return true;
 	},
 	blacklistnamehelp: [
 		`/blacklistname OR /nameblacklist [name1, name2, etc.] | reason - Blacklists all name(s) from the room you are in for a year. Requires: # &`,
+		`/permablacklistname [name1, name2, etc.] | reason - Blacklists all name(s) from the room you are in for 10 years. Requires: # &`,
 	],
 
 	unab: 'unblacklist',

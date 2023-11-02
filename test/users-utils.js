@@ -1,7 +1,7 @@
 'use strict';
 
 /** @type {typeof import('../lib/streams').ObjectReadWriteStream} */
-const ObjectReadWriteStream = require('../lib/streams').ObjectReadWriteStream;
+const ObjectReadWriteStream = require('../dist/lib/streams').ObjectReadWriteStream;
 
 /** @extends {ObjectReadWriteStream<string>} */
 class WorkerStream extends ObjectReadWriteStream {
@@ -169,5 +169,13 @@ function makeUser(name, connectionOrIp) {
 	return user;
 }
 
+function destroyUser(user) {
+	if (!user || !user.connected) return false;
+	user.resetName();
+	user.disconnectAll();
+	user.destroy();
+}
+
 exports.makeConnection = makeConnection;
 exports.makeUser = makeUser;
+exports.destroyUser = destroyUser;

@@ -25,7 +25,8 @@ describe('Ice Face', function () {
 	});
 
 	it(`should not trigger if the Pokemon was KOed`, function () {
-		battle = common.createBattle([[
+		// TODO: Make compatible with gen 9
+		battle = common.gen(8).createBattle([[
 			{species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk']},
 		], [
 			{species: 'Weavile', moves: ['icepunch']},

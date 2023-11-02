@@ -22,23 +22,6 @@ describe('Protean', function () {
 		assert(cinder.hasType('Fighting'));
 	});
 
-	it(`should activate on both turns of a charge move`, function () {
-		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'protean', moves: ['bounce']},
-		], [
-			{species: 'Helioptile', ability: 'noguard', moves: ['soak']},
-		]]);
-		const wynaut = battle.p1.active[0];
-
-		//Turn 1 of Bounce
-		battle.makeChoices();
-		assert(wynaut.hasType('Flying'));
-
-		//Turn 2 of Bounce
-		battle.makeChoices();
-		assert(wynaut.hasType('Flying'));
-	});
-
 	it(`should not change the user's type when using moves that fail earlier than Protean will activate`, function () {
 		battle = common.createBattle([[
 			{species: 'Kecleon', ability: 'protean', moves: ['fling', 'suckerpunch', 'steelroller', 'aurawheel']},
@@ -115,5 +98,24 @@ describe('Protean', function () {
 		assert(kecleon.hasType('Normal'), `Protean changed typing when a exploding move was blocked by Damp.`);
 
 		// More examples: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8548957
+	});
+
+	describe('Gen 6-8', function () {
+		it(`should activate on both turns of a charge move`, function () {
+			battle = common.gen(8).createBattle([[
+				{species: 'Wynaut', ability: 'protean', moves: ['bounce']},
+			], [
+				{species: 'Helioptile', ability: 'noguard', moves: ['soak']},
+			]]);
+			const wynaut = battle.p1.active[0];
+
+			//Turn 1 of Bounce
+			battle.makeChoices();
+			assert(wynaut.hasType('Flying'));
+
+			//Turn 2 of Bounce
+			battle.makeChoices();
+			assert(wynaut.hasType('Flying'));
+		});
 	});
 });

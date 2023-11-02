@@ -26,6 +26,9 @@ export class PostgresDatabase {
 			this.pool = null!;
 		}
 	}
+	destroy() {
+		return this.pool.end();
+	}
 	async query(statement: string | SQLStatement, values?: any[]) {
 		if (!this.pool) {
 			throw new Error(`Attempting to use postgres without 'pg' installed`);
@@ -42,7 +45,7 @@ export class PostgresDatabase {
 	static getConfig() {
 		let config: AnyObject = {};
 		try {
-			config = require('../config/config').usepostgres;
+			config = require(FS.ROOT_PATH + '/config/config').usepostgres;
 			if (!config) throw new Error('Missing config for pg database');
 		} catch (e: any) {}
 		return config;

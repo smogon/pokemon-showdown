@@ -1,6 +1,6 @@
 "use strict";
 const assert = require('assert').strict;
-const {PostgresDatabase} = require('../../lib');
+const {PostgresDatabase} = require('../../dist/lib');
 
 function testMod(mod) {
 	try {

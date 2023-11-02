@@ -2,7 +2,7 @@
 	"compilerOptions": {
 			"lib": ["es2020"],
 			"emitDeclarationOnly": true,
-			"outDir": "../.sim-dist",
+			"outDir": "../dist",
 			"declaration": true,
 			"target": "esnext",
 			"module": "commonjs",

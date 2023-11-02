@@ -387,6 +387,7 @@ export class Elimination {
 
 		if (loser.losses === this.maxSubtrees) {
 			loser.isEliminated = true;
+			loser.sendRoom(`|tournament|update|{"isJoined":false}`);
 			loser.unlinkUser();
 		}
 

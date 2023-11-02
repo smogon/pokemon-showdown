@@ -1,13 +1,22 @@
 import RandomGen2Teams from '../gen2/random-teams';
 import {Utils} from '../../../lib';
-import {MoveCounter} from '../../random-teams';
 
 interface HackmonsCupEntry {
 	types: string[];
 	baseStats: StatsTable;
 }
 
+interface Gen1RandomBattleSpecies {
+	level?: number;
+	moves?: ID[];
+	essentialMoves?: ID[];
+	exclusiveMoves?: ID[];
+	comboMoves?: ID[];
+}
+
 export class RandomGen1Teams extends RandomGen2Teams {
+	randomData: {[species: string]: Gen1RandomBattleSpecies} = require('./random-data.json');
+
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -123,14 +132,15 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		// Now let's store what we are getting.
 		const typeCount: {[k: string]: number} = {};
-		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0};
+		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0, Fire: 0};
 		let uberCount = 0;
 		let nuCount = 0;
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData))[0];
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
-			if (!species.exists || !species.randomBattleMoves) continue;
+			if (!species.exists) continue;
+
 			// Only one Ditto is allowed per battle in Generation 1,
 			// as it can cause an endless battle if two Dittos are forced
 			// to face each other.
@@ -237,29 +247,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		return pokemon;
 	}
 
-	shouldCullMove(move: Move, types: Set<string>, moves: Set<string>, counter: MoveCounter): {cull: boolean} {
-		switch (move.id) {
-		// bit redundant to have both, but neither particularly better than the other
-		case 'hydropump':
-			return {cull: moves.has('surf')};
-		case 'surf':
-			return {cull: moves.has('hydropump')};
-
-		// other redundancies that aren't handled within the movesets themselves
-		case 'selfdestruct':
-			return {cull: moves.has('rest')};
-		case 'rest':
-			return {cull: moves.has('selfdestruct')};
-		case 'sharpen': case 'swordsdance':
-			return {cull: counter.get('Special') > counter.get('Physical') || !counter.get('Physical') || moves.has('growth')};
-		case 'growth':
-			return {cull: counter.get('Special') < counter.get('Physical') || !counter.get('Special') || moves.has('swordsdance')};
-		case 'poisonpowder': case 'stunspore': case 'sleeppowder': case 'toxic':
-			return {cull: counter.get('Status') > 1};
-		}
-		return {cull: false};
-	}
-
 	/**
 	 * Random set generation for Gen 1 Random Battles.
 	 */
@@ -267,31 +254,28 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		species = this.dex.species.get(species);
 		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
-		const movePool = species.randomBattleMoves ? species.randomBattleMoves.slice() : [];
+		const data = this.randomData[species.id];
+		const movePool = data.moves?.slice() || [];
 		const moves = new Set<string>();
-		const types = new Set(species.types);
-
-		const counter = new MoveCounter();
-
-		// Moves that boost Attack:
-		const PhysicalSetup = ['swordsdance', 'sharpen'];
-		// Moves which boost Special Attack:
-		const SpecialSetup = ['amnesia', 'growth'];
 
 		// Either add all moves or add none
-		if (species.comboMoves && species.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
-			for (const m of species.comboMoves) moves.add(m);
+		if (data.comboMoves && data.comboMoves.length <= this.maxMoveCount && this.randomChance(1, 2)) {
+			for (const m of data.comboMoves) moves.add(m);
 		}
 
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
-		if (moves.size < this.maxMoveCount && species.exclusiveMoves) {
-			moves.add(this.sample(species.exclusiveMoves));
+		// This is added before the essential moves so that combos containing three moves can roll an exclusive move
+		if (moves.size < this.maxMoveCount && data.exclusiveMoves) {
+			moves.add(this.sample(data.exclusiveMoves));
 		}
 
-		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
-		if (moves.size < this.maxMoveCount && species.essentialMove) {
-			moves.add(species.essentialMove);
+		// Add the mandatory moves.
+		if (moves.size < this.maxMoveCount && data.essentialMoves) {
+			for (const moveid of data.essentialMoves) {
+				moves.add(moveid);
+				if (moves.size === this.maxMoveCount) break;
+			}
 		}
 
 		while (moves.size < this.maxMoveCount && movePool.length) {
@@ -300,58 +284,45 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				const moveid = this.sampleNoReplace(movePool);
 				moves.add(moveid);
 			}
-
-			// Only do move choosing if we have backup moves in the pool...
-			if (movePool.length) {
-				for (const setMoveid of moves) {
-					const move = this.dex.moves.get(setMoveid);
-					const moveid = move.id;
-					if (!move.damage && !move.damageCallback) counter.add(move.category);
-					if (PhysicalSetup.includes(moveid)) counter.add('physicalsetup');
-					if (SpecialSetup.includes(moveid)) counter.add('specialsetup');
-				}
-
-				for (const moveid of moves) {
-					if (moveid === species.essentialMove) continue;
-					const move = this.dex.moves.get(moveid);
-					if (
-						(!species.essentialMove || moveid !== species.essentialMove) &&
-						this.shouldCullMove(move, types, moves, counter).cull
-					) {
-						moves.delete(moveid);
-						break;
-					}
-					counter.add(move.category);
-				}
-			} // End of the check for more than 4 moves on moveset.
 		}
 
-		const levelScale: {[k: string]: number} = {
-			LC: 88,
-			NFE: 80,
-			PU: 77,
-			NU: 77,
-			NUBL: 76,
-			UU: 74,
-			UUBL: 71,
-			OU: 68,
-			Uber: 65,
-		};
+		const level = this.adjustLevel || data.level || 80;
 
-		const customScale: {[k: string]: number} = {
-			Mewtwo: 62,
-			Caterpie: 100, Metapod: 100, Weedle: 100, Kakuna: 100, Magikarp: 100,
-			Ditto: 88,
-		};
-		const level = this.adjustLevel || customScale[species.name] || levelScale[species.tier] || 80;
+		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
+		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+
+		// Should be able to use Substitute four times from full HP without fainting
+		if (moves.has('substitute')) {
+			while (evs.hp > 3) {
+				const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+				if (hp % 4 !== 0) break;
+				evs.hp -= 4;
+			}
+		}
+
+		// Minimize confusion damage
+		const noAttackStatMoves = [...moves].every(m => {
+			const move = this.dex.moves.get(m);
+			if (move.damageCallback || move.damage) return true;
+			return move.category !== 'Physical';
+		});
+		if (noAttackStatMoves && !moves.has('mimic') && !moves.has('transform')) {
+			evs.atk = 0;
+			// We don't want to lower the HP DV/IV
+			ivs.atk = 2;
+		}
+
+		// shuffle moves to add more randomness to camomons
+		const shuffledMoves = Array.from(moves);
+		this.prng.shuffle(shuffledMoves);
 
 		return {
 			name: species.name,
 			species: species.name,
-			moves: Array.from(moves),
+			moves: shuffledMoves,
 			ability: 'No Ability',
-			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
-			ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30},
+			evs,
+			ivs,
 			item: '',
 			level,
 			shiny: false,

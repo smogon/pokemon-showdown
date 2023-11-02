@@ -11,7 +11,7 @@ describe('G-Max Volcalith', function () {
 	});
 
 	it(`should not damage Rock-types`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
@@ -24,7 +24,7 @@ describe('G-Max Volcalith', function () {
 	});
 
 	it(`should deal damage for four turns, including the fourth turn`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
@@ -40,7 +40,7 @@ describe('G-Max Volcalith', function () {
 	});
 
 	it.skip(`should deal damage alongside Sea of Fire or G-Max Wildfire in the order those field effects were set`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk', 'grasspledge']},
 			{species: 'Wynaut', moves: ['sleeptalk', 'firepledge']},
@@ -61,7 +61,7 @@ describe('G-Max Volcalith', function () {
 	});
 
 	it(`should damage Pokemon in order of Speed`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
@@ -83,7 +83,7 @@ describe('G-Max Volcalith', function () {
 	});
 
 	it(`should deal damage before Black Sludge recovery/damage`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [
@@ -97,7 +97,7 @@ describe('G-Max Volcalith', function () {
 	});
 
 	it(`should deal damage before Grassy Terrain recovery`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		], [

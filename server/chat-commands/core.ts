@@ -17,6 +17,7 @@
 import {Utils} from '../../lib';
 import type {UserSettings} from '../users';
 import type {GlobalPermission} from '../user-groups';
+import {BestOfGame} from '../room-battle';
 
 export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 	userdetails(target, user, trustable) {
@@ -467,7 +468,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!target) return this.parse('/help status');
 
-		const maxLength = 52;
+		const maxLength = 70;
 		if (target.length > maxLength) {
 			return this.errorReply(this.tr`Your status is too long; it must be under ${maxLength} characters.`);
 		}
@@ -614,8 +615,15 @@ export const commands: Chat.ChatCommands = {
 		}
 		user.language = languageID;
 		user.update();
-		const language = Chat.languages.get(languageID);
-		return this.sendReply(this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`);
+		const languageName = Chat.languages.get(languageID);
+		const langRoom = Rooms.search(languageName || "");
+		let language = languageName;
+		if (langRoom) {
+			language = `<a href="/${langRoom.roomid}">${languageName}</a>`;
+		}
+		return this.sendReply(
+			`|html|` + this.tr`Pokémon Showdown will now be displayed in ${language} (except in language rooms).`
+		);
 	},
 	languagehelp: [
 		`/language - View your current language setting.`,
@@ -824,6 +832,68 @@ export const commands: Chat.ChatCommands = {
 		`!showteam hidestats - show the team you're using in the current battle, without displaying any stat-related information.`,
 		`!showset [number] - shows the set of the pokemon corresponding to that number (in original Team Preview order, not necessarily current order)`,
 	],
+
+	confirmready(target, room, user) {
+		const game = this.requireGame(BestOfGame);
+		game.confirmReady(user.id);
+	},
+
+	acceptopenteamsheets(target, room, user, connection, cmd) {
+		room = this.requireRoom();
+		const battle = room.battle;
+		if (!battle) return this.errorReply(this.tr`Must be in a battle room.`);
+		const player = battle.playerTable[user.id];
+		if (!player) {
+			return this.errorReply(this.tr`Must be a player to agree to open team sheets.`);
+		}
+		const format = Dex.formats.get(battle.options.format);
+		if (!Dex.formats.getRuleTable(format).has('openteamsheets')) {
+			return this.errorReply(this.tr`This format does not allow requesting open team sheets. You can both manually agree to it by using !showteam hidestats.`);
+		}
+		if (battle.turn > 0) {
+			return this.errorReply(this.tr`You cannot agree to open team sheets after Team Preview. Each player can still show their own sheet by using this command: !showteam hidestats`);
+		}
+		if (battle.players.some(curPlayer => curPlayer.wantsOpenTeamSheets === false)) {
+			return this.errorReply(this.tr`An opponent has already rejected open team sheets.`);
+		}
+		if (player.wantsOpenTeamSheets !== null) {
+			return this.errorReply(this.tr`You have already made your decision about agreeing to open team sheets.`);
+		}
+		player.wantsOpenTeamSheets = true;
+		player.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
+
+		this.add(this.tr`${user.name} has agreed to open team sheets.`);
+		if (battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
+			void battle.stream.write('>show-openteamsheets');
+		}
+	},
+	acceptopenteamsheetshelp: [`/acceptopenteamsheets - Agrees to an open team sheet opportunity during Team Preview, where all information on a team except stats is shared with the opponent. Requires: \u2606`],
+
+	rejectopenteamsheets(target, room, user) {
+		room = this.requireRoom();
+		const battle = room.battle;
+		if (!battle) return this.errorReply(this.tr`Must be in a battle room.`);
+		const player = battle.playerTable[user.id];
+		if (!player) {
+			return this.errorReply(this.tr`Must be a player to reject open team sheets.`);
+		}
+		const format = Dex.formats.get(battle.options.format);
+		if (!Dex.formats.getRuleTable(format).has('openteamsheets')) {
+			return this.errorReply(this.tr`This format does not allow requesting open team sheets.`);
+		}
+		if (battle.turn > 0) {
+			return this.errorReply(this.tr`You cannot reject open team sheets after Team Preview.`);
+		}
+		if (player.wantsOpenTeamSheets !== null) {
+			return this.errorReply(this.tr`You have already made your decision about agreeing to open team sheets.`);
+		}
+		player.wantsOpenTeamSheets = false;
+		for (const otherPlayer of battle.players) {
+			otherPlayer.sendRoom(Utils.html`|uhtmlchange|otsrequest|`);
+		}
+		return this.add(this.tr`${user.name} rejected open team sheets.`);
+	},
+	rejectopenteamsheetshelp: [`/rejectopenteamsheetshelp - Rejects an open team sheet opportunity during Team Preview, where all information on a team except stats is shared with the opponent. Requires: \u2606`],
 
 	acceptdraw: 'offertie',
 	accepttie: 'offertie',
@@ -1251,21 +1321,24 @@ export const commands: Chat.ChatCommands = {
 	forcewin(target, room, user) {
 		room = this.requireRoom();
 		this.checkCan('forcewin');
-		if (!room.battle) {
+		if (
+			!room.battle &&
+			!(room.game && typeof (room.game as any).tie === 'function' && typeof (room.game as any).win === 'function')
+		) {
 			this.errorReply("/forcewin - This is not a battle room.");
 			return false;
 		}
 
-		room.battle.endType = 'forced';
+		if (room.battle) room.battle.endType = 'forced';
 		if (!target) {
-			room.battle.tie();
+			(room.game as any).tie();
 			this.modlog('FORCETIE');
 			return false;
 		}
 		const targetUser = Users.getExact(target);
 		if (!targetUser) return this.errorReply(this.tr`User '${target}' not found.`);
 
-		room.battle.win(targetUser);
+		(room.game as any).win(targetUser);
 		this.modlog('FORCEWIN', targetUser.id);
 	},
 	forcewinhelp: [
@@ -1449,13 +1522,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!target) return this.errorReply(this.tr`Provide a valid format.`);
 		const originalFormat = Dex.formats.get(target);
-		// Note: The default here of [Gen 8] Anything Goes isn't normally hit; since the web client will send a default format
-		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get(
-			'[Gen 8] Anything Goes'
-		);
-		if (format.effectType !== this.tr`Format`) return this.popupReply(this.tr`Please provide a valid format.`);
+		// Note: The default here of Anything Goes isn't normally hit; since the web client will send a default format
+		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get('Anything Goes');
+		if (format.effectType !== 'Format') return this.popupReply(this.tr`Please provide a valid format.`);
 
-		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team).then(result => {
+		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team, {user: user.id}).then(result => {
 			const matchMessage = (originalFormat === format ? "" : this.tr`The format '${originalFormat.name}' was not found.`);
 			if (result.startsWith('1')) {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team is valid for ${format.name}.`}`);

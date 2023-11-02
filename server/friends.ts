@@ -12,7 +12,7 @@ import * as path from 'path';
 export const MAX_FRIENDS = 100;
 /** Max friend requests. */
 export const MAX_REQUESTS = 6;
-export const DEFAULT_FILE = `${__dirname}/../databases/friends.db`;
+export const DEFAULT_FILE = FS('databases/friends.db').path;
 const REQUEST_EXPIRY_TIME = 30 * 24 * 60 * 60 * 1000;
 const PM_TIMEOUT = 30 * 60 * 1000;
 
@@ -51,22 +51,17 @@ export class FailureMessage extends Error {
 }
 
 export function sendPM(message: string, to: string, from = '&') {
-	const senderID = toID(to);
-	const receiverID = toID(from);
+	const senderID = toID(from);
+	const receiverID = toID(to);
 	const sendingUser = Users.get(senderID);
 	const receivingUser = Users.get(receiverID);
 	const fromIdentity = sendingUser ? sendingUser.getIdentity() : ` ${senderID}`;
 	const toIdentity = receivingUser ? receivingUser.getIdentity() : ` ${receiverID}`;
 
 	if (from === '&') {
-		return sendingUser?.send(`|pm|&|${toIdentity}|${message}`);
+		return receivingUser?.send(`|pm|&|${toIdentity}|${message}`);
 	}
-	if (sendingUser) {
-		sendingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
-	}
-	if (receivingUser) {
-		receivingUser.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
-	}
+	receivingUser?.send(`|pm|${fromIdentity}|${toIdentity}|${message}`);
 }
 
 function canPM(sender: User, receiver: User | null) {
@@ -98,7 +93,9 @@ export class FriendsDatabase {
 		} else {
 			let val;
 			try {
-				val = database.prepare(`SELECT val FROM database_settings WHERE name = 'version'`).get().val;
+				val = (database
+					.prepare(`SELECT val FROM database_settings WHERE name = 'version'`)
+					.get() as AnyObject).val;
 			} catch {}
 			const actualVersion = FS(`databases/migrations/friends`).readdirIfExistsSync().length;
 			if (val === undefined) {
@@ -206,9 +203,9 @@ export class FriendsDatabase {
 
 		const result = await this.transaction('send', [user.id, receiverID]);
 		if (receiver) {
-			sendPM(`/raw <span class="username">${user.name}</span> sent you a friend request!`, receiver.id);
-			sendPM(buf, receiver.id);
-			sendPM(disclaimer, receiver.id);
+			sendPM(`/raw <span class="username">${user.name}</span> sent you a friend request!`, receiver.id, user.id);
+			sendPM(buf, receiver.id, user.id);
+			sendPM(disclaimer, receiver.id, user.id);
 		}
 		sendPM(
 			`/nonotify You sent a friend request to ${receiver?.connected ? receiver.name : receiverID}!`,
@@ -318,9 +315,11 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 	send: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
-			const hasSentRequest = statements.findRequest.get({user1: senderID, user2: receiverID})['num'];
-			const friends = statements.countFriends.get(senderID, senderID)['num'];
-			const totalRequests = statements.countRequests.get(senderID, senderID)['num'];
+			const hasSentRequest = (
+				statements.findRequest.get({user1: senderID, user2: receiverID}) as AnyObject
+			)['num'];
+			const friends = (statements.countFriends.get(senderID, senderID) as AnyObject)['num'];
+			const totalRequests = (statements.countRequests.get(senderID, senderID) as AnyObject)['num'];
 			if (friends >= MAX_FRIENDS) {
 				throw new FailureMessage(`You are at the maximum number of friends.`);
 			}

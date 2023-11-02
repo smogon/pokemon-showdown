@@ -38,20 +38,18 @@ import {Species, DexSpecies} from './dex-species';
 import {Format, DexFormats} from './dex-formats';
 import {Utils} from '../lib';
 
-const BASE_MOD = 'gen8' as ID;
-// to account for Sucrase
-const DATA_PATH = __dirname.endsWith('.sim-dist') ? `../.data-dist` : `../data`;
-const DATA_DIR = path.resolve(__dirname, DATA_PATH);
+const BASE_MOD = 'gen9' as ID;
+const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
 type DataType =
 	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
-	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart';
+	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart' | 'PokemonGoData';
 const DATA_TYPES: (DataType | 'Aliases')[] = [
 	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
-	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart',
+	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData',
 ];
 
 const DATA_FILES = {
@@ -64,6 +62,7 @@ const DATA_FILES = {
 	Moves: 'moves',
 	Natures: 'natures',
 	Pokedex: 'pokedex',
+	PokemonGoData: 'pokemongo',
 	Scripts: 'scripts',
 	Conditions: 'conditions',
 	TypeChart: 'typechart',
@@ -83,6 +82,7 @@ interface DexTableData {
 	Moves: DexTable<MoveData>;
 	Natures: DexTable<NatureData>;
 	Pokedex: DexTable<SpeciesData>;
+	PokemonGoData: DexTable<PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
 	Conditions: DexTable<EffectData>;
 	TypeChart: DexTable<TypeData>;
@@ -564,7 +564,7 @@ export class ModdedDex {
 
 dexes['base'] = new ModdedDex();
 
-// "gen8" is an alias for the current base data
+// "gen9" is an alias for the current base data
 dexes[BASE_MOD] = dexes['base'];
 
 export const Dex = dexes['base'];

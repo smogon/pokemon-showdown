@@ -16,7 +16,7 @@ interface StoneDeltas {
 
 type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'NFE' | 'LC';
 
-function getMegaStone(stone: string, mod = 'gen8'): Item | null {
+function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 	let dex = Dex;
 	if (mod && toID(mod) in Dex.dexes) dex = Dex.mod(toID(mod));
 	const item = dex.items.get(stone);
@@ -40,7 +40,8 @@ function getMegaStone(stone: string, mod = 'gen8'): Item | null {
 			return null;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal) return null;
+	if (!item.megaStone && !item.onPrimal && !item.forcedForme?.endsWith('Epilogue') &&
+		!item.forcedForme?.endsWith('Origin') && !item.name.startsWith('Rusted') && !item.name.endsWith('Mask')) return null;
 	return item;
 }
 
@@ -48,7 +49,7 @@ export const commands: Chat.ChatCommands = {
 	om: 'othermetas',
 	othermetas(target, room, user) {
 		target = toID(target);
-		const omLink = `- <a href="https://www.smogon.com/forums/forums/531/">Other Metagames Forum</a><br />`;
+		const omLink = `- <a href="https://www.smogon.com/forums/forums/733/">Other Metagames Forum</a><br />`;
 
 		if (!target) {
 			this.runBroadcast();
@@ -96,18 +97,40 @@ export const commands: Chat.ChatCommands = {
 		}
 		const stone = getMegaStone(stoneName[0], mod);
 		const species = dex.species.get(sep[0]);
-		if (!stone || (dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id))) {
-			throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
+		if (!stone) {
+			throw new Chat.ErrorMessage(`Error: Mega Stone/Primal Orb/Rusted Item/Origin Item/Mask not found.`);
 		}
 		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon not found.`);
-		let baseSpecies = dex.species.get(stone.megaEvolves);
-		let megaSpecies = dex.species.get(stone.megaStone);
-		if (stone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
-			megaSpecies = dex.species.get("Groudon-Primal");
-			baseSpecies = dex.species.get("Groudon");
-		} else if (stone.id === 'blueorb') {
+		let baseSpecies: Species;
+		let megaSpecies: Species;
+		switch (stone.id) {
+		case 'blueorb':
 			megaSpecies = dex.species.get("Kyogre-Primal");
 			baseSpecies = dex.species.get("Kyogre");
+			break;
+		case 'redorb':
+			megaSpecies = dex.species.get("Groudon-Primal");
+			baseSpecies = dex.species.get("Groudon");
+			break;
+		case 'rustedshield':
+			megaSpecies = dex.species.get("Zamazenta-Crowned");
+			baseSpecies = dex.species.get("Zamazenta");
+			break;
+		case 'rustedsword':
+			megaSpecies = dex.species.get("Zacian-Crowned");
+			baseSpecies = dex.species.get("Zacian");
+			break;
+		default:
+			const forcedForme = stone.forcedForme;
+			if (forcedForme &&
+				(forcedForme.startsWith('Ogerpon') || forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+				megaSpecies = dex.species.get(forcedForme);
+				baseSpecies = dex.species.get(forcedForme.split('-')[0]);
+			} else {
+				megaSpecies = dex.species.get(stone.megaStone);
+				baseSpecies = dex.species.get(stone.megaEvolves);
+			}
+			break;
 		}
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
@@ -121,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 		if (megaSpecies.types.length > baseSpecies.types.length) {
 			deltas.type = megaSpecies.types[1];
 		} else if (megaSpecies.types.length < baseSpecies.types.length) {
-			deltas.type = dex.gen >= 8 ? 'mono' : megaSpecies.types[0];
+			deltas.type = 'mono';
 		} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 			deltas.type = megaSpecies.types[1];
 		}
@@ -171,7 +194,7 @@ export const commands: Chat.ChatCommands = {
 		)).join("&nbsp;|&ThickSpace;") + `</font>`);
 	},
 	mixandmegahelp: [
-		`/mnm <pokemon> @ <mega stone>[, generation] - Shows the Mix and Mega evolved Pok\u00e9mon's type and stats.`,
+		`/mnm <pokemon> @ <mega stone or other>[, generation] - Shows the Mix and Mega evolved Pok\u00e9mon's type and stats.`,
 	],
 
 	orb: 'stone',
@@ -193,16 +216,17 @@ export const commands: Chat.ChatCommands = {
 		if (!targetid) return this.parse('/help stone');
 		this.runBroadcast();
 		const stone = getMegaStone(targetid, sep[1]);
-		if (stone && dex.gen >= 8 && ['redorb', 'blueorb'].includes(stone.id)) {
-			throw new Chat.ErrorMessage("The Orbs do not exist in Gen 8 and later.");
-		}
 		const stones = [];
 		if (!stone) {
-			const species = dex.species.get(targetid.replace(/(?:mega[xy]?|primal)$/, ''));
+			const species = dex.species.get(
+				targetid.replace(/(?:mega[xy]?|primal|origin|crowned|epilogue|cornerstone|wellspring|hearthflame)$/, '')
+			);
 			if (!species.exists) throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
 			if (!species.otherFormes) throw new Chat.ErrorMessage(`Error: Mega Evolution not found.`);
 			for (const poke of species.otherFormes) {
-				if (!/(?:-Primal|-Mega(?:-[XY])?)$/.test(poke)) continue;
+				if (!/(?:-Cornerstone|-Wellspring|-Hearthflame|-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?)$/.test(poke)) {
+					continue;
+				}
 				const megaPoke = dex.species.get(poke);
 				const flag = megaPoke.requiredMove === 'Dragon Ascent' ? megaPoke.requiredMove : megaPoke.requiredItem;
 				if (/mega[xy]$/.test(targetid) && toID(megaPoke.name) !== toID(dex.species.get(targetid))) continue;
@@ -214,17 +238,36 @@ export const commands: Chat.ChatCommands = {
 		const toDisplay = (stones.length ? stones : [stone]);
 		for (const aStone of toDisplay) {
 			if (!aStone) return;
-			let baseSpecies = dex.species.get(aStone.megaEvolves);
-			let megaSpecies = dex.species.get(aStone.megaStone);
-			if (dex.gen >= 8 && ['redorb', 'blueorb'].includes(aStone.id)) {
-				throw new Chat.ErrorMessage("The Orbs do not exist in Gen 8 and later.");
-			}
-			if (aStone.id === 'redorb') { // Orbs do not have 'Item.megaStone' or 'Item.megaEvolves' properties.
-				megaSpecies = dex.species.get("Groudon-Primal");
-				baseSpecies = dex.species.get("Groudon");
-			} else if (aStone.id === 'blueorb') {
+			let baseSpecies: Species;
+			let megaSpecies: Species;
+			switch (aStone.id) {
+			case 'blueorb':
 				megaSpecies = dex.species.get("Kyogre-Primal");
 				baseSpecies = dex.species.get("Kyogre");
+				break;
+			case 'redorb':
+				megaSpecies = dex.species.get("Groudon-Primal");
+				baseSpecies = dex.species.get("Groudon");
+				break;
+			case 'rustedshield':
+				megaSpecies = dex.species.get("Zamazenta-Crowned");
+				baseSpecies = dex.species.get("Zamazenta");
+				break;
+			case 'rustedsword':
+				megaSpecies = dex.species.get("Zacian-Crowned");
+				baseSpecies = dex.species.get("Zacian");
+				break;
+			default:
+				const forcedForme = aStone.forcedForme;
+				if (forcedForme &&
+					(forcedForme.startsWith('Ogerpon') || forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+					megaSpecies = dex.species.get(forcedForme);
+					baseSpecies = dex.species.get(forcedForme.split('-')[0]);
+				} else {
+					megaSpecies = dex.species.get(aStone.megaStone);
+					baseSpecies = dex.species.get(aStone.megaEvolves);
+				}
+				break;
 			}
 			const deltas: StoneDeltas = {
 				baseStats: Object.create(null),
@@ -251,15 +294,21 @@ export const commands: Chat.ChatCommands = {
 				tier = "Orb";
 			} else if (aStone.name === "Dragon Ascent") {
 				tier = "Move";
-			} else {
+			} else if (aStone.name.endsWith('Mask')) {
+				tier = "Mask";
+			} else if (aStone.megaStone) {
 				tier = "Stone";
+			} else {
+				tier = "Item";
 			}
 			let buf = `<li class="result">`;
 			buf += `<span class="col numcol">${tier}</span> `;
 			if (aStone.name === "Dragon Ascent") {
 				buf += `<span class="col itemiconcol"></span>`;
 			} else {
-				buf += `<span class="col itemiconcol"><psicon item="${toID(aStone)}"/></span> `;
+				// temp image support until real images are uploaded
+				const itemName = aStone.name;
+				buf += `<span class="col itemiconcol"><psicon item="${toID(itemName)}"/></span> `;
 			}
 			if (aStone.name === "Dragon Ascent") {
 				buf += `<span class="col movenamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/moves/${targetid}" target="_blank">Dragon Ascent</a></span> `;
@@ -273,7 +322,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			buf += `<span style="float:left;min-height:26px">`;
 			buf += `<span class="col abilitycol">${megaSpecies.abilities['0']}</span>`;
-			buf += `<span class="col abilitycol"></span>`;
+			buf += `<span class="col abilitycol">${megaSpecies.abilities['H'] ? `<em>${megaSpecies.abilities['H']}</em>` : ''}</span>`;
 			buf += `</span>`;
 			buf += `<span style="float:left;min-height:26px">`;
 			buf += `<span class="col statcol"><em>HP</em><br />0</span> `;
@@ -289,7 +338,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}</font>`);
 		}
 	},
-	stonehelp: [`/stone <mega stone>[, generation] - Shows the changes that a mega stone/orb applies to a Pok\u00e9mon.`],
+	stonehelp: [`/stone <mega stone or other>[, generation] - Shows the changes that a mega stone/orb applies to a Pok\u00e9mon.`],
 
 	350: '350cup',
 	'350cup'(target, room, user) {
@@ -351,16 +400,22 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
 		const boosts: {[tier in TierShiftTiers]: number} = {
-			UU: 10,
-			RUBL: 10,
+			UU: 15,
+			RUBL: 15,
 			RU: 20,
 			NUBL: 20,
-			NU: 30,
-			PUBL: 30,
-			PU: 40,
-			NFE: 40,
-			LC: 40,
+			NU: 25,
+			PUBL: 25,
+			PU: 30,
+			NFE: 30,
+			LC: 30,
 		};
+		if (dex.gen < 9) {
+			boosts['UU'] = boosts['RUBL'] = 10;
+			boosts['RU'] = boosts['NUBL'] = 20;
+			boosts['NU'] = boosts['PUBL'] = 30;
+			boosts['PU'] = boosts['NFE'] = boosts['LC'] = 40;
+		}
 		let tier = species.tier;
 		if (tier[0] === '(') tier = tier.slice(1, -1);
 		if (!(tier in boosts)) return this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
@@ -377,6 +432,154 @@ export const commands: Chat.ChatCommands = {
 	tiershifthelp: [
 		`/ts OR /tiershift <pokemon>[, generation] - Shows the base stats that a Pok\u00e9mon would have in Tier Shift.`,
 		`Alternatively, you can use /ts[gen number] to see a Pok\u00e9mon's stats in that generation.`,
+	],
+
+	fuse: 'franticfusions',
+	fuse1: 'franticfusions',
+	fuse2: 'franticfusions',
+	fuse3: 'franticfusions',
+	fuse4: 'franticfusions',
+	fuse5: 'franticfusions',
+	fuse6: 'franticfusions',
+	fuse7: 'franticfusions',
+	fuse8: 'franticfusions',
+	franticfusions(target, room, user, connection, cmd) {
+		const args = target.split(',');
+		if (!toID(args[0]) && !toID(args[1])) return this.parse('/help franticfusions');
+		const targetGen = parseInt(cmd[cmd.length - 1]);
+		if (targetGen && !args[2]) target = `${target},gen${targetGen}`;
+		const {dex, targets} = this.splitFormat(target, true);
+		this.runBroadcast();
+		if (targets.length > 2) return this.parse('/help franticfusions');
+		const species = Utils.deepClone(dex.species.get(targets[0]));
+		const fusion = dex.species.get(targets[1]);
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : args[0].trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
+		if (fusion.name.length) {
+			if (!fusion.exists || fusion.gen > dex.gen) {
+				const monName = fusion.gen > dex.gen ? fusion.name : args[1].trim();
+				const additionalReason = fusion.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+				throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+			}
+			if (fusion.name === species.name) {
+				throw new Chat.ErrorMessage('Pok\u00e9mon can\'t fuse with themselves.');
+			}
+		}
+		if (fusion.name.length) {
+			species.bst = species.baseStats.hp;
+		} else {
+			species.bst = 0;
+		}
+		for (const statName in species.baseStats) {
+			if (statName === 'hp') continue;
+			if (!fusion.name.length) {
+				species.baseStats[statName] = Math.floor(species.baseStats[statName as StatID] / 4);
+				species.bst += species.baseStats[statName];
+			} else {
+				const addition = Math.floor(fusion.baseStats[statName as StatID] / 4);
+				species.baseStats[statName] = Utils.clampIntRange(species.baseStats[statName] + addition, 1, 255);
+				species.bst += species.baseStats[statName];
+			}
+		}
+		const abilities = new Set<string>([...Object.values(species.abilities), ...Object.values(fusion.abilities)]);
+		let buf = '<div class="message"><ul class="utilichart"><li class="result">';
+		buf += '<span class="col numcol">Fusion</span> ';
+		buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
+		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+		buf += '<span class="col typecol">';
+		if (species.types && fusion.name.length) {
+			for (const type of species.types) {
+				buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+			}
+		}
+		buf += '</span> ';
+		if (dex.gen >= 3) {
+			buf += '<span style="float:left;min-height:26px">';
+			const ability1 = [...abilities.values()][0];
+			abilities.delete(ability1);
+			let ability2;
+			if (abilities.size) {
+				ability2 = [...abilities.values()][0];
+				abilities.delete(ability2);
+			}
+			let ability3;
+			if (abilities.size) {
+				ability3 = [...abilities.values()][0];
+				abilities.delete(ability3);
+			}
+			let ability4;
+			if (abilities.size) {
+				ability4 = [...abilities.values()][0];
+				abilities.delete(ability4);
+			}
+			let ability5;
+			if (abilities.size) {
+				ability5 = [...abilities.values()][0];
+				abilities.delete(ability5);
+			}
+			let ability6;
+			if (abilities.size) {
+				ability6 = [...abilities.values()][0];
+				abilities.delete(ability6);
+			}
+			let ability7;
+			if (abilities.size) {
+				ability7 = [...abilities.values()][0];
+				abilities.delete(ability7);
+			}
+			if (ability1) {
+				if (ability2) {
+					buf += '<span class="col twoabilitycol">' + ability1 + '<br />' + ability2 + '</span>';
+				} else {
+					buf += '<span class="col abilitycol">' + ability1 + '</span>';
+				}
+			}
+			if (ability3) {
+				if (ability4) {
+					buf += '<span class="col twoabilitycol">' + ability3 + '<br />' + ability4 + '</span>';
+				} else {
+					buf += '<span class="col abilitycol">' + ability3 + '</span>';
+				}
+			}
+			if (ability5) {
+				if (ability6) {
+					buf += '<span class="col twoabilitycol">' + ability5 + '<br />' + ability6 + '</span>';
+				} else {
+					buf += '<span class="col abilitycol">' + ability5 + '</span>';
+				}
+			}
+			if (ability7) {
+				buf += '<span class="col abilitycol">' + ability7 + '</span>';
+			}
+			buf += '</span>';
+		}
+		buf += '<span style="float:left;min-height:26px">';
+		if (fusion.name.length) {
+			buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
+		} else {
+			buf += '<span class="col statcol"><em>HP</em><br />0</span> ';
+		}
+		buf += '<span class="col statcol"><em>Atk</em><br />' + species.baseStats.atk + '</span> ';
+		buf += '<span class="col statcol"><em>Def</em><br />' + species.baseStats.def + '</span> ';
+		if (dex.gen <= 1) {
+			buf += '<span class="col statcol"><em>Spc</em><br />' + species.baseStats.spa + '</span> ';
+		} else {
+			buf += '<span class="col statcol"><em>SpA</em><br />' + species.baseStats.spa + '</span> ';
+			buf += '<span class="col statcol"><em>SpD</em><br />' + species.baseStats.spd + '</span> ';
+		}
+		buf += '<span class="col statcol"><em>Spe</em><br />' + species.baseStats.spe + '</span> ';
+		buf += '<span class="col bstcol"><em>BST<br />' + species.bst + '</em></span> ';
+		buf += '</span>';
+		buf += '</li><li style="clear:both"></li></ul></div>';
+		this.sendReply(`|raw|${buf}`);
+	},
+	franticfusionshelp: [
+		`/fuse <pokemon>, <fusion>[, generation] - Shows the stats and abilities that <pokemon> would get when fused with <fusion>.`,
+		`/fuse <pokemon>[, generation] - Shows the stats and abilities that <pokemon> donates.`,
+		`Alternatively, you can use /fuse[gen number] to see a Pok\u00e9mon's stats in that generation.`,
 	],
 
 	scale: 'scalemons',
@@ -620,46 +823,93 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
 		}
 		if (!evo.prevo) {
-			throw new Chat.ErrorMessage(`Error: ${evo.name} is not an evolution.`);
-		}
-		const prevoSpecies = Dex.species.get(evo.prevo);
-		const deltas = Utils.deepClone(evo);
-		if (!isReEvo) {
-			deltas.tier = 'CE';
-			deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
-			deltas.types = [];
-			if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
-			if (evo.types[1] !== prevoSpecies.types[1]) {
-				deltas.types[1] = evo.types[1] || evo.types[0];
-			}
-			if (deltas.types.length) {
-				// Undefined type remover
-				deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+			const evoBaseSpecies = Dex.species.get(evo.baseSpecies);
+			if (!evoBaseSpecies.prevo) throw new Chat.ErrorMessage(`Error: ${evoBaseSpecies.name} is not an evolution.`);
+			const prevoSpecies = Dex.species.get(evoBaseSpecies.prevo);
+			const deltas = Utils.deepClone(evo);
+		    if (!isReEvo) {
+			    deltas.tier = 'CE';
+			    deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+			    deltas.types = [];
+			    if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+			    if (evo.types[1] !== prevoSpecies.types[1]) {
+				    deltas.types[1] = evo.types[1] || evo.types[0];
+			    }
+			    if (deltas.types.length) {
+					// Undefined type remover
+				    deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
-				if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
-			} else {
-				deltas.types = null;
+					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+			    } else {
+					deltas.types = null;
+			    }
+		    }
+		    deltas.bst = 0;
+		    let i: StatID;
+		    for (i in evo.baseStats) {
+				const statChange = evoBaseSpecies.baseStats[i] - prevoSpecies.baseStats[i];
+				const formeChange = evo.baseStats[i] - evoBaseSpecies.baseStats[i];
+				if (!isReEvo) {
+			    if (!evo.prevo) {
+						deltas.baseStats[i] = formeChange;
+					} else {
+						deltas.baseStats[i] = statChange;
+					}
+				} else {
+					deltas.baseStats[i] = Utils.clampIntRange(evoBaseSpecies.baseStats[i] + statChange, 1, 255);
+					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + formeChange, 1, 255);
+				}
+				deltas.bst += deltas.baseStats[i];
 			}
-		}
-		deltas.bst = 0;
-		let i: StatID;
-		for (i in evo.baseStats) {
-			const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+			const details = {
+				Gen: evo.gen,
+				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
+			};
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
 			if (!isReEvo) {
-				deltas.baseStats[i] = statChange;
-			} else {
-				deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
+				this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
 			}
-			deltas.bst += deltas.baseStats[i];
-		}
-		const details = {
-			Gen: evo.gen,
-			Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
-			Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
-		};
-		this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
-		if (!isReEvo) {
-			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+		} else {
+			const prevoSpecies = Dex.species.get(evo.prevo);
+			const deltas = Utils.deepClone(evo);
+			if (!isReEvo) {
+				deltas.tier = 'CE';
+				deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+				deltas.types = [];
+				if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+				if (evo.types[1] !== prevoSpecies.types[1]) {
+					deltas.types[1] = evo.types[1] || evo.types[0];
+				}
+				if (deltas.types.length) {
+					// Undefined type remover
+					deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+
+					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
+				} else {
+					deltas.types = null;
+				}
+			}
+			deltas.bst = 0;
+			let i: StatID;
+			for (i in evo.baseStats) {
+				const statChange = evo.baseStats[i] - prevoSpecies.baseStats[i];
+				if (!isReEvo) {
+					deltas.baseStats[i] = statChange;
+				} else {
+					deltas.baseStats[i] = Utils.clampIntRange(deltas.baseStats[i] + statChange, 1, 255);
+				}
+				deltas.bst += deltas.baseStats[i];
+			}
+			const details = {
+				Gen: evo.gen,
+				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
+			};
+			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
+			if (!isReEvo) {
+				this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}&nbsp;|&ThickSpace;<font color="#686868">Stage:</font> ${details["Stage"]}</font>`);
+			}
 		}
 	},
 	reevohelp: [

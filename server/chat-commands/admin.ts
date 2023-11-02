@@ -28,10 +28,9 @@ function hasDevAuth(user: User) {
 
 function bash(command: string, context: Chat.CommandContext, cwd?: string): Promise<[number, string, string]> {
 	context.stafflog(`$ ${command}`);
+	if (!cwd) cwd = FS.ROOT_PATH;
 	return new Promise(resolve => {
-		child_process.exec(command, {
-			cwd: cwd || `${__dirname}/../..`,
-		}, (error, stdout, stderr) => {
+		child_process.exec(command, {cwd}, (error, stdout, stderr) => {
 			let log = `[o] ${stdout}[e] ${stderr}`;
 			if (error) log = `[c] ${error.code}\n${log}`;
 			context.stafflog(log);
@@ -254,6 +253,55 @@ export const commands: Chat.ChatCommands = {
 	],
 	changerankuhtmlhelp: [
 		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * # &`,
+	],
+
+	deletenamecolor: 'setnamecolor',
+	snc: 'setnamecolor',
+	dnc: 'setnamecolor',
+	async setnamecolor(target, room, user, connection, cmd) {
+		this.checkCan('rangeban');
+		if (!toID(target)) {
+			return this.parse(`/help ${cmd}`);
+		}
+		let [userid, source] = this.splitOne(target).map(toID);
+		if (cmd.startsWith('d')) {
+			source = '';
+		} else if (!source || source.length > 18) {
+			return this.errorReply(
+				`Specify a source username to take the color from. Name must be <19 characters.`
+			);
+		}
+		if (!userid || userid.length > 18) {
+			return this.errorReply(`Specify a valid name to set a new color for. Names must be <19 characters.`);
+		}
+		const [res, error] = await LoginServer.request('updatenamecolor', {
+			userid,
+			source,
+			by: user.id,
+		});
+		if (error) {
+			return this.errorReply(error.message);
+		}
+		if (!res || res.actionerror) {
+			return this.errorReply(res?.actionerror || "The loginserver is currently disabled.");
+		}
+		if (source) {
+			return this.sendReply(
+				`|html|<username>${userid}</username>'s namecolor was ` +
+				`successfully updated to match '<username>${source}</username>'. ` +
+				`Refresh your browser for it to take effect.`
+			);
+		} else {
+			return this.sendReply(`${userid}'s namecolor was removed.`);
+		}
+	},
+	setnamecolorhelp: [
+		`/setnamecolor OR /snc [username], [source name] - Set [username]'s name color to match the [source name]'s color.`,
+		`Requires: &`,
+	],
+	deletenamecolorhelp: [
+		`/deletenamecolor OR /dnc [username] - Remove [username]'s namecolor.`,
+		`Requires: &`,
 	],
 
 	pline(target, room, user) {
@@ -521,6 +569,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply("Wait for /updateserver to finish before hotpatching.");
 		}
 
+		await this.parse(`/rebuild`);
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
 			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',
@@ -563,7 +612,7 @@ export const commands: Chat.ChatCommands = {
 
 				const processManagers = ProcessManager.processManagers;
 				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
+					if (manager.filename.startsWith(FS(__dirname + '/../chat-plugins/').path)) {
 						void manager.destroy();
 					}
 				}
@@ -696,6 +745,8 @@ export const commands: Chat.ChatCommands = {
 				void Rooms.PM.respawn();
 				// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
 				void Chat.plugins.datasearch?.PM?.respawn();
+				// update teams global
+				global.Teams = require('../../sim/teams').Teams;
 				// broadcast the new formats list to clients
 				Rooms.global.sendAll(Rooms.global.formatListText);
 				this.sendReply("DONE");
@@ -714,6 +765,8 @@ export const commands: Chat.ChatCommands = {
 
 				this.sendReply("Hotpatching validator...");
 				void TeamValidatorAsync.PM.respawn();
+				// update teams global too while we're at it
+				global.Teams = require('../../sim/teams').Teams;
 				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
 				if (lock['punishments']) {
@@ -836,8 +889,9 @@ export const commands: Chat.ChatCommands = {
 		const processes = new Map<string, ProcessData>();
 		const ramUnits = ["KiB", "MiB", "GiB", "TiB"];
 
+		const cwd = FS.ROOT_PATH;
 		await new Promise<void>(resolve => {
-			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd: `${__dirname}/../..`}, (err, stdout) => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd}, (err, stdout) => {
 				if (err) throw err;
 				const rows = stdout.split('\n').slice(1); // first line is the table header
 				for (const row of rows) {
@@ -945,6 +999,13 @@ export const commands: Chat.ChatCommands = {
 	savelearnsetshelp: [
 		`/savelearnsets - Saves the learnset list currently active on the server. Requires: &`,
 	],
+
+	toggleripgrep(target, room, user) {
+		this.checkCan('rangeban');
+		Config.disableripgrep = !Config.disableripgrep;
+		this.addGlobalModAction(`${user.name} ${Config.disableripgrep ? 'disabled' : 'enabled'} Ripgrep-related functionality.`);
+	},
+	toggleripgrephelp: [`/toggleripgrep - Disable/enable all functionality depending on Ripgrep. Requires: &`],
 
 	disablecommand(target, room, user) {
 		this.checkCan('makeroom');
@@ -1256,7 +1317,7 @@ export const commands: Chat.ChatCommands = {
 			if (target !== 'public' && validPrivateCodePath) {
 				success = await updateserver(this, Config.privatecodepath);
 			}
-			success = success && await updateserver(this, path.resolve(`${__dirname}/../..`));
+			success = success && await updateserver(this, FS.ROOT_PATH);
 			this.addGlobalModAction(`${user.name} used /updateserver${target === 'public' ? ' public' : ''}`);
 		}
 
@@ -1269,8 +1330,78 @@ export const commands: Chat.ChatCommands = {
 		`/updateserver private - Updates only the server's private code. Requires: console access`,
 	],
 
-	rebuild() {
-		this.errorReply("`/rebuild` is no longer necessary; TypeScript files are automatically transpiled as they are loaded.");
+	async updateloginserver(target, room, user) {
+		this.canUseConsole();
+		this.sendReply('Restarting...');
+		const [result, err] = await LoginServer.request('restart');
+		if (err) {
+			Rooms.global.notifyRooms(
+				['staff', 'development'],
+				`|c|&|/log ${user.name} used /updateloginserver - but something failed while updating.`
+			);
+			return this.errorReply(err.message + '\n' + err.stack);
+		}
+		if (!result) return this.errorReply('No result received.');
+		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
+		if (result.actionerror) {
+			return this.errorReply(result.actionerror);
+		}
+		let message = `${user.name} used /updateloginserver`;
+		if (result.updated) {
+			this.sendReply(`DONE. Server updated and restarted.`);
+		} else {
+			message += ` - but something failed while updating.`;
+			this.errorReply(`FAILED. Conflicts were found while updating - the restart was aborted.`);
+		}
+		Rooms.global.notifyRooms(
+			['staff', 'development'], `|c|&|/log ${message}`
+		);
+	},
+	updateloginserverhelp: [
+		`/updateloginserver - Updates and restarts the loginserver. Requires: console access`,
+	],
+
+	async updateclient(target, room, user) {
+		this.canUseConsole();
+		this.sendReply('Restarting...');
+		const [result, err] = await LoginServer.request('rebuildclient', {
+			full: toID(target) === 'full',
+		});
+		if (err) {
+			Rooms.global.notifyRooms(
+				['staff', 'development'],
+				`|c|&|/log ${user.name} used /updateclient - but something failed while updating.`
+			);
+			return this.errorReply(err.message + '\n' + err.stack);
+		}
+		if (!result) return this.errorReply('No result received.');
+		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
+		if (result.actionerror) {
+			return this.errorReply(result.actionerror);
+		}
+		let message = `${user.name} used /updateclient`;
+		if (result.updated) {
+			this.sendReply(`DONE. Client updated.`);
+		} else {
+			message += ` - but something failed while updating.`;
+			this.errorReply(`FAILED. Conflicts were found while updating.`);
+		}
+		Rooms.global.notifyRooms(
+			['staff', 'development'], `|c|&|/log ${message}`
+		);
+	},
+	updateclienthelp: [
+		`/updateclient [full] - Update the client source code. Provide the argument 'full' to make it a full rebuild.`,
+		`Requires: & console access`,
+	],
+
+	async rebuild() {
+		this.canUseConsole();
+		const [, , stderr] = await bash('node ./build', this);
+		if (stderr) {
+			throw new Chat.ErrorMessage(`Crash while rebuilding: ${stderr}`);
+		}
+		this.sendReply('Rebuilt.');
 	},
 
 	/*********************************************************

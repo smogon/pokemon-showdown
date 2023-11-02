@@ -11,7 +11,7 @@ describe("Dynamax", function () {
 	});
 
 	it('Max Move effects should not be suppressed by Sheer Force', function () {
-		battle = common.createBattle();
+		battle = common.gen(8).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Braviary', ability: 'sheerforce', moves: ['heatwave', 'facade', 'superpower']},
 		]});
@@ -27,7 +27,7 @@ describe("Dynamax", function () {
 	});
 
 	it('Max Move versions of disabled moves should not be disabled, except by Assault Vest', function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'Mew', item: 'assaultvest', moves: ['watergun', 'protect']},
 		], [
 			{species: 'Mew', item: 'choiceband', moves: ['watergun', 'protect']},
@@ -40,7 +40,7 @@ describe("Dynamax", function () {
 	});
 
 	it('Max Move weather activates even if foe faints', function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'Shedinja', moves: ['splash']},
 		], [
 			{species: 'Mew', moves: ['watergun']},
@@ -50,7 +50,7 @@ describe("Dynamax", function () {
 	});
 
 	it('Max Move weather activates before Sand Spit', function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'Shedinja', ability: 'sandspit', moves: ['splash']},
 		], [
 			{species: 'Mew', moves: ['watergun']},
@@ -60,7 +60,7 @@ describe("Dynamax", function () {
 	});
 
 	it('makes Liquid Voice stop working', function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'Primarina', ability: 'liquidvoice', moves: ['hypervoice']},
 		], [
 			{species: 'Rhyhorn', ability: 'wonderguard', moves: ['splash']},
@@ -70,7 +70,7 @@ describe("Dynamax", function () {
 	});
 
 	it('should execute in order of updated speed when 2 or more Pokemon are Dynamaxing', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'kingdra', ability: 'swiftswim', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
 			{species: 'groudon', ability: 'drought', moves: ['sleeptalk']},
@@ -86,7 +86,7 @@ describe("Dynamax", function () {
 	});
 
 	it('should revert before the start of the 4th turn, not as an end-of-turn effect on the 3rd turn', function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'psychic']},
 		], [
 			{species: 'weedle', level: 1, moves: ['sleeptalk']},
@@ -102,7 +102,7 @@ describe("Dynamax", function () {
 	});
 
 	it('should be impossible to Dynamax when all the base moves are disabled', function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Feebas", moves: ['splash']},
 		], [
 			{species: "Wynaut", moves: ['taunt', 'splash']},
@@ -111,7 +111,7 @@ describe("Dynamax", function () {
 		assert.cantMove(() => battle.choose('p1', 'move splash dynamax'));
 		assert.cantMove(() => battle.choose('p1', 'move struggle dynamax'));
 
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Feebas", moves: ['splash']},
 		], [
 			{species: "Wynaut", moves: ['imprison', 'splash']},
@@ -123,7 +123,7 @@ describe("Dynamax", function () {
 	});
 
 	it(`should not allow the user to select max moves with 0 base PP remaining`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'pichu', ability: 'prankster', level: 1, moves: ['grudge']},
 			{species: 'noibat', ability: 'prankster', level: 1, moves: ['grudge']},
 			{species: 'azurill', moves: ['sleeptalk']},
@@ -142,7 +142,7 @@ describe("Dynamax", function () {
 	});
 
 	it(`should force the user to use Struggle if certain effects are disabling all of its base moves`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Skwovet", item: 'oranberry', moves: ['sleeptalk', 'belch', 'stuffcheeks']},
 		], [
 			{species: "Calyrex-Shadow", moves: ['disable', 'trick']},
@@ -156,7 +156,7 @@ describe("Dynamax", function () {
 		// Now Skwovet's berry is gone, so Stuff Cheeks is disabled too
 		battle.makeChoices('move struggle', 'auto'); // will throw an error if Skwovet isn't forced to use Struggle
 
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: "Feebas", moves: ['splash']},
 		], [
 			{species: "Clefairy", moves: ['imprison', 'gravity', 'splash']},
@@ -167,7 +167,7 @@ describe("Dynamax", function () {
 	});
 
 	it.skip(`should not remove the variable to Dynamax on forced switches`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(8).createBattle([[
 			{species: 'wynaut', item: 'ejectpack', moves: ['ironhead']},
 			{species: 'audino', item: 'ejectpack', moves: ['sleeptalk']},
 		], [
@@ -185,7 +185,7 @@ describe("Dynamax", function () {
 
 	describe(`Hacked Max Moves`, function () {
 		it(`should not activate Max Move side effects when used without Dynamaxing`, function () {
-			battle = common.createBattle([[
+			battle = common.gen(8).createBattle([[
 				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
 			], [
 				{species: 'shuckle', moves: ['sleeptalk']},
@@ -198,7 +198,7 @@ describe("Dynamax", function () {
 		});
 
 		it(`should treat Max Moves as 0 BP when used without Dynamaxing`, function () {
-			battle = common.createBattle([[
+			battle = common.gen(8).createBattle([[
 				{species: 'wynaut', moves: ['maxflare', 'maxairstream']},
 			], [
 				{species: 'shuckle', ability: 'shellarmor', moves: ['sleeptalk']},
@@ -211,7 +211,7 @@ describe("Dynamax", function () {
 		});
 
 		it(`should treat Max Moves as physical moves when used without Dynamaxing`, function () {
-			battle = common.createBattle([[
+			battle = common.gen(8).createBattle([[
 				{species: 'wynaut', moves: ['maxflare']},
 			], [
 				{species: 'shuckle', item: 'keeberry', moves: ['sleeptalk']},
@@ -221,7 +221,7 @@ describe("Dynamax", function () {
 		});
 
 		it(`should prevent effects that affect regular Max Moves, like Sleep Talk and Instruct`, function () {
-			battle = common.createBattle([[
+			battle = common.gen(8).createBattle([[
 				{species: 'wynaut', moves: ['maxflare', 'sleeptalk']},
 			], [
 				{species: 'shuckle', moves: ['instruct', 'spore', 'roost']},

@@ -55,12 +55,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Handle boosting items
 			if (
-				(['Cubone', 'Marowak'].includes(this.species.name) && this.item === 'thickclub' && statName === 'atk') ||
-				(this.species.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')
+				(['Cubone', 'Marowak'].includes(this.baseSpecies.name) && this.item === 'thickclub' && statName === 'atk') ||
+				(this.baseSpecies.name === 'Pikachu' && this.item === 'lightball' && statName === 'spa')
 			) {
 				stat *= 2;
-			} else if (this.species.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
-				stat *= 1.5;
+			} else if (this.baseSpecies.name === 'Ditto' && this.item === 'metalpowder' && ['def', 'spd'].includes(statName)) {
+				stat = Math.floor(stat * 1.5);
 			}
 
 			return stat;
@@ -302,7 +302,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.recoil && move.totalDamage) {
-				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
+				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, target, 'recoil');
 			}
 			return damage;
 		},
@@ -545,11 +545,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Checking for the move's Critical Hit ratio
 			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
-			const critMult = [0, 16, 8, 4, 3, 2];
+			const critMult = [0, 17, 32, 64, 85, 128];
 			let isCrit = move.willCrit || false;
 			if (typeof move.willCrit === 'undefined') {
 				if (critRatio) {
-					isCrit = this.battle.randomChance(1, critMult[critRatio]);
+					isCrit = this.battle.random(256) < critMult[critRatio];
 				}
 			}
 
@@ -706,7 +706,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			// Apply random factor is damage is greater than 1, except for Flail and Reversal
+			// Apply random factor if damage is greater than 1, except for Flail and Reversal
 			if (!move.noDamageVariance && damage > 1) {
 				damage *= this.battle.random(217, 256);
 				damage = Math.floor(damage / 255);

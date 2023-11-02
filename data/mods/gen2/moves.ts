@@ -190,10 +190,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return this.random(3, 7);
 			},
 			onStart(target) {
-				const noEncore = ['encore', 'metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'struggle', 'transform'];
-				const lockedMove = target.lastMove?.id || '';
+				const lockedMove = target.lastMoveEncore?.id || '';
 				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
-				if (moveIndex < 0 || noEncore.includes(lockedMove) || target.moveSlots[moveIndex].pp <= 0) {
+				if (moveIndex < 0 || target.lastMoveEncore?.flags['failencore'] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -281,7 +280,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	foresight: {
 		inherit: true,
-		accuracy: 100,
 		onTryHit(target) {
 			if (target.volatiles['foresight']) return false;
 		},
@@ -376,7 +374,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	lockon: {
 		inherit: true,
-		accuracy: true,
 		onTryHit(target) {
 			if (target.volatiles['foresight'] || target.volatiles['lockon']) return false;
 		},
@@ -401,13 +398,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	meanlook: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	metronome: {
 		inherit: true,
+		flags: {failencore: 1},
 		noMetronome: [
 			"Counter", "Destiny Bond", "Detect", "Endure", "Metronome", "Mimic", "Mirror Coat", "Protect", "Sketch", "Sleep Talk", "Struggle", "Thief",
 		],
@@ -415,14 +410,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mimic: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
+		accuracy: 100,
 		noSketch: true,
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1},
 	},
 	mindreader: {
 		inherit: true,
-		accuracy: 100,
 		onTryHit(target) {
 			if (target.volatiles['foresight'] || target.volatiles['lockon']) return false;
 		},
@@ -446,6 +439,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mirrormove: {
 		inherit: true,
+		flags: {failencore: 1},
 		onHit(pokemon) {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
@@ -474,7 +468,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Mist');
 			},
-			onBoost(boost, target, source, effect) {
+			onTryBoost(boost, target, source, effect) {
 				if (source && target !== source) {
 					let showMsg = false;
 					let i: BoostID;
@@ -547,9 +541,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	painsplit: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
+		accuracy: 100,
 	},
 	perishsong: {
 		inherit: true,
@@ -742,6 +734,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
+		flags: {bypasssub: 1, failencore: 1, noassist: 1},
 		onHit() {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');
@@ -767,13 +760,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sleeptalk: {
 		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1},
 		onHit(pokemon) {
-			const NoSleepTalk = ['bide', 'sleeptalk'];
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
-				const move = moveSlot.id;
-				if (move && !NoSleepTalk.includes(move) && !this.dex.moves.get(move).flags['charge']) {
-					moves.push(move);
+				const moveid = moveSlot.id;
+				const move = this.dex.moves.get(moveid);
+				if (moveid && !move.flags['nosleeptalk'] && !move.flags['charge']) {
+					moves.push(moveid);
 				}
 			}
 			let randomMove = '';
@@ -793,9 +787,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	spiderweb: {
 		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 		flags: {reflectable: 1, mirror: 1},
 	},
 	spikes: {
@@ -956,7 +947,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 20,
 			onHit(target, source, move) {
-				if (!target.hasType('Normal') && move.statusRoll) {
+				if (move.statusRoll) {
 					target.trySetStatus(move.statusRoll, source);
 				}
 			},
@@ -966,12 +957,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		multiaccuracy: false,
 		multihit: [1, 3],
-	},
-	vitalthrow: {
-		inherit: true,
-		accuracy: true,
-		ignoreAccuracy: undefined,
-		ignoreEvasion: undefined,
 	},
 	whirlwind: {
 		inherit: true,

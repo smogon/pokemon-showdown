@@ -183,7 +183,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(regigigas.getStat('spe'), slowStartSpeed);
 	});
 
-	it.skip(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
+	it(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -201,7 +201,7 @@ describe('Neutralizing Gas', function () {
 
 		// Gluttony now has the opportunity to activate the Aguav Berry again on taking damage
 		battle.makeChoices();
-		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp * 0.33));
+		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp / 3));
 	});
 
 	it(`should not trigger twice if negated then replaced`, function () {
@@ -285,6 +285,20 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices();
 		battle.makeChoices('auto', 'switch 2');
 		assert.statStage(battle.p2.active[0], 'atk', 1);
+	});
+
+	it(`should not reactivate abilities that were protected by Ability Shield`, function () {
+		battle = common.createBattle([[
+			{species: 'Porygon', ability: 'download', item: 'abilityshield', moves: ['sleeptalk']},
+		], [
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		battle.makeChoices('auto', 'switch 2');
+		const porygon = battle.p1.active[0];
+		assert.statStage(porygon, 'spa', 1);
 	});
 
 	describe(`Ability reactivation order`, function () {

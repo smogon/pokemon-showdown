@@ -39,6 +39,7 @@ describe('Dex data', function () {
 					const evoEntry = Pokedex[toID(evo)] || {};
 					assert.equal(evo, evoEntry.name, `Misspelled/nonexistent evo "${evo}" of ${entry.name}`);
 					assert.notEqual(entry.num, evoEntry.num, `Evo ${evo} of ${entry.name} should have a different dex number`);
+					if (entry.name === "Gimmighoul-Roaming") continue;
 					assert.equal(evoEntry.prevo, entry.name, `Evo ${evo} should have ${entry.name} listed as a prevo`);
 				}
 			}
@@ -186,7 +187,7 @@ describe('Dex data', function () {
 					const LEARN_ORDER = 'MTLREVDSC';
 					for (const learned of entry.learnset[moveid]) {
 						// See the definition of MoveSource in sim/global-types
-						assert(/^[1-8][MTLREDSVC]/.test(learned), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid`);
+						assert(/^[1-9][MTLREDSVC]/.test(learned), `Learn method "${learned}" for ${species.name}'s ${move.name} is invalid`);
 
 						// the move validator uses early exits, so this isn't purely a consistency thing
 						// MTL must be before REDSVC, and generations must be ordered newest to oldest
@@ -238,4 +239,84 @@ describe('Dex data', function () {
 			}
 		}
 	});
+
+	// Existence function takes a Pokemon and returns yes if it exists and no otherwise
+	// can be override for testing CAPs
+	function countPokemon(dex, existenceFunction = (s) => s.exists && !s.isNonstandard && s.tier !== 'Illegal') {
+		const count = {species: 0, formes: 0};
+		for (const pkmn of dex.species.all()) {
+			if (!existenceFunction(pkmn)) continue;
+			if (pkmn.name !== pkmn.baseSpecies) {
+				count.formes++;
+			} else {
+				count.species++;
+			}
+		}
+
+		return count;
+	}
+
+	// Source: https://github.com/pkmn/ps/blob/main/dex/index.test.ts#L283-L326
+	// key = gen #, value = number of formes/species in that gen
+	const species = {
+		1: 151,
+		2: 251,
+		3: 386,
+		4: 493,
+		5: 649,
+		6: 721,
+		7: 807,
+		8: 664,
+		9: 587,
+	};
+	const formes = {
+		// Gens 1 and 2 have no alternate formes
+		1: 0,
+		2: 0,
+		3: 3 + 3, // Deoxys (3) + Castform (3)
+	};
+	// Wormadam (2) + Cherrim (1) + Arceus (16) + Pichu (1) +
+	// Rotom (5) + Giratina (1) + Shaymin (1)
+	formes[4] = formes[3] + 2 + 1 + 16 + 1 + 5 + 1 + 1;
+	// Basculin (1) + Darmanitan (1) + *-Therian (3) + Keldeo (1) +
+	// Kyurem (2) + Meloetta (1) + Genesect (4) - Pichu (1)
+	formes[5] = formes[4] + 1 + 1 + 3 + 1 + 2 + 1 + 4 - 1;
+	// Arceus (1) + Vivillon (2) + Meowstic (1) + Primal (2) +
+	// Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Hoopa (1) +
+	// Pikachu (6) + Mega (48) [Floette (1)]
+	formes[6] = formes[5] + 1 + 2 + 1 + 2 + 1 + 3 + 3 + 1 + 6 + 48;
+	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (2) + Zygarde (2) +
+	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1)
+	// Mimikyu (1) + Necrozma (3) [Magearna (1) + LGPE Starters/Meltan/Melmetal (4)]
+	formes[7] = formes[6] + 18 + 12 + 7 - 6 + 2 + 2 + 3 + 1 + 2 + 1 + 17 + 1 + 1 + 3 - 1;
+	// Silvally (17) + Rotom (5) + Basculin (1) + Meowstic (1) +
+	// Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Pikachu (7) + Galar (14) +
+	// Alola (8) + Indeedee (1) + Morpeko (1) + Eiscue (1) + Zacian/Zamazenta (2) +
+	// Toxtricity (1) + Cramorant (2) + Necrozma (2) + Mimikyu (2) + Wishiwashi (1) +
+	// Keldeo (1) + Kyruem (2) + Darmanitan (2) + Cherrim (1)
+	// {DLC1} Alola (4) + Galar (1) + Magearna (1) + Urshifu (1) +
+	// Rockruff (1) + Lycanroc (2) + [Pikachu (1) + Zarude (1)]
+	// {DLC2} Giratina (1) + *-Therian (3) + Genesect (4) + Zygarde (2) +
+	// Birds (3) + Slowking (1) + Calyrex (2)
+	// {GMax} 26 + 7
+	formes[8] = 17 + 5 + 1 + 1 + 1 + 3 + 3 + 7 + 14 + 8 +
+	  1 + 1 + 1 + 2 + 1 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 +
+	  (4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 2 + 3 + 1 + 2) - 1; // FIXME Rockruff
+	// Pikachu (8) + Origin (3) + Therian (4) + Alola (15) + Galar (7) + Paldea (4) + Hisui (16) +
+	// Rotom (5) + Shaymin (1) + Arceus (17) + Basculin (2) + Meloetta (1) + Greninja (1) + Vivillon (2) +
+	// Hoopa (1) + Oricorio (3) + Lycanroc (2) + Mimikyu (1) + Magearna (1) + Toxtricity (1) + Antique (2) +
+	// Eiscue (1) + Indeedee (1) + Cramorant (2) + Morpeko (1) + Crowned (2) + Urshifu (1) + Zarude (1) +
+	// Calyrex (2) + Oinkologne (1) + Ursaluna (1) + Dudunsparce (1) + Palafin (1) + Maushold (1) +
+	// Squawkabilly (3) + Gimmighoul (1) + Basculegion (1) + Masterpiece (2) + Ogerpon (7)
+	formes[9] = 8 + 3 + 4 + 15 + 7 + 4 + 16 + 5 + 1 + 17 + 2 +
+	  1 + 1 + 2 + 1 + 3 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 2 + 1 +
+	  2 + 1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 3 + 1 + 1 + 2 + 7;
+
+	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+		it(`Gen ${gen} should have ${species[gen]} species and ${formes[gen]} formes`, () => {
+			const count = countPokemon(Dex.forGen(gen));
+			assert.equal(count.species, species[gen]);
+			assert.equal(count.formes, formes[gen]);
+		});
+	}
 });

@@ -46,6 +46,10 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Restricted Legendary",
 		speciesFilter: species => species.tags.includes("Restricted Legendary"),
 	},
+	paradox: {
+		name: "Paradox",
+		speciesFilter: species => species.tags.includes("Paradox"),
+	},
 
 	// Move tags
 	// ---------
@@ -164,9 +168,13 @@ export const Tags: {[id: string]: TagData} = {
 		name: "PU",
 		speciesFilter: species => species.tier === 'PU' || species.tier === '(NU)',
 	},
+	zubl: {
+		name: "ZUBL",
+		speciesFilter: species => species.tier === 'ZUBL',
+	},
 	zu: {
 		name: "ZU",
-		speciesFilter: species => species.tier === '(PU)',
+		speciesFilter: species => species.tier === '(PU)' || species.tier === 'ZU',
 	},
 	nfe: {
 		name: "NFE",
@@ -218,6 +226,10 @@ export const Tags: {[id: string]: TagData} = {
 
 	// Nat Dex tiers
 	// -------------
+	ndag: {
+		name: "ND AG",
+		speciesFilter: species => species.natDexTier === 'AG',
+	},
 	nduber: {
 		name: "ND Uber",
 		speciesFilter: species => species.natDexTier === 'Uber' || species.natDexTier === '(Uber)',
