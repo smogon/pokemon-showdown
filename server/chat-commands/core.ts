@@ -323,7 +323,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		message = this.checkChat(message);
 		if (!message) return;
-		await Chat.PrivateMessages.sendOffline(userid, user, message);
+		await Chat.PrivateMessages.sendOffline(userid, user, message, this);
 	},
 	offlinemsghelp: [
 		`/offlinemsg [username], [message] - Sends a message to the offline [username], to be received when they log in.`,

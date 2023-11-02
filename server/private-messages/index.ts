@@ -33,13 +33,17 @@ export const PrivateMessages = new class {
 	database = PM;
 	clearInterval = this.nextClear();
 	offlineIsEnabled = Config.usesqlitepms && Config.usesqlite;
-	async sendOffline(to: string, from: User | string, message: string) {
+	async sendOffline(to: string, from: User | string, message: string, context?: Chat.CommandContext) {
 		const result = await PM.transaction('send', [toID(from), toID(to), message]);
 		if (result.error) throw new Chat.ErrorMessage(result.error);
 		if (typeof from === 'object') {
 			from.send(`|pm|${this.getIdentity(from)}|${this.getIdentity(to)}|${message} __[sent offline]__`);
 		}
-		return !!result.changes;
+		const changed = !!result.changes;
+		if (changed && context) {
+			Chat.runHandlers('onMessageOffline', context, message, toID(to));
+		}
+		return changed;
 	}
 	setViewOnly(user: User | string, val: string | null) {
 		const id = toID(user);
@@ -62,12 +66,10 @@ export const PrivateMessages = new class {
 	}
 	checkCanPM(user: User, pmTarget: ID) {
 		this.checkCanUse(user);
-		if (Config.usesqlitepms === 'friends') {
-			if (!user.friends?.has(pmTarget)) {
-				throw new Chat.ErrorMessage(
-					`At this time, you may only send offline messages to friends. You do not have ${pmTarget} friended.`
-				);
-			}
+		if (Config.usesqlitepms === 'friends' && !user.friends?.has(pmTarget)) {
+			throw new Chat.ErrorMessage(
+				`At this time, you may only send offline messages to friends. You do not have ${pmTarget} friended.`
+			);
 		}
 	}
 	async sendReceived(user: User) {

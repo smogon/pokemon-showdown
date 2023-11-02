@@ -86,6 +86,7 @@ interface Handlers {
 	onRename: (user: User, oldID: ID, newID: ID) => void;
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
+	onMessageOffline: (context: Chat.CommandContext, message: string, targetUserID: ID) => void;
 }
 
 export interface ChatPlugin {
@@ -2626,6 +2627,7 @@ export const Chat = new class {
 // they're just there so forks have time to slowly transition
 (Chat as any).escapeHTML = Utils.escapeHTML;
 (Chat as any).splitFirst = Utils.splitFirst;
+(Chat as any).sendPM = Chat.PrivateMessages.send.bind(Chat.PrivateMessages);
 (CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
 (CommandContext.prototype as any).canTalk = CommandContext.prototype.checkChat;
 (CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;
