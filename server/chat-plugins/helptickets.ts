@@ -337,7 +337,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	}
 
 	getButton() {
-		const color = this.ticket.claimed ? `` : this.ticket.offline ? `notifying subtle` : `notifying`;
+		const color = this.ticket.claimed ? `` : this.ticket.offline ? `alt-notifying` : `notifying`;
 		const creator = (
 			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
 		);
