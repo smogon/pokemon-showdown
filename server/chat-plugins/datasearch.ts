@@ -2634,12 +2634,14 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 		if (!dex) return {error: `"${formatid}" is not a supported format.`};
 
 		gen = dex.gen;
-		format = new Dex.Format({mod: formatid});
 		formatName = `Gen ${gen}`;
+		format = new Dex.Format({mod: formatid});
+		const ruleTable = dex.formats.getRuleTable(format);
 		if (minSourceGen) {
 			formatName += ` (Min Source Gen = ${minSourceGen})`;
-			const ruleTable = dex.formats.getRuleTable(format);
 			ruleTable.minSourceGen = minSourceGen;
+		} else if (gen >= 9) {
+			ruleTable.minSourceGen = gen;
 		}
 	} else {
 		gen = Dex.forFormat(format).gen;
