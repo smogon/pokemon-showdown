@@ -296,7 +296,7 @@ export const commands: Chat.ChatCommands = {
 			if (Chat.PrivateMessages.offlineIsEnabled) {
 				if (user.lastCommand === 'pm') {
 					// don't delete lastCommand so they can just keep sending pms
-					return this.parse(`/offlinemsg ${targetUser.id},${message}`);
+					return this.parse(`/offlinemsg ${targetUser.getLastId()},${message}`);
 				}
 				user.lastCommand = 'pm';
 				return this.errorReply(
@@ -1727,6 +1727,6 @@ process.nextTick(() => {
 });
 
 export const loginfilter: Chat.LoginFilter = user => {
-	if (!Chat.PrivateMessages.checkCanUse(user, true)) return;
+	if (!Chat.PrivateMessages.checkCanUse(user, {isLogin: true, forceBool: true})) return;
 	void Chat.PrivateMessages.sendReceived(user);
 };

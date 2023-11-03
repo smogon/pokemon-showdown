@@ -49,17 +49,17 @@ export const PrivateMessages = new class {
 		const id = toID(user);
 		return PM.run(statements.setBlock, [id, val]);
 	}
-	checkCanUse(user: User, forceBool = false) {
+	checkCanUse(user: User, options = {forceBool: false, isLogin: false}) {
 		if (!this.offlineIsEnabled) {
-			if (forceBool) return false;
+			if (options.forceBool) return false;
 			throw new Chat.ErrorMessage(`Offline PMs are currently disabled.`);
 		}
 		if (!user.autoconfirmed) {
-			if (forceBool) return false;
+			if (options.forceBool) return false;
 			throw new Chat.ErrorMessage("You must be autoconfirmed to use offine messaging.");
 		}
 		if (!Users.globalAuth.atLeast(user, Config.usesqlitepms)) {
-			if (forceBool) return false;
+			if (options.forceBool) return false;
 			throw new Chat.ErrorMessage("You do not have the needed rank to send offline PMs.");
 		}
 		return true;
