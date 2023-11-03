@@ -2375,53 +2375,52 @@ const commands: Chat.ChatCommands = {
 			},
 			'': 'help',
 			help() {
-				this.parse(`${this.cmdToken}help tour settings`);
+				this.parse(`${this.cmdToken}help tour`);
 			},
 		},
-		settingshelp: [
-			`/tour settings autodq <minutes|off> - Sets the automatic disqualification timeout for every tournament.`,
-			`/tour settings autostart <on|minutes|off> - Sets the automatic start timeout for every tournament.`,
-			`/tour settings forcepublic <on|off> - Specifies whether users can hide their battles for every tournament.`,
-			`/tour settings forcetimer <on|off> - Specifies whether users can toggle the timer for every tournament.`,
-			`/tour settings modjoin <on|off> - Specifies whether users can modjoin their battles for every tournament.`,
-			`/tour settings autoconfirmedonly: <on|off> - Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.`,
-			`/tour settings playercap <number> - Sets the playercap for every tournament.`,
-			`/tour settings scouting <on|off> - Specifies whether users can spectate other participants for every tournament.`,
-			`/tour settings sampleteams <on|off> - Specifies whether sample teams are shown for every tournament.`,
-			`/tour settings recenttours <number|off|forcedelete> - Specifies the amount of recent tournaments to list in /recenttours.`,
-			`/tour settings blockrecents <on|off> - Toggles blocking tours in /recenttours from being made.`,
-			`Requires: # &`,
-		],
 	},
 	tournamenthelp() {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`Tournament Commands<br/>` +
-			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
-			`- rules &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started. <a href="view-battlerules">Custom rules help/list</a><br />` +
-			`- end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
-			`- begin/start: Starts the tournament in the current room.<br /><br />` +
+			`/tour create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
+			`/tour rules &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started. <a href="view-battlerules">Custom rules help/list</a><br />` +
+			`/tour end/stop/delete: Forcibly ends the tournament in the current room.<br />` +
+			`/tour begin/start: Starts the tournament in the current room.<br /><br />` +
 			`<details class="readmore"><summary>Configuration Commands</summary>` +
-			`- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />` +
-			`- cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />` +
-			`- viewrules/viewbanlist: Shows the custom rules for the tournament.<br />` +
-			`- clearrules/clearbanlist: Clears the custom rules for the tournament before it has started.<br />` +
-			`- name &lt;name>: Sets a custom name for the tournament.<br />` +
-			`- clearname: Clears the custom name of the tournament.<br />` +
-			`- autostart/setautostart &lt;on|minutes|off>: Sets the automatic start timeout.<br />` +
-			`- dq/disqualify &lt;user>: Disqualifies a user.<br />` +
-			`- autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />` +
-			`- runautodq: Manually run the automatic disqualifier.<br />` +
-			`- autoconfirmedonly/onlyautoconfirmed/aconly/onlyac &lt;on|off>: Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.<br />` +
-			`- scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />` +
-			`- modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />` +
-			`- forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />` +
-			`- forcepublic &lt;on|off>: Forces tournament battles and their replays to be public.<br />` +
-			`- getusers: Lists the users in the current tournament.<br />` +
-			`- announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />` +
-			`- banuser/unbanuser &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks.<br />` +
-			`- sub/replace &lt;olduser>, &lt;newuser>: Substitutes a new user for an old one<br />` +
-			`- settings: Do <code>/help tour settings</code> for more information<br />` +
+			`/tour settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />` +
+			`/tour cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />` +
+			`/tour viewrules/viewbanlist: Shows the custom rules for the tournament.<br />` +
+			`/tour clearrules/clearbanlist: Clears the custom rules for the tournament before it has started.<br />` +
+			`/tour name &lt;name>: Sets a custom name for the tournament.<br />` +
+			`/tour clearname: Clears the custom name of the tournament.<br />` +
+			`/tour autostart/setautostart &lt;on|minutes|off>: Sets the automatic start timeout.<br />` +
+			`/tour dq/disqualify &lt;user>: Disqualifies a user.<br />` +
+			`/tour autodq/setautodq &lt;minutes|off>: Sets the automatic disqualification timeout.<br />` +
+			`/tour runautodq: Manually run the automatic disqualifier.<br />` +
+			`/tour autoconfirmedonly/onlyautoconfirmed/aconly/onlyac &lt;on|off>: Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.<br />` +
+			`/tour scouting &lt;allow|disallow>: Specifies whether joining tournament matches while in a tournament is allowed.<br />` +
+			`/tour modjoin &lt;allow|disallow>: Specifies whether players can modjoin their battles.<br />` +
+			`/tour forcetimer &lt;on|off>: Turn on the timer for tournament battles.<br />` +
+			`/tour forcepublic &lt;on|off>: Forces tournament battles and their replays to be public.<br />` +
+			`/tour getusers: Lists the users in the current tournament.<br />` +
+			`/tour announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />` +
+			`/tour banuser/unbanuser &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks.<br />` +
+			`/tour sub/replace &lt;olduser>, &lt;newuser>: Substitutes a new user for an old one<br />` +
+			`</details>` +
+			`<br /><details class="readmore"><summary>Tournament Settings Commands</summary>` +
+			`/tour settings autodq &lt;minutes|off>: Sets the automatic disqualification timeout for every tournament.<br />` +
+			`/tour settings autostart &lt;on|minutes|off>: Sets the automatic start timeout for every tournament.<br />` +
+			`/tour settings forcepublic &lt;on|off>: Specifies whether users can hide their battles for every tournament.<br />` +
+			`/tour settings forcetimer &lt;on|off>: Specifies whether users can toggle the timer for every tournament.<br />` +
+			`/tour settings modjoin &lt;on|off>: Specifies whether users can modjoin their battles for every tournament.<br />` +
+			`/tour settings autoconfirmedonly &lt;on|off>: Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.<br />` +
+			`/tour settings playercap &lt;number>: Sets the player cap for every tournament.<br />` +
+			`/tour settings scouting &lt;on|off>: Specifies whether users can spectate other participants for every tournament.<br />` +
+			`/tour settings sampleteams &lt;on|off>: Specifies whether sample teams are shown for every tournament.<br />` +
+			`/tour settings recenttours &lt;number|off|forcedelete>: Specifies the amount of recent tournaments to list in /recenttours.<br />` +
+			`/tour settings blockrecents &lt;on|off>: Toggles blocking tours in /recenttours from being made.<br />` +
+			`Requires: # &` +
 			`</details>` +
 			`<br />` +
 			`You can also consult <a href="https://www.smogon.com/forums/threads/3570628/#post-6777489">more detailed help</a>.`
