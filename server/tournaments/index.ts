@@ -2407,8 +2407,8 @@ const commands: Chat.ChatCommands = {
 			`/tour announce/announcements &lt;on|off>: Enables/disables tournament announcements for the current room.<br />` +
 			`/tour banuser/unbanuser &lt;user>: Bans/unbans a user from joining tournaments in this room. Lasts 2 weeks.<br />` +
 			`/tour sub/replace &lt;olduser>, &lt;newuser>: Substitutes a new user for an old one<br />` +
-			`</details>` +
-			`<br /><details class="readmore"><summary>Tournament Settings Commands</summary>` +
+			`</details><br />` +
+			`<details class="readmore"><summary>Tournament Settings Commands</summary>` +
 			`/tour settings autodq &lt;minutes|off>: Sets the automatic disqualification timeout for every tournament.<br />` +
 			`/tour settings autostart &lt;on|minutes|off>: Sets the automatic start timeout for every tournament.<br />` +
 			`/tour settings forcepublic &lt;on|off>: Specifies whether users can hide their battles for every tournament.<br />` +
