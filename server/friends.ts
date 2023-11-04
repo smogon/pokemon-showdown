@@ -257,7 +257,9 @@ export class FriendsDatabase {
 		return this.run('toggleList', [userid, num, num]);
 	}
 	async findFriendship(user1: string, user2: string): Promise<boolean> {
-		return !!(await this.get('findFriendship', [user1, user2].map(toID))).length;
+		user1 = toID(user1);
+		user2 = toID(user2);
+		return !!(await this.get('findFriendship', {user1, user2}))?.length;
 	}
 }
 

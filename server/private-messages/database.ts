@@ -35,6 +35,7 @@ export const statements: {[k: string]: string} = {
 	clearSeen: 'DELETE FROM offline_pms WHERE seen_duration(seen) = 1',
 	getSettings: 'SELECT * FROM pm_settings WHERE userid = ?',
 	setBlock: 'REPLACE INTO pm_settings (userid, view_only) VALUES (?, ?)',
+	deleteSettings: 'DELETE FROM pm_settings WHERE userid = ?',
 };
 
 class StatementMap {

@@ -422,9 +422,9 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(this.tr`You are now blocking private messages, except from staff.`);
 		}
 		let saveValue: string | boolean | null = user.settings.blockPMs;
-		if (!saveValue) saveValue = 'none';
+		if (!saveValue || saveValue === true) saveValue = 'none';
 		// todo: can we do this? atm. no.
-		if (['unlocked', 'autoconfirmed'].includes(saveValue as string) || saveValue === true) {
+		if (['unlocked', 'autoconfirmed'].includes(saveValue as string)) {
 			saveValue = null;
 		}
 		await Chat.PrivateMessages.setViewOnly(user, saveValue);

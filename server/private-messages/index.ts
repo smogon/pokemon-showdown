@@ -51,14 +51,14 @@ export const PrivateMessages = new class {
 		from = toID(from);
 		to = toID(to);
 		const setting = await PM.get(statements.getSettings, [to]);
-		const requirement = setting.view_only || Config.usesqlitepms;
+		const requirement = setting?.view_only || Config.usesqlitepms;
 		switch (requirement) {
 		case 'friends':
 			if (!(await Chat.Friends.findFriendship(to, from))) {
 				if (Config.usesqlitepms === 'friends') {
-					return {error: `At this time, you may only send offline PMs to friends. ${to} is not friends with you.`};
+					throw new Chat.ErrorMessage( `At this time, you may only send offline PMs to friends. ${to} is not friends with you.`);
 				}
-				return {error: `${to} is only accepting offline PMs from friends at this time.`};
+				throw new Chat.ErrorMessage(`${to} is only accepting offline PMs from friends at this time.`);
 			}
 			break;
 		case 'trusted':
@@ -69,21 +69,24 @@ export const PrivateMessages = new class {
 		case 'none':
 			// drivers+ can override
 			if (!Auth.atLeast(Users.globalAuth.get(from as ID), '%')) {
-				return {error: `${to} has indicated that they do not wish to receive offine PMs.`};
+				throw new Chat.ErrorMessage(`${to} has indicated that they do not wish to receive offine PMs.`);
 			}
 			break;
 		default:
 			if (!Auth.atLeast(Users.globalAuth.get(from as ID), requirement)) {
 				if (setting?.view_only) {
-					return {error: `That user is not allowing offline PMs from your rank at this time.`};
+					throw new Chat.ErrorMessage(`That user is not allowing offline PMs from your rank at this time.`);
 				}
-				return {error: 'You do not meet the rank requirement to send offline PMs at this time.'};
+				throw new Chat.ErrorMessage('You do not meet the rank requirement to send offline PMs at this time.');
 			}
 			break;
 		}
 	}
 	setViewOnly(user: User | string, val: string | null) {
 		const id = toID(user);
+		if (!val) { // if null, no need to save
+			return PM.run(statements.deleteSettings, [id]);
+		}
 		return PM.run(statements.setBlock, [id, val]);
 	}
 	checkCanUse(user: User, options = {forceBool: false, isLogin: false}) {
