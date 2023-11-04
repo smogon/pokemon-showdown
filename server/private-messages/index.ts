@@ -51,7 +51,7 @@ export const PrivateMessages = new class {
 		from = toID(from);
 		to = toID(to);
 		const setting = await PM.get(statements.getSettings, [to]);
-		const requirement = setting?.view_only || Config.usesqlitepms;
+		const requirement = setting?.view_only || Config.usesqlitepms || "friends";
 		switch (requirement) {
 		case 'friends':
 			if (!(await Chat.Friends.findFriendship(to, from))) {
