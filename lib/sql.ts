@@ -210,7 +210,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	}
 
 	loadExtensionFile(extension: string) {
-		return this.handleExtensions(require(FS(extension).path));
+		return this.handleExtensions(require('../' + extension));
 	}
 	handleExtensions(imports: any) {
 		if (!this.database) return;
