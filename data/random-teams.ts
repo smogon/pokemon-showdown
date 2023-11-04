@@ -170,10 +170,7 @@ export class RandomTeams {
 		this.moveEnforcementCheckers = {
 			Bug: (movePool) => (movePool.includes('megahorn') || movePool.includes('xscissor')),
 			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
-			Dragon: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => (
-				!counter.get('Dragon') &&
-				(!movePool.includes('dualwingbeat') || isDoubles)
-			),
+			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fairy: (movePool, moves, abilities, types, counter) => !counter.get('Fairy'),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
@@ -196,7 +193,7 @@ export class RandomTeams {
 			Psychic: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Psychic')) return false;
 				if (movePool.includes('calmmind') || movePool.includes('psychicfangs')) return true;
-				return abilities.has('Psychic Surge') || types.includes('Fire') || types.includes('Electric') || types.includes('Fighting');
+				return abilities.has('Psychic Surge') || ['Electric', 'Fighting', 'Fire', 'Poison'].some(m => types.includes(m));
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => (
@@ -579,7 +576,6 @@ export class RandomTeams {
 		if (species.id === "dugtrio") this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
 		if (species.id === "cyclizar") this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
 		if (species.baseSpecies === 'Dudunsparce') this.incompatibleMoves(moves, movePool, 'earthpower', 'shadowball');
-		if (species.id === 'jirachi') this.incompatibleMoves(moves, movePool, 'bodyslam', 'healingwish');
 		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
 	}
 
@@ -732,12 +728,6 @@ export class RandomTeams {
 		// Enforce Salt Cure
 		if (movePool.includes('saltcure')) {
 			counter = this.addMove('saltcure', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Toxic on Grafaiai
-		if (movePool.includes('toxic') && species.id === 'grafaiai') {
-			counter = this.addMove('toxic', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
 		}
 
@@ -1060,7 +1050,7 @@ export class RandomTeams {
 		case 'Reckless':
 			return !counter.get('recoil');
 		case 'Regenerator':
-			return (species.id === 'mienshao' && role === 'Fast Attacker');
+			return (species.id === 'mienshao' && role === 'Wallbreaker');
 		case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Force': case 'Sand Rush':
@@ -1139,10 +1129,12 @@ export class RandomTeams {
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
 		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
+		if (species.id === 'ariados') return 'Insomnia';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
+		if (species.id === 'ribombee') return 'Shield Dust';
+		if (species.id === 'dipplin') return 'Sticky Hold';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
-		if (species.id === 'dipplin') return 'Sticky Hold';
 
 		// singles
 		if (!isDoubles) {
@@ -1175,7 +1167,6 @@ export class RandomTeams {
 			if (species.id === 'kommoo') return this.sample(['Overcoat', 'Soundproof']);
 			if (species.id === 'barraskewda') return 'Propeller Tail';
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
-			if (species.id === 'ribombee') return 'Shield Dust';
 			if (species.id === 'gumshoos') return 'Strong Jaw';
 			if (species.id === 'magnezone') return 'Sturdy';
 			if (species.id === 'clefable' && role === 'Doubles Support') return 'Unaware';
@@ -1420,8 +1411,7 @@ export class RandomTeams {
 	): string {
 		if (types.includes('Normal') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
-			species.id !== 'jirachi' && (counter.get('Physical') >= 4 ||
-			(counter.get('Physical') >= 3 && moves.has('memento'))) &&
+			(counter.get('Physical') >= 4 || (counter.get('Physical') >= 3 && moves.has('memento'))) &&
 			['fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'ruination', 'superfang'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
