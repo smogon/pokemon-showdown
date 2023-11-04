@@ -232,11 +232,11 @@ if (Config.usesqlite) {
 
 
 if (Config.usesqlite) {
-	if (PM.isParentProcess) {
+	if (!process.send) {
 		PM.spawn(Config.pmprocesses || 1);
 		// clear super old pms on startup
 		void PM.run(statements.clearDated);
-	} else {
+	} else if (process.send && process.mainModule === module) {
 		global.Monitor = {
 			crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
 				const repr = JSON.stringify([error.name, error.message, source, details]);
