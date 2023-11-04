@@ -1802,7 +1802,7 @@ export const Chat = new class {
 	 */
 	database = SQL(module, {
 		file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH,
-		processes: global.Config?.chatdbprocesses || 1,
+		processes: global.Config?.chatdbprocesses,
 	});
 	databaseReadyPromise: Promise<void> | null = null;
 
@@ -1810,7 +1810,7 @@ export const Chat = new class {
 		// PLEASE NEVER ACTUALLY ADD MIGRATIONS
 		// things break in weird ways that are hard to reason about, probably because of subprocesses
 		// it WILL crash and it WILL make your life and that of your users extremely unpleasant until it is fixed
-		if (!PM.isParentProcess) return; // We don't need a database in a subprocess that requires Chat.
+		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
 		const {hasDBInfo} = await this.database.get(
