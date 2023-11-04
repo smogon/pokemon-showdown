@@ -1354,7 +1354,7 @@ export class RandomTeams {
 			return (counter.get('Physical') >= 3) ? 'Choice Band' : 'Choice Specs';
 		}
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
-		if (counter.get('Physical') >= 4 && species.id !== 'jirachi' &&
+		if (counter.get('Physical') >= 4 &&
 			['fakeout', 'feint', 'firstimpression', 'rapidspin', 'suckerpunch'].every(m => !moves.has(m)) &&
 			(moves.has('flipturn') || moves.has('uturn') || role === 'Doubles Wallbreaker')
 		) {
@@ -1411,7 +1411,8 @@ export class RandomTeams {
 	): string {
 		if (types.includes('Normal') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
-			(counter.get('Physical') >= 4 || (counter.get('Physical') >= 3 && moves.has('memento'))) &&
+			species.id !== 'jirachi' && (counter.get('Physical') >= 4 ||
+			(counter.get('Physical') >= 3 && moves.has('memento'))) &&
 			['fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'ruination', 'superfang'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
