@@ -2090,7 +2090,7 @@
         ]
     },
     "arceuselectric": {
-        "level": 71,
+        "level": 70,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -2210,7 +2210,7 @@
         ]
     },
     "arceusrock": {
-        "level": 72,
+        "level": 73,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -2220,7 +2220,7 @@
         ]
     },
     "arceussteel": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Doubles Support",
