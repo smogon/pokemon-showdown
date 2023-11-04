@@ -456,6 +456,6 @@ if (require.main === module) {
 		// eslint-disable-next-line no-eval
 		Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
 	}
-} else {
+} else if (!process.send) {
 	PM.spawn(Config.friendsprocesses || 1);
 }
