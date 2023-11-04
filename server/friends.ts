@@ -256,6 +256,9 @@ export class FriendsDatabase {
 		// name, send_login_data, last_login, public_list
 		return this.run('toggleList', [userid, num, num]);
 	}
+	async findFriendship(user1: string, user2: string): Promise<boolean> {
+		return !!(await this.get('findFriendship', [user1, user2].map(toID))).length;
+	}
 }
 
 const statements: {[k: string]: Database.Statement} = {};

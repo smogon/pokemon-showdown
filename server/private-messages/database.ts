@@ -4,17 +4,7 @@
  * @author mia-pi-git
  */
 import {SQL, FS} from '../../lib';
-import {findFriendship} from '../friends';
 import {EXPIRY_TIME, SEEN_EXPIRY_TIME, MAX_PENDING} from '.';
-import {Config} from '../config-loader';
-import {GlobalAuth, Auth} from '../user-groups';
-
-if (!global.Config) global.Config = Config;
-const globalAuth = new GlobalAuth(); // for blockpms
-
-function authAtLeast(userid: ID, symbol: GroupSymbol) {
-	return Auth.atLeast(globalAuth.get(userid), symbol);
-}
 
 export const functions: {[k: string]: (...args: any) => any} = {
 	should_expire: (time) => {
@@ -76,39 +66,6 @@ export const transactions: {
 		const count = statementList.get('checkSentCount', [sender, receiver])?.count;
 		if (count && count > MAX_PENDING) {
 			return {error: `You have already sent the maximum ${MAX_PENDING} offline PMs to that user.`};
-		}
-		const settings = statementList.get('getSettings', [receiver]);
-		const requirement = Config.usesqlitepms || settings?.view_only;
-		if (requirement) {
-			switch (requirement) {
-			case 'friends':
-				if (!findFriendship([sender, receiver])) {
-					if (Config.usesqlitepms === 'friends') {
-						return {error: `At this time, you may only send offline PMs to friends. ${receiver} is not friends with you.`};
-					}
-					return {error: `${receiver} is only accepting offline PMs from friends at this time.`};
-				}
-				break;
-			case 'trusted':
-				if (!globalAuth.has(toID(sender))) {
-					return {error: `${receiver} is currently blocking offline PMs from non-trusted users.`};
-				}
-				break;
-			case 'none':
-				// drivers+ can override
-				if (!authAtLeast(sender, '%')) {
-					return {error: `${receiver} has indicated that they do not wish to receive offine PMs.`};
-				}
-				break;
-			default:
-				if (!authAtLeast(receiver, requirement)) {
-					if (settings?.view_only) {
-						return {error: `That user is not allowing offline PMs from your rank at this time.`};
-					}
-					return {error: 'You do not meet the rank requirement to send offline PMs at this time.'};
-				}
-				break;
-			}
 		}
 		return statementList.run('send', [sender, receiver, message, Date.now()]);
 	},

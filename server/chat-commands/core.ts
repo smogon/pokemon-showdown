@@ -338,6 +338,9 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`That user is online, so a normal PM is being sent.`);
 			return this.parse(`/pm ${userid}, ${message}`);
 		}
+		if (userid.length > 18) {
+			throw new Chat.ErrorMessage(`Invalid userid. Must be <=18 characters in length.`);
+		}
 		message = this.checkChat(message);
 		if (!message) return;
 		await Chat.PrivateMessages.sendOffline(userid, user, message, this);

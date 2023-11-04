@@ -5,6 +5,7 @@
  */
 import {SQL, Utils} from '../../lib';
 import {Config} from '../config-loader';
+import {Auth} from '../user-groups';
 import {statements} from './database';
 /** The time until a PM sent offline expires. Presently, 60 days. */
 export const EXPIRY_TIME = 60 * 24 * 60 * 60 * 1000;
@@ -34,6 +35,7 @@ export const PrivateMessages = new class {
 	clearInterval = this.nextClear();
 	offlineIsEnabled = Config.usesqlitepms && Config.usesqlite;
 	async sendOffline(to: string, from: User | string, message: string, context?: Chat.CommandContext) {
+		await this.checkCanSend(to, from);
 		const result = await PM.transaction('send', [toID(from), toID(to), message]);
 		if (result.error) throw new Chat.ErrorMessage(result.error);
 		if (typeof from === 'object') {
@@ -44,6 +46,41 @@ export const PrivateMessages = new class {
 			Chat.runHandlers('onMessageOffline', context, message, toID(to));
 		}
 		return changed;
+	}
+	async checkCanSend(to: string, from: User | string) {
+		from = toID(from);
+		to = toID(to);
+		const setting = await PM.get(statements.getSettings, [to]);
+		const requirement = setting.view_only || Config.usesqlitepms;
+		switch (requirement) {
+		case 'friends':
+			if (!(await Chat.Friends.findFriendship(to, from))) {
+				if (Config.usesqlitepms === 'friends') {
+					return {error: `At this time, you may only send offline PMs to friends. ${to} is not friends with you.`};
+				}
+				return {error: `${to} is only accepting offline PMs from friends at this time.`};
+			}
+			break;
+		case 'trusted':
+			if (!Users.globalAuth.has(toID(from))) {
+				throw new Chat.ErrorMessage(`${to} is currently blocking offline PMs from non-trusted users.`);
+			}
+			break;
+		case 'none':
+			// drivers+ can override
+			if (!Auth.atLeast(Users.globalAuth.get(from as ID), '%')) {
+				return {error: `${to} has indicated that they do not wish to receive offine PMs.`};
+			}
+			break;
+		default:
+			if (!Auth.atLeast(Users.globalAuth.get(from as ID), requirement)) {
+				if (setting?.view_only) {
+					return {error: `That user is not allowing offline PMs from your rank at this time.`};
+				}
+				return {error: 'You do not meet the rank requirement to send offline PMs at this time.'};
+			}
+			break;
+		}
 	}
 	setViewOnly(user: User | string, val: string | null) {
 		const id = toID(user);
@@ -77,10 +114,11 @@ export const PrivateMessages = new class {
 		// we only want to send the unseen pms to them when they login - they can replay the rest at will otherwise
 		const messages = await this.fetchUnseen(userid);
 		const serverTimezone = -new Date().getTimezoneOffset() / 60;
+		const gmtStr = serverTimezone >= 0 ? `+${serverTimezone}` : serverTimezone;
 		for (const {message, time, sender} of messages) {
 			user.send(
 				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|` +
-				`${message} __[sent offline, ${Chat.toTimestamp(new Date(time))} GMT ${serverTimezone}]__`
+				`${message} __[sent offline, ${Chat.toTimestamp(new Date(time))} GMT ${gmtStr}]__`
 			);
 		}
 	}
