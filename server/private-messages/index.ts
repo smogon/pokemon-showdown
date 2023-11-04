@@ -47,10 +47,13 @@ export const PrivateMessages = new class {
 		}
 		return changed;
 	}
+	getSettings(userid: string) {
+		return PM.get(statements.getSettings, [toID(userid)]);
+	}
 	async checkCanSend(to: string, from: User | string) {
 		from = toID(from);
 		to = toID(to);
-		const setting = await PM.get(statements.getSettings, [to]);
+		const setting = await this.getSettings(to);
 		const requirement = setting?.view_only || Config.usesqlitepms || "friends";
 		switch (requirement) {
 		case 'friends':
