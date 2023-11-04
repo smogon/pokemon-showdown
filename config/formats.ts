@@ -2883,7 +2883,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen3',
-		ruleset: ['Standard', 'Baton Pass Clause'],
+		ruleset: ['Standard', 'Baton Pass Stat Clause'],
 		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL'],
 	},
 	{
