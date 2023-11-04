@@ -1354,7 +1354,7 @@ export class RandomTeams {
 			return (counter.get('Physical') >= 3) ? 'Choice Band' : 'Choice Specs';
 		}
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
-		if (counter.get('Physical') >= 4 &&
+		if (counter.get('Physical') >= 4 && species.id !== 'jirachi' &&
 			['fakeout', 'feint', 'firstimpression', 'rapidspin', 'suckerpunch'].every(m => !moves.has(m)) &&
 			(moves.has('flipturn') || moves.has('uturn') || role === 'Doubles Wallbreaker')
 		) {

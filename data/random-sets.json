@@ -1553,18 +1553,18 @@
         "level": 79,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Fast Support",
                 "movepool": ["Body Slam", "Future Sight", "Iron Head", "Protect", "Wish"],
                 "teraTypes": ["Water"]
             },
             {
-                "role": "AV Pivot",
-                "movepool": ["Body Slam", "Drain Punch", "Energy Ball", "Fire Punch", "Iron Head", "Psychic", "U-turn"],
+                "role": "Bulky Attacker",
+                "movepool": ["Body Slam", "Drain Punch", "Energy Ball", "Fire Punch", "Iron Head", "Psychic", "Stealth Rock", "U-turn"],
                 "teraTypes": ["Fighting", "Water"]
             },
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Fire Punch", "Healing Wish", "Iron Head", "Protect", "Stealth Rock", "U-turn", "Wish"],
+                "role": "Bulky Support",
+                "movepool": ["Fire Punch", "Healing Wish", "Iron Head", "Protect", "U-turn", "Wish"],
                 "teraTypes": ["Water"]
             }
         ]
