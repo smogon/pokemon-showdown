@@ -429,7 +429,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		this.module = module;
 		this.filename = module.filename;
 		this.basename = path.basename(module.filename);
-		this.isParentProcess = !process.send;
+		this.isParentProcess = (process.mainModule !== module || !process.send);
 
 		this.listen();
 	}
