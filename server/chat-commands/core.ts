@@ -424,7 +424,7 @@ export const commands: Chat.ChatCommands = {
 		let saveValue: string | boolean | null = user.settings.blockPMs;
 		if (!saveValue || saveValue === true) saveValue = 'none';
 		// todo: can we do this? atm. no.
-		if (['unlocked', 'autoconfirmed'].includes(saveValue as string)) {
+		if (['unlocked', 'autoconfirmed'].includes(saveValue)) {
 			saveValue = null;
 		}
 		await Chat.PrivateMessages.setViewOnly(user, saveValue);

@@ -56,7 +56,7 @@ export const PrivateMessages = new class {
 		case 'friends':
 			if (!(await Chat.Friends.findFriendship(to, from))) {
 				if (Config.usesqlitepms === 'friends') {
-					throw new Chat.ErrorMessage( `At this time, you may only send offline PMs to friends. ${to} is not friends with you.`);
+					throw new Chat.ErrorMessage(`At this time, you may only send offline PMs to friends. ${to} is not friends with you.`);
 				}
 				throw new Chat.ErrorMessage(`${to} is only accepting offline PMs from friends at this time.`);
 			}
