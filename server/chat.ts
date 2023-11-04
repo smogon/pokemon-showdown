@@ -30,6 +30,7 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import * as Artemis from './artemis';
 import {Dex} from '../sim';
+import {PrivateMessages} from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 
@@ -85,6 +86,7 @@ interface Handlers {
 	onRename: (user: User, oldID: ID, newID: ID) => void;
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
+	onMessageOffline: (context: Chat.CommandContext, message: string, targetUserID: ID) => void;
 }
 
 export interface ChatPlugin {
@@ -689,7 +691,7 @@ export class CommandContext extends MessageContext {
 					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
 				}
 			}
-			Chat.sendPM(message, this.user, this.pmTarget);
+			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
 			if (this.room.game && this.room.game.onLogMessage) {
@@ -1538,6 +1540,7 @@ export const Chat = new class {
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
 	readonly Friends = new FriendsDatabase();
 	readonly PM = PM;
+	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
 
@@ -1837,7 +1840,10 @@ export const Chat = new class {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
-		Chat.destroyHandlers.push(() => void Chat.database?.destroy());
+		Chat.destroyHandlers.push(
+			() => void Chat.database?.destroy(),
+			() => Chat.PrivateMessages.destroy(),
+		);
 	}
 
 	readonly MessageContext = MessageContext;
@@ -1914,14 +1920,6 @@ export const Chat = new class {
 		);
 
 		Monitor.slow(logMessage);
-	}
-	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
-		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
-		if (onlyRecipient) return onlyRecipient.send(buf);
-		user.send(buf);
-		if (pmTarget !== user) pmTarget.send(buf);
-		pmTarget.lastPM = user.id;
-		user.lastPM = pmTarget.id;
 	}
 
 	packageData: AnyObject = {};
@@ -2629,6 +2627,7 @@ export const Chat = new class {
 // they're just there so forks have time to slowly transition
 (Chat as any).escapeHTML = Utils.escapeHTML;
 (Chat as any).splitFirst = Utils.splitFirst;
+(Chat as any).sendPM = Chat.PrivateMessages.send.bind(Chat.PrivateMessages);
 (CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
 (CommandContext.prototype as any).canTalk = CommandContext.prototype.checkChat;
 (CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;
