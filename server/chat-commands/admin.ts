@@ -530,7 +530,7 @@ export const commands: Chat.ChatCommands = {
 
 		message = this.checkChat(message);
 		if (!message) return;
-		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
+		Chat.PrivateMessages.send(`/botmsg ${message}`, user, targetUser, targetUser);
 	},
 	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
 

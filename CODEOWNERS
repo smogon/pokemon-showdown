@@ -5,6 +5,7 @@ data/random-sets.json @MathyFurret @ACakeWearingAHat @livid-washed @adrivrie
 data/random-teams.ts @AnnikaCodes @KrisXV @MathyFurret @ACakeWearingAHat @livid-washed @adrivrie
 data/text/ @Marty-D
 databases/ @monsanto
+lib/sql.ts @mia-pi-git
 server/artemis/* @mia-pi-git
 server/chat-plugins/abuse-monitor.ts @mia-pi-git
 server/chat-plugins/friends.ts @mia-pi-git
@@ -24,6 +25,8 @@ server/chat-plugins/scavenger*.ts @xfix @sparkychildcharlie @PartMan7
 sever/chat-plugins/teams.ts @mia-pi-git
 server/chat-plugins/the-studio.ts @KrisXV
 server/chat-plugins/trivia/ @AnnikaCodes
+server/friends.ts @mia-pi-git
+server/private-messages/* @mia-pi-git
 server/chat-plugins/username-prefixes.ts @AnnikaCodes
 server/chat-plugins/wifi.ts @KrisXV
 server/friends.ts @mia-pi-git
