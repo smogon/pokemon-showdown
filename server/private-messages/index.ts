@@ -54,7 +54,7 @@ export const PrivateMessages = new class {
 			if (options.forceBool) return false;
 			throw new Chat.ErrorMessage(`Offline PMs are currently disabled.`);
 		}
-		if (!user.autoconfirmed) {
+		if (!(options.isLogin ? user.registered : user.autoconfirmed)) {
 			if (options.forceBool) return false;
 			throw new Chat.ErrorMessage("You must be autoconfirmed to use offine messaging.");
 		}
@@ -76,10 +76,11 @@ export const PrivateMessages = new class {
 		const userid = toID(user);
 		// we only want to send the unseen pms to them when they login - they can replay the rest at will otherwise
 		const messages = await this.fetchUnseen(userid);
+		const serverTimezone = -new Date().getTimezoneOffset() / 60;
 		for (const {message, time, sender} of messages) {
 			user.send(
 				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|` +
-				`${message} __[sent offline, ${Chat.toTimestamp(new Date(time))}]__`
+				`${message} __[sent offline, ${Chat.toTimestamp(new Date(time))} GMT ${serverTimezone}]__`
 			);
 		}
 	}
