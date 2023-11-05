@@ -64,28 +64,21 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
-			Flying: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Flying') && !['mantine', 'murkrow'].includes(species.id) &&
-				!movePool.includes('hiddenpowerflying')
-			),
+			Flying: (movePool, moves, abilities, types, counter, species) => (!counter.get('Flying') && species.id !== 'mantine'),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Grass') && (species.baseStats.atk >= 100 || movePool.includes('leafstorm') || movePool.includes('solarbeam'))
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
-			Poison: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Poison') && (types.has('Grass') || types.has('Ground'))
-			),
+			Poison: (movePool, moves, abilities, types, counter) => (!counter.get('Poison') && types.has('Grass')),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Rock') && (species.baseStats.atk >= 95 || abilities.has('Rock Head'))
 			),
-			Steel: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Steel') && ['aggron', 'metagross'].includes(species.id)
-			),
+			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.id === 'metagross'),
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
 	}
@@ -395,20 +388,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		// Enforce setup
 		if (role.includes('Setup')) {
-			// First, try to add a non-Speed setup move
-			const nonSpeedSetupMoves = movePool.filter(moveid => SETUP.includes(moveid) && !SPEED_SETUP.includes(moveid));
-			if (nonSpeedSetupMoves.length) {
-				const moveid = this.sample(nonSpeedSetupMoves);
+			const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
+			if (setupMoves.length) {
+				const moveid = this.sample(setupMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
-			} else {
-				// No non-Speed setup moves, so add any (Speed) setup move
-				const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
-				if (setupMoves.length) {
-					const moveid = this.sample(setupMoves);
-					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, preferredType, role);
-				}
 			}
 		}
 
@@ -482,7 +466,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Hustle': case 'Ice Body': case 'Rain Dish': case 'Sand Veil': case 'Snow Cloak': case 'Solar Power': 
+		case 'Hustle': case 'Ice Body': case 'Rain Dish': case 'Sand Veil': case 'Snow Cloak': case 'Solar Power':
 		case 'Steadfast': case 'Sticky Hold': case 'Unaware':
 			return true;
 		case 'Chlorophyll':
@@ -598,6 +582,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'shedinja' || species.id === 'smeargle') return 'Focus Sash';
 		if (species.id === 'unown') return 'Choice Specs';
 		if (species.id === 'wobbuffet') return 'Custap Berry';
+		if (species.id === 'ditto') return 'Choice Scarf';
 		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
 		if (ability === 'Speed Boost' && species.id === 'yanmega') return 'Life Orb';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
@@ -615,6 +600,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Natural Cure', 'Shed Skin'].includes(ability)) {
 			return (moves.has('raindance') && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
 		}
+		if (ability === 'Unburden') return 'Sitrus Berry';
 		if (role === 'Staller') return 'Leftovers';
 	}
 
@@ -646,6 +632,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				scarfReqs && species.baseStats.spa >= 90 && this.randomChance(1, 2)
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
+		if (
+			counter.get('Special') === 3 && role === 'Fast Attacker' && moves.has('explosion') || moves.has('selfdestruct')
+		) return 'Choice Scarf';
 		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
 		if (counter.get('Physical') === 4 && species.id !== 'jirachi' &&
 			['fakeout', 'rapidspin'].every(m => !moves.has(m))
@@ -660,7 +649,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (species.id === 'farfetchd') return 'Stick';
 		if (moves.has('outrage') && counter.get('setup') && !moves.has('sleeptalk')) return 'Lum Berry';
-		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
+		if (['batonpass', 'protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
 			(!counter.get('recoil') || ability === 'Rock Head')
@@ -675,12 +664,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			) ? 'Life Orb' : 'Leftovers';
 		}
 		// noStab moves that should reject Expert Belt
-		const noExpertBeltMoves = this.noStab.filter(moveid => ['Dragon', 'Normal'].includes(this.dex.moves.get(moveid).type));
-		const expertBeltReqs = !counter.get('Dragon') && !counter.get('Normal') && noExpertBeltMoves.every(m => !moves.has(m));
-		if (
-			!counter.get('Status') && expertBeltReqs &&
-			(moves.has('uturn') || role === 'Fast Attacker')
-		) return 'Expert Belt';
+		const noExpertBeltMoves = this.noStab.filter(moveid => ['Dragon', 'Normal', 'Poison'].includes(this.dex.moves.get(moveid).type));
+		const expertBeltReqs = !counter.get('Dragon') && !counter.get('Normal') && !counter.get('Poison') && noExpertBeltMoves.every(m => !moves.has(m));
+		if (!counter.get('Status') && expertBeltReqs && (moves.has('uturn') || role === 'Fast Attacker')) return 'Expert Belt';
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
 			this.dex.getEffectiveness('Rock', species) < 2

@@ -191,8 +191,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["aromatherapy", "energyball", "hiddenpowerfire", "sleeppowder", "sludgebomb", "synthesis"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["aromatherapy", "energyball", "hiddenpowerfire", "sleeppowder", "sludgebomb", "synthesis"]
             },
             {
                 "role": "Setup Sweeper",
@@ -427,7 +426,7 @@
         "level": 77,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["explosion", "focusblast", "painsplit", "shadowball", "sludgebomb", "substitute", "trick", "willowisp"],
                 "preferredTypes": ["Fighting"]
             }
@@ -924,7 +923,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["heatwave", "hiddenpowerflying", "psychic", "roost", "thunderwave", "toxic"]
+                "movepool": ["heatwave", "hiddenpowerfighting", "psychic", "roost", "thunderwave", "toxic"]
             }
         ]
     },
@@ -1519,7 +1518,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["darkpulse", "explosion", "hiddenpowerfire", "leafstorm", "lowkick", "suckerpunch"]
             },
             {
@@ -1780,7 +1779,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Fast Attacker",
                 "movepool": ["hiddenpowergrass", "hydropump", "icebeam", "selfdestruct", "surf", "waterspout"],
                 "preferredTypes": ["Ice"]
             }
@@ -2472,7 +2471,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["airslash", "bugbuzz", "hiddenpowerfighting", "hiddenpowerground", "shadowball", "uturn"]
+                "movepool": ["airslash", "bugbuzz", "hiddenpowerfighting", "hiddenpowerground", "shadowball", "uturn"],
+                "preferredTypes": ["Bug"]
             }
         ]
     },
