@@ -626,7 +626,7 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Arceus-Base', 'Arceus-Dark', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Figthing', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass',
+			'Arceus-Base', 'Arceus-Dark', 'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Grass',
 			'Arceus-Ground', 'Arceus-Poison', 'Arceus-Rock', 'Arceus-Steel', 'Arceus-Water', 'Basculegion', 'Calyrex-Shadow', 'Chien-Pao', 'Gholdengo',
 			'Koraidon', 'Komala', 'Miraidon', 'Numel', 'Persian-Alola', 'Raichu-Alola', 'Rayquaza', 'Shaymin-Sky', 'Slowbro-Galar', 'Zacian', 'Zacian-Crowned',
 			'Arena Trap', 'Armor Tail', 'Chlorophyll', 'Contrary', 'Dazzling', 'Huge Power', 'Illusion', 'Imposter', 'Magic Bounce', 'Magic Guard',
