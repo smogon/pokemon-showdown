@@ -581,20 +581,15 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		role: RandomTeamsTypes.Role,
 	): string | undefined {
 		if (species.requiredItems) return this.sample(species.requiredItems);
-		if (species.id === 'farfetchd') return 'Stick';
 		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'shedinja' || species.id === 'smeargle') return 'Focus Sash';
 		if (species.id === 'unown') return 'Choice Specs';
 		if (species.id === 'wobbuffet') return 'Custap Berry';
-		if (ability === 'Harvest') return 'Sitrus Berry';
-		if (species.id === 'ditto') return 'Choice Scarf';
-		if (species.id === 'exploud' && role === 'Bulky Attacker') return 'Choice Band';
 		if (ability === 'Poison Heal' || moves.has('facade')) return 'Toxic Orb';
-		if (ability === 'Speed Boost' && species.id !== 'ninjask') return 'Life Orb';
-		if (species.nfe) return 'Eviolite';
-		if (['healingwish', 'memento', 'switcheroo', 'trick'].some(m => moves.has(m))) {
+		if (ability === 'Speed Boost' && species.id === 'yanmega') return 'Life Orb';
+		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 && role !== 'Wallbreaker' && !counter.get('priority')
 			) {
@@ -604,14 +599,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
-		if (moves.has('shellsmash')) return 'White Herb';
-		if (moves.has('psychoshift')) return 'Flame Orb';
-		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
-			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
-		}
-		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
-		if (moves.has('acrobatics')) return 'Flying Gem';
-		if (species.id === 'hitmonlee' && ability === 'Unburden') return moves.has('fakeout') ? 'Normal Gem' : 'Fighting Gem';
+		if (ability === 'Magic Guard') return 'Life Orb';
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
 			return 'Chesto Berry';
@@ -648,8 +636,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
-		if (counter.get('Physical') === 4 && species.id !== 'jirachi' && species.id !== 'spinda' &&
-			['dragontail', 'fakeout', 'rapidspin'].every(m => !moves.has(m))
+		if (counter.get('Physical') === 4 && species.id !== 'jirachi' &&
+			['fakeout', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			return (
 				scarfReqs && (species.baseStats.atk >= 100 || ability === 'Pure Power' || ability === 'Huge Power') &&
@@ -657,21 +645,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			) ? 'Choice Scarf' : 'Choice Band';
 		}
 
-		if (ability === 'Sturdy' && moves.has('explosion')) return 'Custap Berry';
 		if (types.includes('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
 		if (species.id === 'palkia') return 'Lustrous Orb';
+		if (species.id === 'farfetchd') return 'Stick';
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
-		if (
-			(ability === 'Rough Skin') || (species.id !== 'hooh' && role !== 'Wallbreaker' &&
-			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
-		) return 'Rocky Helmet';
 		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
-		if (
-			this.dex.getEffectiveness('Ground', species) >= 2 &&
-			ability !== 'Levitate'
-		) {
-			return 'Air Balloon';
-		}
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
 			(!counter.get('recoil') || ability === 'Rock Head')
@@ -681,7 +659,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (role === 'Fast Support') {
 			return (
 				counter.get('Physical') + counter.get('Special') >= 3 &&
-				['rapidspin', 'uturn', 'voltswitch'].every(m => !moves.has(m)) &&
+				['rapidspin', 'uturn'].every(m => !moves.has(m)) &&
 				this.dex.getEffectiveness('Rock', species) < 2
 			) ? 'Life Orb' : 'Leftovers';
 		}
@@ -690,11 +668,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		const expertBeltReqs = !counter.get('Dragon') && !counter.get('Normal') && noExpertBeltMoves.every(m => !moves.has(m));
 		if (
 			!counter.get('Status') && expertBeltReqs &&
-			(moves.has('uturn') || moves.has('voltswitch') || role === 'Fast Attacker')
+			(moves.has('uturn') || role === 'Fast Attacker')
 		) return 'Expert Belt';
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
-			this.dex.getEffectiveness('Rock', species) < 2 && ability !== 'Sturdy'
+			this.dex.getEffectiveness('Rock', species) < 2
 		) return 'Life Orb';
 		return 'Leftovers';
 	}
