@@ -23,9 +23,9 @@ const SETUP = [
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
-	'aquajet', 'bulletpunch', 'chatter', 'eruption', 'explosion', 'fakeout', 'futuresight', 'iceshard', 'icywind',
-	'knockoff', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
-	'skyattack', 'suckerpunch', 'uturn', 'vacuumwave', 'waterspout',
+	'aquajet', 'bulletpunch', 'chatter', 'eruption', 'explosion', 'fakeout', 'focuspunch', 'futuresight', 'iceshard',
+	'icywind', 'knockoff', 'machpunch', 'pluck', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct',
+	'shadowsneak', 'skyattack', 'suckerpunch', 'uturn', 'vacuumwave', 'waterspout',
 ];
 // Hazard-setting moves
 const HAZARDS = [
@@ -38,6 +38,8 @@ const MOVE_PAIRS = [
 	['sleeptalk', 'rest'],
 	['protect', 'wish'],
 	['leechseed', 'substitute'],
+	['focuspunch', 'substitute'],
+	['raindance', 'rest'],
 ];
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
@@ -173,7 +175,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		// Nature Power is Earthquake this gen
 		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status' && move.id !== 'naturepower')
+			.filter(move => move.category === 'Status')
 			.map(move => move.id);
 
 		// General incompatibilities
@@ -189,30 +191,23 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			['rest', 'substitute'],
 
 			// These attacks are redundant with each other
-			['psychic', 'psyshock'],
-			[['scald', 'surf'], 'hydropump'],
+			['surf', 'hydropump'],
 			[['bodyslam', 'return'], ['bodyslam', 'doubleedge']],
-			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
+			[['energyball', 'leafstorm'], ['leafstorm', 'powerwhip']],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
 
 			// Status move incompatibilities
 			[statusInflictingMoves, statusInflictingMoves],
 
 			// Assorted hardcodes go here:
-			// Zebstrika
-			['wildcharge', 'thunderbolt'],
 			// Manectric
 			['flamethrower', 'overheat'],
-			// Meganium
-			['leechseed', 'dragontail'],
-			// Volcarona and Heatran
-			[['fierydance', 'lavaplume'], 'fireblast'],
+			// Heatran
+			['lavaplume', 'fireblast'],
 			// Walrein
 			['encore', 'roar'],
-			// Lunatone
-			['moonlight', 'rockpolish'],
 			// Smeargle
-			['memento', 'whirlwind'],
+			['explosion', 'whirlwind'],
 			// Seviper
 			['switcheroo', 'suckerpunch'],
 			// Jirachi
@@ -220,8 +215,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
-
-		if (species.id === 'dugtrio') this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
@@ -274,18 +267,12 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Seismic Toss, Spore
-		for (const moveid of ['seismictoss', 'spore']) {
+		// Enforce Seismic Toss, Spore, and Volt Tackle
+		for (const moveid of ['seismictoss', 'spore', 'volttackle']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
 			}
-		}
-
-		// Enforce Thunder Wave on Prankster users
-		if (movePool.includes('thunderwave') && abilities.has('Prankster')) {
-			counter = this.addMove('thunderwave', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, preferredType, role);
 		}
 
 		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
@@ -482,83 +469,24 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Hyper Cutter': case 'Ice Body': case 'Moody': case 'Pickpocket':
-		case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
+		case 'Hustle': case 'Ice Body': case 'Rain Dish': case 'Sand Veil': case 'Snow Cloak': case 'Solar Power': 
+		case 'Steadfast': case 'Sticky Hold': case 'Unaware':
 			return true;
 		case 'Chlorophyll':
-			// Petal Dance is for Lilligant
-			return (
-				species.baseStats.spe > 100 || moves.has('petaldance') ||
-				(!moves.has('sunnyday') && !teamDetails.sun)
-			);
-		case 'Compound Eyes': case 'No Guard':
-			return !counter.get('inaccurate');
-		case 'Contrary': case 'Skill Link':
-			return !counter.get(toID(ability));
-		case 'Defiant': case 'Justified': case 'Moxie':
-			return !counter.get('Physical');
+			return !moves.has('sunnyday') && !teamDetails.sun;
 		case 'Guts':
-			return (!moves.has('facade') && !moves.has('sleeptalk'));
-		case 'Hustle':
-			return (counter.get('Physical') < 2 || species.id === 'delibird');
-		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
+			return !moves.has('facade');
+		case 'Hydration': case 'Swift Swim':
 			return (
-				species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain ||
+				!moves.has('raindance') && !teamDetails.rain ||
 				!moves.has('raindance') && ['Rock Head', 'Water Absorb'].some(abil => abilities.has(abil))
 			);
-		case 'Intimidate':
-			// Slam part is for Tauros
-			return (moves.has('bodyslam') || species.id === 'staraptor');
-		case 'Iron Fist':
-			return (!counter.get(toID(ability)) || species.id === 'golurk');
-		case 'Lightning Rod':
-			return (types.has('Ground') || ((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking'));
-		case 'Magic Guard': case 'Speed Boost':
-			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
-		case 'Mold Breaker':
-			return (species.baseSpecies === 'Basculin' || species.id === 'rampardos');
-		case 'Overgrow':
-			return !counter.get('Grass');
-		case 'Prankster':
-			return !counter.get('Status');
-		case 'Poison Heal':
-			return (species.id === 'breloom' && role === 'Fast Attacker');
-		case 'Synchronize':
-			return (counter.get('Status') < 2 || !!counter.get('recoil'));
-		case 'Regenerator':
-			return ((species.id === 'mienshao' && role !== 'Wallbreaker') || species.id === 'reuniclus');
 		case 'Reckless': case 'Rock Head':
 			return !counter.get('recoil');
-		case 'Sand Force': case 'Sand Rush':
-			return !teamDetails.sand;
-		case 'Serene Grace':
-			return !counter.get('serenegrace');
-		case 'Sheer Force':
-			return (!counter.get('sheerforce') || moves.has('doubleedge') || abilities.has('Guts'));
-		case 'Simple':
-			return !counter.get('setup');
-		case 'Solar Power':
-			return (!counter.get('Special') || !teamDetails.sun);
-		case 'Sticky Hold':
-			return species.id !== 'accelgor';
-		case 'Sturdy':
-			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix' && !!counter.get('sheerforce'));
-		case 'Swarm':
-			return !counter.get('Bug');
+		case 'Skill Link':
+			return !counter.get('skilllink');
 		case 'Technician':
-			return (!counter.get('technician') || moves.has('tailslap'));
-		case 'Tinted Lens':
-			// Night Shade part is for Noctowl
-			return (
-				moves.has('nightshade') ||
-				['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker'
-			);
-		case 'Torrent':
-			return !counter.get('Water');
-		case 'Unaware':
-			return ((role !== 'Bulky Attacker' && role !== 'Bulky Setup') || species.id === 'swoobat');
-		case 'Water Absorb':
-			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
+			return !counter.get('technician');
 		}
 
 		return false;
@@ -588,23 +516,13 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			!abilities.has('Quick Feet') &&
 			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
 		) return 'Guts';
-		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
-		if (species.id === 'ninetales') return 'Drought';
 		if (species.id === 'arcanine') return 'Intimidate';
-		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
-		if (species.id === 'altaria') return 'Natural Cure';
-		if (species.id === 'mandibuzz') return 'Overcoat';
-		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
-		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
+		if (species.id === 'blissey') return 'Natural Cure';
 		if (['spiritomb', 'vespiquen', 'wailord', 'weavile'].includes(species.id)) return 'Pressure';
-		if (species.id === 'druddigon') return 'Rough Skin';
-		if (species.id === 'stunfisk') return 'Static';
-		if (species.id === 'zangoose') return 'Toxic Boost';
-		if (species.id === 'porygon2') return 'Trace';
+		if (species.id === 'yanmega') return (role === 'Fast Attacker') ? 'Speed Boost' : 'Tinted Lens';
+		if (species.id === 'lanturn') return 'Volt Absorb';
 
-		if (abilities.has('Harvest')) return 'Harvest';
-		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
-		if (abilities.has('Unburden') && ['acrobatics', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
+		if (abilities.has('Trace')) return 'Trace';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
