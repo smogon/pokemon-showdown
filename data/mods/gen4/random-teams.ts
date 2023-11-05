@@ -468,7 +468,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'Chlorophyll':
 			return !moves.has('sunnyday') && !teamDetails.sun;
 		case 'Guts':
-			return !moves.has('facade');
+			return !moves.has('facade') && species.id !== 'heracross';
 		case 'Hydration': case 'Swift Swim':
 			return (
 				!moves.has('raindance') && !teamDetails.rain ||
