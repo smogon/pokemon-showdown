@@ -535,25 +535,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
 		// Sort abilities by rating with an element of randomness
-		// All three abilities can be chosen
-		if (abilityAllowed[2] && abilityAllowed[0].rating - 0.5 <= abilityAllowed[2].rating) {
-			if (abilityAllowed[1].rating <= abilityAllowed[2].rating) {
-				if (this.randomChance(1, 2)) [abilityAllowed[1], abilityAllowed[2]] = [abilityAllowed[2], abilityAllowed[1]];
-			} else {
-				if (this.randomChance(1, 3)) [abilityAllowed[1], abilityAllowed[2]] = [abilityAllowed[2], abilityAllowed[1]];
-			}
-			if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
-				if (this.randomChance(2, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-			} else {
-				if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-			}
-		} else {
-			// Third ability cannot be chosen
-			if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
-				if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-			} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
-				if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-			}
+		if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
+			if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
+		} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
+			if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
 		}
 
 		// After sorting, choose the first ability
