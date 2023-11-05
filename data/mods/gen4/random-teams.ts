@@ -661,7 +661,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (types.includes('Normal') && moves.has('fakeout') && !!counter.get('Normal')) return 'Silk Scarf';
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (species.id === 'farfetchd') return 'Stick';
-		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
+		if (moves.has('outrage') && counter.get('setup') && !moves.has('sleeptalk')) return 'Lum Berry';
 		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
