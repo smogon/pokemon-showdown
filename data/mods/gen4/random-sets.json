@@ -361,7 +361,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "fireblast", "psychic", "slackoff", "surf"]
+                "movepool": ["calmmind", "psychic", "slackoff", "surf"]
             }
         ]
     },
@@ -2278,7 +2278,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "extremespeed", "hiddenpowerfire", "icebeam", "psychoboost", "stealthrock", "superpower"],
+                "movepool": ["extremespeed", "hiddenpowerfire", "icebeam", "psychoboost", "shadowball", "stealthrock", "superpower"],
                 "preferredTypes": ["Fighting"]
             }
         ]
@@ -2288,7 +2288,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "extremespeed", "hiddenpowerfire", "icebeam", "psychoboost", "superpower"],
+                "movepool": ["extremespeed", "hiddenpowerfire", "icebeam", "psychoboost", "shadowball", "superpower"],
                 "preferredTypes": ["Fighting"]
             }
         ]
@@ -2672,10 +2672,6 @@
                 "role": "Fast Attacker",
                 "movepool": ["closecombat", "crunch", "extremespeed", "icepunch", "swordsdance"],
                 "preferredTypes": ["Normal"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["aurasphere", "darkpulse", "flashcannon", "nastyplot", "vacuumwave"]
             }
         ]
     },

@@ -1,6 +1,5 @@
 import RandomGen5Teams from '../gen5/random-teams';
 import {Utils} from '../../../lib';
-import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
 import type {MoveCounter} from '../gen8/random-teams';
 
@@ -11,10 +10,6 @@ const RECOVERY_MOVES = [
 // Moves that boost Attack:
 const PHYSICAL_SETUP = [
 	'bellydrum', 'bulkup', 'curse', 'dragondance', 'howl', 'meditate', 'screech', 'swordsdance',
-];
-// Some moves that only boost Speed:
-const SPEED_SETUP = [
-	'agility', 'rockpolish',
 ];
 // Conglomerate for ease of access
 const SETUP = [
@@ -67,7 +62,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			Flying: (movePool, moves, abilities, types, counter, species) => (!counter.get('Flying') && species.id !== 'mantine'),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Grass') && (species.baseStats.atk >= 100 || movePool.includes('leafstorm') || movePool.includes('solarbeam'))
+				!counter.get('Grass') &&
+				(species.baseStats.atk >= 100 || movePool.includes('leafstorm') || movePool.includes('solarbeam'))
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
@@ -664,8 +660,13 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			) ? 'Life Orb' : 'Leftovers';
 		}
 		// noStab moves that should reject Expert Belt
-		const noExpertBeltMoves = this.noStab.filter(moveid => ['Dragon', 'Normal', 'Poison'].includes(this.dex.moves.get(moveid).type));
-		const expertBeltReqs = !counter.get('Dragon') && !counter.get('Normal') && !counter.get('Poison') && noExpertBeltMoves.every(m => !moves.has(m));
+		const noExpertBeltMoves = this.noStab.filter(
+			moveid => ['Dragon', 'Normal', 'Poison'].includes(this.dex.moves.get(moveid).type)
+		);
+		const expertBeltReqs = (
+			!counter.get('Dragon') && !counter.get('Normal') && !counter.get('Poison') &&
+			noExpertBeltMoves.every(m => !moves.has(m))
+		);
 		if (!counter.get('Status') && expertBeltReqs && (moves.has('uturn') || role === 'Fast Attacker')) return 'Expert Belt';
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&

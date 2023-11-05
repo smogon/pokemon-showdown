@@ -4,7 +4,7 @@
 'use strict';
 
 const assert = require('../assert');
-const {testTeam, testSet, testHiddenPower, testAlwaysHasMove, validateLearnset} = require('./tools');
+const {testTeam, testSet, testHiddenPower, validateLearnset} = require('./tools');
 
 describe('[Gen 4] Random Battle (slow)', () => {
 	const options = {format: 'gen4randombattle'};
