@@ -2316,13 +2316,11 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "stealthrock", "stoneedge", "synthesis", "woodhammer"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["earthquake", "stealthrock", "stoneedge", "synthesis", "woodhammer"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["earthquake", "rockpolish", "stoneedge", "swordsdance", "woodhammer"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["earthquake", "rockpolish", "stoneedge", "swordsdance", "woodhammer"]
             }
         ]
     },
@@ -3196,8 +3194,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["airslash", "earthpower", "hiddenpowerice", "leechseed", "seedflare", "substitute"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["airslash", "earthpower", "hiddenpowerice", "leechseed", "seedflare", "substitute"]
             }
         ]
     },
