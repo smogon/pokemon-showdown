@@ -791,7 +791,7 @@ export const commands: Chat.ChatCommands = {
 			const setsToCheck = [species];
 			if (dex.gen >= 8 && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
-			if ([5, 6, 9].includes(dex.gen) || (dex.gen === 7 && !isDoubles)) {
+			if ([4, 5, 6, 9].includes(dex.gen) || (dex.gen === 7 && !isDoubles)) {
 				for (const pokemon of setsToCheck) {
 					const sets = getSets(pokemon, format.id);
 					if (!sets) continue;
@@ -800,7 +800,7 @@ export const commands: Chat.ChatCommands = {
 						buf += `<details><summary>${set.role}</summary>`;
 						if (dex.gen === 9) {
 							buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
-						} else if (([5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
+						} else if (([4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
 							buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
 						}
 						buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
@@ -987,7 +987,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		let setExists: boolean;
-		if ([5, 6, 9].includes(dex.gen) || dex.gen === 7 && format.gameType !== 'doubles') {
+		if ([4, 5, 6, 9].includes(dex.gen) || dex.gen === 7 && format.gameType !== 'doubles') {
 			setExists = !!getSets(species, format);
 		} else if (dex.gen === 7 && format.gameType === 'doubles') {
 			setExists = !!getData(species, format);

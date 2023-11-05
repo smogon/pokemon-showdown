@@ -295,7 +295,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
-		if (['Bulky Support', 'Spinner'] && !teamDetails.rapidSpin) {
+		if (['Bulky Support', 'Spinner'].includes(role) && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
 				counter = this.addMove('rapidspin', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
@@ -947,7 +947,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		const pokemonList = (this.gen === 5) ? Object.keys(this.randomSets) : Object.keys(this.randomData);
+		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);

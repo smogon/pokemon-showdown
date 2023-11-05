@@ -3,6 +3,12 @@ import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
+// Moves that shouldn't be the only STAB moves:
+const NO_STAB = [
+	'bounce', 'eruption', 'explosion', 'fakeout', 'icywind', 'machpunch',
+	'pursuit', 'quickattack', 'reversal', 'selfdestruct', 'waterspout',
+];
+
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
 	battleHasWobbuffet: boolean;
@@ -11,6 +17,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
+		this.noStab = NO_STAB;
 		this.battleHasDitto = false;
 		this.battleHasWobbuffet = false;
 		this.moveEnforcementCheckers = {
