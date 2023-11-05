@@ -210,28 +210,6 @@ export const PrivateMessages = new class {
 };
 
 if (Config.usesqlite) {
-	if (PM.isParentProcess) {
-		PM.spawn(Config.pmprocesses || 1);
-		// clear super old pms on startup
-		void PM.run(statements.clearDated);
-	} else {
-		global.Monitor = {
-			crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
-				const repr = JSON.stringify([error.name, error.message, source, details]);
-				process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-			},
-		};
-		process.on('uncaughtException', err => {
-			Monitor.crashlog(err, 'A private message database process');
-		});
-		process.on('unhandledRejection', err => {
-			Monitor.crashlog(err as Error, 'A private message database process');
-		});
-	}
-}
-
-
-if (Config.usesqlite) {
 	if (!process.send) {
 		PM.spawn(Config.pmprocesses || 1);
 		// clear super old pms on startup
