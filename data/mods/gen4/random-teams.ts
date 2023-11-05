@@ -524,17 +524,15 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Hard-code abilities here
-		if (
-			abilities.has('Guts') &&
-			!abilities.has('Quick Feet') &&
-			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
-		) return 'Guts';
+		if (species.id === 'jynx') return 'Forewarn';
 		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'blissey') return 'Natural Cure';
-		if (['spiritomb', 'vespiquen', 'wailord', 'weavile'].includes(species.id)) return 'Pressure';
 		if (species.id === 'yanmega') return (role === 'Fast Attacker') ? 'Speed Boost' : 'Tinted Lens';
+		if (species.id === 'absol') return 'Super Luck';
 		if (species.id === 'lanturn') return 'Volt Absorb';
 
+		if (abilities.has('Guts') && !abilities.has('Quick Feet') && moves.has('facade')) return 'Guts';
+		if (abilities.has('Hydration') && moves.has('raindance') && moves.has('rest')) return 'Hydration';
 		if (abilities.has('Trace')) return 'Trace';
 
 		let abilityAllowed: Ability[] = [];
@@ -614,8 +612,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 		if (ability === 'Magic Guard') return 'Life Orb';
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
-		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
-			return 'Chesto Berry';
+		if (moves.has('rest') && !moves.has('sleeptalk') && !['Natural Cure', 'Shed Skin'].includes(ability)) {
+			return (moves.has('raindance') && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
 		}
 		if (role === 'Staller') return 'Leftovers';
 	}
@@ -793,7 +791,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				if (hp % 2 === 0) break;
 			} else {
 				// Maximize number of Stealth Rock switch-ins
-				if (srWeakness <= 0 || ability === 'Regenerator' || ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
+				if (srWeakness <= 0 || ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
 				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
 				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
 				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;
