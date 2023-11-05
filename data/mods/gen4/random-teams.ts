@@ -70,7 +70,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Grass') && (species.baseStats.atk >= 100 || movePool.includes('leafstorm'))
+				!counter.get('Grass') && (species.baseStats.atk >= 100 || movePool.includes('leafstorm') || movePool.includes('solarbeam'))
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
@@ -189,12 +189,17 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			[['fakeout', 'uturn'], ['switcheroo', 'trick']],
 			['substitute', 'uturn'],
 			['rest', 'substitute'],
+			['explosion', ['destinybond', 'painsplit', 'rest', 'trick']],
 
 			// These attacks are redundant with each other
 			['surf', 'hydropump'],
 			[['bodyslam', 'return'], ['bodyslam', 'doubleedge']],
-			[['energyball', 'leafstorm'], ['leafstorm', 'powerwhip']],
-			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
+			[['energyball', 'leafstorm'], ['leafblade', 'leafstorm', 'powerwhip']],
+			['lavaplume', 'fireblast'],
+			['closecombat', 'drainpunch'],
+			['discharge', 'thunderbolt'],
+			['gunkshot', 'poisonjab'],
+			['payback', 'pursuit'],
 
 			// Status move incompatibilities
 			[statusInflictingMoves, statusInflictingMoves],
@@ -202,8 +207,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			// Assorted hardcodes go here:
 			// Manectric
 			['flamethrower', 'overheat'],
-			// Heatran
-			['lavaplume', 'fireblast'],
 			// Walrein
 			['encore', 'roar'],
 			// Smeargle
@@ -212,6 +215,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			['switcheroo', 'suckerpunch'],
 			// Jirachi
 			['bodyslam', 'healingwish'],
+			// Blaziken
+			['agility', 'vacuumwave'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -271,6 +276,14 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		for (const moveid of ['seismictoss', 'spore', 'volttackle']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, preferredType, role);
+			}
+		}
+
+		// Enforce Substitute on non-Setup sets with Baton Pass
+		if (!role.includes('Setup')) {
+			if (movePool.includes('batonpass') && movePool.includes('substitute')) {
+				counter = this.addMove('substitute', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
 			}
 		}
