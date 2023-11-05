@@ -196,7 +196,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["hiddenpowerfire", "moonlight", "sludgebomb", "solarbeam", "sunnyday"]
+                "movepool": ["hiddenpowerfire", "sludgebomb", "solarbeam", "sunnyday", "synthesis"]
             }
         ]
     },
