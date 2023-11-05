@@ -295,7 +295,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		// Enforce hazard removal on Bulky Support and Spinner if the team doesn't already have it
-		if (['Bulky Support', 'Spinner'] && !teamDetails.rapidSpin) {
+		if (['Bulky Support', 'Spinner'].includes(role) && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {
 				counter = this.addMove('rapidspin', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
