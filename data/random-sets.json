@@ -333,7 +333,7 @@
                 "teraTypes": ["Poison", "Psychic"]
             },
             {
-                "role": "AV Pivot",
+                "role": "Bulky Attacker",
                 "movepool": ["Earthquake", "Fire Blast", "Psychic", "Shell Side Arm", "Slack Off", "Thunder Wave"],
                 "teraTypes": ["Dark", "Ground", "Poison"]
             }
