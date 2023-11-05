@@ -5130,10 +5130,6 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["seedbomb", "shadowsneak", "synthesis", "willowisp"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["leechseed", "phantomforce", "substitute", "willowisp"]
             }
         ]
     },
@@ -5143,10 +5139,6 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["seedbomb", "shadowsneak", "synthesis", "willowisp"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["leechseed", "phantomforce", "substitute", "willowisp"]
             }
         ]
     },
@@ -5156,10 +5148,6 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["seedbomb", "shadowsneak", "synthesis", "willowisp"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["leechseed", "phantomforce", "substitute", "willowisp"]
             }
         ]
     },
@@ -5169,10 +5157,6 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["seedbomb", "shadowsneak", "synthesis", "willowisp"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["leechseed", "phantomforce", "substitute", "willowisp"]
             }
         ]
     },
