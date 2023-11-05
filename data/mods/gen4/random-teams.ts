@@ -655,7 +655,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (!counter.get('Status') && expertBeltReqs && (moves.has('uturn') || role === 'Fast Attacker')) return 'Expert Belt';
 		if (
 			['Fast Attacker', 'Setup Sweeper', 'Wallbreaker'].some(m => role === m) &&
-			this.dex.getEffectiveness('Rock', species) < 2
+			this.dex.getEffectiveness('Rock', species) < 2 && !moves.has('rapidspin')
 		) return 'Life Orb';
 		return 'Leftovers';
 	}
