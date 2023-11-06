@@ -638,7 +638,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	magneton: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "NFE",
 		natDexTier: "NFE",
 	},
