@@ -1576,6 +1576,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 			player.sendRoom(prompt);
 			player.sendRoom(button);
 			// send it to the main room as well, in case they x out of the old one
+			if (!this.playerTable[userid]) throw new Error(`Player ${userid} in ${this.roomid} doesn't exist`);
 			this.playerTable[userid].sendRoom(prompt);
 			this.playerTable[userid].sendRoom(button);
 		}
