@@ -296,7 +296,7 @@ class OtdHandler {
 		this.room.add(
 			Utils.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
 			`Nominations for ${this.name} of the ${this.timeLabel} are over!</p><p style="tex-align:center;font-size:10pt;">` +
-			`Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner!` +
+			`Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner! ` +
 			`(Nomination by ${winner.name})</p><p style="font-weight:bold;">Thanks to today's participants:` + namesHTML
 		);
 		this.room.update();

@@ -2908,7 +2908,7 @@ export const commands: Chat.ChatCommands = {
 					const text = Array.isArray(help) ?
 						help.join(' | ') : typeof help === 'function' ?
 							`<button class="button" name="send" value="/${cmdList[0] + 'help'}">Get help</button>` : '';
-					buf += text ? ` (<code><small>${text}</small></code>)` : `(no help found)`;
+					buf += text ? ` (<code><small>${text}</small></code>)` : ` (no help found)`;
 				}
 			}
 			buf += `<br />`;
