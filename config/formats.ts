@@ -775,7 +775,8 @@ export const Formats: FormatList = [
 
 				set.species = donorSpecies.name;
 				set.name = donorSpecies.baseSpecies;
-				if (species.name === "Iron Leaves" || species.name === "Walking Wake") {
+				if (["Iron Leaves", "Walking Wake"].includes(donorSpecies.name) ||
+					["Iron Leaves", "Walking Wake"].includes(species.name)) {
 					set.hpType = "Dark";
 				}
 				const problems = this.validateSet(set, teamHas);
