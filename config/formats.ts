@@ -972,8 +972,9 @@ export const Formats: FormatList = [
 			'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Baton Pass', 'Shed Tail',
 		],
 		restricted: [
-			'Arceus', 'Basculegion-Base', 'Calyrex-Ice', 'Dialga', 'Dragapult', 'Flutter Mane', 'Gengar', 'Gholdengo', 'Giratina', 'Groudon', 'Iron Bundle',
-			'Kilowattrel', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Slaking', 'Sneasler', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian',
+			'Arceus', 'Basculegion-Base', 'Calyrex-Ice', 'Dialga', 'Dragapult', 'Enamorus-Base', 'Flutter Mane', 'Gengar', 'Gholdengo', 'Giratina', 'Groudon',
+			'Iron Bundle', 'Jolteon', 'Kilowattrel', 'Manaphy', 'Mewtwo', 'Palkia', 'Rayquaza', 'Slaking', 'Sneasler', 'Ursaluna-Bloodmoon', 'Urshifu',
+			'Urshifu-Rapid-Strike', 'Zacian',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<ID>();
