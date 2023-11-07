@@ -92,16 +92,18 @@ export const Scripts: ModdedBattleScriptsData = {
 						changed = true;
 					}
 				}
-				// Recalculate the modified stat
-				this.modifiedStats![i] = this.storedStats[i];
-				if (this.boosts[i] >= 0) {
-					this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
-				} else {
-					this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
-				}
-				if (delta > 0 && this.modifiedStats![i] > 999) {
-					// Cap the stat at 999
-					this.modifiedStats![i] = 999;
+				if (changed) {
+					// Recalculate the modified stat
+					this.modifiedStats![i] = this.storedStats[i];
+					if (this.boosts[i] >= 0) {
+						this.modifyStat!(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
+					} else {
+						this.modifyStat!(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
+					}
+					if (delta > 0 && this.modifiedStats![i] > 999) {
+						// Cap the stat at 999
+						this.modifiedStats![i] = 999;
+					}
 				}
 			}
 			return changed;
@@ -207,10 +209,10 @@ export const Scripts: ModdedBattleScriptsData = {
 						// We remove recharge
 						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 						delete pokemon.volatiles['partialtrappinglock'];
-					} else if (pokemon.hp) {
-						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
+					} else {
+						if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
+						if (pokemon.hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
-					if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
 
 					// For partial trapping moves, we are saving the target
 					if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
@@ -375,7 +377,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// OHKO moves only have a chance to hit if the user is at least as fast as the target
 			if (move.ohko) {
-				if (target.speed > pokemon.speed) {
+				if (target.getStat('spe') > pokemon.getStat('spe')) {
 					this.battle.add('-immune', target, '[ohko]');
 					return false;
 				}
@@ -578,7 +580,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (moveData.boosts && target.hp) {
 					const willBoost = this.battle.boost(moveData.boosts, target, pokemon, move);
 					if (!willBoost) {
-						if (willBoost === false) this.battle.add('-fail', target);
+						this.battle.add('-fail', target);
 						return false;
 					}
 					didSomething = true;
@@ -748,7 +750,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// If there's a fix move damage, we return that.
-			if (move.damage) {
+			if (move.damage || move.damage === 0) {
 				return move.damage;
 			}
 
@@ -901,7 +903,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Type effectiveness.
 			// In Gen 1, type effectiveness is applied against each of the target's types.
 			for (const targetType of target.types) {
-				const typeMod = this.battle.dex.getEffectiveness(type, targetType);
+				let typeMod = this.battle.dex.getEffectiveness(type, targetType);
+				typeMod = this.battle.runEvent('Effectiveness', this.battle, targetType, move, typeMod);
 				if (typeMod > 0) {
 					// Super effective against targetType
 					damage *= 20;

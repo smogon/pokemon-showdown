@@ -24,18 +24,10 @@ export interface SpeciesData extends Partial<Species> {
 export type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inherit: true};
 
 export interface SpeciesFormatsData {
-	comboMoves?: readonly string[];
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
-	essentialMove?: string;
-	exclusiveMoves?: readonly string[];
 	gmaxUnreleased?: boolean;
 	isNonstandard?: Nonstandard | null;
 	natDexTier?: TierTypes.Singles | TierTypes.Other;
-	randomBattleMoves?: readonly string[];
-	randomBattleLevel?: number;
-	randomDoubleBattleMoves?: readonly string[];
-	randomDoubleBattleLevel?: number;
-	randomBattleNoDynamaxMoves?: readonly string[];
 	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
@@ -50,6 +42,11 @@ export interface LearnsetData {
 }
 
 export type ModdedLearnsetData = LearnsetData & {inherit?: true};
+
+export interface PokemonGoData {
+	encounters?: string[];
+	LGPERestrictiveMoves?: {[moveid: string]: number | null};
+}
 
 export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
 	declare readonly effectType: 'Pokemon';
@@ -188,6 +185,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly gmaxUnreleased?: boolean;
 	/** True if a Pokemon species is incapable of dynamaxing */
 	readonly cannotDynamax?: boolean;
+	/** The Tera Type this Pokemon is forced to use */
+	readonly forceTeraType?: string;
 	/** What it transforms from, if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: string | string[];
 	/** Required item. Do not use this directly; see requiredItems. */
@@ -215,6 +214,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly changesFrom?: string;
 
 	/**
+	 * List of sources and other availability for a Pokemon transferred from
+	 * Pokemon GO.
+	 */
+	readonly pokemonGoData?: string[];
+
+	/**
 	 * Singles Tier. The Pokemon's location in the Smogon tier system.
 	 */
 	readonly tier: TierTypes.Singles | TierTypes.Other;
@@ -226,14 +231,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * National Dex Tier. The Pokemon's location in the Smogon National Dex tier system.
 	 */
 	readonly natDexTier: TierTypes.Singles | TierTypes.Other;
-	declare readonly randomBattleMoves?: readonly ID[];
-	declare readonly randomBattleLevel?: number;
-	declare readonly randomDoubleBattleMoves?: readonly ID[];
-	declare readonly randomDoubleBattleLevel?: number;
-	declare readonly randomBattleNoDynamaxMoves?: readonly ID[];
-	declare readonly exclusiveMoves?: readonly ID[];
-	declare readonly comboMoves?: readonly ID[];
-	declare readonly essentialMove?: ID;
 
 	constructor(data: AnyObject) {
 		super(data);
@@ -289,6 +286,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
 			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
+		this.pokemonGoData = data.pokemonGoData || undefined;
 		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
@@ -535,6 +533,10 @@ export class DexSpecies {
 		learnsetData = new Learnset(this.dex.data.Learnsets[id]);
 		this.learnsetCache.set(id, learnsetData);
 		return learnsetData;
+	}
+
+	getPokemonGoData(id: ID): PokemonGoData {
+		return this.dex.data.PokemonGoData[id];
 	}
 
 	all(): readonly Species[] {

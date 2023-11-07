@@ -20,13 +20,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryHit(target, pokemon) {
 			const action = this.queue.willMove(target);
 			if (action) {
-				const noMeFirst = [
-					'chatter', 'counter', 'covet', 'focuspunch', 'mefirst', 'metalburst', 'mirrorcoat', 'struggle', 'thief',
-				];
 				// Mod-specific: Me First copies the first move in the link
 				// @ts-ignore
 				const move = this.dex.getActiveMove(action.linked?.[0] || action.move);
-				if (move.category !== 'Status' && !noMeFirst.includes(move.id)) {
+				if (move.category !== 'Status' && !move.flags['failmefirst']) {
 					pokemon.addVolatile('mefirst');
 					this.actions.useMove(move, pokemon, target);
 					return null;
@@ -100,9 +97,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mimic: {
 		inherit: true,
 		onHit(target, source) {
-			const disallowedMoves = ['chatter', 'mimic', 'sketch', 'struggle', 'transform'];
 			const lastMove: Move = target.m.lastMoveAbsolute;
-			if (source.transformed || !lastMove || disallowedMoves.includes(lastMove.id) ||
+			if (source.transformed || !lastMove || lastMove.flags['failmimic'] ||
 				source.moves.includes(lastMove.id) || lastMove.isZ) return false;
 			const mimicIndex = source.moves.indexOf('mimic');
 			if (mimicIndex < 0) return false;
@@ -128,11 +124,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
 			if (!lastMove || target.volatiles['dynamax']) return false;
 			const moveIndex = target.moves.indexOf(lastMove.id);
-			const noInstruct = [
-				'assist', 'beakblast', 'belch', 'bide', 'celebrate', 'copycat', 'dynamaxcannon', 'focuspunch', 'iceball', 'instruct', 'kingsshield', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'obstruct', 'outrage', 'petaldance', 'rollout', 'shelltrap', 'sketch', 'sleeptalk', 'struggle', 'thrash', 'transform', 'uproar',
-			];
 			if (
-				noInstruct.includes(lastMove.id) || lastMove.isZ || lastMove.isMax ||
+				lastMove.flags['failinstruct'] || lastMove.isZ || lastMove.isMax ||
 				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
 				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
 				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)
@@ -217,21 +210,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 3,
 			noCopy: true, // doesn't get copied by Z-Baton Pass
 			onStart(target) {
-				const noEncore = [
-					'assist', 'copycat', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform',
-				];
 				let lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
 				if (!lastMove || target.volatiles['dynamax']) return false;
 				if ((lastMove as ActiveMove).isZOrMaxPowered) lastMove = this.dex.moves.get(lastMove.baseMove);
 				// @ts-ignore
 				const linkedMoves: [string, string] = target.getLinkedMoves(true);
 				const moveIndex = target.moves.indexOf(lastMove.id);
-				if (linkedMoves.includes(lastMove.id) && noEncore.includes(linkedMoves[0]) && noEncore.includes(linkedMoves[1])) {
+				if (linkedMoves.includes(lastMove.id) && this.dex.moves.get((linkedMoves[0])).flags['failencore'] &&
+					this.dex.moves.get((linkedMoves[1])).flags['failencore']) {
 					// both moves cannot be encored
 					delete target.volatiles['encore'];
 					return false;
 				}
-				if (lastMove.isZ || noEncore.includes(lastMove.id) ||
+				if (lastMove.isZ || lastMove.flags['failencore'] ||
 					(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
 					// it failed
 					delete target.volatiles['encore'];
@@ -357,7 +348,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
 				const lastMove: Move | ActiveMove | null = source.m.lastMoveAbsolute;
-				if (effect.effectType === 'Move' && !effect.isFutureMove && lastMove) {
+				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && lastMove) {
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === lastMove.id) {
 							moveSlot.pp = 0;
@@ -417,7 +408,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFaint(target, source, effect) {
 				if (!source || !effect || target.side === source.side) return;
-				if (effect.effectType === 'Move' && !effect.isFutureMove) {
+				if (effect.effectType === 'Move' && !effect.flags['futuremove']) {
 					if (source.volatiles['dynamax']) {
 						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
 						return;

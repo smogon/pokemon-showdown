@@ -92,12 +92,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-	poisontouch: {
-		inherit: true,
-		// Activate after Sheer Force to make interaction determistic. The ordering for this ability is
-		// an arbitary decision, but is modelled on Stench, which is reflective of on-cart behaviour.
-		onModifyMovePriority: -1,
-	},
 	powerofalchemy: {
 		inherit: true,
 		onAllyFaint(ally) {

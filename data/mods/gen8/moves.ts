@@ -22,9 +22,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	aurawheel: {
+	assist: {
 		inherit: true,
-		isNonstandard: null,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	auroraveil: {
 		inherit: true,
@@ -35,6 +35,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	autotomize: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	belch: {
+		inherit: true,
+		flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	blizzard: {
 		inherit: true,
@@ -57,6 +61,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	bonemerang: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	celebrate: {
+		inherit: true,
+		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	charge: {
 		inherit: true,
@@ -89,13 +97,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 	},
-	clangingscales: {
+	chatter: {
 		inherit: true,
-		isNonstandard: null,
-	},
-	clangoroussoul: {
-		inherit: true,
-		isNonstandard: null,
+		flags: {
+			protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1,
+			noassist: 1, failcopycat: 1, failinstruct: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1,
+		},
 	},
 	conversion: {
 		inherit: true,
@@ -104,6 +111,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	conversion2: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	copycat: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	coreenforcer: {
 		inherit: true,
@@ -130,11 +141,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "randomNormal",
 	},
-	decorate: {
+	darkvoid: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
-	doomdesire: {
+	decorate: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -156,6 +167,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	eternabeam: {
 		inherit: true,
+		flags: {recharge: 1, protect: 1, mirror: 1, failinstruct: 1},
 		isNonstandard: null,
 	},
 	fishiousrend: {
@@ -195,10 +207,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 	},
-	forestscurse: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	freezeshock: {
 		inherit: true,
 		isNonstandard: null,
@@ -210,6 +218,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	fusionflare: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	futuresight: {
+		inherit: true,
+		flags: {futuremove: 1},
 	},
 	geargrind: {
 		inherit: true,
@@ -254,6 +266,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	heartswap: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	holdhands: {
+		inherit: true,
+		flags: {bypasssub: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	hyperspacefury: {
 		inherit: true,
@@ -387,9 +403,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	mefirst: {
+		inherit: true,
+		flags: {
+			protect: 1, bypasssub: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1,
+		},
+	},
 	meteorassault: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	metronome: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	milkdrink: {
 		inherit: true,
@@ -402,6 +428,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mindreader: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	mirrorcoat: {
+		inherit: true,
+		flags: {protect: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
+	},
+	mirrormove: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	mistball: {
 		inherit: true,
@@ -418,6 +452,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	naturepower: {
 		inherit: true,
 		isNonstandard: null,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
 	naturesmadness: {
 		inherit: true,
@@ -503,6 +538,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	seedflare: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	shadowbone: {
 		inherit: true,
 		isNonstandard: null,
@@ -527,6 +566,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 10,
 	},
+	sleeptalk: {
+		inherit: true,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+	},
 	snaptrap: {
 		inherit: true,
 		isNonstandard: null,
@@ -543,11 +586,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	stormthrow: {
+	spiderweb: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
-	strangesteam: {
+	stormthrow: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -558,6 +601,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sunsteelstrike: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	tailglow: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	technoblast: {
 		inherit: true,
@@ -574,6 +621,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	topsyturvy: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	toxicthread: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	trickortreat: {
 		inherit: true,

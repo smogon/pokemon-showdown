@@ -113,4 +113,57 @@ describe('Mega Evolution', function () {
 		battle.makeChoices('move protect mega', 'auto');
 		assert.equal(megaMon.status, '');
 	});
+
+	describe("Mega Rayquaza", () => {
+		const TEAMS = [[
+			{species: "Rayquaza", ability: 'airlock', moves: ['dragonascent'], evs: {hp: 1}},
+		], [
+			{species: "Rayquaza", ability: 'airlock', moves: ['protect'], evs: {hp: 1}},
+		]];
+
+		function assertCanMega(formatid) {
+			battle = common.createBattle({formatid}, TEAMS);
+			battle.makeChoices(); // team preview
+			battle.makeChoices('move 1 mega', 'auto');
+			assert.equal(battle.p1.active[0].species.name, "Rayquaza-Mega");
+		}
+
+		function assertLegalButCantMega(formatid) {
+			assert.legalTeam(TEAMS[0], formatid);
+			battle = common.createBattle({formatid}, TEAMS);
+			battle.makeChoices(); // team preview
+			assert.throws(() => battle.choose('p1', 'move 1 mega'));
+		}
+
+		it('should be able to Mega Evolve iff it knows Dragon Ascent', () => {
+			assertCanMega('gen6anythinggoes');
+			// battle continues
+			assert.throws(() => battle.choose('p2', 'move 1 mega'));
+		});
+
+		it('should be allowed to Mega Evolve in new gen formats allowing "Past" elements', () => {
+			assertCanMega('gen9nationaldexag');
+			battle.destroy();
+			assertCanMega('gen9natdexdraft');
+			battle.destroy();
+			assertCanMega('gen8anythinggoes@@@+past');
+		});
+
+		it('should not be allowed to Mega Evolve in formats that have the Mega Rayquaza Clause', () => {
+			assertLegalButCantMega('gen6ubers');
+			battle.destroy();
+			assertLegalButCantMega('gen9nationaldexubers');
+		});
+
+		it('should implicitly add the Mega Rayquaza Clause when banned', () => {
+			assertLegalButCantMega('gen9nationaldexag@@@-rayquaza-mega');
+			battle.destroy();
+			assertLegalButCantMega('gen9nationaldexag@@@-mega');
+			battle.destroy();
+			assertLegalButCantMega('gen9nationaldexag@@@-ndag');
+
+			// don't add it where unnecessary
+			assert.false(Dex.formats.getRuleTable(Dex.formats.get('gen5anythinggoes')).has('megarayquazaclause'));
+		});
+	});
 });

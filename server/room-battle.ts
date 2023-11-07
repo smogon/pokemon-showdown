@@ -11,7 +11,7 @@
  * @license MIT
  */
 
-import {FS, Repl, ProcessManager} from '../lib';
+import {FS, Repl, ProcessManager, Utils} from '../lib';
 import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
@@ -56,6 +56,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	readonly slot: SideID;
 	readonly channelIndex: ChannelIndex;
 	request: BattleRequestTracker;
+	hitDisconnectLimit = false;
 	wantsTie: boolean;
 	wantsOpenTeamSheets: boolean | null;
 	active: boolean;
@@ -371,7 +372,10 @@ export class RoomBattleTimer {
 			}
 
 			const dcSecondsLeft = player.dcSecondsLeft;
-			if (dcSecondsLeft <= 0) player.turnSecondsLeft = 0;
+			if (dcSecondsLeft <= 0) {
+				player.hitDisconnectLimit = true;
+				player.turnSecondsLeft = 0;
+			}
 			const secondsLeft = player.turnSecondsLeft;
 			if (!secondsLeft) continue;
 
@@ -459,6 +463,11 @@ export class RoomBattleTimer {
 				void this.battle.stream.write(`>${player.slot} default`);
 				didSomething = true;
 			} else {
+				// in bo3, if player dcs then they lose the set.
+				// assume if not connected then they got hit by dc timer
+				if (!player.connected) {
+					player.hitDisconnectLimit = true;
+				}
 				this.battle.forfeitPlayer(player, ' lost due to inactivity.');
 				return true;
 			}
@@ -496,6 +505,8 @@ export interface RoomBattleOptions {
 	/** For battles restored after a restart */
 	delayedTimer?: boolean;
 	restored?: boolean;
+	/** Best-of stuff */
+	isSubBattle?: boolean;
 }
 
 export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
@@ -766,6 +777,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		return true;
 	}
 
+	startTimer() {
+		this.timer.start();
+	}
+
 	async listen() {
 		let disconnected = false;
 		try {
@@ -879,16 +894,14 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		const p2name = this.p2.name;
 		const p1id = toID(p1name);
 		const p2id = toID(p2name);
+		if (winnerid === p1id) {
+			p1score = 1;
+		} else if (winnerid === p2id) {
+			p1score = 0;
+		}
 		Chat.runHandlers('onBattleEnd', this, winnerid, [p1id, p2id, this.p3?.id, this.p4?.id].filter(Boolean));
-		if (this.room.rated) {
+		if (this.room.rated && !this.options.isSubBattle) {
 			this.room.rated = 0;
-
-			if (winnerid === p1id) {
-				p1score = 1;
-			} else if (winnerid === p2id) {
-				p1score = 0;
-			}
-
 			winner = Users.get(winnerid);
 			if (winner && !winner.registered) {
 				this.room.sendUser(winner, '|askreg|' + winner.id);
@@ -897,13 +910,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			void this.logBattle(score, p1rating, p2rating);
 			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
 		} else if (Config.logchallenges) {
-			if (winnerid === p1id) {
-				p1score = 1;
-			} else if (winnerid === p2id) {
-				p1score = 0;
-			}
 			void this.logBattle(p1score);
-		} else {
+		} else if (!this.options.isSubBattle) {
 			this.logData = null;
 		}
 		// If a replay was saved at any point or we were configured to autosavereplays,
@@ -1335,6 +1343,366 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		});
 		const result = await logPromise;
 		return result;
+	}
+}
+
+export class BestOfGame extends RoomGames.RoomGame {
+	bestOf: number;
+	format: Format;
+	score: number[] | null = null;
+	winThreshold: number;
+	options: RoomBattleOptions;
+	p1!: ID;
+	p2!: ID;
+	wins = {p1: 0, p2: 0};
+	ready: {p1: boolean, p2: boolean} | null = null;
+	ties = 0;
+	games: {battle: Room, winner: string | null, rated: number}[] = [];
+	allowRenames = false;
+	playerNum = 0;
+	winner: ID | null = null;
+	waitingBattle: RoomBattle | null = null;
+	nextBattleTimerStart: number | null = null;
+	nextBattleTimer: NodeJS.Timer | null = null;
+	ended = false;
+	needsTimer = false;
+	teams: Record<string, PokemonSet[] | null | undefined> = {};
+	constructor(room: Room, options: RoomBattleOptions) {
+		super(room, false);
+		this.format = Dex.formats.get(options.format);
+		this.bestOf = Number(Dex.formats.getRuleTable(this.format).valueRules.get('bestof'))!;
+		this.winThreshold = Math.floor(this.bestOf / 2) + 1;
+		this.title = this.format.name;
+		if (!toID(this.title).includes('bestof')) {
+			this.title += ` (Best-of-${this.bestOf})`;
+		}
+		this.options = options;
+		options.isSubBattle = true;
+		if (!options.players && (options.p1 || options.p2)) {
+			options.players = [options.p1?.user, options.p2?.user].map(toID);
+		}
+		for (const userid of options.players || []) {
+			const player = this.makePlayer(userid);
+			this.playerTable[userid] = player;
+			this.room.auth.set(userid, Users.PLAYER_SYMBOL);
+			this[`p${player.num}` as 'p1' | 'p2'] = userid;
+		}
+		process.nextTick(() => this.nextGame());
+	}
+	onConnect(user: User) {
+		const player = this.playerTable[user.id];
+		if (player) {
+			player.sendRoom('|cantleave|');
+		}
+	}
+	makePlayer(userid: string | User): RoomGames.RoomGamePlayer {
+		return new RoomGames.RoomGamePlayer(Users.get(userid) || userid, this, ++this.playerNum);
+	}
+	cleanup() {
+		this.waitingBattle = null;
+		if (this.ready) this.ready = null;
+		if (this.nextBattleTimer) {
+			clearInterval(this.nextBattleTimer);
+			this.nextBattleTimerStart = null;
+		}
+		this.nextBattleTimerStart = null;
+		this.nextBattleTimer = null;
+	}
+	nextGame() {
+		if (this.waitingBattle) {
+			this.waitingBattle.room.add(`Both players are ready! Starting next match!`).update();
+		}
+		this.cleanup();
+
+		const battle = Rooms.createBattle(this.options);
+		if (!battle) throw new Error("Failed to create battle for " + this.title);
+		battle.setParent(this.room);
+		this.games.push({
+			battle,
+			winner: null,
+			rated: battle.rated,
+		});
+		// the absolute result is what counts for rating
+		battle.rated = 0;
+		if (this.needsTimer) {
+			battle.battle?.timer.start();
+		}
+		battle.add(
+			`|html|View the match progress at <a href="/${this.roomid}">${this.roomid}</a>`
+		).update();
+		this.updateDisplay();
+		this.room.add(`|html|<h2>Game ${this.games.length}</h2>`);
+		this.room.add(`|html|<a href="/${battle.roomid}">${battle.title}</a>`);
+		this.room.update();
+	}
+	updateDisplay() {
+		const p1name = this.name(this.p1);
+		const p2name = this.name(this.p2);
+		let buf = Utils.html`<br /><strong>${p1name} and ${p2name}'s Best-of-${this.bestOf} progress:</strong><br />`;
+		buf += '<table>';
+		for (const k of ['p1', 'p2'] as const) {
+			const userid = this[k];
+			buf += `<tr><td>${this.name(userid)}: </td><td>`;
+			for (let i = 0; i < this.bestOf; i++) {
+				if (this.games[i]?.winner === userid) {
+					buf += `<i class="fa fa-circle"></i>`;
+				} else {
+					buf += `<i class="fa fa-circle-o"></i>`;
+				}
+				if (i !== this.bestOf - 1) {
+					buf += ` `;
+				}
+			}
+			buf += `</td></tr>`;
+		}
+		buf += `</table><br /><br />`;
+		buf += `<table><tr>`;
+
+		for (const userid of [this.p1, null, this.p2]) {
+			if (userid === null) {
+				buf += `<td></td>`;
+				continue;
+			}
+			buf += `<td><center><strong>${this.name(userid)}</strong></center></td>`;
+		}
+
+		buf += `</tr><tr>`;
+
+		for (const [i, userid] of [this.p1, null, this.p2].entries()) {
+			if (userid === null) {
+				buf += `<td></td>`;
+				continue;
+			}
+			let name = Users.get(userid)?.avatar;
+			if (!name || typeof name === 'number') name = 'unknownf';
+			const url = Chat.plugins.avatars?.Avatars.src(name) || `https://${Config.routes.client}/sprites/trainers/${name}.png`;
+			buf += `<td><center>`;
+			buf += `<img class="trainersprite"${!i ? ' style="transform: scaleX(-1)"' : ""} src="${url}" />`;
+			buf += `</center></td>`;
+		}
+
+		buf += `</tr><tr>`;
+
+		for (const [i, slot] of ['p1', null, 'p2'].entries()) {
+			if (slot === null) {
+				buf += `<td> vs </td>`;
+				continue;
+			}
+			const team = Teams.unpack(this.options[slot as 'p1' | 'p2']?.team || "");
+			if (!team || !Dex.formats.getRuleTable(this.format).has('teampreview')) {
+				buf += `<td>`;
+				buf += `<psicon pokemon="unknown" /> `.repeat(3);
+				buf += `<br />`;
+				buf += `<psicon pokemon="unknown" /> `.repeat(3);
+				buf += `</td>`;
+				continue;
+			}
+			const style = !i ? ' style="transform: scaleX(-1)"' : "";
+			buf += `<td>`;
+			for (const [j, set] of team.entries()) {
+				if (j % 3 === 0 && j > 1) buf += `<br />`;
+				buf += `<psicon pokemon="${set.species}"${style}/>`;
+			}
+			buf += `</td>`;
+		}
+		buf += `</tr></table>`;
+
+		this.room.add(`|fieldhtml|<center>${buf}</center>`);
+		buf = this.games.map(({battle, winner}, index) => {
+			let progress = `in progress`;
+			if (winner) progress = `winner: ${this.name(winner)}`;
+			if (winner === '') progress = `tied`;
+			return Utils.html`<p>Game ${index + 1}: <a href="/${battle.roomid}">${battle.title} - ${progress}</a></p>`;
+		}).join('');
+		if (this.winner) {
+			buf += Utils.html`<p>${this.name(this.winner)} won!</p>`;
+		} else if (this.winner === '') {
+			buf += `<p>The battle was tied.</p>`;
+		}
+		this.room.add(`|controlshtml|<center>${buf}</center>`);
+		this.room.update();
+	}
+
+	startTimer() {
+		this.needsTimer = true;
+		for (const {battle} of this.games) {
+			battle.battle?.timer.start();
+		}
+	}
+
+	onBattleWin(room: Room, winnerid: string) {
+		const loser = this.p1 === winnerid ? this.p2 : this.p1;
+		const loserPlayer = room.battle!.playerTable[loser];
+		if (loserPlayer?.hitDisconnectLimit) { // disconnection means opp wins the set
+			this.room.add(`${this.name(loser)} lost the series due to inactivity.`);
+			return this.onEnd(winnerid as ID);
+		}
+		if (this.ended) return;
+
+		let isTie = false;
+		if (this.p1 === winnerid) {
+			this.wins.p1++;
+		} else if (this.p2 === winnerid) {
+			this.wins.p2++;
+		} else {
+			this.ties++;
+			isTie = true;
+			this.winThreshold = Math.floor((this.bestOf - this.ties) / 2) + 1;
+		}
+		this.games[this.games.length - 1].winner = isTie ? '' : winnerid;
+
+		this.room.add(
+			`|html|${winnerid ? `${this.name(winnerid)} won game ${this.games.length}!` : `Game ${this.games.length} was a tie`}`
+		).update();
+		for (const k in this.wins) {
+			if (this.wins[k as 'p1' | 'p2'] >= this.winThreshold) {
+				return this.onEnd(this[k as 'p1' | 'p2']);
+			}
+		}
+		if (this.games.length >= this.bestOf) return this.onEnd(''); // tie
+		// no one has won, skip onwards
+		setImmediate(() => this.promptNextGame(room));
+	}
+	promptNextGame(room: Room) {
+		if (!room.battle || this.winner) return; // ???
+		const cmd = `/msgroom ${this.room.roomid},/confirmready`;
+		for (const userid in room.battle.playerTable) {
+			const player = room.battle.playerTable[userid];
+			player.id = userid as ID; // re-link users so that we can use timer properly
+			const name = Utils.escapeHTML(this.name(userid));
+			const button = `|c|&|/uhtml prompt-${userid},<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`;
+			const prompt = `|c|&|/log Are you ready for game ${this.games.length + 1}, ${name}?`;
+			player.sendRoom(prompt);
+			player.sendRoom(button);
+			// send it to the main room as well, in case they x out of the old one
+			this.playerTable[userid].sendRoom(prompt);
+			this.playerTable[userid].sendRoom(button);
+		}
+		this.waitingBattle = room.battle;
+		this.ready = {p1: false, p2: false};
+		this.nextBattleTimerStart = Date.now();
+		this.nextBattleTimer = setInterval(() => this.pokeNextBattleTimer(), 10_000);
+	}
+	pokeNextBattleTimer() {
+		if (!this.nextBattleTimerStart || !this.nextBattleTimer) return; // ??
+		if ((Date.now() - this.nextBattleTimerStart) >= (60_000)) {
+			return this.nextGame();
+		}
+		for (const k of ['p1', 'p2'] as const) {
+			if (!this.ready![k]) {
+				const diff = (this.nextBattleTimerStart + 60000) - Date.now();
+				this.waitingBattle?.room.add(
+					`|inactive|${this.name(this[k])} has ${Chat.toDurationString(diff + 100)}` +
+					` to confirm battle start!`
+				);
+			}
+		}
+		this.waitingBattle?.room.update();
+		this.room.update();
+	}
+	confirmReady(user: ID) {
+		if (![this.p1, this.p2].includes(user)) {
+			throw new Chat.ErrorMessage("You aren't a player in this best-of set.");
+		}
+		const battle = this.waitingBattle;
+		if (!this.ready || !battle) {
+			throw new Chat.ErrorMessage("The battle is not currently waiting for ready confirmation.");
+		}
+
+		this.ready[user === this.p1 ? 'p1' : 'p2'] = true;
+		const readyMsg = Utils.html`|c|&|/uhtml prompt-${user},${this.name(user)} is ready for game ${this.games.length + 1}!`;
+		battle.room.add(readyMsg).update();
+		if (Object.values(this.ready).filter(Boolean).length === 2) {
+			this.nextGame();
+		}
+	}
+	getLatestBattle() {
+		// Strictly, this should never be null unless battle creation lags big time. but let's be typesafe anyway.
+		return this.games[this.games.length - 1].battle.battle;
+	}
+	private name(str: string) {
+		return Users.get(str)?.name || str;
+	}
+	win(targetUser: User | ID) {
+		targetUser = toID(targetUser);
+		if (!this.playerTable[targetUser]) return false;
+		return this.onEnd(targetUser);
+	}
+	tie() {
+		return this.onEnd('');
+	}
+	async onEnd(winner: ID) {
+		this.cleanup();
+		this.room.add(`|allowleave|`).update();
+		if (winner) {
+			this.winner = winner;
+			this.room.add(`|win|${this.name(winner)}`);
+		} else {
+			this.winner = '';
+			this.room.add(`|tie`);
+		}
+		this.updateDisplay();
+		this.room.update();
+		this.score = [this.wins.p1, this.wins.p2];
+		const parentGame = this.room.parent && this.room.parent.game;
+		// @ts-ignore - Tournaments aren't TS'd yet
+		if (parentGame?.onBattleWin) {
+			// @ts-ignore
+			parentGame.onBattleWin(this.room, winner);
+		}
+		// run elo stuff here
+		let p1score = 0.5;
+		if (winner === this.p1) {
+			p1score = 1;
+		} else if (winner === this.p2) {
+			p1score = 0;
+		}
+		for (const k in this.playerTable) {
+			this.playerTable[k].unlinkUser();
+			Users.get(k)?.updateSearch();
+		}
+
+		const {rated, battle: room} = this.games[this.games.length - 1];
+		const battle = room.battle!;
+		if (rated) {
+			(room as GameRoom).rated = rated; // just in case
+			const winnerUser = Users.get(winner);
+			if (winnerUser && !winnerUser.registered) {
+				this.room.sendUser(winnerUser, '|askreg|' + winner);
+			}
+			const [score, p1rating, p2rating] = await Ladders(battle.ladder).updateRating(
+				this.name(this.p1), this.name(this.p2), p1score, battle.room
+			);
+			void battle.logBattle(score, p1rating, p2rating);
+			Chat.runHandlers('onBattleRanked', battle, winner, [p1rating, p2rating], [this.p1, this.p2]);
+		}
+	}
+	forfeit(user: User | string, message = '') {
+		if (typeof user !== 'string') user = user.id;
+		else user = toID(user);
+
+		if (!(user in this.playerTable)) return false;
+		this.winner = user === this.p1 ? this.p2 : this.p1;
+		this.room.add(Utils.html`${this.name(user)} forfeited.`);
+		this.ended = true;
+		void this.onEnd(this.winner);
+		for (const {battle} of this.games) {
+			if (!battle.battle || battle.battle.ended) continue;
+			battle.battle.forfeit(user, message);
+		}
+		return true;
+	}
+	destroy() {
+		this.cleanup();
+		for (const k in this.playerTable) {
+			this.playerTable[k].unlinkUser();
+			delete this.playerTable[k];
+		}
+		for (const [i, entry] of this.games.entries()) {
+			entry.battle.setParent(null);
+			entry.battle.destroy();
+			this.games.splice(i, 1);
+		}
 	}
 }
 

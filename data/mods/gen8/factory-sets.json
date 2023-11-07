@@ -416,13 +416,6 @@
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Icicle Crash"], ["Flare Blitz"], ["U-turn"], ["Earthquake", "Rock Slide"]]
-			}, {
-				"species": "Darmanitan-Galar",
-				"item": ["Choice Band"],
-				"ability": ["Gorilla Tactics"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly", "Adamant"],
-				"moves": [["Icicle Crash"], ["Flare Blitz"], ["U-turn", "Rock Slide"], ["Earthquake"]]
 			}]
 		},
 		"weavile": {
@@ -4658,7 +4651,7 @@
 				"item": ["Eviolite"],
 				"ability": ["Magic Guard"],
 				"evs": {"hp": 252, "def": 4, "spd": 252},
-				"nature": "Bold",
+				"nature": "Calm",
 				"moves": [["Moonblast"], ["Soft-Boiled"], ["Stealth Rock"], ["Knock Off"]]
 			}]
 		},
@@ -5084,7 +5077,7 @@
 				"species": "Mareanie",
 				"item": ["Eviolite"],
 				"ability": ["Regenerator"],
-				"evs": {"hp": 116, "atk": 12, "def": 180, "spa": 12, "spd": 100, "spe": 180},
+				"evs": {"hp": 116, "atk": 12, "def": 180, "spa": 12, "spd": 180},
 				"nature": "Bold",
 				"moves": [["Knock Off"], ["Scald"], ["Sludge Bomb"], ["Recover"]]
 			}]

@@ -164,7 +164,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		onStart(target) {
 			target.removeVolatile('mustrecharge');
 		},
-		onBeforeMovePriority: 4,
+		onBeforeMovePriority: 8,
 		onBeforeMove(pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {
 				return;
@@ -187,7 +187,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 2,
-		onBeforeMovePriority: 4,
+		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
@@ -216,6 +216,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	mustrecharge: {
 		inherit: true,
 		duration: 0,
+		onBeforeMovePriority: 7,
 		onStart() {},
 	},
 	lockedmove: {

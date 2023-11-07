@@ -60,6 +60,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 	},
+	bignugget: {
+		inherit: true,
+		fling: {
+			basePower: 30,
+		},
+	},
 	blastoisinite: {
 		inherit: true,
 		isNonstandard: null,

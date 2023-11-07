@@ -927,8 +927,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onAnyRedirectTarget(target, source, source2, move) {
-			if (!['Water', 'Electric'].includes(move.type) ||
-				['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			if (!['Water', 'Electric'].includes(move.type) || move.flags['pledgecombo']) return;
 			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
 			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
 				if (move.smartTarget) move.smartTarget = false;
@@ -1364,7 +1363,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Nol
+	// Theia
 	burningsoul: {
 		desc: "On switch-in, this Pokemon summons Sunny Day. If this Pokemon is at full HP, it survives one hit with at least 1 HP. OHKO moves fail when used against this Pokemon.",
 		shortDesc: "Drought + Sturdy.",
@@ -1931,7 +1930,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (source.volatiles['leechseed']) return;
-			if (!move.isFutureMove) {
+			if (!move.flags['futuremove']) {
 				source.addVolatile('leechseed', this.effectState.target);
 			}
 		},

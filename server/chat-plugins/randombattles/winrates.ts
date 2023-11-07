@@ -22,17 +22,20 @@ interface FormatData {
 }
 
 const STATS_PATH = 'logs/randbats/{{MONTH}}-winrates.json';
-export let stats: Stats;
+export const stats: Stats = getDefaultStats();
 
 try {
 	const path = STATS_PATH.replace('{{MONTH}}', getMonth());
 	if (!FS('logs/randbats/').existsSync()) {
 		FS('logs/randbats/').mkdirSync();
 	}
-	stats = JSON.parse(FS(path).readSync());
-} catch {
-	stats = getDefaultStats();
-}
+	const savedStats = JSON.parse(FS(path).readSync());
+	stats.elo = savedStats.elo;
+	stats.month = savedStats.month;
+	for (const k in stats.formats) {
+		stats.formats[k] = savedStats.formats[k] || stats.formats[k];
+	}
+} catch {}
 
 function getDefaultStats() {
 	return {
@@ -42,12 +45,15 @@ function getDefaultStats() {
 			// all of these requested by rands staff. they don't anticipate it being changed much
 			// so i'm not spending the time to add commands to toggle this
 			gen9randombattle: {mons: {}},
+			gen9randomdoublesbattle: {mons: {}},
+			gen8randombattle: {mons: {}},
 			gen7randombattle: {mons: {}},
 			gen6randombattle: {mons: {}},
 			gen5randombattle: {mons: {}},
 			gen4randombattle: {mons: {}},
 			gen3randombattle: {mons: {}},
 			gen2randombattle: {mons: {}},
+			gen1randombattle: {mons: {}},
 		},
 	} as Stats;
 }
@@ -65,7 +71,11 @@ function getMonth() {
 // no, this cannot be baseSpecies - some formes matter, ex arceus formes
 // no, there is no better way to do this.
 // yes, i tried.
-function getSpeciesName(species: string) {
+function getSpeciesName(set: PokemonSet, format: Format) {
+	const species = set.species;
+	const item = Dex.items.get(set.item);
+	const moves = set.moves;
+	const megaRayquazaPossible = ['gen6', 'gen7'].includes(format.mod) && !format.ruleset.includes('Mega Rayquaza Clause');
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
@@ -76,6 +86,20 @@ function getSpeciesName(species: string) {
 	  return "Magearna";
 	} else if (species === "Genesect-Douse") {
 		return "Genesect";
+	} else if (species === "Dudunsparce-Three-Segment") {
+		return 'Dudunsparce';
+	} else if (species === "Maushold-Four") {
+		return 'Maushold';
+	} else if (species === "Greninja-Bond") {
+		return 'Greninja';
+	} else if (species === "Keldeo-Resolute") {
+		return 'Keldeo';
+	} else if (species === "Zarude-Dada") {
+		return 'Zarude';
+	} else if (species === "Squawkabilly-Blue") {
+		return "Squawkabilly";
+	} else if (species === "Squawkabilly-White") {
+		return "Squawkabilly-Yellow";
 	} else if (species.startsWith("Basculin-")) {
 		return "Basculin";
 	} else if (species.startsWith("Sawsbuck-")) {
@@ -88,10 +112,22 @@ function getSpeciesName(species: string) {
 		return "Furfrou";
 	} else if (species.startsWith("Minior-")) {
 		return "Minior";
-	} else if (species.startsWith("Gourgeist-")) {
-		return "Gourgeist";
 	} else if (species.startsWith("Toxtricity-")) {
 		return 'Toxtricity';
+	} else if (species.startsWith("Tatsugiri-")) {
+		return 'Tatsugiri';
+	} else if (species === "Zacian" && item.name === "Rusted Sword") {
+		return 'Zacian-Crowned';
+	} else if (species === "Zamazenta" && item.name === "Rusted Shield") {
+		return "Zamazenta-Crowned";
+	} else if (species === "Kyogre" && item.name === "Blue Orb") {
+		return "Kyogre-Primal";
+	} else if (species === "Groudon" && item.name === "Red Orb") {
+		return "Groudon-Primal";
+	} else if (item.megaStone) {
+		return item.megaStone;
+	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && !item.zMove && megaRayquazaPossible) {
+		return "Rayquaza-Mega";
 	} else {
 		return species;
 	}
@@ -119,7 +155,14 @@ export const handlers: Chat.Handlers = {
 async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
-	if (Dex.gen !== Dex.formats.get(battle.format).gen) {
+	const format = Dex.formats.get(battle.format);
+	if (format.mod === 'gen2') {
+		// ladder is inactive, so use a lower threshold
+		eloFloor = 1150;
+	} else if (format.mod !== `gen${Dex.gen}`) {
+		eloFloor = 1300;
+	} else if (format.gameType === 'doubles') {
+		// may need to be raised again if doubles ladder takes off
 		eloFloor = 1300;
 	}
 	if (!formatData || battle.rated < eloFloor) return;
@@ -127,7 +170,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	for (const p of players) {
 		const team = await battle.getTeam(p);
 		if (!team) return; // ???
-		const mons = team.map(f => getSpeciesName(f.species));
+		const mons = team.map(f => getSpeciesName(f, format));
 		for (const mon of mons) {
 			if (!formatData.mons[mon]) formatData.mons[mon] = {timesGenerated: 0, numWins: 0};
 			formatData.mons[mon].timesGenerated++;
@@ -142,7 +185,12 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 export const commands: Chat.ChatCommands = {
 	rwr: 'randswinrates',
 	randswinrates(target, room, user) {
-		return this.parse(`/j view-winrates-${toID(target) || `gen${Dex.gen}randombattle`}`);
+		target = toID(target);
+		if (/^(gen|)[0-9]+$/.test(target)) {
+			if (target.startsWith('gen')) target = target.slice(3);
+			target = `gen${target}randombattle`;
+		}
+		return this.parse(`/j view-winrates-${target ? Dex.formats.get(target).id : `gen${Dex.gen}randombattle`}`);
 	},
 	randswinrateshelp: [
 		'/randswinrates OR /rwr [format] - Get a list of the win rates for all Pokemon in the given Random Battles format.',
@@ -190,13 +238,13 @@ export const pages: Chat.PageTable = {
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 		let hasButton = false;
 		if (await FS(STATS_PATH.replace('{{MONTH}}', prevMonth)).exists()) {
-			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${prevMonth}>Previous month</button>`;
+			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${prevMonth}">Previous month</a>`;
 			hasButton = true;
 		}
 		const nextMonth = new Date(new Date(`${month}-15`).getTime() + (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
 		if (await FS(STATS_PATH.replace('{{MONTH}}', nextMonth)).exists()) {
 			if (hasButton) buf += ` | `;
-			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${nextMonth}>Next month</button>`;
+			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${nextMonth}">Next month</a>`;
 			hasButton = true;
 		}
 		buf += hasButton ? ` | ` : '';

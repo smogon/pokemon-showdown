@@ -1427,10 +1427,10 @@
 				"moves": [["Spikes"], ["Toxic Spikes"], ["Taunt"], ["Ice Beam"]]
 			}]
 		},
-		"greninjaash": {
+		"greninjabond": {
 			"flags": {},
 			"sets": [{
-				"species": "Greninja",
+				"species": "Greninja-Bond",
 				"gender": "M",
 				"item": ["Choice Specs"],
 				"ability": ["Battle Bond"],
@@ -1438,7 +1438,7 @@
 				"nature": "Timid",
 				"moves": [["Hydro Pump", "Surf"], ["Dark Pulse"], ["Water Shuriken"], ["Spikes"]]
 			}, {
-				"species": "Greninja",
+				"species": "Greninja-Bond",
 				"gender": "M",
 				"item": ["Waterium Z"],
 				"ability": ["Battle Bond"],
