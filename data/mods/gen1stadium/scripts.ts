@@ -690,7 +690,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				defense = target.getStat(defType, true);
 			}
 
-			// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
+			// When either attack or defense is higher than 256, they are both divided by 4 and moded by 256.
 			// This is what cuases the rollover bugs.
 			if (attack >= 256 || defense >= 256) {
 				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
