@@ -241,7 +241,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU'],
+		banlist: ['PU', 'Crabominable', 'Raichu-Base', 'Zangoose'],
 	},
 	{
 		name: "[Gen 9] LC UU",
