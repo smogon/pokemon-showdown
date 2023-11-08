@@ -1514,7 +1514,7 @@ export const commands: Chat.ChatCommands = {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;
 		const roomid = targetRoom ? targetRoom.roomid : target;
-		return this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.join('--')}` : ''}`);
+		return this.parse(`/join view-chatlog-${roomid}--today${opts ? `--${opts.map(toID).join('--')}` : ''}`);
 	},
 
 	chatloghelp() {
