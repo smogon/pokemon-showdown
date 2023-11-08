@@ -752,7 +752,11 @@ export abstract class Searcher {
 	async activityStats(room: RoomID, month: string) {
 		const days = (await FS(`logs/chat/${room}/${month}`).readdir()).map(f => f.slice(0, -4));
 		const stats: RoomStats[] = [];
+		const today = Chat.toTimestamp(new Date()).split(' ')[0];
 		for (const day of days) {
+			if (day === today) { // if the day is not over: do not count it, it'll skew the numbers
+				continue;
+			}
 			const curStats = await this.dayStats(room, day);
 			if (!curStats) continue;
 			stats.push(curStats);
@@ -1791,7 +1795,7 @@ export const commands: Chat.ChatCommands = {
 		return this.parse(`/join view-roominfo-${room}${date ? `--${date}` : ''}`);
 	},
 	roomactivityhelp: [
-		`/roomactibity [room][, date] - View room activity logs for the given room.`,
+		`/roomactivity [room][, date] - View room activity logs for the given room.`,
 		`If a date is provided, it searches for logs from that date. Otherwise, it searches the current month.`,
 		`Requires: &`,
 	],
