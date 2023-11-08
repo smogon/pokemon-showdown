@@ -1109,7 +1109,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	neutralizinggas: {
 		name: "Neutralizing Gas",
-		desc: "While this Pokemon is active, Abilities have no effect. This Ability activates before hazards and other Abilities take effect. Does not affect the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
+		desc: "While this Pokemon is active, Abilities have no effect. This Ability activates before hazards and other Abilities take effect. Does not affect the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Multitype, Power Construct, Protosynthesis, Quark Drive, RKS System, Schooling, Shields Down, Stance Change, Zen Mode or Zero to Hero Abilities.",
 		shortDesc: "While this Pokemon is active, Abilities have no effect.",
 
 		start: "  Neutralizing gas filled the area!",
