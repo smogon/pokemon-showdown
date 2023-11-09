@@ -400,26 +400,29 @@ export const commands: Chat.ChatCommands = {
 	blockpm: 'blockpms',
 	ignorepms: 'blockpms',
 	ignorepm: 'blockpms',
-	async blockpms(target, room, user) {
+	blockofflinepms: 'blockpms',
+	async blockpms(target, room, user, connection, cmd) {
 		target = target.toLowerCase().trim();
 		if (target === 'ac') target = 'autoconfirmed';
 
-		if (user.settings.blockPMs === (target || true)) {
-			return this.errorReply(this.tr`You are already blocking private messages! To unblock, use /unblockpms`);
+		const isOffline = cmd.includes('offline');
+		const msg = isOffline ? `offline ` : ``;
+		if (!isOffline && user.settings.blockPMs === (target || true)) {
+			return this.errorReply(this.tr`You are already blocking ${msg}private messages! To unblock, use /unblockpms`);
 		}
 		if (Users.Auth.isAuthLevel(target)) {
-			user.settings.blockPMs = target;
-			this.sendReply(this.tr`You are now blocking private messages, except from staff and ${target}.`);
+			if (!isOffline) user.settings.blockPMs = target;
+			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and ${target}.`);
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
-			user.settings.blockPMs = target;
+			if (!isOffline) user.settings.blockPMs = target;
 			target = this.tr(target);
-			this.sendReply(this.tr `You are now blocking private messages, except from staff and ${target} users.`);
+			this.sendReply(this.tr `You are now blocking ${msg}private messages, except from staff and ${target} users.`);
 		} else if (target === 'friends') {
-			user.settings.blockPMs = target;
-			this.sendReply(this.tr`You are now blocking private messages, except from staff and friends.`);
+			if (!isOffline) user.settings.blockPMs = target;
+			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and friends.`);
 		} else {
-			user.settings.blockPMs = true;
-			this.sendReply(this.tr`You are now blocking private messages, except from staff.`);
+			if (!isOffline) user.settings.blockPMs = true;
+			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff.`);
 		}
 		let saveValue: string | boolean | null = user.settings.blockPMs;
 		if (!saveValue || saveValue === true) saveValue = 'none';
@@ -427,7 +430,7 @@ export const commands: Chat.ChatCommands = {
 		if (['unlocked', 'autoconfirmed'].includes(saveValue)) {
 			saveValue = null;
 		}
-		await Chat.PrivateMessages.setViewOnly(user, saveValue);
+		if (isOffline) await Chat.PrivateMessages.setViewOnly(user, saveValue);
 		user.update();
 		return true;
 	},
