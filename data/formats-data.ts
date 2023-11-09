@@ -1586,7 +1586,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ursalunabloodmoon: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	slugma: {
 		tier: "LC",
@@ -5450,7 +5450,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	baxcalibur: {
 		tier: "Uber",
 		doublesTier: "DUU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	tatsugiri: {
 		tier: "NU",
