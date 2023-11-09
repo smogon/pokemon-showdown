@@ -255,6 +255,25 @@ export const Tags: {[id: string]: TagData} = {
 		speciesFilter: species => species.natDexTier === 'RU',
 	},
 
+	// Nat Dex Doubles Tiers
+	// -------------
+	ndduber: {
+		name: "ND DUber",
+		speciesFilter: species => species.natDexDoublesTier === 'DUber',
+	},
+	nddou: {
+		name: "ND DOU",
+		speciesFilter: species => species.natDexDoublesTier === 'DOU',
+	},
+	ndduu: {
+		name: "ND DUU",
+		speciesFilter: species => species.natDexDoublesTier === 'DUU',
+	},
+	nddlc: {
+		name: "ND DLC",
+		speciesFilter: species => species.natDexDoublesTier === 'LC',
+	},
+	
 	// Legality tags
 	past: {
 		name: "Past",
