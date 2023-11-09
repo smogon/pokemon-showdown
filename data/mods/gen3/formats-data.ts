@@ -195,7 +195,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	poliwhirl: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	poliwrath: {
 		tier: "UU",
@@ -225,13 +225,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	weepinbell: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	victreebel: {
 		tier: "UU",
 	},
 	tentacool: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	tentacruel: {
 		tier: "UU",
@@ -246,7 +246,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	ponyta: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	rapidash: {
 		tier: "UU",
@@ -309,7 +309,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	drowzee: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	hypno: {
 		tier: "UU",
@@ -408,7 +408,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	smoochum: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	jynx: {
 		tier: "UUBL",
@@ -462,7 +462,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UUBL",
 	},
 	porygon: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	porygon2: {
 		tier: "UUBL",
@@ -558,7 +558,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	ariados: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	chinchou: {
 		tier: "ZU",
@@ -582,7 +582,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	flaaffy: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	ampharos: {
 		tier: "UU",
@@ -879,7 +879,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	shedinja: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	whismur: {
 		tier: "LC",
@@ -1041,7 +1041,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	anorith: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	armaldo: {
 		tier: "UUBL",
@@ -1104,7 +1104,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	clamperl: {
-		tier: "PU",
+		tier: "ZUBL",
 	},
 	huntail: {
 		tier: "NU",
