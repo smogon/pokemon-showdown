@@ -645,11 +645,11 @@ export const Formats: FormatList = [
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.previouslySwitchedIn > 0) {
 					const ability = pokemon.battle.dex.abilities.get(ally.baseAbility);
-					if (this.ruleTable.isRestricted(`ability:${ability.id}`) ) {
+					if (this.ruleTable.isRestricted(`ability:${ability.id}`)) {
 						sharedPower.add('restrictedability');
 						continue;
 					}
-					if (pokemon.battle.dex.currentMod !== 'sharedpower' && ['trace', 'mirrorarmor'].includes(ally.baseAbility) ) {
+					if (pokemon.battle.dex.currentMod !== 'sharedpower' && ['trace', 'mirrorarmor'].includes(ally.baseAbility)) {
 						sharedPower.add('noability');
 						continue;
 					}
