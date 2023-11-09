@@ -634,6 +634,7 @@ export const Formats: FormatList = [
 			'Razor Fang', 'Baton Pass', 'Extreme Speed',
 		],
 		unbanlist: ['Arceus-Bug', 'Arceus-Dragon', 'Arceus-Fire', 'Arceus-Ice', 'Arceus-Psychic'],
+		restricted: [],
 		onValidateRule() {
 			if (this.format.gameType !== 'singles') {
 				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
@@ -643,7 +644,12 @@ export const Formats: FormatList = [
 			const sharedPower = new Set<string>();
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.previouslySwitchedIn > 0) {
-					if (pokemon.battle.dex.currentMod !== 'sharedpower' && ['trace', 'mirrorarmor'].includes(ally.baseAbility)) {
+					const ability = pokemon.battle.dex.abilities.get(ally.baseAbility);
+					if (this.ruleTable.isRestricted(`ability:${ability.id}`) ) {
+						sharedPower.add('restrictedability');
+						continue;
+					}
+					if (pokemon.battle.dex.currentMod !== 'sharedpower' && ['trace', 'mirrorarmor'].includes(ally.baseAbility) ) {
 						sharedPower.add('noability');
 						continue;
 					}
