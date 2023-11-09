@@ -424,13 +424,15 @@ export const commands: Chat.ChatCommands = {
 			if (!isOffline) user.settings.blockPMs = true;
 			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff.`);
 		}
-		let saveValue: string | boolean | null = user.settings.blockPMs;
-		if (!saveValue || saveValue === true) saveValue = 'none';
-		// todo: can we do this? atm. no.
-		if (['unlocked', 'autoconfirmed'].includes(saveValue)) {
-			saveValue = null;
+		if (isOffline) {
+			let saveValue: string | null = target;
+			if (!saveValue) saveValue = 'none';
+			// todo: can we do this? atm. no.
+			if (['unlocked', 'autoconfirmed'].includes(saveValue)) {
+				saveValue = null;
+			}
+			await Chat.PrivateMessages.setViewOnly(user, saveValue);
 		}
-		if (isOffline) await Chat.PrivateMessages.setViewOnly(user, saveValue);
 		user.update();
 		return true;
 	},
