@@ -98,6 +98,9 @@ export const Friends = new class {
 		}
 		buf += `</h3> `;
 
+		buf += `<form data-submitsend="/friend add {username}">Add friend: <input name="username" /><br />`;
+		buf += `<button class="button" type="submit">Add <i class="fa fa-paper-plane"></i></button></form>`;
+
 		for (const key in categorized) {
 			const friendArray = categorized[key].sort();
 			if (friendArray.length === 0) continue;
