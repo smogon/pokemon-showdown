@@ -626,15 +626,16 @@ export const Formats: FormatList = [
 		// searchShow: false,
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Arceus', 'Calyrex-Shadow', 'Chien-Pao', 'Flutter Mane', 'Koraidon', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Shaymin-Sky', 'Zacian',
-			'Zacian-Crowned', 'Arena Trap', 'Chlorophyll', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Speed Boost', 'Stench', 'Swift Swim',
-			'Unburden', 'King\'s Rock', 'Starf Berry', 'Leppa Berry', 'Razor Fang', 'Baton Pass', 'Extreme Speed', 'Last Respects',
+			'Arceus', 'Calyrex-Shadow', 'Chien-Pao', 'Flutter Mane', 'Koraidon', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Shaymin-Sky',
+			'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Chlorophyll', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Shadow Tag',
+			'Speed Boost', 'Stench', 'Swift Swim', 'Unburden', 'King\'s Rock', 'Leppa Berry', 'Razor Fang', 'Starf Berry', 'Baton Pass',
+			'Extreme Speed', 'Last Respects',
 		],
 		unbanlist: ['Arceus-Bug', 'Arceus-Dragon', 'Arceus-Fire', 'Arceus-Ice', 'Arceus-Psychic'],
 		restricted: [
-			'Armor Tail', 'Comatose', 'Contrary', 'Dazzling', 'Fur Coat', 'Good as Gold', 'Huge Power', 'Illusion', 'Imposter', 'Magic Guard', 'Mold Breaker',
-			'Multiscale', 'Poison Heal', 'Prankster', 'Protosynthesis', 'Pure Power', 'Purifying Salt', 'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Sand Rush',
-			'Simple', 'Slush Rush', 'Stakeout', 'Sturdy', 'Surge Surfer', 'Tinted Lens', 'Unaware',
+			'Armor Tail', 'Comatose', 'Contrary', 'Dazzling', 'Fur Coat', 'Good as Gold', 'Huge Power', 'Illusion', 'Imposter', 'Magic Guard',
+			'Mold Breaker', 'Multiscale', 'Poison Heal', 'Prankster', 'Protosynthesis', 'Pure Power', 'Purifying Salt', 'Queenly Majesty',
+			'Quick Draw', 'Quick Feet', 'Sand Rush', 'Simple', 'Slush Rush', 'Stakeout', 'Sturdy', 'Surge Surfer', 'Tinted Lens', 'Unaware',
 		],
 		onValidateRule() {
 			if (this.format.gameType !== 'singles') {
