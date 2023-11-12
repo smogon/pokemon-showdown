@@ -628,7 +628,7 @@ export const Formats: FormatList = [
 		banlist: [
 			'Arceus', 'Calyrex-Shadow', 'Chien-Pao', 'Flutter Mane', 'Koraidon', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Shaymin-Sky',
 			'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Chlorophyll', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Shadow Tag',
-			'Speed Boost', 'Stench', 'Swift Swim', 'Unburden', 'Leppa Berry', 'Starf Berry', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
+			'Speed Boost', 'Stench', 'Swift Swim', 'Unburden', 'King\'s Rock', 'Leppa Berry', 'Razor Fang', 'Starf Berry', 'Baton Pass',
 			'Extreme Speed', 'Last Respects',
 		],
 		unbanlist: ['Arceus-Bug', 'Arceus-Dragon', 'Arceus-Fire', 'Arceus-Ice', 'Arceus-Psychic'],
