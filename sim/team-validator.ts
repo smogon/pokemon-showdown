@@ -2522,7 +2522,7 @@ export class TeamValidator {
 						} else if (species.gender !== 'N' &&
 							learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
 							// available as egg move
-							if (species.gender && species.gender === 'M') {
+							if (species.gender === 'M') {
 								// male-only Pokemon can have level-up egg moves if it can have a mother
 								let motherLearnset;
 								if (species.mother) motherLearnset = this.dex.species.getLearnset(toID(species.mother));
