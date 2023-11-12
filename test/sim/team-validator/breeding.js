@@ -222,10 +222,17 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen4ou');
 	});
 
-	it.skip('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
+	it('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
 		team = [
 			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
+	});
+
+	it('should allow level 5 Indeedee-M with Disarming Voice', function () {
+		team = [
+			{species: 'indeedee', level: 5, ability: 'innerfocus', moves: ['disarmingvoice'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen8ou');
 	});
 });

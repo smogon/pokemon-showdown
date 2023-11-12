@@ -2519,9 +2519,24 @@ export class TeamValidator {
 						} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
 							// Pomeg Glitch
 							learned = learnedGen + 'Epomeg';
-						} else if ((!species.gender || species.gender === 'F') &&
+						} else if ((!species.gender || species.gender !== 'N') &&
 							learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
 							// available as egg move
+							if (species.gender && species.gender === 'M') {
+								// male-only Pokemon can have level-up egg moves if it can have a mother
+								let motherLearnset;
+								if (species.id === 'nidoranm') {
+									motherLearnset = this.dex.species.getLearnset(toID('nidoranf'));
+								} else if (species.id === 'volbeat') {
+									motherLearnset = this.dex.species.getLearnset(toID('illumise'));
+								} else if (species.id === 'indeedee') {
+									motherLearnset = this.dex.species.getLearnset(toID('indeedeef'));
+								}
+								if (!motherLearnset || !motherLearnset[move.id]) {
+									cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
+									continue;
+								}
+							}
 							learned = learnedGen + 'Eany';
 							// falls through to E check below
 						} else {
@@ -2571,6 +2586,19 @@ export class TeamValidator {
 							moveSources.pomegEggMoves = [move.id];
 						} else if (learnedGen < 6) {
 							limitedEggMove = move.id;
+						} else {
+							let motherLearnset;
+							if (species.id === 'nidoranm') {
+								motherLearnset = this.dex.species.getLearnset(toID('nidoranf'));
+							} else if (species.id === 'volbeat') {
+								motherLearnset = this.dex.species.getLearnset(toID('illumise'));
+							} else if (species.id === 'indeedee') {
+								motherLearnset = this.dex.species.getLearnset(toID('indeedeef'));
+							}
+							if (motherLearnset && !motherLearnset[move.id]) {
+								limitedEggMove = move.id;
+								moveSources.levelUpEggMoves = [move.id];
+							}
 						}
 						learned = learnedGen + 'E' + (species.prevo ? species.id : '');
 						if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
