@@ -2524,8 +2524,7 @@ export class TeamValidator {
 							// available as egg move
 							if (species.gender === 'M') {
 								// male-only Pokemon can have level-up egg moves if it can have a mother
-								let motherLearnset;
-								if (species.mother) motherLearnset = this.dex.species.getLearnset(toID(species.mother));
+								const motherLearnset = this.dex.species.getLearnset(toID(species.mother));
 								if (!motherLearnset || !motherLearnset[move.id]) {
 									cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
 									continue;
@@ -2581,8 +2580,7 @@ export class TeamValidator {
 						} else if (learnedGen < 6) {
 							limitedEggMove = move.id;
 						} else {
-							let motherLearnset;
-							if (species.mother) motherLearnset = this.dex.species.getLearnset(toID(species.mother));
+							const motherLearnset = this.dex.species.getLearnset(toID(species.mother));
 							if (motherLearnset && !motherLearnset[move.id]) {
 								limitedEggMove = move.id;
 							}
