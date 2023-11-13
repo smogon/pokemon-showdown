@@ -9,8 +9,8 @@
     },
     "venusaur": {
         "level": 73,
-        "moves": ["bodyslam", "hyperbeam", "razorleaf"],
-        "exclusiveMoves": ["sleeppowder", "swordsdance"]
+        "moves": ["hyperbeam", "sleeppowder", "swordsdance"],
+        "essentialMoves": ["bodyslam", "razorleaf"]
     },
     "charmander": {
         "level": 93,
@@ -54,9 +54,8 @@
     },
     "beedrill": {
         "level": 86,
-        "moves": ["agility", "doubleedge", "megadrain", "swordsdance"],
-        "essentialMoves": ["hyperbeam", "twineedle"],
-        "comboMoves": ["agility", "hyperbeam", "swordsdance", "twineedle"]
+        "moves": ["hyperbeam", "swordsdance", "twineedle"],
+        "exclusiveMoves": ["agility", "agility", "megadrain"]
     },
     "pidgey": {
         "level": 96,
@@ -234,12 +233,12 @@
     "diglett": {
         "level": 86,
         "moves": ["earthquake", "rockslide", "slash"],
-        "exclusiveMoves": ["bodyslam", "bodyslam", "substitute"]
+        "exclusiveMoves": ["bodyslam", "substitute"]
     },
     "dugtrio": {
         "level": 73,
         "moves": ["earthquake", "rockslide", "slash"],
-        "exclusiveMoves": ["bodyslam", "bodyslam", "substitute"]
+        "exclusiveMoves": ["bodyslam", "substitute"]
     },
     "meowth": {
         "level": 86,
@@ -441,20 +440,17 @@
     "gastly": {
         "level": 77,
         "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
-        "essentialMoves": ["thunderbolt"],
-        "exclusiveMoves": ["confuseray", "hypnosis", "hypnosis", "hypnosis"]
+        "essentialMoves": ["thunderbolt", "hypnosis"]
     },
     "haunter": {
         "level": 70,
         "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
-        "essentialMoves": ["thunderbolt"],
-        "exclusiveMoves": ["confuseray", "hypnosis", "hypnosis", "hypnosis"]
+        "essentialMoves": ["thunderbolt", "hypnosis"]
     },
     "gengar": {
         "level": 64,
         "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
-        "essentialMoves": ["thunderbolt"],
-        "exclusiveMoves": ["confuseray", "hypnosis", "hypnosis", "hypnosis"]
+        "essentialMoves": ["thunderbolt", "hypnosis"]
     },
     "onix": {
         "level": 81,
@@ -624,7 +620,7 @@
     },
     "lapras": {
         "level": 69,
-        "moves": ["bodyslam", "confuseray", "rest", "sing", "surf"],
+        "moves": ["bodyslam", "rest", "sing", "surf"],
         "essentialMoves": ["blizzard", "thunderbolt"]
     },
     "ditto": {
@@ -644,8 +640,8 @@
     },
     "jolteon": {
         "level": 69,
-        "moves": ["agility", "agility", "bodyslam", "bodyslam", "bodyslam", "doublekick", "pinmissile", "pinmissile"],
-        "essentialMoves": ["thunderbolt", "thunderwave"]
+        "moves": ["bodyslam", "thunderbolt", "thunderwave"],
+        "exclusiveMoves": ["agility", "agility", "doublekick", "pinmissile", "pinmissile"]
     },
     "flareon": {
         "level": 77,
@@ -721,9 +717,8 @@
     },
     "mewtwo": {
         "level": 57,
-        "moves": ["blizzard", "recover", "thunderbolt"],
-        "essentialMoves": ["amnesia", "psychic"],
-        "comboMoves": ["amnesia", "psychic", "recover", "thunderwave"]
+        "moves": ["amnesia", "psychic", "recover"],
+        "exclusiveMoves": ["blizzard", "thunderbolt", "thunderwave", "thunderwave"]
     },
     "mew": {
         "level": 63,

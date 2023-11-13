@@ -284,6 +284,8 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		}
 
 		const levelScale: {[k: string]: number} = {
+			PU: 77,
+			PUBL: 75,
 			NU: 73,
 			NUBL: 71,
 			UU: 69,
