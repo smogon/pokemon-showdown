@@ -1215,6 +1215,28 @@ export const commands: Chat.ChatCommands = {
 		`/endemergency - Turns off emergency mode. Requires: &`,
 	],
 
+	remainingbattles() {
+		this.checkCan('lockdown');
+
+		if (!Rooms.global.lockdown) {
+			return this.errorReply("The server is not under lockdown right now.");
+		}
+
+		const battleRooms = [...Rooms.rooms.values()].filter(x => x.battle?.rated && !x.battle?.ended);
+		let buf = `Total remaining rated battles: <b>${battleRooms.length}</b>`;
+		if (battleRooms.length > 10) buf += `<details><summary>View all battles</summary>`;
+		for (const battle of battleRooms) {
+			buf += `<br />`;
+			buf += `<a href="${battle.roomid}">${battle.title}</a>`;
+			if (battle.settings.isPrivate) buf += ' (Private)';
+		}
+		if (battleRooms.length > 10) buf += `</details>`;
+		this.sendReplyBox(buf);
+	},
+	remainingbattleshelp: [
+		`/remainingbattles - View a list of the remaining battles during lockdown. Requires: &`,
+	],
+
 	async savebattles(target, room, user) {
 		this.checkCan('rangeban'); // admins can restart, so they should be able to do this if needed
 		this.sendReply(`Saving battles...`);
