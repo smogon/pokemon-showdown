@@ -1529,7 +1529,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Full Potential",
-		desc: `Pok&eacute;mon's moves hit off of their highest stat.`,
+		desc: `Pok&eacute;mon's moves hit off of their highest stat, except HP.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3711127/">Full Potential</a>`,
 		],
