@@ -74,7 +74,7 @@ const MIXED_SETUP = [
 ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
-	'agility', 'autotomize', 'rockpolish',
+	'agility', 'autotomize', 'rockpolish', 'trailblaze',
 ];
 // Conglomerate for ease of access
 const SETUP = [
@@ -994,10 +994,7 @@ export class RandomTeams {
 		case 'Contrary': case 'Serene Grace': case 'Skill Link': case 'Strong Jaw':
 			return !counter.get(toID(ability));
 		case 'Chlorophyll':
-			return (
-				!moves.has('sunnyday') && !teamDetails.sun &&
-				species.id !== 'lilligant' && species.id !== 'jumpluff'
-			);
+			return (!moves.has('sunnyday') && !teamDetails.sun && species.id !== 'lilligant');
 		case 'Cloud Nine':
 			return (species.id !== 'golduck');
 		case 'Competitive':
@@ -1130,6 +1127,7 @@ export class RandomTeams {
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
 		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
+		if (species.id === 'jumpluff') return 'Infiltrator';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'ribombee') return 'Shield Dust';
 		if (species.id === 'dipplin') return 'Sticky Hold';

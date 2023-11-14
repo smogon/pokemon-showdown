@@ -2973,7 +2973,7 @@
                 "teraTypes": ["Steel", "Water"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Fast Bulky Setup",
                 "movepool": ["Body Press", "Iron Defense", "Synthesis", "Trailblaze"],
                 "teraTypes": ["Steel"]
             }
