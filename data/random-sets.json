@@ -749,7 +749,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Brick Break", "Double-Edge", "Knock Off", "Trick", "U-turn"],
+                "movepool": ["Double-Edge", "Knock Off", "Trick", "U-turn"],
                 "teraTypes": ["Ghost", "Normal"]
             },
             {
