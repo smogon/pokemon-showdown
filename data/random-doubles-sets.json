@@ -1158,7 +1158,7 @@
         "level": 91,
         "sets": [
             {
-                "role": "Doubles Bulky Setup",
+                "role": "Doubles Support",
                 "movepool": ["Encore", "Lunge", "Tailwind", "Thunder Wave"],
                 "teraTypes": ["Steel", "Water"]
             }
