@@ -9889,6 +9889,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		critRatio: 2,
+		onPrepareHit(target, source, move) {
+			if (move.type !== "Grass") {
+				this.attrLastMove('[anim] Ivy Cudgel ' + move.type);
+			}
+		},
 		onModifyType(move, pokemon) {
 			switch (pokemon.species.name) {
 			case 'Ogerpon-Wellspring': case 'Ogerpon-Wellspring-Tera':
