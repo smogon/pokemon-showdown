@@ -259,7 +259,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 
 		const statusInflictingMoves = ['thunderwave', 'toxic', 'willowisp', 'yawn'];
-		if (!abilities.has('Prankster')) {
+		if (!abilities.has('Prankster') && role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
 

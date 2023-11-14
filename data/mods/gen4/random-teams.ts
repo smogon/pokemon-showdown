@@ -161,7 +161,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['healbell', 'pursuit', 'toxic'];
-		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		// Nature Power is Earthquake this gen
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
@@ -190,9 +189,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			['gunkshot', 'poisonjab'],
 			['payback', 'pursuit'],
 
-			// Status move incompatibilities
-			[statusInflictingMoves, statusInflictingMoves],
-
 			// Assorted hardcodes go here:
 			// Manectric
 			['flamethrower', 'overheat'],
@@ -209,6 +205,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
+
+		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
+		if (!abilities.has('Prankster') && role !== 'Staller') {
+			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
+		}
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
