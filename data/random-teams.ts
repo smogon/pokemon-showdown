@@ -1041,7 +1041,7 @@ export class RandomTeams {
 		case 'Natural Cure':
 			return species.id === 'pawmot';
 		case 'Neutralizing Gas':
-			return (!isDoubles);
+			return !isDoubles;
 		case 'Overcoat': case 'Sweet Veil':
 			return types.includes('Grass');
 		case 'Overgrow':
