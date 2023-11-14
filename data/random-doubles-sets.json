@@ -1160,7 +1160,7 @@
             {
                 "role": "Doubles Bulky Setup",
                 "movepool": ["Encore", "Lunge", "Tailwind", "Thunder Wave"],
-                "teraTypes": ["Ghost"]
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
