@@ -3129,13 +3129,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Body Press", "Moonblast", "Power Gem", "Spikes", "Stealth Rock"],
+                "movepool": ["Body Press", "Light Screen", "Moonblast", "Power Gem", "Reflect", "Spikes", "Stealth Rock"],
                 "teraTypes": ["Fighting"]
             },
             {
-                "role": "Bulky Support",
-                "movepool": ["Body Press", "Light Screen", "Moonblast", "Reflect", "Stealth Rock"],
-                "teraTypes": ["Steel", "Water"]
+                "role": "Fast Bulky Setup",
+                "movepool": ["Body Press", "Iron Defense", "Moonblast", "Rest", "Rock Polish"],
+                "teraTypes": ["Fighting"]
             }
         ]
     },
