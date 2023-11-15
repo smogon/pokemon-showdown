@@ -564,7 +564,7 @@ export const commands: Chat.ChatCommands = {
 				`${targetID} was warned by ${user.name} while offline.${publicReason ? ` (${publicReason})` : ``}`
 			);
 			this.globalModlog('WARN OFFLINE', targetUser || targetID, privateReason);
-			Punishments.offlineWarns.set(targetID, reason);
+			Punishments.offlineWarns.set(targetID, publicReason);
 			if (saveReplay) this.parse('/savereplay forpunishment');
 			return;
 		}
