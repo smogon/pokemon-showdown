@@ -458,7 +458,7 @@ export class RandomGen8Teams {
 				const evoRegion = learnsetSpecies.evoRegion && learnsetSpecies.gen !== this.gen;
 				for (let i = 0; i < 2 && learnsetSpecies.prevo; i++) {
 					learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
-					learnset = this.dex.species.getLearnset(toID(learnsetSpecies));
+					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 					for (const moveid in learnset) {
 						if (!pool.includes(moveid) && !evoRegion || learnset[moveid].some(
 							source => !source.startsWith(`${learnsetSpecies.gen}`) || source.charAt(1) === 'E'

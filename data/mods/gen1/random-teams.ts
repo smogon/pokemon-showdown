@@ -94,7 +94,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			let learnsetSpecies = species;
 			for (let i = 0; i < 2 && learnsetSpecies.prevo; i++) {
 				learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
-				learnset = this.dex.species.getLearnset(toID(learnsetSpecies));
+				learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 				for (const move in learnset) {
 					if (this.dex.moves.get(move).gen !== 1) continue;
 					if (learnset[move].some(learned => learned.startsWith('1'))) {
