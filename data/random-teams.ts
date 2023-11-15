@@ -1948,8 +1948,8 @@ export class RandomTeams {
 					learnset = this.dex.species.getLearnset(toID(learnsetSpecies));
 					for (const moveid in learnset) {
 						if (!pool.includes(moveid) && learnset[moveid].some(
-								source => source.startsWith(String(this.gen)) && (!evoRegion || source.charAt(1) === 'E')
-							)) {
+							source => source.startsWith(String(this.gen)) && (!evoRegion || source.charAt(1) === 'E')
+						)) {
 							pool.push(moveid);
 						}
 					}
