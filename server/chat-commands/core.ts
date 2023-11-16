@@ -17,7 +17,6 @@
 import {Utils} from '../../lib';
 import type {UserSettings} from '../users';
 import type {GlobalPermission} from '../user-groups';
-import {BestOfGame} from '../room-battle';
 
 export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 	userdetails(target, user, trustable) {
@@ -859,7 +858,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	confirmready(target, room, user) {
-		const game = this.requireGame(BestOfGame);
+		const game = this.requireGame(Rooms.BestOfGame);
 		game.confirmReady(user.id);
 	},
 
