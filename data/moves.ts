@@ -19423,6 +19423,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'tarshot',
 		condition: {
 			onStart(pokemon) {
+				if (pokemon.terastallized) return false;
 				this.add('-start', pokemon, 'Tar Shot');
 			},
 			onEffectivenessPriority: -2,
