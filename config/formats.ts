@@ -305,10 +305,36 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
-		name: "[Gen 9] Trick Magic",
+		name: "[Gen 9] Dragon King Cup",
 
 		mod: 'gen9',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Force Monotype = Ghost', 'Min Source Gen = 9', 'VGC Timer'],
+		ruleset: [
+			'Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9',
+			'! Team Preview', '! Picked Team Size', 'Max Team Size = 3', 'VGC Timer',
+		],
+		unbanlist: ['Koraidon', 'Miraidon'],
+		onValidateTeam(team) {
+			let dragonCount = 0;
+			for (const set of team) {
+				if (set.species === 'Koraidon' || set.species === 'Miraidon') {
+					dragonCount++;
+				}
+			}
+			if (dragonCount !== 1) {
+				return [`You must have exactly one Koraidon or Miraidon in your team.`];
+			}
+		},
+		onBattleStart() {
+			this.add('clearpoke');
+			for (const pokemon of this.getAllPokemon()) {
+				let details = pokemon.details.replace(', shiny', '');
+				if (!this.ruleTable.has('speciesrevealclause')) {
+					details = details
+						.replace(/(Greninja|Gourgeist|Pumpkaboo|Xerneas|Silvally|Urshifu|Dudunsparce)(-[a-zA-Z?-]+)?/g, '$1-*');
+				}
+				this.add('poke', pokemon.side.id, details, '');
+			}
+		},
 	},
 	{
 		name: "[Gen 9] Custom Game",
