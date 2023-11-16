@@ -50,24 +50,41 @@ describe('Tar Shot', function () {
 		assert.bounded(damage, [62, 74]);
 	});
 
-	it('should make the target weaker to fire', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Coalossal', ability: 'steamengine', moves: ['tarshot', 'flamecharge']}]});
-		battle.setPlayer('p2', {team: [{species: 'Snorlax', ability: 'thickfat', item: 'occaberry', moves: ['rest']}]});
-		battle.makeChoices('move tarshot', 'move rest');
-		battle.makeChoices('move flamecharge', 'move rest');
-		assert.equal(battle.p2.active[0].item, '');
+	it(`should add a Fire-type weakness, not make the target 2x weaker to Fire`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
+		], [
+			{species: 'ferrothorn', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move tarshot', 'auto');
+		battle.makeChoices('move flamecharge', 'auto');
+		const ferro = battle.p2.active[0];
+		const damage = ferro.maxhp - ferro.hp;
+		assert.bounded(damage, [88, 104]);
 	});
 
-	it('should not make the target over 2x weaker to fire', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Coalossal', ability: 'steamengine', item: 'occaberry', moves: ['tarshot', 'flamecharge']}]});
-		battle.setPlayer('p2', {team: [{species: 'Ferrothorn', ability: 'ironbarbs', moves: ['rest', 'trick']}]});
-		battle.makeChoices('move flamecharge', 'move trick');
-		assert.notEqual(battle.p1.active[0].hp, 0);
-		// Ferrothorn now has the Occa Berry, cancelling out Tar Shot
-		battle.makeChoices('move tarshot', 'move rest');
-		battle.makeChoices('move flamecharge', 'move rest');
-		assert.notEqual(battle.p1.active[0].hp, 0);
+	it(`should not remove the Tar Shot status when a Pokemon Terastallizes`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
+		], [
+			{species: 'snorlax', item: 'weaknesspolicy', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move tarshot', 'auto');
+		battle.makeChoices('move flamecharge', 'move sleeptalk terastallize');
+		const lax = battle.p2.active[0];
+		assert.statStage(lax, 'atk', 2, `Weakness Policy should have activated`);
+	});
+
+	it(`should prevent a Terastallized Pokemon from being afflicted with the Tar Shot status`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
+		], [
+			{species: 'snorlax', item: 'weaknesspolicy', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move tarshot', 'move sleeptalk terastallize');
+		battle.makeChoices('move flamecharge', 'auto');
+		const lax = battle.p2.active[0];
+		assert.statStage(lax, 'atk', 0, `Weakness Policy should not have activated`);
+		assert.statStage(lax, 'spe', -1, `Snorlax's Speed should have been lowered`);
 	});
 });
