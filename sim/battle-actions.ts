@@ -1885,7 +1885,7 @@ export class BattleActions {
 		pokemon.apparentType = type;
 		if (pokemon.species.baseSpecies === 'Ogerpon') {
 			const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
-			pokemon.formeChange(pokemon.species.id + tera, pokemon.getItem(), true);
+			pokemon.formeChange(pokemon.species.id + tera, null, true);
 		}
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
