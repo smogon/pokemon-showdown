@@ -2129,8 +2129,8 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["flamethrower", "hiddenpowergrass", "hiddenpowerice", "overheat", "switcheroo", "thunderbolt", "voltswitch"],
+                "role": "Wallbreaker",
+                "movepool": ["flamethrower", "hiddenpowerice", "overheat", "switcheroo", "thunderbolt", "voltswitch"],
                 "preferredTypes": ["Fire"]
             }
         ]
@@ -2866,7 +2866,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "rockpolish", "stoneedge", "swordsdance", "woodhammer"]
+                "movepool": ["earthquake", "rockpolish", "stoneedge", "woodhammer"]
             }
         ]
     },

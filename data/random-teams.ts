@@ -74,7 +74,7 @@ const MIXED_SETUP = [
 ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
-	'agility', 'autotomize', 'rockpolish',
+	'agility', 'autotomize', 'rockpolish', 'trailblaze',
 ];
 // Conglomerate for ease of access
 const SETUP = [
@@ -120,7 +120,7 @@ const PRIORITY_POKEMON = [
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
-	'Rillaboom', 'Zacian', 'Zamazenta',
+	'Zacian', 'Zamazenta',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Roaring Moon', 'Zacian', 'Zamazenta',
@@ -896,7 +896,7 @@ export class RandomTeams {
 		}
 
 		// Enforce Protect
-		if (role.includes('Protect')) {
+		if (role.includes('Protect') || species.id === 'gliscor') {
 			const protectMoves = movePool.filter(moveid => PROTECT_MOVES.includes(moveid));
 			if (protectMoves.length) {
 				const moveid = this.sample(protectMoves);
@@ -985,8 +985,8 @@ export class RandomTeams {
 	): boolean {
 		if ([
 			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Galvanize', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
-			'Misty Surge', 'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Sniper', 'Snow Cloak', 'Steadfast',
-			'Steam Engine',
+			'Marvel Scale', 'Misty Surge', 'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Sniper', 'Snow Cloak',
+			'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -1031,8 +1031,6 @@ export class RandomTeams {
 			return !counter.get('Physical');
 		case 'Libero': case 'Protean':
 			return role === 'Offensive Protect' || (species.id === 'meowscarada' && role === 'Fast Attacker');
-		case 'Marvel Scale':
-			return isDoubles;
 		case 'Mold Breaker':
 			return (abilities.has('Sharpness') || abilities.has('Unburden'));
 		case 'Moxie':
@@ -1040,7 +1038,7 @@ export class RandomTeams {
 		case 'Natural Cure':
 			return species.id === 'pawmot';
 		case 'Neutralizing Gas':
-			return (!isDoubles && species.id === 'weezing');
+			return !isDoubles;
 		case 'Overcoat': case 'Sweet Veil':
 			return types.includes('Grass');
 		case 'Overgrow':
@@ -1078,7 +1076,7 @@ export class RandomTeams {
 		case 'Swarm':
 			return (!counter.get('Bug') || !!counter.get('recovery'));
 		case 'Swift Swim':
-			return (!moves.has('raindance') && !teamDetails.rain);
+			return (abilities.has('Intimidate') || (!moves.has('raindance') && !teamDetails.rain));
 		case 'Synchronize':
 			return (species.id !== 'umbreon' && species.id !== 'rabsca');
 		case 'Technician':
@@ -1129,8 +1127,9 @@ export class RandomTeams {
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
 		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
-		if (species.id === 'ariados') return 'Insomnia';
+		if (species.id === 'jumpluff') return 'Infiltrator';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
+		if (species.id === 'ribombee') return 'Shield Dust';
 		if (species.id === 'dipplin') return 'Sticky Hold';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
@@ -1163,10 +1162,10 @@ export class RandomTeams {
 			if (species.id === 'conkeldurr' && role === 'Doubles Wallbreaker') return 'Guts';
 			if (species.id === 'tropius' || species.id === 'trevenant') return 'Harvest';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
+			if (species.id === 'ariados') return 'Insomnia';
 			if (species.id === 'kommoo') return this.sample(['Overcoat', 'Soundproof']);
 			if (species.id === 'barraskewda') return 'Propeller Tail';
 			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
-			if (species.id === 'ribombee') return 'Shield Dust';
 			if (species.id === 'gumshoos') return 'Strong Jaw';
 			if (species.id === 'magnezone') return 'Sturdy';
 			if (species.id === 'clefable' && role === 'Doubles Support') return 'Unaware';
@@ -1447,10 +1446,7 @@ export class RandomTeams {
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
 		if (moves.has('stickyweb') && isLead) return 'Focus Sash';
-		if (
-			((!teamDetails.defog && !teamDetails.rapidSpin) || (!counter.get('setup') && role !== 'Wallbreaker')) &&
-			this.dex.getEffectiveness('Rock', species) >= 1
-		) return 'Heavy-Duty Boots';
+		if (this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
 		if (
 			(moves.has('chillyreception') || (
 				role === 'Fast Support' &&
@@ -1490,7 +1486,7 @@ export class RandomTeams {
 			role === 'Tera Blast user' && species.baseSpecies === 'Florges'
 		) return 'Leftovers';
 		if (
-			['flamecharge', 'rapidspin'].every(m => !moves.has(m)) &&
+			['flamecharge', 'rapidspin', 'trailblaze'].every(m => !moves.has(m)) &&
 			['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
 		) return 'Life Orb';
 		return 'Leftovers';

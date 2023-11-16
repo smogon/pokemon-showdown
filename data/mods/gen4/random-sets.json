@@ -463,7 +463,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["explosion", "hiddenpowerice", "signalbeam", "taunt", "thunderbolt"]
+                "movepool": ["explosion", "hiddenpowerice", "signalbeam", "taunt", "thunderbolt"],
+                "preferredTypes": ["Ice"]
             }
         ]
     },
@@ -519,12 +520,11 @@
         "level": 86,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["fireblast", "haze", "painsplit", "sludgebomb", "thunderbolt", "willowisp"],
-                "preferredTypes": ["Fire"]
+                "role": "Bulky Support",
+                "movepool": ["fireblast", "haze", "painsplit", "sludgebomb", "willowisp"]
             },
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["fireblast", "rest", "sleeptalk", "sludgebomb"]
             }
         ]
@@ -1324,7 +1324,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "toxic"]
+                "movepool": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "thunderwave", "toxic"]
             },
             {
                 "role": "Bulky Support",
@@ -1712,8 +1712,8 @@
         "level": 87,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["flamethrower", "hiddenpowergrass", "hiddenpowerice", "overheat", "switcheroo", "thunderbolt"]
+                "role": "Wallbreaker",
+                "movepool": ["flamethrower", "hiddenpowerice", "overheat", "switcheroo", "thunderbolt"]
             }
         ]
     },
@@ -2149,7 +2149,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "explosion", "stealthrock", "stoneedge", "thunderwave", "toxic"]
+                "movepool": ["earthquake", "explosion", "rest", "stealthrock", "stoneedge", "thunderwave", "toxic"]
             },
             {
                 "role": "Bulky Support",
@@ -2223,7 +2223,7 @@
                 "movepool": ["icebeam", "surf", "thunder", "waterspout"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Support",
                 "movepool": ["calmmind", "icebeam", "rest", "sleeptalk", "surf", "thunder"]
             }
         ]
@@ -2320,7 +2320,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["earthquake", "rockpolish", "stoneedge", "swordsdance", "woodhammer"]
+                "movepool": ["earthquake", "rockpolish", "stoneedge", "woodhammer"]
             }
         ]
     },
