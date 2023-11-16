@@ -1686,7 +1686,10 @@ const commands: Chat.ChatCommands = {
 				this.sendReply("Usage: /tour rules <list of rules>");
 				this.sendReply("Rules can be: -bannedthing, +un[banned|restricted]thing, *restrictedthing, !removedrule, addedrule");
 				this.parse('/tour viewrules');
-				return this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
+				if (tournament.customRules.length) {
+					return this.sendReplyBox(`<details><summary>Source</summary><code style="white-space: pre-wrap; display: table; tab-size: 3">/tour rules ${tournament.customRules}</code></details>`);
+				}
+				return;
 			}
 			this.checkCan('tournaments', null, room);
 			if (tournament.isTournamentStarted) {
