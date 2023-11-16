@@ -161,7 +161,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['healbell', 'pursuit', 'toxic'];
-		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		// Nature Power is Earthquake this gen
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
@@ -190,9 +189,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			['gunkshot', 'poisonjab'],
 			['payback', 'pursuit'],
 
-			// Status move incompatibilities
-			[statusInflictingMoves, statusInflictingMoves],
-
 			// Assorted hardcodes go here:
 			// Manectric
 			['flamethrower', 'overheat'],
@@ -209,6 +205,11 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
+
+		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
+		if (role !== 'Staller') {
+			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
+		}
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
@@ -478,6 +479,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			return !counter.get('recoil');
 		case 'Skill Link':
 			return !counter.get('skilllink');
+		case 'Swarm':
+			return !counter.get('Bug');
 		case 'Technician':
 			return !counter.get('technician');
 		}
@@ -614,7 +617,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			) ? 'Choice Scarf' : 'Choice Specs';
 		}
 		if (
-			counter.get('Special') === 3 && role === 'Fast Attacker' && moves.has('explosion') || moves.has('selfdestruct')
+			counter.get('Special') === 3 && role === 'Fast Attacker' && (moves.has('explosion') || moves.has('selfdestruct'))
 		) return 'Choice Scarf';
 		if (counter.get('Special') === 3 && moves.has('uturn')) return 'Choice Specs';
 		if (counter.get('Physical') === 4 && species.id !== 'jirachi' &&

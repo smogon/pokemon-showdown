@@ -176,7 +176,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['healbell', 'pursuit', 'toxic'];
-		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		// Nature Power is Earthquake this gen
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status' && move.id !== 'naturepower')
@@ -200,9 +199,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			[['bodyslam', 'return'], ['bodyslam', 'doubleedge']],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
-
-			// Status move incompatibilities
-			[statusInflictingMoves, statusInflictingMoves],
 
 			// Assorted hardcodes go here:
 			// Zebstrika
@@ -228,6 +224,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
 		if (species.id === 'dugtrio') this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
+
+		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
+		if (!abilities.has('Prankster') && role !== 'Staller') {
+			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
+		}
 	}
 
 	// Generate random moveset for a given species, role, preferred type.

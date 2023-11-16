@@ -380,7 +380,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Foul Play", "Helping Hand", "Light Screen", "Taunt", "Thunder Wave", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Dark", "Flying"]
+                "teraTypes": ["Flying"]
             },
             {
                 "role": "Tera Blast user",
@@ -764,7 +764,7 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Earth Power", "Hydro Pump", "Ice Beam", "Muddy Water"],
+                "movepool": ["Hydro Pump", "Ice Beam", "Muddy Water", "Weather Ball"],
                 "teraTypes": ["Water"]
             },
             {
@@ -964,7 +964,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Brave Bird", "Fake Out", "Helping Hand", "Icy Wind", "Memento", "Tailwind"],
+                "movepool": ["Brave Bird", "Fake Out", "Helping Hand", "Icy Wind", "Tailwind"],
                 "teraTypes": ["Steel"]
             },
             {
@@ -1158,9 +1158,9 @@
         "level": 91,
         "sets": [
             {
-                "role": "Doubles Bulky Setup",
-                "movepool": ["Baton Pass", "Bug Buzz", "Tail Glow", "Tailwind"],
-                "teraTypes": ["Ghost"]
+                "role": "Doubles Support",
+                "movepool": ["Encore", "Lunge", "Tailwind", "Thunder Wave"],
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
@@ -1739,7 +1739,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Dual Wingbeat", "High Horsepower", "Knock Off", "Protect", "Stealth Rock", "Toxic"],
+                "movepool": ["Dual Wingbeat", "High Horsepower", "Knock Off", "Protect", "Toxic", "Toxic Spikes"],
                 "teraTypes": ["Water"]
             },
             {
@@ -1979,7 +1979,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Aura Sphere", "Destiny Bond", "Draco Meteor", "Shadow Force", "Will-O-Wisp"],
+                "movepool": ["Aura Sphere", "Draco Meteor", "Poltergeist", "Shadow Force", "Will-O-Wisp"],
                 "teraTypes": ["Dragon", "Fairy", "Ghost", "Poison"]
             }
         ]
