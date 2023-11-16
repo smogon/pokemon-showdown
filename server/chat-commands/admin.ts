@@ -1359,7 +1359,7 @@ export const commands: Chat.ChatCommands = {
 		if (err) {
 			Rooms.global.notifyRooms(
 				['staff', 'development'],
-				`|c|&|/log ${user.name} used /updateloginserver - but something failed while updating.`
+				`|c|${user.getIdentity()}|/log ${user.name} used /updateloginserver - but something failed while updating.`
 			);
 			return this.errorReply(err.message + '\n' + err.stack);
 		}
@@ -1376,7 +1376,7 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(`FAILED. Conflicts were found while updating - the restart was aborted.`);
 		}
 		Rooms.global.notifyRooms(
-			['staff', 'development'], `|c|&|/log ${message}`
+			['staff', 'development'], `|c|${user.getIdentity()}|/log ${message}`
 		);
 	},
 	updateloginserverhelp: [
@@ -1392,7 +1392,7 @@ export const commands: Chat.ChatCommands = {
 		if (err) {
 			Rooms.global.notifyRooms(
 				['staff', 'development'],
-				`|c|&|/log ${user.name} used /updateclient - but something failed while updating.`
+				`|c|${user.getIdentity()}|/log ${user.name} used /updateclient - but something failed while updating.`
 			);
 			return this.errorReply(err.message + '\n' + err.stack);
 		}
@@ -1409,7 +1409,7 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(`FAILED. Conflicts were found while updating.`);
 		}
 		Rooms.global.notifyRooms(
-			['staff', 'development'], `|c|&|/log ${message}`
+			['staff', 'development'], `|c|${user.getIdentity()}|/log ${message}`
 		);
 	},
 	updateclienthelp: [
