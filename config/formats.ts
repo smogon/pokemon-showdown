@@ -3272,11 +3272,7 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['[Gen 8] PU'],
-		banlist: [
-			'PU', 'Arctovish', 'Aurorus', 'Basculin', 'Centiskorch', 'Drampa', 'Exeggutor-Alola', 'Gallade', 'Glastrier', 'Haunter', 'Magmortar', 'Magneton',
-			'Malamar', 'Ninjask', 'Omastar', 'Perrserker', 'Rotom-Frost', 'Turtonator', 'Vanilluxe', 'Vikavolt', 'Silvally-Dragon', 'Silvally-Ground', 'Sneasel',
-			'Damp Rock', 'Grassy Seed',
-		],
+		banlist: ['PU', 'ZUBL', 'Damp Rock', 'Grassy Seed'],
 	},
 	{
 		name: "[Gen 8] CAP",
@@ -3569,10 +3565,7 @@ export const Formats: FormatList = [
 		mod: 'gen7',
 		searchShow: false,
 		ruleset: ['[Gen 7] PU'],
-		banlist: [
-			'PU', 'Carracosta', 'Crabominable', 'Exeggutor-Base', 'Gorebyss', 'Jynx', 'Raticate-Alola',
-			'Shiftry', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel',
-		],
+		banlist: ['PU', 'ZUBL'],
 	},
 	{
 		name: "[Gen 7] CAP",
@@ -3873,7 +3866,7 @@ export const Formats: FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		ruleset: ['[Gen 6] PU'],
-		banlist: ['PU', 'Fraxure', 'Purugly', 'Regigigas', 'Simisear'],
+		banlist: ['PU', 'ZUBL'],
 	},
 	{
 		name: "[Gen 6] CAP",
@@ -4128,7 +4121,7 @@ export const Formats: FormatList = [
 		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['[Gen 5] PU'],
-		banlist: ['PU', 'Articuno', 'Dragonair', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede', 'Baton Pass'],
+		banlist: ['PU', 'ZUBL', 'Baton Pass'],
 		unbanlist: ['Damp Rock'],
 	},
 	{

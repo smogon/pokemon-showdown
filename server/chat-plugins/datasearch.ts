@@ -630,7 +630,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		lc: 'LC',
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
 	});
-	if (mod.gen === 3) {
+	if (mod.gen !== 9) {
 		allTiers.zu = 'ZU';
 		allTiers.zubl = 'ZUBL';
 	}
