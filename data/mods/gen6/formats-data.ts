@@ -108,7 +108,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	pikachu: {
-		tier: "NFE",
+		tier: "ZU",
+		doublesTier: "(DUU)",
 	},
 	pikachucosplay: {
 		tier: "ZU",
