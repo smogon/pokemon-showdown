@@ -496,7 +496,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU', 'Crabominable', 'Raichu-Base', 'Zangoose'],
+		banlist: ['PU', 'Crabominable', 'Falinks', 'Lycanroc-Midnight', 'Raichu-Base', 'Zangoose'],
 	},
 
 	// Pet Mods
