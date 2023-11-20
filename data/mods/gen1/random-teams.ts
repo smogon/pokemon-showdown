@@ -27,7 +27,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		for (const pokemon of randomN) {
 			const species = this.dex.species.get(pokemon);
-			const learnset = this.dex.species.getLearnset(species.id);
+			let learnset = this.dex.species.getLearnset(species.id);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
 			const mbstmin = 1307;
@@ -84,6 +84,17 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
 			const pool: string[] = [];
 			if (learnset) {
+				for (const move in learnset) {
+					if (this.dex.moves.get(move).gen !== 1) continue;
+					if (learnset[move].some(learned => learned.startsWith('1'))) {
+						pool.push(move);
+					}
+				}
+			}
+			let learnsetSpecies = species;
+			for (let i = 0; i < 2 && learnsetSpecies.prevo; i++) {
+				learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
+				learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 				for (const move in learnset) {
 					if (this.dex.moves.get(move).gen !== 1) continue;
 					if (learnset[move].some(learned => learned.startsWith('1'))) {
