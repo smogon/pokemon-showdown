@@ -78,11 +78,13 @@ export class RandomMnMTeams extends RandomTeams {
 					}
 				}
 				const evoRegion = learnsetSpecies.evoRegion && learnsetSpecies.gen !== this.gen;
-				while (learnsetSpecies.prevo) {
+				for (let i = 0; i < 2 && learnsetSpecies.prevo; i++) {
 					learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
+					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 					for (const moveid in learnset) {
-						if (!pool.includes(moveid) &&
-							learnset[moveid].some(source => source.startsWith(String(this.gen)) && !evoRegion)) {
+						if (!pool.includes(moveid) && learnset[moveid].some(
+							source => source.startsWith(String(this.gen)) && (!evoRegion || source.charAt(1) === 'E')
+						)) {
 							pool.push(moveid);
 						}
 					}
