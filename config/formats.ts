@@ -1202,7 +1202,7 @@ export const Formats: FormatList = [
 			'Enamorus-Base', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Iron Bundle', 'Kommo-o', 'Koraidon', 'Kyogre',
 			'Landorus-Base', 'Iron Valiant', 'Magearna', 'Manaphy', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Roaring Moon', 'Shaymin-Sky',
 			'Sneasler', 'Spectrier', 'Tornadus-Therian', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag',
-			'King\'s Rock', 'Light Clay','Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
+			'King\'s Rock', 'Light Clay', 'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 	},
 	{
