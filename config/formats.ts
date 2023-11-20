@@ -609,28 +609,6 @@ export const Formats: FormatList = [
 		banlist: ['Dragon Rage', 'Sonic Boom'],
 	},
 	{
-		name: "[Gen 9 Pre-DLC] Paldea Dex Draft",
-
-		mod: 'gen9predlc',
-		searchShow: false,
-		ruleset: ['Draft', 'Min Source Gen = 9'],
-	},
-	{
-		name: "[Gen 9 Pre-DLC] Tera Preview Paldea Dex Draft",
-
-		mod: 'gen9predlc',
-		searchShow: false,
-		ruleset: ['[Gen 9] Paldea Dex Draft', 'Tera Type Preview'],
-	},
-	{
-		name: "[Gen 9 Pre-DLC] NatDex LC Draft",
-
-		mod: 'gen9predlc',
-		searchShow: false,
-		ruleset: ['[Gen 9] NatDex Draft', 'Double Item Clause', 'Little Cup'],
-		banlist: ['Dragon Rage', 'Sonic Boom'],
-	},
-	{
 		name: "[Gen 8] Galar Dex Draft",
 
 		mod: 'gen8',
