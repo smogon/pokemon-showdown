@@ -456,7 +456,7 @@ export const commands: Chat.ChatCommands = {
 			user.settings.blockPMs = false;
 		}
 		user.update();
-		return this.sendReply(this.tr`You are no longer ${msg}blocking private messages.`);
+		return this.sendReply(this.tr`You are no longer blocking ${msg}private messages.`);
 	},
 	unblockpmshelp: [
 		`/unblockpms - Unblocks private messages. Block them with /blockpms.`,
