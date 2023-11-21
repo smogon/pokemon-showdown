@@ -50,6 +50,9 @@ export const PrivateMessages = new class {
 	getSettings(userid: string) {
 		return PM.get(statements.getSettings, [toID(userid)]);
 	}
+	deleteSettings(userid: string) {
+		return PM.run(statements.deleteSettings, [toID(userid)]);
+	}
 	async checkCanSend(to: string, from: User | string) {
 		from = toID(from);
 		to = toID(to);

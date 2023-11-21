@@ -443,15 +443,25 @@ export const commands: Chat.ChatCommands = {
 	unblockpm: 'unblockpms',
 	unignorepms: 'unblockpms',
 	unignorepm: 'unblockpms',
-	unblockpms(target, room, user) {
-		if (!user.settings.blockPMs) {
-			return this.errorReply(this.tr`You are not blocking private messages! To block, use /blockpms`);
+	unblockofflinepms: 'unblockpms',
+	async unblockpms(target, room, user, connection, cmd) {
+		const isOffline = cmd.includes('offline');
+		const msg = isOffline ? 'offline ' : '';
+		if (isOffline ? !(await Chat.PrivateMessages.getSettings(user.id)) : !user.settings.blockPMs) {
+			return this.errorReply(this.tr`You are not blocking ${msg}private messages! To block, use /blockpms`);
 		}
-		user.settings.blockPMs = false;
+		if (isOffline) {
+			await Chat.PrivateMessages.deleteSettings(user.id);
+		} else {
+			user.settings.blockPMs = false;
+		}
 		user.update();
-		return this.sendReply(this.tr`You are no longer blocking private messages.`);
+		return this.sendReply(this.tr`You are no longer ${msg}blocking private messages.`);
 	},
-	unblockpmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
+	unblockpmshelp: [
+		`/unblockpms - Unblocks private messages. Block them with /blockpms.`,
+		`/unblockofflinepms - Unblocks offline private messages. Block them with /blockofflinepms.`,
+	],
 
 	unblockinvites: 'blockinvites',
 	blockinvites(target, room, user, connection, cmd) {
