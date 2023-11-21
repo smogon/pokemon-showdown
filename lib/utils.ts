@@ -306,16 +306,23 @@ export function clearRequireCache(options: {exclude?: string[]} = {}) {
 	excludes.push('/node_modules/');
 
 	for (const path in require.cache) {
-		let skip = false;
-		for (const exclude of excludes) {
-			if (path.includes(exclude)) {
-				skip = true;
-				break;
-			}
-		}
-
-		if (!skip) delete require.cache[path];
+		if (excludes.some(p => path.includes(p))) continue;
+		const mod = require.cache[path]; // have to ref to appease ts
+		if (!mod) continue;
+		uncacheModuleTree(mod, excludes);
+		delete require.cache[path];
 	}
+}
+
+export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[], depth = 0) {
+	depth++;
+	if (depth >= 10) return;
+	if (!mod.children || excludes.some(p => mod.filename.includes(p))) return;
+	for (const child of mod.children) {
+		if (excludes.some(p => child.filename.includes(p))) continue;
+		uncacheModuleTree(child, excludes, depth);
+	}
+	delete (mod as any).children;
 }
 
 export function deepClone(obj: any): any {
