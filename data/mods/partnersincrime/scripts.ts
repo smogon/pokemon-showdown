@@ -81,6 +81,13 @@ export const Scripts: ModdedBattleScriptsData = {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
 				}
+				if (pokemon.volatiles['encore']) {
+					// Encore check happens earlier than PiC move swapping, so end encore here.
+					const encoredMove = pokemon.volatiles['encore'].move;
+					if (!pokemon.moves.includes(encoredMove)) {
+						pokemon.removeVolatile('encore');
+					}
+				}
 				this.runEvent('DisableMove', pokemon);
 				for (const moveSlot of pokemon.moveSlots) {
 					const activeMove = this.dex.getActiveMove(moveSlot.id);
