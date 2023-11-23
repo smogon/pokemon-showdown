@@ -794,7 +794,7 @@ export abstract class Searcher {
 		return {average: collected, days: stats};
 	}
 	async dayStats(room: RoomID, day: string) {
-		const cached = this.roomstatsCache.get(day);
+		const cached = this.roomstatsCache.get(room + '-' + day);
 		if (cached) return cached;
 		const results: RoomStats & {day: string} = {
 			deadTime: 0,
@@ -855,7 +855,7 @@ export abstract class Searcher {
 
 		// we don't cache the current day's stats because that could be inaccurate, whereas old days will always be the same
 		if (day !== LogReader.today()) {
-			this.roomstatsCache.set(day, results);
+			this.roomstatsCache.set(room + '-' + day, results);
 		}
 		return results;
 	}
