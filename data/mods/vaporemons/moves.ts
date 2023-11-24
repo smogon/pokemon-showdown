@@ -1020,10 +1020,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {allyanim: 1, futuremove: 1},
 		ignoreImmunity: true,
-		onPrepareHit(target, source, move) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Defog", target);
-		},
 		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
@@ -1039,7 +1035,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					priority: 0,
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: false,
-					onPrepareHit(pokemon) {
+					onPrepareHit() {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Sandsear Storm", target);
 						this.field.setWeather('sandstorm');
@@ -1909,7 +1905,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-activate', source, 'ability: Persistent', '[move] Heal Block');
 					return 7;
 				}
-				if (effect.id === 'deathaura') {
+				if (effect && effect.id === 'deathaura') {
 					return 0;
 				}
 				return 5;
