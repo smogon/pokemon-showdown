@@ -1430,8 +1430,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		shortDesc: "While this Pokemon is active, no stat changes can occur.",
 	},
-	
-// unchanged abilities
+
+	// unchanged abilities
 	damp: {
 		onAnyTryMove(target, source, effect) {
 			if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct', 'shrapnelshot'].includes(effect.id)) {
@@ -1508,8 +1508,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				case 'psychicterrain':
 					newType = 'Psychic';
 					break;
-				if (!newType || pokemon.getTypes().join() === newType || !pokemon.setType(newType)) return;
-				this.add('-start', pokemon, 'typechange', newType, '[from] ability: Mimicry');
+					if (!newType || pokemon.getTypes().join() === newType || !pokemon.setType(newType)) return;
+					this.add('-start', pokemon, 'typechange', newType, '[from] ability: Mimicry');
 				}
 			},
 			onUpdate(pokemon) {
@@ -1662,10 +1662,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	libero: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.libero/*) return;
-			if (*/|| move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (this.effectState.libero) return;
+			if (move.hasBounced ||
+				 move.flags['futuremove'] ||
+				 move.sourceEffect === 'snatch') return;
 			const type = move.type;
-			if (type && type !== '???' && !source.hasItem('terashard') && source.getTypes().join() !== type && source.setType(type)) {
+			if (type && type !== '???' && !source.hasItem('terashard') &&
+				 source.getTypes().join() !== type && source.setType(type)) {
 				this.effectState.libero = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
@@ -1679,10 +1682,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	protean: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.protean/*) return;
-			if (*/|| move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (this.effectState.protean) return;
+			if (move.hasBounced ||
+				 move.flags['futuremove'] ||
+				 move.sourceEffect === 'snatch') return;
 			const type = move.type;
-			if (type && type !== '???' && !source.hasItem('terashard') && source.getTypes().join() !== type && source.setType(type)) {
+			if (type && type !== '???' && !source.hasItem('terashard') &&
+				 source.getTypes().join() !== type && source.setType(type)) {
 				this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
@@ -1696,7 +1702,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	adaptability: {
 		onModifyMove(move, pokemon) {
-			if (move.type === pokemon.teraType && pokemon.baseSpecies.types.includes(pokemon.teraType) && pokemon.hasItem('terashard')) {
+			if (move.type === pokemon.teraType && pokemon.baseSpecies.types.includes(pokemon.teraType)
+				 && pokemon.hasItem('terashard')) {
 				move.stab = 2.25;
 			} else {
 				move.stab = 2;
