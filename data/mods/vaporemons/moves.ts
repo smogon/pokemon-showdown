@@ -1019,6 +1019,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {allyanim: 1, futuremove: 1},
+		self: {
+			sideCondition: 'desertstorm',
+		},
 		ignoreImmunity: true,
 		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
@@ -1035,17 +1038,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					priority: 0,
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: false,
-					onPrepareHit() {
-						this.attrLastMove('[still]');
-						this.add('-anim', source, "Sandsear Storm", target);
-						this.field.setWeather('sandstorm');
-					},
 					effectType: 'Move',
 					type: 'Ground',
 				},
 			});
 			this.add('-start', source, 'move: Desert Storm');
 			return this.NOT_FAIL;
+		},
+		condition: {
+			duration: 2,
+			onStart() {
+				this.add('-message', `A storm is brewing!`);
+			},
+			onEnd() {
+				this.field.setWeather('sandstorm');
+				this.add('-message', `The desert storm whipped up a serious sandstorm!`);
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -1431,10 +1439,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'attract', 'curse', 'disable', 'electrify', 'embargo', 'encore', 'foresight', 'gastroacid', 'foresight', 'miracleeye',
 				'glaiverush', 'healblock', 'throatchop', 'windbreaker', 'nightmare', 'octolock', 'powder', 'saltcure', 'smackdown',
 				'syrupbomb', 'tarshot', 'telekinesis', 'yawn'];
+			const pokemonBoosts: SparseBoostsTable = {};
 			let i: BoostName;
 			for (i in pokemon.boosts) {
+				pokemonBoosts[i] = pokemon.boosts[i];
 				for (const volatile of negativeVolatiles) {
-					if (pokemon.status || pokemon.volatiles[volatile] || pokemon.boosts[i] < 0) {
+					if (pokemon.status || pokemon.volatiles[volatile] || pokemonBoosts[i] < 0) {
 						return this.chainModify(2);
 					}
 				}
