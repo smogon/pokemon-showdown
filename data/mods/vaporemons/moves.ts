@@ -1035,12 +1035,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					priority: 0,
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: true,
-					onTryHit() {
+					onTryHit(move) {
 						if (!target.isGrounded()) {
 							move.basePower = 0;
 						}
 					},
-					onHit() {
+					onHit(move) {
 						this.field.setWeather('sandstorm');
 					},
 					effectType: 'Move',
@@ -1434,12 +1434,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'attract', 'curse', 'disable', 'electrify', 'embargo', 'encore', 'foresight', 'gastroacid', 'foresight', 'miracleeye',
 				'glaiverush', 'healblock', 'throatchop', 'windbreaker', 'nightmare', 'octolock', 'powder', 'saltcure', 'smackdown',
 				'syrupbomb', 'tarshot', 'telekinesis', 'yawn'];
-			const pokemonBoosts: SparseBoostsTable = {};
 			let i: BoostID;
 			for (i in pokemon.boosts) {
-				pokemonBoosts[i] = pokemon.boosts[i];
 				for (const volatile of negativeVolatiles) {
-					if (pokemon.status || pokemon.volatiles[volatile] || pokemonBoosts[i] < 0) {
+					if (pokemon.status || pokemon.volatiles[volatile] || pokemon.boosts[i] < 0) {
 						return this.chainModify(2);
 					}
 				}
