@@ -368,7 +368,6 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
-					this.add('-message', `${target.name} tried to hit the ball back, but its Baseball Bat broke!`);
 				}
 			}
 		},
