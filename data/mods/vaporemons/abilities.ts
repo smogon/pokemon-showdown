@@ -289,18 +289,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		onEnd(source) {
+		onEnd() {
 			if (this.field.terrain) {
-				const cnsource = this.effectState.target;
-				for (const target of cnsource.foes()) {
+				const source = this.effectState.target;
+				for (const target of source.foes()) {
 					target.removeVolatile('cloudnine');
 				}
 			}
-			cnsource.abilityState.ending = true;
+			source.abilityState.ending = true;
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.hasAbility('mimicry')) {
 					for (const target of this.getAllActive()) {
-						if (target.hasAbility('cloudnine') && target !== cnsource) {
+						if (target.hasAbility('cloudnine') && target !== source) {
 							this.debug('Cloud Nine prevents type change');
 							return;
 						}
@@ -322,7 +322,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					(pokemon.hasItem('mistyseed') && this.field.isTerrain('mistyterrain'))
 				) {
 					for (const target of this.getAllActive()) {
-						if (target.hasAbility('cloudnine') && target !== cnsource) {
+						if (target.hasAbility('cloudnine') && target !== source) {
 							this.debug('Cloud Nine prevents Seed use');
 							return;
 						}
