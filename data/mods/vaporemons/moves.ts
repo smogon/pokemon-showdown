@@ -71,7 +71,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 	   secondary: {
 			chance: 100,
-		 	sideCondition: 'stealthrock',
+			sideCondition: 'stealthrock',
 	   },
 		target: "adjacentFoe",
 		type: "Rock",
@@ -90,7 +90,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1, mirror: 1},
 	   secondary: {
 			chance: 100,
-		 	sideCondition: 'stickyweb',
+			sideCondition: 'stickyweb',
 	   },
 		target: "allAdjacentFoes",
 		type: "Electric",
@@ -143,6 +143,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const sides = [pokemon.side];
 			for (const side of sides) {
 				for (const sideCondition of somesideConditions) {
+					if (sideCondition) {
+						this.add('-message', `This sides Stealth Rock and Spikes will be removed!`);
+					}
 					if (side.removeSideCondition('spikes')) {
 						this.add('-sideend', side, this.dex.conditions.get('spikes'));
 						hazardsCleared += 1;
@@ -152,9 +155,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.add('-sideend', side, this.dex.conditions.get('stealthrock'));
 						hazardsCleared += 1;
 						this.boost({def: 1}, pokemon);
-					}
-					if (hazardsCleared > 0) {
-						success = true;
 					}
 				}
 			}
