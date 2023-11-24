@@ -1059,7 +1059,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					priority: 0,
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: false,
-					onPrepareHit(move) {
+					onPrepareHit(pokemon) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Sandsear Storm", target);
 						this.field.setWeather('sandstorm');
@@ -1169,10 +1169,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: false,
 					status: 'tox',
-					onPrepareHit(move) {
-						this.attrLastMove('[still]');
-						this.add('-anim', source, "Corrosive Gas", target);
-					},
 					boosts: {
 						def: -1,
 						spd: -1,
@@ -1390,7 +1386,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		viable: true,
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
-		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
 				const type1 = 'Fighting';
@@ -1430,7 +1425,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hyper Beam", target);
 		},
-		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
 				const type1 = 'Bug';
@@ -1472,6 +1466,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'attract', 'curse', 'disable', 'electrify', 'embargo', 'encore', 'foresight', 'gastroacid', 'foresight', 'miracleeye',
 				'glaiverush', 'healblock', 'throatchop', 'windbreaker', 'nightmare', 'octolock', 'powder', 'saltcure', 'smackdown',
 				'syrupbomb', 'tarshot', 'telekinesis', 'yawn'];
+			const boosts: SparseBoostsTable = {};
 			let i: BoostName;
 			for (i in pokemon.boosts) {
 				for (const volatile of negativeVolatiles) {
@@ -2405,7 +2400,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					move = 'triattack';
 				}
 			}
-			this.useMove(move, pokemon, target);
+			this.actions.useMove(move, pokemon, target);
 			return null;
 		},
 	},
