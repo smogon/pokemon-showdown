@@ -191,7 +191,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "allySide",
 		type: "Fairy",
-		zMoveBoost: {def: 1},
 		contestType: "Clever",
 	},
 	junglehealing: {
