@@ -77,7 +77,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 966 && (move.type === 'Dark' || move.type === 'Steel' || move.type === 'Poison')) {
+			if (user.baseSpecies.num === 966 && ['Dark', 'Steel', 'Poison'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -115,7 +115,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 966 && (move.type === 'Fire' || move.type === 'Steel' || move.type === 'Poison')) {
+			if (user.baseSpecies.num === 966 && ['Fire', 'Steel', 'Poison'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -153,7 +153,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 966 && (move.type === 'Steel' || move.type === 'Poison')) {
+			if (user.baseSpecies.num === 966 && ['Steel', 'Poison'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -191,7 +191,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 966 && (move.type === 'Fairy' || move.type === 'Steel' || move.type === 'Poison')) {
+			if (user.baseSpecies.num === 966 && ['Fairy', 'Steel', 'Poison'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -229,7 +229,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 966 && (move.type === 'Fighting' || move.type === 'Steel' || move.type === 'Poison')) {
+			if (user.baseSpecies.num === 966 && ['Fighting', 'Steel', 'Poison'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -252,18 +252,18 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			basePower: 10,
 		},
 		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Igglybuff' || source.baseSpecies.baseSpecies === 'Jigglypuff' || source.baseSpecies.baseSpecies === 'Wigglytuff') return false;
+			if (['igglybuff', 'jigglypuff', 'wigglytuff'].includes(species.id)) return false;
 			return true;
 		},
 		onModifyDefPriority: 1,
 		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Igglybuff' || pokemon.baseSpecies.baseSpecies === 'Jigglypuff' || pokemon.baseSpecies.baseSpecies === 'Wigglytuff') {
+			if (['igglybuff', 'jigglypuff', 'wigglytuff'].includes(species.id)) {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpDPriority: 1,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Igglybuff' || pokemon.baseSpecies.baseSpecies === 'Jigglypuff' || pokemon.baseSpecies.baseSpecies === 'Wigglytuff') {
+			if (['igglybuff', 'jigglypuff', 'wigglytuff'].includes(species.id)) {
 				return this.chainModify(2);
 			}
 		},
@@ -365,36 +365,6 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				return this.chainModify([5120, 4096]);
 			}
 		},
-		/*
-		onTryHitPriority: 1,
-		onTryHit(target, source, move) {
-			if (target === source || move.hasBounced || !move.flags['bullet']) {
-				return;
-			}
-			const newMove = this.dex.getActiveMove(move.id);
-			newMove.hasBounced = true;
-			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, target, source);
-			target.useItem();
-			this.add('-message', `${target.name}'s Baseball Bat broke!`);
-			return null;
-		},
-		onAllyTryHitSide(target, source, move) {
-			if (target.side === source.side || move.hasBounced || !move.flags['bullet']) {
-				return;
-			}
-			const newMove = this.dex.getActiveMove(move.id);
-			newMove.hasBounced = true;
-			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, this.effectState.target, source);
-			target.useItem();
-			this.add('-message', `${pokemon.name}'s Baseball Bat broke!`);
-			return null;
-		},
-		condition: {
-			duration: 1,
-		},
-		*/
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.flags['bullet']) {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
@@ -526,7 +496,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseSpecies.num === 6 && (move.type === 'Dragon' || move.type === 'Fire')) {
+			if (move && user.baseSpecies.num === 6 && ['Dragon', 'Fire'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -564,7 +534,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
-			if (move && user.baseSpecies.num === 6 && (move.type === 'Flying' || move.type === 'Fire')) {
+			if (move && user.baseSpecies.num === 6 && ['Flying', 'Fire'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
 		},
@@ -648,7 +618,6 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			return this.chainModify(1.2);
 		},
 		onCriticalHit: false,
-		onSourceCriticalHit: false,
 		num: -1030,
 		gen: 8,
 		desc: "Holder is immune to critical hits and has 1.2x Defense.",
@@ -680,32 +649,32 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			basePower: 30,
 		},
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Water' && 
-				 attacker.baseSpecies.baseSpecies === 'Palafin' && 
-				 attacker.species.forme !== 'Hero') {
+			if (move.type === 'Water' &&
+				attacker.baseSpecies.baseSpecies === 'Palafin' && 
+				attacker.species.forme !== 'Hero') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Water' && 
-				 attacker.baseSpecies.baseSpecies === 'Palafin' && 
-				 attacker.species.forme !== 'Hero') {
+			if (move.type === 'Water' &&
+				attacker.baseSpecies.baseSpecies === 'Palafin' && 
+				attacker.species.forme !== 'Hero') {
 				return this.chainModify(2);
 			}
 		},
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if ((move.type === 'Dark' || move.type === 'Fighting') && 
-				 defender.baseSpecies.baseSpecies === 'Palafin' && 
-				 defender.species.forme === 'Hero') {
+			if ((move.type === 'Dark' || move.type === 'Fighting') &&
+				defender.baseSpecies.baseSpecies === 'Palafin' &&
+				defender.species.forme === 'Hero') {
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if ((move.type === 'Dark' || move.type === 'Fighting') && 
-				 defender.baseSpecies.baseSpecies === 'Palafin' && 
-				 defender.species.forme === 'Hero') {
+			if ((move.type === 'Dark' || move.type === 'Fighting') &&
+				defender.baseSpecies.baseSpecies === 'Palafin' &&
+				defender.species.forme === 'Hero') {
 				return this.chainModify(0.5);
 			}
 		},
@@ -876,10 +845,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onSourceModifyAccuracyPriority: -2,
 		onSourceModifyAccuracy(accuracy, target) {
-			if (typeof accuracy === 'number' && 
-				 (target.volatiles['trapped'] || 
-				  target.volatiles['partiallytrapped'] || 
-				  target.volatiles['sandspit'])) {
+			if (typeof accuracy === 'number' &&
+				(target.volatiles['trapped'] ||
+				target.volatiles['partiallytrapped'] ||
+				target.volatiles['sandspit'])) {
 				this.debug('Binding Band boosting accuracy');
 				return this.chainModify(1.5);
 			}
@@ -897,9 +866,8 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			basePower: 60,
 		},
 		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && source.hp && target.hp && move && 
-				(move.id === 'uturn' || move.id === 'voltswitch' || move.id === 'flipturn' || 
-				move.id === 'round' || move.id === 'rollout' || move.id === 'partingshot')) {
+			if (source && source !== target && source.hp && target.hp && move &&
+				['uturn','voltswitch','flipturn','round','rollout','partingshot'].includes(move.id)) {
 				if (!source.isActive || !this.canSwitch(source.side) || source.forceSwitchFlag || target.forceSwitchFlag) {
 					return;
 				}
@@ -1021,7 +989,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		name: "Desert Rose",
 		spritenum: 603,
 		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Florges') return false;
+			if (source.baseSpecies.num === 671) return false;
 			return true;
 		},
 		onSwitchIn(pokemon) {
@@ -1032,30 +1000,30 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 5,
 		onResidual(pokemon) {
-			if (pokemon.baseSpecies.name === 'Florges' && this.field.isWeather('sandstorm')) {
+			if (pokemon.baseSpecies.num === 671 && this.field.isWeather('sandstorm')) {
 				this.heal(pokemon.baseMaxhp / 8);
 			}
 		},
 		onModifySpDPriority: 1,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.name === 'Florges' && this.field.isWeather('sandstorm')) {
+			if (pokemon.baseSpecies.num === 671 && this.field.isWeather('sandstorm')) {
 				return this.chainModify(1.5);
 			}
 		},
 		onUpdate(pokemon) {
-			if (pokemon.volatiles['healblock'] && pokemon.baseSpecies.baseSpecies === 'Florges') {
+			if (pokemon.volatiles['healblock'] && pokemon.baseSpecies.num === 671) {
 				this.add('-activate', pokemon, 'item: Desert Rose');
 				pokemon.removeVolatile('healblock');
 				this.add('-end', pokemon, 'move: Heal Block', '[from] item: Desert Rose');
 			}
 		},
 		onHit(target, source, move) {
-			if (move?.volatileStatus === 'healblock' && target.baseSpecies.baseSpecies === 'Florges') {
+			if (move?.volatileStatus === 'healblock' && target.baseSpecies.num === 671) {
 				this.add('-immune', target, 'healblock', '[from] item: Desert Rose');
 			}
 		},
 		onTryHit(pokemon, target, move) {
-			if (move.id === 'healblock' && pokemon.baseSpecies.baseSpecies === 'Florges') {
+			if (move.id === 'healblock' && target.baseSpecies.num === 671) {
 				this.add('-immune', pokemon, '[from] item: Desert Rose');
 				return null;
 			}
