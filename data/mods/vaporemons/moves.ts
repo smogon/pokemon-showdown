@@ -1,5 +1,4 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
-// slate 1
 	direclaw: {
 		shortDesc: "Sets a layer of Toxic Spikes.",
 		num: -1005,
@@ -164,8 +163,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Steel",
 	},
-
-// slate 2
 	healingstones: {
 		num: -191,
 		accuracy: true,
@@ -282,8 +279,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		maxMove: {basePower: 130},
 		contestType: "Cool",
 	},
-
-// slate 3
 	stormthrow: {
 		num: 480,
 		accuracy: true,
@@ -394,42 +389,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Psychic",
 		contestType: "Cool",
-	}, /*
-	walkietalkiemove: {
-		accuracy: true,
-		basePower: 0,
-		category: "Physical",
-		shortDesc: "Referenced by the Walkie-Talkie item in order for it to work.",
-		name: "Walkie-Talkie Move",
-		pp: 5,
-		priority: 0,
-		flags: {},
-		onPrepareHit(target, source, move) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Sing", target);
-		},
-		slotCondition: 'walkietalkie',
-		condition: {
-			duration: 1,
-			onFaint(target) {
-				target.side.removeSlotCondition(target, 'walkietalkie');
-			},
-			onSwap(target) {
-				if (!target.fainted && this.effectState.moveTarget && this.effectState.moveTarget.isActive) {
-					this.add('-message', `${pokemon.name} was called in!`);
-					// const move = this.dex.getMove(this.effectState.move);
-					this.runMove('copycat', target, this.getTargetLoc(target.side.foe.active[0], target), null, false, true);
-				}
-				target.side.removeSlotCondition(target, 'walkietalkie');
-			},
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-		zMove: {basePower: 140},
-		maxMove: {basePower: 130},
-		contestType: "Cool",
-	}, */
+	},
 	chainlightning: {
 		accuracy: 100,
 		basePower: 15,
@@ -715,98 +675,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
-	}, /*
-  parry: {
-	   accuracy: 100,
-	   basePower: 80,
-	   category: "Physical",
-	   shortDesc: "If the foe used a priority move, this move hits before that move and flinches the foe.",
-	   name: "Parry",
-	   pp: 10,
-	   priority: 0,
-	   flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit(target, source, move) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Mach Punch", target);
-		},
-	   priorityChargeCallback(pokemon) {
-			this.add('-message', `${pokemon.name} is attempting to parry!`);
-			this.actions.useMove("Parry Condition", pokemon);
-		}, 
-		beforeMoveCallback(pokemon) {
-			this.actions.useMove("Parry Attack", pokemon);
-		},
-	   secondary: {}, // sheer force boosted
-	   target: "normal",
-	   type: "Fighting",
-	   contestType: "Clever",
-    },
-  parrycondition: {
-	   accuracy: true,
-	   basePower: 0,
-	   category: "Physical",
-	   shortDesc: "Required to make Parry work.",
-	   name: "Parry Condition",
-	   pp: 10,
-	   priority: 6,
-	   flags: {},
-		volatileStatus: 'parrycondition',
-		onPrepareHit(target, source, move) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Imprison", target);
-		},
-		onHit(target) {
-			this.add('-message', `${target.name}'s priority attacks will get parried!`);
-		},
-	   condition: {
-		 duration: 1,
-		 onModifyPriority(priority, source, target, move) {
-			if ((move?.priority > 0.1) && (move?.category !== 'Status')) {
-				return priority - 6;
-			}
-		 },
-		onBeforeMovePriority: 9,
-		onBeforeMove(pokemon, target, move) {
-			if (['fakeout', 'extremespeed', 'feint', 'firstimpression', 'accelerock', 'aquajet', 'machpunch',
-				  'quickattack', 'bulletpunch', 'shadowsneak','iceshard', 'jetpunch', 'cuttingremark', 'chainlightning',
-				 	'suckerpunch', 'watershuriken', 'vacuumwave', 'grassyglide'].includes(move.id) ||
-				 	(move.type === 'Flying' && pokemon.hp >= pokemon.maxhp / 2 && pokemon.hasAbility('galewings') && move.category !== 'Status') ||
-					(move.flags['heal'] && pokemon.hasAbility('triage') && move.category !== 'Status') &&
-				(!pokemon.hasAbility('innerfocus') ||
-				 !pokemon.hasAbility('shielddust') ||
-				 !pokemon.hasItem('covertcloak') || 
-				 !pokemon.hasAbility('sandveil') && !this.field.isWeather('sandstorm') ||
-				 !pokemon.hasAbility('sunblock') && !this.field.isWeather('sunnyday')  ||
-				 !pokemon.hasAbility('snowcloak') && !this.field.isWeather('snow'))) {
-				this.add('cant', pokemon, move, move);
-				this.add('-message', `${pokemon.name}'s attack was parried!`);
-				return false;
-			}
-		},
-	  },	
-	  secondary: null,
-	  target: "normal",
-	  type: "Fighting",
-	  contestType: "Clever",
-    },
-  parryattack: {
-	   accuracy: 100,
-	   basePower: 80,
-	   category: "Physical",
-	   shortDesc: "Required to make Parry work.",
-	   name: "Parry Attack",
-	   pp: 10,
-	   priority: 0,
-	   flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit(target, source, move) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Mach Punch", target);
-		},
-	   secondary: {}, // sheer force boosted
-	   target: "normal",
-	   type: "Fighting",
-	   contestType: "Clever",
-    }, */
+	},
   parry: {
 	   accuracy: 100,
 	   basePower: 80,
@@ -1199,16 +1068,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.add('-anim', source, "Sandsear Storm", target);
 						this.field.setWeather('sandstorm');
 					},
-					/*
-					self: {
-						onHit(source) {
-							this.field.setWeather('sandstorm');
-						},
-						onMoveFail(source) {
-							this.field.setWeather('sandstorm');
-						},
-					},
-	  				*/
 					effectType: 'Move',
 					type: 'Ground',
 				},
