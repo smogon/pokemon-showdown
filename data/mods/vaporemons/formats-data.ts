@@ -1679,5 +1679,5 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "Illegal",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
-	}, 
+	},
 };
