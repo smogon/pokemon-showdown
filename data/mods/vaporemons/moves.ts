@@ -189,7 +189,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') ||
 					 pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
-				let healAmounts = [0, 3]; // 1/8
+				const healAmounts = [0, 3]; // 1/8
 				this.heal(healAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
 		},
@@ -236,7 +236,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				 if (!target.fainted) {
 					  const source = this.effectState.source;
 					  const damage = this.heal(target.baseMaxhp / 4, target, target);
-					  if (damage) this.add('-heal', target, target.getHealth, '[from] move: Life Dew', '[of] ' + this.effectState.source);
+					  if (damage) this.add('-heal', target, target.getHealth, '[from] move: Life Dew', '[of] ' + source);
 					  target.side.removeSlotCondition(target, 'lifedew');
 				 }
 			},
@@ -643,7 +643,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		onHit(target, source, move) {
-			let bp = Math.min(200, 50 + 50 * source.timesAttacked);
+			const bp = Math.min(200, 50 + 50 * source.timesAttacked);
 			this.add('-message', `Rage Fist currently has a BP of ${bp}!`);
 		},
 		secondary: null,
@@ -665,14 +665,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target, source, move) {
-			let bp = Math.min(200, 50 + 50 * source.timesAttacked);
+			const bp = Math.min(200, 50 + 50 * source.timesAttacked);
 			this.add('-message', `Raging Fury currently has a BP of ${bp}!`);
 		},
 		secondary: null,
 		target: "normal",
 		type: "Fire",
 	},
-  parry: {
+	parry: {
 	   accuracy: 100,
 	   basePower: 80,
 	   category: "Physical",
@@ -704,11 +704,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const parryHolder = this.effectState.target;
 				if ((source.isAlly(parryHolder) || move.target === 'all') &&
 					(!source.hasAbility('innerfocus') || !source.hasAbility('shielddust') ||
-					!source.hasAbility('steadfast') || !source.hasItem('covertcloak') || 
-				 	!source.hasAbility('sandveil') && !this.field.isWeather('sandstorm') ||
-				 	!source.hasAbility('sunblock') && !this.field.isWeather('sunnyday')  ||
-				 	!source.hasAbility('snowcloak') && !this.field.isWeather('snow'))
-					&& move.priority > 0.1) {
+					!source.hasAbility('steadfast') || !source.hasItem('covertcloak') ||
+					!source.hasAbility('sandveil') && !this.field.isWeather('sandstorm') ||
+					!source.hasAbility('sunblock') && !this.field.isWeather('sunnyday') ||
+					!source.hasAbility('snowcloak') && !this.field.isWeather('snow')) &&
+					move.priority > 0.1) {
 					this.attrLastMove('[still]');
 					this.add('cant', parryHolder, 'move: Parry', move, '[of] ' + target);
 					return false;
@@ -718,7 +718,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	   target: "normal",
 	   type: "Fighting",
 	   contestType: "Clever",
-    },
+	},
 	rollout: {
 		num: 205,
 		accuracy: 100,
@@ -1059,7 +1059,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					priority: 0,
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: false,
-					onPrepareHit(target, source, move) {
+					onPrepareHit(move) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Sandsear Storm", target);
 						this.field.setWeather('sandstorm');
@@ -1169,7 +1169,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: false,
 					status: 'tox',
-					onPrepareHit(target, source, move) {
+					onPrepareHit(move) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Corrosive Gas", target);
 					},
@@ -1393,11 +1393,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
-			const type1 = 'Fighting';
-			const type2 = 'Flying';
+				const type1 = 'Fighting';
+				const type2 = 'Flying';
 				if (this.dex.getEffectiveness(type1, target) < this.dex.getEffectiveness(type2, target)) {
 					move.type = 'Flying';
-				} else if (target.hasType('Ghost') && !pokemon.hasAbility('scrappy') && !pokemon.hasAbility('mindseye') && !target.hasItem('ringtarget')) {
+				} else if (target.hasType('Ghost') && !pokemon.hasAbility('scrappy') &&
+							  !pokemon.hasAbility('mindseye') && !target.hasItem('ringtarget')) {
 					move.type = 'Flying';
 				} else if (this.dex.getEffectiveness(type1, target) === this.dex.getEffectiveness(type2, target)) {
 					if (pokemon.hasType('Flying') && !pokemon.hasType('Fighting')) {
@@ -1432,8 +1433,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
-			const type1 = 'Bug';
-			const type2 = 'Electric';
+				const type1 = 'Bug';
+				const type2 = 'Electric';
 				if (this.dex.getEffectiveness(type1, target) < this.dex.getEffectiveness(type2, target)) {
 					if (!target.hasType('Ground') && !target.hasItem('ringtarget')) {
 						move.type = 'Electric';
@@ -1468,10 +1469,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon) {
 			const negativeVolatiles = ['confusion', 'taunt', 'torment', 'trapped', 'partiallytrapped', 'leechseed', 'sandspit',
-			'attract', 'curse', 'disable', 'electrify', 'embargo', 'encore', 'foresight', 'gastroacid', 'foresight', 'miracleeye',
-			'glaiverush', 'healblock', 'throatchop', 'windbreaker', 'nightmare', 'octolock', 'powder', 'saltcure', 'smackdown',
-			'syrupbomb', 'tarshot', 'telekinesis', 'yawn'];
-			const boosts: SparseBoostsTable = {};
+				'attract', 'curse', 'disable', 'electrify', 'embargo', 'encore', 'foresight', 'gastroacid', 'foresight', 'miracleeye',
+				'glaiverush', 'healblock', 'throatchop', 'windbreaker', 'nightmare', 'octolock', 'powder', 'saltcure', 'smackdown',
+				'syrupbomb', 'tarshot', 'telekinesis', 'yawn'];
 			let i: BoostName;
 			for (i in pokemon.boosts) {
 				for (const volatile of negativeVolatiles) {
@@ -1523,7 +1523,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		contestType: "Clever",
 	},
 
-// all edited unchanged moves
+	// all edited unchanged moves
 	stealthrock: {
 		num: 446,
 		accuracy: true,
@@ -1620,7 +1620,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') || pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) {
+				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') ||
+							  pokemon.hasAbility('overcoat') || pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) {
 					return;
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -1650,7 +1651,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
 			onEntryHazard(pokemon) {
-				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') || pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') ||
+					 pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
 			},
@@ -2253,7 +2255,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
-			for (const active of this.getAllActive()) {
+				for (const active of this.getAllActive()) {
 					if (active.hasAbility('cloudnine')) {
 						this.add('-message', `${active.name} suppresses the effects of the terrain!`);
 						return;
@@ -2944,7 +2946,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if ((pokemon.terastallized || pokemon.hasItem('terashard')) && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+			if ((pokemon.terastallized || pokemon.hasItem('terashard')) &&
+				 pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
 				move.category = 'Physical';
 			}
 		},
