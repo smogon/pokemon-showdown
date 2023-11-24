@@ -137,8 +137,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {snatch: 1},
 		onHit(pokemon) {
-			let success = false;
-			let hazardsCleared = 0;
 			const somesideConditions = ['spikes', 'stealthrock'];
 			const sides = [pokemon.side];
 			for (const side of sides) {
@@ -148,12 +146,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 					if (side.removeSideCondition('spikes')) {
 						this.add('-sideend', side, this.dex.conditions.get('spikes'));
-						hazardsCleared += 1;
 						this.boost({def: 1}, pokemon);
 					}
 					if (side.removeSideCondition('stealthrock')) {
 						this.add('-sideend', side, this.dex.conditions.get('stealthrock'));
-						hazardsCleared += 1;
 						this.boost({def: 1}, pokemon);
 					}
 				}
