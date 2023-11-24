@@ -417,7 +417,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['[Gen 9] Ubers'],
 		banlist: [
-			'Annihilape', 'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Basculegion', 'Calyrex-ice', 'Chien-Pao', 'Clodsire', 'Corviknight', 'Ditto',
+			'Annihilape', 'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Basculegion', 'Calyrex-Ice', 'Chien-Pao', 'Clodsire', 'Corviknight', 'Ditto',
 			'Dondozo', 'Eternatus', 'Flutter Mane', 'Glimmora', 'Gliscor', 'Giratina', 'Giratina-Origin', 'Great Tusk', 'Grimmsnarl', 'Groudon', 'Hatterene',
 			'Iron Bundle', 'Iron Treads', 'Kingambit', 'Koraidon', 'Kyogre', 'Landorus-Therian', 'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza',
 			'Regieleki', 'Ribombee', 'Skeledirge', 'Ting-Lu', 'Toxapex', 'Zacian-Crowned',
