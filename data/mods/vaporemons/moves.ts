@@ -1035,12 +1035,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					priority: 0,
 					flags: {allyanim: 1, futuremove: 1},
 					ignoreImmunity: true,
-					onTryHit(target, source, move) {
+					onTryHit() {
 						if (!target.isGrounded()) {
 							move.basePower = 0;
 						}
 					},
-					onHit(target) {
+					onHit() {
 						this.field.setWeather('sandstorm');
 					},
 					effectType: 'Move',
