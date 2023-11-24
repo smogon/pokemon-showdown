@@ -252,18 +252,18 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			basePower: 10,
 		},
 		onTakeItem(item, source) {
-			if (['igglybuff', 'jigglypuff', 'wigglytuff'].includes(species.id)) return false;
+			if (['Igglybuff', 'Jigglypuff', 'Wigglytuff'].includes((source.baseSpecies.baseSpecies))) return false;
 			return true;
 		},
 		onModifyDefPriority: 1,
 		onModifyDef(def, pokemon) {
-			if (['igglybuff', 'jigglypuff', 'wigglytuff'].includes(species.id)) {
+			if (['Igglybuff', 'Jigglypuff', 'Wigglytuff'].includes((pokemon.baseSpecies.baseSpecies))) {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpDPriority: 1,
 		onModifySpD(spd, pokemon) {
-			if (['igglybuff', 'jigglypuff', 'wigglytuff'].includes(species.id)) {
+			if (['Igglybuff', 'Jigglypuff', 'Wigglytuff'].includes((pokemon.baseSpecies.baseSpecies))) {
 				return this.chainModify(2);
 			}
 		},
