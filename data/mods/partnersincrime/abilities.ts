@@ -39,12 +39,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const sortedActive = this.getAllActive();
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
+				if (pokemon.m.innate) {
+					if (!pokemon.volatiles[pokemon.m.innate]) pokemon.addVolatile(pokemon.m.innate, pokemon);
+				}
 				if (pokemon !== source) {
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-				}
-				if (pokemon.m.innate) {
-					if (!pokemon.volatiles[pokemon.m.innate]) pokemon.addVolatile(pokemon.m.innate, pokemon);
 				}
 			}
 		},
