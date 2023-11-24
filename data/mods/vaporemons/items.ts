@@ -172,7 +172,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		spritenum: 648,
 		fling: {
 			basePower: 20,
-			volatilestatus: 'confusion',
+			volatileStatus: 'confusion',
 		},
 		onTakeItem(item, pokemon, source) {
 			if (source?.baseSpecies.num === 966 || pokemon.baseSpecies.num === 966) {
@@ -368,7 +368,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
-					this.add('-message', `${pokemon.name} tried to hit the ball back, but its Baseball Bat broke!`);
+					this.add('-message', `${target.name} tried to hit the ball back, but its Baseball Bat broke!`);
 				}
 			}
 		},
