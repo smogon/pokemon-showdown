@@ -289,10 +289,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		onEnd() {
+		onEnd(source) {
 			if (this.field.terrain) {
-				const source = this.effectState.target;
-				for (const target of source.foes()) {
+				const cnsource = this.effectState.target;
+				for (const target of cnsource.foes()) {
 					target.removeVolatile('cloudnine');
 				}
 			}
