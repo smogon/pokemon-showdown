@@ -1019,9 +1019,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {allyanim: 1, futuremove: 1},
-		self: {
-			sideCondition: 'desertstorm',
-		},
 		ignoreImmunity: true,
 		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
@@ -1037,23 +1034,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					category: "Physical",
 					priority: 0,
 					flags: {allyanim: 1, futuremove: 1},
-					ignoreImmunity: false,
+					ignoreImmunity: true,
+					onTryHit(target, source, move) {
+						if (!target.isGrounded()) {
+							move.basePower = 0;
+						}
+					},
+					onHit(target) {
+						this.field.setWeather('sandstorm');
+					},
 					effectType: 'Move',
 					type: 'Ground',
 				},
 			});
 			this.add('-start', source, 'move: Desert Storm');
 			return this.NOT_FAIL;
-		},
-		condition: {
-			duration: 2,
-			onStart() {
-				this.add('-message', `A storm is brewing!`);
-			},
-			onEnd() {
-				this.field.setWeather('sandstorm');
-				this.add('-message', `The desert storm whipped up a serious sandstorm!`);
-			},
 		},
 		secondary: null,
 		target: "normal",
@@ -1440,7 +1435,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'glaiverush', 'healblock', 'throatchop', 'windbreaker', 'nightmare', 'octolock', 'powder', 'saltcure', 'smackdown',
 				'syrupbomb', 'tarshot', 'telekinesis', 'yawn'];
 			const pokemonBoosts: SparseBoostsTable = {};
-			let i: BoostName;
+			let i: BoostID;
 			for (i in pokemon.boosts) {
 				pokemonBoosts[i] = pokemon.boosts[i];
 				for (const volatile of negativeVolatiles) {
