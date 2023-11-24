@@ -263,7 +263,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		onAnyTerrainStart(target, source, terrain) {
+		onTerrainChange() {
 			const pokemon = this.effectState.target;
 			this.add('-ability', pokemon, 'Cloud Nine');
 			this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
@@ -1478,7 +1478,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.hint("Transform Mimicry changes you to your original un-transformed types.");
 			}
 		},
-		onAnyTerrainStart() {
+		onTerrainChange() {
 			for (const target of this.getAllActive()) {
 				if (target.hasAbility('cloudnine')) {
 					this.debug('Cloud Nine prevents type change');
