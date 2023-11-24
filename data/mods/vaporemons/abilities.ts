@@ -1508,7 +1508,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				case 'psychicterrain':
 					newType = 'Psychic';
 					break;
-					if (!newType || pokemon.getTypes().join() === newType || !pokemon.setType(newType)) return;
 					this.add('-start', pokemon, 'typechange', newType, '[from] ability: Mimicry');
 				}
 			},
