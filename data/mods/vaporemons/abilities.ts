@@ -51,7 +51,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				 if (!target.fainted) {
 					  const source = this.effectState.source;
 					  const damage = this.heal(target.baseMaxhp / 3, target, target);
-					  if (damage) this.add('-heal', target, target.getHealth, '[from] ability: Healer', '[of] ' + this.effectState.source);
+					  if (damage) this.add('-heal', target, target.getHealth, '[from] ability: Healer', '[of] ' + source);
 					  target.side.removeSlotCondition(target, 'healer');
 				 }
 			},
@@ -186,8 +186,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	sandspit: {
 		onDamagingHit(damage, target, source, move) {
-				this.add('-activate', target, 'ability: Sand Spit');
-				source.addVolatile('sandspit', this.effectState.target);
+			this.add('-activate', target, 'ability: Sand Spit');
+			source.addVolatile('sandspit', this.effectState.target);
 		},
 		condition: {
 			duration: 5,
@@ -289,7 +289,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		onEnd(source) {
+		onEnd(pokemon) {
 			if (this.field.terrain) {
 				const source = this.effectState.target;
 				for (const target of source.foes()) {
@@ -316,18 +316,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				if (pokemon.ignoringItem()) continue;
 				if (
-					(pokemon.hasItem('psychicseed') && this.field.isTerrain('psychicterrain'))
-					 || (pokemon.hasItem('electricseed') && this.field.isTerrain('electricterrain'))
-					 || (pokemon.hasItem('grassyseed') && this.field.isTerrain('grassyterrain'))
-					 || (pokemon.hasItem('mistyseed') && this.field.isTerrain('mistyterrain'))
-					) {
-						for (const target of this.getAllActive()) {
-							if (target.hasAbility('cloudnine') && target !== source) {
-								this.debug('Cloud Nine prevents Seed use');
-								return;
-							}
+					(pokemon.hasItem('psychicseed') && this.field.isTerrain('psychicterrain')) ||
+					(pokemon.hasItem('electricseed') && this.field.isTerrain('electricterrain')) ||
+					(pokemon.hasItem('grassyseed') && this.field.isTerrain('grassyterrain')) ||
+					(pokemon.hasItem('mistyseed') && this.field.isTerrain('mistyterrain'))
+				) {
+					for (const target of this.getAllActive()) {
+						if (target.hasAbility('cloudnine') && target !== source) {
+							this.debug('Cloud Nine prevents Seed use');
+							return;
 						}
-						pokemon.useItem();
+					}
+					pokemon.useItem();
 				}
 			}
 		},
@@ -785,7 +785,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onModifySecondaries(secondaries) {
-			if (this.field.isWeather('sandstorm')) { 
+			if (this.field.isWeather('sandstorm')) {
 				this.debug('Snow Cloak prevent secondary');
 				return secondaries.filter(effect => !!(effect.self || effect.dustproof));
 			}
@@ -806,7 +806,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onModifySecondaries(secondaries) {
-			if (this.field.isWeather(['hail', 'snow'])) { 
+			if (this.field.isWeather(['hail', 'snow'])) {
 				this.debug('Snow Cloak prevent secondary');
 				return secondaries.filter(effect => !!(effect.self || effect.dustproof));
 			}
@@ -821,14 +821,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	outclass: {
 		onSourceHit(target, source, move) {
 			if (!move || !target || source.types[1] || source.volatiles['outclass'] || target.hasItem('terashard')) return;
-			let targetType = target.types[0]
+			const targetType = target.types[0];
 			if (target !== source && move.category !== 'Status' &&
 				 !source.hasType(targetType) && source.addType(targetType) && targetType !== '???') {
-					target.setType(target.getTypes(true).map(type => type === targetType ? "???" : type));
-					this.add('-start', target, 'typechange', target.types.join('/'));
-					this.add('-start', source, 'typeadd', targetType, '[from] ability: Outclass');
-					source.addVolatile('outclass');			
-				}
+				target.setType(target.getTypes(true).map(type => type === targetType ? "???" : type));
+				this.add('-start', target, 'typechange', target.types.join('/'));
+				this.add('-start', source, 'typeadd', targetType, '[from] ability: Outclass');
+				source.addVolatile('outclass');
+			}
 		},
 		condition: {},
 		name: "Outclass",
@@ -892,7 +892,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Special attacks have 1.3x power; stat changes to the Special Attack stat have no effect.",
 	},
 	battlespines: {
-      onAfterMove(target, source, move) {
+		onAfterMove(target, source, move) {
 			if (target !== source && move.category !== 'Status' && move.totalDamage) {
 				this.damage(source.baseMaxhp / 8, source, target);
 			}
@@ -966,13 +966,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-message', `${source.name}'s splashed around in the mud!`);
 		},
 		onBasePower(basePower, attacker, defender, move) {
-			if (['Muddy Water','Mud Shot','Mud Bomb','Mud-Slap'].includes(move.name)) {
+			if (['Muddy Water', 'Mud Shot', 'Mud Bomb', 'Mud-Slap'].includes(move.name)) {
 				return this.chainModify(2);
 			}
 		},
 		shortDesc: "On switch-in, sets Mud Sport and Water Sport. This Pokemon's mud moves deal double damage.",
 		rating: 5,
-	}, 
+	},
 	exoskeleton: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Exoskeleton');
@@ -980,17 +980,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hasType('Bug')) {
-				if (['Rock','Fire','Flying'].includes(move.type)) {
+				if (['Rock', 'Fire', 'Flying'].includes(move.type)) {
 					this.debug('Exoskeleton Bug neutralize');
 					return this.chainModify(0.5);
 				}
-			}
-			else //{
-				if (['Fighting','Ground','Grass'].includes(move.type)) {
+			} else {
+				if (['Fighting', 'Ground', 'Grass'].includes(move.type)) {
 					this.debug('Exoskeleton non-Bug neutralize');
 					return this.chainModify(0.5);
 				}
-			//}
+			}
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect && effect.id === 'stealthrock' && target.hasType('Bug')) {
