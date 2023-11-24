@@ -11,10 +11,10 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 	protectclause: {
 		effectType: 'ValidatorRule',
 		name: 'Protect Clause',
-		desc: "Bans moves that protect the user",
-		banlist: ['Protect', 'Detect'/*, 'Baneful Bunker', 'King\u2019s Shield', 'Obstruct', 'Silk Trap', 'Spiky Shield'*/],
+		desc: "Bans Protect and Detect.",
+		banlist: ['Protect', 'Detect'],
 		onBegin() {
-			this.add('rule', 'Protect Clause: Protecting moves are banned');
+			this.add('rule', 'Protect Clause: Widely-distributed protecting moves are banned');
 		},
 	},
 	fieldeffectclause: {
