@@ -298,22 +298,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			source.abilityState.ending = true;
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon.hasAbility('mimicry')) {
-					for (const target of this.getAllActive()) {
-						if (target.hasAbility('cloudnine') && target !== source) {
-							this.debug('Cloud Nine prevents type change');
-							return;
-						}
-					}
-					if (this.field.terrain) {
-						pokemon.addVolatile('mimicry');
-					} else {
-						const types = pokemon.baseSpecies.types;
-						if (pokemon.getTypes().join() === types.join() || !pokemon.setType(types)) return;
-						this.add('-start', pokemon, 'typechange', types.join('/'), '[from] ability: Mimicry');
-						this.hint("Transform Mimicry changes you to your original un-transformed types.");
-					}
-				}
 				if (pokemon.ignoringItem()) continue;
 				if (
 					(pokemon.hasItem('psychicseed') && this.field.isTerrain('psychicterrain')) ||
