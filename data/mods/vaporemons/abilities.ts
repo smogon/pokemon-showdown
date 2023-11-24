@@ -289,18 +289,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		onEnd(pokemon) {
+		onEnd(source) {
 			if (this.field.terrain) {
-				const source = this.effectState.target;
-				for (const target of source.foes()) {
+				const cnsource = this.effectState.target;
+				for (const target of cnsource.foes()) {
 					target.removeVolatile('cloudnine');
 				}
 			}
-			source.abilityState.ending = true;
+			cnsource.abilityState.ending = true;
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.hasAbility('mimicry')) {
 					for (const target of this.getAllActive()) {
-						if (target.hasAbility('cloudnine') && target !== source) {
+						if (target.hasAbility('cloudnine') && target !== cnsource) {
 							this.debug('Cloud Nine prevents type change');
 							return;
 						}
@@ -322,7 +322,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					(pokemon.hasItem('mistyseed') && this.field.isTerrain('mistyterrain'))
 				) {
 					for (const target of this.getAllActive()) {
-						if (target.hasAbility('cloudnine') && target !== source) {
+						if (target.hasAbility('cloudnine') && target !== cnsource) {
 							this.debug('Cloud Nine prevents Seed use');
 							return;
 						}
@@ -1006,15 +1006,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
 			return this.modify(atk, 1.5);
-		}, 
+		},
 		onModifyDamage(damage, source, target, move) {
 			if (move && target.getMoveHitData(move).typeMod === 1) {
 				return this.chainModify(0.5);
-			}
-			else if (move && target.getMoveHitData(move).typeMod > 1) {
+			} else if (move && target.getMoveHitData(move).typeMod > 1) {
 				return this.chainModify(0.25);
 			}
-		}, 
+		},
 		name: "Blunt Force",
 		rating: 3.5,
 		shortDesc: "(Mostly functional) This Pokemon's physical moves have 1.5x power but can't be super effective.",
@@ -1065,8 +1064,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Blaze low HP boost');
 				return this.chainModify(1.5);
-			}
-			else if (move.type === 'Fire') {
+			} else if (move.type === 'Fire') {
 				this.debug('Blaze boost');
 				return this.chainModify(1.2);
 			}
@@ -1076,8 +1074,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Blaze low HP boost');
 				return this.chainModify(1.5);
-			}
-			else if (move.type === 'Fire') {
+			} else if (move.type === 'Fire') {
 				this.debug('Blaze boost');
 				return this.chainModify(1.2);
 			}
@@ -1093,8 +1090,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Torrent low HP boost');
 				return this.chainModify(1.5);
-			}
-			else if (move.type === 'Water') {
+			} else if (move.type === 'Water') {
 				this.debug('Torrent boost');
 				return this.chainModify(1.2);
 			}
@@ -1104,8 +1100,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Torrent low HP boost');
 				return this.chainModify(1.5);
-			}
-			else if (move.type === 'Water') {
+			} else if (move.type === 'Water') {
 				this.debug('Torrent boost');
 				return this.chainModify(1.2);
 			}
@@ -1121,8 +1116,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Overgrow low HP boost');
 				return this.chainModify(1.5);
-			}
-			else if (move.type === 'Grass') {
+			} else if (move.type === 'Grass') {
 				this.debug('Overgrow boost');
 				return this.chainModify(1.2);
 			}
@@ -1132,8 +1126,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Overgrow low HP boost');
 				return this.chainModify(1.5);
-			}
-			else if (move.type === 'Grass') {
+			} else if (move.type === 'Grass') {
 				this.debug('Overgrow boost');
 				return this.chainModify(1.2);
 			}
@@ -1149,8 +1142,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Swarm low HP boost');
 				return this.chainModify(1.5);
-			}
-			else if (move.type === 'Bug') {
+			} else if (move.type === 'Bug') {
 				this.debug('Swarm boost');
 				return this.chainModify(1.2);
 			}
@@ -1160,8 +1152,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.hp <= attacker.maxhp / 3) {
 				this.debug('Swarm low HP boost');
 				return this.chainModify(1.5);
-			}
-			else if (move.type === 'Bug') {
+			} else if (move.type === 'Bug') {
 				this.debug('Swarm boost');
 				return this.chainModify(1.2);
 			}
@@ -1225,22 +1216,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	momentum: {
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (['rapidspin','icespinner','spinout','blazingtorque','combattorque','noxioustorque',
-				  'wickedtorque','drillrun','gyroball','rollout','iceball','flipturn','uturn','electrodrift',
-				  'darkestlariat','flamewheel','aurawheel','shiftgear','mortalspin','geargrind','steelroller',
-				  'rototiller','steamroller','tripleaxel','triplekick','firespin','leaftornado','hurricane',
-				  'bleakwindstorm','sandsearstorm','wildboltstorm','springtimestorm','whirlpool'].includes(move.id))
-			{
+			if (['rapidspin', 'icespinner', 'spinout', 'blazingtorque', 'combattorque', 'noxioustorque',
+				  'wickedtorque', 'drillrun', 'gyroball', 'rollout', 'iceball', 'flipturn', 'uturn', 'electrodrift',
+				  'darkestlariat', 'flamewheel', 'aurawheel', 'shiftgear', 'mortalspin', 'geargrind', 'steelroller',
+				  'rototiller', 'steamroller', 'tripleaxel', 'triplekick', 'firespin', 'leaftornado', 'hurricane',
+				  'bleakwindstorm', 'sandsearstorm', 'wildboltstorm', 'springtimestorm', 'whirlpool'].includes(move.id)) {
 				this.heal(pokemon.baseMaxhp / 8);
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (['rapidspin','icespinner','spinout','blazingtorque','combattorque','noxioustorque',
-				  'wickedtorque','drillrun','gyroball','rollout','iceball','flipturn','uturn','electrodrift',
-				  'darkestlariat','flamewheel','aurawheel','shiftgear','mortalspin','geargrind','steelroller',
-				  'rototiller','steamroller','tripleaxel','triplekick','firespin','leaftornado','hurricane',
-				  'bleakwindstorm','sandsearstorm','wildboltstorm','springtimestorm','whirlpool'].includes(move.id))
-			{
+			if (['rapidspin', 'icespinner', 'spinout', 'blazingtorque', 'combattorque', 'noxioustorque',
+				  'wickedtorque', 'drillrun', 'gyroball', 'rollout', 'iceball', 'flipturn', 'uturn', 'electrodrift',
+				  'darkestlariat', 'flamewheel', 'aurawheel', 'shiftgear', 'mortalspin', 'geargrind', 'steelroller',
+				  'rototiller', 'steamroller', 'tripleaxel', 'triplekick', 'firespin', 'leaftornado', 'hurricane',
+				  'bleakwindstorm', 'sandsearstorm', 'wildboltstorm', 'springtimestorm', 'whirlpool'].includes(move.id)) {
 				this.heal(target.baseMaxhp / 8);
 			}
 		},
