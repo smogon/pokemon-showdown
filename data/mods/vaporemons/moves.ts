@@ -1014,7 +1014,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-	   shortDesc: "Hits two turns after being used. Sets sands when it hits, even if the target is immune.",
+	   shortDesc: "(Partially functional placeholder) Hits two turns after being used. Sets sands when it hits, even if the target is immune.",
 		name: "Desert Storm",
 		pp: 15,
 		priority: 0,
@@ -1034,14 +1034,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					category: "Physical",
 					priority: 0,
 					flags: {allyanim: 1, futuremove: 1},
-					ignoreImmunity: true,
-					onTryHit(move) {
-						if (!target.isGrounded()) {
-							move.basePower = 0;
-						}
-					},
-					onHit(move) {
-						this.field.setWeather('sandstorm');
+					ignoreImmunity: false,
+					self: {
+						sideCondition: 'desertstorm',
 					},
 					effectType: 'Move',
 					type: 'Ground',
@@ -1049,6 +1044,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			});
 			this.add('-start', source, 'move: Desert Storm');
 			return this.NOT_FAIL;
+		},
+		condition: {
+			duration: 1,
+			onStart(source) {
+				this.field.setWeather('sandstorm');
+			},
 		},
 		secondary: null,
 		target: "normal",
