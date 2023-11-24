@@ -407,6 +407,25 @@ export const Formats: FormatList = [
 		ruleset: ['Min Source Gen = 9', 'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
 	{
+		name: "[Gen 9] Ubers UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3731761/">Ubers UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3731754/">Ubers UU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3731755/">Ubers UU Sample Teams</a>`,
+		],
+
+		mod: 'gen9',
+		ruleset: ['[Gen 9] Ubers'],
+		banlist: [
+			'Annihilape', 'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Basculegion', 'Calyrex-ice', 'Chien-Pao', 'Clodsire', 'Corviknight', 'Ditto',
+			'Dondozo', 'Eternatus', 'Flutter Mane', 'Glimmora', 'Gliscor', 'Giratina', 'Giratina-Origin', 'Great Tusk', 'Grimmsnarl', 'Groudon', 'Hatterene',
+			'Iron Bundle', 'Iron Treads', 'Kingambit', 'Koraidon', 'Kyogre', 'Landorus-Therian', 'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza',
+			'Regieleki', 'Ribombee', 'Skeledirge', 'Ting-Lu', 'Toxapex', 'Zacian-Crowned',
+			// Ubers UUBL
+			'Arceus-Electric', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Water', 'Basculegion-F', 'Shaymin-Sky',
+		],
+	},
+	{
 		name: "[Gen 9] ZU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3719022/">ZU Metagame Discussion</a>`,
