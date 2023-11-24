@@ -4214,279 +4214,210 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 	},
 	frigibax: {
-
 		tier: "LC",
 	},
 	arctibax: {
-
 		tier: "NFE",
 	},
 	baxcalibur: {
-
 		tier: "UU",
 	},
 	tatsugiri: {
-
 		tier: "UU",
 	},
 	cyclizar: {
-
 		tier: "UU",
 	},
 	pawmi: {
-
 		tier: "LC",
 	},
 	pawmo: {
-
 		tier: "NFE",
 	},
 	pawmot: {
-
 		tier: "UU",
 	},
 	wattrel: {
-
 		tier: "LC",
 	},
 	kilowattrel: {
-
 		tier: "UU",
 	},
 	bombirdier: {
-
 		tier: "UU",
 	},
 	squawkabilly: {
-
 		tier: "UU",
 	},
 	flamigo: {
-
 		tier: "UU",
 	},
 	klawf: {
-
 		tier: "UU",
 	},
 	nacli: {
-
 		tier: "LC",
 	},
 	naclstack: {
-
 		tier: "UU",
 	},
 	garganacl: {
-
 		tier: "UU",
 	},
 	glimmet: {
-
 		tier: "LC",
 	},
 	glimmora: {
-
 		tier: "UU",
 	},
 	shroodle: {
-
 		tier: "LC",
 	},
 	grafaiai: {
-
 		tier: "UU",
 	},
 	fidough: {
-
 		tier: "LC",
 	},
 	dachsbun: {
-
 		tier: "UU",
 	},
 	maschiff: {
-
 		tier: "LC",
 	},
 	mabosstiff: {
-
 		tier: "UU",
 	},
 	bramblin: {
-
 		tier: "LC",
 	},
 	brambleghast: {
-
 		tier: "UU",
 	},
 	gimmighoul: {
-
 		tier: "LC",
 	},
 	gimmighoulroaming: {
-
 		tier: "LC",
 	},
 	gholdengo: {
-
 		tier: "UU",
 	},
 	greattusk: {
-
 		tier: "OU",
 	},
 	brutebonnet: {
-
 		tier: "UU",
 	},
 	sandyshocks: {
-
 		tier: "UU",
 	},
 	screamtail: {
-
 		tier: "OU",
 	},
 	fluttermane: {
-
 		tier: "UU",
 	},
 	slitherwing: {
-
 		tier: "UU",
 	},
 	roaringmoon: {
-
 		tier: "UU",
 	},
 	irontreads: {
-
 		tier: "OU",
 	},
 	ironmoth: {
-
 		tier: "UU",
 	},
 	ironhands: {
-
 		tier: "UU",
 	},
 	ironjugulis: {
-
 		tier: "UU",
 	},
 	ironthorns: {
-
 		tier: "UU",
 	},
 	ironbundle: {
-
 		tier: "Uber",
 	},
 	ironvaliant: {
-
 		tier: "Uber",
 	},
 	tinglu: {
-
 		tier: "UU",
 	},
 	chienpao: {
-
 		tier: "UU",
 	},
 	wochien: {
-
 		tier: "UU",
 	},
 	chiyu: {
-
 		tier: "UU",
 	},
 	koraidon: {
-
 		tier: "Uber",
 	},
 	miraidon: {
-
 		tier: "Uber",
 	},
 	tinkatink: {
-
 		tier: "LC",
 	},
 	tinkatuff: {
-
 		tier: "UU",
 	},
 	tinkaton: {
-
 		tier: "UU",
 	},
 	charcadet: {
-
 		tier: "LC",
 	},
 	armarouge: {
-
 		tier: "UU",
 	},
 	ceruledge: {
-
 		tier: "UU",
 	},
 	toedscool: {
-
 		tier: "LC",
 	},
 	toedscruel: {
-
 		tier: "UU",
 	},
 	kingambit: {
-
 		tier: "UU",
 	},
 	clodsire: {
-
 		tier: "UU",
 	},
 	annihilape: {
-
 		tier: "UU",
 	},
 	walkingwake: {
-
 		tier: "OU",
 	},
 	ironleaves: {
-
 		tier: "UU",
 	},
 	poltchageist: {
-
 		tier: "LC",
 	},
 	sinistcha: {
-
 		tier: "OU",
 	},
 	okidogi: {
-
 		tier: "OU",
 	},
 	munkidori: {
-
 		tier: "OU",
 	},
 	fezandipiti: {
-
 		tier: "OU",
 	},
 	ogerpon: {
-
 		tier: "OU",
 	},
 };
