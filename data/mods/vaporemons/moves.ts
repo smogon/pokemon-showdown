@@ -1466,7 +1466,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				'attract', 'curse', 'disable', 'electrify', 'embargo', 'encore', 'foresight', 'gastroacid', 'foresight', 'miracleeye',
 				'glaiverush', 'healblock', 'throatchop', 'windbreaker', 'nightmare', 'octolock', 'powder', 'saltcure', 'smackdown',
 				'syrupbomb', 'tarshot', 'telekinesis', 'yawn'];
-			const boosts: SparseBoostsTable = {};
 			let i: BoostName;
 			for (i in pokemon.boosts) {
 				for (const volatile of negativeVolatiles) {
