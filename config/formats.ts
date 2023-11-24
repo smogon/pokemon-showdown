@@ -2079,7 +2079,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: ['[Gen 9] National Dex UU'],
-		banlist: ['ND UU', 'ND RUBL', 'Heat Rock', 'Light Clay'],
+		banlist: ['ND UU', 'ND RUBL', 'Heat Rock'],
 	},
 	{
 		name: "[Gen 9] National Dex Monotype",
