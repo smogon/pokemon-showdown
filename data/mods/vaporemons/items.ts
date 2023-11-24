@@ -632,8 +632,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (!pokemon.hasType(move.type)) {
 				return this.chainModify(1.3);
-			}
-			else if (pokemon.hasType(move.type)) {
+			} else if (pokemon.hasType(move.type)) {
 				return this.chainModify(0.67);
 			}
 		},
