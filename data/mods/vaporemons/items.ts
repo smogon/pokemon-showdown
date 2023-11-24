@@ -387,31 +387,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			if (!this.canSwitch(attacker.side) || attacker.forceSwitchFlag || attacker.switchFlag || !move.flags['sound']) return;
 			this.effectState.move = this.dex.moves.get(move.id);
 			attacker.deductPP(move.id, 1);
-			if (attacker.side.addSlotCondition(attacker, 'walkietalkie')) {
-				for (const side of this.sides) {
-					for (const active of side.active) {
-						active.switchFlag = false;
-					}
-				}
-				this.add('-activate', attacker, 'item: Walkie-Talkie');
-				this.add('-message', `${attacker.name} is calling in one of its allies!`);
-				attacker.switchFlag = true;
-				return null;
-			}
-		},
-		slotCondition: 'walkietalkie',
-		condition: {
-			duration: 1,
-			onFaint(target) {
-				target.side.removeSlotCondition(target, 'walkietalkie');
-			},
-			onSwap(target) {
-				if (!target.fainted && this.effectState.moveTarget && this.effectState.moveTarget.isActive) {
-					const move = this.dex.moves.get(this.effectState.move);
-					this.runMove(move, target, this.getTargetLoc(target.side.foe.active[0], target), null, false, true);
-				}
-				target.side.removeSlotCondition(target, 'walkietalkie');
-			},
+			this.add('-activate', attacker, 'item: Walkie-Talkie');
+			this.add('-message', `${attacker.name} is calling in one of its allies!`);
+			attacker.switchFlag = true;
+			return null;
 		},
 		desc: "(Mostly non-functional placeholder) Before using a sound move, holder switches. Switch-in uses move if it's holding a Walkei-Talkie.",
 		num: -1008,
