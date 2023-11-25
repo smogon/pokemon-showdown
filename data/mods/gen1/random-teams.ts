@@ -102,11 +102,13 @@ export class RandomGen1Teams extends RandomGen2Teams {
 					}
 				}
 			}
-
+			// Remove duplicates from the pool that were added by pre-evos' movesets
+			const deduplicatedPool: string[] = [... new Set(pool)];
+			
 			team.push({
 				name: species.baseSpecies,
 				species: species.name,
-				moves: this.multipleSamplesNoReplace(pool, 4),
+				moves: this.multipleSamplesNoReplace(deduplicatedPool, 4),
 				gender: false,
 				ability: 'No Ability',
 				evs: evs,
