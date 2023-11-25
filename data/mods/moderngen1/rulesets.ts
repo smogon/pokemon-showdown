@@ -32,7 +32,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		desc: 'At the start of a battle, gives each player a link to the Modern Gen 1 thread so they can use it to get information about new additions to the metagame.',
 		onBegin() {
 			this.add('-message', `Welcome to Modern Gen 1!`);
-			this.add('-message', `This is a Gen 1 metagame where all Pokemon and moves from later generations are legal!`);
+			this.add('-message', `This is essentially Gen 9 National Dex OU but played with Gen 1 mechanics!`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
 			this.add('-message', `https://www.smogon.com/forums/threads/gen-9-modern-gen-1.3711533/`);
 		},
