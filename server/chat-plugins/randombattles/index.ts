@@ -107,6 +107,7 @@ function setProbability(
 
 const GEN_NAMES: {[k: string]: string} = {
 	gen1: '[Gen 1]', gen2: '[Gen 2]', gen3: '[Gen 3]', gen4: '[Gen 4]', gen5: '[Gen 5]', gen6: '[Gen 6]', gen7: '[Gen 7]',
+	gen8: '[Gen 8'], gen9: '[Gen 9]',
 };
 
 const STAT_NAMES: {[k: string]: string} = {
@@ -779,9 +780,6 @@ export const commands: Chat.ChatCommands = {
 		if (dex.gen === 1) {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
-				if (isInexact) {
-					return this.errorReply(`No Pok\u00e9mon named '${args[0].trim()}' was found. (Check your spelling?)`);
-				}
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span>${rbyMoves}`);
@@ -789,9 +787,6 @@ export const commands: Chat.ChatCommands = {
 		} else if (isLetsGo) {
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
-				if (isInexact) {
-					return this.errorReply(`No Pok\u00e9mon named '${args[0].trim()}' was found. (Check your spelling?)`);
-				}
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span><br />${lgpeMoves}`);
