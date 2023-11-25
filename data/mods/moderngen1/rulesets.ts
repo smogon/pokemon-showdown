@@ -26,4 +26,15 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			this.add('rule', 'Field Effect Clause: Field Effects are banned');
 		},
 	},
+	mg1mod: {
+		effectType: 'Rule',
+		name: 'MG1 Mod',
+		desc: 'At the start of a battle, gives each player a link to the Modern Gen 1 thread so they can use it to get information about new additions to the metagame.',
+		onBegin() {
+			this.add('-message', `Welcome to Modern Gen 1!`);
+			this.add('-message', `This is a Gen 1 metagame where Pok&eacute;mon and moves from later generations are legal!`);
+			this.add('-message', `You can find our thread and metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/gen-9-modern-gen-1.3711533/`);
+		},
+	},
 };
