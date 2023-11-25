@@ -273,7 +273,7 @@ export const Tags: {[id: string]: TagData} = {
 		name: "ND DLC",
 		speciesFilter: species => species.natDexDoublesTier === 'LC',
 	},
-	
+
 	// Legality tags
 	past: {
 		name: "Past",

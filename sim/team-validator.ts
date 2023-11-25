@@ -1661,11 +1661,11 @@ export class TeamValidator {
 			tierSpecies.natDexTier === '(NU)' ? 'PU' : tierSpecies.natDexTier;
 		const ndTierTag = 'pokemontag:nd' + toID(ndTier);
 		setHas[ndTierTag] = true;
-		
+
 		const ndDoublesTier = tierSpecies.natDexDoublesTier === '(DUU)' ? 'DNU' : tierSpecies.natDexDoublesTier;
 		const ndDoublesTierTag = 'pokemontag:ndd' + toID(ndDoublesTier);
 		setHas[ndDoublesTierTag] = true;
-		
+
 		// Only pokemon that can gigantamax should have the Gmax flag
 		if (!tierSpecies.canGigantamax && set.gigantamax) {
 			return `${tierSpecies.name} cannot Gigantamax but is flagged as being able to.`;
