@@ -35,7 +35,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		desc: 'At the start of a battle, gives each player a link to the VaporeMons thread so they can use it to get information about new additions to the metagame.',
 		onBegin() {
 			this.add('-message', `Welcome to VaporeMons!`);
-			this.add('-message', `This is a [Gen 9] OU-based format where a bunch of new moves, items, abilities, and non-stat adjustments to Pok&eacute;mon were added to the game!`);
+			this.add('-message', `This is a [Gen 9] OU-based format where a bunch of new moves, items, abilities, and non-stat adjustments to Pokemon were added to the game!`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
 			this.add('-message', `https://www.smogon.com/forums/threads/vaporemons-slate-1-discussion-phase.3722917/`);
 		},
