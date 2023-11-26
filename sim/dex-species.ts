@@ -456,7 +456,8 @@ export class DexSpecies {
 					if (!(key in species)) (species as any)[key] = baseSpeciesStatuses[key];
 				}
 			}
-			if (!species.tier && !species.doublesTier && !species.natDexTier && species.baseSpecies !== species.name) {
+			if (!species.tier && !species.doublesTier && !species.natDexTier &&
+				 !species.natDexDoublesTier && species.baseSpecies !== species.name) {
 				if (species.baseSpecies === 'Mimikyu') {
 					species.tier = this.dex.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
 					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
