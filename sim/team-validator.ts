@@ -1663,7 +1663,7 @@ export class TeamValidator {
 		setHas[ndTierTag] = true;
 
 		const ndDoublesTier = tierSpecies.natDexDoublesTier === '(DUU)' ? 'DNU' : tierSpecies.natDexDoublesTier;
-		const ndDoublesTierTag = 'pokemontag:ndd' + toID(ndDoublesTier);
+		const ndDoublesTierTag = 'pokemontag:nd' + toID(ndDoublesTier);
 		setHas[ndDoublesTierTag] = true;
 
 		// Only pokemon that can gigantamax should have the Gmax flag

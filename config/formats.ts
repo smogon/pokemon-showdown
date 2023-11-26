@@ -2139,7 +2139,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Species Clause', 'Gravity Sleep Clause'],
-		banlist: ['ND DUber', 'Gengar-Mega', 'Commander', 'Power Construct', 'Assist', 'Dark Void', 'Swagger'],
+		banlist: ['ND DUber', 'Commander', 'Power Construct', 'Assist', 'Dark Void', 'Swagger'],
 	},
 	{
 		name: "[Gen 9] National Dex AG",
