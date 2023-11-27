@@ -1438,8 +1438,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let i: BoostID;
 			for (i in pokemon.boosts) {
 				for (const volatile of negativeVolatiles) {
-					if (pokemon.status || pokemon.volatiles[volatile] || pokemon.boosts[i] < 0) {
+					if (pokemon.status && pokemon.status !== 'brn' || pokemon.volatiles[volatile] || pokemon.boosts[i] < 0) {
 						return this.chainModify(2);
+					} else if (pokemon.status === 'brn') {
+						return this.chainModify(4);
 					}
 				}
 			}
