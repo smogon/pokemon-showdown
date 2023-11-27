@@ -1336,6 +1336,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				this.add('replace', pokemon, details);
+				this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 				this.add('-end', pokemon, 'Illusion');
 			}
 		},
