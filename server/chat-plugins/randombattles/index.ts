@@ -107,7 +107,7 @@ function setProbability(
 
 const GEN_NAMES: {[k: string]: string} = {
 	gen1: '[Gen 1]', gen2: '[Gen 2]', gen3: '[Gen 3]', gen4: '[Gen 4]', gen5: '[Gen 5]', gen6: '[Gen 6]', gen7: '[Gen 7]',
-	gen8: '[Gen 8'], gen9: '[Gen 9]',
+	gen8: '[Gen 8]', gen9: '[Gen 9]',
 };
 
 const STAT_NAMES: {[k: string]: string} = {
