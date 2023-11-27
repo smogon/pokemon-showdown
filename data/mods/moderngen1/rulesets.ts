@@ -3,7 +3,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Partial Trapping Clause',
 		desc: "Bans moves that partially trap the opponent (later gen additions)",
-		banlist: ['Infestation', 'Magma Storm', 'Sand Tomb', 'Snap Trap', 'Thunder Cage', 'Whirlpool'],
+		banlist: ['Infestation', 'Magma Storm', 'Sand Tomb', 'Snap Trap', 'Thunder Cage', 'Whirlpool', 'Wrap', 'Bind', 'Fire Spin', 'Clamp'],
 		onBegin() {
 			this.add('rule', 'Partial Trapping Clause: Partial Trapping moves are banned');
 		},
