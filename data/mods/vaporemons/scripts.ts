@@ -116,7 +116,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
-		}
+		},
 	},
 	init() {
 		this.modData("Learnsets", "screamtail").learnset.dracometeor = ["9L1"];
