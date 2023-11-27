@@ -785,7 +785,7 @@ export const commands: Chat.ChatCommands = {
 		if (dex.gen === 1) {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
-				this.sendReply(inexactMsg)
+				this.sendReply(inexactMsg);
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span>${rbyMoves}`);
@@ -793,7 +793,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (isLetsGo) {
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
-				this.sendReply(inexactMsg)
+				this.sendReply(inexactMsg);
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span><br />${lgpeMoves}`);
@@ -857,7 +857,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (!movesets.length) {
-			this.sendReply(inexactMsg)
+			this.sendReply(inexactMsg);
 			return this.errorReply(`Error: ${species.name} has no Random Battle data in ${format.name}`);
 		}
 		let buf = movesets.join('<hr/>');
