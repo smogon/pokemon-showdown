@@ -766,9 +766,14 @@ export const commands: Chat.ChatCommands = {
 		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
 		if (!searchResults || !searchResults.length) {
-			return this.errorReply(`No Pok\u00e9mon named '${args[0].trim()}' was found. (Check your spelling?)`);
+			this.errorReply(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
+			return;
 		}
-		const isInexact = searchResults[0].isInexact;
+
+		let inexactMsg = '';
+		if (searchResults[0].isInexact) {
+			inexactMsg = `No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`;
+		}
 		const species = dex.species.get(searchResults[0].name);
 		const extraFormatModifier = isLetsGo ? 'letsgo' : (dex.currentMod === 'gen8bdsp' ? 'bdsp' : '');
 		const doublesModifier = isDoubles ? 'doubles' : '';
@@ -780,6 +785,7 @@ export const commands: Chat.ChatCommands = {
 		if (dex.gen === 1) {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
+				this.sendReply(inexactMsg)
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span>${rbyMoves}`);
@@ -787,6 +793,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (isLetsGo) {
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
+				this.sendReply(inexactMsg)
 				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span><br />${lgpeMoves}`);
@@ -850,15 +857,14 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (!movesets.length) {
-			if (isInexact) {
-				return this.errorReply(`Error: No Pok\u00e9mon named '${args[0].trim()}' was found. (Check your spelling?)`);
-			}
+			this.sendReply(inexactMsg)
 			return this.errorReply(`Error: ${species.name} has no Random Battle data in ${format.name}`);
 		}
 		let buf = movesets.join('<hr/>');
 		if (setCount <= 2) {
 			buf = buf.replace(/<details>/g, '<details open>');
 		}
+		this.sendReply(inexactMsg);
 		this.sendReplyBox(buf);
 	},
 	randombattleshelp: [
