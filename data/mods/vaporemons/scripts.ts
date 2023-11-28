@@ -22,6 +22,17 @@ export const Scripts: ModdedBattleScriptsData = {
 				  (neutralizinggas && this.ability !== ('neutralizinggas' as ID))) && !this.getAbility().isPermanent)
 			);
 		},
+		runEffectiveness(move: ActiveMove) {
+			let totalTypeMod = 0;
+			for (const type of this.getTypes()) {
+				let typeMod = this.battle.dex.getEffectiveness(move, type);
+				typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
+				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+			}
+			if (this.hasAbility('exoskeleton') && !this.hasType('Bug') && this.battle.dex.getEffectiveness(move, 'Bug') < 0) totalTypeMod--;
+			if (this.volatiles['bluntforce'] && totalTypeMod > 0) return 0;
+			return totalTypeMod;
+		}
 	},
 	init() {
 		this.modData("Learnsets", "screamtail").learnset.dracometeor = ["9L1"];
