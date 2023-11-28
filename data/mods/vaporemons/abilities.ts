@@ -989,7 +989,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				defender.addVolatile('bluntforce');
 			}
 		},
-		condition: { // Effectiveness implemented in scripts.ts/pokemon, stuff here is meant to get rid of it after the move is used
+		condition: { // Effectiveness implemented in scripts.ts/pokemon
 			onAfterMoveSecondary(pokemon) {
 				pokemon.removeVolatile('bluntforce');
 			},
