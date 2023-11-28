@@ -962,23 +962,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', pokemon, 'Exoskeleton');
 			this.add('-message', `${pokemon.name} sports a tough exoskeleton!`);
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hasType('Bug')) {
-				if (['Rock', 'Fire', 'Flying'].includes(move.type)) {
-					this.debug('Exoskeleton Bug neutralize');
-					return this.chainModify(0.5);
-				}
-			} else {
-				if (['Fighting', 'Ground', 'Grass'].includes(move.type)) {
-					this.debug('Exoskeleton non-Bug neutralize');
-					return this.chainModify(0.5);
-				}
-			}
-		},
-		onDamage(damage, target, source, effect) {
-			if (effect && effect.id === 'stealthrock' && target.hasType('Bug')) {
-				return damage / 2;
-			}
+		onEffectiveness(typeMod, target, type, move) {
+			if (type === 'Bug' && typeMod > 0) return 0;
 		},
 		isBreakable: true,
 		name: "Exoskeleton",
@@ -997,6 +982,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else if (move && target.getMoveHitData(move).typeMod > 1) {
 				return this.chainModify(0.25);
 			}
+		},
+		onBeforeMovePriority: 5,
+		onBeforeMove(attacker, defender, move) {
+			if (move.category === 'Physical') {
+				defender.addVolatile('bluntforce');
+			}
+		},
+		condition: { // Effectiveness implemented in scripts.ts/pokemon, stuff here is meant to get rid of it after the move is used
+			onAfterMoveSecondary(pokemon) {
+				pokemon.removeVolatile('bluntforce');
+			},
+			// onBeforeMove and onResidual are meant to catch the event where the attack misses
+			onBeforeMove(attacker, defender, move) {
+				attacker.removeVolatile('bluntforce');
+			},
+			onResidual(pokemon) {
+				pokemon.removeVolatile('bluntforce');
+			},
 		},
 		name: "Blunt Force",
 		rating: 3.5,
