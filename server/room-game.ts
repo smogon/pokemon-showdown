@@ -224,7 +224,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * extremely unlikely to keep playing after this function is
 	 * called.
 	 */
-	forfeit?(user: User | string): void;
+	forfeit?(user: User): void;
 
 	/**
 	 * Called when a user uses /choose [text]
@@ -337,11 +337,6 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * Do not try to use this to block messages, use onChatMessage for that.
 	 */
 	onLogMessage(message: string, user: User) {}
-
-	/**
-	 * Called when a game's timer needs to be started. Used mainly for tours.
-	 */
-	startTimer() {}
 }
 
 /**

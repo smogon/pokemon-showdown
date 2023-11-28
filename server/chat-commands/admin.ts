@@ -530,7 +530,7 @@ export const commands: Chat.ChatCommands = {
 
 		message = this.checkChat(message);
 		if (!message) return;
-		Chat.PrivateMessages.send(`/botmsg ${message}`, user, targetUser, targetUser);
+		Chat.sendPM(`/botmsg ${message}`, user, targetUser, targetUser);
 	},
 	botmsghelp: [`/botmsg [username], [message] - Send a private message to a bot without feedback. For room bots, must use in the room the bot is auth in.`],
 
@@ -745,8 +745,6 @@ export const commands: Chat.ChatCommands = {
 				void Rooms.PM.respawn();
 				// respawn datasearch processes (crashes otherwise, since the Dex data in the PM can be out of date)
 				void Chat.plugins.datasearch?.PM?.respawn();
-				// update teams global
-				global.Teams = require('../../sim/teams').Teams;
 				// broadcast the new formats list to clients
 				Rooms.global.sendAll(Rooms.global.formatListText);
 				this.sendReply("DONE");
@@ -765,8 +763,6 @@ export const commands: Chat.ChatCommands = {
 
 				this.sendReply("Hotpatching validator...");
 				void TeamValidatorAsync.PM.respawn();
-				// update teams global too while we're at it
-				global.Teams = require('../../sim/teams').Teams;
 				this.sendReply("DONE. Any battles started after now will have teams be validated according to the new code.");
 			} else if (target === 'punishments') {
 				if (lock['punishments']) {
@@ -1215,28 +1211,6 @@ export const commands: Chat.ChatCommands = {
 		`/endemergency - Turns off emergency mode. Requires: &`,
 	],
 
-	remainingbattles() {
-		this.checkCan('lockdown');
-
-		if (!Rooms.global.lockdown) {
-			return this.errorReply("The server is not under lockdown right now.");
-		}
-
-		const battleRooms = [...Rooms.rooms.values()].filter(x => x.battle?.rated && !x.battle?.ended);
-		let buf = `Total remaining rated battles: <b>${battleRooms.length}</b>`;
-		if (battleRooms.length > 10) buf += `<details><summary>View all battles</summary>`;
-		for (const battle of battleRooms) {
-			buf += `<br />`;
-			buf += `<a href="${battle.roomid}">${battle.title}</a>`;
-			if (battle.settings.isPrivate) buf += ' (Private)';
-		}
-		if (battleRooms.length > 10) buf += `</details>`;
-		this.sendReplyBox(buf);
-	},
-	remainingbattleshelp: [
-		`/remainingbattles - View a list of the remaining battles during lockdown. Requires: &`,
-	],
-
 	async savebattles(target, room, user) {
 		this.checkCan('rangeban'); // admins can restart, so they should be able to do this if needed
 		this.sendReply(`Saving battles...`);
@@ -1359,7 +1333,7 @@ export const commands: Chat.ChatCommands = {
 		if (err) {
 			Rooms.global.notifyRooms(
 				['staff', 'development'],
-				`|c|${user.getIdentity()}|/log ${user.name} used /updateloginserver - but something failed while updating.`
+				`|c|&|/log ${user.name} used /updateloginserver - but something failed while updating.`
 			);
 			return this.errorReply(err.message + '\n' + err.stack);
 		}
@@ -1376,45 +1350,11 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(`FAILED. Conflicts were found while updating - the restart was aborted.`);
 		}
 		Rooms.global.notifyRooms(
-			['staff', 'development'], `|c|${user.getIdentity()}|/log ${message}`
+			['staff', 'development'], `|c|&|/log ${message}`
 		);
 	},
 	updateloginserverhelp: [
 		`/updateloginserver - Updates and restarts the loginserver. Requires: console access`,
-	],
-
-	async updateclient(target, room, user) {
-		this.canUseConsole();
-		this.sendReply('Restarting...');
-		const [result, err] = await LoginServer.request('rebuildclient', {
-			full: toID(target) === 'full',
-		});
-		if (err) {
-			Rooms.global.notifyRooms(
-				['staff', 'development'],
-				`|c|${user.getIdentity()}|/log ${user.name} used /updateclient - but something failed while updating.`
-			);
-			return this.errorReply(err.message + '\n' + err.stack);
-		}
-		if (!result) return this.errorReply('No result received.');
-		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
-		if (result.actionerror) {
-			return this.errorReply(result.actionerror);
-		}
-		let message = `${user.name} used /updateclient`;
-		if (result.updated) {
-			this.sendReply(`DONE. Client updated.`);
-		} else {
-			message += ` - but something failed while updating.`;
-			this.errorReply(`FAILED. Conflicts were found while updating.`);
-		}
-		Rooms.global.notifyRooms(
-			['staff', 'development'], `|c|${user.getIdentity()}|/log ${message}`
-		);
-	},
-	updateclienthelp: [
-		`/updateclient [full] - Update the client source code. Provide the argument 'full' to make it a full rebuild.`,
-		`Requires: & console access`,
 	],
 
 	async rebuild() {

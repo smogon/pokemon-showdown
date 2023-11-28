@@ -6,7 +6,7 @@
 const assert = require('../assert');
 const {testSet, testAlwaysHasMove, testHiddenPower, testNotBothMoves} = require('./tools');
 
-describe('[Gen 3] Random Battle (slow)', () => {
+describe('[Gen 3] Random Battle', () => {
 	const options = {format: 'gen3randombattle'};
 
 	it('should enforce STAB', () => {

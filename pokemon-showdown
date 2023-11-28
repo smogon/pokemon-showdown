@@ -243,6 +243,18 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			});
 		}
 		break;
+	case 'cobbled-debug-server':
+		build();
+		var cobbledServer = require('./dist/sim/cobbled-debug-server');
+		var port = process.argv[3] ?? 18468;
+		cobbledServer.startServer(port);
+		break;
+	case 'cobbled-debug-client':
+		build();
+		var cobbledClient = require('./dist/sim/cobbled-debug-client');
+		var port = process.argv[3] ?? 18468;
+		cobbledClient.startClient(port);
+		break;
 	default:
 		console.error('Unrecognized command: ' + process.argv[2]);
 		console.error('Use `pokemon-showdown help` for help');

@@ -36,7 +36,7 @@ Pokémon Showdown is many things:
 
   - [server/README.md](./server/README.md)
 
-Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 9).
+Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 8).
 
 
 Documentation quick links
@@ -89,10 +89,8 @@ Staff
 - Andrew Werner [HoeenHero] - Development
 - Annika L. [Annika] - Development
 - Chris Monsanto [chaos] - Development, Sysadmin
-- Kris Johnson [Kris] - Development
-- Leonard Craft III [DaWoblefet] - Research (game mechanics)
+- Leonard Craft III - Research (game mechanics)
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
-- Mia A [Mia] - Development
 
 Contributors
 

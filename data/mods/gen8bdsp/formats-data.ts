@@ -505,7 +505,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	jynx: {
-		tier: "NUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	elekid: {
@@ -611,7 +611,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUU",
 	},
 	munchlax: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	snorlax: {
 		tier: "UU",
@@ -1248,7 +1248,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	grumpig: {
-		tier: "PUBL",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	spinda: {

@@ -15,22 +15,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Inner Focus", 1: "Keen Eye", H: "Poison Touch"},
 	},
-	shiftry: {
-		inherit: true,
-		abilities: {0: "Chlorophyll", 1: "Early Bird", H: "Pickpocket"},
-	},
-	piplup: {
-		inherit: true,
-		abilities: {0: "Torrent", H: "Defiant"},
-	},
-	prinplup: {
-		inherit: true,
-		abilities: {0: "Torrent", H: "Defiant"},
-	},
-	empoleon: {
-		inherit: true,
-		abilities: {0: "Torrent", H: "Defiant"},
-	},
 	gallade: {
 		inherit: true,
 		abilities: {0: "Steadfast", H: "Justified"},
@@ -60,10 +44,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Shield Dust", 1: "Compound Eyes"},
 		prevo: undefined,
 		evoLevel: undefined,
-	},
-	vivillonpokeball: {
-		inherit: true,
-		abilities: {0: "Shield Dust", 1: "Compound Eyes"},
 	},
 	sliggoohisui: {
 		inherit: true,

@@ -348,7 +348,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	revenankh: {
 		inherit: true,
-		abilities: {0: "Air Lock", H: "Shed Skin"},
+		abilities: {0: "Shed Skin", 1: "Air Lock"},
 	},
 	pyroak: {
 		inherit: true,

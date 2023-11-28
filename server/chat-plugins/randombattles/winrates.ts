@@ -22,20 +22,17 @@ interface FormatData {
 }
 
 const STATS_PATH = 'logs/randbats/{{MONTH}}-winrates.json';
-export const stats: Stats = getDefaultStats();
+export let stats: Stats;
 
 try {
 	const path = STATS_PATH.replace('{{MONTH}}', getMonth());
 	if (!FS('logs/randbats/').existsSync()) {
 		FS('logs/randbats/').mkdirSync();
 	}
-	const savedStats = JSON.parse(FS(path).readSync());
-	stats.elo = savedStats.elo;
-	stats.month = savedStats.month;
-	for (const k in stats.formats) {
-		stats.formats[k] = savedStats.formats[k] || stats.formats[k];
-	}
-} catch {}
+	stats = JSON.parse(FS(path).readSync());
+} catch {
+	stats = getDefaultStats();
+}
 
 function getDefaultStats() {
 	return {
@@ -45,15 +42,12 @@ function getDefaultStats() {
 			// all of these requested by rands staff. they don't anticipate it being changed much
 			// so i'm not spending the time to add commands to toggle this
 			gen9randombattle: {mons: {}},
-			gen9randomdoublesbattle: {mons: {}},
-			gen8randombattle: {mons: {}},
 			gen7randombattle: {mons: {}},
 			gen6randombattle: {mons: {}},
 			gen5randombattle: {mons: {}},
 			gen4randombattle: {mons: {}},
 			gen3randombattle: {mons: {}},
 			gen2randombattle: {mons: {}},
-			gen1randombattle: {mons: {}},
 		},
 	} as Stats;
 }
@@ -90,12 +84,6 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Dudunsparce';
 	} else if (species === "Maushold-Four") {
 		return 'Maushold';
-	} else if (species === "Greninja-Bond") {
-		return 'Greninja';
-	} else if (species === "Keldeo-Resolute") {
-		return 'Keldeo';
-	} else if (species === "Zarude-Dada") {
-		return 'Zarude';
 	} else if (species === "Squawkabilly-Blue") {
 		return "Squawkabilly";
 	} else if (species === "Squawkabilly-White") {
@@ -126,7 +114,7 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return "Groudon-Primal";
 	} else if (item.megaStone) {
 		return item.megaStone;
-	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && !item.zMove && megaRayquazaPossible) {
+	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && megaRayquazaPossible) {
 		return "Rayquaza-Mega";
 	} else {
 		return species;
@@ -156,13 +144,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
 	const format = Dex.formats.get(battle.format);
-	if (format.mod === 'gen2') {
-		// ladder is inactive, so use a lower threshold
-		eloFloor = 1150;
-	} else if (format.mod !== `gen${Dex.gen}`) {
-		eloFloor = 1300;
-	} else if (format.gameType === 'doubles') {
-		// may need to be raised again if doubles ladder takes off
+	if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
 	}
 	if (!formatData || battle.rated < eloFloor) return;
@@ -185,12 +167,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 export const commands: Chat.ChatCommands = {
 	rwr: 'randswinrates',
 	randswinrates(target, room, user) {
-		target = toID(target);
-		if (/^(gen|)[0-9]+$/.test(target)) {
-			if (target.startsWith('gen')) target = target.slice(3);
-			target = `gen${target}randombattle`;
-		}
-		return this.parse(`/j view-winrates-${target ? Dex.formats.get(target).id : `gen${Dex.gen}randombattle`}`);
+		return this.parse(`/j view-winrates-${toID(target) || `gen${Dex.gen}randombattle`}`);
 	},
 	randswinrateshelp: [
 		'/randswinrates OR /rwr [format] - Get a list of the win rates for all Pokemon in the given Random Battles format.',

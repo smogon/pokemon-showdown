@@ -2507,9 +2507,6 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	greninja: {
 		name: "Greninja",
 	},
-	greninjabond: {
-		name: "Greninja-Bond",
-	},
 	greninjaash: {
 		name: "Greninja-Ash",
 	},

@@ -90,13 +90,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	cornerstonemask: {
-		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			return this.chainModify([4915, 4096]);
-		},
-		onTakeItem: false,
-	},
 	diancite: {
 		inherit: true,
 		isNonstandard: null,
@@ -133,13 +126,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	gyaradosite: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	hearthflamemask: {
-		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			return this.chainModify([4915, 4096]);
-		},
-		onTakeItem: false,
 	},
 	heracronite: {
 		inherit: true,
@@ -245,10 +231,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 	rustedshield: {
 		inherit: true,
 		onTakeItem: false,
+		isNonstandard: null,
 	},
 	rustedsword: {
 		inherit: true,
 		onTakeItem: false,
+		isNonstandard: null,
 	},
 	sablenite: {
 		inherit: true,
@@ -296,13 +284,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (['Poison', 'Flying'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
-		},
-		onTakeItem: false,
-	},
-	wellspringmask: {
-		inherit: true,
-		onBasePower(basePower, user, target, move) {
-			return this.chainModify([4915, 4096]);
 		},
 		onTakeItem: false,
 	},

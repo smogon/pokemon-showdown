@@ -14,7 +14,6 @@ namespace Chat {
 	export type PageContext = import('./chat').PageContext;
 	export type SettingsHandler = import('./chat').SettingsHandler;
 	export type PageTable = import('./chat').PageTable;
-	export type PageHandler = import('./chat').PageHandler;
 	export type ChatCommands = import('./chat').ChatCommands;
 	export type ChatHandler = import('./chat').ChatHandler;
 	export type ChatFilter = import('./chat').ChatFilter;
@@ -52,7 +51,6 @@ namespace Rooms {
 	export type MinorActivity = import('./room-minor-activity').MinorActivity;
 	export type MinorActivityData = import('./room-minor-activity').MinorActivityData;
 	export type RoomBattle = import('./room-battle').RoomBattle;
-	export type BestOfGame = import('./room-battle').BestOfGame;
 	export type Roomlog = import('./roomlogs').Roomlog;
 	export type Room = import('./rooms').Room;
 }

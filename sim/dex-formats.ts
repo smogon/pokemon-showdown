@@ -379,7 +379,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly actions?: ModdedBattleActions;
 	declare readonly challengeShow?: boolean;
 	declare readonly searchShow?: boolean;
-	declare readonly bestOfDefault?: boolean;
 	declare readonly threads?: string[];
 	declare readonly timer?: Partial<GameTimerSettings>;
 	declare readonly tournamentShow?: boolean;
@@ -388,7 +387,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	) => string | null;
 	declare readonly getEvoFamily?: (this: Format, speciesid: string) => ID;
 	declare readonly getSharedPower?: (this: Format, pokemon: Pokemon) => Set<string>;
-	declare readonly getSharedItems?: (this: Format, pokemon: Pokemon) => Set<string>;
 	declare readonly onChangeSet?: (
 		this: TeamValidator, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject
 	) => string[] | void;
@@ -543,7 +541,6 @@ export class DexFormats {
 			if (format.challengeShow === undefined) format.challengeShow = true;
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
-			if (format.bestOfDefault === undefined) format.bestOfDefault = false;
 			if (format.mod === undefined) format.mod = 'gen9';
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 

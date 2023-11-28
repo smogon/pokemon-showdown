@@ -10,6 +10,20 @@
 import {Dex, toID} from './dex';
 import type {PRNG, PRNGSeed} from './prng';
 
+/**
+ * COBBLED: Represents additional move data
+ */
+export interface AdditionalMoveInfo {
+	/**
+	 * COBBLED: The maximum amount of PP the move has.
+	 */
+	maxPp: number;
+	/**
+	 * COBBLED: The current amount of PP the move has.
+	 */
+	pp: number;
+}
+
 export interface PokemonSet {
 	/**
 	 * Nickname. Should be identical to its base species if not specified
@@ -21,6 +35,19 @@ export interface PokemonSet {
 	 * This should always be converted to an id before use.
 	 */
 	species: string;
+	/**
+	 * COBBLED: Unique Id for the Pokemon from the mod.
+	 */
+	uuid?: string;
+	/**
+	 * COBBLED: The current health of the Pokemon being assigned from the mod.
+	 */
+	currentHealth?: number;
+	/**
+	 * COBBLED: The current status of the Pokemon if any from the mod.
+	 */
+	status?: string;
+	statusDuration?: number;
 	/**
 	 * This can be an id, e.g. "whiteherb" or a full name, e.g. "White Herb".
 	 * This should always be converted to an id before use.
@@ -38,6 +65,10 @@ export interface PokemonSet {
 	 * These should always be converted to ids before use.
 	 */
 	moves: string[];
+	/**
+	 * COBBLED: Holds any additional move data coming over from the mod.
+	 */
+	movesInfo?: AdditionalMoveInfo[];
 	/**
 	 * This can be an id, e.g. "adamant" or a full name, e.g. "Adamant".
 	 * This should always be converted to an id before use.
@@ -194,8 +225,8 @@ export const Teams = new class Teams {
 
 			if (set.pokeball || set.hpType || set.gigantamax ||
 				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.teraType) {
-				buf += ',' + (set.hpType || '');
 				buf += ',' + this.packName(set.pokeball || '');
+				buf += ',' + (set.hpType || '');
 				buf += ',' + (set.gigantamax ? 'G' : '');
 				buf += ',' + (set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10 ? set.dynamaxLevel : '');
 				buf += ',' + (set.teraType || '');
@@ -237,6 +268,29 @@ export const Teams = new class Teams {
 			set.species = this.unpackName(buf.substring(i, j), Dex.species) || set.name;
 			i = j + 1;
 
+			// COBBLED: uuid
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.uuid = buf.substring(i, j);
+			i = j + 1;
+
+			// COBBLED: currentHealth
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.currentHealth = parseInt(buf.substring(i, j));
+			i = j + 1;
+
+			// COBBLED: status
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.status = buf.substring(i, j);
+			i = j + 1;
+
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.statusDuration = parseInt(buf.substring(i, j));
+			i = j + 1;
+
 			// item
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
@@ -247,16 +301,31 @@ export const Teams = new class Teams {
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			const ability = buf.substring(i, j);
-			const species = Dex.species.get(set.species);
+			// COBBLED: No longer validate abilities as we can trust the server data, we need this as well to support more then 3/4 abilities.
+			/*
 			set.ability = ['', '0', '1', 'H', 'S'].includes(ability) ?
 				species.abilities[ability as '0' || '0'] || (ability === '' ? '' : '!!!ERROR!!!') :
 				this.unpackName(ability, Dex.abilities);
+			 */
+			set.ability = this.unpackName(ability, Dex.abilities);
 			i = j + 1;
 
 			// moves
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			set.moves = buf.substring(i, j).split(',', 24).map(name => this.unpackName(name, Dex.moves));
+			i = j + 1;
+
+			// COBBLED: Additional move data
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.movesInfo = buf.substring(i, j).split(',', 24).map(moveData => {
+				const moveInfo: AdditionalMoveInfo = {} as AdditionalMoveInfo;
+				let data = moveData.split('/');
+				moveInfo.pp = parseInt(data[0]);
+				moveInfo.maxPp = parseInt(data[1]);
+				return moveInfo;
+			});
 			i = j + 1;
 
 			// nature
@@ -325,8 +394,8 @@ export const Teams = new class Teams {
 			}
 			if (misc) {
 				set.happiness = (misc[0] ? Number(misc[0]) : 255);
-				set.hpType = misc[1] || '';
-				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
+				set.pokeball = this.unpackName(misc[1] || '', Dex.items);
+				set.hpType = misc[2] || '';
 				set.gigantamax = !!misc[3];
 				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
 				set.teraType = misc[5];
@@ -445,7 +514,7 @@ export const Teams = new class Teams {
 		return out;
 	}
 
-	parseExportedTeamLine(line: string, isFirstLine: boolean, set: PokemonSet, aggressive?: boolean) {
+	parseExportedTeamLine(line: string, isFirstLine: boolean, set: PokemonSet) {
 		if (isFirstLine) {
 			let item;
 			[line, item] = line.split(' @ ');
@@ -471,10 +540,10 @@ export const Teams = new class Teams {
 			}
 		} else if (line.startsWith('Trait: ')) {
 			line = line.slice(7);
-			set.ability = aggressive ? toID(line) : line;
+			set.ability = line;
 		} else if (line.startsWith('Ability: ')) {
 			line = line.slice(9);
-			set.ability = aggressive ? toID(line) : line;
+			set.ability = line;
 		} else if (line === 'Shiny: Yes') {
 			set.shiny = true;
 		} else if (line.startsWith('Level: ')) {
@@ -485,13 +554,13 @@ export const Teams = new class Teams {
 			set.happiness = +line;
 		} else if (line.startsWith('Pokeball: ')) {
 			line = line.slice(10);
-			set.pokeball = aggressive ? toID(line) : line;
+			set.pokeball = line;
 		} else if (line.startsWith('Hidden Power: ')) {
 			line = line.slice(14);
-			set.hpType = aggressive ? toID(line) : line;
+			set.hpType = line;
 		} else if (line.startsWith('Tera Type: ')) {
 			line = line.slice(11);
-			set.teraType = aggressive ? line.replace(/[^a-zA-Z0-9]/g, '') : line;
+			set.teraType = line;
 		} else if (line === 'Gigantamax: Yes') {
 			set.gigantamax = true;
 		} else if (line.startsWith('EVs: ')) {
@@ -522,7 +591,7 @@ export const Teams = new class Teams {
 			if (natureIndex === -1) natureIndex = line.indexOf(' nature');
 			if (natureIndex === -1) return;
 			line = line.substr(0, natureIndex);
-			if (line !== 'undefined') set.nature = aggressive ? toID(line) : line;
+			if (line !== 'undefined') set.nature = line;
 		} else if (line.startsWith('-') || line.startsWith('~')) {
 			line = line.slice(line.charAt(1) === ' ' ? 2 : 1);
 			if (line.startsWith('Hidden Power [')) {
@@ -543,19 +612,18 @@ export const Teams = new class Teams {
 		}
 	}
 	/** Accepts a team in any format (JSON, packed, or exported) */
-	import(buffer: string, aggressive?: boolean): PokemonSet[] | null {
-		const sanitize = aggressive ? toID : Dex.getName;
+	import(buffer: string): PokemonSet[] | null {
 		if (buffer.startsWith('[')) {
 			try {
 				const team = JSON.parse(buffer);
 				if (!Array.isArray(team)) throw new Error(`Team should be an Array but isn't`);
 				for (const set of team) {
-					set.name = sanitize(set.name);
-					set.species = sanitize(set.species);
-					set.item = sanitize(set.item);
-					set.ability = sanitize(set.ability);
-					set.gender = sanitize(set.gender);
-					set.nature = sanitize(set.nature);
+					set.name = Dex.getName(set.name);
+					set.species = Dex.getName(set.species);
+					set.item = Dex.getName(set.item);
+					set.ability = Dex.getName(set.ability);
+					set.gender = Dex.getName(set.gender);
+					set.nature = Dex.getName(set.nature);
 					const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 					if (set.evs) {
 						for (const statid in evs) {
@@ -573,7 +641,7 @@ export const Teams = new class Teams {
 					if (!Array.isArray(set.moves)) {
 						set.moves = [];
 					} else {
-						set.moves = set.moves.map(sanitize);
+						set.moves = set.moves.map(Dex.getName);
 					}
 				}
 				return team;
@@ -607,9 +675,9 @@ export const Teams = new class Teams {
 					moves: [],
 				};
 				sets.push(curSet);
-				this.parseExportedTeamLine(line, true, curSet, aggressive);
+				this.parseExportedTeamLine(line, true, curSet);
 			} else {
-				this.parseExportedTeamLine(line, false, curSet, aggressive);
+				this.parseExportedTeamLine(line, false, curSet);
 			}
 		}
 		return sets;
@@ -619,8 +687,6 @@ export const Teams = new class Teams {
 		let TeamGenerator;
 		if (toID(format).includes('gen9computergeneratedteams')) {
 			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
-		} else if (toID(format).includes('gen7randomdoublesbattle')) {
-			TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-doubles-teams').default;
 		} else {
 			TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-teams').default;
 		}

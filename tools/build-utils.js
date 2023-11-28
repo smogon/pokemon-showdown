@@ -3,14 +3,15 @@
 const fs = require("fs");
 const child_process = require("child_process");
 const esbuild = require('esbuild');
+const {zip} = require("zip-a-folder");
 
-const copyOverDataJSON = (file = 'data') => {
+const copyOverDataJSON = (dir, file = 'data') => {
 	const files = fs.readdirSync(file);
 	for (const f of files) {
 		if (fs.statSync(`${file}/${f}`).isDirectory()) {
-			copyOverDataJSON(`${file}/${f}`);
+			copyOverDataJSON(dir, `${file}/${f}`);
 		} else if (f.endsWith('.json')) {
-			fs.copyFileSync(`${file}/${f}`, require('path').resolve('dist', `${file}/${f}`));
+			fs.copyFileSync(`${file}/${f}`, require('path').resolve(dir, `${file}/${f}`));
 		}
 	}
 };
@@ -51,7 +52,28 @@ exports.transpile = (decl) => {
 		sourcemap: true,
 	});
 	fs.copyFileSync('./config/config-example.js', './dist/config/config-example.js');
-	copyOverDataJSON();
+	copyOverDataJSON('dist');
+
+	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
+	if (decl) {
+		exports.buildDecls();
+	}
+};
+
+exports.transpileCobbled = (decl) => {
+	esbuild.buildSync({
+		entryPoints: findFilesForPath('./'),
+		outdir: './cobblemon-showdown/src',
+		outbase: '.',
+		format: 'cjs',
+		tsconfig: './tsconfig.json',
+		sourcemap: true,
+	});
+	fs.copyFileSync('./config/config-example.js', './cobblemon-showdown/src/config/config-example.js');
+	fs.copyFileSync('./cobbled-exports/lib-index.js', './cobblemon-showdown/src/lib/index.js');
+	fs.copyFileSync('./cobbled-exports/cobbled-index.js', './cobblemon-showdown/src/index.js');
+	copyOverDataJSON('cobblemon-showdown/src');
+	zip('./cobblemon-showdown/src', './cobblemon-showdown/showdown.zip');
 
 	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
 	if (decl) {

@@ -15,19 +15,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	beastball: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	berrysweet: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	bignugget: {
+	bindingband: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	bindingband: {
+	beastball: {
 		inherit: true,
 		isNonstandard: "Past",
 	},

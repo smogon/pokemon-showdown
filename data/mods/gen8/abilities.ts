@@ -107,7 +107,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (effect?.effectType !== 'Move') {
 				return;
 			}
-			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
+			if (source.species.id === 'greninja' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
 			}
@@ -387,15 +387,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	heatproof: {
 		inherit: true,
-		onSourceModifyAtk() {},
-		onSourceModifySpA() {},
-		onSourceBasePowerPriority: 18,
-		onSourceBasePower(basePower, attacker, defender, move) {
-			if (move.type === 'Fire') {
-				this.debug('Heatproof BP weaken');
-				return this.chainModify(0.5);
-			}
-		},
 		rating: 2,
 	},
 	heavymetal: {
@@ -440,9 +431,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	illuminate: {
 		inherit: true,
-		onTryBoost() {},
-		onModifyMove() {},
-		isBreakable: undefined,
 		rating: 0,
 	},
 	illusion: {
@@ -591,7 +579,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	mirrorarmor: {
 		inherit: true,
-		rating: 2.5,
+		rating: 2,
 	},
 	mistysurge: {
 		inherit: true,
@@ -1075,18 +1063,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	transistor: {
 		inherit: true,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Electric') {
-				this.debug('Transistor boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Electric') {
-				this.debug('Transistor boost');
-				return this.chainModify(1.5);
-			}
-		},
 		rating: 3.5,
 	},
 	triage: {

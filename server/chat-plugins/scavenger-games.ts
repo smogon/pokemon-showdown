@@ -449,7 +449,7 @@ const TWISTS: {[k: string]: Twist} = {
 	minesweeper: {
 		id: 'minesweeper',
 		name: 'Minesweeper',
-		desc: 'The huntmaker adds \'mines\' to the hunt using `!(mine)` - players that dodge all mines get extra points, while the huntmaker gets points every time a mine is hit.',
+		desc: 'The huntmaker can add incorrect \'mines\' to the hunt - they get points every time a player scavenges it, and players that dodge all the mines in the hunt get points.',
 		onAfterLoad() {
 			this.guesses = this.questions.map(() => []);
 			this.mines = [];
@@ -525,7 +525,6 @@ const TWISTS: {[k: string]: Twist} = {
 			}
 
 			for (const player of Object.values(this.playerTable)) {
-				if (!player) continue;
 				if (player.mines) {
 					for (const {index, mine} of player.mines) {
 						mines[index].find(obj => obj.mine === mine)?.users.push(player.name);

@@ -3,12 +3,6 @@ import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
-// Moves that shouldn't be the only STAB moves:
-const NO_STAB = [
-	'bounce', 'eruption', 'explosion', 'fakeout', 'icywind', 'machpunch',
-	'pursuit', 'quickattack', 'reversal', 'selfdestruct', 'waterspout',
-];
-
 export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
 	battleHasWobbuffet: boolean;
@@ -17,7 +11,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
-		this.noStab = NO_STAB;
 		this.battleHasDitto = false;
 		this.battleHasWobbuffet = false;
 		this.moveEnforcementCheckers = {
@@ -75,8 +68,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				cull: (
 					counter.setupType !== 'Special' ||
 					(counter.get('Special') + counter.get('specialpool') < 2 && !moves.has('batonpass') &&
-					!moves.has('refresh') && !restTalk) ||
-					!counter.get('Special')
+					!moves.has('refresh') && !restTalk)
 				),
 				isSetup: true,
 			};
@@ -246,16 +238,14 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 	getItem(
 		ability: string,
-		types: string[],
+		types: Set<string>,
 		moves: Set<string>,
 		counter: MoveCounter,
-		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species
 	) {
 		// First, the high-priority items
 		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
 		if (species.name === 'Farfetch\u2019d') return 'Stick';
-		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (species.name === 'Marowak') return 'Thick Club';
 		if (species.name === 'Pikachu') return 'Light Ball';
 		if (species.name === 'Shedinja') return 'Lum Berry';
@@ -290,7 +280,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			['fireblast', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
 			Array.from(moves).some(m => {
 				const moveData = this.dex.moves.get(m);
-				return moveData.category === 'Special' && types.includes(moveData.type);
+				return moveData.category === 'Special' && types.has(moveData.type);
 			})
 		)) {
 			return 'Choice Band';
@@ -318,17 +308,21 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return !counter.get('inaccurate');
 		case 'Hustle':
 			return counter.get('Physical') < 2;
+		case 'Lightning Rod':
+			return species.types.includes('Ground');
 		case 'Overgrow':
 			return !counter.get('Grass');
-		case 'Rain Dish': case 'Swift Swim':
-			return !moves.has('raindance') && !teamDetails['rain'];
 		case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Veil':
 			return !teamDetails['sand'];
-		case 'Soundproof':
-			// Electrode prefers Static
+		case 'Serene Grace':
+			return species.id === 'blissey';
+		case 'Sturdy':
+			// Sturdy is bad.
 			return true;
+		case 'Swift Swim':
+			return !moves.has('raindance') && !teamDetails['rain'];
 		case 'Swarm':
 			return !counter.get('Bug');
 		case 'Torrent':
@@ -338,55 +332,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		return false;
-	}
-
-
-	getAbility(
-		types: Set<string>,
-		moves: Set<string>,
-		abilities: Set<string>,
-		counter: MoveCounter,
-		movePool: string[],
-		teamDetails: RandomTeamsTypes.TeamDetails,
-		species: Species,
-	): string {
-		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
-		Utils.sortBy(abilityData, abil => -abil.rating);
-
-		if (abilityData.length <= 1) return abilityData[0].name;
-
-		// Hard-code abilities here
-		if (species.id === 'snorlax') return 'Immunity';
-		if (species.id === 'blissey') return 'Natural Cure';
-
-		let abilityAllowed: Ability[] = [];
-		// Obtain a list of abilities that are allowed (not culled)
-		for (const ability of abilityData) {
-			if (ability.rating >= 1 && !this.shouldCullAbility(
-				ability.name, types, moves, abilities, counter, movePool, teamDetails, species
-			)) {
-				abilityAllowed.push(ability);
-			}
-		}
-
-		// If all abilities are rejected, re-allow all abilities
-		if (!abilityAllowed.length) {
-			for (const ability of abilityData) {
-				if (ability.rating > 0) abilityAllowed.push(ability);
-			}
-			if (!abilityAllowed.length) abilityAllowed = abilityData;
-		}
-
-		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
-		// Sort abilities by rating with an element of randomness
-		if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
-			if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-		} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
-			if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-		}
-
-		// After sorting, choose the first ability
-		return abilityAllowed[0].name;
 	}
 
 	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
@@ -465,7 +410,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				const requiresStab = (
 					!counter.get('stab') &&
 					!moves.has('seismictoss') && !moves.has('nightshade') &&
-					species.id !== 'umbreon' &&
+					species.id !== 'castform' && species.id !== 'umbreon' &&
 					// If a Flying-type has Psychic, it doesn't need STAB
 					!(moves.has('psychic') && types.has('Flying')) &&
 					!(types.has('Ghost') && species.baseStats.spa > species.baseStats.atk) &&
@@ -559,9 +504,32 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species);
+		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a)).filter(a => a.gen === 3);
+		Utils.sortBy(abilityData, abil => -abil.rating);
+		let ability0 = abilityData[0];
+		let ability1 = abilityData[1];
+		if (abilityData[1]) {
+			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
+				[ability0, ability1] = [ability1, ability0];
+			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
+				[ability0, ability1] = [ability1, ability0];
+			}
+			ability = ability0.name;
 
-		const item = this.getItem(ability, species.types, moves, counter, teamDetails, species);
+			while (this.shouldCullAbility(ability, types, moves, abilities, counter, movePool, teamDetails, species)) {
+				if (ability === ability0.name && ability1.rating > 1) {
+					ability = ability1.name;
+				} else {
+					// Default to the highest rated ability if all are rejected
+					ability = abilityData[0].name;
+					break;
+				}
+			}
+		} else {
+			ability = abilityData[0].name;
+		}
+
+		const item = this.getItem(ability, types, moves, counter, species);
 		const level = this.adjustLevel || data.level || (species.nfe ? 90 : 80);
 
 		// Prepare optimal HP
@@ -616,17 +584,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData));
-		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
-			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			const currentSpeciesPool: Species[] = [];
-			for (const poke of pokemonPool) {
-				const species = this.dex.species.get(poke);
-				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
-			}
-			const species = this.sample(currentSpeciesPool);
-			if (!species.exists) continue;
+		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 
+		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
+			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
+			if (!species.exists || !this.randomData[species.id]?.moves) continue;
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
@@ -709,7 +671,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				}
 			}
 
-			// Update team details
+			// Updateeam details
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
 			if (set.ability === 'Sand Stream') teamDetails.sand = 1;
 			if (set.moves.includes('spikes')) teamDetails.spikes = 1;

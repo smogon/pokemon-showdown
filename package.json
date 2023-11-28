@@ -1,15 +1,17 @@
 {
   "name": "pokemon-showdown",
   "description": "The server for the Pokémon Showdown battle simulator",
-  "version": "0.11.9",
+  "version": "0.11.7",
   "main": "dist/sim/index.js",
   "dependencies": {
     "esbuild": "^0.16.10",
+    "path-browserify": "1.0.1",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
-    "probe-image-size": "^7.2.3",
+    "probe-image-size": "^5.0.0",
     "sockjs": "^0.3.21",
-    "source-map-support": "^0.5.21"
+    "ts-node": "^10.0.0",
+    "zip-a-folder": "^1.1.5"
   },
   "optionalDependencies": {
     "better-sqlite3": "^7.6.2",
@@ -31,7 +33,7 @@
   },
   "scripts": {
     "start": "node pokemon-showdown start",
-    "build": "node build",
+    "build": "node build -production",
     "tsc": "tsc",
     "fast-lint": "eslint . --config .eslintrc-no-types.json --cache --cache-location .eslintcache-no-types --ext .js,.ts,.tsx",
     "lint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
@@ -41,8 +43,7 @@
     "test": "mocha",
     "posttest": "npm run tsc",
     "full-test": "npm run lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\"",
-    "full-test-ci": "eslint ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
-    "postinstall": "npm run build postinstall"
+    "postinstall": "npm run build"
   },
   "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
@@ -80,7 +81,7 @@
     "@typescript-eslint/parser": "^5.8.0",
     "eslint": "^8.5.0",
     "mocha": "^8.2.0",
-    "smogon": "^3.0.0",
-    "typescript": "^5.0.4"
+    "smogon": "^2.2.1",
+    "typescript": "^4.9.4"
   }
 }

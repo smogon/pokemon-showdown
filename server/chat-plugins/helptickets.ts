@@ -337,7 +337,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	}
 
 	getButton() {
-		const color = this.ticket.claimed ? `` : this.ticket.offline ? `alt-notifying` : `notifying`;
+		const color = this.ticket.claimed ? `` : this.ticket.offline ? `notifying subtle` : `notifying`;
 		const creator = (
 			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
 		);
@@ -1421,14 +1421,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					const unlockCmd = staff.can('globalban') ?
 						`/unlockip ${ip}` :
 						`Can someone \`\`/unlockip ${ip}\`\` (${data.hostType} host)`;
-					buf += `<button class="button" name="send" value="/msgroom staff,${unlockCmd}">Unlock IP</button><br />`;
-					const marksharedCmd = staff.can('globalban') ?
-						`/markshared ${ip}, {owner}` :
-						`Can someone \`\`/markshared ${ip}, {owner}\`\``;
-					buf += `<form data-submitsend="/msgroom staff,${marksharedCmd}">`;
-					buf += `<input name="owner" placeholder="School/Organization Name, City, Country" size="40" required />`;
-					buf += `<button class="button" type="submit">Mark as shared IP</button>`;
-					buf += `</form>`;
+					buf += `<button class="button" name="send" value="/msgroom staff,${unlockCmd}">Unlock IP</button>`;
 				}
 				buf += `</details>`;
 			}
@@ -2261,6 +2254,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
 		if (this.broadcasting) {
+			if (room?.battle) return this.errorReply(this.tr`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--report${meta}" class="button"><strong>${this.tr`Report someone`}</strong></button>`);
 		}
 
@@ -2271,6 +2265,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		const meta = this.pmTarget ? `-user-${this.pmTarget.id}` : this.room ? `-room-${this.room.roomid}` : '';
 		if (this.broadcasting) {
+			if (room?.battle) return this.errorReply(this.tr`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox(`<button name="joinRoom" value="view-help-request--appeal${meta}" class="button"><strong>${this.tr`Appeal a punishment`}</strong></button>`);
 		}
 
@@ -2774,7 +2769,6 @@ export const commands: Chat.ChatCommands = {
 		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
 
 		tb: 'ban',
-		ticketban: 'ban',
 		async ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
 			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
@@ -2872,7 +2866,6 @@ export const commands: Chat.ChatCommands = {
 		},
 		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`],
 
-		unticketban: 'unban',
 		unban(target, room, user) {
 			if (!target) return this.parse('/help helpticket unban');
 
@@ -2994,13 +2987,6 @@ export const commands: Chat.ChatCommands = {
 			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
 		],
 	},
-
-	tb: 'ticketban',
-	unticketban: 'ticketban',
-	ticketban(target, room, user, connection, cmd) {
-		return this.parse(`/helpticket ${cmd} ${target}`);
-	},
-
 	helptickethelp: [
 		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
 		`/helpticket list - Lists all tickets. Requires: % @ &`,

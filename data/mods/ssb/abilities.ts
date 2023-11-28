@@ -1363,7 +1363,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Theia
+	// Nol
 	burningsoul: {
 		desc: "On switch-in, this Pokemon summons Sunny Day. If this Pokemon is at full HP, it survives one hit with at least 1 HP. OHKO moves fail when used against this Pokemon.",
 		shortDesc: "Drought + Sturdy.",

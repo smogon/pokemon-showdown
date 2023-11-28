@@ -26,6 +26,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
+	aurawheel: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	auroraveil: {
 		inherit: true,
 		onTry() {
@@ -104,6 +108,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1,
 		},
 	},
+	clangingscales: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	clangoroussoul: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	conversion: {
 		inherit: true,
 		isNonstandard: null,
@@ -141,11 +153,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "randomNormal",
 	},
-	darkvoid: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	decorate: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	doomdesire: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -206,6 +218,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+	},
+	forestscurse: {
+		inherit: true,
+		isNonstandard: null,
 	},
 	freezeshock: {
 		inherit: true,
@@ -538,10 +554,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	seedflare: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	shadowbone: {
 		inherit: true,
 		isNonstandard: null,
@@ -586,11 +598,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	spiderweb: {
-		inherit: true,
-		isNonstandard: "Past",
-	},
 	stormthrow: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	strangesteam: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -601,10 +613,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sunsteelstrike: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	tailglow: {
-		inherit: true,
-		isNonstandard: "Past",
 	},
 	technoblast: {
 		inherit: true,
@@ -621,10 +629,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	topsyturvy: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	toxicthread: {
-		inherit: true,
-		isNonstandard: "Past",
 	},
 	trickortreat: {
 		inherit: true,

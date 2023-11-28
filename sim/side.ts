@@ -132,7 +132,7 @@ export class Side {
 			this.active = [null!];
 		}
 
-		this.pokemonLeft = this.pokemon.length;
+		this.pokemonLeft = this.pokemon.filter(pk => !pk.fainted).length;
 		this.faintedLastTurn = null;
 		this.faintedThisTurn = null;
 		this.totalFainted = 0;
@@ -694,11 +694,11 @@ export class Side {
 		} else {
 			slot = parseInt(slotText) - 1;
 		}
-		if (isNaN(slot) || slot < 0) {
+		if (isNaN(slot) || slot < 0 || slotText.length > 2) {
 			// maybe it's a name/species id!
 			slot = -1;
 			for (const [i, mon] of this.pokemon.entries()) {
-				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toID(slotText) === mon.species.id) {
+				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toID(slotText) === mon.species.id || slotText! === mon.uuid) {
 					slot = i;
 					break;
 				}
@@ -1002,6 +1002,14 @@ export class Side {
 				if (data) return this.emitChoiceError(`Unrecognized data after "pass": ${data}`);
 				if (!this.choosePass()) return false;
 				break;
+			case 'useitem':
+				try {
+					this.battle.useItem(data);
+					this.choosePass();
+				} catch (e) {
+					console.error(e);
+				}
+				break;
 			case 'auto':
 			case 'default':
 				this.autoChoose();
@@ -1057,9 +1065,11 @@ export class Side {
 			}
 			break;
 		case 'move':
+			/* Allow passing when a move is needed. This is to allow PokéBall throwing from players.
 			if (!pokemon.fainted && !pokemon.volatiles['commanding']) {
 				return this.emitChoiceError(`Can't pass: Your ${pokemon.name} must make a move (or switch)`);
 			}
+			*/
 			break;
 		default:
 			return this.emitChoiceError(`Can't pass: Not a move or switch request`);

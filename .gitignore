@@ -1,5 +1,6 @@
 /config/*
 !/config/formats.ts
+!/config/custom-formats.ts
 /logs/*
 /test/modlogs
 /test/replays/*.html
@@ -49,6 +50,7 @@ tmp/**/*
 
 downloads
 dist
+cobblemon-showdown
 
 # egg related
 develop-eggs
@@ -71,3 +73,4 @@ local_settings.py
 pip-log.txt
 # redis dumps
 *.rdb
+workspace.code-workspace

@@ -88,17 +88,15 @@ export const Friends = new class {
 			.filter(item => categorized[item].length > 0)
 			.map(item => `${STATUS_TITLES[item]} (${categorized[item].length})`);
 
-		let buf = `<h3>Your friends: `;
+		let buf = `<h3>Your friends: <small> `;
 		if (sorted.length > 0) {
-			buf += `<small> Total (${friends.length}) | ${sorted.join(' | ')}</small></h3> `;
+			buf += `Total (${friends.length}) | ${sorted.join(' | ')}`;
 		} else {
 			buf += `</h3><em>you have no friends added on Showdown lol</em><br /><br /><br />`;
 			buf += `<strong>To add a friend, use </strong><code>/friend add [username]</code>.<br /><br />`;
 			return buf;
 		}
-
-		buf += `<form data-submitsend="/friend add {username}">Add friend: <input name="username" /><br />`;
-		buf += `<button class="button" type="submit">Add <i class="fa fa-paper-plane"></i></button></form>`;
+		buf += `</h3> `;
 
 		for (const key in categorized) {
 			const friendArray = categorized[key].sort();
