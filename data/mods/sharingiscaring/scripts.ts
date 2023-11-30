@@ -35,13 +35,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.runEvent('UseItem', this, null, null, item)) {
 				switch (item.id.startsWith('item:') ? item.id.slice(5) : item.id) {
 				case 'redcard':
-					this.battle.add('-enditem', this, item.name, '[of] ' + source);
+					this.battle.add('-enditem', this, item.fullname, '[of] ' + source);
 					break;
 				default:
 					if (item.isGem) {
-						this.battle.add('-enditem', this, item.name, '[from] gem');
+						this.battle.add('-enditem', this, item.fullname, '[from] gem');
 					} else {
-						this.battle.add('-enditem', this, item.name);
+						this.battle.add('-enditem', this, item.fullname);
 					}
 					break;
 				}
@@ -71,13 +71,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
 			if (!hasAnyItem) return false;
-			if ((!this.hp && toID(item.name) !== 'jabocaberry' && toID(item.name) !== 'rowapberry') || !this.isActive) return false;
+			if ((!this.hp && this.battle.toID(item.name) !== 'jabocaberry' && this.battle.toID(item.name) !== 'rowapberry') ||
+				!this.isActive) return false;
 
 			if (
 				this.battle.runEvent('UseItem', this, null, null, item) &&
 				(force || this.battle.runEvent('TryEatItem', this, null, null, item))
 			) {
-				this.battle.add('-enditem', this, item.name, '[eat]');
+				this.battle.add('-enditem', this, item.fullname, '[eat]');
 
 				this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
 				this.battle.runEvent('EatItem', this, null, null, item);
