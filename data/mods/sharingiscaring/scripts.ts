@@ -1,4 +1,4 @@
-import { RESTORATIVE_BERRIES } from '../../../sim/pokemon';
+import {RESTORATIVE_BERRIES} from '../../../sim/pokemon';
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
@@ -23,13 +23,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			const itemid = this.battle.toID(item);
 			return this.item === itemid || !!this.volatiles['item:' + itemid];
 		},
-		useItem(source?: Pokemon, sourceEffect?: Effect) {
+		useItem(source, sourceEffect) {
 			// @ts-ignore
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
 			// Best to declare everything early because ally might have a gem that needs proccing
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item: this.getItem();
+			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
 			if ((!this.hp && !item.isGem) || !this.isActive) return false;
 			if (!hasAnyItem) return false;
 
@@ -66,12 +66,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
-		eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
+		eatItem(force, source, sourceEffect) {
 			// @ts-ignore
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item: this.getItem();
+			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
 			if (!hasAnyItem) return false;
 			if ((!this.hp && toID(item.name) !== 'jabocaberry' && toID(item.name) !== 'rowapberry') || !this.isActive) return false;
 
@@ -111,7 +111,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
-		setItem(item: string | Item, source?: Pokemon, effect?: Effect) {
+		setItem(item, source, effect) {
 			if (!this.hp || !this.isActive) return false;
 			if (this.itemState.knockedOff) return false;
 			if (typeof item === 'string') item = this.battle.dex.items.get(item);
