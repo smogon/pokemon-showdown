@@ -3338,7 +3338,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	ivycudgel: {
 		name: "Ivy Cudgel",
-		desc: "Has a higher chance for a critical hit. If the user is an Ogerpon holding a mask, this move's type changes to match. Water type for Wellspring Mask, Fire type for Hearthflame Mask, and Rock type for Cornerstone Mask.",
+		desc: "Has a higher chance for a critical hit. If the user is an Ogerpon that is not the base form, this move's type changes to match. Water type for Ogerpon-Wellspring, Fire type for Ogerpon-Hearthflame, and Rock type for Ogerpon-Cornerstone.",
 		shortDesc: "High critical hit ratio. Type depends on user's form.",
 	},
 	jawlock: {
