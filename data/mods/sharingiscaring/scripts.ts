@@ -24,7 +24,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			return this.item === itemid || !!this.volatiles['item:' + itemid];
 		},
 		useItem(source, sourceEffect) {
-			// @ts-ignore
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
 			// Best to declare everything early because ally might have a gem that needs proccing
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
@@ -67,7 +66,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		},
 		eatItem(force, source, sourceEffect) {
-			// @ts-ignore
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
