@@ -957,6 +957,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 
 		logData.p1rating = p1rating;
+		if (this.replaySaved) logData.replaySaved = this.replaySaved;
 		logData.p2rating = p2rating;
 		if (this.playerCap > 2) {
 			logData.p3rating = p3rating;
