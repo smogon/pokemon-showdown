@@ -3387,7 +3387,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["crosschop", "earthquake", "flamethrower", "icepunch", "voltswitch", "wildcharge"]
+                "movepool": ["crosschop", "earthquake", "flamethrower", "icepunch", "voltswitch", "wildcharge"],
+                "preferredTypes": ["Ice"]
             }
         ]
     },

@@ -433,7 +433,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["focusblast", "painsplit", "shadowball", "sludgewave", "substitute", "trick", "willowisp"]
+                "movepool": ["focusblast", "painsplit", "shadowball", "sludgewave", "substitute", "trick", "willowisp"],
+                "preferredTypes": ["Fighting"]
             }
         ]
     },
@@ -2813,7 +2814,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["crosschop", "earthquake", "flamethrower", "icepunch", "voltswitch", "wildcharge"]
+                "movepool": ["crosschop", "earthquake", "flamethrower", "icepunch", "voltswitch", "wildcharge"],
+                "preferredTypes": ["Ice"]
             }
         ]
     },

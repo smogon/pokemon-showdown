@@ -244,8 +244,13 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Head Smash", "Wild Charge"],
+                "movepool": ["Extreme Speed", "Flare Blitz", "Rock Slide", "Stone Edge"],
                 "teraTypes": ["Fire", "Normal", "Rock"]
+            },
+            {
+                "role": "Bulky Protect",
+                "movepool": ["Flare Blitz", "Morning Sun", "Protect", "Rock Slide", "Will-O-Wisp"],
+                "teraTypes": ["Fire", "Grass", "Rock"]
             }
         ]
     },
@@ -2864,7 +2869,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Body Press", "Iron Defense", "Moonblast", "Stealth Rock"],
+                "movepool": ["Body Press", "Iron Defense", "Moonblast", "Trick Room"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -4366,11 +4371,6 @@
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Hyper Voice", "Nasty Plot", "Protect", "Psychic", "Psyshock", "Trick Room"],
                 "teraTypes": ["Fairy"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Nasty Plot", "Psychic", "Psyshock", "Tera Blast", "Trick Room"],
-                "teraTypes": ["Fairy"]
             }
         ]
     },
@@ -4397,6 +4397,11 @@
     "kingambit": {
         "level": 78,
         "sets": [
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Iron Head", "Protect", "Sucker Punch", "Swords Dance"],
+                "teraTypes": ["Dark", "Fire", "Flying"]
+            },
             {
                 "role": "Bulky Protect",
                 "movepool": ["Iron Head", "Kowtow Cleave", "Protect", "Sucker Punch"],
