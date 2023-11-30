@@ -936,6 +936,11 @@
                 "role": "Wallbreaker",
                 "movepool": ["Fire Blast", "Hydro Pump", "Ice Beam", "Psychic", "Psyshock", "Trick Room"],
                 "teraTypes": ["Psychic", "Water"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Chilly Reception", "Future Sight", "Scald", "Slack Off"],
+                "teraTypes": ["Dragon", "Fairy", "Water"]
             }
         ]
     },
