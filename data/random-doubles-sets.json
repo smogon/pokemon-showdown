@@ -245,12 +245,12 @@
             {
                 "role": "Choice Item user",
                 "movepool": ["Extreme Speed", "Flare Blitz", "Rock Slide", "Stone Edge"],
-                "teraTypes": ["Fire", "Normal", "Rock"]
+                "teraTypes": ["Normal", "Rock"]
             },
             {
                 "role": "Bulky Protect",
                 "movepool": ["Flare Blitz", "Morning Sun", "Protect", "Rock Slide", "Will-O-Wisp"],
-                "teraTypes": ["Fire", "Grass", "Rock"]
+                "teraTypes": ["Fairy", "Grass"]
             }
         ]
     },
