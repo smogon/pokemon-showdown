@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["es2020"],
+    "lib": ["es2020", "dom"],
     "noEmit": true,
     "jsx": "react",
     "jsxFactory": "Chat.h",
@@ -18,7 +18,6 @@
     "useDefineForClassFields": false,
     "resolveJsonModule": true
   },
-  "types": ["node"],
   "exclude": ["./.*-dist/**/*", "./server/chat-plugins/private/*/*.d.ts"],
   "include": [
     "./config/*.ts",

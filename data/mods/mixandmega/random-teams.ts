@@ -1,9 +1,7 @@
-import {RandomTeams} from './../../random-teams';
-import {toID} from '../../../sim/dex';
+import { RandomTeams } from "../base/random-teams";
+import { toID } from "../../../sim/dex";
 
-const mnmItems = [
-	'blueorb', 'redorb', 'rustedshield', 'rustedsword',
-];
+const mnmItems = ["blueorb", "redorb", "rustedshield", "rustedsword"];
 
 export class RandomMnMTeams extends RandomTeams {
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
@@ -13,51 +11,77 @@ export class RandomMnMTeams extends RandomTeams {
 		const team = [];
 
 		const natures = this.dex.natures.all();
-		const items = this.dex.items.all().filter(item => item.megaStone || mnmItems.includes(item.id));
+		const items = this.dex.items
+			.all()
+			.filter((item) => item.megaStone || mnmItems.includes(item.id));
 
-		const randomN = this.randomNPokemon(this.maxTeamSize, this.forceMonotype, undefined, undefined, true);
+		const randomN = this.randomNPokemon(
+			this.maxTeamSize,
+			this.forceMonotype,
+			undefined,
+			undefined,
+			true
+		);
 
 		for (let forme of randomN) {
 			let species = dex.species.get(forme);
-			if (species.isNonstandard) species = dex.species.get(species.baseSpecies);
+			if (species.isNonstandard)
+				species = dex.species.get(species.baseSpecies);
 
 			// Random legal item
-			let item = '';
+			let item = "";
 			let isIllegalItem;
 			if (this.gen >= 2) {
 				do {
 					item = this.sample(items).name;
-					isIllegalItem = this.dex.items.get(item).gen > this.gen || this.dex.items.get(item).isNonstandard;
+					isIllegalItem =
+						this.dex.items.get(item).gen > this.gen ||
+						this.dex.items.get(item).isNonstandard;
 				} while (isIllegalItem);
 			}
 
 			// Make sure forme is legal
 			if (species.battleOnly) {
-				if (typeof species.battleOnly === 'string') {
+				if (typeof species.battleOnly === "string") {
 					species = dex.species.get(species.battleOnly);
 				} else {
 					species = dex.species.get(this.sample(species.battleOnly));
 				}
 				forme = species.name;
-			} else if (species.requiredItems && !species.requiredItems.some(req => toID(req) === item)) {
-				if (!species.changesFrom) throw new Error(`${species.name} needs a changesFrom value`);
+			} else if (
+				species.requiredItems &&
+				!species.requiredItems.some((req) => toID(req) === item)
+			) {
+				if (!species.changesFrom)
+					throw new Error(`${species.name} needs a changesFrom value`);
 				species = dex.species.get(species.changesFrom);
 				forme = species.name;
 			}
 
 			// Random legal ability
-			const abilities = Object.values(species.abilities).filter(a => this.dex.abilities.get(a).gen <= this.gen);
-			const ability: string = this.gen <= 2 ? 'No Ability' : this.sample(abilities);
+			const abilities = Object.values(species.abilities).filter(
+				(a) => this.dex.abilities.get(a).gen <= this.gen
+			);
+			const ability: string =
+				this.gen <= 2 ? "No Ability" : this.sample(abilities);
 
 			// Four random unique moves from the movepool
-			let pool = ['struggle'];
-			if (forme === 'Smeargle') {
+			let pool = ["struggle"];
+			if (forme === "Smeargle") {
 				pool = this.dex.moves
 					.all()
-					.filter(move => !(move.isNonstandard || move.isZ || move.isMax || move.realMove))
-					.map(m => m.id);
+					.filter(
+						(move) =>
+							!(
+								move.isNonstandard ||
+								move.isZ ||
+								move.isMax ||
+								move.realMove
+							)
+					)
+					.map((m) => m.id);
 			} else {
-				const formes = ['gastrodoneast', 'pumpkaboosuper', 'zygarde10'];
+				const formes = ["gastrodoneast", "pumpkaboosuper", "zygarde10"];
 				let learnset = this.dex.species.getLearnset(species.id);
 				let learnsetSpecies = species;
 				if (formes.includes(species.id) || !learnset) {
@@ -65,26 +89,45 @@ export class RandomMnMTeams extends RandomTeams {
 					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 				}
 				if (learnset) {
-					pool = Object.keys(learnset).filter(
-						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
+					pool = Object.keys(learnset).filter((moveid) =>
+						learnset![moveid].find((learned) =>
+							learned.startsWith(String(this.gen))
+						)
 					);
 				}
-				if (learnset && learnsetSpecies === species && species.changesFrom) {
-					learnset = this.dex.species.getLearnset(toID(species.changesFrom));
+				if (
+					learnset &&
+					learnsetSpecies === species &&
+					species.changesFrom
+				) {
+					learnset = this.dex.species.getLearnset(
+						toID(species.changesFrom)
+					);
 					for (const moveid in learnset) {
-						if (!pool.includes(moveid) && learnset[moveid].some(source => source.startsWith(String(this.gen)))) {
+						if (
+							!pool.includes(moveid) &&
+							learnset[moveid].some((source) =>
+								source.startsWith(String(this.gen))
+							)
+						) {
 							pool.push(moveid);
 						}
 					}
 				}
-				const evoRegion = learnsetSpecies.evoRegion && learnsetSpecies.gen !== this.gen;
+				const evoRegion =
+					learnsetSpecies.evoRegion && learnsetSpecies.gen !== this.gen;
 				for (let i = 0; i < 2 && learnsetSpecies.prevo; i++) {
 					learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
 					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
 					for (const moveid in learnset) {
-						if (!pool.includes(moveid) && learnset[moveid].some(
-							source => source.startsWith(String(this.gen)) && (!evoRegion || source.charAt(1) === 'E')
-						)) {
+						if (
+							!pool.includes(moveid) &&
+							learnset[moveid].some(
+								(source) =>
+									source.startsWith(String(this.gen)) &&
+									(!evoRegion || source.charAt(1) === "E")
+							)
+						) {
 							pool.push(moveid);
 						}
 					}
@@ -94,7 +137,14 @@ export class RandomMnMTeams extends RandomTeams {
 			const moves = this.multipleSamplesNoReplace(pool, this.maxMoveCount);
 
 			// Random EVs
-			const evs: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			const evs: StatsTable = {
+				hp: 0,
+				atk: 0,
+				def: 0,
+				spa: 0,
+				spd: 0,
+				spe: 0,
+			};
 			const s: StatID[] = ["hp", "atk", "def", "spa", "spd", "spe"];
 			let evpool = 510;
 			do {
@@ -122,30 +172,47 @@ export class RandomMnMTeams extends RandomTeams {
 
 			let stats = species.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
-			if (species.baseSpecies === 'Wishiwashi') stats = Dex.species.get('wishiwashischool').baseStats;
+			if (species.baseSpecies === "Wishiwashi")
+				stats = Dex.species.get("wishiwashischool").baseStats;
 
 			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
-			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
-			mbst += (stats["atk"] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats["def"] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats["spa"] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats["spd"] * 2 + 31 + 21 + 100) + 5;
-			mbst += (stats["spe"] * 2 + 31 + 21 + 100) + 5;
+			let mbst = stats["hp"] * 2 + 31 + 21 + 100 + 10;
+			mbst += stats["atk"] * 2 + 31 + 21 + 100 + 5;
+			mbst += stats["def"] * 2 + 31 + 21 + 100 + 5;
+			mbst += stats["spa"] * 2 + 31 + 21 + 100 + 5;
+			mbst += stats["spd"] * 2 + 31 + 21 + 100 + 5;
+			mbst += stats["spe"] * 2 + 31 + 21 + 100 + 5;
 
 			let level;
 			if (this.adjustLevel) {
 				level = this.adjustLevel;
 			} else {
-				level = Math.floor(100 * mbstmin / mbst); // Initial level guess will underestimate
+				level = Math.floor((100 * mbstmin) / mbst); // Initial level guess will underestimate
 
 				while (level < 100) {
-					mbst = Math.floor((stats["hp"] * 2 + 31 + 21 + 100) * level / 100 + 10);
+					mbst = Math.floor(
+						((stats["hp"] * 2 + 31 + 21 + 100) * level) / 100 + 10
+					);
 					// Since damage is roughly proportional to level
-					mbst += Math.floor(((stats["atk"] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
-					mbst += Math.floor((stats["def"] * 2 + 31 + 21 + 100) * level / 100 + 5);
-					mbst += Math.floor(((stats["spa"] * 2 + 31 + 21 + 100) * level / 100 + 5) * level / 100);
-					mbst += Math.floor((stats["spd"] * 2 + 31 + 21 + 100) * level / 100 + 5);
-					mbst += Math.floor((stats["spe"] * 2 + 31 + 21 + 100) * level / 100 + 5);
+					mbst += Math.floor(
+						((((stats["atk"] * 2 + 31 + 21 + 100) * level) / 100 + 5) *
+							level) /
+							100
+					);
+					mbst += Math.floor(
+						((stats["def"] * 2 + 31 + 21 + 100) * level) / 100 + 5
+					);
+					mbst += Math.floor(
+						((((stats["spa"] * 2 + 31 + 21 + 100) * level) / 100 + 5) *
+							level) /
+							100
+					);
+					mbst += Math.floor(
+						((stats["spd"] * 2 + 31 + 21 + 100) * level) / 100 + 5
+					);
+					mbst += Math.floor(
+						((stats["spe"] * 2 + 31 + 21 + 100) * level) / 100 + 5
+					);
 
 					if (mbst >= mbstmin) break;
 					level++;

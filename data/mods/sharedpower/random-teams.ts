@@ -1,4 +1,4 @@
-import RandomTeams from '../../random-teams';
+import RandomTeams from "../base/random-teams";
 
 export class RandomSharedPowerTeams extends RandomTeams {}
 

@@ -15,7 +15,12 @@
  *   that if it's English-specific, it should be left out of here.
  */
 
-export type Comparable = number | string | boolean | Comparable[] | {reverse: Comparable};
+export type Comparable =
+	| number
+	| string
+	| boolean
+	| Comparable[]
+	| { reverse: Comparable };
 
 /**
  * Safely converts the passed variable into a string. Unlike '' + str,
@@ -33,34 +38,34 @@ export type Comparable = number | string | boolean | Comparable[] | {reverse: Co
  */
 
 export function getString(str: any): string {
-	return (typeof str === 'string' || typeof str === 'number') ? '' + str : '';
+	return typeof str === "string" || typeof str === "number" ? "" + str : "";
 }
 
 export function escapeRegex(str: string) {
-	return str.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
+	return str.replace(/[\\^$.*+?()[\]{}|]/g, "\\$&");
 }
 
 /**
  * Escapes HTML in a string.
-*/
+ */
 export function escapeHTML(str: string | number) {
-	if (str === null || str === undefined) return '';
-	return ('' + str)
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&apos;')
-		.replace(/\//g, '&#x2f;')
-		.replace(/\n/g, '<br />');
+	if (str === null || str === undefined) return "";
+	return ("" + str)
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;")
+		.replace(/\//g, "&#x2f;")
+		.replace(/\n/g, "<br />");
 }
 
 /**
  * Strips HTML from a string.
  */
 export function stripHTML(htmlContent: string) {
-	if (!htmlContent) return '';
-	return htmlContent.replace(/<[^>]*>/g, '');
+	if (!htmlContent) return "";
+	return htmlContent.replace(/<[^>]*>/g, "");
 }
 
 /**
@@ -69,14 +74,14 @@ export function stripHTML(htmlContent: string) {
 export function formatOrder(place: number) {
 	// anything between 10 and 20 should always end with -th
 	let remainder = place % 100;
-	if (remainder >= 10 && remainder <= 20) return place + 'th';
+	if (remainder >= 10 && remainder <= 20) return place + "th";
 
 	// follow standard rules with -st, -nd, -rd, and -th
 	remainder = place % 10;
-	if (remainder === 1) return place + 'st';
-	if (remainder === 2) return place + 'nd';
-	if (remainder === 3) return place + 'rd';
-	return place + 'th';
+	if (remainder === 1) return place + "st";
+	if (remainder === 2) return place + "nd";
+	if (remainder === 3) return place + "rd";
+	return place + "th";
 }
 
 /**
@@ -85,61 +90,81 @@ export function formatOrder(place: number) {
 export function visualize(value: any, depth = 0): string {
 	if (value === undefined) return `undefined`;
 	if (value === null) return `null`;
-	if (typeof value === 'number' || typeof value === 'boolean') {
+	if (typeof value === "number" || typeof value === "boolean") {
 		return `${value}`;
 	}
-	if (typeof value === 'string') {
+	if (typeof value === "string") {
 		return `"${value}"`; // NOT ESCAPED
 	}
-	if (typeof value === 'symbol') {
+	if (typeof value === "symbol") {
 		return value.toString();
 	}
 	if (Array.isArray(value)) {
 		if (depth > 10) return `[array]`;
-		return `[` + value.map(elem => visualize(elem, depth + 1)).join(`, `) + `]`;
+		return (
+			`[` + value.map((elem) => visualize(elem, depth + 1)).join(`, `) + `]`
+		);
 	}
-	if (value instanceof RegExp || value instanceof Date || value instanceof Function) {
+	if (
+		value instanceof RegExp ||
+		value instanceof Date ||
+		value instanceof Function
+	) {
 		if (depth && value instanceof Function) return `Function`;
 		return `${value}`;
 	}
-	let constructor = '';
-	if (value.constructor && value.constructor.name && typeof value.constructor.name === 'string') {
+	let constructor = "";
+	if (
+		value.constructor &&
+		value.constructor.name &&
+		typeof value.constructor.name === "string"
+	) {
 		constructor = value.constructor.name;
-		if (constructor === 'Object') constructor = '';
+		if (constructor === "Object") constructor = "";
 	} else {
-		constructor = 'null';
+		constructor = "null";
 	}
 	// If it has a toString, try to grab the base class from there
 	// (This is for Map/Set subclasses like user.auth)
-	const baseClass = (value?.toString && /\[object (.*)\]/.exec(value.toString())?.[1]) || constructor;
+	const baseClass =
+		(value?.toString && /\[object (.*)\]/.exec(value.toString())?.[1]) ||
+		constructor;
 
 	switch (baseClass) {
-	case 'Map':
-		if (depth > 2) return `Map`;
-		const mapped = [...value.entries()].map(
-			val => `${visualize(val[0], depth + 1)} => ${visualize(val[1], depth + 1)}`
-		);
-		return `${constructor} (${value.size}) { ${mapped.join(', ')} }`;
-	case 'Set':
-		if (depth > 2) return `Set`;
-		return `${constructor} (${value.size}) { ${[...value].map(v => visualize(v), depth + 1).join(', ')} }`;
+		case "Map":
+			if (depth > 2) return `Map`;
+			const mapped = [...value.entries()].map(
+				(val) =>
+					`${visualize(val[0], depth + 1)} => ${visualize(
+						val[1],
+						depth + 1
+					)}`
+			);
+			return `${constructor} (${value.size}) { ${mapped.join(", ")} }`;
+		case "Set":
+			if (depth > 2) return `Set`;
+			return `${constructor} (${value.size}) { ${[...value]
+				.map((v) => visualize(v), depth + 1)
+				.join(", ")} }`;
 	}
 
 	if (value.toString) {
 		try {
 			const stringValue = value.toString();
-			if (typeof stringValue === 'string' &&
-					stringValue !== '[object Object]' &&
-					stringValue !== `[object ${constructor}]`) {
+			if (
+				typeof stringValue === "string" &&
+				stringValue !== "[object Object]" &&
+				stringValue !== `[object ${constructor}]`
+			) {
 				return `${constructor}(${stringValue})`;
 			}
 		} catch {}
 	}
-	let buf = '';
+	let buf = "";
 	for (const key in value) {
 		if (!Object.prototype.hasOwnProperty.call(value, key)) continue;
 		if (depth > 2 || (depth && constructor)) {
-			buf = '...';
+			buf = "...";
 			break;
 		}
 		if (buf) buf += `, `;
@@ -147,7 +172,7 @@ export function visualize(value: any, depth = 0): string {
 		if (!/^[A-Za-z0-9_$]+$/.test(key)) displayedKey = JSON.stringify(key);
 		buf += `${displayedKey}: ` + visualize(value[key], depth + 1);
 	}
-	if (constructor && !buf && constructor !== 'null') return constructor;
+	if (constructor && !buf && constructor !== "null") return constructor;
 	return `${constructor}{${buf}}`;
 }
 
@@ -163,13 +188,13 @@ export function visualize(value: any, depth = 0): string {
  * In other words: `[num, str]` will be sorted A to Z, `[num, {reverse: str}]` will be sorted Z to A.
  */
 export function compare(a: Comparable, b: Comparable): number {
-	if (typeof a === 'number') {
+	if (typeof a === "number") {
 		return a - (b as number);
 	}
-	if (typeof a === 'string') {
+	if (typeof a === "string") {
 		return a.localeCompare(b as string);
 	}
-	if (typeof a === 'boolean') {
+	if (typeof a === "boolean") {
 		return (a ? 1 : 2) - (b ? 1 : 2);
 	}
 	if (Array.isArray(a)) {
@@ -179,8 +204,8 @@ export function compare(a: Comparable, b: Comparable): number {
 		}
 		return 0;
 	}
-	if ('reverse' in a) {
-		return compare((b as {reverse: string}).reverse, a.reverse);
+	if ("reverse" in a) {
+		return compare((b as { reverse: string }).reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
 }
@@ -206,20 +231,32 @@ export function sortBy<T>(array: T[], callback?: (a: T) => Comparable) {
 }
 
 export function splitFirst(str: string, delimiter: string): [string, string];
-export function splitFirst(str: string, delimiter: string, limit: 2): [string, string, string];
-export function splitFirst(str: string, delimiter: string, limit: 3): [string, string, string, string];
-export function splitFirst(str: string, delimiter: string, limit: number): string[];
+export function splitFirst(
+	str: string,
+	delimiter: string,
+	limit: 2
+): [string, string, string];
+export function splitFirst(
+	str: string,
+	delimiter: string,
+	limit: 3
+): [string, string, string, string];
+export function splitFirst(
+	str: string,
+	delimiter: string,
+	limit: number
+): string[];
 /**
-* Like string.split(delimiter), but only recognizes the first `limit`
-* delimiters (default 1).
-*
-* `"1 2 3 4".split(" ", 2) => ["1", "2"]`
-*
-* `Utils.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
-*
-* Returns an array of length exactly limit + 1.
-*
-*/
+ * Like string.split(delimiter), but only recognizes the first `limit`
+ * delimiters (default 1).
+ *
+ * `"1 2 3 4".split(" ", 2) => ["1", "2"]`
+ *
+ * `Utils.splitFirst("1 2 3 4", " ", 1) => ["1", "2 3 4"]`
+ *
+ * Returns an array of length exactly limit + 1.
+ *
+ */
 export function splitFirst(str: string, delimiter: string, limit = 1) {
 	const splitStr: string[] = [];
 	while (splitStr.length < limit) {
@@ -229,7 +266,7 @@ export function splitFirst(str: string, delimiter: string, limit = 1) {
 			str = str.slice(delimiterIndex + delimiter.length);
 		} else {
 			splitStr.push(str);
-			str = '';
+			str = "";
 		}
 	}
 	splitStr.push(str);
@@ -255,7 +292,7 @@ export function html(strings: TemplateStringsArray, ...args: any) {
  * can't be copy/pasted (which would mess up code).
  */
 export function escapeHTMLForceWrap(text: string): string {
-	return escapeHTML(forceWrap(text)).replace(/\u200B/g, '<wbr />');
+	return escapeHTML(forceWrap(text)).replace(/\u200B/g, "<wbr />");
 }
 
 /**
@@ -264,12 +301,15 @@ export function escapeHTMLForceWrap(text: string): string {
  * manually inserting U+200B to tell long words to wrap.
  */
 export function forceWrap(text: string): string {
-	return text.replace(/[^\s]{30,}/g, word => {
+	return text.replace(/[^\s]{30,}/g, (word) => {
 		let lastBreak = 0;
-		let brokenWord = '';
+		let brokenWord = "";
 		for (let i = 1; i < word.length; i++) {
-			if (i - lastBreak >= 10 || /[^a-zA-Z0-9([{][a-zA-Z0-9]/.test(word.slice(i - 1, i + 1))) {
-				brokenWord += word.slice(lastBreak, i) + '\u200B';
+			if (
+				i - lastBreak >= 10 ||
+				/[^a-zA-Z0-9([{][a-zA-Z0-9]/.test(word.slice(i - 1, i + 1))
+			) {
+				brokenWord += word.slice(lastBreak, i) + "\u200B";
 				lastBreak = i;
 			}
 		}
@@ -294,40 +334,16 @@ export function randomElement<T>(arr: T[]): T {
 
 /** Forces num to be an integer (between min and max). */
 export function clampIntRange(num: any, min?: number, max?: number): number {
-	if (typeof num !== 'number') num = 0;
+	if (typeof num !== "number") num = 0;
 	num = Math.floor(num);
 	if (min !== undefined && num < min) num = min;
 	if (max !== undefined && num > max) num = max;
 	return num;
 }
 
-export function clearRequireCache(options: {exclude?: string[]} = {}) {
-	const excludes = options?.exclude || [];
-	excludes.push('/node_modules/');
-
-	for (const path in require.cache) {
-		if (excludes.some(p => path.includes(p))) continue;
-		const mod = require.cache[path]; // have to ref to appease ts
-		if (!mod) continue;
-		uncacheModuleTree(mod, excludes);
-		delete require.cache[path];
-	}
-}
-
-export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[], depth = 0) {
-	depth++;
-	if (depth >= 10) return;
-	if (!mod.children || excludes.some(p => mod.filename.includes(p))) return;
-	for (const child of mod.children) {
-		if (excludes.some(p => child.filename.includes(p))) continue;
-		uncacheModuleTree(child, excludes, depth);
-	}
-	delete (mod as any).children;
-}
-
 export function deepClone(obj: any): any {
-	if (obj === null || typeof obj !== 'object') return obj;
-	if (Array.isArray(obj)) return obj.map(prop => deepClone(prop));
+	if (obj === null || typeof obj !== "object") return obj;
+	if (Array.isArray(obj)) return obj.map((prop) => deepClone(prop));
 	const clone = Object.create(Object.getPrototypeOf(obj));
 	for (const key of Object.keys(obj)) {
 		clone[key] = deepClone(obj[key]);
@@ -364,7 +380,7 @@ export function levenshtein(s: string, t: string, l: number): number {
 			if (i === j && d[i][j] > 4) return n;
 
 			const tj = t.charAt(j - 1);
-			const cost = (si === tj) ? 0 : 1; // Step 5
+			const cost = si === tj ? 0 : 1; // Step 5
 
 			// Calculate the minimum
 			let mi = d[i - 1][j] + 1;
@@ -383,7 +399,7 @@ export function levenshtein(s: string, t: string, l: number): number {
 }
 
 export function waitUntil(time: number): Promise<void> {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		setTimeout(() => resolve(), time - Date.now());
 	});
 }
@@ -397,7 +413,7 @@ export function parseExactInt(str: string): number {
 /** formats an array into a series of question marks and adds the elements to an arguments array */
 export function formatSQLArray(arr: unknown[], args?: unknown[]) {
 	args?.push(...arr);
-	return [...'?'.repeat(arr.length)].join(', ');
+	return [..."?".repeat(arr.length)].join(", ");
 }
 
 export class Multiset<T> extends Map<T, number> {
@@ -415,10 +431,22 @@ export class Multiset<T> extends Map<T, number> {
 
 // backwards compatibility
 export const Utils = {
-	parseExactInt, waitUntil, html, escapeHTML,
-	compare, sortBy, levenshtein,
-	shuffle, deepClone, clearRequireCache,
-	randomElement, forceWrap, splitFirst,
-	stripHTML, visualize, getString,
-	escapeRegex, formatSQLArray, Multiset,
+	parseExactInt,
+	waitUntil,
+	html,
+	escapeHTML,
+	compare,
+	sortBy,
+	levenshtein,
+	shuffle,
+	deepClone,
+	randomElement,
+	forceWrap,
+	splitFirst,
+	stripHTML,
+	visualize,
+	getString,
+	escapeRegex,
+	formatSQLArray,
+	Multiset,
 };

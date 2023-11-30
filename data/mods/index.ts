@@ -1,3 +1,5 @@
+export * as base from "./base";
+
 export * as fullpotential from "./fullpotential";
 export * as gen1 from "./gen1";
 export * as gen1jpn from "./gen1jpn";
@@ -11,7 +13,7 @@ export * as gen4pt from "./gen4pt";
 export * as gen5 from "./gen5";
 export * as gen5bw1 from "./gen5bw1";
 export * as gen6 from "./gen6";
-export * as gen6XY from "./gen6xy";
+export * as gen6xy from "./gen6xy";
 export * as gen7 from "./gen7";
 export * as gen7letsgo from "./gen7letsgo";
 export * as gen7pokebilities from "./gen7pokebilities";
