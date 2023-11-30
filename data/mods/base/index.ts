@@ -1,7 +1,6 @@
 export * from "./abilities";
 export * from "./aliases";
 export * from "./cg-team-data";
-export * from "./cg-teams";
 export * from "./conditions";
 export * from "./formats-data";
 export * from "./items";
@@ -15,6 +14,8 @@ export * from "./rulesets";
 export * from "./scripts";
 export * from "./tags";
 export * from "./typechart";
+import CgTeams from "./cg-teams";
+export { CgTeams };
 import * as randomSets from "./random-sets.json";
 export { randomSets };
 import * as randomDoublesSets from "./random-doubles-sets.json";

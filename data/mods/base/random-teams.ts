@@ -2816,8 +2816,8 @@ export class RandomTeams {
 		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff
-		const usePotD = Config.potd && ruleTable.has("potd");
-		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
+		const usePotD = ruleTable.has("potd");
+		const potd = usePotD ? this.dex.species.get(ruleTable.get("potd")) : null;
 
 		const baseFormes: { [k: string]: number } = {};
 
@@ -2901,11 +2901,11 @@ export class RandomTeams {
 				continue;
 
 			// The Pokemon of the Day
-			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1))
+			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) {
 				species = potd;
+			}
 
 			let set: RandomTeamsTypes.RandomSet;
-
 			if (leadsRemaining) {
 				if (
 					(isDoubles &&
@@ -3008,12 +3008,12 @@ export class RandomTeams {
 			)
 				teamDetails.teraBlast = 1;
 		}
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
-			// large teams sometimes cannot be built
-			throw new Error(
-				`Could not build a random team for ${this.format} (seed=${seed})`
-			);
-		}
+		// if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
+		// 	// large teams sometimes cannot be built
+		// 	throw new Error(
+		// 		`Could not build a random team for ${this.format} (seed=${seed})`
+		// 	);
+		// }
 
 		return pokemon;
 	}

@@ -4,21 +4,21 @@
  *
  * @license MIT
  */
-import {Utils} from '../lib';
+import { Utils } from "../lib";
 
 /**
-* Converts anything to an ID. An ID must have only lowercase alphanumeric
-* characters.
-*
-* If a string is passed, it will be converted to lowercase and
-* non-alphanumeric characters will be stripped.
-*
-* If an object with an ID is passed, its ID will be returned.
-* Otherwise, an empty string will be returned.
-*
-* Generally assigned to the global toID, because of how
-* commonly it's used.
-*/
+ * Converts anything to an ID. An ID must have only lowercase alphanumeric
+ * characters.
+ *
+ * If a string is passed, it will be converted to lowercase and
+ * non-alphanumeric characters will be stripped.
+ *
+ * If an object with an ID is passed, its ID will be returned.
+ * Otherwise, an empty string will be returned.
+ *
+ * Generally assigned to the global toID, because of how
+ * commonly it's used.
+ */
 export function toID(text: any): ID {
 	// The sucrase transformation of optional chaining is too expensive to be used in a hot function like this.
 	/* eslint-disable @typescript-eslint/prefer-optional-chain */
@@ -29,8 +29,8 @@ export function toID(text: any): ID {
 	} else if (text && text.roomid) {
 		text = text.roomid;
 	}
-	if (typeof text !== 'string' && typeof text !== 'number') return '';
-	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
+	if (typeof text !== "string" && typeof text !== "number") return "";
+	return ("" + text).toLowerCase().replace(/[^a-z0-9]+/g, "") as ID;
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 }
 
@@ -108,19 +108,20 @@ export class BasicEffect implements EffectData {
 		this.name = Utils.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Utils.getString(data.fullname) || this.name;
-		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
+		this.effectType =
+			(Utils.getString(data.effectType) as EffectType) || "Condition";
 		this.exists = !!(this.exists && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
-		this.shortDesc = data.shortDesc || '';
-		this.desc = data.desc || '';
+		this.shortDesc = data.shortDesc || "";
+		this.desc = data.desc || "";
 		this.isNonstandard = data.isNonstandard || null;
 		this.duration = data.duration;
 		this.noCopy = !!data.noCopy;
 		this.affectsFainted = !!data.affectsFainted;
-		this.status = data.status as ID || undefined;
-		this.weather = data.weather as ID || undefined;
-		this.sourceEffect = data.sourceEffect || '';
+		this.status = (data.status as ID) || undefined;
+		this.weather = (data.weather as ID) || undefined;
+		this.sourceEffect = data.sourceEffect || "";
 	}
 
 	toString() {
@@ -128,8 +129,11 @@ export class BasicEffect implements EffectData {
 	}
 }
 
-export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
-	readonly effectType: 'Nature';
+export class Nature
+	extends BasicEffect
+	implements Readonly<BasicEffect & NatureData>
+{
+	readonly effectType: "Nature";
 	readonly plus?: StatIDExceptHP;
 	readonly minus?: StatIDExceptHP;
 	constructor(data: AnyObject) {
@@ -138,7 +142,7 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 		data = this;
 
 		this.fullname = `nature: ${this.name}`;
-		this.effectType = 'Nature';
+		this.effectType = "Nature";
 		this.gen = 3;
 		this.plus = data.plus || undefined;
 		this.minus = data.minus || undefined;
@@ -155,7 +159,7 @@ export class DexNatures {
 	}
 
 	get(name: string | Nature): Nature {
-		if (name && typeof name !== 'string') return name;
+		if (name && typeof name !== "string") return name;
 
 		return this.getByID(toID(name));
 	}
@@ -173,9 +177,9 @@ export class DexNatures {
 		if (id && this.dex.data.Natures.hasOwnProperty(id)) {
 			const natureData = this.dex.data.Natures[id];
 			nature = new Nature(natureData);
-			if (nature.gen > this.dex.gen) nature.isNonstandard = 'Future';
+			if (nature.gen > this.dex.gen) nature.isNonstandard = "Future";
 		} else {
-			nature = new Nature({name: id, exists: false});
+			nature = new Nature({ name: id, exists: false });
 		}
 
 		if (nature.exists) this.natureCache.set(id, nature);
@@ -193,7 +197,7 @@ export class DexNatures {
 	}
 }
 
-type TypeInfoEffectType = 'Type' | 'EffectType';
+type TypeInfoEffectType = "Type" | "EffectType";
 
 export class TypeInfo implements Readonly<TypeData> {
 	/**
@@ -226,7 +230,7 @@ export class TypeInfo implements Readonly<TypeData> {
 	 * Type chart, attackingTypeName:result, effectid:result
 	 * result is: 0 = normal, 1 = weakness, 2 = resistance, 3 = immunity
 	 */
-	readonly damageTaken: {[attackingTypeNameOrEffectid: string]: number};
+	readonly damageTaken: { [attackingTypeNameOrEffectid: string]: number };
 	/** The IVs to get this Type Hidden Power (in gen 3 and later) */
 	readonly HPivs: SparseStatsTable;
 	/** The DVs to get this Type Hidden Power (in gen 2). */
@@ -238,7 +242,8 @@ export class TypeInfo implements Readonly<TypeData> {
 
 		this.name = data.name;
 		this.id = data.id;
-		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
+		this.effectType =
+			(Utils.getString(data.effectType) as TypeInfoEffectType) || "Type";
 		this.exists = !!(this.exists && this.id);
 		this.gen = data.gen || 0;
 		this.isNonstandard = data.isNonstandard || null;
@@ -263,7 +268,7 @@ export class DexTypes {
 	}
 
 	get(name: string | TypeInfo): TypeInfo {
-		if (name && typeof name !== 'string') return name;
+		if (name && typeof name !== "string") return name;
 		return this.getByID(toID(name));
 	}
 
@@ -273,9 +278,18 @@ export class DexTypes {
 
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
-			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
+			type = new TypeInfo({
+				name: typeName,
+				id,
+				...this.dex.data.TypeChart[id],
+			});
 		} else {
-			type = new TypeInfo({name: typeName, id, exists: false, effectType: 'EffectType'});
+			type = new TypeInfo({
+				name: typeName,
+				id,
+				exists: false,
+				effectType: "EffectType",
+			});
 		}
 
 		if (type.exists) this.typeCache.set(id, type);
@@ -285,7 +299,9 @@ export class DexTypes {
 	names(): readonly string[] {
 		if (this.namesCache) return this.namesCache;
 
-		this.namesCache = this.all().filter(type => !type.isNonstandard).map(type => type.name);
+		this.namesCache = this.all()
+			.filter((type) => !type.isNonstandard)
+			.map((type) => type.name);
 
 		return this.namesCache;
 	}
@@ -307,46 +323,89 @@ export class DexTypes {
 	}
 }
 
-const idsCache: readonly StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-const reverseCache: {readonly [k: string]: StatID} = {
+const idsCache: readonly StatID[] = ["hp", "atk", "def", "spa", "spd", "spe"];
+const reverseCache: { readonly [k: string]: StatID } = {
 	__proto: null as any,
-	"hitpoints": 'hp',
-	"attack": 'atk',
-	"defense": 'def',
-	"specialattack": 'spa', "spatk": 'spa', "spattack": 'spa', "specialatk": 'spa',
-	"special": 'spa', "spc": 'spa',
-	"specialdefense": 'spd', "spdef": 'spd', "spdefense": 'spd', "specialdef": 'spd',
-	"speed": 'spe',
+	hitpoints: "hp",
+	attack: "atk",
+	defense: "def",
+	specialattack: "spa",
+	spatk: "spa",
+	spattack: "spa",
+	specialatk: "spa",
+	special: "spa",
+	spc: "spa",
+	specialdefense: "spd",
+	spdef: "spd",
+	spdefense: "spd",
+	specialdef: "spd",
+	speed: "spe",
 };
 export class DexStats {
-	readonly shortNames: {readonly [k in StatID]: string};
-	readonly mediumNames: {readonly [k in StatID]: string};
-	readonly names: {readonly [k in StatID]: string};
+	readonly shortNames: { readonly [k in StatID]: string };
+	readonly mediumNames: { readonly [k in StatID]: string };
+	readonly names: { readonly [k in StatID]: string };
 	constructor(dex: ModdedDex) {
 		if (dex.gen !== 1) {
 			this.shortNames = {
-				__proto__: null, hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
+				__proto__: null,
+				hp: "HP",
+				atk: "Atk",
+				def: "Def",
+				spa: "SpA",
+				spd: "SpD",
+				spe: "Spe",
 			} as any;
 			this.mediumNames = {
-				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Sp. Atk", spd: "Sp. Def", spe: "Speed",
+				__proto__: null,
+				hp: "HP",
+				atk: "Attack",
+				def: "Defense",
+				spa: "Sp. Atk",
+				spd: "Sp. Def",
+				spe: "Speed",
 			} as any;
 			this.names = {
-				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special Attack", spd: "Special Defense", spe: "Speed",
+				__proto__: null,
+				hp: "HP",
+				atk: "Attack",
+				def: "Defense",
+				spa: "Special Attack",
+				spd: "Special Defense",
+				spe: "Speed",
 			} as any;
 		} else {
 			this.shortNames = {
-				__proto__: null, hp: "HP", atk: "Atk", def: "Def", spa: "Spc", spd: "[SpD]", spe: "Spe",
+				__proto__: null,
+				hp: "HP",
+				atk: "Atk",
+				def: "Def",
+				spa: "Spc",
+				spd: "[SpD]",
+				spe: "Spe",
 			} as any;
 			this.mediumNames = {
-				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special", spd: "[Sp. Def]", spe: "Speed",
+				__proto__: null,
+				hp: "HP",
+				atk: "Attack",
+				def: "Defense",
+				spa: "Special",
+				spd: "[Sp. Def]",
+				spe: "Speed",
 			} as any;
 			this.names = {
-				__proto__: null, hp: "HP", atk: "Attack", def: "Defense", spa: "Special", spd: "[Special Defense]", spe: "Speed",
+				__proto__: null,
+				hp: "HP",
+				atk: "Attack",
+				def: "Defense",
+				spa: "Special",
+				spd: "[Special Defense]",
+				spe: "Speed",
 			} as any;
 		}
 	}
 	getID(name: string) {
-		if (name === 'Spd') return 'spe' as StatID;
+		if (name === "Spd") return "spe" as StatID;
 		const id = toID(name);
 		if (reverseCache[id]) return reverseCache[id];
 		if (idsCache.includes(id as StatID)) return id as StatID;

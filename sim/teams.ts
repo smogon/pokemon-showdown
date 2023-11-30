@@ -7,8 +7,9 @@
  * @license MIT
  */
 
-import {Dex, toID} from './dex';
-import type {PRNG, PRNGSeed} from './prng';
+import { Dex, toID } from "./dex";
+import type { PRNG, PRNGSeed } from "./prng";
+import * as mods from "../data/mods";
 
 export interface PokemonSet {
 	/**
@@ -110,95 +111,127 @@ export interface PokemonSet {
 	teraType?: string;
 }
 
-export const Teams = new class Teams {
+export const Teams = new (class Teams {
 	pack(team: PokemonSet[] | null): string {
-		if (!team) return '';
+		if (!team) return "";
 
 		function getIv(ivs: StatsTable, s: keyof StatsTable): string {
-			return ivs[s] === 31 || ivs[s] === undefined ? '' : ivs[s].toString();
+			return ivs[s] === 31 || ivs[s] === undefined ? "" : ivs[s].toString();
 		}
 
-		let buf = '';
+		let buf = "";
 		for (const set of team) {
-			if (buf) buf += ']';
+			if (buf) buf += "]";
 
 			// name
-			buf += (set.name || set.species);
+			buf += set.name || set.species;
 
 			// species
 			const id = this.packName(set.species || set.name);
-			buf += '|' + (this.packName(set.name || set.species) === id ? '' : id);
+			buf += "|" + (this.packName(set.name || set.species) === id ? "" : id);
 
 			// item
-			buf += '|' + this.packName(set.item);
+			buf += "|" + this.packName(set.item);
 
 			// ability
-			buf += '|' + this.packName(set.ability);
+			buf += "|" + this.packName(set.ability);
 
 			// moves
-			buf += '|' + set.moves.map(this.packName).join(',');
+			buf += "|" + set.moves.map(this.packName).join(",");
 
 			// nature
-			buf += '|' + (set.nature || '');
+			buf += "|" + (set.nature || "");
 
 			// evs
-			let evs = '|';
+			let evs = "|";
 			if (set.evs) {
-				evs = '|' + (set.evs['hp'] || '') + ',' + (set.evs['atk'] || '') + ',' + (set.evs['def'] || '') + ',' + (set.evs['spa'] || '') + ',' + (set.evs['spd'] || '') + ',' + (set.evs['spe'] || '');
+				evs =
+					"|" +
+					(set.evs["hp"] || "") +
+					"," +
+					(set.evs["atk"] || "") +
+					"," +
+					(set.evs["def"] || "") +
+					"," +
+					(set.evs["spa"] || "") +
+					"," +
+					(set.evs["spd"] || "") +
+					"," +
+					(set.evs["spe"] || "");
 			}
-			if (evs === '|,,,,,') {
-				buf += '|';
+			if (evs === "|,,,,,") {
+				buf += "|";
 			} else {
 				buf += evs;
 			}
 
 			// gender
 			if (set.gender) {
-				buf += '|' + set.gender;
+				buf += "|" + set.gender;
 			} else {
-				buf += '|';
+				buf += "|";
 			}
 
 			// ivs
-			let ivs = '|';
+			let ivs = "|";
 			if (set.ivs) {
-				ivs = '|' + getIv(set.ivs, 'hp') + ',' + getIv(set.ivs, 'atk') + ',' + getIv(set.ivs, 'def') +
-					',' + getIv(set.ivs, 'spa') + ',' + getIv(set.ivs, 'spd') + ',' + getIv(set.ivs, 'spe');
+				ivs =
+					"|" +
+					getIv(set.ivs, "hp") +
+					"," +
+					getIv(set.ivs, "atk") +
+					"," +
+					getIv(set.ivs, "def") +
+					"," +
+					getIv(set.ivs, "spa") +
+					"," +
+					getIv(set.ivs, "spd") +
+					"," +
+					getIv(set.ivs, "spe");
 			}
-			if (ivs === '|,,,,,') {
-				buf += '|';
+			if (ivs === "|,,,,,") {
+				buf += "|";
 			} else {
 				buf += ivs;
 			}
 
 			// shiny
 			if (set.shiny) {
-				buf += '|S';
+				buf += "|S";
 			} else {
-				buf += '|';
+				buf += "|";
 			}
 
 			// level
 			if (set.level && set.level !== 100) {
-				buf += '|' + set.level;
+				buf += "|" + set.level;
 			} else {
-				buf += '|';
+				buf += "|";
 			}
 
 			// happiness
 			if (set.happiness !== undefined && set.happiness !== 255) {
-				buf += '|' + set.happiness;
+				buf += "|" + set.happiness;
 			} else {
-				buf += '|';
+				buf += "|";
 			}
 
-			if (set.pokeball || set.hpType || set.gigantamax ||
-				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.teraType) {
-				buf += ',' + (set.hpType || '');
-				buf += ',' + this.packName(set.pokeball || '');
-				buf += ',' + (set.gigantamax ? 'G' : '');
-				buf += ',' + (set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10 ? set.dynamaxLevel : '');
-				buf += ',' + (set.teraType || '');
+			if (
+				set.pokeball ||
+				set.hpType ||
+				set.gigantamax ||
+				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) ||
+				set.teraType
+			) {
+				buf += "," + (set.hpType || "");
+				buf += "," + this.packName(set.pokeball || "");
+				buf += "," + (set.gigantamax ? "G" : "");
+				buf +=
+					"," +
+					(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10
+						? set.dynamaxLevel
+						: "");
+				buf += "," + (set.teraType || "");
 			}
 		}
 
@@ -207,8 +240,8 @@ export const Teams = new class Teams {
 
 	unpack(buf: string): PokemonSet[] | null {
 		if (!buf) return null;
-		if (typeof buf !== 'string') return buf;
-		if (buf.startsWith('[') && buf.endsWith(']')) {
+		if (typeof buf !== "string") return buf;
+		if (buf.startsWith("[") && buf.endsWith("]")) {
 			try {
 				buf = this.pack(JSON.parse(buf));
 			} catch {
@@ -226,50 +259,55 @@ export const Teams = new class Teams {
 			team.push(set);
 
 			// name
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			set.name = buf.substring(i, j);
 			i = j + 1;
 
 			// species
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
-			set.species = this.unpackName(buf.substring(i, j), Dex.species) || set.name;
+			set.species =
+				this.unpackName(buf.substring(i, j), Dex.species) || set.name;
 			i = j + 1;
 
 			// item
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			set.item = this.unpackName(buf.substring(i, j), Dex.items);
 			i = j + 1;
 
 			// ability
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			const ability = buf.substring(i, j);
 			const species = Dex.species.get(set.species);
-			set.ability = ['', '0', '1', 'H', 'S'].includes(ability) ?
-				species.abilities[ability as '0' || '0'] || (ability === '' ? '' : '!!!ERROR!!!') :
-				this.unpackName(ability, Dex.abilities);
+			set.ability = ["", "0", "1", "H", "S"].includes(ability)
+				? species.abilities[(ability as "0") || "0"] ||
+				  (ability === "" ? "" : "!!!ERROR!!!")
+				: this.unpackName(ability, Dex.abilities);
 			i = j + 1;
 
 			// moves
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
-			set.moves = buf.substring(i, j).split(',', 24).map(name => this.unpackName(name, Dex.moves));
+			set.moves = buf
+				.substring(i, j)
+				.split(",", 24)
+				.map((name) => this.unpackName(name, Dex.moves));
 			i = j + 1;
 
 			// nature
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			set.nature = this.unpackName(buf.substring(i, j), Dex.natures);
 			i = j + 1;
 
 			// evs
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			if (j !== i) {
-				const evs = buf.substring(i, j).split(',', 6);
+				const evs = buf.substring(i, j).split(",", 6);
 				set.evs = {
 					hp: Number(evs[0]) || 0,
 					atk: Number(evs[1]) || 0,
@@ -282,53 +320,53 @@ export const Teams = new class Teams {
 			i = j + 1;
 
 			// gender
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			if (i !== j) set.gender = buf.substring(i, j);
 			i = j + 1;
 
 			// ivs
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			if (j !== i) {
-				const ivs = buf.substring(i, j).split(',', 6);
+				const ivs = buf.substring(i, j).split(",", 6);
 				set.ivs = {
-					hp: ivs[0] === '' ? 31 : Number(ivs[0]) || 0,
-					atk: ivs[1] === '' ? 31 : Number(ivs[1]) || 0,
-					def: ivs[2] === '' ? 31 : Number(ivs[2]) || 0,
-					spa: ivs[3] === '' ? 31 : Number(ivs[3]) || 0,
-					spd: ivs[4] === '' ? 31 : Number(ivs[4]) || 0,
-					spe: ivs[5] === '' ? 31 : Number(ivs[5]) || 0,
+					hp: ivs[0] === "" ? 31 : Number(ivs[0]) || 0,
+					atk: ivs[1] === "" ? 31 : Number(ivs[1]) || 0,
+					def: ivs[2] === "" ? 31 : Number(ivs[2]) || 0,
+					spa: ivs[3] === "" ? 31 : Number(ivs[3]) || 0,
+					spd: ivs[4] === "" ? 31 : Number(ivs[4]) || 0,
+					spe: ivs[5] === "" ? 31 : Number(ivs[5]) || 0,
 				};
 			}
 			i = j + 1;
 
 			// shiny
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			if (i !== j) set.shiny = true;
 			i = j + 1;
 
 			// level
-			j = buf.indexOf('|', i);
+			j = buf.indexOf("|", i);
 			if (j < 0) return null;
 			if (i !== j) set.level = parseInt(buf.substring(i, j));
 			i = j + 1;
 
 			// happiness
-			j = buf.indexOf(']', i);
+			j = buf.indexOf("]", i);
 			let misc;
 			if (j < 0) {
-				if (i < buf.length) misc = buf.substring(i).split(',', 6);
+				if (i < buf.length) misc = buf.substring(i).split(",", 6);
 			} else {
-				if (i !== j) misc = buf.substring(i, j).split(',', 6);
+				if (i !== j) misc = buf.substring(i, j).split(",", 6);
 			}
 			if (misc) {
-				set.happiness = (misc[0] ? Number(misc[0]) : 255);
-				set.hpType = misc[1] || '';
-				set.pokeball = this.unpackName(misc[2] || '', Dex.items);
+				set.happiness = misc[0] ? Number(misc[0]) : 255;
+				set.hpType = misc[1] || "";
+				set.pokeball = this.unpackName(misc[2] || "", Dex.items);
 				set.gigantamax = !!misc[3];
-				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
+				set.dynamaxLevel = misc[4] ? Number(misc[4]) : 10;
 				set.teraType = misc[5];
 			}
 			if (j < 0) break;
@@ -340,32 +378,36 @@ export const Teams = new class Teams {
 
 	/** Very similar to toID but without the lowercase conversion */
 	packName(name: string | undefined | null) {
-		if (!name) return '';
-		return name.replace(/[^A-Za-z0-9]+/g, '');
+		if (!name) return "";
+		return name.replace(/[^A-Za-z0-9]+/g, "");
 	}
 
 	/** Will not entirely recover a packed name, but will be a pretty readable guess */
-	unpackName(name: string, dexTable?: {get: (name: string) => AnyObject}) {
-		if (!name) return '';
+	unpackName(name: string, dexTable?: { get: (name: string) => AnyObject }) {
+		if (!name) return "";
 		if (dexTable) {
 			const obj = dexTable.get(name);
 			if (obj.exists) return obj.name;
 		}
-		return name.replace(/([0-9]+)/g, ' $1 ').replace(/([A-Z])/g, ' $1').replace(/[ ][ ]/g, ' ').trim();
+		return name
+			.replace(/([0-9]+)/g, " $1 ")
+			.replace(/([A-Z])/g, " $1")
+			.replace(/[ ][ ]/g, " ")
+			.trim();
 	}
 
 	/**
 	 * Exports a team in human-readable PS export format
 	 */
-	export(team: PokemonSet[], options?: {hideStats?: boolean}) {
-		let output = '';
+	export(team: PokemonSet[], options?: { hideStats?: boolean }) {
+		let output = "";
 		for (const set of team) {
 			output += this.exportSet(set, options) + `\n`;
 		}
 		return output;
 	}
 
-	exportSet(set: PokemonSet, {hideStats}: {hideStats?: boolean} = {}) {
+	exportSet(set: PokemonSet, { hideStats }: { hideStats?: boolean } = {}) {
 		let out = ``;
 
 		// core
@@ -374,8 +416,8 @@ export const Teams = new class Teams {
 		} else {
 			out += set.species;
 		}
-		if (set.gender === 'M') out += ` (M)`;
-		if (set.gender === 'F') out += ` (F)`;
+		if (set.gender === "M") out += ` (M)`;
+		if (set.gender === "F") out += ` (F)`;
 		if (set.item) out += ` @ ${set.item}`;
 		out += `  \n`;
 
@@ -390,7 +432,11 @@ export const Teams = new class Teams {
 		if (set.shiny) {
 			out += `Shiny: Yes  \n`;
 		}
-		if (typeof set.happiness === 'number' && set.happiness !== 255 && !isNaN(set.happiness)) {
+		if (
+			typeof set.happiness === "number" &&
+			set.happiness !== 255 &&
+			!isNaN(set.happiness)
+		) {
 			out += `Happiness: ${set.happiness}  \n`;
 		}
 		if (set.pokeball) {
@@ -399,7 +445,11 @@ export const Teams = new class Teams {
 		if (set.hpType) {
 			out += `Hidden Power: ${set.hpType}  \n`;
 		}
-		if (typeof set.dynamaxLevel === 'number' && set.dynamaxLevel !== 10 && !isNaN(set.dynamaxLevel)) {
+		if (
+			typeof set.dynamaxLevel === "number" &&
+			set.dynamaxLevel !== 10 &&
+			!isNaN(set.dynamaxLevel)
+		) {
 			out += `Dynamax Level: ${set.dynamaxLevel}  \n`;
 		}
 		if (set.gigantamax) {
@@ -412,10 +462,14 @@ export const Teams = new class Teams {
 		// stats
 		if (!hideStats) {
 			if (set.evs) {
-				const stats = Dex.stats.ids().map(
-					stat => set.evs[stat] ?
-						`${set.evs[stat]} ${Dex.stats.shortNames[stat]}` : ``
-				).filter(Boolean);
+				const stats = Dex.stats
+					.ids()
+					.map((stat) =>
+						set.evs[stat]
+							? `${set.evs[stat]} ${Dex.stats.shortNames[stat]}`
+							: ``
+					)
+					.filter(Boolean);
 				if (stats.length) {
 					out += `EVs: ${stats.join(" / ")}  \n`;
 				}
@@ -424,10 +478,14 @@ export const Teams = new class Teams {
 				out += `${set.nature} Nature  \n`;
 			}
 			if (set.ivs) {
-				const stats = Dex.stats.ids().map(
-					stat => (set.ivs[stat] !== 31 && set.ivs[stat] !== undefined) ?
-						`${set.ivs[stat] || 0} ${Dex.stats.shortNames[stat]}` : ``
-				).filter(Boolean);
+				const stats = Dex.stats
+					.ids()
+					.map((stat) =>
+						set.ivs[stat] !== 31 && set.ivs[stat] !== undefined
+							? `${set.ivs[stat] || 0} ${Dex.stats.shortNames[stat]}`
+							: ``
+					)
+					.filter(Boolean);
 				if (stats.length) {
 					out += `IVs: ${stats.join(" / ")}  \n`;
 				}
@@ -436,7 +494,7 @@ export const Teams = new class Teams {
 
 		// moves
 		for (let move of set.moves) {
-			if (move.startsWith(`Hidden Power `) && move.charAt(13) !== '[') {
+			if (move.startsWith(`Hidden Power `) && move.charAt(13) !== "[") {
 				move = `Hidden Power [${move.slice(13)}]`;
 			}
 			out += `- ${move}  \n`;
@@ -445,72 +503,77 @@ export const Teams = new class Teams {
 		return out;
 	}
 
-	parseExportedTeamLine(line: string, isFirstLine: boolean, set: PokemonSet, aggressive?: boolean) {
+	parseExportedTeamLine(
+		line: string,
+		isFirstLine: boolean,
+		set: PokemonSet,
+		aggressive?: boolean
+	) {
 		if (isFirstLine) {
 			let item;
-			[line, item] = line.split(' @ ');
+			[line, item] = line.split(" @ ");
 			if (item) {
 				set.item = item;
-				if (toID(set.item) === 'noitem') set.item = '';
+				if (toID(set.item) === "noitem") set.item = "";
 			}
-			if (line.endsWith(' (M)')) {
-				set.gender = 'M';
+			if (line.endsWith(" (M)")) {
+				set.gender = "M";
 				line = line.slice(0, -4);
 			}
-			if (line.endsWith(' (F)')) {
-				set.gender = 'F';
+			if (line.endsWith(" (F)")) {
+				set.gender = "F";
 				line = line.slice(0, -4);
 			}
-			if (line.endsWith(')') && line.includes('(')) {
-				const [name, species] = line.slice(0, -1).split('(');
+			if (line.endsWith(")") && line.includes("(")) {
+				const [name, species] = line.slice(0, -1).split("(");
 				set.species = Dex.species.get(species).name;
 				set.name = name.trim();
 			} else {
 				set.species = Dex.species.get(line).name;
-				set.name = '';
+				set.name = "";
 			}
-		} else if (line.startsWith('Trait: ')) {
+		} else if (line.startsWith("Trait: ")) {
 			line = line.slice(7);
 			set.ability = aggressive ? toID(line) : line;
-		} else if (line.startsWith('Ability: ')) {
+		} else if (line.startsWith("Ability: ")) {
 			line = line.slice(9);
 			set.ability = aggressive ? toID(line) : line;
-		} else if (line === 'Shiny: Yes') {
+		} else if (line === "Shiny: Yes") {
 			set.shiny = true;
-		} else if (line.startsWith('Level: ')) {
+		} else if (line.startsWith("Level: ")) {
 			line = line.slice(7);
 			set.level = +line;
-		} else if (line.startsWith('Happiness: ')) {
+		} else if (line.startsWith("Happiness: ")) {
 			line = line.slice(11);
 			set.happiness = +line;
-		} else if (line.startsWith('Pokeball: ')) {
+		} else if (line.startsWith("Pokeball: ")) {
 			line = line.slice(10);
 			set.pokeball = aggressive ? toID(line) : line;
-		} else if (line.startsWith('Hidden Power: ')) {
+		} else if (line.startsWith("Hidden Power: ")) {
 			line = line.slice(14);
 			set.hpType = aggressive ? toID(line) : line;
-		} else if (line.startsWith('Tera Type: ')) {
+		} else if (line.startsWith("Tera Type: ")) {
 			line = line.slice(11);
-			set.teraType = aggressive ? line.replace(/[^a-zA-Z0-9]/g, '') : line;
-		} else if (line === 'Gigantamax: Yes') {
+			set.teraType = aggressive ? line.replace(/[^a-zA-Z0-9]/g, "") : line;
+		} else if (line === "Gigantamax: Yes") {
 			set.gigantamax = true;
-		} else if (line.startsWith('EVs: ')) {
+		} else if (line.startsWith("EVs: ")) {
 			line = line.slice(5);
-			const evLines = line.split('/');
-			set.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			const evLines = line.split("/");
+			set.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 			for (const evLine of evLines) {
-				const [statValue, statName] = evLine.trim().split(' ');
+				const [statValue, statName] = evLine.trim().split(" ");
 				const statid = Dex.stats.getID(statName);
 				if (!statid) continue;
 				const value = parseInt(statValue);
 				set.evs[statid] = value;
 			}
-		} else if (line.startsWith('IVs: ')) {
+		} else if (line.startsWith("IVs: ")) {
 			line = line.slice(5);
-			const ivLines = line.split('/');
-			set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+			const ivLines = line.split("/");
+			set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 			for (const ivLine of ivLines) {
-				const [statValue, statName] = ivLine.trim().split(' ');
+				const [statValue, statName] = ivLine.trim().split(" ");
 				const statid = Dex.stats.getID(statName);
 				if (!statid) continue;
 				let value = parseInt(statValue);
@@ -518,25 +581,32 @@ export const Teams = new class Teams {
 				set.ivs[statid] = value;
 			}
 		} else if (/^[A-Za-z]+ (N|n)ature/.test(line)) {
-			let natureIndex = line.indexOf(' Nature');
-			if (natureIndex === -1) natureIndex = line.indexOf(' nature');
+			let natureIndex = line.indexOf(" Nature");
+			if (natureIndex === -1) natureIndex = line.indexOf(" nature");
 			if (natureIndex === -1) return;
 			line = line.substr(0, natureIndex);
-			if (line !== 'undefined') set.nature = aggressive ? toID(line) : line;
-		} else if (line.startsWith('-') || line.startsWith('~')) {
-			line = line.slice(line.charAt(1) === ' ' ? 2 : 1);
-			if (line.startsWith('Hidden Power [')) {
+			if (line !== "undefined") set.nature = aggressive ? toID(line) : line;
+		} else if (line.startsWith("-") || line.startsWith("~")) {
+			line = line.slice(line.charAt(1) === " " ? 2 : 1);
+			if (line.startsWith("Hidden Power [")) {
 				const hpType = line.slice(14, -1);
-				line = 'Hidden Power ' + hpType;
+				line = "Hidden Power " + hpType;
 				if (!set.ivs && Dex.types.isName(hpType)) {
-					set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+					set.ivs = {
+						hp: 31,
+						atk: 31,
+						def: 31,
+						spa: 31,
+						spd: 31,
+						spe: 31,
+					};
 					const hpIVs = Dex.types.get(hpType).HPivs || {};
 					for (const statid in hpIVs) {
 						set.ivs[statid as StatID] = hpIVs[statid as StatID]!;
 					}
 				}
 			}
-			if (line === 'Frustration' && set.happiness === undefined) {
+			if (line === "Frustration" && set.happiness === undefined) {
 				set.happiness = 0;
 			}
 			set.moves.push(line);
@@ -545,10 +615,11 @@ export const Teams = new class Teams {
 	/** Accepts a team in any format (JSON, packed, or exported) */
 	import(buffer: string, aggressive?: boolean): PokemonSet[] | null {
 		const sanitize = aggressive ? toID : Dex.getName;
-		if (buffer.startsWith('[')) {
+		if (buffer.startsWith("[")) {
 			try {
 				const team = JSON.parse(buffer);
-				if (!Array.isArray(team)) throw new Error(`Team should be an Array but isn't`);
+				if (!Array.isArray(team))
+					throw new Error(`Team should be an Array but isn't`);
 				for (const set of team) {
 					set.name = sanitize(set.name);
 					set.species = sanitize(set.species);
@@ -556,17 +627,26 @@ export const Teams = new class Teams {
 					set.ability = sanitize(set.ability);
 					set.gender = sanitize(set.gender);
 					set.nature = sanitize(set.nature);
-					const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+					const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 					if (set.evs) {
 						for (const statid in evs) {
-							if (typeof set.evs[statid] === 'number') evs[statid as StatID] = set.evs[statid];
+							if (typeof set.evs[statid] === "number")
+								evs[statid as StatID] = set.evs[statid];
 						}
 					}
 					set.evs = evs;
-					const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+					const ivs = {
+						hp: 31,
+						atk: 31,
+						def: 31,
+						spa: 31,
+						spd: 31,
+						spe: 31,
+					};
 					if (set.ivs) {
 						for (const statid in ivs) {
-							if (typeof set.ivs[statid] === 'number') ivs[statid as StatID] = set.ivs[statid];
+							if (typeof set.ivs[statid] === "number")
+								ivs[statid as StatID] = set.ivs[statid];
 						}
 					}
 					set.ivs = ivs;
@@ -588,21 +668,25 @@ export const Teams = new class Teams {
 		while (lines.length && !lines[0]) lines.shift();
 		while (lines.length && !lines[lines.length - 1]) lines.pop();
 
-		if (lines.length === 1 && lines[0].includes('|')) {
+		if (lines.length === 1 && lines[0].includes("|")) {
 			return this.unpack(lines[0]);
 		}
 		for (let line of lines) {
 			line = line.trim();
-			if (line === '' || line === '---') {
+			if (line === "" || line === "---") {
 				curSet = null;
-			} else if (line.startsWith('===')) {
+			} else if (line.startsWith("===")) {
 				// team backup format; ignore
 			} else if (!curSet) {
 				curSet = {
-					name: '', species: '', item: '', ability: '', gender: '',
-					nature: '',
-					evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
-					ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
+					name: "",
+					species: "",
+					item: "",
+					ability: "",
+					gender: "",
+					nature: "",
+					evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+					ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
 					level: 100,
 					moves: [],
 				};
@@ -617,20 +701,23 @@ export const Teams = new class Teams {
 
 	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
 		let TeamGenerator;
-		if (toID(format).includes('gen9computergeneratedteams')) {
-			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
-		} else if (toID(format).includes('gen7randomdoublesbattle')) {
-			TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-doubles-teams').default;
+		if (toID(format).includes("gen9computergeneratedteams")) {
+			TeamGenerator = mods.base.CgTeams;
+		} else if (toID(format).includes("gen7randomdoublesbattle")) {
+			TeamGenerator = mods.gen7.RandomGen7DoublesTeams;
 		} else {
-			TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-teams').default;
+			TeamGenerator = mods.base.RandomTeams;
 		}
 
 		return new TeamGenerator(format, seed);
 	}
 
-	generate(format: Format | string, options: PlayerOptions | null = null): PokemonSet[] {
+	generate(
+		format: Format | string,
+		options: PlayerOptions | null = null
+	): PokemonSet[] {
 		return this.getGenerator(format, options?.seed).getTeam(options);
 	}
-};
+})();
 
 export default Teams;
