@@ -430,7 +430,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Explosion", "Foul Play", "Taunt", "Thunder Wave", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Electric", "Dark"]
+                "teraTypes": ["Dark", "Electric"]
             },
             {
                 "role": "Tera Blast user",
