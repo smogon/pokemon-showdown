@@ -3990,12 +3990,12 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Close Combat", "Crunch", "Iron Head", "Psychic Fangs", "Stone Edge", "Wild Charge"],
-                "teraTypes": ["Dark", "Fighting"]
+                "teraTypes": ["Dark", "Fighting", "Steel"]
             },
             {
                 "role": "Bulky Setup",
                 "movepool": ["Body Press", "Crunch", "Iron Defense", "Iron Head", "Rest", "Stone Edge"],
-                "teraTypes": ["Fighting"]
+                "teraTypes": ["Fighting", "Steel"]
             }
         ]
     },
@@ -4949,7 +4949,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Drain Punch", "Ice Punch", "Swords Dance", "Thunder Punch", "Wild Charge"],
+                "movepool": ["Drain Punch", "Ice Punch", "Swords Dance", "Thunder Punch", "Wild Charge"],
                 "teraTypes": ["Fighting", "Flying", "Steel"]
             }
         ]

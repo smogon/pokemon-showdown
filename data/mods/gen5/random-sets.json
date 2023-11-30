@@ -2187,7 +2187,7 @@
                 "movepool": ["curse", "drainpunch", "rest", "stoneedge"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["drainpunch", "earthquake", "stealthrock", "stoneedge", "thunderwave", "toxic"]
             },
             {
