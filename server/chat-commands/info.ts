@@ -12,7 +12,6 @@ import * as net from 'net';
 import {YouTube, Twitch} from '../chat-plugins/youtube';
 import {Net, Utils} from '../../lib';
 import {RoomSections} from './room-settings';
-import { types } from 'pg';
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
@@ -904,9 +903,9 @@ export const commands: Chat.ChatCommands = {
 			target = types.join("/");
 		} else {
 			const searchResults = dex.dataSearch(targets[0], ['Pokedex']);
-			
+
 			if (searchResults && searchResults[0]) {
-				this.sendReply(`No Pok\u00e9mon named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`)
+				this.sendReply(`No Pok\u00e9mon named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`);
 				species = dex.species.get(searchResults[0].name);
 			} else {
 				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
