@@ -1123,6 +1123,72 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Shared Power",
+		desc: `Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3711011/">Shared Power</a>`,
+		],
+
+		mod: 'sharedpower',
+		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
+		banlist: [
+			'Arceus', 'Calyrex-Shadow', 'Chien-Pao', 'Clefable', 'Flutter Mane', 'Greninja', 'Kingambit', 'Koraidon', 'Magearna',
+			'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Shaymin-Sky', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Chlorophyll',
+			'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Shadow Tag', 'Speed Boost', 'Stench', 'Swift Swim', 'Unburden',
+			'King\'s Rock', 'Leppa Berry', 'Razor Fang', 'Starf Berry', 'Baton Pass', 'Extreme Speed', 'Last Respects',
+		],
+		unbanlist: ['Arceus-Bug', 'Arceus-Dragon', 'Arceus-Fire', 'Arceus-Ice', 'Arceus-Psychic'],
+		restricted: [
+			'Armor Tail', 'Comatose', 'Contrary', 'Dazzling', 'Fur Coat', 'Gale Wings', 'Good as Gold', 'Huge Power', 'Illusion', 'Imposter',
+			'Magic Bounce', 'Magic Guard', 'Mold Breaker', 'Multiscale', 'Poison Heal', 'Prankster', 'Protosynthesis', 'Pure Power', 'Purifying Salt',
+			'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Sand Rush', 'Simple', 'Slush Rush', 'Stakeout', 'Stamina', 'Sturdy', 'Surge Surfer',
+			'Tinted Lens', 'Unaware',
+		],
+		onValidateRule() {
+			if (this.format.gameType !== 'singles') {
+				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
+			}
+		},
+		getSharedPower(pokemon) {
+			const sharedPower = new Set<string>();
+			for (const ally of pokemon.side.pokemon) {
+				if (pokemon.battle.ruleTable.isRestricted(`ability:${ally.baseAbility}`)) continue;
+				if (ally.previouslySwitchedIn > 0) {
+					if (pokemon.battle.dex.currentMod !== 'sharedpower' && ['trace', 'mirrorarmor'].includes(ally.baseAbility)) {
+						sharedPower.add('noability');
+						continue;
+					}
+					sharedPower.add(ally.baseAbility);
+				}
+			}
+			sharedPower.delete(pokemon.baseAbility);
+			return sharedPower;
+		},
+		onBeforeSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
+				const effect = 'ability:' + ability;
+				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
+				if (!pokemon.m.abils) pokemon.m.abils = [];
+				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
+			let format = this.format;
+			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
+			for (const ability of format.getSharedPower!(pokemon)) {
+				if (ability === 'noability') {
+					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
+				}
+				const effect = 'ability:' + ability;
+				delete pokemon.volatiles[effect];
+				pokemon.addVolatile(effect);
+			}
+		},
+	},
+	{
 		name: "[Gen 9] STABmons",
 		desc: `Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.`,
 		threads: [
@@ -1672,73 +1738,6 @@ export const Formats: FormatList = [
 			'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects',
 		],
 		restricted: ['U-turn', 'Volt Switch'],
-	},
-	{
-		name: "[Gen 9] Shared Power",
-		desc: `Once a Pok&eacute;mon switches in, its ability is shared with the rest of the team.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3711011/">Shared Power</a>`,
-		],
-
-		mod: 'sharedpower',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
-		banlist: [
-			'Arceus', 'Calyrex-Shadow', 'Chien-Pao', 'Clefable', 'Flutter Mane', 'Greninja', 'Kingambit', 'Koraidon', 'Magearna',
-			'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Shaymin-Sky', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Chlorophyll',
-			'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Shadow Tag', 'Speed Boost', 'Stench', 'Swift Swim', 'Unburden',
-			'King\'s Rock', 'Leppa Berry', 'Razor Fang', 'Starf Berry', 'Baton Pass', 'Extreme Speed', 'Last Respects',
-		],
-		unbanlist: ['Arceus-Bug', 'Arceus-Dragon', 'Arceus-Fire', 'Arceus-Ice', 'Arceus-Psychic'],
-		restricted: [
-			'Armor Tail', 'Comatose', 'Contrary', 'Dazzling', 'Fur Coat', 'Gale Wings', 'Good as Gold', 'Huge Power', 'Illusion', 'Imposter',
-			'Magic Bounce', 'Magic Guard', 'Mold Breaker', 'Multiscale', 'Poison Heal', 'Prankster', 'Protosynthesis', 'Pure Power', 'Purifying Salt',
-			'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Sand Rush', 'Simple', 'Slush Rush', 'Stakeout', 'Stamina', 'Sturdy', 'Surge Surfer',
-			'Tinted Lens', 'Unaware',
-		],
-		onValidateRule() {
-			if (this.format.gameType !== 'singles') {
-				throw new Error(`Shared Power currently does not support ${this.format.gameType} battles.`);
-			}
-		},
-		getSharedPower(pokemon) {
-			const sharedPower = new Set<string>();
-			for (const ally of pokemon.side.pokemon) {
-				if (pokemon.battle.ruleTable.isRestricted(`ability:${ally.baseAbility}`)) continue;
-				if (ally.previouslySwitchedIn > 0) {
-					if (pokemon.battle.dex.currentMod !== 'sharedpower' && ['trace', 'mirrorarmor'].includes(ally.baseAbility)) {
-						sharedPower.add('noability');
-						continue;
-					}
-					sharedPower.add(ally.baseAbility);
-				}
-			}
-			sharedPower.delete(pokemon.baseAbility);
-			return sharedPower;
-		},
-		onBeforeSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
-			for (const ability of format.getSharedPower!(pokemon)) {
-				const effect = 'ability:' + ability;
-				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
-				if (!pokemon.m.abils) pokemon.m.abils = [];
-				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
-			}
-		},
-		onSwitchInPriority: 2,
-		onSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
-			for (const ability of format.getSharedPower!(pokemon)) {
-				if (ability === 'noability') {
-					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
-				}
-				const effect = 'ability:' + ability;
-				delete pokemon.volatiles[effect];
-				pokemon.addVolatile(effect);
-			}
-		},
 	},
 	{
 		name: "[Gen 9] Sharing is Caring",
