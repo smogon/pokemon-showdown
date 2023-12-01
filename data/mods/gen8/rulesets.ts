@@ -43,6 +43,8 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				nu: 30,
 				publ: 30,
 				pu: 40,
+				zubl: 40,
+				zu: 40,
 				nfe: 40,
 				lc: 40,
 			};
