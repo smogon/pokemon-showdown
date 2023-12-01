@@ -699,12 +699,12 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Items Clause', 'Sketchmons Move Legality', 'Min Source Gen = 9'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Dialga-Base', 'Dragapult',
-			'Enamorus-Base', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina-Base', 'Groudon', 'Gliscor', 'Greninja', 'Iron Bundle', 'Komala', 'Koraidon',
-			'Kyogre', 'Landorus-Base', 'Magearna', 'Meowscarada', 'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia-Base', 'Rayquaza', 'Regieleki',
-			'Roaring Moon', 'Scovillain', 'Shaymin-Sky', 'Sneasler', 'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike', 'Volcarona',
-			'Zacian-Base', 'Zamazenta-Base', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Stench', 'Booster Energy', 'King\'s Rock', 'Baton Pass',
-			'Last Respects', 'Shed Tail',
+			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Dialga', 'Dialga-Origin',
+			'Dragapult', 'Enamorus-Base', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Gliscor', 'Greninja', 'Iron Bundle',
+			'Komala', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Meowscarada', 'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia',
+			'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Roaring Moon', 'Scovillain', 'Shaymin-Sky', 'Sneasler', 'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu',
+			'Urshifu-Rapid-Strike', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag',
+			'Stench', 'Booster Energy', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		restricted: [
 			'Astral Barrage', 'Belly Drum', 'Ceaseless Edge', 'Clangorous Soul', 'Dire Claw', 'Extreme Speed', 'Gigaton Hammer', 'Glacial Lance', 'Fillet Away',
