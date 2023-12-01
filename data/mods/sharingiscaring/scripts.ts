@@ -133,7 +133,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 				for (const ally of this.side.pokemon) {
 					if (!ally.m.sharedItemsUsed) continue;
-					ally.m.sharedItemsUsed= ally.m.sharedItemsUsed.filter((i: ID) => i !== item.id);
+					ally.m.sharedItemsUsed = ally.m.sharedItemsUsed.filter((i: ID) => i !== item.id);
 				}
 			}
 			return true;
