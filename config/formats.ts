@@ -1750,9 +1750,9 @@ export const Formats: FormatList = [
 		onBeforeSwitchIn(pokemon) {
 			let format = this.format;
 			if (!format.getSharedItems) format = this.dex.formats.get('gen9sharingiscaring');
-			if (!pokemon.m.SharedItemsUsed) pokemon.m.SharedItemsUsed = [];
+			if (!pokemon.m.sharedItemsUsed) pokemon.m.sharedItemsUsed = [];
 			for (const item of format.getSharedItems!(pokemon)) {
-				if (pokemon.m.SharedItemsUsed.includes(item)) continue;
+				if (pokemon.m.sharedItemsUsed.includes(item)) continue;
 				const effect = 'item:' + item;
 				pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
 				if (!pokemon.m.items) pokemon.m.items = [];
@@ -1764,7 +1764,7 @@ export const Formats: FormatList = [
 			let format = this.format;
 			if (!format.getSharedItems) format = this.dex.formats.get('gen9sharingiscaring');
 			for (const item of format.getSharedItems!(pokemon)) {
-				if (pokemon.m.SharedItemsUsed.includes(item)) continue;
+				if (pokemon.m.sharedItemsUsed.includes(item)) continue;
 				const effect = 'item:' + item;
 				delete pokemon.volatiles[effect];
 				pokemon.addVolatile(effect);

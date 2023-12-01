@@ -1,4 +1,5 @@
 import {RESTORATIVE_BERRIES} from '../../../sim/pokemon';
+
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
@@ -53,7 +54,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				if (item.id.startsWith('item:')) {
 					delete this.volatiles[item.id];
-					this.m.SharedItemsUsed.push(item.id.slice(5));
+					this.m.sharedItemsUsed.push(item.id.slice(5));
 				} else {
 					this.lastItem = this.item;
 					this.item = '';
@@ -97,7 +98,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				if (item.id.startsWith('item:')) {
 					delete this.volatiles[item.id];
-					this.m.SharedItemsUsed.push(item.id.slice(5));
+					this.m.sharedItemsUsed.push(item.id.slice(5));
 				} else {
 					this.lastItem = this.item;
 					this.item = '';
@@ -131,9 +132,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (item.id) {
 				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 				for (const ally of this.side.pokemon) {
-					if (!ally.m.SharedItemsUsed) continue;
-					// @ts-ignore
-					ally.m.SharedItemsUsed = ally.m.SharedItemsUsed.filter(i => i !== item.id);
+					if (!ally.m.sharedItemsUsed) continue;
+					ally.m.sharedItemsUsed= ally.m.sharedItemsUsed.filter((i: ID) => i !== item.id);
 				}
 			}
 			return true;
