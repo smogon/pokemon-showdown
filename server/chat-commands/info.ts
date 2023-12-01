@@ -12,6 +12,7 @@ import * as net from 'net';
 import {YouTube, Twitch} from '../chat-plugins/youtube';
 import {Net, Utils} from '../../lib';
 import {RoomSections} from './room-settings';
+import { types } from 'pg';
 
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
@@ -889,23 +890,27 @@ export const commands: Chat.ChatCommands = {
 
 		if (species.exists) {
 			target = species.name;
-		} else {
+		} else if (type1.exists) {
 			const types = [];
-			if (type1.exists) {
-				types.push(type1.name);
-				if (type2.exists && type2 !== type1) {
-					types.push(type2.name);
-				}
-				if (type3.exists && type3 !== type1 && type3 !== type2) {
-					types.push(type3.name);
-				}
+			types.push(type1.name);
+			if (type2.exists && type2 !== type1) {
+				types.push(type2.name);
+			}
+			if (type3.exists && type3 !== type1 && type3 !== type2) {
+				types.push(type3.name);
 			}
 
-			if (types.length === 0) {
-				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
-			}
 			species = {types: types};
 			target = types.join("/");
+		} else {
+			const searchResults = dex.dataSearch(targets[0], ['Pokedex']);
+			
+			if (searchResults && searchResults[0]) {
+				this.sendReply(`No Pok\u00e9mon named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`)
+				species = dex.species.get(searchResults[0].name);
+			} else {
+				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+			}
 		}
 
 		const weaknesses = [];
