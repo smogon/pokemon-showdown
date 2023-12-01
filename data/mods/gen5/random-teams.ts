@@ -775,8 +775,13 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			) ? 'Life Orb' : 'Leftovers';
 		}
 		// noStab moves that should reject Expert Belt
-		const noExpertBeltMoves = this.noStab.filter(moveid => ['Dragon', 'Normal'].includes(this.dex.moves.get(moveid).type));
-		const expertBeltReqs = !counter.get('Dragon') && !counter.get('Normal') && noExpertBeltMoves.every(m => !moves.has(m));
+		const noExpertBeltMoves = (
+			this.noStab.filter(moveid => ['Dragon', 'Normal', 'Poison'].includes(this.dex.moves.get(moveid).type))
+		);
+		const expertBeltReqs = (
+			!counter.get('Dragon') && !counter.get('Normal') && !counter.get('Poison') &&
+			noExpertBeltMoves.every(m => !moves.has(m))
+		);
 		if (
 			!counter.get('Status') && expertBeltReqs &&
 			(moves.has('uturn') || moves.has('voltswitch') || role === 'Fast Attacker')
