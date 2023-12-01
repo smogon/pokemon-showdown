@@ -13,7 +13,7 @@
         "essentialMoves": ["bodyslam", "razorleaf"]
     },
     "charmander": {
-        "level": 93,
+        "level": 94,
         "moves": ["counter", "seismictoss", "seismictoss", "slash", "slash"],
         "essentialMoves": ["bodyslam", "fireblast"],
         "comboMoves": ["bodyslam", "fireblast", "submission", "swordsdance"]
@@ -58,14 +58,14 @@
         "exclusiveMoves": ["agility", "agility", "megadrain"]
     },
     "pidgey": {
-        "level": 96,
+        "level": 97,
         "moves": ["mimic", "mirrormove", "sandattack", "substitute"],
         "essentialMoves": ["agility", "doubleedge"],
         "exclusiveMoves": ["quickattack", "skyattack"],
         "comboMoves": ["agility", "doubleedge", "quickattack", "skyattack"]
     },
     "pidgeotto": {
-        "level": 87,
+        "level": 88,
         "moves": ["mimic", "mirrormove", "sandattack", "substitute"],
         "essentialMoves": ["agility", "doubleedge"],
         "exclusiveMoves": ["quickattack", "skyattack"],
@@ -77,7 +77,7 @@
         "exclusiveMoves": ["mimic", "mirrormove", "reflect", "sandattack", "skyattack", "skyattack", "substitute", "quickattack", "quickattack", "quickattack"]
     },
     "rattata": {
-        "level": 90,
+        "level": 91,
         "moves": ["blizzard", "bodyslam", "superfang"],
         "exclusiveMoves": ["doubleedge", "thunderbolt", "thunderbolt", "thunderbolt", "quickattack", "quickattack"]
     },
@@ -128,7 +128,7 @@
         "exclusiveMoves": ["doubleedge", "doublekick"]
     },
     "nidorina": {
-        "level": 86,
+        "level": 87,
         "moves": ["blizzard", "bodyslam", "thunderbolt"],
         "exclusiveMoves": ["bubblebeam", "doubleedge", "doublekick"]
     },
@@ -176,7 +176,7 @@
         "exclusiveMoves": ["flamethrower", "hyperbeam", "reflect", "substitute", "substitute"]
     },
     "jigglypuff": {
-        "level": 90,
+        "level": 91,
         "moves": ["blizzard", "bodyslam", "seismictoss"],
         "essentialMoves": ["thunderwave"],
         "exclusiveMoves": ["counter", "sing", "thunderwave"]
@@ -201,12 +201,12 @@
         "exclusiveMoves": ["stunspore", "stunspore", "swordsdance"]
     },
     "gloom": {
-        "level": 81,
+        "level": 82,
         "moves": ["doubleedge", "megadrain", "sleeppowder"],
         "exclusiveMoves": ["stunspore", "stunspore", "swordsdance"]
     },
     "vileplume": {
-        "level": 77,
+        "level": 76,
         "moves": ["bodyslam", "megadrain", "sleeppowder"],
         "exclusiveMoves": ["stunspore", "stunspore", "swordsdance"]
     },
@@ -329,7 +329,7 @@
         "exclusiveMoves": ["counter", "hyperbeam", "hyperbeam", "rockslide", "rockslide"]
     },
     "bellsprout": {
-        "level": 89,
+        "level": 90,
         "moves": ["doubleedge", "razorleaf", "sleeppowder"],
         "exclusiveMoves": ["stunspore", "stunspore", "swordsdance"]
     },
@@ -375,7 +375,7 @@
         "moves": ["agility", "bodyslam", "fireblast", "hyperbeam"]
     },
     "slowpoke": {
-        "level": 87,
+        "level": 86,
         "moves": ["blizzard", "psychic", "rest"],
         "essentialMoves": ["surf", "thunderwave"],
         "exclusiveMoves": ["amnesia", "earthquake", "earthquake"],
@@ -419,7 +419,7 @@
         "exclusiveMoves": ["hyperbeam", "rest", "rest", "rest"]
     },
     "grimer": {
-        "level": 92,
+        "level": 93,
         "moves": ["fireblast", "fireblast", "megadrain", "sludge", "sludge", "sludge", "thunderbolt"],
         "essentialMoves": ["bodyslam", "explosion"]
     },
@@ -438,17 +438,17 @@
         "exclusiveMoves": ["doubleedge", "hyperbeam", "hyperbeam"]
     },
     "gastly": {
-        "level": 77,
+        "level": 76,
         "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
         "essentialMoves": ["thunderbolt", "hypnosis"]
     },
     "haunter": {
-        "level": 70,
+        "level": 69,
         "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
         "essentialMoves": ["thunderbolt", "hypnosis"]
     },
     "gengar": {
-        "level": 64,
+        "level": 63,
         "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
         "essentialMoves": ["thunderbolt", "hypnosis"]
     },
@@ -503,7 +503,7 @@
         "moves": ["blizzard", "bodyslam", "earthquake", "seismictoss"]
     },
     "hitmonlee": {
-        "level": 81,
+        "level": 82,
         "moves": ["bodyslam", "highjumpkick", "seismictoss"],
         "exclusiveMoves": ["counter", "counter", "meditate", "megakick", "rollingkick"]
     },
@@ -522,7 +522,7 @@
         "moves": ["explosion", "fireblast", "sludge", "thunderbolt"]
     },
     "weezing": {
-        "level": 77,
+        "level": 78,
         "moves": ["explosion", "fireblast", "sludge", "thunderbolt"]
     },
     "rhyhorn": {
@@ -559,7 +559,7 @@
         "exclusiveMoves": ["doubleedge", "hydropump", "hyperbeam", "smokescreen"]
     },
     "goldeen": {
-        "level": 90,
+        "level": 91,
         "moves": ["agility", "blizzard", "doubleedge", "surf"]
     },
     "seaking": {
@@ -568,7 +568,7 @@
         "essentialMoves": ["blizzard", "surf"]
     },
     "staryu": {
-        "level": 82,
+        "level": 81,
         "moves": ["blizzard", "thunderbolt", "thunderwave"],
         "essentialMoves": ["recover"],
         "exclusiveMoves": ["hydropump", "surf", "surf"]
@@ -639,7 +639,7 @@
         "exclusiveMoves": ["acidarmor", "bodyslam", "bodyslam", "bodyslam", "hydropump", "mimic"]
     },
     "jolteon": {
-        "level": 69,
+        "level": 70,
         "moves": ["bodyslam", "thunderbolt", "thunderwave"],
         "exclusiveMoves": ["agility", "agility", "doublekick", "pinmissile", "pinmissile"]
     },
@@ -711,7 +711,7 @@
         "essentialMoves": ["blizzard", "thunderwave"]
     },
     "dragonite": {
-        "level": 73,
+        "level": 72,
         "moves": ["bodyslam", "hyperbeam", "thunderbolt", "thunderwave", "thunderwave"],
         "essentialMoves": ["blizzard"]
     },

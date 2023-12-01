@@ -651,6 +651,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (['dusknoir', 'vespiquen', 'wailord'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
+		if (species.id === 'pangoro' && !counter.get('ironfist')) return 'Scrappy';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'zangoose') return 'Toxic Boost';
