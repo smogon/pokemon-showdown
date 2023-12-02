@@ -535,7 +535,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	ended: boolean;
 	active: boolean;
 	needsRejoin: Set<ID> | null;
-	replaySaved: boolean;
+	replaySaved: boolean | 'auto';
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	p1: RoomBattlePlayer;
 	p2: RoomBattlePlayer;
@@ -920,7 +920,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		if (this.replaySaved || Config.autosavereplays) {
 			const uploader = Users.get(winnerid || p1id);
 			if (uploader?.connections[0]) {
-				Chat.parse('/savereplay silent', this.room, uploader, uploader.connections[0]);
+				const command = Config.autosavereplays === 'private' ? '/savereplay auto' : '/savereplay silent';
+				Chat.parse(command, this.room, uploader, uploader.connections[0]);
 			}
 		}
 		const parentGame = this.room.parent && this.room.parent.game;
@@ -1576,6 +1577,7 @@ export class BestOfGame extends RoomGames.RoomGame {
 			player.sendRoom(prompt);
 			player.sendRoom(button);
 			// send it to the main room as well, in case they x out of the old one
+			if (!this.playerTable[userid]) throw new Error(`Player ${userid} in ${this.roomid} doesn't exist`);
 			this.playerTable[userid].sendRoom(prompt);
 			this.playerTable[userid].sendRoom(button);
 		}
