@@ -489,6 +489,30 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	forcemonocolor: {
+		effectType: 'ValidatorRule',
+		name: 'Force Monocolor',
+		desc: `Forces all teams to have Pokémon of the same color. Usage: Force Monocolor = [Color], e.g. "Force Monocolor = Blue"`,
+		hasValue: true,
+		onValidateRule(value) {
+			const color = value.toLowerCase();
+			const validColors = ['red', 'blue', 'green', 'yellow', 'pink', 'brown', 'purple', 'gray', 'white', 'black'];
+			if (this.dex.gen <= 4) {
+				throw new Error(`The "Force Monocolor" rule is not supported in Generation ${this.dex.gen}.`);
+			}
+			if (!validColors.includes(color)) {
+				throw new Error(`Invalid color "${value}"`);
+			}
+		},
+		onValidateSet(set) {
+			const ruleColor = this.ruleTable.valueRules.get('forcemonocolor')!.toLowerCase();
+			const species = this.dex.species.get(set.species);
+			const color = species.color.toLowerCase();
+			if (color !== ruleColor) {
+				return [`${set.species} must have the ${ruleColor} color.`];
+			}
+		},
+	},
 	forceselect: {
 		effectType: 'ValidatorRule',
 		name: 'Force Select',
