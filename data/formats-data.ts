@@ -1371,7 +1371,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
-		natDexDoublesTier: "DOU",
+		natDexDoublesTier: "DUU",
 	},
 	mewtwo: {
 		tier: "Uber",
@@ -1779,7 +1779,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
-		natDexDoublesTier: "DUU",
+		natDexDoublesTier: "DOU",
 	},
 	ursalunabloodmoon: {
 		tier: "Uber",
@@ -2132,7 +2132,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "UU",
 		doublesTier: "DUU",
 		natDexTier: "OU",
-		natDexDoublesTier: "DOU",
+		natDexDoublesTier: "DUU",
 	},
 	ralts: {
 		tier: "LC",
@@ -2425,7 +2425,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
-		natDexDoublesTier: "DOU",
+		natDexDoublesTier: "DUU",
 	},
 	torkoal: {
 		tier: "RU",
@@ -4238,7 +4238,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "Uber",
-		natDexDoublesTier: "DUU",
+		natDexDoublesTier: "DOU",
 	},
 	kyuremwhite: {
 		isNonstandard: "Past",
@@ -4695,7 +4695,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "DOU",
 		natDexTier: "RU",
-		natDexDoublesTier: "DUU",
+		natDexDoublesTier: "DOU",
 	},
 	dianciemega: {
 		isNonstandard: "Past",
@@ -5697,7 +5697,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DUU",
 		natDexTier: "OU",
-		natDexDoublesTier: "DOU",
+		natDexDoublesTier: "DUU",
 	},
 	hatterenegmax: {
 		isNonstandard: "Past",
@@ -6243,7 +6243,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
-		natDexDoublesTier: "DUU",
+		natDexDoublesTier: "DOU",
 	},
 	shroodle: {
 		tier: "LC",
@@ -6279,7 +6279,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "RU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
-		natDexDoublesTier: "DOU",
+		natDexDoublesTier: "DUU",
 	},
 	gimmighoul: {
 		tier: "LC",
@@ -6291,7 +6291,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "Uber",
-		natDexDoublesTier: "DOU",
+		natDexDoublesTier: "DUU",
 	},
 	greattusk: {
 		tier: "OU",
@@ -6517,7 +6517,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "OU",
 		doublesTier: "DOU",
 		natDexTier: "OU",
-		natDexDoublesTier: "DOU",
+		natDexDoublesTier: "DUU",
 	},
 	ogerponhearthflame: {
 		tier: "Uber",
