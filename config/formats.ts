@@ -1764,7 +1764,7 @@ export const Formats: FormatList = [
 		getSharedItems(pokemon) {
 			const items = new Set<string>();
 			for (const ally of pokemon.side.pokemon) {
-				if (!ally.item) continue;
+				if (!ally.item || ally.fainted) continue;
 				items.add(ally.item);
 			}
 			items.delete(pokemon.item);
