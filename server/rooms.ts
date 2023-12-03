@@ -2069,14 +2069,18 @@ export class GameRoom extends BasicRoom {
 		const data = this.getLog(hideDetails ? 0 : -1);
 		let rating = 0;
 		if (battle.ended && this.rated) rating = this.rated;
-		const {id, password} = this.getReplayData();
+		let {id, password} = this.getReplayData();
 		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
-		const hidden = options === 'forpunishment' || (this as any).unlistReplay ? 2 :
-			this.settings.isPrivate || this.hideReplay ? 1 :
-			options === 'auto' ? 2 :
+		const isPrivate = this.settings.isPrivate || this.hideReplay;
+		const hidden = options === 'forpunishment' || options === 'auto' ? 10 :
+			(this as any).unlistReplay ? 2 :
+			isPrivate ? 1 :
 			0;
 
-		if (battle.replaySaved !== true && options === 'auto') {
+		if (isPrivate && hidden === 10) {
+			password = Replays.generatePassword();
+		}
+		if (battle.replaySaved !== true && hidden === 10) {
 			battle.replaySaved = 'auto';
 		} else {
 			battle.replaySaved = true;
@@ -2142,7 +2146,7 @@ export class GameRoom extends BasicRoom {
 		connection.send('|queryresponse|savereplay|' + JSON.stringify({
 			log: data,
 			id: id,
-			password: password,
+			password,
 			silent,
 		}));
 	}
