@@ -119,13 +119,14 @@ export const commands: Chat.ChatCommands = {
 
 			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
 			announcement.source = source;
+			announcement.save();
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT EDIT');
 			this.privateModAction(room.tr`The announcement was edited by ${user.name}.`);
 			this.parse('/announcement display');
 		},
-		edithelp: [`/announcement edit [announcement] - Edits the current announcement. Requires: % @ # &`],
+		edithelp: [`/announcement edit [announcement] - Edits the announcement. Requires: % @ # &`],
 
 		timer(target, room, user) {
 			room = this.requireRoom();
@@ -193,8 +194,8 @@ export const commands: Chat.ChatCommands = {
 		`Accepts the following commands:`,
 		`/announcement create [announcement] - Creates a announcement. Requires: % @ # &`,
 		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # &`,
-		`/announcement edit [announcement] - Edits the current announcement. Requires: % @ # &`,
-		`/announcement htmledit [announcement] - Edits the current announcement, with HTML allowed. Requires: # &`,
+		`/announcement edit [announcement] - Edits the announcement. Requires: % @ # &`,
+		`/announcement htmledit [announcement] - Edits the announcement, with HTML allowed. Requires: # &`,
 		`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes]. Requires: % @ # &`,
 		`/announcement display - Displays the announcement`,
 		`/announcement end - Ends a announcement. Requires: % @ # &`,
