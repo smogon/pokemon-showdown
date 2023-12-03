@@ -422,7 +422,7 @@ export const Formats: FormatList = [
 			'Kingambit', 'Koraidon', 'Kyogre', 'Landorus-Therian', 'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Regieleki', 'Ribombee',
 			'Skeledirge', 'Ting-Lu', 'Toxapex', 'Zacian-Crowned',
 			// Ubers UUBL
-			'Arceus-Electric', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Water', 'Basculegion', 'Shaymin-Sky', 'Last Respects',
+			'Arceus-Electric', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Water', 'Shaymin-Sky', 'Last Respects',
 		],
 	},
 	{
