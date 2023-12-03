@@ -417,12 +417,12 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['[Gen 9] Ubers'],
 		banlist: [
-			'Annihilape', 'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Basculegion', 'Calyrex-Ice', 'Chien-Pao', 'Clodsire', 'Ditto', 'Eternatus',
+			'Annihilape', 'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Basculegion-Base', 'Calyrex-Ice', 'Chien-Pao', 'Clodsire', 'Ditto', 'Eternatus',
 			'Flutter Mane', 'Glimmora', 'Gliscor', 'Giratina-Origin', 'Great Tusk', 'Grimmsnarl', 'Groudon', 'Hatterene', 'Iron Bundle', 'Iron Treads',
 			'Kingambit', 'Koraidon', 'Kyogre', 'Landorus-Therian', 'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Regieleki', 'Ribombee',
 			'Skeledirge', 'Ting-Lu', 'Toxapex', 'Zacian-Crowned',
 			// Ubers UUBL
-			'Arceus-Electric', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Water', 'Basculegion-F', 'Shaymin-Sky',
+			'Arceus-Electric', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Water', 'Basculegion', 'Shaymin-Sky', 'Last Respects',
 		],
 	},
 	{
