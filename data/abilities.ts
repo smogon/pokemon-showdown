@@ -3305,7 +3305,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		condition: {
 			noCopy: true,
 			onStart(pokemon, source, effect) {
-				if (effect?.id === 'boosterenergy') {
+				if (effect?.name === 'Booster Energy') {
 					this.effectState.fromBooster = true;
 					this.add('-activate', pokemon, 'ability: Protosynthesis', '[fromitem]');
 				} else {
@@ -3439,7 +3439,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		condition: {
 			noCopy: true,
 			onStart(pokemon, source, effect) {
-				if (effect?.id === 'boosterenergy') {
+				if (effect?.name === 'Booster Energy') {
 					this.effectState.fromBooster = true;
 					this.add('-activate', pokemon, 'ability: Quark Drive', '[fromitem]');
 				} else {
