@@ -485,12 +485,12 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Monothreat Steel",
-		desc: `Monotype where every Pok&eacute;mon is required to be part Steel.`,
+		name: "[Gen 9] Monothreat Electric",
+		desc: `Monotype where every Pok&eacute;mon is required to be part Electric.`,
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Steel'],
+		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Electric'],
 	},
 	{
 		name: "[Gen 9] Monotype CAP",
