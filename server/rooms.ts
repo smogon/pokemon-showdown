@@ -42,7 +42,6 @@ import {Roomlogs} from './roomlogs';
 import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
 import {PartialModlogEntry, mainModlog} from './modlog';
-import {Replays} from './replays';
 
 /*********************************************************
  * the Room object.
@@ -2038,7 +2037,7 @@ export class GameRoom extends BasicRoom {
 	 * That's why this function requires a connection. For details, see the top
 	 * comment inside this function.
 	 */
-	async uploadReplay(user?: User, connection?: Connection, options?: 'forpunishment' | 'silent' | 'auto') {
+	async uploadReplay(user: User, connection: Connection, options?: 'forpunishment' | 'silent') {
 		// The reason we don't upload directly to the loginserver, unlike every
 		// other interaction with the loginserver, is because it takes so much
 		// bandwidth that it can get identified as a DoS attack by PHP, Apache, or
@@ -2067,65 +2066,16 @@ export class GameRoom extends BasicRoom {
 		if (format.team && battle.ended) hideDetails = false;
 
 		const data = this.getLog(hideDetails ? 0 : -1);
+		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let rating = 0;
 		if (battle.ended && this.rated) rating = this.rated;
-		let {id, password} = this.getReplayData();
-		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
-		const isPrivate = this.settings.isPrivate || this.hideReplay;
-		const hidden = options === 'forpunishment' || options === 'auto' ? 10 :
-			(this as any).unlistReplay ? 2 :
-			isPrivate ? 1 :
-			0;
-
-		if (isPrivate && hidden === 10) {
-			password = Replays.generatePassword();
-		}
-		if (battle.replaySaved !== true && hidden === 10) {
-			battle.replaySaved = 'auto';
-		} else {
-			battle.replaySaved = true;
-		}
-
-		// If we have a direct connetion to a Replays database, just upload the replay
-		// directly.
-
-		if (Replays.db) {
-			const idWithServer = Config.serverid === 'showdown' ? id : `${Config.serverid}-${id}`;
-			try {
-				const fullid = await Replays.add({
-					id: idWithServer,
-					log: data,
-					players: [battle.p1.name, battle.p2.name],
-					format: format.name,
-					rating: rating || null,
-					private: hidden,
-					password,
-					inputlog: battle.inputLog?.join('\n') || null,
-					uploadtime: Math.trunc(Date.now() / 1000),
-				});
-				if (!silent) {
-					const url = `https://${Config.routes.replays}/${fullid}`;
-					connection?.popup(
-						`|html|<p>Your replay has been uploaded! It's available at:</p><p> <a class="no-panel-intercept" href="${url}" target="_blank">${url}</a>`
-					);
-				}
-			} catch (e) {
-				if (!silent) {
-					connection?.popup(`Your replay could not be saved: ${e}`);
-				}
-				throw e;
-			}
-			return;
-		}
-
-		// requires connection
-		if (!connection) return;
+		const {id, password} = this.getReplayData();
 
 		// STEP 1: Directly tell the login server that a replay is coming
 		// (also include all the data, including a hash of the replay itself,
 		// so it can't be spoofed.)
 
-		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
+		battle.replaySaved = true;
 		const [success] = await LoginServer.request('prepreplay', {
 			id: id,
 			loghash: datahash,
@@ -2133,7 +2083,8 @@ export class GameRoom extends BasicRoom {
 			p2: battle.p2.name,
 			format: format.id,
 			rating,
-			hidden,
+			hidden: options === 'forpunishment' || (this as any).unlistReplay ?
+				'2' : this.settings.isPrivate || this.hideReplay ? '1' : '',
 			inputlog: battle.inputLog?.join('\n') || null,
 		});
 		if (success?.errorip) {
@@ -2146,8 +2097,8 @@ export class GameRoom extends BasicRoom {
 		connection.send('|queryresponse|savereplay|' + JSON.stringify({
 			log: data,
 			id: id,
-			password,
-			silent,
+			password: password,
+			silent: options === 'forpunishment' || options === 'silent',
 		}));
 	}
 
@@ -2312,6 +2263,4 @@ export const Rooms = {
 	RoomBattlePlayer,
 	RoomBattleTimer,
 	PM: RoomBattlePM,
-
-	Replays,
 };

@@ -73,6 +73,7 @@ export class Pokemon {
 	 */
 	position: number;
 	details: string;
+	uuid: string;
 
 	baseSpecies: Species;
 	species: Species;
@@ -321,12 +322,14 @@ export class Pokemon {
 		this.pokeball = this.set.pokeball || 'pokeball';
 		this.dynamaxLevel = typeof set.dynamaxLevel === 'number' ? this.battle.clampIntRange(set.dynamaxLevel, 0, 10) : 10;
 		this.gigantamax = this.set.gigantamax || false;
+		this.uuid = this.set.uuid || '';
 
 		this.baseMoveSlots = [];
 		this.moveSlots = [];
 		if (!this.set.moves?.length) {
 			throw new Error(`Set ${this.name} has no moves`);
 		}
+		let i = 0;
 		for (const moveid of this.set.moves) {
 			let move = this.battle.dex.moves.get(moveid);
 			if (!move.id) continue;
@@ -336,22 +339,26 @@ export class Pokemon {
 			}
 			let basepp = (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5;
 			if (this.battle.gen < 3) basepp = Math.min(61, basepp);
+
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,
-				pp: basepp,
-				maxpp: basepp,
+				// COBBLED: Apply move pp
+				pp: set.movesInfo[i].pp,
+				// COBBLED: Apply
+				maxpp: set.movesInfo[i].maxPp,
 				target: move.target,
 				disabled: false,
 				disabledSource: '',
 				used: false,
 			});
+			i++;
 		}
 
 		this.position = 0;
 		let displayedSpeciesName = this.species.name;
 		if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
-		this.details = displayedSpeciesName + (this.level === 100 ? '' : ', L' + this.level) +
+		this.details = displayedSpeciesName + ', ' + this.uuid + (this.level === 100 ? '' : ', L' + this.level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.status = '';
@@ -478,7 +485,29 @@ export class Pokemon {
 		this.baseMaxhp = 0;
 		this.hp = 0;
 		this.clearVolatile();
-		this.hp = this.maxhp;
+
+		// COBBLED: Apply current health
+		if (this.set.currentHealth == 0 || this.set.currentHealth) {
+			this.hp = this.set.currentHealth;
+		} else {
+			this.hp = this.maxhp;
+		}
+		// COBBLED: Apply status
+		if(!!this.set.status) {
+			let status = this.battle.dex.conditions.get(this.set.status);
+			this.status = status.id;
+			this.statusState = {id: status.id, target: this};
+			if (this.set.statusDuration !== -1) {
+				this.statusState.duration = this.set.statusDuration;
+				this.statusState.startTime = this.set.statusDuration;
+				this.statusState.time = this.set.statusDuration;
+			}
+		}
+
+		if (this.hp == 0) {
+			this.status = 'fnt' as ID;
+			this.fainted = true;
+		}
 	}
 
 	toJSON(): AnyObject {
@@ -500,8 +529,8 @@ export class Pokemon {
 	}
 
 	toString() {
-		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
-		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
+		const fullname = (this.illusion) ? this.illusion.uuid : this.uuid;
+		return this.isActive ? this.getSlot() + ': ' + fullname : (this.side.id + ': ' + fullname);
 	}
 
 	getDetails = () => {
@@ -511,7 +540,7 @@ export class Pokemon {
 			const level = this.battle.ruleTable.has('illusionlevelmod') ? this.illusion.level : this.level;
 			let displayedSpeciesName = this.illusion.species.name;
 			if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
-			const illusionDetails = displayedSpeciesName + (level === 100 ? '' : ', L' + level) +
+			const illusionDetails = displayedSpeciesName + "," + this.illusion.uuid + (level === 100 ? '' : ', L' + level) +
 				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 			details = illusionDetails;
 		}
@@ -1360,7 +1389,7 @@ export class Pokemon {
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
 			this.baseSpecies = rawSpecies;
-			this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
+			this.details = species.name + ', ' + this.uuid + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
@@ -1498,6 +1527,12 @@ export class Pokemon {
 			effect,
 		});
 		return d;
+	}
+
+	capture() {
+		this.hp = 0;
+		this.switchFlag = false;
+		this.battle.capture(this);
 	}
 
 	damage(d: number, source: Pokemon | null = null, effect: Effect | null = null) {
@@ -1653,6 +1688,10 @@ export class Pokemon {
 			return false;
 		}
 		return true;
+	}
+
+	updatePP() {
+		this.battle.add('pp_update', `${this.side.id}: ${this.uuid}`, this.moveSlots.map(move => `${move.id}: ${move.pp}`).join(', '));
 	}
 
 	/**

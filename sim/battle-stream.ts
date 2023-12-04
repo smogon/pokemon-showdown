@@ -106,11 +106,24 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				if (t === 'end' && !this.keepAlive) this.pushEnd();
 			};
 			if (this.debug) options.debug = true;
-			this.battle = new Battle(options);
+			try {
+				this.battle = new Battle(options);
+			} catch (e) {
+				console.log(e);
+			}
 			break;
 		case 'player':
 			const [slot, optionsText] = splitFirst(message, ' ');
 			this.battle!.setPlayer(slot as SideID, JSON.parse(optionsText));
+			break;
+		case 'capture':
+			this.battle!.inputLog.push(`>capture ${message}`);
+			const pokemon = this.battle!.getPokemonByPNX(message);
+			if (pokemon) {
+				pokemon.capture();
+			} else {
+				throw new Error(`Capture targeted ${message} but that Pokémon does not exist.`);
+			}
 			break;
 		case 'p1':
 		case 'p2':

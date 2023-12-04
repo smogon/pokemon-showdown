@@ -14,6 +14,7 @@
  * @license MIT
  */
 
+import {Format} from './dex-formats';
 import {Dex, toID} from './dex';
 import {Teams} from './teams';
 import {Field} from './field';
@@ -24,6 +25,7 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib';
+import * as BagItems from './bag-items';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -192,10 +194,21 @@ export class Battle {
 		this.log = [];
 		this.add('t:', Math.floor(Date.now() / 1000));
 
-		const format = options.format || Dex.formats.get(options.formatid, true);
+		// COBBLED ========
+		let format = undefined
+		if (!!options.format && options.format.debug == undefined) {
+			// This is a format that was given as a loose object, needs to be ratified to a proper object
+			format = new Format(options.format);
+			// ==================================
+		} else {
+			format = options.format || Dex.formats.get(options.formatid, true);
+		}
+
 		this.format = format;
 		this.dex = Dex.forFormat(format);
-		this.gen = this.dex.gen;
+		// COBBLED ========
+		this.gen = options.format.gen || this.dex.gen;
+		// ==================================
 		this.ruleTable = this.dex.formats.getRuleTable(format);
 
 		this.trunc = this.dex.trunc;
@@ -1175,6 +1188,25 @@ export class Battle {
 		return null;
 	}
 
+	getPokemonByPNX(pnx: string) {
+		for (const side of this.sides) {
+			for (const pokemon of side.pokemon) {
+				if (pokemon.getSlot().toString() === pnx) return pokemon;
+			}
+		}
+		return null;
+	}
+
+	getPokemonById(pokemonId: string) {
+		for (const side of this.sides) {
+			for (const pokemon of side.pokemon) {
+				if (pokemon.uuid === pokemonId) {
+					return pokemon;
+				}
+			}
+		}
+	}
+
 	getAllPokemon() {
 		const pokemonList: Pokemon[] = [];
 		for (const side of this.sides) {
@@ -1354,6 +1386,7 @@ export class Battle {
 		} else {
 			this.add('tie');
 		}
+		this.updatePP();
 		this.ended = true;
 		this.requestState = '';
 		for (const s of this.sides) {
@@ -1607,6 +1640,7 @@ export class Battle {
 				}
 			}
 		}
+		this.updatePP();
 		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
@@ -2346,6 +2380,52 @@ export class Battle {
 		}
 	}
 
+	capture(pokemon: Pokemon) {
+		if (this.ended) return;
+		if (!pokemon.fainted) {
+			this.add('capture', pokemon);
+			if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
+			this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+			pokemon.clearVolatile(false);
+			pokemon.fainted = true;
+			pokemon.illusion = null;
+			pokemon.isActive = false;
+			pokemon.isStarted = false;
+			pokemon.side.faintedThisTurn = pokemon;
+
+			if (this.checkWin()) return true;
+
+// 			this.checkFainted();
+
+// 			if (this.actions.dragIn(pokemon.side, pokemon.position)) {
+// 				this.add('Dragged in');
+// 			} else {
+// 				this.add('Did not drag in');
+// 				pokemon.side.faintedThisTurn = pokemon;
+// 			}
+
+// 			const activeData = pokemon.side.active.map(pk => pk?.getMoveRequestData());
+// 			const req = { active: activeData, side: pokemon.side.getRequestData()};
+// 			if (pokemon.side.allySide) {
+// 				req.ally = pokemon.side.allySide.getRequestData(true);
+// 			}
+//
+// 			pokemon.side.emitRequest(req);
+// 			pokemon.side.clearChoice();
+		}
+
+		return false;
+	}
+
+	// COBBLED: Sends out the entire team with updates on each move PP
+	updatePP() {
+		for (const side of this.sides) {
+			for (const pokemon of side.pokemon) {
+				pokemon.updatePP();
+			}
+		}
+	}
+
 	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
 		if (this.ended) return;
 		const length = this.faintQueue.length;
@@ -2853,6 +2933,44 @@ export class Battle {
 
 		this.go();
 		if (this.log.length - this.sentLogPos > 500) this.sendUpdates();
+	}
+
+	splitFirst(str: string, delimiter: string, limit = 1) {
+		const splitStr: string[] = [];
+		while (splitStr.length < limit) {
+			const delimiterIndex = str.indexOf(delimiter);
+			if (delimiterIndex >= 0) {
+				splitStr.push(str.slice(0, delimiterIndex));
+				str = str.slice(delimiterIndex + delimiter.length);
+			} else {
+				splitStr.push(str);
+				str = '';
+			}
+		}
+		splitStr.push(str);
+		return splitStr;
+	}
+
+	useItem(message: string) {
+		if (message === undefined) throw new Error(`No message offered for useItem`);
+		const [pokemonId, itemName, itemId, data] = this.splitFirst(message, ' ', 4);
+		const messageStart = `${pokemonId} ${itemName} ${itemId}`;
+		var dataArray = message.substring(message.indexOf(messageStart) + messageStart.length).split(' ').filter(v => v != '');
+
+		if (pokemonId === undefined) throw new Error(`Pokemon ID required for useitem`);
+		if (itemName === undefined) throw new Error('Item Name required for useitem')
+		if (itemId === undefined) throw new Error('Item ID required for useitem');
+		if (!BagItems.has(itemId)) {
+			throw new Error('Invalid item: ' + itemId); // Maybe throw an error or something idk
+		}
+		const item = BagItems.getItem(itemId);
+		const pokemon = this.getPokemonById(pokemonId);
+		if (!pokemon) throw new Error(`No pokemon found for ID ${pokemonId}`);
+		if (this.ended) {
+			return;
+		}
+		this.add('bagitem', pokemon.uuid, itemName, itemId);
+		item.use(this, pokemon, itemId, dataArray);
 	}
 
 	undoChoice(sideid: SideID) {

@@ -26,7 +26,6 @@
  * @license MIT
  */
 
-import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
@@ -36,11 +35,14 @@ import {Item, DexItems} from './dex-items';
 import {Ability, DexAbilities} from './dex-abilities';
 import {Species, DexSpecies} from './dex-species';
 import {Format, DexFormats} from './dex-formats';
-import {Utils} from '../lib';
+import { Utils } from '../lib';
+import * as CobblemonCache from './cobblemon-cache';
 
 const BASE_MOD = 'gen9' as ID;
-const DATA_DIR = path.resolve(__dirname, '../data');
-const MODS_DIR = path.resolve(DATA_DIR, './mods');
+// to account for Sucrase
+const DATA_PATH = '../data';///pokemon-showdown/.data-dist';//__dirname.endsWith('.sim-dist') ? `../.data-dist` : `../data`;
+const DATA_DIR = DATA_PATH;//path.resolve(__dirname, DATA_PATH);
+const MODS_DIR = DATA_PATH + '/mods';//path.resolve(DATA_DIR, './mods');
 
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
@@ -430,9 +432,10 @@ export class ModdedDex {
 			}
 			return dataObject[dataType];
 		} catch (e: any) {
-			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
-				throw e;
-			}
+		// This gives a different error using the graalJS require function so just ignore it
+// 			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
+// 				throw e;
+// 			}
 		}
 		return {};
 	}
@@ -444,12 +447,50 @@ export class ModdedDex {
 	}
 
 	includeMods(): this {
+		const all_mods = [
+			 'fullpotential',
+			 'gen1',
+			 'gen1jpn',
+			 'gen1stadium',
+			 'gen2',
+			 'gen2stadium2',
+			 'gen3',
+			 'gen3hoenngaiden',
+			 'gen4',
+			 'gen4pt',
+			 'gen5',
+			 'gen5bw1',
+			 'gen6',
+			 'gen6xy',
+			 'gen7',
+			 'gen7letsgo',
+			 'gen7pokebilities',
+			 'gen7sm',
+			 'gen8',
+			 'gen8bdsp',
+			 'gen8dlc1',
+			 'gen8joltemons',
+			 'gen8linked',
+			 'gen9predlc',
+			 'gennext',
+			 'mixandmega',
+			 'partnersincrime',
+			 'pokebilities',
+			 'potd',
+			 'randomroulette',
+			 'sharedpower',
+			 'sharingiscaring',
+			 'ssb',
+			 'thecardgame',
+			 'trademarked',
+			 CobblemonCache.MOD_ID
+       	];
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
-		for (const mod of fs.readdirSync(MODS_DIR)) {
-			dexes[mod] = new ModdedDex(mod);
-		}
+	   for (let mod of all_mods) {
+		 	dexes[mod] = new ModdedDex(mod);
+	   }
 		this.modsLoaded = true;
 
 		return this;

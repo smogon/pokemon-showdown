@@ -1,6 +1,6 @@
 export * as Dashycode from './dashycode';
 export {Repl} from './repl';
-export {Net} from './net';
+// export {Net} from './net';
 export * as Streams from './streams';
 export {FS} from './fs';
 export * as Utils from './utils';

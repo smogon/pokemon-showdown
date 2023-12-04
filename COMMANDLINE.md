@@ -65,6 +65,22 @@ Note: Commands that ask for a team want the team in [packed team format](./sim/T
 
 - Displays this reference
 
+Pokemon Cobbled Commands
+---
+
+`./pokemon-showdown cobbled-debug-server [PORT]`
+
+- Starts a simple websocket server for the battle simulator
+
+`./pokemon-showdown cobbled-debug-client [PORT]`
+
+- Starts a simple websocket client to communicate to a correlating debug server
+
+`node build --cobbled`
+
+- Builds the production cobbled-showdown files, putting them in a top level `cobblemon-showdown` folder.
+    - This differs from `node build` in that it includes important bootstrap scripts for cobbled and removes many unnecessary dependencies for production, like chat or the web server.
+
 
 Piping
 ------

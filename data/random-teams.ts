@@ -1120,7 +1120,7 @@ export class RandomTeams {
 		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Hard-code abilities here
-		if (species.id === 'florges') return 'Flower Veil';
+		if (species.id === 'arcaninehisui') return 'Rock Head';
 		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'empoleon') return 'Competitive';
 		if (species.id === 'chandelure') return 'Flash Fire';
@@ -1138,7 +1138,6 @@ export class RandomTeams {
 		if (!isDoubles) {
 			if (species.id === 'hypno') return 'Insomnia';
 			if (species.id === 'staraptor') return 'Reckless';
-			if (species.id === 'arcaninehisui') return 'Rock Head';
 			if (species.id === 'vespiquen') return 'Pressure';
 			if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 			if (species.id === 'klawf' && role === 'Setup Sweeper') return 'Anger Shell';
@@ -1177,6 +1176,7 @@ export class RandomTeams {
 
 			// just doubles and multi
 			if (this.format.gameType !== 'freeforall') {
+				if (species.id === 'florges') return 'Flower Veil';
 				if (
 					species.id === 'clefairy' ||
 					(species.baseSpecies === 'Maushold' && role === 'Doubles Support')

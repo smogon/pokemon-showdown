@@ -50,5 +50,10 @@ try {
 setImmediate(() => {
 	// npm package, don't rebuild
 	if (process.argv[2] === 'postinstall' && fs.existsSync('dist')) return;
-	require('./tools/build-utils').transpile(force, decl);
+
+	if (['--cobbled', '--c'].includes(process.argv[2]) || ['--cobbled', '--c'].includes(process.argv[3])) {
+		require('./tools/build-utils').transpileCobbled(force, decl);
+	} else {
+		require('./tools/build-utils').transpile(force, decl);
+	}
 });
