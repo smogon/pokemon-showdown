@@ -82,12 +82,12 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
-			const pool: string[] = [];
+			const pool = new Set<string>();
 			if (learnset) {
 				for (const move in learnset) {
 					if (this.dex.moves.get(move).gen !== 1) continue;
 					if (learnset[move].some(learned => learned.startsWith('1'))) {
-						pool.push(move);
+						pool.add(move);
 					}
 				}
 			}
@@ -98,17 +98,15 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				for (const move in learnset) {
 					if (this.dex.moves.get(move).gen !== 1) continue;
 					if (learnset[move].some(learned => learned.startsWith('1'))) {
-						pool.push(move);
+						pool.add(move);
 					}
 				}
 			}
-			// Remove duplicates from the pool that were added by pre-evos' movesets
-			const deduplicatedPool: string[] = [...new Set(pool)];
 
 			team.push({
 				name: species.baseSpecies,
 				species: species.name,
-				moves: this.multipleSamplesNoReplace(deduplicatedPool, 4),
+				moves: this.multipleSamplesNoReplace(Array.from(pool), 4),
 				gender: false,
 				ability: 'No Ability',
 				evs: evs,
