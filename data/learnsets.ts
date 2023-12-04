@@ -91027,7 +91027,7 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 			trickroom: ["9M", "8M", "7M", "6M", "5M", "4M"],
 			vacuumwave: ["9M", "4T"],
 			willowisp: ["9M", "8M", "7M"],
-			wonderrroom: ["8M", "7T", "6T", "5T"],
+			wonderroom: ["8M", "7T", "6T", "5T"],
 			workup: ["8M", "7M", "5M"],
 			wrap: ["9L1", "8L1", "7L1", "6L1", "5L1", "4L1"],
 		},
