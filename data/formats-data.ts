@@ -1568,7 +1568,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	sneasler: {
 		tier: "Uber",
 		doublesTier: "(DUU)",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	teddiursa: {
 		tier: "LC",
