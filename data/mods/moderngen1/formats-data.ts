@@ -86,6 +86,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	pikachu: {
 		tier: "NFE",
 	},
+	pikachustarter: {
+		tier: "Uber",
+	},
 	pikachucosplay: {
 		tier: "Illegal",
 	},
@@ -633,6 +636,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	eevee: {
 		tier: "LC",
+	},
+	eeveestarter: {
+		tier: "Uber",
 	},
 	vaporeon: {
 		tier: "UU",
@@ -3183,6 +3189,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Illegal",
 	},
 	eternatus: {
+		tier: "Uber",
+	},
+	eternatuseternamax: {
 		tier: "Uber",
 	},
 	kubfu: {
