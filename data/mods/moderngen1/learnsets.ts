@@ -2607,37 +2607,37 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		eventData: [
 			{generation: 6, level: 20, perfectIVs: 3, moves: ["1L1"], pokeball: "pokeball"},
 		],
-		eventOnly: false,
+		eventOnly: true,
 	},
 	pikachurockstar: {
 		learnset: {
 			meteormash: ["1L1"],
 		},
-		eventOnly: false,
+		eventOnly: true,
 	},
 	pikachubelle: {
 		learnset: {
 			iciclecrash: ["1L1"],
 		},
-		eventOnly: false,
+		eventOnly: true,
 	},
 	pikachupopstar: {
 		learnset: {
 			drainingkiss: ["1L1"],
 		},
-		eventOnly: false,
+		eventOnly: true,
 	},
 	pikachuphd: {
 		learnset: {
 			electricterrain: ["1L1"],
 		},
-		eventOnly: false,
+		eventOnly: true,
 	},
 	pikachulibre: {
 		learnset: {
 			flyingpress: ["1L1"],
 		},
-		eventOnly: false,
+		eventOnly: true,
 	},
 	pikachuoriginal: {
 		learnset: {
