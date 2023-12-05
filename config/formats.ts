@@ -686,9 +686,9 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Terastal Clause', 'Tier Shift Mod', 'Min Source Gen = 9'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Eternatus', 'Groudon', 'Hoopa-Unbound', 'Koraidon', 'Kyogre', 'Medicham', 'Mewtwo', 'Miraidon',
-			'Rayquaza', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Moody', 'Shadow Tag', 'Damp Rock', 'Heat Rock', 'Light Clay', 'Baton Pass', 'Last Respects',
-			'Shed Tail',
+			'Arceus', 'Azumarill', 'Calyrex-Ice', 'Calyrex-Shadow', 'Eternatus', 'Groudon', 'Hoopa-Unbound', 'Koraidon', 'Kyogre', 'Medicham', 'Mewtwo',
+			'Miraidon', 'Rayquaza', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Drizzle', 'Moody', 'Shadow Tag', 'Heat Rock', 'King\'s Rock', 'Light Clay',
+			'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		unbanlist: ['Arceus-Bug'],
 	},
