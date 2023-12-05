@@ -2047,7 +2047,7 @@ export class RandomTeams {
 		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
-		
+
 		if (requiredType && !this.dex.types.get(requiredType).exists) {
 			throw new Error(`"${requiredType}" is not a valid type.`);
 		}
