@@ -3,13 +3,13 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 1,
 	init() {
 		for (const i in this.data.Pokedex) {
-			(this.data.Pokedex[i] as any).gen = 1;
-			(this.data.Pokedex[i] as any).gender = 'N';
-			(this.data.Pokedex[i] as any).eggGroups = null;
+			this.modData('Pokedex', i).gen = 1;
+			this.modData('Pokedex', i).gender = 'N';
+			this.modData('Pokedex', i).eggGroups = null;
 		}
 		const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
 		for (const i in this.data.Moves) {
-			(this.data.Moves[i] as any).gen = 1;
+			this.modData('Moves', i).gen = 1;
 			if (this.data.Moves[i].category === 'Status') continue;
 			const newCategory = specialTypes.includes(this.data.Moves[i].type) ? 'Special' : 'Physical';
 			if (newCategory !== this.data.Moves[i].category) {
