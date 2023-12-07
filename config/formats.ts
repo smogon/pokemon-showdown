@@ -703,12 +703,12 @@ export const Formats: FormatList = [
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Items Clause', 'Sketchmons Move Legality', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Cinderace', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Dialga', 'Dialga-Origin',
-			'Dondozo', 'Dragapult', 'Dragonite', 'Enamorus-Base', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Gliscor',
-			'Greninja', 'Iron Bundle', 'Komala', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Lilligant-Hisui', 'Magearna', 'Manaphy', 'Meowscarada', 'Mewtwo',
+			'Dondozo', 'Dragapult', 'Dragonite', 'Enamorus-Base', 'Espathra', 'Eternatus', 'Flutter Mane', 'Gholdengo', 'Giratina', 'Giratina-Origin', 'Groudon',
+			'Gliscor', 'Greninja', 'Iron Bundle', 'Komala', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Lilligant-Hisui', 'Magearna', 'Manaphy', 'Meowscarada', 'Mewtwo',
 			'Miraidon', 'Ogerpon-Hearthflame', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Roaring Moon', 'Scovillain', 'Shaymin-Sky',
 			'Sneasler', 'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike', 'Volcarona', 'Walking Wake', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta', 'Zamazenta-Crowned', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Stench', 'Booster Energy', 'Damp Rock', 'King\'s Rock',
-			'Baton Pass', 'Last Respects', 'Shed Tail',
+			'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		restricted: [
 			'Astral Barrage', 'Belly Drum', 'Boomburst', 'Ceaseless Edge', 'Clangorous Soul', 'Dire Claw', 'Extreme Speed', 'Gigaton Hammer', 'Glacial Lance',
