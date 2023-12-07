@@ -1,6 +1,7 @@
 // Note: These are the rules that formats use
 
 import {Utils} from "../lib";
+import type {Learnset} from "../sim/dex-species";
 import {Pokemon} from "../sim/pokemon";
 
 // The list of formats is stored in config/formats.js
@@ -1750,24 +1751,19 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
-			const learnsetData = {...(this.dex.data.Learnsets[species.id]?.learnset || {})};
-			let prevo = species.prevo;
-			while (prevo) {
-				const prevoSpecies = this.dex.species.get(prevo);
-				const prevoLsetData = this.dex.data.Learnsets[prevoSpecies.id]?.learnset || {};
-				for (const moveid in prevoLsetData) {
-					if (!(moveid in learnsetData)) {
-						learnsetData[moveid] = prevoLsetData[moveid];
-					} else {
-						learnsetData[moveid].push(...prevoLsetData[moveid]);
-					}
+			const learnset: NonNullable<Learnset['learnset']> = {};
+			let curSpecies: Species | null = species;
+			while (curSpecies) {
+				const curLearnset = this.dex.species.getLearnset(curSpecies.id) || {};
+				for (const moveid in curLearnset) {
+					learnset[moveid] = [...(learnset[moveid] || []), ...curLearnset[moveid]];
 				}
-				prevo = prevoSpecies.prevo;
+				curSpecies = this.learnsetParent(curSpecies);
 			}
 			const problems = [];
 			if (set.moves?.length) {
 				for (const move of set.moves) {
-					if (learnsetData[this.toID(move)] && !learnsetData[this.toID(move)].filter(v => !v.includes('S')).length) {
+					if (learnset[this.toID(move)]?.every(learned => learned.includes('S'))) {
 						problems.push(`${species.name}'s move ${move} is obtainable only through events.`);
 					}
 				}
