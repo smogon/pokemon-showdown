@@ -508,7 +508,10 @@ export class DexSpecies {
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
-			if (this.dex.gen < 5) delete species.abilities['H'];
+			if (this.dex.gen < 5) {
+				species.abilities = this.dex.deepClone(species.abilities);
+				delete species.abilities['H'];
+			}
 			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
 		} else {
 			species = new Species({
