@@ -1,7 +1,7 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
 	doubleironbash: {
 		inherit: true,
-    isNonstandard: null,
+		isNonstandard: null,
 		gen: 1,
 	},
 };
