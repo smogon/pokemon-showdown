@@ -397,7 +397,7 @@ export class DexSpecies {
 					}
 				}
 			}
-			this.speciesCache.set(id, species);
+			this.speciesCache.set(id, this.dex.deepFreeze(species));
 			return species;
 		}
 
@@ -516,7 +516,7 @@ export class DexSpecies {
 				exists: false, tier: 'Illegal', doublesTier: 'Illegal', natDexTier: 'Illegal', isNonstandard: 'Custom',
 			});
 		}
-		if (species.exists) this.speciesCache.set(id, species);
+		if (species.exists) this.speciesCache.set(id, this.dex.deepFreeze(species));
 		return species;
 	}
 
@@ -531,7 +531,7 @@ export class DexSpecies {
 			return new Learnset({exists: false});
 		}
 		learnsetData = new Learnset(this.dex.data.Learnsets[id]);
-		this.learnsetCache.set(id, learnsetData);
+		this.learnsetCache.set(id, this.dex.deepFreeze(learnsetData));
 		return learnsetData;
 	}
 
@@ -545,7 +545,7 @@ export class DexSpecies {
 		for (const id in this.dex.data.Pokedex) {
 			species.push(this.getByID(id as ID));
 		}
-		this.allCache = species;
+		this.allCache = Object.freeze(species);
 		return this.allCache;
 	}
 }
