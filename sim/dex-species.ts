@@ -525,10 +525,6 @@ export class DexSpecies {
 		return species;
 	}
 
-	getLearnset(id: ID): Learnset['learnset'] {
-		return this.getLearnsetData(id).learnset;
-	}
-
 	getMovePool(id: ID, isNatDex = false): Set<ID> {
 		let eggMovesOnly = false;
 		let maxGen = this.dex.gen;
@@ -627,6 +623,12 @@ export class DexSpecies {
 		return null;
 	}
 
+	/**
+	 * Gets the raw learnset data for the species.
+	 *
+	 * In practice, if you're trying to figure out what moves a pokemon learns,
+	 * you probably want to `getFullLearnset` or `getMovePool` instead.
+	 */
 	getLearnsetData(id: ID): Learnset {
 		let learnsetData = this.learnsetCache.get(id);
 		if (learnsetData) return learnsetData;

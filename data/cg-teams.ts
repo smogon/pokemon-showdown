@@ -179,7 +179,7 @@ export default class TeamGenerator {
 				pairedMove &&
 				!alreadyHavePairedMove &&
 				// We don't check movePool because sometimes paired moves are bad.
-				this.dex.species.getLearnset(species.id)?.[pairedMove]
+				this.dex.species.getLearnsetData(species.id).learnset?.[pairedMove]
 			) {
 				moves.push(this.dex.moves.get(pairedMove));
 				movePool.splice(movePool.indexOf(pairedMove), 1);
