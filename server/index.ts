@@ -43,7 +43,7 @@
  *
  * @license MIT
  */
-
+require('source-map-support').install();
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
 // can successfully print the "We require Node.js 16+" message.
@@ -55,7 +55,6 @@ if (isNaN(nodeVersion) || nodeVersion < 16) {
 }
 
 import {FS, Repl} from '../lib';
-import 'source-map-support/register';
 
 /*********************************************************
  * Set up most of our globals
