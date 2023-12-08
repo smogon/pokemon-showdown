@@ -64,7 +64,7 @@ The beginning of a battle will look something like this:
 `|gen|GENNUM`
 
 > Generation number, from 1 to 9. Stadium counts as its respective gens;
-> Let's Go counts as 9, and modded formats count as whatever gen they were
+> Let's Go counts as 7, and modded formats count as whatever gen they were
 > based on.
 
 `|tier|FORMATNAME`
