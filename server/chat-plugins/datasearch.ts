@@ -1780,47 +1780,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		};
 	}
 
-	const getFullLearnsetOfPokemon = (species: Species, natDex: boolean) => {
-		let usedSpecies: Species = Utils.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
-		if (!usedSpeciesLearnset) {
-			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.baseSpecies));
-			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id) || {});
-		}
-		const lsetData = new Set<string>();
-		for (const move in usedSpeciesLearnset) {
-			const learnset = mod.species.getLearnset(usedSpecies.id);
-			if (!learnset) break;
-			const sources = learnset[move];
-			for (const learned of sources) {
-				const sourceGen = parseInt(learned.charAt(0));
-				if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen >= 9 || natDex)) lsetData.add(move);
-			}
-		}
-
-		while (usedSpecies.prevo) {
-			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.prevo));
-			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
-			for (const move in usedSpeciesLearnset) {
-				const learnset = mod.species.getLearnset(usedSpecies.id);
-				if (!learnset) break;
-				const sources = learnset[move];
-				for (const learned of sources) {
-					const sourceGen = parseInt(learned.charAt(0));
-					if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen === 9 || natDex)) lsetData.add(move);
-				}
-			}
-		}
-
-		return lsetData;
-	};
-
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	const validMoves = new Set(Object.keys(mod.data.Moves));
+	const validMoves = new Set(Object.keys(mod.data.Moves)) as Set<ID>;
 	for (const mon of targetMons) {
 		const species = mod.species.get(mon.name);
-		const lsetData = getFullLearnsetOfPokemon(species, !!nationalSearch);
+		const lsetData = mod.species.getMovePool(species.id, !!nationalSearch);
 		// This pokemon's learnset needs to be excluded, so we perform a difference operation
 		// on the valid moveset and this pokemon's moveset.
 		if (mon.shouldBeExcluded) {
