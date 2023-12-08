@@ -2106,7 +2106,9 @@ export class GameRoom extends BasicRoom {
 				if (!silent) {
 					const url = `https://${Config.routes.replays}/${fullid}`;
 					connection?.popup(
-						`|html|<p>Your replay has been uploaded! It's available at:</p><p> <a class="no-panel-intercept" href="${url}" target="_blank">${url}</a>`
+						`|html|<p>Your replay has been uploaded! It's available at:</p><p> ` +
+						`<a class="no-panel-intercept" href="${url}" target="_blank">${url}</a> ` +
+						`<copytext value="${url}">Copy</copytext>`
 					);
 				}
 			} catch (e) {
