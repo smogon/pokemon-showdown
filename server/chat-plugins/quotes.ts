@@ -106,7 +106,7 @@ export const commands: Chat.ChatCommands = {
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes?.length) return this.errorReply(`This room has no quotes.`);
 		const [num, showAuthor] = Utils.splitFirst(target, ',');
-		const index = parseInt(num) - 1;
+		const index = num === 'last' ? roomQuotes.length - 1 : parseInt(num) - 1;
 		if (isNaN(index)) {
 			return this.errorReply(`Invalid index.`);
 		}
