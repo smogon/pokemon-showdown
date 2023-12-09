@@ -148,7 +148,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		species = this.dex.species.get(species);
 
 		const data = this.randomData[species.id];
-		const movePool = (data.moves || Object.keys(this.dex.species.getLearnset(species.id)!)).slice();
+		const movePool: string[] = [...(data.moves || this.dex.species.getMovePool(species.id))];
 		const rejectedPool: string[] = [];
 		const moves = new Set<string>();
 
