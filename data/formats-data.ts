@@ -5771,7 +5771,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	ogerponcornerstone: {
 		tier: "OU",
 		doublesTier: "DUU",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	missingno: {
 		isNonstandard: "Custom",
