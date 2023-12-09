@@ -109,7 +109,8 @@ export const Replays = new class {
 					players: replayData.players,
 				});
 			}
-		} catch {
+		} catch (e: any) {
+			if (e?.routine !== 'NewUniquenessConstraintViolationError') throw e;
 			await replays.update(replay.id, {
 				log: replayData.log,
 				inputlog: replayData.inputlog,
