@@ -140,37 +140,7 @@ export default class TeamGenerator {
 
 		const moves: Move[] = [];
 
-		let learnset = this.dex.species.getLearnset(species.id);
-		let movePool: string[] = [];
-		let learnsetSpecies = species;
-		if (!learnset || species.id === 'gastrodoneast') {
-			learnsetSpecies = this.dex.species.get(species.baseSpecies);
-			learnset = this.dex.species.getLearnset(learnsetSpecies.id);
-		}
-		if (learnset) {
-			movePool = Object.keys(learnset).filter(
-				moveid => learnset![moveid].find(learned => learned.startsWith('9'))
-			);
-		}
-		if (learnset && learnsetSpecies === species && species.changesFrom) {
-			const changesFrom = this.dex.species.get(species.changesFrom);
-			learnset = this.dex.species.getLearnset(changesFrom.id);
-			for (const moveid in learnset) {
-				if (!movePool.includes(moveid) && learnset[moveid].some(source => source.startsWith('9'))) {
-					movePool.push(moveid);
-				}
-			}
-		}
-		const evoRegion = learnsetSpecies.evoRegion;
-		while (learnsetSpecies.prevo) {
-			learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
-			for (const moveid in learnset) {
-				if (!movePool.includes(moveid) &&
-					learnset[moveid].some(source => source.startsWith('9') && !evoRegion)) {
-					movePool.push(moveid);
-				}
-			}
-		}
+		let movePool: string[] = [...this.dex.species.getMovePool(species.id)];
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
 
 		// Consider either the top 15 moves or top 30% of moves, whichever is greater.
@@ -209,7 +179,7 @@ export default class TeamGenerator {
 				pairedMove &&
 				!alreadyHavePairedMove &&
 				// We don't check movePool because sometimes paired moves are bad.
-				this.dex.species.getLearnset(species.id)?.[pairedMove]
+				this.dex.species.getLearnsetData(species.id).learnset?.[pairedMove]
 			) {
 				moves.push(this.dex.moves.get(pairedMove));
 				movePool.splice(movePool.indexOf(pairedMove), 1);

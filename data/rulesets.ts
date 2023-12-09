@@ -1750,22 +1750,21 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', 'Event Moves Clause: Event-only moves are banned');
 		},
 		onValidateSet(set) {
+			if (!set.moves) return;
+			const moveSources: NonNullable<Learnset['learnset']> = Object.fromEntries(
+				set.moves.map(move => [this.toID(move), []])
+			);
+
 			const species = this.dex.species.get(set.species);
-			const learnset: NonNullable<Learnset['learnset']> = {};
-			let curSpecies: Species | null = species;
-			while (curSpecies) {
-				const curLearnset = this.dex.species.getLearnset(curSpecies.id) || {};
-				for (const moveid in curLearnset) {
-					learnset[moveid] = [...(learnset[moveid] || []), ...curLearnset[moveid]];
+			for (const {learnset} of this.dex.species.getFullLearnset(species.id)) {
+				for (const moveid in moveSources) {
+					moveSources[moveid].push(...(learnset[moveid] || []));
 				}
-				curSpecies = this.learnsetParent(curSpecies);
 			}
 			const problems = [];
-			if (set.moves?.length) {
-				for (const move of set.moves) {
-					if (learnset[this.toID(move)]?.every(learned => learned.includes('S'))) {
-						problems.push(`${species.name}'s move ${move} is obtainable only through events.`);
-					}
+			for (const move of set.moves) {
+				if (moveSources[this.toID(move)]?.every(learned => learned.includes('S'))) {
+					problems.push(`${species.name}'s move ${move} is obtainable only through events.`);
 				}
 			}
 			if (problems.length) problems.push(`(Event-only moves are banned.)`);

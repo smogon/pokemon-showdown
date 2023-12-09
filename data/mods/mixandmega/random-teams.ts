@@ -52,43 +52,11 @@ export class RandomMnMTeams extends RandomTeams {
 			// Four random unique moves from the movepool
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
-				pool = this.dex.moves
-					.all()
+				pool = this.dex.moves.all()
 					.filter(move => !(move.isNonstandard || move.isZ || move.isMax || move.realMove))
 					.map(m => m.id);
 			} else {
-				const formes = ['gastrodoneast', 'pumpkaboosuper', 'zygarde10'];
-				let learnset = this.dex.species.getLearnset(species.id);
-				let learnsetSpecies = species;
-				if (formes.includes(species.id) || !learnset) {
-					learnsetSpecies = this.dex.species.get(species.baseSpecies);
-					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
-				}
-				if (learnset) {
-					pool = Object.keys(learnset).filter(
-						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
-					);
-				}
-				if (learnset && learnsetSpecies === species && species.changesFrom) {
-					learnset = this.dex.species.getLearnset(toID(species.changesFrom));
-					for (const moveid in learnset) {
-						if (!pool.includes(moveid) && learnset[moveid].some(source => source.startsWith(String(this.gen)))) {
-							pool.push(moveid);
-						}
-					}
-				}
-				const evoRegion = learnsetSpecies.evoRegion && learnsetSpecies.gen !== this.gen;
-				for (let i = 0; i < 2 && learnsetSpecies.prevo; i++) {
-					learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
-					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
-					for (const moveid in learnset) {
-						if (!pool.includes(moveid) && learnset[moveid].some(
-							source => source.startsWith(String(this.gen)) && (!evoRegion || source.charAt(1) === 'E')
-						)) {
-							pool.push(moveid);
-						}
-					}
-				}
+				pool = [...this.dex.species.getMovePool(species.id)];
 			}
 
 			const moves = this.multipleSamplesNoReplace(pool, this.maxMoveCount);
