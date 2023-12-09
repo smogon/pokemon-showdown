@@ -1,3 +1,5 @@
+import type {Learnset} from "../../../sim/dex-species";
+
 export const Rulesets: {[k: string]: ModdedFormatData} = {
 	obtainablemoves: {
 		inherit: true,
@@ -74,34 +76,31 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 				magneton: {triattack: 'L'},
 				cloyster: {spikes: 'L'},
 			};
+
+			const moveSources: NonNullable<Learnset['learnset']> = Object.fromEntries(
+				set.moves.map(move => [this.toID(move), []])
+			);
+
+			const species = this.dex.species.get(set.species);
+			for (const {learnset} of this.dex.species.getFullLearnset(species.id)) {
+				for (const moveid in moveSources) {
+					moveSources[moveid].push(...(learnset[moveid] || []));
+				}
+			}
+
 			const notUsableAsTM = ['icebeam', 'flamethrower', 'thunderbolt'];
-			const species = this.dex.species.get(set.species || set.name);
-			const learnsetData = {...(this.dex.data.Learnsets[species.id]?.learnset || {})};
 			const legalityList = illegalCombos[species.id];
 			const problems = [];
-			let prevo = species.prevo;
-			while (prevo) {
-				const prevoSpecies = this.dex.species.get(prevo);
-				const prevoLsetData = this.dex.data.Learnsets[prevoSpecies.id]?.learnset || {};
-				for (const moveid in prevoLsetData) {
-					if (!(moveid in learnsetData)) {
-						learnsetData[moveid] = prevoLsetData[moveid];
-					} else {
-						learnsetData[moveid].push(...prevoLsetData[moveid]);
-					}
-				}
-				prevo = prevoSpecies.prevo;
-			}
 			for (const moveid of set.moves.map(this.toID)) {
 				// Diglett Magnemite Shellder
-				if (!learnsetData[moveid]) continue;
+				if (!moveSources[moveid]) continue;
 				if (legalityList) {
-					const list = learnsetData[moveid].filter(x => !x.includes(legalityList[moveid]));
+					const list = moveSources[moveid].filter(x => !x.includes(legalityList[moveid]));
 					if (!list.length) {
 						switch (legalityList[moveid]) {
 						case 'L':
 							// Converted to a set to remove duplicate entries
-							const levels = new Set(learnsetData[moveid].filter(x => x.includes(legalityList[moveid])).map(x => x.slice(2)));
+							const levels = new Set(moveSources[moveid].filter(x => x.includes(legalityList[moveid])).map(x => x.slice(2)));
 							problems.push(
 								`${species.name} can't learn ${this.dex.moves.get(moveid).name}.`,
 								`(It learns ${this.dex.moves.get(moveid).name} in Pok\u00e9mon Crystal at the following levels: ${[...levels].join(', ')})`
@@ -123,7 +122,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 					}
 				}
 				for (const id of notUsableAsTM) {
-					if (moveid === id && learnsetData[id] && !learnsetData[id].filter(x => !x.includes('2T')).length) {
+					if (moveid === id && moveSources[id] && !moveSources[id].filter(x => !x.includes('2T')).length) {
 						problems.push(`${species.name} can't learn ${this.dex.moves.get(id).name}.`);
 					}
 				}
