@@ -4507,7 +4507,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 3] LC",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3516575/">ADV LC</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3722418/">ADV LC</a>`,
 		],
 
 		mod: 'gen3',
