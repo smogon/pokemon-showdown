@@ -1455,6 +1455,8 @@ export class Pokemon {
 		if (this.battle.gen === 2) this.lastMoveEncore = null;
 		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
+		this.moveLastTurnResult = undefined;
+		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
 		this.attackedBy = [];
