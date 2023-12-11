@@ -1287,18 +1287,19 @@ export const Formats: FormatList = [
 		],
 		restricted: ['Frosmoth', 'Gallade', 'Gholdengo', 'Lilligant-Hisui'],
 		onValidateTeam(team) {
-			const names = new Set<ID>();
+			const nums = new Set<number>();
 			for (const set of team) {
 				const name = set.name;
-				if (names.has(this.dex.toID(name))) {
+				const species = this.dex.species.get(name);
+				if (nums.has(species.num)) {
 					return [
 						`Your Pok\u00e9mon must have different nicknames.`,
-						`(You have more than one Pok\u00e9mon named '${name}')`,
+						`(You have more than one Pok\u00e9mon named after a form of '${species.name}')`,
 					];
 				}
-				names.add(this.dex.toID(name));
+				if (species.exists && species.name !== set.species) nums.add(species.num);
 			}
-			if (!names.size) {
+			if (!nums.size) {
 				return [
 					`${this.format.name} works using nicknames; your team has 0 nicknamed Pok\u00e9mon.`,
 					`(If this was intentional, add a nickname to one Pok\u00e9mon that isn't the name of a Pok\u00e9mon species.)`,
