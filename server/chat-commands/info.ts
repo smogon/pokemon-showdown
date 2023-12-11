@@ -889,8 +889,7 @@ export const commands: Chat.ChatCommands = {
 
 		if (dexObject.exists) {
 			target = dexObject.name;
-		}
-		else if (type1.exists) {
+		} if (type1.exists) {
 			const types = [];
 				types.push(type1.name);
 				if (type2.exists && type2 !== type1) {
