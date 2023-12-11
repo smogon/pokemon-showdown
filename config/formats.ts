@@ -1285,7 +1285,7 @@ export const Formats: FormatList = [
 			'Basculin-White-Striped', 'Kyogre', 'Miraidon', 'Sneasel', 'Sneasel-Hisui', 'Ursaring', 'Arena Trap', 'Huge Power', 'Pure Power',
 			'Shadow Tag', 'Speed Boost', 'Moody', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Revival Blessing',
 		],
-		restricted: ['Gallade', 'Gholdengo', 'Frosmoth', 'Lilligant-Hisui'],
+		restricted: ['Frosmoth', 'Gallade', 'Gholdengo', 'Lilligant-Hisui'],
 		onValidateTeam(team) {
 			const names = new Set<ID>();
 			for (const set of team) {
