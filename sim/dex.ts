@@ -363,7 +363,9 @@ export class ModdedDex {
 	}
 
 	search(
-		target: string, searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures' | 'TypeChart')[] | null, isInexact?: boolean
+		target: string,
+		searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures' | 'TypeChart')[] | null,
+		isInexact?: boolean
 	): AnyObject[] | null {
 		if (!target) return null;
 
