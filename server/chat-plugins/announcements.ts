@@ -146,7 +146,7 @@ export const commands: Chat.ChatCommands = {
 		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
 
 		htmledit: "edit",
-		edit(target,room,user, connection, cmd, message) {
+		edit(target, room, user, connection, cmd, message) {
 			room = this.requireRoom();
 			const supportHTML = cmd === 'htmledit';
 			if (!target) return this.parse('/help announcement edit');
@@ -161,12 +161,11 @@ export const commands: Chat.ChatCommands = {
 			if (!room.minorActivity) return this.errorReply(this.tr`There is no announcement in progress to edit.`);
 
 			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
-			var updatedAnnouncement = new Announcement(room, {source});
+			const updatedAnnouncement = new Announcement(room, {source});
 			room.setMinorActivity(updatedAnnouncement, true);
-			
 			this.roomlog(`${user.name} used ${message}`);
-			this.modlog(`ANNOUNCEMENT EDIT`)
-			this.privateModAction(room.tr`The announcement was edited by ${user.name}.`)
+			this.modlog(`ANNOUNCEMENT EDIT`);
+			this.privateModAction(room.tr`The announcement was edited by ${user.name}.`);
 		},
 		edithelp: [`/announcement edit [announcement] - Edits an announcement without pinging users. Requies % @ # &`],
 
