@@ -110,7 +110,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onTryMovePriority: -2,
 			onTryMove(pokemon, target, move) {
-				if (!pokemon.hasItem('musclememory')) {
+				if (!pokemon.hasAbility('musclememory')) {
 					pokemon.removeVolatile('musclememory');
 					return;
 				}
