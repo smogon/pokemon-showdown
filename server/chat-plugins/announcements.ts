@@ -103,10 +103,10 @@ export const commands: Chat.ChatCommands = {
 		htmledit: 'edit',
 		edit(target, room, user, connection, cmd, message) {
 			room = this.requireRoom();
+			const announcement = this.requireMinorActivity(Announcement);
+
 			if (!target) return this.parse('/help announcement edit');
 			target = target.trim();
-			if (room.battle) return this.errorReply(this.tr`Battles do not support announcements.`);
-
 			const text = this.filter(target);
 			if (target !== text) return this.errorReply(this.tr`You are not allowed to use filtered words in announcements.`);
 
@@ -115,7 +115,6 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('minigame', null, room);
 			if (supportHTML) this.checkCan('declare', null, room);
 			this.checkChat();
-			const announcement = this.requireMinorActivity(Announcement);
 
 			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
 			announcement.source = source;
