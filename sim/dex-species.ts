@@ -330,14 +330,16 @@ export class Learnset {
 	readonly eventData?: EventInfo[];
 	readonly encounters?: EventInfo[];
 	readonly exists: boolean;
+	readonly species: Species;
 
-	constructor(data: AnyObject) {
+	constructor(data: AnyObject, species: Species) {
 		this.exists = true;
 		this.effectType = 'Learnset';
 		this.learnset = data.learnset || undefined;
 		this.eventOnly = !!data.eventOnly;
 		this.eventData = data.eventData || undefined;
 		this.encounters = data.encounters || undefined;
+		this.species = species;
 	}
 }
 
@@ -397,7 +399,7 @@ export class DexSpecies {
 					}
 				}
 			}
-			this.speciesCache.set(id, species);
+			this.speciesCache.set(id, this.dex.deepFreeze(species));
 			return species;
 		}
 
@@ -508,7 +510,10 @@ export class DexSpecies {
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
-			if (this.dex.gen < 5) delete species.abilities['H'];
+			if (this.dex.gen < 5) {
+				species.abilities = this.dex.deepClone(species.abilities);
+				delete species.abilities['H'];
+			}
 			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
 		} else {
 			species = new Species({
@@ -516,22 +521,122 @@ export class DexSpecies {
 				exists: false, tier: 'Illegal', doublesTier: 'Illegal', natDexTier: 'Illegal', isNonstandard: 'Custom',
 			});
 		}
-		if (species.exists) this.speciesCache.set(id, species);
+		if (species.exists) this.speciesCache.set(id, this.dex.deepFreeze(species));
 		return species;
 	}
 
-	getLearnset(id: ID): Learnset['learnset'] {
-		return this.getLearnsetData(id).learnset;
+	getMovePool(id: ID, isNatDex = false): Set<ID> {
+		let eggMovesOnly = false;
+		let maxGen = this.dex.gen;
+		const movePool = new Set<ID>();
+		for (const {species, learnset} of this.getFullLearnset(id)) {
+			for (const moveid in learnset) {
+				if (eggMovesOnly) {
+					if (learnset[moveid].some(source => source.startsWith('9E'))) {
+						movePool.add(moveid as ID);
+					}
+				} else if (maxGen >= 9) {
+					// Pokemon Home now strips learnsets on withdrawal
+					if (isNatDex || learnset[moveid].some(source => source.startsWith('9'))) {
+						movePool.add(moveid as ID);
+					}
+				} else {
+					if (learnset[moveid].some(source => parseInt(source.charAt(0)) <= maxGen)) {
+						movePool.add(moveid as ID);
+					}
+				}
+				if (species.evoRegion) {
+					// species can only evolve in this gen, so prevo can't have any moves
+					// from after that gen
+					if (this.dex.gen >= 9) eggMovesOnly = true;
+					if (this.dex.gen === 8 && species.evoRegion === 'Alola') maxGen = 7;
+				}
+			}
+		}
+		return movePool;
 	}
 
+	getFullLearnset(id: ID): (Learnset & {learnset: NonNullable<Learnset['learnset']>})[] {
+		const originalSpecies = this.get(id);
+		let species: Species | null = originalSpecies;
+		const out: (Learnset & {learnset: NonNullable<Learnset['learnset']>})[] = [];
+		const alreadyChecked: {[k: string]: boolean} = {};
+
+		while (species?.name && !alreadyChecked[species.id]) {
+			alreadyChecked[species.id] = true;
+			const learnset = this.getLearnsetData(species.id);
+			if (learnset.learnset) {
+				out.push(learnset as any);
+				species = this.learnsetParent(species);
+				continue;
+			}
+
+			// no learnset
+			if ((species.changesFrom || species.baseSpecies) !== species.name) {
+				// forme without its own learnset
+				species = this.get(species.changesFrom || species.baseSpecies);
+				// warning: formes with their own learnset, like Wormadam, should NOT
+				// inherit from their base forme unless they're freely switchable
+				continue;
+			}
+			if (species.isNonstandard) {
+				// It's normal for a nonstandard species not to have learnset data
+
+				// Formats should replace the `Obtainable Moves` rule if they want to
+				// allow pokemon without learnsets.
+				return out;
+			}
+			if (species.prevo && this.getLearnsetData(toID(species.prevo)).learnset) {
+				species = this.get(toID(species.prevo));
+				continue;
+			}
+
+			// should never happen
+			throw new Error(`Species with no learnset data: ${species.id}`);
+		}
+
+		return out;
+	}
+
+	learnsetParent(species: Species) {
+		// Own Tempo Rockruff and Battle Bond Greninja are special event formes
+		// that are visually indistinguishable from their base forme but have
+		// different learnsets. To prevent a leak, we make them show up as their
+		// base forme, but hardcode their learnsets into Rockruff-Dusk and
+		// Greninja-Ash
+		if (['Gastrodon', 'Pumpkaboo', 'Sinistea', 'Tatsugiri'].includes(species.baseSpecies) && species.forme) {
+			return this.get(species.baseSpecies);
+		} else if (species.name === 'Lycanroc-Dusk') {
+			return this.get('Rockruff-Dusk');
+		} else if (species.name === 'Greninja-Bond') {
+			return null;
+		} else if (species.prevo) {
+			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
+			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
+			species = this.get(species.prevo);
+			if (species.gen > Math.max(2, this.dex.gen)) return null;
+			return species;
+		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
+			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
+			return this.get(species.changesFrom);
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the raw learnset data for the species.
+	 *
+	 * In practice, if you're trying to figure out what moves a pokemon learns,
+	 * you probably want to `getFullLearnset` or `getMovePool` instead.
+	 */
 	getLearnsetData(id: ID): Learnset {
 		let learnsetData = this.learnsetCache.get(id);
 		if (learnsetData) return learnsetData;
 		if (!this.dex.data.Learnsets.hasOwnProperty(id)) {
-			return new Learnset({exists: false});
+			return new Learnset({exists: false}, this.get(id));
 		}
-		learnsetData = new Learnset(this.dex.data.Learnsets[id]);
-		this.learnsetCache.set(id, learnsetData);
+		learnsetData = new Learnset(this.dex.data.Learnsets[id], this.get(id));
+		this.learnsetCache.set(id, this.dex.deepFreeze(learnsetData));
 		return learnsetData;
 	}
 
@@ -545,7 +650,7 @@ export class DexSpecies {
 		for (const id in this.dex.data.Pokedex) {
 			species.push(this.getByID(id as ID));
 		}
-		this.allCache = species;
+		this.allCache = Object.freeze(species);
 		return this.allCache;
 	}
 }

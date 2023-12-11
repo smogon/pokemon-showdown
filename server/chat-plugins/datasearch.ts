@@ -137,7 +137,7 @@ export const commands: Chat.ChatCommands = {
 			`|html| <details class="readmore"><summary><code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
 			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
-			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC/CAP/CAP NFE/CAP LC.<br/>` +
+			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZUBL/ZU/NFE/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.</summary>` +
 			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
 			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
@@ -630,10 +630,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		lc: 'LC',
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
 	});
-	if (mod.gen !== 9) {
-		allTiers.zu = 'ZU';
-		allTiers.zubl = 'ZUBL';
-	}
 	const allDoublesTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		doublesubers: 'DUber', doublesuber: 'DUber', duber: 'DUber', dubers: 'DUber',
 		doublesou: 'DOU', dou: 'DOU',
@@ -1128,7 +1124,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
 				if (nationalSearch) tier = dex[mon].natDexTier;
-				if (tier === '(PU)') tier = 'ZU';
 				if (tier.startsWith('(')) tier = tier.slice(1, -1) as TierTypes.Singles;
 				// if (tier === 'New') tier = 'OU';
 				if (alts.tiers[tier]) continue;
@@ -1785,47 +1780,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		};
 	}
 
-	const getFullLearnsetOfPokemon = (species: Species, natDex: boolean) => {
-		let usedSpecies: Species = Utils.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
-		if (!usedSpeciesLearnset) {
-			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.baseSpecies));
-			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id) || {});
-		}
-		const lsetData = new Set<string>();
-		for (const move in usedSpeciesLearnset) {
-			const learnset = mod.species.getLearnset(usedSpecies.id);
-			if (!learnset) break;
-			const sources = learnset[move];
-			for (const learned of sources) {
-				const sourceGen = parseInt(learned.charAt(0));
-				if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen >= 9 || natDex)) lsetData.add(move);
-			}
-		}
-
-		while (usedSpecies.prevo) {
-			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.prevo));
-			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
-			for (const move in usedSpeciesLearnset) {
-				const learnset = mod.species.getLearnset(usedSpecies.id);
-				if (!learnset) break;
-				const sources = learnset[move];
-				for (const learned of sources) {
-					const sourceGen = parseInt(learned.charAt(0));
-					if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen === 9 || natDex)) lsetData.add(move);
-				}
-			}
-		}
-
-		return lsetData;
-	};
-
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	const validMoves = new Set(Object.keys(mod.data.Moves));
+	const validMoves = new Set(Object.keys(mod.data.Moves)) as Set<ID>;
 	for (const mon of targetMons) {
 		const species = mod.species.get(mon.name);
-		const lsetData = getFullLearnsetOfPokemon(species, !!nationalSearch);
+		const lsetData = mod.species.getMovePool(species.id, !!nationalSearch);
 		// This pokemon's learnset needs to be excluded, so we perform a difference operation
 		// on the valid moveset and this pokemon's moveset.
 		if (mon.shouldBeExcluded) {

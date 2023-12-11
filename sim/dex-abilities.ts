@@ -97,7 +97,7 @@ export class DexAbilities {
 			});
 		}
 
-		if (ability.exists) this.abilityCache.set(id, ability);
+		if (ability.exists) this.abilityCache.set(id, this.dex.deepFreeze(ability));
 		return ability;
 	}
 

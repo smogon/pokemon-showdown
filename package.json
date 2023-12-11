@@ -5,6 +5,7 @@
   "main": "dist/sim/index.js",
   "dependencies": {
     "esbuild": "^0.16.10",
+    "mysql2": "^3.6.5",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
     "probe-image-size": "^7.2.3",
@@ -18,7 +19,7 @@
     "node-static": "^0.7.11",
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
-    "pg": "^8.8.0",
+    "pg": "^8.11.3",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^3.0.6",
     "sucrase": "^3.15.0"
@@ -41,7 +42,7 @@
     "test": "mocha",
     "posttest": "npm run tsc",
     "full-test": "npm run lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\"",
-    "full-test-ci": "eslint ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
+    "full-test-ci": "eslint --no-error-on-unmatched-pattern ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
     "postinstall": "npm run build postinstall"
   },
   "bin": "./pokemon-showdown",

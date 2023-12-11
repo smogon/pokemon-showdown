@@ -97,7 +97,7 @@ export const Friends = new class {
 			return buf;
 		}
 
-		buf += `<form data-submitsend="/friend add {username}">Add friend: <input name="username" /><br />`;
+		buf += `<form data-submitsend="/friend add {username}">Add friend: <input class="textbox" name="username" /><br />`;
 		buf += `<button class="button" type="submit">Add <i class="fa fa-paper-plane"></i></button></form>`;
 
 		for (const key in categorized) {

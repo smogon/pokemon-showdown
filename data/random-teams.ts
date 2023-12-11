@@ -1120,7 +1120,7 @@ export class RandomTeams {
 		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Hard-code abilities here
-		if (species.id === 'arcaninehisui') return 'Rock Head';
+		if (species.id === 'florges') return 'Flower Veil';
 		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'empoleon') return 'Competitive';
 		if (species.id === 'chandelure') return 'Flash Fire';
@@ -1138,6 +1138,7 @@ export class RandomTeams {
 		if (!isDoubles) {
 			if (species.id === 'hypno') return 'Insomnia';
 			if (species.id === 'staraptor') return 'Reckless';
+			if (species.id === 'arcaninehisui') return 'Rock Head';
 			if (species.id === 'vespiquen') return 'Pressure';
 			if (species.id === 'enamorus' && moves.has('calmmind')) return 'Cute Charm';
 			if (species.id === 'klawf' && role === 'Setup Sweeper') return 'Anger Shell';
@@ -1176,7 +1177,6 @@ export class RandomTeams {
 
 			// just doubles and multi
 			if (this.format.gameType !== 'freeforall') {
-				if (species.id === 'florges') return 'Flower Veil';
 				if (
 					species.id === 'clefairy' ||
 					(species.baseSpecies === 'Maushold' && role === 'Doubles Support')
@@ -1913,43 +1913,11 @@ export class RandomTeams {
 			// Four random unique moves from the movepool
 			let pool = ['struggle'];
 			if (forme === 'Smeargle') {
-				pool = this.dex.moves
-					.all()
+				pool = this.dex.moves.all()
 					.filter(move => !(move.isNonstandard || move.isZ || move.isMax || move.realMove))
 					.map(m => m.id);
 			} else {
-				const formes = ['gastrodoneast', 'pumpkaboosuper', 'zygarde10'];
-				let learnset = this.dex.species.getLearnset(species.id);
-				let learnsetSpecies = species;
-				if (formes.includes(species.id) || !learnset) {
-					learnsetSpecies = this.dex.species.get(species.baseSpecies);
-					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
-				}
-				if (learnset) {
-					pool = Object.keys(learnset).filter(
-						moveid => learnset![moveid].find(learned => learned.startsWith(String(this.gen)))
-					);
-				}
-				if (learnset && learnsetSpecies === species && species.changesFrom) {
-					learnset = this.dex.species.getLearnset(toID(species.changesFrom));
-					for (const moveid in learnset) {
-						if (!pool.includes(moveid) && learnset[moveid].some(source => source.startsWith(String(this.gen)))) {
-							pool.push(moveid);
-						}
-					}
-				}
-				const evoRegion = learnsetSpecies.evoRegion && learnsetSpecies.gen !== this.gen;
-				for (let i = 0; i < 2 && learnsetSpecies.prevo; i++) {
-					learnsetSpecies = this.dex.species.get(learnsetSpecies.prevo);
-					learnset = this.dex.species.getLearnset(learnsetSpecies.id);
-					for (const moveid in learnset) {
-						if (!pool.includes(moveid) && learnset[moveid].some(
-							source => source.startsWith(String(this.gen)) && (!evoRegion || source.charAt(1) === 'E')
-						)) {
-							pool.push(moveid);
-						}
-					}
-				}
+				pool = [...this.dex.species.getMovePool(species.id)];
 			}
 
 			const moves = this.multipleSamplesNoReplace(pool, this.maxMoveCount);
@@ -2047,7 +2015,7 @@ export class RandomTeams {
 		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
-		const last = [0, 151, 251, 386, 493, 649, 721, 807, 898, 1010][this.gen];
+		const last = [0, 151, 251, 386, 493, 649, 721, 807, 898, 1017][this.gen];
 
 		if (n <= 0 || n > last) throw new Error(`n must be a number between 1 and ${last} (got ${n})`);
 		if (requiredType && !this.dex.types.get(requiredType).exists) {
@@ -2063,8 +2031,7 @@ export class RandomTeams {
 			for (const species of speciesPool) {
 				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
 				if (requireMoves) {
-					const hasMovesInCurrentGen = Object.values(this.dex.species.getLearnset(species.id) || {})
-						.some(sources => sources.some(source => source.startsWith('9')));
+					const hasMovesInCurrentGen = this.dex.species.getMovePool(species.id).size;
 					if (!hasMovesInCurrentGen) continue;
 				}
 				if (requiredType && !species.types.includes(requiredType)) continue;
@@ -2131,6 +2098,7 @@ export class RandomTeams {
 			if (!(species.num in hasDexNumber)) continue;
 			if (isNotCustom && (species.gen > this.gen ||
 				(species.isNonstandard && species.isNonstandard !== 'Unobtainable'))) continue;
+			if (requiredType && !species.types.includes(requiredType)) continue;
 			if (!formes[hasDexNumber[species.num]]) formes[hasDexNumber[species.num]] = [];
 			formes[hasDexNumber[species.num]].push(species.name);
 		}

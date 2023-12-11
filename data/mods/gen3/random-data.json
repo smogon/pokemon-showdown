@@ -12,7 +12,7 @@
         "moves": ["earthquake", "icebeam", "mirrorcoat", "rest", "roar", "sleeptalk", "surf", "toxic"]
     },
     "butterfree": {
-        "level": 94,
+        "level": 95,
         "moves": ["gigadrain", "hiddenpowerfire", "morningsun", "psychic", "sleeppowder", "stunspore", "toxic"]
     },
     "beedrill": {
@@ -88,7 +88,7 @@
         "moves": ["fakeout", "hiddenpowerground", "hypnosis", "irontail", "return", "shadowball", "substitute"]
     },
     "golduck": {
-        "level": 82,
+        "level": 81,
         "moves": ["calmmind", "hiddenpowergrass", "hydropump", "hypnosis", "icebeam", "substitute", "surf"]
     },
     "primeape": {
@@ -124,7 +124,7 @@
         "moves": ["doubleedge", "earthquake", "explosion", "hiddenpowerbug", "rockslide", "toxic"]
     },
     "rapidash": {
-        "level": 83,
+        "level": 82,
         "moves": ["fireblast", "hiddenpowergrass", "hiddenpowerrock", "substitute", "toxic"]
     },
     "slowbro": {
@@ -156,7 +156,7 @@
         "moves": ["explosion", "icebeam", "rapidspin", "spikes", "surf", "toxic"]
     },
     "gengar": {
-        "level": 78,
+        "level": 77,
         "moves": ["destinybond", "explosion", "firepunch", "hypnosis", "icepunch", "substitute", "thunderbolt", "willowisp"]
     },
     "hypno": {
@@ -200,7 +200,7 @@
         "moves": ["doubleedge", "earthquake", "megahorn", "rockslide", "substitute", "swordsdance"]
     },
     "tangela": {
-        "level": 91,
+        "level": 92,
         "moves": ["hiddenpowergrass", "leechseed", "morningsun", "sleeppowder", "stunspore"]
     },
     "kangaskhan": {
@@ -212,7 +212,7 @@
         "moves": ["hiddenpowergrass", "hydropump", "icebeam", "megahorn", "raindance"]
     },
     "starmie": {
-        "level": 77,
+        "level": 76,
         "moves": ["hydropump", "icebeam", "psychic", "recover", "surf", "thunderbolt"]
     },
     "mrmime": {
@@ -224,7 +224,7 @@
         "moves": ["aerialace", "batonpass", "hiddenpowerground", "hiddenpowerrock", "quickattack", "silverwind", "swordsdance"]
     },
     "jynx": {
-        "level": 82,
+        "level": 81,
         "moves": ["calmmind", "hiddenpowerfire", "icebeam", "lovelykiss", "psychic", "substitute"]
     },
     "electabuzz": {
@@ -244,11 +244,11 @@
         "moves": ["doubleedge", "earthquake", "hiddenpowerghost", "hiddenpowerrock", "return"]
     },
     "gyarados": {
-        "level": 75,
+        "level": 74,
         "moves": ["doubleedge", "dragondance", "earthquake", "hiddenpowerflying", "hydropump"]
     },
     "lapras": {
-        "level": 81,
+        "level": 80,
         "moves": ["healbell", "icebeam", "rest", "sleeptalk", "surf", "thunderbolt", "toxic"]
     },
     "ditto": {
@@ -280,11 +280,11 @@
         "moves": ["doubleedge", "earthquake", "hiddenpowerflying", "rockslide", "substitute"]
     },
     "snorlax": {
-        "level": 74,
+        "level": 73,
         "moves": ["bodyslam", "curse", "earthquake", "rest", "return", "selfdestruct", "shadowball", "sleeptalk"]
     },
     "articuno": {
-        "level": 82,
+        "level": 81,
         "moves": ["healbell", "hiddenpowerfire", "icebeam", "protect", "rest", "roar", "sleeptalk", "toxic"]
     },
     "zapdos": {
@@ -324,15 +324,15 @@
         "moves": ["doubleedge", "quickattack", "return", "reversal", "shadowball", "substitute", "trick"]
     },
     "noctowl": {
-        "level": 91,
+        "level": 92,
         "moves": ["hiddenpowerfire", "hypnosis", "psychic", "reflect", "toxic", "whirlwind"]
     },
     "ledian": {
-        "level": 97,
+        "level": 98,
         "moves": ["agility", "batonpass", "lightscreen", "reflect", "silverwind", "swordsdance", "toxic"]
     },
     "ariados": {
-        "level": 93,
+        "level": 94,
         "moves": ["agility", "batonpass", "signalbeam", "sludgebomb", "spiderweb", "toxic"]
     },
     "crobat": {
@@ -352,7 +352,7 @@
         "moves": ["batonpass", "calmmind", "hiddenpowerfire", "psychic", "reflect", "wish"]
     },
     "ampharos": {
-        "level": 83,
+        "level": 82,
         "moves": ["firepunch", "healbell", "hiddenpowergrass", "hiddenpowerice", "thunderbolt", "toxic"]
     },
     "bellossom": {
@@ -468,7 +468,7 @@
         "moves": ["earthquake", "focuspunch", "hiddenpowerghost", "return", "swordsdance"]
     },
     "magcargo": {
-        "level": 93,
+        "level": 94,
         "moves": ["fireblast", "hiddenpowergrass", "rest", "sleeptalk", "toxic", "yawn"]
     },
     "piloswine": {
@@ -476,7 +476,7 @@
         "moves": ["doubleedge", "earthquake", "icebeam", "protect", "rockslide", "toxic"]
     },
     "corsola": {
-        "level": 94,
+        "level": 95,
         "moves": ["calmmind", "icebeam", "recover", "surf", "toxic"]
     },
     "octillery": {
@@ -508,7 +508,7 @@
         "moves": ["earthquake", "rapidspin", "rest", "rockslide", "sleeptalk", "toxic"]
     },
     "porygon2": {
-        "level": 82,
+        "level": 81,
         "moves": ["icebeam", "recover", "return", "thunderbolt", "thunderwave", "toxic"]
     },
     "stantler": {
@@ -536,7 +536,7 @@
         "moves": ["calmmind", "crunch", "hiddenpowergrass", "hiddenpowerice", "rest", "sleeptalk", "substitute", "thunderbolt"]
     },
     "entei": {
-        "level": 79,
+        "level": 80,
         "moves": ["bodyslam", "calmmind", "fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "solarbeam", "substitute", "sunnyday"]
     },
     "suicune": {
@@ -552,7 +552,7 @@
         "moves": ["aeroblast", "calmmind", "earthquake", "icebeam", "recover", "substitute", "thunderbolt", "toxic"]
     },
     "hooh": {
-        "level": 72,
+        "level": 71,
         "moves": ["calmmind", "earthquake", "recover", "sacredfire", "substitute", "thunderbolt", "toxic"]
     },
     "celebi": {
@@ -628,7 +628,7 @@
         "moves": ["aerialace", "batonpass", "protect", "silverwind", "substitute", "swordsdance"]
     },
     "shedinja": {
-        "level": 93,
+        "level": 94,
         "moves": ["agility", "batonpass", "hiddenpowerground", "shadowball", "silverwind", "toxic"]
     },
     "exploud": {
@@ -664,7 +664,7 @@
         "moves": ["brickbreak", "bulkup", "recover", "rockslide", "shadowball", "substitute"]
     },
     "manectric": {
-        "level": 83,
+        "level": 82,
         "moves": ["crunch", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderbolt", "thunderwave"]
     },
     "plusle": {
@@ -692,7 +692,7 @@
         "moves": ["encore", "explosion", "hiddenpowerground", "icebeam", "sludgebomb", "toxic", "yawn"]
     },
     "sharpedo": {
-        "level": 84,
+        "level": 85,
         "moves": ["crunch", "earthquake", "endure", "hiddenpowerflying", "hydropump", "icebeam", "return"]
     },
     "wailord": {
@@ -712,7 +712,7 @@
         "moves": ["calmmind", "firepunch", "icywind", "psychic", "substitute", "taunt"]
     },
     "spinda": {
-        "level": 94,
+        "level": 95,
         "moves": ["bodyslam", "encore", "focuspunch", "shadowball", "substitute", "teeterdance", "toxic"]
     },
     "flygon": {
@@ -732,7 +732,7 @@
         "moves": ["brickbreak", "quickattack", "return", "shadowball", "swordsdance"]
     },
     "seviper": {
-        "level": 89,
+        "level": 88,
         "moves": ["crunch", "earthquake", "flamethrower", "hiddenpowergrass", "sludgebomb"]
     },
     "lunatone": {
@@ -788,7 +788,7 @@
         "moves": ["hiddenpowerfire", "solarbeam", "sunnyday", "synthesis"]
     },
     "chimecho": {
-        "level": 88,
+        "level": 89,
         "moves": ["calmmind", "healbell", "hiddenpowerfire", "lightscreen", "psychic", "reflect", "toxic", "yawn"]
     },
     "absol": {
@@ -816,15 +816,15 @@
         "moves": ["doubleedge", "earthquake", "hiddenpowerflying", "rest", "rockslide", "sleeptalk", "toxic"]
     },
     "luvdisc": {
-        "level": 98,
+        "level": 99,
         "moves": ["icebeam", "protect", "substitute", "surf", "sweetkiss", "toxic"]
     },
     "salamence": {
-        "level": 74,
+        "level": 73,
         "moves": ["brickbreak", "dragondance", "earthquake", "fireblast", "hiddenpowerflying", "rockslide"]
     },
     "metagross": {
-        "level": 76,
+        "level": 75,
         "moves": ["agility", "earthquake", "explosion", "meteormash", "psychic", "rockslide"]
     },
     "regirock": {
@@ -836,7 +836,7 @@
         "moves": ["explosion", "icebeam", "rest", "sleeptalk", "thunderbolt", "thunderwave", "toxic"]
     },
     "registeel": {
-        "level": 80,
+        "level": 79,
         "moves": ["rest", "seismictoss", "sleeptalk", "toxic"]
     },
     "latias": {
@@ -868,7 +868,7 @@
         "moves": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "superpower"]
     },
     "deoxysattack": {
-        "level": 74,
+        "level": 73,
         "moves": ["extremespeed", "firepunch", "psychoboost", "shadowball", "superpower"]
     },
     "deoxysdefense": {
