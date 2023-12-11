@@ -490,6 +490,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', target, 'Wind Breaker', '[silent]');
 			},
 		},
+		self: {
+			onHit(pokemon, source, move) {
+				if (source.hasItem('airfreshener')) {
+					this.add('-activate', source, 'move: Aromatherapy');
+					for (const ally of source.side.pokemon) {
+						if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+							continue;
+						}
+						ally.cureStatus();
+					}
+				}
+			},
+		},
 		secondary: {
 			chance: 100,
 			onHit(target) {
@@ -1352,7 +1365,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
-	   shortDesc: "(Mostly functional) Either Fighting or Flying-type, whichever is more effective.",
+	   shortDesc: "Either Fighting or Flying-type, whichever is more effective.",
 		name: "Flying Press",
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
@@ -1387,7 +1400,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Special",
-	   shortDesc: "(Mostly functional) Either Bug or Electric-type, whichever is more effective.",
+	   shortDesc: "Either Bug or Electric-type, whichever is more effective.",
 		name: "Software Crash",
 		pp: 10,
 		flags: {protect: 1, mirror: 1},
@@ -1660,6 +1673,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.field.clearTerrain();
 			return success;
+		},
+		self: {
+			onHit(pokemon, source, move) {
+				if (source.hasItem('airfreshener')) {
+					this.add('-activate', source, 'move: Aromatherapy');
+					for (const ally of source.side.pokemon) {
+						if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+							continue;
+						}
+						ally.cureStatus();
+					}
+				}
+			},
 		},
 		secondary: null,
 		target: "normal",
