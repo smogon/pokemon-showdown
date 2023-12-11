@@ -889,29 +889,29 @@ export const commands: Chat.ChatCommands = {
 
 		if (dexObject.exists) {
 			target = dexObject.name;
-		} if (type1.exists) {
+		} else if (type1.exists) {
 			const types = [];
-				types.push(type1.name);
-				if (type2.exists && type2 !== type1) {
-					types.push(type2.name);
-				}
-				if (type3.exists && type3 !== type1 && type3 !== type2) {
-					types.push(type3.name);
-				}
-			dexObject = { types: types };
+			types.push(type1.name);
+			if (type2.exists && type2 !== type1) {
+				types.push(type2.name);
+			}
+			if (type3.exists && type3 !== type1 && type3 !== type2) {
+				types.push(type3.name);
+			}
+			dexObject = {types: types};
 			target = types.join("/");
 		} else {
 			const searchResults = dex.search(targets[0], ['Pokedex', 'TypeChart']);
 			if (searchResults && searchResults[0]) {
-
 				this.sendReply(`No Pok\u00e9mon or type named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`);
 				dexObject = dex.species.get(searchResults[0].name);
-				if (dexObject.types.toString() == '???') {
-					target = searchResults[0].name, dexObject = searchResults[0].name;
-			}
+				if (dexObject.types.toString() === '???') {
+					target = searchResults[0].name;
+					dexObject = searchResults[0].name;
+				}
 			} else {
 				return this.sendReplyBox(Utils.html`${target} isn't a recognized Pok\u00e9mon or type${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
-		}
+			}
 		}
 
 		const weaknesses = [];
