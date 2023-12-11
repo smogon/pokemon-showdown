@@ -570,7 +570,7 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 		}
-		const newTargets = dex.dataSearch(target);
+		const newTargets = dex.search(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
 		if (!newTargets || !newTargets.length) {
 			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
@@ -882,44 +882,47 @@ export const commands: Chat.ChatCommands = {
 			targets.pop();
 		}
 
-		let species: {types: string[], [k: string]: any} = dex.species.get(targets[0]);
+		let dexObject: {types: string[], [k: string]: any} = dex.species.get(targets[0]);
 		const type1 = dex.types.get(targets[0]);
 		const type2 = dex.types.get(targets[1]);
 		const type3 = dex.types.get(targets[2]);
 
-		if (species.exists) {
-			target = species.name;
-		} else if (type1.exists) {
+		if (dexObject.exists) {
+			target = dexObject.name;
+		}
+		else if (type1.exists) {
 			const types = [];
-			types.push(type1.name);
-			if (type2.exists && type2 !== type1) {
-				types.push(type2.name);
-			}
-			if (type3.exists && type3 !== type1 && type3 !== type2) {
-				types.push(type3.name);
-			}
-
-			species = {types: types};
+				types.push(type1.name);
+				if (type2.exists && type2 !== type1) {
+					types.push(type2.name);
+				}
+				if (type3.exists && type3 !== type1 && type3 !== type2) {
+					types.push(type3.name);
+				}
+			dexObject = { types: types };
 			target = types.join("/");
 		} else {
-			const searchResults = dex.dataSearch(targets[0], ['Pokedex']);
-
+			const searchResults = dex.search(targets[0], ['Pokedex', 'TypeChart']);
 			if (searchResults && searchResults[0]) {
-				this.sendReply(`No Pok\u00e9mon named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`);
-				species = dex.species.get(searchResults[0].name);
-			} else {
-				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+
+				this.sendReply(`No Pok\u00e9mon or type named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${searchResults[0].name}' instead.`);
+				dexObject = dex.species.get(searchResults[0].name);
+				if (dexObject.types.toString() == '???') {
+					target = searchResults[0].name, dexObject = searchResults[0].name;
 			}
+			} else {
+				return this.sendReplyBox(Utils.html`${target} isn't a recognized Pok\u00e9mon or type${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+		}
 		}
 
 		const weaknesses = [];
 		const resistances = [];
 		const immunities = [];
 		for (const type of dex.types.names()) {
-			const notImmune = dex.getImmunity(type, species);
+			const notImmune = dex.getImmunity(type, dexObject);
 			if (notImmune || isInverse) {
 				let typeMod = !notImmune && isInverse ? 1 : 0;
-				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, species);
+				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, dexObject);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -957,13 +960,13 @@ export const commands: Chat.ChatCommands = {
 			trapped: "Trapping",
 		};
 		for (const status in statuses) {
-			if (!dex.getImmunity(status, species)) {
+			if (!dex.getImmunity(status, dexObject)) {
 				immunities.push(statuses[status]);
 			}
 		}
 
 		const buffer = [];
-		buffer.push(`${species.exists ? `${species.name} (ignoring abilities):` : `${target}:`}`);
+		buffer.push(`${dexObject.exists ? `${dexObject.name} (ignoring abilities):` : `${target}:`}`);
 		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<font color=#999999>None</font>'}`);
 		buffer.push(`<span class="message-effect-resist">Resistances</span>: ${resistances.join(', ') || '<font color=#999999>None</font>'}`);
 		buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immunities.join(', ') || '<font color=#999999>None</font>'}`);
@@ -2670,15 +2673,25 @@ export const commands: Chat.ChatCommands = {
 			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
 			buf += `<twitch src="${link}" />`;
 		} else {
+			if (Chat.linkRegex.test(link)) {
+				if (/^https?:\/\/(.*)\.(mp4|mov)\b(\?|$)/i.test(link)) { // video
+					// can't fitImage video, so we're just gonna have to guess to keep it small
+					buf = Utils.html`<video src="${link}" controls="" width="300px" height="300px"></video>`;
+				} else if (/^https?:\/\/(.*)\.(mp3|wav)\b(\?|$)/i.test(link)) { // audio
+					buf = Utils.html`<audio src="${link}" controls=""></audio>`;
+				}
+			}
 			if (link.includes('data:image/png;base64')) {
 				throw new Chat.ErrorMessage('Please provide an actual link (you probably copied it wrong?).');
 			}
-			try {
-				const [width, height, resized] = await Chat.fitImage(link);
-				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
-				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
-			} catch {
-				return this.errorReply('Invalid image');
+			if (!buf) { // fall back on image
+				try {
+					const [width, height, resized] = await Chat.fitImage(link);
+					buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
+					if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
+				} catch {
+					return this.errorReply('Invalid image, audio, or video URL.');
+				}
 			}
 		}
 		if (comment) {
@@ -2691,8 +2704,8 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 	showhelp: [
-		`/show [url] - Shows you an image or YouTube video.`,
-		`!show [url] - Shows an image or YouTube to everyone in a chatroom. Requires: whitelist % @ # &`,
+		`/show [url] - Shows you an image, audio clip, video file, or YouTube video.`,
+		`!show [url] - Shows an image, audio clip, video file, or YouTube video to everyone in a chatroom. Requires: whitelist % @ # &`,
 	],
 
 	rebroadcast(target, room, user, connection) {
