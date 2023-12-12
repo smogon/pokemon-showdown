@@ -2015,9 +2015,6 @@ export class RandomTeams {
 		// Picks `n` random pokemon--no repeats, even among formes
 		// Also need to either normalize for formes or select formes at random
 		// Unreleased are okay but no CAP
-		const last = [0, 151, 251, 386, 493, 649, 721, 807, 898, 1017][this.gen];
-
-		if (n <= 0 || n > last) throw new Error(`n must be a number between 1 and ${last} (got ${n})`);
 		if (requiredType && !this.dex.types.get(requiredType).exists) {
 			throw new Error(`"${requiredType}" is not a valid type.`);
 		}
@@ -2038,7 +2035,6 @@ export class RandomTeams {
 				if (minSourceGen && species.gen < minSourceGen) continue;
 				const num = species.num;
 				if (num <= 0 || pool.includes(num)) continue;
-				if (num > last) break;
 				pool.push(num);
 			}
 		} else {
@@ -2096,6 +2092,7 @@ export class RandomTeams {
 		const formes: string[][] = [];
 		for (const species of speciesPool) {
 			if (!(species.num in hasDexNumber)) continue;
+			if (requiredType && !species.types.includes(requiredType)) continue;
 			if (isNotCustom && (species.gen > this.gen ||
 				(species.isNonstandard && species.isNonstandard !== 'Unobtainable'))) continue;
 			if (requiredType && !species.types.includes(requiredType)) continue;
