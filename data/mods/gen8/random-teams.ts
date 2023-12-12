@@ -610,9 +610,9 @@ export class RandomGen8Teams {
 		const formes: string[][] = [];
 		for (const species of speciesPool) {
 			if (!(species.num in hasDexNumber)) continue;
-			if (requiredType && !species.types.includes(requiredType)) continue;
 			if (isNotCustom && (species.gen > this.gen ||
 				(species.isNonstandard && species.isNonstandard !== 'Unobtainable'))) continue;
+			if (requiredType && !species.types.includes(requiredType)) continue;
 			if (!formes[hasDexNumber[species.num]]) formes[hasDexNumber[species.num]] = [];
 			formes[hasDexNumber[species.num]].push(species.name);
 		}
