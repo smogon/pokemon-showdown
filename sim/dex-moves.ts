@@ -65,6 +65,7 @@ interface MoveFlags {
 	weather?: 1; //Negated by Weather Control
 	bone?: 1; //Affected by Bone Based
 	horn?: 1; //Affected by Mighty Horn and Hardened Sheath
+	counter?: 1; //Indicates move is result of an ability.
 }
 
 export interface HitEffect {

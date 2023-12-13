@@ -7047,17 +7047,18 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	coldrebound: {
-		
 		onDamagingHit(damage, target, source, move) {
-			const icywind = Dex.moves.get('icywind')
+			if (!(target.hp > 0) || !move.flags['contact'] || move.flags['counter']) return;
+			let counterMove = Dex.moves.get('icywind')
 			this.add('-activate', target, 'Cold Rebound');
-			this.actions.useMove(move, source);
-		// 	this.queue.prioritizeAction(this.queue.resolveAction({
-		// 		choice: 'move',
-		// 		pokemon: target,
-		// 		moveid: icywind.id,
-		// 		targetLoc: target.getLocOf(source)!,
-		// 	})[0] as MoveAction);
+			this.effectState.counter = true;
+			this.actions.useMove(counterMove, target);
+		},
+		onModifyMove(move) {
+			if (this.effectState.counter) {
+				move.flags['counter'] = 1
+				this.effectState.counter = false
+			}
 		},
 		name: "Cold Rebound",
 		rating: 3,
