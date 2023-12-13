@@ -7047,26 +7047,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	coldrebound: {
-		onModifyMove(move) {
-			if (!move?.flags['horn']) return;
-			if (!move.secondaries) {
-				move.secondaries = [];
-			}
-			move.secondaries.push({
-				chance: 100,
-				boosts: {atk: 1},
-				ability: this.dex.abilities.get('hardenedsheath'),
-			});
-		},
+		
 		onDamagingHit(damage, target, source, move) {
 			const icywind = Dex.moves.get('icywind')
-			this.add('-singleturn', target, 'ability: Cold Rebound', '[of] ' + target);
-			this.queue.prioritizeAction(this.queue.resolveAction({
-				choice: 'move',
-				pokemon: target,
-				moveid: icywind.id,
-				targetLoc: target.getLocOf(source)!,
-			})[0] as MoveAction);
+			this.add('-activate', target, 'Cold Rebound');
+			this.actions.useMove(move, source);
+		// 	this.queue.prioritizeAction(this.queue.resolveAction({
+		// 		choice: 'move',
+		// 		pokemon: target,
+		// 		moveid: icywind.id,
+		// 		targetLoc: target.getLocOf(source)!,
+		// 	})[0] as MoveAction);
 		},
 		name: "Cold Rebound",
 		rating: 3,
