@@ -7046,7 +7046,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 399,
 		gen: 8,
 	},
-	coldRebound: {
+	coldrebound: {
 		onModifyMove(move) {
 			if (!move?.flags['horn']) return;
 			if (!move.secondaries) {
