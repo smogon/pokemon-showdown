@@ -21714,5 +21714,182 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Water",
 		contestType: "Tough",
+	},
+	smite: {
+		num: 904,
+		accuracy: 85, 
+		basePower: 120,
+		category: "Physical",
+		name: "Smite",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		volatileStatus: 'smackdown',
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				let applies = false;
+				if (pokemon.hasType('Flying') || pokemon.hasAbility('levitate')) applies = true;
+				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] ||
+					this.field.getPseudoWeather('gravity')) applies = false;
+				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
+					applies = true;
+					this.queue.cancelMove(pokemon);
+					pokemon.removeVolatile('twoturnmove');
+				}
+				if (pokemon.volatiles['magnetrise']) {
+					applies = true;
+					delete pokemon.volatiles['magnetrise'];
+				}
+				if (pokemon.volatiles['telekinesis']) {
+					applies = true;
+					delete pokemon.volatiles['telekinesis'];
+				}
+				if (!applies) return false;
+				this.add('-start', pokemon, 'Smack Down');
+			},
+			onRestart(pokemon) {
+				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
+					this.queue.cancelMove(pokemon);
+					pokemon.removeVolatile('twoturnmove');
+					this.add('-start', pokemon, 'Smack Down');
+				}
+			},
+			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
+		},
+		target: "normal",
+		type: "Electric",
+		contestType: "Tough",
+	},
+	outburst: {
+		num: 905,
+		accuracy: 100,
+		basePower: 250,
+		category: "Special",
+		name: "Explosion",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, noparentalbond: 1},
+		selfdestruct: "always",
+		secondary: null,
+		target: "allAdjacent",
+		type: "Normal",
+		contestType: "Beautiful",
+	},
+	scorchedearth: {
+		num: 906,
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		name: "Scorched Earth",
+		pp: 10,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Ground', type);
+		},
+		priority: 0,
+		secondary: null,
+		target: "any",
+		type: "Fire",
+		zMove: {basePower: 170},
+		contestType: "Tough",
+	},
+	ironfangs: {
+		num: 907,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		name: "Iron Fangs",
+		pp: 15,
+		priority: 0,
+		flags: {bite: 1, contact: 1, protect: 1, mirror: 1},
+		onTryHit(pokemon) {
+			// will shatter screens through sub, before you hit
+			pokemon.side.removeSideCondition('reflect');
+			pokemon.side.removeSideCondition('lightscreen');
+			pokemon.side.removeSideCondition('auroraveil');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		contestType: "Clever",
+	},
+	lovelybite: {
+		num: 908,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Lovely Bite",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, bite: 1},
+		secondary: {
+			chance: 10,
+			volatileStatus: 'attract',
+		},
+		target: "normal",
+		type: "Fairy",
+		contestType: "Beautiful",
+	},
+	shadowfangs: {
+		num: 909,
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Shadow Fangs",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, bite: 1},
+		secondary: {
+			chance: 10,
+			volatileStatus: 'curse',
+		},
+		target: "normal",
+		type: "Ghost",
+		contestType: "Tough",
+	},
+	jaggedfangs: {
+		num: 910,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Jagged Fangs",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, bite: 1},
+		secondary: {
+			chance: 20,
+			self: {
+				boosts: {
+					atk: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Ghost",
+		contestType: "Tough",
+	},
+	seismicfist: {
+		num: 911,
+		accuracy: 100,
+		basePower: 85,
+		category: "Physical",
+		name: "Seismic Fist",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
+		target: "normal",
+		type: "Ground",
+		contestType: "Tough",
+		secondary: {
+			chance: 20,
+			boosts: {
+				def: -1,
+			},
+		},
 	}
+	
+
+
+
 };
