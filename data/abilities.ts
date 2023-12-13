@@ -5366,7 +5366,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Electric') {
 				this.debug('Electrocytes boost');
-				console.log(`Electrocytes: Atk: ${atk}, Modified Atk: ${this.chainModify(1.25)}`)
 				return this.chainModify(1.25);	
 				}
 		},
@@ -7003,6 +7002,79 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 396,
 		gen: 8,
 	},
+	mightyhorn: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['horn']) {
+				this.debug('Mighty Horn boost');
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		name: "Mighty Horn",
+		rating: 3,
+		num: 397,
+	},
+	hardenedsheath: {
+		onModifyMove(move) {
+			if (!move?.flags['horn']) return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 100,
+				boosts: {atk: 1},
+				ability: this.dex.abilities.get('hardenedsheath'),
+			});
+		},
+		name: "Hardened Sheath",
+		rating: 3,
+		num: 398,
+	},
+	arcticfur: {
+		onSourceModifyAtkPriority: 5,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			return this.chainModify(0.65);
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			return this.chainModify(0.65);
+
+		},
+		isBreakable: true,
+		name: "Arctic Fur",
+		rating: 3,
+		num: 399,
+		gen: 8,
+	},
+	coldRebound: {
+		onModifyMove(move) {
+			if (!move?.flags['horn']) return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 100,
+				boosts: {atk: 1},
+				ability: this.dex.abilities.get('hardenedsheath'),
+			});
+		},
+		onDamagingHit(damage, target, source, move) {
+			const icywind = Dex.moves.get('icywind')
+			this.add('-singleturn', target, 'ability: Cold Rebound', '[of] ' + target);
+			this.queue.prioritizeAction(this.queue.resolveAction({
+				choice: 'move',
+				pokemon: target,
+				moveid: icywind.id,
+				targetLoc: target.getLocOf(source)!,
+			})[0] as MoveAction);
+		},
+		name: "Cold Rebound",
+		rating: 3,
+		num: 398,
+		gen: 8,
+	},
+
+
 	
 	
 

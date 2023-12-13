@@ -517,6 +517,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Boost Pokemon's Grass moves by 20%, 50% when below 1/3 HP",
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using a Grass-type attack, and 1.2 otherwise.",
 	},
+	pickup: {
+		inherit: true,
+		onStart(pokemon) {
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			for (const condition of sideConditions) {
+				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] ability: Pickup', '[of] ' + pokemon);
+				}
+			}
+		}
+	},
 	poisontouch: {
 		inherit: true,
 		// Activate after Sheer Force to make interaction determistic. The ordering for this ability is
