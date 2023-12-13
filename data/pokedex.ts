@@ -3921,6 +3921,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 38,
 		color: "Red",
+		evoType: "levelMove",
+      evoMove: "Ancient Power",
 		evos: ["Yanmega"],
 		eggGroups: ["Bug"],
 	},
