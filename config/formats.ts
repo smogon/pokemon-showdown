@@ -130,6 +130,16 @@ export const Formats: FormatList = [
 
 	// 	},
 	// },
+		{
+		name: "[Gen 8] Ability Testing Site",
+		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3712086/">Pure Hackmons</a>`,
+		],
+
+		mod: 'gen8eliteredux',
+		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
+	},
 	{
 		name: "[Gen 8] Elite Redux OU",
 		desc: `Testing for ER Innates`,
