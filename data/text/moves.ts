@@ -6587,6 +6587,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		name: "Tackle",
 		shortDesc: "No additional effect.",
 	},
+	tachyoncutter: {
+		name: "Tachyon Cutter",
+		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit. This move does not check accuracy.",
+		shortDesc: "Hits twice. This move does not check accuracy.",
+	},
 	tailglow: {
 		name: "Tail Glow",
 		desc: "Raises the user's Special Attack by 3 stages.",
@@ -6832,6 +6837,11 @@ export const MovesText: {[k: string]: MoveText} = {
 		},
 
 		start: "  [SOURCE] trapped [POKEMON]!",
+	},
+	thunderclap: {
+		name: "Thunderclap",
+		desc: "Fails if the target did not select a physical attack, special attack, or Me First for use this turn, or if the target moves before the user.",
+		shortDesc: "Usually goes first. Fails if target is not attacking.",
 	},
 	thunderfang: {
 		name: "Thunder Fang",

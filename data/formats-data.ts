@@ -5634,6 +5634,16 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 		natDexTier: "UUBL",
 	},
+	ragingbolt: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
+	ironcrown: {
+		tier: "OU",
+		doublesTier: "DOU",
+		natDexTier: "OU",
+	},
 	missingno: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
