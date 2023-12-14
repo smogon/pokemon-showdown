@@ -465,10 +465,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			if (pokemon.species.baseSpecies === 'Ogerpon') {
-				const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
-				pokemon.formeChange(pokemon.species.id + tera, pokemon.getItem(), true);
-			}
 			this.battle.runEvent('AfterTerastallization', pokemon);
 		},
 		getMixedSpecies(originalForme, megaForme, pokemon) {

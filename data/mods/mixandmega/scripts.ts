@@ -464,9 +464,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			if (pokemon.species.baseSpecies === 'Ogerpon') {
-				const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
-				pokemon.formeChange(pokemon.species.id + tera, pokemon.getItem(), true);
+			if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
+				pokemon.formeChange('Terapagos-Stellar', null, true);
 			}
 			this.battle.runEvent('AfterTerastallization', pokemon);
 		},

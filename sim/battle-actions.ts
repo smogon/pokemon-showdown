@@ -1887,6 +1887,9 @@ export class BattleActions {
 			const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
 			pokemon.formeChange(pokemon.species.id + tera, null, true);
 		}
+		if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
+			pokemon.formeChange('Terapagos-Stellar', null, true);
+		}
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
 

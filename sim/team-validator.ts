@@ -2403,7 +2403,9 @@ export class TeamValidator {
 			} else if (learnset['sketch']) {
 				if (move.noSketch || move.isZ || move.isMax) {
 					cantLearnReason = `can't be Sketched.`;
-				} else if (move.gen > 7 && !canSketchPostGen7Moves) {
+				} else if (move.gen > 7 && !canSketchPostGen7Moves &&
+					(dex.gen === 8 ||
+						(dex.gen === 9 && ['gen9dlc1', 'gen9predlc'].includes(format.mod)))) {
 					cantLearnReason = `can't be Sketched because it's a Gen ${move.gen} move and Sketch isn't available in Gen ${move.gen}.`;
 				} else {
 					if (!sources.length || !moveSources.size()) sketch = true;
