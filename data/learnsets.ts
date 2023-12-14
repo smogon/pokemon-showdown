@@ -70080,7 +70080,8 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 			workup: ["8M", "7M"],
 			zenheadbutt: ["9M", "8M", "7T", "6T"],
 		},
-	},meowsticf: {
+	},
+	meowsticf: {
 		learnset: {
 			alluringvoice: ["9M"],
 			allyswitch: ["8M", "7T"],
