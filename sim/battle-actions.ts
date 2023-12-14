@@ -346,6 +346,19 @@ export class BattleActions {
 			this.battle.activeMove = oldActiveMove;
 		}
 	}
+
+	runAdditionalMove(move: Move, pokemon: Pokemon, target: Pokemon, moveMutations?: Object, ) {
+		type MutableMove = {-readonly [K in keyof Move]: Move[K]}
+		const nextMutableMove: MutableMove = move
+		if (moveMutations) {
+			for (const key of Object.keys(moveMutations)) {
+				(nextMutableMove as any)[key] = (moveMutations as any)[key];
+			}
+		}
+		const nextMove: Move = nextMutableMove
+		const targetLoc = pokemon.getLocOf(target)
+		this.runMove(nextMove, pokemon, targetLoc, null, undefined, true);
+	}
 	/**
 	 * useMove is the "inside" move caller. It handles effects of the
 	 * move itself, but not the idea of using the move.
@@ -1706,10 +1719,10 @@ export class BattleActions {
 			const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
 			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
-		} else if (move.multihitType === 'boxer' && move.hit > 1) {
-			// Boxer modifier
+		} else if ((move.multihitType === 'boxer' || move.multihitType === 'maw') && move.hit > 1) {
+			// Boxer & Primal Maw modifier
 			const bondModifier = 0.5
-			this.battle.debug(`Raging Boxer modifier: ${bondModifier}`);
+			this.battle.debug(`Raging Boxer / Primal Maw modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		} else if (move.multihitType === 'headed') {
 			let bondModifier;

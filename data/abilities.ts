@@ -7053,10 +7053,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	coldrebound: {
 		onDamagingHit(damage, target, source, move) {
 			if (!(target.hp > 0) || !move.flags['contact'] || move.flags['counter']) return;
-			let counterMove = Dex.moves.get('icywind')
+			let counterMove = Dex.moves.get('icywind');
 			this.add('-activate', target, 'Cold Rebound');
 			this.effectState.counter = true;
-			this.actions.useMove(counterMove, target, source);
+			this.actions.runMove(counterMove, target, target.getLocOf(source));
 		},
 		onModifyMove(move) {
 			if (this.effectState.counter) {
@@ -7064,6 +7064,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.effectState.counter = false
 			}
 		},
+		isBreakable: true,
 		name: "Cold Rebound",
 		rating: 3,
 		num: 400,
@@ -7103,21 +7104,15 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	pyroshells: {
-		onAfterMoveSecondary(target, source, move) {
-			if (move.flags['pulse']) {
-				let nextMove = Dex.moves.get('outburst');
-				this.add('-activate', source, 'Pyro Shells');
-				this.effectState.pyroshells = true;
-				this.actions.useMove(nextMove, source);
-
+		onAfterMove(source, target, move) {
+			if (this.effectState.additionalAttack || !move.flags['pulse']) return 
+			const moveMutations = {
+				basePower: 50,
+				selfdestruct: undefined
 			}
-		},
-		onModifyMove(move) {
-			if (this.effectState.pyroshells) {
-				move.basePower = 50
-				if (move.selfdestruct) move.selfdestruct = undefined
-				this.effectState.pyroshells = false
-			}
+			this.effectState.additionalAttack = true
+			this.actions.runAdditionalMove(Dex.moves.get('outburst'), source, target, moveMutations)
+			this.effectState.additionalAttack = false
 		},
 
 		name: "Pyro Shells",
@@ -7126,44 +7121,31 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	volcanorage: {
-		onAfterMoveSecondary(target, source, move) {
-			if (move.type === 'Fire') {
-				let nextMove = Dex.moves.get('eruption');
-				this.add('-activate', source, 'Volcano Rage');
-				this.effectState.volcanorage = true;
-				this.actions.useMove(nextMove, source);
-
+		onAfterMove(source, target, move) {
+			if (this.effectState.additionalAttack || !(move.type === 'Fire')) return 
+			const moveMutations = {
+				basePower: 50,
 			}
+			this.effectState.additionalAttack = true
+			this.actions.runAdditionalMove(Dex.moves.get('eruption'), source, target, moveMutations)
+			this.effectState.additionalAttack = false
 		},
-		onModifyMove(move) {
-			if (this.effectState.volcanorage) {
-				move.basePower = 50
-				this.effectState.volcanorage = false
-			}
-		},
-
-		name: "Pyro Shells",
+		name: "Volcano Rage",
 		rating: 3,
 		num: 404,
 		gen: 8,
 	},
 	thundercall: {
-		onAfterMoveSecondary(target, source, move) {
-			if (move.type === 'Electric') {
-				let nextMove = Dex.moves.get('smite');
-				this.add('-activate', source, 'Thundercall');
-				this.effectState.thundercall = true;
-				this.actions.useMove(nextMove, source);
-
+		onAfterMove(source, target, move) {
+			if (this.effectState.additionalAttack || !(move.type === 'Electric')) return; 
+			
+			const moveMutations = {
+				basePower: 120 * 0.2
 			}
+			this.effectState.additionalAttack = true
+			this.actions.runAdditionalMove(Dex.moves.get('thundercall'), source, target, moveMutations)
+			this.effectState.additionalAttack = false
 		},
-		onBasePower(move) {
-			if (this.effectState.thundercall) {
-				this.effectState.thundercall = false;
-				return this.chainModify(0.8);
-			}
-		},
-
 		name: "Thunder Call",
 		rating: 3,
 		num: 405,
@@ -7220,11 +7202,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	lowblow: {
 		onSwitchIn(pokemon) {
 			let nextMove = Dex.moves.get('feintattack');
-			this.add('-activate', pokemon, 'Low Blow');
-			this.actions.useMove(nextMove, pokemon);
+			let targetLoc = 4
+			let target = pokemon.side.foes().forEach((a) => {if (pokemon.getLocOf(a) < targetLoc) targetLoc = pokemon.getLocOf(a)})
+			if (targetLoc < 4 && targetLoc > 0) {
+				this.actions.runMove(nextMove, pokemon, targetLoc);
+			}
 
 		},
-
 		name: "Low Blow",
 		rating: 3,
 		num: 408,
@@ -7254,7 +7238,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
-				move.type = 'Ghot';
+				move.type = 'Ghost';
 				move.typeChangerBoosted = this.effect;
 			}
 		},
@@ -7275,7 +7259,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			];
 			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
-				move.type = 'Ghot';
+				move.type = 'Ghost';
 				move.typeChangerBoosted = this.effect;
 			}
 		},
@@ -7345,23 +7329,21 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	parry: {
 		onDamagingHit(damage, target, source, move) {
-			if (!(target.hp > 0) || !move.flags['contact'] || move.flags['counter']) return;
-			let counterMove = Dex.moves.get('machpunch')
-			this.add('-activate', target, 'Parry');
-			this.effectState.counter = true;
-			this.actions.useMove(counterMove, target, source);
+			if (!(target.hp > 0) || this.effectState.additionalAttack || !(move.flags['contact'] || (move.flags['counter']))) return; 
+			const moveMutations = {
+				basePower: 40 * 0.8,
+				flags: {...Dex.moves.get('machpunch').flags, counter: 1}
+			}
+			this.effectState.additionalAttack = true
+			this.actions.runAdditionalMove(Dex.moves.get('machpunch'), source, target, moveMutations)
+			this.effectState.additionalAttack = false
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.flags['contact']) {
 				return this.chainModify(0.8);
 			}
 		},
-		onModifyMove(move) {
-			if (this.effectState.counter) {
-				move.flags['counter'] = 1
-				this.effectState.counter = false
-			}
-		},
+		isBreakable: true,
 		name: "Parry",
 		rating: 3,
 		num: 414,
@@ -7511,20 +7493,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					willBurst = true;
 				}
 			}
-			if (!willBurst || !(target.hp > 0)) return;
-			let nextMove = Dex.moves.get('hyperbeam')
-			this.add('-activate', target, 'Atomic Burst');
-			this.effectState.atomicburst = true;
-			this.actions.useMove(nextMove, target, source);
-		},
-		onBasePower(damage, pokemon, target, move) {
-			if (this.effectState.atomicburst) {
-				move.self = {}
-				this.effectState.atomicburst = false
-				this.chainModify([1364, 4096])
-				
+
+			if (!willBurst || !(target.hp > 0) || this.effectState.additionalAttack) return;
+
+			const moveMutations = {
+				basePower: (150 / 3),
+				self: {}
 			}
-		},			
+
+			this.effectState.additionalAttack = true
+			this.actions.runAdditionalMove(Dex.moves.get('hyperbeam'), source, target, moveMutations)
+			this.effectState.additionalAttack = false
+
+		},		
 		name: "Atomic Burst",
 		rating: 3.5,
 		num: 420,
@@ -7541,21 +7522,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					willBlow = true;
 				}
 			}
-			if (!willBlow || !(target.hp > 0)) return;
-			let nextMove = Dex.moves.get('hyperbeam')
-			this.add('-activate', target, 'Atomic Burst');
-			this.effectState.blow = true;
-			this.actions.useMove(nextMove, target, source);
-		},
-		onModifyMove(move) {
-			if (this.effectState.blow) {
-				move.self = {}
-				this.effectState.blow = false	
+			if (!willBlow || !(target.hp > 0) || this.effectState.additionalAttack) return;
+
+			const moveMutations = {
+				self: {}
 			}
+
+			this.effectState.additionalAttack = true
+			this.actions.runAdditionalMove(Dex.moves.get('hyperbeam'), source, target, moveMutations)
+			this.effectState.additionalAttack = false
 		},			
 		name: "Atomic Burst",
 		rating: 3.5,
-		num: 420,
+		num: 421,
 		gen: 8,
 	},
 	draconize: {
@@ -7576,7 +7555,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Draconize",
 		rating: 4,
-		num: 421,
+		num: 422,
 		gen: 8,
 
 	},
@@ -7591,8 +7570,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
-					this.boost({spa: -1}, target, pokemon, null, true);
-					this.boost({atk: -1}, target, pokemon, null, true);
+					this.boost({spa: -1, atk: -1}, target, pokemon, null, true);
 				}
 			}
 		},
@@ -7609,7 +7587,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Fearmonger",
 		rating: 4,
-		num: 422,
+		num: 423,
 		gen: 8,
 
 	},
@@ -7623,14 +7601,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 			if (statsLowered) {
-				this.boost({atk: 1}, target, target, null, false, true);
-				this.boost({def: 1}, target, target, null, false, true);
+				this.boost({atk: 1, def: 1}, target, target, null, false, true);
 
 			}
 		},
 		name: "King's Wrath",
 		rating: 4,
-		num: 423,
+		num: 424,
 		gen: 8,
 
 	},
@@ -7644,14 +7621,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 			if (statsLowered) {
-				this.boost({spa: 1}, target, target, null, false, true);
-				this.boost({spd: 1}, target, target, null, false, true);
+				this.boost({spa: 1, spd: 1}, target, target, null, false, true);
 
 			}
 		},
 		name: "Queens's Mourning",
 		rating: 4,
-		num: 424,
+		num: 425,
 		gen: 8,
 	},
 	toxicspill: {
@@ -7665,7 +7641,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Toxic Spill",
 		rating: 3,
-		num: 425,
+		num: 426,
 		gen: 8,
 
 	},
@@ -7686,7 +7662,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Desert Cloak",
 		rating: 3,
-		num: 426,
+		num: 427,
 		gen: 8,
 
 	},
@@ -7703,28 +7679,227 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		onFoeAfterBoost(boost, target, source, effect) {
-			let willBurst = false;
-			const pokemon = this.effectState.target;
-			const positiveBoosts: Partial<BoostsTable> = {};
-			let i: BoostID;
-			for (i in boost) {
-				if (boost[i]! > 0) {
-					willBurst = true;
-				}
-			}
-			if (!willBurst || !(target.hp > 0)) return;
-			let nextMove = Dex.moves.get('hyperbeam')
-			this.add('-activate', target, 'Atomic Burst');
-			this.effectState.atomicburst = true;
-			this.actions.useMove(nextMove, target, source);
-		},
 		name: "Pretty Princess",
 		rating: 3,
-		num: 425,
+		num: 428,
+		gen: 8,
+	},
+	selfrepair: {
+		onResidualOrder: 29,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16);
+		},
+		onCheckShow(pokemon) {
+			// This is complicated
+			// For the most part, in-game, it's obvious whether or not Natural Cure activated,
+			// since you can see how many of your opponent's pokemon are statused.
+			// The only ambiguous situation happens in Doubles/Triples, where multiple pokemon
+			// that could have Natural Cure switch out, but only some of them get cured.
+			if (pokemon.side.active.length === 1) return;
+			if (pokemon.showCure === true || pokemon.showCure === false) return;
+
+			const cureList = [];
+			let noCureCount = 0;
+			for (const curPoke of pokemon.side.active) {
+				// pokemon not statused
+				if (!curPoke?.status) {
+					// this.add('-message', "" + curPoke + " skipped: not statused or doesn't exist");
+					continue;
+				}
+				if (curPoke.showCure) {
+					// this.add('-message', "" + curPoke + " skipped: Natural Cure already known");
+					continue;
+				}
+				const species = curPoke.species;
+				// pokemon can't get Natural Cure
+				if (!Object.values(species.abilities).includes('Self Repair')) {
+					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
+					continue;
+				}
+				//TODO: Currently, this and Natural Cure do not check for innates
+				// pokemon's ability is known to be Natural Cure
+				if (!species.abilities['1'] && !species.abilities['H']) {
+					// this.add('-message', "" + curPoke + " skipped: only one ability");
+					continue;
+				}
+				// pokemon isn't switching this turn
+				if (curPoke !== pokemon && !this.queue.willSwitch(curPoke)) {
+					// this.add('-message', "" + curPoke + " skipped: not switching");
+					continue;
+				}
+
+				if (curPoke.hasAbility('Self Repair')) {
+					// this.add('-message', "" + curPoke + " confirmed: could be Natural Cure (and is)");
+					cureList.push(curPoke);
+				} else {
+					// this.add('-message', "" + curPoke + " confirmed: could be Natural Cure (but isn't)");
+					noCureCount++;
+				}
+			}
+
+			if (!cureList.length || !noCureCount) {
+				// It's possible to know what pokemon were cured
+				for (const pkmn of cureList) {
+					pkmn.showCure = true;
+				}
+			} else {
+				// It's not possible to know what pokemon were cured
+
+				// Unlike a -hint, this is real information that battlers need, so we use a -message
+				this.add('-message', "(" + cureList.length + " of " + pokemon.side.name + "'s pokemon " + (cureList.length === 1 ? "was" : "were") + " cured by Self Repair.)");
+
+				for (const pkmn of cureList) {
+					pkmn.showCure = false;
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			if (!pokemon.status) return;
+
+			// if pokemon.showCure is undefined, it was skipped because its ability
+			// is known
+			if (pokemon.showCure === undefined) pokemon.showCure = true;
+
+			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
+			pokemon.clearStatus();
+
+			// only reset .showCure if it's false
+			// (once you know a Pokemon has Natural Cure, its cures are always known)
+			if (!pokemon.showCure) pokemon.showCure = undefined;
+		},
+		name: "Self Repair",
+		rating: 4,
+		num: 429,
+		gen: 8,
+	},
+	hellblaze: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Fire') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Blaze boost');
+					return this.chainModify(1.8);	
+				} else {
+					this.debug('Lite Blaze boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Fire') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Blaze boost');
+					return this.chainModify(1.8);	
+				} else {
+					this.debug('Lite Blaze boost');
+					return this.chainModify(1.3);
+				}
+			}
+		}, 
+		name: "Hellblaze",
+		rating: 4,
+		num: 430,
+		gen: 8,
+	},
+	riptide: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Water') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Riptide boost');
+					return this.chainModify(1.8);	
+				} else {
+					this.debug('Lite Riptide boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Water') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Riptide boost');
+					return this.chainModify(1.8);	
+				} else {
+					this.debug('Lite Riptide boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		name: "Riptide",
+		rating: 4,
+		num: 431,
 		gen: 8,
 
 	},
+	forestrage: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move && move.type === 'Grass') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Forest Rage boost');
+					return this.chainModify(1.8);	
+				} else {
+					this.debug('Lite Riptide boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move && move.type === 'Grass') {
+				if (attacker.hp <= attacker.maxhp / 3) {
+					this.debug('Full Forest Rage boost');
+					return this.chainModify(1.8);	
+				} else {
+					this.debug('Lite Forest Rage boost');
+					return this.chainModify(1.3);
+				}
+			}
+		},
+		name: "Forest Rage",
+		rating: 4,
+		num: 432,
+		gen: 8,
+
+	},
+	primalmaw: { //Uses parentalBond as base.
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+			if (move.flags['bite']) {
+				move.multihit = 2;
+				move.multihitType = 'maw';
+			}
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'maw' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		name: "Primal Maw",
+		rating: 3,
+		num: 433,
+		gen: 8,
+	}, 
+	sweepingedge: {
+		onModifyMove(move) {
+			if (move.flags['slicing']) {
+				move.accuracy = true;
+				if (move.target === 'normal' || move.target === 'any') move.target = 'allAdjacentFoes';
+			}
+		},
+		name: "Sweeping Edge",
+		rating: 3,
+		num: 434,
+		gen: 8,
+	},
+
+	
 
 	
 	
