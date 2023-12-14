@@ -8264,6 +8264,26 @@ export const Moves: {[moveid: string]: MoveData} = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
+	hardpress: {
+		num: 462,
+		accuracy: 100,
+		basePower: 0,
+		basePowerCallback(pokemon, target) {
+			const hp = target.hp;
+			const maxHP = target.maxhp;
+			const bp = Math.floor(Math.floor((120 * (100 * Math.floor(hp * 4096 / maxHP)) + 2048 - 1) / 4096) / 100) || 1;
+			this.debug('BP for ' + hp + '/' + maxHP + " HP: " + bp);
+			return bp;
+		},
+		category: "Physical",
+		name: "Hard Press",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
 	haze: {
 		num: 114,
 		accuracy: true,
@@ -14411,6 +14431,22 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Psychic",
 		contestType: "Clever",
+	},
+	psychicnoise: {
+		num: 864,
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		name: "Psychic Noise",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'healblock', // TODO: Make duration in healblock 2 when this is the effect
+		},
+		target: "normal",
+		type: "Psychic",
 	},
 	psychicterrain: {
 		num: 678,
@@ -20712,6 +20748,29 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Bug",
 		contestType: "Cute",
+	},
+	upperhand: {
+		num: 382,
+		accuracy: 100,
+		basePower: 65,
+		category: "Physical",
+		name: "Upper Hand",
+		pp: 15,
+		priority: 3,
+		flags: {contact: 1, protect: 1},
+		onTryHit(target, pokemon) {
+			const action = this.queue.willMove(target);
+			const move = action?.choice === 'move' ? action.move : null;
+			if (!move || move.priority <= 0.1) {
+				return false;
+			}
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Fighting",
 	},
 	uproar: {
 		num: 253,
