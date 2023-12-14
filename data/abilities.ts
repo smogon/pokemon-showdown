@@ -7013,6 +7013,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Mighty Horn",
 		rating: 3,
 		num: 397,
+		gen: 8,
+
 	},
 	hardenedsheath: {
 		onModifyMove(move) {
@@ -7029,6 +7031,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Hardened Sheath",
 		rating: 3,
 		num: 398,
+		gen: 8,
+
 	},
 	arcticfur: {
 		onSourceModifyAtkPriority: 5,
@@ -7111,7 +7115,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onModifyMove(move) {
 			if (this.effectState.pyroshells) {
 				move.basePower = 50
-				if (move.selfdestruct) delete move.selfdestruct
+				if (move.selfdestruct) move.selfdestruct = undefined
 				this.effectState.pyroshells = false
 			}
 		},
@@ -7415,6 +7419,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Scrapyard",
 		rating: 3.5,
 		num: 416,
+		gen: 8,
+
 	},
 	loosequills: {
 		onDamagingHit(damage, target, source, move) {
@@ -7428,6 +7434,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Loose Quills",
 		rating: 3.5,
 		num: 417,
+		gen: 8,
+
 	},
 	looserocks: {
 		onDamagingHit(damage, target, source, move) {
@@ -7441,6 +7449,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Loose Rocks",
 		rating: 3.5,
 		num: 418,
+		gen: 8,
+
 	},
 	spinningtop: {
 		onModifyMove(move) {
@@ -7567,6 +7577,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Draconize",
 		rating: 4,
 		num: 421,
+		gen: 8,
+
 	},
 	fearmonger: {
 		onStart(pokemon) {
@@ -7598,6 +7610,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Fearmonger",
 		rating: 4,
 		num: 422,
+		gen: 8,
+
 	},
 	kingswrath: {
 		onAnyAfterEachBoost(boost, target, source) {
@@ -7617,6 +7631,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "King's Wrath",
 		rating: 4,
 		num: 423,
+		gen: 8,
+
 	},
 	queensmourning: {
 		onAnyAfterEachBoost(boost, target, source) {
@@ -7636,6 +7652,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Queens's Mourning",
 		rating: 4,
 		num: 424,
+		gen: 8,
 	},
 	toxicspill: {
 		onResidual(pokemon) {
@@ -7649,6 +7666,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Toxic Spill",
 		rating: 3,
 		num: 425,
+		gen: 8,
+
 	},
 	desertcloak: {
 		onAllySetStatus(status, target, source, effect) {
@@ -7668,6 +7687,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Desert Cloak",
 		rating: 3,
 		num: 426,
+		gen: 8,
+
 	},
 	prettyprincess: {
 		onBasePower(damage, source, target) {
@@ -7701,6 +7722,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Pretty Princess",
 		rating: 3,
 		num: 425,
+		gen: 8,
+
 	},
 
 	
