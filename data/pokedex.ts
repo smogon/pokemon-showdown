@@ -18406,6 +18406,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 	terapagosterastal: {
 		num: 1024,
 		name: "Terapagos-Terastal",
+		baseSpecies: "Terapagos",
+		forme: "Terastal",
 		types: ["Normal"],
 		gender: "M",
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100},
@@ -18414,10 +18416,13 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 16,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		battleOnly: "Terapagos",
 	},
 	terapagosstellar: {
 		num: 1024,
 		name: "Terapagos-Stellar",
+		baseSpecies: "Terapagos",
+		forme: "Stellar",
 		types: ["Normal"],
 		gender: "M",
 		baseStats: {hp: 160, atk: 105, def: 110, spa: 130, spd: 110, spe: 85},
@@ -18426,6 +18431,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 77,
 		color: "Blue",
 		eggGroups: ["Undiscovered"],
+		battleOnly: "Terapagos-Terastal",
 	},
 	pecharunt: {
 		num: 1024,
