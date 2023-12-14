@@ -16042,7 +16042,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.8,
 		weightkg: 40,
 		color: "White",
-		evos: ["Archuladon"],
+		evos: ["Archaludon"],
 		eggGroups: ["Mineral", "Dragon"],
 		canGigantamax: "G-Max Depletion",
 	},
@@ -18320,7 +18320,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		evoType: "useItem",
 		evoItem: "Metal Alloy",
 		eggGroups: ["Mineral", "Dragon"],
-		
 	},
 	hydrapple: {
 		num: 1019,

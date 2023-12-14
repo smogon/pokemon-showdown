@@ -8410,6 +8410,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
+				if (effect?.effectType === "Move") {
+					return 2;
+				}
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Heal Block');
 					return 7;
@@ -14443,7 +14446,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 100,
-			volatileStatus: 'healblock', // TODO: Make duration in healblock 2 when this is the effect
+			volatileStatus: 'healblock',
 		},
 		target: "normal",
 		type: "Psychic",
