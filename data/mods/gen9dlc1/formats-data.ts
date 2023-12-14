@@ -5773,4 +5773,34 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 		natDexTier: "UUBL",
 	},
+	archaludon: {
+		isNonstandard: "Future",
+	},
+	hydrapple: {
+		isNonstandard: "Future",
+	},
+	gougingfire: {
+		isNonstandard: "Future",
+	},
+	ragingbolt: {
+		isNonstandard: "Future",
+	},
+	ironboulder: {
+		isNonstandard: "Future",
+	},
+	ironcrown: {
+		isNonstandard: "Future",
+	},
+	terapagos: {
+		isNonstandard: "Future",
+	},
+	terapagosterastal: {
+		isNonstandard: "Future",
+	},
+	terapagosstellar: {
+		isNonstandard: "Future",
+	},
+	pecharunt: {
+		isNonstandard: "Future",
+	},
 };
