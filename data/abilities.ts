@@ -7052,7 +7052,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			let counterMove = Dex.moves.get('icywind')
 			this.add('-activate', target, 'Cold Rebound');
 			this.effectState.counter = true;
-			this.actions.useMove(counterMove, target);
+			this.actions.useMove(counterMove, target, source);
 		},
 		onModifyMove(move) {
 			if (this.effectState.counter) {
@@ -7062,9 +7062,650 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		name: "Cold Rebound",
 		rating: 3,
-		num: 398,
+		num: 400,
 		gen: 8,
 	},
+	ironbarrage: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['pulse']) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyMove(move) {
+			move.accuracy = true;
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (typeof move.accuracy !== 'boolean' && move.accuracy <= 75) {
+				return priority - 3;
+			}
+		},
+		name: "Iron Barrage",
+		rating: 3,
+		num: 401,
+		gen: 8,
+	},
+	steelbarrel: {
+		onBasePowerPriority: 19,
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'recoil') {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (this.activeMove.id !== 'struggle') return null;
+			}
+		},
+		name: "Iron Barrage",
+		rating: 3,
+		num: 402,
+		gen: 8,
+	},
+	pyroshells: {
+		onAfterMoveSecondary(target, source, move) {
+			if (move.flags['pulse']) {
+				let nextMove = Dex.moves.get('outburst');
+				this.add('-activate', source, 'Pyro Shells');
+				this.effectState.pyroshells = true;
+				this.actions.useMove(nextMove, source);
+
+			}
+		},
+		onModifyMove(move) {
+			if (this.effectState.pyroshells) {
+				move.basePower = 50
+				if (move.selfdestruct) delete move.selfdestruct
+				this.effectState.pyroshells = false
+			}
+		},
+
+		name: "Pyro Shells",
+		rating: 3,
+		num: 403,
+		gen: 8,
+	},
+	volcanorage: {
+		onAfterMoveSecondary(target, source, move) {
+			if (move.type === 'Fire') {
+				let nextMove = Dex.moves.get('eruption');
+				this.add('-activate', source, 'Volcano Rage');
+				this.effectState.volcanorage = true;
+				this.actions.useMove(nextMove, source);
+
+			}
+		},
+		onModifyMove(move) {
+			if (this.effectState.volcanorage) {
+				move.basePower = 50
+				this.effectState.volcanorage = false
+			}
+		},
+
+		name: "Pyro Shells",
+		rating: 3,
+		num: 404,
+		gen: 8,
+	},
+	thundercall: {
+		onAfterMoveSecondary(target, source, move) {
+			if (move.type === 'Electric') {
+				let nextMove = Dex.moves.get('smite');
+				this.add('-activate', source, 'Thundercall');
+				this.effectState.thundercall = true;
+				this.actions.useMove(nextMove, source);
+
+			}
+		},
+		onBasePower(move) {
+			if (this.effectState.thundercall) {
+				this.effectState.thundercall = false;
+				return this.chainModify(0.8);
+			}
+		},
+
+		name: "Thunder Call",
+		rating: 3,
+		num: 405,
+		gen: 8,
+	},
+	marineapex: {
+		onModifyMove(move) {
+			move.infiltrates = true;
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (target.hasType('Water')) {
+				this.debug('Marine Apex boost');
+				return this.chainModify(1.5);
+			}
+		},
+
+		name: "Marine Apex",
+		rating: 3,
+		num: 406,
+		gen: 8,
+	},
+	dicipline: {
+		onAfterMove(source, target, move) {
+			if (source.volatiles['lockedmove']) {
+				source.removeVolatile('lockedmove');
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.volatiles['confusion']) {
+				this.add('-activate', pokemon, 'ability: Dicipline');
+				pokemon.removeVolatile('confusion');
+			}
+		},
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'confusion') return null;
+		},
+		onHit(target, source, move) {
+			if (move?.volatileStatus === 'confusion') {
+				this.add('-immune', target, 'confusion', '[from] ability: Dicipline');
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Dicipline', '[of] ' + target);
+			}
+		},
+
+		name: "Dicipline",
+		rating: 3,
+		num: 407,
+		gen: 8,
+	},
+	lowblow: {
+		onSwitchIn(pokemon) {
+			let nextMove = Dex.moves.get('feintattack');
+			this.add('-activate', pokemon, 'Low Blow');
+			this.actions.useMove(nextMove, pokemon);
+
+		},
+
+		name: "Low Blow",
+		rating: 3,
+		num: 408,
+		gen: 8,
+	},
+	noseferatu: {
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onModifyMove(move) {
+			if (move.flags['contact']) {
+				move.drain = [1, 3]
+			}
+		},
+		name: "Noseferatu",
+		rating: 3,
+		num: 409,
+		gen: 8,
+	},
+	spectralize: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Ghot';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Spectralize",
+		rating: 3,
+		num: 410,
+		gen: 8,
+	},
+	spectralshroud: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Ghot';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		onModifyMove(move) {
+			if (move.target === 'self' || move.category === 'Status') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				status: 'tox',
+				ability: this.dex.abilities.get('spectralshroud'),
+			});
+		},
+		name: "Spectral Shroud",
+		rating: 3,
+		num: 411,
+		gen: 8,
+	},
+	lethargy: {
+		onStart(pokemon) {
+			pokemon.addVolatile('lethargy');
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['lethargy'];
+			this.add('-end', pokemon, 'Lethargy', '[silent]');
+		},
+		condition: {
+			onResidualOrder: 28,
+			onResidualSubOrder: 2,
+			onStart(target) {
+				this.add('-start', target, 'ability: Lethargy');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				const modifier = ((-0.2 * pokemon.activeTurns) + 1)
+				return this.chainModify(modifier >= 0.2 ? modifier : 0.2 );
+			},
+			onModifySpA(spa, pokemon) {
+				const modifier = ((-0.2 * pokemon.activeTurns) + 1)
+				return this.chainModify(modifier >= 0.2 ? modifier : 0.2 );
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Lethargy');
+			},
+		},
+		name: "Lethargy",
+		rating: -1,
+		num: 412,
+		gen: 8,
+	},
+	fungalinfection: {
+		onAfterMoveSecondary(target, source, move) {
+			if (target.hp > 0 && target != source && move.category !== 'Status') {
+				this.add('-activate', source, 'ability: Fungal Infection');
+				target.addVolatile('leechseed');
+			}
+		},
+		name: "Fungal Infection",
+		rating: 3,
+		num: 413,
+		gen: 8,
+	},
+	parry: {
+		onDamagingHit(damage, target, source, move) {
+			if (!(target.hp > 0) || !move.flags['contact'] || move.flags['counter']) return;
+			let counterMove = Dex.moves.get('machpunch')
+			this.add('-activate', target, 'Parry');
+			this.effectState.counter = true;
+			this.actions.useMove(counterMove, target, source);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['contact']) {
+				return this.chainModify(0.8);
+			}
+		},
+		onModifyMove(move) {
+			if (this.effectState.counter) {
+				move.flags['counter'] = 1
+				this.effectState.counter = false
+			}
+		},
+		name: "Parry",
+		rating: 3,
+		num: 414,
+		gen: 8,
+	},
+	roundhouse: {
+		onModifyMove(move, pokemon, target) {
+			if (move.flags['kick']) move.accuracy = true;
+
+		},
+		onBeforeMove(pokemon, target, move) {
+			const def = target.getStat('def', false, true);
+			const spd = target.getStat('spd', false, true);
+			if (def > spd) {
+				move.overrideDefensiveStat = 'spd'
+			} else {
+				move.overrideDefensiveStat = 'def'
+			}
+		},
+		name: "Parry",
+		rating: 3,
+		num: 414,
+		gen: 8,
+	},
+	mineralize: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Rock';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Mineralize",
+		rating: 4,
+		num: 415,
+		gen: 8,
+	},
+	scrapyard: {
+		onDamagingHit(damage, target, source, move) {
+			const side = source.isAlly(target) ? source.side.foe : source.side;
+			const spikes = side.sideConditions['spikes'];
+			if (move.category !== 'Status' && (!spikes || spikes.layers < 3)) {
+				this.add('-activate', target, 'ability: Scrapyard');
+				side.addSideCondition('spikes', target);
+			}
+		},
+		name: "Scrapyard",
+		rating: 3.5,
+		num: 416,
+	},
+	loosequills: {
+		onDamagingHit(damage, target, source, move) {
+			const side = source.isAlly(target) ? source.side.foe : source.side;
+			const spikes = side.sideConditions['spikes'];
+			if (move.category !== 'Status' && (!spikes || spikes.layers < 3)) {
+				this.add('-activate', target, 'ability: Loose Quills');
+				side.addSideCondition('spikes', target);
+			}
+		},
+		name: "Loose Quills",
+		rating: 3.5,
+		num: 417,
+	},
+	looserocks: {
+		onDamagingHit(damage, target, source, move) {
+			const side = source.isAlly(target) ? source.side.foe : source.side;
+			const stealthrock = side.sideConditions['stealthrock'];
+			if (move.category !== 'Status' && (!stealthrock)) {
+				this.add('-activate', target, 'ability: Loose Rocks');
+				side.addSideCondition('stealthrock', target);
+			}
+		},
+		name: "Loose Rocks",
+		rating: 3.5,
+		num: 418,
+	},
+	spinningtop: {
+		onModifyMove(move) {
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 100,
+				boosts: {spe: 1},
+				ability: this.dex.abilities.get('spinningtop'),
+			});
+		},
+		onAfterHit(target, pokemon, move) {
+			if (!move.hasSheerForce) {
+				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
+					this.add('-end', pokemon, 'Leech Seed', '[from] ability: Spinning Top', '[of] ' + pokemon);
+				}
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				for (const condition of sideConditions) {
+					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+					}
+				}
+				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+					pokemon.removeVolatile('partiallytrapped');
+				}
+			}
+		},
+		onAfterSubDamage(damage, target, pokemon, move) {
+			if (!move.hasSheerForce) {
+				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+				}
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				for (const condition of sideConditions) {
+					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] ability: Spinning Top', '[of] ' + pokemon);
+					}
+				}
+				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+					pokemon.removeVolatile('partiallytrapped');
+				}
+			}
+		},
+		name: "Spinning Top",
+		rating: 3.5,
+		num: 419,
+		gen: 8,
+	},
+	atomicburst: {
+		onFoeAfterBoost(boost, target, source, effect) {
+			let willBurst = false;
+			const pokemon = this.effectState.target;
+			const positiveBoosts: Partial<BoostsTable> = {};
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					willBurst = true;
+				}
+			}
+			if (!willBurst || !(target.hp > 0)) return;
+			let nextMove = Dex.moves.get('hyperbeam')
+			this.add('-activate', target, 'Atomic Burst');
+			this.effectState.atomicburst = true;
+			this.actions.useMove(nextMove, target, source);
+		},
+		onBasePower(damage, pokemon, target, move) {
+			if (this.effectState.atomicburst) {
+				move.self = {}
+				this.effectState.atomicburst = false
+				this.chainModify([1364, 4096])
+				
+			}
+		},			
+		name: "Atomic Burst",
+		rating: 3.5,
+		num: 420,
+		gen: 8,
+	},
+	retributionblow: {
+		onFoeAfterBoost(boost, target, source, effect) {
+			let willBlow = false;
+			const pokemon = this.effectState.target;
+			const positiveBoosts: Partial<BoostsTable> = {};
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					willBlow = true;
+				}
+			}
+			if (!willBlow || !(target.hp > 0)) return;
+			let nextMove = Dex.moves.get('hyperbeam')
+			this.add('-activate', target, 'Atomic Burst');
+			this.effectState.blow = true;
+			this.actions.useMove(nextMove, target, source);
+		},
+		onModifyMove(move) {
+			if (this.effectState.blow) {
+				move.self = {}
+				this.effectState.blow = false	
+			}
+		},			
+		name: "Atomic Burst",
+		rating: 3.5,
+		num: 420,
+		gen: 8,
+	},
+	draconize: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Dragon';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		name: "Draconize",
+		rating: 4,
+		num: 421,
+	},
+	fearmonger: {
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Fearmonger', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({spa: -1}, target, pokemon, null, true);
+					this.boost({atk: -1}, target, pokemon, null, true);
+				}
+			}
+		},
+		onModifyMove(move) {
+			if (!move?.flags['contact'] || move.target === 'self') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 10,
+				status: 'par',
+				ability: this.dex.abilities.get('fearmonger'),
+			});
+		},
+		name: "Fearmonger",
+		rating: 4,
+		num: 422,
+	},
+	kingswrath: {
+		onAnyAfterEachBoost(boost, target, source) {
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({atk: 1}, target, target, null, false, true);
+				this.boost({def: 1}, target, target, null, false, true);
+
+			}
+		},
+		name: "King's Wrath",
+		rating: 4,
+		num: 423,
+	},
+	queensmourning: {
+		onAnyAfterEachBoost(boost, target, source) {
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({spa: 1}, target, target, null, false, true);
+				this.boost({spd: 1}, target, target, null, false, true);
+
+			}
+		},
+		name: "Queens's Mourning",
+		rating: 4,
+		num: 424,
+	},
+	toxicspill: {
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			for (const target of [...pokemon.foes(), ...pokemon.alliesAndSelf()]) {
+				if (!target.hasType('Poison')) {
+					this.damage(target.baseMaxhp / 8, target, pokemon);
+				}
+			}
+		},
+		name: "Toxic Spill",
+		rating: 3,
+		num: 425,
+	},
+	desertcloak: {
+		onAllySetStatus(status, target, source, effect) {
+			if (['sandstorm'].includes(target.effectiveWeather())) {
+				if ((effect as Move)?.status) {
+					this.add('-immune', target, '[from] ability: Desert Cloak');
+				}
+				return false;
+			}
+		},
+		onAllyTryAddVolatile(status, target) {
+			if (status.id === 'yawn' && ['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
+				this.add('-immune', target, '[from] ability: Desert Cloak');
+				return null;
+			}
+		},
+		name: "Desert Cloak",
+		rating: 3,
+		num: 426,
+	},
+	prettyprincess: {
+		onBasePower(damage, source, target) {
+			let willBoost = false
+			let i: BoostID
+			for (i in target.boosts) {
+				if (target.boosts[i] && target.boosts[i] < 0) {
+					willBoost = true
+				}
+			}
+			if (willBoost) {
+				return this.chainModify(1.5);
+			}
+		},
+		onFoeAfterBoost(boost, target, source, effect) {
+			let willBurst = false;
+			const pokemon = this.effectState.target;
+			const positiveBoosts: Partial<BoostsTable> = {};
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! > 0) {
+					willBurst = true;
+				}
+			}
+			if (!willBurst || !(target.hp > 0)) return;
+			let nextMove = Dex.moves.get('hyperbeam')
+			this.add('-activate', target, 'Atomic Burst');
+			this.effectState.atomicburst = true;
+			this.actions.useMove(nextMove, target, source);
+		},
+		name: "Pretty Princess",
+		rating: 3,
+		num: 425,
+	},
+
+	
+	
+	
 
 
 	
