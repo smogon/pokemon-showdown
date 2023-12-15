@@ -1948,6 +1948,13 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 
 		start: "  [POKEMON] is radiating a bursting aura!",
 	},
+	terashell: {
+		name: "Tera Shell",
+		desc: "The Pokemon's shell contains the powers of each type. All damage-dealing moves that hit the Pokemon when its HP is full will not be very effective.",
+		shortDesc: "All damage-dealing moves that hit the Pokemon when its HP is full will not be very effective.",
+
+		activate: "  [POKEMON] made its shell gleam! It's distorting type matchups!",
+	},
 	thermalexchange: {
 		name: "Thermal Exchange",
 		desc: "This Pokemon's Attack is raised 1 stage after it is damaged by a Fire-type move. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",

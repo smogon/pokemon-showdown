@@ -4659,6 +4659,28 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 164,
 	},
+	terashell: {
+		// TODO figure out if this only works on Terapagos
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target || move.category === 'Status') return;
+			if (!target.runImmunity(move.type)) return; // immunity has priority
+			if (target.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
+			if (target.hp < target.maxhp) return;
+
+			this.add('-activate', target, 'ability: Tera Shell');
+			target.abilityState.resisted = true;
+			return -1;
+		},
+		onAfterMove(target, source, move) {
+			if (target.abilityState.resisted) {
+				delete target.abilityState.resisted;
+			}
+		},
+		isBreakable: true,
+		name: "Tera Shell",
+		rating: 3.5,
+		num: 308,
+	},
 	thermalexchange: {
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Fire') {
