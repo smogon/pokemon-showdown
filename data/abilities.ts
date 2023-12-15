@@ -3315,31 +3315,31 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
 			},
 			onModifyAtkPriority: 5,
-			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.bestStat !== 'atk') return;
+			onModifyAtk(atk, pokemon) {
+				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
 				this.debug('Protosynthesis atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
-			onModifyDef(def, target, source, move) {
-				if (this.effectState.bestStat !== 'def') return;
+			onModifyDef(def, pokemon) {
+				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
 				this.debug('Protosynthesis def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
-			onModifySpA(relayVar, source, target, move) {
-				if (this.effectState.bestStat !== 'spa') return;
+			onModifySpA(spa, pokemon) {
+				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
 				this.debug('Protosynthesis spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
-			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.bestStat !== 'spd') return;
+			onModifySpD(spd, pokemon) {
+				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
 				this.debug('Protosynthesis spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe') return;
+				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
 				this.debug('Protosynthesis spe boost');
 				return this.chainModify(1.5);
 			},
@@ -3347,7 +3347,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-end', pokemon, 'Protosynthesis');
 			},
 		},
-		isPermanent: true,
 		name: "Protosynthesis",
 		rating: 3,
 		num: 281,
@@ -3449,31 +3448,31 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
 			},
 			onModifyAtkPriority: 5,
-			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.bestStat !== 'atk') return;
+			onModifyAtk(atk, pokemon) {
+				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
 				this.debug('Quark Drive atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
-			onModifyDef(def, target, source, move) {
-				if (this.effectState.bestStat !== 'def') return;
+			onModifyDef(def, pokemon) {
+				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
 				this.debug('Quark Drive def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
-			onModifySpA(relayVar, source, target, move) {
-				if (this.effectState.bestStat !== 'spa') return;
+			onModifySpA(spa, pokemon) {
+				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
 				this.debug('Quark Drive spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
-			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.bestStat !== 'spd') return;
+			onModifySpD(spd, pokemon) {
+				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
 				this.debug('Quark Drive spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe') return;
+				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
 				this.debug('Quark Drive spe boost');
 				return this.chainModify(1.5);
 			},
@@ -3481,7 +3480,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.add('-end', pokemon, 'Quark Drive');
 			},
 		},
-		isPermanent: true,
 		name: "Quark Drive",
 		rating: 3,
 		num: 282,
