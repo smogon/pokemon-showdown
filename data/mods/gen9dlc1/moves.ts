@@ -79,9 +79,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	glaciate: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	hardpress: {
 		inherit: true,
 		isNonstandard: "Future",
+	},
+	hyperspacefury: {
+		inherit: true,
+		noSketch: false,
 	},
 	iceburn: {
 		inherit: true,
@@ -170,6 +178,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: "Future",
 	},
 	topsyturvy: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	triplekick: {
 		inherit: true,
 		isNonstandard: "Past",
 	},

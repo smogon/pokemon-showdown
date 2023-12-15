@@ -1,8 +1,4 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
-	aeroblast: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	allyswitch: {
 		inherit: true,
 		stallingMove: false,
@@ -46,15 +42,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (this.field.isWeather('hail')) move.accuracy = true;
 		},
 	},
-	blueflare: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	boltbeak: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	boltstrike: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -104,31 +92,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			noassist: 1, failcopycat: 1, failinstruct: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1,
 		},
 	},
-	conversion: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	conversion2: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	copycat: {
 		inherit: true,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
-	coreenforcer: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	cosmicpower: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	craftyshield: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	crushgrip: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -145,15 +113,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	decorate: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	doubleironbash: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	dragonhammer: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -171,10 +131,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isNonstandard: null,
 	},
 	fishiousrend: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	floralhealing: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -207,18 +163,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 	},
-	freezeshock: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	fusionbolt: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	fusionflare: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	futuresight: {
 		inherit: true,
 		flags: {futuremove: 1},
@@ -239,10 +183,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		basePower: 130,
 	},
-	glaciate: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	grassyglide: {
 		inherit: true,
 		basePower: 70,
@@ -259,10 +199,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	healbell: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	heartswap: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -274,14 +210,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	hyperspacefury: {
 		inherit: true,
 		isNonstandard: "Past",
+		noSketch: false,
 	},
 	hyperspacehole: {
 		inherit: true,
 		isNonstandard: "Past",
-	},
-	iceburn: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	icehammer: {
 		inherit: true,
@@ -317,7 +250,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	lusterpurge: {
 		inherit: true,
-		isNonstandard: null,
+		basePower: 70,
 	},
 	magiccoat: {
 		inherit: true,
@@ -439,11 +372,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mistball: {
 		inherit: true,
-		isNonstandard: null,
-	},
-	moongeistbeam: {
-		inherit: true,
-		isNonstandard: null,
+		basePower: 70,
 	},
 	multiattack: {
 		inherit: true,
@@ -474,23 +403,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	photongeyser: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	plasmafists: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	poweruppunch: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	prismaticlaser: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	psychoshift: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -518,17 +435,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	rockwrecker: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	roost: {
 		inherit: true,
 		pp: 10,
-	},
-	sacredfire: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	searingshot: {
 		inherit: true,
@@ -554,10 +463,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 10,
 	},
-	simplebeam: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	skullbash: {
 		inherit: true,
 		isNonstandard: null,
@@ -578,27 +483,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 10,
 	},
-	sparklingaria: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	spectralthief: {
 		inherit: true,
 		isNonstandard: null,
-	},
-	spiderweb: {
-		inherit: true,
-		isNonstandard: "Past",
 	},
 	stormthrow: {
 		inherit: true,
 		isNonstandard: null,
 	},
 	submission: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	sunsteelstrike: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -618,19 +511,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	topsyturvy: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	toxicthread: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
 	trickortreat: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	triplekick: {
 		inherit: true,
 		isNonstandard: null,
 	},

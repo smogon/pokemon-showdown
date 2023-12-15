@@ -4163,8 +4163,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		volatileStatus: 'dragoncheer',
 		condition: {
-			// TODO check if this stacks with Focus Energy
 			onStart(target, source, effect) {
+				if (target.volatiles['dragonenergy']) return false;
 				if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', target, 'move: Dragon Cheer', '[silent]');
 				} else {
@@ -6146,6 +6146,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'focusenergy',
 		condition: {
 			onStart(target, source, effect) {
+				if (target.volatiles['dragoncheer']) return false;
 				if (effect?.id === 'zpower') {
 					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
 				} else if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
@@ -6819,7 +6820,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 95,
 		basePower: 65,
 		category: "Special",
-		isNonstandard: "Past",
 		name: "Glaciate",
 		pp: 10,
 		priority: 0,
@@ -9458,6 +9458,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				def: -1,
 			},
 		},
+		noSketch: true,
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -20785,7 +20786,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 			return 10 * move.hit;
 		},
 		category: "Physical",
-		isNonstandard: "Past",
 		name: "Triple Kick",
 		pp: 10,
 		priority: 0,
