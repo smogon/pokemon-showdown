@@ -4648,6 +4648,30 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 0,
 		num: 140,
 	},
+	teraformzero: {
+		onAfterTerastallization(pokemon) {
+			if (this.field.weather || this.field.terrain) {
+				this.add('-ability', pokemon, 'Teraform Zero');
+				this.field.clearWeather();
+				this.field.clearTerrain();
+			}
+		},
+		name: "Teraform Zero",
+		rating: 3,
+		num: 309,
+	},
+	terashift: {
+		onPreStart(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Terapagos' || pokemon.transformed) return;
+			if (pokemon.species.forme !== 'Terastal') {
+				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
+			}
+		},
+		isPermanent: true,
+		name: "Tera Shift",
+		rating: 3,
+		num: 307,
+	},
 	teravolt: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Teravolt');
