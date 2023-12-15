@@ -1,6 +1,7 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
 	aeroblast: {
 		inherit: true,
+		flags: {protect: 1, mirror: 1, distance: 1},
 		isNonstandard: "Past",
 	},
 	alluringvoice: {
