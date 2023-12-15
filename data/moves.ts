@@ -1471,6 +1471,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
+		noSketch: true,
 		secondary: {
 			chance: 30,
 			status: 'brn',
@@ -2699,6 +2700,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
+		noSketch: true,
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -11009,6 +11011,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
+		noSketch: true,
 		secondary: {
 			chance: 30,
 			volatileStatus: 'confusion',
@@ -13210,6 +13213,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
+		noSketch: true,
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -17156,7 +17160,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onHit(target, source) {
-			const disallowedMoves = ['chatter', 'sketch', 'struggle'];
+			const disallowedMoves = [
+				'blazingtorque', 'chatter', 'combattorque', 'darkvoid', 'hyperspacefury', 'magicaltorque', 'noxioustorque', 'revivalblessing', 'sketch', 'struggle', 'terastarstorm', 'wickedtorque'
+			];
 			const move = target.lastMove;
 			if (source.transformed || !move || source.moves.includes(move.id)) return false;
 			if (disallowedMoves.includes(move.id) || move.isZ || move.isMax) return false;
@@ -19960,6 +19966,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				move.target = 'allAdjacentFoes';
 			}
 		},
+		noSketch: true,
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -21561,6 +21568,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {
 			protect: 1, failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
+		noSketch: true,
 		secondary: {
 			chance: 10,
 			status: 'slp',
