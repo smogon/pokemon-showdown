@@ -1520,6 +1520,13 @@ export const MovesText: {[k: string]: MoveText} = {
 		desc: "Has a 30% chance to paralyze the target.",
 		shortDesc: "30% chance to paralyze the target.",
 	},
+	dragoncheer: {
+		name: "Dragon Cheer",
+		desc: "Raises allies' chance for a critical hit by 1 stage, or by 2 stages if they are part Dragon type before this effect is applied. Fails if the target already has the effect, or if the target has the Focus Energy effect. Baton Pass can be used to transfer this effect to an ally.",
+		shortDesc: "Allies: Crit Ratio +1. Crit Ratio +2 if Dragon.",
+
+		start: "#focusenergy",
+	},
 	dragonclaw: {
 		name: "Dragon Claw",
 		shortDesc: "No additional effect.",

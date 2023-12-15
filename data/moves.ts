@@ -4177,7 +4177,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.effectState.hasDragonType = target.hasType("Dragon");
 			},
 			onModifyCritRatio(critRatio, source) {
-				return critRatio + (this.effectState.hasDragonType ? 3 : 2);
+				return critRatio + (this.effectState.hasDragonType ? 2 : 1);
 			},
 		},
 		secondary: null,
