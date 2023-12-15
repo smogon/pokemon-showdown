@@ -137,6 +137,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	revivalblessing: {
+		inherit: true,
+		noSketch: false,
+	},
 	rockwrecker: {
 		inherit: true,
 		isNonstandard: "Past",

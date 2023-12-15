@@ -17161,12 +17161,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
 		},
 		onHit(target, source) {
-			const disallowedMoves = [
-				'blazingtorque', 'chatter', 'combattorque', 'darkvoid', 'hyperspacefury', 'magicaltorque', 'noxioustorque', 'revivalblessing', 'sketch', 'struggle', 'terastarstorm', 'wickedtorque'
-			];
 			const move = target.lastMove;
 			if (source.transformed || !move || source.moves.includes(move.id)) return false;
-			if (disallowedMoves.includes(move.id) || move.isZ || move.isMax) return false;
+			if (move.noSketch || move.isZ || move.isMax) return false;
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return false;
 			const sketchedMove = {

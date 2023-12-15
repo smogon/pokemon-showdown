@@ -112,6 +112,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	darkvoid: {
 		inherit: true,
 		isNonstandard: "Past",
+		noSketch: false,
 	},
 	doubleironbash: {
 		inherit: true,
