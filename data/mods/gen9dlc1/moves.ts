@@ -3,9 +3,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	alluringvoice: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
 	beakblast: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	bitterblade: {
+		inherit: true,
+		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 	},
 	blueflare: {
 		inherit: true,
@@ -14,6 +22,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	boltstrike: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	burningbulwark: {
+		inherit: true,
+		isNonstandard: "Future",
 	},
 	conversion: {
 		inherit: true,
@@ -35,9 +47,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	dragoncheer: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
 	dragonhammer: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	electroshot: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	ficklebeam: {
+		inherit: true,
+		isNonstandard: "Future",
 	},
 	floralhealing: {
 		inherit: true,
@@ -55,6 +79,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	hardpress: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
 	iceburn: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -62,6 +90,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	lusterpurge: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	malignantchain: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	matchagotcha: {
+		inherit: true,
+		flags: {protect: 1, mirror: 1, defrost: 1},
+	},
+	mightycleave: {
+		inherit: true,
+		isNonstandard: "Future",
 	},
 	mistball: {
 		inherit: true,
@@ -78,6 +118,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	prismaticlaser: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	psychicnoise: {
+		inherit: true,
+		isNonstandard: "Future",
 	},
 	psychoboost: {
 		inherit: true,
@@ -106,6 +150,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	sunsteelstrike: {
 		inherit: true,
 		isNonstandard: "Past",
+	},
+	supercellslam: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	tachyoncutter: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	terastarstorm: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	thunderclap: {
+		inherit: true,
+		isNonstandard: "Future",
 	},
 	topsyturvy: {
 		inherit: true,
