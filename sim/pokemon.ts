@@ -520,7 +520,7 @@ export class Pokemon {
 		let stat = this.storedStats[statName];
 
 		// Wonder Room swaps defenses before calculating anything else
-		if ('wonderroom' in this.battle.field.pseudoWeather) {
+		if ('wonderroom' in this.battle.field.pseudoWeather && !this.battle.field.suppressingRoom()) {
 			if (statName === 'def') {
 				stat = this.storedStats['spd'];
 			} else if (statName === 'spd') {
@@ -591,9 +591,9 @@ export class Pokemon {
 
 	getActionSpeed() {
 		let speed = this.getStat('spe', false, false);
-		if (this.battle.field.getPseudoWeather('trickroom')) {
+		if (this.battle.field.getPseudoWeather('trickroom') && !this.battle.field.suppressingRoom()) {
 			speed = 10000 - speed;
-		}
+		} 
 		return this.battle.trunc(speed, 13);
 	}
 
@@ -826,7 +826,8 @@ export class Pokemon {
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
 			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
-			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']
+			this.volatiles['embargo'] || 
+			(this.battle.field.pseudoWeather['magicroom'] && !this.battle.field.suppressingRoom())
 		);
 	}
 

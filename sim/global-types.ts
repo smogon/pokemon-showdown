@@ -370,6 +370,7 @@ interface ModdedBattleQueue extends Partial<BattleQueue> {
 
 interface ModdedField extends Partial<Field> {
 	suppressingWeather?: (this: Field) => boolean;
+	suppressingTerrain?: (this:Field) => boolean;
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
@@ -395,6 +396,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
 	start?: (this: Battle) => void;
 	suppressingWeather?: (this: Battle) => boolean;
+	suppressingTerrain?: (this: Battle) => boolean;
 	trunc?: (n: number) => number;
 	win?: (this: Battle, side?: SideID | '' | Side | null) => boolean;
 	faintMessages?: (this: Battle, lastFirst?: boolean, forceCheck?: boolean, checkWin?: boolean) => boolean | undefined;

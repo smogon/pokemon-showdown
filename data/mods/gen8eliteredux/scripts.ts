@@ -39,6 +39,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return false;
 		},
+		suppressingTerrain() {
+			for (const pokemon of this!.battle!.getAllActive()) {
+				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() &&
+					(pokemon.getAbility().suppressTerrain ||
+						pokemon.m.innates?.some((k: string) => this.battle.dex.abilities.get(k).suppressTerrain))) {
+					return true;
+				}
+			}
+			return false;
+		},
 	},
 	pokemon: {
 		ignoringAbility() {

@@ -1732,6 +1732,9 @@ export class BattleActions {
 				this.battle.debug(`Multi-Headed modifier: ${bondModifier}`);
 				baseDamage = this.battle.modify(baseDamage, bondModifier);
 			}
+		} else if (move.multihitType === 'dual') {
+			const bondModifier = 0.75
+			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		}
 
 

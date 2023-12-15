@@ -7876,11 +7876,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 				}
 				return 5;
 			},
-			onFieldStart(target, source) {
+			onFieldStart(target, source, effect) {
 				if (source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Gravity', '[persistent]');
 				} else {
 					this.add('-fieldstart', 'move: Gravity');
+				}
+				if (effect?.effectType === 'Ability') {
+					this.effectState.duration = effect.name === 'Atlas' ? 8 : 5; //Atlas or Gravity Well duration change
 				}
 				for (const pokemon of this.getAllActive()) {
 					let applies = false;

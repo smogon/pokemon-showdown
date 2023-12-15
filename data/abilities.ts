@@ -7204,6 +7204,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			let nextMove = Dex.moves.get('feintattack');
 			let targetLoc = 4
 			let target = pokemon.side.foes().forEach((a) => {if (pokemon.getLocOf(a) < targetLoc) targetLoc = pokemon.getLocOf(a)})
+			console.log(target)
 			if (targetLoc < 4 && targetLoc > 0) {
 				this.actions.runMove(nextMove, pokemon, targetLoc);
 			}
@@ -7316,7 +7317,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	fungalinfection: {
-		onAfterMoveSecondary(target, source, move) {
+		onAfterMove(source, target, move) {
 			if (target.hp > 0 && target != source && move.category !== 'Status') {
 				this.add('-activate', source, 'ability: Fungal Infection');
 				target.addVolatile('leechseed');
@@ -7898,6 +7899,536 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 434,
 		gen: 8,
 	},
+	//TODO: Test Clueless
+	clueless: {
+		onSwitchIn(pokemon) {
+			this.effectState.switchingIn = true;
+		},
+		onStart(pokemon) {
+			// Air Lock does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			if (this.effectState.switchingIn) {
+				this.add('-ability', pokemon, 'Clueless');
+				this.effectState.switchingIn = false;
+			}
+			this.eachEvent('WeatherChange', this.effect);
+		},
+		onEnd(pokemon) {
+			this.eachEvent('WeatherChange', this.effect);
+		},
+
+		//Room suppressions implemented in getActionSpeed(), getDefenseStat(), ignoringItem(), 
+		suppressRoom: true,
+		suppressTerrain: true,
+		suppressWeather: true,
+		name: "Clueless",
+		rating: 3,
+		num: 435,
+		gen: 8,
+	}, 
+	hydrocircuit: {
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyMove(move) {
+			if (move.type === 'Water') {
+				move.drain = [1, 4]
+			}
+		},
+		name: "Hydro Circuit",
+		rating: 3,
+		num: 436,
+		gen: 8,
+	},
+	giftedmind: {
+		onTryHit(target, source, move) {
+			const psychicWeaknesses = ['Dark', 'Ghost', 'Bug'];
+			if (target !== source && psychicWeaknesses.includes(move.type)) {	
+				this.add('-immune', target, '[from] ability: Storm Drain');
+				return null;
+			}
+		},
+		onModifyMove(move) {
+			if (move.category === 'Status') {
+				move.accuracy = true
+			}
+		},
+		name: "Gifted Mind",
+		rating: 3,
+		num: 437,
+		gen: 8,
+	},
+	equinox: {
+		onModifyAtk(atk, attacker, defender, move) {
+			const spa = attacker.getStat('spa', false, false);
+			if (spa > atk) {
+				return this.chainModify([spa, atk]);
+
+			}
+		},
+		onModifySpA(spa, attacker, defender, move) {
+			const atk = attacker.getStat('atk', false, false);
+			if (atk > spa) {
+				return this.chainModify([atk, spa]);
+
+			}
+		},
+		name: "Equinox",
+		rating: 3,
+		num: 438,
+		gen: 8,
+	},
+	absorbant: {
+		onAfterMove(source, target, move) {
+			if (target.hp > 0 && target != source && move.drain) {
+				this.add('-activate', source, 'ability: Absorbant');
+				target.addVolatile('leechseed');
+			}
+		},
+		onModifyMove(move, target, source) {
+			if (move.drain) {
+				const numerator = move.drain[0] * 1.5
+				const denominator = move.drain[1]
+				move.drain = [numerator, denominator]
+			}
+		},
+		name: "Absorbant",
+		rating: 3,
+		num: 439,
+		gen: 8,
+	},
+	cheatingdeath: {
+		onStart(pokemon) {
+			if (pokemon.activeTurns === 0 && !this.effectState.beginCD) {
+				this.effectState.beginCD = true
+				this.effectState.hitsLeft = 2
+				console.log(`init Effect State: ${this.effectState.beginCD}`)
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
+			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
+			this.debug('Cheating Death immunity: ' + move.id);
+			if (this.effectState.hitsLeft > 0) {
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-immune', target, '[from] ability: Cheating Death');
+				}
+				this.effectState.hitsLeft--;
+				return null;
+			}
+		},
+		name: "Cheating Death",
+		rating: 3,
+		num: 440,
+		gen: 8,
+	},
+	cheaptactics: {
+		onSwitchIn(pokemon) {
+			let nextMove = Dex.moves.get('scratch');
+			let targetLoc = 4
+			let target = pokemon.side.foes().forEach((a) => {if (pokemon.getLocOf(a) < targetLoc) targetLoc = pokemon.getLocOf(a)})
+			console.log(target)
+			if (targetLoc < 4 && targetLoc > 0) {
+				this.actions.runMove(nextMove, pokemon, targetLoc);
+			}
+
+		},
+		name: "Cheap Tactics",
+		rating: 3,
+		num: 441,
+		gen: 8,
+	},
+	coward: {
+		onSwitchIn(pokemon) {
+			this.actions.useMove(Dex.moves.get('protect'), pokemon);
+
+		},
+		name: "Coward",
+		rating: 3,
+		num: 442,
+		gen: 8,
+	},
+	voltrush: {
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Electric' && pokemon.hp === pokemon.maxhp) return priority + 1;
+		},
+		name: "Volt Rush",
+		rating: 3,
+		num: 443,
+		gen: 8,
+	},
+	duneterror: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.effectiveWeather() === 'sandstorm') {
+				this.chainModify(0.65)
+			} 
+		},
+		onModifyAtkPriority: 6,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ground') {
+				this.debug('Dune Terror boost');
+				return this.chainModify(1.2);	
+				}
+		},
+		onModifySpAPriority: 6,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ground') {
+				this.debug('Dune Terror boost');
+				return this.chainModify(1.2);	
+			}
+		},
+		name: "Dune Terror",
+		rating: 3,
+		num: 444,
+		gen: 8,
+	},
+	infernalrage: {
+		onModifyAtkPriority: 6,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Infernal Rage boost');
+				return this.chainModify([5529,4096]); // ~35% boost
+			}
+		},
+		onModifySpAPriority: 6,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Infernal Rage boost');
+				return this.chainModify([5529,4096]); // ~35% boost
+			}
+		},
+
+		onAfterMoveSecondaryPriority: -1,
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source && source !== target && move && move.type === 'Fire' && !source.forceSwitchFlag && move.totalDamage) {
+				const ebRecoilDamage = this.clampIntRange(Math.round(move.totalDamage * 0.05), 1)
+				this.add('-activate', source, 'Infernal Rage');
+				this.damage(ebRecoilDamage, source, source, 'recoil');
+			}
+		},
+		name: "Infernal Rage",
+		rating: 3,
+		num: 445,
+		gen: 8,
+
+	},
+	radiance: {
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('radiance - enhancing accuracy');
+			return this.chainModify(1.2);
+		},
+		onAnyTryMove(source, target, move) {
+			if (move.type === 'Dark') {
+				this.attrLastMove('[still]');
+				this.add('cant', this.effectState.target, 'ability: Radiance', move, '[of] ' + target);
+				return false;
+			}
+		},
+		name: "Radiance",
+		rating: 3,
+		num: 446,
+		gen: 8,
+	},
+	atlas: {
+		onStart(source) {
+			if (!this.field.getPseudoWeather('gravity')) {
+				this.add('-activate', source, 'ability: Atlas');
+				this.field.addPseudoWeather('gravity', source, source.getAbility());
+			}
+
+		},
+		onFractionalPriority: -0.1,
+		name: "Atlas",
+		rating: 3,
+		num: 447,
+		gen: 8,
+	}, 
+	elementalcharge: {
+		onModifyMove(move) {
+			let status;
+			switch (move.type) {
+				case 'Fire':
+					status = 'brn';
+					break;
+				case 'Electric':
+					status = 'par'
+					break;
+				case 'Ice':
+					status = 'frz'
+					break;
+				default:
+			}
+			if (status) {
+				if (!move.secondaries) {
+					move.secondaries = [];
+				}
+				move.secondaries.push({
+					chance: 20,
+					status: status,
+					ability: this.dex.abilities.get('elementalcharge'),
+				});
+			}
+
+		},
+		name: "Elemental Charge",
+		rating: 3,
+		num: 448,
+		gen: 8,
+	}, 
+	dualwield: { //Uses parentalBond as base.
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
+			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+			if (move.flags['pulse']) {
+				move.multihit = 2;
+				move.multihitType = 'dual';
+			}
+		},
+		// Damage modifier implemented in BattleActions#modifyDamage()
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'dual' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		name: "Dual Wield",
+		rating: 3,
+		num: 449,
+		gen: 8,
+	},
+	ambush: { 
+		onModifyMove(move, attacker, defender) {
+			if (defender && !defender.activeTurns) {
+				move.willCrit = true;
+			}
+
+		},
+		name: "Ambush",
+		rating: 3,
+		num: 450,
+		gen: 8,
+	},
+	jawsofcarnage: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.add('-activate', source, 'Jaws of Carnage');
+				source.heal(source.baseMaxhp / 2);
+				this.add('-heal', source, source.getHealth, '[silent]')
+			}
+		},
+		name: "Jaws of Carnage",
+		rating: 3,
+		num: 451,
+		gen: 8,
+	},
+	angelswrath: { //oh boy, here we go
+		onModifyMove(move, pokemon, target) {
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			switch (move.name) {
+				case 'Tackle': 				
+					move.basePower = 100
+					move.secondaries.push(
+						{
+							chance: 100,
+							volatileStatus: 'disable',
+							ability: this.dex.abilities.get('angelswrath'),
+						},
+						{
+							chance: 100,
+							volatileStatus: 'encore',
+							ability: this.dex.abilities.get('angelswrath'),
+
+						}
+					);
+					break;
+	
+				case 'Electroweb': 					
+					move.basePower = 155
+					move.accuracy = true
+					move.secondaries.push({
+						chance: 100,
+						boosts: {spe: -12},
+						ability: this.dex.abilities.get('angelswrath'),
+					});
+					break;
+
+				case 'Bug Bite': 					
+					move.basePower = 140
+					move.drain = [1,1]
+					move.onAfterHit = (target, source) => {
+						if (source.hp) {
+							const item = target.takeItem();
+							if (item) {
+								this.add('-enditem', target, item.name, '[from] ability: Angel\'s Wrath', '[of] ' + source);
+							}
+						}
+					}
+					break;
+
+				case 'Poison Sting': 				
+					move.basePower = 120;
+					move.secondaries.push({
+						chance: 100,
+						status: 'tox',
+						ability: this.dex.abilities.get('angelswrath'),
+					});
+					move.onEffectiveness = (typeMod, target, type) => {
+							if (type === 'Steel') return 1;
+					}
+					if (!move.ignoreImmunity) move.ignoreImmunity = {};
+					if (move.ignoreImmunity !== true) {
+						move.ignoreImmunity['Poison'] = true;
+					}
+					break;
+			
+				case 'String Shot':
+					move.onAfterHit = (source, target, move) => {
+						const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+						this.add('-activate', target, 'ability: Angel\'s Wrath');
+						for (const condition of sideConditions) {
+							for (const side of source.side.foeSidesWithConditions()) {
+								side.addSideCondition(condition);
+							}
+						}
+					}
+					break;
+				case 'Harden': 
+					move.onAfterMove = (source, target, move) => {
+						this.boost({atk: 1, spa: 1,spd: 1,def: 1,spe: 1,accuracy: 1,evasion: 1}, source)
+
+					}
+					break;
+				case 'Iron Defense': 
+					move.priority = 4;
+					move.onAfterMove = (source, target, move) => {
+						const moveMutations = {
+							onTryHit: (target: Pokemon, source: Pokemon, move: ActiveMove) => {
+								if (!move.flags['protect'] || move.category === 'Status') {
+									if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+									if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+									return;
+								}
+								if (move.smartTarget) {
+									move.smartTarget = false;
+								} else {
+									this.add('-activate', target, 'move: Protect');
+								}
+								const lockedmove = source.getVolatile('lockedmove');
+								if (lockedmove) {
+									// Outrage counter is reset
+									if (source.volatiles['lockedmove'].duration === 2) {
+										delete source.volatiles['lockedmove'];
+									}
+								}
+								if (this.checkMoveMakesContact(move, source, target)) {
+									this.boost({atk: -1, spa: -1,spd: -1,def: -1,spe: -1,accuracy: -1,evasion: -1}, source, target, this.dex.getActiveMove("Iron Defense"));
+								}
+								return this.NOT_FAIL;
+							},
+							onHit: (target: Pokemon, source: Pokemon, move: ActiveMove) => {
+									if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+									this.boost({atk: -1, spa: -1,spd: -1,def: -1,spe: -1,accuracy: -1,evasion: -1}, source, target, this.dex.getActiveMove("King's Shield"));
+									}
+							}
+						}
+						this.actions.runAdditionalMove(Dex.moves.get('kingsshield'), source, source, moveMutations)
+					}
+				
+				}
+			},
+			name: 'Angel\'s Wrath',
+			rating: 3,
+			num: 452,
+			gen: 8,
+	},
+	prismaticfur: {
+		onModifyDefPriority: 6,
+		//Fur Coat
+		onModifyDef(def) {
+			return this.chainModify(2);
+		},
+		//Ice Scales
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category === 'Special') {
+				return this.chainModify(0.5);
+			}
+		},
+		//Protean
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Prismatic Fur');
+			}
+		},
+		//Color Change
+		onFoePrepareHit(source, target, move) {
+			let bestType;
+			let bestTypeMod = 0;
+			let typeMod;
+			for (const type of this.dex.types.all()) {
+				if (!this.dex.getImmunity(move.type, type.id)) {
+					//breaks, as immunity is strongest resistance possible
+					bestType = type.name;
+					break;
+				}
+				typeMod = this.dex.getEffectiveness(move.type, type.name);
+				if (typeMod < bestTypeMod) {
+					bestType = type.name;
+					bestTypeMod = typeMod
+				}
+			}
+			if (source !== target && bestType && !target.getTypes().includes(bestType)) {
+				if (!target.setType(bestType)) return;
+				this.add('-start', target, 'typechange', bestType, '[from] ability: Prismatic Fur');
+			}
+		},
+		name: "Prismatic Fur",
+		rating: 5,
+		num: 453,
+		gen: 8,
+	},
+	faehunter: {
+		onModifyDamage(damage, source, target, move) {
+			if (target.hasType('Fairy')) {
+				this.debug('Fae Hunter boost');
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Fae Hunter",
+		rating: 3,
+		num: 454,
+		gen: 8,
+	},
+	gravitywell: {
+		onStart(source) {
+			if (!this.field.getPseudoWeather('gravity')) {
+				this.add('-activate', source, 'ability: Gravity Well');
+				this.field.addPseudoWeather('gravity', source, source.getAbility());
+			}
+
+		},
+		name: "Gravity Well",
+		rating: 3,
+		num: 454,
+		gen: 8,
+	}, 
+	
+	
+	
+
+
+
+	
+
 
 	
 

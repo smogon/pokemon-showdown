@@ -114,6 +114,27 @@ export class Field {
 		return false;
 	}
 
+	suppressingTerrain() {
+		for (const side of this.battle.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() && pokemon.getAbility().suppressTerrain) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	suppressingRoom() {
+		for (const side of this.battle.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon && !pokemon.fainted && !pokemon.ignoringAbility() && pokemon.getAbility().suppressRoom) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	isWeather(weather: string | string[]) {
 		const ourWeather = this.effectiveWeather();
 		if (!Array.isArray(weather)) {
@@ -166,6 +187,7 @@ export class Field {
 	}
 
 	effectiveTerrain(target?: Pokemon | Side | Battle) {
+		if (this.suppressingTerrain()) return ''
 		if (this.battle.event && !target) target = this.battle.event.target;
 		return this.battle.runEvent('TryTerrain', target) ? this.terrain : '';
 	}
