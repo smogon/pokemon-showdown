@@ -1732,21 +1732,37 @@ export class BattleActions {
 		baseDamage = this.battle.randomizer(baseDamage);
 
 		// STAB
+		const isTeraStellar = pokemon.terastallized === 'Stellar';
 		if (move.forceSTAB || (type !== '???' &&
-			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type))))) {
+			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type)) ||
+				(isTeraStellar && !pokemon.stellarBoostedTypes.has(type))))) {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
 			// (On second thought, it might be easier to get a MissingNo.)
 
-			let stab = move.stab || 1.5;
-			if (type === pokemon.terastallized && pokemon.getTypes(false, true).includes(type)) {
+			// The Stellar tera type makes this incredibly confusing
+			// If the move's type does not match one of the user's base types,
+			// the Stellar tera type applies a one-time 1.2x damage boost for that type.
+			//
+			// If the move's type does match one of the user's base types,
+			// then the Stellar tera type applies a one-time 2x STAB boost for that type,
+			// and then goes back to using the regular 1.5x STAB boost for those types.
+
+
+			let stab = (isTeraStellar && !pokemon.getTypes(false, true).includes(type)) ? [4915, 4096] : move.stab || 1.5;
+			if ((type === pokemon.terastallized || (isTeraStellar && !pokemon.stellarBoostedTypes.has(type))) &&
+				pokemon.getTypes(false, true).includes(type)) {
 				// In my defense, the game hardcodes the Adaptability check like this, too.
 				stab = stab === 2 ? 2.25 : 2;
-			} else if (pokemon.terastallized && type !== pokemon.terastallized) {
+			} else if (pokemon.terastallized && type !== pokemon.terastallized && move.stab === 2) {
 				stab = 1.5;
 			}
 			baseDamage = this.battle.modify(baseDamage, stab);
+
+			if (isTeraStellar && pokemon.species.name !== 'Terapagos-Stellar') {
+				pokemon.stellarBoostedTypes.add(type);
+			}
 		}
 
 		// types

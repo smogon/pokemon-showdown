@@ -242,6 +242,7 @@ export class Pokemon {
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	syrupTriggered: boolean;
+	stellarBoostedTypes: Set<string>;
 
 	/** Have this pokemon's Start events run yet? (Start events run every switch-in) */
 	isStarted: boolean;
@@ -453,6 +454,7 @@ export class Pokemon {
 		this.swordBoost = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
+		this.stellarBoostedTypes = new Set();
 		this.isStarted = false;
 		this.duringMove = false;
 
@@ -2010,7 +2012,9 @@ export class Pokemon {
 	}
 
 	getTypes(excludeAdded?: boolean, preterastallized?: boolean): string[] {
-		if (!preterastallized && this.terastallized) return [this.terastallized];
+		if (!preterastallized && this.terastallized && this.terastallized !== 'Stellar') {
+			return [this.terastallized];
+		}
 		const types = this.battle.runEvent('Type', this, null, null, this.types);
 		if (!excludeAdded && this.addedType) return types.concat(this.addedType);
 		if (types.length) return types;
@@ -2072,6 +2076,7 @@ export class Pokemon {
 	}
 
 	runEffectiveness(move: ActiveMove) {
+		if (this.terastallized && move.type === 'Stellar') return 1;
 		let totalTypeMod = 0;
 		for (const type of this.getTypes()) {
 			let typeMod = this.battle.dex.getEffectiveness(move, type);

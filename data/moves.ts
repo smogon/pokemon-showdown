@@ -19926,6 +19926,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		num: 851,
 		accuracy: 100,
 		basePower: 80,
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.terastallized === 'Stellar') {
+				return 100;
+			}
+			return 80;
+		},
 		category: "Special",
 		name: "Tera Blast",
 		pp: 10,
@@ -19945,6 +19951,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.terastallized && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
 				move.category = 'Physical';
 			}
+			if (pokemon.terastallized === 'Stellar') {
+				move.self = {boosts: {atk: -1, spa: -1}};
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -19959,8 +19968,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onModifyMove(move, source, target) {
-			if (source.species.id === 'Terapagos-Stellar') {
+		onModifyType(move, pokemon) {
+			if (pokemon.species.id === 'Terapagos-Stellar') {
+				move.type = 'Stellar';
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.id === 'Terapagos-Stellar') {
 				move.target = 'allAdjacentFoes';
 			}
 		},
