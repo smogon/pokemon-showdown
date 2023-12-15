@@ -4164,7 +4164,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		volatileStatus: 'dragoncheer',
 		condition: {
 			onStart(target, source, effect) {
-				if (target.volatiles['dragonenergy']) return false;
+				if (target.volatiles['focusenergy']) return false;
 				if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', target, 'move: Dragon Cheer', '[silent]');
 				} else {
