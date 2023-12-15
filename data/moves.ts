@@ -5368,8 +5368,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onBasePower(relayVar, source, target, move) {
+		onBasePower(basePower, pokemon) {
 			if (this.randomChance(3, 10)) {
+				this.add('-activate', pokemon, 'move: Fickle Beam');
 				return this.chainModify(2);
 			}
 		},

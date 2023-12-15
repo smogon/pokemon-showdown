@@ -1934,6 +1934,11 @@ export const MovesText: {[k: string]: MoveText} = {
 			shortDesc: "Raises user's Attack by 2 if this KOes the target.",
 		},
 	},
+	ficklebeam: {
+		name: "Fickle Beam",
+
+		activate: "  [POKEMON] is going all out for this attack!",
+	},
 	fierydance: {
 		name: "Fiery Dance",
 		desc: "Has a 50% chance to raise the user's Special Attack by 1 stage.",
