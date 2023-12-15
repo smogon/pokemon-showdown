@@ -1,4 +1,20 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	berrysweet: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	cloversweet: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	dubiousdisc: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	electirizer: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	eviolite: {
 		inherit: true,
 		onModifyDef(def, pokemon) {
@@ -11,5 +27,41 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return this.chainModify(1.5);
 			}
 		},
+	},
+	flowersweet: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	lovesweet: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	magmarizer: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	metalalloy: {
+		inherit: true,
+		isNonstandard: "Future",
+	},
+	protector: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	ribbonsweet: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	starsweet: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	strawberrysweet: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	upgrade: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 };

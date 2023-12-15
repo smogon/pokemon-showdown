@@ -4770,7 +4770,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Rock",
+		type: "Electric",
 	},
 	electroweb: {
 		num: 527,
@@ -19487,7 +19487,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	tachyoncutter: {
 		num: 911,
 		accuracy: true,
-		basePower: 60,
+		basePower: 50,
 		category: "Special",
 		name: "Tachyon Cutter",
 		pp: 10,
