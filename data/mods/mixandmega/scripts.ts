@@ -433,6 +433,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
 				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
+			if (pokemon.illusion?.species.baseSpecies === 'Terapagos') {
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
+			}
 
 			let type = pokemon.teraType;
 			if (pokemon.species.baseSpecies !== 'Ogerpon' && pokemon.getItem().name.endsWith('Mask')) {

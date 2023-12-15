@@ -2675,4 +2675,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		// Implemented in Pokemon#getDetails
 	},
+	uselessmovesclause: {
+		effectType: 'ValidatorRule',
+		name: 'Useless Moves Clause',
+		// implemented in /mods/moderngen1/rulesets.ts
+	},
 };

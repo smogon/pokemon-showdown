@@ -1872,7 +1872,7 @@ export class BattleActions {
 	}
 
 	terastallize(pokemon: Pokemon) {
-		if (pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
+		if (pokemon.illusion && ['Ogerpon', 'Terapagos'].includes(pokemon.illusion.species.baseSpecies)) {
 			this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 		}
 
