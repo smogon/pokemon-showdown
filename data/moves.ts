@@ -2072,7 +2072,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
+				if (!move.flags['protect'] || move.category === 'Status') {
 					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
 					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
@@ -4161,20 +4161,25 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {snatch: 1},
 		volatileStatus: 'dragoncheer',
 		condition: {
+			// TODO check if this stacks with Focus Energy
 			onStart(target, source, effect) {
 				if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', target, 'move: Dragon Cheer', '[silent]');
 				} else {
 					this.add('-start', target, 'move: Dragon Cheer');
 				}
+				// Store at the start because the boost doesn't change if a Pokemon
+				// Terastallizes into Dragon while having this volatile
+				// Found by DarkFE:
+				// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9894139
+				this.effectState.hasDragonType = target.hasType("Dragon");
 			},
 			onModifyCritRatio(critRatio, source) {
-				// TODO: Figure out actual ratios
-				return critRatio + (source.hasType('Dragon') ? 3 : 2);
+				return critRatio + (this.effectState.hasDragonType ? 3 : 2);
 			},
 		},
 		secondary: null,
-		target: "allies",
+		target: "adjacentAlly",
 		type: "Dragon",
 	},
 	dragonclaw: {
@@ -8381,6 +8386,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePowerCallback(pokemon, target) {
 			const hp = target.hp;
 			const maxHP = target.maxhp;
+			// TODO figure out actual BP cap
 			const bp = Math.floor(Math.floor((120 * (100 * Math.floor(hp * 4096 / maxHP)) + 2048 - 1) / 4096) / 100) || 1;
 			this.debug('BP for ' + hp + '/' + maxHP + " HP: " + bp);
 			return bp;
@@ -10947,7 +10953,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	lusterpurge: {
 		num: 295,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 95,
 		category: "Special",
 		name: "Luster Purge",
 		pp: 5,
@@ -12488,7 +12494,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	mistball: {
 		num: 296,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 95,
 		category: "Special",
 		name: "Mist Ball",
 		pp: 5,
@@ -14577,7 +14583,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Psychic Noise",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		secondary: {
 			chance: 100,
 			volatileStatus: 'healblock',
@@ -15538,6 +15544,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onModifyType(move, pokemon) {
 			let type = pokemon.getTypes()[0];
 			if (type === "Bird") type = "???";
+			if (type === "Stellar") type = pokemon.getTypes(false, true)[0];
 			move.type = type;
 		},
 		secondary: null,
@@ -15628,6 +15635,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 1,
 			// reviving implemented in side.ts, kind of
 		},
+		noSketch: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -19135,7 +19143,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		hasCrashDamage: true,
 		onMoveFail(target, source, move) {
-			// TODO: Figure out actual damage taken
 			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Supercell Slam'));
 		},
 		secondary: null,

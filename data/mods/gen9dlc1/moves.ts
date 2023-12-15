@@ -89,6 +89,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	lusterpurge: {
 		inherit: true,
+		basePower: 70,
 		isNonstandard: "Past",
 	},
 	malignantchain: {
@@ -105,6 +106,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mistball: {
 		inherit: true,
+		basePower: 70,
 		isNonstandard: "Past",
 	},
 	moongeistbeam: {

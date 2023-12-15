@@ -5775,32 +5775,42 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	archaludon: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	hydrapple: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	gougingfire: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	ragingbolt: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	ironboulder: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	ironcrown: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	terapagos: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	terapagosterastal: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	terapagosstellar: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 	pecharunt: {
 		isNonstandard: "Future",
+		tier: "Illegal",
 	},
 };
