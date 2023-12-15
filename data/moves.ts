@@ -5369,7 +5369,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(relayVar, source, target, move) {
-			if (this.randomChance(1, 3)) {
+			if (this.randomChance(3, 10)) {
 				return this.chainModify(2);
 			}
 		},
