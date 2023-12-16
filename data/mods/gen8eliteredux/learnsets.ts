@@ -192240,7 +192240,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"rattataalolan": {
+		"rattataalola": {
 			"learnset": {
 				"tackle": [
 					"7L1"
@@ -192421,7 +192421,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"raticatealolan": {
+		"raticatealola": {
 			"learnset": {
 				"swordsdance": [
 					"7L1",
@@ -192661,7 +192661,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"raichualolan": {
+		"raichualola": {
 			"learnset": {
 				"psybeam": [
 					"7L0"
@@ -192955,7 +192955,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"sandshrewalolan": {
+		"sandshrewalola": {
 			"learnset": {
 				"defensecurl": [
 					"7L1",
@@ -193195,7 +193195,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"sandslashalolan": {
+		"sandslashalola": {
 			"learnset": {
 				"iciclespear": [
 					"7L0",
@@ -193468,7 +193468,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"vulpixalolan": {
+		"vulpixalola": {
 			"learnset": {
 				"powdersnow": [
 					"7L1"
@@ -193659,7 +193659,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"ninetalesalolan": {
+		"ninetalesalola": {
 			"learnset": {
 				"dazzlinggleam": [
 					"7L0",
@@ -193898,7 +193898,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"diglettalolan": {
+		"diglettalola": {
 			"learnset": {
 				"scorchingsands": [
 					"7L1",
@@ -194065,7 +194065,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"dugtrioalolan": {
+		"dugtrioalola": {
 			"learnset": {
 				"sandtomb": [
 					"7L0"
@@ -194261,7 +194261,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"meowthalolan": {
+		"meowthalola": {
 			"learnset": {
 				"wickedblow": [
 					"7L1"
@@ -194484,7 +194484,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"persianalolan": {
+		"persianalola": {
 			"learnset": {
 				"swift": [
 					"7L0",
@@ -194738,7 +194738,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"geodudealolan": {
+		"geodudealola": {
 			"learnset": {
 				"tackle": [
 					"7L1"
@@ -194967,7 +194967,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"graveleralolan": {
+		"graveleralola": {
 			"learnset": {
 				"tackle": [
 					"7L1"
@@ -195204,7 +195204,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"golemalolan": {
+		"golemalola": {
 			"learnset": {
 				"seismicfist": [
 					"7L1"
@@ -195475,7 +195475,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"grimeralolan": {
+		"grimeralola": {
 			"learnset": {
 				"wickedblow": [
 					"7L1"
@@ -195705,7 +195705,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"mukalolan": {
+		"mukalola": {
 			"learnset": {
 				"venomdrench": [
 					"7L0"
@@ -195973,7 +195973,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"exeggutoralolan": {
+		"exeggutoralola": {
 			"learnset": {
 				"dragonbreath": [
 					"7L0"
@@ -196222,7 +196222,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"marowakalolan": {
+		"marowakalola": {
 			"learnset": {
 				"shadowbone": [
 					"7L0"
@@ -196537,7 +196537,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"meowthgalarian": {
+		"meowthgalar": {
 			"learnset": {
 				"fakeout": [
 					"7L1"
@@ -196719,7 +196719,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"ponytagalarian": {
+		"ponytagalar": {
 			"learnset": {
 				"tackle": [
 					"7L1"
@@ -196865,7 +196865,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"rapidashgalarian": {
+		"rapidashgalar": {
 			"learnset": {
 				"megakick": [
 					"7L0"
@@ -197114,7 +197114,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"slowpokegalarian": {
+		"slowpokegalar": {
 			"learnset": {
 				"tackle": [
 					"7L1"
@@ -197345,7 +197345,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"slowbrogalarian": {
+		"slowbrogalar": {
 			"learnset": {
 				"shellsidearm": [
 					"7L0"
@@ -197633,7 +197633,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"farfetchdgalarian": {
+		"farfetchdgalar": {
 			"learnset": {
 				"peck": [
 					"7L1"
@@ -197799,7 +197799,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"weezinggalarian": {
+		"weezinggalar": {
 			"learnset": {
 				"doublehit": [
 					"7L0"
@@ -198009,7 +198009,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"mrmimegalarian": {
+		"mrmimegalar": {
 			"learnset": {
 				"copycat": [
 					"7L1"
@@ -198301,7 +198301,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"articunogalarian": {
+		"articunogalar": {
 			"learnset": {
 				"dualwingbeat": [
 					"7L0",
@@ -198516,7 +198516,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"zapdosgalarian": {
+		"zapdosgalar": {
 			"learnset": {
 				"dualwingbeat": [
 					"7L0",
@@ -198750,7 +198750,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"moltresgalarian": {
+		"moltresgalar": {
 			"learnset": {
 				"dualwingbeat": [
 					"7L0",
@@ -198940,7 +198940,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"slowkinggalarian": {
+		"slowkinggalar": {
 			"learnset": {
 				"eeriespell": [
 					"7L0"
@@ -199231,7 +199231,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"corsolagalarian": {
+		"corsolagalar": {
 			"learnset": {
 				"tackle": [
 					"7L1"
@@ -199449,7 +199449,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"zigzagoongalarian": {
+		"zigzagoongalar": {
 			"learnset": {
 				"tackle": [
 					"7L1"
@@ -199649,7 +199649,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"linoonegalarian": {
+		"linoonegalar": {
 			"learnset": {
 				"nightslash": [
 					"7L0"
@@ -199880,7 +199880,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"darumakagalarian": {
+		"darumakagalar": {
 			"learnset": {
 				"powdersnow": [
 					"7L1"
@@ -200066,7 +200066,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"darmanitangalarian": {
+		"darmanitangalar": {
 			"learnset": {
 				"iciclecrash": [
 					"7L0"
@@ -200322,7 +200322,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"yamaskgalarian": {
+		"yamaskgalar": {
 			"learnset": {
 				"astonish": [
 					"7L1"
@@ -200494,7 +200494,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"stunfiskgalarian": {
+		"stunfiskgalar": {
 			"learnset": {
 				"mudslap": [
 					"7L1",
@@ -215695,7 +215695,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			},
 			"inherit": true
 		},
-		"darmanitanzenmodegalarian": {
+		"darmanitanzenmodegalar": {
 			"learnset": {
 				"iciclecrash": [
 					"7L0"

@@ -18069,7 +18069,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		baseSpecies: "Butterfree",
 		forme: "Mega",
 		types: ["Bug", "Psychic"],
-		baseStats: {hp: 60, atk: 15, def: 60, spa: 140, spd: 120, spe: 110},
+		baseStats: {hp: 60, atk: 15, def: 60, spa: 145, spd: 125, spe: 110},
 		abilities: {0: "Tinted Lens"},
 		heightm: 1.1,
 		weightkg: 32,
