@@ -1699,7 +1699,7 @@ export class RandomTeams {
 		// For Monotype
 		const isMonotype = !!this.forceMonotype || ruleTable.has('sametypeclause');
 		const isDoubles = this.format.gameType !== 'singles';
-		const typePool = this.dex.types.names();
+		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
 		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff

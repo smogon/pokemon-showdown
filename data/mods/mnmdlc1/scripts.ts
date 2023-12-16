@@ -1,5 +1,6 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
+	inherit: "gen9dlc1",
 	init() {
 		for (const i in this.data.Items) {
 			if (!this.data.Items[i].megaStone) continue;
@@ -433,9 +434,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
 				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
-			if (pokemon.illusion?.species.baseSpecies === 'Terapagos') {
-				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
-			}
 
 			let type = pokemon.teraType;
 			if (pokemon.species.baseSpecies !== 'Ogerpon' && pokemon.getItem().name.endsWith('Mask')) {
@@ -466,9 +464,6 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.battle.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 					}
 				}
-			}
-			if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
-				pokemon.formeChange('Terapagos-Stellar', null, true);
 			}
 			this.battle.runEvent('AfterTerastallization', pokemon);
 		},
