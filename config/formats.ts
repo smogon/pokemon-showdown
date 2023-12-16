@@ -204,7 +204,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Battle Stadium Singles Regulation E",
 
-		mod: 'gen9',
+		mod: 'gen9dlc1',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
 		banlist: ['Walking Wake', 'Iron Leaves'],
@@ -323,7 +323,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] VGC 2023 Regulation E",
 
-		mod: 'gen9',
+		mod: 'gen9dlc1',
 		gameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets'],
@@ -332,7 +332,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] VGC 2023 Regulation E (Bo3)",
 
-		mod: 'gen9',
+		mod: 'gen9dlc1',
 		gameType: 'doubles',
 		challengeShow: false,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
