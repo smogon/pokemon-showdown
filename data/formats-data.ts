@@ -356,12 +356,12 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "NFE",
 	},
 	crobat: {
-		tier: "RU",
-	},
-	oddish: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "LC",
+		natDexTier: "RU",
+	},
+	oddish: {
+		tier: "LC",
 	},
 	gloom: {
 		tier: "NFE",

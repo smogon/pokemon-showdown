@@ -1735,7 +1735,7 @@ export class BattleActions {
 		const isTeraStellar = pokemon.terastallized === 'Stellar';
 		if (move.forceSTAB || (type !== '???' &&
 			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type)) ||
-				(isTeraStellar && !pokemon.stellarBoostedTypes.has(type))))) {
+				(isTeraStellar && !pokemon.stellarBoostedTypes.includes(type))))) {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.
@@ -1751,7 +1751,7 @@ export class BattleActions {
 
 
 			let stab = (isTeraStellar && !pokemon.getTypes(false, true).includes(type)) ? [4915, 4096] : move.stab || 1.5;
-			if ((type === pokemon.terastallized || (isTeraStellar && !pokemon.stellarBoostedTypes.has(type))) &&
+			if ((type === pokemon.terastallized || (isTeraStellar && !pokemon.stellarBoostedTypes.includes(type))) &&
 				pokemon.getTypes(false, true).includes(type)) {
 				// In my defense, the game hardcodes the Adaptability check like this, too.
 				stab = stab === 2 ? 2.25 : 2;
@@ -1760,8 +1760,9 @@ export class BattleActions {
 			}
 			baseDamage = this.battle.modify(baseDamage, stab);
 
-			if (isTeraStellar && pokemon.species.name !== 'Terapagos-Stellar') {
-				pokemon.stellarBoostedTypes.add(type);
+			if (isTeraStellar && pokemon.species.name !== 'Terapagos-Stellar' &&
+				!pokemon.stellarBoostedTypes.includes(type)) {
+				pokemon.stellarBoostedTypes.push(type);
 			}
 		}
 

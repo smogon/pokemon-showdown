@@ -481,6 +481,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			) {
 				throw new Error(`Invalid type "${type.name}" in Generation ${this.dex.gen}`);
 			}
+			if (type.name === 'Stellar') {
+				throw new Error(`There are no Stellar-type Pok\u00e9mon.`);
+			}
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);

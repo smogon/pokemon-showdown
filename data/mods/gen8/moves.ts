@@ -96,6 +96,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 	},
+	coreenforcer: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	craftyshield: {
 		inherit: true,
 		isNonstandard: null,

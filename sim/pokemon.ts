@@ -242,7 +242,7 @@ export class Pokemon {
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	syrupTriggered: boolean;
-	stellarBoostedTypes: Set<string>;
+	stellarBoostedTypes: string[];
 
 	/** Have this pokemon's Start events run yet? (Start events run every switch-in) */
 	isStarted: boolean;
@@ -454,7 +454,7 @@ export class Pokemon {
 		this.swordBoost = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
-		this.stellarBoostedTypes = new Set();
+		this.stellarBoostedTypes = [];
 		this.isStarted = false;
 		this.duringMove = false;
 

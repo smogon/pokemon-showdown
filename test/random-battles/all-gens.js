@@ -202,26 +202,26 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 
 						for (const itemName of [].concat(set.item)) {
 							if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;
-							const item = Dex.items.get(itemName);
+							const item = Dex.forGen(genNum).items.get(itemName);
 							assert(item.exists, `invalid item "${itemName}" of ${species}`);
 							assert.equal(item.name, itemName, `miscapitalized item "${itemName}" of ${species}`);
 						}
 
 						for (const abilityName of [].concat(set.ability)) {
-							const ability = Dex.abilities.get(abilityName);
+							const ability = Dex.forGen(genNum).abilities.get(abilityName);
 							assert(ability.exists, `invalid ability "${abilityName}" of ${species}`);
 							assert.equal(ability.name, abilityName, `miscapitalized ability "${abilityName}" of ${species}`);
 						}
 
 						for (const natureName of [].concat(set.nature)) {
-							const nature = Dex.natures.get(natureName);
+							const nature = Dex.forGen(genNum).natures.get(natureName);
 							assert(nature.exists, `invalid nature "${natureName}" of ${species}`);
 							assert.equal(nature.name, natureName, `miscapitalized nature "${natureName}" of ${species}`);
 						}
 
 						for (const moveSpec of set.moves) {
 							for (const moveName of [].concat(moveSpec)) {
-								const move = Dex.moves.get(moveName);
+								const move = Dex.forGen(genNum).moves.get(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
 								assert.equal(move.name, moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${species}`);
 								assert(validateLearnset(move, set, vType, mod), `illegal move "${moveName}" of ${species}`);
