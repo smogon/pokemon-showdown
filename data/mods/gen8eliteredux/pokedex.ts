@@ -16645,17 +16645,17 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"bruxishmega": {
-		"abilities": {
-			"0": "Dazzling",
-			"1": "Defiant",
-			"H": "Predator",
-			"I1": "Strong Jaw",
-			"I2": "Wonder Skin",
-			"I3": "Psychic Mind"
-		},
-		"inherit": true
-	},
+	// "bruxishmega": {
+	// 	"abilities": {
+	// 		"0": "Dazzling",
+	// 		"1": "Defiant",
+	// 		"H": "Predator",
+	// 		"I1": "Strong Jaw",
+	// 		"I2": "Wonder Skin",
+	// 		"I3": "Psychic Mind"
+	// 	},
+	// 	"inherit": true
+	// },
 	"torterramega": {
 		"abilities": {
 			"0": "Atlas",
