@@ -352,30 +352,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.bestStat !== 'atk' || source.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'atk' || source.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Rune Drive atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, target, source, move) {
-				if (this.effectState.bestStat !== 'def' || target.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'def' || target.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Rune Drive def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(relayVar, source, target, move) {
-				if (this.effectState.bestStat !== 'spa' || source.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spa' || source.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Rune Drive spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.bestStat !== 'spd' || target.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spd' || target.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Rune Drive spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spe' || pokemon.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Rune Drive spe boost');
 				return this.chainModify(1.5);
 			},
@@ -418,30 +418,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.bestStat !== 'atk' || source.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'atk' || source.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Photon Drive atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, target, source, move) {
-				if (this.effectState.bestStat !== 'def' || target.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'def' || target.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Photon Drive def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(relayVar, source, target, move) {
-				if (this.effectState.bestStat !== 'spa' || source.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spa' || source.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Photon Drive spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.bestStat !== 'spd' || target.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spd' || target.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Photon Drive spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spe' || pokemon.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Photon Drive spe boost');
 				return this.chainModify(1.5);
 			},
@@ -484,30 +484,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.bestStat !== 'atk' || source.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'atk' || source.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Neuron Drive atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, target, source, move) {
-				if (this.effectState.bestStat !== 'def' || target.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'def' || target.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Neuron Drive def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(relayVar, source, target, move) {
-				if (this.effectState.bestStat !== 'spa' || source.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spa' || source.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Neuron Drive spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.bestStat !== 'spd' || target.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spd' || target.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Neuron Drive spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.volatiles['cloudnine']) return;
+				if (this.effectState.bestStat !== 'spe' || pokemon.volatiles['cloudnine'] || pokemon.ignoringAbility()) return;
 				this.debug('Neuron Drive spe boost');
 				return this.chainModify(1.5);
 			},
@@ -551,30 +551,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.bestStat !== 'atk') return;
+				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
 				this.debug('Protosmosis atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, target, source, move) {
-				if (this.effectState.bestStat !== 'def') return;
+				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
 				this.debug('Protosmosis def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(relayVar, source, target, move) {
-				if (this.effectState.bestStat !== 'spa') return;
+				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
 				this.debug('Protosmosis spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.bestStat !== 'spd') return;
+				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
 				this.debug('Protosmosis spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe') return;
+				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
 				this.debug('Protosmosis spe boost');
 				return this.chainModify(1.5);
 			},
@@ -618,30 +618,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.bestStat !== 'atk') return;
+				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
 				this.debug('Protocrysalis atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, target, source, move) {
-				if (this.effectState.bestStat !== 'def') return;
+				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
 				this.debug('Protocrysalis def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(relayVar, source, target, move) {
-				if (this.effectState.bestStat !== 'spa') return;
+				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
 				this.debug('Protocrysalis spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.bestStat !== 'spd') return;
+				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
 				this.debug('Protocrysalis spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe') return;
+				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
 				this.debug('Protocrysalis spe boost');
 				return this.chainModify(1.5);
 			},
@@ -685,30 +685,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, source, target, move) {
-				if (this.effectState.bestStat !== 'atk') return;
+				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
 				this.debug('Protostasis atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, target, source, move) {
-				if (this.effectState.bestStat !== 'def') return;
+				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
 				this.debug('Protostasis def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(relayVar, source, target, move) {
-				if (this.effectState.bestStat !== 'spa') return;
+				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
 				this.debug('Protostasis spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(relayVar, target, source, move) {
-				if (this.effectState.bestStat !== 'spd') return;
+				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
 				this.debug('Protostasis spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe') return;
+				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
 				this.debug('Protostasis spe boost');
 				return this.chainModify(1.5);
 			},
