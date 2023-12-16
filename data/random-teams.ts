@@ -201,7 +201,7 @@ export class RandomTeams {
 			},
 			Psychic: (movePool, moves, abilities, types, counter) => {
 				if (counter.get('Psychic')) return false;
-				if (movePool.includes('calmmind') || movePool.includes('psychicfangs')) return true;
+				if (movePool.includes('calmmind') || abilities.has('Strong Jaw')) return true;
 				return abilities.has('Psychic Surge') || ['Electric', 'Fighting', 'Fire', 'Grass', 'Poison'].some(m => types.includes(m));
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
