@@ -19970,7 +19970,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, noassist: 1, failcopycat: 1, failmimic: 1},
 		onModifyType(move, pokemon) {
-			if (pokemon.species.id === 'Terapagos-Stellar') {
+			if (pokemon.species.name === 'Terapagos-Stellar') {
 				move.type = 'Stellar';
 			}
 		},
