@@ -116,6 +116,8 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Toxtricity';
 	} else if (species.startsWith("Tatsugiri-")) {
 		return 'Tatsugiri';
+	} else if (species.startsWith("Alcremie-")) {
+		return 'Alcremie';
 	} else if (species === "Zacian" && item.name === "Rusted Sword") {
 		return 'Zacian-Crowned';
 	} else if (species === "Zamazenta" && item.name === "Rusted Shield") {
