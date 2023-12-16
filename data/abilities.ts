@@ -3138,6 +3138,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 1.5,
 		num: 38,
 	},
+	poisonpuppeteer: {
+		onAnyAfterSetStatus(status, target, source, effect) {
+			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
+			if (status.id === 'psn' || status.id === 'tox') {
+				target.addVolatile('confusion');
+			}
+		},
+		name: "Poison Puppeteer",
+		rating: 3,
+		num: 310,
+	},
 	poisontouch: {
 		onSourceDamagingHit(damage, target, source, move) {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
@@ -4658,6 +4669,28 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		rating: 3,
 		num: 309,
 	},
+	terashell: {
+		// TODO figure out if this only works on Terapagos
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target || move.category === 'Status') return;
+			if (!target.runImmunity(move.type)) return; // immunity has priority
+			if (target.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
+			if (target.hp < target.maxhp) return;
+
+			this.add('-activate', target, 'ability: Tera Shell');
+			target.abilityState.resisted = true;
+			return -1;
+		},
+		onAfterMove(target, source, move) {
+			if (target.abilityState.resisted) {
+				delete target.abilityState.resisted;
+			}
+		},
+		isBreakable: true,
+		name: "Tera Shell",
+		rating: 3.5,
+		num: 308,
+	},
 	terashift: {
 		onPreStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Terapagos' || pokemon.transformed) return;
@@ -4680,28 +4713,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Teravolt",
 		rating: 3,
 		num: 164,
-	},
-	terashell: {
-		// TODO figure out if this only works on Terapagos
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target || move.category === 'Status') return;
-			if (!target.runImmunity(move.type)) return; // immunity has priority
-			if (target.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
-			if (target.hp < target.maxhp) return;
-
-			this.add('-activate', target, 'ability: Tera Shell');
-			target.abilityState.resisted = true;
-			return -1;
-		},
-		onAfterMove(target, source, move) {
-			if (target.abilityState.resisted) {
-				delete target.abilityState.resisted;
-			}
-		},
-		isBreakable: true,
-		name: "Tera Shell",
-		rating: 3.5,
-		num: 308,
 	},
 	thermalexchange: {
 		onDamagingHit(damage, target, source, move) {
