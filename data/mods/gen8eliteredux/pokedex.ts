@@ -16806,17 +16806,17 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		},
 		"inherit": true
 	},
-	"kingdramegay": {
-		"abilities": {
-			"0": "Swift Swim",
-			"1": "Sniper",
-			"H": "Riptide",
-			"I1": "Prism Scales",
-			"I2": "Mega Launcher",
-			"I3": "Marvel Scale"
-		},
-		"inherit": true
-	},
+	// "kingdramegay": {
+	// 	"abilities": {
+	// 		"0": "Swift Swim",
+	// 		"1": "Sniper",
+	// 		"H": "Riptide",
+	// 		"I1": "Prism Scales",
+	// 		"I2": "Mega Launcher",
+	// 		"I3": "Marvel Scale"
+	// 	},
+	// 	"inherit": true
+	// },
 	"meganiummega": {
 		"abilities": {
 			"0": "Misty Surge",

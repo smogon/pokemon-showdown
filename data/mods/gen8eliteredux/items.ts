@@ -799,4 +799,140 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dewgongite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	hitmonchanite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	hitmonleeite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	hitmontopite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	crobatite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	skarmorite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	torterrite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	infernapite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	empoleonite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	shucklite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	relicanthite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	quagsite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	jellicentite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	toucannonite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	dragoniteite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	breloomite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	slakingite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	feraligatritex: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	feralitgatritey: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	granbullite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	gyaradosmegay: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	haxorusite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	meganiumite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	luxrite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	nidokingite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	nidoqueenite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	sandslashite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	typhlosionite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	krookodilite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	magnezonite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	shedninjite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	swalotite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	lanturnite: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	slowkingite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 }
