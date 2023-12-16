@@ -7024,7 +7024,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 			move.secondaries.push({
 				chance: 100,
-				boosts: {atk: 1},
+				self: {
+					boosts: {atk: 1},
+				},
 				ability: this.dex.abilities.get('hardenedsheath'),
 			});
 		},
@@ -7143,7 +7145,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				basePower: 120 * 0.2
 			}
 			this.effectState.additionalAttack = true
-			this.actions.runAdditionalMove(Dex.moves.get('thundercall'), source, target, moveMutations)
+			this.actions.runAdditionalMove(Dex.moves.get('smite'), source, target, moveMutations)
 			this.effectState.additionalAttack = false
 		},
 		name: "Thunder Call",
@@ -7167,7 +7169,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 406,
 		gen: 8,
 	},
-	dicipline: {
+	discipline: {
 		onAfterMove(source, target, move) {
 			if (source.volatiles['lockedmove']) {
 				source.removeVolatile('lockedmove');
@@ -7175,7 +7177,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.volatiles['confusion']) {
-				this.add('-activate', pokemon, 'ability: Dicipline');
+				this.add('-activate', pokemon, 'ability: Discipline');
 				pokemon.removeVolatile('confusion');
 			}
 		},
@@ -7184,17 +7186,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onHit(target, source, move) {
 			if (move?.volatileStatus === 'confusion') {
-				this.add('-immune', target, 'confusion', '[from] ability: Dicipline');
+				this.add('-immune', target, 'confusion', '[from] ability: Discipline');
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Dicipline', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Discipline', '[of] ' + target);
 			}
 		},
 
-		name: "Dicipline",
+		name: "Discipline",
 		rating: 3,
 		num: 407,
 		gen: 8,
@@ -7204,9 +7206,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			let nextMove = Dex.moves.get('feintattack');
 			let targetLoc = 4
 			let target = pokemon.side.foes().forEach((a) => {if (pokemon.getLocOf(a) < targetLoc) targetLoc = pokemon.getLocOf(a)})
-			console.log(target)
 			if (targetLoc < 4 && targetLoc > 0) {
-				this.actions.runMove(nextMove, pokemon, targetLoc);
+				this.actions.runMove(nextMove, pokemon, targetLoc, pokemon.getAbility(), undefined, true);
 			}
 
 		},
@@ -7329,14 +7330,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	parry: {
-		onDamagingHit(damage, target, source, move) {
-			if (!(target.hp > 0) || this.effectState.additionalAttack || !(move.flags['contact'] || (move.flags['counter']))) return; 
+		onDamagingHit(damage, defender, attacker, move) {
+			if (!(attacker.hp > 0) || this.effectState.additionalAttack || !(move.flags['contact'] || (move.flags['counter']))) return; 
 			const moveMutations = {
 				basePower: 40 * 0.8,
 				flags: {...Dex.moves.get('machpunch').flags, counter: 1}
 			}
 			this.effectState.additionalAttack = true
-			this.actions.runAdditionalMove(Dex.moves.get('machpunch'), source, target, moveMutations)
+			this.actions.runAdditionalMove(Dex.moves.get('machpunch'), defender, attacker, moveMutations)
 			this.effectState.additionalAttack = false
 		},
 		onSourceModifyDamage(damage, source, target, move) {
@@ -7436,25 +7437,16 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 
 	},
 	spinningtop: {
-		onModifyMove(move) {
-			if (!move.secondaries) {
-				move.secondaries = [];
-			}
-			move.secondaries.push({
-				chance: 100,
-				boosts: {spe: 1},
-				ability: this.dex.abilities.get('spinningtop'),
-			});
-		},
-		onAfterHit(target, pokemon, move) {
-			if (!move.hasSheerForce) {
+		onFoeDamagingHit(damage, target, pokemon, move) {
+			if (!move.hasSheerForce && move.hit > 0 && move.type === 'Fighting') {
+				this.boost({spe: 1}, pokemon);
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] ability: Spinning Top', '[of] ' + pokemon);
 				}
 				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] ability: Spinning Top', '[of] ' + pokemon);
 					}
 				}
 				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -7463,7 +7455,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAfterSubDamage(damage, target, pokemon, move) {
-			if (!move.hasSheerForce) {
+			if (!move.hasSheerForce && move.type === 'Fighting') {
+				this.add('-activate', target, 'ability: Spinning Top');
+				this.boost({spe: 1}, pokemon);
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
 					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
 				}
@@ -7495,7 +7489,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 
-			if (!willBurst || !(target.hp > 0) || this.effectState.additionalAttack) return;
+			if (!willBurst || this.effectState.additionalAttack) return;
 
 			const moveMutations = {
 				basePower: (150 / 3),
@@ -7503,7 +7497,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 
 			this.effectState.additionalAttack = true
-			this.actions.runAdditionalMove(Dex.moves.get('hyperbeam'), source, target, moveMutations)
+			this.actions.runAdditionalMove(Dex.moves.get('hyperbeam'), pokemon, source, moveMutations)
 			this.effectState.additionalAttack = false
 
 		},		
@@ -7523,17 +7517,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					willBlow = true;
 				}
 			}
-			if (!willBlow || !(target.hp > 0) || this.effectState.additionalAttack) return;
+			if (!willBlow || this.effectState.additionalAttack) return;
 
 			const moveMutations = {
 				self: {}
 			}
 
 			this.effectState.additionalAttack = true
-			this.actions.runAdditionalMove(Dex.moves.get('hyperbeam'), source, target, moveMutations)
+			this.actions.runAdditionalMove(Dex.moves.get('hyperbeam'), pokemon, source, moveMutations)
 			this.effectState.additionalAttack = false
 		},			
-		name: "Atomic Burst",
+		name: "Retribution Blow",
 		rating: 3.5,
 		num: 421,
 		gen: 8,
@@ -7945,7 +7939,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onTryHit(target, source, move) {
 			const psychicWeaknesses = ['Dark', 'Ghost', 'Bug'];
 			if (target !== source && psychicWeaknesses.includes(move.type)) {	
-				this.add('-immune', target, '[from] ability: Storm Drain');
+				this.add('-immune', target, '[from] ability: Gifted Mind');
 				return null;
 			}
 		},
@@ -7961,14 +7955,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	equinox: {
 		onModifyAtk(atk, attacker, defender, move) {
-			const spa = attacker.getStat('spa', false, false);
+			const spa = attacker.getStat('spa', false, true);
 			if (spa > atk) {
 				return this.chainModify([spa, atk]);
 
 			}
 		},
 		onModifySpA(spa, attacker, defender, move) {
-			const atk = attacker.getStat('atk', false, false);
+			const atk = attacker.getStat('atk', false, true);
 			if (atk > spa) {
 				return this.chainModify([atk, spa]);
 
@@ -8003,7 +7997,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.activeTurns === 0 && !this.effectState.beginCD) {
 				this.effectState.beginCD = true
 				this.effectState.hitsLeft = 2
-				console.log(`init Effect State: ${this.effectState.beginCD}`)
 			}
 		},
 		onTryHit(target, source, move) {
@@ -8030,9 +8023,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			let nextMove = Dex.moves.get('scratch');
 			let targetLoc = 4
 			let target = pokemon.side.foes().forEach((a) => {if (pokemon.getLocOf(a) < targetLoc) targetLoc = pokemon.getLocOf(a)})
-			console.log(target)
 			if (targetLoc < 4 && targetLoc > 0) {
-				this.actions.runMove(nextMove, pokemon, targetLoc);
+				this.actions.runMove(nextMove, pokemon, targetLoc, pokemon.getAbility(), undefined, true);
 			}
 
 		},
@@ -8042,9 +8034,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	coward: {
+		onSwitchInPriority: 4,
 		onSwitchIn(pokemon) {
 			this.actions.useMove(Dex.moves.get('protect'), pokemon);
-
 		},
 		name: "Coward",
 		rating: 3,
@@ -8238,13 +8230,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 						{
 							chance: 100,
 							volatileStatus: 'disable',
+							onHit(target, source, move) {
+								if (source.isActive) {
+									target.addVolatile('encore', source, move);
+									target.addVolatile('disable', source, move);
+								}
+							},
 							ability: this.dex.abilities.get('angelswrath'),
-						},
-						{
-							chance: 100,
-							volatileStatus: 'encore',
-							ability: this.dex.abilities.get('angelswrath'),
-
 						}
 					);
 					break;
@@ -8252,11 +8244,17 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				case 'Electroweb': 					
 					move.basePower = 155
 					move.accuracy = true
-					move.secondaries.push({
-						chance: 100,
-						boosts: {spe: -12},
-						ability: this.dex.abilities.get('angelswrath'),
-					});
+					move.secondaries.push(
+						{ 
+							chance: 100,
+							onHit(target, source, move) {
+								if (source.isActive) {
+									target.addVolatile('trapped', target, this.dex.abilities.get('angelswrath'), 'trapper');
+									this.boost({spe: -12}, target)
+								}
+							}
+						},
+					);
 					break;
 
 				case 'Bug Bite': 					
@@ -8289,65 +8287,45 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					break;
 			
 				case 'String Shot':
-					move.onAfterHit = (source, target, move) => {
-						const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-						this.add('-activate', target, 'ability: Angel\'s Wrath');
-						for (const condition of sideConditions) {
-							for (const side of source.side.foeSidesWithConditions()) {
-								side.addSideCondition(condition);
+					move.onAfterMove = (source, target, move) => {
+						if (move.hit >= 1) {
+							const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+							this.add('-activate', source, 'ability: Angel\'s Wrath');
+							for (const condition of sideConditions) {
+								source.side.foe.addSideCondition(condition);
 							}
 						}
 					}
 					break;
 				case 'Harden': 
 					move.onAfterMove = (source, target, move) => {
+						this.add('-activate', source, 'ability: Angel\'s Wrath');
 						this.boost({atk: 1, spa: 1,spd: 1,def: 1,spe: 1,accuracy: 1,evasion: 1}, source)
-
 					}
 					break;
 				case 'Iron Defense': 
 					move.priority = 4;
 					move.onAfterMove = (source, target, move) => {
-						const moveMutations = {
-							onTryHit: (target: Pokemon, source: Pokemon, move: ActiveMove) => {
-								if (!move.flags['protect'] || move.category === 'Status') {
-									if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-									if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-									return;
-								}
-								if (move.smartTarget) {
-									move.smartTarget = false;
-								} else {
-									this.add('-activate', target, 'move: Protect');
-								}
-								const lockedmove = source.getVolatile('lockedmove');
-								if (lockedmove) {
-									// Outrage counter is reset
-									if (source.volatiles['lockedmove'].duration === 2) {
-										delete source.volatiles['lockedmove'];
-									}
-								}
-								if (this.checkMoveMakesContact(move, source, target)) {
-									this.boost({atk: -1, spa: -1,spd: -1,def: -1,spe: -1,accuracy: -1,evasion: -1}, source, target, this.dex.getActiveMove("Iron Defense"));
-								}
-								return this.NOT_FAIL;
-							},
-							onHit: (target: Pokemon, source: Pokemon, move: ActiveMove) => {
-									if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-									this.boost({atk: -1, spa: -1,spd: -1,def: -1,spe: -1,accuracy: -1,evasion: -1}, source, target, this.dex.getActiveMove("King's Shield"));
-									}
-							}
+						//Executes special Angel's Shield
+						this.add('-activate', target, 'ability: Angel\'s Wrath');
+						this.actions.useMove(Dex.moves.get('angelsshield'), source)
 						}
-						this.actions.runAdditionalMove(Dex.moves.get('kingsshield'), source, source, moveMutations)
-					}
 				
 				}
 			},
-			name: 'Angel\'s Wrath',
+			onModifyPriority(priority, source, target, move) {
+				//Special Case to ensure Iron Defense has Protect Priority
+				if (move.name === 'Iron Defense') {
+					return priority + 4;
+				} 
+				
+			},
+			name: "Angel's Wrath",
 			rating: 3,
 			num: 452,
 			gen: 8,
 	},
+	
 	prismaticfur: {
 		onModifyDefPriority: 6,
 		//Fur Coat
