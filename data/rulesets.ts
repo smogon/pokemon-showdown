@@ -481,6 +481,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			) {
 				throw new Error(`Invalid type "${type.name}" in Generation ${this.dex.gen}`);
 			}
+			if (type.name === 'Stellar') {
+				throw new Error(`There are no Stellar-type Pok\u00e9mon.`);
+			}
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
@@ -2674,5 +2677,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 			this.add('rule', "Illusion Level Mod: Illusion disguises the Pok\u00e9mon's true level");
 		},
 		// Implemented in Pokemon#getDetails
+	},
+	uselessmovesclause: {
+		effectType: 'ValidatorRule',
+		name: 'Useless Moves Clause',
+		// implemented in /mods/moderngen1/rulesets.ts
 	},
 };
