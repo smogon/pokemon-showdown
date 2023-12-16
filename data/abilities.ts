@@ -4248,7 +4248,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.boost({def: 1});
 		},
 		name: "Stamina",
-		rating: 3.5,
+		rating: 4,
 		num: 192,
 	},
 	stancechange: {
