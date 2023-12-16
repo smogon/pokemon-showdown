@@ -565,7 +565,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	bloodmoon: {
 		name: "Blood Moon",
-		shortDesc: "Cannot be used twice in a row.",
+		shortDesc: "Cannot be selected the turn after it's used.",
 	},
 	bloomdoom: {
 		name: "Bloom Doom",
@@ -2434,7 +2434,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	gigatonhammer: {
 		name: "Gigaton Hammer",
-		shortDesc: "Cannot be used twice in a row.",
+		shortDesc: "Cannot be selected the turn after it's used.",
 	},
 	gigavolthavoc: {
 		name: "Gigavolt Havoc",
