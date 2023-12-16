@@ -129,8 +129,8 @@ const DOUBLES_NO_LEAD_POKEMON = [
 ];
 
 const DEFENSIVE_TERA_BLAST_USERS = [
-	'alcremie', 'bellossom', 'comfey', 'florges'
-]
+	'alcremie', 'bellossom', 'comfey', 'florges',
+];
 
 function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance > 20 && move.secondary.chance < 100;
@@ -775,7 +775,7 @@ export class RandomTeams {
 		if (species.id === 'smeargle') {
 			if (movePool.includes('spore')) {
 				counter = this.addMove('spore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
+					movePool, teraType, role);
 			}
 		}
 
@@ -783,7 +783,7 @@ export class RandomTeams {
 		if (species.id === 'deoxysdefense') {
 			if (movePool.includes('nightshade')) {
 				counter = this.addMove('nightshade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
+					movePool, teraType, role);
 			}
 		}
 
