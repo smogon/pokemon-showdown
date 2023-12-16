@@ -18324,7 +18324,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 1019,
 		name: "Hydrapple",
 		types: ["Grass", "Dragon"],
-		gender: "N",
 		baseStats: {hp: 106, atk: 80, def: 110, spa: 120, spd: 80, spe: 44},
 		abilities: {0: "Supersweet Syrup", 1: "Regenerator", H: "Sticky Hold"},
 		heightm: 1.8,
