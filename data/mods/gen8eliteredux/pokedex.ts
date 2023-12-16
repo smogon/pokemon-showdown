@@ -16587,5 +16587,351 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true, 
 		abilities: {0: "Swift Swim", I1: "Sea Guardian", I2: "Mega Launcher", I3: "Marvel Scale"},
 	},
-
+	"dewgongmega": {
+		"abilities": {
+			"0": "Hardened Sheath",
+			"1": "Lightning Rod",
+			"H": "Arctic Fur",
+			"I1": "Cold Rebound",
+			"I2": "Water Veil",
+			"I3": "Hydrate"
+		},
+		"inherit": true
+	},
+	"hitmonchanmega": {
+		"abilities": {
+			"0": "Parry",
+			"I1": "Raging Boxer",
+			"I2": "Power Fists",
+			"I3": "Blitz Boxer"
+		},
+		"inherit": true
+	},
+	"hitmonleemega": {
+		"abilities": {
+			"0": "Roundhouse",
+			"I1": "Limber",
+			"I2": "Mineralize",
+			"I3": "Striker"
+		},
+		"inherit": true
+	},
+	"hitmontopmega": {
+		"abilities": {
+			"0": "Spinning Top",
+			"I1": "Technician",
+			"I2": "Battle Armor",
+			"I3": "Intimidate"
+		},
+		"inherit": true
+	},
+	"crobatmega": {
+		"abilities": {
+			"0": "Scare",
+			"1": "Nosferatu",
+			"H": "Amplifier",
+			"I1": "Phantom",
+			"I2": "Spectral Shroud",
+			"I3": "Shadow Shield"
+		},
+		"inherit": true
+	},
+	"skarmorymega": {
+		"abilities": {
+			"0": "Scrapyard",
+			"I1": "Motor Drive",
+			"I2": "Power Core",
+			"I3": "Self Repair"
+		},
+		"inherit": true
+	},
+	"bruxishmega": {
+		"abilities": {
+			"0": "Dazzling",
+			"1": "Defiant",
+			"H": "Predator",
+			"I1": "Strong Jaw",
+			"I2": "Wonder Skin",
+			"I3": "Psychic Mind"
+		},
+		"inherit": true
+	},
+	"torterramega": {
+		"abilities": {
+			"0": "Atlas",
+			"I1": "Forest Rage",
+			"I2": "Solid Rock",
+			"I3": "Grassy Surge"
+		},
+		"inherit": true
+	},
+	"infernapemega": {
+		"abilities": {
+			"0": "Equinox",
+			"I1": "Hellblaze",
+			"I2": "Limber",
+			"I3": "Berserk"
+		},
+		"inherit": true
+	},
+	"empoleonmega": {
+		"abilities": {
+			"0": "No Guard",
+			"1": "Competitive",
+			"H": "Slush Rush",
+			"I1": "Riptide",
+			"I2": "Antarctic Bird",
+			"I3": "Battle Armor"
+		},
+		"inherit": true
+	},
+	"shucklemega": {
+		"abilities": {
+			"0": "Self Sufficient",
+			"I1": "Multi Headed",
+			"I2": "Juggernaut",
+			"I3": "Unaware"
+		},
+		"inherit": true
+	},
+	"relicanthmega": {
+		"abilities": {
+			"0": "Marine Apex",
+			"I1": "Rock Head",
+			"I2": "Reckless",
+			"I3": "Primal Armor"
+		},
+		"inherit": true
+	},
+	"quagsiremega": {
+		"abilities": {
+			"0": "Clueless",
+			"I1": "Unaware",
+			"I2": "Water Veil",
+			"I3": "Oblivious"
+		},
+		"inherit": true
+	},
+	"jellicentmega": {
+		"abilities": {
+			"0": "Cursed Body",
+			"1": "Clear Body",
+			"H": "Immunity",
+			"I1": "Water Bubble",
+			"I2": "Soul Eater",
+			"I3": "Poison Touch"
+		},
+		"inherit": true
+	},
+	"toucannonmega": {
+		"abilities": {
+			"0": "Sturdy",
+			"I1": "Steel Barrel",
+			"I2": "Iron Barrage",
+			"I3": "Pyro Shells"
+		},
+		"inherit": true
+	},
+	"dragonitemega": {
+		"abilities": {
+			"0": "Multiscale",
+			"I1": "Galvanize",
+			"I2": "Discipline",
+			"I3": "Thundercall"
+		},
+		"inherit": true
+	},
+	"breloommega": {
+		"abilities": {
+			"0": "Fungal Infection",
+			"I1": "Perfectionist",
+			"I2": "Technician",
+			"I3": "Effect Spore"
+		},
+		"inherit": true
+	},
+	"slakingmega": {
+		"abilities": {
+			"0": "Unseen Fist",
+			"I1": "Lethargy",
+			"I2": "Crystallize",
+			"I3": "Rampage"
+		},
+		"inherit": true
+	},
+	"feraligatrmegax": {
+		"abilities": {
+			"0": "Primal Maw",
+			"I1": "Riptide",
+			"I2": "Dry Skin",
+			"I3": "Predator"
+		},
+		"inherit": true
+	},
+	"feraligatrmegay": {
+		"abilities": {
+			"0": "Atomic Burst",
+			"I1": "Riptide",
+			"I2": "Galvanize",
+			"I3": "Rampage"
+		},
+		"inherit": true
+	},
+	"granbullmega": {
+		"abilities": {
+			"0": "Tough Claws",
+			"1": "Strong Jaw",
+			"H": "Friend Guard",
+			"I1": "Pretty Princess",
+			"I2": "Defiant",
+			"I3": "Hyper Aggressive"
+		},
+		"inherit": true
+	},
+	"gyaradosmegay": {
+		"abilities": {
+			"0": "Mystic Power",
+			"I1": "Levitate",
+			"I2": "Prism Scales",
+			"I3": "Draconize"
+		},
+		"inherit": true
+	},
+	"haxorusmega": {
+		"abilities": {
+			"0": "Fearmonger",
+			"I1": "Hyper Cutter",
+			"I2": "Sweeping Edge",
+			"I3": "Merciless"
+		},
+		"inherit": true
+	},
+	"kingdramegay": {
+		"abilities": {
+			"0": "Swift Swim",
+			"1": "Sniper",
+			"H": "Riptide",
+			"I1": "Prism Scales",
+			"I2": "Mega Launcher",
+			"I3": "Marvel Scale"
+		},
+		"inherit": true
+	},
+	"meganiummega": {
+		"abilities": {
+			"0": "Misty Surge",
+			"I1": "Forest Rage",
+			"I2": "Absorbant",
+			"I3": "Triage"
+		},
+		"inherit": true
+	},
+	"luxraymega": {
+		"abilities": {
+			"0": "Shocking Jaws",
+			"I1": "Predator",
+			"I2": "Fae Hunter",
+			"I3": "Merciless"
+		},
+		"inherit": true
+	},
+	"nidokingmega": {
+		"abilities": {
+			"0": "Sheer Force",
+			"I1": "Kings Wrath",
+			"I2": "Rivalry",
+			"I3": "Mighty Horn"
+		},
+		"inherit": true
+	},
+	"nidoqueenmega": {
+		"abilities": {
+			"0": "Sheer Force",
+			"I1": "Queens Mourning",
+			"I2": "Queenly Majesty",
+			"I3": "Multiscale"
+		},
+		"inherit": true
+	},
+	"sandslashmega": {
+		"abilities": {
+			"0": "Desert Cloak",
+			"I1": "Sand Rush",
+			"I2": "Sand Force",
+			"I3": "Tough Claws"
+		},
+		"inherit": true
+	},
+	"typhlosionmega": {
+		"abilities": {
+			"0": "Volcano Rage",
+			"I1": "Hellblaze",
+			"I2": "Sand Stream",
+			"I3": "Sand Force"
+		},
+		"inherit": true
+	},
+	"krookodilemega": {
+		"abilities": {
+			"0": "Dune Terror",
+			"I1": "Metallic",
+			"I2": "Moxie",
+			"I3": "Jaws Of Carnage"
+		},
+		"inherit": true
+	},
+	"magnezonemega": {
+		"abilities": {
+			"0": "Electric Surge",
+			"I1": "Electric Burst",
+			"I2": "Multi Headed",
+			"I3": "Magnet Pull"
+		},
+		"inherit": true
+	},
+	"shedinjamega": {
+		"abilities": {
+			"0": "Cheating Death",
+			"I1": "Tinted Lens",
+			"I2": "Magic Guard",
+			"I3": "Adaptability"
+		},
+		"inherit": true
+	},
+	"swalotmega": {
+		"abilities": {
+			"0": "Toxic Spill",
+			"I1": "Poison Touch",
+			"I2": "Liquified",
+			"I3": "Corrosion"
+		},
+		"inherit": true
+	},
+	"lanturnmega": {
+		"abilities": {
+			"0": "Hydro Circuit",
+			"I1": "Storm Drain",
+			"I2": "Volt Absorb",
+			"I3": "Radiance"
+		},
+		"inherit": true
+	},
+	"laprasmegax": {
+		"abilities": {
+			"0": "Primal Maw",
+			"I1": "Swift Swim",
+			"I2": "Shell Armor",
+			"I3": "Jaws Of Carnage"
+		},
+		"inherit": true
+	},
+	"slowkingmega": {
+		"abilities": {
+			"0": "Gifted Mind",
+			"I1": "Own Tempo",
+			"I2": "Psychic Surge",
+			"I3": "Magical Dust"
+		},
+		"inherit": true
+	}
 };

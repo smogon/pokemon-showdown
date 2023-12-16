@@ -12263,6 +12263,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Blue",
 		prevo: "Clauncher",
 		evoLevel: 37,
+		otherFormes: ["Clawitzer-Redux"],
+		eggGroups: ["Water 1", "Water 3"],
+	},
+	clawitzerredux: {
+		num: 693,
+		name: "Clawitzer-Redux",
+		types: ["Fire", "Electric"],
+		baseStats: {hp: 80, atk: 65, def: 83, spa: 110, spd: 82, spe: 110},
+		abilities: {0: "Elemental Charge"},
+		heightm: 1.3,
+		weightkg: 35.3,
+		color: "White",
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	helioptile: {
@@ -12676,6 +12688,19 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 8,
 		color: "Purple",
 		evos: ["Noivern"],
+		otherFormes: ["Noibat-Redux"],
+		eggGroups: ["Flying", "Dragon"],
+	},
+	noibatredux: {
+		num: 714,
+		name: "Noibat-Redux",
+		types: ["Rock", "Ghost"],
+		baseStats: {hp: 50, atk: 75, def: 45, spa: 30, spd: 50, spe: 95},
+		abilities: {0: "Hyper Aggressive", 1: "Expert Hunter", H: "Rock Head"},
+		heightm: 0.5,
+		weightkg: 8,
+		color: "Purple",
+		evos: ["Noivern-Redux"],
 		eggGroups: ["Flying", "Dragon"],
 	},
 	noivern: {
@@ -12688,6 +12713,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 85,
 		color: "Purple",
 		prevo: "Noibat",
+		evoLevel: 48,
+		otherFormes: ["Noivern-Redux"],
+		eggGroups: ["Flying", "Dragon"],
+	},
+	noivernredux: {
+		num: 715,
+		name: "Noivern-Redux",
+		types: ["Rock", "Ghost"],
+		baseStats: {hp: 85, atk: 97, def: 80, spa: 70, spd: 80, spe: 123},
+		abilities: {0: "Hyper Aggressive", 1: "Expert Hunter", H: "Rock Head"},
+		heightm: 1.5,
+		weightkg: 85,
+		color: "Purple",
+		prevo: "Noibat-Redux",
 		evoLevel: 48,
 		eggGroups: ["Flying", "Dragon"],
 	},
@@ -18037,6 +18076,17 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
+	dewleon: {
+		num: 1011,
+		name: "Dewleon",
+		types: ["Ice", "Normal"],
+		baseStats: {hp: 90, atk: 90, def: 70, spa: 95, spd: 120, spe: 95},
+		abilities: {0: "Prismatic Fur"},
+		heightm: 1.7,
+		weightkg: 120,
+		color: "White",
+		eggGroups: ["Water 1", "Field"],
+	},
 	missingno: {
 		num: 0,
 		name: "MissingNo.",
@@ -18048,6 +18098,14 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
 	},
+
+
+
+
+
+
+
+
 	//ER Megas
 	miloticmega: {
 		num: 350,
@@ -18133,19 +18191,1033 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Flygonite",
 	},
-	kingdramega: {
-		num: 230,
-		name: "Kingdra-Mega",
-		baseSpecies: "Kingdra",
-		types: ["Water", "Dragon"],
-		baseStats: {hp: 75, atk: 105, def: 100, spa: 145, spd: 100, spe: 115},
-		abilities: {0: "Swift Swim"},
-		heightm: 1.8,
-		weightkg: 152,
-		color: "Blue",
-		forme: "Mega",
-		eggGroups: ["Amorphous"],
-		requiredItem: "Kingdrite",
+
+	"dewgongmega": {
+		"abilities": {
+			"0": "Hardened Sheath",
+			"1": "Lightning Rod",
+			"H": "Arctic Fur"
+		},
+		"baseStats": {
+			"hp": 90,
+			"atk": 110,
+			"def": 105,
+			"spa": 125,
+			"spd": 105,
+			"spe": 90
+		},
+		"forme": "Mega",
+		"name": "Dewgong-Mega",
+		"types": [
+			"Water",
+			"Ice"
+		],
+		"baseSpecies": "Dewgong",
+		"eggGroups": [
+			"Water 1",
+			"Field"
+		],
+		"num": 87,
+		"heightm": 1.7,
+		"weightkg": 120,
+		"color": "White"
+	},
+	"hitmonchanmega": {
+		"abilities": {
+			"0": "Parry"
+		},
+		"baseStats": {
+			"hp": 80,
+			"atk": 145,
+			"def": 99,
+			"spa": 35,
+			"spd": 120,
+			"spe": 106
+		},
+	"forme": "Mega",
+	"name": "Hitmonchan-Mega",
+	"types": [
+		"Fighting",
+		"Ground"
+	],
+	"baseSpecies": "Hitmonchan",
+	"eggGroups": [
+		"Human-Like"
+	],
+		"num": 107,
+		"heightm": 1.4,
+		"weightkg": 50.2,
+		"color": "Brown"
+	},
+	"hitmonleemega": {
+		"abilities": {
+			"0": "Roundhouse"
+		},
+		"baseStats": {
+			"hp": 80,
+			"atk": 140,
+			"def": 73,
+			"spa": 65,
+			"spd": 110,
+			"spe": 117
+		},
+		"forme": "Mega",
+		"name": "Hitmonlee-Mega",
+		"types": [
+			"Fighting",
+			"Rock"
+		],
+		"baseSpecies": "Hitmonlee",
+		"eggGroups": [
+			"Human-Like"
+		],
+		"num": 106,
+		"heightm": 1.5,
+		"weightkg": 49.8,
+		"color": "Brown"
+	},
+	"hitmontopmega": {
+		"abilities": {
+			"0": "Spinning Top"
+		},
+		"baseStats": {
+			"hp": 80,
+			"atk": 135,
+			"def": 115,
+			"spa": 45,
+			"spd": 135,
+			"spe": 75
+		},
+		"forme": "Mega",
+		"name": "Hitmontop-Mega",
+		"types": [
+			"Fighting",
+			"Steel"
+		],
+		"baseSpecies": "Hitmontop",
+		"eggGroups": [
+			"Human-Like"
+		],
+		"num": 237,
+		"heightm": 1.4,
+		"weightkg": 48,
+		"color": "Brown"
+	},
+	"crobatmega": {
+		"abilities": {
+			"0": "Scare",
+			"1": "Nosferatu",
+			"H": "Amplifier"
+		},
+		"baseStats": {
+			"hp": 85,
+			"atk": 140,
+			"def": 70,
+			"spa": 110,
+			"spd": 70,
+			"spe": 170
+		},
+		"forme": "Mega",
+		"name": "Crobat-Mega",
+		"types": [
+			"Poison",
+			"Flying"
+		],
+		"baseSpecies": "Crobat",
+		"eggGroups": [
+			"Flying"
+		],
+		"num": 169,
+		"heightm": 1.8,
+		"weightkg": 75,
+		"color": "Purple"
+	},
+	"skarmorymega": {
+		"abilities": {
+			"0": "Scrapyard"
+		},
+		"baseStats": {
+			"hp": 65,
+			"atk": 110,
+			"def": 170,
+			"spa": 40,
+			"spd": 90,
+			"spe": 90
+		},
+		"forme": "Mega",
+		"name": "Skarmory-Mega",
+		"types": [
+			"Steel",
+			"Flying"
+		],
+		"baseSpecies": "Skarmory",
+		"eggGroups": [
+			"Flying"
+		],
+		"num": 227,
+		"heightm": 1.7,
+		"weightkg": 50.5,
+		"color": "Gray"
+	},
+	// "bruxishmega": {
+	// 	"abilities": {
+	// 		"0": "Dazzling",
+	// 		"1": "Defiant",
+	// 		"H": "Predator"
+	// 	},
+	// 	"baseStats": {
+	// 		"hp": 68,
+	// 		"atk": 105,
+	// 		"def": 70,
+	// 		"spa": 70,
+	// 		"spd": 70,
+	// 		"spe": 0
+	// 	},
+	// 	"forme": "Mega",
+	// 	"name": "Bruxish-Mega",
+	// 	"types": [
+	// 		"Water",
+	// 		"Psychic"
+	// 	],
+	// 	"baseSpecies": "Bruxish",
+	// 	"eggGroups": [
+	// 		"Water 2"
+	// 	],
+	// 	"num": 779,
+	// 	"heightm": 0.9,
+	// 	"weightkg": 19,
+	// 	"color": "Pink"
+	// },
+	"torterramega": {
+		"abilities": {
+			"0": "Atlas"
+		},
+		"baseStats": {
+			"hp": 95,
+			"atk": 149,
+			"def": 184,
+			"spa": 65,
+			"spd": 105,
+			"spe": 36
+		},
+		"forme": "Mega",
+		"name": "Torterra-Mega",
+		"types": [
+			"Grass",
+			"Ground"
+		],
+		"baseSpecies": "Torterra",
+		"eggGroups": [
+			"Monster",
+			"Grass"
+		],
+		"num": 389,
+		"heightm": 2.2,
+		"weightkg": 310,
+		"color": "Green"
+	},
+	"infernapemega": {
+		"abilities": {
+			"0": "Equinox"
+		},
+		"baseStats": {
+			"hp": 76,
+			"atk": 145,
+			"def": 75,
+			"spa": 145,
+			"spd": 70,
+			"spe": 123
+		},
+		"forme": "Mega",
+		"name": "Infernape-Mega",
+		"types": [
+			"Fire",
+			"Fighting"
+		],
+		"baseSpecies": "Infernape",
+		"eggGroups": [
+			"Field",
+			"Human-Like"
+		],
+		"num": 392,
+		"heightm": 1.2,
+		"weightkg": 55,
+		"color": "Brown"
+	},
+	"empoleonmega": {
+		"abilities": {
+			"0": "No Guard",
+			"1": "Competitive",
+			"H": "Slush Rush"
+		},
+		"baseStats": {
+			"hp": 84,
+			"atk": 80,
+			"def": 118,
+			"spa": 131,
+			"spd": 121,
+			"spe": 96
+		},
+		"forme": "Mega",
+		"name": "Empoleon-Mega",
+		"types": [
+			"Water",
+			"Steel"
+		],
+		"baseSpecies": "Empoleon",
+		"eggGroups": [
+			"Water 1",
+			"Field"
+		],
+		"num": 395,
+		"heightm": 1.7,
+		"weightkg": 84.5,
+		"color": "Blue"
+	},
+	"shucklemega": {
+		"abilities": {
+			"0": "Self Sufficient"
+		},
+		"baseStats": {
+			"hp": 30,
+			"atk": 60,
+			"def": 255,
+			"spa": 10,
+			"spd": 255,
+			"spe": 5
+		},
+		"forme": "Mega",
+		"name": "Shuckle-Mega",
+		"types": [
+			"Bug",
+			"Rock"
+		],
+		"baseSpecies": "Shuckle",
+		"eggGroups": [
+			"Bug"
+		],
+		"num": 213,
+		"heightm": 0.6,
+		"weightkg": 20.5,
+		"color": "Yellow"
+	},
+	"relicanthmega": {
+		"abilities": {
+			"0": "Marine Apex"
+		},
+		"baseStats": {
+			"hp": 100,
+			"atk": 160,
+			"def": 130,
+			"spa": 45,
+			"spd": 75,
+			"spe": 95
+		},
+		"forme": "Mega",
+		"name": "Relicanth-Mega",
+		"types": [
+			"Water",
+			"Rock"
+		],
+		"baseSpecies": "Relicanth",
+		"eggGroups": [
+			"Water 1",
+			"Water 2"
+		],
+		"num": 369,
+		"heightm": 1,
+		"weightkg": 23.4,
+		"color": "Gray"
+	},
+	"quagsiremega": {
+		"abilities": {
+			"0": "Clueless"
+		},
+		"baseStats": {
+			"hp": 95,
+			"atk": 110,
+			"def": 130,
+			"spa": 110,
+			"spd": 130,
+			"spe": 35
+		},
+		"forme": "Mega",
+		"name": "Quagsire-Mega",
+		"types": [
+			"Water",
+			"Ground"
+		],
+		"baseSpecies": "Quagsire",
+		"eggGroups": [
+			"Water 1",
+			"Field"
+		],
+		"num": 195,
+		"heightm": 1.4,
+		"weightkg": 75,
+		"color": "Blue"
+	},
+	"jellicentmega": {
+		"abilities": {
+			"0": "Cursed Body",
+			"1": "Clear Body",
+			"H": "Immunity"
+		},
+		"baseStats": {
+			"hp": 120,
+			"atk": 60,
+			"def": 70,
+			"spa": 85,
+			"spd": 105,
+			"spe": 0
+		},
+		"forme": "Mega",
+		"name": "Jellicent-Mega",
+		"types": [
+			"Water",
+			"Ghost"
+		],
+		"baseSpecies": "Jellicent",
+		"eggGroups": [
+			"Amorphous"
+		],
+		"num": 593,
+		"heightm": 2.2,
+		"weightkg": 135,
+		"color": "White"
+	},
+	"toucannonmega": {
+		"abilities": {
+			"0": "Sturdy"
+		},
+		"baseStats": {
+			"hp": 80,
+			"atk": 120,
+			"def": 110,
+			"spa": 135,
+			"spd": 110,
+			"spe": 70
+		},
+		"forme": "Mega",
+		"name": "Toucannon-Mega",
+		"types": [
+			"Normal",
+			"Steel"
+		],
+		"baseSpecies": "Toucannon",
+		"eggGroups": [
+			"Flying"
+		],
+		"num": 733,
+		"heightm": 1.1,
+		"weightkg": 26,
+		"color": "Black"
+	},
+	"dragonitemega": {
+		"abilities": {
+			"0": "Multiscale"
+		},
+		"baseStats": {
+			"hp": 91,
+			"atk": 159,
+			"def": 120,
+			"spa": 125,
+			"spd": 125,
+			"spe": 80
+		},
+		"forme": "Mega",
+		"name": "Dragonite-Mega",
+		"types": [
+			"Dragon",
+			"Electric"
+		],
+		"baseSpecies": "Dragonite",
+		"eggGroups": [
+			"Water 1",
+			"Dragon"
+		],
+		"num": 149,
+		"heightm": 2.2,
+		"weightkg": 210,
+		"color": "Brown"
+	},
+	"breloommega": {
+		"abilities": {
+			"0": "Fungal Infection"
+		},
+		"baseStats": {
+			"hp": 60,
+			"atk": 140,
+			"def": 130,
+			"spa": 50,
+			"spd": 110,
+			"spe": 70
+		},
+		"forme": "Mega",
+		"name": "Breloom-Mega",
+		"types": [
+			"Grass",
+			"Fighting"
+		],
+		"baseSpecies": "Breloom",
+		"eggGroups": [
+			"Fairy",
+			"Grass"
+		],
+		"num": 286,
+		"heightm": 1.2,
+		"weightkg": 39.2,
+		"color": "Green"
+	},
+	"slakingmega": {
+		"abilities": {
+			"0": "Unseen Fist"
+		},
+		"baseStats": {
+			"hp": 130,
+			"atk": 210,
+			"def": 105,
+			"spa": 95,
+			"spd": 105,
+			"spe": 105
+		},
+		"forme": "Mega",
+		"name": "Slaking-Mega",
+		"types": [
+			"Normal",
+			"Ice"
+		],
+		"baseSpecies": "Slaking",
+		"eggGroups": [
+			"Field"
+		],
+		"num": 289,
+		"heightm": 2,
+		"weightkg": 130.5,
+		"color": "Brown"
+	},
+	"feraligatrmegax": {
+		"abilities": {
+			"0": "Primal Maw"
+		},
+		"baseStats": {
+			"hp": 85,
+			"atk": 140,
+			"def": 100,
+			"spa": 109,
+			"spd": 93,
+			"spe": 103
+		},
+		"forme": "Mega",
+		"name": "Feraligatr-Mega-X",
+		"types": [
+			"Water",
+			"Dark"
+		],
+		"baseSpecies": "Feraligatr",
+		"eggGroups": [
+			"Monster",
+			"Water 1"
+		],
+		"num": 160,
+		"heightm": 2.3,
+		"weightkg": 88.8,
+		"color": "Blue"
+	},
+	"feraligatrmegay": {
+		"abilities": {
+			"0": "Atomic Burst"
+		},
+		"baseStats": {
+			"hp": 85,
+			"atk": 75,
+			"def": 130,
+			"spa": 159,
+			"spd": 113,
+			"spe": 68
+		},
+		"forme": "Mega",
+		"name": "Feraligatr-Mega-Y",
+		"types": [
+			"Water",
+			"Electric"
+		],
+		"baseSpecies": "Feraligatr",
+		"eggGroups": [
+			"Monster",
+			"Water 1"
+		],
+		"num": 160,
+		"heightm": 2.3,
+		"weightkg": 88.8,
+		"color": "Blue"
+	},
+	"granbullmega": {
+		"abilities": {
+			"0": "Tough Claws",
+			"1": "Strong Jaw",
+			"H": "Friend Guard"
+		},
+		"baseStats": {
+			"hp": 90,
+			"atk": 160,
+			"def": 130,
+			"spa": 60,
+			"spd": 105,
+			"spe": 35
+		},
+		"forme": "Mega",
+		"name": "Granbull-Mega",
+		"types": [
+			"Fairy",
+			"Ground"
+		],
+		"baseSpecies": "Granbull",
+		"eggGroups": [
+			"Field",
+			"Fairy"
+		],
+		"num": 210,
+		"heightm": 1.4,
+		"weightkg": 48.7,
+		"color": "Purple"
+	},
+	"gyaradosmegay": {
+		"abilities": {
+			"0": "Mystic Power"
+		},
+		"baseStats": {
+			"hp": 95,
+			"atk": 95,
+			"def": 99,
+			"spa": 130,
+			"spd": 140,
+			"spe": 81
+		},
+		"forme": "Mega",
+		"name": "Gyarados-Mega-Y",
+		"types": [
+			"Water",
+			"Dragon"
+		],
+		"baseSpecies": "Gyarados",
+		"eggGroups": [
+			"Water 2",
+			"Dragon"
+		],
+		"num": 130,
+		"heightm": 6.5,
+		"weightkg": 235,
+		"color": "Blue"
+	},
+	"haxorusmega": {
+		"abilities": {
+			"0": "Fearmonger"
+		},
+		"baseStats": {
+			"hp": 76,
+			"atk": 180,
+			"def": 110,
+			"spa": 82,
+			"spd": 90,
+			"spe": 102
+		},
+		"forme": "Mega",
+		"name": "Haxorus-Mega",
+		"types": [
+			"Dragon",
+			"Steel"
+		],
+		"baseSpecies": "Haxorus",
+		"eggGroups": [
+			"Monster",
+			"Dragon"
+		],
+		"num": 612,
+		"heightm": 1.8,
+		"weightkg": 105.5,
+		"color": "Yellow"
+	},
+	// "kingdramegay": {
+	// 	"abilities": {
+	// 		"0": "Swift Swim",
+	// 		"1": "Sniper",
+	// 		"H": "Riptide"
+	// 	},
+	// 	"baseStats": {
+	// 		"hp": 75,
+	// 		"atk": 95,
+	// 		"def": 95,
+	// 		"spa": 95,
+	// 		"spd": 95,
+	// 		"spe": 85
+	// 	},
+	// 	"forme": "Mega",
+	// 	"name": "Kingdra-Mega-Y",
+	// 	"types": [
+	// 		"Water",
+	// 		"Dragon"
+	// 	],
+	// 	"baseSpecies": "Kingdra",
+	// 	"eggGroups": [
+	// 		"Water 1",
+	// 		"Dragon"
+	// 	],
+	// 	"num": 230,
+	// 	"heightm": 1.8,
+	// 	"weightkg": 152,
+	// 	"color": "Blue"
+	// },
+	"meganiummega": {
+		"abilities": {
+			"0": "Misty Surge"
+		},
+		"baseStats": {
+			"hp": 80,
+			"atk": 97,
+			"def": 130,
+			"spa": 118,
+			"spd": 130,
+			"spe": 80
+		},
+		"forme": "Mega",
+		"name": "Meganium-Mega",
+		"types": [
+			"Grass",
+			"Fairy"
+		],
+		"baseSpecies": "Meganium",
+		"eggGroups": [
+			"Monster",
+			"Grass"
+		],
+		"num": 154,
+		"heightm": 1.8,
+		"weightkg": 100.5,
+		"color": "Green"
+	},
+	"luxraymega": {
+		"abilities": {
+			"0": "Shocking Jaws"
+		},
+		"baseStats": {
+			"hp": 90,
+			"atk": 143,
+			"def": 95,
+			"spa": 106,
+			"spd": 95,
+			"spe": 104
+		},
+		"forme": "Mega",
+		"name": "Luxray-Mega",
+		"types": [
+			"Electric",
+			"Dark"
+		],
+		"baseSpecies": "Luxray",
+		"eggGroups": [
+			"Field"
+		],
+		"num": 405,
+		"heightm": 1.4,
+		"weightkg": 42,
+		"color": "Blue"
+	},
+	"nidokingmega": {
+		"abilities": {
+			"0": "Sheer Force"
+		},
+		"baseStats": {
+			"hp": 81,
+			"atk": 142,
+			"def": 92,
+			"spa": 85,
+			"spd": 95,
+			"spe": 110
+		},
+		"forme": "Mega",
+		"name": "Nidoking-Mega",
+		"types": [
+			"Poison",
+			"Ground"
+		],
+		"baseSpecies": "Nidoking",
+		"eggGroups": [
+			"Monster",
+			"Field"
+		],
+		"num": 34,
+		"heightm": 1.4,
+		"weightkg": 62,
+		"color": "Purple"
+	},
+	"nidoqueenmega": {
+		"abilities": {
+			"0": "Sheer Force"
+		},
+		"baseStats": {
+			"hp": 90,
+			"atk": 82,
+			"def": 112,
+			"spa": 125,
+			"spd": 110,
+			"spe": 86
+		},
+		"forme": "Mega",
+		"name": "Nidoqueen-Mega",
+		"types": [
+			"Poison",
+			"Ground"
+		],
+		"baseSpecies": "Nidoqueen",
+		"eggGroups": [
+			"Undiscovered"
+		],
+		"num": 31,
+		"heightm": 1.3,
+		"weightkg": 60,
+		"color": "Blue"
+	},
+	"sandslashmega": {
+		"abilities": {
+			"0": "Desert Cloak"
+		},
+		"baseStats": {
+			"hp": 95,
+			"atk": 140,
+			"def": 110,
+			"spa": 45,
+			"spd": 85,
+			"spe": 95
+		},
+		"forme": "Mega",
+		"name": "Sandslash-Mega",
+		"types": [
+			"Ground"
+		],
+		"baseSpecies": "Sandslash",
+		"eggGroups": [
+			"Field"
+		],
+		"num": 28,
+		"heightm": 1,
+		"weightkg": 29.5,
+		"color": "Yellow"
+	},
+	"typhlosionmega": {
+		"abilities": {
+			"0": "Volcano Rage"
+		},
+		"baseStats": {
+			"hp": 78,
+			"atk": 94,
+			"def": 98,
+			"spa": 149,
+			"spd": 105,
+			"spe": 110
+		},
+		"forme": "Mega",
+		"name": "Typhlosion-Mega",
+		"types": [
+			"Fire",
+			"Ground"
+		],
+		"baseSpecies": "Typhlosion",
+		"eggGroups": [
+			"Field"
+		],
+		"num": 157,
+		"heightm": 1.7,
+		"weightkg": 79.5,
+		"color": "Yellow"
+	},
+	"krookodilemega": {
+		"abilities": {
+			"0": "Dune Terror"
+		},
+		"baseStats": {
+			"hp": 95,
+			"atk": 147,
+			"def": 110,
+			"spa": 75,
+			"spd": 100,
+			"spe": 92
+		},
+		"forme": "Mega",
+		"name": "Krookodile-Mega",
+		"types": [
+			"Ground",
+			"Dark"
+		],
+		"baseSpecies": "Krookodile",
+		"eggGroups": [
+			"Field"
+		],
+		"num": 553,
+		"heightm": 1.5,
+		"weightkg": 96.3,
+		"color": "Red"
+	},
+	"magnezonemega": {
+		"abilities": {
+			"0": "Electric Surge"
+		},
+		"baseStats": {
+			"hp": 70,
+			"atk": 75,
+			"def": 135,
+			"spa": 165,
+			"spd": 125,
+			"spe": 65
+		},
+		"forme": "Mega",
+		"name": "Magnezone-Mega",
+		"types": [
+			"Electric",
+			"Steel"
+		],
+		"baseSpecies": "Magnezone",
+		"eggGroups": [
+			"Mineral"
+		],
+		"num": 462,
+		"heightm": 1.2,
+		"weightkg": 180,
+		"color": "Gray"
+	},
+	"shedinjamega": {
+		"abilities": {
+			"0": "Cheating Death"
+		},
+		"baseStats": {
+			"hp": 1,
+			"atk": 120,
+			"def": 45,
+			"spa": 70,
+			"spd": 30,
+			"spe": 110
+		},
+		"forme": "Mega",
+		"name": "Shedinja-Mega",
+		"types": [
+			"Bug",
+			"Ghost"
+		],
+		"baseSpecies": "Shedinja",
+		"eggGroups": [
+			"Mineral"
+		],
+		"num": 292,
+		"heightm": 0.8,
+		"weightkg": 1.2,
+		"color": "Brown"
+	},
+	"swalotmega": {
+		"abilities": {
+			"0": "Toxic Spill"
+		},
+		"baseStats": {
+			"hp": 100,
+			"atk": 108,
+			"def": 118,
+			"spa": 108,
+			"spd": 118,
+			"spe": 55
+		},
+		"forme": "Mega",
+		"name": "Swalot-Mega",
+		"types": [
+			"Poison"
+		],
+		"baseSpecies": "Swalot",
+		"eggGroups": [
+			"Amorphous"
+		],
+		"num": 317,
+		"heightm": 1.7,
+		"weightkg": 80,
+		"color": "Purple"
+	},
+	"lanturnmega": {
+		"abilities": {
+			"0": "Hydro Circuit"
+		},
+		"baseStats": {
+			"hp": 125,
+			"atk": 58,
+			"def": 88,
+			"spa": 126,
+			"spd": 116,
+			"spe": 67
+		},
+		"forme": "Mega",
+		"name": "Lanturn-Mega",
+		"types": [
+			"Water",
+			"Electric"
+		],
+		"baseSpecies": "Lanturn",
+		"eggGroups": [
+			"Water 2"
+		],
+		"num": 171,
+		"heightm": 1.2,
+		"weightkg": 22.5,
+		"color": "Blue"
+	},
+	"laprasmegax": {
+		"abilities": {
+			"0": "Primal Maw"
+		},
+		"baseStats": {
+			"hp": 130,
+			"atk": 135,
+			"def": 105,
+			"spa": 100,
+			"spd": 90,
+			"spe": 85
+		},
+		"forme": "Mega",
+		"name": "Lapras-Mega-X",
+		"types": [
+			"Water"
+		],
+		"baseSpecies": "Lapras",
+		"eggGroups": [
+			"Monster",
+			"Water 1"
+		],
+		"num": 131,
+		"heightm": 2.5,
+		"weightkg": 220,
+		"color": "Blue"
+	},
+	"slowkingmega": {
+		"abilities": {
+			"0": "Gifted Mind"
+		},
+		"baseStats": {
+			"hp": 95,
+			"atk": 85,
+			"def": 80,
+			"spa": 130,
+			"spd": 180,
+			"spe": 20
+		},
+		"forme": "Mega",
+		"name": "Slowking-Mega",
+		"types": [
+			"Psychic"
+		],
+		"baseSpecies": "Slowking",
+		"eggGroups": [
+			"Monster",
+			"Water 1"
+		],
+		"num": 199,
+		"heightm": 2,
+		"weightkg": 79.5,
+		"color": "Pink"
 	},
 	syclar: {
 		num: -1,
