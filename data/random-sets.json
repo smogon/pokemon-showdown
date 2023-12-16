@@ -340,7 +340,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Flip Turn", "Haze", "Knock Off", "Rapid Spin", "Sludge Bomb", "Surf", "Toxic", "Toxic Spikes"],
-                "teraTypes": ["Grass", "Flying"]
+                "teraTypes": ["Flying", "Grass"]
             }
         ]
     },
@@ -4769,7 +4769,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Aura Sphere", "Flash Cannon", "Fleur Cannon", "Pain Split", "Spikes", "Volt Switch"],
+                "movepool": ["Aura Sphere", "Flash Cannon", "Fleur Cannon", "Pain Split", "Spikes", "Thunder Wave", "Volt Switch"],
                 "teraTypes": ["Fairy", "Fighting", "Water"]
             },
             {
@@ -4779,7 +4779,7 @@
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Fleur Cannon", "Iron Head", "Shift Gear", "Tera Blast", "Thunderbolt"],
+                "movepool": ["Fleur Cannon", "Iron Head", "Shift Gear", "Tera Blast"],
                 "teraTypes": ["Ground"]
             }
         ]
