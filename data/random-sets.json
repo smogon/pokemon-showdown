@@ -2343,7 +2343,7 @@
         "level": 85,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["Crunch", "Flip Turn", "Ice Spinner", "Low Kick", "Wave Crash"],
                 "teraTypes": ["Water"]
             },
@@ -4918,7 +4918,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["Close Combat", "Flip Turn", "Poison Jab", "Psychic Fangs", "Throat Chop", "Waterfall"],
                 "teraTypes": ["Fighting"]
             }
