@@ -416,6 +416,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	psychoshift: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	purify: {
 		inherit: true,
 		isNonstandard: null,
