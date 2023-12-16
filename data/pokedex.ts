@@ -18310,7 +18310,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: 1018,
 		name: "Archaludon",
 		types: ["Steel", "Dragon"],
-		gender: "N",
 		baseStats: {hp: 90, atk: 105, def: 130, spa: 125, spd: 65, spe: 85},
 		abilities: {0: "Stamina", 1: "Sturdy", H: "Stalwart"},
 		heightm: 2,
