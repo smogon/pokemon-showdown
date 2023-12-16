@@ -1939,6 +1939,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	terashift: {
 		name: "Tera Shift",
 		shortDesc: "If Terapagos, this Pokemon transforms into its Terastal forme.",
+
+		transform: "[POKEMON] transformed!",
 	},
 	teravolt: {
 		name: "Teravolt",

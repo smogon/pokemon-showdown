@@ -4248,7 +4248,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.boost({def: 1});
 		},
 		name: "Stamina",
-		rating: 3.5,
+		rating: 4,
 		num: 192,
 	},
 	stancechange: {
@@ -4681,7 +4681,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			target.abilityState.resisted = true;
 			return -1;
 		},
-		onAfterMove(target, source, move) {
+		onAfterMoveSecondary(target, source, move) {
 			if (target.abilityState.resisted) {
 				delete target.abilityState.resisted;
 			}
@@ -4695,6 +4695,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onPreStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Terapagos' || pokemon.transformed) return;
 			if (pokemon.species.forme !== 'Terastal') {
+				this.add('-activate', pokemon, 'ability: Tera Shift');
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
 			}
 		},
