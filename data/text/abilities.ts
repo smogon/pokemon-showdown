@@ -2195,8 +2195,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Antarctic Bird",
 		shortDesc: "This Pokemon's Ice and Flying type moves are boosted by 30%"
 	},
-	burnate: {
-		name: "Burnate",
+	immolate: {
+		name: "Immolate",
 		shortDesc: "This Pokemon's Normal-type moves become Fire type and have 1.2x power."
 	},
 	crystallize: {
@@ -2315,8 +2315,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Self Sufficient",
 		shortDesc: "This Pokemon heals 1/16 HP each turn"
 	},
-	groundate: {
-		name: "Groundate",
+	tectonize: {
+		name: "Tectonize",
 		shortDesc: "This Pokemon's Normal-type moves become Ground type and have 1.2x power."
 
 	},
@@ -2380,8 +2380,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		name: "Phantom",
 		shortDesc: "This Pokemon gains the Ghost type"
 	},
-	poisonate: {
-		name: "Poisonate",
+	intoxicate: {
+		name: "Intoxicate",
 		shortDesc: "This Pokemon's Normal-type moves become Poison type and have 1.2x power."
 
 	},
@@ -2629,8 +2629,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon raises highest stat if switched in during rain."
 
 	},
-	buginize: {
-		name: "Buginize",
+	pollinate: {
+		name: "Pollinate",
 		desc: "This Pokemon's Normal-type moves become Bug-type moves and have their power multiplied by 1.2. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Bug type and have 1.2x power.",
 

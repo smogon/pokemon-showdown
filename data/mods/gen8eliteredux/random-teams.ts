@@ -948,7 +948,7 @@ export class RandomGen8ERTeams {
 					}
 				} else if (
 					// Less obvious forms of STAB
-					(moveType === 'Normal' && (['Aerilate', 'Galvanize', 'Pixilate', 'Refrigerate', 'Burnate', 'Crystallize', 'Fighting Spirit', 'Groundate', 'Hydrate', 'Poisonate', 'Buginize', 'Solar Flare'].some(abil => abilities.has(abil)))) ||
+					(moveType === 'Normal' && (['Aerilate', 'Galvanize', 'Pixilate', 'Refrigerate', 'Immolate', 'Crystallize', 'Fighting Spirit', 'Tectonize', 'Hydrate', 'Intoxicate', 'Pollinate', 'Solar Flare'].some(abil => abilities.has(abil)))) ||
 					(move.priority === 0 && (abilities.has('Libero') || abilities.has('Protean')) && !this.noStab.includes(moveid)) ||
 					(moveType === 'Steel' && abilities.has('Steelworker')) || 
 					(abilities.has('Mystic Power'))
