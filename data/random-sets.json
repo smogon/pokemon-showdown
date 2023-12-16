@@ -1309,7 +1309,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Body Slam", "Crunch", "Earthquake", "Rest", "Sleep Talk"],
+                "movepool": ["Body Slam", "Earthquake", "Rest", "Sleep Talk", "Throat Chop"],
                 "teraTypes": ["Ghost", "Ground"]
             }
         ]
