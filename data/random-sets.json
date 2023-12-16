@@ -5899,7 +5899,12 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Brave Bird", "Close Combat", "Swords Dance", "Throat Chop", "U-turn"],
+                "movepool": ["Brave Bird", "Close Combat", "Throat Chop", "U-turn"],
+                "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Brave Bird", "Close Combat", "Roost", "Swords Dance", "Throat Chop"],
                 "teraTypes": ["Fighting"]
             }
         ]
