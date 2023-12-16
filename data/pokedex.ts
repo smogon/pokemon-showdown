@@ -18330,8 +18330,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 93,
 		color: "Green",
 		prevo: "Dipplin",
-		evoType: "useItem",
-		evoItem: "Tart Apple",
+		evoType: "levelMove",
+		evoMove: "Dragon Cheer",
 		eggGroups: ["Grass", "Dragon"],
 	},
 	gougingfire: {
