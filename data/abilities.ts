@@ -1703,7 +1703,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		// This should be applied directly to the stat as opposed to chaining with the others
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
-			return this.modify(atk, 1.5);
+			return this.modify(atk, 1.4);
 		},
 		onSourceModifyAccuracyPriority: -1,
 		onSourceModifyAccuracy(accuracy, target, source, move) {
@@ -5290,7 +5290,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	blitzboxer: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (move.flags['punch']) return priority + 1;
+			if (move.flags['punch'] && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
 		name: "Blitz Boxer",
 		rating: 4,
@@ -5319,7 +5319,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 310,
 		gen: 8,
 	},
-	burnate: {
+	immolate: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -5335,7 +5335,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
-		name: "Burnate",
+		name: "Immolate",
 		rating: 4,
 		num: 311,
 		gen: 8,
@@ -5433,6 +5433,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
 			if (move.ignoreImmunity !== true) {
 				move.ignoreImmunity['Electric'] = true;
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.type === 'Electric' && target?.hasType('Ground')) {
+				return typeMod - 1
 			}
 		},
 		name: "Ground Shock",
@@ -5581,7 +5586,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.chainModify(0.9)
 		},
 		onModifyDef(spe, pokemon) {
-			this.chainModify([5325,4096])
+			this.chainModify([5735,4096])
 		},
 		name: "Lead Coat",
 		rating: 3.5,
@@ -5687,6 +5692,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		gen: 8,
 	},
 	fossilized: {
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Rock') {
+				this.debug('Fossilized boost');
+				return this.chainModify(1.2);	
+				}
+		},
+		onModifySpAPriority: 6,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Rock') {
+				this.debug('Fossilized boost');
+				return this.chainModify(1.2);	
+			}
+		},
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Rock') {
@@ -5720,12 +5738,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	dreamcatcher: {
 		onBasePower(bp, source, target, move) {
 			for (const target of source.foes()) {
-				if (target.status === 'slp' || target.hasAbility('comatose')) {
+				if (target.status === 'slp') {
 					return this.chainModify(2);
 				}
 			}
 			for (const ally of source.alliesAndSelf()) {
-				if (ally.status === 'slp' || target.hasAbility('comatose')) {
+				if (ally.status === 'slp') {
 					return this.chainModify(2);
 				}
 			}
@@ -5775,7 +5793,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 337,
 		gen: 8,
 	},
-	groundate: {
+	tectonize: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -5791,7 +5809,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
-		name: "Groundate",
+		name: "Tectonize",
 		rating: 4,
 		num: 338,
 		gen: 8,
@@ -6034,7 +6052,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 353,
 		gen: 8,
 	},
-	poisonate: {
+	intoxicate: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -6050,7 +6068,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
-		name: "Poisonate",
+		name: "Intoxicate",
 		rating: 4,
 		num: 354,
 		gen: 8,
@@ -6231,6 +6249,19 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	rawwood: {
 		onSourceModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Raw Wood boost');
+				return this.chainModify(1.2);	
+				}
+		},
+		onModifySpAPriority: 6,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Raw Wood boost');
+				return this.chainModify(1.2);	
+			}
+		},
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Grass') {
 				return this.chainModify(0.5);
@@ -6398,10 +6429,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	twistdimension: {
 		onStart(source) {
-			if (!this.field.getPseudoWeather('trickroom')) {
-				this.add('-activate', source, 'ability: Twist. Dimension');
-				this.field.addPseudoWeather('trickroom', source, source.getAbility());
-			}
+			this.add('-activate', source, 'ability: Twist. Dimension');
+			this.field.addPseudoWeather('trickroom', source, source.getAbility());
 
 		},
 		name: "Twist. Dimension",
@@ -6877,7 +6906,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['sound']) {
 				this.debug('Amplifier boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.3);
 			}
 		},
 		name: "Amplifier",
@@ -6928,7 +6957,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 393,
 		gen: 8,
 	},
-	buginize: {
+	pollinate: {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			const noModifyType = [
@@ -6944,7 +6973,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
-		name: "Buginize",
+		name: "Pollinate",
 		rating: 4,
 		num: 394,
 		gen: 8,

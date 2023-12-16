@@ -22,10 +22,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
 			this.debug('Battle Armor weaken')
-			return this.chainModify(0.9)
+			return this.chainModify(0.8)
 		},
-		shortDesc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
-		desc: "This Pokemon takes 10% less damage. Cannot be struck by a critical hit.",
+		shortDesc: "This Pokemon takes 20% less damage. Cannot be struck by a critical hit.",
+		desc: "This Pokemon takes 20% less damage. Cannot be struck by a critical hit.",
 		
 	},
 	battlebond: {
@@ -235,10 +235,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.type === 'Poison') {
 				this.debug('Immunity Damage reduction');
-				return this.chainModify(0.8);
+				return this.chainModify(0.5);
 			}
 		},
-		shortDesc: "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it. 20% less damage from Poison",
+		shortDesc: "This Pokemon cannot be poisoned. Gaining this Ability while poisoned cures it. Half damage from Poison",
 	},
 	innerfocus: {
 		inherit: true,
@@ -268,6 +268,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.3.",
 		shortDesc: "This Pokemon's punch-based attacks have 1.3x power. Sucker Punch is not boosted.",
+
+	},
+	hustle: {
+		inherit: true,
+		onModifyAtkPriority: 5,
+		onModifySpA(spa) {
+			return this.modify(spa, 1.4);
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (move.category !== 'Status' && typeof accuracy === 'number') {
+				return this.chainModify([3277, 4096]);
+			}
+		},
+		desc: "This Pokemon's Attack & Special Attack is multiplied by 1.4 and the accuracy of its physical attacks is multiplied by 0.8.",
+		shortDesc: "This Pokemon deals 1.4x more damage but accuracy of its attacks is 0.8x.",
 
 	},
 	keeneye: {
@@ -333,7 +349,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'recoil') {
 				if (!this.activeMove) throw new Error("Battle.activeMove is null");
-				if (this.activeMove.id !== 'struggle') return this.chainModify([2868,4096]);
+				if (this.activeMove.id !== 'struggle') return this.chainModify(1.5);
 			}
 		},
 		shortDesc: "This Pokemon cannot be paralyzed. Gaining this Ability while paralyzed cures it. Takes 30% less recoil damage.",
@@ -419,74 +435,74 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// 		}
 	// 	},
 	// },
-	// neutralizinggas: {
-	// 	//TODO: Remove diabling of setter's innates
-	// 	inherit: true,
-	// 	// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
-	// 	onPreStart(pokemon) {
-	// 		this.add('-ability', pokemon, 'Neutralizing Gas');
-	// 		pokemon.abilityState.ending = false;
-	// 		// Remove setter's innates before the ability starts
-	// 		if (pokemon.m.innates) {
-	// 			for (const innate of pokemon.m.innates) {
-	// 				if (this.dex.abilities.get(innate).isPermanent || innate === 'neutralizinggas') continue;
-	// 				pokemon.removeVolatile('ability:' + innate);
-	// 			}
-	// 		}
-	// 		for (const target of this.getAllActive()) {
-	// 			if (target.illusion) {
-	// 				this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
-	// 			}
-	// 			if (target.volatiles['slowstart']) {
-	// 				delete target.volatiles['slowstart'];
-	// 				this.add('-end', target, 'Slow Start', '[silent]');
-	// 			}
-	// 			if (target.m.innates) {
-	// 				for (const innate of target.m.innates) {
-	// 					if (this.dex.abilities.get(innate).isPermanent) continue;
-	// 					target.removeVolatile('ability:' + innate);
-	// 				}
-	// 			}
-	// 		}
-	// 	},
-	// 	onEnd(source) {
-	// 		this.add('-end', source, 'ability: Neutralizing Gas');
+	neutralizinggas: {
+		//TODO: Remove diabling of setter's innates
+		inherit: true,
+		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
+		onPreStart(pokemon) {
+			this.add('-ability', pokemon, 'Neutralizing Gas');
+			pokemon.abilityState.ending = false;
+			// Remove setter's innates before the ability starts
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (this.dex.abilities.get(innate).isPermanent || innate === 'neutralizinggas') continue;
+					pokemon.removeVolatile('ability:' + innate);
+				}
+			}
+			for (const target of this.getAllActive()) {
+				if (target.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
+				}
+				if (target.volatiles['slowstart']) {
+					delete target.volatiles['slowstart'];
+					this.add('-end', target, 'Slow Start', '[silent]');
+				}
+				if (target.m.innates) {
+					for (const innate of target.m.innates) {
+						if (this.dex.abilities.get(innate).isPermanent) continue;
+						target.removeVolatile('ability:' + innate);
+					}
+				}
+			}
+		},
+		onEnd(source) {
+			this.add('-end', source, 'ability: Neutralizing Gas');
 			
-	// 		// FIXME this happens before the pokemon switches out, should be the opposite order.
-	// 		// Not an easy fix since we cant use a supported event. Would need some kind of special event that
-	// 		// gathers events to run after the switch and then runs them when the ability is no longer accessible.
-	// 		// (If you're tackling this, do note extreme weathers have the same issue)
+			// FIXME this happens before the pokemon switches out, should be the opposite order.
+			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
+			// gathers events to run after the switch and then runs them when the ability is no longer accessible.
+			// (If you're tackling this, do note extreme weathers have the same issue)
 			
-	// 		// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
-	// 		if (source.abilityState.ending) return;
-	// 		source.abilityState.ending = true;
-	// 		const sortedActive = this.getAllActive();
-	// 		this.speedSort(sortedActive);
-	// 		for (const pokemon of sortedActive) {
-	// 			if (pokemon !== source) {
-	// 				// Will be suppressed by Pokemon#ignoringAbility if needed
-	// 				this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-	// 				if (pokemon.m.innates) {
-	// 					for (const innate of pokemon.m.innates) {
-	// 						// permanent abilities
-	// 						if (pokemon.volatiles['ability:' + innate]) continue;
-	// 						pokemon.addVolatile('ability:' + innate, pokemon);
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	},
-	// },
+			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
+			if (source.abilityState.ending) return;
+			source.abilityState.ending = true;
+			const sortedActive = this.getAllActive();
+			this.speedSort(sortedActive);
+			for (const pokemon of sortedActive) {
+				if (pokemon !== source) {
+					// Will be suppressed by Pokemon#ignoringAbility if needed
+					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+					if (pokemon.m.innates) {
+						for (const innate of pokemon.m.innates) {
+							// permanent abilities
+							if (pokemon.volatiles['ability:' + innate]) continue;
+							pokemon.addVolatile('ability:' + innate, pokemon);
+						}
+					}
+				}
+			}
+		},
+	},
 	overcoat: {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.category === 'Special') {
 				this.debug('Overcoat weaken')
-				return this.chainModify(0.9)
+				return this.chainModify(0.8)
 			}
 		},
 		desc: "This Pokemon is immune to powder moves, damage from Sandstorm, and the effects of Rage Powder and the Effect Spore Ability. This Pokemon takes 10% less damage from Special attacks",
-		shortDesc: "This Pokemon is immune to powder moves, Sandstorm damage, and Effect Spore. 10% less damage from Special attacks",
+		shortDesc: "This Pokemon is immune to powder moves, Sandstorm damage, and Effect Spore. 20% less damage from Special attacks",
 	},
 	overgrow: {
 		inherit: true,
@@ -852,6 +868,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "While this Pokemon is poisoned, its physical attacks have 1.5x power. Immune to Poison and Toxic status damage",
 
 	},
+	toxicdebris: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
+	},
 	//*** Pokebilities Trace - Commented just in case */
 	// trace: {
 		// 	inherit: true,
@@ -891,6 +912,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// 		}
 	// 	},
 	// },
+	triage: {
+		inherit: true,
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.flags['heal']) return priority + 1;
+		},
+	},
 	turboblaze: {
 		inherit: true,
 		onStart(pokemon) {
