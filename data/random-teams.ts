@@ -520,11 +520,10 @@ export class RandomTeams {
 			[SETUP, HAZARDS],
 			[SETUP, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']],
 			[PHYSICAL_SETUP, PHYSICAL_SETUP],
-			['curse', 'irondefense'],
 			[SPECIAL_SETUP, 'thunderwave'],
 			['substitute', PIVOT_MOVES],
 			[SPEED_SETUP, ['aquajet', 'rest', 'trickroom']],
-			['curse', 'rapidspin'],
+			['curse', ['irondefense', 'rapidspin']],
 			['dragondance', 'dracometeor'],
 
 			// These attacks are redundant with each other
@@ -715,28 +714,12 @@ export class RandomTeams {
 				movePool, teraType, role);
 		}
 
-		// Enforce Sticky Web
-		if (movePool.includes('stickyweb')) {
-			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Revelation Dance
-		if (movePool.includes('revelationdance')) {
-			counter = this.addMove('revelationdance', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Revival Blessing
-		if (movePool.includes('revivalblessing')) {
-			counter = this.addMove('revivalblessing', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Salt Cure
-		if (movePool.includes('saltcure')) {
-			counter = this.addMove('saltcure', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
+		// Enforce Night Shade, Revelation Dance, Revival Blessing, and Sticky Web
+		for (const moveid of ['nightshade', 'revelationdance', 'revivalblessing', 'stickyweb']) {
+			if (movePool.includes(moveid)) {
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
 		}
 
 		// Enforce Trick Room on Doubles Wallbreaker
@@ -777,14 +760,6 @@ export class RandomTeams {
 		if (species.id === 'smeargle') {
 			if (movePool.includes('spore')) {
 				counter = this.addMove('spore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
-		}
-
-		// Apparently, nothing else currently in Random Battles requires special code to enforce Night Shade/Stoss
-		if (species.id === 'deoxysdefense') {
-			if (movePool.includes('nightshade')) {
-				counter = this.addMove('nightshade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
 		}
@@ -1500,7 +1475,7 @@ export class RandomTeams {
 		if (species.id === 'golem') return 'Custap Berry';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'palkia') return 'Lustrous Orb';
-		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
+		if (moves.has('substitute')) return 'Leftovers';
 		if (moves.has('stickyweb') && (species.id !== 'araquanid') && isLead) return 'Focus Sash';
 		if (this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
 		if (
