@@ -1037,7 +1037,7 @@ export const Aliases: {[alias: string]: string} = {
 	replenish: "G-Max Replenish",
 	resonance: "G-Max Resonance",
 	sandblast: "G-Max Sandblast",
-	smite: "G-Max Smite",
+	fairysmite: "G-Max Smite",
 	snooze: "G-Max Snooze",
 	steelsurge: "G-Max Steelsurge",
 	stonesurge: "G-Max Stonesurge",
