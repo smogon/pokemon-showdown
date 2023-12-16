@@ -6559,7 +6559,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Malignant Chain", "Nasty Plot", "Parting Shot", "Recover", "Shadow Ball", "Toxic"],
+                "movepool": ["Malignant Chain", "Nasty Plot", "Parting Shot", "Recover", "Shadow Ball"],
                 "teraTypes": ["Dark"]
             }
         ]
