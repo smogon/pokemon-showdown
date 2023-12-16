@@ -7924,15 +7924,8 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	//TODO: Test Clueless
 	clueless: {
-		onSwitchIn(pokemon) {
-			this.effectState.switchingIn = true;
-		},
 		onStart(pokemon) {
-			// Air Lock does not activate when Skill Swapped or when Neutralizing Gas leaves the field
-			if (this.effectState.switchingIn) {
-				this.add('-ability', pokemon, 'Clueless');
-				this.effectState.switchingIn = false;
-			}
+			this.add('-ability', pokemon, 'Clueless');
 			this.eachEvent('WeatherChange', this.effect);
 		},
 		onEnd(pokemon) {
