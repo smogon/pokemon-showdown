@@ -196,7 +196,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, distance: 1, wind: 1},
-		willCrit: true,
+		critRatio: 2,
 		secondary: null,
 		target: "any",
 		type: "Flying",
@@ -350,7 +350,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Anchor Shot",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, bullet: 1},
 		secondary: {
 			chance: 100,
 			onHit(target, source, move) {
@@ -677,7 +677,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	attract: {
 		num: 213,
-		accuracy: 100,
+		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		name: "Attract",
@@ -1692,7 +1692,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePower: 140,
 		category: "Special",
 		name: "Boomburst",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
 		secondary: null,
@@ -1825,12 +1825,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 	brickbreak: {
 		num: 280,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 80,
 		category: "Physical",
 		name: "Brick Break",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		onTryHit(pokemon) {
 			// will shatter screens through sub, before you hit
 			pokemon.side.removeSideCondition('reflect');
@@ -5697,7 +5697,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Flash Cannon",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, pulse: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1, bullet: 1},
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -8137,7 +8137,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Gunk Shot",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, pulse: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1, bullet: 1},
 		secondary: {
 			chance: 30,
 			status: 'psn',
@@ -8284,7 +8284,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Headbutt",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, field: 1},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -8330,8 +8330,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 	},
 	headsmash: {
 		num: 457,
-		accuracy: 85,
-		basePower: 140,
+		accuracy: 80,
+		basePower: 150,
 		category: "Physical",
 		name: "Head Smash",
 		pp: 5,
@@ -9078,11 +9078,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 	hornattack: {
 		num: 30,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 80,
 		category: "Physical",
 		name: "Horn Attack",
 		pp: 25,
 		priority: 0,
+		critRatio: 2,
 		flags: {contact: 1, protect: 1, mirror: 1, horn: 1},
 		secondary: null,
 		target: "normal",
@@ -12565,7 +12566,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Mud Shot",
 		pp: 15,
 		priority: 1,
-		flags: {protect: 1, mirror: 1, pulse: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1, bullet: 1},
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -12817,7 +12818,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Needle Arm",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -13235,7 +13236,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	originpulse: {
 		num: 618,
 		accuracy: 100,
-		basePower: 110,
+		basePower: 120,
 		category: "Special",
 		name: "Origin Pulse",
 		pp: 10,
@@ -15436,7 +15437,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 5,
 		priority: -6,
 		forceSwitch: true,
-		flags: {recharge: 1, protect: 1, mirror: 1},
+		flags: {recharge: 1, protect: 1, mirror: 1, sound: 1},
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -15462,7 +15463,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	rockclimb: {
 		num: 431,
 		accuracy: 90,
-		basePower: 90,
+		basePower: 85,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rock Climb",
@@ -16074,7 +16075,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Scale Shot",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, bullet: 1},
 		multihit: [2, 5],
 		selfBoost: {
 			boosts: {
@@ -16365,7 +16366,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Shadow Claw",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
 		critRatio: 2,
 		secondary: null,
 		target: "normal",
@@ -17544,7 +17545,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Snipe Shot",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, pulse: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1, bullet: 1},
 		critRatio: 2,
 		tracksTarget: true,
 		secondary: null,
@@ -17899,7 +17900,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Spike Cannon",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, pulse: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1, bullet: 1},
 		multihit: [2, 5],
 		secondary: null,
 		target: "normal",
@@ -18546,7 +18547,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Stone Edge",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, slicing: 1},
 		critRatio: 2,
 		secondary: null,
 		target: "normal",
@@ -19385,7 +19386,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Tar Shot",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, bullet: 1},
 		volatileStatus: 'tarshot',
 		condition: {
 			onStart(pokemon) {
@@ -20913,7 +20914,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Water Gun",
 		pp: 25,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, pulse: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1, bullet: 1},
 		secondary: null,
 		target: "normal",
 		type: "Water",
@@ -21290,14 +21291,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 	wildcharge: {
 		num: 528,
 		accuracy: 100,
-		basePower: 95,
+		basePower: 90,
 		category: "Physical",
 		name: "Wild Charge",
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		recoil: [1, 4],
-		secondary: null,
+		secondary: {
+			chance: 10,
+			status: 'par',
+		},
 		target: "normal",
 		type: "Electric",
 		contestType: "Tough",
