@@ -129,6 +129,11 @@ export const Scripts: ModdedBattleScriptsData = {
 		delete this.modData('Learnsets', 'thundurus').learnset.electroweb;
 		delete this.modData('Learnsets', 'mew').learnset.electroweb;
 		delete this.modData('Learnsets', 'bellibolt').learnset.electroweb;
+		delete this.modData('Learnsets', 'tadbulb').learnset.electroweb;
+		delete this.modData('Learnsets', 'voltorb').learnset.electroweb;
+		delete this.modData('Learnsets', 'voltorbhisui').learnset.electroweb;
+		delete this.modData('Learnsets', 'electrode').learnset.electroweb;
+		delete this.modData('Learnsets', 'electrodehisui').learnset.electroweb;
 		delete this.modData('Learnsets', 'jolteon').learnset.electroweb;
 		this.modData("Learnsets", "bellibolt").learnset.surf = ["9L1"];
 		this.modData("Learnsets", "bellibolt").learnset.hydropump = ["9L1"];
