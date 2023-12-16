@@ -18191,7 +18191,20 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous"],
 		requiredItem: "Flygonite",
 	},
-
+	kingdramega: {
+		num: 230,
+		name: "Kingdra-Mega",
+		baseSpecies: "Kingdra",
+		types: ["Water", "Dragon"],
+		baseStats: {hp: 75, atk: 105, def: 100, spa: 145, spd: 100, spe: 115},
+		abilities: {0: "Swift Swim"},
+		heightm: 1.8,
+		weightkg: 152,
+		color: "Blue",
+		forme: "Mega",
+		eggGroups: ["Amorphous"],
+		requiredItem: "Kingdrite",
+	},
 	"dewgongmega": {
 		"abilities": {
 			"0": "Hardened Sheath",
