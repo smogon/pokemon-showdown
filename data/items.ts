@@ -3603,7 +3603,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		num: 2409,
+		num: 2482,
 		gen: 9,
 	},
 	metalcoat: {
