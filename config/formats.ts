@@ -173,9 +173,10 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Same Type Clause', 'Terastal Clause'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Giratina', 'Giratina-Origin',
-			'Groudon', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Magearna', 'Mewtwo', 'Miraidon', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza',
-			'Shaymin-Sky', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Moody', 'Shadow Tag', 'Booster Energy', 'Damp Rock',
+			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin',
+			'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Kyurem-White', 'Lugia',
+			'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palafin', 'Palkia', 'Palkia-Origin',
+			'Rayquaza', 'Shaymin-Sky', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Moody', 'Shadow Tag', 'Damp Rock',
 			'Focus Band', 'King\'s Rock', 'Razor Fang', 'Quick Claw', 'Acupressure', 'Baton Pass', 'Last Respects',
 		],
 	},
@@ -419,7 +420,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Basculin-White-Striped', 'Bisharp', 'Chansey', 'Haunter', 'Magneton', 'Primeape', 'Scyther', 'Sneasel-Hisui', 'Ursaring', 'Arena Trap', 'Magnet Pull', 'Shadow Tag', 'Baton Pass',
+			'Basculin-White-Striped', 'Bisharp', 'Chansey', 'Duraludon', 'Haunter', 'Magneton', 'Porygon2', 'Primeape', 'Rhydon', 'Scyther', 'Sneasel-Hisui',
+			'Ursaring', 'Arena Trap', 'Magnet Pull', 'Shadow Tag', 'Baton Pass',
 		],
 	},
 	{
@@ -433,6 +435,17 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['[Gen 9] Ubers'],
 		banlist: [
+			// New Pokemon
+			'Alcremie', 'Araquanid', 'Archaludon', 'Bastiodon', 'Bellossom', 'Blaziken', 'Cinccino', 'Cobalion', 'Comfey', 'Deoxys', 'Deoxys-Attack',
+			'Deoxys-Defense', 'Deoxys-Speed', 'Dewgong', 'Dodrio', 'Electivire', 'Emboar', 'Entei', 'Excadrill', 'Exeggutor', 'Exeggutor-Alola',
+			'Feraligatr', 'Flygon', 'Galvantula', 'Golurk', 'Gouging Fire', 'Granbull', 'Hitmonchan', 'Hitmonlee', 'Hitmontop', 'Ho-Oh', 'Hydrapple',
+			'Incineroar', 'Iron Boulder', 'Iron Crown', 'Keldeo', 'Kingdra', 'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Lanturn', 'Lapras', 'Latias',
+			'Latios', 'Lugia', 'Lunala', 'Magmortar', 'Malamar', 'Meganium', 'Meowstic', 'Meowstic-F', 'Metagross', 'Minior', 'Minun', 'Necrozma',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Plusle', 'Porygon-Z', 'Primarina', 'Raging Bolt', 'Raikou', 'Rampardos', 'Regice', 'Regigigas',
+			'Regirock', 'Registeel', 'Reshiram', 'Reuniclus', 'Rhyperior', 'Sceptile', 'Scrafty', 'Serperior', 'Skarmory', 'Smeargle', 'Solgaleo',
+			'Suicune', 'Swampert', 'Tentacruel', 'Terapagos', 'Terrakion', 'Toucannon', 'Venusaur', 'Vileplume', 'Virizion', 'Whimsicott', 'Zebstrika',
+			'Zekrom',
+			// Ubers OU
 			'Annihilape', 'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Basculegion-Base', 'Calyrex-Ice', 'Chien-Pao', 'Clodsire', 'Ditto', 'Eternatus',
 			'Flutter Mane', 'Glimmora', 'Gliscor', 'Giratina-Origin', 'Great Tusk', 'Grimmsnarl', 'Groudon', 'Hatterene', 'Iron Bundle', 'Iron Treads',
 			'Kingambit', 'Koraidon', 'Kyogre', 'Landorus-Therian', 'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Regieleki', 'Ribombee',

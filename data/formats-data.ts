@@ -1638,18 +1638,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	raikou: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "OU",
+		doublesTier: "DOU",
 		natDexTier: "RU",
 	},
 	entei: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "OU",
+		doublesTier: "DOU",
 		natDexTier: "RU",
 	},
 	suicune: {
-		isNonstandard: "Past",
-		tier: "Illegal",
+		tier: "OU",
+		doublesTier: "DOU",
 		natDexTier: "RU",
 	},
 	larvitar: {
