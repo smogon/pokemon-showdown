@@ -18233,7 +18233,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 87,
 		"heightm": 1.7,
 		"weightkg": 120,
-		"color": "White"
+		"color": "White",
+		requiredItem: "Dewgongite",
+
 	},
 	"hitmonchanmega": {
 		"abilities": {
@@ -18260,7 +18262,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 107,
 		"heightm": 1.4,
 		"weightkg": 50.2,
-		"color": "Brown"
+		"color": "Brown",
+		requiredItem: "Hitmonchanite",
+
 	},
 	"hitmonleemega": {
 		"abilities": {
@@ -18287,7 +18291,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 106,
 		"heightm": 1.5,
 		"weightkg": 49.8,
-		"color": "Brown"
+		"color": "Brown",
+		requiredItem: "Hitmonleeite",
+
 	},
 	"hitmontopmega": {
 		"abilities": {
@@ -18314,7 +18320,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 237,
 		"heightm": 1.4,
 		"weightkg": 48,
-		"color": "Brown"
+		"color": "Brown",
+		requiredItem: "Hitmontopite",
+
 	},
 	"crobatmega": {
 		"abilities": {
@@ -18343,7 +18351,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 169,
 		"heightm": 1.8,
 		"weightkg": 75,
-		"color": "Purple"
+		"color": "Purple",
+		requiredItem: "Crobatite"
 	},
 	"skarmorymega": {
 		"abilities": {
@@ -18370,7 +18379,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 227,
 		"heightm": 1.7,
 		"weightkg": 50.5,
-		"color": "Gray"
+		"color": "Gray",
+		requiredItem: "Skarmorite"
 	},
 	// "bruxishmega": {
 	// 	"abilities": {
@@ -18427,7 +18437,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 389,
 		"heightm": 2.2,
 		"weightkg": 310,
-		"color": "Green"
+		"color": "Green",
+		requiredItem: "Torterrite"
+
 	},
 	"infernapemega": {
 		"abilities": {
@@ -18455,7 +18467,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 392,
 		"heightm": 1.2,
 		"weightkg": 55,
-		"color": "Brown"
+		"color": "Brown",
+		requiredItem: "Infernapite"
 	},
 	"empoleonmega": {
 		"abilities": {
@@ -18485,7 +18498,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 395,
 		"heightm": 1.7,
 		"weightkg": 84.5,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Empoleonite"
+
 	},
 	"shucklemega": {
 		"abilities": {
@@ -18512,7 +18527,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 213,
 		"heightm": 0.6,
 		"weightkg": 20.5,
-		"color": "Yellow"
+		"color": "Yellow",
+		requiredItem: "Shucklite"
+
 	},
 	"relicanthmega": {
 		"abilities": {
@@ -18540,7 +18557,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 369,
 		"heightm": 1,
 		"weightkg": 23.4,
-		"color": "Gray"
+		"color": "Gray",
+		requiredItem: "Relicanthite"
+
 	},
 	"quagsiremega": {
 		"abilities": {
@@ -18568,7 +18587,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 195,
 		"heightm": 1.4,
 		"weightkg": 75,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Quagsite"
+
 	},
 	"jellicentmega": {
 		"abilities": {
@@ -18597,7 +18618,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 593,
 		"heightm": 2.2,
 		"weightkg": 135,
-		"color": "White"
+		"color": "White",
+		requiredItem: "Jellicentite"
+
 	},
 	"toucannonmega": {
 		"abilities": {
@@ -18624,7 +18647,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 733,
 		"heightm": 1.1,
 		"weightkg": 26,
-		"color": "Black"
+		"color": "Black",
+		requiredItem: "Toucannonite"
+
 	},
 	"dragonitemega": {
 		"abilities": {
@@ -18652,7 +18677,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 149,
 		"heightm": 2.2,
 		"weightkg": 210,
-		"color": "Brown"
+		"color": "Brown",
+		requiredItem: "Dragoniteite"
+
 	},
 	"breloommega": {
 		"abilities": {
@@ -18680,7 +18707,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 286,
 		"heightm": 1.2,
 		"weightkg": 39.2,
-		"color": "Green"
+		"color": "Green",
+		requiredItem: "Breloomite"
+
 	},
 	"slakingmega": {
 		"abilities": {
@@ -18707,7 +18736,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 289,
 		"heightm": 2,
 		"weightkg": 130.5,
-		"color": "Brown"
+		"color": "Brown",
+		requiredItem: "Slakingite"
+
 	},
 	"feraligatrmegax": {
 		"abilities": {
@@ -18735,7 +18766,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 160,
 		"heightm": 2.3,
 		"weightkg": 88.8,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Feralitatrite X"
+
 	},
 	"feraligatrmegay": {
 		"abilities": {
@@ -18763,7 +18796,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 160,
 		"heightm": 2.3,
 		"weightkg": 88.8,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Feralitatrite Y"
+
 	},
 	"granbullmega": {
 		"abilities": {
@@ -18793,7 +18828,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 210,
 		"heightm": 1.4,
 		"weightkg": 48.7,
-		"color": "Purple"
+		"color": "Purple",
+		requiredItem: "Granbullite"
+
 	},
 	"gyaradosmegay": {
 		"abilities": {
@@ -18821,7 +18858,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 130,
 		"heightm": 6.5,
 		"weightkg": 235,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Gyaradosite Y"
+
 	},
 	"haxorusmega": {
 		"abilities": {
@@ -18849,7 +18888,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 612,
 		"heightm": 1.8,
 		"weightkg": 105.5,
-		"color": "Yellow"
+		"color": "Yellow",
+		requiredItem: "Haxorusite"
 	},
 	// "kingdramegay": {
 	// 	"abilities": {
@@ -18907,7 +18947,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 154,
 		"heightm": 1.8,
 		"weightkg": 100.5,
-		"color": "Green"
+		"color": "Green",
+		requiredItem: "Meganiumite"
+
 	},
 	"luxraymega": {
 		"abilities": {
@@ -18934,7 +18976,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 405,
 		"heightm": 1.4,
 		"weightkg": 42,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Luxrite"
 	},
 	"nidokingmega": {
 		"abilities": {
@@ -18962,7 +19005,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 34,
 		"heightm": 1.4,
 		"weightkg": 62,
-		"color": "Purple"
+		"color": "Purple",
+		requiredItem: "Nidokingite"
 	},
 	"nidoqueenmega": {
 		"abilities": {
@@ -18989,7 +19033,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 31,
 		"heightm": 1.3,
 		"weightkg": 60,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Nidoqueenite"
 	},
 	"sandslashmega": {
 		"abilities": {
@@ -19015,7 +19060,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 28,
 		"heightm": 1,
 		"weightkg": 29.5,
-		"color": "Yellow"
+		"color": "Yellow",
+		requiredItem: "Sandslashite"
+
 	},
 	"typhlosionmega": {
 		"abilities": {
@@ -19042,7 +19089,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 157,
 		"heightm": 1.7,
 		"weightkg": 79.5,
-		"color": "Yellow"
+		"color": "Yellow",
+		requiredItem: "Sandslashite"
+
 	},
 	"krookodilemega": {
 		"abilities": {
@@ -19069,7 +19118,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 553,
 		"heightm": 1.5,
 		"weightkg": 96.3,
-		"color": "Red"
+		"color": "Red",
+		requiredItem: "Krookodilite"
 	},
 	"magnezonemega": {
 		"abilities": {
@@ -19096,7 +19146,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 462,
 		"heightm": 1.2,
 		"weightkg": 180,
-		"color": "Gray"
+		"color": "Gray",
+		requiredItem: "Magnezonite"
 	},
 	"shedinjamega": {
 		"abilities": {
@@ -19123,7 +19174,8 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 292,
 		"heightm": 0.8,
 		"weightkg": 1.2,
-		"color": "Brown"
+		"color": "Brown",
+		requiredItem: "Shedninjite"
 	},
 	"swalotmega": {
 		"abilities": {
@@ -19149,7 +19201,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 317,
 		"heightm": 1.7,
 		"weightkg": 80,
-		"color": "Purple"
+		"color": "Purple",
+		requiredItem: "Swalotite"
+
 	},
 	"lanturnmega": {
 		"abilities": {
@@ -19176,7 +19230,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 171,
 		"heightm": 1.2,
 		"weightkg": 22.5,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Lanturnite"
+
 	},
 	"laprasmegax": {
 		"abilities": {
@@ -19203,7 +19259,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 131,
 		"heightm": 2.5,
 		"weightkg": 220,
-		"color": "Blue"
+		"color": "Blue",
+		requiredItem: "Laprasite X"
+
+		
 	},
 	"slowkingmega": {
 		"abilities": {
@@ -19230,7 +19289,9 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		"num": 199,
 		"heightm": 2,
 		"weightkg": 79.5,
-		"color": "Pink"
+		"color": "Pink",
+		requiredItem: "Slowkingite"
+
 	},
 	syclar: {
 		num: -1,

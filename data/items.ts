@@ -7706,11 +7706,11 @@ export const Items: {[itemid: string]: ItemData} = {
 		isNonstandard: "Past",
 	},
 	shedninjite: {
-		name: "Magnezonite",
+		name: "Shedninjite",
 		spritenum: 622,
-		megaStone: "Magnezone-Mega",
-		megaEvolves: "Magnezone",
-		itemUser: ["Magnezone"],
+		megaStone: "Shedninja-Mega",
+		megaEvolves: "Shedninja",
+		itemUser: ["Shedninja"],
 		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
@@ -7722,9 +7722,9 @@ export const Items: {[itemid: string]: ItemData} = {
 	swalotite: {
 		name: "Magnezonite",
 		spritenum: 622,
-		megaStone: "Magnezone-Mega",
-		megaEvolves: "Magnezone",
-		itemUser: ["Magnezone"],
+		megaStone: "Swalot-Mega",
+		megaEvolves: "Swalot",
+		itemUser: ["Swalot"],
 		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
@@ -7734,16 +7734,30 @@ export const Items: {[itemid: string]: ItemData} = {
 		isNonstandard: "Past",
 	},
 	lanturnite: {
-		name: "Magnezonite",
+		name: "Lanturnite",
 		spritenum: 622,
-		megaStone: "Magnezone-Mega",
-		megaEvolves: "Magnezone",
-		itemUser: ["Magnezone"],
+		megaStone: "Lanturn-Mega",
+		megaEvolves: "Lanturn",
+		itemUser: ["Lanturn"],
 		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
 		num: 1039,
+		gen: 7,
+		isNonstandard: "Past",
+	},
+	laprasitex: {
+		name: "Laprasite X",
+		spritenum: 622,
+		megaStone: "Lapras-Mega-X",
+		megaEvolves: "Lapras",
+		itemUser: ["Lapras"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: 1040,
 		gen: 7,
 		isNonstandard: "Past",
 	},
@@ -7757,7 +7771,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
 			return true;
 		},
-		num: 1040,
+		num: 1041,
 		gen: 7,
 		isNonstandard: "Past",
 	},
