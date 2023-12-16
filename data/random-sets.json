@@ -3786,11 +3786,6 @@
                 "role": "Setup Sweeper",
                 "movepool": ["Close Combat", "Leaf Blade", "Stone Edge", "Swords Dance"],
                 "teraTypes": ["Rock"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Aura Sphere", "Calm Mind", "Giga Drain", "Vacuum Wave"],
-                "teraTypes": ["Fighting"]
             }
         ]
     },
