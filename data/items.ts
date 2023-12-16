@@ -3596,9 +3596,9 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	//TODO - Sprite & Fling Base Power
+	// TODO - Sprite & Fling Base Power
 	metalalloy: {
-		name: "Metal Alloy", 
+		name: "Metal Alloy",
 		spritenum: 0,
 		fling: {
 			basePower: 30,

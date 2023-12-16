@@ -86,8 +86,6 @@ describe('Protosynthesis', function () {
 		]]);
 
 		const tail = battle.p1.active[0];
-		const weezingNoGas = battle.p2.pokemon[0];
-		const weezingWithGas = battle.p2.pokemon[1];
 		battle.makeChoices('move luckychant', 'move venoshock');
 		assert.bounded(tail.maxhp - tail.hp, [84, 102]);
 		battle.makeChoices('auto', 'switch 2');
