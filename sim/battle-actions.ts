@@ -1754,8 +1754,8 @@ export class BattleActions {
 			if ((type === pokemon.terastallized || (isTeraStellar && !pokemon.stellarBoostedTypes.includes(type))) &&
 				pokemon.getTypes(false, true).includes(type)) {
 				// In my defense, the game hardcodes the Adaptability check like this, too.
-				stab = stab === 2 ? 2.25 : 2;
-			} else if (pokemon.terastallized && type !== pokemon.terastallized && move.stab === 2) {
+				stab = (stab === 2 && !isTeraStellar) ? 2.25 : 2;
+			} else if (pokemon.terastallized && type !== pokemon.terastallized && stab === 2) {
 				stab = 1.5;
 			}
 			baseDamage = this.battle.modify(baseDamage, stab);

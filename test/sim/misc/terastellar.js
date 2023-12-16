@@ -116,4 +116,30 @@ describe("Tera Stellar", function () {
 		assert.statStage(inkay, 'atk', 1);
 		assert.statStage(inkay, 'spa', 1);
 	});
+
+	it(`should not work with Adapatability`, function () {
+        battle = common.createBattle([[
+            {species: 'Wynaut', ability: 'adaptability', moves: ['hyperspacehole', 'terablast'], teraType: 'Stellar'},
+        ], [
+            {species: 'Happiny', ability: 'shellarmor', moves: ['softboiled']},
+        ]]);
+
+        const happiny = battle.p2.active[0];
+
+        battle.makeChoices('move hyperspacehole terastallize', 'auto');
+        let damage = happiny.maxhp - happiny.hp;
+        assert.bounded(damage, [58, 70], `Hyperspace Hole should only have 2x damage on its first use`);
+
+        battle.makeChoices('move hyperspacehole', 'auto');
+        damage = happiny.maxhp - happiny.hp;
+        assert.bounded(damage, [43, 52], `Hyperspace Hole should only have 1.5x damage on its second use`);
+
+        battle.makeChoices('move terablast', 'auto');
+        damage = happiny.maxhp - happiny.hp;
+        assert.bounded(damage, [43, 52], `Tera Blast should only have ~1.2x damage on its first use`);
+
+        battle.makeChoices('move terablast', 'auto');
+        damage = happiny.maxhp - happiny.hp;
+        assert.bounded(damage, [24, 29], `Tera Blast should not have any boosted damage on its second use`);
+    });
 });
