@@ -19975,7 +19975,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if (pokemon.species.id === 'Terapagos-Stellar') {
+			if (pokemon.species.name === 'Terapagos-Stellar') {
 				move.target = 'allAdjacentFoes';
 			}
 		},
