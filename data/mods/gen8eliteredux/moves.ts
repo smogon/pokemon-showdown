@@ -1215,6 +1215,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	ironfangs: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
+	},
+	jaggedfangs: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
+	},
 	jumpkick: {
 		inherit: true,
 		isNonstandard: null,
@@ -1238,6 +1248,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	lightthatburnsthesky: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	lovelybite: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
 	},
 	lowkick: {
 		inherit: true,
@@ -1376,6 +1391,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	ominouswind: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	outburst: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
 	},
 	pollenpuff: {
 		inherit: true,
@@ -1519,6 +1539,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	scorchedearth: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
+	},
 	searingsunrazesmash: {
 		inherit: true,
 		isNonstandard: null,
@@ -1530,6 +1555,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	seedflare: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	seismicfist: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
+	},
+	shadowfangs: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
 	},
 	sharpen: {
 		inherit: true,
@@ -1571,6 +1606,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	smellingsalts: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	smite: {
+		inherit: true,
+		isNonstandard: null,
+		gen: 8
 	},
 	snatch: {
 		inherit: true,
