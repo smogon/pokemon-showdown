@@ -4695,6 +4695,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onPreStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Terapagos' || pokemon.transformed) return;
 			if (pokemon.species.forme !== 'Terastal') {
+				this.add('-activate', pokemon, 'ability: Tera Shift');
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
 			}
 		},
