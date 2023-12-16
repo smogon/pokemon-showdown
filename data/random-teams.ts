@@ -756,7 +756,7 @@ export class RandomTeams {
 		}
 
 		// Enforce Knock Off on pure Normal- and Fighting-types
-		if (types.length === 1 && types.includes('Normal') || types.includes('Fighting')) {
+		if (types.length === 1 && (types.includes('Normal') || types.includes('Fighting'))) {
 			if (movePool.includes('knockoff')) {
 				counter = this.addMove('knockoff', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
