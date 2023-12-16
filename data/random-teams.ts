@@ -1113,7 +1113,7 @@ export class RandomTeams {
 		case 'Sticky Hold':
 			return (species.id === 'muk');
 		case 'Sturdy':
-			return !!counter.get('recoil');
+			return (!!counter.get('recoil') && species.id !== 'skarmory');
 		case 'Swarm':
 			return (!counter.get('Bug') || !!counter.get('recovery'));
 		case 'Swift Swim':
