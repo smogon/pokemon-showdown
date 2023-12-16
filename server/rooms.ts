@@ -39,7 +39,6 @@ import {
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity, MinorActivityData} from './room-minor-activity';
 import {Roomlogs} from './roomlogs';
-import * as crypto from 'crypto';
 import {RoomAuth} from './user-groups';
 import {PartialModlogEntry, mainModlog} from './modlog';
 import {Replays} from './replays';
@@ -2066,11 +2065,12 @@ export class GameRoom extends BasicRoom {
 		let hideDetails = !format.id.includes('customgame');
 		if (format.team && battle.ended) hideDetails = false;
 
-		const data = this.getLog(hideDetails ? 0 : -1);
-		let rating = 0;
+		const log = this.getLog(hideDetails ? 0 : -1);
+		let rating: number | undefined;
 		if (battle.ended && this.rated) rating = this.rated;
 		let {id, password} = this.getReplayData();
 		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
+		if (silent) connection = undefined;
 		const isPrivate = this.settings.isPrivate || this.hideReplay;
 		const hidden = options === 'forpunishment' || options === 'auto' ? 10 :
 			(this as any).unlistReplay ? 2 :
@@ -2094,8 +2094,8 @@ export class GameRoom extends BasicRoom {
 			try {
 				const fullid = await Replays.add({
 					id: idWithServer,
-					log: data,
-					players: [battle.p1.name, battle.p2.name],
+					log,
+					players: battle.players.map(p => p.name),
 					format: format.name,
 					rating: rating || null,
 					private: hidden,
@@ -2103,54 +2103,43 @@ export class GameRoom extends BasicRoom {
 					inputlog: battle.inputLog?.join('\n') || null,
 					uploadtime: Math.trunc(Date.now() / 1000),
 				});
-				if (!silent) {
-					const url = `https://${Config.routes.replays}/${fullid}`;
-					connection?.popup(
-						`|html|<p>Your replay has been uploaded! It's available at:</p><p> ` +
-						`<a class="no-panel-intercept" href="${url}" target="_blank">${url}</a> ` +
-						`<copytext value="${url}">Copy</copytext>`
-					);
-				}
+				const url = `https://${Config.routes.replays}/${fullid}`;
+				connection?.popup(
+					`|html|<p>Your replay has been uploaded! It's available at:</p><p> ` +
+					`<a class="no-panel-intercept" href="${url}" target="_blank">${url}</a> ` +
+					`<copytext value="${url}">Copy</copytext>`
+				);
 			} catch (e) {
-				if (!silent) {
-					connection?.popup(`Your replay could not be saved: ${e}`);
-				}
+				connection?.popup(`Your replay could not be saved: ${e}`);
 				throw e;
 			}
 			return;
 		}
 
-		// requires connection
-		if (!connection) return;
+		// Otherwise, (we're probably a side server), upload the replay through LoginServer
 
-		// STEP 1: Directly tell the login server that a replay is coming
-		// (also include all the data, including a hash of the replay itself,
-		// so it can't be spoofed.)
-
-		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
-		const [success] = await LoginServer.request('prepreplay', {
-			id: id,
-			loghash: datahash,
-			p1: battle.p1.name,
-			p2: battle.p2.name,
-			format: format.id,
-			rating,
+		const [result] = await LoginServer.request('addreplay', {
+			id,
+			log,
+			players: battle.players.map(p => p.name).join(','),
+			format: format.name,
+			rating, // will probably do nothing
 			hidden,
-			inputlog: battle.inputLog?.join('\n') || null,
+			inputlog: battle.inputLog?.join('\n') || undefined,
+			password,
 		});
-		if (success?.errorip) {
-			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
+		if (result?.errorip) {
+			connection?.popup(`This server's request IP ${result.errorip} is not a registered server.`);
 			return;
 		}
 
-		// STEP 2: Tell the user to upload the replay to the login server
-
-		connection.send('|queryresponse|savereplay|' + JSON.stringify({
-			log: data,
-			id: id,
-			password,
-			silent,
-		}));
+		const fullid = result?.replayid;
+		const url = `https://${Config.routes.replays}/${fullid}`;
+		connection?.popup(
+			`|html|<p>Your replay has been uploaded! It's available at:</p><p> ` +
+			`<a class="no-panel-intercept" href="${url}" target="_blank">${url}</a> ` +
+			`<copytext value="${url}">Copy</copytext>`
+		);
 	}
 
 	getReplayData() {
