@@ -204,7 +204,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Earthquake", "Throat Chop", "Stone Edge", "Sucker Punch"],
+                "movepool": ["Earthquake", "Stone Edge", "Sucker Punch", "Throat Chop"],
                 "teraTypes": ["Dark", "Fairy", "Flying", "Ghost", "Ground"]
             }
         ]
