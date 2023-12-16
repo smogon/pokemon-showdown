@@ -589,10 +589,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.totalDamage && !pokemon.forceSwitchFlag) {
-				this.heal(move.totalDamage / 3, pokemon);
+				this.heal(move.totalDamage / 4, pokemon);
 			}
 		},
-		desc: "After an attack, holder gains 1/3 of the damage in HP dealt to other Pokemon.",
+		desc: "After an attack, holder gains 1/4 of the damage in HP dealt to other Pokemon.",
 	},
 	sharpedonite: {
 		inherit: true,
