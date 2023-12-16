@@ -1,4 +1,4 @@
-export const Learnsets: {["1L1"]: LearnsetData} = {
+export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 	missingno: {
 		learnset: {
 			blizzard: ["1L1"],
