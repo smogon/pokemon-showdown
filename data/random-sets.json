@@ -1013,14 +1013,14 @@
         "level": 87,
         "sets": [
             {
-                "role": "Bulky Setup",
+                "role": "Fast Bulky Setup",
                 "movepool": ["Giga Drain", "Quiver Dance", "Sleep Powder", "Strength Sap"],
                 "teraTypes": ["Poison", "Steel", "Water"]
             },
             {
-                "role": "Fast Bulky Setup",
-                "movepool": ["Giga Drain", "Quiver Dance", "Sludge Bomb", "Strength Sap"],
-                "teraTypes": ["Poison"]
+                "role": "Bulky Setup",
+                "movepool": ["Giga Drain", "Moonblast", "Quiver Dance", "Sludge Bomb", "Strength Sap"],
+                "teraTypes": ["Fairy", "Poison"]
             },
             {
                 "role": "Tera Blast user",
@@ -2804,7 +2804,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Encore", "Knock Off", "Light Screen", "Psychic Noise", "Reflect", "Stealth Rock", "Thunder Wave", "U-turn", "Yawn"],
+                "movepool": ["Encore", "Knock Off", "Light Screen", "Psychic", "Psychic Noise", "Reflect", "Stealth Rock", "Thunder Wave", "U-turn", "Yawn"],
                 "teraTypes": ["Dark", "Electric", "Steel"]
             }
         ]
@@ -3369,7 +3369,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Petal Dance", "Pollen Puff", "Quiver Dance", "Sleep Powder"],
+                "movepool": ["Alluring Voice", "Petal Dance", "Quiver Dance", "Sleep Powder"],
                 "teraTypes": ["Grass"]
             }
         ]
@@ -3941,11 +3941,6 @@
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Hydro Pump", "Secret Sword", "Substitute", "Surf"],
                 "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Calm Mind", "Hydro Pump", "Secret Sword", "Tera Blast"],
-                "teraTypes": ["Ice"]
             }
         ]
     },
@@ -4186,11 +4181,6 @@
                 "role": "AV Pivot",
                 "movepool": ["Draco Meteor", "Dragon Tail", "Earthquake", "Fire Blast", "Heavy Slam", "Hydro Pump", "Knock Off", "Thunderbolt"],
                 "teraTypes": ["Electric", "Fire", "Ground", "Water"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Body Press", "Curse", "Heavy Slam", "Rest"],
-                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -4635,7 +4625,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Acrobatics", "Earthquake", "Power Gem", "Shell Smash"],
-                "teraTypes": ["Flying", "Ground"]
+                "teraTypes": ["Flying", "Ground", "Steel", "Water"]
             }
         ]
     },
