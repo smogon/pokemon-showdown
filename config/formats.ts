@@ -528,12 +528,12 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Monothreat Fire",
-		desc: `Monotype where every Pok&eacute;mon is required to be part Fire.`,
+		name: "[Gen 9] Monothreat Dark",
+		desc: `Monotype where every Pok&eacute;mon is required to be part Dark.`,
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Fire'],
+		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Dark'],
 	},
 	{
 		name: "[Gen 9] Monotype CAP",
@@ -2868,39 +2868,6 @@ export const Formats: FormatList = [
 			'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Shedinja', 'Solgaleo', 'Urshifu-Base', 'Xerneas', 'Yveltal', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned',
 			'Zekrom', 'Commander', 'Power Construct', 'Assist', 'Dark Void', 'Swagger',
 		],
-	},
-	{
-		name: "[Gen 9 DLC 1] Monothreat Fire",
-		desc: `Monotype where every Pok&eacute;mon is required to be part Fire.`,
-
-		mod: 'gen9dlc1',
-		searchShow: false,
-		ruleset: ['[Gen 9 DLC 1] Monotype', 'Force Monotype = Fire'],
-	},
-	{
-		name: "[Gen 9 DLC 1] Monotype CAP",
-		desc: `Monotype where CAP Pok&eacute;mon are legal.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/9476494">Monotype CAP</a>`,
-		],
-
-		mod: 'gen9dlc1',
-		searchShow: false,
-		ruleset: ['[Gen 9 DLC 1] Monotype', '+CAP'],
-		banlist: ['Cawmodore', 'Fidgit', 'Hemogoblin', 'Heat Rock'],
-	},
-	{
-		name: "[Gen 9 DLC 1] Monotype LC",
-		desc: `Monotype where every Pok&eacute;mon must be in the first stage in their evolution line.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/posts/9476493">Monotype LC</a>`,
-		],
-
-		mod: 'gen9dlc1',
-		searchShow: false,
-		ruleset: ['[Gen 9 DLC 1] LC', 'Same Type Clause', 'Terastal Clause'],
-		banlist: ['Damp Rock', 'Focus Band', 'Heat Rock', 'Icy Rock', 'Quick Claw'],
-		unbanlist: ['Diglett-Base', 'Growlithe-Hisui', 'Vulpix', 'Vulpix-Alola', 'Sticky Web'],
 	},
 	{
 		name: "[Gen 9 DLC 1] Paldea Dex Draft",
