@@ -8532,7 +8532,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
-				if (effect?.effectType === "Move") {
+				if (effect?.name === "Psychic Noise") {
 					return 2;
 				}
 				if (source?.hasAbility('persistent')) {
