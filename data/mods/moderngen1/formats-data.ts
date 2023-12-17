@@ -950,7 +950,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	ursalunabloodmoon: {
-		tier: "OU",
+		tier: "UU",
 	},
 	slugma: {
 		tier: "LC",
@@ -1044,7 +1044,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	celebi: {
-		tier: "OU",
+		tier: "UU",
 	},
 	treecko: {
 		tier: "LC",
@@ -1176,7 +1176,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	ninjask: {
-		tier: "UU",
+		tier: "OU",
 	},
 	shedinja: {
 		tier: "UU",
@@ -1494,7 +1494,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	torterra: {
-		tier: "UU",
+		tier: "OU",
 	},
 	chimchar: {
 		tier: "LC",
@@ -1512,7 +1512,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	empoleon: {
-		tier: "UU",
+		tier: "OU",
 	},
 	starly: {
 		tier: "LC",
@@ -2216,7 +2216,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	braviaryhisui: {
 		isNonstandard: null,
-		tier: "OU",
+		tier: "UU",
 	},
 	vullaby: {
 		tier: "LC",
@@ -2273,7 +2273,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "Uber",
 	},
 	landorus: {
-		tier: "OU",
+		tier: "UU",
 	},
 	landorustherian: {
 		tier: "OU",
@@ -2889,7 +2889,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	kartana: {
-		tier: "UU",
+		tier: "OU",
 	},
 	guzzlord: {
 		tier: "UU",
@@ -3033,13 +3033,13 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	dipplin: {
-		tier: "OU",
+		tier: "NFE",
 	},
 	silicobra: {
 		tier: "LC",
 	},
 	sandaconda: {
-		tier: "OU",
+		tier: "UU",
 	},
 	cramorant: {
 		tier: "UU",
@@ -3159,7 +3159,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	duraludon: {
-		tier: "UU",
+		tier: "NFE",
 	},
 	dreepy: {
 		tier: "LC",
@@ -3545,18 +3545,39 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	sinistcha: {
-		tier: "OU",
+		tier: "UU",
 	},
 	okidogi: {
-		tier: "OU",
+		tier: "UU",
 	},
 	munkidori: {
-		tier: "OU",
+		tier: "UU",
 	},
 	fezandipiti: {
-		tier: "OU",
+		tier: "UU",
 	},
 	ogerpon: {
+		tier: "UU",
+	},
+	terapagos: {
+		tier: "OU",
+	},
+	hydrapple: {
+		tier: "OU",
+	},
+	ragingbolt: {
+		tier: "OU",
+	},
+	gougingfire: {
+		tier: "OU",
+	},
+	archaludon: {
+		tier: "OU",
+	},
+	ironcrown: {
+		tier: "OU",
+	},
+	ironboulder: {
 		tier: "OU",
 	},
 };
