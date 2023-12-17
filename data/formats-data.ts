@@ -837,7 +837,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	rhydon: {
-		tier: "NFE",
+		tier: "ZUBL",
+		doublesTier: "NFE",
+		natDexTier: "NFE",
 	},
 	rhyperior: {
 		tier: "OU",
@@ -1092,7 +1094,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	porygon2: {
-		tier: "NFE",
+		tier: "ZUBL",
+		doublesTier: "NFE",
+		natDexTier: "NFE",
 	},
 	porygonz: {
 		tier: "OU",
@@ -5016,7 +5020,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	duraludon: {
-		tier: "NFE",
+		tier: "ZUBL",
 		doublesTier: "NFE",
 		natDexTier: "RU",
 	},
