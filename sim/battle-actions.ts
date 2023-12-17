@@ -1752,6 +1752,9 @@ export class BattleActions {
 			let stab: number | [number, number];
 			if (isTeraStellarBoosted) {
 				stab = pokemon.getTypes(false, true).includes(type) ? 2 : [4915, 4096];
+				if (pokemon.species.name !== 'Terapagos-Stellar') {
+					pokemon.stellarBoostedTypes.push(type);
+				}
 			} else {
 				stab = move.stab || 1.5;
 				if (type === pokemon.terastallized && pokemon.getTypes(false, true).includes(type)) {
@@ -1762,10 +1765,6 @@ export class BattleActions {
 				}
 			}
 			baseDamage = this.battle.modify(baseDamage, stab);
-
-			if (isTeraStellarBoosted && pokemon.species.name !== 'Terapagos-Stellar') {
-				pokemon.stellarBoostedTypes.push(type);
-			}
 		}
 
 		// types

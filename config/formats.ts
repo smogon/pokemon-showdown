@@ -1971,6 +1971,9 @@ export const Formats: FormatList = [
 					let stab: number | [number, number];
 					if (isTeraStellarBoosted) {
 						stab = pokemon.getTypes(false, true).includes(type) ? 2 : [4915, 4096];
+						if (pokemon.species.name !== 'Terapagos-Stellar') {
+							pokemon.stellarBoostedTypes.push(type);
+						}
 					} else {
 						stab = move.stab || 1.5;
 						if (type === pokemon.terastallized && pokemon.getTypes(false, true).includes(type)) {
@@ -1981,10 +1984,6 @@ export const Formats: FormatList = [
 						}
 					}
 					baseDamage = this.battle.modify(baseDamage, stab);
-
-					if (isTeraStellarBoosted && pokemon.species.name !== 'Terapagos-Stellar') {
-						pokemon.stellarBoostedTypes.push(type);
-					}
 				}
 
 				// types
