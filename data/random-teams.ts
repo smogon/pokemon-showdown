@@ -1334,7 +1334,7 @@ export class RandomTeams {
 		if (moves.has('populationbomb')) return 'Wide Lens';
 		if (
 			(moves.has('scaleshot') && role !== 'Choice Item user') ||
-			(counter.get('setup') && (species.id === 'torterra' || species.id === 'cinccino'))
+			(counter.get('setup') && (species.id === 'torterra' && !isDoubles || species.id === 'cinccino'))
 		) return 'Loaded Dice';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
