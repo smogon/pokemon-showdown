@@ -3033,7 +3033,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	dipplin: {
-		tier: "OU",
+		tier: "NFE",
 	},
 	silicobra: {
 		tier: "LC",
@@ -3159,7 +3159,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	duraludon: {
-		tier: "UU",
+		tier: "NFE",
 	},
 	dreepy: {
 		tier: "LC",
@@ -3557,6 +3557,27 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	ogerpon: {
+		tier: "OU",
+	},
+	terapagos: {
+		tier: "OU",
+	},
+	hydrapple: {
+		tier: "OU",
+	},
+	ragingbolt: {
+		tier: "OU",
+	},
+	gougingfire: {
+		tier: "OU",
+	},
+	archaludon: {
+		tier: "OU",
+	},
+	ironcrown: {
+		tier: "OU",
+	},
+	ironboulder: {
 		tier: "OU",
 	},
 };
