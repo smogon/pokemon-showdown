@@ -52,6 +52,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	souldew: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	starsweet: {
 		inherit: true,
 		isNonstandard: "Past",
