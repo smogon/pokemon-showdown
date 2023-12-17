@@ -18434,7 +18434,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		forceTeraType: "Stellar",
 	},
 	pecharunt: {
-		num: 1024,
+		num: 1025,
 		name: "Pecharunt",
 		types: ["Poison", "Ghost"],
 		gender: "N",
