@@ -5666,16 +5666,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 		natDexTier: "OU",
 	},
-	terapagosterastal: {
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "OU",
-	},
-	terapagosstellar: {
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "OU",
-	},
 	pecharunt: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",
