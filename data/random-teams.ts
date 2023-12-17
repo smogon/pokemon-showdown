@@ -520,11 +520,10 @@ export class RandomTeams {
 			[SETUP, HAZARDS],
 			[SETUP, ['defog', 'nuzzle', 'toxic', 'waterspout', 'yawn', 'haze']],
 			[PHYSICAL_SETUP, PHYSICAL_SETUP],
-			['curse', 'irondefense'],
 			[SPECIAL_SETUP, 'thunderwave'],
 			['substitute', PIVOT_MOVES],
 			[SPEED_SETUP, ['aquajet', 'rest', 'trickroom']],
-			['curse', 'rapidspin'],
+			['curse', ['irondefense', 'rapidspin']],
 			['dragondance', 'dracometeor'],
 
 			// These attacks are redundant with each other
@@ -550,7 +549,6 @@ export class RandomTeams {
 			['taunt', 'disable'],
 			['toxic', ['willowisp', 'thunderwave']],
 			[['thunderwave', 'toxic', 'willowisp'], 'toxicspikes'],
-			['thunderwave', 'yawn'],
 
 			// This space reserved for assorted hardcodes that otherwise make little sense out of context
 			// Landorus and Thundurus
@@ -576,6 +574,8 @@ export class RandomTeams {
 		if (!isDoubles) this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
 
 		if (!types.includes('Dark') && teraType !== 'Dark') this.incompatibleMoves(moves, movePool, 'knockoff', 'suckerpunch');
+
+		if (!abilities.has('Prankster')) this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
 
 		// This space reserved for assorted hardcodes that otherwise make little sense out of context
 		if (species.id === 'luvdisc') {
@@ -714,28 +714,12 @@ export class RandomTeams {
 				movePool, teraType, role);
 		}
 
-		// Enforce Sticky Web
-		if (movePool.includes('stickyweb')) {
-			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Revelation Dance
-		if (movePool.includes('revelationdance')) {
-			counter = this.addMove('revelationdance', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Revival Blessing
-		if (movePool.includes('revivalblessing')) {
-			counter = this.addMove('revivalblessing', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Salt Cure
-		if (movePool.includes('saltcure')) {
-			counter = this.addMove('saltcure', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
+		// Enforce Night Shade, Revelation Dance, Revival Blessing, and Sticky Web
+		for (const moveid of ['nightshade', 'revelationdance', 'revivalblessing', 'stickyweb']) {
+			if (movePool.includes(moveid)) {
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
 		}
 
 		// Enforce Trick Room on Doubles Wallbreaker
@@ -776,14 +760,6 @@ export class RandomTeams {
 		if (species.id === 'smeargle') {
 			if (movePool.includes('spore')) {
 				counter = this.addMove('spore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
-		}
-
-		// Apparently, nothing else currently in Random Battles requires special code to enforce Night Shade/Stoss
-		if (species.id === 'deoxysdefense') {
-			if (movePool.includes('nightshade')) {
-				counter = this.addMove('nightshade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
 		}
@@ -1024,8 +1000,8 @@ export class RandomTeams {
 	): boolean {
 		if ([
 			'Armor Tail', 'Battle Bond', 'Early Bird', 'Flare Boost', 'Galvanize', 'Gluttony', 'Harvest', 'Hydration', 'Ice Body', 'Immunity',
-			'Marvel Scale', 'Misty Surge', 'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Sniper', 'Snow Cloak',
-			'Steadfast', 'Steam Engine',
+			'Liquid Voice', 'Marvel Scale', 'Misty Surge', 'Moody', 'Own Tempo', 'Pressure', 'Quick Feet', 'Rain Dish', 'Sand Veil', 'Shed Skin',
+			'Sniper', 'Snow Cloak', 'Steadfast', 'Steam Engine',
 		].includes(ability)) return true;
 
 		switch (ability) {
@@ -1099,8 +1075,6 @@ export class RandomTeams {
 			return species.id === 'wyrdeer';
 		case 'Seed Sower':
 			return role === 'Bulky Support';
-		case 'Shed Skin':
-			return species.id === 'seviper' || species.id === 'arbok';
 		case 'Sheer Force':
 			const braviaryCase = (species.id === 'braviaryhisui' && (role === 'Wallbreaker' || role === 'Bulky Protect'));
 			const abilitiesCase = (abilities.has('Guts') || abilities.has('Sharpness'));
@@ -1165,13 +1139,18 @@ export class RandomTeams {
 		if (species.id === 'florges') return 'Flower Veil';
 		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'empoleon') return 'Competitive';
+		if (species.id === 'dodrio') return 'Early Bird';
 		if (species.id === 'chandelure') return 'Flash Fire';
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
 		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
 		if (species.id === 'jumpluff') return 'Infiltrator';
+		if (species.id === 'toucannon' && !counter.get('sheerforce') && !counter.get('skillink')) return 'Keen Eye';
 		if (species.id === 'reuniclus') return (role === 'AV Pivot') ? 'Regenerator' : 'Magic Guard';
 		if (species.id === 'smeargle') return 'Own Tempo';
+		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
+		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
+		if (species.id === 'sandaconda' || moves.has('rest')) return 'Shed Skin';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'ribombee') return 'Shield Dust';
 		if (species.id === 'dipplin') return 'Sticky Hold';
@@ -1355,7 +1334,7 @@ export class RandomTeams {
 		if (moves.has('populationbomb')) return 'Wide Lens';
 		if (
 			(moves.has('scaleshot') && role !== 'Choice Item user') ||
-			(counter.get('setup') && (species.id === 'torterra' || species.id === 'cinccino'))
+			(counter.get('setup') && ((species.id === 'torterra' && !isDoubles) || species.id === 'cinccino'))
 		) return 'Loaded Dice';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
@@ -1486,18 +1465,18 @@ export class RandomTeams {
 			);
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Specs';
 		}
+		if (counter.get('speedsetup') && role === 'Bulky Setup') return 'Weakness Policy';
 		if (
 			!counter.get('Status') &&
 			(moves.has('rapidspin') || !['Fast Attacker', 'Wallbreaker', 'Tera Blast user'].includes(role))
 		) {
 			return 'Assault Vest';
 		}
-		if (counter.get('speedsetup') && role === 'Bulky Setup') return 'Weakness Policy';
 		if (species.id === 'golem') return 'Custap Berry';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'palkia') return 'Lustrous Orb';
-		if (moves.has('substitute') || ability === 'Moody') return 'Leftovers';
-		if (moves.has('stickyweb') && isLead) return 'Focus Sash';
+		if (moves.has('substitute')) return 'Leftovers';
+		if (moves.has('stickyweb') && species.id !== 'araquanid' && isLead) return 'Focus Sash';
 		if (this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
 		if (
 			(moves.has('chillyreception') || (
