@@ -1655,6 +1655,27 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 		doublesTier: "DOU",
 	},
+	terapagos: {
+		tier: "OU",
+	},
+	hydrapple: {
+		tier: "OU",
+	},
+	ragingbolt: {
+		tier: "OU",
+	},
+	gougingfire: {
+		tier: "OU",
+	},
+	archaludon: {
+		tier: "OU",
+	},
+	ironcrown: {
+		tier: "OU",
+	},
+	ironboulder: {
+		tier: "OU",
+	},
 	revavroomcaph: {
 		tier: "Illegal",
 		doublesTier: "(DUU)",
