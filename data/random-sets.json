@@ -4625,7 +4625,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Acrobatics", "Earthquake", "Power Gem", "Shell Smash"],
-                "teraTypes": ["Flying", "Ground"]
+                "teraTypes": ["Flying", "Ground", "Steel", "Water"]
             }
         ]
     },
