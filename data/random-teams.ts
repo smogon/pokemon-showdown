@@ -1150,7 +1150,7 @@ export class RandomTeams {
 		if (species.id === 'smeargle') return 'Own Tempo';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
-		if (species.id === 'sandaconda' || species.id === 'scrafty' && moves.has('rest')) return 'Shed Skin';
+		if (species.id === 'sandaconda' || (species.id === 'scrafty' && moves.has('rest'))) return 'Shed Skin';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'ribombee') return 'Shield Dust';
 		if (species.id === 'dipplin') return 'Sticky Hold';
