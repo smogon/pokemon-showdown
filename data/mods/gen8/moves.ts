@@ -32,6 +32,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	beakblast: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	belch: {
 		inherit: true,
 		flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
@@ -416,6 +420,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	psychoboost: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	psychoshift: {
 		inherit: true,
 		isNonstandard: null,
@@ -471,6 +479,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	shoreup: {
 		inherit: true,
 		pp: 10,
+	},
+	sketch: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	skullbash: {
 		inherit: true,
