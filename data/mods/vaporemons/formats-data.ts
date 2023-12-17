@@ -1440,7 +1440,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	gliscor: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	magcargo: {
@@ -1528,7 +1528,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	darkrai: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	conkeldurr: {
