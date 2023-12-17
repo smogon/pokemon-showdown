@@ -1334,7 +1334,7 @@ export class RandomTeams {
 		if (moves.has('populationbomb')) return 'Wide Lens';
 		if (
 			(moves.has('scaleshot') && role !== 'Choice Item user') ||
-			(counter.get('setup') && (species.id === 'torterra' && !isDoubles || species.id === 'cinccino'))
+			(counter.get('setup') && ((species.id === 'torterra' && !isDoubles) || species.id === 'cinccino'))
 		) return 'Loaded Dice';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
@@ -1476,7 +1476,7 @@ export class RandomTeams {
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute')) return 'Leftovers';
-		if (moves.has('stickyweb') && (species.id !== 'araquanid') && isLead) return 'Focus Sash';
+		if (moves.has('stickyweb') && species.id !== 'araquanid' && isLead) return 'Focus Sash';
 		if (this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
 		if (
 			(moves.has('chillyreception') || (
