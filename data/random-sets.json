@@ -2193,8 +2193,13 @@
         "level": 88,
         "sets": [
             {
+                "role": "Bulky Attacker",
+                "movepool": ["Night Shade", "Recover", "Spikes", "Stealth Rock", "Taunt"],
+                "teraTypes": ["Steel"]
+            },
+            {
                 "role": "Bulky Support",
-                "movepool": ["Knock Off", "Night Shade", "Recover", "Spikes", "Stealth Rock", "Taunt"],
+                "movepool": ["Knock Off", "Psychic Noise", "Recover", "Spikes", "Stealth Rock", "Teleport"],
                 "teraTypes": ["Steel"]
             },
             {
@@ -3898,9 +3903,14 @@
         "level": 77,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Dragon Dance", "Earth Power", "Icicle Spear", "Scale Shot"],
-                "teraTypes": ["Fairy", "Steel"]
+                "role": "Tera Blast user",
+                "movepool": ["Dragon Dance",  "Icicle Spear", "Scale Shot", "Tera Blast"],
+                "teraTypes": ["Ground"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Draco Meteor", "Earth Power", "Freeze-Dry", "Ice Beam", "Outrage"],
+                "teraTypes": ["Ground"]
             }
         ]
     },
