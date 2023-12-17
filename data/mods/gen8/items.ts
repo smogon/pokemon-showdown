@@ -298,10 +298,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	souldew: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	splashplate: {
 		inherit: true,
 		isNonstandard: "Past",
