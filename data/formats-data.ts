@@ -5668,7 +5668,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	terapagos: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	pecharunt: {
 		isNonstandard: "Unobtainable",
