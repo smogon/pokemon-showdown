@@ -1065,7 +1065,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 				'steadfast', 'steelwing', 'stockpile', 'stormdrain', 'swordsdance', 'tailglow', 'weakarmor', 'withdraw', 'workup',
 			];
 			for (const set of team) {
-				if (!set.moves.includes('Baton Pass')) continue;
+				if (!set.moves.map(this.toID).includes('batonpass' as ID)) continue;
 				let passableBoosts = false;
 				const item = this.toID(set.item);
 				const ability = this.toID(set.ability);
@@ -1077,6 +1077,39 @@ export const Rulesets: {[k: string]: FormatData} = {
 				if (passableBoosts) {
 					return [
 						`${set.name || set.species} has Baton Pass and a way to boost its stats, which is banned by Baton Pass Stat Clause.`,
+					];
+				}
+			}
+		},
+	},
+	batonpassstattrapclause: {
+		effectType: 'ValidatorRule',
+		name: 'Baton Pass Stat Trap Clause',
+		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to boost its stats or trap Pok&eacute;mon.",
+		onBegin() {
+			this.add('rule', 'Baton Pass Stat Trap Clause: No Baton Passer may have a way to boost stats or trap Pok\u00e9mon');
+		},
+		onValidateTeam(team) {
+			const statBoostOrTrapping = [
+				'Acid Armor', 'Acupressure', 'Agility', 'Amnesia', 'Ancient Power', 'Assist', 'Barrier', 'Belly Drum', 'Block', 'Bulk Up', 'Calm Mind', 'Charge',
+				'Charge Beam', 'Cosmic Power', 'Curse', 'Defend Order', 'Defense Curl', 'Dragon Dance', 'Growth', 'Guard Swap', 'Harden', 'Heart Swap', 'Howl',
+				'Iron Defense', 'Ingrain', 'Mean Look', 'Meteor Mash', 'Meditate', 'Metal Claw', 'Nasty Plot', 'Ominous Wind', 'Power Trick', 'Psych Up', 'Rage',
+				'Rock Polish', 'Sharpen', 'Silver Wind', 'Skull Bash', 'Spider Web', 'Steel Wing', 'Stockpile', 'Swords Dance', 'Tail Glow', 'Withdraw', 'Speed Boost',
+				'Apicot Berry', 'Ganlon Berry', 'Liechi Berry', 'Petaya Berry', 'Salac Berry', 'Starf Berry',
+			].map(this.toID);
+			for (const set of team) {
+				if (!set.moves.map(this.toID).includes('batonpass' as ID)) continue;
+				let passableBoosts = false;
+				const item = this.toID(set.item);
+				const ability = this.toID(set.ability);
+				for (const move of set.moves) {
+					if (statBoostOrTrapping.includes(this.toID(move))) passableBoosts = true;
+				}
+				if (statBoostOrTrapping.includes(item)) passableBoosts = true;
+				if (statBoostOrTrapping.includes(ability)) passableBoosts = true;
+				if (passableBoosts) {
+					return [
+						`${set.name || set.species} has Baton Pass and a way to boost its stats or pass trapping, which is banned by Baton Pass Stat Trap Clause.`,
 					];
 				}
 			}
