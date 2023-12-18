@@ -8,6 +8,7 @@ export const MOVE_PAIRINGS: {[moveID: string]: string} = {
 // Bonuses to move ratings by ability
 export const ABILITY_MOVE_BONUSES: {[abilityID: string]: {[moveID: string]: number}} = {
 	drought: {sunnyday: 0.2, solarbeam: 2},
+	contrary: {terablast: 2},
 };
 // Bonuses to move ratings by move type
 export const ABILITY_MOVE_TYPE_BONUSES: {[abilityID: string]: {[typeID: string]: number}} = {
@@ -40,7 +41,10 @@ export const HARDCODED_MOVE_WEIGHTS: {[moveID: string]: number} = {
 
 	// Power increases in conditions out of our control that may occur
 	avalanche: 1.2,
+	ficklebeam: 1.3,
 	hex: 1.2,
+	stompingtantrum: 1.2,
+	temperflare: 1.2,
 
 	// screens
 	lightscreen: 3, reflect: 3, auroraveil: 3, // TODO: make sure AVeil always gets Snow?
@@ -65,4 +69,4 @@ export const HARDCODED_MOVE_WEIGHTS: {[moveID: string]: number} = {
 };
 
 export const WEIGHT_BASED_MOVES = ['heatcrash', 'heavyslam', 'lowkick', 'grassknot'];
-export const SPEED_BASED_MOVES = ['gyroball', 'electroball'];
+export const TARGET_HP_BASED_MOVES = ['crushgrip', 'hardpress'];

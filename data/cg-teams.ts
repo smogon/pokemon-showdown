@@ -40,7 +40,7 @@ import {
 	ABILITY_MOVE_TYPE_BONUSES,
 	HARDCODED_MOVE_WEIGHTS,
 	MOVE_PAIRINGS,
-	SPEED_BASED_MOVES,
+	TARGET_HP_BASED_MOVES,
 	WEIGHT_BASED_MOVES,
 } from './cg-team-data';
 
@@ -95,6 +95,9 @@ export default class TeamGenerator {
 	prng: PRNG;
 	itemPool: Item[];
 	specialItems: {[pokemon: string]: string};
+
+	/** An estimate of the highest raw speed in the metagame */
+	readonly TOP_SPEED = 300;
 
 	constructor(format: Format | string, seed: PRNG | PRNGSeed | null) {
 		this.dex = Dex.forFormat(format);
@@ -276,17 +279,30 @@ export default class TeamGenerator {
 
 		// For Tera Type, we just pick a random type if it's got Tera Blast, Revelation Dance, or no attacking moves,
 		// and the type of one of its attacking moves otherwise (so it can take advantage of the boosts).
+		// Pokemon with 3 or more attack types and Pokemon with both Tera Blast and Contrary can also get Stellar type
+		// but Pokemon with Adaptability never get Stellar because Tera Stellar makes Adaptability have no effect
 		// Ogerpon's formes are forced to the Tera type that matches their forme
+		// Terapagos is forced to Stellar type
 		// Pokemon with Black Sludge don't generally want to tera to a type other than Poison
+		const hasTeraBlast = moves.some(m => m.id === 'terablast');
+		const hasRevelationDance = moves.some(m => m.id === 'revelationdance');
 		let teraType;
 		if (species.forceTeraType) {
 			teraType = species.forceTeraType;
 		} else if (item === 'blacksludge' && this.prng.randomChance(2, 3)) {
 			teraType = 'Poison';
-		} else if (!moves.some(m => m.id === 'terablast' || m.id === 'revelationdance') && nonStatusMoves.length) {
-			teraType = this.prng.sample(nonStatusMoves.map(move => this.dex.moves.get(move).type));
+		} else if (hasTeraBlast && ability === 'Contrary' && this.prng.randomChance(2, 3)) {
+			teraType = 'Stellar';
 		} else {
-			teraType = this.prng.sample([...this.dex.types.all()]).name;
+			let types = nonStatusMoves.map(move => TeamGenerator.moveType(this.dex.moves.get(move), species));
+			const noStellar = ability === 'Adaptability' || new Set(types).size < 3;
+			if (hasTeraBlast || hasRevelationDance || !nonStatusMoves.length) {
+				types = [...this.dex.types.all().map(t => t.name)];
+				if (noStellar) types.splice(types.indexOf('Stellar'));
+			} else {
+				if (!noStellar) types.push('Stellar');
+			}
+			teraType = this.prng.sample(types);
 		}
 
 		return {
@@ -359,6 +375,10 @@ export default class TeamGenerator {
 		// this is NOT doubles, so there will be no adjacent ally
 		if (move.target === 'adjacentAlly') return 0;
 
+		// There's an argument to be made for using Terapagos-Stellar's stats instead
+		// but the important thing is to not use Terapagos-Base's stats since it never battles in that forme
+		if (ability === 'Tera Shift') species = this.dex.species.get('Terapagos-Terastal');
+
 		// Attack and Special Attack are scaled by level^2 because in addition to stats themselves being scaled by level,
 		// damage dealt by attacks is also scaled by the user's level
 		const adjustedStats: StatsTable = {
@@ -418,7 +438,7 @@ export default class TeamGenerator {
 					case 'protect': case 'kingsshield': case 'silktrap':
 						weight *= 4;
 						break;
-					case 'banefulbunker': case 'spikyshield':
+					case 'banefulbunker': case 'burningbulwark': case 'spikyshield':
 						weight *= 5;
 						break;
 					default:
@@ -443,20 +463,28 @@ export default class TeamGenerator {
 			return weight;
 		}
 
+		let basePower = move.basePower;
 		// For Grass Knot and friends, let's just assume they average out to around 60 base power.
-		const isWeirdPowerMove = WEIGHT_BASED_MOVES.includes(move.id);
-		let basePower = isWeirdPowerMove ? 60 : move.basePower;
+		// Same with Crush Grip and Hard Press
+		if (WEIGHT_BASED_MOVES.includes(move.id) || TARGET_HP_BASED_MOVES.includes(move.id)) basePower = 60;
 		// not how this calc works but it should be close enough
-		if (SPEED_BASED_MOVES.includes(move.id)) basePower = adjustedStats.spe / 2;
+		if (move.id === 'electroball') basePower = Math.min(150, adjustedStats.spe / 2);
+		/** A value from 0 to 1, where 0 is the fastest and 1 is the slowest */
+		const slownessRating = Math.max(0, this.TOP_SPEED - adjustedStats.spe) / this.TOP_SPEED;
+		if (move.id === 'gyroball') basePower = 150 * slownessRating;
 
 		let baseStat = move.category === 'Physical' ? adjustedStats.atk : adjustedStats.spa;
 		if (move.id === 'foulplay') baseStat = adjustedStats.spe * level / 100;
 		if (move.id === 'bodypress') baseStat = adjustedStats.def * level / 100;
 		// 10% bonus for never-miss moves
-		const accuracy = move.accuracy === true || ability === 'No Guard' ? 1.1 : move.accuracy / 100;
-		let moveType = move.type;
-		if (['judgement', 'revelationdance'].includes(move.id)) moveType = species.types[0];
-		if (move.id === 'ivycudgel' && species.types.length > 1) moveType = species.types[1];
+		let accuracy = move.accuracy === true || ability === 'No Guard' ? 110 : move.accuracy;
+		if (accuracy < 100) {
+			if (ability === 'Compound Eyes') accuracy = Math.min(100, Math.round(accuracy * 1.3));
+			if (ability === 'Victory Star') accuracy = Math.min(100, Math.round(accuracy * 1.1));
+		}
+		accuracy /= 100;
+
+		const moveType = TeamGenerator.moveType(move, species);
 
 		let powerEstimate = basePower * baseStat * accuracy;
 		// STAB
@@ -499,8 +527,10 @@ export default class TeamGenerator {
 		}
 
 		// priority is more useful when you're slower
-		if (move.priority > 0) weight *= (Math.max(105 - adjustedStats.spe, 0) / 105) * 0.5 + 1;
-		if (move.priority < 0) weight *= Math.min((1 / adjustedStats.spe) * 25, 1);
+		// except Upper Hand, which is anti-priority and thus better on faster Pokemon
+		// TODO: make weight scale with priority
+		if (move.priority > 0 && move.id !== 'upperhand') weight *= (Math.max(105 - adjustedStats.spe, 0) / 105) * 0.5 + 1;
+		if (move.priority < 0 || move.id === 'upperhand') weight *= Math.min((1 / adjustedStats.spe) * 25, 1);
 
 		// flags
 		if (move.flags.charge || (move.flags.recharge && ability !== 'Truant')) weight *= 0.5;
@@ -522,10 +552,31 @@ export default class TeamGenerator {
 		// TODO: consider more possible secondaries
 		weight *= this.boostWeight(move, movesSoFar, species, ability, level);
 		const secondaryChance = Math.min((move.secondary?.chance || 100) * (ability === 'Serene Grace' ? 2 : 1) / 100, 100);
-		if (move.secondary?.status && ability !== 'Sheer Force') {
-			weight *= TeamGenerator.statusWeight(move.secondary.status, secondaryChance);
+		if (move.secondary || move.secondaries) {
+			if (ability === 'Sheer Force') {
+				weight *= 1.3;
+			} else {
+				const secondaries = move.secondaries || [move.secondary!];
+				for (const secondary of secondaries) {
+					if (secondary.status) {
+						weight *= TeamGenerator.statusWeight(secondary.status, secondaryChance, slownessRating);
+						if (ability === 'Poison Puppeteer' && ['psn', 'tox'].includes(secondary.status)) {
+							weight *= TeamGenerator.statusWeight('confusion', secondaryChance);
+						}
+					}
+					if (secondary.volatileStatus) {
+						weight *= TeamGenerator.statusWeight(secondary.volatileStatus, secondaryChance, slownessRating);
+					}
+				}
+			}
 		}
 		if (ability === 'Toxic Chain') weight *= TeamGenerator.statusWeight('tox', 1 - Math.pow(0.7, numberOfHits));
+
+		// Special effect if something special happened earlier in the turn
+		// More useful on slower Pokemon
+		if (move.id === 'lashout') weight *= 1 + 0.2 * slownessRating;
+		if (move.id === 'burningjealousy') weight *= TeamGenerator.statusWeight('brn', 0.2 * slownessRating);
+		if (move.id === 'alluringvoice') weight *= TeamGenerator.statusWeight('confusion', 0.2 * slownessRating);
 
 		// self-inflicted confusion or locking yourself in
 		if (move.self?.volatileStatus) weight *= 0.8;
@@ -536,6 +587,10 @@ export default class TeamGenerator {
 		if (move.selfdestruct) weight *= 0.3;
 		if (move.recoil && ability !== 'Rock Head' && ability !== 'Magic Guard') {
 			weight *= 1 - (move.recoil[0] / move.recoil[1]);
+			if (ability === 'Reckless') weight *= 1.2;
+		}
+		if (move.hasCrashDamage && ability !== 'Magic Guard') {
+			weight *= 1 - 0.75 * (1.2 - accuracy);
 			if (ability === 'Reckless') weight *= 1.2;
 		}
 		if (move.mindBlownRecoil) weight *= 0.25;
@@ -562,24 +617,47 @@ export default class TeamGenerator {
 		}
 
 		// Oricorio should rarely get Tera Blast, as Revelation Dance is strictly better
-		if (species.baseSpecies === 'Oricorio' && move.id === 'terablast') weight *= 0.5;
+		// Tera Blast is also bad on species with forced Tera types, a.k.a. Ogerpon and Terapagos
+		if (move.id === 'terablast' && (species.baseSpecies === 'Oricorio' || species.forceTeraType)) weight *= 0.5;
 
 		return weight;
 	}
 
 	/**
+	 * @returns The effective type of moves with variable types such as Judgment
+	 */
+	protected static moveType(move: Move, species: Species) {
+		switch (move.id) {
+		case 'judgment':
+		case 'revelationdance':
+			return species.types[0];
+		case 'ivycudgel':
+			if (species.types.length > 1) return species.types[1];
+		}
+		return move.type;
+	}
+
+	/**
 	 * @returns A multiplier to a move weighting based on the status it inflicts.
 	 */
-	protected static statusWeight(status: string, chance = 1): number {
+	protected static statusWeight(status: string, chance = 1, slownessRating?: number): number {
 		if (chance !== 1) return 1 + (TeamGenerator.statusWeight(status) - 1) * chance;
 
 		switch (status) {
-		case 'brn': return 1.5;
+		case 'brn': return 2;
 		case 'frz': return 5;
-		case 'par': return 1.5;
-		case 'psn': return 1.5;
+		// paralysis is especially valuable on slow pokemon that can become faster than an opponent by paralyzing it
+		// but some pokemon are so slow that most paralyzed pokemon would still outspeed them anyway
+		case 'par': return slownessRating && slownessRating > 0.25 ? 2 + slownessRating : 2;
+		case 'psn': return 1.75;
 		case 'tox': return 4;
 		case 'slp': return 4;
+		case 'confusion': return 1.5;
+		case 'healblock': return 1.75;
+		case 'flinch': return slownessRating ? slownessRating * 3 : 1;
+		case 'saltcure': return 2;
+		case 'sparklingaria': return 0.95;
+		case 'syrupbomb': return 1.5;
 		}
 		return 1;
 	}
@@ -610,7 +688,7 @@ export default class TeamGenerator {
 		const accuracy = move.accuracy === true ? 100 : move.accuracy / 100;
 		const secondaryChance = move.secondary && ability !== 'Sheer Force' ?
 			Math.min(((move.secondary.chance || 100) * (ability === 'Serene Grace' ? 2 : 1) / 100), 100) * accuracy : 0;
-		const simpleMod = ability === 'Simple' ? 2 : 1;
+		const abilityMod = ability === 'Simple' ? 2 : ability === 'Contrary' ? -1 : 1;
 		const bodyPressMod = movesSoFar.some(m => m.id === 'bodyPress') ? 2 : 1;
 		const electroBallMod = movesSoFar.some(m => m.id === 'electroball') ? 2 : 1;
 		for (const {chance, boosts} of [
@@ -625,19 +703,19 @@ export default class TeamGenerator {
 			if (!boosts || chance === 0) continue;
 			const statusMod = move.category === 'Status' ? 1 : 0.5;
 
-			if (boosts.atk && physicalIsRelevant) weight += chance * boosts.atk * simpleMod * 2 * statusMod;
-			if (boosts.spa && specialIsRelevant) weight += chance * boosts.spa * simpleMod * 2 * statusMod;
+			if (boosts.atk && physicalIsRelevant) weight += chance * boosts.atk * abilityMod * 2 * statusMod;
+			if (boosts.spa && specialIsRelevant) weight += chance * boosts.spa * abilityMod * 2 * statusMod;
 
 			// TODO: should these scale by base stat magnitude instead of using ternaries?
 			// defense/special defense boost is less useful if we have some bulk to start with
 			if (boosts.def) {
-				weight += chance * boosts.def * simpleMod * bodyPressMod * (adjustedStats.def > 60 ? 0.5 : 1) * statusMod;
+				weight += chance * boosts.def * abilityMod * bodyPressMod * (adjustedStats.def > 60 ? 0.5 : 1) * statusMod;
 			}
-			if (boosts.spd) weight += chance * boosts.spd * simpleMod * (adjustedStats.spd > 60 ? 0.5 : 1) * statusMod;
+			if (boosts.spd) weight += chance * boosts.spd * abilityMod * (adjustedStats.spd > 60 ? 0.5 : 1) * statusMod;
 
 			// speed boost is less useful for fast pokemon
 			if (boosts.spe) {
-				weight += chance * boosts.spe * simpleMod * electroBallMod * (adjustedStats.spe > 95 ? 0.5 : 1) * statusMod;
+				weight += chance * boosts.spe * abilityMod * electroBallMod * (adjustedStats.spe > 95 ? 0.5 : 1) * statusMod;
 			}
 		}
 
