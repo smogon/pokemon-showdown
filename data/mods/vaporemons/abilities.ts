@@ -1401,6 +1401,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				if (showMsg && !(effect as ActiveMove).secondaries) {
 					this.add('-activate', target, 'ability: Fair Fight');
+					this.add('-message', `${target.name} can't change its stats!`);
 				}
 			},
 		},
