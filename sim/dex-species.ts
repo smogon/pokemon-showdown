@@ -526,10 +526,8 @@ export class DexSpecies {
 	}
 
 	/**
-	 * 
-	 * 
 	 * @param id the ID of the species the move pool belongs to
-	 * @param isNatDex 
+	 * @param isNatDex
 	 * @returns a Set of IDs of the full valid movepool of the given species for the current generation/mod.
 	 * Note that inter-move incompatibilities, such as those from exclusive events, are not considered and all moves are
 	 * lumped together. However, Necturna and Necturine's Sketchable moves are omitted from this pool, as their fundamental
