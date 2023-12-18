@@ -1189,7 +1189,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Justified",
 		rating: 3,
 		num: 154,
-		shortDesc: "Dark-type moves deal 50% damage to this Pokemon and raise its Attack by 1 stage.",
+		shortDesc: "Dark-type moves deal 1/2 damage to this Pokemon and raise its Attack by 1 stage.",
 	},
 	momentum: {
 		onAfterMoveSecondarySelfPriority: -1,
