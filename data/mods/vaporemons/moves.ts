@@ -805,7 +805,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-	   shortDesc: "Heals 33%, heals 12.5% every turn. Burns foe if hit by contact.",
+	   shortDesc: "Heals 33% then 12.5% every turn. Burns foes that make contact.",
 		name: "Rekindle",
 		pp: 10,
 		priority: 0,
