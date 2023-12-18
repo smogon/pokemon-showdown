@@ -1391,7 +1391,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		condition: {
 			onTryBoost(boost, target, source, effect) {
-				if (effect.effectType === 'Move' && effect.infiltrates) return;
 				if (source) {
 					let showMsg = false;
 					let i: BoostID;
