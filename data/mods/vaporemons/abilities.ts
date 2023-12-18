@@ -1391,18 +1391,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		condition: {
 			onTryBoost(boost, target, source, effect) {
-				if (source) {
-					let showMsg = false;
-					let i: BoostID;
-					for (i in boost) {
-						if (boost[i]! < 0 || boost[i]! > 0) {
-							delete boost[i];
-							showMsg = true;
-						}
+				let showMsg = false;
+				let i: BoostID;
+				for (i in boost) {
+					if (boost[i]! < 0 || boost[i]! > 0) {
+						delete boost[i];
+						showMsg = true;
 					}
-					if (showMsg && !(effect as ActiveMove).secondaries) {
-						this.add('-activate', target, 'ability: Fair Fight');
-					}
+				}
+				if (showMsg && !(effect as ActiveMove).secondaries) {
+					this.add('-activate', target, 'ability: Fair Fight');
 				}
 			},
 		},
