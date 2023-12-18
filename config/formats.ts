@@ -194,7 +194,7 @@ export const Formats: FormatList = [
 		banlist: ['Crucibellite'],
 	},
 	{
-		name: "[Gen 9] Battle Stadium Singles Regulation D",
+		name: "[Gen 9] BSS Regulation D",
 
 		mod: 'gen9predlc',
 		searchShow: false,
@@ -203,7 +203,7 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
-		name: "[Gen 9] Battle Stadium Singles Regulation E",
+		name: "[Gen 9] BSS Regulation E",
 
 		mod: 'gen9dlc1',
 		bestOfDefault: true,
@@ -211,7 +211,7 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
-		name: "[Gen 9] BSS Reg F",
+		name: "[Gen 9] BSS Regulation F",
 
 		mod: 'gen9',
 		searchShow: false,
@@ -321,7 +321,7 @@ export const Formats: FormatList = [
 		banlist: ['Basculin-White-Striped', 'Dunsparce', 'Gligar', 'Murkrow', 'Qwilfish-Hisui', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma'],
 	},
 	{
-		name: "[Gen 9] VGC 2023 Regulation D",
+		name: "[Gen 9] VGC Regulation D",
 
 		mod: 'gen9predlc',
 		gameType: 'doubles',
@@ -331,7 +331,7 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
-		name: "[Gen 9] VGC 2023 Regulation E",
+		name: "[Gen 9] VGC Regulation E",
 
 		mod: 'gen9dlc1',
 		gameType: 'doubles',
@@ -340,7 +340,7 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
-		name: "[Gen 9] VGC 2023 Regulation E (Bo3)",
+		name: "[Gen 9] VGC Regulation E (Bo3)",
 
 		mod: 'gen9dlc1',
 		gameType: 'doubles',
@@ -349,7 +349,7 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
-		name: "[Gen 9] VGC 2024 Reg F",
+		name: "[Gen 9] VGC Regulation F",
 
 		mod: 'gen9',
 		gameType: 'doubles',
@@ -358,7 +358,7 @@ export const Formats: FormatList = [
 		banlist: [],
 	},
 	{
-		name: "[Gen 9] VGC 2024 Reg F (Bo3)",
+		name: "[Gen 9] VGC Regulation F (Bo3)",
 
 		mod: 'gen9',
 		gameType: 'doubles',
