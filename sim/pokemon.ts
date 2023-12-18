@@ -785,7 +785,8 @@ export class Pokemon {
 			}
 			if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
 				const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
-					!(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) &&
+					!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
+					!(move.id === 'electroshot' && ['raindance', 'primordialsea'].includes(this.effectiveWeather())) &&
 					!(this.hasItem('powerherb') && move.id !== 'skydrop');
 				if (!isCharging) {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
