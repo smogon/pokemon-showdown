@@ -1166,30 +1166,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "This Pokemon draws Fairy moves to itself to raise Sp. Atk by 1; Fairy immunity.",
 	},
 	justified: {
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Dark') {
-				if (!this.boost({atk: 1})) {
-					this.add('-immune', target, '[from] ability: Justified');
-				}
-				return null;
+		onDamagingHit(damage, target, source, move) {
+			if (move.type === 'Dark') {
+				this.boost({atk: 1});
 			}
 		},
-		onAnyRedirectTarget(target, source, source2, move) {
-			if (move.type !== 'Dark' || move.flags['pledgecombo']) return;
-			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
-			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
-				if (move.smartTarget) move.smartTarget = false;
-				if (this.effectState.target !== target) {
-					this.add('-activate', this.effectState.target, 'ability: Justified');
-				}
-				return this.effectState.target;
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dark') {
+				this.debug('Justified weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dark') {
+				this.debug('Justified weaken');
+				return this.chainModify(0.5);
 			}
 		},
 		isBreakable: true,
 		name: "Justified",
 		rating: 3,
 		num: 154,
-		shortDesc: "This Pokemon draws Dark moves to itself to raise Atk by 1; Dark immunity.",
+		shortDesc: "Dark-type moves deal 1/2 damage to this Pokemon and raise its Attack by 1 stage.",
 	},
 	momentum: {
 		onAfterMoveSecondarySelfPriority: -1,
@@ -1391,19 +1391,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		condition: {
 			onTryBoost(boost, target, source, effect) {
-				if (effect.effectType === 'Move' && effect.infiltrates) return;
-				if (source) {
-					let showMsg = false;
-					let i: BoostID;
-					for (i in boost) {
-						if (boost[i]! < 0 || boost[i]! > 0) {
-							delete boost[i];
-							showMsg = true;
-						}
+				let showMsg = false;
+				let i: BoostID;
+				for (i in boost) {
+					if (boost[i]! < 0 || boost[i]! > 0) {
+						delete boost[i];
+						showMsg = true;
 					}
-					if (showMsg && !(effect as ActiveMove).secondaries) {
-						this.add('-activate', target, 'ability: Fair Fight');
-					}
+				}
+				if (showMsg && !(effect as ActiveMove).secondaries) {
+					this.add('-activate', target, 'ability: Fair Fight');
+					this.add('-message', `${target.name} can't change its stats!`);
 				}
 			},
 		},
