@@ -1938,11 +1938,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	teraformzero: {
 		name: "Teraform Zero",
-		shortDesc: "On switch-in, ends the effects of weather and terrain. Once per battle.",
+		shortDesc: "Terapagos: Terastallizing ends the effects of weather and terrain. Once per battle.",
 	},
 	terashell: {
 		name: "Tera Shell",
-		desc: "If this Pokemon is at full HP, the effectiveness of attacks against it is changed to 0.5 unless this Pokemon is immune to the move. Multi-hit moves retain the same effectiveness throughout the attack.",
+		desc: "If this Pokemon is a Terapagos at full HP, the effectiveness of attacks against it is changed to 0.5 unless this Pokemon is immune to the move. Multi-hit moves retain the same effectiveness throughout the attack.",
 		shortDesc: "If full HP, attacks taken have effectiveness changed to 0.5 unless naturally immune.",
 
 		activate: "  [POKEMON] made its shell gleam! It's distorting type matchups!",
