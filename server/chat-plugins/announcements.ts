@@ -100,6 +100,33 @@ export const commands: Chat.ChatCommands = {
 		},
 		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # &`],
 
+		htmledit: 'edit',
+		edit(target, room, user, connection, cmd, message) {
+			room = this.requireRoom();
+			const announcement = this.requireMinorActivity(Announcement);
+
+			if (!target) return this.parse('/help announcement edit');
+			target = target.trim();
+			const text = this.filter(target);
+			if (target !== text) return this.errorReply(this.tr`You are not allowed to use filtered words in announcements.`);
+
+			const supportHTML = cmd === 'htmledit';
+
+			this.checkCan('minigame', null, room);
+			if (supportHTML) this.checkCan('declare', null, room);
+			this.checkChat();
+
+			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
+			announcement.source = source;
+			announcement.save();
+
+			this.roomlog(`${user.name} used ${message}`);
+			this.modlog('ANNOUNCEMENT EDIT');
+			this.privateModAction(room.tr`The announcement was edited by ${user.name}.`);
+			this.parse('/announcement display');
+		},
+		edithelp: [`/announcement edit [announcement] - Edits the announcement. Requires: % @ # &`],
+
 		timer(target, room, user) {
 			room = this.requireRoom();
 			const announcement = this.requireMinorActivity(Announcement);
@@ -166,6 +193,8 @@ export const commands: Chat.ChatCommands = {
 		`Accepts the following commands:`,
 		`/announcement create [announcement] - Creates a announcement. Requires: % @ # &`,
 		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # &`,
+		`/announcement edit [announcement] - Edits the announcement. Requires: % @ # &`,
+		`/announcement htmledit [announcement] - Edits the announcement, with HTML allowed. Requires: # &`,
 		`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes]. Requires: % @ # &`,
 		`/announcement display - Displays the announcement`,
 		`/announcement end - Ends a announcement. Requires: % @ # &`,
