@@ -108,6 +108,9 @@ export interface PokemonSet {
 	 * Tera Type
 	 */
 	teraType?: string;
+	startingPPs?: number[];
+	startingHP?: number;
+	status?: string;
 }
 
 export const Teams = new class Teams {
