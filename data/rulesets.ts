@@ -501,11 +501,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 		onValidateSet(set) {
-			const ruleColor = this.ruleTable.valueRules.get('forcemonocolor')!.toLowerCase();
-			const species = this.dex.species.get(set.species);
-			const color = species.color.toLowerCase();
-			if (color !== ruleColor) {
-				return [`${set.species} must have the ${ruleColor} color.`];
+			const color = this.toID(this.ruleTable.valueRules.get('forcemonocolor'));
+			let dex = this.dex;
+			if (dex.gen < 5) {
+				dex = dex.forGen(5);
+			}
+			const species = dex.species.get(set.species);
+			if (this.toID(species.color) !== color) {
+				return [`${set.species} must be the color ${color}.`];
 			}
 		},
 	},
