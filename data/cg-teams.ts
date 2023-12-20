@@ -328,6 +328,7 @@ export default class TeamGenerator {
 			item = 'Booster Energy';
 		}
 
+
 		const ivs: PokemonSet['ivs'] = {
 			hp: 31,
 			atk: moves.some(move => this.dex.moves.get(move).category === 'Physical') ? 31 : 0,
@@ -732,6 +733,26 @@ export default class TeamGenerator {
 		return move.type;
 	}
 
+	protected static moveIsPhysical(move: Move, species: Species) {
+		if (move.category === 'Physical') {
+			return !(move.damageCallback || move.damage);
+		} else if (['terablast', 'terastarstorm', 'photongeyser', 'shellsidearm'].includes(move.id)) {
+			return species.baseStats.atk > species.baseStats.spa;
+		} else {
+			return false;
+		}
+	}
+
+	protected static moveIsSpecial(move: Move, species: Species) {
+		if (move.category === 'Special') {
+			return !(move.damageCallback || move.damage);
+		} else if (['terablast', 'terastarstorm', 'photongeyser', 'shellsidearm'].includes(move.id)) {
+			return species.baseStats.atk <= species.baseStats.spa;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * @returns A multiplier to a move weighting based on the status it inflicts.
 	 */
@@ -762,12 +783,14 @@ export default class TeamGenerator {
 	 */
 	protected boostWeight(move: Move, movesSoFar: Move[], species: Species, ability: string, level: number): number {
 		const physicalIsRelevant = (
-			move.category === 'Physical' ||
-			movesSoFar.some(m => m.category === 'Physical' && !m.overrideOffensiveStat && !m.overrideOffensivePokemon)
+			TeamGenerator.moveIsPhysical(move, species) ||
+			movesSoFar.some(
+				m => TeamGenerator.moveIsPhysical(m, species) && !m.overrideOffensiveStat && !m.overrideOffensivePokemon
+			)
 		);
 		const specialIsRelevant = (
-			move.category === 'Special' ||
-			movesSoFar.some(m => m.category === 'Special')
+			TeamGenerator.moveIsSpecial(move, species) ||
+			movesSoFar.some(m => TeamGenerator.moveIsSpecial(m, species))
 		);
 
 		const adjustedStats: StatsTable = {
@@ -854,14 +877,15 @@ export default class TeamGenerator {
 			spd: species.baseStats.spd * level / 100,
 			spe: species.baseStats.spe * level / 100,
 		};
+		const statusImmunities = ['Comatose', 'Purifying Salt', 'Shields Down', 'Natural Cure'];
 
 		let weight;
 		switch (item.id) {
 		// Choice Items
 		case 'choiceband':
-			return moves.every(x => x.category === 'Physical') ? 50 : 0;
+			return moves.every(x => TeamGenerator.moveIsPhysical(x, species)) ? 50 : 0;
 		case 'choicespecs':
-			return moves.every(x => x.category === 'Special') ? 50 : 0;
+			return moves.every(x => TeamGenerator.moveIsSpecial(x, species)) ? 50 : 0;
 		case 'choicescarf':
 			if (moves.some(x => x.category === 'Status' || x.secondary?.self?.boosts?.spe)) return 0;
 			if (adjustedStats.spe > 50 && adjustedStats.spe < 120) return 50;
@@ -902,12 +926,26 @@ export default class TeamGenerator {
 
 		// status
 		case 'flameorb':
-			weight = ability === 'Guts' && !species.types.includes('Fire') ? 30 : 0;
-			if (moves.some(m => m.id === 'facade')) weight *= 2;
+			if (species.types.includes('Fire')) return 0;
+			if (statusImmunities.includes(ability)) return 0;
+			if (['Thermal Exchange', 'Water Bubble', 'Water Veil'].includes(ability)) return 0;
+			weight = ['Guts', 'Flare Boost'].includes(ability) ? 30 : 0;
+			if (moves.some(m => m.id === 'facade')) {
+				if (!weight && !moves.some(m => TeamGenerator.moveIsPhysical(m, species) && m.id !== 'facade')) {
+					weight = 30;
+				} else {
+					weight *= 2;
+				}
+			}
 			return weight;
 		case 'toxicorb':
 			if (species.types.includes('Poison') || species.types.includes('Steel')) return 0;
-			if (['Immunity', 'Comatose', 'Purifying Salt', 'Shields Down'].includes('ability')) return 0;
+			if (statusImmunities.includes(ability)) return 0;
+			if (ability === 'Immunity') return 0;
+			// If facade is our only physical attack, Flame Orb is preferred
+			if (!moves.some(m => TeamGenerator.moveIsPhysical(m, species) && m.id !== 'facade') &&
+				!species.types.includes('Fire') && ['Thermal Exchange', 'Water Bubble', 'Water Veil'].includes(ability)
+			) return 0;
 
 			weight = 0;
 			if (['Poison Heal', 'Toxic Boost'].includes('ability')) weight += 25;
