@@ -538,6 +538,17 @@ export default class TeamGenerator {
 				weight *= 0.3;
 			}
 
+			if (movesSoFar.length === 3 && movesStats.nonStatusMoves === 0) {
+				// uh oh
+				weight *= 0.6;
+				for (const stat in movesStats.setup) {
+					if (movesStats.setup[stat as StatIDExceptHP] > 0) {
+						// having no attacks is bad; having setup but no attacks is REALLY bad
+						weight *= 0.6;
+					}
+				}
+			}
+
 			// don't need 2 healing moves
 			if (move.heal && movesStats.healing) weight *= 0.5;
 
