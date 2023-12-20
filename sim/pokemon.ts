@@ -357,9 +357,8 @@ export class Pokemon {
 		if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
 		this.details = displayedSpeciesName + (this.level === 100 ? '' : ', L' + this.level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
-
-		this.status = '';
-		this.statusState = {};
+		this.status = this.set.status ? this.battle.dex.conditions.get(this.set.status).id : '';
+		this.statusState = this.status ? {id: this.status, target: this} : {};
 		this.volatiles = {};
 		this.showCure = undefined;
 
