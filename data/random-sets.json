@@ -4540,7 +4540,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Hydro Pump", "Leech Life", "Liquidation", "Sticky Web"],
-                "teraTypes": ["Water"]
+                "teraTypes": ["Ground", "Steel", "Water"]
             }
         ]
     },
