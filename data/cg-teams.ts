@@ -906,10 +906,11 @@ export default class TeamGenerator {
 			if (moves.some(m => m.id === 'facade')) weight *= 2;
 			return weight;
 		case 'toxicorb':
-			if (species.types.includes('Poison')) return 0;
+			if (species.types.includes('Poison') || species.types.includes('Steel')) return 0;
+			if (['Immunity', 'Comatose', 'Purifying Salt', 'Shields Down'].includes('ability')) return 0;
 
 			weight = 0;
-			if (ability === 'Poison Heal') weight += 25;
+			if (['Poison Heal', 'Toxic Boost'].includes('ability')) weight += 25;
 			if (moves.some(m => m.id === 'facade')) weight += 25;
 
 			return weight;
