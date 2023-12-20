@@ -238,7 +238,9 @@ export default class TeamGenerator {
 				}
 				movePoolIsTrimmed = true;
 			} else {
-				weights = movePool.map(m => this.getMoveWeight(this.dex.moves.get(m), teamStats, species, moves, movesStats, ability, level));
+				weights = movePool.map(
+					m => this.getMoveWeight(this.dex.moves.get(m), teamStats, species, moves, movesStats, ability, level)
+				);
 			}
 
 			const moveID = this.weightedRandomPick(movePool, weights, {remove: true});
