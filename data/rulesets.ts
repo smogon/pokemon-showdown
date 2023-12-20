@@ -498,7 +498,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const color = value.toLowerCase();
 			const validColors = ['red', 'blue', 'green', 'yellow', 'pink', 'brown', 'purple', 'gray', 'white', 'black'];
 			if (this.dex.gen <= 4) {
-				throw new Error(`The "Force Monocolor" rule is not supported in Generation ${this.dex.gen}.`);
+				this.dex = this.dex.mod('gen5');
 			}
 			if (!validColors.includes(color)) {
 				throw new Error(`Invalid color "${value}"`);
