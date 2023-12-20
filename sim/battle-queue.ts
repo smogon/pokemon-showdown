@@ -160,7 +160,7 @@ export class BattleQueue {
 	 */
 	resolveAction(action: ActionChoice, midTurn = false): Action[] {
 		if (!action) throw new Error(`Action not passed to resolveAction`);
-		if (action.choice === 'pass') return [];
+		if (["pass", "catch"].includes(action.choice)) return [];
 		const actions = [action];
 
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
