@@ -1007,8 +1007,8 @@ export class Side {
 				this.autoChoose();
 				break;
 			case 'catch':
-			if (!this.chooseCatch()) return false;
-			break;
+				if (!this.chooseCatch()) return false;
+				break;
 			default:
 				this.emitChoiceError(`Unrecognized choice: ${choiceString}`);
 				break;
