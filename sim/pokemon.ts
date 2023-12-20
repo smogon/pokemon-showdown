@@ -328,6 +328,8 @@ export class Pokemon {
 		if (!this.set.moves?.length) {
 			throw new Error(`Set ${this.name} has no moves`);
 		}
+
+		let index = 0;
 		for (const moveid of this.set.moves) {
 			let move = this.battle.dex.moves.get(moveid);
 			if (!move.id) continue;
@@ -340,13 +342,14 @@ export class Pokemon {
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,
-				pp: basepp,
+				pp: (this.set.startingPPs && this.set.startingPPs[index]) ? this.set.startingPPs[index] : basepp,
 				maxpp: basepp,
 				target: move.target,
 				disabled: false,
 				disabledSource: '',
 				used: false,
 			});
+			index++;
 		}
 
 		this.position = 0;
@@ -354,9 +357,8 @@ export class Pokemon {
 		if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
 		this.details = displayedSpeciesName + (this.level === 100 ? '' : ', L' + this.level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
-
-		this.status = '';
-		this.statusState = {};
+		this.status = this.set.status ? this.battle.dex.conditions.get(this.set.status).id : '';
+		this.statusState = this.status ? {id: this.status, target: this} : {};
 		this.volatiles = {};
 		this.showCure = undefined;
 
@@ -480,7 +482,7 @@ export class Pokemon {
 		this.baseMaxhp = 0;
 		this.hp = 0;
 		this.clearVolatile();
-		this.hp = this.maxhp;
+		this.hp = this.set.startingHP ? this.set.startingHP : this.maxhp;
 	}
 
 	toJSON(): AnyObject {
