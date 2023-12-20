@@ -495,12 +495,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: `Forces all teams to have Pokémon of the same color. Usage: Force Monocolor = [Color], e.g. "Force Monocolor = Blue"`,
 		hasValue: true,
 		onValidateRule(value) {
-			const color = value.toLowerCase();
 			const validColors = ['red', 'blue', 'green', 'yellow', 'pink', 'brown', 'purple', 'gray', 'white', 'black'];
-			if (this.dex.gen <= 4) {
-				this.dex = this.dex.mod('gen5');
-			}
-			if (!validColors.includes(color)) {
+			if (!validColors.includes(this.dex.toID(value))) {
 				throw new Error(`Invalid color "${value}"`);
 			}
 		},
