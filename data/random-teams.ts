@@ -1304,7 +1304,7 @@ export class RandomTeams {
 			ability === 'Imposter' ||
 			(species.id === 'magnezone' && moves.has('bodypress') && !isDoubles)
 		) return 'Choice Scarf';
-		if (species.id === 'rampardos' && role === 'Wallbreaker') return 'Choice Scarf';
+		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (species.id === 'reuniclus' && ability === 'Magic Guard') return 'Life Orb';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (

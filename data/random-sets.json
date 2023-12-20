@@ -2303,12 +2303,12 @@
         "level": 89,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Fire Punch", "Head Smash", "Rock Slide"],
                 "teraTypes": ["Ground", "Rock"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["Crunch", "Earthquake", "Fire Punch", "Rock Slide"],
                 "teraTypes": ["Dark", "Rock"]
             }
