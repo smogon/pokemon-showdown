@@ -27,7 +27,7 @@ import {toID} from './dex';
 
 /** A single action that can be chosen. */
 export interface ChosenAction {
-	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass'; 	// action type
+	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass' | 'catch'; 	// action type
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
@@ -1006,6 +1006,9 @@ export class Side {
 			case 'default':
 				this.autoChoose();
 				break;
+			case 'catch':
+			if (!this.chooseCatch()) return false;
+			break;
 			default:
 				this.emitChoiceError(`Unrecognized choice: ${choiceString}`);
 				break;
@@ -1040,6 +1043,12 @@ export class Side {
 		}
 
 		return index;
+	}
+	chooseCatch(): boolean | Side {
+		this.choice.actions.push({
+			choice: 'catch',
+		} as ChosenAction);
+		return true;
 	}
 
 	choosePass(): boolean | Side {
