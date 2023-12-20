@@ -32,6 +32,11 @@ if (Config.usesqlite && Config.usesqliteleveling) {
 	dbSetupPromise = setupDatabase(database);
 }
 
+function getLevelSpeciesID(set: PokemonSet, format?: Format) {
+	if (['Basculin', 'Greninja'].includes(set.name)) return toID(set.species);
+	return toID(getSpeciesName(set, format || Dex.formats.get('gen9computergeneratedteams')));
+}
+
 async function updateStats(battle: RoomBattle, winner: ID) {
 	if (!incrementWins || !incrementLosses) await dbSetupPromise;
 	if (toID(battle.format) !== 'gen9computergeneratedteams') return;
@@ -50,7 +55,7 @@ async function updateStats(battle: RoomBattle, winner: ID) {
 		const increment = (player.id === winner ? incrementWins : incrementLosses);
 
 		for (const set of team) {
-			const statsSpecies = getSpeciesName(set, Dex.formats.get(battle.format));
+			const statsSpecies = getLevelSpeciesID(set, Dex.formats.get(battle.format));
 			await addPokemon?.run([toID(statsSpecies), set.level]);
 			await increment?.run([toID(statsSpecies)]);
 		}
