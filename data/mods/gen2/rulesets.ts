@@ -42,9 +42,9 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 			'Spore + Spider Web',
 		],
 	},
-	nintendocup2000movelegality: {
+	nc2000movelegality: {
 		effectType: 'ValidatorRule',
-		name: 'Nintendo Cup 2000 Move Legality',
+		name: 'NC 2000 Move Legality',
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
 		onValidateSet(set) {
 			const illegalCombos: {[speciesid: string]: {[moveid: string]: 'E' | 'L' | 'S'}} = {

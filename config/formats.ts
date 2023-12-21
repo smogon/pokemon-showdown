@@ -5246,17 +5246,17 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 2] Nintendo Cup 2000",
+		name: "[Gen 2] NC 2000",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3682691/">Nintendo Cup 2000 Resource Hub</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Differences between Nintendo Cup 2000 and GSC OU</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3682691/">NC 2000 Resource Hub</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3677370/">Differences between NC 2000 and GSC OU</a>`,
 		],
 
 		mod: 'gen2stadium2',
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
-			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause', 'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'Nintendo Cup 2000 Move Legality',
+			'Obtainable', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Species Clause', 'Item Clause', 'Endless Battle Clause', 'Cancel Mod', 'Event Moves Clause', 'Nickname Clause', 'Team Preview', 'NC 2000 Move Legality',
 		],
 		banlist: ['Uber'],
 	},
@@ -5361,16 +5361,16 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 1] OU', 'Allow Tradeback'],
 	},
 	{
-		name: "[Gen 1] Nintendo Cup 1997",
+		name: "[Gen 1] NC 1997",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3682412/">Nintendo Cup 1997 Discussion &amp; Resources</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3682412/">NC 1997 Discussion &amp; Resources</a>`,
 		],
 
 		mod: 'gen1jpn',
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 3', 'Min Level = 50', 'Max Level = 55', 'Max Total Level = 155',
-			'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Nintendo Cup 1997 Move Legality',
+			'Obtainable', 'Team Preview', 'Stadium Sleep Clause', 'Species Clause', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'NC 1997 Move Legality',
 		],
 		banlist: ['Uber'],
 	},
