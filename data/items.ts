@@ -629,7 +629,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.tags.includes("Paradox")) {
-				if (['Gouging Fire', 'Raging Bolt', 'Iron Boulder', 'Iron Crown'].includes(source.baseSpecies.baseSpecies)) {
+				if (['Gouging Fire', 'Iron Boulder', 'Iron Crown', 'Raging Bolt'].includes(source.baseSpecies.baseSpecies)) {
 					this.hint("Gouging Fire, Iron Boulder, Iron Crown and Raging Bolt may lose Booster Energy through item-manipulating moves.");
 				} else {
 					return false;
