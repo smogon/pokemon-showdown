@@ -4672,7 +4672,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	terashell: {
 		onEffectiveness(typeMod, target, type, move) {
-			if (target.species.id !== 'terapagosterastal') return;
+			if (!target.species.id === 'terapagosterastal') return;
 			if (this.effectState.resisted) return -1; // all hits of multi-hit move should be not very effective
 			if (!target || move.category === 'Status') return;
 			if (!target.runImmunity(move.type)) return; // immunity has priority
