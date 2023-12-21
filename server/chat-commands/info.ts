@@ -1005,7 +1005,7 @@ export const commands: Chat.ChatCommands = {
 			trapped: "Trapping",
 		};
 		for (const status in statuses) {
-			if (!dex.getImmunity(status, species)) {
+			if (!dex.getImmunity(status, types)) {
 				immunities.push(statuses[status]);
 			}
 		}
