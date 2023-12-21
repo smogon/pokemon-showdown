@@ -1012,7 +1012,7 @@ export default class TeamGenerator {
 	 * @returns The level a Pokémon should be.
 	 */
 	protected static getLevel(species: Species): number {
-		if (['Zacian', 'Zamazenta'].includes(species.baseSpecies)) {
+		if (['Zacian', 'Zamazenta'].includes(species.name)) {
 			species = Dex.species.get(species.otherFormes![0]);
 		} else if (useBaseSpecies.includes(species.baseSpecies)) {
 			species = Dex.species.get(species.baseSpecies);
