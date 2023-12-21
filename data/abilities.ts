@@ -4676,7 +4676,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!target || move.category === 'Status') return;
 			if (!target.runImmunity(move.type)) return; // immunity has priority
 			if (target.hp < target.maxhp) return;
-			if (source.species.id !== 'terapagosstellar') return;
+			if (target.species.id !== 'terapagosstellar') return;
 
 			this.add('-activate', target, 'ability: Tera Shell');
 			this.effectState.resisted = true;
