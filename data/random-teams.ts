@@ -87,7 +87,7 @@ const SPEED_CONTROL = [
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
-	'accelerock', 'aquajet', 'beakblast', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'clearsmog', 'covet',
+	'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'clearsmog', 'covet',
 	'dragontail', 'doomdesire', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'futuresight',
 	'grassyglide', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'meteorbeam', 'mortalspin', 'nuzzle', 'pluck', 'pursuit', 'quickattack',
 	'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'uturn', 'watershuriken',
@@ -911,7 +911,7 @@ export class RandomTeams {
 		}
 
 		// Enforce Protect
-		if (role.includes('Protect') || species.id === 'gliscor') {
+		if (role.includes('Protect')) {
 			const protectMoves = movePool.filter(moveid => PROTECT_MOVES.includes(moveid));
 			if (protectMoves.length) {
 				const moveid = this.sample(protectMoves);
@@ -1139,6 +1139,7 @@ export class RandomTeams {
 		if (species.id === 'florges') return 'Flower Veil';
 		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'empoleon') return 'Competitive';
+		if (species.id === 'swampert' && !counter.get('Water') && !moves.has('flipturn')) return 'Damp';
 		if (species.id === 'dodrio') return 'Early Bird';
 		if (species.id === 'chandelure') return 'Flash Fire';
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
@@ -1303,7 +1304,7 @@ export class RandomTeams {
 			ability === 'Imposter' ||
 			(species.id === 'magnezone' && moves.has('bodypress') && !isDoubles)
 		) return 'Choice Scarf';
-		if (species.id === 'rampardos' && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (species.id === 'reuniclus' && ability === 'Magic Guard') return 'Life Orb';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (

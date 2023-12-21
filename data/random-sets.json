@@ -74,7 +74,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Encore", "Focus Blast", "Grass Knot", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Alluring Voice", "Encore", "Focus Blast", "Grass Knot", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Grass", "Water"]
             },
             {
@@ -89,8 +89,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Focus Blast", "Grass Knot", "Nasty Plot", "Psychic", "Psyshock", "Surf", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Fighting", "Grass", "Water"]
+                "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Psychic", "Psyshock", "Surf", "Thunderbolt", "Volt Switch"],
+                "teraTypes": ["Fairy", "Fighting", "Grass", "Water"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Nasty Plot", "Psyshock", "Surf", "Thunderbolt"],
+                "teraTypes": ["Fairy", "Fighting", "Grass", "Water"]
             }
         ]
     },
@@ -730,7 +735,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Transform"],
-                "teraTypes": ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
+                "teraTypes": ["Stellar"]
             }
         ]
     },
@@ -2298,12 +2303,12 @@
         "level": 89,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Fire Punch", "Head Smash", "Rock Slide"],
                 "teraTypes": ["Ground", "Rock"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["Crunch", "Earthquake", "Fire Punch", "Rock Slide"],
                 "teraTypes": ["Dark", "Rock"]
             }
@@ -2659,7 +2664,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Knock Off", "Protect", "Spikes", "Toxic Spikes", "U-turn"],
+                "movepool": ["Earthquake", "Knock Off", "Protect", "Stealth Rock", "Toxic Spikes", "U-turn"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -4535,7 +4540,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Hydro Pump", "Leech Life", "Liquidation", "Sticky Web"],
-                "teraTypes": ["Water"]
+                "teraTypes": ["Ground", "Steel", "Water"]
             }
         ]
     },
