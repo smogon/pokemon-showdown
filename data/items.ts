@@ -628,7 +628,10 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeItem(item, source) {
-			if (source.baseSpecies.tags.includes("Paradox")) return false;
+			if (source.baseSpecies.tags.includes("Paradox") &&
+				!['Raging Bolt', 'Gouging Fire', 'Iron Boulder', 'Iron Crown'].includes(source.baseSpecies.baseSpecies)) {
+				return false;
+			}
 			return true;
 		},
 		num: 1880,
