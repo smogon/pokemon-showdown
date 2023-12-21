@@ -731,11 +731,11 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Terastal Clause', 'Tier Shift Mod', 'Min Source Gen = 9'],
 		banlist: [
-			'Arceus', 'Azumarill', 'Calyrex-Ice', 'Calyrex-Shadow', 'Eternatus', 'Groudon', 'Hoopa-Unbound', 'Koraidon', 'Kyogre', 'Medicham', 'Mewtwo',
-			'Miraidon', 'Rayquaza', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Drizzle', 'Moody', 'Shadow Tag', 'Heat Rock', 'King\'s Rock', 'Light Clay',
-			'Razor Fang', 'Baton Pass', 'Last Respects', 'Shed Tail',
+			'Arceus', 'Azumarill', 'Calyrex-Shadow', 'Deoxys-Attack', 'Hoopa-Unbound', 'Koraidon', 'Kyogre', 'Medicham', 'Miraidon', 'Zacian-Crowned',
+			'Arena Trap', 'Drizzle', 'Moody', 'Shadow Tag', 'Heat Rock', 'King\'s Rock', 'Light Clay', 'Razor Fang', 'Baton Pass', 'Last Respects',
+			'Shed Tail',
 		],
-		unbanlist: ['Arceus-Bug'],
+		unbanlist: ['Arceus-Bug', 'Arceus-Grass', 'Arceus-Ice'],
 	},
 	{
 		name: "[Gen 9] Sketchmons",
