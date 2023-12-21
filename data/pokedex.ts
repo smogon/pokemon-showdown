@@ -13536,6 +13536,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Black",
 		prevo: "Salandit",
 		evoLevel: 33,
+		evoGender: "F",
 		eggGroups: ["Monster", "Dragon"],
 		otherFormes: ["Salazzle-Totem"],
 		formeOrder: ["Salazzle", "Salazzle-Totem"],
