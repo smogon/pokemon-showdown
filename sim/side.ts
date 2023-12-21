@@ -162,6 +162,16 @@ export class Side {
 		// old-gens
 		this.lastMove = null;
 	}
+	toPokefindPokemon() {
+		return this.pokemon.map(pokemon => ({
+			"hp": pokemon.hp,
+			"status": pokemon.status,
+			"moves": pokemon.moveSlots.map(move => ({
+				"move": move.move,
+				"pp": move.pp,
+			})),
+		}));
+	}
 
 	toJSON(): AnyObject {
 		return State.serializeSide(this);
