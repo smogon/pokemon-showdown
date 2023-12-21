@@ -4671,12 +4671,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 309,
 	},
 	terashell: {
-		// TODO figure out if this only works on Terapagos
 		onEffectiveness(typeMod, target, type, move) {
 			if (this.effectState.resisted) return -1; // all hits of multi-hit move should be not very effective
 			if (!target || move.category === 'Status') return;
 			if (!target.runImmunity(move.type)) return; // immunity has priority
 			if (target.hp < target.maxhp) return;
+			if (source.species.id !== 'terapagosstellar') return;
 
 			this.add('-activate', target, 'ability: Tera Shell');
 			this.effectState.resisted = true;
