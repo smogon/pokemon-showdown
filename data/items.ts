@@ -628,9 +628,12 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTakeItem(item, source) {
-			if (source.baseSpecies.tags.includes("Paradox") &&
-				!['Raging Bolt', 'Gouging Fire', 'Iron Boulder', 'Iron Crown'].includes(source.baseSpecies.baseSpecies)) {
-				return false;
+			if (source.baseSpecies.tags.includes("Paradox") {
+				if (['Raging Bolt', 'Gouging Fire', 'Iron Boulder', 'Iron Crown'].includes(source.baseSpecies.baseSpecies)) {
+					this.hint("Raging Bolt, Gouging Fire, Iron Boulder and Iron Crown may lose Booster Energy through item-manipulating moves.");
+				} else {
+					return false;
+				}
 			}
 			return true;
 		},
