@@ -340,15 +340,6 @@ export const Formats: FormatList = [
 		banlist: ['Walking Wake', 'Iron Leaves'],
 	},
 	{
-		name: "[Gen 9] VGC 2023 Regulation E (Bo3)",
-
-		mod: 'gen9dlc1',
-		gameType: 'doubles',
-		challengeShow: false,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Force Open Team Sheets', 'Best of = 3'],
-		banlist: ['Walking Wake', 'Iron Leaves'],
-	},
-	{
 		name: "[Gen 9] VGC 2024 Reg F",
 
 		mod: 'gen9',
