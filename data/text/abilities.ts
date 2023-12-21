@@ -1266,6 +1266,10 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 			shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be poisoned.",
 		},
 	},
+	poisonpuppeteer: {
+		name: "Poison Puppeteer",
+		shortDesc: "If this Pokemon poisons or badly poisons a target, the target also becomes confused.",
+	},
 	poisontouch: {
 		name: "Poison Touch",
 		desc: "This Pokemon's contact moves have a 30% chance of poisoning. This effect comes after a move's inherent secondary effect chance.",
@@ -1931,6 +1935,23 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		shortDesc: "This Pokemon does not take damage from attacks made by its allies.",
 
 		block: "  [POKEMON] can't be hit by attacks from its ally Pok\u00E9mon!",
+	},
+	teraformzero: {
+		name: "Teraform Zero",
+		shortDesc: "Terapagos: Terastallizing ends the effects of weather and terrain. Once per battle.",
+	},
+	terashell: {
+		name: "Tera Shell",
+		desc: "If this Pokemon is a Terapagos at full HP, the effectiveness of attacks against it is changed to 0.5 unless this Pokemon is immune to the move. Multi-hit moves retain the same effectiveness throughout the attack.",
+		shortDesc: "If full HP, attacks taken have effectiveness changed to 0.5 unless naturally immune.",
+
+		activate: "  [POKEMON] made its shell gleam! It's distorting type matchups!",
+	},
+	terashift: {
+		name: "Tera Shift",
+		shortDesc: "If this Pokemon is a Terapagos, it transforms into its Terastal Form on entry.",
+
+		transform: "[POKEMON] transformed!",
 	},
 	teravolt: {
 		name: "Teravolt",

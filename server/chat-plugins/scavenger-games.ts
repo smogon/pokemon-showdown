@@ -341,9 +341,9 @@ const TWISTS: {[k: string]: Twist} = {
 			return true;
 		},
 
-		onLeave(user) {
-			for (const ip of user.ips) {
-				this.altIps[ip] = {id: user.id, name: user.name};
+		onLeave(player) {
+			for (const ip of player.joinIps) {
+				this.altIps[ip] = {id: player.id, name: player.name};
 			}
 		},
 

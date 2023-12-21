@@ -630,6 +630,9 @@ export class DexFormats {
 
 	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
 		if (format.ruleTable && !repeals) return format.ruleTable;
+		if (format.name.length > 50) {
+			throw new Error(`Format "${format.name}" has a name longer than 50 characters`);
+		}
 		if (depth === 1) {
 			const dex = this.dex.mod(format.mod);
 			if (dex !== this.dex) {

@@ -490,6 +490,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', target, 'Wind Breaker', '[silent]');
 			},
 		},
+		self: {
+			onHit(pokemon, source, move) {
+				if (source.hasItem('airfreshener')) {
+					this.add('-activate', source, 'move: Aromatherapy');
+					for (const ally of source.side.pokemon) {
+						if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+							continue;
+						}
+						ally.cureStatus();
+					}
+				}
+			},
+		},
 		secondary: {
 			chance: 100,
 			onHit(target) {
@@ -792,7 +805,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-	   shortDesc: "Heals by 1/3 max HP, then 1/8 every turn. Burns foe if they switch out.",
+	   shortDesc: "Heals 33% then 12.5% every turn. Burns foes that make contact.",
 		name: "Rekindle",
 		pp: 10,
 		priority: 0,
@@ -805,47 +818,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			onHit(pokemon, source, move) {
 				pokemon.addVolatile('rekindleheal');
+				pokemon.addVolatile('rekindle');
+				this.add('-message', `${pokemon.name}'s flames burn brightly!`);
 			},
-		},
-		beforeTurnCallback(pokemon) {
-			for (const side of this.sides) {
-				if (side.hasAlly(pokemon)) continue;
-				side.addSideCondition('rekindle', pokemon);
-				const data = side.getSideConditionData('rekindle');
-				if (!data.sources) {
-					data.sources = [];
-				}
-				data.sources.push(pokemon);
-			}
-		},
-		onTryHit(target, pokemon) {
-			target.side.removeSideCondition('rekindle');
 		},
 		condition: {
 			duration: 1,
-			onBeforeSwitchOut(pokemon) {
-				this.debug('Rekindle start');
-				let alreadyAdded = false;
-				pokemon.removeVolatile('destinybond');
-				for (const source of this.effectState.sources) {
-					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon, 'move: Rekindle');
-						alreadyAdded = true;
-					}
-					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
-					// If it is, then Mega Evolve before moving.
-					if (source.canMegaEvo || source.canUltraBurst) {
-						for (const [actionIndex, action] of this.queue.entries()) {
-							if (action.pokemon === source && action.choice === 'megaEvo') {
-								this.actions.runMegaEvo(source);
-								this.queue.list.splice(actionIndex, 1);
-								break;
-							}
-						}
-					}
-					pokemon.trySetStatus('brn', source);
-					this.actions.runMove('rekindle', source, source.getLocOf(pokemon));
+			onDamagingHit(damage, target, source, move) {
+				if (this.checkMoveMakesContact(move, source, target)) {
+					source.trySetStatus('brn', target);
+					this.add('-message', `${target.name}'s flames burnt its attacker!`);
+					target.removeVolatile('rekindleheal');
+					this.add('-message', `${target.name}'s flames were put out!`);
 				}
 			},
 		},
@@ -1352,7 +1336,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
-	   shortDesc: "(Mostly functional) Either Fighting or Flying-type, whichever is more effective.",
+	   shortDesc: "Either Fighting or Flying-type, whichever is more effective.",
 		name: "Flying Press",
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
@@ -1387,7 +1371,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Special",
-	   shortDesc: "(Mostly functional) Either Bug or Electric-type, whichever is more effective.",
+	   shortDesc: "Either Bug or Electric-type, whichever is more effective.",
 		name: "Software Crash",
 		pp: 10,
 		flags: {protect: 1, mirror: 1},
@@ -1660,6 +1644,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.field.clearTerrain();
 			return success;
+		},
+		self: {
+			onHit(pokemon, source, move) {
+				if (source.hasItem('airfreshener')) {
+					this.add('-activate', source, 'move: Aromatherapy');
+					for (const ally of source.side.pokemon) {
+						if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+							continue;
+						}
+						ally.cureStatus();
+					}
+				}
+			},
 		},
 		secondary: null,
 		target: "normal",

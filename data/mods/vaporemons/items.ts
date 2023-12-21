@@ -14,7 +14,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		},
 		onTryHealPriority: 1,
 		onTryHeal(damage, target, source, effect) {
-			const heals = ['leechseed', 'ingrain', 'aquaring', 'strengthsap', 'healingstones'];
+			const heals = ['leechseed', 'ingrain', 'aquaring', 'strengthsap', 'healingstones', 'rekindleheal'];
 			if (heals.includes(effect.id)) {
 				return this.chainModify([5324, 4096]);
 			}
