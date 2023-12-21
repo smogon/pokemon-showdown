@@ -1221,7 +1221,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (status.id === 'slp') {
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						this.add('-message', "Sleep Clause activated. (In Nintendo formats, Sleep Clause activates if any of the opponent's Pokemon are asleep, even if self-inflicted from Rest)");
+						this.add('-message', "Sleep Clause activated. (In official formats, Sleep Clause activates if any of the opponent's Pokemon are asleep, even if self-inflicted from Rest)");
 						return false;
 					}
 				}
@@ -1947,9 +1947,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans items that are not usable in Pokemon Stadium 2.",
 		banlist: ['Fast Ball', 'Friend Ball', 'Great Ball', 'Heavy Ball', 'Level Ball', 'Love Ball', 'Lure Ball', 'Master Ball', 'Moon Ball', 'Park Ball', 'Poke Ball', 'Safari Ball', 'Ultra Ball', 'Fire Stone', 'Leaf Stone', 'Moon Stone', 'Sun Stone', 'Thunder Stone', 'Upgrade', 'Water Stone', 'Mail'],
 	},
-	nintendocup2000movelegality: {
+	nc2000movelegality: {
 		effectType: 'ValidatorRule',
-		name: "Nintendo Cup 2000 Move Legality",
+		name: "NC 2000 Move Legality",
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
 		// Implemented in mods/gen2/rulesets.ts
 	},
@@ -1959,10 +1959,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: "Bans the combination of Agility and partial trapping moves like Wrap.",
 		banlist: ['Agility + Wrap', 'Agility + Fire Spin', 'Agility + Bind', 'Agility + Clamp'],
 	},
-	nintendocup1997movelegality: {
+	nc1997movelegality: {
 		effectType: 'ValidatorRule',
-		name: "Nintendo Cup 1997 Move Legality",
-		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in Nintendo Cup 1997.",
+		name: "NC 1997 Move Legality",
+		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in NC 1997.",
 		// Implemented in mods/gen1jpn/rulesets.ts
 	},
 	noswitching: {

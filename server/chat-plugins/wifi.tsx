@@ -346,7 +346,7 @@ class Giveaway extends Rooms.SimpleRoomGame {
 			</table>
 			<p style={{textAlign: 'center', fontSize: '7pt', fontWeight: 'bold'}}>
 				<u>Note:</u> You must have a Switch, Pok&eacute;mon {gameName[this.game]}, {}
-				and Nintendo Switch Online to receive the prize. {}
+				and NSO to receive the prize. {}
 				Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pok&eacute;mon, {}
 				unless it is explicitly allowed.
 			</p>
