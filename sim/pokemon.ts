@@ -1094,15 +1094,19 @@ export class Pokemon {
 				spd: this.baseStoredStats['spd'],
 				spe: this.baseStoredStats['spe'],
 			},
-			moves: this[forAlly ? 'baseMoves' : 'moves'].map(move => {
-				if (move === 'hiddenpower') {
-					return move + toID(this.hpType) + (this.battle.gen < 6 ? '' : this.hpPower);
+			moves: (forAlly ? this.baseMoveSlots : this.baseMoveSlots).map(move => {
+				let moveName = move.id;
+				if (move.id === 'hiddenpower') {
+					moveName = move + toID(this.hpType) + (this.battle.gen < 6 ? '' : this.hpPower);
 				}
-				if (move === 'frustration' || move === 'return') {
-					const basePowerCallback = this.battle.dex.moves.get(move).basePowerCallback as (pokemon: Pokemon) => number;
-					return move + basePowerCallback(this);
+				if (move.id === 'frustration' || move.id === 'return') {
+					const basePowerCallback = this.battle.dex.moves.get(move.id).basePowerCallback as (pokemon: Pokemon) => number;
+					moveName = move.id + basePowerCallback(this);
 				}
-				return move;
+				return {
+					move: moveName,
+					pp: move.pp,
+				};
 			}),
 			baseAbility: this.baseAbility,
 			item: this.item,
