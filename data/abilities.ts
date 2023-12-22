@@ -530,6 +530,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAfterMoveSecondary(target, source, move) {
 			if (!target.hp) return;
 			const type = move.type;
+			if (type === 'Stellar') return;
 			if (
 				target.isActive && move.effectType === 'Move' && move.category !== 'Status' &&
 				type !== '???' && !target.hasType(type)
