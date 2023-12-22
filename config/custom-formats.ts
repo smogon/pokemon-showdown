@@ -7,6 +7,6 @@ export const Formats: FormatList = [
 		desc: `No Special rules`,
 		threads: [],
 		mod: 'gen9',
-		ruleset: ['HP Percentage Mod'],
+		ruleset: [],
 	},
 ];
