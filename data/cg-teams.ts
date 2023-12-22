@@ -61,6 +61,8 @@ interface MovesStats {
 
 // We put a limit on the number of Pokémon on a team that can be weak to a given type.
 const MAX_WEAK_TO_SAME_TYPE = 3;
+/** An estimate of the highest raw speed in the metagame */
+const TOP_SPEED = 300;
 
 const levelOverride: {[speciesID: string]: number} = {};
 export let levelUpdateInterval: NodeJS.Timeout | null = null;
@@ -104,9 +106,6 @@ export default class TeamGenerator {
 	prng: PRNG;
 	itemPool: Item[];
 	specialItems: {[pokemon: string]: string};
-
-	/** An estimate of the highest raw speed in the metagame */
-	readonly TOP_SPEED = 300;
 
 	constructor(format: Format | string, seed: PRNG | PRNGSeed | null) {
 		this.dex = Dex.forFormat(format);
@@ -390,7 +389,7 @@ export default class TeamGenerator {
 		// type check
 		for (const type of this.dex.types.all()) {
 			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
-			if (effectiveness === 1) { // WEAKNESS!
+			if (effectiveness >= 1) { // WEAKNESS!
 				if (stats.typeWeaknesses[type.name] === undefined) {
 					stats.typeWeaknesses[type.name] = 0;
 				}
@@ -403,7 +402,7 @@ export default class TeamGenerator {
 		// species passes; increment counters
 		for (const type of this.dex.types.all()) {
 			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
-			if (effectiveness === 1) {
+			if (effectiveness >= 1) {
 				stats.typeWeaknesses[type.name]++;
 			}
 		}
@@ -515,8 +514,22 @@ export default class TeamGenerator {
 			// Hardcoded boosts
 			if (move.id in HARDCODED_MOVE_WEIGHTS) weight *= HARDCODED_MOVE_WEIGHTS[move.id];
 
+			// Rest and Sleep Talk are pretty bad on Pokemon that can't fall asleep
+			const sleepImmunities = [
+				'Comatose',
+				'Purifying Salt',
+				'Shields Down',
+				'Insomnia',
+				'Vital Spirit',
+				'Sweet Veil',
+				'Misty Surge',
+				'Electric Surge',
+				'Hadron Engine',
+			];
+			if (['sleeptalk', 'rest'].includes(move.id) && sleepImmunities.includes(ability)) return 0;
+
 			// Sleep Talk is bad with moves that can't be used repeatedly, a.k.a. most status moves
-			// the exceptions allowed here are moves which boost a stat by exacly 1 and moves that wake the user up
+			// the exceptions allowed here are moves which boost a stat by exactly 1 and moves that wake the user up
 			if (move.id === 'sleeptalk') {
 				if (movesStats.noSleepTalk) weight *= 0.1;
 			} else if (movesSoFar.some(m => m.id === 'sleeptalk')) {
@@ -561,7 +574,7 @@ export default class TeamGenerator {
 		// Same with Crush Grip and Hard Press
 		if (WEIGHT_BASED_MOVES.includes(move.id) || TARGET_HP_BASED_MOVES.includes(move.id)) basePower = 60;
 		/** A value from 0 to 1, where 0 is the fastest and 1 is the slowest */
-		const slownessRating = Math.max(0, this.TOP_SPEED - adjustedStats.spe) / this.TOP_SPEED;
+		const slownessRating = Math.max(0, TOP_SPEED - adjustedStats.spe) / TOP_SPEED;
 		// not how this calc works but it should be close enough
 		if (move.id === 'gyroball') basePower = 150 * slownessRating * slownessRating;
 		if (move.id === 'electroball') basePower = 150 * (1 - slownessRating) * (1 - slownessRating);
@@ -616,7 +629,9 @@ export default class TeamGenerator {
 		// semi-hardcoded move weights that depend on having control over the item
 		if (!this.specialItems[species.name] && !species.requiredItem) {
 			if (move.id === 'acrobatics') weight *= 1.75;
-			if (move.id === 'facade') weight *= 1.5;
+			if (move.id === 'facade') {
+				if (!['Comatose', 'Purifying Salt', 'Shields Down', 'Natural Cure', 'Misty Surge'].includes(ability)) weight *= 1.5;
+			}
 		}
 
 		// priority is more useful when you're slower
@@ -724,11 +739,13 @@ export default class TeamGenerator {
 	 */
 	protected static moveType(move: Move, species: Species) {
 		switch (move.id) {
+		case 'ivycudgel':
+		case 'ragingbull':
+			if (species.types.length > 1) return species.types[1];
+			// falls through for Ogerpon and Tauros's respective base formes
 		case 'judgment':
 		case 'revelationdance':
 			return species.types[0];
-		case 'ivycudgel':
-			if (species.types.length > 1) return species.types[1];
 		}
 		return move.type;
 	}
@@ -877,7 +894,7 @@ export default class TeamGenerator {
 			spd: species.baseStats.spd * level / 100,
 			spe: species.baseStats.spe * level / 100,
 		};
-		const statusImmunities = ['Comatose', 'Purifying Salt', 'Shields Down', 'Natural Cure'];
+		const statusImmunities = ['Comatose', 'Purifying Salt', 'Shields Down', 'Natural Cure', 'Misty Surge'];
 
 		let weight;
 		switch (item.id) {
