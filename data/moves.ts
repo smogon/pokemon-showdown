@@ -2853,7 +2853,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		onHit(target) {
+		onHit(target, source) {
+			if (source.terastallized === 'Stellar') return false;
 			const type = this.dex.moves.get(target.moveSlots[0].id).type;
 			if (target.hasType(type) || !target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
@@ -2874,11 +2875,11 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {bypasssub: 1},
 		onHit(target, source) {
-			if (!target.lastMoveUsed) {
-				return false;
-			}
+			if (!target.lastMoveUsed) return false;
+			if (source.terastallized === 'Stellar') return false;
 			const possibleTypes = [];
 			const attackType = target.lastMoveUsed.type;
+			if (attackType === 'Stellar') return false;
 			for (const type of this.dex.types.names()) {
 				if (source.hasType(type)) continue;
 				const typeCheck = this.dex.types.get(type).damageTaken[attackType];
@@ -6304,7 +6305,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 		onHit(target) {
-			if (target.hasType('Grass')) return false;
+			if (target.hasType('Grass') || target.terastallized === 'Stellar') return false;
 			if (!target.addType('Grass')) return false;
 			this.add('-start', target, 'typeadd', 'Grass', '[from] move: Forest\'s Curse');
 		},
