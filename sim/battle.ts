@@ -130,6 +130,7 @@ export class Battle {
 	ruleTable: Dex.RuleTable;
 	prng: PRNG;
 	rated: boolean | string;
+	pokefindBattle: boolean;
 	reportExactHP: boolean;
 	reportPercentages: boolean;
 	supportCancel: boolean;
@@ -226,6 +227,7 @@ export class Battle {
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
 		this.rated = options.rated || !!options.rated;
 		this.reportExactHP = !!format.debug;
+		this.pokefindBattle = this.format.section?.toLowerCase().includes("pokefind") || false;
 		this.reportPercentages = false;
 		this.supportCancel = false;
 
@@ -2918,10 +2920,14 @@ export class Battle {
 				if (side && side !== split.side) throw new Error("Multiple sides passed to add");
 				side = split.side;
 				secret.push(split.secret);
-				shared.push(split.shared);
+				if (!this.pokefindBattle) {
+					shared.push(split.shared);
+				}
 			} else {
 				secret.push(part);
-				shared.push(part);
+				if (!this.pokefindBattle) {
+					shared.push(part);
+				}
 			}
 		}
 		this.addSplit(side!, secret, shared);
