@@ -78,7 +78,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["crunch", "facade", "flamewheel", "protect", "suckerpunch", "swordsdance", "uturn"]
+                "movepool": ["crunch", "facade", "flamewheel", "protect", "suckerpunch", "swordsdance", "uturn"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },
@@ -443,7 +444,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["focusblast", "foulplay", "lightscreen", "protect", "psychic", "reflect", "thunderwave", "toxic", "wish"]
+                "movepool": ["focusblast", "foulplay", "protect", "psychic", "thunderwave", "toxic", "wish"]
             },
             {
                 "role": "Staller",
@@ -1804,7 +1805,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["bugbuzz", "encore", "roost", "thunderwave", "wish"]
+                "movepool": ["bugbuzz", "encore", "roost", "thunderwave"]
             }
         ]
     },
@@ -2527,7 +2528,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["aquajet", "crunch", "icepunch", "lowkick", "switcheroo", "waterfall"]
+                "movepool": ["aquajet", "crunch", "icepunch", "lowkick", "switcheroo", "waterfall"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Setup Sweeper",

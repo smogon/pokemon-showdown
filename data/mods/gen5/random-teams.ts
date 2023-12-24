@@ -229,6 +229,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (!abilities.has('Prankster') && role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
+
+		if (abilities.has('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
@@ -281,7 +283,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Seismic Toss, Spore
+		// Enforce Seismic Toss and Spore
 		for (const moveid of ['seismictoss', 'spore']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -490,7 +492,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	): boolean {
 		switch (ability) {
 		case 'Flare Boost': case 'Gluttony': case 'Hyper Cutter': case 'Ice Body': case 'Moody': case 'Pickpocket':
-		case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
+		case 'Pressure': case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
 			return true;
 		case 'Chlorophyll':
 			// Petal Dance is for Lilligant
@@ -551,7 +553,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix' && !!counter.get('sheerforce'));
 		case 'Swarm':
-			return !counter.get('Bug');
+			return !counter.get('Bug') && !moves.has('uturn');
 		case 'Technician':
 			return (!counter.get('technician') || moves.has('tailslap'));
 		case 'Tinted Lens':
@@ -603,7 +605,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'mandibuzz') return 'Overcoat';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
-		if (['spiritomb', 'vespiquen', 'wailord', 'weavile'].includes(species.id)) return 'Pressure';
+		if (['spiritomb', 'vespiquen', 'weavile'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon') return 'Rough Skin';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'zangoose') return 'Toxic Boost';

@@ -92,7 +92,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Ice') || movePool.includes('blizzard') ||
+				!counter.get('Ice') || (!moves.has('blizzard') && movePool.includes('freezedry')) ||
 				abilities.has('Refrigerate') && (movePool.includes('return') || movePool.includes('hypervoice'))
 			),
 			Normal: movePool => movePool.includes('boomburst'),
@@ -263,6 +263,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
 
+		if (abilities.has('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
+
 		// Force Protect and U-turn on Beedrill-Mega
 		if (species.id === 'beedrillmega') {
 			this.incompatibleMoves(moves, movePool, 'drillrun', 'knockoff');
@@ -319,8 +321,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Seismic Toss, Spore, and Sticky Web
-		for (const moveid of ['seismictoss', 'spore', 'stickyweb']) {
+		// Enforce Blizzard, Seismic Toss, Spore, and Sticky Web
+		for (const moveid of ['blizzard', 'seismictoss', 'spore', 'stickyweb']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
@@ -529,7 +531,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	): boolean {
 		switch (ability) {
 		case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter': case 'Ice Body': case 'Magician':
-		case 'Moody': case 'Pressure': case 'Sand Veil': case 'Snow Cloak': case 'Steadfast':
+		case 'Moody': case 'Pressure': case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast':
 			return true;
 		case 'Aerilate': case 'Pixilate': case 'Refrigerate':
 			return ['doubleedge', 'hypervoice', 'return'].every(m => !moves.has(m));
@@ -569,6 +571,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return (species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force'));
 		case 'Oblivious': case 'Prankster':
 			return !counter.get('Status');
+		case 'Overcoat':
+			return types.has('Grass');
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Synchronize':
@@ -595,7 +599,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Sturdy':
 			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix' && !!counter.get('sheerforce'));
 		case 'Swarm':
-			return (!counter.get('Bug') || !!species.isMega);
+			return ((!counter.get('Bug') && !moves.has('uturn')) || !!species.isMega);
 		case 'Technician':
 			return (!counter.get('technician') || moves.has('tailslap') || !!species.isMega);
 		case 'Tinted Lens':
@@ -649,7 +653,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
-		if (['dusknoir', 'vespiquen', 'wailord'].includes(species.id)) return 'Pressure';
+		if (['dusknoir', 'vespiquen'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
 		if (species.id === 'pangoro' && !counter.get('ironfist')) return 'Scrappy';
 		if (species.id === 'stunfisk') return 'Static';
