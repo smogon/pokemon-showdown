@@ -15992,6 +15992,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			},
 			onTypePriority: -1,
 			onType(types, pokemon) {
+				if (pokemon.terastallized === "Stellar") return types;
 				this.effectState.typeWas = types;
 				return types.filter(type => type !== 'Flying');
 			},
