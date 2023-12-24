@@ -1023,7 +1023,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	gyaradosmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "OU",
+		natDexTier: "UUBL",
 	},
 	lapras: {
 		tier: "OU",
