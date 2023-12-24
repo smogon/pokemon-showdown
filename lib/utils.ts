@@ -343,10 +343,8 @@ export function deepFreeze<T>(obj: T): T {
 	Object.freeze(obj);
 	if (Array.isArray(obj)) {
 		for (const elem of obj) deepFreeze(elem);
-		return obj;
-	}
-	for (const key of Object.keys(obj)) {
-		deepFreeze((obj as any)[key]);
+	} else {
+		for (const elem of Object.values(obj)) deepFreeze(elem);
 	}
 	return obj;
 }
