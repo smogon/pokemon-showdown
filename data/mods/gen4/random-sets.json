@@ -297,7 +297,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["encore", "focusblast", "psychic", "shadowball", "substitute", "trick"],
+                "movepool": ["calmmind", "encore", "focusblast", "psychic", "shadowball", "substitute", "trick"],
                 "preferredTypes": ["Fighting"]
             }
         ]
