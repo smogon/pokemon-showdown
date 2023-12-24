@@ -2632,7 +2632,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "hypnosis", "lightscreen", "psychic", "reflect", "stealthrock", "toxic"]
+                "movepool": ["earthquake", "hypnosis", "psychic", "stealthrock", "toxic"]
             },
             {
                 "role": "Staller",

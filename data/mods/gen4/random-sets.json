@@ -2617,7 +2617,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "explosion", "ironhead", "lightscreen", "payback", "reflect", "stealthrock", "toxic"]
+                "movepool": ["earthquake", "explosion", "ironhead", "payback", "stealthrock", "toxic"]
             },
             {
                 "role": "Staller",
