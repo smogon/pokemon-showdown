@@ -3216,7 +3216,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	scraggy: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	scrafty: {
 		tier: "OU",
