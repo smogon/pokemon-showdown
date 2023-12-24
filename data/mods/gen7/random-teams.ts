@@ -380,7 +380,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		}
 
 		if (abilities.has('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
-		
+
 		// Z-Conversion Porygon-Z
 		if (species.id === 'porygonz') {
 			this.incompatibleMoves(moves, movePool, 'shadowball', 'recover');

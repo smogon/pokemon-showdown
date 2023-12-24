@@ -464,8 +464,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Hustle': case 'Ice Body': case 'Rain Dish': case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Solar Power':
-		case 'Steadfast': case 'Sticky Hold': case 'Unaware':
+		case 'Hustle': case 'Ice Body': case 'Rain Dish': case 'Sand Veil': case 'Sniper': case 'Snow Cloak':
+		case 'Solar Power': case 'Steadfast': case 'Sticky Hold': case 'Unaware':
 			return true;
 		case 'Chlorophyll':
 			return !moves.has('sunnyday') && !teamDetails.sun;
