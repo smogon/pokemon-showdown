@@ -521,12 +521,12 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Monothreat Dark",
-		desc: `Monotype where every Pok&eacute;mon is required to be part Dark.`,
+		name: "[Gen 9] Monothreat Grass",
+		desc: `Monotype where every Pok&eacute;mon is required to be part Grass.`,
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Dark'],
+		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Grass'],
 	},
 	{
 		name: "[Gen 9] Monotype CAP",
@@ -550,8 +550,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: ['[Gen 9] LC', 'Same Type Clause', 'Terastal Clause'],
-		banlist: ['Damp Rock', 'Focus Band', 'Heat Rock', 'Icy Rock', 'Quick Claw'],
-		unbanlist: ['Diglett-Base', 'Growlithe-Hisui', 'Vulpix', 'Vulpix-Alola', 'Sticky Web'],
+		banlist: ['Minccino', 'Damp Rock', 'Focus Band', 'Heat Rock', 'Icy Rock', 'Quick Claw'],
+		unbanlist: ['Diglett-Base', 'Growlithe-Hisui', 'Scraggy', 'Vulpix', 'Vulpix-Alola', 'Sticky Web'],
 	},
 
 	// Pet Mods
