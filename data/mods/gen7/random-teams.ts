@@ -767,7 +767,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force')
 			);
 		case 'Oblivious': case 'Prankster':
-			return !counter.get('Status');
+			return (!counter.get('Status') || (species.id === 'tornadus' && moves.has('bulkup')));
 		case 'Overcoat':
 			return types.has('Grass');
 		case 'Overgrow':

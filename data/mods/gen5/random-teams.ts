@@ -529,7 +529,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Prankster':
-			return !counter.get('Status');
+			return (!counter.get('Status') || (species.id === 'tornadus' && moves.has('bulkup')));
 		case 'Poison Heal':
 			return (species.id === 'breloom' && role === 'Fast Attacker');
 		case 'Synchronize':
