@@ -15984,16 +15984,13 @@ export const Moves: {[moveid: string]: MoveData} = {
 			duration: 1,
 			onResidualOrder: 25,
 			onStart(target) {
-				if (!target.terastallized || (target.terastallized === "Stellar" && target.hp >= target.maxhp)) {
-					this.add('-singleturn', target, 'move: Roost');
-				} else {
-					if (target.terastallized === "Flying") {
-						this.add('-hint', "If a Flying Terastallized Pokemon uses Roost, it remains Flying-type.");
-					} else if (target.terastallized === "Stellar") {
-						this.add('-hint', "If a Stellar Terastallized Flying-type Pokemon uses Roost while not full HP, it remains Flying-type.");
+				if (target.terastallized) {
+					if (target.hasType('Flying')) {
+						this.add('-hint', "If a Terastallized Pokemon uses Roost, it remains Flying-type.");
 					}
 					return false;
 				}
+				this.add('-singleturn', target, 'move: Roost');
 			},
 			onTypePriority: -1,
 			onType(types, pokemon) {
