@@ -3652,7 +3652,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	kyuremblack: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
 	kyuremwhite: {
