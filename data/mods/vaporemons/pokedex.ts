@@ -1765,20 +1765,14 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	},
 	mudkip: {
 		inherit: true,
-		num: 1064,
-		species: "Mudkip",
 		abilities: {0: "Torrent", H: "Mud Wash"},
 	},
 	marshtomp: {
 		inherit: true,
-		num: 1065,
-		species: "Marshtomp",
 		abilities: {0: "Torrent", H: "Mud Wash"},
 	},
 	swampert: {
 		inherit: true,
-		num: 1066,
-		species: "Swampert",
 		abilities: {0: "Torrent", H: "Mud Wash"},
 	},
 	trapinch: {
