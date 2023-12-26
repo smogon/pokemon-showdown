@@ -396,7 +396,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	pluck: {
 		num: 365,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 70,
 		category: "Physical",
 		shortDesc: "Heals the user by 75% of the damage dealt.",
 		name: "Pluck",
@@ -518,6 +518,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 50,
 		basePowerCallback(pokemon, target, move) {
 			const yourSide = pokemon.side;
+			const targetSide = target.side;
 			let allLayers = 0;
 			if (yourSide.getSideCondition('stealthrock')) allLayers++;
 			if (yourSide.getSideCondition('healingstones')) allLayers++;
@@ -528,11 +529,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (yourSide.sideConditions['toxicspikes']) {
 				allLayers += yourSide.sideConditions['toxicspikes'].layers;
 			}
+			if (targetSide.getSideCondition('stealthrock')) allLayers++;
+			if (targetSide.getSideCondition('healingstones')) allLayers++;
+			if (targetSide.getSideCondition('stickyweb')) allLayers++;
+			if (targetSide.sideConditions['spikes']) {
+				allLayers += targetSide.sideConditions['spikes'].layers;
+			}
+			if (targetSide.sideConditions['toxicspikes']) {
+				allLayers += targetSide.sideConditions['toxicspikes'].layers;
+			}
 			this.debug('Hazardous Waste damage boost');
-			return Math.min(300, 50 + 50 * allLayers);
+			return Math.min(400, 50 + 50 * allLayers);
 		},
 		category: "Physical",
-		shortDesc: "+50 power for each hazard layer on user's side. Caps at 300.",
+		shortDesc: "+50 power for each hazard layer on the field. Caps at 400.",
 		name: "Hazardous Waste",
 		pp: 10,
 		priority: 0,
@@ -540,6 +550,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Acid Downpour", target);
+		},
+		onHit(target, source, move) {
+			const bp = Math.min(200, 50 + 50 * source.timesAttacked);
+			this.add('-message', `Rage Fist currently has a BP of ${bp}!`);
 		},
 		secondary: null,
 		target: "normal",
@@ -964,15 +978,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	brickbreak: {
 		inherit: true,
-		basePower: 85,
+		basePower: 90,
 	},
 	psychicfangs: {
 		inherit: true,
+		basePower: 90,
 		flags: {bite: 1, protect: 1, mirror: 1},
 	},
 	sledgehammerblow: {
 		accuracy: 100,
-		basePower: 85,
+		basePower: 90,
 		category: "Physical",
 	   shortDesc: "Destroys screens, unless the target is immune.",
 		name: "Sledgehammer Blow",
