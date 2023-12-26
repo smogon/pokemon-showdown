@@ -552,6 +552,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Acid Downpour", target);
 		},
 		onHit(target, source, move) {
+			const yourSide = pokemon.side;
+			const targetSide = target.side;
+			let allLayers = 0;
+			if (yourSide.getSideCondition('stealthrock')) allLayers++;
+			if (yourSide.getSideCondition('healingstones')) allLayers++;
+			if (yourSide.getSideCondition('stickyweb')) allLayers++;
+			if (yourSide.sideConditions['spikes']) {
+				allLayers += yourSide.sideConditions['spikes'].layers;
+			}
+			if (yourSide.sideConditions['toxicspikes']) {
+				allLayers += yourSide.sideConditions['toxicspikes'].layers;
+			}
+			if (targetSide.getSideCondition('stealthrock')) allLayers++;
+			if (targetSide.getSideCondition('healingstones')) allLayers++;
+			if (targetSide.getSideCondition('stickyweb')) allLayers++;
+			if (targetSide.sideConditions['spikes']) {
+				allLayers += targetSide.sideConditions['spikes'].layers;
+			}
+			if (targetSide.sideConditions['toxicspikes']) {
+				allLayers += targetSide.sideConditions['toxicspikes'].layers;
+			}
 			const bp = Math.min(400, 50 + 50 * allLayers);
 			this.add('-message', `Hazardous Waste currently has a BP of ${bp}!`);
 		},
