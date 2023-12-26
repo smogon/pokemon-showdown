@@ -458,7 +458,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				this.add('-item', pokemon, 'Charizardite Shard X');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
 				pokemon.setType(pokemon.getTypes(true).map(type => type === targetType ? "???" : type));
-				this.add('-start', source, 'typeadd', 'Dragon', '[from] item: Charizardite Shard X');
+				this.add('-start', pokemon, 'typeadd', 'Dragon', '[from] item: Charizardite Shard X');
 				this.add('-message', `${pokemon.name}'s Charizardite Shard X changed its type!`);
 				pokemon.setAbility('toughclaws', pokemon, true);
 				this.add('-activate', pokemon, 'ability: Tough Claws');
