@@ -294,14 +294,14 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Punching Glove boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move.flags['punch']) delete move.flags['contact'];
 		},
-		desc: "Holder's punch-based attacks have 1.2x power and do not make contact.",
+		desc: "Holder's punch-based attacks have 1.3x power and do not make contact.",
 		num: 1884,
 		gen: 9,
 	},
@@ -315,14 +315,14 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['slicing']) {
 				this.debug('Razor Claw boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move.flags['slicing']) delete move.flags['contact'];
 		},
-		desc: "Holder's slicing-based attacks have 1.2x power and do not make contact.",
+		desc: "Holder's slicing-based attacks have 1.3x power and do not make contact.",
 		num: 326,
 		gen: 4,
 	},
@@ -337,14 +337,14 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['bite']) {
 				this.debug('Razor Fang boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move.flags['bite']) delete move.flags['contact'];
 		},
-		desc: "Holder's biting-based attacks have 1.2x power and do not make contact.",
+		desc: "Holder's biting-based attacks have 1.3x power and do not make contact.",
 		num: 327,
 		gen: 4,
 		isNonstandard: null,
@@ -916,14 +916,14 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move?.priority > 0.1) {
 				this.debug('Quick Claw boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move?.priority > 0.1) delete move.flags['contact'];
 		},
-		desc: "Holder's priority attacks have 1.2x power and do not make contact.",
+		desc: "Holder's priority attacks have 1.3x power and do not make contact.",
 		num: 217,
 		gen: 2,
 	},
@@ -937,13 +937,13 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.recoil || move.hasCrashDamage) {
 				this.debug('Protective Pads boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		// protective effect handled in Battle#checkMoveMakesContact
 		num: 880,
 		gen: 7,
-		desc: "This Pokemon's recoil moves deal 1.2x damage and all of its moves don't make contact.",
+		desc: "This Pokemon's recoil moves deal 1.3x damage and all of its moves don't make contact.",
 	},
 	desertrose: {
 		name: "Desert Rose",
