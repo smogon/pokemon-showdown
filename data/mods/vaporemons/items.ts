@@ -405,7 +405,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			pokemon.cureStatus();
 		},
 		// other effect coded into the moves themselves
-		desc: "Holder's wind-based attacks heal the party's status.",
+		desc: "Holder's wind-based attacks heal the party's status. Holder has its status condition cured when it switches out.",
 		num: -1009,
 		gen: 9,
 	},
