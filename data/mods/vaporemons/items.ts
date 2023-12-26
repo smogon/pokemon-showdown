@@ -453,16 +453,12 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			const oldtype = pokemon.hpType;
+			const targetType = pokemon.types[1];
 			if (pokemon.baseSpecies.baseSpecies === 'Charizard') {
 				this.add('-item', pokemon, 'Charizardite Shard X');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
-				if (oldtype && oldtype !== '???') {
-					const targetType = pokemon.types[1];
-					if (!pokemon.setType('Dragon')) return;
-					pokemon.setType(pokemon.getTypes(true).map(type => type === targetType ? "Dragon" : type));
-					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] item: Charizardite Shard X');
-				}
+				pokemon.setType(pokemon.getTypes(true).map(type => type === targetType ? "???" : type));
+				this.add('-start', source, 'typeadd', 'Dragon', '[from] item: Charizardite Shard X');
 				this.add('-message', `${pokemon.name}'s Charizardite Shard X changed its type!`);
 				pokemon.setAbility('toughclaws', pokemon, true);
 				this.add('-activate', pokemon, 'ability: Tough Claws');
