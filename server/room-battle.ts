@@ -143,10 +143,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 			}
 		}
 	}
-	getUser() {
-		return (this.id && Users.get(this.id)) || null;
-	}
-	unlinkUser() {
+	override unlinkUser() {
 		const user = this.getUser();
 		if (user) {
 			for (const connection of user.connections) {
@@ -168,18 +165,6 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 		for (const connection of user.connections) {
 			Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
 		}
-	}
-
-	toString() {
-		return this.id;
-	}
-	send(data: string) {
-		const user = this.getUser();
-		if (user) user.send(data);
-	}
-	sendRoom(data: string) {
-		const user = this.getUser();
-		if (user) user.sendTo(this.game.roomid, data);
 	}
 }
 
@@ -521,10 +506,10 @@ export interface RoomBattleOptions {
 }
 
 export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
-	readonly gameid: ID;
-	readonly room: GameRoom;
-	readonly title: string;
-	readonly allowRenames: boolean;
+	override readonly gameid = 'battle' as ID;
+	override readonly room: GameRoom;
+	override readonly title: string;
+	override readonly allowRenames: boolean;
 	readonly format: string;
 	/** Will exist even if the game is unrated, in case it's later forced to be rated */
 	readonly ladder: string;
@@ -538,38 +523,36 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	/**
 	 * userid that requested extraction -> playerids that accepted the extraction
 	 */
-	readonly allowExtraction: {[k: string]: Set<ID>};
+	readonly allowExtraction: {[k: string]: Set<ID>} = {};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
-	readonly timer: RoomBattleTimer;
+	override readonly timer: RoomBattleTimer;
 	missingBattleStartMessage: boolean | 'multi';
-	started: boolean;
-	ended: boolean;
-	active: boolean;
+	started = false;
+	active = false;
 	restoredNeedsRejoin: Set<ID> | null;
-	replaySaved: boolean | 'auto';
+	replaySaved: boolean | 'auto' = false;
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
-	p1: RoomBattlePlayer;
-	p2: RoomBattlePlayer;
-	p3: RoomBattlePlayer;
-	p4: RoomBattlePlayer;
-	inviteOnlySetter: ID | null;
-	logData: AnyObject | null;
-	endType: string;
+	p1: RoomBattlePlayer = null!;
+	p2: RoomBattlePlayer = null!;
+	p3: RoomBattlePlayer = null!;
+	p4: RoomBattlePlayer = null!;
+	inviteOnlySetter: ID | null = null;
+	logData: AnyObject | null = null;
+	endType: 'forfeit' | 'forced' | 'normal' = 'normal';
 	/**
 	 * If the battle is ended: an array of the number of Pokemon left for each side.
 	 */
-	score: number[] | null;
-	inputLog: string[] | null;
-	turn: number;
-	rqid: number;
-	requestCount: number;
+	score: number[] | null = null;
+	inputLog: string[] | null = null;
+	turn = 0;
+	rqid = 1;
+	requestCount = 0;
 	options: RoomBattleOptions;
 	frozen?: boolean;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
 		const format = Dex.formats.get(options.format, true);
-		this.gameid = 'battle' as ID;
 		this.room = room;
 		this.title = format.name;
 		this.options = options;
@@ -583,31 +566,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
 		// true when onCreateBattleRoom has been called
 		this.missingBattleStartMessage = !!options.inputLog || options.delayedStart || false;
-		this.started = false;
-		this.ended = false;
-		this.active = false;
-		this.replaySaved = false;
 
 		this.playerCap = format.playerCount;
-		this.p1 = null!;
-		this.p2 = null!;
-		this.p3 = null!;
-		this.p4 = null!;
-		this.inviteOnlySetter = null;
 
 		this.restoredNeedsRejoin = options.restored ? new Set(options.restoredPlayers) : null;
-
-		// data to be logged
-		this.allowExtraction = {};
-
-		this.logData = null;
-		this.endType = 'normal';
-		this.score = null;
-		this.inputLog = null;
-		this.turn = 0;
-
-		this.rqid = 1;
-		this.requestCount = 0;
 
 		this.stream = PM.createStream();
 
@@ -663,7 +625,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.active = active;
 		if (Rooms.global.battleCount === 0) Rooms.global.automaticKillRequest();
 	}
-	choose(user: User, data: string) {
+	override choose(user: User, data: string) {
 		if (this.frozen) {
 			user.popup(`Your battle is currently paused, so you cannot move right now.`);
 			return;
@@ -687,7 +649,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 
 		void this.stream.write(`>${player.slot} ${choice}`);
 	}
-	undo(user: User, data: string) {
+	override undo(user: User, data: string) {
 		const player = this.playerTable[user.id];
 		const [, rqid] = data.split('|', 2);
 		if (!player) return;
@@ -706,7 +668,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 
 		void this.stream.write(`>${player.slot} undo`);
 	}
-	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
+	override joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
 		if (this.restoredNeedsRejoin?.size && !this.restoredNeedsRejoin.has(user.id)) {
 			user.popup(`All the original players in this battle must join first.`);
 			return false;
@@ -761,7 +723,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.room.update();
 		return true;
 	}
-	leaveGame(user: User) {
+	override leaveGame(user: User) {
 		if (!user) return false; // ...
 		if (this.room.rated || this.room.tour) {
 			user.popup(`Players can't be swapped out in a ${this.room.tour ? "tournament" : "rated"} battle.`);
@@ -780,7 +742,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		return true;
 	}
 
-	startTimer() {
+	override startTimer() {
 		this.timer.start();
 	}
 
@@ -886,11 +848,11 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			break;
 		}
 	}
-	async onEnd(winner: any) {
+	async onEnd(winnerName: any) {
 		this.timer.end();
 		// Declare variables here in case we need them for non-rated battles logging.
 		let p1score = 0.5;
-		const winnerid = toID(winner);
+		const winnerid = toID(winnerName);
 
 		// Check if the battle was rated to update the ladder, return its response, and log the battle.
 		const p1name = this.p1.name;
@@ -905,7 +867,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
 		if (this.room.rated && !this.options.isSubBattle) {
 			this.room.rated = 0;
-			winner = Users.get(winnerid);
+			const winner = Users.get(winnerid);
 			if (winner && !winner.registered) {
 				this.room.sendUser(winner, '|askreg|' + winner.id);
 			}
@@ -980,7 +942,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		await FS(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
 		// console.log(JSON.stringify(logData));
 	}
-	onConnect(user: User, connection: Connection | null = null) {
+	override onConnect(user: User, connection: Connection | null = null) {
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
@@ -998,10 +960,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 		if (!player.active) this.onJoin(user);
 	}
-	onUpdateConnection(user: User, connection: Connection | null = null) {
+	override onUpdateConnection(user: User, connection: Connection | null = null) {
 		this.onConnect(user, connection);
 	}
-	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
+	override onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (user.id === oldUserid) return;
 		if (!this.playerTable) {
 			// !! should never happen but somehow still does
@@ -1042,7 +1004,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		};
 		void this.stream.write(`>player ${player.slot} ` + JSON.stringify(options));
 	}
-	onJoin(user: User) {
+	override onJoin(user: User) {
 		const player = this.playerTable[user.id];
 		if (player && !player.active) {
 			player.active = true;
@@ -1050,7 +1012,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
 		}
 	}
-	onLeave(user: User, oldUserid?: ID) {
+	override onLeave(user: User, oldUserid?: ID) {
 		const player = this.playerTable[oldUserid || user.id];
 		if (player?.active) {
 			player.sendRoom(`|request|null`);
@@ -1075,7 +1037,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	tiebreak() {
 		void this.stream.write(`>tiebreak`);
 	}
-	forfeit(user: User | string, message = '') {
+	override forfeit(user: User | string, message = '') {
 		if (typeof user !== 'string') user = user.id;
 		else user = toID(user);
 
@@ -1102,7 +1064,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	 * playerOpts should be empty only if importing an inputlog
 	 * (so the player isn't recreated)
 	 */
-	addPlayer(user: User | string | null, playerOpts?: RoomBattlePlayerOptions | null) {
+	override addPlayer(user: User | string | null, playerOpts?: RoomBattlePlayerOptions | null) {
 		const player = super.addPlayer(user);
 		if (typeof user === 'string') user = null;
 		if (!player) return null;
@@ -1192,7 +1154,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	updatePlayer(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
+	override updatePlayer(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
 		super.updatePlayer(player, user);
 
 		player.invite = '';
@@ -1293,7 +1255,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 	}
 
-	destroy() {
+	override destroy() {
 		for (const player of this.players) {
 			player.destroy();
 		}
@@ -1337,7 +1299,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		const result = Teams.unpack(resultStrings[0]);
 		return result;
 	}
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		const parts = message.split('\n');
 		for (const line of parts) {
 			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room)}|${line}`);
@@ -1366,17 +1328,14 @@ export class BestOfGame extends RoomGames.RoomGame<BestOfPlayer> {
 	score: number[] | null = null;
 	winThreshold: number;
 	options: RoomBattleOptions;
-	// wins = [0, 0];
 	ready = false;
 	ties = 0;
 	games: {room: Room, winner: ID | null, rated: number}[] = [];
-	allowRenames = false;
 	playerNum = 0;
 	winner: ID | null = null;
 	waitingBattle: RoomBattle | null = null;
 	nextBattleTimerStart: number | null = null;
 	nextBattleTimer: NodeJS.Timer | null = null;
-	ended = false;
 	needsTimer = false;
 	teams: Record<string, PokemonSet[] | null | undefined> = {};
 	constructor(room: Room, options: RoomBattleOptions) {
@@ -1538,7 +1497,7 @@ export class BestOfGame extends RoomGames.RoomGame<BestOfPlayer> {
 		this.room.update();
 	}
 
-	startTimer() {
+	override startTimer() {
 		this.needsTimer = true;
 		for (const {room} of this.games) {
 			room.battle?.timer.start();
@@ -1719,13 +1678,13 @@ export class BestOfGame extends RoomGames.RoomGame<BestOfPlayer> {
 }
 
 export class RoomBattleStream extends BattleStream {
-	readonly battle: Battle;
+	override readonly battle: Battle;
 	constructor() {
 		super({keepAlive: true});
 		this.battle = null!;
 	}
 
-	_write(chunk: string) {
+	override _write(chunk: string) {
 		const startTime = Date.now();
 		if (this.battle && Config.debugsimprocesses && process.send) {
 			process.send('DEBUG\n' + this.battle.inputLog.join('\n') + '\n' + chunk);
