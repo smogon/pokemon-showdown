@@ -401,7 +401,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		// effect coded into the moves themselves
+		onSwitchOut(pokemon) {
+			pokemon.cureStatus();
+		},
+		// other effect coded into the moves themselves
 		desc: "Holder's wind-based attacks heal the party's status.",
 		num: -1009,
 		gen: 9,
@@ -455,8 +458,10 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 				this.add('-item', pokemon, 'Charizardite Shard X');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
 				if (type && type !== '???') {
+					let targetType = pokemon.types[1]
 					if (!pokemon.setType('Dragon')) return;
-					this.add('-start', pokemon, 'typechange', 'Dragon', '[from] item: Charizardite Shard X');
+					pokemon.setType(pokemon.getTypes(true).map(type => type === targetType ? "Dragon" : type));
+					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] item: Charizardite Shard X');
 				}
 				this.add('-message', `${pokemon.name}'s Charizardite Shard X changed its type!`);
 				pokemon.setAbility('toughclaws', pokemon, true);
