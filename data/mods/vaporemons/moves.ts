@@ -552,8 +552,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Acid Downpour", target);
 		},
 		onHit(target, source, move) {
-			const bp = Math.min(200, 50 + 50 * source.timesAttacked);
-			this.add('-message', `Rage Fist currently has a BP of ${bp}!`);
+			const bp = Math.min(400, 50 + 50 * allLayers);
+			this.add('-message', `Hazardous Waste currently has a BP of ${bp}!`);
 		},
 		secondary: null,
 		target: "normal",
