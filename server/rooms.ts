@@ -34,7 +34,7 @@ import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
 import {
-	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex, BestOfGame,
+	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, BestOfGame,
 } from "./room-battle";
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity, MinorActivityData} from './room-minor-activity';
@@ -1303,15 +1303,9 @@ export class GlobalRoomState {
 			if (!room.battle || room.battle.ended) continue;
 			room.battle.frozen = true;
 			const log = await room.battle.getLog();
-			const players: ID[] = room.battle.options.players || [];
-			if (!players.length) {
-				for (const num of ['p1', 'p2', 'p3', 'p4'] as const) {
-					if (room.battle[num]?.id) {
-						players.push(room.battle[num].id);
-					}
-				}
-			}
+			const players = room.battle.players.map(p => p.id).filter(Boolean);
 			if (!players.length || !log?.length) continue; // shouldn't happen???
+			// players can be empty right after `/importinputlog`
 			const timerData = {
 				...room.battle.timer.settings,
 				active: !!room.battle.timer.timer || false,
@@ -1350,7 +1344,8 @@ export class GlobalRoomState {
 				roomid,
 				title,
 				rated: Number(rated),
-				players,
+				players: [],
+				restoredPlayers: players,
 				delayedStart: true,
 				delayedTimer: timer.active,
 				restored: true,
@@ -1361,14 +1356,14 @@ export class GlobalRoomState {
 			if (timer) { // json blob of settings
 				Object.assign(room.battle.timer.settings, timer);
 			}
-			for (const [i, p] of players.entries()) {
-				room.auth.set(p, Users.PLAYER_SYMBOL);
+			for (const [i, pid] of players.entries()) {
+				room.auth.set(pid, Users.PLAYER_SYMBOL);
 				const player = room.battle.players[i];
-				player.id = p;
-				player.name = p; // temp for if they get timed out before they connect
-				const u = Users.getExact(p);
-				if (u) {
-					this.rejoinBattle(room, u, i);
+				player.id = pid;
+				player.name = pid; // in case user hasn't reconnected yet
+				const user = Users.getExact(pid);
+				if (user) {
+					this.rejoinBattle(room, user, i);
 				}
 			}
 		}
@@ -1380,22 +1375,19 @@ export class GlobalRoomState {
 
 	rejoinBattle(room: GameRoom, user: User, idx: number) {
 		if (!room.battle) return;
-		// we reuse these player objects explicitly so if
-		// someone has already started the timer, their settings carry over (should reduce bugs)
-		// and it's safe to do this first because we know these users were already in the battle
-		let player = room.battle.players[idx];
+		const player = room.battle.players[idx];
 		if (!player) {
-			// this can happen sometimes
-			player = room.battle.players[idx] = new Rooms.RoomBattlePlayer(
-				user, room.battle, (idx + 1) as PlayerIndex
-			);
+			// possible if a format was changed from 4-player to 2-player midway through a restore,
+			// so don't do that
+			throw new Error(`Player ${idx + 1} not found in battle ${room.roomid} while trying to rejoin battle`);
 		}
-		player.id = user.id;
+		if (player.id !== user.id) {
+			throw new Error(`User ID mismatch ${player.id} vs ${user.id} in battle ${room.roomid} while trying to rejoin battle`);
+		}
 		player.name = user.name;
-		room.battle.playerTable[user.id] = player;
-		user.joinRoom(room.roomid);
 		// force update panel
-		room.battle.onConnect(user);
+		user.joinRoom(room.roomid);
+		// room.battle.onConnect(user); // should be unnecessary
 		if (room.battle.options.delayedTimer && !room.battle.timer.timer) {
 			room.battle.timer.start();
 		}
@@ -1406,7 +1398,7 @@ export class GlobalRoomState {
 		for (const room of Rooms.rooms.values()) {
 			const battle = room.battle;
 			if (!battle) continue;
-			const idx = battle.options.players?.indexOf(user.id);
+			const idx = battle.options.restoredPlayers?.indexOf(user.id);
 			if (battle.ended) {
 				// TODO: Do we want to rejoin the battle room here?
 				// We might need to cache the join so it only happens once -
@@ -1937,10 +1929,10 @@ export class GameRoom extends BasicRoom {
 		this.tour = options.tour || null;
 		this.setParent((options as any).parent || (this.tour && this.tour.room) || null);
 
-		this.p1 = options.p1?.user || null;
-		this.p2 = options.p2?.user || null;
-		this.p3 = options.p3?.user || null;
-		this.p4 = options.p4?.user || null;
+		this.p1 = options.players?.[0]?.user || null;
+		this.p2 = options.players?.[1]?.user || null;
+		this.p3 = options.players?.[2]?.user || null;
+		this.p4 = options.players?.[3]?.user || null;
 
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 
@@ -2184,8 +2176,7 @@ export const Rooms = {
 		return room;
 	},
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
-		const players: User[] = [options.p1, options.p2, options.p3, options.p4]
-			.filter(Boolean).map(player => player!.user);
+		const players = options.players.map(player => player.user);
 		const gameType = Dex.formats.get(options.format).gameType;
 		if (gameType !== 'multi' && gameType !== 'freeforall') {
 			if (players.length > 2) {

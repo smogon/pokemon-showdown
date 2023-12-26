@@ -480,10 +480,7 @@ class Ladder extends LadderStore {
 			'multi' : false;
 		return Rooms.createBattle({
 			format: formatid,
-			p1: players[0],
-			p2: players[1],
-			p3: players[2],
-			p4: players[3],
+			players,
 			rated: minRating,
 			challengeType: readies[0].challengeType,
 			delayedStart,

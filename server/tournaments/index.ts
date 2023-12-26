@@ -1071,18 +1071,17 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		const room = Rooms.createBattle({
 			format: this.fullFormat,
 			isPrivate: this.room.settings.isPrivate,
-			p1: {
+			players: [{
 				user: from,
 				team: challenge.team,
 				hidden: challenge.hidden,
 				inviteOnly: challenge.inviteOnly,
-			},
-			p2: {
+			}, {
 				user,
 				team: ready.settings.team,
 				hidden: ready.settings.hidden,
 				inviteOnly: ready.settings.inviteOnly,
-			},
+			}],
 			rated: !Ladders.disabled && this.isRated,
 			challengeType: ready.challengeType,
 			tour: this,

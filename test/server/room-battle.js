@@ -26,7 +26,9 @@ describe('Simulator abstraction layer features', function () {
 				p1 = makeUser("MissingNo.");
 				p2 = makeUser();
 				room = Rooms.createBattle({
-					format: '', p1: {user: p1, team: packedTeam}, p2: {user: p2, team: packedTeam}, allowRenames: false,
+					format: '',
+					players: [{user: p1, team: packedTeam}, {user: p2, team: packedTeam}],
+					allowRenames: false,
 				});
 				p1.resetName();
 				for (const player of room.battle.players) {

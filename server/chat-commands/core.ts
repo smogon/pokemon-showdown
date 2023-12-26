@@ -797,20 +797,18 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
-		const battleRoom = Rooms.createBattle({format: formatid, inputLog: target});
+		const battleRoom = Rooms.createBattle({format: formatid, players: [], inputLog: target});
 		if (!battleRoom) return; // createBattle will inform the user if creating the battle failed
 
-		const nameIndex1 = target.indexOf(`"name":"`);
-		const nameNextQuoteIndex1 = target.indexOf(`"`, nameIndex1 + 8);
-		const nameIndex2 = target.indexOf(`"name":"`, nameNextQuoteIndex1 + 1);
-		const nameNextQuoteIndex2 = target.indexOf(`"`, nameIndex2 + 8);
-		if (nameIndex1 >= 0 && nameNextQuoteIndex1 >= 0 && nameIndex2 >= 0 && nameNextQuoteIndex2 >= 0) {
-			const battle = battleRoom.battle!;
-			battle.p1.name = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
-			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
-		}
 		battleRoom.auth.set(user.id, Users.HOST_SYMBOL);
+		let scanIndex = 0;
 		for (const player of battleRoom.battle!.players) {
+			const nameIndex1 = target.indexOf(`"name":"`, scanIndex);
+			const nameIndex2 = target.indexOf(`"`, nameIndex1 + 8);
+			if (nameIndex1 < 0 || nameIndex2 < 0) break; // shouldn't happen. incomplete inputlog?
+			scanIndex = nameIndex2 + 1;
+			const name = target.slice(nameIndex1 + 8, nameIndex2);
+			player.name = name;
 			player.hasTeam = true;
 		}
 		this.parse(`/join ${battleRoom.roomid}`);
