@@ -552,7 +552,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Acid Downpour", target);
 		},
 		onHit(target, source, move) {
-			const yourSide = pokemon.side;
+			const yourSide = source.side;
 			const targetSide = target.side;
 			let allLayers = 0;
 			if (yourSide.getSideCondition('stealthrock')) allLayers++;
