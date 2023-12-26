@@ -351,7 +351,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	oricoriopau: {
 		inherit: true,
 		types: ["Fairy", "Flying"],
-		abilities: {0: "Dancer", 1: "Muscle Memory", H: "Fairy Aura"},
+		abilities: {0: "Dancer", 1: "Muscle Memory", H: "Unaware"},
 	},
 	oricoriopompom: {
 		inherit: true,
