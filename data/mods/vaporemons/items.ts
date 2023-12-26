@@ -453,12 +453,12 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			const type = pokemon.hpType;
+			const oldtype = pokemon.hpType;
 			if (pokemon.baseSpecies.baseSpecies === 'Charizard') {
 				this.add('-item', pokemon, 'Charizardite Shard X');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
-				if (type && type !== '???') {
-					let targetType = pokemon.types[1]
+				if (oldtype && oldtype !== '???') {
+					const targetType = pokemon.types[1];
 					if (!pokemon.setType('Dragon')) return;
 					pokemon.setType(pokemon.getTypes(true).map(type => type === targetType ? "Dragon" : type));
 					this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[from] item: Charizardite Shard X');
