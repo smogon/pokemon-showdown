@@ -1943,7 +1943,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	terashell: {
 		name: "Tera Shell",
 		desc: "If this Pokemon is a Terapagos at full HP, the effectiveness of attacks against it is changed to 0.5 unless this Pokemon is immune to the move. Multi-hit moves retain the same effectiveness throughout the attack.",
-		shortDesc: "If full HP, attacks taken have effectiveness changed to 0.5 unless naturally immune.",
+		shortDesc: "Terapagos: If full HP, attacks taken have 0.5x effectiveness unless naturally immune.",
 
 		activate: "  [POKEMON] made its shell gleam! It's distorting type matchups!",
 	},
