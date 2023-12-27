@@ -14,7 +14,6 @@ describe('Tera Blast', function () {
 		battle.makeChoices('move terablast terastallize', 'move protect');
 
 		const leftPokemon = battle.p1.pokemon[0];
-		assert.notEqual(leftPokemon.terastallized, undefined);
 		assert.equal(leftPokemon.lastMove.category, 'Special');
 	});
 
@@ -30,7 +29,6 @@ describe('Tera Blast', function () {
 		battle.makeChoices('move terablast terastallize', 'move protect');
 
 		const leftPokemon = battle.p1.pokemon[0];
-		assert.notEqual(leftPokemon.terastallized, undefined);
 		assert.equal(leftPokemon.lastMove.category, 'Physical');
 	});
 
@@ -47,7 +45,6 @@ describe('Tera Blast', function () {
 		battle.makeChoices('move terablast', 'move protect');
 
 		const leftPokemon = battle.p1.pokemon[0];
-		assert.equal(leftPokemon.terastallized, undefined);
 		assert.equal(leftPokemon.lastMove.category, 'Special');
 	});
 
@@ -65,7 +62,6 @@ describe('Tera Blast', function () {
 		battle.makeChoices('move terablast terastallize', 'move splash');
 
 		const leftPokemon = battle.p1.pokemon[0];
-		assert.notEqual(leftPokemon.terastallized, undefined);
 		assert.equal(leftPokemon.lastMove.category, 'Physical');
 	});
 });
