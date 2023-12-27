@@ -297,7 +297,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["encore", "focusblast", "psychic", "shadowball", "substitute", "trick"],
+                "movepool": ["calmmind", "encore", "focusblast", "psychic", "shadowball", "substitute", "trick"],
                 "preferredTypes": ["Fighting"]
             }
         ]
@@ -1673,6 +1673,10 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["recover", "seismictoss", "taunt", "toxic", "willowisp"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["payback", "recover", "seismictoss", "toxic", "willowisp"]
             }
         ]
     },
@@ -2501,7 +2505,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["aquajet", "crunch", "icepunch", "return", "waterfall"]
+                "movepool": ["aquajet", "crunch", "icepunch", "return", "waterfall"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Setup Sweeper",
@@ -2612,7 +2617,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "explosion", "ironhead", "lightscreen", "payback", "reflect", "stealthrock", "toxic"]
+                "movepool": ["earthquake", "explosion", "ironhead", "payback", "stealthrock", "toxic"]
             },
             {
                 "role": "Staller",

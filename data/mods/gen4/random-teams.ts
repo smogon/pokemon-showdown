@@ -188,6 +188,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			['discharge', 'thunderbolt'],
 			['gunkshot', 'poisonjab'],
 			['payback', 'pursuit'],
+			['protect', 'swordsdance'],
 
 			// Assorted hardcodes go here:
 			// Manectric
@@ -463,8 +464,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Hustle': case 'Ice Body': case 'Rain Dish': case 'Sand Veil': case 'Snow Cloak': case 'Solar Power':
-		case 'Steadfast': case 'Sticky Hold': case 'Unaware':
+		case 'Hustle': case 'Ice Body': case 'Rain Dish': case 'Sand Veil': case 'Sniper': case 'Snow Cloak':
+		case 'Solar Power': case 'Steadfast': case 'Sticky Hold': case 'Unaware':
 			return true;
 		case 'Chlorophyll':
 			return !moves.has('sunnyday') && !teamDetails.sun;
@@ -480,7 +481,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		case 'Skill Link':
 			return !counter.get('skilllink');
 		case 'Swarm':
-			return !counter.get('Bug');
+			return !counter.get('Bug') && !moves.has('uturn');
 		case 'Technician':
 			return !counter.get('technician');
 		}

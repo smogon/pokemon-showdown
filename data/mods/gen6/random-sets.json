@@ -120,7 +120,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["facade", "flamewheel", "protect", "suckerpunch", "swordsdance", "uturn"]
+                "movepool": ["crunch", "facade", "flamewheel", "protect", "suckerpunch", "swordsdance", "uturn"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },
@@ -223,7 +224,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["dazzlinggleam", "fireblast", "healbell", "lightscreen", "protect", "reflect", "stealthrock", "thunderwave", "wish"]
+                "movepool": ["dazzlinggleam", "fireblast", "healbell", "knockoff", "protect", "stealthrock", "thunderwave", "wish"]
             }
         ]
     },
@@ -364,6 +365,10 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["hiddenpowerfire", "knockoff", "powerwhip", "sleeppowder", "sludgebomb", "suckerpunch"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["powerwhip", "sludgebomb", "sunnyday", "weatherball"]
             }
         ]
     },
@@ -501,7 +506,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["focusblast", "foulplay", "lightscreen", "protect", "psychic", "reflect", "thunderwave", "toxic", "wish"]
+                "movepool": ["focusblast", "foulplay", "protect", "psychic", "thunderwave", "toxic", "wish"]
             },
             {
                 "role": "Staller",
@@ -743,7 +748,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["freezedry", "healbell", "hydropump", "icebeam", "thunderbolt", "toxic"]
+                "movepool": ["freezedry", "healbell", "hydropump", "icebeam", "toxic"]
             },
             {
                 "role": "Staller",
@@ -2001,7 +2006,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["encore", "roost", "thunderwave", "toxic", "uturn"]
+                "movepool": ["encore", "roost", "thunderwave", "uturn"]
             }
         ]
     },
@@ -2010,7 +2015,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["bugbuzz", "encore", "roost", "thunderwave", "wish"]
+                "movepool": ["bugbuzz", "encore", "roost", "thunderwave"]
             }
         ]
     },
@@ -2356,7 +2361,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "explosion", "freezedry", "iceshard", "return", "spikes"]
+                "movepool": ["earthquake", "explosion", "freezedry", "iceshard", "return", "spikes"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -2844,7 +2850,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["aquajet", "crunch", "icepunch", "lowkick", "waterfall"],
-                "preferredTypes": ["Fighting"]
+                "preferredTypes": ["Ice"]
             }
         ]
     },
@@ -2954,7 +2960,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "ironhead", "lightscreen", "psychic", "reflect", "stealthrock", "toxic"]
+                "movepool": ["earthquake", "ironhead", "psychic", "stealthrock", "toxic"]
             },
             {
                 "role": "Staller",
@@ -4755,22 +4761,16 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["blazekick", "extremespeed", "ironhead", "shiftgear", "thunderbolt", "xscissor"]
+                "movepool": ["blazekick", "ironhead", "shiftgear", "thunderbolt", "xscissor"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["blazekick", "extremespeed", "ironhead", "uturn"]
             },
             {
                 "role": "Fast Attacker",
                 "movepool": ["bugbuzz", "flamethrower", "flashcannon", "icebeam", "thunderbolt", "uturn"],
                 "preferredTypes": ["Bug"]
-            }
-        ]
-    },
-    "genesectdouse": {
-        "level": 75,
-        "sets": [
-            {
-                "role": "Wallbreaker",
-                "movepool": ["bugbuzz", "extremespeed", "flamethrower", "icebeam", "ironhead", "technoblast", "thunderbolt", "uturn"],
-                "preferredTypes": ["Water"]
             }
         ]
     },
