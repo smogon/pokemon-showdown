@@ -453,7 +453,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			const targetType = pokemon.types[1];
+			const targetType = pokemon.getTypes(true, true)[1];
 			if (pokemon.baseSpecies.baseSpecies === 'Charizard') {
 				this.add('-item', pokemon, 'Charizardite Shard X');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
