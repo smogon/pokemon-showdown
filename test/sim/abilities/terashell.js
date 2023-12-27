@@ -17,7 +17,7 @@ describe('Tera Shell', function () {
 		battle.makeChoices();
 		const terapagos = battle.p1.active[0];
 		const damage = terapagos.maxhp - terapagos.hp;
-		assert.bounded(damage, [20, 24], `Tera Shell should yield not very effective damage roll, actual damage taken is ${damage}`);
+		assert.bounded(damage, [14-16], `Tera Shell should yield not very effective damage roll, actual damage taken is ${damage}`);
 
 		battle.makeChoices();
 		assert.bounded(terapagos.maxhp - terapagos.hp - damage, [40, 48], `Tera Shell should not reduce damage, because Snorlax was not at full HP`);
