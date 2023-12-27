@@ -604,10 +604,10 @@
         "moves": ["haze", "nightshade", "stealthrock", "strengthsap", "willowisp"]
     },
     "octillery": {
-        "level": 86,
-        "moves": ["energyball", "fireblast", "gunkshot", "hydropump", "icebeam", "protect"],
-        "doublesLevel": 84,
-        "doublesMoves": ["fireblast", "gunkshot", "hydropump", "icebeam", "protect", "substitute"]
+        "level": 90,
+        "moves": ["energyball", "fireblast", "gunkshot", "hydropump", "icebeam", "scald", "thunderwave"],
+        "doublesLevel": 90,
+        "doublesMoves": ["fireblast", "gunkshot", "hydropump", "icebeam", "protect", "thunderwave"]
     },
     "delibird": {
         "level": 100,
@@ -879,10 +879,10 @@
         "doublesMoves": ["closecombat", "knockoff", "protect", "suckerpunch", "swordsdance"]
     },
     "glalie": {
-        "level": 80,
-        "moves": ["disable", "earthquake", "freezedry", "protect", "substitute"],
-        "doublesLevel": 84,
-        "doublesMoves": ["disable", "earthquake", "freezedry", "protect", "substitute"]
+        "level": 94,
+        "moves": ["earthquake", "explosion", "freezedry", "spikes", "superfang", "taunt"],
+        "doublesLevel": 94,
+        "doublesMoves": ["disable", "foulplay", "freezedry", "helpinghand", "icywind", "protect"]
     },
     "walrein": {
         "level": 86,
@@ -1195,7 +1195,7 @@
         "level": 82,
         "moves": ["healbell", "knockoff", "psychic", "stealthrock", "uturn", "yawn"],
         "doublesLevel": 86,
-        "doublesMoves": ["helpinghand", "knockoff", "psychic", "stealthrock", "thunderwave", "u-turn", "yawn"]
+        "doublesMoves": ["helpinghand", "knockoff", "psychic", "stealthrock", "thunderwave", "uturn", "yawn"]
     },
     "mesprit": {
         "level": 84,
@@ -1734,7 +1734,7 @@
         "level": 81,
         "moves": ["bravebird", "defog", "flareblitz", "roost", "swordsdance", "uturn"],
         "doublesLevel": 86,
-        "doublesMoves": ["bravebird", "defog", "incinerate", "overheat", "tailwind", "u-turn", "willowisp"]
+        "doublesMoves": ["bravebird", "defog", "incinerate", "overheat", "tailwind", "uturn", "willowisp"]
     },
     "pangoro": {
         "level": 84,

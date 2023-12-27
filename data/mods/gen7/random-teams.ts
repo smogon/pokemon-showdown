@@ -128,7 +128,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Ice') || movePool.includes('blizzard') ||
+				!counter.get('Ice') || (!moves.has('blizzard') && movePool.includes('freezedry')) ||
 				abilities.has('Refrigerate') && (movePool.includes('return') || movePool.includes('hypervoice'))
 			),
 			Normal: movePool => movePool.includes('boomburst'),
@@ -378,6 +378,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (!abilities.has('Prankster')) {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
+
+		if (abilities.has('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
+
 		// Z-Conversion Porygon-Z
 		if (species.id === 'porygonz') {
 			this.incompatibleMoves(moves, movePool, 'shadowball', 'recover');
@@ -501,8 +504,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Seismic Toss, Spore, and Sticky Web
-		for (const moveid of ['seismictoss', 'spore', 'stickyweb']) {
+		// Enforce Blizzard, Seismic Toss, Spore, and Sticky Web
+		for (const moveid of ['blizzard', 'seismictoss', 'spore', 'stickyweb']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
@@ -718,7 +721,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		switch (ability) {
 		case 'Battle Bond': case 'Dazzling': case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter':
 		case 'Ice Body': case 'Innards Out': case 'Liquid Voice': case 'Magician': case 'Moody': case 'Pressure':
-		case 'Sand Veil': case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
+		case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Weak Armor':
 			return true;
 		case 'Aerilate': case 'Galvanize': case 'Pixilate': case 'Refrigerate':
 			return ['doubleedge', 'hypervoice', 'return'].every(m => !moves.has(m));
@@ -764,7 +767,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force')
 			);
 		case 'Oblivious': case 'Prankster':
-			return !counter.get('Status');
+			return (!counter.get('Status') || (species.id === 'tornadus' && moves.has('bulkup')));
+		case 'Overcoat':
+			return types.has('Grass');
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Power Construct':
@@ -785,7 +790,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return (
 				!counter.get('sheerforce') ||
 				moves.has('doubleedge') || abilities.has('Guts') ||
-				!!species.isMega || species.id === 'toucannon'
+				!!species.isMega
 			);
 		case 'Simple':
 			return !counter.get('setup');
@@ -800,7 +805,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return (!!counter.get('recoil') && !counter.get('recovery') ||
 				(species.id === 'steelix' && role === 'Wallbreaker'));
 		case 'Swarm':
-			return (!counter.get('Bug') || !!species.isMega);
+			return ((!counter.get('Bug') && !moves.has('uturn')) || !!species.isMega);
 		case 'Technician':
 			return (!counter.get('technician') || moves.has('tailslap') || !!species.isMega || species.id === 'persianalola');
 		case 'Tinted Lens':
@@ -854,12 +859,13 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'raticatealola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
 		if (species.id === 'arcanine') return 'Intimidate';
+		if (species.id === 'toucannon' && !counter.get('sheerforce') && !counter.get('skilllink')) return 'Keen Eye';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (
-			['dusknoir', 'raikou', 'suicune', 'vespiquen', 'wailord'].includes(species.id)
+			['dusknoir', 'raikou', 'suicune', 'vespiquen'].includes(species.id)
 		) return 'Pressure';
 		if (species.id === 'tsareena') return 'Queenly Majesty';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
