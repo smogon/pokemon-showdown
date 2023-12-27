@@ -13,8 +13,7 @@ describe('Tera Blast', function () {
 		]]);
 		battle.makeChoices('move terablast terastallize', 'move protect');
 
-		const leftPokemon = battle.p1.pokemon[0];
-		assert.equal(leftPokemon.lastMove.category, 'Special');
+		assert.equal(battle.p1.pokemon[0].lastMove.category, 'Special');
 	});
 
 	it(`should be a physical attack when terastallized with higher attack stat`, function () {
@@ -28,8 +27,7 @@ describe('Tera Blast', function () {
 		battle.makeChoices('move dragondance', 'move protect');
 		battle.makeChoices('move terablast terastallize', 'move protect');
 
-		const leftPokemon = battle.p1.pokemon[0];
-		assert.equal(leftPokemon.lastMove.category, 'Physical');
+		assert.equal(battle.p1.pokemon[0].lastMove.category, 'Physical');
 	});
 
 	it(`should be a special attack when not terastallized, even if attack stat is higher`, function () {
@@ -44,11 +42,10 @@ describe('Tera Blast', function () {
 		// However, Regidrago is not terastallized when using Tera Blast.
 		battle.makeChoices('move terablast', 'move protect');
 
-		const leftPokemon = battle.p1.pokemon[0];
-		assert.equal(leftPokemon.lastMove.category, 'Special');
+		assert.equal(battle.p1.pokemon[0].lastMove.category, 'Special');
 	});
 
-	// Skipped until https://github.com/smogon/pokemon-showdown/issues/9381 is fixed
+	// Skipped until https://github.com/smogon/pokemon-showdown/issues/9381 is fixed.
 	it.skip(`should be a special attack when terastallized even if target ignores stat changes`, function () {
 		const battle = common.createBattle([[
 			// Regidrago has equal base attack and special attack stats.
@@ -61,7 +58,6 @@ describe('Tera Blast', function () {
 		battle.makeChoices('move dragondance', 'move splash');
 		battle.makeChoices('move terablast terastallize', 'move splash');
 
-		const leftPokemon = battle.p1.pokemon[0];
-		assert.equal(leftPokemon.lastMove.category, 'Physical');
+		assert.equal(battle.p1.pokemon[0].lastMove.category, 'Physical');
 	});
 });
