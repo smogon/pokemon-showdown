@@ -263,7 +263,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * place in.
 	 */
 	removeBannedUser(user: User) {
-		if (this.forfeit) this.forfeit(user);
+		this.forfeit?.(user);
 	}
 
 	/**

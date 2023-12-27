@@ -1361,6 +1361,7 @@ export class GlobalRoomState {
 				const player = room.battle.players[i];
 				player.id = pid;
 				player.name = pid; // in case user hasn't reconnected yet
+				player.hasTeam = true;
 				const user = Users.getExact(pid);
 				if (user) {
 					this.rejoinBattle(room, user, i);
