@@ -20,7 +20,7 @@ describe('Tera Shell', function () {
 		assert.bounded(damage, [14-16], `Tera Shell should yield not very effective damage roll, actual damage taken is ${damage}`);
 
 		battle.makeChoices();
-		assert.bounded(terapagos.maxhp - terapagos.hp - damage, [40, 48], `Tera Shell should not reduce damage, because Snorlax was not at full HP`);
+		assert.bounded(terapagos.maxhp - terapagos.hp - damage, [28, 33], `Tera Shell should not reduce damage, because Terapagos-Terastal was not at full HP`);
 	});
 
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9893603
@@ -46,7 +46,7 @@ describe('Tera Shell', function () {
 		battle.makeChoices();
 		const terapagos = battle.p1.active[0];
 		const damage = terapagos.maxhp - terapagos.hp;
-		assert.bounded(damage, [21, 27], `Tera Shell should yield not very effective damage for both all hits of multi-hit move, actual damage taken is ${damage}`);
+		assert.bounded(damage, [15, 18], `Tera Shell should yield not very effective damage for both all hits of multi-hit move, actual damage taken is ${damage}`);
 	});
 
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9893651
@@ -60,7 +60,7 @@ describe('Tera Shell', function () {
 		battle.makeChoices('move sleeptalk', 'move wickedblow');
 		const terapagos = battle.p1.active[0];
 		const damage = terapagos.maxhp - terapagos.hp;
-		assert.bounded(damage, [40, 48], `Tera Shell should not reduce damage, because Tera Shell should be suppressed`);
+		assert.bounded(damage, [28, 33], `Tera Shell should not reduce damage, because Tera Shell should be suppressed`);
 	});
 
 	// TODO unconfirmed behavior, currently applies resistance to each type of a possibly multi-type pokemon
