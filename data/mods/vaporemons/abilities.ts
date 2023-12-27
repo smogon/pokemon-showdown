@@ -944,7 +944,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-message', `${source.name}'s splashed around in the mud!`);
 		},
 		onModifyMove(move, pokemon) {
-			if (['Muddy Water', 'Mud Shot', 'Mud Bomb', 'Mud-Slap'].includes(move.name) && move.secondaries) {
+			if (['muddywater', 'mudshot', 'mudbomb', 'mudslap'].includes(move.id)) {
 				delete move.secondaries;
 				delete move.self;
 			}
