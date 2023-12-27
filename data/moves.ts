@@ -19954,9 +19954,21 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if (pokemon.terastallized && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+			if (!pokemon.terastallized) return;
+
+			// When checking the attacker's stats to determine move category, ignore abilities that
+			// change the stat stage boosts at calculation time. This will not ignore abilities whose
+			// stat stage changes have already been applied to the boost table.
+			const originalIgnoreAbility = move.ignoreAbility;
+			move.ignoreAbility = true;
+			const unModifiedAtk = pokemon.getStat('atk', false, true);
+			const unModifiedSpAtk = pokemon.getStat('spa', false, true);
+			// Reset the move so that the target's abilities will be applied in damage calculation.
+			move.ignoreAbility = originalIgnoreAbility;
+			if (unModifiedAtk > unModifiedSpAtk) {
 				move.category = 'Physical';
 			}
+
 			if (pokemon.terastallized === 'Stellar') {
 				move.self = {boosts: {atk: -1, spa: -1}};
 			}
