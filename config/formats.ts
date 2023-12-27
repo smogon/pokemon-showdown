@@ -1818,11 +1818,12 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Flutter Mane',
-			'Giratina', 'Giratina-Origin', 'Groudon', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Landorus-Base', 'Magearna', 'Mewtwo', 'Miraidon', 'Palafin', 'Palkia',
-			'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Shaymin-Sky', 'Spectrier', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned',
-			'Arena Trap', 'Moody', 'Shadow Tag', 'Choice Scarf', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass',
-			'Last Respects', 'Revival Blessing', 'Shed Tail',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Espathra',
+			'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White',
+			'Landorus-Base', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palafin', 'Palkia', 'Palkia-Origin',
+			'Rayquaza', 'Regieleki', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Spectrier', 'Terapagos', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
+			'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Choice Scarf', 'Focus Band', 'Focus Sash', 'King\'s Rock', 'Quick Claw', 'Razor Fang',
+			'Baton Pass', 'Last Respects', 'Revival Blessing', 'Shed Tail',
 		],
 		onValidateRule() {
 			if (this.format.gameType !== 'singles') {
