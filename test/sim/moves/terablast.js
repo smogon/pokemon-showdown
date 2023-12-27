@@ -51,7 +51,8 @@ describe('Tera Blast', function () {
 		assert.equal(leftPokemon.lastMove.category, 'Special');
 	});
 
-	it(`should be a special attack when terastallized even if target ignores stat changes`, function () {
+	// Skipped until https://github.com/smogon/pokemon-showdown/issues/9381 is fixed
+	it.skip(`should be a special attack when terastallized even if target ignores stat changes`, function () {
 		const battle = common.createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
@@ -65,8 +66,6 @@ describe('Tera Blast', function () {
 
 		const leftPokemon = battle.p1.pokemon[0];
 		assert.notEqual(leftPokemon.terastallized, undefined);
-		// TODO(https://github.com/smogon/pokemon-showdown/issues/9381)
-		// This test reproduces a bug. The category should be 'Physical' when fixed.
-		assert.equal(leftPokemon.lastMove.category, 'Special');
+		assert.equal(leftPokemon.lastMove.category, 'Physical');
 	});
 });
