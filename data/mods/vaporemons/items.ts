@@ -294,14 +294,14 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Punching Glove boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move.flags['punch']) delete move.flags['contact'];
 		},
-		desc: "Holder's punch-based attacks have 1.2x power and do not make contact.",
+		desc: "Holder's punch-based attacks have 1.3x power and do not make contact.",
 		num: 1884,
 		gen: 9,
 	},
@@ -315,14 +315,14 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['slicing']) {
 				this.debug('Razor Claw boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move.flags['slicing']) delete move.flags['contact'];
 		},
-		desc: "Holder's slicing-based attacks have 1.2x power and do not make contact.",
+		desc: "Holder's slicing-based attacks have 1.3x power and do not make contact.",
 		num: 326,
 		gen: 4,
 	},
@@ -337,14 +337,14 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['bite']) {
 				this.debug('Razor Fang boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move.flags['bite']) delete move.flags['contact'];
 		},
-		desc: "Holder's biting-based attacks have 1.2x power and do not make contact.",
+		desc: "Holder's biting-based attacks have 1.3x power and do not make contact.",
 		num: 327,
 		gen: 4,
 		isNonstandard: null,
@@ -401,8 +401,11 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		fling: {
 			basePower: 30,
 		},
-		// effect coded into the moves themselves
-		desc: "Holder's wind-based attacks heal the party's status.",
+		onSwitchOut(pokemon) {
+			pokemon.cureStatus();
+		},
+		// other effect coded into the moves themselves
+		desc: "Holder's wind-based attacks heal the party's status. Holder has its status condition cured when it switches out.",
 		num: -1009,
 		gen: 9,
 	},
@@ -450,14 +453,11 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			const type = pokemon.hpType;
+			const targetType = pokemon.getTypes(true, true)[1];
 			if (pokemon.baseSpecies.baseSpecies === 'Charizard') {
 				this.add('-item', pokemon, 'Charizardite Shard X');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
-				if (type && type !== '???') {
-					if (!pokemon.setType('Dragon')) return;
-					this.add('-start', pokemon, 'typechange', 'Dragon', '[from] item: Charizardite Shard X');
-				}
+				pokemon.setType(pokemon.getTypes(true).map(type => type === targetType ? "Dragon" : type));
 				this.add('-message', `${pokemon.name}'s Charizardite Shard X changed its type!`);
 				pokemon.setAbility('toughclaws', pokemon, true);
 				this.add('-activate', pokemon, 'ability: Tough Claws');
@@ -479,7 +479,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		itemUser: ["Charizard"],
 		num: -1011,
 		gen: 9,
-		desc: "Charizard: Becomes Dragon-type, Ability: Tough Claws, +1 Atk, 1.2x Dragon/Fire power.",
+		desc: "Charizard: Becomes Fire/Dragon-type, Ability: Tough Claws, +1 Atk, 1.2x Dragon/Fire power.",
 	},
 	charizarditeshardy: {
 		name: "Charizardite Shard Y",
@@ -517,7 +517,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		itemUser: ["Charizard"],
 		num: -1012,
 		gen: 9,
-		desc: "Charizard: Becomes Fire-type, Ability: Drought, +1 SpA, 1.2x Fire/Flying power.",
+		desc: "Charizard: Becomes pure Fire-type, Ability: Drought, +1 SpA, 1.2x Fire/Flying power.",
 	},
 	oddkeystone: {
 		name: "Odd Keystone",
@@ -911,14 +911,14 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move?.priority > 0.1) {
 				this.debug('Quick Claw boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove(move) {
 			if (move?.priority > 0.1) delete move.flags['contact'];
 		},
-		desc: "Holder's priority attacks have 1.2x power and do not make contact.",
+		desc: "Holder's priority attacks have 1.3x power and do not make contact.",
 		num: 217,
 		gen: 2,
 	},
@@ -932,13 +932,13 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.recoil || move.hasCrashDamage) {
 				this.debug('Protective Pads boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5324, 4096]);
 			}
 		},
 		// protective effect handled in Battle#checkMoveMakesContact
 		num: 880,
 		gen: 7,
-		desc: "This Pokemon's recoil moves deal 1.2x damage and all of its moves don't make contact.",
+		desc: "This Pokemon's recoil moves deal 1.3x damage and all of its moves don't make contact.",
 	},
 	desertrose: {
 		name: "Desert Rose",
