@@ -1879,6 +1879,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Justified", H: "Water Veil"},
 	},
+	keldeoresolute: {
+		inherit: true,
+		abilities: {0: "Justified", H: "Water Veil"},
+	},
 	espurr: {
 		inherit: true,
 		abilities: {0: "Green-Eyed", 1: "Infiltrator", H: "Own Tempo"},
