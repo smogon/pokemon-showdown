@@ -950,7 +950,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onBasePower(basePower, attacker, defender, move) {
-			if (['Muddy Water', 'Mud Shot', 'Mud Bomb', 'Mud-Slap'].includes(move.name)) {
+			if (['muddywater', 'mudshot', 'mudbomb', 'mudslap'].includes(move.id)) {
 				return this.chainModify(2);
 			}
 		},
