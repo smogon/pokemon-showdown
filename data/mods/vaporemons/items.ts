@@ -479,7 +479,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		itemUser: ["Charizard"],
 		num: -1011,
 		gen: 9,
-		desc: "Charizard: Becomes Dragon-type, Ability: Tough Claws, +1 Atk, 1.2x Dragon/Fire power.",
+		desc: "Charizard: Becomes Fire/Dragon-type, Ability: Tough Claws, +1 Atk, 1.2x Dragon/Fire power.",
 	},
 	charizarditeshardy: {
 		name: "Charizardite Shard Y",
@@ -517,7 +517,7 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		itemUser: ["Charizard"],
 		num: -1012,
 		gen: 9,
-		desc: "Charizard: Becomes Fire-type, Ability: Drought, +1 SpA, 1.2x Fire/Flying power.",
+		desc: "Charizard: Becomes pure Fire-type, Ability: Drought, +1 SpA, 1.2x Fire/Flying power.",
 	},
 	oddkeystone: {
 		name: "Odd Keystone",
