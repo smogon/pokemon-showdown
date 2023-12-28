@@ -334,9 +334,7 @@ export class RoomBattleTimer {
 			const secondsLeft = player.turnSecondsLeft;
 			let grace = player.secondsLeft - this.settings.starting;
 			if (grace < 0) grace = 0;
-			if (player) {
-				player.sendRoom(`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` + (grace ? ` | ${grace} sec grace` : ``));
-			}
+			player.sendRoom(`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` + (grace ? ` | ${grace} sec grace` : ``));
 			if (secondsLeft <= 30 && secondsLeft < this.settings.starting) {
 				room.add(`|inactive|${player.name} has ${secondsLeft} seconds left this turn.`);
 			}
@@ -573,10 +571,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		this.stream = PM.createStream();
 
-		let ratedMessage = '';
-		if (options.ratedMessage) {
-			ratedMessage = options.ratedMessage;
-		}
+		let ratedMessage = options.ratedMessage || '';
 		if (this.rated) {
 			ratedMessage = 'Rated battle';
 		} else if (this.room.tour) {
@@ -614,12 +609,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	checkActive() {
-		let active = true;
-		if (this.ended || !this.started) {
-			active = false;
-		} else if (this.players.some(p => !p.active)) {
-			active = false;
-		}
+		const active = (this.started && !this.ended && this.players.every(p => p.active));
 		Rooms.global.battleCount += (active ? 1 : 0) - (this.active ? 1 : 0);
 		this.room.active = active;
 		this.active = active;
@@ -817,10 +807,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 					choice: '',
 				};
 				this.requestCount++;
-				if (player) player.sendRoom(`|request|${requestJSON}`);
+				player?.sendRoom(`|request|${requestJSON}`);
 				break;
 			}
-			if (player) player.sendRoom(lines[2]);
+			player?.sendRoom(lines[2]);
 			break;
 		}
 
@@ -1407,10 +1397,8 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	}
 	override onConnect(user: User) {
 		const player = this.playerTable[user.id];
-		if (player) {
-			player.sendRoom('|cantleave|');
-			player.readyButton();
-		}
+		player?.sendRoom('|cantleave|');
+		player?.readyButton();
 	}
 	override makePlayer(user: User | null, options: RoomBattlePlayerOptions): BestOfPlayer {
 		return new BestOfPlayer(user, this, ++this.playerNum, options);
