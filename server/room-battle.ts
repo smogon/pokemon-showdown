@@ -1568,8 +1568,8 @@ export class BestOfGame extends RoomGames.RoomGame<BestOfPlayer> {
 		if (!room.battle || this.winner) return; // ???
 		const cmd = `/msgroom ${this.room.roomid},/confirmready`;
 		for (const battlePlayer of room.battle.players) {
-			const player = this.playerTable[battlePlayer.id];
-			if (!player) throw new Error(`Player ${battlePlayer.id} in ${this.roomid} doesn't exist`);
+			const player = this.players[battlePlayer.num - 1];
+			if (!player) throw new Error(`Player ${battlePlayer.num} in ${this.roomid} doesn't exist`);
 
 			const prompt = `|c|&|/log Are you ready for game ${this.games.length + 1}, ${player.name}?`;
 			const button = `|c|&|/uhtml prompt-${player.id},<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`;
