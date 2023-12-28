@@ -315,7 +315,11 @@ export class Pokemon {
 		}
 		this.speciesState = { id: this.species.id };
 
-		this.name = set.name.substr(0, 20);
+		if (this.battle.pokefindBattle) {
+			this.name = set.name;
+		} else {
+			this.name = set.name.substr(0, 20);
+		}
 		this.fullname = this.side.id + ": " + this.name;
 
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
