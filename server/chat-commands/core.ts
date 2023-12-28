@@ -867,7 +867,7 @@ export const commands: Chat.ChatCommands = {
 
 	confirmready(target, room, user) {
 		const game = this.requireGame(Rooms.BestOfGame);
-		game.confirmReady(user.id);
+		game.confirmReady(user);
 	},
 
 	acceptopenteamsheets(target, room, user, connection, cmd) {

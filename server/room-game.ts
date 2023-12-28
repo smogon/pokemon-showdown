@@ -31,7 +31,10 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	/**
 	 * This will be '' if there's no user associated with the player.
 	 *
-	 * we explicitly don't hold a direct reference to the user
+	 * This includes after the game ends, where the game should no longer
+	 * be in the user's game list.
+	 *
+	 * We intentionally don't hold a direct reference to the user.
 	 */
 	id: ID;
 	constructor(user: User | string | null, game: GameClass, num = 0) {
