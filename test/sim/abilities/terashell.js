@@ -17,7 +17,6 @@ describe('Tera Shell', function () {
 		battle.makeChoices();
 		const terapagos = battle.p1.active[0];
 		const damage = terapagos.maxhp - terapagos.hp;
-		console.log(damage);
 		assert.bounded(damage, [14, 16], `Tera Shell should yield not very effective damage roll, actual damage taken is ${damage}`);
 
 		battle.makeChoices();
