@@ -933,6 +933,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		// console.log(JSON.stringify(logData));
 	}
 	override onConnect(user: User, connection: Connection | null = null) {
+		if (this.ended && this.room.parent?.game?.constructor.name === 'BestOfGame') {
+			const parentGame = this.room.parent.game as BestOfGame;
+			parentGame.playerTable[user.id]?.updateReadyButton();
+		}
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
@@ -1321,7 +1325,7 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 			`https://${Config.routes.client}/sprites/trainers/${avatar}.png`;
 		return url;
 	}
-	readyButton() {
+	updateReadyButton() {
 		const user = this.getUser();
 		if (!user?.connected) return;
 
@@ -1398,7 +1402,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	override onConnect(user: User) {
 		const player = this.playerTable[user.id];
 		player?.sendRoom('|cantleave|');
-		player?.readyButton();
+		player?.updateReadyButton();
 	}
 	override makePlayer(user: User | null, options: RoomBattlePlayerOptions): BestOfPlayer {
 		return new BestOfPlayer(user, this, ++this.playerNum, options);
@@ -1413,7 +1417,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		this.waitingBattle = null;
 		for (const player of this.players) {
 			player.ready = null;
-			player.readyButton();
+			player.updateReadyButton();
 		}
 		if (this.nextBattleTimer) {
 			clearInterval(this.nextBattleTimer);
@@ -1464,8 +1468,12 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			battleRoom.battle?.timer.start();
 		}
 		const gameNum = this.games.length;
+		const p1 = this.players[0];
+		const p2 = this.players[1];
 		battleRoom.add(
-			`|html|<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`
+			Utils.html`|html|<table width="100%"><tr><td align="left">${p1.name}</td><td align="right">${p2.name}</tr>` +
+			`<tr><td align="left">${this.renderWins(p1)}</td><td align="right">${this.renderWins(p2)}</tr></table>` +
+			`<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`
 		).update();
 
 		this.room.add(`|html|<h2>Game ${gameNum}</h2>`);
@@ -1475,6 +1483,12 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		prevBattleRoom?.add(
 			`|html|Next: <a href="/${battleRoom.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`
 		).update();
+	}
+	renderWins(player: BestOfPlayer) {
+		const wins = this.games.filter(game => game.winner === player).length;
+		const winBuf = `<i class="fa fa-circle"></i> `.repeat(wins);
+		const restBuf = `<i class="fa fa-circle-o"></i> `.repeat(this.winThreshold - wins);
+		return player.num === 1 ? winBuf + restBuf : restBuf + winBuf;
 	}
 	updateDisplay() {
 		const p1name = this.players[0].name;
@@ -1602,7 +1616,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		this.waitingBattle = room;
 		for (const player of this.players) {
 			player.ready = false;
-			player.readyButton();
+			player.updateReadyButton();
 		}
 		this.nextBattleTimerEnd = Date.now() + 60_000;
 		this.nextBattleTimer = setInterval(() => this.pokeNextBattleTimer(), 10_000);
@@ -1633,7 +1647,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		}
 
 		player.ready = true;
-		player.readyButton();
+		player.updateReadyButton();
 		const readyMsg = `||${player.name} is ready for game ${this.games.length + 1}.`;
 		this.waitingBattle.add(readyMsg).update();
 		this.room.add(readyMsg).update();
