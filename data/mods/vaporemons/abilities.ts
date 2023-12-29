@@ -35,7 +35,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Cute Charm",
 		shortDesc: "This Pokemon takes 50% damage from moves of its own type.",
 		rating: 3,
@@ -93,7 +93,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Grass Pelt",
 		shortDesc: "On switch-in, summons Grassy Terrain. During Grassy Terrain, Def is 1.3333x.",
 		rating: 4.5,
@@ -846,7 +846,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			return false;
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Steely Spirit",
 		rating: 3.5,
 		shortDesc: "This Pokemon's Steel power is 2x; it can't be paralyzed; Electric power against it is halved.",
@@ -865,7 +865,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Sheer Heart",
 		shortDesc: "Special attacks have 1.3x power; stat changes to the Special Attack stat have no effect.",
 	},
@@ -980,7 +980,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return damage / 2;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Exoskeleton",
 		rating: 4,
 		shortDesc: "(Mostly functional) If Bug: no Bug weaknesses. If non-Bug: +Bug resistances.",
@@ -1019,7 +1019,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			return false;
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Water Veil",
 		rating: 2,
 		num: 41,
@@ -1036,7 +1036,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.67);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Shield Dust",
 		rating: 4,
 		num: 19,
@@ -1166,7 +1166,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.effectState.target;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Fairy Ringer",
 		rating: 3,
 		shortDesc: "This Pokemon draws Fairy moves to itself to raise Atk by 1; Fairy immunity.",
@@ -1191,7 +1191,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Justified",
 		rating: 3,
 		num: 154,
@@ -1428,7 +1428,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Damp",
 		rating: 0.5,
 		num: 6,

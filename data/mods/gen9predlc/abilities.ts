@@ -11,7 +11,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onTryBoost() {},
 		onModifyMove() {},
-		isBreakable: undefined,
+		flags: {},
 		rating: 0,
 	},
 	mindseye: {

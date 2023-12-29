@@ -33,9 +33,9 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
 	readonly suppressWeather: boolean;
+	readonly flags: AbilityFlags;
 	declare readonly condition?: ConditionData;
 	declare readonly isPermanent?: boolean;
-	declare readonly isBreakable?: boolean;
 
 	constructor(data: AnyObject) {
 		super(data);
@@ -43,6 +43,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
 		this.suppressWeather = !!data.suppressWeather;
+		this.flags = data.flags || {};
 		this.rating = data.rating || 0;
 
 		if (!this.gen) {

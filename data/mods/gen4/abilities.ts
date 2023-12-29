@@ -385,7 +385,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts[key]! *= 2;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Simple",
 		rating: 4,
 		num: 86,
@@ -481,7 +481,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Thick Fat",
 		rating: 3.5,
 		num: 47,

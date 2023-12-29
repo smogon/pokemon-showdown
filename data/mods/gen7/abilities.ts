@@ -24,11 +24,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	darkaura: {
 		inherit: true,
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 	fairyaura: {
 		inherit: true,
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 	innerfocus: {
 		inherit: true,
