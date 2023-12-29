@@ -1617,7 +1617,7 @@ export class TeamValidator {
 		if (species.baseSpecies === "Unown" && dex.gen === 2) {
 			let resultBinary = '';
 			for (const iv of ['atk', 'def', 'spe', 'spa'] as const) {
-				resultBinary += Math.floor(set.ivs[iv] / 2).toString(2).padStart(4, '0').slice(1, 3);
+				resultBinary += set.ivs[iv].toString(2).padStart(5, '0').slice(1, 3);
 			}
 			const resultDecimal = Math.floor(parseInt(resultBinary, 2) / 10);
 			const expectedLetter = String.fromCharCode(resultDecimal + 65);
