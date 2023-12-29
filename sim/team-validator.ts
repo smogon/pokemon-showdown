@@ -1609,6 +1609,19 @@ export class TeamValidator {
 		if (species.baseSpecies === "Greninja" && toID(set.ability) === 'battlebond') {
 			set.species = "Greninja-Bond";
 		}
+
+		if (species.baseSpecies === "Unown" && dex.gen === 2) {
+			let resultBinary = '';
+			for (const iv of ['atk', 'def', 'spe', 'spa'] as const) {
+				resultBinary += set.ivs[iv].toString(2).padStart(5, '0').slice(1, 3);
+			}
+			const resultDecimal = Math.floor(parseInt(resultBinary, 2) / 10);
+			const expectedLetter = String.fromCharCode(resultDecimal + 65);
+			const unownLetter = species.forme || "A";
+			if (unownLetter !== expectedLetter) {
+				problems.push(`Unown has forme ${unownLetter}, but its DVs give it the forme ${expectedLetter}.`);
+			}
+		}
 		return problems;
 	}
 
