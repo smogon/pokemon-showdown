@@ -16,7 +16,7 @@ import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
 import * as RoomGames from "./room-game";
 import type {Tournament} from './tournaments/index';
-import {RoomSettings} from './rooms';
+import type {RoomSettings} from './rooms';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 export type PlayerIndex = 1 | 2 | 3 | 4;
@@ -59,7 +59,6 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	hitDisconnectLimit = false;
 	wantsTie: boolean;
 	wantsOpenTeamSheets: boolean | null;
-	active: boolean;
 	eliminated: boolean;
 	/**
 	 * Total timer.
@@ -93,8 +92,15 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
  	*/
 	dcSecondsLeft: number;
 	/**
+	 * Is the user actually in the room?
+	 */
+	active: boolean;
+	/**
 	 * Used to track a user's last known connection status, and display
 	 * the proper message when it changes.
+	 *
+	 * `.active` is set when the user joins/leaves, but `.connected` is
+	 * only set after the relevant messages are sent.
 	 */
 	connected: boolean;
 	invite: ID;
@@ -114,7 +120,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
 		this.wantsTie = false;
 		this.wantsOpenTeamSheets = null;
-		this.active = true;
+		this.active = !!user?.connected;
 		this.eliminated = false;
 
 		this.secondsLeft = 1;
@@ -260,6 +266,7 @@ export class RoomBattleTimer {
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
 		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
 
+		this.checkActivity();
 		this.nextRequest();
 		return true;
 	}
@@ -402,7 +409,7 @@ export class RoomBattleTimer {
 	checkActivity() {
 		if (this.battle.ended) return;
 		for (const player of this.battle.players) {
-			const isConnected = !!player?.active;
+			const isConnected = !!player.active;
 
 			if (isConnected === player.connected) continue;
 
@@ -1198,6 +1205,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		player.invite = '';
 		const slot = player.slot;
 		if (user) {
+			player.active = user.inRooms.has(this.roomid);
+			player.connected = true;
 			const options = {
 				name: player.name,
 				avatar: user.avatar,
@@ -1208,6 +1217,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 
 			this.room.add(`|player|${slot}|${player.name}|${user.avatar}`);
 		} else {
+			player.active = false;
+			player.connected = false;
 			const options = {
 				name: '',
 			};
