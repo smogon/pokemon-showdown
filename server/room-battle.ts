@@ -100,10 +100,10 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 	 * Used to track a user's last known connection status, and display
 	 * the proper message when it changes.
 	 *
-	 * `.active` is set when the user joins/leaves, but `.connected` is
-	 * only set after the relevant messages are sent.
+	 * `.active` is set right when the user joins/leaves, but `.knownActive`
+	 * is only set after the timer knows about it.
 	 */
-	connected: boolean;
+	knownActive: boolean;
 	invite: ID;
 	/**
 	 * Has the simulator received this player's team yet?
@@ -128,7 +128,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 		this.turnSecondsLeft = 1;
 		this.dcSecondsLeft = 1;
 
-		this.connected = true;
+		this.knownActive = true;
 		this.invite = '';
 		this.hasTeam = false;
 
@@ -152,7 +152,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 			user.updateSearch();
 		}
 		this.id = '';
-		this.connected = false;
+		this.knownActive = false;
 		this.active = false;
 	}
 	updateChannel(user: User | Connection) {
@@ -351,7 +351,7 @@ export class RoomBattleTimer {
 		const room = this.battle.room;
 		for (const player of this.battle.players) {
 			if (player.request.isWait) continue;
-			if (player.connected) {
+			if (player.knownActive) {
 				player.secondsLeft -= TICK_TIME;
 				player.turnSecondsLeft -= TICK_TIME;
 			} else {
@@ -369,7 +369,7 @@ export class RoomBattleTimer {
 			const secondsLeft = player.turnSecondsLeft;
 			if (!secondsLeft) continue;
 
-			if (!player.connected && (dcSecondsLeft <= secondsLeft || this.settings.dcTimerBank)) {
+			if (!player.knownActive && (dcSecondsLeft <= secondsLeft || this.settings.dcTimerBank)) {
 				// dc timer is shown only if it's lower than turn timer or you're in timer bank mode
 				if (dcSecondsLeft % 30 === 0 || dcSecondsLeft <= 20) {
 					room.add(`|inactive|${player.name} has ${dcSecondsLeft} seconds to reconnect!`);
@@ -392,13 +392,13 @@ export class RoomBattleTimer {
 	checkActivity() {
 		if (this.battle.ended) return;
 		for (const player of this.battle.players) {
-			const isConnected = !!player.active;
+			const isActive = !!player.active;
 
-			if (isConnected === player.connected) continue;
+			if (isActive === player.knownActive) continue;
 
-			if (!isConnected) {
+			if (!isActive) {
 				// player has disconnected
-				player.connected = false;
+				player.knownActive = false;
 				if (!this.settings.dcTimerBank) {
 					// don't wait longer than 6 ticks (1 minute)
 					if (this.settings.dcTimer) {
@@ -426,7 +426,7 @@ export class RoomBattleTimer {
 				}
 			} else {
 				// player has reconnected
-				player.connected = true;
+				player.knownActive = true;
 				if (this.timerRequesters.size) {
 					let timeLeft = ``;
 					if (!player.request.isWait) {
@@ -449,7 +449,7 @@ export class RoomBattleTimer {
 		let didSomething = false;
 		for (const player of players) {
 			if (player.turnSecondsLeft > 0) continue;
-			if (this.settings.timeoutAutoChoose && player.secondsLeft > 0 && player.connected) {
+			if (this.settings.timeoutAutoChoose && player.secondsLeft > 0 && player.knownActive) {
 				void this.battle.stream.write(`>${player.slot} default`);
 				didSomething = true;
 			} else {
@@ -1147,7 +1147,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		const slot = player.slot;
 		if (user) {
 			player.active = user.inRooms.has(this.roomid);
-			player.connected = true;
+			player.knownActive = true;
 			const options = {
 				name: player.name,
 				avatar: user.avatar,
@@ -1159,7 +1159,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.room.add(`|player|${slot}|${player.name}|${user.avatar}`);
 		} else {
 			player.active = false;
-			player.connected = false;
+			player.knownActive = false;
 			const options = {
 				name: '',
 			};
