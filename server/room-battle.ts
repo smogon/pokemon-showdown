@@ -1590,9 +1590,9 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		this.games[this.games.length - 1].winner = winner;
 		if (winner) {
 			winner.wins++;
-			const loserPlayer = room.battle!.players.filter(p => p.id !== winnerid)[0];
+			const loserPlayer = room.battle!.players.filter(p => p.num !== winner.num)[0];
 			if (loserPlayer?.hitDisconnectLimit) { // disconnection means opp wins the set
-				return this.forfeit(loserPlayer.id, ` lost the series due to inactivity.`);
+				return this.forfeit(loserPlayer.name, ` lost the series due to inactivity.`);
 			}
 			this.room.add(Utils.html`|html|${winner.name} won game ${this.games.length}!`).update();
 			if (winner.wins >= this.winThreshold) {
