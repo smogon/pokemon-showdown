@@ -264,7 +264,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({atk: length}, source, source, this.dex.abilities.get('chillingneigh'));
 			}
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "As One (Glastrier)",
 		rating: 3.5,
@@ -287,7 +286,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.boost({spa: length}, source, source, this.dex.abilities.get('grimneigh'));
 			}
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "As One (Spectrier)",
 		rating: 3.5,
@@ -359,7 +357,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				source.abilityState.battleBondTriggered = true;
 			}
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Battle Bond",
 		rating: 3.5,
@@ -586,7 +583,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			return false;
 		},
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Comatose",
 		rating: 4,
@@ -998,7 +994,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
 			}
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1},
 		name: "Disguise",
 		rating: 3.5,
@@ -1709,7 +1704,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				source.formeChange(forme, effect);
 			}
 		},
-		isPermanent: true,
 		flags: {cantsuppress: 1, notransform: 1},
 		name: "Gulp Missile",
 		rating: 2.5,
@@ -1966,7 +1960,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1},
 		name: "Ice Face",
 		rating: 3,
@@ -2341,7 +2334,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	lingeringaroma: {
 		onDamagingHit(damage, target, source, move) {
 			const sourceAbility = source.getAbility();
-			if (sourceAbility.isPermanent || sourceAbility.id === 'lingeringaroma') {
+			if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'lingeringaroma') {
 				return;
 			}
 			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
@@ -2710,7 +2703,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	multitype: {
 		// Multitype's type-changing itself is implemented in statuses.js
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Multitype",
 		rating: 4,
@@ -2719,7 +2711,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	mummy: {
 		onDamagingHit(damage, target, source, move) {
 			const sourceAbility = source.getAbility();
-			if (sourceAbility.isPermanent || sourceAbility.id === 'mummy') {
+			if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'mummy') {
 				return;
 			}
 			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
@@ -2894,7 +2886,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
 				if (pokemon !== source) {
-					if (pokemon.getAbility().isPermanent) continue; // does not interact with e.g Ice Face, Zen Mode
+					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
 					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
 
 					// Will be suppressed by Pokemon#ignoringAbility if needed
@@ -3307,7 +3299,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			pokemon.maxhp = newMaxHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Power Construct",
 		rating: 5,
@@ -3827,7 +3818,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	rkssystem: {
 		// RKS System's type-changing itself is implemented in statuses.js
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "RKS System",
 		rating: 4,
@@ -4000,7 +3990,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			}
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Schooling",
 		rating: 3,
@@ -4205,7 +4194,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-immune', target, '[from] ability: Shields Down');
 			return null;
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Shields Down",
 		rating: 3,
@@ -4443,7 +4431,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			const targetForme = (move.id === 'kingsshield' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Stance Change",
 		rating: 4,
@@ -4902,7 +4889,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
 			}
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1},
 		name: "Tera Shift",
 		rating: 3,
@@ -5573,7 +5559,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				}
 			},
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Zen Mode",
 		rating: 0,
@@ -5598,7 +5583,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.effectState.heroMessageDisplayed = true;
 			}
 		},
-		isPermanent: true,
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1},
 		name: "Zero to Hero",
 		rating: 5,

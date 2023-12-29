@@ -9,7 +9,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				source.formeChange('Palafin-Hero', this.effect, true);
 			}
 		},
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		name: "Zero to Hero",
 		shortDesc: "If this Pokemon is a Palafin in Zero Form, KOing a foe has it change to Hero Form.",
 		rating: 5,

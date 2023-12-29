@@ -16,7 +16,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				if (target.m.abils?.length) {
 					for (const key of target.m.abils) {
-						if (this.dex.abilities.get(key.slice(8)).isPermanent) continue;
+						if (this.dex.abilities.get(key.slice(8)).flags['cantsuppress']) continue;
 						target.removeVolatile(key);
 					}
 				}

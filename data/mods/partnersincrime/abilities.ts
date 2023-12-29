@@ -19,7 +19,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-end', target, 'Slow Start', '[silent]');
 				}
 				if (target.m.innate) {
-					if (!this.dex.abilities.get(target.m.innate.slice(8)).isPermanent) {
+					if (!this.dex.abilities.get(target.m.innate.slice(8)).flags['cantsuppress']) {
 						target.removeVolatile(target.m.innate);
 					}
 				}

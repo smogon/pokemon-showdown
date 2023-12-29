@@ -2936,12 +2936,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			if (target.getAbility().isPermanent) return;
+			if (target.getAbility().flags['cantsuppress']) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage(damage, target) {
-			if (target.getAbility().isPermanent) return;
+			if (target.getAbility().flags['cantsuppress']) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
@@ -5003,7 +5003,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			];
 			if (
 				target.ability === source.ability ||
-				target.getAbility().isPermanent || target.ability === 'truant' ||
+				target.getAbility().flags['cantsuppress'] || target.ability === 'truant' ||
 				source.getAbility().isPermanent || additionalBannedSourceAbilities.includes(source.ability)
 			) {
 				return false;
@@ -6620,7 +6620,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 		volatileStatus: 'gastroacid',
 		onTryHit(target) {
-			if (target.getAbility().isPermanent) {
+			if (target.getAbility().flags['cantsuppress']) {
 				return false;
 			}
 			if (target.hasItem('Ability Shield')) {
@@ -6636,7 +6636,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
 			},
 			onCopy(pokemon) {
-				if (pokemon.getAbility().isPermanent) pokemon.removeVolatile('gastroacid');
+				if (pokemon.getAbility().flags['cantsuppress']) pokemon.removeVolatile('gastroacid');
 			},
 		},
 		secondary: null,
@@ -15863,7 +15863,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			];
 
 			if (target.getAbility().isPermanent || additionalBannedTargetAbilities.includes(target.ability) ||
-				source.getAbility().isPermanent) {
+				source.getAbility().flags['cantsuppress']) {
 				return false;
 			}
 		},
@@ -17089,7 +17089,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 		onTryHit(target) {
-			if (target.getAbility().isPermanent || target.ability === 'simple' || target.ability === 'truant') {
+			if (target.getAbility().flags['cantsuppress'] || target.ability === 'simple' || target.ability === 'truant') {
 				return false;
 			}
 		},
@@ -21862,7 +21862,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onTryHit(target) {
-			if (target.getAbility().isPermanent) {
+			if (target.getAbility().flags['cantsuppress']) {
 				return false;
 			}
 		},

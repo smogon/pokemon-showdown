@@ -11,7 +11,7 @@ interface AbilityEventMethods {
 /* Possible Ability flags */
 interface AbilityFlags {
 	breakable?: 1; // Can be suppressed by Mold Breaker and related effects
-	cantsuppress?: 1; // Ability can't be suppressed by Gastro Acid
+	cantsuppress?: 1; // Ability can't be suppressed by Core Enforcer, Gastro Acid, or Neutralizing Gas, or removed by Entrainment (target), Mummy, Lingering Aroma, Role Play (user), or Worry Seed
 	failroleplay?: 1; // Role Play fails if target has this Ability
 	failskillswap?: 1; // Skill Swap fails if either the user or target has this Ability
 	noentrain?: 1; // Entrainment fails if target has this Ability

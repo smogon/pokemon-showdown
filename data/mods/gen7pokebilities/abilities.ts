@@ -4,7 +4,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (target.ability === 'mummy') {
 				const sourceAbility = source.getAbility();
-				if (sourceAbility.isPermanent || sourceAbility.id === 'mummy') {
+				if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'mummy') {
 					return;
 				}
 				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
@@ -15,7 +15,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			} else {
 				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
-					.filter(val => !this.dex.abilities.get(val).isPermanent && val !== 'mummy');
+					.filter(val => !this.dex.abilities.get(val).flags['cantsuppress'] && val !== 'mummy');
 				if (!possibleAbilities.length) return;
 				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 					const abil = this.sample(possibleAbilities);

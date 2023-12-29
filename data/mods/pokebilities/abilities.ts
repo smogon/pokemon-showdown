@@ -4,7 +4,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (target.ability === 'mummy') {
 				const sourceAbility = source.getAbility();
-				if (sourceAbility.isPermanent || sourceAbility.id === 'mummy') {
+				if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'mummy') {
 					return;
 				}
 				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
@@ -15,7 +15,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			} else {
 				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
-					.filter(val => !this.dex.abilities.get(val).isPermanent && val !== 'mummy');
+					.filter(val => !this.dex.abilities.get(val).flags['cantsuppress'] && val !== 'mummy');
 				if (!possibleAbilities.length) return;
 				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 					const abil = this.sample(possibleAbilities);
@@ -44,7 +44,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			// Remove setter's innates before the ability starts
 			if (pokemon.m.innates) {
 				for (const innate of pokemon.m.innates) {
-					if (this.dex.abilities.get(innate).isPermanent || innate === 'neutralizinggas') continue;
+					if (this.dex.abilities.get(innate).flags['cantsuppress'] || innate === 'neutralizinggas') continue;
 					pokemon.removeVolatile('ability:' + innate);
 				}
 			}
@@ -58,7 +58,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				if (target.m.innates) {
 					for (const innate of target.m.innates) {
-						if (this.dex.abilities.get(innate).isPermanent) continue;
+						if (this.dex.abilities.get(innate).flags['cantsuppress']) continue;
 						target.removeVolatile('ability:' + innate);
 					}
 				}
