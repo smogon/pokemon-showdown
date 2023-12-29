@@ -1424,8 +1424,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			...player.options,
 			user: player.getUser()!,
 		}));
-		if (players.some(p => !p.user?.connected)) {
-			// user is offline
+		if (players.some(p => !p.user)) {
 			return null;
 		}
 		return {
@@ -1440,8 +1439,9 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		const options = this.getOptions();
 		if (!options) {
 			for (const p of this.players) {
-				if (!p.getUser()?.connected) {
-					this.forfeitPlayer(p, ` lost by being offline at the start of a game.`);
+				if (!p.getUser()) {
+					// tbc this isn't just being offline, it's changing name or being offline for 15 minutes
+					this.forfeitPlayer(p, ` lost by being unavailable at the start of a game.`);
 					return;
 				}
 			}
