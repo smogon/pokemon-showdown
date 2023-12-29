@@ -4815,8 +4815,12 @@ export const Formats: FormatList = [
 			'Picked Team Size = 1', 'Max Team Size = 3',
 			'Standard', 'Baton Pass Clause', 'Swagger Clause', 'Accuracy Moves Clause', 'Sleep Moves Clause',
 		],
-		banlist: ['Uber', 'Cottonee', 'Dragonite', 'Jirachi', 'Kyurem-Black', 'Mew', 'Togekiss', 'Whimsicott', 'Victini', 'Focus Band', 'Focus Sash', 'Quick Claw', 'Soul Dew', 'Perish Song'],
-		unbanlist: ['Genesect', 'Landorus', 'Manaphy', 'Thundurus', 'Tornadus-Therian'],
+		banlist: [
+			'Arceus', 'Blaziken', 'Cottonee', 'Darkrai', 'Deoxys', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh',
+			'Jirachi', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Mew', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram',
+			'Shaymin-Sky', 'Togekiss', 'Victini', 'Whimsicott', 'Zekrom', 'Focus Band', 'Focus Sash', 'Quick Claw', 'Soul Dew',
+			'Perish Song',
+		],
 	},
 	{
 		name: "[Gen 5] ZU",
@@ -5016,10 +5020,14 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3',
-			'[Gen 4] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview', '!Freeze Clause Mod',
+			'Standard', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
-		banlist: ['Jirachi', 'Latias', 'Machamp', 'Porygon-Z', 'Shaymin', 'Snorlax', 'Togekiss', 'Focus Sash', 'Destiny Bond', 'Explosion', 'Perish Song', 'Self-Destruct'],
-		unbanlist: ['Wobbuffet', 'Wynaut', 'Sand Veil', 'Swagger'],
+		banlist: [
+			'Arceus', 'Darkrai', 'Deoxys-Attack', 'Deoxys-Base', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Garchomp',
+			'Giratina', 'Groudon', 'Ho-Oh', 'Jirachi', 'Kyogre', 'Latias', 'Latios', 'Lugia', 'Machamp', 'Manaphy', 'Mew',
+			'Mewtwo', 'Palkia', 'Porygon-Z', 'Rayquaza', 'Salamence', 'Shaymin', 'Shaymin-Sky', 'Snorlax', 'Togekiss',
+			'Focus Sash', 'Soul Dew', 'Destiny Bond', 'Explosion', 'Perish Song', 'Self-Destruct',
+		],
 	},
 	{
 		name: "[Gen 4] ZU",
@@ -5183,13 +5191,15 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3',
-			'[Gen 3] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview', '!Freeze Clause Mod',
+			'Standard', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
 		banlist: [
-			'Clefable', 'Slaking', 'Snorlax', 'Suicune', 'Zapdos', 'Destiny Bond', 'Explosion', 'Ingrain', 'Perish Song',
+			'Clefable', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense',
+			'Deoxys-Speed', 'Groudon', 'Ho-Oh', 'Kyogre', 'Latias', 'Latios',
+			'Lugia', 'Mew', 'Mewtwo', 'Rayquaza', 'Slaking', 'Snorlax', 'Suicune',
+			'Zapdos', 'Destiny Bond', 'Explosion', 'Ingrain', 'Perish Song',
 			'Self-Destruct', 'Focus Band', 'King\'s Rock', 'Quick Claw',
 		],
-		unbanlist: ['Mr. Mime', 'Wobbuffet', 'Wynaut', 'Sand Veil', 'Soundproof'],
 	},
 	{
 		name: "[Gen 3] Custom Game",
@@ -5247,11 +5257,12 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3',
-			'[Gen 2] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
+			'Standard', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
 		banlist: [
-			'Alakazam', 'Clefable', 'Snorlax', 'Zapdos', 'Berserk Gene', 'Focus Band', 'King\'s Rock', 'Quick Claw',
-			'Attract', 'Destiny Bond', 'Explosion', 'Perish Song', 'Present', 'Self-Destruct', 'Swagger',
+			'Alakazam', 'Celebi', 'Clefable', 'Ho-Oh', 'Lugia', 'Mew', 'Mewtwo', 'Snorlax', 'Zapdos',
+			'Berserk Gene', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Attract', 'Destiny Bond',
+			'Explosion', 'Perish Song', 'Present', 'Self-Destruct', 'Swagger',
 		],
 	},
 	{
@@ -5331,9 +5342,9 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: [
 			'Picked Team Size = 1', 'Max Team Size = 3',
-			'[Gen 1] OU', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
+			'Standard', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
-		banlist: ['Bind', 'Clamp', 'Explosion', 'Fire Spin', 'Self-Destruct', 'Wrap'],
+		banlist: ['Mew', 'Mewtwo', 'Bind', 'Clamp', 'Explosion', 'Fire Spin', 'Self-Destruct', 'Wrap'],
 	},
 	{
 		name: "[Gen 1] Japanese OU",
