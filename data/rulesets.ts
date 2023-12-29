@@ -2695,14 +2695,16 @@ export const Rulesets: {[k: string]: FormatData} = {
 	proteanpalacemod: {
 		effectType: 'Rule',
 		name: "Protean Palace Mod",
-		desc: `Each Pok&eacute;mon innately has Protean.`,
+		desc: `Pok&eacute;mon become the type of the move they use.`,
 		onBegin() {
-			this.add('rule', 'Protean Palace Mod: Every Pok\u00e9mon innately has Protean.');
+			this.add('rule', 'Protean Palace Mod: Pok\u00e9mon become the type of the move they use.');
 		},
-		onSwitchIn(pokemon) {
-			if (!pokemon.hasAbility(['libero', 'protean'])) {
-				const effect = 'ability:protean';
-				pokemon.addVolatile(effect);
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
 	},
