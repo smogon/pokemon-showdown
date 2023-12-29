@@ -45,6 +45,8 @@ const STARTING_TIME_CHALLENGE = 300;
 const STARTING_GRACE_TIME = 60;
 const MAX_TURN_TIME_CHALLENGE = 300;
 
+const BEST_OF_IN_BETWEEN_TIME = 60;
+
 const DISCONNECTION_TIME = 60;
 const DISCONNECTION_BANK_TIME = 300;
 
@@ -1307,6 +1309,7 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 	wins = 0;
 	ready: boolean | null = null;
 	options: Omit<RoomBattlePlayerOptions, 'user'> & {user: null};
+	dcAutoloseTime: number | null = null;
 	constructor(user: User | null, game: BestOfGame, num: number, options: RoomBattlePlayerOptions) {
 		super(user, game, num);
 		this.options = {...options, user: null};
@@ -1322,6 +1325,7 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 		const user = this.getUser();
 		if (!user?.connected) return;
 
+		this.dcAutoloseTime = null;
 		const room = this.game.room;
 		const battleRoom = this.game.games[this.game.games.length - 1]?.room as Room | undefined;
 		const gameNum = this.game.games.length + 1;
@@ -1604,17 +1608,22 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		}
 
 		// no one has won, skip onwards
-		this.updateDisplay();
-		setImmediate(() => this.promptNextGame(room));
+		this.promptNextGame(room);
 	}
 	promptNextGame(room: Room) {
 		if (!room.battle || this.winner) return; // ???
+		this.updateDisplay();
 		this.waitingBattle = room;
+		const now = Date.now();
+		this.nextBattleTimerEnd = now + BEST_OF_IN_BETWEEN_TIME * 1000;
 		for (const player of this.players) {
 			player.ready = false;
+			const dcAutoloseTime = now + room.battle.players[player.num - 1].dcSecondsLeft * 1000;
+			if (dcAutoloseTime < this.nextBattleTimerEnd) {
+				player.dcAutoloseTime = dcAutoloseTime;
+			}
 			player.updateReadyButton();
 		}
-		this.nextBattleTimerEnd = Date.now() + 60_000;
 		this.nextBattleTimer = setInterval(() => this.pokeNextBattleTimer(), 10_000);
 	}
 	pokeNextBattleTimer() {
@@ -1624,8 +1633,14 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		}
 		for (const p of this.players) {
 			if (!p.ready) {
-				const diff = this.nextBattleTimerEnd - Date.now();
-				const message = `|inactive|${p.name} has ${Chat.toDurationString(diff + 100)} to confirm battle start!`;
+				const now = Date.now() - 100; // fudge to make rounding work better
+				if (p.dcAutoloseTime && now > p.dcAutoloseTime) {
+					return this.forfeit(p.name, ` lost the series due to inactivity.`);
+				}
+				const message = (p.dcAutoloseTime ?
+					`|inactive|${p.name} has ${Chat.toDurationString(p.dcAutoloseTime - now)} to reconnect!` :
+					`|inactive|${p.name} has ${Chat.toDurationString(this.nextBattleTimerEnd - now)} to confirm battle start!`
+				);
 				this.waitingBattle?.add(message);
 				this.room.add(message);
 			}
