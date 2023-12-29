@@ -1347,10 +1347,11 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 		}
 
 		const cmd = `/msgroom ${room.roomid},/confirmready`;
-		const button = `|c|&|/uhtml controls,<p>Are you ready for game ${gameNum}, ${this.name}?</p>` +
+		const button = `|c|&|/uhtml controls,<div class="infobox"><p style="margin:6px">Are you ready for game ${gameNum}, ${this.name}?</p><p style="margin:6px">` +
 			(this.ready ?
 				`<button class="button" disabled><i class="fa fa-check"></i> I'm ready!</button> &ndash; waiting for opponent...` :
-				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`);
+				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`) +
+			`</p></div>`;
 		this.sendRoom(button);
 		battleRoom?.sendUser(user, button);
 	}
@@ -1371,6 +1372,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	waitingBattle: GameRoom | null = null;
 	nextBattleTimerEnd: number | null = null;
 	nextBattleTimer: NodeJS.Timer | null = null;
+	/** Does NOT control bestof's own timer, which is always-on. Controls timers in sub-battles. */
 	needsTimer = false;
 	score: number[] | null = null;
 	constructor(room: Room, options: RoomBattleOptions) {
