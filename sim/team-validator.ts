@@ -1615,15 +1615,9 @@ export class TeamValidator {
 		}
 
 		if (species.baseSpecies === "Unown" && dex.gen === 2) {
-			const ivs = set.ivs;
-			const convertedIVs = [];
-			convertedIVs.push(ivs.atk < 16 ? ivs.atk + 16 : ivs.atk);
-			convertedIVs.push(ivs.def < 16 ? ivs.def + 16 : ivs.def);
-			convertedIVs.push(ivs.spe < 16 ? ivs.spe + 16 : ivs.spe);
-			convertedIVs.push(ivs.spa < 16 ? ivs.spa + 16 : ivs.spa);
 			let resultBinary = '';
-			for (const iv of convertedIVs) {
-				resultBinary += Math.floor(iv / 2).toString(2).substr(1, 2);
+			for (const iv of ['atk', 'def', 'spe', 'spa'] as const) {
+				resultBinary += Math.floor(set.ivs[iv] / 2).toString(2).padStart(4, '0').slice(1, 3);
 			}
 			const resultDecimal = Math.floor(parseInt(resultBinary, 2) / 10);
 			const expectedLetter = String.fromCharCode(resultDecimal + 65);
