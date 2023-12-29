@@ -1621,7 +1621,7 @@ export class TeamValidator {
 			}
 			const resultDecimal = Math.floor(parseInt(resultBinary, 2) / 10);
 			const expectedLetter = String.fromCharCode(resultDecimal + 65);
-			const unownLetter = species.name === "Unown" ? "A" : species.name.charAt(6);
+			const unownLetter = species.forme || "A";
 			if (unownLetter !== expectedLetter) {
 				problems.push(`Unown has forme ${unownLetter}, but its DVs give it the forme ${expectedLetter}.`);
 			}
