@@ -8,8 +8,21 @@ interface AbilityEventMethods {
 	onStart?: (this: Battle, target: Pokemon) => void;
 }
 
+/* Possible Ability flags */
+interface AbilityFlags {
+	breakable?: 1; // Can be suppressed by Mold Breaker and related effects
+	cantsuppress?: 1; // Ability can't be suppressed by Gastro Acid
+	failroleplay?: 1; // Role Play fails if target has this Ability
+	failskillswap?: 1; // Skill Swap fails if either the user or target has this Ability
+	noentrain?: 1; // Entrainment fails if target has this Ability
+	noreceiver?: 1; // Receiver and Power of Alchemy will not activate if an ally faints with this Ability
+	notrace?: 1; // Trace cannot copy this Ability
+	notransform?: 1; // Disables the Ability if the user is Transformed
+}
+
 export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {
 	name: string;
+	flags: AbilityFlags;
 }
 
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
