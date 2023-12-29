@@ -1372,6 +1372,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	nextBattleTimerEnd: number | null = null;
 	nextBattleTimer: NodeJS.Timer | null = null;
 	needsTimer = false;
+	score: number[] | null = null;
 	constructor(room: Room, options: RoomBattleOptions) {
 		super(room);
 		this.format = Dex.formats.get(options.format);
@@ -1662,6 +1663,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		this.room.update();
 		const p1 = this.players[0];
 		const p2 = this.players[1];
+		this.score = this.players.map(p => p.wins);
 		// @ts-ignore - Tournaments aren't TS'd yet
 		this.room.parent?.game?.onBattleWin?.(this.room, winner.id);
 		// run elo stuff here
