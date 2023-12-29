@@ -56,7 +56,6 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 	readonly slot: SideID;
 	readonly channelIndex: ChannelIndex;
 	request: BattleRequestTracker;
-	hitDisconnectLimit = false;
 	wantsTie: boolean;
 	wantsOpenTeamSheets: boolean | null;
 	eliminated: boolean;
@@ -365,7 +364,6 @@ export class RoomBattleTimer {
 
 			const dcSecondsLeft = player.dcSecondsLeft;
 			if (dcSecondsLeft <= 0) {
-				player.hitDisconnectLimit = true;
 				player.turnSecondsLeft = 0;
 			}
 			const secondsLeft = player.turnSecondsLeft;
@@ -455,11 +453,6 @@ export class RoomBattleTimer {
 				void this.battle.stream.write(`>${player.slot} default`);
 				didSomething = true;
 			} else {
-				// in bo3, if player dcs then they lose the set.
-				// assume if not connected then they got hit by dc timer
-				if (!player.connected) {
-					player.hitDisconnectLimit = true;
-				}
 				this.battle.forfeitPlayer(player, ' lost due to inactivity.');
 				return true;
 			}
@@ -1591,7 +1584,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		if (winner) {
 			winner.wins++;
 			const loserPlayer = room.battle!.players.filter(p => p.num !== winner.num)[0];
-			if (loserPlayer?.hitDisconnectLimit) { // disconnection means opp wins the set
+			if (loserPlayer && loserPlayer.dcSecondsLeft <= 0) { // disconnection means opp wins the set
 				return this.forfeit(loserPlayer.name, ` lost the series due to inactivity.`);
 			}
 			this.room.add(Utils.html`|html|${winner.name} won game ${this.games.length}!`).update();
