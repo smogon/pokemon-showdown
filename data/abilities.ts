@@ -375,7 +375,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.debug('Beads of Ruin SpD drop');
 			return this.chainModify(0.75);
 		},
-		flags: {breakable: 1},
+		flags: {},
 		name: "Beads of Ruin",
 		rating: 4.5,
 		num: 284,
@@ -4772,7 +4772,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.debug('Sword of Ruin Def drop');
 			return this.chainModify(0.75);
 		},
-		flags: {breakable: 1},
+		flags: {},
 		name: "Sword of Ruin",
 		rating: 4.5,
 		num: 285,
@@ -4790,7 +4790,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.debug('Tablets of Ruin Atk drop');
 			return this.chainModify(0.75);
 		},
-		flags: {breakable: 1},
+		flags: {},
 		name: "Tablets of Ruin",
 		rating: 4.5,
 		num: 284,
@@ -4804,7 +4804,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: {},
 		name: "Tangled Feet",
 		rating: 1,
 		num: 77,
@@ -5215,7 +5215,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.debug('Vessel of Ruin SpA drop');
 			return this.chainModify(0.75);
 		},
-		flags: {breakable: 1},
+		flags: {},
 		name: "Vessel of Ruin",
 		rating: 4.5,
 		num: 284,

@@ -1032,6 +1032,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	tangledfeet: {
 		inherit: true,
+		flags: {breakable: 1},
 		rating: 1,
 	},
 	tanglinghair: {
