@@ -4996,15 +4996,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 		onTryHit(target, source) {
 			if (target === source || target.volatiles['dynamax']) return false;
-
-			const additionalBannedSourceAbilities = [
-				// Zen Mode included here for compatability with Gen 5-6
-				'commander', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
-			];
 			if (
 				target.ability === source.ability ||
 				target.getAbility().flags['cantsuppress'] || target.ability === 'truant' ||
-				source.getAbility().isPermanent || additionalBannedSourceAbilities.includes(source.ability)
+				source.getAbility().flags['noentrain']
 			) {
 				return false;
 			}

@@ -1164,6 +1164,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	wonderguard: {
 		inherit: true,
+		flags: {failroleplay: 1, noreceiver: 1, failskillswap: 1, breakable: 1},
 		rating: 5,
 	},
 	wonderskin: {
