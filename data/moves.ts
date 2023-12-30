@@ -3915,14 +3915,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		onHit(target, source, move) {
 			let success: boolean | null = false;
-			for (const pokemon of source.alliesAndSelf()) {
-				if (pokemon.ability === target.ability) continue;
-				const oldAbility = pokemon.setAbility(target.ability);
-				if (oldAbility) {
-					this.add('-ability', pokemon, target.getAbility().name, '[from] move: Doodle');
-					success = true;
-				} else if (!success && oldAbility === null) {
-					success = null;
+			if (!target.getAbility().flags['failroleplay']) {
+				for (const pokemon of source.alliesAndSelf()) {
+					if (pokemon.ability === target.ability || pokemon.getAbility().flags['cantsuppress']) continue;
+					const oldAbility = pokemon.setAbility(target.ability);
+					if (oldAbility) {
+						this.add('-ability', pokemon, target.getAbility().name, '[from] move: Doodle');
+						success = true;
+					} else if (!success && oldAbility === null) {
+						success = null;
+					}
 				}
 			}
 			if (!success) {
