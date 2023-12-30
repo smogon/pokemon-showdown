@@ -122,7 +122,7 @@ const PRIORITY_POKEMON = [
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
-	'Zacian', 'Zamazenta',
+	'Iron Boulder', 'Zacian', 'Zamazenta',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Roaring Moon', 'Zacian', 'Zamazenta',
@@ -1137,6 +1137,7 @@ export class RandomTeams {
 
 		// Hard-code abilities here
 		if (species.id === 'florges') return 'Flower Veil';
+		if (species.id === 'bombirdier' && !counter.get('Rock')) return 'Big Pecks';
 		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'empoleon') return 'Competitive';
 		if (species.id === 'swampert' && !counter.get('Water') && !moves.has('flipturn')) return 'Damp';
@@ -1146,7 +1147,7 @@ export class RandomTeams {
 		if (abilities.has('Guts') && (moves.has('facade') || moves.has('sleeptalk') || species.id === 'gurdurr')) return 'Guts';
 		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
 		if (species.id === 'jumpluff') return 'Infiltrator';
-		if (species.id === 'toucannon' && !counter.get('sheerforce') && !counter.get('skilllink')) return 'Keen Eye';
+		if (species.id === 'toucannon' && !counter.get('skilllink')) return 'Keen Eye';
 		if (species.id === 'reuniclus') return (role === 'AV Pivot') ? 'Regenerator' : 'Magic Guard';
 		if (species.id === 'smeargle') return 'Own Tempo';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
