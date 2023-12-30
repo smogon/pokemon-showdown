@@ -5188,8 +5188,8 @@ export const Formats: FormatList = [
 			'Clefable', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense',
 			'Deoxys-Speed', 'Groudon', 'Ho-Oh', 'Kyogre', 'Latias', 'Latios',
 			'Lugia', 'Mew', 'Mewtwo', 'Rayquaza', 'Slaking', 'Snorlax', 'Suicune',
-			'Zapdos', 'Destiny Bond', 'Explosion', 'Ingrain', 'Perish Song',
-			'Self-Destruct', 'Focus Band', 'King\'s Rock', 'Quick Claw',
+			'Zapdos', 'Destiny Bond', 'Explosion', 'Perish Song', 'Self-Destruct',
+			'Focus Band', 'King\'s Rock', 'Quick Claw',
 		],
 	},
 	{
