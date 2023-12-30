@@ -1929,7 +1929,7 @@
             },
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Swords Dance", "Earthquake", "Gunk Shot", "Trailblaze"],
+                "movepool": ["Earthquake", "Gunk Shot", "Swords Dance", "Trailblaze"],
                 "teraTypes": ["Grass", "Ground"]
             }
         ]
