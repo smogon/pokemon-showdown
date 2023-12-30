@@ -1928,7 +1928,7 @@
                 "teraTypes": ["Dark", "Fire", "Grass", "Ground", "Poison"]
             },
             {
-                "role": "Fast Bulky Setup",
+                "role": "Setup Sweeper",
                 "movepool": ["Earthquake", "Gunk Shot", "Swords Dance", "Trailblaze"],
                 "teraTypes": ["Grass", "Ground"]
             }
@@ -3288,7 +3288,7 @@
                 "teraTypes": ["Fire"]
             },
             {
-                "role": "Fast Bulky Setup",
+                "role": "Setup Sweeper",
                 "movepool": ["Bulk Up", "Drain Punch", "Flare Blitz", "Trailblaze"],
                 "teraTypes": ["Fighting", "Grass"]
             }
