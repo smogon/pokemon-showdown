@@ -479,6 +479,8 @@ export interface RoomBattleOptions {
 	 * special cases:
 	 * - `/importinputlog`, where it's empty (players have to be invited/restored)
 	 * - challenge ffa/multi, where it's 2 (the rest have to be invited)
+	 * - restoring saved battles after a restart (players should be manually restored)
+	 * In all special cases, either `delayedStart` or `inputLog` must be set
 	 */
 	players: RoomBattlePlayerOptions[];
 	delayedStart?: boolean | 'multi';
@@ -490,10 +492,8 @@ export interface RoomBattleOptions {
 	ratedMessage?: string;
 	seed?: PRNGSeed;
 	roomid?: RoomID;
-	restoredPlayers?: ID[];
 	/** For battles restored after a restart */
 	delayedTimer?: boolean;
-	restored?: boolean;
 	/** Best-of stuff */
 	isSubBattle?: boolean;
 }
@@ -519,10 +519,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	readonly allowExtraction: {[k: string]: Set<ID>} = {};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
 	override readonly timer: RoomBattleTimer;
-	missingBattleStartMessage: boolean | 'multi';
 	started = false;
 	active = false;
-	restoredNeedsRejoin: Set<ID> | null;
 	replaySaved: boolean | 'auto' = false;
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	p1: RoomBattlePlayer = null!;
@@ -557,12 +555,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		this.challengeType = options.challengeType || 'challenge';
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
-		// true when onCreateBattleRoom has been called
-		this.missingBattleStartMessage = !!options.inputLog || options.delayedStart || false;
-
 		this.playerCap = format.playerCount;
-
-		this.restoredNeedsRejoin = options.restored ? new Set(options.restoredPlayers) : null;
 
 		this.stream = PM.createStream();
 
@@ -596,7 +589,18 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			const p = options.players[i];
 			const player = this.addPlayer(p?.user || null, p || null);
 			if (!player) throw new Error(`failed to create player ${i + 1} in ${room.roomid}`);
-			if (options.inputLog) player.hasTeam = true;
+		}
+		if (options.inputLog) {
+			let scanIndex = 0;
+			for (const player of this.players) {
+				const nameIndex1 = options.inputLog.indexOf(`"name":"`, scanIndex);
+				const nameIndex2 = options.inputLog.indexOf(`"`, nameIndex1 + 8);
+				if (nameIndex1 < 0 || nameIndex2 < 0) break; // shouldn't happen. incomplete inputlog?
+				scanIndex = nameIndex2 + 1;
+				const name = options.inputLog.slice(nameIndex1 + 8, nameIndex2);
+				player.name = name;
+				player.hasTeam = true;
+			}
 		}
 		this.timer = new RoomBattleTimer(this);
 		if (Config.forcetimer || this.format.includes('blitz')) this.timer.start();
@@ -654,10 +658,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		void this.stream.write(`>${player.slot} undo`);
 	}
 	override joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
-		if (this.restoredNeedsRejoin?.size && !this.restoredNeedsRejoin.has(user.id)) {
-			user.popup(`All the original players in this battle must join first.`);
-			return false;
-		}
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
@@ -690,15 +690,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 
 		this.updatePlayer(this[slot], user, playerOpts);
-		this.restoredNeedsRejoin?.delete(user.id);
-		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
-			const users = this.players.map(player => {
-				const u = player.getUser();
-				if (!u) throw new Error(`User ${player.name} not found on ${this.roomid} battle creation`);
-				return u;
-			});
+		if (validSlots.length - 1 <= 0) {
+			// all players have joined, start the battle
+			// onCreateBattleRoom crashes if some users are unavailable at start of battle
+			// what do we do??? no clue but I guess just exclude them from the array for now
+			const users = this.players.map(player => player.getUser()).filter(Boolean) as User[];
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
-			this.missingBattleStartMessage = false;
 			this.started = true;
 			this.room.add(`|uhtmlchange|invites|`);
 		} else if (!this.started && this.invitesFull()) {
@@ -722,7 +719,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		Chat.runHandlers('onBattleLeave', user, this.room);
 
 		this.updatePlayer(player, null);
-		this.room.auth.set(user.id, '+');
 		this.room.update();
 		return true;
 	}
@@ -1143,6 +1139,9 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	override updatePlayer(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
+		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
+			this.room.auth.set(player.id, '+');
+		}
 		super.updatePlayer(player, user);
 
 		player.invite = '';
@@ -1172,20 +1171,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	start() {
-		// on start
-		const users = this.players.map(player => {
-			const user = player.getUser();
-			if (!user && !this.missingBattleStartMessage) {
-				throw new Error(`User ${player.name} not found on ${this.roomid} battle creation`);
-			}
-			return user;
-		});
-		if (!this.missingBattleStartMessage) {
-			// @ts-ignore The above error should throw if null is found, or this should be skipped
-			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
-			this.started = true;
-		}
-
 		if (this.gameType === 'multi') {
 			this.room.title = `Team ${this.p1.name} vs. Team ${this.p2.name}`;
 		} else if (this.gameType === 'freeforall') {
@@ -1203,7 +1188,25 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
 			).update();
 		}
-		if (this.missingBattleStartMessage === 'multi') {
+
+		// run onCreateBattleRoom handlers
+
+		if (this.options.inputLog && this.players.every(player => player.hasTeam)) {
+			// already started
+			this.started = true;
+		}
+		const delayStart = this.options.delayedStart || !!this.options.inputLog;
+		const users = this.players.map(player => {
+			const user = player.getUser();
+			if (!user && !delayStart) {
+				throw new Error(`User ${player.id} not found on ${this.roomid} battle creation`);
+			}
+			return user;
+		});
+		if (!delayStart) {
+			Rooms.global.onCreateBattleRoom(users as User[], this.room, {rated: this.rated});
+			this.started = true;
+		} else if (delayStart === 'multi') {
 			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);
 		}
 	}
@@ -1218,6 +1221,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return;
 		}
 		if (!connection) return;
+
 		const playerForms = this.players.map(player => (
 			player.id ? (
 				`<form><label>Player ${player.num}: <strong>${player.name}</strong></label></form>`

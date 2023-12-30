@@ -1323,7 +1323,7 @@ export class GlobalRoomState {
 		return count;
 	}
 
-	battlesLoading?: boolean;
+	battlesLoading = false;
 	async loadBattles() {
 		if (!Config.usepostgres) return;
 		this.battlesLoading = true;
@@ -1333,6 +1333,8 @@ export class GlobalRoomState {
 				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
 			);
 		}
+		const startTime = Date.now();
+		let count = 0;
 		const logDatabase = new PostgresDatabase();
 		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
 		for await (const battle of logDatabase.stream(query)) {
@@ -1345,10 +1347,7 @@ export class GlobalRoomState {
 				title,
 				rated: Number(rated),
 				players: [],
-				restoredPlayers: players,
-				delayedStart: true,
 				delayedTimer: timer.active,
-				restored: true,
 			});
 			if (!room || !room.battle) continue; // shouldn't happen???
 			room.battle.started = true; // so that timer works
@@ -1356,61 +1355,33 @@ export class GlobalRoomState {
 			if (timer) { // json blob of settings
 				Object.assign(room.battle.timer.settings, timer);
 			}
-			for (const [i, pid] of players.entries()) {
-				room.auth.set(pid, Users.PLAYER_SYMBOL);
+			for (const [i, playerid] of players.entries()) {
+				room.auth.set(playerid, Users.PLAYER_SYMBOL);
 				const player = room.battle.players[i];
-				player.id = pid;
-				player.name = pid; // in case user hasn't reconnected yet
+				player.id = playerid;
 				player.hasTeam = true;
-				const user = Users.getExact(pid);
-				if (user) {
-					this.rejoinBattle(room, user, i);
-				}
+				const user = Users.getExact(playerid);
+				player.name = user?.name || playerid; // in case user hasn't reconnected yet
+				user?.joinRoom(room);
 			}
+			count++;
 		}
 		for (const u of Users.users.values()) {
 			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
 		}
-		delete this.battlesLoading;
-	}
-
-	rejoinBattle(room: GameRoom, user: User, idx: number) {
-		if (!room.battle) return;
-		const player = room.battle.players[idx];
-		if (!player) {
-			// possible if a format was changed from 4-player to 2-player midway through a restore,
-			// so don't do that
-			throw new Error(`Player ${idx + 1} not found in battle ${room.roomid} while trying to rejoin battle`);
-		}
-		if (player.id !== user.id) {
-			throw new Error(`User ID mismatch ${player.id} vs ${user.id} in battle ${room.roomid} while trying to rejoin battle`);
-		}
-		player.name = user.name;
-		// force update panel
-		user.joinRoom(room.roomid);
-		// room.battle.onConnect(user); // should be unnecessary
-		if (room.battle.options.delayedTimer && !room.battle.timer.timer) {
-			room.battle.timer.start();
-		}
-		user.send(`|pm|&|${user.getIdentity()}|/uhtmlchange restartmsg,`);
+		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
+		this.battlesLoading = false;
 	}
 
 	joinOldBattles(user: User) {
 		for (const room of Rooms.rooms.values()) {
 			const battle = room.battle;
 			if (!battle) continue;
-			const idx = battle.options.restoredPlayers?.indexOf(user.id);
-			if (battle.ended) {
-				// TODO: Do we want to rejoin the battle room here?
-				// We might need to cache the join so it only happens once -
-				// just running joinRoom would mean they join the room every refresh until the battle expires
+			const player = battle.playerTable[user.id];
+			if (!player) return;
 
-				// user.joinRoom(room);
-				continue;
-			}
-			if (typeof idx === 'number' && idx > -1) {
-				this.rejoinBattle(room, user, idx);
-			}
+			player.name = user.name;
+			user.joinRoom(room.roomid);
 		}
 	}
 
@@ -1737,12 +1708,6 @@ export class GlobalRoomState {
 			this.maxUsers = Users.users.size;
 			this.maxUsersDate = Date.now();
 		}
-		if (this.battlesLoading) {
-			connection.send(
-				`|pm|&|${user.getIdentity()}|/uhtml restartmsg,` +
-				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
-			);
-		}
 	}
 	startLockdown(err: Error | null = null, slow = false) {
 		if (this.lockdown && err) return;
@@ -1894,9 +1859,9 @@ export class GlobalRoomState {
 export class ChatRoom extends BasicRoom {
 	// This is not actually used, this is just a fake class to keep
 	// TypeScript happy
-	battle = null;
-	active: false = false as const;
-	type: 'chat' = 'chat' as const;
+	override battle = null;
+	override active = false as const;
+	override type = 'chat' as const;
 }
 
 export class GameRoom extends BasicRoom {
@@ -1954,8 +1919,7 @@ export class GameRoom extends BasicRoom {
 	}
 	getLogForUser(user: User) {
 		if (!(user.id in this.game.playerTable)) return this.getLog();
-		// @ts-ignore
-		return this.getLog(this.game.playerTable[user.id].num);
+		return this.getLog(this.game.playerTable[user.id].num as 0);
 	}
 	update(excludeUser: User | null = null) {
 		if (!this.log.broadcastBuffer.length) return;
@@ -1979,8 +1943,7 @@ export class GameRoom extends BasicRoom {
 	}
 	sendPlayer(num: 0 | 1, message: string) {
 		const player = this.getPlayer(num);
-		if (!player) return false;
-		player.sendRoom(message);
+		player?.sendRoom(message);
 	}
 	getPlayer(num: 0 | 1) {
 		// @ts-ignore
@@ -1999,7 +1962,7 @@ export class GameRoom extends BasicRoom {
 	}
 	onConnect(user: User, connection: Connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
-		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
+		this.game?.onConnect?.(user, connection);
 	}
 	onJoin(user: User, connection: Connection) {
 		if (!user) return false; // ???
@@ -2245,13 +2208,13 @@ export const Rooms = {
 			roomTitle = `${p1name} and friends`;
 		} else if (isBestOf && !options.isSubBattle) {
 			roomTitle = `${p1name} vs. ${p2name}`;
-			roomid = `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
+			roomid ||= `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
 			roomTitle = options.title;
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
-		if (!roomid) roomid = Rooms.global.prepBattleRoom(options.format);
+		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		if (options.isSubBattle || !isBestOf) {

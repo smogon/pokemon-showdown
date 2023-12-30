@@ -801,16 +801,6 @@ export const commands: Chat.ChatCommands = {
 		if (!battleRoom) return; // createBattle will inform the user if creating the battle failed
 
 		battleRoom.auth.set(user.id, Users.HOST_SYMBOL);
-		let scanIndex = 0;
-		for (const player of battleRoom.battle!.players) {
-			const nameIndex1 = target.indexOf(`"name":"`, scanIndex);
-			const nameIndex2 = target.indexOf(`"`, nameIndex1 + 8);
-			if (nameIndex1 < 0 || nameIndex2 < 0) break; // shouldn't happen. incomplete inputlog?
-			scanIndex = nameIndex2 + 1;
-			const name = target.slice(nameIndex1 + 8, nameIndex2);
-			player.name = name;
-			player.hasTeam = true;
-		}
 		this.parse(`/join ${battleRoom.roomid}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
