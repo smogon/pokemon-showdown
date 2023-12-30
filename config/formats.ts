@@ -3953,7 +3953,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Anything Goes",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3718501/post-9552584">SS AG Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3718501/post-9552584">SS AG Resources</a>`,
 		],
 
 		mod: 'gen8',
@@ -3964,7 +3964,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] ZU",
 		desc: `The unofficial usage-based tier below PU.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3646944/post-8034677">SS ZU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3646944/post-8034677">SS ZU Resources</a>`,
 		],
 
 		mod: 'gen8',
