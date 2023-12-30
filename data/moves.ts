@@ -5381,6 +5381,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon) {
 			if (this.randomChance(3, 10)) {
+				this.attrLastMove('[anim] Fickle Beam All Out');
 				this.add('-activate', pokemon, 'move: Fickle Beam');
 				return this.chainModify(2);
 			}
