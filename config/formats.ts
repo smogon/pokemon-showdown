@@ -3933,7 +3933,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3646875/post-8031457">SS 1v1 Resources</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/posts/8031457">SS 1v1 Resources</a>`,
 		],
 
 		mod: 'gen8',
@@ -3953,7 +3953,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 8] Anything Goes",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3718501/post-9552584">SS AG Resources</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/posts/9552584">SS AG Resources</a>`,
 		],
 
 		mod: 'gen8',
@@ -3964,7 +3964,7 @@ export const Formats: FormatList = [
 		name: "[Gen 8] ZU",
 		desc: `The unofficial usage-based tier below PU.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3646944/post-8034677">SS ZU Resources</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/posts/8034677">SS ZU Resources</a>`,
 		],
 
 		mod: 'gen8',
