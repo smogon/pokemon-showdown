@@ -55,13 +55,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
 			const isAbility = pokemon.ability === 'trace';
 
-			const additionalBannedAbilities = [
-				// Zen Mode included here for compatability with Gen 5-6
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
-			];
-			const possibleTargets = pokemon.adjacentFoes().filter(target => (
-				!target.getAbility().isPermanent && !additionalBannedAbilities.includes(target.ability)
-			));
+			const possibleTargets = pokemon.adjacentFoes().filter(target => (!target.getAbility().flags['notrace'] && !(target.ability === 'noability')));
 			if (!possibleTargets.length) return;
 
 			const target = this.sample(possibleTargets);

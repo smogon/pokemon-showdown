@@ -99,12 +99,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const target = possibleTargets[rand];
 				let possibleAbilities = [target.ability];
 				if (target.m.innates) possibleAbilities.push(...target.m.innates);
-				const additionalBannedAbilities = [
-					// Zen Mode included here for compatability with Gen 5-6
-					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode', pokemon.ability, ...(pokemon.m.innates || []),
-				];
+				const additionalBannedAbilities = [pokemon.ability, ...(pokemon.m.innates || [])];
 				possibleAbilities = possibleAbilities
-					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+					.filter(val => !this.dex.abilities.get(val).flags['notrace'] && !additionalBannedAbilities.includes(val));
 				if (!possibleAbilities.length) {
 					possibleTargets.splice(rand, 1);
 					continue;

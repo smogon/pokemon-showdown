@@ -134,6 +134,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
+		flags: {breakable: 1},
 	},
 	forewarn: {
 		inherit: true,
