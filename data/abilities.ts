@@ -4804,7 +4804,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {},
+		flags: {breakable: 1},
 		name: "Tangled Feet",
 		rating: 1,
 		num: 77,
