@@ -17195,7 +17195,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onTryHit(target, source) {
 			const targetAbility = target.getAbility();
 			const sourceAbility = source.getAbility();
-			if (sourceAbility.flags['failskillswap'] || targetAbility.flags['failskillswap'] || target.volatiles['dynamax']) return false;
+			if (sourceAbility.flags['failskillswap'] || targetAbility.flags['failskillswap'] || target.volatiles['dynamax']) {
+				return false;
+			}
 			const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
 			if (!sourceCanBeSet) return sourceCanBeSet;
 			const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);

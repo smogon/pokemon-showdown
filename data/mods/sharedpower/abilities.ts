@@ -56,7 +56,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
 			const isAbility = pokemon.ability === 'trace';
 
-			const possibleTargets = pokemon.adjacentFoes().filter(target => (!target.getAbility().flags['notrace'] && !(target.ability === 'noability')));
+			const possibleTargets = pokemon.adjacentFoes().filter(
+				target => (!target.getAbility().flags['notrace'] && !(target.ability === 'noability'))
+			);
 			if (!possibleTargets.length) return;
 
 			const target = this.sample(possibleTargets);

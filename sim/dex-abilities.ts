@@ -11,10 +11,10 @@ interface AbilityEventMethods {
 /* Possible Ability flags */
 interface AbilityFlags {
 	breakable?: 1; // Can be suppressed by Mold Breaker and related effects
-	cantsuppress?: 1; // Ability can't be suppressed by Core Enforcer, Gastro Acid, or Neutralizing Gas, or removed by Entrainment (target), Mummy, Lingering Aroma, Role Play (user), or Worry Seed
+	cantsuppress?: 1; // Ability can't be suppressed by e.g. Gastro Acid or Neutralizing Gas
 	failroleplay?: 1; // Role Play fails if target has this Ability
 	failskillswap?: 1; // Skill Swap fails if either the user or target has this Ability
-	noentrain?: 1; // Entrainment fails if target has this Ability
+	noentrain?: 1; // Entrainment fails if user has this Ability
 	noreceiver?: 1; // Receiver and Power of Alchemy will not activate if an ally faints with this Ability
 	notrace?: 1; // Trace cannot copy this Ability
 	notransform?: 1; // Disables the Ability if the user is Transformed
@@ -22,7 +22,6 @@ interface AbilityFlags {
 
 export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {
 	name: string;
-	flags: AbilityFlags;
 }
 
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
@@ -35,7 +34,6 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	readonly suppressWeather: boolean;
 	readonly flags: AbilityFlags;
 	declare readonly condition?: ConditionData;
-	declare readonly isPermanent?: boolean;
 
 	constructor(data: AnyObject) {
 		super(data);

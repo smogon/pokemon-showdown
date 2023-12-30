@@ -994,7 +994,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1},
+		flags: {
+			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
+			breakable: 1, notransform: 1,
+		},
 		name: "Disguise",
 		rating: 3.5,
 		num: 209,
@@ -1960,7 +1963,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.formeChange('Eiscue', this.effect, true);
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1, notransform: 1},
+		flags: {
+			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
+			breakable: 1, notransform: 1,
+		},
 		name: "Ice Face",
 		rating: 3,
 		num: 248,
@@ -5044,7 +5050,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
 
-			const possibleTargets = pokemon.adjacentFoes().filter(target => (!target.getAbility().flags['notrace'] && !(target.ability === 'noability')));
+			const possibleTargets = pokemon.adjacentFoes().filter(
+				target => (!target.getAbility().flags['notrace'] && !(target.ability === 'noability'))
+			);
 			if (!possibleTargets.length) return;
 
 			const target = this.sample(possibleTargets);
