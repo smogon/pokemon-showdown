@@ -136,6 +136,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		flags: {breakable: 1},
 	},
+	forecast: {
+		inherit: true,
+		flags: {notrace: 1},
+	},
 	forewarn: {
 		inherit: true,
 		onStart(pokemon) {
@@ -514,6 +518,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		},
+		flags: {notrace: 1},
 	},
 	unburden: {
 		inherit: true,

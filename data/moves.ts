@@ -15851,16 +15851,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {bypasssub: 1, allyanim: 1},
 		onTryHit(target, source) {
 			if (target.ability === source.ability) return false;
-
-			const additionalBannedTargetAbilities = [
-				// Zen Mode included here for compatability with Gen 5-6
-				'commander', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', 'zenmode',
-			];
-
-			if (target.getAbility().isPermanent || additionalBannedTargetAbilities.includes(target.ability) ||
-				source.getAbility().flags['cantsuppress']) {
-				return false;
-			}
+			if (target.getAbility().flags['failroleplay'] || source.getAbility().flags['cantsuppress']) return false;
 		},
 		onHit(target, source) {
 			const oldAbility = source.setAbility(target.ability);

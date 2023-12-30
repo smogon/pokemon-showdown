@@ -1321,8 +1321,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryHit(target, source) {
 			if (target.ability === source.ability || source.hasItem('griseousorb')) return false;
-			const bannedTargetAbilities = ['multitype', 'wonderguard'];
-			if (bannedTargetAbilities.includes(target.ability) || source.ability === 'multitype') {
+			if (target.getAbility().flags['failroleplay'] || source.ability === 'multitype') {
 				return false;
 			}
 		},
