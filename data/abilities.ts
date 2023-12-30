@@ -3308,10 +3308,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllyFaint(target) {
 			if (!this.effectState.target.hp) return;
 			const ability = target.getAbility();
-			const additionalBannedAbilities = [
-				'noability', 'commander', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
-			];
-			if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) return;
+			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
 			if (this.effectState.target.setAbility(ability)) {
 				this.add('-ability', this.effectState.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
 			}
@@ -3703,10 +3700,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onAllyFaint(target) {
 			if (!this.effectState.target.hp) return;
 			const ability = target.getAbility();
-			const additionalBannedAbilities = [
-				'noability', 'commander', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard',
-			];
-			if (target.getAbility().isPermanent || additionalBannedAbilities.includes(target.ability)) return;
+			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
 			if (this.effectState.target.setAbility(ability)) {
 				this.add('-ability', this.effectState.target, ability, '[from] ability: Receiver', '[of] ' + target);
 			}

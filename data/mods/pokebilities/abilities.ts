@@ -100,11 +100,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const isAbility = pokemon.ability === 'powerofalchemy';
 			let possibleAbilities = [ally.ability];
 			if (ally.m.innates) possibleAbilities.push(...ally.m.innates);
-			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', pokemon.ability, ...(pokemon.m.innates || []),
-			];
+			const additionalBannedAbilities = [pokemon.ability, ...(pokemon.m.innates || [])];
 			possibleAbilities = possibleAbilities
-				.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+				.filter(val => !this.dex.abilities.get(val).flags['noreceiver'] && !additionalBannedAbilities.includes(val));
 			if (!possibleAbilities.length) return;
 			const ability = this.dex.abilities.get(possibleAbilities[this.random(possibleAbilities.length)]);
 			this.add('-ability', pokemon, ability, '[from] ability: Power of Alchemy', '[of] ' + ally);
@@ -124,11 +122,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const isAbility = pokemon.ability === 'receiver';
 			let possibleAbilities = [ally.ability];
 			if (ally.m.innates) possibleAbilities.push(...ally.m.innates);
-			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', pokemon.ability, ...(pokemon.m.innates || []),
-			];
+			const additionalBannedAbilities = [pokemon.ability, ...(pokemon.m.innates || [])];
 			possibleAbilities = possibleAbilities
-				.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+				.filter(val => !this.dex.abilities.get(val).flags['noreceiver'] && !additionalBannedAbilities.includes(val));
 			if (!possibleAbilities.length) return;
 			const ability = this.dex.abilities.get(possibleAbilities[this.random(possibleAbilities.length)]);
 			this.add('-ability', pokemon, ability, '[from] ability: Receiver', '[of] ' + ally);
