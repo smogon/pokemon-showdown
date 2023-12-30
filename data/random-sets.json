@@ -4411,11 +4411,6 @@
                 "role": "Bulky Support",
                 "movepool": ["Beak Blast", "Boomburst", "Bullet Seed", "Knock Off", "Roost", "U-turn"],
                 "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["Beak Blast", "Boomburst", "Flash Cannon", "Heat Wave", "Roost"],
-                "teraTypes": ["Normal"]
             }
         ]
     },
