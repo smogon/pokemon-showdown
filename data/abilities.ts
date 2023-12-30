@@ -5271,12 +5271,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	wanderingspirit: {
 		onDamagingHit(damage, target, source, move) {
-			const additionalBannedAbilities = ['commander', 'hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
-			if (source.getAbility().isPermanent || additionalBannedAbilities.includes(source.ability) ||
-				target.volatiles['dynamax']
-			) {
-				return;
-			}
+			if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
 
 			if (this.checkMoveMakesContact(move, source, target)) {
 				const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, source.ability);

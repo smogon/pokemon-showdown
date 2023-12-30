@@ -179,13 +179,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
 			const isAbility = target.ability === 'wanderingspirit';
-			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
 			if (isAbility) {
-				if (source.getAbility().isPermanent || additionalBannedAbilities.includes(source.ability) ||
-					target.volatiles['dynamax']
-				) {
-					return;
-				}
+				if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
 
 				if (this.checkMoveMakesContact(move, source, target)) {
 					const sourceAbility = source.setAbility('wanderingspirit', target);
@@ -200,7 +195,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else {
 				// Make Wandering Spirit replace a random ability
 				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
-					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+					.filter(val => !this.dex.abilities.get(val).flags['failskillswap']);
 				if (!possibleAbilities.length || target.volatiles['dynamax']) return;
 				if (move.flags['contact']) {
 					const sourceAbility = this.sample(possibleAbilities);
