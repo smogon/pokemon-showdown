@@ -65,8 +65,7 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["brickbreak", "doubleedge", "hiddenpowerbug", "sludgebomb", "swordsdance"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["brickbreak", "doubleedge", "hiddenpowerbug", "sludgebomb", "swordsdance"]
             }
         ]
     },
@@ -231,7 +230,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["aromatherapy", "gigadrain", "hiddenpowerbug", "return", "spore", "stunspore"],
-                "preferredTypes": ["Bug", "Normal"]
+                "preferredTypes": ["Normal"]
             }
         ]
     },
@@ -240,13 +239,11 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["batonpass", "hiddenpowerfire", "psychic", "signalbeam", "sleeppowder", "sludgebomb", "substitute"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["batonpass", "hiddenpowerfire", "psychic", "signalbeam", "sleeppowder", "sludgebomb", "substitute"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["hiddenpowerfire", "psychic", "signalbeam", "sleeppowder", "sludgebomb"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["hiddenpowerfire", "psychic", "signalbeam", "sleeppowder", "sludgebomb"]
             }
         ]
     },
@@ -1367,11 +1364,11 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["doubleedge", "earthquake", "explosion", "hiddenpowerrock", "irontail", "rest", "roar", "toxic"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Support",
                 "movepool": ["doubleedge", "earthquake", "hiddenpowerrock", "rest", "sleeptalk"]
             }
         ]
@@ -1412,13 +1409,11 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "hiddenpowerground", "morningsun", "silverwind", "steelwing", "swordsdance"],
-                "preferredTypes": ["Steel"]
+                "movepool": ["batonpass", "hiddenpowerground", "morningsun", "silverwind", "steelwing", "swordsdance"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["agility", "batonpass", "hiddenpowerground", "silverwind", "steelwing"],
-                "preferredTypes": ["Steel"]
+                "movepool": ["agility", "batonpass", "hiddenpowerground", "silverwind", "steelwing"]
             }
         ]
     },
@@ -2396,7 +2391,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["doubleedge", "earthquake", "hiddenpowerbug", "rapidspin", "rockslide"],
-                "preferredTypes": ["Bug", "Ground"]
+                "preferredTypes": ["Ground"]
             }
         ]
     },

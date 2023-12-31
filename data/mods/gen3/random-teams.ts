@@ -40,25 +40,24 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		this.battleHasWobbuffet = false;
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter, species) => (
-				movePool.includes('megahorn') || (!species.types[1] && movePool.includes('hiddenpowerbug'))
+				!counter.get('Bug') && ['armaldo', 'heracross', 'parasect'].includes(species.id)
 			),
+			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
+			Flying: (movePool, moves, abilities, types, counter, species) => (!counter.get('Flying') && species.id !== 'crobat'),
+			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
-			Normal: (movePool, moves, abilities, types, counter, species) => {
-				if (species.id === 'blissey' && movePool.includes('softboiled')) return true;
-				return !counter.get('Normal') && counter.setupType === 'Physical';
-			},
+			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
+			Normal: (movePool, moves, abilities, types, counter, species) => !counter.get('Normal'),
+			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison') && !counter.get('Bug'),
 			Psychic: (movePool, moves, abilities, types, counter, species) => (
-				types.has('Psychic') &&
-				(movePool.includes('psychic') || movePool.includes('psychoboost')) &&
-				species.baseStats.spa >= 100
+				!counter.get('Psychic') && species.baseStats.spa >= 100
 			),
-			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 100,
-			Water: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Water') && counter.setupType !== 'Physical' && species.baseStats.spa >= 60
-			),
+			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock'),
+			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.id !== 'forretress'),
+			Water: (movePool, moves, abilities, types, counter, species) => !counter.get('Water'),
 		};
 	}
 
@@ -220,25 +219,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		// Enforce STAB
-		for (const type of types) {
-			// Check if a STAB move of that type should be required
-			const stabMoves = [];
-			for (const moveid of movePool) {
-				const move = this.dex.moves.get(moveid);
-				const moveType = this.getMoveType(move, species, abilities, preferredType);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && type === moveType) {
-					stabMoves.push(moveid);
-				}
-			}
-			while (runEnforcementChecker(type)) {
-				if (!stabMoves.length) break;
-				const moveid = this.sampleNoReplace(stabMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, preferredType, role);
-			}
-		}
-
 		// Enforce moves of all Preferred Types
 		for (const type of preferredTypes) {
 			if (!counter.get(type)) {
@@ -255,6 +235,25 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 						movePool, preferredType, role);
 				}
+			}
+		}
+
+		// Enforce STAB
+		for (const type of types) {
+			// Check if a STAB move of that type should be required
+			const stabMoves = [];
+			for (const moveid of movePool) {
+				const move = this.dex.moves.get(moveid);
+				const moveType = this.getMoveType(move, species, abilities, preferredType);
+				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && type === moveType) {
+					stabMoves.push(moveid);
+				}
+			}
+			while (runEnforcementChecker(type)) {
+				if (!stabMoves.length) break;
+				const moveid = this.sampleNoReplace(stabMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, preferredType, role);
 			}
 		}
 
