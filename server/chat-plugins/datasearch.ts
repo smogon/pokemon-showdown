@@ -164,7 +164,13 @@ export const commands: Chat.ChatCommands = {
 		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
+		const isBattleContext = !!room?.battle;
 		let qty;
+		let gen;
+
+		if (isBattleContext) {
+			gen = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex.currentMod;
+		}
 		for (const arg of targets) {
 			if (!arg) continue;
 			const num = Number(arg);
@@ -180,6 +186,10 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
+
+		if (gen && gen !== "base") {
+			targetsBuffer.push(`${gen}`);
+		}
 
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
@@ -211,7 +221,13 @@ export const commands: Chat.ChatCommands = {
 		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
+		const isBattleContext = !!room?.battle;
 		let qty;
+		let gen;
+
+		if (isBattleContext) {
+			gen = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex.currentMod;
+		}
 		for (const arg of targets) {
 			if (!arg) continue;
 			const num = Number(arg);
@@ -227,6 +243,10 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
+
+		if (gen && gen !== "base") {
+			targetsBuffer.push(`${gen}`);
+		}
 
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
@@ -257,7 +277,13 @@ export const commands: Chat.ChatCommands = {
 		target = target.slice(0, 300);
 		const targets = target.split(",");
 		const targetsBuffer = [];
+		const isBattleContext = !!room?.battle;
 		let qty;
+		let gen;
+
+		if (isBattleContext) {
+			gen = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex.currentMod;
+		}
 		for (const arg of targets) {
 			if (!arg) continue;
 			const num = Number(arg);
@@ -273,6 +299,10 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
+
+		if (gen && gen !== "base") {
+			targetsBuffer.push(`${gen}`);
+		}
 
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
