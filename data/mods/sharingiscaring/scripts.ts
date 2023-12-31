@@ -19,10 +19,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			return true;
 		},
 		hasItem(item) {
-			if (this.ignoringItem()) return false;
-			if (Array.isArray(item)) return item.some(i => this.hasItem(i));
-			const itemid = this.battle.toID(item);
-			return this.item === itemid || !!this.volatiles['item:' + itemid];
+			if (Array.isArray(item)) {
+				return item.some(i => this.hasItem(i));
+			} else {
+				if (this.battle.toID(item) !== this.item && !this.volatiles['item:' + this.battle.toID(item)]) return false;
+			}
+			return !this.ignoringItem();
 		},
 		useItem(source, sourceEffect) {
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
