@@ -407,8 +407,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		case 'Swarm':
 			return !counter.get('Bug');
 		case 'Swift Swim':
-			// Relicanth always wants Swift Swim if it doesn't have Double-Edge
-			return (!moves.has('raindance') && !teamDetails.rain && !(species.id === 'relicanth' && !counter.get('recoil')));
+			return (
+				// Relicanth always wants Swift Swim if it doesn't have Double-Edge
+				!moves.has('raindance') && !teamDetails.rain && !(species.id === 'relicanth' && !counter.get('recoil')) ||
+				!moves.has('raindance') && ['Rock Head', 'Water Absorb'].some(abil => abilities.has(abil))
+			);
 		case 'Thick Fat':
 			return (species.id === 'snorlax' || (species.id === 'hariyama' && moves.has('sleeptalk')));
 		case 'Water Absorb':
