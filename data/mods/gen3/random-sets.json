@@ -49,7 +49,7 @@
         "level": 95,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["hiddenpowerfire", "morningsun", "psychic", "sleeppowder", "stunspore", "toxic"],
                 "preferredTypes": ["Psychic"]
             }
@@ -239,7 +239,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["batonpass", "hiddenpowerfire", "psychic", "signalbeam", "sleeppowder", "sludgebomb", "substitute"],
                 "preferredTypes": ["Poison"]
             },
@@ -316,11 +316,11 @@
                 "movepool": ["brickbreak", "bulkup", "earthquake", "hiddenpowerghost", "hydropump", "hypnosis", "substitute"]
             },
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["brickbreak", "hiddenpowerghost", "hydropump", "hypnosis", "icebeam", "rest", "sleeptalk", "toxic"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["focuspunch", "hydropump", "icebeam", "substitute", "toxic"]
             }
         ]
@@ -637,7 +637,7 @@
         "level": 79,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["doubleedge", "earthquake", "rest", "return", "shadowball", "toxic"],
                 "preferredTypes": ["Ground"]
             },
@@ -777,7 +777,7 @@
         "level": 100,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["transform"]
             }
         ]
@@ -1026,7 +1026,7 @@
                 "movepool": ["agility", "batonpass", "silverwind", "swordsdance"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["batonpass", "silverwind", "substitute", "swordsdance"]
             }
         ]
@@ -1053,7 +1053,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["aerialace", "haze", "hiddenpowerground", "shadowball", "sludgebomb", "toxic"],
                 "preferredTypes": ["Ground"]
             }
@@ -1156,7 +1156,7 @@
         "level": 85,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["encore", "hiddenpowerflying", "sleeppowder", "synthesis", "toxic"]
             },
             {
@@ -1174,7 +1174,7 @@
                 "preferredTypes": ["Ghost"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["batonpass", "brickbreak", "return", "shadowball", "substitute", "thunderwave", "toxic"]
             },
             {
@@ -1201,7 +1201,7 @@
                 "preferredTypes": ["Fighting"]
             },
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["aerialace", "doubleedge", "hiddenpowerground", "hypnosis", "signalbeam", "toxic"],
                 "preferredTypes": ["Ground"]
             }
@@ -1241,7 +1241,7 @@
                 "movepool": ["batonpass", "protect", "toxic", "wish"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["batonpass", "meanlook", "moonlight", "toxic"]
             }
         ]
@@ -1402,7 +1402,7 @@
                 "movepool": ["hydropump", "selfdestruct", "shadowball", "sludgebomb", "swordsdance"]
             },
             {
-                "role": "Fast Support",
+                "role": "Fast Attacker",
                 "movepool": ["destinybond", "hydropump", "selfdestruct", "sludgebomb", "spikes"]
             }
         ]
@@ -1557,7 +1557,7 @@
                 "movepool": ["drillpeck", "protect", "rest", "spikes", "toxic"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["drillpeck", "spikes", "toxic", "whirlwind"]
             },
             {
@@ -1621,7 +1621,7 @@
         "level": 87,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["encore", "explosion", "spikes", "spore"]
             }
         ]
@@ -1940,7 +1940,7 @@
                 "movepool": ["hiddenpowerghost", "hiddenpowerrock", "machpunch", "skyuppercut", "spore", "substitute", "swordsdance"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["focuspunch", "hiddenpowerghost", "hiddenpowerrock", "spore", "substitute"]
             }
         ]
@@ -2033,7 +2033,7 @@
                 "movepool": ["doubleedge", "protect", "thunderwave", "toxic", "wish"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["batonpass", "bodyslam", "healbell", "protect", "wish"]
             }
         ]
@@ -2074,7 +2074,7 @@
                 "preferredTypes": ["Ground"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["doubleedge", "earthquake", "focuspunch", "irontail", "rockslide", "substitute"]
             }
         ]
@@ -2149,7 +2149,7 @@
                 "movepool": ["encore", "moonlight", "seismictoss", "thunderwave", "toxic"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["batonpass", "encore", "seismictoss", "substitute", "thunderwave", "toxic"]
             }
         ]
@@ -2274,7 +2274,7 @@
                 "movepool": ["focuspunch", "hiddenpowerdark", "leechseed", "substitute"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["hiddenpowerdark", "needlearm", "spikes", "thunderpunch"]
             }
         ]
@@ -2457,7 +2457,7 @@
                 "movepool": ["rest", "seismictoss", "shadowball", "sleeptalk"]
             },
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["focuspunch", "icebeam", "painsplit", "shadowball", "substitute", "willowisp"]
             }
         ]
@@ -2497,7 +2497,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Generalist",
                 "movepool": ["earthquake", "explosion", "icebeam", "spikes", "toxic"]
             }
         ]
