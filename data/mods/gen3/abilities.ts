@@ -88,6 +88,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.effectState.target;
 			}
 		},
+		flags: {breakable: 1},
 		name: "Lightning Rod",
 		rating: 0,
 		num: 32,
