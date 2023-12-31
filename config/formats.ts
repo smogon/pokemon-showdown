@@ -5185,11 +5185,9 @@ export const Formats: FormatList = [
 			'Standard', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
 		banlist: [
-			'Clefable', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense',
-			'Deoxys-Speed', 'Groudon', 'Ho-Oh', 'Kyogre', 'Latias', 'Latios',
-			'Lugia', 'Mew', 'Mewtwo', 'Rayquaza', 'Slaking', 'Snorlax', 'Suicune',
-			'Zapdos', 'Destiny Bond', 'Explosion', 'Perish Song', 'Self-Destruct',
-			'Focus Band', 'King\'s Rock', 'Quick Claw',
+			'Clefable', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Groudon', 'Ho-Oh', 'Kyogre', 'Latias', 'Latios',
+			'Lugia', 'Mew', 'Mewtwo', 'Rayquaza', 'Slaking', 'Snorlax', 'Suicune', 'Zapdos', 'Destiny Bond', 'Explosion', 'Perish Song',
+			'Self-Destruct', 'Focus Band', 'King\'s Rock', 'Quick Claw',
 		],
 	},
 	{
