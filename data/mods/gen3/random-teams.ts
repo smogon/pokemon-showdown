@@ -7,10 +7,6 @@ import type {MoveCounter} from '../gen8/random-teams';
 const RECOVERY_MOVES = [
 	'milkdrink', 'moonlight', 'morningsun', 'recover', 'slackoff', 'softboiled', 'synthesis',
 ];
-// Moves that boost Attack:
-const PHYSICAL_SETUP = [
-	'bellydrum', 'bulkup', 'curse', 'dragondance', 'howl', 'meditate', 'screech', 'swordsdance',
-];
 // Conglomerate for ease of access
 const SETUP = [
 	'acidarmor', 'agility', 'bellydrum', 'bulkup', 'calmmind', 'curse', 'dragondance', 'growth', 'howl', 'irondefense',
@@ -140,7 +136,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// These moves don't mesh well with other aspects of the set
 			[statusMoves, 'trick'],
 			[SETUP, badWithSetup],
-			[PHYSICAL_SETUP, PHYSICAL_SETUP],
 			['rest', ['protect', 'substitute']],
 			[['selfdestruct', 'explosion'], ['destinybond', 'painsplit', 'rest']],
 
@@ -244,7 +239,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		// Enforce all Preferred Types
+		// Enforce moves of all Preferred Types
 		for (const type of preferredTypes) {
 			if (!counter.get(type)) {
 				const stabMoves = [];
@@ -302,10 +297,31 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		// Enforce setup
-		if (role.includes('Setup')) {
+		if (role.includes('Setup') || role === 'Berry Sweeper') {
 			const setupMoves = movePool.filter(moveid => SETUP.includes(moveid));
 			if (setupMoves.length) {
 				const moveid = this.sample(setupMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, preferredType, role);
+			}
+		}
+
+		// Enforce Berry Sweeper moves
+		if (role === 'Berry Sweeper') {
+			// Enforce Flail/Reversal
+			for (const move of ['flail', 'reversal']) {
+				if (movePool.includes(move)) {
+					counter = this.addMove(move, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, preferredType, role);
+				}
+			}
+			// Enforce one of Endure and Substitute, but not both
+			const hpControlMoves = [];
+			for (const moveid of movePool) {
+				if (['endure', 'substitute'].includes(moveid)) hpControlMoves.push(moveid);
+			}
+			if (hpControlMoves.length) {
+				const moveid = this.sample(hpControlMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, preferredType, role);
 			}
@@ -327,7 +343,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		}
 
 		// Enforce coverage move
-		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker'].includes(role)) {
+		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker', 'Berry Sweeper'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
 				const currentAttackType = counter.damagingMoves.values().next().value.type;
