@@ -437,6 +437,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Hard-code abilities here
+		if (species.id === 'yanma' && counter.get('inaccurate')) return 'Compound Eyes';
 		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'blissey') return 'Natural Cure';
 		if (species.id === 'heracross' && role === 'Berry Sweeper') return 'Swarm';
