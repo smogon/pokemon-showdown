@@ -485,49 +485,56 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		role: RandomTeamsTypes.Role,
 	) {
 		// First, the high-priority items
-		if (species.name === 'Ditto') return this.sample(['Metal Powder', 'Quick Claw']);
-		if (species.name === 'Farfetch\u2019d') return 'Stick';
-		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
-		if (species.name === 'Marowak') return 'Thick Club';
-		if (species.name === 'Pikachu') return 'Light Ball';
-		if (species.name === 'Shedinja') return 'Lum Berry';
-		if (species.name === 'Unown') return 'Twisted Spoon';
+		if (species.id === 'farfetchd') return 'Stick';
+		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
+		if (species.id === 'linoone' && role === 'Setup Sweeper') return 'Silk Scarf';
+		if (species.id === 'marowak') return 'Thick Club';
+		if (species.id === 'pikachu') return 'Light Ball';
+		if (species.id === 'shedinja') return 'Lum Berry';
+		if (species.id === 'unown') return counter.get('Physical') ? 'Choice Band' : 'Twisted Spoon';
 
 		if (moves.has('trick')) return 'Choice Band';
-		if (moves.has('rest') && !moves.has('sleeptalk') && !['Early Bird', 'Natural Cure', 'Shed Skin'].includes(ability)) {
-			return 'Chesto Berry';
-		}
+		if (
+			moves.has('rest') && !moves.has('sleeptalk') &&
+			// Altaria wants Chesto Berry on Dragon Dance + Rest
+			(moves.has('dragondance') || !['Early Bird', 'Natural Cure', 'Shed Skin'].includes(ability))
+		) return 'Chesto Berry';
 
 		// Medium priority items
-		if (moves.has('dragondance') && ability !== 'Natural Cure') return 'Lum Berry';
-		if ((moves.has('bellydrum') && counter.get('Physical') - counter.get('priority') > 1) || (
-			((moves.has('swordsdance') && counter.get('Status') < 2) || (moves.has('bulkup') && moves.has('substitute'))) &&
-			!counter.get('priority') &&
-			species.baseStats.spe >= 60 && species.baseStats.spe <= 95
-		)) {
-			return 'Salac Berry';
-		}
-		if (moves.has('endure') || (
-			moves.has('substitute') &&
-			['bellydrum', 'endeavor', 'flail', 'reversal'].some(m => moves.has(m))
-		)) {
-			return (
-				species.baseStats.spe <= 100 && ability !== 'Speed Boost' && !counter.get('speedsetup') && !moves.has('focuspunch')
-			) ? 'Salac Berry' : 'Liechi Berry';
-		}
-		if (moves.has('substitute') && counter.get('Physical') >= 3 && species.baseStats.spe >= 120) return 'Liechi Berry';
-		if ((moves.has('substitute') || moves.has('raindance')) && counter.get('Special') >= 3) return 'Petaya Berry';
-		if (counter.get('Physical') >= 4 && !moves.has('fakeout')) return 'Choice Band';
-		if (counter.get('Physical') >= 3 && !moves.has('rapidspin') && (
-			['fireblast', 'icebeam', 'overheat'].some(m => moves.has(m)) ||
-			Array.from(moves).some(m => {
-				const moveData = this.dex.moves.get(m);
-				return moveData.category === 'Special' && types.includes(moveData.type);
-			})
-		)) {
+		if (counter.get('Physical') >= 4) return 'Choice Band';
+		if (counter.get('Physical') >= 3 && (moves.has('batonpass') || (role === 'Wallbreaker' && counter.get('Special')))) {
 			return 'Choice Band';
 		}
-		if (moves.has('psychoboost')) return 'White Herb';
+
+		if (moves.has('dragondance') && ability !== 'Natural Cure' && !moves.has('healbell')) return 'Lum Berry';
+		if (moves.has('bellydrum')) return moves.has('substitute') ? 'Salac Berry' : 'Lum Berry';
+
+		if (moves.has('raindance') && counter.get('Special') >= 3) return 'Petaya Berry';
+
+		if (role === 'Berry Sweeper') {
+			if (moves.has('endure')) return 'Salac Berry';
+			if (moves.has('flail') || moves.has('reversal')) return (species.baseStats.spe >= 90) ? 'Liechi Berry' : 'Salac Berry';
+			if (moves.has('substitute') && counter.get('Physical') >= 3) return 'Liechi Berry';
+			if (moves.has('substitute') && counter.get('Special') >= 3) return 'Petaya Berry';
+		}
+
+		const salacReqs = species.baseStats.spe >= 60 && species.baseStats.spe <= 100 && !counter.get('priority');
+
+		if (moves.has('bulkup') && moves.has('substitute') && counter.get('Status') === 2 && salacReqs) return 'Salac Berry';
+
+		if (moves.has('swordsdance') && moves.has('substitute') && counter.get('Status') === 2) {
+			if (salacReqs) return 'Salac Berry';
+			if (species.baseStats.spe > 100 && counter.get('Physical') >= 2) return 'Liechi Berry';
+		}
+
+		if (moves.has('swordsdance') && counter.get('Status') === 1) {
+			if (salacReqs) return 'Salac Berry';
+			if (species.baseStats.spe > 100) {
+				return (counter.get('Physical') >= 3 && this.randomChance(1, 2)) ? 'Liechi Berry' : 'Lum Berry';
+			}
+		}
+
+		if (species.id === 'deoxys' || species.id === 'deoxysattack') return 'White Herb';
 
 		// Default to Leftovers
 		return 'Leftovers';
