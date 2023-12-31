@@ -396,29 +396,23 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		role: RandomTeamsTypes.Role
 	) {
 		switch (ability) {
+		case 'Rain Dish': case 'Sand Veil': case 'Solar Power': case 'Soundproof': case 'Steadfast': case 'Sticky Hold':
+			return true;
 		case 'Chlorophyll':
 			return !moves.has('sunnyday') && !teamDetails.sun;
-		case 'Compound Eyes':
-			return !counter.get('inaccurate');
 		case 'Hustle':
-			return counter.get('Physical') < 2;
-		case 'Overgrow':
-			return !counter.get('Grass');
-		case 'Rain Dish': case 'Swift Swim':
-			return !moves.has('raindance') && !teamDetails.rain;
+			return !counter.get('Physical');
 		case 'Rock Head':
 			return !counter.get('recoil');
-		case 'Sand Veil':
-			return !teamDetails['sand'];
-		case 'Soundproof':
-			// Electrode prefers Static
-			return true;
 		case 'Swarm':
 			return !counter.get('Bug');
-		case 'Torrent':
-			return !counter.get('Water');
+		case 'Swift Swim':
+			// Relicanth always wants Swift Swim if it doesn't have Double-Edge
+			return (!moves.has('raindance') && !teamDetails.rain && !(species.id === 'relicanth' && !counter.get('recoil')));
+		case 'Thick Fat':
+			return (species.id === 'snorlax' || (species.id === 'hariyama' && moves.has('sleeptalk')));
 		case 'Water Absorb':
-			return abilities.has('Swift Swim');
+			return (species.id === 'mantine' && moves.has('raindance'));
 		}
 
 		return false;
@@ -443,8 +437,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Hard-code abilities here
-		if (species.id === 'snorlax') return 'Immunity';
+		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'blissey') return 'Natural Cure';
+		if (species.id === 'heracross' && role === 'Berry Sweeper') return 'Swarm';
+		if (species.id === 'gardevoir') return 'Trace';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)

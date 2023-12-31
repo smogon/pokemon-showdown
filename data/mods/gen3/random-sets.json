@@ -297,11 +297,16 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "rest", "sleeptalk", "toxic"]
+                "movepool": ["flamethrower", "hiddenpowergrass", "rest", "sleeptalk", "toxic"]
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["extremespeed", "fireblast", "hiddenpowergrass", "hiddenpowerrock", "irontail", "rest", "toxic"]
+                "movepool": ["doubleedge", "extremespeed", "fireblast", "hiddenpowerrock", "irontail"],
+                "preferredTypes": ["Steel"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["flamethrower", "hiddenpowergrass", "hiddenpowerrock", "protect", "toxic"]
             }
         ]
     },
