@@ -567,7 +567,7 @@ namespace RandomTeamsTypes {
 		role: Role;
 		movepool: string[];
 		teraTypes?: string[];
-		preferredTypes?: string;
+		preferredTypes?: string[];
 	}
 	export interface RandomSpeciesData {
 		level?: number;

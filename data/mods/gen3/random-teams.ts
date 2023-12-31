@@ -176,6 +176,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		preferredType: string,
 		role: RandomTeamsTypes.Role,
 	): Set<string> {
+		const preferredTypes = preferredType ? preferredType.split(',') : [];
 		const moves = new Set<string>();
 		let counter = this.newQueryMoves(moves, species, preferredType, abilities);
 		this.cullMovePool(types, moves, abilities, counter, movePool, teamDetails, species, isLead, isDoubles,
@@ -243,20 +244,22 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		// Enforce Preferred Types
-		if (!counter.get('preferred')) {
-			const stabMoves = [];
-			for (const moveid of movePool) {
-				const move = this.dex.moves.get(moveid);
-				const moveType = this.getMoveType(move, species, abilities, preferredType);
-				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && preferredType === moveType) {
-					stabMoves.push(moveid);
+		// Enforce all Preferred Types
+		for (const type of preferredTypes) {
+			if (!counter.get(type)) {
+				const stabMoves = [];
+				for (const moveid of movePool) {
+					const move = this.dex.moves.get(moveid);
+					const moveType = this.getMoveType(move, species, abilities, preferredType);
+					if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && type === moveType) {
+						stabMoves.push(moveid);
+					}
 				}
-			}
-			if (stabMoves.length) {
-				const moveid = this.sample(stabMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, preferredType, role);
+				if (stabMoves.length) {
+					const moveid = this.sample(stabMoves);
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, preferredType, role);
+				}
 			}
 		}
 
@@ -539,8 +542,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const set = this.sampleIfArray(sets);
 		const role = set.role;
 		const movePool: string[] = Array.from(set.movepool);
-		// const preferredTypes = set.preferredTypes;
-		const preferredType = '';
+		const preferredTypes = set.preferredTypes;
+		// In Gen 3, if a set has multiple preferred types, enforce all of them.
+		const preferredType = preferredTypes ? preferredTypes.join() : '';
 
 		let ability = '';
 		let item = undefined;
