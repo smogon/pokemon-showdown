@@ -463,23 +463,12 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		ruleset: ['[Gen 9] Ubers'],
 		banlist: [
-			// New Pokemon
-			'Alcremie', 'Araquanid', 'Archaludon', 'Bastiodon', 'Bellossom', 'Blastoise', 'Blaziken', 'Cinccino', 'Cobalion', 'Comfey', 'Deoxys',
-			'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dewgong', 'Dodrio', 'Electivire', 'Emboar', 'Entei', 'Excadrill', 'Exeggutor',
-			'Exeggutor-Alola', 'Feraligatr', 'Flygon', 'Galvantula', 'Golurk', 'Gouging Fire', 'Granbull', 'Hitmonchan', 'Hitmonlee', 'Hitmontop',
-			'Ho-Oh', 'Hydrapple', 'Incineroar', 'Iron Boulder', 'Iron Crown', 'Keldeo', 'Kingdra', 'Kyurem', 'Kyurem-Black', 'Kyurem-White',
-			'Lanturn', 'Lapras', 'Latias', 'Latios', 'Lugia', 'Lunala', 'Magmortar', 'Malamar', 'Meganium', 'Meowstic', 'Meowstic-F', 'Metagross',
-			'Minior', 'Minun', 'Necrozma', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Plusle', 'Porygon-Z', 'Primarina', 'Raging Bolt', 'Raikou',
-			'Rampardos', 'Regice', 'Regigigas', 'Regirock', 'Registeel', 'Reshiram', 'Reuniclus', 'Rhyperior', 'Sceptile', 'Scrafty', 'Serperior',
-			'Skarmory', 'Smeargle', 'Solgaleo', 'Suicune', 'Swampert', 'Tentacruel', 'Terapagos', 'Terrakion', 'Toucannon', 'Venusaur', 'Vileplume',
-			'Virizion', 'Whimsicott', 'Zebstrika', 'Zekrom',
 			// Ubers OU
-			'Annihilape', 'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Basculegion-Base', 'Calyrex-Ice', 'Chien-Pao', 'Clodsire', 'Ditto', 'Eternatus',
-			'Flutter Mane', 'Glimmora', 'Gliscor', 'Giratina-Origin', 'Great Tusk', 'Grimmsnarl', 'Groudon', 'Hatterene', 'Iron Bundle', 'Iron Treads',
-			'Kingambit', 'Koraidon', 'Kyogre', 'Landorus-Therian', 'Mewtwo', 'Miraidon', 'Ogerpon-Hearthflame', 'Rayquaza', 'Regieleki', 'Ribombee',
-			'Skeledirge', 'Ting-Lu', 'Toxapex', 'Zacian-Crowned',
-			// Ubers UUBL
-			'Arceus-Electric', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Water', 'Shaymin-Sky', 'Last Respects',
+			'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ghost', 'Arceus-Ground', 'Basculegion-Base', 'Calyrex-Ice', 'Chien-Pao', 'Clodsire', 'Deoxys-Attack', 'Deoxys-Speed',
+			'Ditto', 'Eternatus', 'Flutter Mane', 'Giratina-Origin', 'Glimmora', 'Gliscor', 'Grimmsnarl', 'Groudon', 'Hatterene', 'Ho-Oh', 'Iron Bundle', 'Koraidon',
+			'Kyogre', 'Kyurem-Black', 'Lunala', 'Miraidon', 'Necrozma-Dusk-Mane', 'Rayquaza', 'Ribombee', 'Skeledirge', 'Terapagos', 'Ting-Lu', 'Zacian-Crowned',
+			// Ubers UUBL + Arceus-Ghost
+			'Arceus-Flying', 'Arceus-Steel', 'Arceus-Water', 'Shaymin-Sky', 'Last Respects',
 		],
 	},
 	{
@@ -523,9 +512,11 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
-			'Corphish', 'Diglett-Alola', 'Drifloon', 'Foongus', 'Glimmet', 'Gothita', 'Grimer-Alola', 'Grookey', 'Impidimp', 'Koffing',
-			'Larvesta', 'Magnemite', 'Mienfoo', 'Mudbray', 'Numel', 'Pawniard', 'Sandshrew-Alola', 'Shellder', 'Shroodle', 'Snover',
-			'Stunky', 'Timburr', 'Tinkatink', 'Toedscool', 'Voltorb-Hisui', 'Vullaby', 'Wattrel', 'Zorua-Hisui',
+			'Buizel', 'Chinchou', 'Corphish', 'Diglett-Alola', 'Doduo', 'Drifloon', 'Drilbur', 'Elekid', 'Foongus', 'Fuecoco', 'Gastly', 'Glimmet', 'Gothita',
+			'Grimer-Alola', 'Grookey', 'Growlithe-Hisui', 'Houndour', 'Impidimp', 'Joltik', 'Koffing', 'Larvesta', 'Magby', 'Magnemite', 'Mareanie', 'Meowth-Base',
+			'Mienfoo', 'Minccino', 'Mudbray', 'Numel', 'Nymble', 'Pawniard', 'Porygon', 'Psyduck', 'Quaxly', 'Sandshrew-Alola', 'Shellder', 'Shellos', 'Shroodle',
+			'Slowpoke-Base', 'Snivy', 'Snover', 'Snubbull', 'Squirtle', 'Stunky', 'Teddiursa', 'Tentacool', 'Timburr', 'Tinkatink', 'Toedscool', 'Torchic',
+			'Trapinch', 'Voltorb-Hisui', 'Vullaby', 'Wattrel', 'Zorua-Hisui',
 		],
 	},
 	{
