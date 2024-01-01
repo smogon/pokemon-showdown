@@ -512,11 +512,9 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
-			'Buizel', 'Chinchou', 'Corphish', 'Diglett-Alola', 'Doduo', 'Drifloon', 'Drilbur', 'Elekid', 'Foongus', 'Fuecoco', 'Gastly', 'Glimmet', 'Gothita',
-			'Grimer-Alola', 'Grookey', 'Growlithe-Hisui', 'Houndour', 'Impidimp', 'Joltik', 'Koffing', 'Larvesta', 'Magby', 'Magnemite', 'Mareanie', 'Meowth-Base',
-			'Mienfoo', 'Minccino', 'Mudbray', 'Numel', 'Nymble', 'Pawniard', 'Porygon', 'Psyduck', 'Quaxly', 'Sandshrew-Alola', 'Shellder', 'Shellos', 'Shroodle',
-			'Slowpoke-Base', 'Snivy', 'Snover', 'Snubbull', 'Squirtle', 'Stunky', 'Teddiursa', 'Tentacool', 'Timburr', 'Tinkatink', 'Toedscool', 'Torchic',
-			'Trapinch', 'Voltorb-Hisui', 'Vullaby', 'Wattrel', 'Zorua-Hisui',
+			'Diglett-Alola', 'Drifloon', 'Drilbur', 'Elekid', 'Foongus', 'Gastly', 'Glimmet', 'Gothita', 'Grimer-Alola', 'Growlithe-Hisui', 'Impidimp',
+			'Koffing', 'Magby', 'Magnemite', 'Mareanie', 'Meowth-Base', 'Mienfoo', 'Minccino', 'Mudbray', 'Pawniard', 'Porygon', 'Shellder', 'Shroodle',
+			'Snivy', 'Snubbull', 'Stunky', 'Tentacool', 'Timburr', 'Tinkatink', 'Toedscool', 'Trapinch', 'Voltorb-Hisui', 'Vullaby', 'Wattrel',
 		],
 	},
 	{
