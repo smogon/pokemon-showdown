@@ -385,7 +385,7 @@ class Ladder extends LadderStore {
 		let formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) {
 			formatTable = {
-				numPlayers: ['multi', 'freeforall'].includes(Dex.formats.get(formatid).gameType) ? 4 : 2,
+				numPlayers: Dex.formats.get(formatid).playerCount,
 				searches: new Map(),
 			};
 			Ladders.searches.set(formatid, formatTable);
@@ -476,8 +476,7 @@ class Ladder extends LadderStore {
 			return undefined;
 		}
 		const format = Dex.formats.get(formatid);
-		const delayedStart = (['multi', 'freeforall'].includes(format.gameType) && players.length === 2) ?
-			'multi' : false;
+		const delayedStart = format.playerCount > players.length ? 'multi' : false;
 		return Rooms.createBattle({
 			format: formatid,
 			players,

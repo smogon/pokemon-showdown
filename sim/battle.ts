@@ -217,10 +217,9 @@ export class Battle {
 		this.formatData = {id: format.id};
 		this.gameType = (format.gameType || 'singles');
 		this.field = new Field(this);
-		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'freeforall';
-		this.sides = Array(isFourPlayer ? 4 : 2).fill(null) as any;
+		this.sides = Array(format.playerCount).fill(null) as any;
 		this.activePerHalf = this.gameType === 'triples' ? 3 :
-			(isFourPlayer || this.gameType === 'doubles') ? 2 :
+			(format.playerCount > 2 || this.gameType === 'doubles') ? 2 :
 			1;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;

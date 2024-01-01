@@ -2208,11 +2208,9 @@ export const Rooms = {
 	},
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
 		const players = options.players.map(player => player.user);
-		const gameType = Dex.formats.get(options.format).gameType;
-		if (gameType !== 'multi' && gameType !== 'freeforall') {
-			if (players.length > 2) {
-				throw new Error(`Four players were provided, but the format is a two-player format.`);
-			}
+		const format = Dex.formats.get(options.format);
+		if (players.length > format.playerCount) {
+			throw new Error(`${players.length} players were provided, but the format is a ${format.playerCount}-player format.`);
 		}
 		if (new Set(players).size < players.length) {
 			throw new Error(`Players can't battle themselves`);
@@ -2222,7 +2220,6 @@ export const Rooms = {
 			Ladders.cancelSearches(user);
 		}
 
-		const format = Dex.formats.get(options.format);
 		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
 
 		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isSubBattle) {
@@ -2268,9 +2265,9 @@ export const Rooms = {
 		const p2name = p2 ? p2.name : "Player 2";
 		let roomTitle;
 		let roomid = options.roomid;
-		if (gameType === 'multi') {
+		if (format.gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
-		} else if (gameType === 'freeforall') {
+		} else if (format.gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
 		} else if (isBestOf && !options.isSubBattle) {
