@@ -621,6 +621,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			} else if (moves.has('substitute') && (item === 'Salac Berry' || item === 'Petaya Berry' || item === 'Liechi Berry')) {
 				// Other pinch berry holders should have berries activate after three Substitutes
 				if (hp % 4 === 0) break;
+			} else if (moves.has('bellydrum')) {
+				// Belly Drum users should be able to use Belly Drum twice
+				if (hp % 2 > 0) break;
 			}
 			evs.hp -= 4;
 		}
