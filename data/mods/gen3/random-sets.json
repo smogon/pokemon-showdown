@@ -1416,7 +1416,7 @@
                 "movepool": ["batonpass", "hiddenpowerground", "morningsun", "silverwind", "steelwing", "swordsdance"]
             },
             {
-                "role": "Fast Attacker",
+                "role": "Generalist",
                 "movepool": ["agility", "batonpass", "hiddenpowerground", "silverwind", "steelwing"]
             }
         ]
