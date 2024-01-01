@@ -4519,7 +4519,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	kommoo: {
 		tier: "UU",
 		doublesTier: "DUU",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	kommoototem: {
 		isNonstandard: "Past",
@@ -4589,7 +4589,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	kartana: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	guzzlord: {
 		isNonstandard: "Past",
