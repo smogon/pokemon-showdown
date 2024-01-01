@@ -1199,8 +1199,7 @@
         "sets": [
             {
                 "role": "Berry Sweeper",
-                "movepool": ["hiddenpowerflying", "hypnosis", "reversal", "shadowball", "substitute"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["hiddenpowerflying", "hypnosis", "reversal", "shadowball", "substitute"]
             },
             {
                 "role": "Fast Attacker",
