@@ -624,6 +624,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			} else if (moves.has('bellydrum')) {
 				// Belly Drum users should be able to use Belly Drum twice
 				if (hp % 2 > 0) break;
+			} else {
+				break;
 			}
 			evs.hp -= 4;
 		}
