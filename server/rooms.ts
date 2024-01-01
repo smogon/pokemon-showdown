@@ -2006,14 +2006,6 @@ export class GameRoom extends BasicRoom {
 			this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_INACTIVE_DEALLOCATE);
 		}
 	}
-	sendPlayer(num: 0 | 1, message: string) {
-		const player = this.getPlayer(num);
-		player?.sendRoom(message);
-	}
-	getPlayer(num: 0 | 1) {
-		// @ts-ignore
-		return this.game['p' + (num + 1)];
-	}
 	requestModchat(user: User | null) {
 		if (!user) {
 			this.modchatUser = '';
