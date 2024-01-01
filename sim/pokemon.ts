@@ -820,6 +820,9 @@ export class Pokemon {
 
 	ignoringAbility() {
 		if (this.battle.gen >= 5 && !this.isActive) return true;
+
+		// Certain Abilities won't activate while Transformed, even if they ordinarily couldn't be suppressed (e.g. Disguise)
+		if (this.getAbility().flags['notransform'] && this.transformed) return true;
 		if (this.getAbility().flags['cantsuppress']) return false;
 		if (this.volatiles['gastroacid']) return true;
 

@@ -592,8 +592,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onUpdate(pokemon) {
 			if (this.gameType !== 'doubles') return;
 			const ally = pokemon.allies()[0];
-			if (!ally || pokemon.transformed ||
-				pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
+			if (!ally || pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
 				// Handle any edge cases
 				if (pokemon.getVolatile('commanding')) pokemon.removeVolatile('commanding');
 				return;
@@ -955,10 +954,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	disguise: {
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (
-				effect && effect.effectType === 'Move' &&
-				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
-			) {
+			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.species.id)) {
 				this.add('-activate', target, 'ability: Disguise');
 				this.effectState.busted = true;
 				return 0;
@@ -966,7 +962,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onCriticalHit(target, source, move) {
 			if (!target) return;
-			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id)) {
 				return;
 			}
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
@@ -977,7 +973,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target || move.category === 'Status') return;
-			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id)) {
 				return;
 			}
 
@@ -1155,7 +1151,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	embodyaspectcornerstone: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' && !pokemon.transformed && !this.effectState.embodied) {
+			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' && !this.effectState.embodied) {
 				this.effectState.embodied = true;
 				this.boost({def: 1}, pokemon);
 			}
@@ -1170,7 +1166,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	embodyaspecthearthflame: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' && !pokemon.transformed && !this.effectState.embodied) {
+			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' && !this.effectState.embodied) {
 				this.effectState.embodied = true;
 				this.boost({atk: 1}, pokemon);
 			}
@@ -1185,7 +1181,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	embodyaspectteal: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' && !pokemon.transformed && !this.effectState.embodied) {
+			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' && !this.effectState.embodied) {
 				this.effectState.embodied = true;
 				this.boost({spe: 1}, pokemon);
 			}
@@ -1200,7 +1196,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	embodyaspectwellspring: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' && !pokemon.transformed && !this.effectState.embodied) {
+			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' && !this.effectState.embodied) {
 				this.effectState.embodied = true;
 				this.boost({spd: 1}, pokemon);
 			}
@@ -1686,7 +1682,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	gulpmissile: {
 		onDamagingHit(damage, target, source, move) {
-			if (!source.hp || !source.isActive || target.transformed || target.isSemiInvulnerable()) return;
+			if (!source.hp || !source.isActive || target.isSemiInvulnerable()) return;
 			if (['cramorantgulping', 'cramorantgorging'].includes(target.species.id)) {
 				this.damage(source.baseMaxhp / 4, source, target);
 				if (target.species.id === 'cramorantgulping') {
@@ -1699,10 +1695,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.ts
 		onSourceTryPrimaryHit(target, source, effect) {
-			if (
-				effect && effect.id === 'surf' && source.hasAbility('gulpmissile') &&
-				source.species.name === 'Cramorant' && !source.transformed
-			) {
+			if (effect && effect.id === 'surf' && source.hasAbility('gulpmissile') && source.species.name === 'Cramorant') {
 				const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
 				source.formeChange(forme, effect);
 			}
@@ -1840,7 +1833,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	hungerswitch: {
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (pokemon.species.baseSpecies !== 'Morpeko' || pokemon.transformed || pokemon.terastallized) return;
+			if (pokemon.species.baseSpecies !== 'Morpeko' || pokemon.terastallized) return;
 			const targetForme = pokemon.species.name === 'Morpeko' ? 'Morpeko-Hangry' : 'Morpeko';
 			pokemon.formeChange(targetForme);
 		},
@@ -1912,8 +1905,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	iceface: {
 		onStart(pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) &&
-				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
+			if (this.field.isWeather(['hail', 'snow']) && pokemon.species.id === 'eiscuenoice') {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
@@ -1921,10 +1913,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (
-				effect && effect.effectType === 'Move' && effect.category === 'Physical' &&
-				target.species.id === 'eiscue' && !target.transformed
-			) {
+			if (effect && effect.effectType === 'Move' && effect.category === 'Physical' && target.species.id === 'eiscue') {
 				this.add('-activate', target, 'ability: Ice Face');
 				this.effectState.busted = true;
 				return 0;
@@ -1932,14 +1921,14 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onCriticalHit(target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed) return;
+			if (move.category !== 'Physical' || target.species.id !== 'eiscue') return;
 			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
 			if (!target.runImmunity(move.type)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (move.category !== 'Physical' || target.species.id !== 'eiscue' || target.transformed) return;
+			if (move.category !== 'Physical' || target.species.id !== 'eiscue') return;
 
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
@@ -1956,8 +1945,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
 			if ((sourceEffect as Ability)?.suppressWeather) return;
 			if (!pokemon.hp) return;
-			if (this.field.isWeather(['hail', 'snow']) &&
-				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
+			if (this.field.isWeather(['hail', 'snow']) && pokemon.species.id === 'eiscuenoice') {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
@@ -2846,7 +2834,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	neutralizinggas: {
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
 		onPreStart(pokemon) {
-			if (pokemon.transformed) return;
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
@@ -3433,7 +3420,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			if (pokemon.transformed) return;
 			// Protosynthesis is not affected by Utility Umbrella
 			if (this.field.isWeather('sunnyday')) {
 				pokemon.addVolatile('protosynthesis');
@@ -3570,7 +3556,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
 		},
 		onTerrainChange(pokemon) {
-			if (pokemon.transformed) return;
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.addVolatile('quarkdrive');
 			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
@@ -4883,7 +4868,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	terashift: {
 		onPreStart(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Terapagos' || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Terapagos') return;
 			if (pokemon.species.forme !== 'Terastal') {
 				this.add('-activate', pokemon, 'ability: Tera Shift');
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
@@ -5557,7 +5542,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	zerotohero: {
 		onSwitchOut(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Palafin' || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
 			}
@@ -5568,7 +5553,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onStart(pokemon) {
 			if (!this.effectState.switchingIn) return;
 			this.effectState.switchingIn = false;
-			if (pokemon.baseSpecies.baseSpecies !== 'Palafin' || pokemon.transformed) return;
+			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (!this.effectState.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
 				this.effectState.heroMessageDisplayed = true;
