@@ -10,7 +10,7 @@ const RECOVERY_MOVES = [
 // Conglomerate for ease of access
 const SETUP = [
 	'acidarmor', 'agility', 'bellydrum', 'bulkup', 'calmmind', 'curse', 'dragondance', 'growth', 'howl', 'irondefense',
-	'meditate', 'nastyplot', 'raindance', 'sunnyday', 'swordsdance', 'tailglow',
+	'meditate', 'raindance', 'sunnyday', 'swordsdance', 'tailglow',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
@@ -486,7 +486,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		isLead: boolean,
 		preferredType: string,
 		role: RandomTeamsTypes.Role,
-	) {
+	): string {
 		// First, the high-priority items
 		if (species.id === 'farfetchd') return 'Stick';
 		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
@@ -676,9 +676,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const type = this.forceMonotype || this.sample(typePool);
 
 		const baseFormes: {[k: string]: number} = {};
-		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
-		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
@@ -702,16 +700,11 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// Limit to one Ditto per battle in Gen 2
 			if (this.dex.gen < 3 && species.name === 'Ditto' && this.battleHasDitto) continue;
 
-			const tier = species.tier;
 			const types = species.types;
-			const typeCombo = types.slice().sort().join();
 
 			if (!isMonotype && !this.forceMonotype) {
 				// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 				const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
-
-				// Limit two Pokemon per tier
-				if (tierCount[tier] >= 2 * limitFactor) continue;
 
 				// Limit two of any type
 				let skip = false;
@@ -735,9 +728,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					}
 				}
 				if (skip) continue;
-
-				// Limit one of any type combination
-				if (!this.forceMonotype && typeComboCount[typeCombo] >= 1 * limitFactor) continue;
 			}
 
 			// Okay, the set passes, add it to our team
@@ -750,13 +740,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;
 
-			// Increment tier counter
-			if (tierCount[tier]) {
-				tierCount[tier]++;
-			} else {
-				tierCount[tier] = 1;
-			}
-
 			// Increment type counters
 			for (const typeName of types) {
 				if (typeName in typeCount) {
@@ -764,11 +747,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				} else {
 					typeCount[typeName] = 1;
 				}
-			}
-			if (typeCombo in typeComboCount) {
-				typeComboCount[typeCombo]++;
-			} else {
-				typeComboCount[typeCombo] = 1;
 			}
 
 			// Increment weakness counter
