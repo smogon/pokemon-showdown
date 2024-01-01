@@ -899,7 +899,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			}
 		}
 
-		logData.p1score = p1score;
 		logData.p1rating = p1rating;
 		if (this.replaySaved) logData.replaySaved = this.replaySaved;
 		logData.p2rating = p2rating;
