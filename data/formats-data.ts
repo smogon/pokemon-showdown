@@ -3840,11 +3840,6 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
-	meowsticf: {
-		tier: "OU",
-		doublesTier: "DOU",
-		natDexTier: "RU",
-	},
 	honedge: {
 		isNonstandard: "Past",
 		tier: "Illegal",
