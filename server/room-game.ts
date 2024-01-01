@@ -154,12 +154,13 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 		return player;
 	}
 
-	updatePlayer(player: PlayerClass, user: User | null) {
+	updatePlayer(player: PlayerClass, userOrName: User | string | null) {
 		if (!this.allowRenames) return;
 		if (player.id) {
 			delete this.playerTable[player.id];
 		}
-		if (user) {
+		if (userOrName) {
+			const user = typeof userOrName === 'string' ? {name: userOrName, id: toID(userOrName)} : userOrName;
 			player.id = user.id;
 			player.name = user.name;
 			this.playerTable[player.id] = player;

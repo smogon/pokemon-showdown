@@ -1290,9 +1290,57 @@ export class GlobalRoomState {
 		void this.loadBattles();
 	}
 
+	async serializeBattleRoom(room: Room) {
+		if (!room.battle || room.battle.ended) return null;
+		room.battle.frozen = true;
+		const log = await room.battle.getLog();
+		const players = room.battle.players.map(p => p.id).filter(Boolean);
+		if (!players.length || !log?.length) return null; // shouldn't happen???
+		// players can be empty right after `/importinputlog`
+		return {
+			roomid: room.roomid,
+			inputLog: log.join('\n'),
+			players,
+			title: room.title,
+			rated: room.battle.rated,
+			timer: {
+				...room.battle.timer.settings,
+				active: !!room.battle.timer.timer || false,
+			},
+		};
+	}
+	deserializeBattleRoom(battle: NonNullable<Awaited<ReturnType<GlobalRoomState['serializeBattleRoom']>>>) {
+		const {inputLog, players, roomid, title, rated, timer} = battle;
+		const [, formatid] = roomid.split('-');
+		const room = Rooms.createBattle({
+			format: formatid,
+			inputLog,
+			roomid,
+			title,
+			rated: Number(rated),
+			players: [],
+			delayedTimer: timer.active,
+		});
+		if (!room || !room.battle) return false; // shouldn't happen???
+		if (timer) { // json blob of settings
+			Object.assign(room.battle.timer.settings, timer);
+		}
+		for (const [i, playerid] of players.entries()) {
+			room.auth.set(playerid, Users.PLAYER_SYMBOL);
+			const player = room.battle.players[i];
+			player.id = playerid;
+			room.battle.playerTable[playerid] = player;
+			player.hasTeam = true;
+			const user = Users.getExact(playerid);
+			player.name = user?.name || playerid; // in case user hasn't reconnected yet
+			user?.joinRoom(room);
+		}
+		return true;
+	}
+
 	async saveBattles() {
 		let count = 0;
-		if (!Config.usepostgres) return 0;
+		if (!Config.usepostgres) return this.saveBattlesJSONL();
 		const logDatabase = new PostgresDatabase();
 		await logDatabase.ensureMigrated({
 			table: 'stored_battles',
@@ -1302,30 +1350,44 @@ export class GlobalRoomState {
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
 			room.battle.frozen = true;
-			const log = await room.battle.getLog();
-			const players = room.battle.players.map(p => p.id).filter(Boolean);
-			if (!players.length || !log?.length) continue; // shouldn't happen???
-			// players can be empty right after `/importinputlog`
-			const timerData = {
-				...room.battle.timer.settings,
-				active: !!room.battle.timer.timer || false,
-			};
+			room.battle.timer.stop();
+			const b = await this.serializeBattleRoom(room);
+			if (!b) continue;
 			await logDatabase.query(
 				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
 				` ON CONFLICT (roomid) DO UPDATE ` +
 				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
 				// for some reason Battle#rated is sometimes a float which Postgres can't handle
-				[room.roomid, log.join('\n'), players, room.title, Math.floor(room.battle.rated), timerData]
+				[b.roomid, b.inputLog, b.players, b.title, b.rated, b.timer]
 			);
-			room.battle.timer.stop();
 			count++;
 		}
 		return count;
 	}
 
+	async saveBattlesJSONL() {
+		let count = 0;
+		const out = FS('logs/battles.jsonl.progress').createAppendStream();
+		for (const room of Rooms.rooms.values()) {
+			if (!room.battle || room.battle.ended) continue;
+			room.battle.frozen = true;
+			room.battle.timer.stop();
+			const b = await this.serializeBattleRoom(room);
+			if (!b) continue;
+			await out.write(JSON.stringify(b) + '\n');
+			count++;
+		}
+		await out.writeEnd();
+		await FS('logs/battles.jsonl.progress').rename('logs/battles.jsonl');
+		return count;
+	}
+
 	battlesLoading = false;
 	async loadBattles() {
-		if (!Config.usepostgres) return;
+		if (!Config.usepostgres) {
+			await this.loadBattlesJSONL();
+			return;
+		}
 		this.battlesLoading = true;
 		for (const u of Users.users.values()) {
 			u.send(
@@ -1338,33 +1400,8 @@ export class GlobalRoomState {
 		const logDatabase = new PostgresDatabase();
 		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
 		for await (const battle of logDatabase.stream(query)) {
-			const {input_log, players, roomid, title, rated, timer} = battle;
-			const [, formatid] = roomid.split('-');
-			const room = Rooms.createBattle({
-				format: formatid,
-				inputLog: input_log,
-				roomid,
-				title,
-				rated: Number(rated),
-				players: [],
-				delayedTimer: timer.active,
-			});
-			if (!room || !room.battle) continue; // shouldn't happen???
-			room.battle.started = true; // so that timer works
-			room.battle.start();
-			if (timer) { // json blob of settings
-				Object.assign(room.battle.timer.settings, timer);
-			}
-			for (const [i, playerid] of players.entries()) {
-				room.auth.set(playerid, Users.PLAYER_SYMBOL);
-				const player = room.battle.players[i];
-				player.id = playerid;
-				player.hasTeam = true;
-				const user = Users.getExact(playerid);
-				player.name = user?.name || playerid; // in case user hasn't reconnected yet
-				user?.joinRoom(room);
-			}
-			count++;
+			battle.inputLog = battle.input_log;
+			if (this.deserializeBattleRoom(battle)) count++;
 		}
 		for (const u of Users.users.values()) {
 			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
@@ -1372,14 +1409,44 @@ export class GlobalRoomState {
 		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
 		this.battlesLoading = false;
 	}
+	async loadBattlesJSONL() {
+		this.battlesLoading = true;
+		for (const u of Users.users.values()) {
+			u.send(
+				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
+				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
+			);
+		}
+		const startTime = Date.now();
+		let count = 0;
+		let input;
+		try {
+			const stream = FS('logs/battles.jsonl').createReadStream();
+			await stream.fd;
+			input = stream.byLine();
+		} catch (e) {
+			return;
+		}
+		for await (const line of input) {
+			if (!line) continue;
+			if (this.deserializeBattleRoom(JSON.parse(line))) count++;
+		}
+		for (const u of Users.users.values()) {
+			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
+		}
+		await FS('logs/battles.jsonl').unlinkIfExists();
+		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
+		this.battlesLoading = false;
+	}
 
-	joinOldBattles(user: User) {
+	rejoinGames(user: User) {
 		for (const room of Rooms.rooms.values()) {
-			const battle = room.battle;
-			if (!battle) continue;
-			const player = battle.playerTable[user.id];
+			const game = room.game;
+			if (!game) continue;
+			const player = game.playerTable[user.id];
 			if (!player) return;
 
+			user.games.add(room.roomid);
 			player.name = user.name;
 			user.joinRoom(room.roomid);
 		}
