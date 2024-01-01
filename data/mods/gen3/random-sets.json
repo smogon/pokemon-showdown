@@ -2389,12 +2389,8 @@
         "level": 82,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["earthquake", "hiddenpowerbug", "rockslide", "swordsdance"]
-            },
-            {
                 "role": "Wallbreaker",
-                "movepool": ["doubleedge", "earthquake", "hiddenpowerbug", "rapidspin", "rockslide"],
+                "movepool": ["doubleedge", "earthquake", "hiddenpowerbug", "rapidspin", "rockslide", "swordsdance"],
                 "preferredTypes": ["Ground"]
             }
         ]
