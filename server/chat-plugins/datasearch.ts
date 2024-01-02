@@ -180,7 +180,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
-
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		if (!target.includes('mod=')) {
+			const dex = defaultFormat.dex;
+			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
+		}
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
@@ -227,7 +231,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
-
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		if (!target.includes('mod=')) {
+			const dex = defaultFormat.dex;
+			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
+		}
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
