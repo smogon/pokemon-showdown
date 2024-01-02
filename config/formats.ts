@@ -1378,17 +1378,18 @@ export const Formats: FormatList = [
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Arceus', 'Calyrex-Shadow', 'Chien-Pao', 'Clefable', 'Deoxys-Base', 'Deoxys-Attack', 'Dondozo', 'Eternatus', 'Flutter Mane',
-			'Greninja', 'Kingambit', 'Koraidon', 'Magearna', 'Miraidon', 'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Rayquaza', 'Shaymin-Sky',
-			'Terapagos', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Arena Trap', 'Chlorophyll', 'Magnet Pull', 'Moody', 'Neutralizing Gas',
-			'Regenerator', 'Shadow Tag', 'Speed Boost', 'Stench', 'Swift Swim', 'Unburden', 'King\'s Rock', 'Leppa Berry', 'Razor Fang',
-			'Starf Berry', 'Baton Pass', 'Extreme Speed', 'Last Respects',
+			'Greninja', 'Kingambit', 'Kyurem-Black', 'Kyurem-White', 'Koraidon', 'Lunala', 'Magearna', 'Miraidon', 'Necrozma-Dawn-Wings',
+			'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Terapagos', 'Zacian', 'Zacian-Crowned',
+			'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Chlorophyll', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Regenerator', 'Shadow Tag',
+			'Speed Boost', 'Stench', 'Swift Swim', 'Unburden', 'King\'s Rock', 'Leppa Berry', 'Razor Fang', 'Starf Berry', 'Baton Pass',
+			'Extreme Speed', 'Last Respects',
 		],
 		unbanlist: ['Arceus-Bug', 'Arceus-Dragon', 'Arceus-Fire', 'Arceus-Ice'],
 		restricted: [
 			'Armor Tail', 'Comatose', 'Contrary', 'Dazzling', 'Fur Coat', 'Gale Wings', 'Good as Gold', 'Huge Power', 'Illusion', 'Imposter',
 			'Magic Bounce', 'Magic Guard', 'Mold Breaker', 'Multiscale', 'Poison Heal', 'Prankster', 'Protosynthesis', 'Pure Power', 'Purifying Salt',
-			'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Sand Rush', 'Shadow Shield', 'Simple', 'Slush Rush', 'Stakeout', 'Stamina', 'Sturdy',
-			'Surge Surfer', 'Teravolt', 'Tinted Lens', 'Triage', 'Turboblaze', 'Unaware', 'Water Bubble',
+			'Queenly Majesty', 'Quick Draw', 'Quick Feet', 'Sand Rush', 'Simple', 'Slush Rush', 'Stakeout', 'Stamina', 'Sturdy', 'Surge Surfer',
+			'Tinted Lens', 'Triage', 'Unaware', 'Water Bubble',
 		],
 		onValidateRule() {
 			if (this.format.gameType !== 'singles') {
