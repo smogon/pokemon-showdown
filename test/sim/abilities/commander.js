@@ -75,7 +75,6 @@ describe('Commander', function () {
 			{species: 'dondozo', moves: ['transform']},
 			{species: 'roggenrola', moves: ['sleeptalk']},
 			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
-			
 		]]);
 
 		battle.makeChoices('auto', 'move transform 2, move sleeptalk');
