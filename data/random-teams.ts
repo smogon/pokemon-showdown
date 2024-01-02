@@ -503,7 +503,7 @@ export class RandomTeams {
 				[RECOVERY_MOVES, 'healpulse'],
 				['lifedew', 'healpulse'],
 				['haze', 'icywind'],
-				[['muddywater', 'hydropump'], 'scald'],
+				[['hydropump', 'muddywater'], ['muddywater', 'scald']],
 				['disable', 'encore'],
 				['freezedry', 'icebeam'],
 				['energyball', 'leafstorm'],
@@ -1437,7 +1437,7 @@ export class RandomTeams {
 			(offensiveRole || (role === 'Tera Blast user' && (species.baseStats.spe >= 80 || moves.has('trickroom')))) &&
 			(!moves.has('fakeout') || species.id === 'ambipom') && !moves.has('incinerate') &&
 			(!moves.has('uturn') || types.includes('Bug') || species.baseStats.atk >= 120 || ability === 'Libero') &&
-			(!moves.has('icywind') || species.id === 'ironbundle')
+			((!moves.has('icywind') && !moves.has('electroweb')) || species.id === 'ironbundle')
 		) {
 			return (
 				(ability === 'Quark Drive' || ability === 'Protosynthesis') &&

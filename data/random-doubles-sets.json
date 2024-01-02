@@ -688,9 +688,9 @@
         "level": 84,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Offensive Protect",
                 "movepool": ["Alluring Voice", "Helping Hand", "Protect", "Thunder Wave", "Thunderbolt"],
-                "teraTypes": ["Flying", "Ghost"]
+                "teraTypes": ["Fairy"]
             },
             {
                 "role": "Tera Blast user",
@@ -1459,7 +1459,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Hurricane", "Hydro Pump", "Roost", "Tailwind", "Wide Guard"],
+                "movepool": ["Hurricane", "Hydro Pump", "Muddy Water", "Tailwind", "Wide Guard"],
                 "teraTypes": ["Ground"]
             }
         ]
@@ -1749,7 +1749,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Helping Hand", "Icy Wind", "Protect", "Psychic", "Snarl"],
+                "movepool": ["Encore", "Heal Pulse", "Helping Hand", "Icy Wind", "Protect", "Psychic", "Snarl"],
                 "teraTypes": ["Dark", "Steel"]
             }
         ]
@@ -2424,7 +2424,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Icy Wind", "Poltergeist", "Spikes", "Taunt", "Triple Axel", "Will-O-Wisp"],
+                "movepool": ["Icy Wind", "Poltergeist", "Protect", "Spikes", "Taunt", "Triple Axel", "Will-O-Wisp"],
                 "teraTypes": ["Ghost", "Water"]
             }
         ]
@@ -4258,7 +4258,7 @@
                 "teraTypes": ["Dark", "Fighting", "Fire"]
             },
             {
-                "role": "Doubles Setup Sweeper",
+                "role": "Doubles Bulky Setup",
                 "movepool": ["Close Combat", "Flame Charge", "Protect", "Sunsteel Strike"],
                 "teraTypes": ["Fighting", "Fire"]
             }
