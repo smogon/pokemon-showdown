@@ -75,7 +75,7 @@ describe('[Gen 3] Random Battle (slow)', () => {
 					// randomMoveset() deletes moves from the movepool, so recreate it every time
 					const preferredType = preferredTypes ? preferredTypes.join() : '';
 					const movePool = set.movepool.map(m => dex.moves.get(m).id);
-					const moveSet = generator.randomMoveset(types, abilities, {}, species, false, false, movePool, preferredType, role);
+					const moveSet = generator.randomMoveset(types, abilities, {}, species, false, movePool, preferredType, role);
 					for (const move of moveSet) moves.delete(move);
 					if (!moves.size) break;
 				}
