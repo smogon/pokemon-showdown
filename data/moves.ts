@@ -5543,7 +5543,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-combine');
 				return 150;
 			}
-			return 80;
+			return move.basePower;
 		},
 		category: "Special",
 		name: "Fire Pledge",
@@ -7821,7 +7821,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-combine');
 				return 150;
 			}
-			return 80;
+			return move.basePower;
 		},
 		category: "Special",
 		name: "Grass Pledge",
@@ -19939,7 +19939,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (pokemon.terastallized === 'Stellar') {
 				return 100;
 			}
-			return 80;
+			return move.basePower;
 		},
 		category: "Special",
 		name: "Tera Blast",
@@ -21307,7 +21307,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-combine');
 				return 150;
 			}
-			return 80;
+			return move.basePower;
 		},
 		category: "Special",
 		name: "Water Pledge",
