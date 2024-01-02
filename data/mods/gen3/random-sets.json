@@ -1737,7 +1737,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["aeroblast", "earthquake", "recover", "substitute", "toxic"]
+                "movepool": ["earthquake", "psychic", "recover", "substitute", "toxic"]
             },
             {
                 "role": "Bulky Setup",
