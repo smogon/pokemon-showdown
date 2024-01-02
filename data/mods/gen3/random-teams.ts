@@ -393,7 +393,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		role: RandomTeamsTypes.Role
 	) {
 		switch (ability) {
-		case 'Rain Dish': case 'Sand Veil': case 'Solar Power': case 'Soundproof': case 'Steadfast': case 'Sticky Hold':
+		case 'Rain Dish': case 'Sand Veil': case 'Soundproof': case 'Sticky Hold':
 			return true;
 		case 'Chlorophyll':
 			return !moves.has('sunnyday') && !teamDetails.sun;
