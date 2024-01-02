@@ -728,7 +728,7 @@ export const Formats: FormatList = [
 		],
 		restricted: [
 			'Dynamic Punch', 'Flail', 'Flip Turn', 'Fury Cutter', 'Grass Knot', 'Grassy Glide', 'Hard Press', 'Heavy Slam', 'Heat Crash',
-			'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Reversal', 'Spit Up', 'Stored Power', 'Tera Blast', 'Volt Switch', 'Zap Cannon',
+			'Inferno', 'Low Kick', 'Nuzzle', 'Power Trip', 'Reversal', 'Tera Blast', 'Spit Up', 'Stored Power', 'Volt Switch', 'Zap Cannon',
 		],
 		onValidateTeam(team) {
 			const itemTable = new Set<string>();
