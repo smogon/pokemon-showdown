@@ -4847,10 +4847,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 309,
 	},
 	terashell: {
-		// TODO figure out if this only works on Terapagos
 		onEffectiveness(typeMod, target, type, move) {
+			if (!target || target.species.name !== 'Terapagos-Terastal') return;
 			if (this.effectState.resisted) return -1; // all hits of multi-hit move should be not very effective
-			if (!target || move.category === 'Status') return;
+			if (move.category === 'Status') return;
 			if (!target.runImmunity(move.type)) return; // immunity has priority
 			if (target.hp < target.maxhp) return;
 
