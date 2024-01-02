@@ -1819,7 +1819,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			const problems = [];
 			for (const move of set.moves) {
-				if (moveSources[this.toID(move)]?.every(learned => learned.includes('S'))) {
+				const sources = moveSources[this.toID(move)];
+				if (sources?.length && sources.every(learned => learned.includes('S'))) {
 					problems.push(`${species.name}'s move ${move} is obtainable only through events.`);
 				}
 			}
