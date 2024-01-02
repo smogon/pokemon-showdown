@@ -230,7 +230,7 @@ describe('Transform', function () {
 		assert.cantMove(() => battle.choose('p1', 'move transform terastallize'));
 	});
 
-	it(`should not work if the Pokemon is Tera Stellar`, function () {
+	it(`should not work if the user is Tera Stellar`, function () {
 		battle = common.createBattle([[
 			{species: 'Ditto', ability: 'limber', moves: ['transform'], teraType: 'Stellar'},
 		], [
