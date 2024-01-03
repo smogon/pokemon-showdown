@@ -1510,6 +1510,9 @@ export const pages: Chat.PageTable = {
 export const commands: Chat.ChatCommands = {
 	chatlogs: 'chatlog',
 	cl: 'chatlog',
+	roomlog: 'chatlog',
+	rl: 'chatlog',
+	roomlogs: 'chatlog',
 	chatlog(target, room, user) {
 		const [tarRoom, ...opts] = target.split(',');
 		const targetRoom = tarRoom ? Rooms.search(tarRoom) : room;
