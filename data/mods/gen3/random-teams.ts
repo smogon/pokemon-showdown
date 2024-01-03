@@ -571,7 +571,6 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		const types = species.types;
 		const abilities = new Set(Object.values(species.abilities));
-		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 
 		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool,
