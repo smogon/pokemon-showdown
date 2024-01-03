@@ -1,0 +1,17 @@
+export const Items: {[k: string]: ModdedItemData} = {
+	airballoon: {
+		inherit: true,
+		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded
+		onDamagingHit(damage, target, source, move) {
+			this.add('-enditem', target, 'Air Balloon');
+			if (target.item === 'airballoon') {
+				target.item = '';
+				target.itemState = {id: '', target};
+			} else {
+				delete target.volatiles['item:airballoon'];
+				target.m.sharedItemsUsed.push('airballoon');
+			}
+			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
+		},
+	},
+};
