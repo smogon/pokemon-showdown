@@ -2,11 +2,17 @@ import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
+// Moves that shouldn't be the only STAB moves:
+const NO_STAB = [
+	'explosion', 'icywind', 'machpunch', 'pursuit', 'quickattack', 'reversal', 'selfdestruct',
+];
+
 export class RandomGen2Teams extends RandomGen3Teams {
 	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
+		this.noStab = NO_STAB;
 		this.moveEnforcementCheckers = {
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),

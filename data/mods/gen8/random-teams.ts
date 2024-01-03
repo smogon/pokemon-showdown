@@ -1477,9 +1477,9 @@ export class RandomGen8Teams {
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
-		isDoubles: boolean,
 		preferredType: string,
 		role: RandomTeamsTypes.Role,
+		isDoubles: boolean,
 		isNoDynamax: boolean
 	): boolean {
 		if ([
@@ -1673,9 +1673,9 @@ export class RandomGen8Teams {
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
-		isDoubles: boolean,
 		preferredType: string,
 		role: RandomTeamsTypes.Role,
+		isDoubles: boolean,
 		isNoDynamax: boolean
 	): string {
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
@@ -1720,7 +1720,7 @@ export class RandomGen8Teams {
 		// Obtain a list of abilities that are allowed (not culled)
 		for (const ability of abilityData) {
 			if (ability.rating >= 1 && !this.shouldCullAbility(
-				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles, '', '', isNoDynamax
+				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, '', '', isDoubles, isNoDynamax
 			)) {
 				abilityAllowed.push(ability);
 			}
@@ -2313,7 +2313,7 @@ export class RandomGen8Teams {
 		}
 
 		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species,
-			isDoubles, '', '', isNoDynamax);
+			'', '', isDoubles, isNoDynamax);
 
 		if (species.requiredItems) {
 			item = this.sample(species.requiredItems);
