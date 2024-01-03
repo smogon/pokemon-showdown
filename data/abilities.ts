@@ -1913,7 +1913,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.category === 'Physical' && target.species.id === 'eiscue') {
+			if (effect?.effectType === 'Move' && effect.category === 'Physical' && target.species.id === 'eiscue') {
 				this.add('-activate', target, 'ability: Ice Face');
 				this.effectState.busted = true;
 				return 0;
