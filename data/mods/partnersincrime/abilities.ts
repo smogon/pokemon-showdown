@@ -56,7 +56,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const isAbility = pokemon.ability === 'trace';
 
 			const possibleTargets = pokemon.adjacentFoes().filter(
-				target => (!target.getAbility().flags['notrace'] && !(target.ability === 'noability'))
+				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
 			);
 			if (!possibleTargets.length) return;
 
