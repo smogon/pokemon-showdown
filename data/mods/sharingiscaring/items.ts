@@ -13,5 +13,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 		},
+		onAfterSubDamage(damage, target, source, effect) {
+			this.debug('effect: ' + effect.id);
+			if (effect.effectType === 'Move') {
+				this.add('-enditem', target, 'Air Balloon');
+				if (target.item === 'airballoon') {
+					target.item = '';
+					target.itemState = {id: '', target};
+				} else {
+					delete target.volatiles['item:airballoon'];
+					target.m.sharedItemsUsed.push('airballoon');
+				}
+				this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
+			}
+		},
 	},
 };
