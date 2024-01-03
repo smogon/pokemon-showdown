@@ -5037,7 +5037,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
 
 			const possibleTargets = pokemon.adjacentFoes().filter(
-				target => (!target.getAbility().flags['notrace'] && !(target.ability === 'noability'))
+				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
 			);
 			if (!possibleTargets.length) return;
 
