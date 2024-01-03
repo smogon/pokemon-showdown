@@ -5536,6 +5536,11 @@
                 "role": "Bulky Protect",
                 "movepool": ["Earth Power", "Glare", "Hyper Drill", "Protect", "Tailwind"],
                 "teraTypes": ["Ghost", "Ground", "Normal"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Boomburst", "Earth Power", "Helping Hand", "Protect", "Tailwind"],
+                "teraTypes": ["Ghost", "Ground", "Normal"]
             }
         ]
     },
@@ -5545,6 +5550,11 @@
             {
                 "role": "Bulky Protect",
                 "movepool": ["Earth Power", "Glare", "Hyper Drill", "Protect", "Tailwind"],
+                "teraTypes": ["Ghost", "Ground", "Normal"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Boomburst", "Earth Power", "Helping Hand", "Protect", "Tailwind"],
                 "teraTypes": ["Ghost", "Ground", "Normal"]
             }
         ]
@@ -5784,7 +5794,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Ice Spinner", "Lash Out", "Protect", "Sacred Sword", "Sucker Punch", "Throat Chop"],
+                "movepool": ["Icicle Crash", "Lash Out", "Protect", "Sacred Sword", "Sucker Punch", "Throat Chop"],
                 "teraTypes": ["Dark", "Fighting", "Ghost"]
             }
         ]
