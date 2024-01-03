@@ -326,6 +326,7 @@ export default class TeamGenerator {
 			// ...unless the Pokemon can use Booster Energy
 			item = 'Booster Energy';
 		}
+
 		const ivs: PokemonSet['ivs'] = {
 			hp: 31,
 			atk: moves.some(move => this.dex.moves.get(move).category === 'Physical') ? 31 : 0,
