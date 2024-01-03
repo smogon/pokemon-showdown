@@ -533,6 +533,8 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
+		preferredType: string,
+		role: RandomTeamsTypes.Role,
 		isDoubles: boolean,
 	): boolean {
 		if ([
