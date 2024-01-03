@@ -99,7 +99,7 @@ const HAZARDS = [
 ];
 // Protect and its variants
 const PROTECT_MOVES = [
-	'banefulbunker', 'protect', 'spikyshield',
+	'banefulbunker', 'burningbulwark', 'protect', 'silktrap', 'spikyshield',
 ];
 // Moves that switch the user out
 const PIVOT_MOVES = [
@@ -193,15 +193,18 @@ export class RandomTeams {
 				)
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
-			Ice: (movePool, moves, abilities, types, counter) => (movePool.includes('freezedry') || !counter.get('Ice')),
+			Ice: (movePool, moves, abilities, types, counter) => (
+				movePool.includes('freezedry') || movePool.includes('blizzard') || !counter.get('Ice')
+			),
 			Normal: (movePool, moves, types, counter) => (movePool.includes('boomburst') || movePool.includes('hypervoice')),
 			Poison: (movePool, moves, abilities, types, counter) => {
 				if (types.includes('Ground')) return false;
 				return !counter.get('Poison');
 			},
-			Psychic: (movePool, moves, abilities, types, counter) => {
+			Psychic: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => {
 				if (counter.get('Psychic')) return false;
 				if (movePool.includes('calmmind') || abilities.has('Strong Jaw')) return true;
+				if (isDoubles && movePool.includes('psychicfangs')) return true;
 				return abilities.has('Psychic Surge') || ['Electric', 'Fighting', 'Fire', 'Grass', 'Poison'].some(m => types.includes(m));
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
@@ -490,6 +493,7 @@ export class RandomTeams {
 				// In order of decreasing generalizability
 				[SPEED_CONTROL, SPEED_CONTROL],
 				[HAZARDS, HAZARDS],
+				[PROTECT_MOVES, PROTECT_MOVES],
 				['rockslide', 'stoneedge'],
 				[SETUP, ['fakeout', 'helpinghand']],
 				[PROTECT_MOVES, 'wideguard'],
@@ -499,12 +503,13 @@ export class RandomTeams {
 				[RECOVERY_MOVES, 'healpulse'],
 				['lifedew', 'healpulse'],
 				['haze', 'icywind'],
-				[['muddywater', 'hydropump'], 'scald'],
+				[['hydropump', 'muddywater'], ['muddywater', 'scald']],
 				['disable', 'encore'],
 				['freezedry', 'icebeam'],
 				['energyball', 'leafstorm'],
+				['wildcharge', 'thunderbolt'],
 				['earthpower', 'sandsearstorm'],
-				['boomburst', 'hyperdrill'],
+				['coaching', ['helpinghand', 'howl']],
 			];
 
 			for (const pair of doublesIncompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -535,6 +540,7 @@ export class RandomTeams {
 			['powerwhip', 'hornleech'],
 			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
 			['knockoff', 'foulplay'],
+			['throatchop', ['crunch', 'lashout']],
 			['doubleedge', ['bodyslam', 'headbutt']],
 			['fireblast', ['fierydance', 'flamethrower']],
 			['lavaplume', 'magmastorm'],
@@ -544,6 +550,7 @@ export class RandomTeams {
 			['closecombat', 'drainpunch'],
 			['bugbite', 'pounce'],
 			[['dragonpulse', 'spacialrend'], 'dracometeor'],
+			['alluringvoice', 'dazzlinggleam'],
 
 			// These status moves are redundant with each other
 			['taunt', 'disable'],
@@ -1105,6 +1112,9 @@ export class RandomTeams {
 			return (species.id === 'clefable' && role !== 'Bulky Support');
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup'));
+		case 'Vital Spirit':
+			// Magmar and Electabuzz want their contact status abilities in Doubles
+			return (species.nfe && isDoubles);
 		case 'Volt Absorb':
 			if (abilities.has('Iron Fist') && counter.ironFist >= 2) return true;
 			return (this.dex.getEffectiveness('Electric', species) < -1);
@@ -1152,12 +1162,12 @@ export class RandomTeams {
 		if (species.id === 'smeargle') return 'Own Tempo';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
+		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'sandaconda' || (species.id === 'scrafty' && moves.has('rest'))) return 'Shed Skin';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'ribombee') return 'Shield Dust';
 		if (species.id === 'dipplin') return 'Sticky Hold';
 		if (species.id === 'breloom') return 'Technician';
-		if (species.id === 'porygon2') return 'Trace';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
 
 		// singles
@@ -1172,33 +1182,37 @@ export class RandomTeams {
 			if (abilities.has('Harvest') && (moves.has('protect') || moves.has('substitute'))) return 'Harvest';
 			if (abilities.has('Serene Grace') && moves.has('headbutt')) return 'Serene Grace';
 			if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
-			if (species.id === 'zebstrika') return 'Sap Sipper';
 			if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
 			if (abilities.has('Soundproof') && (moves.has('substitute') || counter.get('setup'))) return 'Soundproof';
 			if (species.id === 'cinccino') return (role === 'Setup Sweeper') ? 'Technician' : 'Skill Link';
+			if (species.id === 'porygon2') return 'Trace';
 		}
 
 		// doubles, multi, and ffa
 		if (isDoubles) {
+			if (species.id === 'gumshoos' || species.id === 'porygonz') return 'Adaptability';
 			if (species.id === 'farigiraf') return 'Armor Tail';
 			if (species.id === 'dragapult') return 'Clear Body';
 			if (species.id === 'altaria') return 'Cloud Nine';
-			if (species.id === 'armarouge') return 'Flash Fire';
+			if (species.id === 'meowsticf') return 'Competitive';
+			if (species.id === 'armarouge' && !moves.has('meteorbeam')) return 'Flash Fire';
 			if (species.id === 'talonflame') return 'Gale Wings';
 			if (
 				['oinkologne', 'oinkolognef', 'snorlax', 'swalot'].includes(species.id) && role !== 'Doubles Wallbreaker'
 			) return 'Gluttony';
 			if (species.id === 'conkeldurr' && role === 'Doubles Wallbreaker') return 'Guts';
-			if (species.id === 'tropius' || species.id === 'trevenant') return 'Harvest';
+			if (species.id !== 'arboliva' && abilities.has('Harvest')) return 'Harvest';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
 			if (species.id === 'ariados') return 'Insomnia';
-			if (species.id === 'kommoo') return this.sample(['Overcoat', 'Soundproof']);
-			if (species.id === 'barraskewda') return 'Propeller Tail';
-			if (species.id === 'flapple' || (species.id === 'appletun' && this.randomChance(1, 2))) return 'Ripen';
-			if (species.id === 'gumshoos') return 'Strong Jaw';
+			if (species.id === 'primarina') return 'Liquid Voice';
+			if (species.id === 'kommoo') return 'Soundproof';
+			if (
+				(species.id === 'flapple' && role === 'Doubles Bulky Attacker') ||
+				(species.id === 'appletun' && this.randomChance(1, 2))
+			) return 'Ripen';
 			if (species.id === 'magnezone') return 'Sturdy';
 			if (species.id === 'clefable' && role === 'Doubles Support') return 'Unaware';
-			if (species.id === 'drifblim') return 'Unburden';
+			if (['drifblim', 'hitmonlee', 'sceptile'].includes(species.id) && !moves.has('shedtail')) return 'Unburden';
 			if (abilities.has('Intimidate')) return 'Intimidate';
 
 			if (this.randomChance(1, 2) && species.id === 'kingambit') return 'Defiant';
@@ -1211,6 +1225,8 @@ export class RandomTeams {
 				) return 'Friend Guard';
 				if (species.id === 'blissey') return 'Healer';
 				if (species.id === 'sinistcha') return 'Hospitality';
+				if (species.id === 'duraludon') return 'Stalwart';
+				if (species.id === 'barraskewda') return 'Propeller Tail';
 				if (species.id === 'oranguru' || abilities.has('Pressure') && abilities.has('Telepathy')) return 'Telepathy';
 
 				if (this.randomChance(1, 2) && species.id === 'mukalola') return 'Power of Alchemy';
@@ -1284,8 +1300,6 @@ export class RandomTeams {
 			if (species.id === 'lokix') {
 				return (role === 'Fast Attacker') ? 'Silver Powder' : 'Life Orb';
 			}
-			if (species.id === 'froslass') return 'Wide Lens';
-			if (species.id === 'necrozmaduskmane') return 'Weakness Policy';
 		}
 		if (species.requiredItems) {
 			// Z-Crystals aren't available in Gen 9, so require Plates
@@ -1298,14 +1312,18 @@ export class RandomTeams {
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
 		if (species.id === 'smeargle') return 'Focus Sash';
+		if (species.id === 'froslass') return 'Wide Lens';
 		if (moves.has('clangoroussoul') || (species.id === 'toxtricity' && moves.has('shiftgear'))) return 'Throat Spray';
-		if (species.baseSpecies === 'Magearna' && role === 'Tera Blast user') return 'Weakness Policy';
+		if (
+			(species.baseSpecies === 'Magearna' && role === 'Tera Blast user') ||
+			species.id === 'necrozmaduskmane' || (species.id === 'calyrexice' && isDoubles)
+		) return 'Weakness Policy';
 		if (moves.has('lastrespects') || moves.has('dragonenergy')) return 'Choice Scarf';
 		if (
 			ability === 'Imposter' ||
 			(species.id === 'magnezone' && moves.has('bodypress') && !isDoubles)
 		) return 'Choice Scarf';
-		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
+		if (species.id === 'rampardos' && (role === 'Fast Attacker' || isDoubles)) return 'Choice Scarf';
 		if (species.id === 'reuniclus' && ability === 'Magic Guard') return 'Life Orb';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
@@ -1335,11 +1353,14 @@ export class RandomTeams {
 		if (moves.has('courtchange')) return 'Heavy-Duty Boots';
 		if (moves.has('populationbomb')) return 'Wide Lens';
 		if (
-			(moves.has('scaleshot') && role !== 'Choice Item user') ||
+			moves.has('scaleshot') ||
 			(counter.get('setup') && ((species.id === 'torterra' && !isDoubles) || species.id === 'cinccino'))
 		) return 'Loaded Dice';
-		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
+		if (ability === 'Unburden') {
+			return (moves.has('closecombat') || moves.has('leafstorm')) ? 'White Herb' : 'Sitrus Berry';
+		}
 		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
+		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.rain)) return 'Power Herb';
 		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (ability === 'Gluttony') return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
@@ -1376,17 +1397,22 @@ export class RandomTeams {
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
 
-		if (species.id === 'ursalunabloodmoon') return 'Silk Scarf';
-		if (moves.has('covet')) return 'Normal Gem';
-		if (species.id === 'calyrexice') return 'Weakness Policy';
+		if (species.id === 'ursalunabloodmoon' || (moves.has('doubleedge') && moves.has('fakeout'))) return 'Silk Scarf';
+		if (
+			moves.has('flipturn') && moves.has('protect') && (moves.has('aquajet') || (moves.has('jetpunch')))
+		) return 'Mystic Water';
+		if (moves.has('dragondance')) return 'Clear Amulet';
 		if (moves.has('waterspout')) return 'Choice Scarf';
+		if (counter.get('speedsetup') && role === 'Doubles Bulky Setup') return 'Weakness Policy';
+		if (species.id === 'toxapex') return 'Binding Band';
+		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
+
 		if (role === 'Choice Item user') {
 			if (scarfReqs || (counter.get('Physical') < 4 && counter.get('Special') < 3 && !moves.has('memento'))) {
 				return 'Choice Scarf';
 			}
 			return (counter.get('Physical') >= 3) ? 'Choice Band' : 'Choice Specs';
 		}
-		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
 		if (counter.get('Physical') >= 4 &&
 			['fakeout', 'feint', 'firstimpression', 'rapidspin', 'suckerpunch'].every(m => !moves.has(m)) &&
 			(moves.has('flipturn') || moves.has('uturn') || role === 'Doubles Wallbreaker')
@@ -1396,20 +1422,21 @@ export class RandomTeams {
 		if (
 			((counter.get('Special') >= 4 && (moves.has('voltswitch') || role === 'Doubles Wallbreaker')) || (
 				counter.get('Special') >= 3 && (moves.has('uturn') || moves.has('flipturn'))
-			)) && !moves.has('acidspray') && !moves.has('electroweb')
+			)) && !moves.has('electroweb')
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Specs';
 		}
+		if (species.name === 'Latias' || species.name === 'Latios') return 'Soul Dew';
 		if (
 			(role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute') ||
-			species.id === 'eternatus' || species.id === 'toxapex'
+			species.id === 'eternatus'
 		) return 'Leftovers';
 		if (species.id === 'sylveon') return 'Pixie Plate';
 		if (
-			(offensiveRole || (role === 'Tera Blast user' && species.baseStats.spe >= 80 && !moves.has('trickroom'))) &&
+			(offensiveRole || (role === 'Tera Blast user' && (species.baseStats.spe >= 80 || moves.has('trickroom')))) &&
 			(!moves.has('fakeout') || species.id === 'ambipom') && !moves.has('incinerate') &&
 			(!moves.has('uturn') || types.includes('Bug') || species.baseStats.atk >= 120 || ability === 'Libero') &&
-			(!moves.has('icywind') || species.id === 'ironbundle')
+			((!moves.has('icywind') && !moves.has('electroweb')) || species.id === 'ironbundle')
 		) {
 			return (
 				(ability === 'Quark Drive' || ability === 'Protosynthesis') &&
@@ -1427,7 +1454,6 @@ export class RandomTeams {
 			return (this.dex.getEffectiveness('Rock', species) >= 1) ? 'Heavy-Duty Boots' : 'Clear Amulet';
 		}
 		if (!counter.get('Status')) return 'Assault Vest';
-		if (species.id === 'pawmot') return 'Leppa Berry';
 		return 'Sitrus Berry';
 	}
 
@@ -1649,8 +1675,8 @@ export class RandomTeams {
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm') return false;
 			// Magearna and doubles Dragonite, though these can work well as a general rule
-			if (
-				move.id === 'terablast' && (moves.has('shiftgear') || species.baseStats.atk > species.baseStats.spa)
+			if (move.id === 'terablast' && (
+				species.id === 'porygon2' || moves.has('shiftgear') || species.baseStats.atk > species.baseStats.spa)
 			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
@@ -1985,6 +2011,8 @@ export class RandomTeams {
 			let stats = species.baseStats;
 			// If Wishiwashi, use the school-forme's much higher stats
 			if (species.baseSpecies === 'Wishiwashi') stats = Dex.species.get('wishiwashischool').baseStats;
+			// If Terapagos, use Terastal-forme's stats
+			if (species.baseSpecies === 'Terapagos') stats = Dex.species.get('terapagosterastal').baseStats;
 
 			// Modified base stat total assumes 31 IVs, 85 EVs in every stat
 			let mbst = (stats["hp"] * 2 + 31 + 21 + 100) + 10;
