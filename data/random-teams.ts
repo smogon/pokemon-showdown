@@ -509,7 +509,6 @@ export class RandomTeams {
 				['energyball', 'leafstorm'],
 				['wildcharge', 'thunderbolt'],
 				['earthpower', 'sandsearstorm'],
-				['boomburst', 'hyperdrill'],
 				['coaching', ['helpinghand', 'howl']],
 			];
 
