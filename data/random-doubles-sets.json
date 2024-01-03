@@ -5534,7 +5534,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Boomburst", "Earth Power", "Glare", "Hyper Drill", "Protect", "Tailwind"],
+                "movepool": ["Earth Power", "Glare", "Hyper Drill", "Protect", "Tailwind"],
                 "teraTypes": ["Ghost", "Ground", "Normal"]
             }
         ]
@@ -5544,7 +5544,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Boomburst", "Earth Power", "Glare", "Hyper Drill", "Protect", "Tailwind"],
+                "movepool": ["Earth Power", "Glare", "Hyper Drill", "Protect", "Tailwind"],
                 "teraTypes": ["Ghost", "Ground", "Normal"]
             }
         ]
