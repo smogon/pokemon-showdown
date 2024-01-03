@@ -96,4 +96,17 @@ describe('Protosynthesis', function () {
 		battle.makeChoices('move recover', 'move venoshock');
 		assert.bounded(tail.maxhp - tail.hp, [84, 102]);
 	});
+
+	it(`should not activate while the user is Transformed`, function () {
+		battle = common.createBattle([[
+			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
+			{species: 'Ditto', ability: 'imposter', moves: ['transform']},
+		], [
+			{species: 'Roaring Moon', ability: 'protosynthesis', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('switch 2', 'auto');
+		const dittoMoon = battle.p1.active[0];
+		assert(!dittoMoon.volatiles['protosynthesis']);
+	});
 });

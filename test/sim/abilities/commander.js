@@ -21,7 +21,7 @@ describe('Commander', function () {
 		assert.cantMove(() => battle.p2.choose('move swordsdance', 'move sleeptalk'));
 	});
 
-	it(`should not work if either Pokemon is Transformed into Dondozo/Tatsugiri`, function () {
+	it(`should not work if another Pokemon is Transformed into Dondozo`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', moves: ['sleeptalk']},
 			{species: 'dondozo', moves: ['sleeptalk']},
@@ -35,10 +35,26 @@ describe('Commander', function () {
 		assert.false(!!mewDondozo.volatiles['commanded']);
 	});
 
-	it(`should not work if Tatsugiri is Transformed, and should work if Dondozo is Transformed`, function () {
+	it(`should not work if another Pokemon is Transformed into Tatsugiri`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', moves: ['sleeptalk']},
 			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
+		], [
+			{species: 'roggenrola', moves: ['sleeptalk']},
+			{species: 'sunkern', ability: 'commander', moves: ['transform']},
+			{species: 'dondozo', moves: ['transform']},
+		]]);
+
+		battle.makeChoices('auto', 'move sleeptalk, move transform 2');
+		battle.makeChoices('auto', 'switch 3, move sleeptalk');
+		const dondozo = battle.p2.active[0];
+		assert.false(!!dondozo.volatiles['commanded'], `Transformed Sunkern into another Tatsugiri should not trigger Commander`);
+	});
+
+	it(`should work if Tatsugiri is Transformed into another Pokemon with Commander`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'sunkern', ability: 'commander', moves: ['sleeptalk']},
 		], [
 			{species: 'roggenrola', moves: ['sleeptalk']},
 			{species: 'tatsugiri', ability: 'commander', moves: ['transform']},
@@ -48,11 +64,23 @@ describe('Commander', function () {
 		battle.makeChoices('auto', 'move sleeptalk, move transform 2');
 		battle.makeChoices('auto', 'switch 3, move sleeptalk');
 		const dondozo = battle.p2.active[0];
-		assert.false(!!dondozo.volatiles['commanded'], `Transformed Tatsugiri should not trigger Commander`);
+		assert(!!dondozo.volatiles['commanded']);
+	});
 
-		battle.makeChoices('auto', 'move transform 1, switch 3');
+	it(`should work if Dondozo is Transformed`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'diglett', moves: ['sleeptalk']},
+		], [
+			{species: 'dondozo', moves: ['transform']},
+			{species: 'roggenrola', moves: ['sleeptalk']},
+			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('auto', 'move transform 2, move sleeptalk');
 		battle.makeChoices('auto', 'move sleeptalk, switch 3');
-		assert(!!dondozo.volatiles['commanded'], `Transformed Dondozo should trigger Commander`);
+		const dondozo = battle.p2.active[0];
+		assert(!!dondozo.volatiles['commanded']);
 	});
 
 	it.skip(`should cause Tatsugiri to dodge all moves, including moves which normally bypass semi-invulnerability`, function () {

@@ -168,7 +168,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
 		},
@@ -193,7 +193,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	setthestage: {
 		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield. This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5. On switch-in, this Pokemon selects a physical or special set.",
 		shortDesc: "Stance Change + Adaptability; on switch-in, selects physical or special set.",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onSwitchIn(pokemon) {
 			if (pokemon.species.baseSpecies !== 'Aegislash') return;
 			const forme = this.randomChance(1, 2) ? 'aegii-Alt' : 'aegii';
@@ -236,7 +236,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "On switch-in, this Pokemon summons Rain Dance. If Rain Dance or Heavy Rain is active, this Pokemon has doubled Speed, collects a raindrop, and restores 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Big Root, it will restore 1/6 of its maximum HP, rounded down, at the end of the turn. If this Pokemon is holding Utility Umbrella, its HP does not get restored and it does not collect raindrops. Each raindrop raises this Pokemon's Defense and Special Defense by 1 stage while it is collected.",
 		shortDesc: "Drizzle + Swift Swim. Restore HP if raining. Collect raindrops.",
 		name: "Rainy Season",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onStart(source) {
 			for (const action of this.queue) {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
@@ -627,7 +627,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon is a Kartana, then when it switches in, it changes to two random types and gets corresponding STAB attacks.",
 		shortDesc: "Kartana: User gains 2 random types and STAB moves on switch-in.",
 		name: "Bipolar",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onSwitchIn(pokemon) {
 			if (pokemon.species.baseSpecies !== 'Kartana') return;
 			const typeMap: {[key: string]: string} = {
@@ -684,7 +684,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon's species is Alcremie, it alternates one of its moves between two different options at the end of each turn, depending on the forme of Alcremie.",
 		shortDesc: "Alcremie: alternates between moves each turn.",
 		name: "Winding Song",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onResidual(pokemon) {
 			if (pokemon.species.baseSpecies !== 'Alcremie') return;
 			let coolMoves = [];
@@ -754,7 +754,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Armor Time",
 		desc: "If this Pokemon uses a status move or King Giri Giri Slash, it changes its typing and boosts one of its stats by 1 stage randomly between four options: Bug/Fire type with a Special Attack boost, Bug/Steel type with a Defense boost, Bug/Rock type with a Special Defense boost, and Bug/Electric type with a Speed boost.",
 		shortDesc: "On use of status or King Giri Giri Slash, the user changes type and gets a boost.",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onBeforeMove(source, target, move) {
 			if (move.category !== "Status" && move.id !== "kinggirigirislash") return;
 			const types = ['Fire', 'Steel', 'Rock', 'Electric'];
@@ -829,8 +829,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "While in Minior-Meteor forme, this Pokemon cannot be affected by major status conditions and is immune to critical hits. This ability cannot be ignored by Moongeist Beam, Sunsteel Strike, Mold Breaker, Teravolt, or Turboblaze.",
 		shortDesc: "Minior-Meteor: Immune to crits and status",
 		name: "Capsule Armor",
-		isPermanent: true,
-		isBreakable: false,
+		flags: {cantsuppress: 1},
 		onCriticalHit: false,
 		onSetStatus(status, target, source, effect) {
 			if (target.species.id !== 'miniormeteor' || target.transformed) return;
@@ -1678,7 +1677,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon is a forme of Necrozma, its forme changes on switch-in depending on the number of unfainted Pokemon on the user's team: Necrozma-Dusk-Mane if 3 or fewer Pokemon and Necrozma-Dawn-Wings was sent out already; Necrozma-Ultra if it is the last Pokemon left on the team and Necrozma-Dusk-Mane was sent out already.",
 		shortDesc: "Changes forme on switch-in depending on # of remaining Pokemon on user's team.",
 		name: "The Numbers Game",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onStart(target) {
 			if (target.baseSpecies.baseSpecies !== 'Necrozma' || target.transformed) return;
 			if (target.side.pokemonLeft <= 3) {
@@ -1832,7 +1831,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon is an Aggron and is hit by a move that is not very effective, this Pokemon becomes Aggron-Mega and its Attack is boosted by 1 stage.",
 		shortDesc: "Aggron: If hit by resisted move, Mega Evolve and gain +1 Atk.",
 		name: "Overasked Clause",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onHit(target, source, move) {
 			if (target.getMoveHitData(move).typeMod < 0) {
 				if (!target.hp) return;
@@ -2008,7 +2007,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	combattraining: {
 		desc: "If this Pokemon is a Cosplay Pikachu forme, the first hit it takes in battle deals 0 neutral damage. Confusion damage also breaks the immunity.",
 		shortDesc: "(Pikachu-Cosplay only) First hit deals 0 damage.",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			const cosplayFormes = [

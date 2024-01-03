@@ -121,6 +121,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	zenmode: {
 		inherit: true,
-		isPermanent: false,
+		flags: {failroleplay: 1, noentrain: 1, notrace: 1},
 	},
 };

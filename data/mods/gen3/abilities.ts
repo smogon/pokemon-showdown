@@ -51,6 +51,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	forecast: {
+		inherit: true,
+		flags: {},
+	},
 	intimidate: {
 		inherit: true,
 		onStart(pokemon) {
@@ -84,7 +88,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.effectState.target;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Lightning Rod",
 		rating: 0,
 		num: 32,
@@ -167,14 +171,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
-			const bannedAbilities = ['forecast', 'multitype', 'trace'];
-			if (bannedAbilities.includes(target.ability)) {
-				return;
-			}
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		},
+		flags: {},
 	},
 	truant: {
 		inherit: true,

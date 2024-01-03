@@ -32,7 +32,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				((this.volatiles['gastroacid'] ||
 					(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
 						this.m.innates?.some((k: string) => k === 'neutralizinggas'))
-					)) && !this.getAbility().isPermanent
+					)) && !this.getAbility().flags['cantsuppress']
 				)
 			);
 		},

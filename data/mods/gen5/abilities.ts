@@ -52,6 +52,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	overcoat: {
 		inherit: true,
 		onTryHit() {},
+		flags: {},
 		rating: 0.5,
 	},
 	sapsipper: {
