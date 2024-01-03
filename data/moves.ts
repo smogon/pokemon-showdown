@@ -2936,12 +2936,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			if (target.getAbility().isPermanent) return;
+			if (target.getAbility().flags['cantsuppress']) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage(damage, target) {
-			if (target.getAbility().isPermanent) return;
+			if (target.getAbility().flags['cantsuppress']) return;
 			if (target.newlySwitched || this.queue.willMove(target)) return;
 			target.addVolatile('gastroacid');
 		},
@@ -3915,14 +3915,16 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {},
 		onHit(target, source, move) {
 			let success: boolean | null = false;
-			for (const pokemon of source.alliesAndSelf()) {
-				if (pokemon.ability === target.ability) continue;
-				const oldAbility = pokemon.setAbility(target.ability);
-				if (oldAbility) {
-					this.add('-ability', pokemon, target.getAbility().name, '[from] move: Doodle');
-					success = true;
-				} else if (!success && oldAbility === null) {
-					success = null;
+			if (!target.getAbility().flags['failroleplay']) {
+				for (const pokemon of source.alliesAndSelf()) {
+					if (pokemon.ability === target.ability || pokemon.getAbility().flags['cantsuppress']) continue;
+					const oldAbility = pokemon.setAbility(target.ability);
+					if (oldAbility) {
+						this.add('-ability', pokemon, target.getAbility().name, '[from] move: Doodle');
+						success = true;
+					} else if (!success && oldAbility === null) {
+						success = null;
+					}
 				}
 			}
 			if (!success) {
@@ -4996,15 +4998,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 		onTryHit(target, source) {
 			if (target === source || target.volatiles['dynamax']) return false;
-
-			const additionalBannedSourceAbilities = [
-				// Zen Mode included here for compatability with Gen 5-6
-				'commander', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
-			];
 			if (
 				target.ability === source.ability ||
-				target.getAbility().isPermanent || target.ability === 'truant' ||
-				source.getAbility().isPermanent || additionalBannedSourceAbilities.includes(source.ability)
+				target.getAbility().flags['cantsuppress'] || target.ability === 'truant' ||
+				source.getAbility().flags['noentrain']
 			) {
 				return false;
 			}
@@ -6620,7 +6617,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 		volatileStatus: 'gastroacid',
 		onTryHit(target) {
-			if (target.getAbility().isPermanent) {
+			if (target.getAbility().flags['cantsuppress']) {
 				return false;
 			}
 			if (target.hasItem('Ability Shield')) {
@@ -6636,7 +6633,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
 			},
 			onCopy(pokemon) {
-				if (pokemon.getAbility().isPermanent) pokemon.removeVolatile('gastroacid');
+				if (pokemon.getAbility().flags['cantsuppress']) pokemon.removeVolatile('gastroacid');
 			},
 		},
 		secondary: null,
@@ -15856,16 +15853,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {bypasssub: 1, allyanim: 1},
 		onTryHit(target, source) {
 			if (target.ability === source.ability) return false;
-
-			const additionalBannedTargetAbilities = [
-				// Zen Mode included here for compatability with Gen 5-6
-				'commander', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', 'zenmode',
-			];
-
-			if (target.getAbility().isPermanent || additionalBannedTargetAbilities.includes(target.ability) ||
-				source.getAbility().isPermanent) {
-				return false;
-			}
+			if (target.getAbility().flags['failroleplay'] || source.getAbility().flags['cantsuppress']) return false;
 		},
 		onHit(target, source) {
 			const oldAbility = source.setAbility(target.ability);
@@ -17089,7 +17077,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1},
 		onTryHit(target) {
-			if (target.getAbility().isPermanent || target.ability === 'simple' || target.ability === 'truant') {
+			if (target.getAbility().flags['cantsuppress'] || target.ability === 'simple' || target.ability === 'truant') {
 				return false;
 			}
 		},
@@ -17205,15 +17193,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, bypasssub: 1, allyanim: 1},
 		onTryHit(target, source) {
-			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard', 'terashell'];
 			const targetAbility = target.getAbility();
 			const sourceAbility = source.getAbility();
-			// TODO: research in what order these should be checked
-			if (
-				target.volatiles['dynamax'] ||
-				targetAbility.isPermanent || sourceAbility.isPermanent ||
-				additionalBannedAbilities.includes(target.ability) || additionalBannedAbilities.includes(source.ability)
-			) {
+			if (sourceAbility.flags['failskillswap'] || targetAbility.flags['failskillswap'] || target.volatiles['dynamax']) {
 				return false;
 			}
 			const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
@@ -21862,7 +21844,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onTryHit(target) {
-			if (target.getAbility().isPermanent) {
+			if (target.getAbility().flags['cantsuppress']) {
 				return false;
 			}
 		},
