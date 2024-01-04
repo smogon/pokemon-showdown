@@ -2832,7 +2832,7 @@ export const MovesText: {[k: string]: MoveText} = {
 	},
 	hardpress: {
 		name: "Hard Press",
-		desc: "Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
+		desc: "Power is equal to 100 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
 		shortDesc: "More power the more HP the target has left.",
 	},
 	haze: {

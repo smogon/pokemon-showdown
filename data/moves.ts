@@ -8390,8 +8390,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		basePowerCallback(pokemon, target) {
 			const hp = target.hp;
 			const maxHP = target.maxhp;
-			// TODO figure out actual BP cap
-			const bp = Math.floor(Math.floor((120 * (100 * Math.floor(hp * 4096 / maxHP)) + 2048 - 1) / 4096) / 100) || 1;
+			const bp = Math.floor(Math.floor((100 * (100 * Math.floor(hp * 4096 / maxHP)) + 2048 - 1) / 4096) / 100) || 1;
 			this.debug('BP for ' + hp + '/' + maxHP + " HP: " + bp);
 			return bp;
 		},
