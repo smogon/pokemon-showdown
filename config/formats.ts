@@ -441,7 +441,7 @@ export const Formats: FormatList = [
 			'Ditto', 'Eternatus', 'Flutter Mane', 'Giratina-Origin', 'Glimmora', 'Gliscor', 'Grimmsnarl', 'Groudon', 'Hatterene', 'Ho-Oh', 'Iron Bundle', 'Koraidon',
 			'Kyogre', 'Kyurem-Black', 'Lunala', 'Miraidon', 'Necrozma-Dusk-Mane', 'Rayquaza', 'Ribombee', 'Skeledirge', 'Terapagos', 'Ting-Lu', 'Zacian-Crowned',
 			// Ubers UUBL + Arceus-Ghost
-			'Arceus-Flying', 'Arceus-Steel', 'Arceus-Water', 'Shaymin-Sky', 'Last Respects',
+			'Arceus-Flying', 'Arceus-Steel', 'Arceus-Water', 'Shaymin-Sky', 'Zekrom', 'Last Respects',
 		],
 	},
 	{
