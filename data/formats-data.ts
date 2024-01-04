@@ -5163,7 +5163,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	meowscarada: {
 		tier: "OU",
 		doublesTier: "DUU",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	fuecoco: {
 		tier: "LC",
