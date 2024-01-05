@@ -56,6 +56,9 @@ export const commands: Chat.ChatCommands = {
 		if (!target) {
 			return this.parse(`/help quote`);
 		}
+		// edgecase for when people try to /quote num instead of /viewquote
+		const num = parseInt(target);
+		if (typeof num === 'number' && !isNaN(num)) return this.parse(`/viewquote ${target}`);
 		if (!quotes[room.roomid]) quotes[room.roomid] = [];
 
 		const roomQuotes = quotes[room.roomid];
