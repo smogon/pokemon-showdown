@@ -45,7 +45,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	randquotehelp: [`/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.`],
 
-	addquuote(target, room, user) {
+	addquote(target, room, user) {
 		room = this.requireRoom();
 		if (!room.persist) {
 			return this.errorReply("This command is unavailable in temporary rooms.");
