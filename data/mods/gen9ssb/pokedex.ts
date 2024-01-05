@@ -12,13 +12,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Fortified Metal"},
 	},
 
-	// Aeonic
-	nosepass: {
-		inherit: true,
-		baseStats: {hp: 57, atk: 90, def: 95, spa: 75, spd: 103, spe: 29},
-		abilities: {0: "Change Tempo"},
-	},
-
 	// A Quag To The Past
 	quagsire: {
 		inherit: true,
@@ -179,13 +172,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	mawile: {
 		inherit: true,
 		abilities: {0: "Curse of Dexit"},
-	},
-
-	// Lalaya
-	murkrow: {
-		inherit: true,
-		types: ["Dark", "Fairy"],
-		abilities: {0: "Workaholic"},
 	},
 
 	// Lumari

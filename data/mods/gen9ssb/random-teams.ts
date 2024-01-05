@@ -42,12 +42,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Smelt',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Steel', shiny: true,
 	},
-	Aeonic: {
-		species: 'Nosepass', ability: 'Change Tempo', item: 'Fossilized Fish', gender: 'M',
-		moves: ['Ice Burn', 'Electro Drift', 'Milk Drink'],
-		signatureMove: 'Memes That Burn The Sky',
-		evs: {hp: 252, spa: 252, spd: 4}, ivs: {spe: 0}, nature: 'Quiet', teraType: 'Rock',
-	},
 	'A Quag To The Past': {
 		species: 'Quagsire', ability: 'Quag of Ruin', item: 'Leftovers', gender: 'M',
 		moves: ['Surging Strikes', 'Precipice Blades', 'Gunk Shot'],
@@ -204,12 +198,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Sucker Punch', 'Fire Lash', 'Play Rough'],
 		signatureMove: 'Attack of Opportunity',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', shiny: 1024,
-	},
-	Lalaya: {
-		species: 'Murkrow', ability: 'Workaholic', item: 'Loaded Dice', gender: 'F',
-		moves: ['Knock Off', 'Bone Rush', 'Flip Turn'],
-		signatureMove: 'Sugar Rush',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Fairy', shiny: true,
 	},
 	Lumari: {
 		species: 'Ponyta-Galar', ability: 'Pyrotechnic', item: 'Eviolite', gender: 'F',

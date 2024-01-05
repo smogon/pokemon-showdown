@@ -69,29 +69,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
-	// Aeonic
-	memesthatburnthesky: {
-		accuracy: 100,
-		basePower: 140,
-		category: "Special",
-		shortDesc: "No additional effect.",
-		name: "Memes That Burn The Sky",
-		gen: 9,
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, recharge: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Light That Burns The Sky', target);
-			this.add('-anim', source, 'Rock Wrecker', target);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Rock",
-	},
-
 	// A Quag To The Past
 	sireswitch: {
 		accuracy: true,
@@ -1017,37 +994,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 		contestType: "Clever",
-	},
-
-	// Lalaya
-	sugarrush: {
-		accuracy: 100,
-		basePower: 25,
-		category: "Physical",
-		shortDesc: "Hits 2-5 times. User: -1 Def, +1 Spe after last hit.",
-		name: "Sugar Rush",
-		pp: 15,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[anim] Lumina Crash');
-		},
-		onPrepareHit() {
-			this.add(`c:|${getName('Lalaya')}|imagine suffering from crippling alcoholism`);
-		},
-		onAfterMove() {
-			this.add(`c:|${getName('Lalaya')}|*sips* cheers bro i'll drink to that`);
-		},
-		multihit: [2, 5],
-		selfBoost: {
-			boosts: {
-				def: -1,
-				spe: 1,
-			},
-		},
-		secondary: null,
-		target: "normal",
-		type: "Fairy",
 	},
 
 	// Lumari

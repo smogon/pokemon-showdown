@@ -32,18 +32,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Aelita')}|Well, I hope the Lyoko Warriors are at least well equipped.`);
 		},
 	},
-	aeonic: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Kris')}|aeo you need to submit your switch in and out messages`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Kris')}|aeo forgot to fill out his switch messages so I'm here instead.`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Aeonic')}|i guess they never miss huh`);
-		},
-	},
 	aquagtothepast: {
 		noCopy: true,
 		onStart() {
@@ -449,28 +437,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Krytocon')}|D:`);
-		},
-	},
-	lalaya: {
-		noCopy: true,
-		onStart(pokemon) {
-			this.add(`c:|${getName('Lalaya')}|Time to mix drinks and end lives.`);
-			this.add('-start', pokemon, 'typechange', 'Dark/Fairy', '[silent]');
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Lalaya')}|coffee break, brb`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Lalaya')}|alright this job sucks I'm heading home byeeeee`);
-		},
-		innateName: "Sniper",
-		shortDesc: "If this Pokemon strikes with a critical hit, the damage is multiplied by 1.5.",
-		onModifyDamage(damage, source, target, move) {
-			if (source.illusion) return;
-			if (target.getMoveHitData(move).crit) {
-				this.debug('Sniper boost');
-				return this.chainModify(1.5);
-			}
 		},
 	},
 	lumari: {

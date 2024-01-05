@@ -30,26 +30,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		isBreakable: true,
 	},
 
-	// Aeonic
-	changetempo: {
-		shortDesc: "Summons Trick Room on switch-in and negates the user's charge/recharge.",
-		name: "Change Tempo",
-		onStart(target) {
-			if (!this.field.getPseudoWeather('trickroom')) {
-				this.add('-ability', target, 'Change Tempo');
-				this.field.addPseudoWeather('trickroom', target, target.getAbility());
-			}
-		},
-		onChargeMove(pokemon, target, move) {
-			this.attrLastMove('[still]');
-			this.addMove('-anim', pokemon, move.name, target);
-			return false;
-		},
-		onUpdate(pokemon) {
-			if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
-		},
-	},
-
 	// A Quag To The Past
 	quagofruin: {
 		shortDesc: "Active Pokemon without this Ability have their Def multiplied by 0.85. Ignores abilities.",
@@ -525,19 +505,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				target.addVolatile('curse', pokemon);
 			}
-		},
-	},
-
-	// Lalaya
-	workaholic: {
-		shortDesc: "Focus Energy on switch-in. Super Luck.",
-		name: "Workaholic",
-		onStart(pokemon) {
-			this.add('-activate', pokemon, 'ability: Workaholic');
-			pokemon.addVolatile('Focus Energy');
-		},
-		onModifyCritRatio(critRatio) {
-			return critRatio + 1;
 		},
 	},
 
