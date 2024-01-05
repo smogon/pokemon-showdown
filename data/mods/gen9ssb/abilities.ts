@@ -27,7 +27,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 
 	// A Quag To The Past
@@ -49,6 +49,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyMove(move) {
 			move.ignoreAbility = true;
 		},
+		flags: {},
 	},
 	clodofruin: {
 		shortDesc: "Active Pokemon without this Ability have their Atk multiplied by 0.85. Ignores stat changes.",
@@ -80,7 +81,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts['accuracy'] = 0;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 
 	// Archas
@@ -98,6 +99,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.heal(source.maxhp / ratio, source);
 			}
 		},
+		flags: {},
 	},
 
 	// Blitz
@@ -126,7 +128,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 
 	// BreadLoeuf
@@ -146,6 +148,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.damage(foe.hp / 4, foe, pokemon);
 			}
 		},
+		flags: {},
 	},
 
 	// Cake
@@ -175,6 +178,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				side.addSideCondition(hazard);
 			}
 		},
+		flags: {},
 	},
 
 	// Chloe
@@ -197,6 +201,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
+		flags: {},
 	},
 
 	// Coolcodename
@@ -211,7 +216,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 
 	// Dawn of Artemis
@@ -236,6 +241,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-setboost', pokemon, 'atk', pokemon.boosts['atk'], '[silent]');
 			this.add('-message', `${pokemon.name} swapped its Attack and Special Attack boosts!`);
 		},
+		flags: {},
 	},
 
 	// DaWoblefet
@@ -260,6 +266,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.damage(target.getUndynamaxedHP(damage), source, target);
 			}
 		},
+		flags: {},
 	},
 
 	// Eli
@@ -295,6 +302,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.effectState.gamblingAddiction = true;
 			}
 		},
+		flags: {},
 	},
 
 	// havi
@@ -303,7 +311,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Mensis Cage",
 		onDamagingHit(damage, target, source, move) {
 			if (source.volatiles['disable']) return;
-			if (!move.isMax && !move.isFutureMove && move.id !== 'struggle') {
+			if (!move.isMax && !move.flags['futuremove'] && move.id !== 'struggle') {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('disable', this.effectState.target);
 				}
@@ -319,7 +327,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return false;
 		},
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
-		isPermanent: true,
+		flags: {},
 	},
 
 	// HoeenHero
@@ -337,6 +345,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		// Misspelling implemented in scripts.ts#hitStepAccuracy
+		flags: {},
 	},
 
 	// in the hills
@@ -350,7 +359,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 
 	// Irpachuza
@@ -367,6 +376,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.name === "Aurora Veil") delete move.onTry;
 			this.actions.useMove(move, target);
 		},
+		flags: {},
 	},
 
 	// Isaiah
@@ -384,6 +394,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.removeVolatile('powertrick');
 			}
 		},
+		flags: {},
 	},
 
 	// Kennedy
@@ -415,6 +426,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.field.addPseudoWeather('anfieldatmosphere', target, target.getAbility());
 		},
+		flags: {},
 	},
 	youllneverwalkalone: {
 		shortDesc: "Boosts Atk, Def, SpD, and Spe by 25% under Anfield Atmosphere.",
@@ -451,7 +463,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify([5120, 4096]);
 			}
 		},
-		isPermanent: true,
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 	},
 
 	// Kolochu
@@ -466,6 +478,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(2);
 			}
 		},
+		flags: {},
 	},
 
 	// Kris
@@ -489,6 +502,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyMove(move) {
 			move.ignoreImmunity = true;
 		},
+		flags: {},
 	},
 
 	// Krytocon
@@ -506,6 +520,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				target.addVolatile('curse', pokemon);
 			}
 		},
+		flags: {},
 	},
 
 	// Lumari
@@ -515,6 +530,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyCritRatio(critRatio, source, target) {
 			if (target?.status === 'brn') return 5;
 		},
+		flags: {},
 	},
 
 	// Mad Monty
@@ -609,6 +625,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
+		flags: {},
 	},
 
 	// Mathy
@@ -622,6 +639,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onAnyModifyType(move, pokemon, target) {
 			move.type = "???";
 		},
+		flags: {},
 	},
 
 	// Mex
@@ -635,6 +653,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (bpMod > 2) bpMod = 2;
 			return this.chainModify(bpMod);
 		},
+		flags: {},
 	},
 
 	// Mia
@@ -681,6 +700,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			);
 			this.add(`c:|${getName('Mia')}|Interesting. With that in mind, bring it!`);
 		},
+		flags: {},
 	},
 
 	// neycwang
@@ -692,12 +712,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return priority + 1;
 			}
 		},
+		flags: {},
 	},
 
 	// phoopes
 	ididitagain: {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
 		name: "I Did It Again",
+		flags: {},
 		// implemented in rulesets.ts
 	},
 
@@ -732,6 +754,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(accMod[this.effectState.fallen]);
 			}
 		},
+		flags: {},
 	},
 
 	// ReturnToMonkey
@@ -765,21 +788,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
 
-			const additionalBannedAbilities = [
-				// Zen Mode included here for compatability with Gen 5-6
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'monkeseemonkedo', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
-			];
-			const possibleTargets = pokemon.adjacentFoes().filter(target => (
-				!target.getAbility().isPermanent && !additionalBannedAbilities.includes(target.ability)
-			));
+			const possibleTargets = pokemon.adjacentFoes().filter(
+				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
+			);
 			if (!possibleTargets.length) return;
 
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Monke See Monke Do', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
 	},
 
 	// Rumia
@@ -796,6 +816,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return priority + 1;
 			}
 		},
+		flags: {},
 	},
 
 	// smely socks
@@ -846,8 +867,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add(`c:|${getName('smely socks')}|/html <img src=${img} style="width:32px" />`);
 			}
 		},
-		isBreakable: true,
-		isPermanent: true,
+		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 	},
 
 	// Swiffix
@@ -872,6 +892,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				});
 			}
 		},
+		flags: {},
 	},
 
 	// Theia
@@ -889,7 +910,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				source.trySetStatus('brn', target);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 
 	// TheJesucristoOsAma
@@ -905,6 +926,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-item', pokemon, this.dex.items.get(item), '[from] ability: The Grace Of Jesus Christ');
 			pokemon.setItem(item);
 		},
+		flags: {},
 	},
 
 	// trace
@@ -927,6 +949,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
+		flags: {},
 	},
 
 	// UT
@@ -942,6 +965,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.type === 'Flying') return priority + 1;
 		},
+		flags: {},
 	},
 
 	// Venous
@@ -954,6 +978,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.boost({def: 1, spd: 1}, target);
 			}
 		},
+		flags: {},
 	},
 
 	// Violet
@@ -981,6 +1006,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.takeItem();
 			this.field.setTerrain('scarletaeoniaterrain');
 		},
+		flags: {},
 	},
 
 	// WigglyTree
@@ -999,7 +1025,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.75);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 
 	// Yellow Paint
@@ -1036,7 +1062,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 
 	// Modified Bad Dreams to support havi's ability
@@ -1048,29 +1074,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.status === 'slp' || target.hasAbility(['comatose', 'mensiscage'])) {
 					this.damage(target.baseMaxhp / 8, target, pokemon);
 				}
-			}
-		},
-	},
-
-	// Modified Trace to support ReturnToMonke's ability
-	trace: {
-		inherit: true,
-		onUpdate(pokemon) {
-			if (!pokemon.isStarted || this.effectState.gaveUp) return;
-
-			const additionalBannedAbilities = [
-				// Zen Mode included here for compatability with Gen 5-6
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'monkeseemonkedo', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
-			];
-			const possibleTargets = pokemon.adjacentFoes().filter(target => (
-				!target.getAbility().isPermanent && !additionalBannedAbilities.includes(target.ability)
-			));
-			if (!possibleTargets.length) return;
-
-			const target = this.sample(possibleTargets);
-			const ability = target.getAbility();
-			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		},
 	},
