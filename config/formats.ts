@@ -3512,8 +3512,8 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 3] UU'],
 		banlist: ['UU'],
 		unbanlist: [
-			'Absol', 'Aggron', 'Azumarill', 'Banette', 'Camerupt', 'Exploud', 'Girafarig', 'Hypno', 'Kabutops', 'Magmar', 'Mantine', 'Meganium', 'Mr. Mime',
-			'Ninetales', 'Persian', 'Politoed', 'Poliwrath', 'Primeape', 'Raichu', 'Rapidash', 'Sharpedo', 'Shiftry', 'Sneasel', 'Stantler', 'Victreebel',
+			'Absol', 'Aggron', 'Azumarill', 'Banette', 'Camerupt', 'Exploud', 'Girafarig', 'Hypno', 'Kabutops', 'Magmar', 'Mantine', 'Meganium', 'Mr. Mime', 'Ninetales',
+			'Persian', 'Politoed', 'Poliwrath', 'Primeape', 'Quagsire', 'Raichu', 'Rapidash', 'Sharpedo', 'Shiftry', 'Sneasel', 'Stantler', 'Victreebel',
 		],
 	},
 
