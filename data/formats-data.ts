@@ -2762,7 +2762,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	abomasnow: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
@@ -2916,7 +2916,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	emboar: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
@@ -4192,7 +4192,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	oricoriosensu: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
