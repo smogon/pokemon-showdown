@@ -14,7 +14,7 @@
 import {FS, Repl, ProcessManager, Utils} from '../lib';
 import {execSync} from "child_process";
 import {BattleStream} from "../sim/battle-stream";
-import * as RoomGames from "./room-game";
+import {RoomGamePlayer, RoomGame} from "./room-game";
 import type {Tournament} from './tournaments/index';
 import type {RoomSettings} from './rooms';
 
@@ -45,6 +45,8 @@ const STARTING_TIME_CHALLENGE = 300;
 const STARTING_GRACE_TIME = 60;
 const MAX_TURN_TIME_CHALLENGE = 300;
 
+const BEST_OF_IN_BETWEEN_TIME = 40;
+
 const DISCONNECTION_TIME = 60;
 const DISCONNECTION_BANK_TIME = 300;
 
@@ -52,11 +54,10 @@ const DISCONNECTION_BANK_TIME = 300;
 const TIMER_COOLDOWN = 20 * SECONDS;
 const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
 
-export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
+export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 	readonly slot: SideID;
 	readonly channelIndex: ChannelIndex;
 	request: BattleRequestTracker;
-	hitDisconnectLimit = false;
 	wantsTie: boolean;
 	wantsOpenTeamSheets: boolean | null;
 	eliminated: boolean;
@@ -73,16 +74,18 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	 */
 	secondsLeft: number;
 	/**
-	 * Turn timer.
+	 * Current turn timer.
 	 *
 	 * Set equal to the player's overall timer, but capped at 150
 	 * seconds in a ladder battle. Goes down by 5 every tick.
 	 * Tracked separately from the overall timer, and the player also
-	 * loses if this reaches 0.
+	 * loses if this reaches 0 (except in VGC where the default choice
+	 * is chosen if it reaches 0).
 	 */
 	turnSecondsLeft: number;
 	/**
 	 * Disconnect timer.
+	 *
 	 * Starts at 60 seconds. While the player is disconnected, this
 	 * will go down by 5 every tick. Tracked separately from the
 	 * overall timer, and the player also loses if this reaches 0.
@@ -99,10 +102,10 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 	 * Used to track a user's last known connection status, and display
 	 * the proper message when it changes.
 	 *
-	 * `.active` is set when the user joins/leaves, but `.connected` is
-	 * only set after the relevant messages are sent.
+	 * `.active` is set right when the user joins/leaves, but `.knownActive`
+	 * is only set after the timer knows about it.
 	 */
-	connected: boolean;
+	knownActive: boolean;
 	invite: ID;
 	/**
 	 * Has the simulator received this player's team yet?
@@ -127,7 +130,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 		this.turnSecondsLeft = 1;
 		this.dcSecondsLeft = 1;
 
-		this.connected = true;
+		this.knownActive = true;
 		this.invite = '';
 		this.hasTeam = false;
 
@@ -141,10 +144,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 			}
 		}
 	}
-	getUser() {
-		return (this.id && Users.get(this.id)) || null;
-	}
-	unlinkUser() {
+	override unlinkUser() {
 		const user = this.getUser();
 		if (user) {
 			for (const connection of user.connections) {
@@ -154,7 +154,7 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 			user.updateSearch();
 		}
 		this.id = '';
-		this.connected = false;
+		this.knownActive = false;
 		this.active = false;
 	}
 	updateChannel(user: User | Connection) {
@@ -166,18 +166,6 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer<RoomBattle> {
 		for (const connection of user.connections) {
 			Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
 		}
-	}
-
-	toString() {
-		return this.id;
-	}
-	send(data: string) {
-		const user = this.getUser();
-		if (user) user.send(data);
-	}
-	sendRoom(data: string) {
-		const user = this.getUser();
-		if (user) user.sendTo(this.game.roomid, data);
 	}
 }
 
@@ -347,9 +335,7 @@ export class RoomBattleTimer {
 			const secondsLeft = player.turnSecondsLeft;
 			let grace = player.secondsLeft - this.settings.starting;
 			if (grace < 0) grace = 0;
-			if (player) {
-				player.sendRoom(`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` + (grace ? ` | ${grace} sec grace` : ``));
-			}
+			player.sendRoom(`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` + (grace ? ` | ${grace} sec grace` : ``));
 			if (secondsLeft <= 30 && secondsLeft < this.settings.starting) {
 				room.add(`|inactive|${player.name} has ${secondsLeft} seconds left this turn.`);
 			}
@@ -367,7 +353,7 @@ export class RoomBattleTimer {
 		const room = this.battle.room;
 		for (const player of this.battle.players) {
 			if (player.request.isWait) continue;
-			if (player.connected) {
+			if (player.knownActive) {
 				player.secondsLeft -= TICK_TIME;
 				player.turnSecondsLeft -= TICK_TIME;
 			} else {
@@ -380,13 +366,12 @@ export class RoomBattleTimer {
 
 			const dcSecondsLeft = player.dcSecondsLeft;
 			if (dcSecondsLeft <= 0) {
-				player.hitDisconnectLimit = true;
 				player.turnSecondsLeft = 0;
 			}
 			const secondsLeft = player.turnSecondsLeft;
 			if (!secondsLeft) continue;
 
-			if (!player.connected && (dcSecondsLeft <= secondsLeft || this.settings.dcTimerBank)) {
+			if (!player.knownActive && (dcSecondsLeft <= secondsLeft || this.settings.dcTimerBank)) {
 				// dc timer is shown only if it's lower than turn timer or you're in timer bank mode
 				if (dcSecondsLeft % 30 === 0 || dcSecondsLeft <= 20) {
 					room.add(`|inactive|${player.name} has ${dcSecondsLeft} seconds to reconnect!`);
@@ -409,13 +394,13 @@ export class RoomBattleTimer {
 	checkActivity() {
 		if (this.battle.ended) return;
 		for (const player of this.battle.players) {
-			const isConnected = !!player.active;
+			const isActive = !!player.active;
 
-			if (isConnected === player.connected) continue;
+			if (isActive === player.knownActive) continue;
 
-			if (!isConnected) {
+			if (!isActive) {
 				// player has disconnected
-				player.connected = false;
+				player.knownActive = false;
 				if (!this.settings.dcTimerBank) {
 					// don't wait longer than 6 ticks (1 minute)
 					if (this.settings.dcTimer) {
@@ -443,7 +428,7 @@ export class RoomBattleTimer {
 				}
 			} else {
 				// player has reconnected
-				player.connected = true;
+				player.knownActive = true;
 				if (this.timerRequesters.size) {
 					let timeLeft = ``;
 					if (!player.request.isWait) {
@@ -466,15 +451,10 @@ export class RoomBattleTimer {
 		let didSomething = false;
 		for (const player of players) {
 			if (player.turnSecondsLeft > 0) continue;
-			if (this.settings.timeoutAutoChoose && player.secondsLeft > 0 && player.connected) {
+			if (this.settings.timeoutAutoChoose && player.secondsLeft > 0 && player.knownActive) {
 				void this.battle.stream.write(`>${player.slot} default`);
 				didSomething = true;
 			} else {
-				// in bo3, if player dcs then they lose the set.
-				// assume if not connected then they got hit by dc timer
-				if (!player.connected) {
-					player.hitDisconnectLimit = true;
-				}
 				this.battle.forfeitPlayer(player, ' lost due to inactivity.');
 				return true;
 			}
@@ -494,11 +474,15 @@ interface RoomBattlePlayerOptions {
 
 export interface RoomBattleOptions {
 	format: string;
-	p1?: RoomBattlePlayerOptions;
-	p2?: RoomBattlePlayerOptions;
-	p3?: RoomBattlePlayerOptions;
-	p4?: RoomBattlePlayerOptions;
-
+	/**
+	 * length should be equal to the format's playerCount, except in two
+	 * special cases:
+	 * - `/importinputlog`, where it's empty (players have to be invited/restored)
+	 * - challenge ffa/multi, where it's 2 (the rest have to be invited)
+	 * - restoring saved battles after a restart (players should be manually restored)
+	 * In all special cases, either `delayedStart` or `inputLog` must be set
+	 */
+	players: RoomBattlePlayerOptions[];
 	delayedStart?: boolean | 'multi';
 	challengeType?: ChallengeType;
 	allowRenames?: boolean;
@@ -508,19 +492,17 @@ export interface RoomBattleOptions {
 	ratedMessage?: string;
 	seed?: PRNGSeed;
 	roomid?: RoomID;
-	players?: ID[];
 	/** For battles restored after a restart */
 	delayedTimer?: boolean;
-	restored?: boolean;
 	/** Best-of stuff */
 	isSubBattle?: boolean;
 }
 
-export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
-	readonly gameid: ID;
-	readonly room: GameRoom;
-	readonly title: string;
-	readonly allowRenames: boolean;
+export class RoomBattle extends RoomGame<RoomBattlePlayer> {
+	override readonly gameid = 'battle' as ID;
+	override readonly room: GameRoom;
+	override readonly title: string;
+	override readonly allowRenames: boolean;
 	readonly format: string;
 	/** Will exist even if the game is unrated, in case it's later forced to be rated */
 	readonly ladder: string;
@@ -534,38 +516,34 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	/**
 	 * userid that requested extraction -> playerids that accepted the extraction
 	 */
-	readonly allowExtraction: {[k: string]: Set<ID>};
+	readonly allowExtraction: {[k: string]: Set<ID>} = {};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
-	readonly timer: RoomBattleTimer;
-	missingBattleStartMessage: boolean | 'multi';
-	started: boolean;
-	ended: boolean;
-	active: boolean;
-	needsRejoin: Set<ID> | null;
-	replaySaved: boolean | 'auto';
+	override readonly timer: RoomBattleTimer;
+	started = false;
+	active = false;
+	replaySaved: boolean | 'auto' = false;
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
-	p1: RoomBattlePlayer;
-	p2: RoomBattlePlayer;
-	p3: RoomBattlePlayer;
-	p4: RoomBattlePlayer;
-	inviteOnlySetter: ID | null;
-	logData: AnyObject | null;
-	endType: string;
+	p1: RoomBattlePlayer = null!;
+	p2: RoomBattlePlayer = null!;
+	p3: RoomBattlePlayer = null!;
+	p4: RoomBattlePlayer = null!;
+	inviteOnlySetter: ID | null = null;
+	logData: AnyObject | null = null;
+	endType: 'forfeit' | 'forced' | 'normal' = 'normal';
 	/**
 	 * If the battle is ended: an array of the number of Pokemon left for each side.
 	 */
-	score: number[] | null;
-	inputLog: string[] | null;
-	turn: number;
-	rqid: number;
-	requestCount: number;
+	score: number[] | null = null;
+	inputLog: string[] | null = null;
+	turn = 0;
+	rqid = 1;
+	requestCount = 0;
 	options: RoomBattleOptions;
 	frozen?: boolean;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
 		const format = Dex.formats.get(options.format, true);
-		this.gameid = 'battle' as ID;
 		this.room = room;
 		this.title = format.name;
 		this.options = options;
@@ -577,40 +555,11 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.challengeType = options.challengeType || 'challenge';
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 		this.ladder = typeof format.rated === 'string' ? toID(format.rated) : options.format;
-		// true when onCreateBattleRoom has been called
-		this.missingBattleStartMessage = !!options.inputLog || options.delayedStart || false;
-		this.started = false;
-		this.ended = false;
-		this.active = false;
-		this.replaySaved = false;
-
-		this.playerCap = this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2;
-		this.p1 = null!;
-		this.p2 = null!;
-		this.p3 = null!;
-		this.p4 = null!;
-		this.inviteOnlySetter = null;
-
-		this.needsRejoin = options.restored ? new Set(options.players) : null;
-
-		// data to be logged
-		this.allowExtraction = {};
-
-		this.logData = null;
-		this.endType = 'normal';
-		this.score = null;
-		this.inputLog = null;
-		this.turn = 0;
-
-		this.rqid = 1;
-		this.requestCount = 0;
+		this.playerCap = format.playerCount;
 
 		this.stream = PM.createStream();
 
-		let ratedMessage = '';
-		if (options.ratedMessage) {
-			ratedMessage = options.ratedMessage;
-		}
+		let ratedMessage = options.ratedMessage || '';
 		if (this.rated) {
 			ratedMessage = 'Rated battle';
 		} else if (this.room.tour) {
@@ -633,11 +582,25 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 
 		void this.listen();
 
-		this.addPlayer(options.p1?.user || null, options.p1);
-		this.addPlayer(options.p2?.user || null, options.p2);
-		if (this.playerCap > 2) {
-			this.addPlayer(options.p3?.user || null, options.p3);
-			this.addPlayer(options.p4?.user || null, options.p4);
+		if (options.players.length > this.playerCap) {
+			throw new Error(`${options.players.length} players passed to battle ${room.roomid} but ${this.playerCap} players expected`);
+		}
+		for (let i = 0; i < this.playerCap; i++) {
+			const p = options.players[i];
+			const player = this.addPlayer(p?.user || null, p || null);
+			if (!player) throw new Error(`failed to create player ${i + 1} in ${room.roomid}`);
+		}
+		if (options.inputLog) {
+			let scanIndex = 0;
+			for (const player of this.players) {
+				const nameIndex1 = options.inputLog.indexOf(`"name":"`, scanIndex);
+				const nameIndex2 = options.inputLog.indexOf(`"`, nameIndex1 + 8);
+				if (nameIndex1 < 0 || nameIndex2 < 0) break; // shouldn't happen. incomplete inputlog?
+				scanIndex = nameIndex2 + 1;
+				const name = options.inputLog.slice(nameIndex1 + 8, nameIndex2);
+				player.name = name;
+				player.hasTeam = true;
+			}
 		}
 		this.timer = new RoomBattleTimer(this);
 		if (Config.forcetimer || this.format.includes('blitz')) this.timer.start();
@@ -645,26 +608,13 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	}
 
 	checkActive() {
-		let active = true;
-		if (this.ended || !this.started) {
-			active = false;
-		} else if (!this.p1?.active) {
-			active = false;
-		} else if (!this.p2?.active) {
-			active = false;
-		} else if (this.playerCap > 2) {
-			if (!this.p3?.active) {
-				active = false;
-			} else if (!this.p4?.active) {
-				active = false;
-			}
-		}
+		const active = (this.started && !this.ended && this.players.every(p => p.active));
 		Rooms.global.battleCount += (active ? 1 : 0) - (this.active ? 1 : 0);
 		this.room.active = active;
 		this.active = active;
 		if (Rooms.global.battleCount === 0) Rooms.global.automaticKillRequest();
 	}
-	choose(user: User, data: string) {
+	override choose(user: User, data: string) {
 		if (this.frozen) {
 			user.popup(`Your battle is currently paused, so you cannot move right now.`);
 			return;
@@ -688,7 +638,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 
 		void this.stream.write(`>${player.slot} ${choice}`);
 	}
-	undo(user: User, data: string) {
+	override undo(user: User, data: string) {
 		const player = this.playerTable[user.id];
 		const [, rqid] = data.split('|', 2);
 		if (!player) return;
@@ -707,20 +657,13 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 
 		void this.stream.write(`>${player.slot} undo`);
 	}
-	joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
-		if (this.needsRejoin?.size && !this.needsRejoin.has(user.id)) {
-			user.popup(`All the original players in this battle must join first.`);
-			return false;
-		}
+	override joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
 		}
 
-		const validSlots: SideID[] = [];
-		for (const player of this.players) {
-			if (!player.id) validSlots.push(player.slot);
-		}
+		const validSlots = this.players.filter(player => !player.id).map(player => player.slot);
 
 		if (slot && !validSlots.includes(slot)) {
 			user.popup(`This battle already has a user in slot ${slot}.`);
@@ -728,16 +671,16 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 
 		if (!validSlots.length) {
-			user.popup(`This battle already has two players.`);
+			user.popup(`This battle already has ${this.playerCap} players.`);
 			return false;
 		}
 
+		slot ??= this.players.find(player => player.invite === user.id)?.slot;
 		if (!slot && validSlots.length > 1) {
 			user.popup(`Which slot would you like to join into? Use something like \`/joingame ${validSlots[0]}\``);
 			return false;
 		}
-
-		if (!slot) slot = validSlots[0];
+		slot ??= validSlots[0];
 
 		if (this[slot].invite === user.id) {
 			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
@@ -747,15 +690,12 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 
 		this.updatePlayer(this[slot], user, playerOpts);
-		this.needsRejoin?.delete(user.id);
-		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
-			const users = this.players.map(player => {
-				const u = player.getUser();
-				if (!u) throw new Error(`User ${player.name} not found on ${this.roomid} battle creation`);
-				return u;
-			});
+		if (validSlots.length - 1 <= 0) {
+			// all players have joined, start the battle
+			// onCreateBattleRoom crashes if some users are unavailable at start of battle
+			// what do we do??? no clue but I guess just exclude them from the array for now
+			const users = this.players.map(player => player.getUser()).filter(Boolean) as User[];
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
-			this.missingBattleStartMessage = false;
 			this.started = true;
 			this.room.add(`|uhtmlchange|invites|`);
 		} else if (!this.started && this.invitesFull()) {
@@ -765,7 +705,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		this.room.update();
 		return true;
 	}
-	leaveGame(user: User) {
+	override leaveGame(user: User) {
 		if (!user) return false; // ...
 		if (this.room.rated || this.room.tour) {
 			user.popup(`Players can't be swapped out in a ${this.room.tour ? "tournament" : "rated"} battle.`);
@@ -779,12 +719,11 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		Chat.runHandlers('onBattleLeave', user, this.room);
 
 		this.updatePlayer(player, null);
-		this.room.auth.set(user.id, '+');
 		this.room.update();
 		return true;
 	}
 
-	startTimer() {
+	override startTimer() {
 		this.timer.start();
 	}
 
@@ -859,10 +798,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 					choice: '',
 				};
 				this.requestCount++;
-				if (player) player.sendRoom(`|request|${requestJSON}`);
+				player?.sendRoom(`|request|${requestJSON}`);
 				break;
 			}
-			if (player) player.sendRoom(lines[2]);
+			player?.sendRoom(lines[2]);
 			break;
 		}
 
@@ -890,11 +829,11 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			break;
 		}
 	}
-	async onEnd(winner: any) {
+	async onEnd(winnerName: any) {
 		this.timer.end();
 		// Declare variables here in case we need them for non-rated battles logging.
 		let p1score = 0.5;
-		const winnerid = toID(winner);
+		const winnerid = toID(winnerName);
 
 		// Check if the battle was rated to update the ladder, return its response, and log the battle.
 		const p1name = this.p1.name;
@@ -906,10 +845,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		} else if (winnerid === p2id) {
 			p1score = 0;
 		}
-		Chat.runHandlers('onBattleEnd', this, winnerid, [p1id, p2id, this.p3?.id, this.p4?.id].filter(Boolean));
+		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
 		if (this.room.rated && !this.options.isSubBattle) {
 			this.room.rated = 0;
-			winner = Users.get(winnerid);
+			const winner = Users.get(winnerid);
 			if (winner && !winner.registered) {
 				this.room.sendUser(winner, '|askreg|' + winner.id);
 			}
@@ -931,12 +870,8 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 				Chat.parse(command, this.room, uploader, uploader.connections[0]);
 			}
 		}
-		const parentGame = this.room.parent && this.room.parent.game;
 		// @ts-ignore - Tournaments aren't TS'd yet
-		if (parentGame?.onBattleWin) {
-			// @ts-ignore
-			parentGame.onBattleWin(this.room, winnerid);
-		}
+		this.room.parent?.game?.onBattleWin?.(this.room, winnerid);
 		// If the room's replay was hidden, disable users from joining after the game is over
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
@@ -987,7 +922,11 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		await FS(`${logpath}${this.room.getReplayData().id}.log.json`).write(JSON.stringify(logData));
 		// console.log(JSON.stringify(logData));
 	}
-	onConnect(user: User, connection: Connection | null = null) {
+	override onConnect(user: User, connection: Connection | null = null) {
+		if (this.ended && this.room.parent?.game?.constructor.name === 'BestOfGame') {
+			const parentGame = this.room.parent.game as BestOfGame;
+			parentGame.playerTable[user.id]?.updateReadyButton();
+		}
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
@@ -1005,10 +944,10 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 		if (!player.active) this.onJoin(user);
 	}
-	onUpdateConnection(user: User, connection: Connection | null = null) {
+	override onUpdateConnection(user: User, connection: Connection | null = null) {
 		this.onConnect(user, connection);
 	}
-	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
+	override onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (user.id === oldUserid) return;
 		if (!this.playerTable) {
 			// !! should never happen but somehow still does
@@ -1049,7 +988,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		};
 		void this.stream.write(`>player ${player.slot} ` + JSON.stringify(options));
 	}
-	onJoin(user: User) {
+	override onJoin(user: User) {
 		const player = this.playerTable[user.id];
 		if (player && !player.active) {
 			player.active = true;
@@ -1057,7 +996,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
 		}
 	}
-	onLeave(user: User, oldUserid?: ID) {
+	override onLeave(user: User, oldUserid?: ID) {
 		const player = this.playerTable[oldUserid || user.id];
 		if (player?.active) {
 			player.sendRoom(`|request|null`);
@@ -1082,7 +1021,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	tiebreak() {
 		void this.stream.write(`>tiebreak`);
 	}
-	forfeit(user: User | string, message = '') {
+	override forfeit(user: User | string, message = '') {
 		if (typeof user !== 'string') user = user.id;
 		else user = toID(user);
 
@@ -1093,8 +1032,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	forfeitPlayer(player: RoomBattlePlayer, message = '') {
 		if (this.ended || !this.started) return false;
 
-		if (!message) message = ' forfeited.';
-		this.room.add(`|-message|${player.name}${message}`);
+		this.room.add(`|-message|${player.name}${message || ' forfeited.'}`);
 		this.endType = 'forfeit';
 		// multi battles, they need to be removed, else they can do things like spam forfeit
 		if (this.playerCap > 2) {
@@ -1109,8 +1047,9 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	 * playerOpts should be empty only if importing an inputlog
 	 * (so the player isn't recreated)
 	 */
-	addPlayer(user: User | null, playerOpts?: RoomBattlePlayerOptions) {
+	override addPlayer(user: User | string | null, playerOpts?: RoomBattlePlayerOptions | null) {
 		const player = super.addPlayer(user);
+		if (typeof user === 'string') user = null;
 		if (!player) return null;
 		const slot = player.slot;
 		this[slot] = player;
@@ -1136,16 +1075,15 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	checkPrivacySettings(options: RoomBattleOptions & Partial<RoomSettings>) {
 		let inviteOnly = false;
 		const privacySetter = new Set<ID>([]);
-		for (const p of ['p1', 'p2', 'p3', 'p4'] as const) {
-			const playerOptions = options[p];
-			if (playerOptions) {
-				if (playerOptions.inviteOnly) {
+		for (const p of options.players) {
+			if (p.user) {
+				if (p.inviteOnly) {
 					inviteOnly = true;
-					privacySetter.add(playerOptions.user.id);
-				} else if (playerOptions.hidden) {
-					privacySetter.add(playerOptions.user.id);
+					privacySetter.add(p.user.id);
+				} else if (p.hidden) {
+					privacySetter.add(p.user.id);
 				}
-				if (playerOptions.user) this.checkForcedUserSettings(playerOptions.user);
+				this.checkForcedUserSettings(p.user);
 			}
 		}
 
@@ -1199,14 +1137,17 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	updatePlayer(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
+	override updatePlayer(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
+		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
+			this.room.auth.set(player.id, '+');
+		}
 		super.updatePlayer(player, user);
 
 		player.invite = '';
 		const slot = player.slot;
 		if (user) {
 			player.active = user.inRooms.has(this.roomid);
-			player.connected = true;
+			player.knownActive = true;
 			const options = {
 				name: player.name,
 				avatar: user.avatar,
@@ -1218,7 +1159,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			this.room.add(`|player|${slot}|${player.name}|${user.avatar}`);
 		} else {
 			player.active = false;
-			player.connected = false;
+			player.knownActive = false;
 			const options = {
 				name: '',
 			};
@@ -1229,20 +1170,6 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	}
 
 	start() {
-		// on start
-		const users = this.players.map(player => {
-			const user = player.getUser();
-			if (!user && !this.missingBattleStartMessage) {
-				throw new Error(`User ${player.name} not found on ${this.roomid} battle creation`);
-			}
-			return user;
-		});
-		if (!this.missingBattleStartMessage) {
-			// @ts-ignore The above error should throw if null is found, or this should be skipped
-			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
-			this.started = true;
-		}
-
 		if (this.gameType === 'multi') {
 			this.room.title = `Team ${this.p1.name} vs. Team ${this.p2.name}`;
 		} else if (this.gameType === 'freeforall') {
@@ -1260,7 +1187,25 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 				`For information on how to participate check out the <a href="${suspectTest.url}">suspect thread</a>.</strong></div>`
 			).update();
 		}
-		if (this.missingBattleStartMessage === 'multi') {
+
+		// run onCreateBattleRoom handlers
+
+		if (this.options.inputLog && this.players.every(player => player.hasTeam)) {
+			// already started
+			this.started = true;
+		}
+		const delayStart = this.options.delayedStart || !!this.options.inputLog;
+		const users = this.players.map(player => {
+			const user = player.getUser();
+			if (!user && !delayStart) {
+				throw new Error(`User ${player.id} not found on ${this.roomid} battle creation`);
+			}
+			return user;
+		});
+		if (!delayStart) {
+			Rooms.global.onCreateBattleRoom(users as User[], this.room, {rated: this.rated});
+			this.started = true;
+		} else if (delayStart === 'multi') {
 			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);
 		}
 	}
@@ -1275,6 +1220,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 			return;
 		}
 		if (!connection) return;
+
 		const playerForms = this.players.map(player => (
 			player.id ? (
 				`<form><label>Player ${player.num}: <strong>${player.name}</strong></label></form>`
@@ -1300,7 +1246,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		}
 	}
 
-	destroy() {
+	override destroy() {
 		for (const player of this.players) {
 			player.destroy();
 		}
@@ -1331,6 +1277,9 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		const id = toID(user);
 		const player = this.playerTable[id];
 		if (!player) return;
+		return this.getPlayerTeam(player);
+	}
+	async getPlayerTeam(player: RoomBattlePlayer) {
 		void this.stream.write(`>requestteam ${player.slot}`);
 		const teamDataPromise = new Promise<string[]>((resolve, reject) => {
 			if (!this.dataResolvers) this.dataResolvers = [];
@@ -1341,7 +1290,7 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 		const result = Teams.unpack(resultStrings[0]);
 		return result;
 	}
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		const parts = message.split('\n');
 		for (const line of parts) {
 			void this.stream.write(`>chat-inputlogonly ${user.getIdentity(this.room)}|${line}`);
@@ -1359,29 +1308,82 @@ export class RoomBattle extends RoomGames.RoomGame<RoomBattlePlayer> {
 	}
 }
 
-export class BestOfGame extends RoomGames.RoomGame {
+export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
+	wins = 0;
+	ready: boolean | null = null;
+	options: Omit<RoomBattlePlayerOptions, 'user'> & {user: null};
+	dcAutoloseTime: number | null = null;
+	constructor(user: User | null, game: BestOfGame, num: number, options: RoomBattlePlayerOptions) {
+		super(user, game, num);
+		this.options = {...options, user: null};
+	}
+	avatar() {
+		let avatar = Users.get(this.id)?.avatar;
+		if (!avatar || typeof avatar === 'number') avatar = 'unknownf';
+		const url = Chat.plugins.avatars?.Avatars.src(avatar) ||
+			`https://${Config.routes.client}/sprites/trainers/${avatar}.png`;
+		return url;
+	}
+	updateReadyButton() {
+		const user = this.getUser();
+		if (!user?.connected) return;
+
+		this.dcAutoloseTime = null;
+		const room = this.game.room;
+		const battleRoom = this.game.games[this.game.games.length - 1]?.room as Room | undefined;
+		const gameNum = this.game.games.length + 1;
+
+		if (this.ready === false) {
+			const notification = `|tempnotify|choice|Next game|It's time for game ${gameNum} in your best-of-${this.game.bestOf}!`;
+			if (battleRoom && user.inRooms.has(battleRoom.roomid)) {
+				battleRoom.send(notification);
+			} else {
+				this.sendRoom(notification);
+			}
+		} else {
+			const notification = `|tempnotifyoff|choice`;
+			battleRoom?.sendUser(user, notification);
+			this.sendRoom(notification);
+		}
+
+		if (this.ready === null) {
+			const button = `|c|&|/uhtml controls,`;
+			this.sendRoom(button);
+			battleRoom?.sendUser(user, button);
+			return;
+		}
+
+		const cmd = `/msgroom ${room.roomid},/confirmready`;
+		const button = `|c|&|/uhtml controls,<div class="infobox"><p style="margin:6px">Are you ready for game ${gameNum}, ${this.name}?</p><p style="margin:6px">` +
+			(this.ready ?
+				`<button class="button" disabled><i class="fa fa-check"></i> I'm ready!</button> &ndash; waiting for opponent...` :
+				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`) +
+			`</p></div>`;
+		this.sendRoom(button);
+		battleRoom?.sendUser(user, button);
+	}
+}
+
+export class BestOfGame extends RoomGame<BestOfPlayer> {
+	override allowRenames = false;
 	bestOf: number;
 	format: Format;
-	score: number[] | null = null;
 	winThreshold: number;
-	options: RoomBattleOptions;
-	p1!: ID;
-	p2!: ID;
-	wins = {p1: 0, p2: 0};
-	ready: {p1: boolean, p2: boolean} | null = null;
+	options: Omit<RoomBattleOptions, 'players'> & {players: null};
 	ties = 0;
-	games: {battle: Room, winner: string | null, rated: number}[] = [];
-	allowRenames = false;
+	games: {room: Room, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
 	playerNum = 0;
-	winner: ID | null = null;
-	waitingBattle: RoomBattle | null = null;
-	nextBattleTimerStart: number | null = null;
+	/** null = tie, undefined = not ended */
+	winner: BestOfPlayer | null | undefined = undefined;
+	/** when waiting between battles, this is the just-ended battle room, the one with the |tempnotify| */
+	waitingBattle: GameRoom | null = null;
+	nextBattleTimerEnd: number | null = null;
 	nextBattleTimer: NodeJS.Timer | null = null;
-	ended = false;
+	/** Does NOT control bestof's own timer, which is always-on. Controls timers in sub-battles. */
 	needsTimer = false;
-	teams: Record<string, PokemonSet[] | null | undefined> = {};
+	score: number[] | null = null;
 	constructor(room: Room, options: RoomBattleOptions) {
-		super(room, false);
+		super(room);
 		this.format = Dex.formats.get(options.format);
 		this.bestOf = Number(Dex.formats.getRuleTable(this.format).valueRules.get('bestof'))!;
 		this.winThreshold = Math.floor(this.bestOf / 2) + 1;
@@ -1389,75 +1391,117 @@ export class BestOfGame extends RoomGames.RoomGame {
 		if (!toID(this.title).includes('bestof')) {
 			this.title += ` (Best-of-${this.bestOf})`;
 		}
-		this.options = options;
-		options.isSubBattle = true;
-		if (!options.players && (options.p1 || options.p2)) {
-			options.players = [options.p1?.user, options.p2?.user].map(toID);
-		}
-		for (const userid of options.players || []) {
-			const player = this.makePlayer(userid);
-			this.playerTable[userid] = player;
-			this.room.auth.set(userid, Users.PLAYER_SYMBOL);
-			this[`p${player.num}` as 'p1' | 'p2'] = userid;
+		this.options = {
+			...options,
+			isSubBattle: true,
+			allowRenames: false,
+			players: null,
+		};
+		for (const playerOpts of options.players) {
+			this.addPlayer(playerOpts.user, playerOpts);
 		}
 		process.nextTick(() => this.nextGame());
 	}
-	onConnect(user: User) {
+	override onConnect(user: User) {
 		const player = this.playerTable[user.id];
-		if (player) {
-			player.sendRoom('|cantleave|');
-		}
+		player?.sendRoom('|cantleave|');
+		player?.updateReadyButton();
 	}
-	makePlayer(userid: string | User): RoomGames.RoomGamePlayer {
-		return new RoomGames.RoomGamePlayer(Users.get(userid) || userid, this, ++this.playerNum);
+	override makePlayer(user: User | null, options: RoomBattlePlayerOptions): BestOfPlayer {
+		return new BestOfPlayer(user, this, ++this.playerNum, options);
 	}
-	cleanup() {
+	override addPlayer(user: User, options: RoomBattlePlayerOptions) {
+		const player = super.addPlayer(user, options);
+		if (!player) throw new Error(`Failed to make player ${user} in ${this.roomid}`);
+		this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
+		return player;
+	}
+	clearWaiting() {
 		this.waitingBattle = null;
-		if (this.ready) this.ready = null;
+		for (const player of this.players) {
+			player.ready = null;
+			player.updateReadyButton();
+		}
 		if (this.nextBattleTimer) {
 			clearInterval(this.nextBattleTimer);
-			this.nextBattleTimerStart = null;
+			this.nextBattleTimerEnd = null;
 		}
-		this.nextBattleTimerStart = null;
+		this.nextBattleTimerEnd = null;
 		this.nextBattleTimer = null;
 	}
-	nextGame() {
-		if (this.waitingBattle) {
-			this.waitingBattle.room.add(`Both players are ready! Starting next match!`).update();
+	getOptions(): RoomBattleOptions | null {
+		const players = this.players.map(player => ({
+			...player.options,
+			user: player.getUser()!,
+		}));
+		if (players.some(p => !p.user)) {
+			return null;
 		}
-		this.cleanup();
+		return {
+			...this.options,
+			players,
+		};
+	}
+	nextGame() {
+		const prevBattleRoom = this.waitingBattle;
+		this.clearWaiting();
 
-		const battle = Rooms.createBattle(this.options);
-		if (!battle) throw new Error("Failed to create battle for " + this.title);
-		battle.setParent(this.room);
+		const options = this.getOptions();
+		if (!options) {
+			for (const p of this.players) {
+				if (!p.getUser()) {
+					// tbc this isn't just being offline, it's changing name or being offline for 15 minutes
+					this.forfeitPlayer(p, ` lost by being unavailable at the start of a game.`);
+					return;
+				}
+			}
+			throw new Error(`Failed to get options for ${this.roomid}`);
+		}
+		const battleRoom = Rooms.createBattle(options);
+		if (!battleRoom) throw new Error("Failed to create battle for " + this.title);
+		battleRoom.setParent(this.room);
 		this.games.push({
-			battle,
-			winner: null,
-			rated: battle.rated,
+			room: battleRoom,
+			winner: undefined,
+			rated: battleRoom.rated,
 		});
 		// the absolute result is what counts for rating
-		battle.rated = 0;
+		battleRoom.rated = 0;
 		if (this.needsTimer) {
-			battle.battle?.timer.start();
+			battleRoom.battle?.timer.start();
 		}
-		battle.add(
-			`|html|View the match progress at <a href="/${this.roomid}">${this.roomid}</a>`
+		const gameNum = this.games.length;
+		const p1 = this.players[0];
+		const p2 = this.players[1];
+		battleRoom.add(
+			Utils.html`|html|<table width="100%"><tr><td align="left">${p1.name}</td><td align="right">${p2.name}</tr>` +
+			`<tr><td align="left">${this.renderWins(p1)}</td><td align="right">${this.renderWins(p2)}</tr></table>` +
+			`<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`
 		).update();
+
+		this.room.add(`|html|<h2>Game ${gameNum}</h2>`);
+		this.room.add(Utils.html`|html|<a href="/${battleRoom.roomid}">${battleRoom.title}</a>`);
 		this.updateDisplay();
-		this.room.add(`|html|<h2>Game ${this.games.length}</h2>`);
-		this.room.add(Utils.html`|html|<a href="/${battle.roomid}">${battle.title}</a>`);
-		this.room.update();
+
+		prevBattleRoom?.add(
+			`|html|Next: <a href="/${battleRoom.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`
+		).update();
+	}
+	renderWins(player: BestOfPlayer) {
+		const wins = this.games.filter(game => game.winner === player).length;
+		const winBuf = `<i class="fa fa-circle"></i> `.repeat(wins);
+		const restBuf = `<i class="fa fa-circle-o"></i> `.repeat(this.winThreshold - wins);
+		return player.num === 1 ? winBuf + restBuf : restBuf + winBuf;
 	}
 	updateDisplay() {
-		const p1name = this.name(this.p1);
-		const p2name = this.name(this.p2);
+		const p1name = this.players[0].name;
+		const p2name = this.players[1].name;
 		let buf = Utils.html`<br /><strong>${p1name} and ${p2name}'s Best-of-${this.bestOf} progress:</strong><br />`;
 		buf += '<table>';
-		for (const k of ['p1', 'p2'] as const) {
-			const userid = this[k];
-			buf += `<tr><td>${this.name(userid)}: </td><td>`;
+		for (const p of this.players) {
+			buf += Utils.html`<tr><td>${p.name}: </td><td>`;
 			for (let i = 0; i < this.bestOf; i++) {
-				if (this.games[i]?.winner === userid) {
+				if (this.games[i]?.winner === p) {
 					buf += `<i class="fa fa-circle"></i>`;
 				} else {
 					buf += `<i class="fa fa-circle-o"></i>`;
@@ -1471,37 +1515,36 @@ export class BestOfGame extends RoomGames.RoomGame {
 		buf += `</table><br /><br />`;
 		buf += `<table><tr>`;
 
-		for (const userid of [this.p1, null, this.p2]) {
-			if (userid === null) {
+		for (const i of [0, null, 1]) {
+			if (i === null) {
 				buf += `<td></td>`;
 				continue;
 			}
-			buf += `<td><center><strong>${this.name(userid)}</strong></center></td>`;
+			buf += Utils.html`<td><center><strong>${this.players[i].name}</strong></center></td>`;
 		}
 
 		buf += `</tr><tr>`;
 
-		for (const [i, userid] of [this.p1, null, this.p2].entries()) {
-			if (userid === null) {
+		for (const i of [0, null, 1]) {
+			if (i === null) {
 				buf += `<td></td>`;
 				continue;
 			}
-			let name = Users.get(userid)?.avatar;
-			if (!name || typeof name === 'number') name = 'unknownf';
-			const url = Chat.plugins.avatars?.Avatars.src(name) || `https://${Config.routes.client}/sprites/trainers/${name}.png`;
+			const p = this.players[i];
+			const mirrorLeftPlayer = !i ? ' style="transform: scaleX(-1)"' : "";
 			buf += `<td><center>`;
-			buf += `<img class="trainersprite"${!i ? ' style="transform: scaleX(-1)"' : ""} src="${url}" />`;
+			buf += `<img class="trainersprite"${mirrorLeftPlayer} src="${p.avatar()}" />`;
 			buf += `</center></td>`;
 		}
 
 		buf += `</tr><tr>`;
 
-		for (const [i, slot] of ['p1', null, 'p2'].entries()) {
-			if (slot === null) {
+		for (const i of [0, null, 1]) {
+			if (i === null) {
 				buf += `<td> vs </td>`;
 				continue;
 			}
-			const team = Teams.unpack(this.options[slot as 'p1' | 'p2']?.team || "");
+			const team = Teams.unpack(this.players[i].options.team || "");
 			if (!team || !Dex.formats.getRuleTable(this.format).has('teampreview')) {
 				buf += `<td>`;
 				buf += `<psicon pokemon="unknown" /> `.repeat(3);
@@ -1510,223 +1553,203 @@ export class BestOfGame extends RoomGames.RoomGame {
 				buf += `</td>`;
 				continue;
 			}
-			const style = !i ? ' style="transform: scaleX(-1)"' : "";
+			const mirrorLeftPlayer = !i ? ' style="transform: scaleX(-1)"' : "";
 			buf += `<td>`;
 			for (const [j, set] of team.entries()) {
 				if (j % 3 === 0 && j > 1) buf += `<br />`;
-				buf += `<psicon pokemon="${set.species}"${style}/>`;
+				buf += `<psicon pokemon="${set.species}"${mirrorLeftPlayer} />`;
 			}
 			buf += `</td>`;
 		}
 		buf += `</tr></table>`;
-
 		this.room.add(`|fieldhtml|<center>${buf}</center>`);
-		buf = this.games.map(({battle, winner}, index) => {
-			let progress = `in progress`;
-			if (winner) progress = `winner: ${this.name(winner)}`;
-			if (winner === '') progress = `tied`;
-			return Utils.html`<p>Game ${index + 1}: <a href="/${battle.roomid}">${battle.title} - ${progress}</a></p>`;
+
+		buf = this.games.map(({room, winner}, index) => {
+			let progress = `being played`;
+			if (winner) progress = Utils.html`won by ${winner.name}`;
+			if (winner === null) progress = `tied`;
+			return Utils.html`<p>Game ${index + 1}: <a href="/${room.roomid}"><strong>${progress}</strong></a></p>`;
 		}).join('');
 		if (this.winner) {
-			buf += Utils.html`<p>${this.name(this.winner)} won!</p>`;
-		} else if (this.winner === '') {
+			buf += Utils.html`<p>${this.winner.name} won!</p>`;
+		} else if (this.winner === null) {
 			buf += `<p>The battle was tied.</p>`;
 		}
 		this.room.add(`|controlshtml|<center>${buf}</center>`);
 		this.room.update();
 	}
 
-	startTimer() {
+	override startTimer() {
 		this.needsTimer = true;
-		for (const {battle} of this.games) {
-			battle.battle?.timer.start();
+		for (const {room} of this.games) {
+			room.battle?.timer.start();
 		}
 	}
 
-	onBattleWin(room: Room, winnerid: string) {
-		const loser = this.p1 === winnerid ? this.p2 : this.p1;
-		const loserPlayer = room.battle!.playerTable[loser];
-		if (loserPlayer?.hitDisconnectLimit) { // disconnection means opp wins the set
-			this.room.add(`${this.name(loser)} lost the series due to inactivity.`);
-			return this.onEnd(winnerid as ID);
-		}
-		if (this.ended) return;
+	onBattleWin(room: Room, winnerid: ID) {
+		if (this.ended) return; // ???
 
-		let isTie = false;
-		if (this.p1 === winnerid) {
-			this.wins.p1++;
-		} else if (this.p2 === winnerid) {
-			this.wins.p2++;
+		const winner = winnerid ? this.playerTable[winnerid] : null;
+		this.games[this.games.length - 1].winner = winner;
+		if (winner) {
+			winner.wins++;
+			const loserPlayer = room.battle!.players.filter(p => p.num !== winner.num)[0];
+			if (loserPlayer && loserPlayer.dcSecondsLeft <= 0) { // disconnection means opp wins the set
+				return this.forfeit(loserPlayer.name, ` lost the series due to inactivity.`);
+			}
+			this.room.add(Utils.html`|html|${winner.name} won game ${this.games.length}!`).update();
+			if (winner.wins >= this.winThreshold) {
+				return this.onEnd(winner.id);
+			}
 		} else {
 			this.ties++;
-			isTie = true;
 			this.winThreshold = Math.floor((this.bestOf - this.ties) / 2) + 1;
+			this.room.add(`|html|Game ${this.games.length} was a tie.`).update();
 		}
-		this.games[this.games.length - 1].winner = isTie ? '' : winnerid;
+		if (this.games.length >= this.bestOf) {
+			return this.onEnd(''); // overall tie
+		}
 
-		this.room.add(
-			Utils.html`|html|${winnerid ? `${this.name(winnerid)} won game ${this.games.length}!` : `Game ${this.games.length} was a tie`}`
-		).update();
-		for (const k in this.wins) {
-			if (this.wins[k as 'p1' | 'p2'] >= this.winThreshold) {
-				return this.onEnd(this[k as 'p1' | 'p2']);
-			}
-		}
-		if (this.games.length >= this.bestOf) return this.onEnd(''); // tie
 		// no one has won, skip onwards
-		setImmediate(() => this.promptNextGame(room));
+		this.promptNextGame(room);
 	}
 	promptNextGame(room: Room) {
 		if (!room.battle || this.winner) return; // ???
-		const cmd = `/msgroom ${this.room.roomid},/confirmready`;
-		for (const userid in room.battle.playerTable) {
-			const player = room.battle.playerTable[userid];
-			player.id = userid as ID; // re-link users so that we can use timer properly
-			const button = `|c|&|/uhtml prompt-${userid},<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`;
-			const prompt = `|c|&|/log Are you ready for game ${this.games.length + 1}, ${this.name(userid)}?`;
-			player.sendRoom(prompt);
-			player.sendRoom(button);
-			// send it to the main room as well, in case they x out of the old one
-			if (!this.playerTable[userid]) throw new Error(`Player ${userid} in ${this.roomid} doesn't exist`);
-			this.playerTable[userid].sendRoom(prompt);
-			this.playerTable[userid].sendRoom(button);
+		this.updateDisplay();
+		this.waitingBattle = room;
+		const now = Date.now();
+		this.nextBattleTimerEnd = now + BEST_OF_IN_BETWEEN_TIME * 1000;
+		for (const player of this.players) {
+			player.ready = false;
+			const dcAutoloseTime = now + room.battle.players[player.num - 1].dcSecondsLeft * 1000;
+			if (dcAutoloseTime < this.nextBattleTimerEnd) {
+				player.dcAutoloseTime = dcAutoloseTime;
+			}
+			player.updateReadyButton();
 		}
-		this.waitingBattle = room.battle;
-		this.ready = {p1: false, p2: false};
-		this.nextBattleTimerStart = Date.now();
 		this.nextBattleTimer = setInterval(() => this.pokeNextBattleTimer(), 10_000);
 	}
 	pokeNextBattleTimer() {
-		if (!this.nextBattleTimerStart || !this.nextBattleTimer) return; // ??
-		if ((Date.now() - this.nextBattleTimerStart) >= (60_000)) {
+		if (!this.nextBattleTimerEnd || !this.nextBattleTimer) return; // ??
+		if (Date.now() >= this.nextBattleTimerEnd) {
 			return this.nextGame();
 		}
-		for (const k of ['p1', 'p2'] as const) {
-			if (!this.ready![k]) {
-				const diff = (this.nextBattleTimerStart + 60000) - Date.now();
-				this.waitingBattle?.room.add(
-					`|inactive|${this.name(this[k])} has ${Chat.toDurationString(diff + 100)}` +
-					` to confirm battle start!`
+		for (const p of this.players) {
+			if (!p.ready) {
+				const now = Date.now() - 100; // fudge to make rounding work better
+				if (p.dcAutoloseTime && now > p.dcAutoloseTime) {
+					return this.forfeit(p.name, ` lost the series due to inactivity.`);
+				}
+				const message = (p.dcAutoloseTime ?
+					`|inactive|${p.name} has ${Chat.toDurationString(p.dcAutoloseTime - now)} to reconnect!` :
+					`|inactive|${p.name} has ${Chat.toDurationString(this.nextBattleTimerEnd - now)} to confirm battle start!`
 				);
+				this.waitingBattle?.add(message);
+				this.room.add(message);
 			}
 		}
-		this.waitingBattle?.room.update();
+		this.waitingBattle?.update();
 		this.room.update();
 	}
-	confirmReady(user: ID) {
-		if (![this.p1, this.p2].includes(user)) {
+	confirmReady(user: User) {
+		const player = this.playerTable[user.id];
+		if (!player) {
 			throw new Chat.ErrorMessage("You aren't a player in this best-of set.");
 		}
-		const battle = this.waitingBattle;
-		if (!this.ready || !battle) {
+		if (!this.waitingBattle) {
 			throw new Chat.ErrorMessage("The battle is not currently waiting for ready confirmation.");
 		}
 
-		this.ready[user === this.p1 ? 'p1' : 'p2'] = true;
-		const readyMsg = Utils.html`|c|&|/uhtml prompt-${user},${this.name(user)} is ready for game ${this.games.length + 1}!`;
-		battle.room.add(readyMsg).update();
-		if (Object.values(this.ready).filter(Boolean).length === 2) {
+		player.ready = true;
+		player.updateReadyButton();
+		const readyMsg = `||${player.name} is ready for game ${this.games.length + 1}.`;
+		this.waitingBattle.add(readyMsg).update();
+		this.room.add(readyMsg).update();
+		if (this.players.every(p => p.ready)) {
 			this.nextGame();
 		}
 	}
-	getLatestBattle() {
-		// Strictly, this should never be null unless battle creation lags big time. but let's be typesafe anyway.
-		return this.games[this.games.length - 1].battle.battle;
-	}
-	private name(str: string) {
-		return Users.get(str)?.name || str;
-	}
-	win(targetUser: User | ID) {
-		targetUser = toID(targetUser);
-		if (!this.playerTable[targetUser]) return false;
-		return this.onEnd(targetUser);
-	}
-	tie() {
-		return this.onEnd('');
-	}
-	async onEnd(winner: ID) {
-		this.cleanup();
+	async onEnd(winnerid: ID) {
+		this.clearWaiting();
 		this.room.add(`|allowleave|`).update();
+		const winner = winnerid ? this.playerTable[winnerid] : null;
+		this.winner = winner;
 		if (winner) {
-			this.winner = winner;
-			this.room.add(`|win|${this.name(winner)}`);
+			this.room.add(`|win|${winner.name}`);
 		} else {
-			this.winner = '';
 			this.room.add(`|tie`);
 		}
 		this.updateDisplay();
 		this.room.update();
-		this.score = [this.wins.p1, this.wins.p2];
-		const parentGame = this.room.parent && this.room.parent.game;
+		const p1 = this.players[0];
+		const p2 = this.players[1];
+		this.score = this.players.map(p => p.wins);
 		// @ts-ignore - Tournaments aren't TS'd yet
-		if (parentGame?.onBattleWin) {
-			// @ts-ignore
-			parentGame.onBattleWin(this.room, winner);
-		}
+		this.room.parent?.game?.onBattleWin?.(this.room, winner.id);
 		// run elo stuff here
 		let p1score = 0.5;
-		if (winner === this.p1) {
+		if (winner === p1) {
 			p1score = 1;
-		} else if (winner === this.p2) {
+		} else if (winner === p2) {
 			p1score = 0;
 		}
-		for (const k in this.playerTable) {
-			this.playerTable[k].unlinkUser();
-			Users.get(k)?.updateSearch();
+		for (const player of this.players) {
+			const user = player.getUser();
+			player.unlinkUser();
+			user?.updateSearch();
 		}
 
-		const {rated, battle: room} = this.games[this.games.length - 1];
+		const {rated, room} = this.games[this.games.length - 1];
 		const battle = room.battle!;
 		if (rated) {
 			(room as GameRoom).rated = rated; // just in case
-			const winnerUser = Users.get(winner);
+			const winnerUser = winner?.getUser();
 			if (winnerUser && !winnerUser.registered) {
 				this.room.sendUser(winnerUser, '|askreg|' + winner);
 			}
 			const [score, p1rating, p2rating] = await Ladders(battle.ladder).updateRating(
-				this.name(this.p1), this.name(this.p2), p1score, battle.room
+				p1.name, p2.name, p1score, battle.room
 			);
 			void battle.logBattle(score, p1rating, p2rating);
-			Chat.runHandlers('onBattleRanked', battle, winner, [p1rating, p2rating], [this.p1, this.p2]);
+			Chat.runHandlers('onBattleRanked', battle, winnerid, [p1rating, p2rating], [p1.id, p2.id]);
 		}
 	}
-	forfeit(user: User | string, message = '') {
-		if (typeof user !== 'string') user = user.id;
-		else user = toID(user);
+	override forfeit(user: User | string, message = '') {
+		const userid = (typeof user !== 'string') ? user.id : toID(user);
 
-		if (!(user in this.playerTable)) return false;
-		this.winner = user === this.p1 ? this.p2 : this.p1;
-		this.room.add(Utils.html`${this.name(user)} forfeited.`);
+		const loser = this.playerTable[userid];
+		if (loser) this.forfeitPlayer(loser, message);
+	}
+	forfeitPlayer(loser: BestOfPlayer, message = '') {
+		this.winner = this.players.filter(p => p !== loser)[0];
+		this.room.add(`||${loser.name}${message || ' forfeited.'}`);
 		this.ended = true;
-		void this.onEnd(this.winner);
-		for (const {battle} of this.games) {
-			if (!battle.battle || battle.battle.ended) continue;
-			battle.battle.forfeit(user, message);
+		void this.onEnd(this.winner.id);
+		for (const {room} of this.games) {
+			if (!room.battle || room.battle.ended) continue;
+			room.battle.forfeit(loser.id, message);
 		}
 		return true;
 	}
-	destroy() {
-		this.cleanup();
-		for (const k in this.playerTable) {
-			this.playerTable[k].unlinkUser();
-			delete this.playerTable[k];
-		}
-		for (const [i, entry] of this.games.entries()) {
-			entry.battle.setParent(null);
-			entry.battle.destroy();
-			this.games.splice(i, 1);
-		}
+	override destroy() {
+		this.clearWaiting();
+		for (const p of this.players) p.destroy();
+		this.players = [];
+		this.playerTable = {};
+		for (const {room} of this.games) room.destroy();
+		this.games = [];
+		this.winner = null;
 	}
 }
 
 export class RoomBattleStream extends BattleStream {
-	readonly battle: Battle;
+	override readonly battle: Battle;
 	constructor() {
 		super({keepAlive: true});
 		this.battle = null!;
 	}
 
-	_write(chunk: string) {
+	override _write(chunk: string) {
 		const startTime = Date.now();
 		if (this.battle && Config.debugsimprocesses && process.send) {
 			process.send('DEBUG\n' + this.battle.inputLog.join('\n') + '\n' + chunk);

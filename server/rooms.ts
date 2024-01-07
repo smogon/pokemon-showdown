@@ -34,7 +34,7 @@ import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
 import {
-	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex, BestOfGame,
+	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, BestOfGame,
 } from "./room-battle";
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity, MinorActivityData} from './room-minor-activity';
@@ -1290,9 +1290,57 @@ export class GlobalRoomState {
 		void this.loadBattles();
 	}
 
+	async serializeBattleRoom(room: Room) {
+		if (!room.battle || room.battle.ended) return null;
+		room.battle.frozen = true;
+		const log = await room.battle.getLog();
+		const players = room.battle.players.map(p => p.id).filter(Boolean);
+		if (!players.length || !log?.length) return null; // shouldn't happen???
+		// players can be empty right after `/importinputlog`
+		return {
+			roomid: room.roomid,
+			inputLog: log.join('\n'),
+			players,
+			title: room.title,
+			rated: room.battle.rated,
+			timer: {
+				...room.battle.timer.settings,
+				active: !!room.battle.timer.timer || false,
+			},
+		};
+	}
+	deserializeBattleRoom(battle: NonNullable<Awaited<ReturnType<GlobalRoomState['serializeBattleRoom']>>>) {
+		const {inputLog, players, roomid, title, rated, timer} = battle;
+		const [, formatid] = roomid.split('-');
+		const room = Rooms.createBattle({
+			format: formatid,
+			inputLog,
+			roomid,
+			title,
+			rated: Number(rated),
+			players: [],
+			delayedTimer: timer.active,
+		});
+		if (!room || !room.battle) return false; // shouldn't happen???
+		if (timer) { // json blob of settings
+			Object.assign(room.battle.timer.settings, timer);
+		}
+		for (const [i, playerid] of players.entries()) {
+			room.auth.set(playerid, Users.PLAYER_SYMBOL);
+			const player = room.battle.players[i];
+			player.id = playerid;
+			room.battle.playerTable[playerid] = player;
+			player.hasTeam = true;
+			const user = Users.getExact(playerid);
+			player.name = user?.name || playerid; // in case user hasn't reconnected yet
+			user?.joinRoom(room);
+		}
+		return true;
+	}
+
 	async saveBattles() {
 		let count = 0;
-		if (!Config.usepostgres) return 0;
+		if (!Config.usepostgres) return this.saveBattlesJSONL();
 		const logDatabase = new PostgresDatabase();
 		await logDatabase.ensureMigrated({
 			table: 'stored_battles',
@@ -1302,36 +1350,44 @@ export class GlobalRoomState {
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
 			room.battle.frozen = true;
-			const log = await room.battle.getLog();
-			const players: ID[] = room.battle.options.players || [];
-			if (!players.length) {
-				for (const num of ['p1', 'p2', 'p3', 'p4'] as const) {
-					if (room.battle[num]?.id) {
-						players.push(room.battle[num].id);
-					}
-				}
-			}
-			if (!players.length || !log?.length) continue; // shouldn't happen???
-			const timerData = {
-				...room.battle.timer.settings,
-				active: !!room.battle.timer.timer || false,
-			};
+			room.battle.timer.stop();
+			const b = await this.serializeBattleRoom(room);
+			if (!b) continue;
 			await logDatabase.query(
 				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
 				` ON CONFLICT (roomid) DO UPDATE ` +
 				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
 				// for some reason Battle#rated is sometimes a float which Postgres can't handle
-				[room.roomid, log.join('\n'), players, room.title, Math.floor(room.battle.rated), timerData]
+				[b.roomid, b.inputLog, b.players, b.title, b.rated, b.timer]
 			);
-			room.battle.timer.stop();
 			count++;
 		}
 		return count;
 	}
 
-	battlesLoading?: boolean;
+	async saveBattlesJSONL() {
+		let count = 0;
+		const out = FS('logs/battles.jsonl.progress').createAppendStream();
+		for (const room of Rooms.rooms.values()) {
+			if (!room.battle || room.battle.ended) continue;
+			room.battle.frozen = true;
+			room.battle.timer.stop();
+			const b = await this.serializeBattleRoom(room);
+			if (!b) continue;
+			await out.write(JSON.stringify(b) + '\n');
+			count++;
+		}
+		await out.writeEnd();
+		await FS('logs/battles.jsonl.progress').rename('logs/battles.jsonl');
+		return count;
+	}
+
+	battlesLoading = false;
 	async loadBattles() {
-		if (!Config.usepostgres) return;
+		if (!Config.usepostgres) {
+			await this.loadBattlesJSONL();
+			return;
+		}
 		this.battlesLoading = true;
 		for (const u of Users.users.values()) {
 			u.send(
@@ -1339,85 +1395,58 @@ export class GlobalRoomState {
 				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
 			);
 		}
+		const startTime = Date.now();
+		let count = 0;
 		const logDatabase = new PostgresDatabase();
 		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
 		for await (const battle of logDatabase.stream(query)) {
-			const {input_log, players, roomid, title, rated, timer} = battle;
-			const [, formatid] = roomid.split('-');
-			const room = Rooms.createBattle({
-				format: formatid,
-				inputLog: input_log,
-				roomid,
-				title,
-				rated: Number(rated),
-				players,
-				delayedStart: true,
-				delayedTimer: timer.active,
-				restored: true,
-			});
-			if (!room || !room.battle) continue; // shouldn't happen???
-			room.battle.started = true; // so that timer works
-			room.battle.start();
-			if (timer) { // json blob of settings
-				Object.assign(room.battle.timer.settings, timer);
-			}
-			for (const [i, p] of players.entries()) {
-				room.auth.set(p, Users.PLAYER_SYMBOL);
-				const player = room.battle.players[i];
-				player.id = p;
-				player.name = p; // temp for if they get timed out before they connect
-				const u = Users.getExact(p);
-				if (u) {
-					this.rejoinBattle(room, u, i);
-				}
-			}
+			battle.inputLog = battle.input_log;
+			if (this.deserializeBattleRoom(battle)) count++;
 		}
 		for (const u of Users.users.values()) {
 			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
 		}
-		delete this.battlesLoading;
+		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
+		this.battlesLoading = false;
 	}
-
-	rejoinBattle(room: GameRoom, user: User, idx: number) {
-		if (!room.battle) return;
-		// we reuse these player objects explicitly so if
-		// someone has already started the timer, their settings carry over (should reduce bugs)
-		// and it's safe to do this first because we know these users were already in the battle
-		let player = room.battle.players[idx];
-		if (!player) {
-			// this can happen sometimes
-			player = room.battle.players[idx] = new Rooms.RoomBattlePlayer(
-				user, room.battle, (idx + 1) as PlayerIndex
+	async loadBattlesJSONL() {
+		this.battlesLoading = true;
+		for (const u of Users.users.values()) {
+			u.send(
+				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
+				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
 			);
 		}
-		player.id = user.id;
-		player.name = user.name;
-		room.battle.playerTable[user.id] = player;
-		user.joinRoom(room.roomid);
-		// force update panel
-		room.battle.onConnect(user);
-		if (room.battle.options.delayedTimer && !room.battle.timer.timer) {
-			room.battle.timer.start();
+		const startTime = Date.now();
+		let count = 0;
+		let input;
+		try {
+			const stream = FS('logs/battles.jsonl').createReadStream();
+			await stream.fd;
+			input = stream.byLine();
+		} catch (e) {
+			return;
 		}
-		user.send(`|pm|&|${user.getIdentity()}|/uhtmlchange restartmsg,`);
+		for await (const line of input) {
+			if (!line) continue;
+			if (this.deserializeBattleRoom(JSON.parse(line))) count++;
+		}
+		for (const u of Users.users.values()) {
+			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
+		}
+		await FS('logs/battles.jsonl').unlinkIfExists();
+		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
+		this.battlesLoading = false;
 	}
 
-	joinOldBattles(user: User) {
+	rejoinGames(user: User) {
 		for (const room of Rooms.rooms.values()) {
-			const battle = room.battle;
-			if (!battle) continue;
-			const idx = battle.options.players?.indexOf(user.id);
-			if (battle.ended) {
-				// TODO: Do we want to rejoin the battle room here?
-				// We might need to cache the join so it only happens once -
-				// just running joinRoom would mean they join the room every refresh until the battle expires
+			const player = room.game?.playerTable[user.id];
+			if (!player) continue;
 
-				// user.joinRoom(room);
-				continue;
-			}
-			if (typeof idx === 'number' && idx > -1) {
-				this.rejoinBattle(room, user, idx);
-			}
+			user.games.add(room.roomid);
+			player.name = user.name;
+			user.joinRoom(room.roomid);
 		}
 	}
 
@@ -1744,12 +1773,6 @@ export class GlobalRoomState {
 			this.maxUsers = Users.users.size;
 			this.maxUsersDate = Date.now();
 		}
-		if (this.battlesLoading) {
-			connection.send(
-				`|pm|&|${user.getIdentity()}|/uhtml restartmsg,` +
-				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
-			);
-		}
 	}
 	startLockdown(err: Error | null = null, slow = false) {
 		if (this.lockdown && err) return;
@@ -1901,9 +1924,9 @@ export class GlobalRoomState {
 export class ChatRoom extends BasicRoom {
 	// This is not actually used, this is just a fake class to keep
 	// TypeScript happy
-	battle = null;
-	active: false = false as const;
-	type: 'chat' = 'chat' as const;
+	override battle = null;
+	override active = false as const;
+	override type = 'chat' as const;
 }
 
 export class GameRoom extends BasicRoom {
@@ -1937,10 +1960,10 @@ export class GameRoom extends BasicRoom {
 		this.tour = options.tour || null;
 		this.setParent((options as any).parent || (this.tour && this.tour.room) || null);
 
-		this.p1 = options.p1?.user || null;
-		this.p2 = options.p2?.user || null;
-		this.p3 = options.p3?.user || null;
-		this.p4 = options.p4?.user || null;
+		this.p1 = options.players?.[0]?.user || null;
+		this.p2 = options.players?.[1]?.user || null;
+		this.p3 = options.players?.[2]?.user || null;
+		this.p4 = options.players?.[3]?.user || null;
 
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 
@@ -1961,8 +1984,7 @@ export class GameRoom extends BasicRoom {
 	}
 	getLogForUser(user: User) {
 		if (!(user.id in this.game.playerTable)) return this.getLog();
-		// @ts-ignore
-		return this.getLog(this.game.playerTable[user.id].num);
+		return this.getLog(this.game.playerTable[user.id].num as 0);
 	}
 	update(excludeUser: User | null = null) {
 		if (!this.log.broadcastBuffer.length) return;
@@ -1984,15 +2006,6 @@ export class GameRoom extends BasicRoom {
 			this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_INACTIVE_DEALLOCATE);
 		}
 	}
-	sendPlayer(num: 0 | 1, message: string) {
-		const player = this.getPlayer(num);
-		if (!player) return false;
-		player.sendRoom(message);
-	}
-	getPlayer(num: 0 | 1) {
-		// @ts-ignore
-		return this.game['p' + (num + 1)];
-	}
 	requestModchat(user: User | null) {
 		if (!user) {
 			this.modchatUser = '';
@@ -2006,7 +2019,7 @@ export class GameRoom extends BasicRoom {
 	}
 	onConnect(user: User, connection: Connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
-		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
+		this.game?.onConnect?.(user, connection);
 	}
 	onJoin(user: User, connection: Connection) {
 		if (!user) return false; // ???
@@ -2184,13 +2197,10 @@ export const Rooms = {
 		return room;
 	},
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
-		const players: User[] = [options.p1, options.p2, options.p3, options.p4]
-			.filter(Boolean).map(player => player!.user);
-		const gameType = Dex.formats.get(options.format).gameType;
-		if (gameType !== 'multi' && gameType !== 'freeforall') {
-			if (players.length > 2) {
-				throw new Error(`Four players were provided, but the format is a two-player format.`);
-			}
+		const players = options.players.map(player => player.user);
+		const format = Dex.formats.get(options.format);
+		if (players.length > format.playerCount) {
+			throw new Error(`${players.length} players were provided, but the format is a ${format.playerCount}-player format.`);
 		}
 		if (new Set(players).size < players.length) {
 			throw new Error(`Players can't battle themselves`);
@@ -2200,7 +2210,6 @@ export const Rooms = {
 			Ladders.cancelSearches(user);
 		}
 
-		const format = Dex.formats.get(options.format);
 		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
 
 		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isSubBattle) {
@@ -2246,20 +2255,20 @@ export const Rooms = {
 		const p2name = p2 ? p2.name : "Player 2";
 		let roomTitle;
 		let roomid = options.roomid;
-		if (gameType === 'multi') {
+		if (format.gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
-		} else if (gameType === 'freeforall') {
+		} else if (format.gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
 		} else if (isBestOf && !options.isSubBattle) {
 			roomTitle = `${p1name} vs. ${p2name}`;
-			roomid = `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
+			roomid ||= `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
 			roomTitle = options.title;
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
-		if (!roomid) roomid = Rooms.global.prepBattleRoom(options.format);
+		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		if (options.isSubBattle || !isBestOf) {

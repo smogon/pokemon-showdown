@@ -2152,7 +2152,7 @@ export class RandomGen8Teams {
 			(isNoDynamax && data.noDynamaxMoves) ||
 			data.moves;
 		const movePool: string[] = [...(randMoves || this.dex.species.getMovePool(species.id))];
-		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
+		if (this.format.playerCount > 2) {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
 			// Random Free-For-All also uses doubles move pools, for now
 			const allySwitch = movePool.indexOf('allyswitch');
