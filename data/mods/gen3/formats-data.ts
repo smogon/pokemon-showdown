@@ -246,7 +246,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	ponyta: {
-		tier: "ZUBL",
+		tier: "LC",
 	},
 	rapidash: {
 		tier: "UU",
