@@ -944,9 +944,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const type = this.forceMonotype || this.sample(typePool);
 
 		const baseFormes: {[k: string]: number} = {};
-		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
-		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
@@ -970,13 +968,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
-			const tier = species.tier;
-
-			// Limit two Pokemon per tier
-			if (this.gen === 5 && !isMonotype && !this.forceMonotype && tierCount[tier] >= 2 * limitFactor) continue;
 
 			const types = species.types;
-			const typeCombo = types.slice().sort().join();
 
 			if (!isMonotype && !this.forceMonotype) {
 				let skip = false;
@@ -1002,9 +995,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					}
 				}
 				if (skip) continue;
-
-				// Limit one of any type combination
-				if (typeComboCount[typeCombo] >= 1 * limitFactor) continue;
 			}
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
@@ -1018,13 +1008,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[species.baseSpecies] = 1;
 
-			// Increment tier counter
-			if (tierCount[tier]) {
-				tierCount[tier]++;
-			} else {
-				tierCount[tier] = 1;
-			}
-
 			// Increment type counters
 			for (const typeName of types) {
 				if (typeName in typeCount) {
@@ -1032,11 +1015,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				} else {
 					typeCount[typeName] = 1;
 				}
-			}
-			if (typeCombo in typeComboCount) {
-				typeComboCount[typeCombo]++;
-			} else {
-				typeComboCount[typeCombo] = 1;
 			}
 
 			// Increment weakness counter

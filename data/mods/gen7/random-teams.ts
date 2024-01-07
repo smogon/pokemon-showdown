@@ -1276,7 +1276,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const baseFormes: {[k: string]: number} = {};
 		let hasMega = false;
 
-		const tierCount: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
@@ -1326,21 +1325,16 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				// Limit one Mega per team
 				if (hasMega && species.isMega) continue;
 
-				const tier = species.tier;
 				const types = species.types;
 				const typeCombo = types.slice().sort().join();
+				const weakToFreezeDry = (
+					this.dex.getEffectiveness('Ice', species) > 0 ||
+					(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Water'))
+				);
 				// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 				const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
 				if (restrict) {
-					// Limit one Pokemon per tier, two for Monotype
-					if (
-						(tierCount[tier] >= (isMonotype || this.forceMonotype ? 2 : 1) * limitFactor) &&
-						!this.randomChance(1, Math.pow(5, tierCount[tier]))
-					) {
-						continue;
-					}
-
 					if (!isMonotype && !this.forceMonotype) {
 						// Limit two of any type
 						let skip = false;
@@ -1364,10 +1358,16 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							}
 						}
 						if (skip) continue;
+
+						// Limit four weak to Freeze-Dry
+						if (weakToFreezeDry) {
+							if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
+							if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
+						}
 					}
 
-					// Limit one of any type combination, three in Monotype
-					if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 3 : 1) * limitFactor) continue;
+					// Limit three of any type combination in Monotype
+					if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
 				}
 
 				const set = this.randomSet(
@@ -1393,13 +1393,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				// Now that our Pokemon has passed all checks, we can increment our counters
 				baseFormes[species.baseSpecies] = 1;
 
-				// Increment tier counter
-				if (tierCount[tier]) {
-					tierCount[tier]++;
-				} else {
-					tierCount[tier] = 1;
-				}
-
 				// Increment type counters
 				for (const typeName of types) {
 					if (typeName in typeCount) {
@@ -1421,6 +1414,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 						typeWeaknesses[typeName]++;
 					}
 				}
+				if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
 
 				// Track what the team has
 				if (item.megaStone || species.name === 'Rayquaza-Mega') hasMega = true;
