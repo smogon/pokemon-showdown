@@ -31,7 +31,10 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	/**
 	 * This will be '' if there's no user associated with the player.
 	 *
-	 * we explicitly don't hold a direct reference to the user
+	 * This includes after the game ends, where the game should no longer
+	 * be in the user's game list.
+	 *
+	 * We intentionally don't hold a direct reference to the user.
 	 */
 	id: ID;
 	constructor(user: User | string | null, game: GameClass, num = 0) {
@@ -62,13 +65,14 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	toString() {
 		return this.id;
 	}
+	getUser() {
+		return (this.id && Users.getExact(this.id)) || null;
+	}
 	send(data: string) {
-		const user = Users.getExact(this.id);
-		if (user) user.send(data);
+		this.getUser()?.send(data);
 	}
 	sendRoom(data: string) {
-		const user = Users.getExact(this.id);
-		if (user) user.sendTo(this.game.roomid, data);
+		this.getUser()?.sendTo(this.game.roomid, data);
 	}
 }
 
@@ -84,20 +88,20 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * which are available as `this.room.game === this` and `this.room.subGame === this`.
 	 */
 	room: Room;
-	gameid: ID;
-	title: string;
-	allowRenames: boolean;
+	gameid = 'game' as ID;
+	title = 'Game';
+	allowRenames = false;
 	isSubGame: boolean;
 	/**
 	 * userid:player table.
 	 *
 	 * Does not contain userless players: use playerList for the full list.
 	 */
-	playerTable: {[userid: string]: PlayerClass};
-	players: PlayerClass[];
-	playerCount: number;
-	playerCap: number;
-	ended: boolean;
+	playerTable: {[userid: string]: PlayerClass} = Object.create(null);
+	players: PlayerClass[] = [];
+	playerCount = 0;
+	playerCap = 0;
+	ended = false;
 	/** Does `/guess` or `/choose` require the user to be able to talk? */
 	checkChat = false;
 	/**
@@ -108,15 +112,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	constructor(room: Room, isSubGame = false) {
 		this.roomid = room.roomid;
 		this.room = room;
-		this.gameid = 'game' as ID;
-		this.title = 'Game';
-		this.allowRenames = false;
 		this.isSubGame = isSubGame;
-		this.playerTable = Object.create(null);
-		this.players = [];
-		this.playerCount = 0;
-		this.playerCap = 0;
-		this.ended = false;
 
 		if (this.isSubGame) {
 			this.room.subGame = this;
@@ -158,12 +154,13 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 		return player;
 	}
 
-	updatePlayer(player: PlayerClass, user: User | null) {
+	updatePlayer(player: PlayerClass, userOrName: User | string | null) {
 		if (!this.allowRenames) return;
 		if (player.id) {
 			delete this.playerTable[player.id];
 		}
-		if (user) {
+		if (userOrName) {
+			const user = typeof userOrName === 'string' ? {name: userOrName, id: toID(userOrName)} : userOrName;
 			player.id = user.id;
 			player.name = user.name;
 			this.playerTable[player.id] = player;
@@ -270,7 +267,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * place in.
 	 */
 	removeBannedUser(user: User) {
-		if (this.forfeit) this.forfeit(user);
+		this.forfeit?.(user);
 	}
 
 	/**

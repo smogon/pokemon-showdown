@@ -22,7 +22,7 @@ import {BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges} f
  * Keys are formatids
  */
 const searches = new Map<string, {
-	numPlayers: number,
+	playerCount: number,
 	/** userid:BattleReady */
 	searches: Map<ID, BattleReady>,
 }>();
@@ -385,7 +385,7 @@ class Ladder extends LadderStore {
 		let formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) {
 			formatTable = {
-				numPlayers: ['multi', 'freeforall'].includes(Dex.formats.get(formatid).gameType) ? 4 : 2,
+				playerCount: Dex.formats.get(formatid).playerCount,
 				searches: new Map(),
 			};
 			Ladders.searches.set(formatid, formatTable);
@@ -404,7 +404,7 @@ class Ladder extends LadderStore {
 			if (matched) {
 				matches.push(search);
 			}
-			if (matches.length >= formatTable.numPlayers) {
+			if (matches.length >= formatTable.playerCount) {
 				for (const matchedSearch of matches) formatTable.searches.delete(matchedSearch.userid);
 				Ladder.match(matches);
 				return;
@@ -423,7 +423,7 @@ class Ladder extends LadderStore {
 	static periodicMatch() {
 		// In order from longest waiting to shortest waiting
 		for (const [formatid, formatTable] of Ladders.searches) {
-			if (formatTable.numPlayers > 2) continue; // TODO: implement
+			if (formatTable.playerCount > 2) continue; // TODO: implement
 			const matchmaker = Ladders(formatid);
 			let longest: [BattleReady, User] | null = null;
 			for (const search of formatTable.searches.values()) {
@@ -476,14 +476,10 @@ class Ladder extends LadderStore {
 			return undefined;
 		}
 		const format = Dex.formats.get(formatid);
-		const delayedStart = (['multi', 'freeforall'].includes(format.gameType) && players.length === 2) ?
-			'multi' : false;
+		const delayedStart = format.playerCount > players.length ? 'multi' : false;
 		return Rooms.createBattle({
 			format: formatid,
-			p1: players[0],
-			p2: players[1],
-			p3: players[2],
-			p4: players[3],
+			players,
 			rated: minRating,
 			challengeType: readies[0].challengeType,
 			delayedStart,

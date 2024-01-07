@@ -1477,9 +1477,9 @@ export class RandomGen8Teams {
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
-		isDoubles: boolean,
 		preferredType: string,
 		role: RandomTeamsTypes.Role,
+		isDoubles: boolean,
 		isNoDynamax: boolean
 	): boolean {
 		if ([
@@ -1673,9 +1673,9 @@ export class RandomGen8Teams {
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
-		isDoubles: boolean,
 		preferredType: string,
 		role: RandomTeamsTypes.Role,
+		isDoubles: boolean,
 		isNoDynamax: boolean
 	): string {
 		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
@@ -1720,7 +1720,7 @@ export class RandomGen8Teams {
 		// Obtain a list of abilities that are allowed (not culled)
 		for (const ability of abilityData) {
 			if (ability.rating >= 1 && !this.shouldCullAbility(
-				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, isDoubles, '', '', isNoDynamax
+				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, '', '', isDoubles, isNoDynamax
 			)) {
 				abilityAllowed.push(ability);
 			}
@@ -2152,7 +2152,7 @@ export class RandomGen8Teams {
 			(isNoDynamax && data.noDynamaxMoves) ||
 			data.moves;
 		const movePool: string[] = [...(randMoves || this.dex.species.getMovePool(species.id))];
-		if (this.format.gameType === 'multi' || this.format.gameType === 'freeforall') {
+		if (this.format.playerCount > 2) {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
 			// Random Free-For-All also uses doubles move pools, for now
 			const allySwitch = movePool.indexOf('allyswitch');
@@ -2313,7 +2313,7 @@ export class RandomGen8Teams {
 		}
 
 		ability = this.getAbility(types, moves, abilities, counter, movePool, teamDetails, species,
-			isDoubles, '', '', isNoDynamax);
+			'', '', isDoubles, isNoDynamax);
 
 		if (species.requiredItems) {
 			item = this.sample(species.requiredItems);
@@ -2498,6 +2498,10 @@ export class RandomGen8Teams {
 
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
+			const weakToFreezeDry = (
+				this.dex.getEffectiveness('Ice', species) > 0 ||
+				(this.dex.getEffectiveness('Ice', species) > -2 && types.includes('Water'))
+			);
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
@@ -2525,10 +2529,16 @@ export class RandomGen8Teams {
 					}
 				}
 				if (skip) continue;
+
+				// Limit four weak to Freeze-Dry
+				if (weakToFreezeDry) {
+					if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
+					if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
+				}
 			}
 
-			// Limit one of any type combination, three in Monotype
-			if (!this.forceMonotype && typeComboCount[typeCombo] >= (isMonotype ? 3 : 1) * limitFactor) continue;
+			// Limit three of any type combination in Monotype
+			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
 
 			// The Pokemon of the Day
 			if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
@@ -2565,6 +2575,7 @@ export class RandomGen8Teams {
 					typeWeaknesses[typeName]++;
 				}
 			}
+			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
 
 			// Track what the team has
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;

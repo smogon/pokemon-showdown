@@ -99,4 +99,17 @@ describe('Disguise', function () {
 		battle.makeChoices();
 		assert(battle.log.every(line => !line.startsWith('|-crit')));
 	});
+
+	it(`should not work while Transformed`, function () {
+		battle = common.createBattle([[
+			{species: 'Mimikyu', ability: 'disguise', moves: ['transform']},
+		], [
+			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk', 'aerialace']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move aerialace');
+		const transformedMimikyu = battle.p1.active[0];
+		assert.species(transformedMimikyu, 'Mimikyu', `Transformed Mimikyu should not have changed to Mimikyu-busted after taking damage`);
+		assert.false.fullHP(transformedMimikyu);
+	});
 });

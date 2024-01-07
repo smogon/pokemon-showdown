@@ -169,8 +169,8 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	}
 	if (!formatData || battle.rated < eloFloor) return;
 	checkRollover();
-	for (const p of players) {
-		const team = await battle.getTeam(p);
+	for (const p of battle.players) {
+		const team = await battle.getPlayerTeam(p);
 		if (!team) return; // ???
 		const mons = team.map(f => getSpeciesName(f, format));
 		for (const mon of mons) {
