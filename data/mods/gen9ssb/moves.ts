@@ -996,6 +996,42 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		contestType: "Clever",
 	},
 
+	// Loethalion
+	darkmooncackle: {
+		accuracy: 100,
+		basePower: 30,
+		basePowerCallback(pokemon, target, move) {
+			const bp = move.basePower + 20 * pokemon.positiveBoosts();
+			this.debug('BP: ' + bp);
+			return bp;
+		},
+		category: "Special",
+		desc: "Power is equal to 30+(X*20), where X is the user's total stat stage changes that are greater than 0. Has a 100% chance to raise the user's Special Attack by 1 stage.",
+		shortDesc: "+20 bp for each user's stat boost. 100% chance +1 SpA.",
+		name: "Darkmoon Cackle",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Bulk Up', source);
+			this.add('-anim', source, 'Cosmic Power', source);
+			this.add('-anim', source, 'Moonblast', target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spa: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Lumari
 	mysticalbonfire: {
 		accuracy: 100,

@@ -173,7 +173,7 @@ export const ssbSets: SSBSets = {
 		species: 'Stakataka', ability: 'Anchor Arms', item: 'Life Orb', gender: 'M',
 		moves: ['Trick Room', 'Hammer Arm', 'Wave Crash'],
 		signatureMove: 'Anchor Toss',
-		evs: {hp: 252, atk: 252, def: 4}, ivs: {atk: 0}, nature: 'Brave', teraType: 'Water', shiny: true,
+		evs: {hp: 252, atk: 252, def: 4}, nature: 'Brave', teraType: 'Water', shiny: true,
 	},
 	Kennedy: {
 		species: 'Cinderace', ability: 'Anfield', item: 'Berserk Gene', gender: 'M',
@@ -198,6 +198,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Sucker Punch', 'Fire Lash', 'Play Rough'],
 		signatureMove: 'Attack of Opportunity',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', shiny: 1024,
+	},
+	Loethalion: {
+		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
+		moves: [['Esper Wing', 'Lumina Crash', 'Psychic Noise'], ['Agility', 'Calm Mind'], ['Draining Kiss', 'Matcha Gotcha']],
+		signatureMove: 'Darkmoon Cackle',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
 	Lumari: {
 		species: 'Ponyta-Galar', ability: 'Pyrotechnic', item: 'Eviolite', gender: 'F',

@@ -439,6 +439,40 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Krytocon')}|D:`);
 		},
 	},
+	loethalion: {
+		noCopy: true,
+		onStart(pokemon) {
+			const foe = enemyStaff(pokemon);
+			if (foe === 'WigglyTree') {
+				this.add(`c:|${getName('Loethalion')}|No, I'm not drawing Dialga on a bike again`);
+			} else if (foe === 'Swiffix') {
+				this.add(`c:|${getName('Loethalion')}|Oh hi Stinky`);
+			} else if (foe === 'Mex') {
+				this.add(`c:|${getName('Loethalion')}|In spain without the A`);
+			} else if (foe === 'Billo') {
+				this.add(`c:|${getName('Loethalion')}|So your saying I can't ban myself?`);
+			} else if (foe === 'Clefable') {
+				this.add(`c:|${getName('Loethalion')}|But what if I hack a tiny bit?`);
+			} else if (foe === 'Lunell') {
+				this.add(`c:|${getName('Loethalion')}|We bean posting?`);
+			} else if (foe === 'Ciran') {
+				this.add(`c:|${getName('Loethalion')}|So I have another great piplup drawing idea :>`);
+			} else {
+				this.add(`c:|${getName('Loethalion')}| ...from Zero`);
+			}
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (enemyStaff(source) === 'Swiffix') {
+				this.add(`c:|${getName('Loethalion')}|It's still pfp...`);
+			}
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c:|${getName('Loethalion')}| I don't remember why I'm even here __walks out the room__`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Loethalion')}|__Wheezing laugh__`);
+		},
+	},
 	lumari: {
 		noCopy: true,
 		// quotes added later

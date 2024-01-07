@@ -27,6 +27,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 		itemUser: ["Mr. Mime"],
 		desc: "If held by a Mr. Mime with Fleur Cannon, it can use Bibbidi-Bobbidi-Rands.",
 	},
+	// Loethalion
+	gardevoirite: {
+		inherit: true,
+		itemUser: ["Ralts"],
+		megaEvolves: "Ralts",
+		desc: "If held by a Ralts, this item allows it to Mega Evolve in battle.",
+	},
 	// Peary
 	pearyumz: {
 		name: "Pearyum Z",
