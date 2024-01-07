@@ -360,7 +360,7 @@ export class Pokemon {
 				move: move.name,
 				id: move.id,
 				pp: (this.set.startingPPs && this.set.startingPPs[index]) ? this.set.startingPPs[index] : basepp,
-				maxpp: basepp,
+				maxpp: (this.set.startingMaxPPs && this.set.startingMaxPPs[index]) ? this.set.startingMaxPPs[index] : basepp,
 				target: move.target,
 				disabled: false,
 				disabledSource: "",

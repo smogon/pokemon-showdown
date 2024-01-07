@@ -109,6 +109,7 @@ export interface PokemonSet {
 	 */
 	teraType?: string;
 	startingPPs?: number[];
+	startingMaxPPs?: number[];
 	startingHP?: number;
 	status?: string;
 }
