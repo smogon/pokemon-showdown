@@ -3616,7 +3616,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	terrakion: {
-		tier: "PUBL",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		natDexTier: "RUBL",
 	},
@@ -4701,7 +4701,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	inteleon: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
