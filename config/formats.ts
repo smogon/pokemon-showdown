@@ -491,12 +491,12 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Monothreat Ground",
-		desc: `Monotype where every Pok&eacute;mon is required to be part Ground.`,
+		name: "[Gen 9] Monothreat Fighting",
+		desc: `Monotype where every Pok&eacute;mon is required to be part Fighting.`,
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Ground'],
+		ruleset: ['[Gen 9] Monotype', 'Force Monotype = Fighting'],
 	},
 	{
 		name: "[Gen 9] Monotype CAP",
