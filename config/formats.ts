@@ -422,7 +422,7 @@ export const Formats: FormatList = [
 		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Basculin-White-Striped', 'Bisharp', 'Chansey', 'Dipplin', 'Duraludon', 'Haunter', 'Magneton', 'Porygon2', 'Primeape', 'Rhydon',
-			'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Ursaring', 'Arena Trap', 'Magnet Pull', 'Shadow Tag', 'Baton Pass',
+			'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Ursaring', 'Vulpix-Base', 'Arena Trap', 'Magnet Pull', 'Shadow Tag', 'Baton Pass',
 		],
 	},
 	{
