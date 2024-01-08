@@ -845,7 +845,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		} else if (winnerid === p2id) {
 			p1score = 0;
 		}
-		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
+		Chat.runHandlers('onBattleEnd', this, winnerid, Object.keys(this.playerTable) as ID[]);
 		if (this.room.rated && !this.options.isSubBattle) {
 			this.room.rated = 0;
 			const winner = Users.get(winnerid);
