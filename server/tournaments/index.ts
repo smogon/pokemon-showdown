@@ -1087,13 +1087,16 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			challengeType: ready.challengeType,
 			tour: this,
 			parentid: this.roomid,
+			isSubBattle: true,
 		});
-		if (!room?.game) throw new Error(`Failed to create battle in ${room}`);
 
 		challenge.from.pendingChallenge = null;
 		player.pendingChallenge = null;
 		from.sendTo(this.room, '|tournament|update|{"challenging":null}');
 		user.sendTo(this.room, '|tournament|update|{"challenged":null}');
+
+		// server lockdown
+		if (!room) return;
 
 		challenge.from.inProgressMatch = {to: player, room};
 		this.room.add(`|tournament|battlestart|${from.name}|${user.name}|${room.roomid}`).update();

@@ -153,6 +153,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 			user.games.delete(this.game.roomid);
 			user.updateSearch();
 		}
+		delete this.game.playerTable[this.id];
 		this.id = '';
 		this.knownActive = false;
 		this.active = false;
@@ -823,7 +824,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			if (!this.ended) {
 				this.ended = true;
 				void this.onEnd(this.logData!.winner);
-				this.clearPlayers();
 			}
 			this.checkActive();
 			break;
@@ -845,7 +845,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		} else if (winnerid === p2id) {
 			p1score = 0;
 		}
-		Chat.runHandlers('onBattleEnd', this, winnerid, Object.keys(this.playerTable) as ID[]);
+		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
 		if (this.room.rated && !this.options.isSubBattle) {
 			this.room.rated = 0;
 			const winner = Users.get(winnerid);
@@ -872,12 +872,15 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		// @ts-ignore - Tournaments aren't TS'd yet
 		this.room.parent?.game?.onBattleWin?.(this.room, winnerid);
-		// If the room's replay was hidden, disable users from joining after the game is over
+		// If the room's replay was hidden, don't let users join after the game is over
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
 			this.room.setPrivate('hidden');
 		}
 		this.room.update();
+
+		// so it stops showing up in the users' games list
+		for (const player of this.players) player.unlinkUser();
 	}
 	async logBattle(
 		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
@@ -1240,12 +1243,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		);
 	}
 
-	clearPlayers() {
-		for (const player of this.players) {
-			player.unlinkUser();
-		}
-	}
-
 	override destroy() {
 		for (const player of this.players) {
 			player.destroy();
@@ -1371,7 +1368,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	winThreshold: number;
 	options: Omit<RoomBattleOptions, 'players'> & {players: null};
 	ties = 0;
-	games: {room: Room, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
+	games: {room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
 	playerNum = 0;
 	/** null = tie, undefined = not ended */
 	winner: BestOfPlayer | null | undefined = undefined;
@@ -1458,6 +1455,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			throw new Error(`Failed to get options for ${this.roomid}`);
 		}
 		const battleRoom = Rooms.createBattle(options);
+		// shouldn't happen even in lockdown
 		if (!battleRoom) throw new Error("Failed to create battle for " + this.title);
 		battleRoom.setParent(this.room);
 		this.games.push({
@@ -1700,9 +1698,10 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		}
 
 		const {rated, room} = this.games[this.games.length - 1];
-		const battle = room.battle!;
+		const battle = room.battle;
+		if (!battle) throw new Error(`Room ${room.roomid} has no battle???`);
 		if (rated) {
-			(room as GameRoom).rated = rated; // just in case
+			room.rated = rated; // just in case
 			const winnerUser = winner?.getUser();
 			if (winnerUser && !winnerUser.registered) {
 				this.room.sendUser(winnerUser, '|askreg|' + winner);
