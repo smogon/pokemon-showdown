@@ -151,7 +151,7 @@ describe('Matchmaker', function () {
 				players: [{user: this.p1, team: this.s1.team}, {user: this.p2, team: this.s2.team}],
 				rated: 1000,
 			});
-			assert.equal(room, undefined);
+			assert.equal(room, null);
 		});
 	});
 });
