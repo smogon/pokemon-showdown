@@ -388,7 +388,14 @@ export const Conditions: {[k: string]: ConditionData} = {
 			target.removeVolatile('Protect');
 			target.removeVolatile('Endure');
 
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
+			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
+
 			this.actions.trySpreadMoveHit([target], data.source, hitMove, true);
 			if (data.source.isActive && data.source.hasItem('lifeorb') && this.gen >= 5) {
 				this.singleEvent('AfterMoveSecondarySelf', data.source.getItem(), data.source.itemState, data.source, target, data.source.getItem());
