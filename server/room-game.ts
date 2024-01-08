@@ -56,6 +56,7 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 			user.games.delete(this.game.roomid);
 			user.updateSearch();
 		}
+		delete this.game.playerTable[this.id];
 		this.id = '';
 	}
 	destroy() {
