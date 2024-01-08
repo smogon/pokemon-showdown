@@ -2698,5 +2698,5 @@ export const commands: Chat.ChatCommands = {
 };
 
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/trivia add ', '/trivia submit ');
+	Chat.multiLinePattern.register('/trivia add ', '/trivia submit ', '/trivia move ');
 });
