@@ -202,11 +202,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-message', `aegii currently has a ${setType} oriented set.`);
 		},
 		onModifyMove(move, attacker, defender) {
-			move.stab = 2;
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield' && move.id !== 'reset') return;
 			const targetForme = (move.id === 'kingsshield' || move.id === 'reset' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (source.hasType(move.type)) {
+				return 2;
+			}
 		},
 		name: "Set the Stage",
 		gen: 8,
@@ -1004,8 +1008,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	deceiver: {
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus of 2 instead of 1.5. If this Pokemon is at full HP, it survives one hit with at least 1 HP.",
 		shortDesc: "Adaptability + Sturdy.",
-		onModifyMove(move) {
-			move.stab = 2;
+		onModifySTAB(stab, source, target, move) {
+			if (source.hasType(move.type)) {
+				return 2;
+			}
 		},
 		onTryHit(pokemon, target, move) {
 			if (move.ohko) {
@@ -1559,8 +1565,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Randomly changes this Pokemon's type at the end of every turn to the type of one of its moves; same-type attack bonus (STAB) is 2 instead of 1.5.",
 		shortDesc: "Adaptability + Randomly changes to the type of one of its moves every turn.",
 		name: "Wild Magic Surge",
-		onModifyMove(move) {
-			move.stab = 2;
+		onModifySTAB(stab, source, target, move) {
+			if (source.hasType(move.type)) {
+				return 2;
+			}
 		},
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;

@@ -331,7 +331,6 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	selfDropped?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	spreadHit?: boolean;
-	stab?: number;
 	statusRoll?: string;
 	totalDamage?: number | false;
 	typeChangerBoosted?: Effect;
@@ -466,8 +465,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly forceSTAB: boolean;
 	/** True if it can't be copied with Sketch. */
 	readonly noSketch: boolean;
-	/** STAB multiplier (can be modified by other effects) (default 1.5). */
-	readonly stab?: number;
 
 	readonly volatileStatus?: ID;
 
@@ -511,7 +508,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.spreadHit = data.spreadHit || false;
 		this.forceSTAB = !!data.forceSTAB;
 		this.noSketch = !!data.noSketch;
-		this.stab = data.stab || undefined;
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (this.category !== 'Status' && !this.maxMove && this.id !== 'struggle') {
