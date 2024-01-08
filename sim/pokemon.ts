@@ -1219,12 +1219,12 @@ export class Pokemon {
 					pp: move.pp
 				};
 			}),
-			baseAbility: this.baseAbility,
+			baseAbility: this.battle.dex.abilities.getByID(this.baseAbility).name,
 			item: this.item,
 			pokeball: this.pokeball
 		};
 		if (this.battle.gen > 6) {
-			entry.ability = this.ability;
+			entry.ability = this.battle.dex.abilities.getByID(this.ability).name;
 		}
 		if (this.battle.gen >= 9) {
 			entry.commanding = !!this.volatiles["commanding"] && !this.fainted;
