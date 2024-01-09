@@ -240,6 +240,13 @@ export class Connection {
 	lastRequestedPage: string | null;
 	lastActiveTime: number;
 	openPages: null | Set<string>;
+	/**
+	 * Used to distinguish Connection from User.
+	 *
+	 * Makes it easy to do something like
+	 * `for (const conn of (userOrConn.connections || [userOrConn]))`
+	 */
+	readonly connections = null;
 	constructor(
 		id: string,
 		worker: ProcessManager.StreamWorker,
