@@ -1087,7 +1087,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			challengeType: ready.challengeType,
 			tour: this,
 			parentid: this.roomid,
-			isSubBattle: true,
 		});
 
 		challenge.from.pendingChallenge = null;

@@ -490,8 +490,11 @@ export interface RoomBattleOptions {
 	roomid?: RoomID;
 	/** For battles restored after a restart */
 	delayedTimer?: boolean;
-	/** Best-of stuff */
-	isSubBattle?: boolean;
+	/**
+	 * If false and the format is a best-of format, creates a best-of game
+	 * rather than a battle.
+	 */
+	isBestOfSubBattle?: boolean;
 }
 
 export class RoomBattle extends RoomGame<RoomBattlePlayer> {
@@ -841,7 +844,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			p1score = 0;
 		}
 		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
-		if (this.room.rated && !this.options.isSubBattle) {
+		if (this.room.rated && !this.options.isBestOfSubBattle) {
 			this.room.rated = 0;
 			const winner = Users.get(winnerid);
 			if (winner && !winner.registered) {
@@ -852,7 +855,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
 		} else if (Config.logchallenges) {
 			void this.logBattle(p1score);
-		} else if (!this.options.isSubBattle) {
+		} else if (!this.options.isBestOfSubBattle) {
 			this.logData = null;
 		}
 		// If a replay was saved at any point or we were configured to autosavereplays,
@@ -1385,7 +1388,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		}
 		this.options = {
 			...options,
-			isSubBattle: true,
+			isBestOfSubBattle: true,
 			allowRenames: false,
 			players: null,
 		};

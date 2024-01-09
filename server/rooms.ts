@@ -2163,7 +2163,7 @@ export const Rooms = {
 
 		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
 
-		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isSubBattle) {
+		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isBestOfSubBattle) {
 			for (const user of players) {
 				user.popup(`The server will be restarting soon. Best-of-${isBestOf} battles cannot be started at this time.`);
 			}
@@ -2171,7 +2171,7 @@ export const Rooms = {
 		}
 
 		// gotta allow new bo3 child battles to start
-		if (Rooms.global.lockdown === true && !options.isSubBattle) {
+		if (Rooms.global.lockdown === true && !options.isBestOfSubBattle) {
 			for (const user of players) {
 				user.popup("The server is restarting. Battles will be available again in a few minutes.");
 			}
@@ -2211,7 +2211,7 @@ export const Rooms = {
 		} else if (format.gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
-		} else if (isBestOf && !options.isSubBattle) {
+		} else if (isBestOf && !options.isBestOfSubBattle) {
 			roomTitle = `${p1name} vs. ${p2name}`;
 			roomid ||= `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
@@ -2222,7 +2222,7 @@ export const Rooms = {
 		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
-		if (options.isSubBattle || !isBestOf) {
+		if (options.isBestOfSubBattle || !isBestOf) {
 			const battle = new Rooms.RoomBattle(room, options);
 			room.game = battle;
 			battle.checkPrivacySettings(options);
