@@ -683,7 +683,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return false;
 		}
 
-		this.updatePlayer(this[slot], user, playerOpts);
+		this.setPlayerUser(this[slot], user, playerOpts);
 		if (validSlots.length - 1 <= 0) {
 			// all players have joined, start the battle
 			// onCreateBattleRoom crashes if some users are unavailable at start of battle
@@ -1028,14 +1028,14 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	forfeitPlayer(player: RoomBattlePlayer, message = '') {
-		if (this.ended || !this.started) return false;
+		if (this.ended || !this.started || player.eliminated) return false;
 
+		player.eliminated = true;
 		this.room.add(`|-message|${player.name}${message || ' forfeited.'}`);
 		this.endType = 'forfeit';
 		if (this.playerCap > 2) {
 			player.sendRoom(`|request|null`);
-			// multi battles, so they can't spam forfeit
-			this.updatePlayer(player, null);
+			this.setPlayerUser(player, null);
 		}
 		void this.stream.write(`>forcelose ${player.slot}`);
 		return true;
@@ -1135,11 +1135,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	override updatePlayer(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
+	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
 		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
 			this.room.auth.set(player.id, '+');
 		}
-		super.updatePlayer(player, user);
+		super.setPlayerUser(player, user);
 
 		player.invite = '';
 		const slot = player.slot;
