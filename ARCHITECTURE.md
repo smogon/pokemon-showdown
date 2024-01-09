@@ -38,6 +38,6 @@ It was written long ago, so instead of a single JS entry point, it includes a lo
 Login server
 ------------
 
-The client’s login server, which handles logins and most database interaction, is written in PHP, with a rewrite to TypeScript in progress. The backend is split between a MySQL InnoDB database and a Percona database, with a migration to Postgres planned.
+The client’s login server, which handles logins and most database interaction, is written in TypeScript in progress. The backend is split between a MySQL InnoDB database (for most things) and a Postgres database (for Replays).
 
 Its entry point is [server.ts](https://github.com/smogon/pokemon-showdown-loginserver/blob/master/src/server.ts).
