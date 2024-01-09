@@ -1388,7 +1388,7 @@ export class GlobalRoomState {
 
 	rejoinGames(user: User) {
 		for (const room of Rooms.rooms.values()) {
-			const player = room.game?.playerTable[user.id];
+			const player = room.game && !room.game.ended && room.game.playerTable[user.id];
 			if (!player) continue;
 
 			user.games.add(room.roomid);
