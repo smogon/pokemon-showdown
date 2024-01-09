@@ -35,6 +35,9 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	 * be in the user's game list.
 	 *
 	 * We intentionally don't hold a direct reference to the user.
+	 *
+	 * If modifying: remember to sync `this.game.playerTable` and
+	 * `this.getUser().games`.
 	 */
 	id: ID;
 	constructor(user: User | string | null, game: GameClass, num = 0) {
@@ -49,25 +52,13 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 			user.updateSearch();
 		}
 	}
-	unlinkUser() {
-		if (!this.id) return;
-		const user = Users.getExact(this.id);
-		if (user && !this.game.isSubGame) {
-			user.games.delete(this.game.roomid);
-			user.updateSearch();
-		}
-		delete this.game.playerTable[this.id];
-		this.id = '';
-	}
-	destroy() {
-		this.unlinkUser();
-	}
+	destroy() {}
 
 	toString() {
 		return this.id;
 	}
 	getUser() {
-		return (this.id && Users.getExact(this.id)) || null;
+		return this.id ? Users.getExact(this.id) : null;
 	}
 	send(data: string) {
 		this.getUser()?.send(data);
@@ -96,13 +87,17 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	/**
 	 * userid:player table.
 	 *
-	 * Does not contain userless players: use playerList for the full list.
+	 * Does not contain userless players: use this.players for the full list.
+	 *
+	 * Not a source of truth. Should be kept in sync with
+	 * `Object.fromEntries(this.players.filter(p => p.id).map(p => [p.id, p]))`
 	 */
 	playerTable: {[userid: string]: PlayerClass} = Object.create(null);
 	players: PlayerClass[] = [];
 	playerCount = 0;
 	playerCap = 0;
-	ended = false;
+	/** should only be set by setEnded */
+	readonly ended: boolean = false;
 	/** Does `/guess` or `/choose` require the user to be able to talk? */
 	checkChat = false;
 	/**
@@ -123,6 +118,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	}
 
 	destroy() {
+		this.setEnded();
 		if (this.isSubGame) {
 			this.room.subGame = null;
 		} else {
@@ -157,17 +153,33 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 
 	updatePlayer(player: PlayerClass, userOrName: User | string | null) {
 		if (!this.allowRenames) return;
+		this.setPlayerUser(player, userOrName);
+	}
+	setPlayerUser(player: PlayerClass, userOrName: User | string | null) {
+		if (this.ended) return;
+		if (player.id === toID(userOrName)) return;
 		if (player.id) {
 			delete this.playerTable[player.id];
+			const user = Users.getExact(player.id);
+			if (user) {
+				user.games.delete(this.roomid);
+				user.updateSearch();
+			}
 		}
 		if (userOrName) {
-			const user = typeof userOrName === 'string' ? {name: userOrName, id: toID(userOrName)} : userOrName;
-			player.id = user.id;
-			player.name = user.name;
+			const {name, id} = typeof userOrName === 'string' ? {name: userOrName, id: toID(userOrName)} : userOrName;
+			player.id = id;
+			player.name = name;
 			this.playerTable[player.id] = player;
-			this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
+			this.room.auth.set(id, Users.PLAYER_SYMBOL);
+
+			const user = typeof userOrName === 'string' ? Users.getExact(id) : userOrName;
+			if (user) {
+				user.games.add(this.roomid);
+				user.updateSearch();
+			}
 		} else {
-			player.unlinkUser();
+			player.id = '';
 		}
 	}
 
@@ -180,10 +192,10 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 			player = this.playerTable[player.id];
 			if (!player) throw new Error("Player not found");
 		}
-		if (!this.allowRenames) return false;
+
+		this.setPlayerUser(player, null);
 		const playerIndex = this.players.indexOf(player);
 		if (playerIndex < 0) return false;
-		if (player.id) delete this.playerTable[player.id];
 		this.players.splice(playerIndex, 1);
 		player.destroy();
 		this.playerCount--;
@@ -198,6 +210,19 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 			this.playerTable[user.id].id = user.id;
 			this.playerTable[user.id].name = user.name;
 			delete this.playerTable[oldUserid];
+		}
+	}
+
+	setEnded() {
+		if (this.ended) return;
+		(this.ended as boolean) = true;
+		if (this.isSubGame) return;
+		for (const player of this.players) {
+			const user = player.getUser();
+			if (user) {
+				user.games.delete(this.roomid);
+				user.updateSearch();
+			}
 		}
 	}
 

@@ -1347,7 +1347,7 @@ export class GlobalRoomState {
 			room.battle.timer.stop();
 			const b = await this.serializeBattleRoom(room);
 			if (!b) continue;
-			await out.write(JSON.stringify(b) + '\n');
+			await out.writeLine(JSON.stringify(b));
 			count++;
 		}
 		await out.writeEnd();
@@ -1508,7 +1508,10 @@ export class GlobalRoomState {
 		return Config.rankList;
 	}
 
-	getBattles(/** formatfilter, elofilter, usernamefilter */ filter: string) {
+	/**
+	 * @param filter formatfilter, elofilter, usernamefilter
+	 */
+	getBattles(filter: string) {
 		const rooms: GameRoom[] = [];
 		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;

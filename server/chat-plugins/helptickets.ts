@@ -479,9 +479,8 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		this.room.game = null;
 		// @ts-ignore
 		this.room = null;
-		for (const player of this.players) {
-			player.destroy();
-		}
+		this.setEnded();
+		for (const player of this.players) player.destroy();
 		// @ts-ignore
 		this.players = null;
 		// @ts-ignore

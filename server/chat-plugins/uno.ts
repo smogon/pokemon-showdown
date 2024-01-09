@@ -569,6 +569,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		this.sendToRoom(`|uhtmlchange|uno-${this.gameNumber}|<div class="infobox">The game of UNO has ended.</div>`, true);
 
 		// deallocate games for each player.
+		this.setEnded();
 		for (const i in this.playerTable) {
 			this.playerTable[i].destroy();
 		}
