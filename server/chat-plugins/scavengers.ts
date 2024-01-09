@@ -319,6 +319,7 @@ class ScavengerHuntDatabase {
 	}
 }
 export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
+	override readonly gameid = 'scavengerhunt' as ID;
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
@@ -330,7 +331,6 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	mods: {[k: string]: ModEvent[]};
 	staffHostId: string;
 	staffHostName: string;
-	gameid: ID;
 	scavGame: true;
 	timerEnd: number | null;
 	timer: NodeJS.Timer | null;
@@ -372,7 +372,6 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		this.staffHostName = staffHost.name;
 		this.cacheUserIps(staffHost); // store it in case of host subbing
 
-		this.gameid = 'scavengerhunt' as ID;
 		this.title = 'Scavenger Hunt';
 		this.scavGame = true;
 

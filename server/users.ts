@@ -339,9 +339,16 @@ export interface UserSettings {
 export class User extends Chat.MessageContext {
 	/** In addition to needing it to implement MessageContext, this is also nice for compatibility with Connection. */
 	readonly user: User;
+	/**
+	 * Not a source of truth - should always be in sync with
+	 * `[...Rooms.rooms.values()].filter(room => this.id in room.users)`
+	 */
 	readonly inRooms: Set<RoomID>;
 	/**
-	 * Set of room IDs
+	 * Not a source of truth - should always in sync with
+	 * `[...Rooms.rooms.values()].filter(`
+	 * `  room => room.game && this.id in room.game.playerTable && !room.game.ended`
+	 * `)`
 	 */
 	readonly games: Set<RoomID>;
 	mmrCache: {[format: string]: number};
