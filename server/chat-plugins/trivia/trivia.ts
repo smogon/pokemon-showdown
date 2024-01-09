@@ -364,7 +364,7 @@ class TriviaPlayer extends Rooms.RoomGamePlayer<Trivia> {
 }
 
 export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
-	gameid: ID;
+	override readonly gameid = 'trivia' as ID;
 	kickedUsers: Set<string>;
 	canLateJoin: boolean;
 	game: TriviaGame;
@@ -383,7 +383,6 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		isRandomMode = false, isSubGame = false, isRandomCategory = false,
 	) {
 		super(room, isSubGame);
-		this.gameid = 'trivia' as ID;
 		this.title = 'Trivia';
 		this.allowRenames = true;
 		this.playerCap = Number.MAX_SAFE_INTEGER;
@@ -1200,6 +1199,7 @@ export class TriumvirateModeTrivia extends Trivia {
  * which is a game of First mode trivia that ends after a specified interval.
  */
 export class Mastermind extends Rooms.SimpleRoomGame {
+	override readonly gameid = 'mastermind' as ID;
 	/** userid:score Map */
 	leaderboard: Map<ID, {score: number, hasLeft?: boolean}>;
 	phase: string;
@@ -1210,7 +1210,6 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 		super(room);
 
 		this.leaderboard = new Map();
-		this.gameid = 'mastermind' as ID;
 		this.title = 'Mastermind';
 		this.allowRenames = true;
 		this.playerCap = Number.MAX_SAFE_INTEGER;

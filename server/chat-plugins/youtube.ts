@@ -364,6 +364,7 @@ export const Twitch = new class {
 };
 
 export class GroupWatch extends Rooms.SimpleRoomGame {
+	override readonly gameid = 'groupwatch' as ID;
 	url: string;
 	info: VideoData;
 	started: number | null = null;
@@ -437,6 +438,7 @@ export class GroupWatch extends Rooms.SimpleRoomGame {
 }
 
 export class TwitchStream extends Rooms.SimpleRoomGame {
+	override readonly gameid = 'twitchstream' as ID;
 	started = false;
 	data: TwitchChannel;
 	constructor(room: Room, data: TwitchChannel) {

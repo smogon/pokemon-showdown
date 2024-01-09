@@ -85,6 +85,7 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer<Tournament> {
 }
 
 export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
+	override readonly gameid = 'tournament' as ID;
 	readonly isTournament: true;
 	readonly completedMatches: Set<RoomID>;
 	/** Format ID not including custom rules */
@@ -117,13 +118,11 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	autoStartTimeout: number;
 	autoStartTimer: NodeJS.Timeout | null;
 
-	isEnded: boolean;
 	constructor(
 		room: ChatRoom, format: Format, generator: Generator,
 		playerCap: string | undefined, isRated: boolean, name: string | undefined
 	) {
 		super(room);
-		this.gameid = 'tournament' as ID;
 		const formatId = toID(format);
 
 		this.title = format.name + ' tournament';
@@ -164,8 +163,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.autoStartTimeout = Infinity;
 		this.autoStartTimer = null;
 
-		this.isEnded = false;
-
 		room.add(`|tournament|create|${this.baseFormat}|${generator.name}|${this.playerCap}${this.name === this.baseFormat ? `` : `|${this.name}`}`);
 		const update: {
 			format: string, teambuilderFormat?: string, generator: string,
@@ -191,10 +188,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			const room = Rooms.get(roomid) as GameRoom;
 			if (room) room.tour = null;
 		}
-		for (const player of this.players) {
-			player.unlinkUser();
-		}
-		this.isEnded = true;
+		this.setEnded();
 		this.room.game = null;
 	}
 	getRemainingPlayers() {
@@ -292,7 +286,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 
 	updateFor(targetUser: User, connection?: Connection | User) {
 		if (!connection) connection = targetUser;
-		if (this.isEnded) return;
+		if (this.ended) return;
 
 		if ((!this.bracketUpdateTimer && this.isBracketInvalidated) ||
 			(this.isTournamentStarted && this.isAvailableMatchesInvalidated)) {
@@ -353,7 +347,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}
 
 	update() {
-		if (this.isEnded) return;
+		if (this.ended) return;
 		if (this.isBracketInvalidated) {
 			if (Date.now() < this.lastBracketUpdate + BRACKET_MINIMUM_UPDATE_INTERVAL) {
 				if (this.bracketUpdateTimer) clearTimeout(this.bracketUpdateTimer);
@@ -474,20 +468,13 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}
 
 	removeUser(userid: ID, output?: Chat.CommandContext) {
-		if (!(userid in this.playerTable)) {
+		const player = this.playerTable[userid];
+		if (!player) {
 			if (output) output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		for (const player of this.players) {
-			if (player.id === userid) {
-				this.players.splice(this.players.indexOf(player), 1);
-				break;
-			}
-		}
-		this.playerTable[userid].destroy();
-		delete this.playerTable[userid];
-		this.playerCount--;
+		this.removePlayer(player);
 		const user = Users.get(userid);
 		this.room.add(`|tournament|leave|${user ? user.name : userid}`);
 		if (user) user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
@@ -911,7 +898,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 				player.autoDisqualifyWarned = false;
 			}
 		}
-		if (!this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
+		if (!this.ended) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
 
 		if (output) output.sendReply("All available matches were checked for automatic disqualification.");
 	}
@@ -1134,7 +1121,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}
 	onBattleJoin(room: GameRoom, user: User) {
 		if (!room.p1 || !room.p2) return;
-		if (this.allowScouting || this.isEnded || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) {
+		if (this.allowScouting || this.ended || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) {
 			return;
 		}
 		if (user.can('makeroom')) return;
