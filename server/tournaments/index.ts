@@ -85,6 +85,7 @@ export class TournamentPlayer extends Rooms.RoomGamePlayer<Tournament> {
 }
 
 export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
+	override readonly gameid = 'tournament' as ID;
 	readonly isTournament: true;
 	readonly completedMatches: Set<RoomID>;
 	/** Format ID not including custom rules */
@@ -122,7 +123,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		playerCap: string | undefined, isRated: boolean, name: string | undefined
 	) {
 		super(room);
-		this.gameid = 'tournament' as ID;
 		const formatId = toID(format);
 
 		this.title = format.name + ' tournament';

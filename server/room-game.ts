@@ -52,7 +52,9 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 			user.updateSearch();
 		}
 	}
-	destroy() {}
+	destroy() {
+		(this.game as any) = null;
+	}
 
 	toString() {
 		return this.id;
@@ -74,13 +76,13 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
  * If you don't want to define your own player class, you should extend SimpleRoomGame.
  */
 export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlayer> {
+	abstract gameid: ID;
 	roomid: RoomID;
 	/**
 	 * The room this roomgame is in. Rooms can have two RoomGames at a time,
 	 * which are available as `this.room.game === this` and `this.room.subGame === this`.
 	 */
 	room: Room;
-	gameid = 'game' as ID;
 	title = 'Game';
 	allowRenames = false;
 	isSubGame: boolean;
@@ -372,7 +374,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
  *
  * A RoomGame without a custom player class. Gives a default implementation for makePlayer.
  */
-export class SimpleRoomGame extends RoomGame<RoomGamePlayer> {
+export abstract class SimpleRoomGame extends RoomGame<RoomGamePlayer> {
 	makePlayer(user: User | string | null, ...rest: any[]): RoomGamePlayer {
 		const num = this.players.length ? this.players[this.players.length - 1].num : 1;
 		return new RoomGamePlayer(user, this, num);

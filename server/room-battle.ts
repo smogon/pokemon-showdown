@@ -1357,6 +1357,7 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 }
 
 export class BestOfGame extends RoomGame<BestOfPlayer> {
+	override readonly gameid = 'bestof' as ID;
 	override allowRenames = false;
 	bestOf: number;
 	format: Format;

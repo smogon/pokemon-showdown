@@ -231,6 +231,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 }
 
 class Mafia extends Rooms.RoomGame<MafiaPlayer> {
+	override readonly gameid = 'mafia' as ID;
 	started: boolean;
 	theme: MafiaDataTheme | null;
 	hostid: ID;
@@ -275,7 +276,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	constructor(room: ChatRoom, host: User) {
 		super(room);
 
-		this.gameid = 'mafia' as ID;
 		this.title = 'Mafia';
 		this.playerCap = 20;
 		this.allowRenames = false;
