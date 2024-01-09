@@ -24,7 +24,7 @@ Its entry point is [server/index.ts](./server/index.ts), which launches several 
 
 - [server/chat.ts](./server/chat.ts) sets up `Chat`, which handles chat commands and messages coming in from users (all client-to-server commands are routed through there)
 
-`Rooms` also includes support for battle rooms, which is where the game simulation itself is done. Game simulation code is in [sim/](./sim/).
+`Rooms` also includes support for battle rooms, which is where the server connects to the game simulator itself. Game simulation code is in [sim/](./sim/).
 
 Client
 ------
