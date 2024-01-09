@@ -1358,8 +1358,8 @@ export class User extends Chat.MessageContext {
 		}
 		if (!connection.inRooms.has(room.roomid)) {
 			if (!this.inRooms.has(room.roomid)) {
-				this.inRooms.add(room.roomid);
 				room.onJoin(this, connection);
+				this.inRooms.add(room.roomid);
 			}
 			connection.joinRoom(room);
 			room.onConnect(this, connection);
