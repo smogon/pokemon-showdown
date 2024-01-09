@@ -353,7 +353,7 @@ export abstract class BasicRoom {
 	/**
 	 * Send a room message to a single user.
 	 */
-	sendUser(user: User | Connection, message: string) {
+	sendUser(user: Connection | User, message: string) {
 		user.sendTo(this, message);
 	}
 	/**

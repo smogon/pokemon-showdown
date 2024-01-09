@@ -158,13 +158,8 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 		this.knownActive = false;
 		this.active = false;
 	}
-	updateChannel(user: User | Connection) {
-		if (user instanceof Users.Connection) {
-			// "user" is actually a connection
-			Sockets.channelMove(user.worker, this.game.roomid, this.channelIndex, user.socketid);
-			return;
-		}
-		for (const connection of user.connections) {
+	updateChannel(connections: Connection | User) {
+		for (const connection of connections.connections || [connections]) {
 			Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
 		}
 	}
