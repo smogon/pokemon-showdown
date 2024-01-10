@@ -2006,7 +2006,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 			const ruleTable = this.ruleTable;
 			const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
-			const potentialMaxTeamSize = maxTeamSize * this.format.playerCount;
+			const numPlayers = (this.format.gameType === 'freeforall' || this.format.gameType === 'multi') ? 4 : 2;
+			const potentialMaxTeamSize = maxTeamSize * numPlayers;
 			if (potentialMaxTeamSize > 24) {
 				throw new Error(`Crazyhouse Rule cannot be added because a team can potentially have ${potentialMaxTeamSize} Pokemon on one team, which is more than the server limit of 24.`);
 			}
@@ -2736,5 +2737,225 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'ValidatorRule',
 		name: 'Useless Moves Clause',
 		// implemented in /mods/moderngen1/rulesets.ts
+	},
+	kantocup: {
+		effectType: 'ValidatorRule',
+		name: 'Kanto Cup',
+		desc: "Only allows Pok&eacute;mon from the kanto region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isKanto = (species.num >= 1 && species.num <= 151);
+			if (!isKanto && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Kanto`];
+			}
+		},
+	},
+	oldjohtocup: {
+		effectType: 'ValidatorRule',
+		name: 'Old Johto Cup',
+		desc: "Only allows Pok&eacute;mon from gen 2",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isTwo = (species.num >= 152 && species.num <= 251) && species.gen <= 2;
+			if (!isTwo && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Gen 2`];
+			}
+		},
+	},
+	johtocup: {
+		effectType: 'ValidatorRule',
+		name: 'Johto Cup',
+		desc: "Only allows Pok&eacute;mon from the Johto region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isJohto = (species.num >= 152 && species.num <= 251);
+			if (!isJohto && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Johto`];
+			}
+		},
+	},
+	oldhoenncup: {
+		effectType: 'ValidatorRule',
+		name: 'Old Hoenn Cup',
+		desc: "Only allows Pok&eacute;mon from gen 3",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isThree = (species.num >= 252 && species.num <= 386) && species.gen <= 3;
+			if (!isThree && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Gen 3`];
+			}
+		},
+	},
+	hoenncup: {
+		effectType: 'ValidatorRule',
+		name: 'Hoenn Cup',
+		desc: "Only allows Pok&eacute;mon from the Hoenn region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isHoenn = (species.num >= 252 && species.num <= 386);
+			if (!isHoenn && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Hoenn`];
+			}
+		},
+	},
+	oldsinnohcup: {
+		effectType: 'ValidatorRule',
+		name: 'Old Sinnoh Cup',
+		desc: "Only allows Pok&eacute;mon from gen 4",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isFour = (species.num >= 387 && species.num <= 493) && species.gen <= 4;
+			if (!isFour && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Gen 4`];
+			}
+		},
+	},
+	sinnohcup: {
+		effectType: 'ValidatorRule',
+		name: 'Sinnoh Cup',
+		desc: "Only allows Pok&eacute;mon from the Sinnoh region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isSinnoh = (species.num >= 387 && species.num <= 493);
+			if (!isSinnoh && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Sinnoh`];
+			}
+		},
+	},
+	oldunovacup: {
+		effectType: 'ValidatorRule',
+		name: 'Old Unova Cup',
+		desc: "Only allows Pok&eacute;mon from gen 5",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isFive = (species.num >= 494 && species.num <= 649) && species.gen <= 5;
+			if (!isFive && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Gen 5`];
+			}
+		},
+	},
+	unovacup: {
+		effectType: 'ValidatorRule',
+		name: 'Unova Cup',
+		desc: "Only allows Pok&eacute;mon from the Unova region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isUnova = (species.num >= 494 && species.num <= 649);
+			if (!isUnova && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Unova`];
+			}
+		},
+	},
+	oldkaloscup: {
+		effectType: 'ValidatorRule',
+		name: 'Old Kalos Cup',
+		desc: "Only allows Pok&eacute;mon from gen 6",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isSix = (species.num >= 650 && species.num <= 721) && species.gen <= 6;
+			if (!isSix && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Gen 6`];
+			}
+		},
+	},
+	kaloscup: {
+		effectType: 'ValidatorRule',
+		name: 'Kalos Cup',
+		desc: "Only allows Pok&eacute;mon from the Kalos region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isKalos = (species.num >= 650 && species.num <= 721);
+			if (!isKalos && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Kalos`];
+			}
+		},
+	},
+	oldalolacup: {
+		effectType: 'ValidatorRule',
+		name: 'Old Alola Cup',
+		desc: "Only allows Pok&eacute;mon from gen 7",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isSeven = (species.num >= 722 && species.num <= 807) && species.gen <= 7;
+			if (!isSeven && !this.ruleTable.has('+' + species.id)) {
+				if (species.num == 808 || species.num == 809){
+					return [`Meltan and Melmetal aren't in USUM`];
+				}
+				else { 
+					return [`${species.baseSpecies} or its base form are not from Gen 7`];
+				}
+			}
+		},
+	},
+	alolacup: {
+		effectType: 'ValidatorRule',
+		name: 'Alola Cup',
+		desc: "Only allows Pok&eacute;mon from the Alola region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isAlola = (species.num >= 722 && species.num <= 809);
+			if (!isAlola && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Alola`];
+			}
+		},
+	},
+	oldgalarcup: {
+		effectType: 'ValidatorRule',
+		name: 'Old Galar Cup',
+		desc: "Only allows Pok&eacute;mon from gen 8",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isEight = (species.num >= 810 && species.num <= 898) && species.gen <= 8;
+			if (!isEight && !this.ruleTable.has('+' + species.id)) {
+				if (species.num >= 899 || species.num <= 905){
+					return [`Pokémon from Legends Arceus aren't in SWSH`];
+				}
+				else {
+					return [`${species.baseSpecies} or its base form are not from Gen 8`];
+				}
+			}
+		},
+	},
+	galarcup: {
+		effectType: 'ValidatorRule',
+		name: 'Galar Cup',
+		desc: "Only allows Pok&eacute;mon from the Galar region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isGalar = (species.num >= 810 && species.num <= 898);
+			if (!isGalar && !this.ruleTable.has('+' + species.id)) {
+				if (species.num >= 899 || species.num <= 905){
+					return [`Pokémon from Legends Arceus have their own cup: the Hisui cup`];
+				}
+				else {
+					return [`${species.baseSpecies} or its base form are not from Galar`];
+				}
+			}
+		},
+	},
+	hisuicup: {
+		effectType: 'ValidatorRule',
+		name: 'Hisui Cup',
+		desc: "Only allows Pok&eacute;mon from the Hisui region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isHisui = (species.num >= 899 && species.num <= 905) || 
+			['Hisui'].includes(species.forme);
+			if (!isHisui && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} is not from Hisui`];
+			}
+		},
+	},
+	paldeacup: {
+		effectType: 'ValidatorRule',
+		name: 'Paldea Cup',
+		desc: "Only allows Pok&eacute;mon from the Paldea region",
+		onValidateSet(set, format) {
+			const species = this.dex.species.get(set.species || set.name);
+			const isPaldea = (species.num >= 906 && species.num <= 1024);
+			if (!isPaldea && !this.ruleTable.has('+' + species.id)) {
+				return [`${species.baseSpecies} or its base form are not from Paldea`];
+			}
+		},
 	},
 };
