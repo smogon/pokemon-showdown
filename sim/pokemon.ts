@@ -1206,17 +1206,18 @@ export class Pokemon {
 				spe: this.baseStoredStats["spe"]
 			},
 			moves: (forAlly ? this.baseMoveSlots : this.baseMoveSlots).map(move => {
-				let moveName = move.id;
+				let moveName = move.move;
 				if (move.id === "hiddenpower") {
-					moveName = move.id + toID(this.hpType) + (this.battle.gen < 6 ? "" : this.hpPower);
+					moveName = moveName + toID(this.hpType) + (this.battle.gen < 6 ? "" : this.hpPower);
 				}
 				if (move.id === "frustration" || move.id === "return") {
 					const basePowerCallback = this.battle.dex.moves.get(move.id).basePowerCallback as (pokemon: Pokemon) => number;
-					moveName = move.id + basePowerCallback(this);
+					moveName = moveName + basePowerCallback(this);
 				}
 				return {
 					move: moveName,
-					pp: move.pp
+					pp: move.pp,
+					maxPP: move.maxpp,
 				};
 			}),
 			baseAbility: this.battle.dex.abilities.getByID(this.baseAbility).name,
