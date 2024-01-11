@@ -11313,7 +11313,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
-		isNonstandard: "Unobtainable",
 		name: "Malignant Chain",
 		pp: 5,
 		priority: 0,
