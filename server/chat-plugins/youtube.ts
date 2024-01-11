@@ -314,12 +314,10 @@ export class YoutubeInterface {
 		return new GroupWatch(baseRoom, num, url, title, videoInfo);
 	}
 	async getGroupwatchData(url: string) {
-		let urlData;
-		try {
-			urlData = new URL(url);
-		} catch {
-			throw new Chat.ErrorMessage('Invalid URL: ' + url);
+		if (!Chat.isLink(url)) {
+			throw new Chat.ErrorMessage("Invalid URL: " + url);
 		}
+		const urlData = new URL(url);
 		const host = urlData.hostname;
 		let videoInfo: GroupwatchData;
 		if (['youtu.be', 'www.youtube.com'].includes(host)) {
