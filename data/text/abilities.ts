@@ -1277,7 +1277,8 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	poisonpuppeteer: {
 		name: "Poison Puppeteer",
-		shortDesc: "If this Pokemon poisons or badly poisons a target, the target also becomes confused.",
+		desc: "If this Pokemon is a Pecharunt and poisons or badly poisons a target, the target also becomes confused.",
+		shortDesc: "Pecharunt: If this Pokemon poisons a target, the target also becomes confused.",
 	},
 	poisontouch: {
 		name: "Poison Touch",

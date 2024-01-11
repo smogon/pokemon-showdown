@@ -3252,6 +3252,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	poisonpuppeteer: {
 		onAnyAfterSetStatus(status, target, source, effect) {
+			if (source.baseSpecies.name !== "Pecharunt") return;
 			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
 			if (status.id === 'psn' || status.id === 'tox') {
 				target.addVolatile('confusion');
