@@ -1819,7 +1819,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		if (move.gen <= mod.gen) {
 			if (
 				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
-				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past"].includes(move.isNonstandard))
+				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past", "Unobtainable"].includes(move.isNonstandard))
 			) {
 				continue;
 			} else {
