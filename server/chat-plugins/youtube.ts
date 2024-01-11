@@ -483,6 +483,7 @@ export class GroupWatch extends Rooms.SimpleRoomGame {
 	}
 	destroy() {
 		GroupWatch.groupwatches.delete(this.id);
+		this.room.game = null;
 		this.room = null!;
 	}
 }
