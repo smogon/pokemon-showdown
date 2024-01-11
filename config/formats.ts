@@ -476,6 +476,17 @@ export const Formats: FormatList = [
 		],
 	},
 	{
+		name: "[Gen 3] LC",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3722418/">ADV LC</a>`,
+		],
+
+		mod: 'gen3',
+		// searchShow: false,
+		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
+		banlist: ['Chansey', 'Meditite', 'Omanyte', 'Scyther', 'Wynaut', 'Zigzagoon', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
+	},
+	{
 		name: "[Gen 9] LC UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3711750/">LC UU Metagame Discussion</a>`,
@@ -4858,17 +4869,6 @@ export const Formats: FormatList = [
 		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'Baton Pass + Substitute'],
 	},
 	{
-		name: "[Gen 3] LC",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3722418/">ADV LC</a>`,
-		],
-
-		mod: 'gen3',
-		searchShow: false,
-		ruleset: ['Standard', 'Little Cup', 'Sleep Moves Clause'],
-		banlist: ['Chansey', 'Meditite', 'Omanyte', 'Scyther', 'Wynaut', 'Zigzagoon', 'Baton Pass', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
-	},
-	{
 		name: "[Gen 3] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
@@ -4924,6 +4924,16 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 2] UU'],
 		banlist: ['UU', 'NUBL', 'Swagger'],
 		unbanlist: ['Agility + Baton Pass'],
+	},
+	{
+		name: "[Gen 2] PU",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3671458/">GSC PU</a>`],
+
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['[Gen 2] NU'],
+		banlist: ['NU', 'PUBL'],
+		unbanlist: ['Swagger'],
 	},
 	{
 		name: "[Gen 2] 1v1",
