@@ -1593,6 +1593,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			}
 			this.room.add(Utils.html`|html|${winner.name} won game ${this.games.length}!`).update();
 			if (winner.wins >= this.winThreshold) {
+				this.setEnded();
 				return this.onEnd(winner.id);
 			}
 		} else {
@@ -1711,6 +1712,8 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		if (loser) this.forfeitPlayer(loser, message);
 	}
 	forfeitPlayer(loser: BestOfPlayer, message = '') {
+		if (this.ended || this.winner) return false;
+
 		this.winner = this.players.filter(p => p !== loser)[0];
 		this.room.add(`||${loser.name}${message || ' forfeited.'}`);
 		this.setEnded();
