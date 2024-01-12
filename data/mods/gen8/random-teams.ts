@@ -2662,16 +2662,30 @@ export class RandomGen8Teams {
 
 		// Build a pool of eligible sets, given the team partners
 		// Also keep track of sets with moves the team requires
-		let effectivePool: {set: AnyObject, moveVariants?: number[]}[] = [];
+		let effectivePool: {set: AnyObject, moveVariants?: number[], item?: string, ability?: string}[] = [];
 		const priorityPool = [];
 		for (const curSet of setList) {
 			// if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
-			const item = this.dex.items.get(curSet.item);
-			if (itemsMax[item.id] && teamData.has[item.id] >= itemsMax[item.id]) continue;
+			// reject disallowed items, specifically a second of any given choice item
+			const allowedItems: string[] = [];
+			for (const itemString of curSet.item) {
+				const item = this.dex.items.get(itemString);
+				if (itemsMax[item.id] && teamData.has[item.id] >= itemsMax[item.id]) continue;
+				allowedItems.push(itemString);
+			}
+			if (allowedItems.length === 0) continue;
+			const curSetItem = this.sample(allowedItems);
 
-			const ability = this.dex.abilities.get(curSet.ability);
-			if (teamData.weather && weatherAbilities.includes(ability.id)) continue; // reject 2+ weather setters
+			// reject 2+ weather setters
+			const allowedAbilities: string[] = [];
+			for (const abilityString of curSet.ability) {
+				const ability = this.dex.abilities.get(abilityString);
+				if (teamData.weather && weatherAbilities.includes(ability.id)) continue;
+				allowedAbilities.push(abilityString);
+			}
+			if (allowedAbilities.length === 0) continue;
+			const curSetAbility = this.sample(allowedAbilities);
 
 			let reject = false;
 			let hasRequiredMove = false;
@@ -2689,8 +2703,10 @@ export class RandomGen8Teams {
 				curSetVariants.push(variantIndex);
 			}
 			if (reject) continue;
-			effectivePool.push({set: curSet, moveVariants: curSetVariants});
-			if (hasRequiredMove) priorityPool.push({set: curSet, moveVariants: curSetVariants});
+
+			const fullSetSpec = {set: curSet, moveVariants: curSetVariants, item: curSetItem, ability: curSetAbility};
+			effectivePool.push(fullSetSpec);
+			if (hasRequiredMove) priorityPool.push(fullSetSpec);
 		}
 		if (priorityPool.length) effectivePool = priorityPool;
 
@@ -2708,8 +2724,8 @@ export class RandomGen8Teams {
 		}
 
 
-		const item = this.sampleIfArray(setData.set.item);
-		const ability = this.sampleIfArray(setData.set.ability);
+		const item = setData.item || this.sampleIfArray(setData.set.item);
+		const ability = setData.ability || this.sampleIfArray(setData.set.ability);
 		const nature = this.sampleIfArray(setData.set.nature);
 		const level = this.adjustLevel || setData.set.level || (tier === "LC" ? 5 : 100);
 
