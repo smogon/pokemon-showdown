@@ -321,7 +321,9 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	vulpix: {
-		tier: "NFE",
+		tier: "ZUBL",
+		doublesTier: "LC",
+		natDexTier: "LC",
 	},
 	vulpixalola: {
 		tier: "NFE",
