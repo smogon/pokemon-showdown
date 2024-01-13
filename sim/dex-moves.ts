@@ -43,6 +43,7 @@ interface MoveFlags {
 	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
+	metronome?: 1; // Can be selected by Metronome.
 	mirror?: 1; // Can be copied by Mirror Move.
 	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
 	noassist?: 1; // Cannot be selected by Assist.
@@ -270,7 +271,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	// ---------------
 	hasCrashDamage?: boolean;
 	isConfusionSelfHit?: boolean;
-	noMetronome?: string[];
 	noSketch?: boolean;
 	stallingMove?: boolean;
 	baseMove?: string;

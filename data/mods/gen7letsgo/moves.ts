@@ -42,9 +42,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "A random move that was introduced in gen 1 is selected for use, other than Counter, Mimic, Mirror Move, Struggle, or Transform.",
 		shortDesc: "Picks a random move from gen 1.",
 		onHit(target, source, effect) {
-			const moves = this.dex.moves.all().filter(
-				move => !move.realMove && move.gen === 1 && !effect.noMetronome!.includes(move.name)
-			);
+			const moves = this.dex.moves.all().filter(move => move.gen === 1 && move.flags['metronome']);
 			let randomMove = '';
 			if (moves.length) {
 				moves.sort((a, b) => a.num - b.num);
