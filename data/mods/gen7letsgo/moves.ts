@@ -43,7 +43,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Picks a random move from gen 1.",
 		onHit(target, source, effect) {
 			const moves = this.dex.moves.all().filter(
-				move => !move.realMove && move.gen === 1 && move.flags['metronome']
+				move => move.gen === 1 && move.flags['metronome']
 			);
 			let randomMove = '';
 			if (moves.length) {
