@@ -28,6 +28,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {breakable: 1},
+		gen: 9,
 	},
 
 	// A Quag To The Past
@@ -50,6 +51,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			move.ignoreAbility = true;
 		},
 		flags: {},
+		gen: 9,
 	},
 	clodofruin: {
 		shortDesc: "Active Pokemon without this Ability have their Atk multiplied by 0.85. Ignores stat changes.",
@@ -82,6 +84,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {breakable: 1},
+		gen: 9,
 	},
 
 	// Archas
@@ -100,6 +103,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {},
+		gen: 9,
 	},
 
 	// Blitz
@@ -129,26 +133,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {breakable: 1},
-	},
-
-	// BreadLoeuf
-	painfulexit: {
-		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
-		name: "Painful Exit",
-		onBeforeSwitchOutPriority: -1,
-		onBeforeSwitchOut(pokemon) {
-			if (enemyStaff(pokemon) === "Mad Monty") {
-				this.add(`c:|${getName('BreadLoeuf')}|Welp`);
-			} else {
-				this.add(`c:|${getName('BreadLoeuf')}|Just kidding!! Take this KNUCKLE SANDWICH`);
-			}
-			for (const foe of pokemon.foes()) {
-				if (!foe || foe.fainted || !foe.hp) continue;
-				this.add(`-anim`, pokemon, "Tackle", foe);
-				this.damage(foe.hp / 4, foe, pokemon);
-			}
-		},
-		flags: {},
 	},
 
 	// Cake
@@ -191,7 +175,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
 			];
 			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id) &&
-				// TODO: Figure out actual interaction
 				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Grass';
 				move.typeChangerBoosted = this.effect;
@@ -203,6 +186,58 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		flags: {},
 	},
+
+	// clerica
+	masquerade: {
+		shortDesc: "(Mimikyu only) The first hit is blocked: instead, takes 1/8 damage and gets +1 Atk/Spe.",
+		name: "Masquerade",
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (
+				effect && effect.effectType === 'Move' &&
+				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
+			) {
+				this.add('-activate', target, 'ability: Masquerade');
+				this.effectState.busted = true;
+				return 0;
+			}
+		},
+		onCriticalHit(target, source, move) {
+			if (!target) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
+				return;
+			}
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
+			if (!target.runImmunity(move.type)) return;
+			return false;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target || move.category === 'Status') return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
+				return;
+			}
+
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
+			if (hitSub) return;
+
+			if (!target.runImmunity(move.type)) return;
+			return 0;
+		},
+		onUpdate(pokemon) {
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
+				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				pokemon.formeChange(speciesid, this.effect, true);
+				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
+				this.boost({atk: 1, spe: 1});
+				const img = "https://media.discordapp.net/attachments/764667730468536320/1079168557553831947/alcremie.png";
+				this.add(`c:|${getName('clerica')}|/html <img src=${img} style="width:32px" />`);
+			}
+		},
+		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+	},
+
 
 	// Coolcodename
 	firewall: {
@@ -217,6 +252,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {breakable: 1},
+	},
+
+	// Cor'Jon
+	painfulexit: {
+		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
+		name: "Painful Exit",
+		onBeforeSwitchOutPriority: -1,
+		onBeforeSwitchOut(pokemon) {
+			if (enemyStaff(pokemon) === "Mad Monty") {
+				this.add(`c:|${getName('BreadLoeuf')}|Welp`);
+			} else {
+				this.add(`c:|${getName('BreadLoeuf')}|Just kidding!! Take this KNUCKLE SANDWICH`);
+			}
+			for (const foe of pokemon.foes()) {
+				if (!foe || foe.fainted || !foe.hp) continue;
+				this.add(`-anim`, pokemon, "Tackle", foe);
+				this.damage(foe.hp / 4, foe, pokemon);
+			}
+		},
+		flags: {},
 	},
 
 	// Dawn of Artemis
@@ -371,7 +426,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				"Light Screen", "Reflect", "Protect", "Detect", "Barrier", "Spiky Shield", "Baneful Bunker",
 				"Safeguard", "Mist", "King's Shield", "Magic Coat", "Aurora Veil",
 			];
-			const move = this.dex.deepClone(this.dex.moves.get(this.sample(randomMove)));
+			const move = this.dex.getActiveMove(this.sample(randomMove));
 			// allows use of Aurora Veil without hail
 			if (move.name === "Aurora Veil") delete move.onTry;
 			this.actions.useMove(move, target);
@@ -464,21 +519,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
-	},
-
-	// Kolochu
-	soulsurfer: {
-		name: "Soul Surfer",
-		shortDesc: "Rain on entry; Speed: x2 in Electric Terrain.",
-		onStart(source) {
-			this.field.setWeather('raindance');
-		},
-		onModifySpe(spe) {
-			if (this.field.isTerrain('electricterrain')) {
-				return this.chainModify(2);
-			}
-		},
-		flags: {},
 	},
 
 	// Kris
@@ -703,7 +743,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
-	// neycwang
+	// Ney
 	pranksterplus: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1. Dark types are not immune.",
 		name: "Prankster Plus",
@@ -819,57 +859,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
-	// smely socks
-	masquerade: {
-		shortDesc: "(Mimikyu only) The first hit is blocked: instead, takes 1/8 damage and gets +1 Atk/Spe.",
-		name: "Masquerade",
-		onDamagePriority: 1,
-		onDamage(damage, target, source, effect) {
-			if (
-				effect && effect.effectType === 'Move' &&
-				['mimikyu', 'mimikyutotem'].includes(target.species.id) && !target.transformed
-			) {
-				this.add('-activate', target, 'ability: Masquerade');
-				this.effectState.busted = true;
-				return 0;
-			}
-		},
-		onCriticalHit(target, source, move) {
-			if (!target) return;
-			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
-				return;
-			}
-			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
-			if (hitSub) return;
-
-			if (!target.runImmunity(move.type)) return;
-			return false;
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target || move.category === 'Status') return;
-			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
-				return;
-			}
-
-			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
-			if (hitSub) return;
-
-			if (!target.runImmunity(move.type)) return;
-			return 0;
-		},
-		onUpdate(pokemon) {
-			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
-				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
-				pokemon.formeChange(speciesid, this.effect, true);
-				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
-				this.boost({atk: 1, spe: 1});
-				const img = "https://media.discordapp.net/attachments/764667730468536320/1079168557553831947/alcremie.png";
-				this.add(`c:|${getName('smely socks')}|/html <img src=${img} style="width:32px" />`);
-			}
-		},
-		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
-	},
-
 	// Swiffix
 	stinky: {
 		desc: "10% chance to either poison or paralyze the Pokemon on hit.",
@@ -923,7 +912,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const plates = this.dex.items.all().filter(item => item.onPlate && !item.zMove);
 			const item = this.sample(plates.filter(plate => this.toID(plate) !== this.toID(pokemon.item)));
 			pokemon.item = '';
-			this.add('-item', pokemon, this.dex.items.get(item), '[from] ability: The Grace Of Jesus Christ');
+			this.add('-item', pokemon, item, '[from] ability: The Grace Of Jesus Christ');
 			pokemon.setItem(item);
 		},
 		flags: {},
@@ -964,6 +953,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.type === 'Flying') return priority + 1;
+		},
+		flags: {},
+	},
+
+	// umuwo
+	soulsurfer: {
+		name: "Soul Surfer",
+		shortDesc: "Rain on entry; Speed: x2 in Electric Terrain.",
+		onStart(source) {
+			this.field.setWeather('raindance');
+		},
+		onModifySpe(spe) {
+			if (this.field.isTerrain('electricterrain')) {
+				return this.chainModify(2);
+			}
 		},
 		flags: {},
 	},

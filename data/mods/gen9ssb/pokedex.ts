@@ -37,12 +37,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Blitz of Ruin"},
 	},
 
-	// BreadLeouf
-	dachsbun: {
-		inherit: true,
-		abilities: {0: "Painful Exit"},
-	},
-
 	// Cake
 	dudunsparcethreesegment: {
 		inherit: true,
@@ -55,10 +49,26 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Acetosa"},
 	},
 
+	// clerica
+	mimikyu: {
+		inherit: true,
+		abilities: {0: "Masquerade"},
+	},
+	mimikyubusted: {
+		inherit: true,
+		abilities: {0: 'Masquerade'},
+	},
+
 	// Coolcodename
 	victini: {
 		inherit: true,
 		abilities: {0: "Firewall"},
+	},
+
+	// Cor'Jon
+	dachsbun: {
+		inherit: true,
+		abilities: {0: "Painful Exit"},
 	},
 
 	// Dawn of Artemis
@@ -154,13 +164,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 103,
 	},
 
-	// Kolochu
-	pikachu: {
-		inherit: true,
-		baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120},
-		abilities: {0: "Soul Surfer"},
-	},
-
 	// Kris
 	nymble: {
 		inherit: true,
@@ -209,7 +212,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Hacking'},
 	},
 
-	// neycwang
+	// Ney
 	banettemega: {
 		inherit: true,
 		abilities: {0: 'Prankster Plus'},
@@ -262,16 +265,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 55, atk: 135, def: 75, spa: 35, spd: 85, spe: 135},
 		abilities: {0: 'Rough and Tumble'},
-	},
-
-	// smely socks
-	mimikyu: {
-		inherit: true,
-		abilities: {0: "Masquerade"},
-	},
-	mimikyubusted: {
-		inherit: true,
-		abilities: {0: 'Masquerade'},
 	},
 
 	// spoo
@@ -382,6 +375,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	talonflame: {
 		inherit: true,
 		abilities: {0: "Gale Guard"},
+	},
+
+	// umowu
+	pikachu: {
+		inherit: true,
+		baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120},
+		abilities: {0: "Soul Surfer"},
 	},
 
 	// Venous

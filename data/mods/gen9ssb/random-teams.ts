@@ -66,12 +66,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Geyser Blast',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Water', shiny: true,
 	},
-	BreadLoeuf: {
-		species: 'Dachsbun', ability: 'Painful Exit', item: 'Leftovers', gender: '',
-		moves: ['Wish', 'Rest', 'Play Rough'],
-		signatureMove: 'Baker\'s Douze Off',
-		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
-	},
 	Cake: {
 		species: 'Dudunsparce-Three-Segment', ability: 'Not Enough Removal', item: 'Leftovers', gender: 'N',
 		moves: [
@@ -91,11 +85,23 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'De Todas las Flores',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Grass', shiny: true,
 	},
+	clerica: {
+		species: 'Mimikyu', ability: 'Masquerade', item: 'Ghostium Z', gender: 'F',
+		moves: ['Protect', 'Substitute', 'Phantom Force'],
+		signatureMove: 'Stockholm Syndrome',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
 	Coolcodename: {
 		species: 'Victini', ability: 'Firewall', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Searing Shot', 'Psychic', 'Dazzling Gleam'],
 		signatureMove: 'Haxer\'s Will',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Fairy', shiny: 1024,
+	},
+	'Cor\'Jon': {
+		species: 'Dachsbun', ability: 'Painful Exit', item: 'Leftovers', gender: '',
+		moves: ['Wish', 'Rest', 'Play Rough'],
+		signatureMove: 'Baker\'s Douze Off',
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
 	},
 	'Dawn of Artemis': {
 		species: 'Necrozma', ability: 'Form Change', item: 'Expert Belt', gender: 'F',
@@ -181,12 +187,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Hat-Trick',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Any',
 	},
-	kolochu: {
-		species: 'Pikachu', ability: 'Soul Surfer', item: 'Light Ball', gender: '',
-		moves: ['Thunder', 'Volt Switch', 'Bouncy Bubble'],
-		signatureMove: 'Hang Ten',
-		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Water',
-	},
 	Kris: {
 		species: 'Nymble', ability: 'Cacophony', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Boomburst', 'Bug Buzz', 'Torch Song'],
@@ -235,7 +235,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Testing in Production',
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
 	},
-	neycwang: {
+	Ney: {
 		species: 'Banette', ability: 'Insomnia', item: 'Banettite', gender: 'M',
 		moves: ['Destiny Bond', 'Will-O-Wisp', 'Parting Shot'],
 		signatureMove: 'Shadow Dance',
@@ -289,12 +289,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Treacherous Traversal',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Poison', skip: 'sharp_claw',
 	},
-	'smely socks': {
-		species: 'Mimikyu', ability: 'Masquerade', item: 'Ghostium Z', gender: 'F',
-		moves: ['Protect', 'Substitute', 'Phantom Force'],
-		signatureMove: 'Stockholm Syndrome',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
-	},
 	'snake_rattler': {
 		species: 'Fidgit', ability: 'Persistent', item: ['Mental Herb', 'Covert Cloak'], gender: 'M',
 		moves: ['Tailwind', 'Healing Wish', 'Taunt'],
@@ -346,6 +340,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Brave Bird', 'Roost', ['Swords Dance', 'Flare Blitz', 'Will-O-Wisp']],
 		signatureMove: 'Wingover',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Flying',
+	},
+	umowu: {
+		species: 'Pikachu', ability: 'Soul Surfer', item: 'Light Ball', gender: '',
+		moves: ['Thunder', 'Volt Switch', 'Bouncy Bubble'],
+		signatureMove: 'Hang Ten',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Water',
 	},
 	Venous: {
 		species: 'Mantine', ability: 'Concrete Over Water', item: 'Leftovers', gender: '',

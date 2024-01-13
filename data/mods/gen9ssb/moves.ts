@@ -237,6 +237,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bird",
 	},
 
+	// Chloe
 	detodaslasflores: {
 		accuracy: 90,
 		basePower: 90,
@@ -261,6 +262,38 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
+	},
+
+	// clerica
+	stockholmsyndrome: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Curses and traps foe. User loses 1/2 HP.",
+		name: "Stockholm Syndrome",
+		pp: 5,
+		priority: 0,
+		flags: {bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Curse', target);
+			this.add('-anim', source, 'Block', target);
+		},
+		onHit(target, source, move) {
+			let success = false;
+			if (!target.volatiles['curse']) {
+				this.directDamage(source.maxhp / 2, source, source);
+				target.addVolatile('curse');
+				success = true;
+			}
+			return target.addVolatile('trapped', source, move, 'trapper') || success;
+		},
+		zMove: {effect: 'heal'},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
 	},
 
 	// Coolcodename
@@ -830,35 +863,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
-	// Kolochu
-	hangten: {
-		accuracy: 100,
-		basePower: 75,
-		category: "Special",
-		name: "Hang Ten",
-		shortDesc: "User sets Electric Terrain on hit.",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Stoked Sparksurfer', target);
-			this.add('-anim', source, 'Surf', target);
-		},
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setTerrain('electricterrain');
-				},
-			},
-		},
-		target: "normal",
-		type: "Water",
-	},
-
 	// Kris
 	ok: {
 		accuracy: true,
@@ -1234,7 +1238,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
-	// neycwang
+	// Ney
 	shadowdance: {
 		accuracy: 100,
 		basePower: 80,
@@ -1476,38 +1480,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Rock",
 	},
 
-	// smely socks
-	stockholmsyndrome: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Curses and traps foe. User loses 1/2 HP.",
-		name: "Stockholm Syndrome",
-		pp: 5,
-		priority: 0,
-		flags: {bypasssub: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Curse', target);
-			this.add('-anim', source, 'Block', target);
-		},
-		onHit(target, source, move) {
-			let success = false;
-			if (!target.volatiles['curse']) {
-				this.directDamage(source.maxhp / 2, source, source);
-				target.addVolatile('curse');
-				success = true;
-			}
-			return target.addVolatile('trapped', source, move, 'trapper') || success;
-		},
-		zMove: {effect: 'heal'},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
-
 	// snake_rattler
 	conceptrelevant: {
 		accuracy: 100,
@@ -1743,6 +1715,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
+	},
+
+	// umowu
+	hangten: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		name: "Hang Ten",
+		shortDesc: "User sets Electric Terrain on hit.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Stoked Sparksurfer', target);
+			this.add('-anim', source, 'Surf', target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setTerrain('electricterrain');
+				},
+			},
+		},
+		target: "normal",
+		type: "Water",
 	},
 
 	// Venous
