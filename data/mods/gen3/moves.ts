@@ -20,6 +20,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 	},
+	assist: {
+		inherit: true,
+		flags: {metronome: 1, noassist: 1, nosleeptalk: 1},
+	},
 	astonish: {
 		inherit: true,
 		basePowerCallback(pokemon, target) {
@@ -473,6 +477,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mirrormove: {
 		inherit: true,
+		flags: {metronome: 1, failencore: 1, nosleeptalk: 1, noassist: 1},
 		onTryHit() { },
 		onHit(pokemon) {
 			const noMirror = [
