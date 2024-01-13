@@ -758,7 +758,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Aura Sphere",
 		pp: 20,
 		priority: 0,
-		flags: {pulse: 1, protect: 1, mirror: 1, distance: 1, metronome: 1, bullet: 1},
+		flags: {protect: 1, mirror: 1, distance: 1, metronome: 1, bullet: 1, pulse: 1},
 		secondary: null,
 		target: "any",
 		type: "Fighting",
@@ -3419,7 +3419,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Dark Pulse",
 		pp: 15,
 		priority: 0,
-		flags: {pulse: 1, protect: 1, mirror: 1, distance: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, distance: 1, metronome: 1, pulse: 1},
 		secondary: {
 			chance: 20,
 			volatileStatus: 'flinch',
@@ -4283,7 +4283,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Dragon Pulse",
 		pp: 10,
 		priority: 0,
-		flags: {pulse: 1, protect: 1, mirror: 1, distance: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, distance: 1, metronome: 1, pulse: 1},
 		secondary: null,
 		target: "any",
 		type: "Dragon",
@@ -8647,7 +8647,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Heal Pulse",
 		pp: 10,
 		priority: 0,
-		flags: {pulse: 1, protect: 1, reflectable: 1, distance: 1, heal: 1, allyanim: 1, metronome: 1},
+		flags: {protect: 1, reflectable: 1, distance: 1, heal: 1, allyanim: 1, metronome: 1, pulse: 1},
 		onHit(target, source) {
 			let success = false;
 			if (source.hasAbility('megalauncher')) {
@@ -13473,7 +13473,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Origin Pulse",
 		pp: 10,
 		priority: 0,
-		flags: {pulse: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1},
 		target: "allAdjacentFoes",
 		type: "Water",
 		contestType: "Beautiful",
@@ -19984,7 +19984,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Terrain Pulse",
 		pp: 10,
 		priority: 0,
-		flags: {pulse: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, pulse: 1},
 		onModifyType(move, pokemon) {
 			if (!pokemon.isGrounded()) return;
 			switch (this.field.terrain) {
@@ -21362,7 +21362,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		name: "Water Pulse",
 		pp: 20,
 		priority: 0,
-		flags: {pulse: 1, protect: 1, mirror: 1, distance: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, distance: 1, metronome: 1, pulse: 1},
 		secondary: {
 			chance: 20,
 			volatileStatus: 'confusion',
