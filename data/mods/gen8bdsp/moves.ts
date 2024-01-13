@@ -123,6 +123,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	dragonhammer: {
+		inherit: true,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+	},
 	drumbeating: {
 		inherit: true,
 		isNonstandard: "Past",
