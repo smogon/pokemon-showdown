@@ -18,7 +18,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	ancientpower: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 	},
 	astonish: {
 		inherit: true,
@@ -196,7 +196,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	disable: {
 		inherit: true,
 		accuracy: 55,
-		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
 		volatileStatus: 'disable',
 		condition: {
 			durationCallback() {
@@ -253,7 +253,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				name: "Doom Desire",
 				basePower: 120,
 				category: "Physical",
-				flags: {},
+				flags: {metronome: 1, futuremove: 1},
 				willCrit: false,
 				type: '???',
 			} as unknown as ActiveMove;
@@ -269,7 +269,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 0,
 					damage: damage,
 					category: "Physical",
-					flags: {futuremove: 1},
+					flags: {metronome: 1, futuremove: 1},
 					effectType: 'Move',
 					type: '???',
 				},
@@ -335,11 +335,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	fakeout: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 	},
 	feintattack: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 	},
 	flash: {
 		inherit: true,
@@ -517,7 +517,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	overheat: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 	},
 	petaldance: {
 		inherit: true,
@@ -602,7 +602,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	taunt: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1},
+		flags: {protect: 1, bypasssub: 1, metronome: 1},
 		condition: {
 			duration: 2,
 			onStart(target) {
@@ -630,11 +630,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	teeterdance: {
 		inherit: true,
-		flags: {protect: 1},
+		flags: {protect: 1, metronome: 1},
 	},
 	tickle: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1},
 	},
 	uproar: {
 		inherit: true,

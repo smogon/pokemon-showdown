@@ -398,14 +398,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	meanlook: {
 		inherit: true,
-		flags: {reflectable: 1, mirror: 1},
+		flags: {reflectable: 1, mirror: 1, metronome: 1},
 	},
 	metronome: {
 		inherit: true,
 		flags: {failencore: 1},
-		noMetronome: [
-			"Counter", "Destiny Bond", "Detect", "Endure", "Metronome", "Mimic", "Mirror Coat", "Protect", "Sketch", "Sleep Talk", "Struggle", "Thief",
-		],
 		noSketch: true,
 	},
 	mimic: {
@@ -439,7 +436,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mirrormove: {
 		inherit: true,
-		flags: {failencore: 1},
+		flags: {metronome: 1, failencore: 1},
 		onHit(pokemon) {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
@@ -462,7 +459,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Mist",
 		pp: 30,
 		priority: 0,
-		flags: {},
+		flags: {metronome: 1},
 		volatileStatus: 'mist',
 		condition: {
 			onStart(pokemon) {
@@ -787,7 +784,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	spiderweb: {
 		inherit: true,
-		flags: {reflectable: 1, mirror: 1},
+		flags: {reflectable: 1, mirror: 1, metronome: 1},
 	},
 	spikes: {
 		inherit: true,
