@@ -169,6 +169,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dragonhammer: {
+		inherit: true,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+	},
 	dragonrage: {
 		inherit: true,
 		isNonstandard: null,
