@@ -967,7 +967,8 @@ export const Formats: FormatList = [
 			if (!teamHas.abilityMap) {
 				teamHas.abilityMap = Object.create(null);
 				for (const pokemon of Dex.species.all()) {
-					if (pokemon.isNonstandard || (unreleased(pokemon) && !this.ruleTable.has('+unobtainable'))) continue;
+					if (pokemon.isNonstandard && !this.ruleTable.has(`+pokemontag:${this.toID(pokemon.isNonstandard)}`)) continue;
+					if (unreleased(pokemon) && !this.ruleTable.has('+unobtainable')) continue;
 					if (pokemon.battleOnly) continue;
 					if (this.ruleTable.isBannedSpecies(pokemon)) continue;
 
@@ -987,7 +988,8 @@ export const Formats: FormatList = [
 
 			const species = this.dex.species.get(set.species);
 			if (!species.exists || species.num < 1) return [`The Pok\u00e9mon "${set.species}" does not exist.`];
-			if (species.isNonstandard || (unreleased(species) && !this.ruleTable.has('+unobtainable'))) {
+			if ((species.isNonstandard && !this.ruleTable.has(`+pokemontag:${this.toID(species.isNonstandard)}`)) ||
+				(unreleased(species) && !this.ruleTable.has('+unobtainable'))) {
 				return [`${species.name} is not obtainable in Generation ${this.dex.gen}.`];
 			}
 
