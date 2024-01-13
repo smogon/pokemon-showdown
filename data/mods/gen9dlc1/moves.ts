@@ -1,7 +1,7 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
 	aeroblast: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, distance: 1},
+		flags: {protect: 1, mirror: 1, distance: 1, metronome: 1},
 		isNonstandard: "Past",
 	},
 	alluringvoice: {
@@ -14,7 +14,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	bitterblade: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
 	},
 	blueflare: {
 		inherit: true,
@@ -107,7 +107,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	matchagotcha: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, defrost: 1},
+		flags: {protect: 1, mirror: 1, defrost: 1, metronome: 1},
 	},
 	mightycleave: {
 		inherit: true,

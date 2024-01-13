@@ -138,6 +138,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dragonhammer: {
+		inherit: true,
+		flags: {contact: 1, protect: 1, mirror: 1},
+	},
 	dualchop: {
 		inherit: true,
 		isNonstandard: null,
@@ -186,7 +190,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	futuresight: {
 		inherit: true,
-		flags: {futuremove: 1},
+		flags: {metronome: 1, futuremove: 1},
 	},
 	geargrind: {
 		inherit: true,
