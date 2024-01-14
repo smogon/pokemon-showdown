@@ -21,6 +21,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return typeMod + this.dex.getEffectiveness('Normal', type);
 		},
 	},
+	ivycudgel: {
+		inherit: true,
+		onModifyType(move, pokemon) {
+			switch (pokemon.species.name) {
+			case 'Ogerpon-Wellspring': case 'Ogerpon-Wellspring-Tera':
+				move.type = 'Water';
+				break;
+			case 'Ogerpon-Hearthflame': case 'Ogerpon-Hearthflame-Tera':
+				move.type = 'Fire';
+				break;
+			case 'Ogerpon-Cornerstone': case 'Ogerpon-Cornerstone-Tera':
+				move.type = 'Fighting';
+				break;
+			}
+		},
+	},
 	roost: {
 		inherit: true,
 		condition: {
