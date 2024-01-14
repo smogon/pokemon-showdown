@@ -644,7 +644,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	adaptability: {
 		inherit: true,
-		onModifyMove(move) {},
+		onModifySTAB() {},
 		onBasePower(power, attacker, defender, move) {
 			if (!attacker.hasType(move.type)) {
 				return this.chainModify(1.33);
