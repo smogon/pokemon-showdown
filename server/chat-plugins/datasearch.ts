@@ -395,7 +395,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse('/help itemsearch');
 		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
-		if (targetGen) target += ` maxgen${targetGen}`;
+		if (targetGen) target = `maxgen${targetGen} ` + target;
 
 		const response = await runSearch({
 			target,
