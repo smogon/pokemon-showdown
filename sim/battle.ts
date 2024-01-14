@@ -2373,7 +2373,6 @@ export class Battle {
 				pokemon.illusion = null;
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
-				delete pokemon.terastallized;
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
 			}
@@ -2624,6 +2623,7 @@ export class Battle {
 					target: action.target,
 				});
 			}
+			delete action.target.terastallized;
 			action.target.fainted = false;
 			action.target.faintQueued = false;
 			action.target.subFainted = false;
