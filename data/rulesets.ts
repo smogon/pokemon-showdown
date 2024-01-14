@@ -881,7 +881,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			if (set.moves) {
 				for (const id of set.moves) {
 					const move = this.dex.moves.get(id);
-					if (move.status && move.status === 'slp') problems.push(move.name + ' is banned by Sleep Moves Clause.');
+					if (move.status === 'slp') problems.push(move.name + ' is banned by Sleep Moves Clause.');
 				}
 			}
 			return problems;
@@ -908,7 +908,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 					// but false if the move's accuracy is 100% (yet can be lowered).
 					const hasMissChanceOrNeverMisses = move.accuracy === true || move.accuracy < 100;
 
-					if (move.status && move.status === 'slp' && hasMissChanceOrNeverMisses) {
+					if (move.status === 'slp' && hasMissChanceOrNeverMisses) {
 						hasSleepMove = true;
 					}
 				}
