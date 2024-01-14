@@ -1607,12 +1607,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 168,
 	},
 	adaptability: {
-		onModifyMove(move, pokemon) {
-			if (move.type === pokemon.teraType && pokemon.baseSpecies.types.includes(pokemon.teraType) &&
-				 pokemon.hasItem('terashard')) {
-				move.stab = 2.25;
-			} else {
-				move.stab = 2;
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				if (move.type === source.teraType && source.baseSpecies.types.includes(source.teraType) &&
+					source.hasItem('terashard')) {
+					return 2.25;
+				}
+				return 2;
 			}
 		},
 		name: "Adaptability",

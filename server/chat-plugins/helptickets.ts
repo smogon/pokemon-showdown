@@ -176,41 +176,34 @@ export function writeStats(line: string) {
 }
 
 export class HelpTicket extends Rooms.SimpleRoomGame {
-	room: ChatRoom;
+	override readonly gameid = "helpticket" as ID;
+	override readonly allowRenames = true;
+	override room: ChatRoom;
 	ticket: TicketState;
 	claimQueue: string[];
-	involvedStaff: Set<ID>;
+	involvedStaff = new Set<ID>();
 	createTime: number;
 	activationTime: number;
-	emptyRoom: boolean;
-	firstClaimTime: number;
-	unclaimedTime: number;
+	emptyRoom = false;
+	firstClaimTime = 0;
+	unclaimedTime = 0;
 	lastUnclaimedStart: number;
-	closeTime: number;
-	resolution: 'unknown' | 'dead' | 'unresolved' | 'resolved';
-	result: TicketResult | null;
+	closeTime = 0;
+	resolution: 'unknown' | 'dead' | 'unresolved' | 'resolved' = 'unknown';
+	result: TicketResult | null = null;
 
 	constructor(room: ChatRoom, ticket: TicketState) {
 		super(room);
 		this.room = room;
 		this.room.settings.language = Users.get(ticket.creator)?.language || 'english' as ID;
 		this.title = `Help Ticket - ${ticket.type}`;
-		this.gameid = "helpticket" as ID;
-		this.allowRenames = true;
 		this.ticket = ticket;
 		this.claimQueue = [];
 
 		/* Stats */
-		this.involvedStaff = new Set();
 		this.createTime = Date.now();
 		this.activationTime = (ticket.active ? this.createTime : 0);
-		this.emptyRoom = false;
-		this.firstClaimTime = 0;
-		this.unclaimedTime = 0;
 		this.lastUnclaimedStart = (ticket.active ? this.createTime : 0);
-		this.closeTime = 0;
-		this.resolution = 'unknown';
-		this.result = null;
 	}
 
 	onJoin(user: User, connection: Connection) {
@@ -477,15 +470,11 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 
 		this.room.game = null;
-		// @ts-ignore
-		this.room = null;
-		for (const player of this.players) {
-			player.destroy();
-		}
-		// @ts-ignore
-		this.players = null;
-		// @ts-ignore
-		this.playerTable = null;
+		(this.room as any) = null;
+		this.setEnded();
+		for (const player of this.players) player.destroy();
+		(this.players as any) = null;
+		(this.playerTable as any) = null;
 	}
 	onChatMessage(message: string, user: User) {
 		HelpTicket.uploadReplaysFrom(message, user, user.connections[0]);

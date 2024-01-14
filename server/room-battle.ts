@@ -144,27 +144,18 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 			}
 		}
 	}
-	override unlinkUser() {
+	override destroy() {
 		const user = this.getUser();
 		if (user) {
-			for (const connection of user.connections) {
-				Sockets.channelMove(connection.worker, this.game.roomid, 0, connection.socketid);
-			}
-			user.games.delete(this.game.roomid);
-			user.updateSearch();
+			this.updateChannel(user, 0);
 		}
 		this.id = '';
 		this.knownActive = false;
 		this.active = false;
 	}
-	updateChannel(user: User | Connection) {
-		if (user instanceof Users.Connection) {
-			// "user" is actually a connection
-			Sockets.channelMove(user.worker, this.game.roomid, this.channelIndex, user.socketid);
-			return;
-		}
-		for (const connection of user.connections) {
-			Sockets.channelMove(connection.worker, this.game.roomid, this.channelIndex, connection.socketid);
+	updateChannel(user: User | Connection, channel = this.channelIndex) {
+		for (const connection of (user.connections || [user])) {
+			Sockets.channelMove(connection.worker, this.game.roomid, channel, connection.socketid);
 		}
 	}
 }
@@ -494,8 +485,11 @@ export interface RoomBattleOptions {
 	roomid?: RoomID;
 	/** For battles restored after a restart */
 	delayedTimer?: boolean;
-	/** Best-of stuff */
-	isSubBattle?: boolean;
+	/**
+	 * If false and the format is a best-of format, creates a best-of game
+	 * rather than a battle.
+	 */
+	isBestOfSubBattle?: boolean;
 }
 
 export class RoomBattle extends RoomGame<RoomBattlePlayer> {
@@ -689,7 +683,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return false;
 		}
 
-		this.updatePlayer(this[slot], user, playerOpts);
+		this.setPlayerUser(this[slot], user, playerOpts);
 		if (validSlots.length - 1 <= 0) {
 			// all players have joined, start the battle
 			// onCreateBattleRoom crashes if some users are unavailable at start of battle
@@ -747,7 +741,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.room.add(`|bigerror|The simulator process crashed. We've been notified and will fix this ASAP.`);
 			if (!disconnected) Monitor.crashlog(new Error(`Sim stream interrupted`), `A sim stream`);
 			this.started = true;
-			this.ended = true;
+			this.setEnded();
 			this.checkActive();
 		}
 	}
@@ -821,9 +815,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.inputLog = this.logData!.inputLog;
 			this.started = true;
 			if (!this.ended) {
-				this.ended = true;
+				this.setEnded();
 				void this.onEnd(this.logData!.winner);
-				this.clearPlayers();
 			}
 			this.checkActive();
 			break;
@@ -846,7 +839,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			p1score = 0;
 		}
 		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
-		if (this.room.rated && !this.options.isSubBattle) {
+		if (this.room.rated && !this.options.isBestOfSubBattle) {
 			this.room.rated = 0;
 			const winner = Users.get(winnerid);
 			if (winner && !winner.registered) {
@@ -857,7 +850,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
 		} else if (Config.logchallenges) {
 			void this.logBattle(p1score);
-		} else if (!this.options.isSubBattle) {
+		} else if (!this.options.isBestOfSubBattle) {
 			this.logData = null;
 		}
 		// If a replay was saved at any point or we were configured to autosavereplays,
@@ -872,12 +865,17 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		// @ts-ignore - Tournaments aren't TS'd yet
 		this.room.parent?.game?.onBattleWin?.(this.room, winnerid);
-		// If the room's replay was hidden, disable users from joining after the game is over
+		// If the room's replay was hidden, don't let users join after the game is over
 		if (this.room.hideReplay) {
 			this.room.settings.modjoin = '%';
 			this.room.setPrivate('hidden');
 		}
 		this.room.update();
+
+		// so it stops showing up in the users' games list
+		for (const player of this.players) {
+			player.getUser()?.games.delete(this.roomid);
+		}
 	}
 	async logBattle(
 		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
@@ -1030,14 +1028,14 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	forfeitPlayer(player: RoomBattlePlayer, message = '') {
-		if (this.ended || !this.started) return false;
+		if (this.ended || !this.started || player.eliminated) return false;
 
+		player.eliminated = true;
 		this.room.add(`|-message|${player.name}${message || ' forfeited.'}`);
 		this.endType = 'forfeit';
-		// multi battles, they need to be removed, else they can do things like spam forfeit
 		if (this.playerCap > 2) {
 			player.sendRoom(`|request|null`);
-			this.removePlayer(player);
+			this.setPlayerUser(player, null);
 		}
 		void this.stream.write(`>forcelose ${player.slot}`);
 		return true;
@@ -1137,11 +1135,11 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	override updatePlayer(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
+	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
 		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
 			this.room.auth.set(player.id, '+');
 		}
-		super.updatePlayer(player, user);
+		super.setPlayerUser(player, user);
 
 		player.invite = '';
 		const slot = player.slot;
@@ -1240,13 +1238,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		);
 	}
 
-	clearPlayers() {
-		for (const player of this.players) {
-			player.unlinkUser();
-		}
-	}
-
 	override destroy() {
+		this.setEnded();
 		for (const player of this.players) {
 			player.destroy();
 		}
@@ -1257,7 +1250,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		this.p3 = null!;
 		this.p4 = null!;
 
-		this.ended = true;
 		void this.stream.destroy();
 		if (this.active) {
 			Rooms.global.battleCount += -1;
@@ -1365,13 +1357,14 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 }
 
 export class BestOfGame extends RoomGame<BestOfPlayer> {
+	override readonly gameid = 'bestof' as ID;
 	override allowRenames = false;
 	bestOf: number;
 	format: Format;
 	winThreshold: number;
 	options: Omit<RoomBattleOptions, 'players'> & {players: null};
 	ties = 0;
-	games: {room: Room, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
+	games: {room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
 	playerNum = 0;
 	/** null = tie, undefined = not ended */
 	winner: BestOfPlayer | null | undefined = undefined;
@@ -1393,7 +1386,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		}
 		this.options = {
 			...options,
-			isSubBattle: true,
+			isBestOfSubBattle: true,
 			allowRenames: false,
 			players: null,
 		};
@@ -1458,6 +1451,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			throw new Error(`Failed to get options for ${this.roomid}`);
 		}
 		const battleRoom = Rooms.createBattle(options);
+		// shouldn't happen even in lockdown
 		if (!battleRoom) throw new Error("Failed to create battle for " + this.title);
 		battleRoom.setParent(this.room);
 		this.games.push({
@@ -1599,6 +1593,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			}
 			this.room.add(Utils.html`|html|${winner.name} won game ${this.games.length}!`).update();
 			if (winner.wins >= this.winThreshold) {
+				this.setEnded();
 				return this.onEnd(winner.id);
 			}
 		} else {
@@ -1693,16 +1688,12 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		} else if (winner === p2) {
 			p1score = 0;
 		}
-		for (const player of this.players) {
-			const user = player.getUser();
-			player.unlinkUser();
-			user?.updateSearch();
-		}
 
 		const {rated, room} = this.games[this.games.length - 1];
-		const battle = room.battle!;
+		const battle = room.battle;
+		if (!battle) throw new Error(`Room ${room.roomid} has no battle???`);
 		if (rated) {
-			(room as GameRoom).rated = rated; // just in case
+			room.rated = rated; // just in case
 			const winnerUser = winner?.getUser();
 			if (winnerUser && !winnerUser.registered) {
 				this.room.sendUser(winnerUser, '|askreg|' + winner);
@@ -1721,9 +1712,11 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		if (loser) this.forfeitPlayer(loser, message);
 	}
 	forfeitPlayer(loser: BestOfPlayer, message = '') {
+		if (this.ended || this.winner) return false;
+
 		this.winner = this.players.filter(p => p !== loser)[0];
 		this.room.add(`||${loser.name}${message || ' forfeited.'}`);
-		this.ended = true;
+		this.setEnded();
 		void this.onEnd(this.winner.id);
 		for (const {room} of this.games) {
 			if (!room.battle || room.battle.ended) continue;

@@ -28,7 +28,7 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
-import {FS, Utils, Streams, PostgresDatabase} from '../lib';
+import {FS, Utils, Streams} from '../lib';
 import {RoomSection, RoomSections} from './chat-commands/room-settings';
 import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
@@ -353,7 +353,7 @@ export abstract class BasicRoom {
 	/**
 	 * Send a room message to a single user.
 	 */
-	sendUser(user: User | Connection, message: string) {
+	sendUser(user: Connection | User, message: string) {
 		user.sendTo(this, message);
 	}
 	/**
@@ -1340,33 +1340,6 @@ export class GlobalRoomState {
 
 	async saveBattles() {
 		let count = 0;
-		if (!Config.usepostgres) return this.saveBattlesJSONL();
-		const logDatabase = new PostgresDatabase();
-		await logDatabase.ensureMigrated({
-			table: 'stored_battles',
-			migrationsFolder: 'databases/migrations/storedbattles',
-			baseSchemaFile: 'databases/schemas/stored-battles.sql',
-		});
-		for (const room of Rooms.rooms.values()) {
-			if (!room.battle || room.battle.ended) continue;
-			room.battle.frozen = true;
-			room.battle.timer.stop();
-			const b = await this.serializeBattleRoom(room);
-			if (!b) continue;
-			await logDatabase.query(
-				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
-				` ON CONFLICT (roomid) DO UPDATE ` +
-				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
-				// for some reason Battle#rated is sometimes a float which Postgres can't handle
-				[b.roomid, b.inputLog, b.players, b.title, b.rated, b.timer]
-			);
-			count++;
-		}
-		return count;
-	}
-
-	async saveBattlesJSONL() {
-		let count = 0;
 		const out = FS('logs/battles.jsonl.progress').createAppendStream();
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
@@ -1374,7 +1347,7 @@ export class GlobalRoomState {
 			room.battle.timer.stop();
 			const b = await this.serializeBattleRoom(room);
 			if (!b) continue;
-			await out.write(JSON.stringify(b) + '\n');
+			await out.writeLine(JSON.stringify(b));
 			count++;
 		}
 		await out.writeEnd();
@@ -1384,32 +1357,6 @@ export class GlobalRoomState {
 
 	battlesLoading = false;
 	async loadBattles() {
-		if (!Config.usepostgres) {
-			await this.loadBattlesJSONL();
-			return;
-		}
-		this.battlesLoading = true;
-		for (const u of Users.users.values()) {
-			u.send(
-				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
-				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
-			);
-		}
-		const startTime = Date.now();
-		let count = 0;
-		const logDatabase = new PostgresDatabase();
-		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
-		for await (const battle of logDatabase.stream(query)) {
-			battle.inputLog = battle.input_log;
-			if (this.deserializeBattleRoom(battle)) count++;
-		}
-		for (const u of Users.users.values()) {
-			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
-		}
-		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
-		this.battlesLoading = false;
-	}
-	async loadBattlesJSONL() {
 		this.battlesLoading = true;
 		for (const u of Users.users.values()) {
 			u.send(
@@ -1441,7 +1388,7 @@ export class GlobalRoomState {
 
 	rejoinGames(user: User) {
 		for (const room of Rooms.rooms.values()) {
-			const player = room.game?.playerTable[user.id];
+			const player = room.game && !room.game.ended && room.game.playerTable[user.id];
 			if (!player) continue;
 
 			user.games.add(room.roomid);
@@ -1561,7 +1508,10 @@ export class GlobalRoomState {
 		return Config.rankList;
 	}
 
-	getBattles(/** formatfilter, elofilter, usernamefilter */ filter: string) {
+	/**
+	 * @param filter formatfilter, elofilter, usernamefilter
+	 */
+	getBattles(filter: string) {
 		const rooms: GameRoom[] = [];
 		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;
@@ -2196,6 +2146,10 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
+	/**
+	 * Can return null during lockdown, so make sure to handle that case.
+	 * No need for UI; this function sends popups to users.
+	 */
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
 		const players = options.players.map(player => player.user);
 		const format = Dex.formats.get(options.format);
@@ -2212,19 +2166,19 @@ export const Rooms = {
 
 		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
 
-		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isSubBattle) {
+		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isBestOfSubBattle) {
 			for (const user of players) {
 				user.popup(`The server will be restarting soon. Best-of-${isBestOf} battles cannot be started at this time.`);
 			}
-			return;
+			return null;
 		}
 
 		// gotta allow new bo3 child battles to start
-		if (Rooms.global.lockdown === true && !options.isSubBattle) {
+		if (Rooms.global.lockdown === true && !options.isBestOfSubBattle) {
 			for (const user of players) {
 				user.popup("The server is restarting. Battles will be available again in a few minutes.");
 			}
-			return;
+			return null;
 		}
 
 		const p1Special = players.length ? players[0].battleSettings.special : undefined;
@@ -2240,7 +2194,7 @@ export const Rooms = {
 			for (const user of players) {
 				user.popup(`Your special battle settings don't match: ${mismatch}`);
 			}
-			return;
+			return null;
 		} else if (p1Special) {
 			options.ratedMessage = p1Special;
 		}
@@ -2260,7 +2214,7 @@ export const Rooms = {
 		} else if (format.gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
-		} else if (isBestOf && !options.isSubBattle) {
+		} else if (isBestOf && !options.isBestOfSubBattle) {
 			roomTitle = `${p1name} vs. ${p2name}`;
 			roomid ||= `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
@@ -2271,7 +2225,7 @@ export const Rooms = {
 		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
-		if (options.isSubBattle || !isBestOf) {
+		if (options.isBestOfSubBattle || !isBestOf) {
 			const battle = new Rooms.RoomBattle(room, options);
 			room.game = battle;
 			battle.checkPrivacySettings(options);
