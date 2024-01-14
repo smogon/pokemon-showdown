@@ -1608,7 +1608,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	adaptability: {
 		onModifySTAB(stab, source, target, move) {
-			if (source.hasType(move.type)) {
+			if (move.forceSTAB || source.hasType(move.type)) {
 				if (move.type === source.teraType && source.baseSpecies.types.includes(source.teraType) &&
 					source.hasItem('terashard')) {
 					return 2.25;

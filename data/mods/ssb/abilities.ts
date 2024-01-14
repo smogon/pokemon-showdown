@@ -208,7 +208,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
 		},
 		onModifySTAB(stab, source, target, move) {
-			if (source.hasType(move.type)) {
+			if (move.forceSTAB || source.hasType(move.type)) {
 				return 2;
 			}
 		},
@@ -1009,7 +1009,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus of 2 instead of 1.5. If this Pokemon is at full HP, it survives one hit with at least 1 HP.",
 		shortDesc: "Adaptability + Sturdy.",
 		onModifySTAB(stab, source, target, move) {
-			if (source.hasType(move.type)) {
+			if (move.forceSTAB || source.hasType(move.type)) {
 				return 2;
 			}
 		},
@@ -1566,7 +1566,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Adaptability + Randomly changes to the type of one of its moves every turn.",
 		name: "Wild Magic Surge",
 		onModifySTAB(stab, source, target, move) {
-			if (source.hasType(move.type)) {
+			if (move.forceSTAB || source.hasType(move.type)) {
 				return 2;
 			}
 		},
