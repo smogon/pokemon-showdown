@@ -41,8 +41,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 0,
 	},
 	adaptability: {
-		onModifyMove(move) {
-			move.stab = 2;
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				if (stab === 2) {
+					return 2.25;
+				}
+				return 2;
+			}
 		},
 		flags: {},
 		name: "Adaptability",
