@@ -294,10 +294,13 @@ export class RandomTeams {
 
 	/**
 	 * Check if user has directly tried to ban/unban/restrict things in a custom battle.
-	 * Doesn't count bans nested inside other formats/rules.
+	 * Doesn't count bans nested inside other formats/rules except Force Select.
 	 */
 	private hasDirectCustomBanlistChanges() {
 		if (this.format.banlist.length || this.format.restricted.length || this.format.unbanlist.length) return true;
+		// Force Select is functionally a ban on not including a specific Pokemon.
+		// It may be enforced in-battle even if included nested from another format rather than customRules.
+		if (this.format.ruleTable?.valueRules.get('forceselect')) return true;
 		if (!this.format.customRules) return false;
 		for (const rule of this.format.customRules) {
 			for (const banlistOperator of ['-', '+', '*']) {
@@ -2092,6 +2095,7 @@ export class RandomTeams {
 		}
 
 		const isNotCustom = !ruleTable;
+		let validForceSelectForme = null;
 
 		const pool: number[] = [];
 		let speciesPool: Species[] = [];
@@ -2110,24 +2114,52 @@ export class RandomTeams {
 				pool.push(num);
 			}
 		} else {
+			if (ruleTable!.valueRules.get('forceselect')) {
+				const tryForceSelectSpecies = this.dex.species.get(ruleTable!.valueRules.get('forceselect'));
+				if (tryForceSelectSpecies.exists) {
+					// Accept force-selected Pokemon as one slot
+					validForceSelectForme = tryForceSelectSpecies.name;
+					n--;
+
+					// Manipulate rule table to prevent force-selected Pokemon from also being randomly selected
+					let ruleTableCopy = new RuleTable();
+					ruleTableCopy = Object.assign(ruleTableCopy, ruleTable);
+					ruleTable!.forEach((value, key) => { ruleTableCopy.set(key, value); });
+					ruleTable = ruleTableCopy;
+
+					const pokemonToken = `pokemon:${toID(validForceSelectForme)}`;
+					if (ruleTable.has(`+${pokemonToken}`)) {
+						ruleTable.delete(`+${pokemonToken}`);
+					}
+
+					const basePokemonToken = `basepokemon:${toID(tryForceSelectSpecies.baseSpecies)}`;
+					if (ruleTable.has(`+${basePokemonToken}`)) {
+						ruleTable.delete(`+${basePokemonToken}`);
+					}
+					if (!ruleTable.has(`-${basePokemonToken}`)) {
+						ruleTable.set(`-${basePokemonToken}`, '');
+					}
+				}
+			}
+
 			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
-			const nonexistentBanReason = ruleTable.check('nonexistent');
+			const nonexistentBanReason = ruleTable!.check('nonexistent');
 			// Assume tierSpecies does not differ from species here (mega formes can be used without their stone, etc)
 			for (const species of this.dex.species.all()) {
 				if (requiredType && !species.types.includes(requiredType)) continue;
 
-				let banReason = ruleTable.check('pokemon:' + species.id);
+				let banReason = ruleTable!.check('pokemon:' + species.id);
 				if (banReason) continue;
 				if (banReason !== '') {
-					if (species.isMega && ruleTable.check('pokemontag:mega')) continue;
+					if (species.isMega && ruleTable!.check('pokemontag:mega')) continue;
 
-					banReason = ruleTable.check('basepokemon:' + toID(species.baseSpecies));
+					banReason = ruleTable!.check('basepokemon:' + toID(species.baseSpecies));
 					if (banReason) continue;
 					if (banReason !== '' || this.dex.species.get(species.baseSpecies).isNonstandard !== species.isNonstandard) {
 						const nonexistentCheck = Tags.nonexistent.genericFilter!(species) && nonexistentBanReason;
 						let tagWhitelisted = false;
 						let tagBlacklisted = false;
-						for (const ruleid of ruleTable.tagRules) {
+						for (const ruleid of ruleTable!.tagRules) {
 							if (ruleid.startsWith('*')) continue;
 							const tagid = ruleid.slice(12);
 							const tag = Tags[tagid];
@@ -2144,7 +2176,7 @@ export class RandomTeams {
 						}
 						if (tagBlacklisted) continue;
 						if (!tagWhitelisted) {
-							if (ruleTable.check('pokemontag:allpokemon')) continue;
+							if (ruleTable!.check('pokemontag:allpokemon')) continue;
 						}
 					}
 				}
@@ -2172,15 +2204,21 @@ export class RandomTeams {
 		}
 
 		if (formes.length < n) {
-			throw new Error(`Legal Pokemon forme count insufficient to support Max Team Size: (${formes.length} / ${n}).`);
+			const legalFormeCount = validForceSelectForme ? (formes.length + 1) : formes.length;
+			const maxTeamSize = validForceSelectForme ? (n + 1) : n;
+			throw new Error(`Legal Pokemon forme count insufficient to support Max Team Size: (${legalFormeCount} / ${maxTeamSize}).`);
 		}
 
-		const nPokemon = [];
+		let nPokemon = [];
 		for (let i = 0; i < n; i++) {
 			if (!formes[i].length) {
 				throw new Error(`Invalid pokemon gen ${this.gen}: ${JSON.stringify(formes)} numbers ${JSON.stringify(hasDexNumber)}`);
 			}
 			nPokemon.push(this.sample(formes[i]));
+		}
+		if (validForceSelectForme) {
+			nPokemon.push(validForceSelectForme);
+			nPokemon = Utils.shuffle(nPokemon); // Order force-selected Pokemon randomly
 		}
 		return nPokemon;
 	}

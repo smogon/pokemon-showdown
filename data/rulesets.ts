@@ -519,7 +519,14 @@ export const Rulesets: {[k: string]: FormatData} = {
 		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
 		hasValue: true,
 		onValidateRule(value) {
-			if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);
+			const species = this.dex.species.get(value);
+			if (!species.exists) throw new Error(`Force Select: Misspelled Pokemon "${value}"`);
+
+			if (this.ruleTable.isBannedSpecies(species)) {
+				throw new Error(
+					`Because ${value} is both banned and required by Force Select, no possible team can pass the validator.`
+				);
+			}
 		},
 		onValidateTeam(team) {
 			let hasSelection = false;
