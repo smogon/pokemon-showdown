@@ -158,8 +158,8 @@ export const Formats: FormatList = [
 		ruleset: ['Little Cup', 'Standard'],
 		banlist: [
 			'Aipom', 'Basculin-White-Striped', 'Cutiefly', 'Diglett-Base', 'Dunsparce', 'Duraludon', 'Flittle', 'Girafarig', 'Gligar',
-			'Meditite', 'Misdreavus', 'Murkrow', 'Qwilfish-Hisui', 'Rufflet', 'Scraggy', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Stantler',
-			'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Baton Pass', 'Sticky Web',
+			'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Qwilfish-Hisui', 'Rufflet', 'Scraggy', 'Scyther', 'Sneasel', 'Sneasel-Hisui',
+			'Stantler', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Baton Pass', 'Sticky Web',
 		],
 	},
 	{
@@ -497,7 +497,7 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 9] LC'],
 		banlist: [
 			'Diglett-Alola', 'Drifloon', 'Drilbur', 'Elekid', 'Foongus', 'Gastly', 'Glimmet', 'Gothita', 'Grimer-Alola', 'Growlithe-Hisui', 'Impidimp',
-			'Koffing', 'Magby', 'Magnemite', 'Mareanie', 'Meowth-Base', 'Mienfoo', 'Minccino', 'Mudbray', 'Pawniard', 'Porygon', 'Shellder', 'Shroodle',
+			'Koffing', 'Magby', 'Magnemite', 'Mareanie', 'Meowth-Base', 'Mienfoo', 'Minccino', 'Mudbray', 'Pawniard', 'Shellder', 'Shroodle',
 			'Snivy', 'Snubbull', 'Stunky', 'Tentacool', 'Timburr', 'Tinkatink', 'Toedscool', 'Trapinch', 'Voltorb-Hisui', 'Vullaby', 'Wattrel',
 		],
 	},
@@ -532,7 +532,7 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 9] LC', 'Same Type Clause', 'Terastal Clause'],
 		banlist: ['Minccino', 'Damp Rock', 'Focus Band', 'Heat Rock', 'Icy Rock', 'Quick Claw'],
-		unbanlist: ['Diglett-Base', 'Growlithe-Hisui', 'Scraggy', 'Vulpix', 'Vulpix-Alola', 'Sticky Web'],
+		unbanlist: ['Diglett-Base', 'Growlithe-Hisui', 'Porygon', 'Scraggy', 'Vulpix', 'Vulpix-Alola', 'Sticky Web'],
 	},
 
 	// Pet Mods
