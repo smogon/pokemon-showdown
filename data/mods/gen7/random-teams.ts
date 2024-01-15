@@ -1102,9 +1102,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return 'Leftovers';
 	}
 
-	getLevel(
-		species: Species,
-	): number {
+	getLevel(species: Species): number {
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
 		if (this.gen >= 3) {
