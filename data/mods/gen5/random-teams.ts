@@ -948,6 +948,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const typeCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
+		let numMaxLevelPokemon = 0;
 
 		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
@@ -996,6 +997,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					}
 				}
 				if (skip) continue;
+
+				// Limit one level 100 Pokemon
+				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+					continue;
+				}
 			}
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
@@ -1025,6 +1031,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					typeWeaknesses[typeName]++;
 				}
 			}
+
+			// Increment level 100 counter
+			if (set.level === 100) numMaxLevelPokemon++;
 
 			// Team details
 			if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails.hail = 1;

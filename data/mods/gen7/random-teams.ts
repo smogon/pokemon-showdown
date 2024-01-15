@@ -1104,7 +1104,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 	getLevel(
 		species: Species,
-	) : number {
+	): number {
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
 		if (this.gen >= 3) {
@@ -1315,6 +1315,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
+		let numMaxLevelPokemon = 0;
 
 		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
 		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
@@ -1399,6 +1400,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
 							if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
 						}
+
+						// Limit one level 100 Pokemon
+						if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+							continue;
+						}
 					}
 
 					// Limit three of any type combination in Monotype
@@ -1450,6 +1456,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					}
 				}
 				if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
+
+				// Increment level 100 counter
+				if (set.level === 100) numMaxLevelPokemon++;
 
 				// Track what the team has
 				if (item.megaStone || species.name === 'Rayquaza-Mega') hasMega = true;
