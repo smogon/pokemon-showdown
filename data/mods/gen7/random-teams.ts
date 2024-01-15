@@ -1117,6 +1117,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		// Gen 2 still uses tier-based levelling
 		if (this.gen === 2) {
 			const levelScale: {[k: string]: number} = {
+				ZU: 81,
+				ZUBL: 79,
 				PU: 77,
 				PUBL: 75,
 				NU: 73,
