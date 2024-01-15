@@ -486,7 +486,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		if (player.completed) return user.sendTo(this.room, "You have already completed this scavenger hunt.");
 		this.runEvent('Leave', player);
 		this.joinedIps = this.joinedIps.filter(ip => !player.joinIps.includes(ip));
-		this.removePlayer(player);
+		this.removePlayer(user);
 		this.leftHunt[user.id] = 1;
 		user.sendTo(this.room, "You have left the scavenger hunt.");
 	}
@@ -903,7 +903,8 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		// do not remove players that have completed - they should still get to see the answers
 		if (player.completed) return true;
 
-		this.removePlayer(player);
+		player.destroy();
+		delete this.playerTable[userid];
 		return true;
 	}
 

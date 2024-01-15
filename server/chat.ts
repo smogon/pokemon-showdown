@@ -694,7 +694,9 @@ export class CommandContext extends MessageContext {
 			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
-			this.room.game?.onLogMessage?.(message, this.user);
+			if (this.room.game && this.room.game.onLogMessage) {
+				this.room.game.onLogMessage(message, this.user);
+			}
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
 		}
@@ -782,7 +784,8 @@ export class CommandContext extends MessageContext {
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
 	checkGameFilter() {
-		return this.room?.game?.onChatMessage?.(this.message, this.user);
+		if (!this.room?.game || !this.room.game.onChatMessage) return;
+		return this.room.game.onChatMessage(this.message, this.user);
 	}
 	pmTransform(originalMessage: string, sender?: User, receiver?: User | null | string) {
 		if (!sender) {

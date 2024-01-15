@@ -778,9 +778,9 @@ export abstract class BasicRoom {
 		if (this.parent === room) return;
 
 		if (this.parent) {
-			(this.parent.subRooms as any).delete(this.roomid);
+			(this as any).parent.subRooms.delete(this.roomid);
 			if (!this.parent.subRooms!.size) {
-				(this.parent.subRooms as any) = null;
+				(this as any).parent.subRooms = null;
 			}
 		}
 		(this as any).parent = room;
@@ -1048,7 +1048,7 @@ export abstract class BasicRoom {
 		if (user.named) {
 			this.reportJoin('l', user.getIdentity(this), user);
 		}
-		this.game?.onLeave?.(user);
+		if (this.game && this.game.onLeave) this.game.onLeave(user);
 		this.runAutoModchat();
 
 		return true;
