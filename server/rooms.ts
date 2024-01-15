@@ -1106,9 +1106,10 @@ export abstract class BasicRoom {
 	destroy(): void {
 		// deallocate ourself
 
-		if (this.battle && this.tour) {
-			// resolve state of the tournament;
-			if (!this.battle.ended) this.tour.onBattleWin(this as any as GameRoom, '');
+		if (this.game) {
+			this.game.destroy();
+			this.game = null;
+			this.battle = null;
 			this.tour = null;
 		}
 
@@ -1132,11 +1133,6 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.game) {
-			this.game.destroy();
-			this.game = null;
-			this.battle = null;
-		}
 		this.active = false;
 
 		// Ensure there aren't any pending messages that could restart the expire timer
