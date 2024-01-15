@@ -226,7 +226,7 @@
         "moves": ["haze", "hiddenpowerflying", "rest", "surf", "thunder"]
     },
     "mewtwo": {
-        "moves": ["fireblast", "icebeam", "psychic", "recover", "thunderbolt", "thunderwave"]
+        "moves": ["flamethrower", "icebeam", "psychic", "recover", "thunder", "thunderbolt"]
     },
     "mew": {
         "moves": ["earthquake", "explosion", "rockslide", "softboiled", "swordsdance"]

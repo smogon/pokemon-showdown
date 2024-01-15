@@ -1121,11 +1121,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["brickbreak", "doubleedge", "hiddenpowerghost", "hydropump", "return"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["brickbreak", "encore", "hiddenpowerghost", "hydropump", "rest", "return", "sleeptalk"],
+                "movepool": ["brickbreak", "doubleedge", "encore", "hiddenpowerghost", "hydropump", "rest", "return", "sleeptalk"],
                 "preferredTypes": ["Normal"]
             }
         ]
@@ -2321,7 +2317,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["explosion", "hypnosis", "icebeam", "psychic", "toxic"]
+                "movepool": ["explosion", "hiddenpowerfire", "hypnosis", "icebeam", "psychic", "toxic"]
             }
         ]
     },

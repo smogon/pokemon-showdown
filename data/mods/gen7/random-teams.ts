@@ -760,7 +760,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Mold Breaker':
 			return (
-				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || abilities.has('Sheer Force')
+				species.baseSpecies === 'Basculin' || species.id === 'pangoro' || species.id === 'pinsirmega' ||
+				abilities.has('Sheer Force')
 			);
 		case 'Oblivious': case 'Prankster':
 			return (!counter.get('Status') || (species.id === 'tornadus' && moves.has('bulkup')));
@@ -854,11 +855,13 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'raticatealola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
 		if (species.id === 'arcanine') return 'Intimidate';
+		if (species.id === 'lucariomega') return 'Justified';
 		if (species.id === 'toucannon' && !counter.get('sheerforce') && !counter.get('skilllink')) return 'Keen Eye';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
+		if (species.id === 'muk') return 'Poison Touch';
 		if (
 			['dusknoir', 'raikou', 'suicune', 'vespiquen'].includes(species.id)
 		) return 'Pressure';
@@ -1099,6 +1102,38 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return 'Leftovers';
 	}
 
+	getLevel(species: Species): number {
+		// level set by rules
+		if (this.adjustLevel) return this.adjustLevel;
+		if (this.gen >= 3) {
+			// Revamped generations use random-sets.json
+			const sets = this.randomSets[species.id];
+			if (sets.level) return sets.level;
+		} else {
+			// Other generations use random-data.json
+			const data = this.randomData[species.id];
+			if (data.level) return data.level;
+		}
+		// Gen 2 still uses tier-based levelling
+		if (this.gen === 2) {
+			const levelScale: {[k: string]: number} = {
+				ZU: 81,
+				ZUBL: 79,
+				PU: 77,
+				PUBL: 75,
+				NU: 73,
+				NUBL: 71,
+				UU: 69,
+				UUBL: 67,
+				OU: 65,
+				Uber: 61,
+			};
+			if (levelScale[species.tier]) return levelScale[species.tier];
+		}
+		// Default to 80
+		return 80;
+	}
+
 	randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
@@ -1164,7 +1199,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			item = 'Black Sludge';
 		}
 
-		const level = this.adjustLevel || this.randomSets[species.id]["level"] || (species.nfe ? 90 : 80);
+		const level = this.getLevel(species);
 
 		// Minimize confusion damage
 		if (!counter.get('Physical') && !moves.has('copycat') && !moves.has('transform')) {
@@ -1280,6 +1315,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
+		let numMaxLevelPokemon = 0;
 
 		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
 		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
@@ -1364,6 +1400,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
 							if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
 						}
+
+						// Limit one level 100 Pokemon
+						if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+							continue;
+						}
 					}
 
 					// Limit three of any type combination in Monotype
@@ -1415,6 +1456,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					}
 				}
 				if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
+
+				// Increment level 100 counter
+				if (set.level === 100) numMaxLevelPokemon++;
 
 				// Track what the team has
 				if (item.megaStone || species.name === 'Rayquaza-Mega') hasMega = true;

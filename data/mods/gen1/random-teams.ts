@@ -122,6 +122,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		// Now let's store what we are getting.
 		const typeCount: {[k: string]: number} = {};
 		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0, Fire: 0};
+		let numMaxLevelPokemon = 0;
 
 		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData))[0];
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
@@ -171,6 +172,12 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				continue;
 			}
 
+			// Limit one level 100 Pokemon
+			if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+				rejectedButNotInvalidPool.push(species.id);
+				continue;
+			}
+
 			// The set passes the limitations.
 			pokemon.push(this.randomSet(species));
 
@@ -188,6 +195,9 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			for (const weakness of pokemonWeaknesses) {
 				weaknessCount[weakness]++;
 			}
+
+			// Increment level 100 counter
+			if (this.getLevel(species) === 100) numMaxLevelPokemon++;
 
 			// Ditto check
 			if (species.id === 'ditto') this.battleHasDitto = true;
@@ -245,7 +255,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			}
 		}
 
-		const level = this.adjustLevel || data.level || 80;
+		const level = this.getLevel(species);
 
 		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
 		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};

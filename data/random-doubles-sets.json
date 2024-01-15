@@ -1274,7 +1274,12 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Baneful Bunker", "Burning Bulwark", "Decorate", "Fake Out", "Ruination", "Silk Trap", "Spiky Shield"],
+                "movepool": ["Decorate", "Fake Out", "Follow Me", "Pollen Puff", "Tailwind"],
+                "teraTypes": ["Ghost"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Decorate", "Fake Out", "Follow Me", "Tailwind"],
                 "teraTypes": ["Ghost"]
             }
         ]
@@ -1460,7 +1465,7 @@
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Hurricane", "Hydro Pump", "Muddy Water", "Tailwind", "Wide Guard"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Ground", "Steel"]
             }
         ]
     },

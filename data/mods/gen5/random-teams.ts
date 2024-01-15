@@ -488,8 +488,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Hyper Cutter': case 'Ice Body': case 'Moody': case 'Pickpocket':
-		case 'Pressure': case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
+		case 'Flare Boost': case 'Gluttony': case 'Ice Body': case 'Moody': case 'Pickpocket': case 'Pressure':
+		case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
 			return true;
 		case 'Chlorophyll':
 			// Petal Dance is for Lilligant
@@ -595,6 +595,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		) return 'Guts';
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
 		if (species.id === 'ninetales') return 'Drought';
+		if (species.id === 'gligar') return 'Immunity';
 		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.id === 'altaria') return 'Natural Cure';
@@ -856,7 +857,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Black Sludge';
 		}
 
-		const level = this.adjustLevel || this.randomSets[species.id]["level"] || (species.nfe ? 90 : 80);
+		const level = this.getLevel(species);
 
 		// We use a special variable to track Hidden Power
 		// so that we can check for all Hidden Powers at once
@@ -947,6 +948,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const typeCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
+		let numMaxLevelPokemon = 0;
 
 		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
@@ -995,6 +997,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					}
 				}
 				if (skip) continue;
+
+				// Limit one level 100 Pokemon
+				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
+					continue;
+				}
 			}
 
 			const set = this.randomSet(species, teamDetails, pokemon.length === 0);
@@ -1024,6 +1031,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					typeWeaknesses[typeName]++;
 				}
 			}
+
+			// Increment level 100 counter
+			if (set.level === 100) numMaxLevelPokemon++;
 
 			// Team details
 			if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails.hail = 1;
