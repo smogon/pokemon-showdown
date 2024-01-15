@@ -1107,14 +1107,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}
 	onRename(user: User, oldUserid: ID) {
 		if (oldUserid in this.playerTable) {
-			if (user.id === oldUserid) {
-				this.playerTable[user.id].name = user.name;
-			} else {
-				this.playerTable[user.id] = this.playerTable[oldUserid];
-				this.playerTable[user.id].id = user.id;
-				this.playerTable[user.id].name = user.name;
-				delete this.playerTable[oldUserid];
-			}
+			this.renamePlayer(user, oldUserid);
 		}
 
 		this.updateFor(user);

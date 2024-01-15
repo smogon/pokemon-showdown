@@ -149,7 +149,6 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 		if (user) {
 			this.updateChannel(user, 0);
 		}
-		this.id = '';
 		this.knownActive = false;
 		this.active = false;
 	}

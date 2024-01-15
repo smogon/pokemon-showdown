@@ -54,12 +54,14 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	 *
 	 * Do not modify directly. You usually want `game.updatePlayer`
 	 * (respects allowRenames) or `game.setPlayerUser` (overrides
-	 * allowRenames).
+	 * allowRenames) or `game.renamePlayer` (overrides allowRenames
+	 * and also skips gamelist updates if the change was a simple
+	 * user rename).
 	 *
-	 * If modifying: remember to sync `this.game.playerTable` and
+	 * If force-modifying: remember to sync `this.game.playerTable` and
 	 * `this.getUser().games`.
 	 */
-	id: ID;
+	readonly id: ID;
 	constructor(user: User | string | null, game: GameClass, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;
@@ -195,7 +197,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 		}
 		if (userOrName) {
 			const {name, id} = typeof userOrName === 'string' ? {name: userOrName, id: toID(userOrName)} : userOrName;
-			player.id = id;
+			(player.id as string) = id;
 			player.name = name;
 			this.playerTable[player.id] = player;
 			this.room.auth.set(id, Users.PLAYER_SYMBOL);
@@ -206,7 +208,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 				user.updateSearch();
 			}
 		} else {
-			player.id = '';
+			(player.id as string) = '';
 		}
 	}
 
@@ -222,12 +224,18 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 		return true;
 	}
 
+	/**
+	 * Like `setPlayerUser`, but bypasses some unnecessary game list updates if
+	 * the user renamed directly from the old userid.
+	 *
+	 * `this.playerTable[oldUserid]` mnust exist or this will crash.
+	 */
 	renamePlayer(user: User, oldUserid: ID) {
 		if (user.id === oldUserid) {
 			this.playerTable[user.id].name = user.name;
 		} else {
 			this.playerTable[user.id] = this.playerTable[oldUserid];
-			this.playerTable[user.id].id = user.id;
+			(this.playerTable[user.id].id as string) = user.id;
 			this.playerTable[user.id].name = user.name;
 			delete this.playerTable[oldUserid];
 		}
