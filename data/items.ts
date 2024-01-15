@@ -1430,7 +1430,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 235,
 		gen: 2,
-		isNonstandard: "Past",
 	},
 	dragoniumz: {
 		name: "Dragonium Z",
