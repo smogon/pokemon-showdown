@@ -1081,10 +1081,12 @@ export class User extends Chat.MessageContext {
 				room.onJoin(this, connection);
 				this.inRooms.add(roomid);
 			}
-			// Yes, this is intentionally supposed to call onConnect twice
-			// during a normal login. Override onUpdateConnection if you
-			// don't want this behavior.
-			room.game?.onUpdateConnection?.(this, connection);
+			if (room.game && room.game.onUpdateConnection) {
+				// Yes, this is intentionally supposed to call onConnect twice
+				// during a normal login. Override onUpdateConnection if you
+				// don't want this behavior.
+				room.game.onUpdateConnection(this, connection);
+			}
 		}
 		this.updateReady(connection);
 	}
@@ -1295,17 +1297,20 @@ export class User extends Chat.MessageContext {
 	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
 		roomid = roomid && (roomid as Room).roomid ? (roomid as Room).roomid : roomid as RoomID;
 		const room = Rooms.search(roomid);
-		if (!room) {
-			if (roomid.startsWith('view-')) {
-				return Chat.resolvePage(roomid, this, connection);
-			}
-			connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
-			return false;
+		if (!room && roomid.startsWith('view-')) {
+			return Chat.resolvePage(roomid, this, connection);
 		}
-		if (!room.checkModjoin(this)) {
-			if (!this.named) return Rooms.RETRY_AFTER_LOGIN;
-			connection.sendTo(roomid, `|noinit|joinfailed|The room "${roomid}" is invite-only, and you haven't been invited.`);
-			return false;
+		if (!room?.checkModjoin(this)) {
+			if (!this.named) {
+				return Rooms.RETRY_AFTER_LOGIN;
+			} else {
+				if (room) {
+					connection.sendTo(roomid, `|noinit|joinfailed|The room "${roomid}" is invite-only, and you haven't been invited.`);
+				} else {
+					connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
+				}
+				return false;
+			}
 		}
 		if ((room as GameRoom).tour) {
 			const errorMessage = (room as GameRoom).tour!.onBattleJoin(room as GameRoom, this);
@@ -1541,13 +1546,20 @@ export class User extends Chat.MessageContext {
 	destroy() {
 		// deallocate user
 		for (const roomid of this.games) {
-			const game = Rooms.get(roomid)?.game;
+			const room = Rooms.get(roomid);
+			if (!room) {
+				Monitor.warn(`while deallocating, room ${roomid} did not exist for ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
+				this.games.delete(roomid);
+				continue;
+			}
+			const game = room.game;
 			if (!game) {
 				Monitor.warn(`while deallocating, room ${roomid} did not have a game for ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
 				this.games.delete(roomid);
 				continue;
 			}
-			if (!game.ended) game.forfeit?.(this, " lost by being offline too long.");
+			if (game.ended) continue;
+			if (game.forfeit) game.forfeit(this);
 		}
 		this.clearChatQueue();
 		this.destroyPunishmentTimer();
