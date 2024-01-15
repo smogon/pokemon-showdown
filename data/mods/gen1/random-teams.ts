@@ -245,7 +245,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			}
 		}
 
-		const level = this.adjustLevel || data.level || 80;
+		const level = this.getLevel(species);
 
 		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
 		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};

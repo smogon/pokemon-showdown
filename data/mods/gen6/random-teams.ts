@@ -911,7 +911,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Black Sludge';
 		}
 
-		const level = this.adjustLevel || this.randomSets[species.id]["level"] || (species.nfe ? 90 : 80);
+		const level = this.getLevel(species);
 
 		// Minimize confusion damage
 		if (!counter.get('Physical') && !moves.has('copycat') && !moves.has('transform')) {

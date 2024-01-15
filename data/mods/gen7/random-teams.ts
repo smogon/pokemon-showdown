@@ -1102,6 +1102,38 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return 'Leftovers';
 	}
 
+	getLevel(
+		species: Species,
+	) : number {
+		// level set by rules
+		if (this.adjustLevel) return this.adjustLevel;
+		if (this.gen >= 3) {
+			// Revamped generations use random-sets.json
+			const sets = this.randomSets[species.id];
+			if (sets.level) return sets.level;
+		} else {
+			// Other generations use random-data.json
+			const data = this.randomData[species.id];
+			if (data.level) return data.level;
+		}
+		// Gen 2 still uses tier-based levelling
+		if (this.gen === 2) {
+			const levelScale: {[k: string]: number} = {
+				PU: 77,
+				PUBL: 75,
+				NU: 73,
+				NUBL: 71,
+				UU: 69,
+				UUBL: 67,
+				OU: 65,
+				Uber: 61,
+			};
+			if (levelScale[species.tier]) return levelScale[species.tier];
+		}
+		// Default to 80
+		return 80;
+	}
+
 	randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
@@ -1167,7 +1199,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			item = 'Black Sludge';
 		}
 
-		const level = this.adjustLevel || this.randomSets[species.id]["level"] || (species.nfe ? 90 : 80);
+		const level = this.getLevel(species);
 
 		// Minimize confusion damage
 		if (!counter.get('Physical') && !moves.has('copycat') && !moves.has('transform')) {
