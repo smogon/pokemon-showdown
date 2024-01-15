@@ -488,8 +488,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Ice Body': case 'Moody': case 'Pickpocket':
-		case 'Pressure': case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
+		case 'Flare Boost': case 'Gluttony': case 'Ice Body': case 'Moody': case 'Pickpocket': case 'Pressure':
+		case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
 			return true;
 		case 'Chlorophyll':
 			// Petal Dance is for Lilligant
