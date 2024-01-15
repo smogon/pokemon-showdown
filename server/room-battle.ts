@@ -1238,10 +1238,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	override destroy() {
-		if (!this.ended) {
-			this.setEnded();
-			this.room.parent?.game?.onBattleWin?.(this.room, '');
-		}
+		this.setEnded();
 		for (const player of this.players) {
 			player.destroy();
 		}
