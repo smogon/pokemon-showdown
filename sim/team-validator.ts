@@ -625,6 +625,9 @@ export class TeamValidator {
 			setSources.sourcesBefore = 0;
 			setSources.sources = ['8S0 melmetal'];
 		}
+		if(species.id === 'volbeat' && dex.gen === 7 && set.moves.includes('Dizzy Punch') && set.moves.includes('Lunge')) {
+			return [`Volbeat can't get its egg move combination (Dizzy Punch, Lunge) from any possible father.`];
+		}
 		if (!species.exists) {
 			return [`The Pokemon "${set.species}" does not exist.`];
 		}
