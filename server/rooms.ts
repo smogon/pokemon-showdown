@@ -1324,7 +1324,7 @@ export class GlobalRoomState {
 		for (const [i, playerid] of players.entries()) {
 			room.auth.set(playerid, Users.PLAYER_SYMBOL);
 			const player = room.battle.players[i];
-			player.id = playerid;
+			(player.id as string) = playerid;
 			room.battle.playerTable[playerid] = player;
 			player.hasTeam = true;
 			const user = Users.getExact(playerid);
