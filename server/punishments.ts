@@ -1339,9 +1339,7 @@ export const Punishments = new class {
 		if (room.subRooms) {
 			for (const subRoom of room.subRooms.values()) {
 				for (const curUser of affected) {
-					if (subRoom.game && subRoom.game.removeBannedUser) {
-						subRoom.game.removeBannedUser(curUser);
-					}
+					subRoom.game?.removeBannedUser?.(curUser);
 					curUser.leaveRoom(subRoom.roomid);
 				}
 			}
@@ -1359,9 +1357,7 @@ export const Punishments = new class {
 		for (const curUser of affected) {
 			// ensure there aren't roombans so nothing gets mixed up
 			Punishments.roomUnban(room, (curUser as any).id || curUser);
-			if (room.game && room.game.removeBannedUser) {
-				room.game.removeBannedUser(curUser);
-			}
+			room.game?.removeBannedUser?.(curUser);
 			curUser.leaveRoom(room.roomid);
 		}
 
@@ -1841,9 +1837,7 @@ export const Punishments = new class {
 				}
 				if (punishment.type !== 'ROOMBAN' && punishment.type !== 'BLACKLIST') return null;
 				const room = Rooms.get(roomid)!;
-				if (room.game && room.game.removeBannedUser) {
-					room.game.removeBannedUser(user);
-				}
+				room.game?.removeBannedUser?.(user);
 				user.leaveRoom(room.roomid);
 			}
 			return punishments;

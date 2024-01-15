@@ -311,7 +311,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 
 	forfeit(user: User) {
 		if (!(user.id in this.playerTable)) return;
-		this.removePlayer(user);
+		this.removePlayer(this.playerTable[user.id]);
 		if (!this.ticket.open) return;
 		this.room.modlog({action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id});
 		this.addText(`${user.name} is no longer interested in this ticket.`, user);

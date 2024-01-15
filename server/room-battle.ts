@@ -494,7 +494,7 @@ export interface RoomBattleOptions {
 
 export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	override readonly gameid = 'battle' as ID;
-	override readonly room: GameRoom;
+	override readonly room!: GameRoom;
 	override readonly title: string;
 	override readonly allowRenames: boolean;
 	readonly format: string;
@@ -538,7 +538,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
 		const format = Dex.formats.get(options.format, true);
-		this.room = room;
 		this.title = format.name;
 		this.options = options;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
@@ -863,7 +862,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				Chat.parse(command, this.room, uploader, uploader.connections[0]);
 			}
 		}
-		// @ts-ignore - Tournaments aren't TS'd yet
 		this.room.parent?.game?.onBattleWin?.(this.room, winnerid);
 		// If the room's replay was hidden, don't let users join after the game is over
 		if (this.room.hideReplay) {
@@ -941,9 +939,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.sendInviteForm(connection || user);
 		}
 		if (!player.active) this.onJoin(user);
-	}
-	override onUpdateConnection(user: User, connection: Connection | null = null) {
-		this.onConnect(user, connection);
 	}
 	override onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (user.id === oldUserid) return;
@@ -1362,6 +1357,7 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 export class BestOfGame extends RoomGame<BestOfPlayer> {
 	override readonly gameid = 'bestof' as ID;
 	override allowRenames = false;
+	override room!: GameRoom;
 	bestOf: number;
 	format: Format;
 	winThreshold: number;
@@ -1378,7 +1374,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	/** Does NOT control bestof's own timer, which is always-on. Controls timers in sub-battles. */
 	needsTimer = false;
 	score: number[] | null = null;
-	constructor(room: Room, options: RoomBattleOptions) {
+	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
 		this.format = Dex.formats.get(options.format);
 		this.bestOf = Number(Dex.formats.getRuleTable(this.format).valueRules.get('bestof'))!;
@@ -1584,7 +1580,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	}
 
 	onBattleWin(room: Room, winnerid: ID) {
-		if (this.ended) return; // ???
+		if (this.ended) return; // can happen if the bo3 is destroyed fsr
 
 		const winner = winnerid ? this.playerTable[winnerid] : null;
 		this.games[this.games.length - 1].winner = winner;
@@ -1596,7 +1592,6 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			}
 			this.room.add(Utils.html`|html|${winner.name} won game ${this.games.length}!`).update();
 			if (winner.wins >= this.winThreshold) {
-				this.setEnded();
 				return this.onEnd(winner.id);
 			}
 		} else {
@@ -1667,8 +1662,13 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			this.nextGame();
 		}
 	}
-	async onEnd(winnerid: ID) {
+	override setEnded() {
 		this.clearWaiting();
+		super.setEnded();
+	}
+	async onEnd(winnerid: ID) {
+		if (this.ended) return;
+		this.setEnded();
 		this.room.add(`|allowleave|`).update();
 		const winner = winnerid ? this.playerTable[winnerid] : null;
 		this.winner = winner;
@@ -1682,8 +1682,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		const p1 = this.players[0];
 		const p2 = this.players[1];
 		this.score = this.players.map(p => p.wins);
-		// @ts-ignore - Tournaments aren't TS'd yet
-		this.room.parent?.game?.onBattleWin?.(this.room, winner.id);
+		this.room.parent?.game?.onBattleWin?.(this.room, winnerid);
 		// run elo stuff here
 		let p1score = 0.5;
 		if (winner === p1) {
@@ -1694,7 +1693,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 
 		const {rated, room} = this.games[this.games.length - 1];
 		const battle = room.battle;
-		if (!battle) throw new Error(`Room ${room.roomid} has no battle???`);
+		if (!battle) return; // expired room
 		if (rated) {
 			room.rated = rated; // just in case
 			const winnerUser = winner?.getUser();
@@ -1728,12 +1727,12 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		return true;
 	}
 	override destroy() {
-		this.clearWaiting();
+		this.setEnded();
+		for (const {room} of this.games) room.expire();
+		this.games = [];
 		for (const p of this.players) p.destroy();
 		this.players = [];
 		this.playerTable = {};
-		for (const {room} of this.games) room.destroy();
-		this.games = [];
 		this.winner = null;
 	}
 }

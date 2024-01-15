@@ -1468,8 +1468,7 @@ const commands: Chat.ChatCommands = {
 			} else {
 				Punishments.roomPunishName(room, targetUserid, punishment);
 			}
-			const tour = room.getGame(Tournament);
-			if (tour) tour.removeBannedUser(targetUserid);
+			room.getGame(Tournament)?.removeBannedUser(targetUserid);
 
 			this.modlog('TOURBAN', targetUser, reason);
 			this.privateModAction(
@@ -1986,13 +1985,7 @@ const commands: Chat.ChatCommands = {
 			if (this.meansYes(option)) {
 				tournament.setForceTimer(true);
 				for (const player of tournament.players) {
-					const curMatch = player.inProgressMatch;
-					if (curMatch) {
-						const battle = curMatch.room.game;
-						if (battle) {
-							battle.startTimer();
-						}
-					}
+					player.inProgressMatch?.room.game?.startTimer();
 				}
 				this.privateModAction(`The timer was turned on for the tournament by ${user.name}`);
 				this.modlog('TOUR FORCETIMER', null, 'ON');
@@ -2012,27 +2005,25 @@ const commands: Chat.ChatCommands = {
 					return this.parse(`/help tour settings`);
 				}
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansYes(target)) {
-					if (!room.settings.tournaments.allowModjoin) {
-						if (tour && !tour.allowModjoin) this.parse(`/tour modjoin allow`);
-						room.settings.tournaments.allowModjoin = true;
-						room.saveSettings();
-						this.privateModAction(`Modjoin was enabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'modjoin: ALLOW');
-					} else {
+					if (room.settings.tournaments.allowModjoin) {
 						throw new Chat.ErrorMessage(`Modjoin is already enabled for every tournament.`);
 					}
+					if (tour && !tour.allowModjoin) this.parse(`/tour modjoin allow`);
+					room.settings.tournaments.allowModjoin = true;
+					room.saveSettings();
+					this.privateModAction(`Modjoin was enabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'modjoin: ALLOW');
 				} else {
-					if (room.settings.tournaments.allowModjoin) {
-						if (tour?.allowModjoin) this.parse(`/tour modjoin disallow`);
-						room.settings.tournaments.allowModjoin = false;
-						room.saveSettings();
-						this.privateModAction(`Modjoin was disabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'modjoin: DISALLOW');
-					} else {
+					if (!room.settings.tournaments.allowModjoin) {
 						throw new Chat.ErrorMessage(`Modjoin is already disabled for every tournament.`);
 					}
+					if (tour?.allowModjoin) this.parse(`/tour modjoin disallow`);
+					room.settings.tournaments.allowModjoin = false;
+					room.saveSettings();
+					this.privateModAction(`Modjoin was disabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'modjoin: DISALLOW');
 				}
 			},
 			scouting(target, room, user) {
@@ -2040,27 +2031,25 @@ const commands: Chat.ChatCommands = {
 				this.checkCan('declare', null, room);
 				if (!target || (!this.meansYes(target) && !this.meansNo(target))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansYes(target)) {
-					if (!room.settings.tournaments.allowScouting) {
-						if (tour && !tour.allowScouting) this.parse(`/tour scouting allow`);
-						room.settings.tournaments.allowScouting = true;
-						room.saveSettings();
-						this.privateModAction(`Scouting was enabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'scouting: ALLOW');
-					} else {
+					if (room.settings.tournaments.allowScouting) {
 						throw new Chat.ErrorMessage(`Scouting is already enabled for every tournament.`);
 					}
+					if (tour && !tour.allowScouting) this.parse(`/tour scouting allow`);
+					room.settings.tournaments.allowScouting = true;
+					room.saveSettings();
+					this.privateModAction(`Scouting was enabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'scouting: ALLOW');
 				} else {
-					if (room.settings.tournaments) {
-						if (tour?.allowScouting) this.parse(`/tour scouting disallow`);
-						room.settings.tournaments.allowScouting = false;
-						room.saveSettings();
-						this.privateModAction(`Scouting was disabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'scouting: DISALLOW');
-					} else {
+					if (!room.settings.tournaments.allowScouting) {
 						throw new Chat.ErrorMessage(`Scouting is already disabled for every tournament.`);
 					}
+					if (tour?.allowScouting) this.parse(`/tour scouting disallow`);
+					room.settings.tournaments.allowScouting = false;
+					room.saveSettings();
+					this.privateModAction(`Scouting was disabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'scouting: DISALLOW');
 				}
 			},
 			aconly: 'autoconfirmedonly',
@@ -2070,7 +2059,7 @@ const commands: Chat.ChatCommands = {
 				room = this.requireRoom();
 				this.checkCan('declare', null, room);
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				const value = this.meansYes(target) ? true : this.meansNo(target) ? false : null;
 				if (!target || value === null) return this.parse(`/help tour settings`);
 				if (room.settings.tournaments.autoconfirmedOnly === value) {
@@ -2088,27 +2077,25 @@ const commands: Chat.ChatCommands = {
 				this.checkCan('declare', null, room);
 				if (!target || (!this.meansNo(target) && !this.meansYes(target))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansNo(target)) {
-					if (room.settings.tournaments.forcePublic) {
-						if (tour?.forcePublic) this.parse(`/tour forcepublic off`);
-						room.settings.tournaments.forcePublic = false;
-						room.saveSettings();
-						this.privateModAction(`Forced public battles were disabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'forcepublic: DISABLE');
-					} else {
+					if (!room.settings.tournaments.forcePublic) {
 						throw new Chat.ErrorMessage(`Forced public battles are already disabled for every tournament.`);
 					}
+					if (tour?.forcePublic) this.parse(`/tour forcepublic off`);
+					room.settings.tournaments.forcePublic = false;
+					room.saveSettings();
+					this.privateModAction(`Forced public battles were disabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'forcepublic: DISABLE');
 				} else {
-					if (!room.settings.tournaments.forcePublic) {
-						if (tour && !tour.forcePublic) this.parse(`/tour forcepublic on`);
-						room.settings.tournaments.forcePublic = true;
-						room.saveSettings();
-						this.privateModAction(`Forced public battles were enabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'forcepublic: ENABLE');
-					} else {
+					if (room.settings.tournaments.forcePublic) {
 						throw new Chat.ErrorMessage(`Forced public battles are already enabled for every tournament.`);
 					}
+					if (tour && !tour.forcePublic) this.parse(`/tour forcepublic on`);
+					room.settings.tournaments.forcePublic = true;
+					room.saveSettings();
+					this.privateModAction(`Forced public battles were enabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'forcepublic: ENABLE');
 				}
 			},
 			forcetimer(target, room, user) {
@@ -2116,27 +2103,25 @@ const commands: Chat.ChatCommands = {
 				this.checkCan('declare', null, room);
 				if (!target || (!this.meansNo(target) && !this.meansYes(target))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansNo(target)) {
-					if (room.settings.tournaments.forceTimer) {
-						if (tour?.forceTimer) this.parse(`/tour forcetimer off`);
-						room.settings.tournaments.forceTimer = false;
-						room.saveSettings();
-						this.privateModAction(`Forced timer was disabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'forcetimer: DISABLE');
-					} else {
+					if (!room.settings.tournaments.forceTimer) {
 						throw new Chat.ErrorMessage(`Forced timer is already disabled for every tournament.`);
 					}
+					if (tour?.forceTimer) this.parse(`/tour forcetimer off`);
+					room.settings.tournaments.forceTimer = false;
+					room.saveSettings();
+					this.privateModAction(`Forced timer was disabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'forcetimer: DISABLE');
 				} else {
-					if (!room.settings.tournaments.forceTimer) {
-						if (tour && !tour.forceTimer) this.parse(`/tour forcetimer on`);
-						room.settings.tournaments.forceTimer = true;
-						room.saveSettings();
-						this.privateModAction(`Forced timer was enabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'forcetimer: ENABLE');
-					} else {
+					if (room.settings.tournaments.forceTimer) {
 						throw new Chat.ErrorMessage(`Forced timer is already enabled for every tournament.`);
 					}
+					if (tour && !tour.forceTimer) this.parse(`/tour forcetimer on`);
+					room.settings.tournaments.forceTimer = true;
+					room.saveSettings();
+					this.privateModAction(`Forced timer was enabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'forcetimer: ENABLE');
 				}
 			},
 			autostart(target, room, user) {
@@ -2147,19 +2132,18 @@ const commands: Chat.ChatCommands = {
 					return this.parse(`/help tour settings`);
 				}
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansNo(target)) {
-					if (room.settings.tournaments.autostart) {
-						if (tour && !tour.isTournamentStarted && tour.autoDisqualifyTimeout !== Infinity) {
-							this.parse(`/tour setautojoin off`);
-						}
-						room.settings.tournaments.autostart = false;
-						room.saveSettings();
-						this.privateModAction(`Autostart was disabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'autostart: DISABLE');
-					} else {
+					if (!room.settings.tournaments.autostart) {
 						throw new Chat.ErrorMessage(`Autostart is already disabled for every tournament.`);
 					}
+					if (tour && !tour.isTournamentStarted && tour.autoDisqualifyTimeout !== Infinity) {
+						this.parse(`/tour setautojoin off`);
+					}
+					room.settings.tournaments.autostart = false;
+					room.saveSettings();
+					this.privateModAction(`Autostart was disabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'autostart: DISABLE');
 				} else if (this.meansYes(target) && target !== '1') {
 					if (room.settings.tournaments.autostart === true) {
 						throw new Chat.ErrorMessage(`Autostart for every tournament is already set to true.`);
@@ -2192,19 +2176,18 @@ const commands: Chat.ChatCommands = {
 				const num = Number(target);
 				if (!target || (!this.meansNo(target) && isNaN(num))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansNo(target)) {
-					if (room.settings.tournaments.autodq) {
-						if (tour && !tour.isTournamentStarted && tour.autoDisqualifyTimeout !== Infinity) {
-							this.parse(`/tour autodq off`);
-						}
-						delete room.settings.tournaments.autodq;
-						room.saveSettings();
-						this.privateModAction(`Automatic disqualification was disabled for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'autodq: DISABLE');
-					} else {
+					if (!room.settings.tournaments.autodq) {
 						throw new Chat.ErrorMessage(`Automatic disqualification is already disabled for every tournament.`);
 					}
+					if (tour && !tour.isTournamentStarted && tour.autoDisqualifyTimeout !== Infinity) {
+						this.parse(`/tour autodq off`);
+					}
+					delete room.settings.tournaments.autodq;
+					room.saveSettings();
+					this.privateModAction(`Automatic disqualification was disabled for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'autodq: DISABLE');
 				} else if (!isNaN(num)) {
 					const timeout = num * 60 * 1000;
 					if (timeout < 0.5 * 60 * 1000 || timeout > Chat.MAX_TIMEOUT_DURATION) {
@@ -2228,19 +2211,18 @@ const commands: Chat.ChatCommands = {
 				const num = parseInt(target);
 				if (!target || (!this.meansNo(target) && isNaN(num))) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansNo(target)) {
-					if (room.settings.tournaments.playerCap) {
-						if (tour && !tour.isTournamentStarted && tour.playerCap) {
-							this.parse(`/tour setplayercap off`);
-						}
-						delete room.settings.tournaments.playerCap;
-						room.saveSettings();
-						this.privateModAction(`Player Cap was removed for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, 'playercap: REMOVE');
-					} else {
+					if (!room.settings.tournaments.playerCap) {
 						throw new Chat.ErrorMessage(`Player Cap is already removed for every tournament.`);
 					}
+					if (tour && !tour.isTournamentStarted && tour.playerCap) {
+						this.parse(`/tour setplayercap off`);
+					}
+					delete room.settings.tournaments.playerCap;
+					room.saveSettings();
+					this.privateModAction(`Player Cap was removed for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, 'playercap: REMOVE');
 				} else if (!isNaN(num)) {
 					if (num < 2) {
 						throw new Chat.ErrorMessage(`The Player Cap must be at least 2.`);
@@ -2268,26 +2250,24 @@ const commands: Chat.ChatCommands = {
 				this.checkCan('declare', null, room);
 				if (!target) return this.parse(`/help tour settings`);
 				const tour = room.getGame(Tournament);
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansYes(target)) {
-					if (!room.settings.tournaments.showSampleTeams) {
-						if (tour && !tour.isTournamentStarted) tour.showSampleTeams();
-						room.settings.tournaments.showSampleTeams = true;
-						room.saveSettings();
-						this.privateModAction(`Show Sample Teams was set to ON for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, `show sample teams: ON`);
-					} else {
+					if (room.settings.tournaments.showSampleTeams) {
 						throw new Chat.ErrorMessage(`Sample teams are already shown for every tournament.`);
 					}
+					if (tour && !tour.isTournamentStarted) tour.showSampleTeams();
+					room.settings.tournaments.showSampleTeams = true;
+					room.saveSettings();
+					this.privateModAction(`Show Sample Teams was set to ON for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, `show sample teams: ON`);
 				} else if (this.meansNo(target)) {
-					if (room.settings.tournaments.showSampleTeams) {
-						delete room.settings.tournaments.showSampleTeams;
-						room.saveSettings();
-						this.privateModAction(`Show Sample Teams was set to OFF for every tournament by ${user.name}`);
-						this.modlog('TOUR SETTINGS', null, `show sample teams: OFF`);
-					} else {
+					if (!room.settings.tournaments.showSampleTeams) {
 						throw new Chat.ErrorMessage(`Sample teams are already not shown for every tournament.`);
 					}
+					delete room.settings.tournaments.showSampleTeams;
+					room.saveSettings();
+					this.privateModAction(`Show Sample Teams was set to OFF for every tournament by ${user.name}`);
+					this.modlog('TOUR SETTINGS', null, `show sample teams: OFF`);
 				} else {
 					return this.sendReply(`Usage: ${this.cmdToken}${this.fullCmd} <on|off>`);
 				}
@@ -2295,15 +2275,14 @@ const commands: Chat.ChatCommands = {
 			recenttours(target, room, user) {
 				room = this.requireRoom();
 				this.checkCan('declare', null, room);
-				const num = parseInt(target);
-				const force = toID(target) === 'forcedelete';
-				if (!target ||
-					(!this.meansNo(target) && !force &&
-						(isNaN(num) || num > 15 || num < 0))) {
+				let num = parseInt(target);
+				const forcedelete = toID(target) === 'forcedelete';
+				if (this.meansNo(target) || forcedelete) num = 0;
+				if (isNaN(num) || num > 15 || num < 0) {
 					return this.parse(`/help tour settings`);
 				}
-				if (!room.settings.tournaments) room.settings.tournaments = {};
-				if (!isNaN(num) && num <= 15 && num >= 1) {
+				room.settings.tournaments ||= {};
+				if (num >= 1) {
 					if (room.settings.tournaments.recentToursLength === num) {
 						throw new Chat.ErrorMessage(`Number of recent tournaments to record is already set to ${num}.`);
 					}
@@ -2316,24 +2295,19 @@ const commands: Chat.ChatCommands = {
 					room.saveSettings();
 					this.privateModAction(`Number of recent tournaments to record was set to ${num} by ${user.name}.`);
 					this.modlog('TOUR SETTINGS', null, `recent tours: ${num} most recent`);
-				} else if (this.meansNo(target) || force) {
-					if (room.settings.tournaments.recentToursLength) {
-						delete room.settings.tournaments.recentToursLength;
-						if (force) {
-							delete room.settings.tournaments.recentTours;
-							this.privateModAction(`Recent tournaments list was deleted by ${user.name}.`);
-							this.modlog('TOUR SETTINGS', null, `recent tours: delete`);
-						}
-						room.saveSettings();
-						this.privateModAction(`Number of recent tournaments to record was turned off by ${user.name}.`);
-						this.modlog('TOUR SETTINGS', null, `recent tours: off`);
-					} else {
-						if (!force) {
-							throw new Chat.ErrorMessage(`Number of recent tournaments to record is already disabled.`);
-						}
-					}
 				} else {
-					this.sendReply(`Usage: ${this.cmdToken}${this.fullCmd} <number|off|forcedelete>`);
+					if (forcedelete && room.settings.tournaments.recentTours) {
+						delete room.settings.tournaments.recentTours;
+						this.privateModAction(`Recent tournaments list was deleted by ${user.name}.`);
+						this.modlog('TOUR SETTINGS', null, `recent tours: delete`);
+					}
+					if (!room.settings.tournaments.recentToursLength) {
+						throw new Chat.ErrorMessage(`Number of recent tournaments to record is already disabled.`);
+					}
+					delete room.settings.tournaments.recentToursLength;
+					room.saveSettings();
+					this.privateModAction(`Number of recent tournaments to record was turned off by ${user.name}.`);
+					this.modlog('TOUR SETTINGS', null, `recent tours: off`);
 				}
 			},
 			blockrecents(target, room, user) {
@@ -2346,7 +2320,7 @@ const commands: Chat.ChatCommands = {
 					}
 					return this.parse(`/help tour settings`);
 				}
-				if (!room.settings.tournaments) room.settings.tournaments = {};
+				room.settings.tournaments ||= {};
 				if (this.meansYes(target)) {
 					if (room.settings.tournaments.blockRecents) {
 						throw new Chat.ErrorMessage(`Recent tournaments are already blocked from being made.`);
