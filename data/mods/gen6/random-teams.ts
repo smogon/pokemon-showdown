@@ -527,7 +527,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Hyper Cutter': case 'Ice Body': case 'Magician':
+		case 'Flare Boost': case 'Gluttony': case 'Harvest': case 'Ice Body': case 'Magician':
 		case 'Moody': case 'Pressure': case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast':
 			return true;
 		case 'Aerilate': case 'Pixilate': case 'Refrigerate':
@@ -643,12 +643,16 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
 		if (species.id === 'ninetales') return 'Drought';
+		if (species.id === 'pinsirmega') return 'Hyper Cutter';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
+		if (species.id === 'lucariomega') return 'Justified';
+		if (species.id === 'gligar') return 'Immunity';
 		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'rampardos' && role === 'Bulky Attacker') return 'Mold Breaker';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
+		if (species.id === 'muk') return 'Poison Touch';
 		if (['dusknoir', 'vespiquen'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
 		if (species.id === 'pangoro' && !counter.get('ironfist')) return 'Scrappy';
@@ -907,7 +911,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			item = 'Black Sludge';
 		}
 
-		const level = this.adjustLevel || this.randomSets[species.id]["level"] || (species.nfe ? 90 : 80);
+		const level = this.getLevel(species);
 
 		// Minimize confusion damage
 		if (!counter.get('Physical') && !moves.has('copycat') && !moves.has('transform')) {

@@ -724,7 +724,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Black Sludge';
 		}
 
-		const level = this.adjustLevel || this.randomSets[species.id]["level"] || (species.nfe ? 90 : 80);
+		const level = this.getLevel(species);
 
 		// We use a special variable to track Hidden Power
 		// so that we can check for all Hidden Powers at once

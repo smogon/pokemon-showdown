@@ -2463,6 +2463,7 @@ export class RandomGen8Teams {
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
+		let numMaxLevelPokemon = 0;
 
 		const pokemonList = [];
 		for (const poke of Object.keys(this.randomData)) {
@@ -2535,6 +2536,12 @@ export class RandomGen8Teams {
 					if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
 					if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
 				}
+
+				// Limit one level 100 Pokemon
+				if (
+					!this.adjustLevel && numMaxLevelPokemon >= limitFactor &&
+					(this.getLevel(species, isDoubles, this.dex.formats.getRuleTable(this.format).has('dynamaxclause')) === 100)
+				) continue;
 			}
 
 			// Limit three of any type combination in Monotype
@@ -2576,6 +2583,9 @@ export class RandomGen8Teams {
 				}
 			}
 			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
+
+			// Increment level 100 counter
+			if (set.level === 100) numMaxLevelPokemon++;
 
 			// Track what the team has
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
