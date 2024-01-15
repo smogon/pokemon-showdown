@@ -493,7 +493,6 @@ export class RandomTeams {
 				// In order of decreasing generalizability
 				[SPEED_CONTROL, SPEED_CONTROL],
 				[HAZARDS, HAZARDS],
-				[PROTECT_MOVES, PROTECT_MOVES],
 				['rockslide', 'stoneedge'],
 				[SETUP, ['fakeout', 'helpinghand']],
 				[PROTECT_MOVES, 'wideguard'],
@@ -902,16 +901,11 @@ export class RandomTeams {
 			}
 		}
 
-		// Enforce redirecting moves, or Fake Out if no redirecting move
+		// Enforce redirecting moves and Fake Out on Doubles Support
 		if (role === 'Doubles Support') {
-			const redirectMoves = movePool.filter(moveid => ['followme', 'ragepowder'].includes(moveid));
-			if (redirectMoves.length) {
-				const moveid = this.sample(redirectMoves);
-				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			} else {
-				if (movePool.includes('fakeout')) {
-					counter = this.addMove('fakeout', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+			for (const moveid of ['fakeout', 'followme', 'ragepowder']) {
+				if (movePool.includes(moveid)) {
+					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 						movePool, teraType, role);
 				}
 			}
@@ -1038,7 +1032,7 @@ export class RandomTeams {
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Hustle':
 			// some of this is just for Delibird in singles/doubles
-			return (counter.get('Physical') < 2 || moves.has('fakeout') || moves.has('rapidspin'));
+			return (!counter.get('Physical') || moves.has('fakeout') || moves.has('rapidspin'));
 		case 'Infiltrator':
 			return (isDoubles && abilities.has('Clear Body'));
 		case 'Insomnia':
@@ -1159,13 +1153,14 @@ export class RandomTeams {
 		if (species.id === 'jumpluff') return 'Infiltrator';
 		if (species.id === 'toucannon' && !counter.get('skilllink')) return 'Keen Eye';
 		if (species.id === 'reuniclus') return (role === 'AV Pivot') ? 'Regenerator' : 'Magic Guard';
-		if (species.id === 'smeargle') return 'Own Tempo';
+		if (species.id === 'smeargle' && !counter.get('technician')) return 'Own Tempo';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'sandaconda' || (species.id === 'scrafty' && moves.has('rest'))) return 'Shed Skin';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'ribombee') return 'Shield Dust';
+		if (species.id === 'cinccino') return (role === 'Wallbreaker') ? 'Skill Link' : 'Technician';
 		if (species.id === 'dipplin') return 'Sticky Hold';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
@@ -1184,7 +1179,6 @@ export class RandomTeams {
 			if (abilities.has('Own Tempo') && moves.has('petaldance')) return 'Own Tempo';
 			if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
 			if (abilities.has('Soundproof') && (moves.has('substitute') || counter.get('setup'))) return 'Soundproof';
-			if (species.id === 'cinccino') return (role === 'Setup Sweeper') ? 'Technician' : 'Skill Link';
 			if (species.id === 'porygon2') return 'Trace';
 		}
 
@@ -1327,7 +1321,7 @@ export class RandomTeams {
 		if (species.id === 'reuniclus' && ability === 'Magic Guard') return 'Life Orb';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
-			['Cheek Pouch', 'Cud Chew', 'Harvest'].some(m => ability === m) ||
+			['Cheek Pouch', 'Cud Chew', 'Harvest', 'Ripen'].some(m => ability === m) ||
 			moves.has('bellydrum') || moves.has('filletaway')
 		) {
 			return 'Sitrus Berry';
@@ -1353,8 +1347,8 @@ export class RandomTeams {
 		if (moves.has('courtchange')) return 'Heavy-Duty Boots';
 		if (moves.has('populationbomb')) return 'Wide Lens';
 		if (
-			moves.has('scaleshot') ||
-			(counter.get('setup') && ((species.id === 'torterra' && !isDoubles) || species.id === 'cinccino'))
+			moves.has('scaleshot') || (species.id === 'torterra' && !isDoubles) ||
+			(species.id === 'cinccino' && role !== 'Wallbreaker')
 		) return 'Loaded Dice';
 		if (ability === 'Unburden') {
 			return (moves.has('closecombat') || moves.has('leafstorm')) ? 'White Herb' : 'Sitrus Berry';

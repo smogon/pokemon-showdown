@@ -407,7 +407,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return (
 				// Relicanth always wants Swift Swim if it doesn't have Double-Edge
 				!moves.has('raindance') && !teamDetails.rain && !(species.id === 'relicanth' && !counter.get('recoil')) ||
-				!moves.has('raindance') && ['Rock Head', 'Water Absorb'].some(abil => abilities.has(abil))
+				!moves.has('raindance') && abilities.has('Water Absorb')
 			);
 		case 'Thick Fat':
 			return (species.id === 'snorlax' || (species.id === 'hariyama' && moves.has('sleeptalk')));
@@ -505,7 +505,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			return 'Choice Band';
 		}
 
-		if (moves.has('dragondance') && ability !== 'Natural Cure' && !moves.has('healbell')) return 'Lum Berry';
+		if (
+			moves.has('dragondance') && ability !== 'Natural Cure' &&
+			!moves.has('healbell') && !moves.has('substitute')
+		) return 'Lum Berry';
 		if (moves.has('bellydrum')) return moves.has('substitute') ? 'Salac Berry' : 'Lum Berry';
 
 		if (moves.has('raindance') && counter.get('Special') >= 3) return 'Petaya Berry';

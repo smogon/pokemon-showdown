@@ -989,8 +989,8 @@
                 "movepool": ["encore", "energyball", "sleeppowder", "stunspore", "toxic", "uturn"]
             },
             {
-                "role": "Staller",
-                "movepool": ["bounce", "leechseed", "substitute", "toxic"]
+                "role": "Fast Support",
+                "movepool": ["hiddenpowerflying", "leechseed", "protect", "substitute", "toxic"]
             }
         ]
     },
@@ -1076,7 +1076,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "calmmind", "hiddenpowerfire", "psychic", "substitute", "thunderbolt"]
+                "movepool": ["batonpass", "calmmind", "hiddenpowerfighting", "hiddenpowerfire", "psychic", "substitute", "thunderbolt"]
             }
         ]
     },
@@ -1225,6 +1225,10 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["bravebird", "roost", "spikes", "stealthrock", "whirlwind"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["bravebird", "roost", "spikes", "stealthrock", "toxic"]
             }
         ]
     },
@@ -1587,7 +1591,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bodyslam", "earthquake", "encore", "lowkick", "nightslash", "return", "slackoff", "suckerpunch"]
+                "movepool": ["bodyslam", "earthquake", "encore", "nightslash", "return", "slackoff", "suckerpunch"]
             },
             {
                 "role": "Bulky Setup",
@@ -1595,7 +1599,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["bodyslam", "bulkup", "earthquake", "lowkick", "nightslash", "return", "suckerpunch"]
+                "movepool": ["bodyslam", "bulkup", "earthquake", "nightslash", "return", "suckerpunch"]
             }
         ]
     },
@@ -2119,7 +2123,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["charm", "protect", "surf", "toxic"]
+                "movepool": ["icebeam", "protect", "substitute", "surf", "toxic"]
             }
         ]
     },
@@ -3102,7 +3106,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["confuseray", "earthquake", "return", "substitute", "thunderwave"]
+                "movepool": ["earthquake", "return", "substitute", "thunderwave"]
             }
         ]
     },

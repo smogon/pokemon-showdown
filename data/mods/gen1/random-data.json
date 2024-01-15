@@ -50,7 +50,7 @@
     "butterfree": {
         "level": 79,
         "moves": ["psychic", "sleeppowder", "stunspore"],
-        "exclusiveMoves": ["hyperbeam", "megadrain", "psywave", "substitute"]
+        "exclusiveMoves": ["doubleedge", "hyperbeam", "megadrain", "substitute"]
     },
     "beedrill": {
         "level": 87,
@@ -223,7 +223,7 @@
     "venonat": {
         "level": 88,
         "moves": ["psychic", "sleeppowder", "stunspore"],
-        "exclusiveMoves": ["doubleedge", "megadrain", "psywave"]
+        "exclusiveMoves": ["doubleedge", "megadrain"]
     },
     "venomoth": {
         "level": 73,
