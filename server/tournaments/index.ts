@@ -524,22 +524,22 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			output.errorReply(`${replacementUser.name} is not in this room (${this.room.title}).`);
 			return;
 		}
-		if (this.playerTable[user.id].pendingChallenge) {
+		const player = this.playerTable[user.id];
+		if (player.pendingChallenge) {
 			this.cancelChallenge(user, output);
 		}
 
 		// Replace the player
-		this.renamePlayer(replacementUser, user.id);
-		const newPlayer = this.playerTable[replacementUser.id];
+		this.setPlayerUser(player, replacementUser);
 
 		// Reset and invalidate any in progress battles
 		let matchPlayer = null;
-		if (newPlayer.inProgressMatch) {
-			matchPlayer = newPlayer;
+		if (player.inProgressMatch) {
+			matchPlayer = player;
 		} else {
-			for (const player of this.players) {
-				if (player.inProgressMatch && player.inProgressMatch.to === newPlayer) {
-					matchPlayer = player;
+			for (const p of this.players) {
+				if (p.inProgressMatch && p.inProgressMatch.to === player) {
+					matchPlayer = p;
 					break;
 				}
 			}
@@ -563,8 +563,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.update();
 		this.updateFor(user);
 		this.updateFor(replacementUser);
-		const challengePlayer = newPlayer.pendingChallenge &&
-			(newPlayer.pendingChallenge.from || newPlayer.pendingChallenge.to);
+		const challengePlayer = player.pendingChallenge &&
+			(player.pendingChallenge.from || player.pendingChallenge.to);
 		if (challengePlayer) {
 			const challengeUser = Users.getExact(challengePlayer.id);
 			if (challengeUser) this.updateFor(challengeUser);
