@@ -467,7 +467,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	async autojoin(target, room, user, connection) {
-		const targets = target.split(',');
+		const targets = target.split(',').filter(Boolean);
 		if (targets.length > 16 || connection.inRooms.size > 1) {
 			return connection.popup("To prevent DoS attacks, you can only use /autojoin for 16 or fewer rooms, when you haven't joined any rooms yet. Please use /join for each room separately.");
 		}

@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import {FS, Utils} from '../lib';
+import {FS, Utils, type Streams} from '../lib';
 import type {PartialModlogEntry} from './modlog';
 
 interface RoomlogOptions {

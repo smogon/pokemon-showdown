@@ -577,14 +577,14 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 			this.kickedUsers.add(id);
 		}
 
-		super.removePlayer(user);
+		this.removePlayer(this.playerTable[user.id]);
 	}
 
 	leave(user: User) {
 		if (!this.playerTable[user.id]) {
 			throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current game.`);
 		}
-		super.removePlayer(user);
+		this.removePlayer(this.playerTable[user.id]);
 	}
 
 	/**
@@ -1387,7 +1387,7 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 		if (lbEntry) {
 			this.leaderboard.set(user.id, {...lbEntry, hasLeft: true});
 		}
-		super.removePlayer(user);
+		this.removePlayer(this.playerTable[user.id]);
 	}
 
 	kick(toKick: User, kicker: User) {
@@ -1411,7 +1411,7 @@ export class Mastermind extends Rooms.SimpleRoomGame {
 			}
 		}
 
-		super.removePlayer(toKick);
+		this.removePlayer(this.playerTable[toKick.id]);
 	}
 }
 

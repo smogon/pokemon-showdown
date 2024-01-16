@@ -15,7 +15,23 @@
  * @license MIT
  */
 
-// globally Rooms.RoomGamePlayer
+/**
+ * Available globally as `Rooms.RoomGamePlayer`.
+ *
+ * Players are an abstraction for the people playing a `RoomGame`. They
+ * may or may not be associated with a user. If they are, the game will
+ * appear on the user's games list.
+ *
+ * Either way, they give a level of abstraction to players, allowing you
+ * to easily sub out users or otherwise associate/dissociate users.
+ *
+ * You should mostly only be adding/removing players with functions like
+ * `addPlayer`, `removePlayer`, etc, and changing the associated user
+ * with `setPlayerUser` or `setEnded`.
+ *
+ * Do not modify `playerTable` or `player.id` yourself, it will make
+ * users' games lists get out of sync.
+ */
 export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	readonly num: number;
 	readonly game: GameClass;
@@ -31,8 +47,8 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	/**
 	 * This will be '' if there's no user associated with the player.
 	 *
-	 * This includes after the game ends, where the game should no longer
-	 * be in the user's game list.
+	 * After the game ends, this will still be the user's ID, but it
+	 * won't be in the user's game list anymore.
 	 *
 	 * We intentionally don't hold a direct reference to the user.
 	 *
@@ -96,6 +112,11 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * userid:player table.
 	 *
 	 * Does not contain userless players: use this.players for the full list.
+	 *
+	 * Do not iterate. You usually want to iterate `game.players` instead.
+	 *
+	 * Do not modify directly. You usually want `game.addPlayer` or
+	 * `game.removePlayer` instead.
 	 *
 	 * Not a source of truth. Should be kept in sync with
 	 * `Object.fromEntries(this.players.filter(p => p.id).map(p => [p.id, p]))`
@@ -193,14 +214,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 
 	abstract makePlayer(user: User | string | null, ...rest: any[]): PlayerClass;
 
-	removePlayer(player: PlayerClass | User) {
-		if (player instanceof Users.User) {
-			// API changed
-			// TODO: deprecate
-			player = this.playerTable[player.id];
-			if (!player) throw new Error("Player not found");
-		}
-
+	removePlayer(player: PlayerClass) {
 		this.setPlayerUser(player, null);
 		const playerIndex = this.players.indexOf(player);
 		if (playerIndex < 0) return false;
@@ -255,13 +269,16 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 
 	/**
 	 * Called when a user uses /forfeit
-	 * Also planned to be used for some force-forfeit situations, such
+	 * Also used for some force-forfeit situations, such
 	 * as when a user changes their name and .allowRenames === false
 	 * This is strongly recommended to be supported, as the user is
 	 * extremely unlikely to keep playing after this function is
 	 * called.
+	 *
+	 * @param user
+	 * @param reason if a forced forfeit; should start with space
 	 */
-	forfeit?(user: User | string): void;
+	forfeit?(user: User | string, reason?: string): void;
 
 	/**
 	 * Called when a user uses /choose [text]
@@ -303,11 +320,17 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	onJoin(user: User, connection: Connection) {}
 
 	/**
+	 * Called when a subroom game (battle or bestof) ends, on the
+	 * parent game (bestof or tournament).
+	 */
+	onBattleWin?(room: GameRoom, winnerid: ID): void;
+
+	/**
 	 * Called when a user is banned from the room this game is taking
 	 * place in.
 	 */
 	removeBannedUser(user: User) {
-		this.forfeit?.(user);
+		this.forfeit?.(user, " lost by being banned.");
 	}
 
 	/**
@@ -344,6 +367,10 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * is updated in some way (such as by changing user or renaming).
 	 * If you don't want this behavior, override onUpdateConnection
 	 * and/or onRename.
+	 *
+	 * This means that by default, it's called twice: once when
+	 * connected to the server (as guest1763 or whatever), and once
+	 * when logged in.
 	 */
 	onConnect(user: User, connection: Connection) {}
 
