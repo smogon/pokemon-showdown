@@ -34,11 +34,12 @@ import {QueuedHunt} from './chat-plugins/scavengers';
 import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
 import {RepeatedPhrase} from './chat-plugins/repeats';
 import {
-	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, BestOfGame,
+	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, type RoomBattleOptions,
 } from "./room-battle";
+import {BestOfGame} from './room-battle-bestof';
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
 import {MinorActivity, MinorActivityData} from './room-minor-activity';
-import {Roomlogs} from './roomlogs';
+import {Roomlogs, type Roomlog} from './roomlogs';
 import {RoomAuth} from './user-groups';
 import {PartialModlogEntry, mainModlog} from './modlog';
 import {Replays} from './replays';
@@ -778,9 +779,9 @@ export abstract class BasicRoom {
 		if (this.parent === room) return;
 
 		if (this.parent) {
-			(this as any).parent.subRooms.delete(this.roomid);
+			(this.parent.subRooms as any).delete(this.roomid);
 			if (!this.parent.subRooms!.size) {
-				(this as any).parent.subRooms = null;
+				(this.parent.subRooms as any) = null;
 			}
 		}
 		(this as any).parent = room;
@@ -1048,7 +1049,7 @@ export abstract class BasicRoom {
 		if (user.named) {
 			this.reportJoin('l', user.getIdentity(this), user);
 		}
-		if (this.game && this.game.onLeave) this.game.onLeave(user);
+		this.game?.onLeave?.(user);
 		this.runAutoModchat();
 
 		return true;
@@ -1106,9 +1107,10 @@ export abstract class BasicRoom {
 	destroy(): void {
 		// deallocate ourself
 
-		if (this.battle && this.tour) {
-			// resolve state of the tournament;
-			if (!this.battle.ended) this.tour.onBattleWin(this as any as GameRoom, '');
+		if (this.game) {
+			this.game.destroy();
+			this.game = null;
+			this.battle = null;
 			this.tour = null;
 		}
 
@@ -1132,11 +1134,6 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.game) {
-			this.game.destroy();
-			this.game = null;
-			this.battle = null;
-		}
 		this.active = false;
 
 		// Ensure there aren't any pending messages that could restart the expire timer

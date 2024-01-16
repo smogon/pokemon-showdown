@@ -11,12 +11,13 @@
  * @license MIT
  */
 
-import {FS, Repl, ProcessManager, Utils} from '../lib';
 import {execSync} from "child_process";
+import {FS, Repl, ProcessManager, type Streams} from '../lib';
 import {BattleStream} from "../sim/battle-stream";
 import {RoomGamePlayer, RoomGame} from "./room-game";
 import type {Tournament} from './tournaments/index';
 import type {RoomSettings} from './rooms';
+import type {BestOfGame} from './room-battle-bestof';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 export type PlayerIndex = 1 | 2 | 3 | 4;
@@ -44,8 +45,6 @@ const MAX_TURN_TIME = 150;
 const STARTING_TIME_CHALLENGE = 300;
 const STARTING_GRACE_TIME = 60;
 const MAX_TURN_TIME_CHALLENGE = 300;
-
-const BEST_OF_IN_BETWEEN_TIME = 40;
 
 const DISCONNECTION_TIME = 60;
 const DISCONNECTION_BANK_TIME = 300;
@@ -453,7 +452,7 @@ export class RoomBattleTimer {
 	}
 }
 
-interface RoomBattlePlayerOptions {
+export interface RoomBattlePlayerOptions {
 	user: User;
 	/** should be '' for random teams */
 	team?: string;
@@ -493,7 +492,7 @@ export interface RoomBattleOptions {
 
 export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	override readonly gameid = 'battle' as ID;
-	override readonly room: GameRoom;
+	override readonly room!: GameRoom;
 	override readonly title: string;
 	override readonly allowRenames: boolean;
 	readonly format: string;
@@ -537,7 +536,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
 		const format = Dex.formats.get(options.format, true);
-		this.room = room;
 		this.title = format.name;
 		this.options = options;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
@@ -813,56 +811,33 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.score = this.logData!.score;
 			this.inputLog = this.logData!.inputLog;
 			this.started = true;
-			if (!this.ended) {
-				this.setEnded();
-				void this.onEnd(this.logData!.winner);
-			}
-			this.checkActive();
+			void this.end(this.logData!.winner);
 			break;
 		}
 	}
-	async onEnd(winnerName: any) {
+	end(winnerName: unknown) {
+		if (this.ended) return;
+		this.setEnded();
+		this.checkActive();
 		this.timer.end();
 		// Declare variables here in case we need them for non-rated battles logging.
 		let p1score = 0.5;
 		const winnerid = toID(winnerName);
 
 		// Check if the battle was rated to update the ladder, return its response, and log the battle.
-		const p1name = this.p1.name;
-		const p2name = this.p2.name;
-		const p1id = toID(p1name);
-		const p2id = toID(p2name);
-		if (winnerid === p1id) {
+		if (winnerid === this.p1.id) {
 			p1score = 1;
-		} else if (winnerid === p2id) {
+		} else if (winnerid === this.p2.id) {
 			p1score = 0;
 		}
 		Chat.runHandlers('onBattleEnd', this, winnerid, this.players.map(p => p.id));
 		if (this.room.rated && !this.options.isBestOfSubBattle) {
-			this.room.rated = 0;
-			const winner = Users.get(winnerid);
-			if (winner && !winner.registered) {
-				this.room.sendUser(winner, '|askreg|' + winner.id);
-			}
-			const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(p1name, p2name, p1score, this.room);
-			void this.logBattle(score, p1rating, p2rating);
-			Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1id, p2id]);
+			void this.updateLadder(p1score, winnerid);
 		} else if (Config.logchallenges) {
 			void this.logBattle(p1score);
 		} else if (!this.options.isBestOfSubBattle) {
 			this.logData = null;
 		}
-		// If a replay was saved at any point or we were configured to autosavereplays,
-		// reupload when the battle is over to overwrite the partial data (and potentially
-		// reflect any changes that may have been made to the replay's hidden status).
-		if (this.replaySaved || Config.autosavereplays) {
-			const uploader = Users.get(winnerid || p1id);
-			if (uploader?.connections[0]) {
-				const command = Config.autosavereplays === 'private' ? '/savereplay auto' : '/savereplay silent';
-				Chat.parse(command, this.room, uploader, uploader.connections[0]);
-			}
-		}
-		// @ts-ignore - Tournaments aren't TS'd yet
 		this.room.parent?.game?.onBattleWin?.(this.room, winnerid);
 		// If the room's replay was hidden, don't let users join after the game is over
 		if (this.room.hideReplay) {
@@ -875,6 +850,26 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		for (const player of this.players) {
 			player.getUser()?.games.delete(this.roomid);
 		}
+
+		// If a replay was saved at any point or we were configured to autosavereplays,
+		// reupload when the battle is over to overwrite the partial data (and potentially
+		// reflect any changes that may have been made to the replay's hidden status).
+		if (this.replaySaved || Config.autosavereplays) {
+			const options = Config.autosavereplays === 'private' ? undefined : 'silent';
+			return this.room.uploadReplay(undefined, undefined, options);
+		}
+	}
+	async updateLadder(p1score: number, winnerid: ID) {
+		this.room.rated = 0;
+		const winner = Users.get(winnerid);
+		if (winner && !winner.registered) {
+			this.room.sendUser(winner, '|askreg|' + winner.id);
+		}
+		const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(
+			this.p1.name, this.p2.name, p1score, this.room
+		);
+		void this.logBattle(score, p1rating, p2rating);
+		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [this.p1.id, this.p2.id]);
 	}
 	async logBattle(
 		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
@@ -940,9 +935,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.sendInviteForm(connection || user);
 		}
 		if (!player.active) this.onJoin(user);
-	}
-	override onUpdateConnection(user: User, connection: Connection | null = null) {
-		this.onConnect(user, connection);
 	}
 	override onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (user.id === oldUserid) return;
@@ -1238,7 +1230,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	}
 
 	override destroy() {
-		this.setEnded();
+		if (!this.ended) {
+			this.setEnded();
+			this.room.parent?.game?.onBattleWin?.(this.room, '');
+		}
 		for (const player of this.players) {
 			player.destroy();
 		}
@@ -1296,441 +1291,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		});
 		const result = await logPromise;
 		return result;
-	}
-}
-
-export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
-	wins = 0;
-	ready: boolean | null = null;
-	options: Omit<RoomBattlePlayerOptions, 'user'> & {user: null};
-	dcAutoloseTime: number | null = null;
-	constructor(user: User | null, game: BestOfGame, num: number, options: RoomBattlePlayerOptions) {
-		super(user, game, num);
-		this.options = {...options, user: null};
-	}
-	avatar() {
-		let avatar = Users.get(this.id)?.avatar;
-		if (!avatar || typeof avatar === 'number') avatar = 'unknownf';
-		const url = Chat.plugins.avatars?.Avatars.src(avatar) ||
-			`https://${Config.routes.client}/sprites/trainers/${avatar}.png`;
-		return url;
-	}
-	updateReadyButton() {
-		const user = this.getUser();
-		if (!user?.connected) return;
-
-		this.dcAutoloseTime = null;
-		const room = this.game.room;
-		const battleRoom = this.game.games[this.game.games.length - 1]?.room as Room | undefined;
-		const gameNum = this.game.games.length + 1;
-
-		if (this.ready === false) {
-			const notification = `|tempnotify|choice|Next game|It's time for game ${gameNum} in your best-of-${this.game.bestOf}!`;
-			if (battleRoom && user.inRooms.has(battleRoom.roomid)) {
-				battleRoom.send(notification);
-			} else {
-				this.sendRoom(notification);
-			}
-		} else {
-			const notification = `|tempnotifyoff|choice`;
-			battleRoom?.sendUser(user, notification);
-			this.sendRoom(notification);
-		}
-
-		if (this.ready === null) {
-			const button = `|c|&|/uhtml controls,`;
-			this.sendRoom(button);
-			battleRoom?.sendUser(user, button);
-			return;
-		}
-
-		const cmd = `/msgroom ${room.roomid},/confirmready`;
-		const button = `|c|&|/uhtml controls,<div class="infobox"><p style="margin:6px">Are you ready for game ${gameNum}, ${this.name}?</p><p style="margin:6px">` +
-			(this.ready ?
-				`<button class="button" disabled><i class="fa fa-check"></i> I'm ready!</button> &ndash; waiting for opponent...` :
-				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`) +
-			`</p></div>`;
-		this.sendRoom(button);
-		battleRoom?.sendUser(user, button);
-	}
-}
-
-export class BestOfGame extends RoomGame<BestOfPlayer> {
-	override readonly gameid = 'bestof' as ID;
-	override allowRenames = false;
-	bestOf: number;
-	format: Format;
-	winThreshold: number;
-	options: Omit<RoomBattleOptions, 'players'> & {players: null};
-	ties = 0;
-	games: {room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
-	playerNum = 0;
-	/** null = tie, undefined = not ended */
-	winner: BestOfPlayer | null | undefined = undefined;
-	/** when waiting between battles, this is the just-ended battle room, the one with the |tempnotify| */
-	waitingBattle: GameRoom | null = null;
-	nextBattleTimerEnd: number | null = null;
-	nextBattleTimer: NodeJS.Timer | null = null;
-	/** Does NOT control bestof's own timer, which is always-on. Controls timers in sub-battles. */
-	needsTimer = false;
-	score: number[] | null = null;
-	constructor(room: Room, options: RoomBattleOptions) {
-		super(room);
-		this.format = Dex.formats.get(options.format);
-		this.bestOf = Number(Dex.formats.getRuleTable(this.format).valueRules.get('bestof'))!;
-		this.winThreshold = Math.floor(this.bestOf / 2) + 1;
-		this.title = this.format.name;
-		if (!toID(this.title).includes('bestof')) {
-			this.title += ` (Best-of-${this.bestOf})`;
-		}
-		this.options = {
-			...options,
-			isBestOfSubBattle: true,
-			allowRenames: false,
-			players: null,
-		};
-		for (const playerOpts of options.players) {
-			this.addPlayer(playerOpts.user, playerOpts);
-		}
-		process.nextTick(() => this.nextGame());
-	}
-	override onConnect(user: User) {
-		const player = this.playerTable[user.id];
-		player?.sendRoom('|cantleave|');
-		player?.updateReadyButton();
-	}
-	override makePlayer(user: User | null, options: RoomBattlePlayerOptions): BestOfPlayer {
-		return new BestOfPlayer(user, this, ++this.playerNum, options);
-	}
-	override addPlayer(user: User, options: RoomBattlePlayerOptions) {
-		const player = super.addPlayer(user, options);
-		if (!player) throw new Error(`Failed to make player ${user} in ${this.roomid}`);
-		this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
-		return player;
-	}
-	clearWaiting() {
-		this.waitingBattle = null;
-		for (const player of this.players) {
-			player.ready = null;
-			player.updateReadyButton();
-		}
-		if (this.nextBattleTimer) {
-			clearInterval(this.nextBattleTimer);
-			this.nextBattleTimerEnd = null;
-		}
-		this.nextBattleTimerEnd = null;
-		this.nextBattleTimer = null;
-	}
-	getOptions(): RoomBattleOptions | null {
-		const players = this.players.map(player => ({
-			...player.options,
-			user: player.getUser()!,
-		}));
-		if (players.some(p => !p.user)) {
-			return null;
-		}
-		return {
-			...this.options,
-			players,
-		};
-	}
-	nextGame() {
-		const prevBattleRoom = this.waitingBattle;
-		this.clearWaiting();
-
-		const options = this.getOptions();
-		if (!options) {
-			for (const p of this.players) {
-				if (!p.getUser()) {
-					// tbc this isn't just being offline, it's changing name or being offline for 15 minutes
-					this.forfeitPlayer(p, ` lost by being unavailable at the start of a game.`);
-					return;
-				}
-			}
-			throw new Error(`Failed to get options for ${this.roomid}`);
-		}
-		const battleRoom = Rooms.createBattle(options);
-		// shouldn't happen even in lockdown
-		if (!battleRoom) throw new Error("Failed to create battle for " + this.title);
-		battleRoom.setParent(this.room);
-		this.games.push({
-			room: battleRoom,
-			winner: undefined,
-			rated: battleRoom.rated,
-		});
-		// the absolute result is what counts for rating
-		battleRoom.rated = 0;
-		if (this.needsTimer) {
-			battleRoom.battle?.timer.start();
-		}
-		const gameNum = this.games.length;
-		const p1 = this.players[0];
-		const p2 = this.players[1];
-		battleRoom.add(
-			Utils.html`|html|<table width="100%"><tr><td align="left">${p1.name}</td><td align="right">${p2.name}</tr>` +
-			`<tr><td align="left">${this.renderWins(p1)}</td><td align="right">${this.renderWins(p2)}</tr></table>` +
-			`<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`
-		).update();
-
-		this.room.add(`|html|<h2>Game ${gameNum}</h2>`);
-		this.room.add(Utils.html`|html|<a href="/${battleRoom.roomid}">${battleRoom.title}</a>`);
-		this.updateDisplay();
-
-		prevBattleRoom?.add(
-			`|html|Next: <a href="/${battleRoom.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`
-		).update();
-	}
-	renderWins(player: BestOfPlayer) {
-		const wins = this.games.filter(game => game.winner === player).length;
-		const winBuf = `<i class="fa fa-circle"></i> `.repeat(wins);
-		const restBuf = `<i class="fa fa-circle-o"></i> `.repeat(this.winThreshold - wins);
-		return player.num === 1 ? winBuf + restBuf : restBuf + winBuf;
-	}
-	updateDisplay() {
-		const p1name = this.players[0].name;
-		const p2name = this.players[1].name;
-		let buf = Utils.html`<br /><strong>${p1name} and ${p2name}'s Best-of-${this.bestOf} progress:</strong><br />`;
-		buf += '<table>';
-		for (const p of this.players) {
-			buf += Utils.html`<tr><td>${p.name}: </td><td>`;
-			for (let i = 0; i < this.bestOf; i++) {
-				if (this.games[i]?.winner === p) {
-					buf += `<i class="fa fa-circle"></i>`;
-				} else {
-					buf += `<i class="fa fa-circle-o"></i>`;
-				}
-				if (i !== this.bestOf - 1) {
-					buf += ` `;
-				}
-			}
-			buf += `</td></tr>`;
-		}
-		buf += `</table><br /><br />`;
-		buf += `<table><tr>`;
-
-		for (const i of [0, null, 1]) {
-			if (i === null) {
-				buf += `<td></td>`;
-				continue;
-			}
-			buf += Utils.html`<td><center><strong>${this.players[i].name}</strong></center></td>`;
-		}
-
-		buf += `</tr><tr>`;
-
-		for (const i of [0, null, 1]) {
-			if (i === null) {
-				buf += `<td></td>`;
-				continue;
-			}
-			const p = this.players[i];
-			const mirrorLeftPlayer = !i ? ' style="transform: scaleX(-1)"' : "";
-			buf += `<td><center>`;
-			buf += `<img class="trainersprite"${mirrorLeftPlayer} src="${p.avatar()}" />`;
-			buf += `</center></td>`;
-		}
-
-		buf += `</tr><tr>`;
-
-		for (const i of [0, null, 1]) {
-			if (i === null) {
-				buf += `<td> vs </td>`;
-				continue;
-			}
-			const team = Teams.unpack(this.players[i].options.team || "");
-			if (!team || !Dex.formats.getRuleTable(this.format).has('teampreview')) {
-				buf += `<td>`;
-				buf += `<psicon pokemon="unknown" /> `.repeat(3);
-				buf += `<br />`;
-				buf += `<psicon pokemon="unknown" /> `.repeat(3);
-				buf += `</td>`;
-				continue;
-			}
-			const mirrorLeftPlayer = !i ? ' style="transform: scaleX(-1)"' : "";
-			buf += `<td>`;
-			for (const [j, set] of team.entries()) {
-				if (j % 3 === 0 && j > 1) buf += `<br />`;
-				buf += `<psicon pokemon="${set.species}"${mirrorLeftPlayer} />`;
-			}
-			buf += `</td>`;
-		}
-		buf += `</tr></table>`;
-		this.room.add(`|fieldhtml|<center>${buf}</center>`);
-
-		buf = this.games.map(({room, winner}, index) => {
-			let progress = `being played`;
-			if (winner) progress = Utils.html`won by ${winner.name}`;
-			if (winner === null) progress = `tied`;
-			return Utils.html`<p>Game ${index + 1}: <a href="/${room.roomid}"><strong>${progress}</strong></a></p>`;
-		}).join('');
-		if (this.winner) {
-			buf += Utils.html`<p>${this.winner.name} won!</p>`;
-		} else if (this.winner === null) {
-			buf += `<p>The battle was tied.</p>`;
-		}
-		this.room.add(`|controlshtml|<center>${buf}</center>`);
-		this.room.update();
-	}
-
-	override startTimer() {
-		this.needsTimer = true;
-		for (const {room} of this.games) {
-			room.battle?.timer.start();
-		}
-	}
-
-	onBattleWin(room: Room, winnerid: ID) {
-		if (this.ended) return; // ???
-
-		const winner = winnerid ? this.playerTable[winnerid] : null;
-		this.games[this.games.length - 1].winner = winner;
-		if (winner) {
-			winner.wins++;
-			const loserPlayer = room.battle!.players.filter(p => p.num !== winner.num)[0];
-			if (loserPlayer && loserPlayer.dcSecondsLeft <= 0) { // disconnection means opp wins the set
-				return this.forfeit(loserPlayer.name, ` lost the series due to inactivity.`);
-			}
-			this.room.add(Utils.html`|html|${winner.name} won game ${this.games.length}!`).update();
-			if (winner.wins >= this.winThreshold) {
-				this.setEnded();
-				return this.onEnd(winner.id);
-			}
-		} else {
-			this.ties++;
-			this.winThreshold = Math.floor((this.bestOf - this.ties) / 2) + 1;
-			this.room.add(`|html|Game ${this.games.length} was a tie.`).update();
-		}
-		if (this.games.length >= this.bestOf) {
-			return this.onEnd(''); // overall tie
-		}
-
-		// no one has won, skip onwards
-		this.promptNextGame(room);
-	}
-	promptNextGame(room: Room) {
-		if (!room.battle || this.winner) return; // ???
-		this.updateDisplay();
-		this.waitingBattle = room;
-		const now = Date.now();
-		this.nextBattleTimerEnd = now + BEST_OF_IN_BETWEEN_TIME * 1000;
-		for (const player of this.players) {
-			player.ready = false;
-			const dcAutoloseTime = now + room.battle.players[player.num - 1].dcSecondsLeft * 1000;
-			if (dcAutoloseTime < this.nextBattleTimerEnd) {
-				player.dcAutoloseTime = dcAutoloseTime;
-			}
-			player.updateReadyButton();
-		}
-		this.nextBattleTimer = setInterval(() => this.pokeNextBattleTimer(), 10_000);
-	}
-	pokeNextBattleTimer() {
-		if (!this.nextBattleTimerEnd || !this.nextBattleTimer) return; // ??
-		if (Date.now() >= this.nextBattleTimerEnd) {
-			return this.nextGame();
-		}
-		for (const p of this.players) {
-			if (!p.ready) {
-				const now = Date.now() - 100; // fudge to make rounding work better
-				if (p.dcAutoloseTime && now > p.dcAutoloseTime) {
-					return this.forfeit(p.name, ` lost the series due to inactivity.`);
-				}
-				const message = (p.dcAutoloseTime ?
-					`|inactive|${p.name} has ${Chat.toDurationString(p.dcAutoloseTime - now)} to reconnect!` :
-					`|inactive|${p.name} has ${Chat.toDurationString(this.nextBattleTimerEnd - now)} to confirm battle start!`
-				);
-				this.waitingBattle?.add(message);
-				this.room.add(message);
-			}
-		}
-		this.waitingBattle?.update();
-		this.room.update();
-	}
-	confirmReady(user: User) {
-		const player = this.playerTable[user.id];
-		if (!player) {
-			throw new Chat.ErrorMessage("You aren't a player in this best-of set.");
-		}
-		if (!this.waitingBattle) {
-			throw new Chat.ErrorMessage("The battle is not currently waiting for ready confirmation.");
-		}
-
-		player.ready = true;
-		player.updateReadyButton();
-		const readyMsg = `||${player.name} is ready for game ${this.games.length + 1}.`;
-		this.waitingBattle.add(readyMsg).update();
-		this.room.add(readyMsg).update();
-		if (this.players.every(p => p.ready)) {
-			this.nextGame();
-		}
-	}
-	async onEnd(winnerid: ID) {
-		this.clearWaiting();
-		this.room.add(`|allowleave|`).update();
-		const winner = winnerid ? this.playerTable[winnerid] : null;
-		this.winner = winner;
-		if (winner) {
-			this.room.add(`|win|${winner.name}`);
-		} else {
-			this.room.add(`|tie`);
-		}
-		this.updateDisplay();
-		this.room.update();
-		const p1 = this.players[0];
-		const p2 = this.players[1];
-		this.score = this.players.map(p => p.wins);
-		// @ts-ignore - Tournaments aren't TS'd yet
-		this.room.parent?.game?.onBattleWin?.(this.room, winner.id);
-		// run elo stuff here
-		let p1score = 0.5;
-		if (winner === p1) {
-			p1score = 1;
-		} else if (winner === p2) {
-			p1score = 0;
-		}
-
-		const {rated, room} = this.games[this.games.length - 1];
-		const battle = room.battle;
-		if (!battle) throw new Error(`Room ${room.roomid} has no battle???`);
-		if (rated) {
-			room.rated = rated; // just in case
-			const winnerUser = winner?.getUser();
-			if (winnerUser && !winnerUser.registered) {
-				this.room.sendUser(winnerUser, '|askreg|' + winner);
-			}
-			const [score, p1rating, p2rating] = await Ladders(battle.ladder).updateRating(
-				p1.name, p2.name, p1score, battle.room
-			);
-			void battle.logBattle(score, p1rating, p2rating);
-			Chat.runHandlers('onBattleRanked', battle, winnerid, [p1rating, p2rating], [p1.id, p2.id]);
-		}
-	}
-	override forfeit(user: User | string, message = '') {
-		const userid = (typeof user !== 'string') ? user.id : toID(user);
-
-		const loser = this.playerTable[userid];
-		if (loser) this.forfeitPlayer(loser, message);
-	}
-	forfeitPlayer(loser: BestOfPlayer, message = '') {
-		if (this.ended || this.winner) return false;
-
-		this.winner = this.players.filter(p => p !== loser)[0];
-		this.room.add(`||${loser.name}${message || ' forfeited.'}`);
-		this.setEnded();
-		void this.onEnd(this.winner.id);
-		for (const {room} of this.games) {
-			if (!room.battle || room.battle.ended) continue;
-			room.battle.forfeit(loser.id, message);
-		}
-		return true;
-	}
-	override destroy() {
-		this.clearWaiting();
-		for (const p of this.players) p.destroy();
-		this.players = [];
-		this.playerTable = {};
-		for (const {room} of this.games) room.destroy();
-		this.games = [];
-		this.winner = null;
 	}
 }
 
