@@ -331,14 +331,6 @@ export const Formats: FormatList = [
 		banlist: [],
 	},
 	{
-		name: "[Gen 9] Blueberry Prologue",
-
-		mod: 'gen9',
-		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Blueberry Pokedex', 'Min Source Gen = 9', 'VGC Timer'],
-		unbanlist: ['Restricted Legendary'],
-	},
-	{
 		name: "[Gen 9] Doubles Custom Game",
 
 		mod: 'gen9',
