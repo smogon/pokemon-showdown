@@ -103,8 +103,8 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	if (!pokemon.m.datacorrupt) {
 		const newMoves = changeMoves(context, pokemon, newSet.moves.concat(newSet.signatureMove));
 		pokemon.moveSlots = newMoves;
-		// @ts-ignore Necessary so pokemon doesn't get 8 moves
-		pokemon.baseMoveSlots = newMoves;
+		// Necessary so pokemon doesn't get 8 moves
+		(pokemon as any).baseMoveSlots = newMoves;
 	}
 	pokemon.canMegaEvo = context.actions.canMegaEvo(pokemon);
 	pokemon.canUltraBurst = context.actions.canUltraBurst(pokemon);

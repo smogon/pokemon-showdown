@@ -127,7 +127,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Trivial Pursuit',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Poison',
 	},
-	Eli: {
+	Elly: {
 		species: 'Thundurus', ability: 'Storm Surge', item: 'Heavy-Duty Boots', gender: 'F',
 		moves: ['Wildbolt Storm', 'Sandsear Storm', 'Volt Switch'],
 		signatureMove: 'Sustained Winds',
@@ -222,6 +222,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Bitter Blade', 'Swords Dance', 'Taunt'],
 		signatureMove: 'Breaking Change',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Ghost',
+	},
+	Meteordash: {
+		species: 'Tatsugiri', ability: 'Shadow Shield', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Fickle Beam', 'Scald', 'Glare'],
+		signatureMove: 'Plagiarism',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Steel',
 	},
 	Mex: {
 		species: 'Dialga', ability: 'Time Dilation', item: 'Adamant Orb', gender: 'N',
@@ -392,7 +398,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
-		const monotype = ruleTable.has('sametypeclause') ? this.sample([...this.dex.types.names()]) : false;
+		const monotype = ruleTable.has('sametypeclause') ?
+			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false;
 
 		let pool = Object.keys(ssbSets);
 		if (debug.length) {

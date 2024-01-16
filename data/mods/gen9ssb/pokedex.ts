@@ -93,7 +93,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Sharpness"},
 	},
 
-	// Eli
+	// Elly
 	thundurus: {
 		inherit: true,
 		abilities: {0: "Storm Surge"},

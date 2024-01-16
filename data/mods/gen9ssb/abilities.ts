@@ -324,7 +324,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
-	// Eli
+	// Elly
 	stormsurge: {
 		shortDesc: "On switch-in, this Pokemon summons Storm Surge.",
 		name: "Storm Surge",

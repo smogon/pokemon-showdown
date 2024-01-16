@@ -212,16 +212,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('deftinwolf')}|Death is only the beginning.`);
 		},
 	},
-	eli: {
+	elly: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('Eli')}|any`);
+			this.add(`c:|${getName('Elly')}|any`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Eli')}|ok bye`);
+			this.add(`c:|${getName('Elly')}|ok bye`);
 		},
 		onFaint(pokemon) {
-			this.add(`c:|${getName('Eli')}|that wasn't very nice, ${enemyStaff(pokemon)}.`);
+			this.add(`c:|${getName('Elly')}|that wasn't very nice, ${enemyStaff(pokemon)}.`);
 		},
 	},
 	ganjafin: {
@@ -494,6 +494,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Mathy')}|thanks for making my job harder :/`);
+		},
+	},
+	meteordash: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Meteordash')}|hi`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Meteordash')}|oh`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Meteordash')}|man.`);
 		},
 	},
 	mex: {

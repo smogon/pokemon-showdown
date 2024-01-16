@@ -84,7 +84,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return -6;
 			}
 		},
-		flags: {},
+		flags: {failcopycat: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -474,7 +474,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
-	// Eli
+	// Elly
 	sustainedwinds: {
 		accuracy: 90,
 		basePower: 20,
@@ -1125,6 +1125,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
+	},
+
+	// Meteordash
+	plagiarism: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Plagiarism",
+		shortDesc: "Steals and uses the foe's sig move, imprisons.",
+		pp: 1,
+		priority: 1,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Mimic');
+			this.attrLastMove('[anim] Imprison');
+		},
+		onHit(target, source) {
+			const sigMoveName = ssbSets[target.name].signatureMove;
+			const move = this.dex.getActiveMove(sigMoveName);
+			if (move.flags['failcopycat'] || move.noSketch) {
+				return false;
+			}
+			const plagiarismIndex = source.moves.indexOf('plagiarism');
+			if (plagiarismIndex < 0) return false;
+			this.add(`c:|${getName('Meteordash')}|yoink`);
+			const plagiarisedMove = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			source.moveSlots[plagiarismIndex] = plagiarisedMove;
+			source.baseMoveSlots[plagiarismIndex] = plagiarisedMove;
+			this.add('-activate', source, 'move: Plagiarism', move.name);
+			this.add('-message', `${source.name} plagiarised ${target.name}'s ${move.name}!`);
+			this.actions.useMove(move.id, source, target);
+			delete target.volatiles['imprison'];
+			source.addVolatile('imprison', source);
+		},
+		noSketch: true,
+		secondary: null,
+		target: "normal",
+		type: "Dark",
 	},
 
 	// Mex
