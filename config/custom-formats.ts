@@ -6,7 +6,7 @@ export const Formats: FormatList = [
 		name: "Normal",
 		desc: `No Special rules`,
 		threads: [],
-		mod: 'gen9',
+		mod: 'pokefind',
 		ruleset: [],
 	},
 ];
