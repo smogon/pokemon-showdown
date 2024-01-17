@@ -4,7 +4,7 @@ export interface SSBSet {
 	species: string;
 	ability: string | string[];
 	item: string | string[];
-	gender: GenderName;
+	gender: GenderName | GenderName[];
 	moves: (string | string[])[];
 	signatureMove: string;
 	evs?: {hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number};
@@ -364,6 +364,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Bitter Blade', 'Cross Poison', 'No Retreat'],
 		signatureMove: 'Waterfowl Dance',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy', shiny: true,
+	},
+	WarriorGallade: {
+		species: 'Tropius', ability: 'Primeval Harvest', item: 'Starf Berry', gender: ['M', 'M', 'F'],
+		moves: ['Sunny Day', 'Natural Gift', ['Bitter Blade', 'Sappy Seed', 'Stored Power', 'Counter']],
+		signatureMove: 'Fruitful Longbow',
+		evs: {hp: 184, atk: 112, def: 36, spd: 88, spe: 88}, ivs: {spa: 29}, nature: 'Impish', teraType: ['Dragon', 'Psychic', 'Fighting'], shiny: 20,
 	},
 	WigglyTree: {
 		species: 'Sudowoodo', ability: 'Tree Stance', item: 'Liechi Berry', gender: 'M',

@@ -580,7 +580,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('PYRO')}|Just remember ALL CAPS when you spell the man name...`);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
+			if (effect?.effectType === 'Move') {
 				if (effect.id === 'meatgrinder') {
 					this.add(`c:|${getName('PYRO')}|Tripping off the beat kinda, dripping off the meat grinder`);
 					return;
@@ -798,7 +798,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Vio͜͡let')}|...Heed my words. I am Malenia, Blade of Miquella. And I have never known defeat.`);
 		},
 		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
+			if (effect?.effectType === 'Move') {
 				if (source?.m.phaseChange) {
 					this.add(`c:|${getName('Vio͜͡let')}|Let your flesh be consumed. By the scarlet rot.`);
 				} else {
@@ -808,6 +808,54 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Vio͜͡let')}|Your strength, extraordinary… The mark... of a true Lord…`);
+		},
+	},
+	warriorgallade: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('WarriorGallade')}|i wanted to proc berries, but it seems that i was better at proc rastinating instead. nom nom nom.`);
+			// innate
+			if (pokemon.illusion) return;
+			pokemon.abilityState.gluttony = true;
+			this.add('-activate', pokemon, 'ability: TBA');
+			this.boost({def: 1, spd: 1}, pokemon);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('WarriorGallade')}|amidst this tactical retreat, you didn't think i forgot about the pokeradar, did you? you can bet that my return with even more questions will be __eventful__ :3`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('WarriorGallade')}|a wig flew, and now i must bid you adieu. farewell my berries accrued, for this is the end of my etude.`);
+		},
+		onSourceAfterFaint() {
+			this.add(`c:|${getName('WarriorGallade')}|Triumphant through trouncing tough, tenacious threats today, though testing 212 takeovers tarry. Theorizing these techniques tends to torrid, terribly tiresome tabulations, therefore torrential tactics traverse thorough thoughts.`);
+		},
+		innateName: "TBA",
+		shortDesc: "Gluttony + Thick Fat + Neuroforce + +1 Def/Sp. Def boost.",
+		onDamage(item, pokemon) {
+			if (pokemon.illusion) return;
+			pokemon.abilityState.gluttony = true;
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (defender.illusion) return;
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (defender.illusion) return;
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.illusion) return;
+			if (move && target.getMoveHitData(move).typeMod > 0) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 	},
 	wigglytree: {

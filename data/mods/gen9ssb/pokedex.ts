@@ -196,6 +196,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Dynamic Typing"},
 	},
 
+	// Meteordash
+	tatsugiri: {
+		inherit: true,
+		abilities: {0: "Shadow Shield"},
+	},
+
 	// Mex
 	dialga: {
 		inherit: true,
@@ -394,6 +400,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	ironvaliant: {
 		inherit: true,
 		abilities: {0: "Scarlet Aeonia"},
+	},
+
+	// WarriorGallade
+	tropius: {
+		inherit: true,
+		abilities: {0: "Primeval Harvest"},
 	},
 
 	// WigglyTree

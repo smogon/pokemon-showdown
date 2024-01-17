@@ -1908,6 +1908,58 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
+	// WarriorGallade - TODO: Fix animations
+	fruitfullongbow: {
+		accuracy: 90,
+		basePower: 160,
+		category: "Special",
+		shortDesc: "Hit off higher atk, eats berry, Dragon/Fly eff.",
+		name: "Fruitful Longbow",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {charge: 1, protect: 1, mirror: 1, slicing: 1, wind: 1},
+		critRatio: 2,
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Dragon', type);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.getStat('atk') > pokemon.getStat('spa')) {
+				move.overrideOffensiveStat = 'atk';
+			}
+		},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				this.attrLastMove('[anim] Signal Beam');
+				this.attrLastMove('[anim] Twister');
+				this.attrLastMove('[anim] Psycho Cut');
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			this.attrLastMove('[anim] Tailwind');
+			this.add('-message', `${attacker.name} whipped up an intense whirlwind and began to glow a vivid green!`);
+			if (attacker.getItem().isBerry) {
+				attacker.eatItem(true);
+				this.heal(attacker.maxhp / 4, attacker);
+			}
+			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
+				this.attrLastMove('[still]');
+				this.attrLastMove('[anim] Signal Beam');
+				this.attrLastMove('[anim] Twister');
+				this.attrLastMove('[anim] Psycho Cut');
+				return;
+			}
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
+
 	// WigglyTree
 	perfectmimic: {
 		accuracy: true,

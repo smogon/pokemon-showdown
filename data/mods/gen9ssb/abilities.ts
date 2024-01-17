@@ -1013,6 +1013,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// WarriorGallade
+	primevalharvest: {
+		shortDesc: "Sun: Heal 1/8 max HP, random berry if no item. Else 50% random berry if no item.",
+		name: "Primeval Harvest",
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			const isSunny = this.field.isWeather(['sunnyday', 'desolateland']);
+			if (isSunny) {
+				this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon, pokemon.getAbility());
+			}
+			if (isSunny || this.randomChance(1, 2)) {
+				if (pokemon.hp && !pokemon.item) {
+					const berry = this.sample([
+						'cheri', 'chesto', 'pecha', 'lum', 'aguav', 'liechi', 'ganlon', 'petaya',
+						'apicot', 'salac', 'micle', 'lansat', 'enigma', 'custap', 'kee', 'maranga',
+					]) + 'berry';
+					pokemon.setItem(berry);
+					pokemon.lastItem = '';
+					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Primeval Harvest');
+				}
+			}
+		},
+		flags: {},
+	},
+
 	// WigglyTree
 	treestance: {
 		shortDesc: "No recoil; 3/4 damage from supereffective attacks.",
