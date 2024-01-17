@@ -1,5 +1,5 @@
 export const Pokedex: {[k: string]: ModdedSpeciesData} = {
-	kyotoDragonite: {
+	kyotodragonite: {
 		num: -10001,
 		name: "Kyoto Dragonite",
 		types: ["Electric", "Water"],
