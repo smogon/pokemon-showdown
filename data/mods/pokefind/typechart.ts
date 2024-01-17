@@ -1,25 +1,25 @@
 export const TypeChart: {[k: string]: ModdedTypeData} = {
 	shadow: {
 		damageTaken: {
-			shadow: 2,
-			normal: 0,
-			fire: 0,
-			water: 0,
-			electric: 0,
-			grass: 0,
-			ice: 0,
-			fighting: 0,
-			poison: 0,
-			ground: 0,
-			flying: 0,
-			psychic: 0,
-			bug: 0,
-			rock: 0,
-			ghost: 0,
-			dragon: 0,
-			dark: 0,
-			steel: 0,
-			fairy: 0,
+			Shadow: 2,
+			Normal: 0,
+			Fire: 0,
+			Water: 0,
+			Electric: 0,
+			Grass: 0,
+			Ice: 0,
+			Fighting: 0,
+			Poison: 0,
+			Ground: 0,
+			Flying: 0,
+			Psychic: 0,
+			Bug: 0,
+			Rock: 0,
+			Ghost: 0,
+			Dragon: 0,
+			Dark: 0,
+			Steel: 0,
+			Fairy: 0,
 		},
 	},
 	bug: {
@@ -44,7 +44,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	dark: {
@@ -70,7 +70,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	dragon: {
@@ -95,7 +95,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 2,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	electric: {
@@ -121,7 +121,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 2,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	fairy: {
@@ -146,7 +146,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 1,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	fighting: {
@@ -171,7 +171,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	fire: {
@@ -197,7 +197,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 2,
 			Stellar: 0,
 			Water: 1,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	flying: {
@@ -222,7 +222,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	ghost: {
@@ -248,7 +248,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	grass: {
@@ -274,7 +274,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 2,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	ground: {
@@ -300,7 +300,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 1,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	ice: {
@@ -327,7 +327,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 1,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	normal: {
@@ -352,7 +352,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	poison: {
@@ -379,7 +379,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	psychic: {
@@ -404,7 +404,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	rock: {
@@ -430,7 +430,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 1,
 			Stellar: 0,
 			Water: 1,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	steel: {
@@ -458,7 +458,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 2,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	stellar: {
@@ -483,7 +483,7 @@ export const TypeChart: {[k: string]: ModdedTypeData} = {
 			Steel: 0,
 			Stellar: 0,
 			Water: 0,
-			shadow: 1,
+			Shadow: 1,
 		},
 	},
 	water: {
