@@ -10,12 +10,17 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		// 	return 5;
 		// },
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'Shadow Sky');
+			if (effect?.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectState.duration = 0;
+				this.add('-weather', 'ShadowSky', '[from] ability: ' + effect.name, '[of] ' + source);
+			} else {
+				this.add('-weather', 'ShadowSky');
+			}
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
-			this.add('-weather', 'Shadow Sky', '[upkeep]');
-			if (this.field.isWeather('shadowsky')) this.eachEvent('Weather');
+			this.add('-weather', 'ShadowSky', '[upkeep]');
+			this.eachEvent('Weather');
 		},
 		onWeather(target) {
 			if (!target.hasType('Shadow')) {
