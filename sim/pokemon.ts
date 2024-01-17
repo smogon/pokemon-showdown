@@ -443,7 +443,7 @@ export class Pokemon {
 		this.faintQueued = false;
 		this.subFainted = null;
 
-		this.types = this.baseSpecies.types;
+		this.types = this.set.types ? this.set.types : this.baseSpecies.types;
 		this.baseTypes = this.types;
 		this.addedType = "";
 		this.knownType = true;
