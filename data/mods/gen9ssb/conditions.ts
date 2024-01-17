@@ -544,6 +544,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Ney')}|How long am I banned for?`);
 		},
 	},
+	notater517: {
+		noCopy: true,
+		// phrases TBD
+	},
 	peary: {
 		noCopy: true,
 		onStart() {

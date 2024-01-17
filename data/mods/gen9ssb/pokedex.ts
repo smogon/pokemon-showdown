@@ -33,7 +33,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Blitz
 	chiyu: {
 		inherit: true,
-		types: ['Water', 'Dark'],
+		types: ["Water", "Dark"],
 		abilities: {0: "Blitz of Ruin"},
 	},
 
@@ -56,7 +56,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	mimikyubusted: {
 		inherit: true,
-		abilities: {0: 'Masquerade'},
+		abilities: {0: "Masquerade"},
 	},
 
 	// Coolcodename
@@ -65,7 +65,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Firewall"},
 	},
 
-	// Cor'Jon
+	// Cor"Jon
 	dachsbun: {
 		inherit: true,
 		abilities: {0: "Painful Exit"},
@@ -215,13 +215,19 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	mewtwomegax: {
 		inherit: true,
-		abilities: {0: 'Hacking'},
+		abilities: {0: "Hacking"},
 	},
 
 	// Ney
 	banettemega: {
 		inherit: true,
-		abilities: {0: 'Prankster Plus'},
+		abilities: {0: "Prankster Plus"},
+	},
+
+	// Notater517
+	incineroar: {
+		inherit: true,
+		abilities: {0: "Vent Crosser"},
 	},
 
 	// Peary
@@ -252,7 +258,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	duskull: {
 		inherit: true,
 		baseStats: {hp: 50, atk: 55, def: 90, spa: 90, spd: 55, spe: 55},
-		abilities: {0: 'Youkai of the Dusk'},
+		abilities: {0: "Youkai of the Dusk"},
 	},
 
 	// Scotteh
@@ -265,23 +271,23 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	sneasel: {
 		inherit: true,
 		baseStats: {hp: 55, atk: 105, def: 95, spa: 35, spd: 95, spe: 135},
-		abilities: {0: 'Rough and Tumble'},
+		abilities: {0: "Rough and Tumble"},
 	},
 	sneaselhisui: {
 		inherit: true,
 		baseStats: {hp: 55, atk: 135, def: 75, spa: 35, spd: 85, spe: 135},
-		abilities: {0: 'Rough and Tumble'},
+		abilities: {0: "Rough and Tumble"},
 	},
 
 	// spoo
 	mumbao: {
 		inherit: true,
 		baseStats: {hp: 92, atk: 63, def: 96, spa: 104, spd: 97, spe: 124},
-		abilities: {0: 'Dazzling'},
+		abilities: {0: "Dazzling"},
 	},
 	jumbao: {
 		inherit: true,
-		abilities: {0: 'Drought'},
+		abilities: {0: "Drought"},
 	},
 
 	// Swiffix

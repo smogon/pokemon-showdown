@@ -1314,6 +1314,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
+	// Notater517
+	nyaa: {
+		accuracy: true,
+		basePower: 0,
+		category: "Physical",
+		shortDesc: "100% chance to raise the user's Attack by 1.",
+		name: "~nyaa",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {bypasssub: 1},
+		onPrepareHit(target, source) {
+			this.attrLastMove('[anim] Haze');
+			this.attrLastMove('[anim] Sweet Kiss');
+			this.attrLastMove('[anim] Baton Pass');
+		},
+		onHitField() {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+			}
+		},
+		self: {
+			boosts: {
+				atk: 1,
+				def: 1,
+			},
+		},
+		slotCondition: 'nyaa',
+		condition: {
+			onSwap(target, source) {
+				if (!target.fainted) {
+					this.add(`c:|${getName('Notater517')}|~nyaa ${target.name}`);
+					this.add(`c:|${getName('Jeopard-E')}|**It is now ${target.name}'s turn to ask a question.**`);
+					target.side.removeSlotCondition(target, 'nyaa');
+				}
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Steel",
+	},
+
 	// Peary
 	"1000gears": {
 		accuracy: true,

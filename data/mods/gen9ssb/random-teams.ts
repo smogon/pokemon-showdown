@@ -80,7 +80,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Ghost', shiny: 957,
 	},
 	Chloe: {
-		species: 'Tsareena', ability: 'Acetosa', item: 'Assualt Vest', gender: 'F',
+		species: 'Tsareena', ability: 'Acetosa', item: 'Assault Vest', gender: 'F',
 		moves: ['Rapid Spin', 'Fishious Rend', 'Stone Axe'],
 		signatureMove: 'De Todas las Flores',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Grass', shiny: true,
@@ -247,6 +247,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Shadow Dance',
 		evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave', shiny: true,
 	},
+	Notater517: {
+		species: 'Incineroar', ability: 'Vent Crosser', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Ceaseless Edge', 'Pyro Ball', ['Rapid Spin', 'Encore']],
+		signatureMove: '~nyaa',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Steel',
+	},
 	Peary: {
 		species: 'Klinklang', ability: 'Levitate', item: 'Pearyum Z', gender: '',
 		moves: ['Lock On', 'Sheer Cold', 'Substitute'],
@@ -402,7 +408,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team: PokemonSet[] = [];
-		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
+		const debug: string[] = ['Notater517']; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const monotype = ruleTable.has('sametypeclause') ?
 			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false;

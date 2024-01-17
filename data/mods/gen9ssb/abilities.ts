@@ -755,6 +755,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Notater517
+	ventcrosser: {
+		shortDesc: "Uses Baton Pass after every move.",
+		name: "Vent Crosser",
+		onAfterMove(source, target, move) {
+			this.actions.useMove('Baton Pass', source);
+		},
+		flags: {},
+	},
+
 	// phoopes
 	ididitagain: {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
