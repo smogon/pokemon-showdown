@@ -112,7 +112,6 @@ export interface PokemonSet {
 	startingMaxPPs?: number[];
 	startingHP?: number;
 	status?: string;
-	types?: string[];
 }
 
 export const Teams = new class Teams {
