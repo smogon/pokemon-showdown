@@ -1374,18 +1374,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
 		},
 	},
-	rach: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|Hel-lo`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|I was doing better alone`);
-		},
-		onFaint() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|I'm all good already, so moved on, it's scary`);
-		},
-	},
 	rageuser: {
 		noCopy: true,
 		onStart() {
