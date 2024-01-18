@@ -1613,30 +1613,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Rach
-	burnitdown: {
-		desc: "On switch-in, this Pokemon lowers the foe's higher offensive stat.",
-		shortDesc: "Lower the foe's higher offensive stat.",
-		onStart(pokemon) {
-			let totalatk = 0;
-			let totalspa = 0;
-			for (const target of pokemon.foes()) {
-				totalatk += target.getStat('atk', false, true);
-				totalspa += target.getStat('spa', false, true);
-			}
-			for (const target of pokemon.foes()) {
-				this.add('-ability', pokemon, 'BURN IT DOWN!');
-				if (totalatk && totalatk >= totalspa) {
-					this.boost({atk: -1}, target, pokemon, null, true);
-				} else if (totalspa) {
-					this.boost({spa: -1}, target, pokemon, null, true);
-				}
-			}
-		},
-		name: "BURN IT DOWN!",
-		gen: 8,
-	},
-
 	// Rage
 	inversionsurge: {
 		desc: "On switch-in, this Pokemon summons Inversion Terrain. While Inversion Terrain is active, type effectiveness for all Pokemon on the field is inverted, and paralyzed Pokemon have doubled, instead of halved, Speed.",

@@ -3664,48 +3664,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
-	// Rach
-	spindawheel: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The user uses a random hazard-setting move; burns, badly poisons, or paralyzes the target; and then switches out.",
-		shortDesc: "Sets random hazard; brn/tox/par; switches.",
-		name: "Spinda Wheel",
-		gen: 8,
-		pp: 20,
-		priority: 0,
-		flags: {reflectable: 1, protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			target.m.spindaHazard = this.sample(['Sticky Web', 'Stealth Rock', 'Spikes', 'Toxic Spikes', 'G-Max Steelsurge']);
-			target.m.spindaStatus = this.sample(['Thunder Wave', 'Toxic', 'Will-O-Wisp']);
-			if (target.m.spindaHazard) {
-				this.add('-anim', source, target.m.spindaHazard, target);
-			}
-			if (target.m.spindaStatus) {
-				this.add('-anim', source, target.m.spindaStatus, target);
-			}
-		},
-		onHit(target, source, move) {
-			if (target) {
-				if (target.m.spindaHazard) {
-					target.side.addSideCondition(target.m.spindaHazard);
-				}
-				if (target.m.spindaStatus) {
-					const s = target.m.spindaStatus;
-					target.trySetStatus(s === 'Toxic' ? 'tox' : s === 'Thunder Wave' ? 'par' : 'brn');
-				}
-			}
-		},
-		selfSwitch: true,
-		secondary: null,
-		target: "normal",
-		type: "Normal",
-	},
-
 	// Rage
 	shockedlapras: {
 		accuracy: 100,
