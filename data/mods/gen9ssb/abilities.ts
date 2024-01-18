@@ -385,6 +385,36 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// HiZo
+	martyrcomplex: {
+		desc: "If this Pokemon is knocked out, next Pokemon gets +1 Speed and +1 Attack/Special Attack, whichever is higher.",
+		shortDesc: "If this Pokemon is KOed, next Pokemon gets +1 Spe and +1 Atk or SpA.",
+		name: "Martyr Complex",
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.add('-activate', target, 'ability: Martyr Complex');
+				this.add('-message', `${target.name} will be avenged!`);
+				target.side.addSlotCondition(target, 'martyrcomplex');
+			}
+		},
+		condition: {
+			onSwap(target) {
+				const boosts: SparseBoostsTable = {};
+				boosts['spe'] = 1;
+				if (target.getStat('atk', false, true) > target.getStat('spa', false, true)) {
+					boosts['atk'] = 1;
+				} else {
+					boosts['spa'] = 1;
+				}
+				this.boost(boosts, target, target, this.effect);
+				target.side.removeSlotCondition(target, 'martyrcomplex');
+			},
+		},
+		// Permanent sleep "status" implemented in the relevant sleep-checking effects
+		flags: {},
+	},
+
 	// HoeenHero
 	misspelled: {
 		shortDesc: "SpA 1.5x, Accuracy 0.8x, Never misses, only misspells moves.",

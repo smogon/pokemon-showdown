@@ -376,7 +376,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	superegoinflation: {
 		accuracy: true,
 		basePower: 0,
-		category: "Special",
+		category: "Status",
 		shortDesc: "User heals 25% HP; Target +2 Atk/SpA + Taunt.",
 		name: "Super Ego Inflation",
 		gen: 9,
@@ -544,6 +544,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		volatileStatus: 'disable',
 		target: "normal",
 		type: "Ghost",
+	},
+
+	// HiZo
+	scapegoat: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "A party member is selected and faints, raising the user's Attack, Special Attack, and Speed by 2. Faints the user if there are no useable Pokemon on that side besides the user.",
+		shortDesc: "Faints a teammate, raises Atk, SpA, Spe by 2.",
+		name: "Scapegoat",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryHit(source) {
+			if (!this.canSwitch(source.side)) {
+				this.add('-message', `You have noone to blame but yourself.`);
+				this.faint(source);
+				return this.NOT_FAIL;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Swords Dance', source);
+		},
+		onHit(target, source) {
+			this.add('message', `A decision must be made.`);
+		},
+		slotCondition: 'scapegoat',
+		// fake switch a la revival blessing
+		selfSwitch: true,
+		condition: {
+			duration: 1,
+			// reviving implemented in side.ts, kind of
+		},
+		secondary: null,
+		target: "self",
+		type: "Dark",
 	},
 
 	// HoeenHero
@@ -1135,6 +1175,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Plagiarism",
 		shortDesc: "Steals and uses the foe's sig move, imprisons.",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 1,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
 		onPrepareHit() {
@@ -1569,7 +1610,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Rock",
 	},
 
-	// snake_rattler
+	// snake
 	conceptrelevant: {
 		accuracy: 100,
 		basePower: 70,

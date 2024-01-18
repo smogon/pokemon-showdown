@@ -248,6 +248,32 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('havi')}|the nightmare swirls and churns unending n_n`);
 		},
 	},
+	hizo: {
+		noCopy: true,
+		onStart() {
+			// TODO: Confirm nicks later
+			let friends;
+			const tier = this.sample(['pic', 'sketch', 'ggsp']);
+			switch (tier) {
+			case 'pic':
+				friends = ['chromate', 'yuki', 'YoBuddyTheBaker', 'zoe', 'jasprose'];
+				break;
+			case 'sketch':
+				friends = ['Eggs', 'career ended', 'ponchlake'];
+				break;
+			default:
+				friends = ['roonie217', 'chromate', 'tkhanh', 'lilyhii'];
+				break;
+			}
+			this.add(`c:|${getName('HiZo')}|/pm ${this.sample(friends)}, ${tier}?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('HiZo')}|maybe later then`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('HiZo')}|can i try that matchup again?`);
+		},
+	},
 	hoeenhero: {
 		noCopy: true,
 		onStart() {
@@ -674,16 +700,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		innateName: "Rough and Tumble",
 		shortDesc: "Changes Sneasel forme on switch out.",
 	},
-	snakerattler: {
+	snake: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('snake_rattler')}|CAP Concept: Pure Utility Pokemon`);
+			this.add(`c:|${getName('snake')}|CAP Concept: Pure Utility Pokemon`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('snake_rattler')}|CAP is a community focused project that creates singular Pokemon through structured Smogon based discussion threads. We define a concept to build around and proceed through various stages to determine typing, ability, stats, and movepool to complement that concept. We also run stages to determine a CAP's art, name, Pokedex entry, and sprite, so even if you're not a competitive Pokemon person you can get involved. At the end of each process we implement each CAP here on Pokemon Showdown!, where they are made available with the rest of our creations in the CAP metagame, found under 'S/V Singles'.`);
+			this.add(`c:|${getName('snake')}|CAP is a community focused project that creates singular Pokemon through structured Smogon based discussion threads. We define a concept to build around and proceed through various stages to determine typing, ability, stats, and movepool to complement that concept. We also run stages to determine a CAP's art, name, Pokedex entry, and sprite, so even if you're not a competitive Pokemon person you can get involved. At the end of each process we implement each CAP here on Pokemon Showdown!, where they are made available with the rest of our creations in the CAP metagame, found under 'S/V Singles'.`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('snake_rattler')}|CAP does not accept personal creations. This refers to any idea for a Pokemon that already has predefined typing, stats, abilities, movepool, name, art, pokedex entries, weight, height, or even generic themes such as "rabbit" or "angry". These facets of a Pokemon are all decided through community discussion in CAP during the CAP process. If you think you have an idea for a Pokemon that does not define these features, you may have a concept. CAP bases our Pokemon around concepts that look to explore the mechanics behind Pokemon and we take open submissions whenever we start a new project. Examples of past concepts include Perfect Sketch User, Momentum, Trapping mechanics, delayed move user, and weather enabler.`);
+			this.add(`c:|${getName('snake')}|CAP does not accept personal creations. This refers to any idea for a Pokemon that already has predefined typing, stats, abilities, movepool, name, art, pokedex entries, weight, height, or even generic themes such as "rabbit" or "angry". These facets of a Pokemon are all decided through community discussion in CAP during the CAP process. If you think you have an idea for a Pokemon that does not define these features, you may have a concept. CAP bases our Pokemon around concepts that look to explore the mechanics behind Pokemon and we take open submissions whenever we start a new project. Examples of past concepts include Perfect Sketch User, Momentum, Trapping mechanics, delayed move user, and weather enabler.`);
 		},
 	},
 	spoouser: {

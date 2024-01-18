@@ -145,6 +145,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Augur of Ebrietas',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ghost',
 	},
+	HiZo: {
+		species: 'Zoroark-Hisui', ability: 'Martyr Complex', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Last Respects', 'Boomburst', 'Spirit Break'],
+		signatureMove: 'Scapegoat',
+		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naive', teraType: 'Fairy',
+	},
 	HoeenHero: {
 		species: 'Ludicolo', ability: 'Misspelled', item: 'Life Orb', gender: 'M',
 		moves: [['Hydro Pump', 'Surf'], 'Giga Drain', 'Ice Beam'],
@@ -301,7 +307,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Treacherous Traversal',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Poison', skip: 'sharp_claw',
 	},
-	'snake_rattler': {
+	snake: {
 		species: 'Fidgit', ability: 'Persistent', item: ['Mental Herb', 'Covert Cloak'], gender: 'M',
 		moves: ['Tailwind', 'Healing Wish', 'Taunt'],
 		signatureMove: 'Concept Relevant',
@@ -375,6 +381,7 @@ export const ssbSets: SSBSets = {
 		species: 'Tropius', ability: 'Primeval Harvest', item: 'Starf Berry', gender: ['M', 'M', 'F'],
 		moves: ['Sunny Day', 'Natural Gift', ['Bitter Blade', 'Sappy Seed', 'Stored Power', 'Counter']],
 		signatureMove: 'Fruitful Longbow',
+		// eslint-disable-next-line max-len
 		evs: {hp: 184, atk: 112, def: 36, spd: 88, spe: 88}, ivs: {spa: 29}, nature: 'Impish', teraType: ['Dragon', 'Psychic', 'Fighting'], shiny: 20,
 	},
 	WigglyTree: {
@@ -408,7 +415,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team: PokemonSet[] = [];
-		const debug: string[] = ['Notater517']; // Set this to a list of SSB sets to override the normal pool for debugging.
+		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const monotype = ruleTable.has('sametypeclause') ?
 			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false;

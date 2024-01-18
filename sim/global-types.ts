@@ -310,6 +310,8 @@ interface ModdedBattleActions {
 
 interface ModdedBattleSide {
 	canDynamaxNow?: (this: Side) => boolean;
+	chooseSwitch?: (this: Side, slotText?: string) => any;
+	getChoice?: (this: Side) => string;
 	getRequestData?: (this: Side, forAlly?: boolean) => {name: string, id: ID, pokemon: AnyObject[]};
 }
 

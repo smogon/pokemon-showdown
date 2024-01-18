@@ -2640,7 +2640,8 @@ export const Formats: FormatList = [
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let name: string = this.toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
-			if (this.dex.species.get(name).exists || this.dex.moves.get(name).exists || this.dex.abilities.get(name).exists) {
+			if (this.dex.species.get(name).exists || this.dex.moves.get(name).exists ||
+				this.dex.abilities.get(name).exists || name === 'blitz') {
 				// Certain pokemon have volatiles named after their id
 				// To prevent overwriting those, and to prevent accidentaly leaking
 				// that a pokemon is on a team through the onStart even triggering
