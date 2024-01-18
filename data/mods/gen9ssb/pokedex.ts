@@ -30,6 +30,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Saintly Bullet"},
 	},
 
+	// berry
+	regirock: {
+		inherit: true,
+		abilities: {0: "Sturdy"},
+	},
+
 	// Blitz
 	chiyu: {
 		inherit: true,

@@ -60,6 +60,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Quiver Dance',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	berry: {
+		species: 'Regirock', ability: 'Sturdy', item: 'Maranga Berry', gender: 'F',
+		moves: ['Curse', 'Salt Cure', 'Stone Axe'],
+		signatureMove: 'what kind',
+		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Rock',
+	},
 	Blitz: {
 		species: 'Chi-Yu', ability: 'Blitz of Ruin', item: 'Life Orb', gender: 'N',
 		moves: ['Fiery Wrath', 'Lava Plume', 'Nasty Plot'],

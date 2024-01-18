@@ -155,6 +155,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// berry
+	whatkind: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Eats berry, gives random new berry, heals 25%.",
+		name: "what kind",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Nasty Plot');
+		},
+		onHit(pokemon) {
+			const item = pokemon.getItem();
+			if (item.isBerry) {
+				pokemon.eatItem(true);
+				const berries = ['iapapa', 'leppa', 'lum', 'maranga', 'ganlon', 'starf', 'liechi', 'enigma'];
+				pokemon.setItem(this.sample(berries) + 'berry');
+			}
+			this.heal(pokemon.baseMaxhp / 4, pokemon);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
+
 	// Blitz
 	geyserblast: {
 		accuracy: 95,

@@ -85,6 +85,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Archas')}|What would Grandfather... think of me now...`);
 		},
 	},
+	berry: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('berry')}|berry`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('berry')}|rock`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('berry')}|and all I got was this lousy t-shirt`);
+		},
+	},
 	blitzuser: {
 		noCopy: true,
 		onStart(pokemon) {
