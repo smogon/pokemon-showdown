@@ -144,10 +144,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 
 	// Isaiah
-	stakataka: {
+	medicham: {
 		inherit: true,
-		types: ["Water", "Fighting"],
-		abilities: {0: "Anchor Arms"},
+		abilities: {0: "Psychic Surge"},
 	},
 
 	// Kennedy

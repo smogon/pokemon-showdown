@@ -464,24 +464,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
-	// Isaiah
-	anchorarms: {
-		desc: "Swaps Attack and Defense while Trick Room is up.",
-		name: "Anchor Arms",
-		onUpdate(pokemon) {
-			if (this.field.getPseudoWeather('trickroom')) {
-				if (pokemon.volatiles['powertrick']) return;
-				this.add('-ability', pokemon, 'Anchor Arms');
-				pokemon.addVolatile('powertrick');
-			} else {
-				if (!pokemon.volatiles['powertrick']) return;
-				this.add('-ability', pokemon, 'Anchor Arms');
-				pokemon.removeVolatile('powertrick');
-			}
-		},
-		flags: {},
-	},
-
 	// Kennedy
 	anfield: {
 		shortDesc: "Clears terrain/hazards/pseudo weathers. Summons Anfield Atmosphere.",

@@ -347,14 +347,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	isaiah: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c:|${getName('Isaiah')}|Yup, that's me: MuscleBob BuffPants. I've created my own workout routine that's given me amazing results.`);
-			this.add('-start', pokemon, 'typechange', 'Water/Fighting', '[silent]');
+			this.add(`c:|${getName('Isaiah')}|Who dyin'?`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Isaiah')}|Well, I sure had fun, we'll have to do it again sometime, bye. This working-out thing isn't working out.`);
+			this.add(`c:|${getName('Isaiah')}|Misclick`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('Isaiah')}|I hope Super Weenie Hut Jr is still open for business...`);
+			this.add(`c:|${getName('Isaiah')}|Bruh, nice cteam`);
 		},
 	},
 	kennedy: {

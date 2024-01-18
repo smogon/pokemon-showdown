@@ -35,7 +35,9 @@ export function getName(name: string): string {
 	const userid = toID(name);
 	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
 
-	const group = usergroups[userid] || ' ';
+	let group = usergroups[userid] || ' ';
+	if (name === 'Artemis') group = '@';
+	if (name === 'Jeopard-E') group = '*';
 	return Math.floor(Date.now() / 1000) + '|' + group + name;
 }
 

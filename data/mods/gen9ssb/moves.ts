@@ -778,30 +778,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Isaiah
-	anchortoss: {
-		accuracy: 100,
-		basePower: 200,
+	simplegameplan: {
+		accuracy: true,
+		basePower: 120,
 		category: "Physical",
-		name: "Anchor Toss",
-		shortDesc: "+1 Atk/Def before damage. The user faints.",
-		pp: 5,
+		name: "Simple Gameplan",
+		shortDesc: "No additional effect.",
+		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove(source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Bulk Up', source);
-			this.boost({atk: 1, def: 1}, source);
-		},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Self-Destruct', target);
+			this.attrLastMove('[anim] High Jump Kick');
 		},
-		onHit() {
-			this.add(`c:|${getName('Isaiah')}|Oh, this is it. They're all gonna find out I'm a fake. I can't give up. I've got to try. I can do it! I've got Anchor Arms! I'm no wimp, I'm a jerk!`);
-		},
-		selfdestruct: "always",
 		secondary: null,
 		target: "allAdjacent",
-		type: "Water",
+		type: "Psychic",
 	},
 
 	// Kennedy
@@ -1327,8 +1318,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Ney
 	shadowdance: {
-		accuracy: 100,
-		basePower: 80,
+		accuracy: 110,
+		basePower: 90,
 		category: "Physical",
 		shortDesc: "100% chance to raise the user's Attack by 1.",
 		name: "Shadow Dance",
@@ -1340,7 +1331,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Shadow Claw', target);
+			this.add('-anim', source, 'Poltergeist', target);
 			this.add('-anim', source, 'Dragon Dance', source);
 		},
 		secondary: {

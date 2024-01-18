@@ -182,10 +182,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, spa: 4, spd: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Isaiah: {
-		species: 'Stakataka', ability: 'Anchor Arms', item: 'Life Orb', gender: 'M',
-		moves: ['Trick Room', 'Hammer Arm', 'Wave Crash'],
-		signatureMove: 'Anchor Toss',
-		evs: {hp: 252, atk: 252, def: 4}, nature: 'Brave', teraType: 'Water', shiny: true,
+		species: 'Medicham', ability: 'Psychic Surge', item: 'Medichamite', gender: 'M',
+		moves: ['Close Combat', 'Knock Off', 'Triple Axel'],
+		signatureMove: 'Simple Gameplan',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
 	},
 	Kennedy: {
 		species: 'Cinderace', ability: 'Anfield', item: 'Berserk Gene', gender: 'M',
