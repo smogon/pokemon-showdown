@@ -56,7 +56,7 @@ The stream version lets you do it a bit at a time instead of all at once, so you
 * `encoding` [override encoding](#override-encoding)
 * Returns: {Promise<void>} for the next time it's safe to write to the `writeStream`.
 
-Writes to the stream. `writeStream.write(null)` is equivalent to `writeStream.end()`.
+Writes to the stream. `writeStream.write(null)` is equivalent to `writeStream.writeEnd()`.
 
 ### writeStream.writeLine(chunk, [encoding])
 
