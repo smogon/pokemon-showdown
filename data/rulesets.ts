@@ -139,9 +139,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
-	draft: {
+	standarddraft: {
 		effectType: 'ValidatorRule',
-		name: 'Draft',
+		name: 'Standard Draft',
 		desc: "The custom Draft League ruleset",
 		ruleset: [
 			'Obtainable', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',

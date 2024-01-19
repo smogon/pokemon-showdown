@@ -580,18 +580,18 @@ export const Formats: FormatList = [
 		column: 1,
 	},
 	{
-		name: "[Gen 9] Paldea Dex Draft",
+		name: "[Gen 9] Draft",
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['Draft', 'Min Source Gen = 9'],
+		ruleset: ['Standard Draft', 'Min Source Gen = 9'],
 	},
 	{
-		name: "[Gen 9] Tera Preview Paldea Dex Draft",
+		name: "[Gen 9] Tera Preview Draft",
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['[Gen 9] Paldea Dex Draft', 'Tera Type Preview'],
+		ruleset: ['[Gen 9] Draft', 'Tera Type Preview'],
 	},
 	{
 		name: "[Gen 9] 6v6 Doubles Draft",
@@ -599,7 +599,7 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Draft', '!Sleep Clause Mod', '!Evasion Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard Draft', '!Sleep Clause Mod', '!Evasion Clause', 'Min Source Gen = 9'],
 	},
 	{
 		name: "[Gen 9] 4v4 Doubles Draft",
@@ -607,14 +607,14 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Draft', 'Item Clause', 'VGC Timer', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Clause', 'Adjust Level = 50', 'Picked Team Size = 4', 'Min Source Gen = 9'],
+		ruleset: ['Standard Draft', 'Item Clause', 'VGC Timer', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Clause', 'Adjust Level = 50', 'Picked Team Size = 4', 'Min Source Gen = 9'],
 	},
 	{
 		name: "[Gen 9] NatDex Draft",
 
 		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['Draft', '+Unobtainable', '+Past'],
+		ruleset: ['Standard Draft', '+Unobtainable', '+Past'],
 	},
 	{
 		name: "[Gen 9] Tera Preview NatDex Draft",
@@ -644,14 +644,14 @@ export const Formats: FormatList = [
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['Draft', 'Dynamax Clause'],
+		ruleset: ['Standard Draft', 'Dynamax Clause'],
 	},
 	{
 		name: "[Gen 8] NatDex Draft",
 
 		mod: 'gen8',
 		searchShow: false,
-		ruleset: ['Draft', 'Dynamax Clause', '+Past'],
+		ruleset: ['Standard Draft', 'Dynamax Clause', '+Past'],
 	},
 	{
 		name: "[Gen 8] NatDex 4v4 Doubles Draft",
@@ -659,21 +659,21 @@ export const Formats: FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Draft', 'Item Clause', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Moves Clause', 'Adjust Level = 50', 'Picked Team Size = 4', '+Past'],
+		ruleset: ['Standard Draft', 'Item Clause', '!Sleep Clause Mod', '!OHKO Clause', '!Evasion Moves Clause', 'Adjust Level = 50', 'Picked Team Size = 4', '+Past'],
 	},
 	{
 		name: "[Gen 7] Draft",
 
 		mod: 'gen7',
 		searchShow: false,
-		ruleset: ['Draft', '+LGPE'],
+		ruleset: ['Standard Draft', '+LGPE'],
 	},
 	{
 		name: "[Gen 6] Draft",
 
 		mod: 'gen6',
 		searchShow: false,
-		ruleset: ['Draft', 'Moody Clause', 'Swagger Clause'],
+		ruleset: ['Standard Draft', 'Moody Clause', 'Swagger Clause'],
 		banlist: ['Soul Dew'],
 	},
 
@@ -2637,18 +2637,18 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9 DLC 1] Paldea Dex Draft",
+		name: "[Gen 9 DLC 1] Draft",
 
 		mod: 'gen9dlc1',
 		searchShow: false,
-		ruleset: ['Draft', 'Min Source Gen = 9'],
+		ruleset: ['Standard Draft', 'Min Source Gen = 9'],
 	},
 	{
-		name: "[Gen 9 DLC 1] Tera Preview Paldea Dex Draft",
+		name: "[Gen 9 DLC 1] Tera Preview Draft",
 
 		mod: 'gen9dlc1',
 		searchShow: false,
-		ruleset: ['[Gen 9 DLC 1] Paldea Dex Draft', 'Tera Type Preview'],
+		ruleset: ['[Gen 9 DLC 1] Draft', 'Tera Type Preview'],
 	},
 
 	// Randomized Format Spotlight
