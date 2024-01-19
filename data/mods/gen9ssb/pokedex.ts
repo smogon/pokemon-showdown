@@ -155,6 +155,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Psychic Surge"},
 	},
 
+	// kenn
+	larvitar: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 84, def: 70, spa: 65, spd: 70, spe: 61},
+		abilities: {0: "Deserted Dunes"},
+	},
+
 	// Kennedy
 	cinderace: {
 		inherit: true,

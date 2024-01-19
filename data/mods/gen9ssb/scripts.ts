@@ -977,6 +977,18 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 	},
 	pokemon: {
+		effectiveWeather() {
+			const weather = this.battle.field.effectiveWeather();
+			switch (weather) {
+			case 'sunnyday':
+			case 'raindance':
+			case 'desolateland':
+			case 'primordialsea':
+			case 'stormsurge':
+				if (this.hasItem('utilityumbrella')) return '';
+			}
+			return weather;
+		},
 		getMoveTargets(move, target) {
 			let targets: Pokemon[] = [];
 
@@ -1019,7 +1031,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
 						!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
 						!(move.id === 'fruitfullongbow' && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
-						!(move.id === 'electroshot' && ['raindance', 'primordialsea'].includes(this.effectiveWeather())) &&
+						!(move.id === 'electroshot' && ['stormsurge', 'raindance', 'primordialsea'].includes(this.effectiveWeather())) &&
 						!(this.hasItem('powerherb') && move.id !== 'skydrop');
 					if (!isCharging) {
 						target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);

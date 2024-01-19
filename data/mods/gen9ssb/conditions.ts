@@ -368,6 +368,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Isaiah')}|Bruh, nice cteam`);
 		},
 	},
+	kenn: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('kenn')}|*old man grumbling*`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('kenn')}|Ope`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('kenn')}|I'm too old for this shi-`);
+		},
+	},
 	kennedy: {
 		noCopy: true,
 		innateName: "Battle Bond",
@@ -956,6 +968,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 
 	// Custom effects
+	// Elly
 	stormsurge: {
 		name: 'StormSurge',
 		effectType: 'Weather',
@@ -1027,6 +1040,40 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.effectState.stage++;
 			}
 			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
+		},
+	},
+
+	// kenn
+	deserteddunes: {
+		name: 'DesertedDunes',
+		effectType: 'Weather',
+		duration: 0,
+		onEffectivenessPriority: -1,
+		onEffectiveness(typeMod, target, type, move) {
+			if (move?.effectType === 'Move' && move.category !== 'Status' && type === 'Rock' && typeMod > 0) {
+				this.add('-fieldactivate', 'Deserted Dunes');
+				return 0;
+			}
+		},
+		onModifySpDPriority: 10,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.hasType('Rock') && this.field.isWeather('deserteddunes')) {
+				return this.modify(spd, 1.5);
+			}
+		},
+		onFieldStart(field, source, effect) {
+			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, '[of] ' + source);
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'DesertedDunes', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			this.damage(target.baseMaxhp / 16);
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
 		},
 	},
 

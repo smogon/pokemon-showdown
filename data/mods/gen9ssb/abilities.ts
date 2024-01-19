@@ -1,6 +1,8 @@
 import {ssbSets} from "./random-teams";
 import {changeSet, getName, enemyStaff} from "./scripts";
 
+const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'deserteddunes'];
+
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
 	// Example
@@ -464,6 +466,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// kenn
+	deserteddunes: {
+		onStart(source) {
+			this.field.setWeather('deserteddunes');
+		},
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'deserteddunes' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherState.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('deserteddunes')) {
+					this.field.weatherState.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+		flags: {},
+		name: "Deserted Dunes",
+		gen: 9,
+	},
+
 	// Kennedy
 	anfield: {
 		shortDesc: "Clears terrain/hazards/pseudo weathers. Summons Anfield Atmosphere.",
@@ -621,6 +647,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				break;
 			case 'raindance':
 			case 'primordialsea':
+			case 'stormsurge':
 				if (pokemon.species.id !== 'castformrainy') {
 					forme = 'Castform-Rainy';
 					relevantMove = 'Thunder';
@@ -1117,7 +1144,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
-	// Modified Bad Dreams to support havi's ability
+	// Modified abilities
 	baddreams: {
 		inherit: true,
 		onResidual(pokemon) {
@@ -1126,6 +1153,161 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (target.status === 'slp' || target.hasAbility(['comatose', 'mensiscage'])) {
 					this.damage(target.baseMaxhp / 8, target, pokemon);
 				}
+			}
+		},
+	},
+	deltastream: {
+		inherit: true,
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'deltastream' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+	},
+	desolateland: {
+		inherit: true,
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'desolateland' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+	},
+	dryskin: {
+		inherit: true,
+		onWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
+			if (effect.id === 'raindance' || effect.id === 'primordialsea' || effect.id === 'stormsurge') {
+				this.heal(target.baseMaxhp / 8);
+			} else if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
+				this.damage(target.baseMaxhp / 8, target, target);
+			}
+		},
+	},
+	forecast: {
+		inherit: true,
+		onWeatherChange(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			let forme = null;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
+				break;
+			case 'raindance':
+			case 'primordialsea':
+			case 'stormsurge':
+				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
+				break;
+			case 'hail':
+			case 'snow':
+				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
+				break;
+			default:
+				if (pokemon.species.id !== 'castform') forme = 'Castform';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+			}
+		},
+	},
+	hydration: {
+		inherit: true,
+		onResidual(pokemon) {
+			if (pokemon.status && ['raindance', 'primordialsea', 'stormsurge'].includes(pokemon.effectiveWeather())) {
+				this.debug('hydration');
+				this.add('-activate', pokemon, 'ability: Hydration');
+				pokemon.cureStatus();
+			}
+		},
+	},
+	neutralizinggas: {
+		inherit: true,
+		onPreStart(pokemon) {
+			this.add('-ability', pokemon, 'Neutralizing Gas');
+			pokemon.abilityState.ending = false;
+			for (const target of this.getAllActive()) {
+				if (target.hasItem('Ability Shield')) {
+					this.add('-block', target, 'item: Ability Shield');
+					continue;
+				}
+				// Can't suppress a Tatsugiri inside of Dondozo already
+				if (target.volatiles['commanding']) {
+					continue;
+				}
+				if (target.illusion) {
+					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
+				}
+				if (target.volatiles['slowstart']) {
+					delete target.volatiles['slowstart'];
+					this.add('-end', target, 'Slow Start', '[silent]');
+				}
+				if (STRONG_WEATHERS.includes(target.getAbility().id)) {
+					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
+				}
+			}
+		},
+	},
+	overcoat: {
+		inherit: true,
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail' || type === 'powder') return false;
+		},
+	},
+	primordialsea: {
+		inherit: true,
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'primordialsea' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+	},
+	raindish: {
+		inherit: true,
+		onWeather(target, source, effect) {
+			if (target.hasItem('utilityumbrella')) return;
+			if (effect.id === 'raindance' || effect.id === 'primordialsea' || effect.id === 'stormsurge') {
+				this.heal(target.baseMaxhp / 16);
+			}
+		},
+	},
+	sandforce: {
+		inherit: true,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.field.isWeather(['sandstorm', 'deserteddunes'])) {
+				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
+					this.debug('Sand Force boost');
+					return this.chainModify([5325, 4096]);
+				}
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'deserteddunes') return false;
+		},
+	},
+	sandrush: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather(['sandstorm', 'deserteddunes'])) {
+				return this.chainModify(2);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'deserteddunes') return false;
+		},
+	},
+	sandveil: {
+		inherit: true,
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'deserteddunes') return false;
+		},
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			if (this.field.isWeather(['sandstorm', 'deserteddunes'])) {
+				this.debug('Sand Veil - decreasing accuracy');
+				return this.chainModify([3277, 4096]);
+			}
+		},
+	},
+	swiftswim: {
+		inherit: true,
+		onModifySpe(spe, pokemon) {
+			if (['raindance', 'primordialsea', 'stormsurge'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(2);
 			}
 		},
 	},

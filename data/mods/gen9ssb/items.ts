@@ -43,4 +43,34 @@ export const Items: {[k: string]: ModdedItemData} = {
 		itemUser: ["Klinklang"],
 		desc: "If held by a Klinklang with Gear Grind, it can use 1000 Gears.",
 	},
+
+	// Modified for other effects
+	safetygoggles: {
+		inherit: true,
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail' || type === 'powder') return false;
+		},
+	},
+	utilityumbrella: {
+		inherit: true,
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem()) return;
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'stormsurge'].includes(this.field.effectiveWeather())) {
+				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.inactive) return;
+			this.effectState.inactive = false;
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'stormsurge'].includes(this.field.effectiveWeather())) {
+				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+			}
+		},
+		onEnd(pokemon) {
+			if (['sunnyday', 'raindance', 'desolateland', 'primordialsea', 'stormsurge'].includes(this.field.effectiveWeather())) {
+				this.runEvent('WeatherChange', pokemon, pokemon, this.effect);
+			}
+			this.effectState.inactive = true;
+		},
+	},
 };

@@ -193,6 +193,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Simple Gameplan',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
 	},
+	kenn: {
+		species: 'Larvitar', ability: 'Deserted Dunes', item: 'Eviolite', gender: 'M',
+		moves: ['Salt Cure', 'Shore Up', ['Precipice Blades', 'Headlong Rush']],
+		signatureMove: 'Stone Faced',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Rock', shiny: true,
+	},
 	Kennedy: {
 		species: 'Cinderace', ability: 'Anfield', item: 'Berserk Gene', gender: 'M',
 		moves: ['Blaze Kick', ['Triple Kick', 'Trop Kick'], 'U-turn'],
@@ -301,7 +307,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Purification',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', teraType: 'Water',
 	},
-	'sharp_claw': {
+	sharp_claw: {
 		species: 'Sneasel', ability: 'Regenerator', item: 'Heavy-Duty Boots', gender: 'F',
 		moves: ['Knock Off', 'Ice Spinner', 'Ice Shard'],
 		signatureMove: 'Treacherous Traversal',
@@ -483,7 +489,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			let teraType: string | undefined;
 			if (ssbSet.teraType) {
 				teraType = ssbSet.teraType === 'Any' ?
-					this.sample(this.dex.types.all().map(x => x.name)) :
+					this.sample(this.dex.types.names()) :
 					this.sampleIfArray(ssbSet.teraType);
 			}
 

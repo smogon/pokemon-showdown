@@ -632,7 +632,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Geomancy', target);
 		},
 		onModifyMove(move, pokemon, target) {
-			const BLOCKING_WEATHERS = ['raindance', 'desolateland', 'primordialsea', 'deltastream'];
+			const BLOCKING_WEATHERS = ['stormsurge', 'raindance', 'desolateland', 'primordialsea', 'deltastream'];
 			if (!BLOCKING_WEATHERS.includes(this.field.getWeather().id) && this.randomChance(1, 3)) {
 				move.target = 'self';
 			}
@@ -823,6 +823,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// kenn
+	stonefaced: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Sets Stealth Rock. Lowers foe Def/Spe by 1.",
+		name: "Stone Faced",
+		pp: 15,
+		priority: 0,
+		flags: {reflectable: 1, mustpressure: 1},
+		sideCondition: 'stealthrock',
+		onPrepareHit(target, source) {
+			this.attrLastMove('[anim] Scary Face');
+			this.attrLastMove('[anim] Stone Axe');
+		},
+		boosts: {
+			def: 1,
+			spe: 1,
+		},
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+	},
+
 	// Kennedy
 	hattrick: {
 		accuracy: 98,
@@ -980,6 +1004,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Fairy",
 	},
+
 	// Krytocon
 	attackofopportunity: {
 		accuracy: 100,
@@ -2211,11 +2236,79 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
-	// Modified various moves to support havi's ability
+	// Modified moves
+	bleakwindstorm: {
+		inherit: true,
+		onModifyMove(move, pokemon, target) {
+			if (target && ['raindance', 'primordialsea', 'stormsurge'].includes(target.effectiveWeather())) {
+				move.accuracy = true;
+			}
+		},
+	},
+	dig: {
+		inherit: true,
+		condition: {
+			duration: 2,
+			onImmunity(type, pokemon) {
+				if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail') return false;
+			},
+			onInvulnerability(target, source, move) {
+				if (['earthquake', 'magnitude'].includes(move.id)) {
+					return;
+				}
+				return false;
+			},
+			onSourceModifyDamage(damage, source, target, move) {
+				if (move.id === 'earthquake' || move.id === 'magnitude') {
+					return this.chainModify(2);
+				}
+			},
+		},
+	},
+	dive: {
+		inherit: true,
+		condition: {
+			duration: 2,
+			onImmunity(type, pokemon) {
+				if (type === 'sandstorm' || type === 'deserteddunes' || type === 'hail') return false;
+			},
+			onInvulnerability(target, source, move) {
+				if (['surf', 'whirlpool'].includes(move.id)) {
+					return;
+				}
+				return false;
+			},
+			onSourceModifyDamage(damage, source, target, move) {
+				if (move.id === 'surf' || move.id === 'whirlpool') {
+					return this.chainModify(2);
+				}
+			},
+		},
+	},
 	dreameater: {
 		inherit: true,
 		onTryImmunity(target) {
 			return target.status === 'slp' || target.hasAbility(['comatose', 'mensiscage']);
+		},
+	},
+	electroshot: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			this.boost({spa: 1}, attacker, attacker, move);
+			if (['raindance', 'primordialsea', 'stormsurge'].includes(attacker.effectiveWeather())) {
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+				return;
+			}
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
 		},
 	},
 	hex: {
@@ -2228,11 +2321,81 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return move.basePower;
 		},
 	},
+	hurricane: {
+		inherit: true,
+		onModifyMove(move, pokemon, target) {
+			switch (target?.effectiveWeather()) {
+			case 'raindance':
+			case 'primordialsea':
+			case 'stormsurge':
+				move.accuracy = true;
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				move.accuracy = 50;
+				break;
+			}
+		},
+	},
 	infernalparade: {
 		inherit: true,
 		basePowerCallback(pokemon, target, move) {
 			if (target.status || target.hasAbility(['comatose', 'mensiscage'])) return move.basePower * 2;
 			return move.basePower;
+		},
+	},
+	moonlight: {
+		inherit: true,
+		onHit(pokemon) {
+			let factor = 0.5;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				factor = 0.667;
+				break;
+			case 'raindance':
+			case 'primordialsea':
+			case 'stormsurge':
+			case 'sandstorm':
+			case 'deserteddunes':
+			case 'hail':
+			case 'snow':
+				factor = 0.25;
+				break;
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
+		},
+	},
+	morningsun: {
+		inherit: true,
+		onHit(pokemon) {
+			let factor = 0.5;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				factor = 0.667;
+				break;
+			case 'raindance':
+			case 'primordialsea':
+			case 'stormsurge':
+			case 'sandstorm':
+			case 'deserteddunes':
+			case 'hail':
+			case 'snow':
+				factor = 0.25;
+				break;
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
 		},
 	},
 	nightmare: {
@@ -2266,6 +2429,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 	},
+	sandsearstorm: {
+		inherit: true,
+		onModifyMove(move, pokemon, target) {
+			if (target && ['raindance', 'primordialsea', 'stormsurge'].includes(target.effectiveWeather())) {
+				move.accuracy = true;
+			}
+		},
+	},
+	shoreup: {
+		inherit: true,
+		onHit(pokemon) {
+			let factor = 0.5;
+			if (this.field.isWeather(['sandstorm', 'deserteddunes'])) {
+				factor = 0.667;
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
+		},
+	},
 	sleeptalk: {
 		inherit: true,
 		onTry(source) {
@@ -2278,6 +2464,69 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return source.status === 'slp' || source.hasAbility(['comatose', 'mensiscage']);
 		},
 	},
+	solarbeam: {
+		inherit: true,
+		onBasePower(basePower, pokemon, target) {
+			const weakWeathers = ['raindance', 'primordialsea', 'stormsurge', 'sandstorm', 'deserteddunes', 'hail', 'snow'];
+			if (weakWeathers.includes(pokemon.effectiveWeather())) {
+				this.debug('weakened by weather');
+				return this.chainModify(0.5);
+			}
+		},
+	},
+	solarblade: {
+		inherit: true,
+		onBasePower(basePower, pokemon, target) {
+			const weakWeathers = ['raindance', 'primordialsea', 'stormsurge', 'sandstorm', 'deserteddunes', 'hail', 'snow'];
+			if (weakWeathers.includes(pokemon.effectiveWeather())) {
+				this.debug('weakened by weather');
+				return this.chainModify(0.5);
+			}
+		},
+	},
+	synthesis: {
+		inherit: true,
+		onHit(pokemon) {
+			let factor = 0.5;
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				factor = 0.667;
+				break;
+			case 'raindance':
+			case 'primordialsea':
+			case 'stormsurge':
+			case 'sandstorm':
+			case 'deserteddunes':
+			case 'hail':
+			case 'snow':
+				factor = 0.25;
+				break;
+			}
+			const success = !!this.heal(this.modify(pokemon.maxhp, factor));
+			if (!success) {
+				this.add('-fail', pokemon, 'heal');
+				return this.NOT_FAIL;
+			}
+			return success;
+		},
+	},
+	thunder: {
+		inherit: true,
+		onModifyMove(move, pokemon, target) {
+			switch (target?.effectiveWeather()) {
+			case 'raindance':
+			case 'primordialsea':
+			case 'stormsurge':
+				move.accuracy = true;
+				break;
+			case 'sunnyday':
+			case 'desolateland':
+				move.accuracy = 50;
+				break;
+			}
+		},
+	},
 	wakeupslap: {
 		inherit: true,
 		basePowerCallback(pokemon, target, move) {
@@ -2286,6 +2535,54 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return move.basePower * 2;
 			}
 			return move.basePower;
+		},
+	},
+	weatherball: {
+		inherit: true,
+		onModifyType(move, pokemon) {
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				move.type = 'Fire';
+				break;
+			case 'raindance':
+			case 'primordialsea':
+			case 'stormsurge':
+				move.type = 'Water';
+				break;
+			case 'sandstorm':
+			case 'deserteddunes':
+				move.type = 'Rock';
+				break;
+			case 'hail':
+			case 'snow':
+				move.type = 'Ice';
+				break;
+			}
+		},
+		onModifyMove(move, pokemon) {
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+			case 'raindance':
+			case 'primordialsea':
+			case 'stormsurge':
+			case 'sandstorm':
+			case 'deserteddunes':
+			case 'hail':
+			case 'snow':
+				move.basePower *= 2;
+				break;
+			}
+			this.debug('BP: ' + move.basePower);
+		},
+	},
+	wildboltstorm: {
+		inherit: true,
+		onModifyMove(move, pokemon, target) {
+			if (target && ['raindance', 'primordialsea', 'stormsurge'].includes(target.effectiveWeather())) {
+				move.accuracy = true;
+			}
 		},
 	},
 };
