@@ -394,7 +394,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Calm Mind", "Psychic Noise", "Psyshock", "Scald", "Slack Off", "Thunder Wave"],
+                "movepool": ["Calm Mind", "Psyshock", "Scald", "Slack Off", "Thunder Wave"],
                 "teraTypes": ["Fairy", "Water"]
             },
             {
