@@ -378,11 +378,6 @@
         "level": 92,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Earthquake", "Stealth Rock", "Stone Edge", "Volt Switch", "Wild Charge"],
-                "teraTypes": ["Ground"]
-            },
-            {
                 "role": "Wallbreaker",
                 "movepool": ["Double-Edge", "Earthquake", "Explosion", "Rock Polish", "Stone Edge"],
                 "teraTypes": ["Ground"]
