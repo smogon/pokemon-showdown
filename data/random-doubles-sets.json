@@ -1794,12 +1794,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Bullet Punch", "Hammer Arm", "Knock Off", "Meteor Mash", "Psychic Fangs", "Stomping Tantrum"],
+                "movepool": ["Bullet Punch", "Hammer Arm", "Heavy Slam", "Knock Off", "Psychic Fangs", "Stomping Tantrum"],
                 "teraTypes": ["Dark", "Steel", "Water"]
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Agility", "Brick Break", "Knock Off", "Meteor Mash", "Protect", "Psychic Fangs"],
+                "movepool": ["Agility", "Brick Break", "Heavy Slam", "Knock Off", "Protect", "Psychic Fangs"],
                 "teraTypes": ["Dragon"]
             }
         ]
