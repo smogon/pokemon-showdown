@@ -92,7 +92,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["aquatail", "crunch", "earthquake", "glare", "gunkshot", "poisonjab", "seedbomb", "switcheroo"],
+                "movepool": ["crunch", "earthquake", "glare", "gunkshot", "poisonjab", "seedbomb", "switcheroo"],
                 "preferredTypes": ["Ground"]
             }
         ]
@@ -236,7 +236,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["aerialace", "bite", "doubleedge", "fakeout", "hypnosis", "return", "seedbomb", "switcheroo", "taunt", "uturn"],
+                "movepool": ["bite", "doubleedge", "fakeout", "hypnosis", "return", "seedbomb", "taunt", "uturn"],
                 "preferredTypes": ["Dark"]
             }
         ]
@@ -1824,7 +1824,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["focusblast", "healbell", "lightscreen", "psychic", "reflect", "thunderwave", "toxic"]
+                "movepool": ["focusblast", "healbell", "psychic", "thunderwave", "toxic"]
             },
             {
                 "role": "Bulky Attacker",
@@ -2319,7 +2319,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["lightscreen", "psychoboost", "reflect", "spikes", "stealthrock", "superpower", "taunt"]
+                "movepool": ["psychoboost", "spikes", "stealthrock", "superpower", "taunt"]
             }
         ]
     },
@@ -2745,7 +2745,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["blizzard", "earthquake", "focusblast", "hiddenpowerfire", "iceshard", "woodhammer"],
+                "movepool": ["blizzard", "earthquake", "focusblast", "iceshard", "woodhammer"],
                 "preferredTypes": ["Grass"]
             }
         ]
@@ -2939,7 +2939,8 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "icepunch", "painsplit", "shadowsneak", "trick", "willowisp"]
+                "movepool": ["earthquake", "icepunch", "painsplit", "shadowsneak", "trick", "willowisp"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Bulky Attacker",

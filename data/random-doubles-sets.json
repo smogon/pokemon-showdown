@@ -5700,7 +5700,7 @@
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Close Combat", "Drain Punch", "Fake Out", "Ice Punch", "Volt Switch", "Wild Charge"],
-                "teraTypes": ["Electric", "Fighting", "Fire"]
+                "teraTypes": ["Electric", "Fire"]
             },
             {
                 "role": "Bulky Protect",
