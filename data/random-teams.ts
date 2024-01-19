@@ -1083,7 +1083,8 @@ export class RandomTeams {
 		case 'Sheer Force':
 			const braviaryCase = (species.id === 'braviaryhisui' && (role === 'Wallbreaker' || role === 'Bulky Protect'));
 			const abilitiesCase = (abilities.has('Guts') || abilities.has('Sharpness'));
-			return (!counter.get('sheerforce') || moves.has('bellydrum') || braviaryCase || abilitiesCase);
+			const movesCase = (moves.has('bellydrum') || moves.has('flamecharge'));
+			return (!counter.get('sheerforce') || braviaryCase || abilitiesCase || movesCase);
 		case 'Slush Rush':
 			return !teamDetails.snow;
 		case 'Solar Power':
