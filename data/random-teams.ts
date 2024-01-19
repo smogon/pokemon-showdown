@@ -1156,7 +1156,7 @@ export class RandomTeams {
 		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
 		if (species.id === 'jumpluff') return 'Infiltrator';
 		if (species.id === 'toucannon' && !counter.get('skilllink')) return 'Keen Eye';
-		if (species.id === 'reuniclus') return (role === 'AV Pivot') ? 'Regenerator' : 'Magic Guard';
+		if (species.id === 'reuniclus') return 'Magic Guard';
 		if (species.id === 'smeargle' && !counter.get('technician')) return 'Own Tempo';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
