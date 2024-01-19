@@ -1560,7 +1560,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Fire Blast", "Ice Beam", "Knock Off", "Stealth Rock", "Stone Edge", "Thunder Wave"],
-                "teraTypes": ["Poison", "Rock"]
+                "teraTypes": ["Ghost", "Rock"]
             }
         ]
     },
