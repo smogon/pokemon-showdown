@@ -1085,7 +1085,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["explosion", "gyroball", "rapidspin", "spikes", "stealthrock", "toxicspikes"]
+                "movepool": ["explosion", "payback", "rapidspin", "spikes", "stealthrock", "toxicspikes"]
             }
         ]
     },
