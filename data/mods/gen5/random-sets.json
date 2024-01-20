@@ -2577,7 +2577,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["fakeout", "lowkick", "pursuit", "return", "uturn"]
+                "movepool": ["fakeout", "lowkick", "payback", "pursuit", "return", "uturn"]
             }
         ]
     },

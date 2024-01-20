@@ -198,6 +198,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			[['bodyslam', 'return'], ['bodyslam', 'doubleedge']],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
+			['payback', 'pursuit'],
 
 			// Assorted hardcodes go here:
 			// Zebstrika
