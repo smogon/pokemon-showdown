@@ -6618,7 +6618,7 @@
                 "teraTypes": ["Stellar"]
             },
             {
-                "role": "Fast Bulky Setup",
+                "role": "Setup Sweeper",
                 "movepool": ["Calm Mind", "Earth Power", "Rapid Spin", "Rest", "Tera Starstorm"],
                 "teraTypes": ["Stellar"]
             }
