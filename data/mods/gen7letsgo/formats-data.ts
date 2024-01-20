@@ -588,7 +588,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	vaporeon: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	jolteon: {
