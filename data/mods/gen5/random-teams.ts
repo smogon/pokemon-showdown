@@ -533,7 +533,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil'));
 		case 'Regenerator':
-			return ((species.id === 'mienshao' && role !== 'Wallbreaker') || species.id === 'reuniclus');
+			return ((species.id === 'mienshao' && role !== 'Fast Attacker') || species.id === 'reuniclus');
 		case 'Reckless': case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Force': case 'Sand Rush':
