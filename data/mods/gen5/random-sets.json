@@ -3580,6 +3580,10 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["bulkup", "drainpunch", "icepunch", "machpunch", "thunderpunch"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["drainpunch", "icepunch", "machpunch", "thunderpunch"]
             }
         ]
     },
