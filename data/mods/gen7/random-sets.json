@@ -3549,7 +3549,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["earthquake", "haze", "icepunch", "painsplit", "shadowsneak", "willowisp"],
                 "preferredTypes": ["Ground"]
             }
