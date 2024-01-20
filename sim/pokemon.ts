@@ -1205,6 +1205,7 @@ export class Pokemon {
 				spd: this.baseStoredStats["spd"],
 				spe: this.baseStoredStats["spe"]
 			},
+			boosts: this.boosts,
 			moves: (forAlly ? this.baseMoveSlots : this.baseMoveSlots).map(move => {
 				let moveName = move.move;
 				if (move.id === "hiddenpower") {
@@ -1222,7 +1223,8 @@ export class Pokemon {
 			}),
 			baseAbility: this.battle.dex.abilities.getByID(this.baseAbility).name,
 			item: this.item,
-			pokeball: this.pokeball
+			pokeball: this.pokeball,
+			volatiles: Object.keys(this.volatiles),
 		};
 		if (this.battle.gen > 6) {
 			entry.ability = this.battle.dex.abilities.getByID(this.ability).name;

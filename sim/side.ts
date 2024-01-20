@@ -230,6 +230,7 @@ export class Side {
 			name: this.name,
 			id: this.id,
 			pokemon: [] as AnyObject[],
+			conditions: Object.keys(this.sideConditions),
 		};
 		for (const pokemon of this.pokemon) {
 			data.pokemon.push(pokemon.getSwitchRequestData(forAlly));
