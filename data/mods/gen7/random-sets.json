@@ -2150,7 +2150,8 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"]
+                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
+                "preferredTypes": ["Ice"]
             }
         ]
     },
@@ -2159,7 +2160,8 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"]
+                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
+                "preferredTypes": ["Ice"]
             }
         ]
     },

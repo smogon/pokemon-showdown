@@ -1985,7 +1985,8 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"]
+                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Bulky Attacker",
@@ -1998,7 +1999,8 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"]
+                "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Bulky Attacker",
