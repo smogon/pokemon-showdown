@@ -2045,7 +2045,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Endeavor", "Substitute", "Surf", "Whirlpool"],
-                "teraTypes": ["Dragon", "Ghost", "Poison"]
+                "teraTypes": ["Ghost"]
             }
         ]
     },
