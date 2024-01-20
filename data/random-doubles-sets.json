@@ -5870,12 +5870,12 @@
             {
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Close Combat", "Leaf Blade", "Protect", "Swords Dance"],
-                "teraTypes": ["Fighting", "Fire", "Psychic"]
+                "teraTypes": ["Fighting", "Fire", "Poison"]
             },
             {
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Close Combat", "Leaf Blade", "Psyblade", "Wild Charge"],
-                "teraTypes": ["Fighting", "Fire", "Poison"]
+                "teraTypes": ["Fighting", "Fire", "Psychic"]
             }
         ]
     },
