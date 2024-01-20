@@ -1381,7 +1381,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["crunch", "dragondance", "earthquake", "firepunch", "icepunch", "stoneedge"]
+                "movepool": ["crunch", "dragondance", "earthquake", "firepunch", "stoneedge"]
             }
         ]
     },

@@ -1566,7 +1566,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["crunch", "dragondance", "earthquake", "firepunch", "icepunch", "stoneedge"]
+                "movepool": ["crunch", "dragondance", "earthquake", "firepunch", "stoneedge"]
             }
         ]
     },
@@ -1575,7 +1575,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["crunch", "dragondance", "earthquake", "firepunch", "icepunch", "stoneedge"]
+                "movepool": ["crunch", "dragondance", "earthquake", "firepunch", "stoneedge"]
             }
         ]
     },
@@ -4272,11 +4272,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["autotomize", "explosion", "flashcannon", "freezedry", "hiddenpowerground", "icebeam", "toxic"]
+                "movepool": ["autotomize", "explosion", "flashcannon", "freezedry", "hiddenpowerground", "icebeam", "toxic"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "AV Pivot",
-                "movepool": ["explosion", "flashcannon", "freezedry", "hiddenpowerground", "icebeam"]
+                "movepool": ["explosion", "flashcannon", "freezedry", "hiddenpowerground", "icebeam"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
