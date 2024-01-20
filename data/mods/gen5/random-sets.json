@@ -932,7 +932,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["bravebird", "hypnosis", "roost", "superfang", "taunt", "toxic", "uturn"]
+                "movepool": ["bravebird", "heatwave", "roost", "superfang", "taunt", "toxic", "uturn"]
             }
         ]
     },
