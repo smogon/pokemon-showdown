@@ -48,7 +48,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'bisharp', 'breloom', 'cacturne', 'dusknoir', 'honchkrow', 'scizor', 'shedinja',
+	'bisharp', 'breloom', 'cacturne', 'dusknoir', 'honchkrow', 'scizor', 'shedinja', 'shiftry',
 ];
 
 export class RandomGen5Teams extends RandomGen6Teams {
@@ -198,6 +198,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			[['bodyslam', 'return'], ['bodyslam', 'doubleedge']],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
+			['payback', 'pursuit'],
 
 			// Assorted hardcodes go here:
 			// Zebstrika
@@ -532,7 +533,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil'));
 		case 'Regenerator':
-			return ((species.id === 'mienshao' && role !== 'Wallbreaker') || species.id === 'reuniclus');
+			return ((species.id === 'mienshao' && role !== 'Fast Attacker') || species.id === 'reuniclus');
 		case 'Reckless': case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Force': case 'Sand Rush':
