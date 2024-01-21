@@ -1,4 +1,18 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
+	vicegrip: {
+		num: 11,
+		accuracy: 100,
+		basePower: 55,
+		category: "Physical",
+		name: "Vice Grip",
+		pp: 30,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Tough",
+	},
 	"shadowrush": {
 		num: 10001,
 		accuracy: 100,
