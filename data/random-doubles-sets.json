@@ -1794,12 +1794,12 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Bullet Punch", "Hammer Arm", "Knock Off", "Meteor Mash", "Psychic Fangs", "Stomping Tantrum"],
+                "movepool": ["Bullet Punch", "Hammer Arm", "Heavy Slam", "Knock Off", "Psychic Fangs", "Stomping Tantrum"],
                 "teraTypes": ["Dark", "Steel", "Water"]
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Agility", "Brick Break", "Knock Off", "Meteor Mash", "Protect", "Psychic Fangs"],
+                "movepool": ["Agility", "Brick Break", "Heavy Slam", "Knock Off", "Protect", "Psychic Fangs"],
                 "teraTypes": ["Dragon"]
             }
         ]
@@ -3981,6 +3981,11 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Brave Bird", "Bullet Seed", "Protect", "Tailwind"],
                 "teraTypes": ["Grass", "Steel"]
+            },
+            {
+                "role": "Bulky Protect",
+                "movepool": ["Beak Blast", "Bullet Seed", "Knock Off", "Protect"],
+                "teraTypes": ["Grass", "Steel"]
             }
         ]
     },
@@ -5219,8 +5224,8 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Bitter Blade", "Close Combat", "Poltergeist", "Protect", "Shadow Sneak", "Swords Dance"],
-                "teraTypes": ["Fighting", "Fire", "Ghost", "Grass"]
+                "movepool": ["Bitter Blade", "Poltergeist", "Protect", "Shadow Sneak", "Swords Dance"],
+                "teraTypes": ["Fire", "Ghost", "Grass"]
             }
         ]
     },
@@ -5700,7 +5705,7 @@
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Close Combat", "Drain Punch", "Fake Out", "Ice Punch", "Volt Switch", "Wild Charge"],
-                "teraTypes": ["Electric", "Fighting", "Fire"]
+                "teraTypes": ["Electric", "Fire"]
             },
             {
                 "role": "Bulky Protect",
@@ -5870,12 +5875,12 @@
             {
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Close Combat", "Leaf Blade", "Protect", "Swords Dance"],
-                "teraTypes": ["Fighting", "Fire", "Psychic"]
+                "teraTypes": ["Fighting", "Fire", "Poison"]
             },
             {
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Close Combat", "Leaf Blade", "Psyblade", "Wild Charge"],
-                "teraTypes": ["Fighting", "Fire", "Poison"]
+                "teraTypes": ["Fighting", "Fire", "Psychic"]
             }
         ]
     },
