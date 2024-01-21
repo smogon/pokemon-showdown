@@ -200,7 +200,9 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 			(player.id as string) = id;
 			player.name = name;
 			this.playerTable[player.id] = player;
-			this.room.auth.set(id, Users.PLAYER_SYMBOL);
+			if (this.room.roomid.startsWith('battle-') || this.room.roomid.startsWith('game-')) {
+				this.room.auth.set(id, Users.PLAYER_SYMBOL);
+			}
 
 			const user = typeof userOrName === 'string' ? Users.getExact(id) : userOrName;
 			if (user) {
