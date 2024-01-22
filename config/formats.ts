@@ -2207,8 +2207,8 @@ export const Formats: FormatList = [
 		name: "[Gen 9] National Dex",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710848/">National Dex Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714511/">National Dex Ubers Viability Rankings</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714863/">National Dex Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714511/">National Dex Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714863/">National Dex Sample Teams</a>`,
 		],
 
 		mod: 'gen9',
@@ -2584,8 +2584,8 @@ export const Formats: FormatList = [
 		name: "[Gen 9 DLC 1] National Dex",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3710848/">National Dex Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714511/">National Dex Ubers Viability Rankings</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3714863/">National Dex Ubers Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714511/">National Dex Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3714863/">National Dex Sample Teams</a>`,
 		],
 
 		mod: 'gen9dlc1',
