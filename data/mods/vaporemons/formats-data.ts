@@ -1745,7 +1745,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	porygon2: {
-		tier: "rU",
+		tier: "RU",
 		doublesTier: "DOU",
 	},
 	porygonz: {
