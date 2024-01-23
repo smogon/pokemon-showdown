@@ -999,10 +999,12 @@ export const Items: {[itemid: string]: ModdedItemData} = {
 		spritenum: 624,
 		onTakeItem: false,
 		onSwitchIn(pokemon) {
-			this.add('-item', pokemon, 'Diancite Stone Fragment');
-			pokemon.setAbility('magicbounce', pokemon, true);
-			this.add('-activate', pokemon, 'ability: Magic Bounce');
-			this.boost({atk: 1, spa: 1, spe: 1});
+			if (pokemon.baseSpecies.name === 'Diancie') {
+				this.add('-item', pokemon, 'Diancite Stone Fragment');
+				pokemon.setAbility('magicbounce', pokemon, true);
+				this.add('-activate', pokemon, 'ability: Magic Bounce');
+				this.boost({atk: 1, spa: 1, spe: 1});
+			}
 		},
 		itemUser: ["Diancie"],
 		gen: 9,
