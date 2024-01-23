@@ -114,7 +114,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'avalugghisui').learnset.stoneaxe = ['9L1'];
 		this.modData('Learnsets', 'drednaw').learnset.stoneaxe = ['9L1'];
 		delete this.modData('Learnsets', 'regieleki').learnset.electroweb;
-		delete this.modData('Learnsets', 'meloetta').learnset.sing;
 		delete this.modData('Learnsets', 'meloetta').learnset.swordsdance;
 		delete this.modData('Learnsets', 'magnemite').learnset.electroweb;
 		delete this.modData('Learnsets', 'magnezone').learnset.electroweb;
@@ -281,7 +280,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "meloetta").learnset.axekick = ["9L1"];
 		this.modData("Learnsets", "meloetta").learnset.blazekick = ["9L1"];
 		this.modData("Learnsets", "meloetta").learnset.healbell = ["9L1"];
-		this.modData("Learnsets", "meloetta").learnset.megakick = ["9L1"];
+		this.modData("Learnsets", "meloetta").learnset.takedown = ["9L1"];
 		this.modData("Learnsets", "meloetta").learnset.rapidspin = ["9L1"];
 		this.modData("Learnsets", "meloetta").learnset.recover = ["9L1"];
 		this.modData("Learnsets", "meloetta").learnset.vacuumwave = ["9L1"];
@@ -1180,7 +1179,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "snorlax").learnset.rollout = ["9L1"];
 		this.modData("Learnsets", "snorlax").learnset.slackoff = ["9L1"];
 		delete this.modData('Learnsets', 'sneasler').learnset.acrobatics;
-		delete this.modData('Learnsets', 'darkrai').learnset.hypnosis;
 		delete this.modData('Learnsets', 'darkrai').learnset.psychic;
 		delete this.modData('Learnsets', 'darkrai').learnset.nastyplot;
 		delete this.modData('Learnsets', 'mew').learnset.steelbeam;
