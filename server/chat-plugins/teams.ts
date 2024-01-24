@@ -315,7 +315,8 @@ export const TeamsHandler = new class {
 				teamBuf = teamBuf.replace(set.species, `<psicon pokemon="${set.species}" /> <br />${set.species}`);
 			}
 			if (set.item) {
-				teamBuf = teamBuf.replace(set.item, `${set.item} <psicon item="${set.item}" />`);
+				const tester = new RegExp(`${Utils.escapeRegex(set.item)}\\b`);
+				teamBuf = teamBuf.replace(tester, `${set.item} <psicon item="${set.item}" />`);
 			}
 			return teamBuf;
 		}).join('<hr />');
