@@ -531,7 +531,7 @@ export class Pokemon {
 	}
 
 	toString() {
-		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
+		const fullname = this.fullname;
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 

@@ -138,7 +138,7 @@ export class BattleActions {
 		if (sourceEffect) {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails, '[from] ' + sourceEffect);
 		} else {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails, pokemon.illusion ? `[illusion] ${pokemon.illusion.fullname}` : '');
 		}
 		pokemon.abilityOrder = this.battle.abilityOrder++;
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
