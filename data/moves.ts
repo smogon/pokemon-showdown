@@ -12983,6 +12983,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			move.basePower = item.naturalGift.basePower;
 			this.debug('BP: ' + move.basePower);
 			pokemon.setItem('');
+			this.add("-enditem", pokemon, item, "[eat]");
 			pokemon.lastItem = item.id;
 			pokemon.usedItemThisTurn = true;
 			this.runEvent('AfterUseItem', pokemon, null, null, item);
