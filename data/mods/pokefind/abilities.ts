@@ -12,4 +12,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.damage(pokemon.baseMaxhp / 6, pokemon, pokemon);
 		},
 	},
+	protean: {
+		inherit: true,
+		onSwitchIn(pokemon) {
+			this.add('-end', pokemon, 'typechange', '[from] ability: Protean');
+			delete this.effectState.protean;
+		},
+	},
+	libero: {
+		inherit: true,
+		onSwitchIn(pokemon) {
+			this.add('-end', pokemon, 'typechange', '[from] ability: Libero');
+			delete this.effectState.libero;
+		},
+	},
 };
