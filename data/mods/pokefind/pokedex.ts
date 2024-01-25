@@ -1571,7 +1571,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Unknown",
 		eggGroups: ["Field"],
 	},
-	"shilohporygon-z": {
+	"shilohporygonz": {
 		num: -10132,
 		name: "Shiloh Porygon-Z",
 		types: ["Ghost", "Fighting"],
