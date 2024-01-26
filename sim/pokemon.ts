@@ -1199,11 +1199,11 @@ export class Pokemon {
 			condition: this.getHealth().secret,
 			active: (this.position < this.side.active.length),
 			stats: {
-				atk: this.baseStoredStats["atk"],
-				def: this.baseStoredStats["def"],
-				spa: this.baseStoredStats["spa"],
-				spd: this.baseStoredStats["spd"],
-				spe: this.baseStoredStats["spe"]
+				atk: this.storedStats["atk"] !== this.baseStoredStats["atk"] ? this.storedStats["atk"] : this.baseStoredStats["atk"],
+				def: this.storedStats["def"] !== this.baseStoredStats["def"] ? this.storedStats["def"] : this.baseStoredStats["def"],
+				spa: this.storedStats["spa"] !== this.baseStoredStats["spa"] ? this.storedStats["spa"] : this.baseStoredStats["spa"],
+				spd: this.storedStats["spd"] !== this.baseStoredStats["spd"] ? this.storedStats["spd"] : this.baseStoredStats["spd"],
+				spe: this.storedStats["spe"] !== this.baseStoredStats["spe"] ? this.storedStats["spe"] : this.baseStoredStats["spe"],
 			},
 			boosts: this.boosts,
 			moves: (forAlly ? this.baseMoveSlots : this.baseMoveSlots).map(move => {

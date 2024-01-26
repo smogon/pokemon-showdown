@@ -1263,6 +1263,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			}
 			this.add('-item', target, myItem.name, '[from] move: Bestow', '[of] ' + source);
+			this.add('-enditem', source, myItem.name, '[from] move: Bestow', '[of] ' + source, "[silent]");
 		},
 		secondary: null,
 		target: "normal",
@@ -10290,7 +10291,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			if (source.hp) {
 				const item = target.takeItem();
 				if (item) {
-					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+					this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source, '[silent]');
 				}
 			}
 		},
