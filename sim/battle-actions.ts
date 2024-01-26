@@ -608,11 +608,13 @@ export class BattleActions {
 		return moveResult;
 	}
 	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
-		if (move.id === 'helpinghand' || (this.battle.gen >= 8 && move.id === 'toxic' && pokemon.hasType('Poison'))) {
-			return new Array(targets.length).fill(true);
-		}
 		const hitResults = this.battle.runEvent('Invulnerability', targets, pokemon, move);
 		for (const [i, target] of targets.entries()) {
+			if (target.volatiles['commanding']) {
+				hitResults[i] = false;
+			} else if (move.id === 'helpinghand' || (this.battle.gen >= 8 && move.id === 'toxic' && pokemon.hasType('Poison'))) {
+				hitResults[i] = true;
+			}
 			if (hitResults[i] === false) {
 				if (move.smartTarget) {
 					move.smartTarget = false;

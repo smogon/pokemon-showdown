@@ -820,14 +820,10 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
 		},
-		// Override No Guard
-		onInvulnerabilityPriority: 2,
-		onInvulnerability(target, source, move) {
-			return false;
-		},
 		onBeforeTurn(pokemon) {
 			this.queue.cancelAction(pokemon);
 		},
+		// Dodging moves is handled in BattleActions#hitStepInvulnerabilityEvent
 	},
 
 	// Arceus and Silvally's actual typing is implemented here.
