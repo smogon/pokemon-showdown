@@ -1367,25 +1367,25 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 			if (pokemon.length >= this.maxTeamSize) break;
 
 			const pokemonList = Object.keys(this.randomDoublesData);
-			const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
-			while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
-				const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
+			const [pokemonPool, shuffledBaseSpecies] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+
+			while (shuffledBaseSpecies.length && pokemon.length < this.maxTeamSize) {
+				// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
+				const baseSpecies = shuffledBaseSpecies.pop()!.baseSpecies;
 				const currentSpeciesPool: Species[] = [];
 				// Check if the base species has a mega forme available
 				let canMega = false;
-				for (const poke of pokemonPool) {
+				for (const poke of pokemonPool[baseSpecies].speciesArray) {
 					const species = this.dex.species.get(poke);
-					if (!hasMega && species.baseSpecies === baseSpecies && species.isMega) canMega = true;
+					if (!hasMega && species.isMega) canMega = true;
 				}
-				for (const poke of pokemonPool) {
+				for (const poke of pokemonPool[baseSpecies].speciesArray) {
 					const species = this.dex.species.get(poke);
-					if (species.baseSpecies === baseSpecies) {
-						// Prevent multiple megas
-						if (hasMega && species.isMega) continue;
-						// Prevent base forme, if a mega is available
-						if (canMega && !species.isMega) continue;
-						currentSpeciesPool.push(species);
-					}
+					// Prevent multiple megas
+					if (hasMega && species.isMega) continue;
+					// Prevent base forme, if a mega is available
+					if (canMega && !species.isMega) continue;
+					currentSpeciesPool.push(species);
 				}
 				const species = this.sample(currentSpeciesPool);
 				if (!species.exists) continue;

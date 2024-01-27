@@ -684,15 +684,12 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		let numMaxLevelPokemon = 0;
 
 		const pokemonList = (this.gen === 3) ? Object.keys(this.randomSets) : Object.keys(this.randomData);
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
-		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
-			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			const currentSpeciesPool: Species[] = [];
-			for (const poke of pokemonPool) {
-				const species = this.dex.species.get(poke);
-				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
-			}
-			const species = this.sample(currentSpeciesPool);
+		const [pokemonPool, shuffledBaseSpecies] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+
+		while (shuffledBaseSpecies.length && pokemon.length < this.maxTeamSize) {
+			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
+			const baseSpecies = shuffledBaseSpecies.pop()!.baseSpecies;
+			const species = this.dex.species.get(this.sample(pokemonPool[baseSpecies].speciesArray));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)

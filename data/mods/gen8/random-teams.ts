@@ -2413,11 +2413,10 @@ export class RandomGen8Teams {
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
 		pokemonList: string[]
-	) {
+	): [{[k: string]: {count: number, speciesArray: ID[]}}, {baseSpecies: string, score: number}[]] {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
-		const pokemonPool = [];
-		const baseSpeciesPool = [];
-		const baseSpeciesCount: {[k: string]: number} = {};
+		const pokemonPool: {[k: string]: {count: number, speciesArray: ID[]}} = {};
+		const shuffledBaseSpecies = [];
 		for (const pokemon of pokemonList) {
 			let species = this.dex.species.get(pokemon);
 			if (exclude.includes(species.id)) continue;
@@ -2428,16 +2427,37 @@ export class RandomGen8Teams {
 					if (!species.types.includes(type)) continue;
 				}
 			}
-			pokemonPool.push(pokemon);
-			baseSpeciesCount[species.baseSpecies] = (baseSpeciesCount[species.baseSpecies] || 0) + 1;
-		}
-		// Include base species 1x if 1-3 formes, 2x if 4-6 formes, 3x if 7+ formes
-		for (const baseSpecies of Object.keys(baseSpeciesCount)) {
-			for (let i = 0; i < Math.min(Math.ceil(baseSpeciesCount[baseSpecies] / 3), 3); i++) {
-				baseSpeciesPool.push(baseSpecies);
+
+			if (species.baseSpecies in pokemonPool) {
+				pokemonPool[species.baseSpecies].count++;
+				pokemonPool[species.baseSpecies].speciesArray.push(species.id);
+			} else {
+				pokemonPool[species.baseSpecies] = {count: 1, speciesArray: [species.id]};
 			}
 		}
-		return [pokemonPool, baseSpeciesPool];
+		// Include base species 1x if 1-3 formes, 2x if 4-6 formes, 3x if 7+ formes
+		for (const baseSpecies of Object.keys(pokemonPool)) {
+			// Squawkabilly has 4 formes, but only 2 functionally different formes, so only include it 1x
+			if (baseSpecies === 'Squawkabilly') {
+				pokemonPool[baseSpecies].count = 1;
+			} else {
+				pokemonPool[baseSpecies].count = Math.min(Math.ceil(pokemonPool[baseSpecies].count / 3), 3);
+			}
+
+			/**
+			 * Weighted random shuffle
+			 * Uses the fact that for two uniform variables x1 and x2, x1^(1/w1) is larger than x2^(1/w2)
+			 * with probability equal to w1/(w1+w2), which is what we want. See e.g. here https://arxiv.org/pdf/1012.0256.pdf,
+			 * original paper is behind a paywall.
+			 */
+			const sortObject = {
+				baseSpecies: baseSpecies,
+				score: Math.pow(this.prng.next(), 1 / pokemonPool[baseSpecies].count),
+			};
+			shuffledBaseSpecies.push(sortObject);
+		}
+		shuffledBaseSpecies.sort((a, b) => a.score - b.score);
+		return [pokemonPool, shuffledBaseSpecies];
 	}
 
 	randomTeam() {
@@ -2471,15 +2491,12 @@ export class RandomGen8Teams {
 				pokemonList.push(poke);
 			}
 		}
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
-		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
-			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			const currentSpeciesPool: Species[] = [];
-			for (const poke of pokemonPool) {
-				const species = this.dex.species.get(poke);
-				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
-			}
-			let species = this.sample(currentSpeciesPool);
+		const [pokemonPool, shuffledBaseSpecies] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+
+		while (shuffledBaseSpecies.length && pokemon.length < this.maxTeamSize) {
+			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
+			const baseSpecies = shuffledBaseSpecies.pop()!.baseSpecies;
+			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies].speciesArray));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
