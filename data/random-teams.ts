@@ -1716,7 +1716,7 @@ export class RandomTeams {
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
 		pokemonList: string[]
-	): [{[k: string]: {count: number, speciesArray: ID[]}}, {baseSpecies: string, score: number}[]] {
+	): [{[k: string]: ID[]}, {baseSpecies: string, score: number}[]] {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool: {[k: string]: ID[]} = {};
 		const shuffledBaseSpecies = [];
@@ -1740,7 +1740,7 @@ export class RandomTeams {
 		// Include base species 1x if 1-3 formes, 2x if 4-6 formes, 3x if 7+ formes
 		for (const baseSpecies of Object.keys(pokemonPool)) {
 			// Squawkabilly has 4 formes, but only 2 functionally different formes, so only include it 1x
-			let weight = baseSpecies === 'Squawkabilly` ? 1 : Math.min(Math.ceil(pokemonPool[baseSpecies].count / 3), 3);
+			const weight = (baseSpecies === 'Squawkabilly') ? 1 : Math.min(Math.ceil(pokemonPool[baseSpecies].length / 3), 3);
 
 			/**
 			 * Weighted random shuffle

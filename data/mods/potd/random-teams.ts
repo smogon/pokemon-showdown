@@ -54,7 +54,7 @@ export class RandomPOTDTeams extends RandomTeams {
 		while (shuffledBaseSpecies.length && pokemon.length < this.maxTeamSize) {
 			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
 			const baseSpecies = shuffledBaseSpecies.pop()!.baseSpecies;
-			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies].speciesArray));
+			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
