@@ -1331,11 +1331,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				const currentSpeciesPool: Species[] = [];
 				// Check if the base species has a mega forme available
 				let canMega = false;
-				for (const poke of pokemonPool[baseSpecies].speciesArray) {
+				for (const poke of pokemonPool[baseSpecies]) {
 					const species = this.dex.species.get(poke);
 					if (!hasMega && species.isMega) canMega = true;
 				}
-				for (const poke of pokemonPool[baseSpecies].speciesArray) {
+				for (const poke of pokemonPool[baseSpecies]) {
 					const species = this.dex.species.get(poke);
 					// Prevent multiple megas
 					if (hasMega && species.isMega) continue;
