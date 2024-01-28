@@ -952,11 +952,10 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		let numMaxLevelPokemon = 0;
 
 		const pokemonList = Object.keys(this.randomSets);
-		const [pokemonPool, shuffledBaseSpecies] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
-		while (shuffledBaseSpecies.length && pokemon.length < this.maxTeamSize) {
-			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
-			const baseSpecies = shuffledBaseSpecies.pop()!.baseSpecies;
+		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
+			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			const species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			if (!species.exists) continue;
 

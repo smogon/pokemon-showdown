@@ -33,7 +33,7 @@ export class RandomPOTDTeams extends RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
-		const [pokemonPool, shuffledBaseSpecies] = this.getPokemonPool(
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(
 			type, pokemon, isMonotype, pokemonList.filter(m => this.dex.species.get(m).baseSpecies !== potd.baseSpecies)
 		);
 
@@ -51,9 +51,8 @@ export class RandomPOTDTeams extends RandomTeams {
 			}
 		}
 
-		while (shuffledBaseSpecies.length && pokemon.length < this.maxTeamSize) {
-			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
-			const baseSpecies = shuffledBaseSpecies.pop()!.baseSpecies;
+		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
+			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			if (!species.exists) continue;
 

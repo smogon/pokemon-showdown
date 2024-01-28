@@ -1367,11 +1367,10 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 			if (pokemon.length >= this.maxTeamSize) break;
 
 			const pokemonList = Object.keys(this.randomDoublesData);
-			const [pokemonPool, shuffledBaseSpecies] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+			const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
-			while (shuffledBaseSpecies.length && pokemon.length < this.maxTeamSize) {
-				// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
-				const baseSpecies = shuffledBaseSpecies.pop()!.baseSpecies;
+			while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
+				const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 				const currentSpeciesPool: Species[] = [];
 				// Check if the base species has a mega forme available
 				let canMega = false;

@@ -2413,10 +2413,10 @@ export class RandomGen8Teams {
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
 		pokemonList: string[]
-	): [{[k: string]: ID[]}, {baseSpecies: string, score: number}[]] {
+	): [{[k: string]: ID[]}, string[]] {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
 		const pokemonPool: {[k: string]: ID[]} = {};
-		const shuffledBaseSpecies = [];
+		const baseSpeciesPool = [];
 		for (const pokemon of pokemonList) {
 			let species = this.dex.species.get(pokemon);
 			if (exclude.includes(species.id)) continue;
@@ -2438,21 +2438,9 @@ export class RandomGen8Teams {
 		for (const baseSpecies of Object.keys(pokemonPool)) {
 			// Squawkabilly has 4 formes, but only 2 functionally different formes, so only include it 1x
 			const weight = (baseSpecies === 'Squawkabilly') ? 1 : Math.min(Math.ceil(pokemonPool[baseSpecies].length / 3), 3);
-
-			/**
-			 * Weighted random shuffle
-			 * Uses the fact that for two uniform variables x1 and x2, x1^(1/w1) is larger than x2^(1/w2)
-			 * with probability equal to w1/(w1+w2), which is what we want. See e.g. here https://arxiv.org/pdf/1012.0256.pdf,
-			 * original paper is behind a paywall.
-			 */
-			const sortObject = {
-				baseSpecies: baseSpecies,
-				score: Math.pow(this.prng.next(), 1 / weight),
-			};
-			shuffledBaseSpecies.push(sortObject);
+			for (let i = 0; i < weight; i++) baseSpeciesPool.push(baseSpecies);
 		}
-		shuffledBaseSpecies.sort((a, b) => a.score - b.score);
-		return [pokemonPool, shuffledBaseSpecies];
+		return [pokemonPool, baseSpeciesPool];
 	}
 
 	randomTeam() {
@@ -2486,11 +2474,10 @@ export class RandomGen8Teams {
 				pokemonList.push(poke);
 			}
 		}
-		const [pokemonPool, shuffledBaseSpecies] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
-		while (shuffledBaseSpecies.length && pokemon.length < this.maxTeamSize) {
-			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
-			const baseSpecies = shuffledBaseSpecies.pop()!.baseSpecies;
+		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
+			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			if (!species.exists) continue;
 
