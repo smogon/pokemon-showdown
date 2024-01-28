@@ -2475,7 +2475,6 @@ export class RandomGen8Teams {
 			}
 		}
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
-
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
 			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
