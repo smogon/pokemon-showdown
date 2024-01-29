@@ -5572,7 +5572,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	ceruledge: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 		natDexTier: "UUBL",
 	},
