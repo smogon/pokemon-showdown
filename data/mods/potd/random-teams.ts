@@ -33,12 +33,9 @@ export class RandomPOTDTeams extends RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
-		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
-
-		// Remove PotD from baseSpeciesPool
-		if (baseSpeciesPool.includes(potd.baseSpecies)) {
-			this.fastPop(baseSpeciesPool, baseSpeciesPool.indexOf(potd.baseSpecies));
-		}
+		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(
+			type, pokemon, isMonotype, pokemonList.filter(m => this.dex.species.get(m).baseSpecies !== potd.baseSpecies)
+		);
 
 		// Add PotD to type counts
 		for (const typeName of potd.types) {
@@ -56,12 +53,7 @@ export class RandomPOTDTeams extends RandomTeams {
 
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			const currentSpeciesPool: Species[] = [];
-			for (const poke of pokemonPool) {
-				const species = this.dex.species.get(poke);
-				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
-			}
-			let species = this.sample(currentSpeciesPool);
+			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
