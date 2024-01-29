@@ -397,11 +397,13 @@ export class Pokemon {
 				this.set.ivs[stat] = 31;
 			}
 		}
-		for (stat in this.set.evs) {
-			this.set.evs[stat] = this.battle.clampIntRange(this.set.evs[stat], 0, 255);
-		}
-		for (stat in this.set.ivs) {
-			this.set.ivs[stat] = this.battle.clampIntRange(this.set.ivs[stat], 0, 31);
+		if (!this.battle.pokefindBattle) {
+			for (stat in this.set.evs) {
+				this.set.evs[stat] = this.battle.clampIntRange(this.set.evs[stat], 0, 255);
+			}
+			for (stat in this.set.ivs) {
+				this.set.ivs[stat] = this.battle.clampIntRange(this.set.ivs[stat], 0, 31);
+			}
 		}
 		if (this.battle.gen && this.battle.gen <= 2) {
 			// We represent DVs using even IVs. Ensure they are in fact even.
