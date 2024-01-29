@@ -125,7 +125,6 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		let numMaxLevelPokemon = 0;
 
 		const pokemonPool = Object.keys(this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData))[0]);
-
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
