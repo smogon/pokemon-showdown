@@ -124,7 +124,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0, Fire: 0};
 		let numMaxLevelPokemon = 0;
 
-		const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData))[0];
+		const pokemonPool = Object.keys(this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData))[0]);
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {
 			const species = this.dex.species.get(this.sampleNoReplace(pokemonPool));
 			if (!species.exists) continue;
