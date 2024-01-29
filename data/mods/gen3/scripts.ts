@@ -12,6 +12,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.modData('Moves', i).category = newCategory;
 			}
 		}
+		for (const i in this.data.Pokedex) {
+			if (this.abilities.get(this.data.Pokedex[i].abilities['1']).gen === 4) {
+				delete this.modData('Pokedex', i).abilities['1'];
+			}
+		}
 	},
 	pokemon: {
 		inherit: true,
