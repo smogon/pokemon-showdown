@@ -50,7 +50,7 @@
         ]
     },
     "pikachu": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -155,7 +155,7 @@
         ]
     },
     "ninetalesalola": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -275,7 +275,7 @@
         ]
     },
     "arcaninehisui": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -290,7 +290,7 @@
         ]
     },
     "poliwrath": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -310,7 +310,7 @@
         ]
     },
     "tentacruel": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -510,7 +510,7 @@
         ]
     },
     "hitmonchan": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -570,7 +570,7 @@
         ]
     },
     "magmar": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -600,7 +600,7 @@
         ]
     },
     "taurospaldeablaze": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -650,7 +650,7 @@
         ]
     },
     "lapras": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -665,7 +665,7 @@
         ]
     },
     "ditto": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -710,7 +710,7 @@
         ]
     },
     "snorlax": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -730,7 +730,7 @@
         ]
     },
     "articuno": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -750,7 +750,7 @@
         ]
     },
     "zapdos": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -875,7 +875,7 @@
         ]
     },
     "feraligatr": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -890,7 +890,7 @@
         ]
     },
     "furret": {
-        "level": 96,
+        "level": 97,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -915,7 +915,7 @@
         ]
     },
     "ariados": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -925,7 +925,7 @@
         ]
     },
     "lanturn": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -995,7 +995,7 @@
         ]
     },
     "jumpluff": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1020,7 +1020,7 @@
         ]
     },
     "quagsire": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1070,7 +1070,7 @@
         ]
     },
     "slowking": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1105,7 +1105,7 @@
         ]
     },
     "granbull": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1180,7 +1180,7 @@
         ]
     },
     "magcargo": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -1250,7 +1250,7 @@
         ]
     },
     "porygon2": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1270,7 +1270,7 @@
         ]
     },
     "smeargle": {
-        "level": 96,
+        "level": 99,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1295,7 +1295,7 @@
         ]
     },
     "blissey": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1320,7 +1320,7 @@
         ]
     },
     "entei": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1330,7 +1330,7 @@
         ]
     },
     "suicune": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1360,7 +1360,7 @@
         ]
     },
     "lugia": {
-        "level": 76,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -1370,7 +1370,7 @@
         ]
     },
     "hooh": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1410,7 +1410,7 @@
         ]
     },
     "swampert": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1495,7 +1495,7 @@
         ]
     },
     "breloom": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -1580,7 +1580,7 @@
         ]
     },
     "volbeat": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1590,7 +1590,7 @@
         ]
     },
     "illumise": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1620,7 +1620,7 @@
         ]
     },
     "torkoal": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1640,7 +1640,7 @@
         ]
     },
     "flygon": {
-        "level": 90,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1660,7 +1660,7 @@
         ]
     },
     "altaria": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1730,7 +1730,7 @@
         ]
     },
     "banette": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -1740,7 +1740,7 @@
         ]
     },
     "tropius": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1815,7 +1815,7 @@
         ]
     },
     "regice": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1825,7 +1825,7 @@
         ]
     },
     "registeel": {
-        "level": 86,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -1930,7 +1930,7 @@
         ]
     },
     "deoxysattack": {
-        "level": 75,
+        "level": 76,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1950,7 +1950,7 @@
         ]
     },
     "deoxysspeed": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1985,7 +1985,7 @@
         ]
     },
     "empoleon": {
-        "level": 81,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2055,7 +2055,7 @@
         ]
     },
     "vespiquen": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2115,7 +2115,7 @@
         ]
     },
     "mismagius": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -2175,7 +2175,7 @@
         ]
     },
     "garchomp": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -2230,7 +2230,7 @@
         ]
     },
     "abomasnow": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -2270,7 +2270,7 @@
         ]
     },
     "rhyperior": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -2285,7 +2285,7 @@
         ]
     },
     "electivire": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -2350,7 +2350,7 @@
         ]
     },
     "gliscor": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -2390,7 +2390,7 @@
         ]
     },
     "gallade": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -2455,7 +2455,7 @@
         ]
     },
     "rotomheat": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -2520,7 +2520,7 @@
         ]
     },
     "azelf": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -2545,7 +2545,7 @@
         ]
     },
     "dialgaorigin": {
-        "level": 74,
+        "level": 75,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -2915,7 +2915,7 @@
         ]
     },
     "emboar": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -2940,7 +2940,7 @@
         ]
     },
     "samurotthisui": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2995,7 +2995,7 @@
         ]
     },
     "leavanny": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3145,7 +3145,7 @@
         ]
     },
     "zoroarkhisui": {
-        "level": 79,
+        "level": 80,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -3170,7 +3170,7 @@
         ]
     },
     "gothitelle": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3215,7 +3215,7 @@
         ]
     },
     "amoonguss": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3400,7 +3400,7 @@
         ]
     },
     "cobalion": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3415,7 +3415,7 @@
         ]
     },
     "terrakion": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -3585,7 +3585,7 @@
         ]
     },
     "keldeoresolute": {
-        "level": 82,
+        "level": 80,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -3660,7 +3660,7 @@
         ]
     },
     "vivillon": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3685,7 +3685,7 @@
         ]
     },
     "florges": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -3730,7 +3730,7 @@
         ]
     },
     "malamar": {
-        "level": 85,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -3830,7 +3830,7 @@
         ]
     },
     "klefki": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3955,7 +3955,7 @@
         ]
     },
     "incineroar": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -3965,7 +3965,7 @@
         ]
     },
     "primarina": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -4260,7 +4260,7 @@
         ]
     },
     "solgaleo": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -4275,7 +4275,7 @@
         ]
     },
     "lunala": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -4450,7 +4450,7 @@
         ]
     },
     "flapple": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -4595,7 +4595,7 @@
         ]
     },
     "alcremie": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -4655,7 +4655,7 @@
         ]
     },
     "indeedee": {
-        "level": 86,
+        "level": 83,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -5000,7 +5000,7 @@
         ]
     },
     "meowscarada": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -5230,7 +5230,7 @@
         ]
     },
     "bellibolt": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -5470,7 +5470,7 @@
         ]
     },
     "flamigo": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -5885,7 +5885,7 @@
         ]
     },
     "dipplin": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -6010,7 +6010,7 @@
         ]
     },
     "archaludon": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -6030,7 +6030,7 @@
         ]
     },
     "hydrapple": {
-        "level": 80,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -6040,7 +6040,7 @@
         ]
     },
     "gougingfire": {
-        "level": 78,
+        "level": 76,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -6115,7 +6115,7 @@
         ]
     },
     "pecharunt": {
-        "level": 73,
+        "level": 75,
         "sets": [
             {
                 "role": "Offensive Protect",
