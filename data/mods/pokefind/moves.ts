@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: { [k: string]: ModdedMoveData } = {
 	vicegrip: {
 		num: 11,
 		accuracy: 100,
@@ -7,11 +7,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Vice Grip",
 		pp: 30,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-		contestType: "Tough",
+		contestType: "Tough"
 	},
 	"shadowrush": {
 		num: 10001,
@@ -24,10 +24,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		secondary: null,
 		target: "normal",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowblast": {
 		num: 10002,
@@ -40,11 +41,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		critRatio: 2,
 		secondary: null,
 		target: "normal",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowblitz": {
 		num: 10003,
@@ -57,10 +59,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		secondary: null,
 		target: "normal",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowbolt": {
 		num: 10004,
@@ -73,13 +76,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		secondary: {
 			chance: 10,
-			status: 'par',
+			status: "par"
 		},
 		target: "normal",
-		type: "Shadow",
+		type: "Shadow"
 
 	},
 	"shadowbreak": {
@@ -93,10 +97,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		secondary: null,
 		target: "normal",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowchill": {
 		num: 10006,
@@ -109,13 +114,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		secondary: {
 			chance: 10,
-			status: 'frz',
+			status: "frz"
 		},
 		target: "normal",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowend": {
 		num: 10007,
@@ -129,6 +135,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			protect: 1,
 			mirror: 1,
 			heal: 1,
+			metronome: 1
 		},
 		secondary: null,
 		target: "normal",
@@ -137,12 +144,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onAfterMove(pokemon, target, move) {
 			if (move.mindBlownRecoil && !move.multihit) {
 				const hpBeforeRecoil = pokemon.hp;
-				this.damage(Math.round(hpBeforeRecoil / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
+				this.damage(Math.round(hpBeforeRecoil / 2), pokemon, pokemon, this.dex.conditions.get("Mind Blown"), true);
 				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon, pokemon);
+					this.runEvent("EmergencyExit", pokemon, pokemon);
 				}
 			}
-		},
+		}
 	},
 	"shadowfire": {
 		num: 10008,
@@ -155,13 +162,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		secondary: {
 			chance: 10,
-			status: 'brn',
+			status: "brn"
 		},
 		target: "normal",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowrave": {
 		num: 10009,
@@ -174,15 +182,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		secondary: {
 			chance: 10,
 			boosts: {
-				spa: -1,
-			},
+				spa: -1
+			}
 		},
 		target: "allAdjacentFoes",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowstorm": {
 		num: 10010,
@@ -195,10 +204,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			protect: 1,
 			mirror: 1,
+			metronome: 1
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowwave": {
 		num: 10011,
@@ -210,10 +220,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {
 			protect: 1,
+			metronome: 1
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowdown": {
 		num: 10012,
@@ -223,12 +234,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Shadow Down",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, metronome: 1 },
 		boosts: {
-			def: -2,
+			def: -2
 		},
 		target: "allAdjacentFoes",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowhalf": {
 		num: 10013,
@@ -242,12 +253,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			protect: 1,
 			mirror: 1,
 			recharge: 1,
+			metronome: 1
 		},
 		damageCallback(pokemon, target) {
 			return this.clampIntRange(target.getUndynamaxedHP() / 2, 1);
 		},
 		target: "all",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowhold": {
 		num: 10014,
@@ -257,14 +269,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Shadow Hold",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
-		volatileStatus: 'partiallytrapped',
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		volatileStatus: "partiallytrapped",
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Shadow",
 		onHit(target, source, move) {
-			return target.addVolatile('trapped', source, move, 'trapper');
-		},
+			return target.addVolatile("trapped", source, move, "trapper");
+		}
 	},
 	"shadowsky": {
 		num: 10015,
@@ -274,11 +286,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Shadow Sky",
 		pp: 5,
 		priority: 0,
-		weather: 'ShadowSky',
-		flags: {},
+		weather: "ShadowSky",
+		flags: { metronome: 1 },
 		secondary: null,
 		target: "all",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowshed": {
 		num: 10016,
@@ -288,15 +300,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Shadow Shed",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: { snatch: 1, metronome: 1 },
 		onHit(target, source) {
-			target.side.removeSideCondition('reflect');
-			target.side.removeSideCondition('lightscreen');
-			target.side.removeSideCondition('safeguard');
+			target.side.removeSideCondition("reflect");
+			target.side.removeSideCondition("lightscreen");
+			target.side.removeSideCondition("safeguard");
 		},
 		secondary: null,
 		target: "all",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowpanic": {
 		num: 10017,
@@ -306,11 +318,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Shadow Panic",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1},
-		volatileStatus: 'confusion',
+		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		volatileStatus: "confusion",
 		secondary: null,
 		target: "allAdjacentFoes",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"shadowmist": {
 		num: 10018,
@@ -320,13 +332,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Shadow Mist",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
 		boosts: {
-			evasion: -2,
+			evasion: -2
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
-		type: "Shadow",
+		type: "Shadow"
 	},
 	"savagescratch": {
 		num: 10019,
@@ -336,10 +348,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Savage Scratch",
 		pp: 35,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: { contact: 1, protect: 1, metronome: 1 },
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Normal"
 	},
 	"glaring": {
 		num: 10020,
@@ -349,13 +361,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Glaring",
 		pp: 30,
 		priority: 0,
-		flags: {protect: 1},
+		flags: { protect: 1, metronome: 1 },
 		boosts: {
-			def: -2,
+			def: -2
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
-		type: "Normal",
+		type: "Normal"
 	},
 	"savagebite": {
 		num: 10021,
@@ -365,13 +377,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Savage Bite",
 		pp: 25,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: {
 			chance: 100,
-			volatileStatus: 'flinch',
+			volatileStatus: "flinch"
 		},
 		target: "normal",
-		type: "Dark",
+		type: "Dark"
 	},
 	"opbite": {
 		num: 10022,
@@ -381,15 +393,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "OP Bite",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: { contact: 1, protect: 1, metronome: 1 },
 		secondary: {
 			chance: 20,
 			boosts: {
-				spd: -1,
-			},
+				spd: -1
+			}
 		},
 		target: "normal",
-		type: "Dark",
+		type: "Dark"
 	},
 	"furiousswipes": {
 		num: 10023,
@@ -399,11 +411,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Furious Swipes",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: { contact: 1, protect: 1, metronome: 1 },
 		multihit: [2, 5],
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Normal"
 	},
 	"savagefang": {
 		num: 10024,
@@ -413,12 +425,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Savage Fang",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: { contact: 1, protect: 1, metronome: 1 },
 		secondary: {
 			chance: 10,
-			volatileStatus: 'flinch',
+			volatileStatus: "flinch"
 		},
 		target: "normal",
-		type: "Normal",
-	},
+		type: "Normal"
+	}
 };
