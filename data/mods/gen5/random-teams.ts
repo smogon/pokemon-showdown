@@ -855,10 +855,10 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
 		if (species.baseSpecies === 'Basculin') {
-			forme = 'Basculin' + this.sample(['', '-Blue-Striped'])
+			forme = 'Basculin' + this.sample(['', '-Blue-Striped']);
 		}
 		if (species.baseSpecies === 'Keldeo') {
-			forme = 'Keldeo' + this.sample(['', '-Resolute'])
+			forme = 'Keldeo' + this.sample(['', '-Resolute']);
 		}
 
 		// For Trick / Switcheroo
