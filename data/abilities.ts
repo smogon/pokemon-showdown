@@ -626,9 +626,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	competitive: {
 		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.isAlly(source)) {
-				if (effect.id === 'stickyweb') {
-					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Competitive only affects stats lowered by foes.", true, source.side);
-				}
 				return;
 			}
 			let statsLowered = false;
@@ -887,9 +884,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	defiant: {
 		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.isAlly(source)) {
-				if (effect.id === 'stickyweb') {
-					this.hint("Court Change Sticky Web counts as lowering your own Speed, and Defiant only affects stats lowered by foes.", true, source.side);
-				}
 				return;
 			}
 			let statsLowered = false;

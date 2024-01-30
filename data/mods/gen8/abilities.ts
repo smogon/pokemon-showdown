@@ -172,6 +172,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	competitive: {
 		inherit: true,
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
+				if (effect.id === 'stickyweb') {
+					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Competitive only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({spa: 2}, target, target, null, false, true);
+			}
+		},
 		rating: 2.5,
 	},
 	compoundeyes: {
@@ -231,6 +249,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	defiant: {
 		inherit: true,
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
+				if (effect.id === 'stickyweb') {
+					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Defiant only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({atk: 2}, target, target, null, false, true);
+			}
+		},
 		rating: 2.5,
 	},
 	deltastream: {

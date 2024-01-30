@@ -18612,7 +18612,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
-				this.boost({spe: -1}, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
+				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
 			},
 		},
 		secondary: null,
