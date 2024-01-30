@@ -83,7 +83,7 @@ describe('Commander', function () {
 		assert(!!dondozo.volatiles['commanded']);
 	});
 
-	it.skip(`should cause Tatsugiri to dodge all moves, including moves which normally bypass semi-invulnerability`, function () {
+	it(`should cause Tatsugiri to dodge all moves, including moves which normally bypass semi-invulnerability`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'machamp', ability: 'noguard', moves: ['closecombat']},
 			{species: 'seviper', moves: ['toxic']},
