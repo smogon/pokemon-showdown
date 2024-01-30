@@ -1359,12 +1359,6 @@
         "doublesLevel": 86,
         "doublesMoves": ["flipturn", "liquidation", "muddywater", "protect", "superpower"]
     },
-    "basculinbluestriped": {
-        "level": 85,
-        "moves": ["aquajet", "crunch", "flipturn", "liquidation", "psychicfangs", "superpower"],
-        "doublesLevel": 86,
-        "doublesMoves": ["flipturn", "liquidation", "muddywater", "protect", "superpower"]
-    },
     "krookodile": {
         "level": 78,
         "moves": ["closecombat", "earthquake", "knockoff", "stealthrock", "stoneedge"],
@@ -1708,7 +1702,7 @@
         "doublesLevel": 72,
         "doublesMoves": ["dracometeor", "dragonpulse", "earthpower", "freezedry", "fusionflare", "icebeam", "protect", "roost"]
     },
-    "keldeoresolute": {
+    "keldeo": {
         "level": 77,
         "moves": ["airslash", "calmmind", "hydropump", "icywind", "scald", "secretsword", "substitute"],
         "doublesLevel": 82,
@@ -2329,12 +2323,6 @@
         "doublesLevel": 72,
         "doublesMoves": ["agility", "aurasphere", "dazzlinggleam", "flashcannon", "fleurcannon", "protect", "trick"]
     },
-    "magearnaoriginal": {
-        "level": 74,
-        "moves": ["agility", "calmmind", "flashcannon", "fleurcannon"],
-        "doublesLevel": 72,
-        "doublesMoves": ["agility", "aurasphere", "dazzlinggleam", "flashcannon", "fleurcannon", "protect", "trick"]
-    },
     "marshadow": {
         "level": 69,
         "moves": ["bulkup", "closecombat", "icepunch", "rocktomb", "shadowsneak", "spectralthief"],
@@ -2740,12 +2728,6 @@
         "moves": ["bulkup", "closecombat", "icepunch", "surgingstrikes", "uturn"]
     },
     "zarude": {
-        "level": 78,
-        "moves": ["bulkup", "closecombat", "darkestlariat", "junglehealing", "powerwhip", "uturn"],
-        "doublesLevel": 80,
-        "doublesMoves": ["closecombat", "darkestlariat", "junglehealing", "powerwhip", "protect"]
-    },
-    "zarudedada": {
         "level": 78,
         "moves": ["bulkup", "closecombat", "darkestlariat", "junglehealing", "powerwhip", "uturn"],
         "doublesLevel": 80,

@@ -4086,15 +4086,6 @@
             }
         ]
     },
-    "basculinbluestriped": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["aquajet", "crunch", "superpower", "waterfall", "zenheadbutt"]
-            }
-        ]
-    },
     "krookodile": {
         "level": 79,
         "sets": [

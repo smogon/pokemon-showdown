@@ -853,6 +853,14 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, preferredType, role);
 		}
 
+		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
+		if (species.baseSpecies === 'Basculin') {
+			forme = 'Basculin' + this.sample(['', '-Blue-Striped'])
+		}
+		if (species.baseSpecies === 'Keldeo') {
+			forme = 'Keldeo' + this.sample(['', '-Resolute'])
+		}
+
 		// For Trick / Switcheroo
 		if (item === 'Leftovers' && types.includes('Poison')) {
 			item = 'Black Sludge';

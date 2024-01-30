@@ -1159,12 +1159,10 @@ export class RandomTeams {
 		if (species.id === 'toucannon' && !counter.get('skilllink')) return 'Keen Eye';
 		if (species.id === 'reuniclus') return 'Magic Guard';
 		if (species.id === 'smeargle' && !counter.get('technician')) return 'Own Tempo';
-		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
-		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'sandaconda' || (species.id === 'scrafty' && moves.has('rest'))) return 'Shed Skin';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
-		if (species.id === 'cinccino') return (role === 'Wallbreaker') ? 'Skill Link' : 'Technician';
+		if (species.id === 'cinccino') return 'Technician';
 		if (species.id === 'dipplin') return 'Sticky Hold';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
@@ -1352,7 +1350,7 @@ export class RandomTeams {
 		if (moves.has('populationbomb')) return 'Wide Lens';
 		if (
 			moves.has('scaleshot') || (species.id === 'torterra' && !isDoubles) ||
-			(species.id === 'cinccino' && role !== 'Wallbreaker')
+			(species.id === 'cinccino')
 		) return 'Loaded Dice';
 		if (ability === 'Unburden') {
 			return (moves.has('closecombat') || moves.has('leafstorm')) ? 'White Herb' : 'Sitrus Berry';
@@ -1500,6 +1498,7 @@ export class RandomTeams {
 		}
 		if (species.id === 'golem') return (counter.get('speedsetup')) ? 'Weakness Policy' : 'Custap Berry';
 		if (species.id === 'urshifurapidstrike') return 'Punching Glove';
+		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
 		if (species.id === 'palkia') return 'Lustrous Orb';
 		if (moves.has('substitute')) return 'Leftovers';
 		if (moves.has('stickyweb') && species.id !== 'araquanid' && isLead) return 'Focus Sash';
@@ -1520,7 +1519,7 @@ export class RandomTeams {
 			)
 		) return 'Rocky Helmet';
 		if (moves.has('outrage')) return 'Lum Berry';
-		if (moves.has('protect')) return 'Leftovers';
+		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead &&
 			!counter.get('recovery') && !counter.get('recoil') &&
@@ -1638,8 +1637,33 @@ export class RandomTeams {
 			}
 		}
 
+		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
+		if (species.baseSpecies === 'Basculin') {
+			forme = 'Basculin' + this.sample(['', '-Blue-Striped'])
+		}
+		if (species.baseSpecies === 'Dudunsparce') {
+			forme = 'Dudunsparce' + this.sample(['', '-Three-Segment'])
+		}
+		if (species.baseSpecies === 'Keldeo') {
+			forme = 'Keldeo' + this.sample(['', '-Resolute'])
+		}
+		if (species.baseSpecies === 'Magearna') {
+			forme = 'Magearna' + this.sample(['', '-Original'])
+		}
+		if (species.baseSpecies === 'Maushold') {
+			forme = 'Maushold' + this.sample(['', '-Four'])
+		}
 		if (species.baseSpecies === 'Pikachu') {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
+		}
+		if (species.baseSpecies === 'Polteageist') {
+			forme = 'Polteageist' + this.sample(['', '-Antique'])
+		}
+		if (species.baseSpecies === 'Sinistcha') {
+			forme = 'Sinistcha' + this.sample(['', '-Masterpiece'])
+		}
+		if (species.baseSpecies === 'Zarude') {
+			forme = 'Zarude' + this.sample(['', '-Dada'])
 		}
 
 		// Get level

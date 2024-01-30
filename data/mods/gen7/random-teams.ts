@@ -1194,6 +1194,17 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, preferredType, role);
 		}
 
+		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
+		if (species.baseSpecies === 'Basculin') {
+			forme = 'Basculin' + this.sample(['', '-Blue-Striped'])
+		}
+		if (species.baseSpecies === 'Keldeo') {
+			forme = 'Keldeo' + this.sample(['', '-Resolute'])
+		}
+		if (species.baseSpecies === 'Magearna') {
+			forme = 'Magearna' + this.sample(['', '-Original'])
+		}
+
 		// For Trick / Switcheroo
 		if (item === 'Leftovers' && types.includes('Poison')) {
 			item = 'Black Sludge';

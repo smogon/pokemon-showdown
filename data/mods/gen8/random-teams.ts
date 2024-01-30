@@ -2340,8 +2340,25 @@ export class RandomGen8Teams {
 		if (item === 'Leftovers' && types.has('Poison')) {
 			item = 'Black Sludge';
 		}
-		if (species.baseSpecies === 'Pikachu' && !gmax && this.dex.currentMod !== 'gen8bdsp') {
+
+		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
+		if (species.baseSpecies === 'Basculin') {
+			forme = 'Basculin' + this.sample(['', '-Blue-Striped'])
+		}
+		if (species.baseSpecies === 'Keldeo') {
+			forme = 'Keldeo' + this.sample(['', '-Resolute'])
+		}
+		if (species.baseSpecies === 'Magearna') {
+			forme = 'Magearna' + this.sample(['', '-Original'])
+		}
+		if (species.baseSpecies === 'Pikachu') {
 			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
+		}
+		if (species.baseSpecies === 'Polteageist') {
+			forme = 'Polteageist' + this.sample(['', '-Antique'])
+		}
+		if (species.baseSpecies === 'Zarude') {
+			forme = 'Zarude' + this.sample(['', '-Dada'])
 		}
 
 		const level: number = this.getLevel(species, isDoubles, isNoDynamax);
