@@ -439,6 +439,7 @@ export class RoomBattleTimer {
 		}
 		let didSomething = false;
 		for (const player of players) {
+			if (!player.id) continue; // already eliminated, relevant for FFA gamesif it
 			if (player.turnSecondsLeft > 0) continue;
 			if (this.settings.timeoutAutoChoose && player.secondsLeft > 0 && player.knownActive) {
 				void this.battle.stream.write(`>${player.slot} default`);

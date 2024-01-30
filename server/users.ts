@@ -1586,8 +1586,16 @@ function pruneInactive(threshold: number) {
 			user.destroy();
 		}
 		if (!user.can('addhtml')) {
+			const suspicious = global.Config?.isSuspicious?.(user) || false;
 			for (const connection of user.connections) {
-				if (now - connection.lastActiveTime > CONNECTION_EXPIRY_TIME) {
+				if (
+					// conn's been inactive for 24h, just kill it
+					(now - connection.lastActiveTime > CONNECTION_EXPIRY_TIME) ||
+					// they're connected and not named, but not namelocked. this is unusual behavior, ultimately just wasting resources.
+					// people have been spamming us with conns as of writing this, so it appears to be largely bots doing this.
+					// so we're just gonna go ahead and dc them. if they're a real user, they can rejoin and go back to... whatever.
+					suspicious && (now - connection.connectedAt) > threshold
+				) {
 					connection.destroy();
 				}
 			}

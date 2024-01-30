@@ -980,12 +980,10 @@ export async function getBattleLog(battle: string, noReplay = false): Promise<Ba
 		const data = JSON.parse(raw);
 		if (data.log?.length) {
 			const log = data.log.split('\n');
-			const players = {
-				p1: toID(data.p1),
-				p2: toID(data.p2),
-				p3: toID(data.p3),
-				p4: toID(data.p4),
-			};
+			const players: BattleInfo['players'] = {} as any;
+			for (const [i, id] of data.players.entries()) {
+				players[`p${i + 1}` as SideID] = toID(id);
+			}
 			const chat = [];
 			const mons: BattleInfo['pokemon'] = {};
 			for (const line of log) {
@@ -998,7 +996,7 @@ export async function getBattleLog(battle: string, noReplay = false): Promise<Ba
 					slot = slot.slice(0, -1); // p2a -> p2
 					// safe to not check here bc this should always exist in the players table.
 					// if it doesn't, there's a problem
-					const id = players[slot as SideID];
+					const id = players[slot as SideID] as string;
 					if (!mons[id]) mons[id] = [];
 					name = name?.trim() || "";
 					const setId = `${name || ""}-${species}`;
