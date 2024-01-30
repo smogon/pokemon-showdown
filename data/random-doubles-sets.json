@@ -999,12 +999,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Helping Hand", "Pollen Puff", "Rage Powder", "Sleep Powder", "Strength Sap", "Tailwind"],
-                "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Bulky Protect",
-                "movepool": ["Acrobatics", "Protect", "Sleep Powder", "Tailwind"],
+                "movepool": ["Acrobatics", "Encore", "Helping Hand", "Pollen Puff", "Rage Powder", "Sleep Powder", "Strength Sap", "Tailwind"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -6073,13 +6068,13 @@
         "level": 75,
         "sets": [
             {
-                "role": "Offensive Protect",
+                "role": "Doubles Setup Sweeper",
                 "movepool": ["Malignant Chain", "Nasty Plot", "Protect", "Recover", "Shadow Ball"],
                 "teraTypes": ["Dark"]
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Malignant Chain", "Parting Shot", "Poison Gas", "Protect", "Recover", "Shadow Ball"],
+                "movepool": ["Malignant Chain", "Parting Shot", "Poison Gas", "Protect", "Shadow Ball"],
                 "teraTypes": ["Dark"]
             }
         ]
