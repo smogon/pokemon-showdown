@@ -202,7 +202,7 @@ export const commands: Chat.ChatCommands = {
 };
 
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/announcement (new|create|htmlcreate) ');
+	Chat.multiLinePattern.register('/announcement (new|create|htmlcreate|edit|htmledit) ');
 });
 
 // should handle restarts and also hotpatches
