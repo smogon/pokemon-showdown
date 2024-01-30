@@ -147,7 +147,10 @@ function formatItem(item: Item | string) {
  * Gets the sets for a Pokemon for a format that uses the new schema.
  * Old formats will use getData()
  */
-function getSets(species: string | Species, format: string | Format = 'gen9randombattle'): any[] | null {
+function getSets(species: string | Species, format: string | Format = 'gen9randombattle'): {
+	level: number,
+	sets: any[],
+} | null {
 	const dex = Dex.forFormat(format);
 	format = Dex.formats.get(format);
 	species = dex.species.get(species);
@@ -156,13 +159,13 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 		FS(`data/${dex.isBase ? '' : `mods/${dex.currentMod}/`}random-${isDoubles ? `doubles-` : ``}sets.json`)
 			.readIfExistsSync() || '{}'
 	);
-	const sets = setsFile[species.id]?.sets;
-	if (!sets?.length) return null;
-	return sets;
+	const data = setsFile[species.id];
+	if (!data?.sets?.length) return null;
+	return data;
 }
 
 /**
- * Gets the random battles data for a Pokemon for formats other than gen9 and gen7singles.
+ * Gets the random battles data for a Pokemon for formats with the old schema.
  */
 function getData(species: string | Species, format: string | Format): any | null {
 	const dex = Dex.forFormat(format);
@@ -178,11 +181,38 @@ function getData(species: string | Species, format: string | Format): any | null
 	return data;
 }
 
+/**
+ * Gets the default level for a Pokemon in the given format.
+ * Returns 0 if the format doesn't use default levels or it can't be determined.
+ */
+function getLevel(species: string | Species, format: string | Format): number {
+	const dex = Dex.forFormat(format);
+	format = Dex.formats.get(format);
+	species = dex.species.get(species);
+	switch (format.id) {
+	// Only formats where levels are not all manually assigned should be copied here
+	case 'gen2randombattle':
+		const levelScale: {[k: string]: number} = {
+			PU: 77,
+			PUBL: 75,
+			NU: 73,
+			NUBL: 71,
+			UU: 69,
+			UUBL: 67,
+			OU: 65,
+			Uber: 61,
+		};
+		return levelScale[species.tier] || 80;
+		// TODO: Gen 7 Doubles (currently uses BST-based scaling that accounts for the set's ability/item)
+	}
+	return 0;
+}
+
 function getRBYMoves(species: string | Species) {
 	species = Dex.mod(`gen1`).species.get(species);
 	const data = getData(species, 'gen1randombattle');
 	if (!data) return false;
-	let buf = ``;
+	let buf = `<br/><b>Level</b>: ${data.level}`;
 	if (data.comboMoves) {
 		buf += `<br/><b>Combo moves</b>: `;
 		buf += data.comboMoves.map(formatMove).sort().join(", ");
@@ -802,16 +832,18 @@ export const commands: Chat.ChatCommands = {
 			const setsToCheck = [species];
 			if (dex.gen >= 8 && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
-			if ([4, 5, 6, 9].includes(dex.gen) || (dex.gen === 7 && !isDoubles)) {
+			if ([3, 4, 5, 6, 9].includes(dex.gen) || (dex.gen === 7 && !isDoubles)) {
 				for (const pokemon of setsToCheck) {
-					const sets = getSets(pokemon, format.id);
-					if (!sets) continue;
+					const data = getSets(pokemon, format.id);
+					if (!data) continue;
+					const {sets, level} = data;
 					let buf = `<span style="color:#999999;">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
+					buf += `<b>Level</b>: ${level}`;
 					for (const set of sets) {
 						buf += `<details><summary>${set.role}</summary>`;
 						if (dex.gen === 9) {
 							buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
-						} else if (([4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
+						} else if (([3, 4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
 							buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
 						}
 						buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
@@ -843,12 +875,14 @@ export const commands: Chat.ChatCommands = {
 					if (!data) continue;
 					if (!data.moves || pokemon.isNonstandard === 'Future') continue;
 					let randomMoves = data.moves;
+					const level = data.level || getLevel(pokemon, format);
 					if (isDoubles && data.doublesMoves) randomMoves = data.doublesMoves;
 					if (isNoDMax && data.noDynamaxMoves) randomMoves = data.noDynamaxMoves;
 					const m = randomMoves.slice().sort().map(formatMove);
 					movesets.push(
 						`<details>` +
 						`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${format.name}:<span style="color:#999999;"></summary>` +
+						(level ? `<b>Level</b>: ${level}<br>` : '') +
 						`${m.join(`, `)}</details>`
 					);
 					setCount++;
@@ -1000,7 +1034,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		let setExists: boolean;
-		if ([4, 5, 6, 9].includes(dex.gen) || dex.gen === 7 && format.gameType !== 'doubles') {
+		if ([3, 4, 5, 6, 9].includes(dex.gen) || dex.gen === 7 && format.gameType !== 'doubles') {
 			setExists = !!getSets(species, format);
 		} else if (dex.gen === 7 && format.gameType === 'doubles') {
 			setExists = !!getData(species, format);

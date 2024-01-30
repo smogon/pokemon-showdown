@@ -96,7 +96,9 @@ const gameidToGame: {[k: string]: Game} = {
 	sv: 'SV',
 };
 
-class Giveaway extends Rooms.SimpleRoomGame {
+abstract class Giveaway extends Rooms.SimpleRoomGame {
+	override readonly gameid = 'giveaway' as ID;
+	abstract type: string;
 	gaNumber: number;
 	host: User;
 	giver: User;
@@ -346,7 +348,7 @@ class Giveaway extends Rooms.SimpleRoomGame {
 			</table>
 			<p style={{textAlign: 'center', fontSize: '7pt', fontWeight: 'bold'}}>
 				<u>Note:</u> You must have a Switch, Pok&eacute;mon {gameName[this.game]}, {}
-				and Nintendo Switch Online to receive the prize. {}
+				and NSO to receive the prize. {}
 				Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pok&eacute;mon, {}
 				unless it is explicitly allowed.
 			</p>
@@ -733,6 +735,7 @@ export class LotteryGiveaway extends Giveaway {
 }
 
 export class GTS extends Rooms.SimpleRoomGame {
+	override readonly gameid = 'gts' as ID;
 	gtsNumber: number;
 	room: Room;
 	giver: User;

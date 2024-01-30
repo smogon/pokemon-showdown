@@ -611,12 +611,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Psycho Drive',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
 	},
-	Rach: {
-		species: 'Spinda', ability: 'BURN IT DOWN!', item: 'Leftovers', gender: 'F',
-		moves: ['Extreme Speed', 'Recover', 'Knock Off'],
-		signatureMove: 'Spinda Wheel',
-		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish',
-	},
 	Rage: {
 		species: 'Espeon', ability: 'Inversion Surge', item: 'Leftovers', gender: 'M',
 		moves: ['Psychic', 'Calm Mind', 'Hyper Voice'],

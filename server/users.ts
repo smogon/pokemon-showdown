@@ -240,6 +240,13 @@ export class Connection {
 	lastRequestedPage: string | null;
 	lastActiveTime: number;
 	openPages: null | Set<string>;
+	/**
+	 * Used to distinguish Connection from User.
+	 *
+	 * Makes it easy to do something like
+	 * `for (const conn of (userOrConn.connections || [userOrConn]))`
+	 */
+	readonly connections = null;
 	constructor(
 		id: string,
 		worker: ProcessManager.StreamWorker,
@@ -332,9 +339,16 @@ export interface UserSettings {
 export class User extends Chat.MessageContext {
 	/** In addition to needing it to implement MessageContext, this is also nice for compatibility with Connection. */
 	readonly user: User;
+	/**
+	 * Not a source of truth - should always be in sync with
+	 * `[...Rooms.rooms.values()].filter(room => this.id in room.users)`
+	 */
 	readonly inRooms: Set<RoomID>;
 	/**
-	 * Set of room IDs
+	 * Not a source of truth - should always in sync with
+	 * `[...Rooms.rooms.values()].filter(`
+	 * `  room => room.game && this.id in room.game.playerTable && !room.game.ended`
+	 * `)`
 	 */
 	readonly games: Set<RoomID>;
 	mmrCache: {[format: string]: number};
@@ -858,7 +872,7 @@ export class User extends Chat.MessageContext {
 			Punishments.checkName(user, userid, registered);
 
 			Rooms.global.checkAutojoin(user);
-			Rooms.global.joinOldBattles(this);
+			Rooms.global.rejoinGames(user);
 			Chat.loginfilter(user, this, userType);
 			return true;
 		}
@@ -874,7 +888,7 @@ export class User extends Chat.MessageContext {
 			return false;
 		}
 		Rooms.global.checkAutojoin(this);
-		Rooms.global.joinOldBattles(this);
+		Rooms.global.rejoinGames(this);
 		Chat.loginfilter(this, null, userType);
 		return true;
 	}
@@ -930,7 +944,14 @@ export class User extends Chat.MessageContext {
 			room.game.onRename(this, oldid, joining, isForceRenamed);
 		}
 		for (const roomid of this.inRooms) {
-			Rooms.get(roomid)!.onRename(this, oldid, joining);
+			const room = Rooms.get(roomid)!;
+			room.onRename(this, oldid, joining);
+			if (room.game && !this.games.has(roomid)) {
+				if (room.game.playerTable[this.id]) {
+					this.games.add(roomid);
+					room.game.onRename(this, oldid, joining, isForceRenamed);
+				}
+			}
 		}
 		if (isForceRenamed) this.trackRename = oldname;
 		return true;
@@ -1060,12 +1081,10 @@ export class User extends Chat.MessageContext {
 				room.onJoin(this, connection);
 				this.inRooms.add(roomid);
 			}
-			if (room.game && room.game.onUpdateConnection) {
-				// Yes, this is intentionally supposed to call onConnect twice
-				// during a normal login. Override onUpdateConnection if you
-				// don't want this behavior.
-				room.game.onUpdateConnection(this, connection);
-			}
+			// Yes, this is intentionally supposed to call onConnect twice
+			// during a normal login. Override onUpdateConnection if you
+			// don't want this behavior.
+			room.game?.onUpdateConnection?.(this, connection);
 		}
 		this.updateReady(connection);
 	}
@@ -1276,20 +1295,17 @@ export class User extends Chat.MessageContext {
 	async tryJoinRoom(roomid: RoomID | Room, connection: Connection) {
 		roomid = roomid && (roomid as Room).roomid ? (roomid as Room).roomid : roomid as RoomID;
 		const room = Rooms.search(roomid);
-		if (!room && roomid.startsWith('view-')) {
-			return Chat.resolvePage(roomid, this, connection);
-		}
-		if (!room?.checkModjoin(this)) {
-			if (!this.named) {
-				return Rooms.RETRY_AFTER_LOGIN;
-			} else {
-				if (room) {
-					connection.sendTo(roomid, `|noinit|joinfailed|The room "${roomid}" is invite-only, and you haven't been invited.`);
-				} else {
-					connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
-				}
-				return false;
+		if (!room) {
+			if (roomid.startsWith('view-')) {
+				return Chat.resolvePage(roomid, this, connection);
 			}
+			connection.sendTo(roomid, `|noinit|nonexistent|The room "${roomid}" does not exist.`);
+			return false;
+		}
+		if (!room.checkModjoin(this)) {
+			if (!this.named) return Rooms.RETRY_AFTER_LOGIN;
+			connection.sendTo(roomid, `|noinit|joinfailed|The room "${roomid}" is invite-only, and you haven't been invited.`);
+			return false;
 		}
 		if ((room as GameRoom).tour) {
 			const errorMessage = (room as GameRoom).tour!.onBattleJoin(room as GameRoom, this);
@@ -1337,8 +1353,8 @@ export class User extends Chat.MessageContext {
 		}
 		if (!connection.inRooms.has(room.roomid)) {
 			if (!this.inRooms.has(room.roomid)) {
-				this.inRooms.add(room.roomid);
 				room.onJoin(this, connection);
+				this.inRooms.add(room.roomid);
 			}
 			connection.joinRoom(room);
 			room.onConnect(this, connection);
@@ -1525,20 +1541,13 @@ export class User extends Chat.MessageContext {
 	destroy() {
 		// deallocate user
 		for (const roomid of this.games) {
-			const room = Rooms.get(roomid);
-			if (!room) {
-				Monitor.warn(`while deallocating, room ${roomid} did not exist for ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
-				this.games.delete(roomid);
-				continue;
-			}
-			const game = room.game;
+			const game = Rooms.get(roomid)?.game;
 			if (!game) {
 				Monitor.warn(`while deallocating, room ${roomid} did not have a game for ${this.id} in rooms ${[...this.inRooms]} and games ${[...this.games]}`);
 				this.games.delete(roomid);
 				continue;
 			}
-			if (game.ended) continue;
-			if (game.forfeit) game.forfeit(this);
+			if (!game.ended) game.forfeit?.(this, " lost by being offline too long.");
 		}
 		this.clearChatQueue();
 		this.destroyPunishmentTimer();
@@ -1577,8 +1586,16 @@ function pruneInactive(threshold: number) {
 			user.destroy();
 		}
 		if (!user.can('addhtml')) {
+			const suspicious = global.Config?.isSuspicious?.(user) || false;
 			for (const connection of user.connections) {
-				if (now - connection.lastActiveTime > CONNECTION_EXPIRY_TIME) {
+				if (
+					// conn's been inactive for 24h, just kill it
+					(now - connection.lastActiveTime > CONNECTION_EXPIRY_TIME) ||
+					// they're connected and not named, but not namelocked. this is unusual behavior, ultimately just wasting resources.
+					// people have been spamming us with conns as of writing this, so it appears to be largely bots doing this.
+					// so we're just gonna go ahead and dc them. if they're a real user, they can rejoin and go back to... whatever.
+					suspicious && (now - connection.connectedAt) > threshold
+				) {
 					connection.destroy();
 				}
 			}

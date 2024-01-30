@@ -1067,7 +1067,7 @@ export class TeamValidator {
 
 		const cantBreedNorEvolve = (species.eggGroups[0] === 'Undiscovered' && !species.prevo && !species.nfe);
 		const isLegendary = (cantBreedNorEvolve && !species.tags.includes('Paradox') && ![
-			'Pikachu', 'Unown', 'Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish',
+			'Pikachu', 'Unown', 'Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish', 'Gouging Fire', 'Raging Bolt', 'Iron Boulder', 'Iron Crown', 'Terapagos',
 		].includes(species.baseSpecies)) || [
 			'Manaphy', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala',
 		].includes(species.baseSpecies);
@@ -1608,6 +1608,19 @@ export class TeamValidator {
 
 		if (species.baseSpecies === "Greninja" && toID(set.ability) === 'battlebond') {
 			set.species = "Greninja-Bond";
+		}
+
+		if (species.baseSpecies === "Unown" && dex.gen === 2) {
+			let resultBinary = '';
+			for (const iv of ['atk', 'def', 'spe', 'spa'] as const) {
+				resultBinary += set.ivs[iv].toString(2).padStart(5, '0').slice(1, 3);
+			}
+			const resultDecimal = Math.floor(parseInt(resultBinary, 2) / 10);
+			const expectedLetter = String.fromCharCode(resultDecimal + 65);
+			const unownLetter = species.forme || "A";
+			if (unownLetter !== expectedLetter) {
+				problems.push(`Unown has forme ${unownLetter}, but its DVs give it the forme ${expectedLetter}.`);
+			}
 		}
 		return problems;
 	}

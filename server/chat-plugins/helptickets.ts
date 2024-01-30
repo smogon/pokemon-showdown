@@ -176,41 +176,34 @@ export function writeStats(line: string) {
 }
 
 export class HelpTicket extends Rooms.SimpleRoomGame {
-	room: ChatRoom;
+	override readonly gameid = "helpticket" as ID;
+	override readonly allowRenames = true;
+	override room: ChatRoom;
 	ticket: TicketState;
 	claimQueue: string[];
-	involvedStaff: Set<ID>;
+	involvedStaff = new Set<ID>();
 	createTime: number;
 	activationTime: number;
-	emptyRoom: boolean;
-	firstClaimTime: number;
-	unclaimedTime: number;
+	emptyRoom = false;
+	firstClaimTime = 0;
+	unclaimedTime = 0;
 	lastUnclaimedStart: number;
-	closeTime: number;
-	resolution: 'unknown' | 'dead' | 'unresolved' | 'resolved';
-	result: TicketResult | null;
+	closeTime = 0;
+	resolution: 'unknown' | 'dead' | 'unresolved' | 'resolved' = 'unknown';
+	result: TicketResult | null = null;
 
 	constructor(room: ChatRoom, ticket: TicketState) {
 		super(room);
 		this.room = room;
 		this.room.settings.language = Users.get(ticket.creator)?.language || 'english' as ID;
 		this.title = `Help Ticket - ${ticket.type}`;
-		this.gameid = "helpticket" as ID;
-		this.allowRenames = true;
 		this.ticket = ticket;
 		this.claimQueue = [];
 
 		/* Stats */
-		this.involvedStaff = new Set();
 		this.createTime = Date.now();
 		this.activationTime = (ticket.active ? this.createTime : 0);
-		this.emptyRoom = false;
-		this.firstClaimTime = 0;
-		this.unclaimedTime = 0;
 		this.lastUnclaimedStart = (ticket.active ? this.createTime : 0);
-		this.closeTime = 0;
-		this.resolution = 'unknown';
-		this.result = null;
 	}
 
 	onJoin(user: User, connection: Connection) {
@@ -318,7 +311,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 
 	forfeit(user: User) {
 		if (!(user.id in this.playerTable)) return;
-		this.removePlayer(user);
+		this.removePlayer(this.playerTable[user.id]);
 		if (!this.ticket.open) return;
 		this.room.modlog({action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id});
 		this.addText(`${user.name} is no longer interested in this ticket.`, user);
@@ -477,15 +470,11 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 
 		this.room.game = null;
-		// @ts-ignore
-		this.room = null;
-		for (const player of this.players) {
-			player.destroy();
-		}
-		// @ts-ignore
-		this.players = null;
-		// @ts-ignore
-		this.playerTable = null;
+		(this.room as any) = null;
+		this.setEnded();
+		for (const player of this.players) player.destroy();
+		(this.players as any) = null;
+		(this.playerTable as any) = null;
 	}
 	onChatMessage(message: string, user: User) {
 		HelpTicket.uploadReplaysFrom(message, user, user.connections[0]);
@@ -991,12 +980,10 @@ export async function getBattleLog(battle: string, noReplay = false): Promise<Ba
 		const data = JSON.parse(raw);
 		if (data.log?.length) {
 			const log = data.log.split('\n');
-			const players = {
-				p1: toID(data.p1),
-				p2: toID(data.p2),
-				p3: toID(data.p3),
-				p4: toID(data.p4),
-			};
+			const players: BattleInfo['players'] = {} as any;
+			for (const [i, id] of data.players.entries()) {
+				players[`p${i + 1}` as SideID] = toID(id);
+			}
 			const chat = [];
 			const mons: BattleInfo['pokemon'] = {};
 			for (const line of log) {
@@ -1009,7 +996,7 @@ export async function getBattleLog(battle: string, noReplay = false): Promise<Ba
 					slot = slot.slice(0, -1); // p2a -> p2
 					// safe to not check here bc this should always exist in the players table.
 					// if it doesn't, there's a problem
-					const id = players[slot as SideID];
+					const id = players[slot as SideID] as string;
 					if (!mons[id]) mons[id] = [];
 					name = name?.trim() || "";
 					const setId = `${name || ""}-${species}`;
@@ -1023,7 +1010,7 @@ export async function getBattleLog(battle: string, noReplay = false): Promise<Ba
 			}
 			return {
 				log: chat,
-				title: `${data.p1} vs ${data.p2}`,
+				title: `${players.p1} vs ${players.p2}`,
 				url: `https://${Config.routes.replays}/${battle}`,
 				players,
 				pokemon: mons,

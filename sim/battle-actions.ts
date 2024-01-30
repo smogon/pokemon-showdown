@@ -662,7 +662,9 @@ export class BattleActions {
 			} else if (this.battle.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') &&
 				!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 				this.battle.debug('natural prankster immunity');
-				if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
+				if (target.illusion || !(move.status && !this.dex.getImmunity(move.status, target))) {
+					this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
+				}
 				this.battle.add('-immune', target);
 				hitResults[i] = false;
 			} else {
@@ -1732,14 +1734,17 @@ export class BattleActions {
 		baseDamage = this.battle.randomizer(baseDamage);
 
 		// STAB
-		const isTeraStellarBoosted = pokemon.terastallized === 'Stellar' && !pokemon.stellarBoostedTypes.includes(type);
-		if (move.forceSTAB || (type !== '???' &&
-			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type)) ||
-				isTeraStellarBoosted))) {
-			// The "???" type never gets STAB
-			// Not even if you Roost in Gen 4 and somehow manage to use
-			// Struggle in the same turn.
-			// (On second thought, it might be easier to get a MissingNo.)
+		// The "???" type never gets STAB
+		// Not even if you Roost in Gen 4 and somehow manage to use
+		// Struggle in the same turn.
+		// (On second thought, it might be easier to get a MissingNo.)
+		if (type !== '???') {
+			let stab: number | [number, number] = 1;
+
+			const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type);
+			if (isSTAB) {
+				stab = 1.5;
+			}
 
 			// The Stellar tera type makes this incredibly confusing
 			// If the move's type does not match one of the user's base types,
@@ -1748,22 +1753,20 @@ export class BattleActions {
 			// If the move's type does match one of the user's base types,
 			// then the Stellar tera type applies a one-time 2x STAB boost for that type,
 			// and then goes back to using the regular 1.5x STAB boost for those types.
-
-			let stab: number | [number, number];
-			if (isTeraStellarBoosted) {
-				stab = pokemon.getTypes(false, true).includes(type) ? 2 : [4915, 4096];
-				if (pokemon.species.name !== 'Terapagos-Stellar') {
-					pokemon.stellarBoostedTypes.push(type);
+			if (pokemon.terastallized === 'Stellar') {
+				if (!pokemon.stellarBoostedTypes.includes(type)) {
+					stab = isSTAB ? 2 : [4915, 4096];
+					if (pokemon.species.name !== 'Terapagos-Stellar') {
+						pokemon.stellarBoostedTypes.push(type);
+					}
 				}
 			} else {
-				stab = move.stab || 1.5;
-				if (type === pokemon.terastallized && pokemon.getTypes(false, true).includes(type)) {
-					// In my defense, the game hardcodes the Adaptability check like this, too.
-					stab = stab === 2 ? 2.25 : 2;
-				} else if (pokemon.terastallized && type !== pokemon.terastallized) {
-					stab = 1.5;
+				if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
+					stab = 2;
 				}
+				stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
 			}
+
 			baseDamage = this.battle.modify(baseDamage, stab);
 		}
 

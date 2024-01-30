@@ -9,7 +9,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Sets a layer of Toxic Spikes on the opponent's side of the field.",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onAfterHit(target, source, move) {
 			if (!move.hasSheerForce && source.hp && !target.hasItem('covertcloak')) {
 				for (const side of source.side.foeSidesWithConditions()) {
@@ -24,7 +24,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			}
 		},
-	   secondary: {},
+		secondary: {},
 		target: "normal",
 		type: "Poison",
 		contestType: "Clever",
@@ -38,7 +38,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Ceaseless Edge",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
 		onAfterHit(target, source, move) {
 			if (!move.hasSheerForce && source.hp && !target.hasItem('covertcloak')) {
 				for (const side of source.side.foeSidesWithConditions()) {
@@ -53,7 +53,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			}
 		},
-	   secondary: {},
+		secondary: {},
 		target: "normal",
 		type: "Dark",
 	},
@@ -67,11 +67,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Sets Stealth Rock on the target's side.",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, slicing: 1},
-	   secondary: {
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
+		secondary: {
 			chance: 100,
 			sideCondition: 'stealthrock',
-	   },
+		},
 		target: "adjacentFoe",
 		type: "Rock",
 		contestType: "Tough",
@@ -85,11 +85,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Electroweb",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
-	   secondary: {
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		secondary: {
 			chance: 100,
 			sideCondition: 'stickyweb',
-	   },
+		},
 		target: "allAdjacentFoes",
 		type: "Electric",
 		contestType: "Beautiful",
@@ -104,7 +104,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Skull Bash",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, charge: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, charge: 1, protect: 1, mirror: 1, metronome: 1},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -131,7 +131,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Shelter",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, metronome: 1},
 		onHit(pokemon) {
 			const somesideConditions = ['spikes', 'stealthrock'];
 			const sides = [pokemon.side];
@@ -165,7 +165,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Healing Stones",
 		pp: 20,
 		priority: 0,
-		flags: {nonsky: 1, heal: 1, snatch: 1},
+		flags: {snatch: 1, heal: 1, nonsky: 1, metronome: 1},
 		sideCondition: 'healingstones',
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -183,7 +183,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') ||
-					 pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
+					 pokemon.hasItem('mantisclaw')) return;
 				const healAmounts = [0, 3]; // 1/8
 				this.heal(healAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
@@ -223,7 +223,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {snatch: 1, heal: 1, bypasssub: 1},
 		heal: [1, 3],
 		slotCondition: 'lifedew',
-	   condition: {
+		condition: {
 			onSwap(target) {
 				 if (!target.fainted) {
 					  const source = this.effectState.source;
@@ -232,7 +232,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					  target.side.removeSlotCondition(target, 'lifedew');
 				 }
 			},
-	   },
+		},
 		secondary: null,
 		target: "self",
 		type: "Water",
@@ -245,7 +245,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Shrapnel Shot",
 		pp: 20,
 		priority: 0,
-		flags: {bullet: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
 		multihit: [2, 5],
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -275,7 +275,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Storm Throw",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		willCrit: true,
 		secondary: null,
 		target: "normal",
@@ -290,7 +290,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Frost Breath",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		willCrit: true,
 		secondary: null,
 		target: "normal",
@@ -306,7 +306,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Snipe Shot",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, pulse: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, pulse: 1},
 		willCrit: true,
 		tracksTarget: true,
 		secondary: null,
@@ -336,7 +336,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Choke",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Sky Uppercut", target);
@@ -361,7 +361,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Cutting Remark",
 		pp: 25,
 		priority: 1,
-		flags: {sound: 1, protect: 1, mirror: 1, bypasssub: 1, slicing: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1, slicing: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Psycho Cut", target);
@@ -382,7 +382,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Chain Lightning",
 		pp: 20,
 		priority: 1,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		multihit: [2, 5],
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -396,13 +396,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	pluck: {
 		num: 365,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 70,
 		category: "Physical",
 		shortDesc: "Heals the user by 75% of the damage dealt.",
 		name: "Pluck",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1, metronome: 1},
 		drain: [3, 4],
 		secondary: null,
 		target: "normal",
@@ -418,7 +418,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Throat Chop",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		condition: {
 			duration: 3,
 			onStart(target) {
@@ -461,7 +461,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Wind Breaker",
 		pp: 10,
 		priority: 0,
-		flags: {wind: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Gust", target);
@@ -518,6 +518,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 50,
 		basePowerCallback(pokemon, target, move) {
 			const yourSide = pokemon.side;
+			const targetSide = target.side;
 			let allLayers = 0;
 			if (yourSide.getSideCondition('stealthrock')) allLayers++;
 			if (yourSide.getSideCondition('healingstones')) allLayers++;
@@ -528,18 +529,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (yourSide.sideConditions['toxicspikes']) {
 				allLayers += yourSide.sideConditions['toxicspikes'].layers;
 			}
+			if (targetSide.getSideCondition('stealthrock')) allLayers++;
+			if (targetSide.getSideCondition('healingstones')) allLayers++;
+			if (targetSide.getSideCondition('stickyweb')) allLayers++;
+			if (targetSide.sideConditions['spikes']) {
+				allLayers += targetSide.sideConditions['spikes'].layers;
+			}
+			if (targetSide.sideConditions['toxicspikes']) {
+				allLayers += targetSide.sideConditions['toxicspikes'].layers;
+			}
 			this.debug('Hazardous Waste damage boost');
-			return Math.min(300, 50 + 50 * allLayers);
+			return Math.min(400, 50 + 50 * allLayers);
 		},
 		category: "Physical",
-		shortDesc: "+50 power for each hazard layer on user's side. Caps at 300.",
+		shortDesc: "+50 power for each hazard layer on the field. Caps at 400.",
 		name: "Hazardous Waste",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Acid Downpour", target);
+		},
+		onHit(target, source, move) {
+			const yourSide = source.side;
+			const targetSide = target.side;
+			let allLayers = 0;
+			if (yourSide.getSideCondition('stealthrock')) allLayers++;
+			if (yourSide.getSideCondition('healingstones')) allLayers++;
+			if (yourSide.getSideCondition('stickyweb')) allLayers++;
+			if (yourSide.sideConditions['spikes']) {
+				allLayers += yourSide.sideConditions['spikes'].layers;
+			}
+			if (yourSide.sideConditions['toxicspikes']) {
+				allLayers += yourSide.sideConditions['toxicspikes'].layers;
+			}
+			if (targetSide.getSideCondition('stealthrock')) allLayers++;
+			if (targetSide.getSideCondition('healingstones')) allLayers++;
+			if (targetSide.getSideCondition('stickyweb')) allLayers++;
+			if (targetSide.sideConditions['spikes']) {
+				allLayers += targetSide.sideConditions['spikes'].layers;
+			}
+			if (targetSide.sideConditions['toxicspikes']) {
+				allLayers += targetSide.sideConditions['toxicspikes'].layers;
+			}
+			const bp = Math.min(400, 50 + 50 * allLayers);
+			this.add('-message', `Hazardous Waste currently has a BP of ${bp}!`);
 		},
 		secondary: null,
 		target: "normal",
@@ -554,7 +589,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Chisel",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, contact: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		multihit: 4,
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -575,7 +610,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Peekaboo",
 		pp: 20,
 		priority: -3,
-		flags: {contact: 1, protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+		flags: {
+			contact: 1, protect: 1,
+			metronome: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1,
+		},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Heart Stamp", target);
@@ -615,7 +653,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Psycho Boost",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		self: {
 			boosts: {
 				spa: -1,
@@ -669,14 +707,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 	parry: {
-	   accuracy: 100,
-	   basePower: 80,
-	   category: "Physical",
-	   shortDesc: "If the foe used a priority move, this move hits before that move and flinches the foe.",
-	   name: "Parry",
-	   pp: 10,
-	   priority: 0,
-	   flags: {contact: 1, protect: 1, mirror: 1},
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "If the foe used a priority move, this move hits before that move and flinches the foe.",
+		name: "Parry",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Mach Punch", target);
@@ -686,7 +724,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-message', `${pokemon.name} is attempting to parry!`);
 			pokemon.addVolatile('parry');
 		},
-	   secondary: {}, // sheer force boosted
+		secondary: {}, // sheer force boosted
 		condition: {
 			duration: 1,
 			onStart(target, source) {
@@ -711,9 +749,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
-	   target: "normal",
-	   type: "Fighting",
-	   contestType: "Clever",
+		target: "normal",
+		type: "Fighting",
+		contestType: "Clever",
 	},
 	rollout: {
 		num: 205,
@@ -727,11 +765,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return move.basePower;
 		},
 		category: "Physical",
-	   shortDesc: "Switches the user out. 2x power if Rollout or Defense Curl was used last turn.",
+		shortDesc: "Switches the user out. 2x power if Rollout or Defense Curl was used last turn.",
 		name: "Rollout",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, noparentalbond: 1, failinstruct: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, failinstruct: 1, noparentalbond: 1},
 		self: {
 			sideCondition: 'rollout',
 		},
@@ -755,11 +793,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 50,
 		category: "Special",
-	   shortDesc: "Switches the user out. 2x power if Round was used last turn.",
+		shortDesc: "Switches the user out. 2x power if Round was used last turn.",
 		name: "Round",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
 		self: {
 			sideCondition: 'round',
 		},
@@ -782,11 +820,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-	   shortDesc: "Healing from Rekindle.",
+		shortDesc: "Healing from Rekindle.",
 		name: "Rekindle Heal",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {metronome: 1},
 		volatileStatus: 'rekindleheal',
 		condition: {
 			onStart(pokemon) {
@@ -805,11 +843,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-	   shortDesc: "Heals 33% then 12.5% every turn. Burns foes that make contact.",
+		shortDesc: "Heals 33% then 12.5% every turn. Burns foes that make contact.",
 		name: "Rekindle",
 		pp: 10,
 		priority: 0,
-		flags: {heal: 1, snatch: 1},
+		flags: {snatch: 1, heal: 1, metronome: 1},
 		heal: [1, 3],
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -843,11 +881,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 90,
 		basePower: 120,
 		category: "Special",
-	   shortDesc: "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2. Hits in 1 turn in Sand.",
+		shortDesc: "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2. Hits in 1 turn in Sand.",
 		name: "Meteor Beam",
 		pp: 10,
 		priority: 0,
-		flags: {charge: 1, protect: 1, mirror: 1},
+		flags: {charge: 1, protect: 1, mirror: 1, metronome: 1},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				return;
@@ -873,11 +911,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-	   shortDesc: "Restores HP equal to the user's level × 1.25.",
+		shortDesc: "Restores HP equal to the user's level × 1.25.",
 		name: "Rebuild",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
+		flags: {snatch: 1, heal: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Iron Defense", target);
@@ -894,11 +932,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-	   shortDesc: "Removes hazards and terrains, then forces out target.",
+		shortDesc: "Removes hazards and terrains, then forces out target.",
 		name: "Wash Away",
 		pp: 10,
 		priority: -6,
-		flags: {protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, noassist: 1, failcopycat: 1},
 		forceSwitch: true,
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -936,11 +974,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-	   shortDesc: "1.5x power if a sound move was used last turn.",
+		shortDesc: "1.5x power if a sound move was used last turn.",
 		name: "Echo Chamber",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hyper Voice", target);
@@ -964,21 +1002,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	brickbreak: {
 		inherit: true,
-		basePower: 85,
+		basePower: 90,
 	},
 	psychicfangs: {
 		inherit: true,
-		flags: {bite: 1, protect: 1, mirror: 1},
+		basePower: 90,
+		flags: {protect: 1, mirror: 1, metronome: 1, bite: 1},
 	},
 	sledgehammerblow: {
 		accuracy: 100,
-		basePower: 85,
+		basePower: 90,
 		category: "Physical",
-	   shortDesc: "Destroys screens, unless the target is immune.",
+		shortDesc: "Destroys screens, unless the target is immune.",
 		name: "Sledgehammer Blow",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Gigaton Hammer", target);
@@ -998,11 +1037,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-	   shortDesc: "(Partially functional placeholder) Hits two turns after being used. Sets sands when it hits, even if the target is immune.",
+		shortDesc: "(Partially functional placeholder) Hits two turns after being used. Sets sands when it hits, even if the target is immune.",
 		name: "Desert Storm",
 		pp: 15,
 		priority: 0,
-		flags: {allyanim: 1, futuremove: 1},
+		flags: {allyanim: 1, metronome: 1, futuremove: 1},
 		ignoreImmunity: true,
 		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
@@ -1045,12 +1084,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
-	   shortDesc: "If the user is hit this turn, +1 SpA.",
+		shortDesc: "If the user is hit this turn, +1 SpA.",
 		isNonstandard: null,
 		name: "Dragon Rage",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('dragonrage');
 		},
@@ -1075,12 +1114,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 85,
 		category: "Physical",
-	   shortDesc: "If the user is hit this turn, +1 Atk.",
+		shortDesc: "If the user is hit this turn, +1 Atk.",
 		isNonstandard: null,
 		name: "Rage",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('rage');
 		},
@@ -1104,11 +1143,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-	   shortDesc: "Hits two turns after being used. Foe: badly poisoned and -1 Def & SpD.",
+		shortDesc: "Hits two turns after being used. Foe: badly poisoned and -1 Def & SpD.",
 		name: "Latent Venom",
 		pp: 5,
 		priority: 0,
-		flags: {allyanim: 1, futuremove: 1, snatch: 1},
+		flags: {snatch: 1, allyanim: 1, metronome: 1, futuremove: 1},
 		ignoreImmunity: true,
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
@@ -1150,11 +1189,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-	   shortDesc: "Prevents pivoting moves from being used for the rest of the turn.",
+		shortDesc: "Prevents pivoting moves from being used for the rest of the turn.",
 		name: "Pivot Fail",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {metronome: 1},
 		volatileStatus: 'pivotfail',
 		condition: {
 			duration: 1,
@@ -1184,11 +1223,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 65,
 		category: "Physical",
-	   shortDesc: "Removes the target's Ground immunity and causes pivoting moves to fail.",
+		shortDesc: "Removes the target's Ground immunity and causes pivoting moves to fail.",
 		name: "Smack Down",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, nonsky: 1},
+		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1},
 		volatileStatus: 'smackdown',
 		onHit(target) {
 			target.addVolatile('pivotfail');
@@ -1234,11 +1273,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-	   shortDesc: "100% chance to lower the target's Speed by 1 (2 if Flying-type).",
+		shortDesc: "100% chance to lower the target's Speed by 1 (2 if Flying-type).",
 		name: "Root Pull",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Trailblaze", target);
@@ -1266,7 +1305,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Snatch",
 		pp: 10,
 		priority: 2,
-		flags: {bypasssub: 1, mustpressure: 1, noassist: 1, failcopycat: 1, protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1, mustpressure: 1, noassist: 1, failcopycat: 1},
 		self: {
 			onHit(pokemon, source, move) {
 				pokemon.addVolatile('snatch');
@@ -1312,18 +1351,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
-	   shortDesc: "Nullifies the target's Ability.",
+		shortDesc: "Nullifies the target's Ability.",
 		isNonstandard: null,
 		name: "Signal Beam",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		onHit(target) {
-			if (target.getAbility().isPermanent) return;
+			if (target.getAbility().flags['cantsuppress']) return;
 			target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage(damage, target) {
-			if (target.getAbility().isPermanent) return;
+			if (target.getAbility().flags['cantsuppress']) return;
 			target.addVolatile('gastroacid');
 		},
 		secondary: null,
@@ -1336,10 +1375,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
-	   shortDesc: "Either Fighting or Flying-type, whichever is more effective.",
+		shortDesc: "Either Fighting or Flying-type, whichever is more effective.",
 		name: "Flying Press",
 		pp: 10,
-		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1, metronome: 1},
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
 				const type1 = 'Fighting';
@@ -1371,10 +1410,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Special",
-	   shortDesc: "Either Bug or Electric-type, whichever is more effective.",
+		shortDesc: "Either Bug or Electric-type, whichever is more effective.",
 		name: "Software Crash",
 		pp: 10,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hyper Beam", target);
@@ -1409,11 +1448,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
-	   shortDesc: "2x power if the user has negative stat changes or a status.",
+		shortDesc: "2x power if the user has negative stat changes or a status.",
 		name: "Lash Out",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onBasePower(basePower, pokemon) {
 			const negativeVolatiles = ['confusion', 'taunt', 'torment', 'trapped', 'partiallytrapped', 'leechseed', 'sandspit',
 				'attract', 'curse', 'disable', 'electrify', 'embargo', 'encore', 'foresight', 'gastroacid', 'foresight', 'miracleeye',
@@ -1439,12 +1478,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Physical",
-	   shortDesc: "Type and power based on user's berry.",
+		shortDesc: "Type and power based on user's berry.",
 		isNonstandard: null,
 		name: "Natural Gift",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 		onModifyType(move, pokemon) {
 			if (pokemon.ignoringItem()) return;
 			const item = pokemon.getItem();
@@ -1480,7 +1519,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Stealth Rock",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1, snatch: 1},
+		flags: {reflectable: 1, snatch: 1, metronome: 1},
 		sideCondition: 'stealthrock',
 		condition: {
 			// this is a side condition
@@ -1489,7 +1528,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') ||
-					 pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
+					 pokemon.hasItem('mantisclaw')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				if (pokemon.hasAbility('smelt')) {
 					const fireHazard = this.dex.getActiveMove('Stealth Rock');
@@ -1515,7 +1554,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Spikes",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1, nonsky: 1, mustpressure: 1, snatch: 1},
+		flags: {reflectable: 1, snatch: 1, nonsky: 1, metronome: 1, mustpressure: 1},
 		sideCondition: 'spikes',
 		condition: {
 			// this is a side condition
@@ -1531,7 +1570,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') ||
-					 pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
+					 pokemon.hasItem('mantisclaw')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
@@ -1550,7 +1589,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Toxic Spikes",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1, nonsky: 1, mustpressure: 1, snatch: 1},
+		flags: {reflectable: 1, snatch: 1, nonsky: 1, metronome: 1, mustpressure: 1},
 		sideCondition: 'toxicspikes',
 		condition: {
 			// this is a side condition
@@ -1569,7 +1608,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') ||
-							  pokemon.hasAbility('overcoat') || pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) {
+							  pokemon.hasAbility('overcoat') || pokemon.hasItem('mantisclaw')) {
 					return;
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -1592,7 +1631,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Sticky Web",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1, snatch: 1},
+		flags: {reflectable: 1, snatch: 1, metronome: 1},
 		sideCondition: 'stickyweb',
 		condition: {
 			onSideStart(side) {
@@ -1600,7 +1639,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onEntryHazard(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') ||
-					 pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
+					 pokemon.hasItem('mantisclaw')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
 			},
@@ -1619,7 +1658,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Defog",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, wind: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, wind: 1},
 		onHit(target, source, move) {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
@@ -1692,7 +1731,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Rapid Spin",
 		pp: 40,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onAfterHit(target, pokemon, move) {
 			if (!move.hasSheerForce) {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
@@ -1745,7 +1784,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Mortal Spin",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onAfterHit(target, pokemon, move) {
 			if (!move.hasSheerForce) {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
@@ -1824,7 +1863,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Court Change",
 		pp: 10,
 		priority: 0,
-		flags: {mirror: 1},
+		flags: {mirror: 1, metronome: 1},
 		onHitField(target, source) {
 			const sideConditions = [
 				'mist', 'lightscreen', 'reflect', 'spikes', 'safeguard', 'tailwind', 'toxicspikes', 'stealthrock',
@@ -1899,7 +1938,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Heal Block",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 		volatileStatus: 'healblock',
 		condition: {
 			duration: 5,
@@ -1966,7 +2005,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Electric Terrain",
 		pp: 10,
 		priority: 0,
-		flags: {nonsky: 1},
+		flags: {nonsky: 1, metronome: 1},
 		terrain: 'electricterrain',
 		condition: {
 			duration: 5,
@@ -2048,7 +2087,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Psychic Terrain",
 		pp: 10,
 		priority: 0,
-		flags: {nonsky: 1},
+		flags: {nonsky: 1, metronome: 1},
 		terrain: 'psychicterrain',
 		condition: {
 			duration: 5,
@@ -2120,7 +2159,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Grassy Terrain",
 		pp: 10,
 		priority: 0,
-		flags: {nonsky: 1},
+		flags: {nonsky: 1, metronome: 1},
 		terrain: 'grassyterrain',
 		condition: {
 			duration: 5,
@@ -2196,7 +2235,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Misty Terrain",
 		pp: 10,
 		priority: 0,
-		flags: {nonsky: 1},
+		flags: {nonsky: 1, metronome: 1},
 		terrain: 'mistyterrain',
 		condition: {
 			duration: 5,
@@ -2881,7 +2920,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	aromaticmist: {
 		inherit: true,
-		flags: {bypasssub: 1, snatch: 1},
+		flags: {snatch: 1, bypasssub: 1, metronome: 1},
 	},
 	terablast: {
 		num: 851,
@@ -2891,7 +2930,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Tera Blast",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, mustpressure: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, mustpressure: 1},
 		onPrepareHit(target, source, move) {
 			if (source.terastallized) {
 				this.attrLastMove('[anim] Tera Blast ' + source.teraType);
@@ -2947,7 +2986,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Burn Up",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, defrost: 1},
+		flags: {protect: 1, mirror: 1, defrost: 1, metronome: 1},
 		onTryMove(pokemon, target, move) {
 			if (pokemon.hasType('Fire')) return;
 			this.add('-fail', pokemon, 'move: Burn Up');
@@ -2974,7 +3013,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Roost",
 		pp: 5,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
+		flags: {snatch: 1, heal: 1, metronome: 1},
 		heal: [1, 2],
 		self: {
 			volatileStatus: 'roost',

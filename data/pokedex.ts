@@ -18344,7 +18344,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.5,
 		weightkg: 590,
 		color: "Brown",
-		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ragingbolt: {
@@ -18357,7 +18356,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 5.2,
 		weightkg: 480,
 		color: "Yellow",
-		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironboulder: {
@@ -18370,7 +18368,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.5,
 		weightkg: 162.5,
 		color: "Gray",
-		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	ironcrown: {
@@ -18383,7 +18380,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.6,
 		weightkg: 156,
 		color: "Blue",
-		tags: ["Paradox"],
 		eggGroups: ["Undiscovered"],
 	},
 	terapagos: {
@@ -19491,12 +19487,12 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		num: -72,
 		name: "Cresceidon",
 		types: ["Water", "Fairy"],
-		baseStats: {hp: 80, atk: 32, def: 111, spa: 88, spd: 99, spe: 125},
-		abilities: {0: "Multiscale", 1: "Rough Skin"},
+		baseStats: {hp: 80, atk: 32, def: 111, spa: 88, spd: 99, spe: 124},
+		abilities: {0: "Multiscale", 1: "Rough Skin", H: "Water Veil"},
 		heightm: 10,
 		weightkg: 999.9,
 		color: "Blue",
-		eggGroups: ["Undiscovered"],
+		eggGroups: ["Amorphous", "Water 3"],
 		gen: 9,
 	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder

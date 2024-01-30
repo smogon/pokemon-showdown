@@ -5,9 +5,9 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		ruleset: ['Obtainable', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Dig', 'Fly'],
 	},
-	nintendocup1997movelegality: {
+	nc1997movelegality: {
 		effectType: 'ValidatorRule',
-		name: 'Nintendo Cup 1997 Move Legality',
+		name: 'NC 1997 Move Legality',
 		desc: "Bans move combinations on Pok\u00e9mon that would only be obtainable in Pok\u00e9mon Yellow.",
 		banlist: [
 			// https://www.smogon.com/forums/threads/rby-and-gsc-illegal-movesets.78638/

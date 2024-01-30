@@ -123,6 +123,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	dragonhammer: {
+		inherit: true,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+	},
 	drumbeating: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -615,9 +619,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		desc: "A random move is selected for use, other than After You, Belch, Body Press, Chatter, Copycat, Counter, Covet, Destiny Bond, Detect, Dragon Ascent, Endure, Feint, Focus Punch, Follow Me, Helping Hand, Life Dew, Metronome, Mimic, Mirror Coat, Nature Power, Origin Pulse, Precipice Blades, Protect, Quash, Quick Guard, Rage Powder, Sketch, Sleep Talk, Snarl, Snore, Spiky Shield, Struggle, Switcheroo, Thief, Transform, Trick, or Wide Guard.",
 		shortDesc: "Picks a random move.",
-		noMetronome: [
-			"After You", "Belch", "Body Press", "Chatter", "Copycat", "Counter", "Covet", "Destiny Bond", "Detect", "Dragon Ascent", "Endure", "Feint", "Focus Punch", "Follow Me", "Helping Hand", "Life Dew", "Metronome", "Mimic", "Mirror Coat", "Nature Power", "Origin Pulse", "Precipice Blades", "Protect", "Quash", "Quick Guard", "Rage Powder", "Sketch", "Sleep Talk", "Snarl", "Snore", "Spiky Shield", "Struggle", "Switcheroo", "Thief", "Transform", "Trick", "Wide Guard",
-		],
 	},
 	mindblown: {
 		inherit: true,
