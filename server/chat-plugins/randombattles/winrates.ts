@@ -167,7 +167,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		// may need to be raised again if doubles ladder takes off
 		eloFloor = 1300;
 	}
-	if (!formatData || battle.rated < eloFloor) return;
+	if (!formatData || battle.rated < eloFloor || !winner) return;
 	checkRollover();
 	for (const p of battle.players) {
 		const team = await battle.getPlayerTeam(p);
