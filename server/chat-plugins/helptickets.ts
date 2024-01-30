@@ -1010,7 +1010,7 @@ export async function getBattleLog(battle: string, noReplay = false): Promise<Ba
 			}
 			return {
 				log: chat,
-				title: `${data.p1} vs ${data.p2}`,
+				title: `${players.p1} vs ${players.p2}`,
 				url: `https://${Config.routes.replays}/${battle}`,
 				players,
 				pokemon: mons,
