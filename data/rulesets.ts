@@ -2237,7 +2237,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const baseSpecies = this.dex.species.get(species.baseSpecies);
 			if (!newSpecies.prevo) {
 				if (!baseSpecies.prevo || newSpecies.id === 'greninjabond' || newSpecies.id === 'ursalunabloodmoon'
-					 || newSpecies.id ==='vivillonpokeball') return;
+					 || newSpecies.id === 'vivillonpokeball') return;
 				const prevoSpecies = this.dex.species.get(baseSpecies.prevo);
 				let statid: StatID;
 				newSpecies.bst = 0;
