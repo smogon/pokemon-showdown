@@ -1981,7 +1981,7 @@
         "doublesLevel": 81,
         "doublesMoves": ["accelerock", "closecombat", "drillrun", "protect", "rockslide", "swordsdance"]
     },
-    "wishiwashischool": {
+    "wishiwashi": {
         "level": 85,
         "moves": ["earthquake", "hydropump", "icebeam", "scald", "uturn"],
         "doublesLevel": 88,
