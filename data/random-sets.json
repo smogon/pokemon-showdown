@@ -6110,12 +6110,12 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Dragon Dance", "Earthquake", "Iron Head", "Knock Off", "Outrage", "Roost"],
-                "teraTypes": ["Dark", "Dragon", "Ground", "Steel"]
+                "teraTypes": ["Dark", "Dragon", "Ground", "Poison", "Steel"]
             },
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Iron Head", "Knock Off", "Outrage", "U-turn"],
-                "teraTypes": ["Dark", "Dragon", "Poison", "Steel"]
+                "teraTypes": ["Dark", "Dragon", "Steel"]
             }
         ]
     },
