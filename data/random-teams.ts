@@ -1466,7 +1466,7 @@ export class RandomTeams {
 		if (types.includes('Normal') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
 			species.id !== 'jirachi' && (counter.get('Physical') >= 4) &&
-			['fakeout', 'firstimpression', 'flamecharge', 'rapidspin', 'ruination', 'superfang'].every(m => !moves.has(m))
+			['dragontail', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
 				role !== 'Wallbreaker' &&
