@@ -826,7 +826,8 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!evo.prevo) {
 			const evoBaseSpecies = Dex.species.get(evo.baseSpecies);
-			if (!evoBaseSpecies.prevo || targetid === 'greninjabond' || targetid === 'ursalunabloodmoon' || targetid === 'vivillonpokeball') throw new Chat.ErrorMessage(`Error: ${evoBaseSpecies.name} is not an evolution.`);
+			if (!evoBaseSpecies.prevo || targetid === 'greninjabond' || targetid === 'ursalunabloodmoon' || targetid === 'vivillonpokeball')
+				throw new Chat.ErrorMessage(`Error: ${evoBaseSpecies.name} is not an evolution.`);
 			const prevoSpecies = Dex.species.get(evoBaseSpecies.prevo);
 			const deltas = Utils.deepClone(evo);
 		    if (!isReEvo) {
