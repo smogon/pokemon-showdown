@@ -193,6 +193,8 @@ function getLevel(species: string | Species, format: string | Format): number {
 	// Only formats where levels are not all manually assigned should be copied here
 	case 'gen2randombattle':
 		const levelScale: {[k: string]: number} = {
+			ZU: 81,
+			ZUBL: 79,
 			PU: 77,
 			PUBL: 75,
 			NU: 73,

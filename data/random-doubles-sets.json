@@ -999,12 +999,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Helping Hand", "Pollen Puff", "Rage Powder", "Sleep Powder", "Strength Sap", "Tailwind"],
-                "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Bulky Protect",
-                "movepool": ["Acrobatics", "Protect", "Sleep Powder", "Tailwind"],
+                "movepool": ["Acrobatics", "Encore", "Helping Hand", "Pollen Puff", "Rage Powder", "Sleep Powder", "Strength Sap", "Tailwind"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3069,21 +3064,6 @@
             }
         ]
     },
-    "basculinbluestriped": {
-        "level": 87,
-        "sets": [
-            {
-                "role": "Doubles Wallbreaker",
-                "movepool": ["Aqua Jet", "Flip Turn", "Psychic Fangs", "Wave Crash"],
-                "teraTypes": ["Water"]
-            },
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Aqua Jet", "Flip Turn", "Protect", "Wave Crash"],
-                "teraTypes": ["Water"]
-            }
-        ]
-    },
     "basculegion": {
         "level": 70,
         "sets": [
@@ -5114,21 +5094,6 @@
             }
         ]
     },
-    "mausholdfour": {
-        "level": 80,
-        "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Encore", "Population Bomb", "Protect", "Tidy Up"],
-                "teraTypes": ["Normal"]
-            },
-            {
-                "role": "Doubles Support",
-                "movepool": ["Encore", "Follow Me", "Helping Hand", "Population Bomb", "Protect", "Taunt", "Thunder Wave", "U-turn"],
-                "teraTypes": ["Ghost"]
-            }
-        ]
-    },
     "dachsbun": {
         "level": 90,
         "sets": [
@@ -5540,21 +5505,6 @@
         ]
     },
     "dudunsparce": {
-        "level": 86,
-        "sets": [
-            {
-                "role": "Bulky Protect",
-                "movepool": ["Earth Power", "Glare", "Hyper Drill", "Protect", "Tailwind"],
-                "teraTypes": ["Ghost", "Ground", "Normal"]
-            },
-            {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Boomburst", "Earth Power", "Helping Hand", "Protect", "Tailwind"],
-                "teraTypes": ["Ghost", "Ground", "Normal"]
-            }
-        ]
-    },
-    "dudunsparcethreesegment": {
         "level": 86,
         "sets": [
             {
@@ -6118,13 +6068,13 @@
         "level": 75,
         "sets": [
             {
-                "role": "Offensive Protect",
+                "role": "Doubles Setup Sweeper",
                 "movepool": ["Malignant Chain", "Nasty Plot", "Protect", "Recover", "Shadow Ball"],
                 "teraTypes": ["Dark"]
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Malignant Chain", "Parting Shot", "Poison Gas", "Protect", "Recover", "Shadow Ball"],
+                "movepool": ["Malignant Chain", "Parting Shot", "Poison Gas", "Protect", "Shadow Ball"],
                 "teraTypes": ["Dark"]
             }
         ]

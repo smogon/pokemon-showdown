@@ -1160,9 +1160,6 @@
     "basculin": {
         "moves": ["aquajet", "icebeam", "liquidation", "muddywater", "protect", "superpower"]
     },
-    "basculinbluestriped": {
-        "moves": ["aquajet", "icebeam", "liquidation", "muddywater", "protect", "superpower"]
-    },
     "krookodile": {
         "moves": ["earthquake", "knockoff", "protect", "stoneedge", "superpower"]
     },
