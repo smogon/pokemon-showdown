@@ -1569,6 +1569,29 @@ export class RandomTeams {
 		return tierScale[tier] || 80;
 	}
 
+	getForme(species: Species): string {
+		if (typeof species.battleOnly === 'string') {
+			// Only change the forme. The species has custom moves, and may have different typing and requirements.
+			return species.battleOnly;
+		}
+		if (species.cosmeticFormes) return this.sample([species.name].concat(species.cosmeticFormes));
+
+		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
+		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
+		if (species.baseSpecies === 'Dudunsparce') return 'Dudunsparce' + this.sample(['', '-Three-Segment']);
+		if (species.baseSpecies === 'Magearna') return 'Magearna' + this.sample(['', '-Original']);
+		if (species.baseSpecies === 'Maushold') return 'Maushold' + this.sample(['', '-Four']);
+		if (species.baseSpecies === 'Pikachu') {
+			return 'Pikachu' + this.sample(
+				['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']
+			);
+		}
+		if (species.baseSpecies === 'Polteageist') return 'Polteageist' + this.sample(['', '-Antique']);
+		if (species.baseSpecies === 'Sinistcha') return 'Sinistcha' + this.sample(['', '-Masterpiece']);
+		if (species.baseSpecies === 'Zarude') return 'Zarude' + this.sample(['', '-Dada']);
+		return species.name;
+	}
+
 	randomSet(
 		s: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
@@ -1576,15 +1599,7 @@ export class RandomTeams {
 		isDoubles = false
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
-		let forme = species.name;
-
-		if (typeof species.battleOnly === 'string') {
-			// Only change the forme. The species has custom moves, and may have different typing and requirements.
-			forme = species.battleOnly;
-		}
-		if (species.cosmeticFormes) {
-			forme = this.sample([species.name].concat(species.cosmeticFormes));
-		}
+		const forme = this.getForme(species);
 		const sets = (this as any)[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
 		const possibleSets = [];
 
@@ -1632,32 +1647,6 @@ export class RandomTeams {
 			} else {
 				item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
 			}
-		}
-
-		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
-		if (species.baseSpecies === 'Basculin') {
-			forme = 'Basculin' + this.sample(['', '-Blue-Striped']);
-		}
-		if (species.baseSpecies === 'Dudunsparce') {
-			forme = 'Dudunsparce' + this.sample(['', '-Three-Segment']);
-		}
-		if (species.baseSpecies === 'Magearna') {
-			forme = 'Magearna' + this.sample(['', '-Original']);
-		}
-		if (species.baseSpecies === 'Maushold') {
-			forme = 'Maushold' + this.sample(['', '-Four']);
-		}
-		if (species.baseSpecies === 'Pikachu') {
-			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
-		}
-		if (species.baseSpecies === 'Polteageist') {
-			forme = 'Polteageist' + this.sample(['', '-Antique']);
-		}
-		if (species.baseSpecies === 'Sinistcha') {
-			forme = 'Sinistcha' + this.sample(['', '-Masterpiece']);
-		}
-		if (species.baseSpecies === 'Zarude') {
-			forme = 'Zarude' + this.sample(['', '-Dada']);
 		}
 
 		// Get level
