@@ -1234,6 +1234,17 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 			item = 'Black Sludge';
 		}
 
+		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
+		if (species.baseSpecies === 'Basculin') {
+			forme = 'Basculin' + this.sample(['', '-Blue-Striped']);
+		}
+		if (species.baseSpecies === 'Keldeo') {
+			forme = 'Keldeo' + this.sample(['', '-Resolute']);
+		}
+		if (species.baseSpecies === 'Magearna') {
+			forme = 'Magearna' + this.sample(['', '-Original']);
+		}
+
 		let level: number;
 		if (this.adjustLevel) {
 			level = this.adjustLevel;

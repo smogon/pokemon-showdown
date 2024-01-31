@@ -96,6 +96,10 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Keldeo';
 	} else if (species === "Zarude-Dada") {
 		return 'Zarude';
+	} else if (species === 'Polteageist-Antique') {
+		return 'Polteageist';
+	} else if (species === 'Sinistcha-Masterpiece') {
+		return 'Sinistcha';
 	} else if (species === "Squawkabilly-Blue") {
 		return "Squawkabilly";
 	} else if (species === "Squawkabilly-White") {
