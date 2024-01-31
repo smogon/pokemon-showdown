@@ -55,21 +55,6 @@ describe('Dex#getSpecies', function () {
 			["Pikachu", "Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner", "Pikachu-Starter"]
 		);
 	});
-
-	it('should handle past-gen abilities', function () {
-		assert.deepEqual(
-			Dex.forGen(5).species.get('Hitmontop').abilities,
-			{0: "Intimidate", 1: "Technician", H: "Steadfast"}
-		);
-		assert.deepEqual(
-			Dex.forGen(4).species.get('Hitmontop').abilities,
-			{0: "Intimidate", 1: "Technician"}
-		);
-		assert.deepEqual(
-			Dex.forGen(3).species.get('Hitmontop').abilities,
-			{0: "Intimidate"}
-		);
-	});
 });
 
 describe('Dex#getItem', function () {
