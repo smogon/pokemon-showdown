@@ -2420,9 +2420,9 @@ export class RandomGen8Teams {
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
 		pokemonList: string[]
-	): [{[k: string]: ID[]}, string[]] {
+	): [{[k: string]: string[]}, string[]] {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
-		const pokemonPool: {[k: string]: ID[]} = {};
+		const pokemonPool: {[k: string]: string[]} = {};
 		const baseSpeciesPool = [];
 		for (const pokemon of pokemonList) {
 			let species = this.dex.species.get(pokemon);
@@ -2436,9 +2436,9 @@ export class RandomGen8Teams {
 			}
 
 			if (species.baseSpecies in pokemonPool) {
-				pokemonPool[species.baseSpecies].push(species.id);
+				pokemonPool[species.baseSpecies].push(pokemon);
 			} else {
-				pokemonPool[species.baseSpecies] = [species.id];
+				pokemonPool[species.baseSpecies] = [pokemon];
 			}
 		}
 		// Include base species 1x if 1-3 formes, 2x if 4-6 formes, 3x if 7+ formes
