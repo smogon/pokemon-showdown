@@ -2005,7 +2005,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Dazzling Gleam", "Psychic", "Psychic Noise", "Psyshock", "Recover"],
-                "teraTypes": ["Electric", "Fairy"]
+                "teraTypes": ["Electric", "Fairy", "Poison", "Steel"]
             }
         ]
     },
@@ -3630,12 +3630,12 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Close Combat", "Dragon Dance", "Earthquake", "Iron Head", "Outrage"],
-                "teraTypes": ["Fighting", "Ground", "Steel"]
+                "teraTypes": ["Steel"]
             },
             {
                 "role": "Fast Bulky Setup",
                 "movepool": ["Close Combat", "Earthquake", "Iron Head", "Scale Shot", "Swords Dance"],
-                "teraTypes": ["Fighting", "Ground", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
