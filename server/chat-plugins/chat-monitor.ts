@@ -502,7 +502,7 @@ export const nicknamefilter: Chat.NicknameFilter = (name, user) => {
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
 	for (const list in filterWords) {
-	        if (!Chat.monitors[list]) continue;
+		if (!Chat.monitors[list]) continue;
 		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (const line of filterWords[list]) {
 			let {regex, word} = line;
