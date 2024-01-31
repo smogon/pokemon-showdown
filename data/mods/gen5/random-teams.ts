@@ -799,15 +799,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		isLead = false
 	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
-		let forme = species.name;
-
-		if (typeof species.battleOnly === 'string') {
-			// Only change the forme. The species has custom moves, and may have different typing and requirements.
-			forme = species.battleOnly;
-		}
-		if (species.cosmeticFormes) {
-			forme = this.sample([species.name].concat(species.cosmeticFormes));
-		}
+		const forme = this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets = [];
 		// Check if the Pokemon has a Spinner set
@@ -851,14 +843,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, preferredType, role);
 		if (item === undefined) {
 			item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, preferredType, role);
-		}
-
-		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
-		if (species.baseSpecies === 'Basculin') {
-			forme = 'Basculin' + this.sample(['', '-Blue-Striped']);
-		}
-		if (species.baseSpecies === 'Keldeo') {
-			forme = 'Keldeo' + this.sample(['', '-Resolute']);
 		}
 
 		// For Trick / Switcheroo
