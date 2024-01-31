@@ -3113,7 +3113,8 @@ export const pages: Chat.PageTable = {
 		buf += `<p>Using a <code>+</code> instead of a <code>-</code> unbans that category.</p>`;
 		buf += `<ul><li><code>+ Blaziken</code>: Unban/unrestrict a Pok&eacute;mon.</li></ul></small></details><br />`;
 		cmd.push(`bans={bans}`);
-		buf += `Bans/Unbans: <input name="bans" /> <small>(separated by commas)</small><br /><br />`;
+		buf += `Bans/Unbans: <small>(separated by commas)</small><br /><br />`;
+		buf += `<textarea style="width: 100%" name="bans"></textarea><br />`;
 		buf += `<details class="readmore"><summary><u><strong>Clauses</strong></u></summary>`;
 		buf += `<p>The following rules can be added to challenges/tournaments to modify the style of play. `;
 		buf += `Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code>.</p>`;
