@@ -2236,7 +2236,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const newSpecies = this.dex.deepClone(species);
 			const baseSpecies = this.dex.species.get(species.baseSpecies);
 			if (!newSpecies.prevo) {
-				if (!baseSpecies.prevo || newSpecies.id === 'greninjabond' || newSpecies.id === 'ursalunabloodmoon' || newSpecies.id ==='vivillonpokeball') return;
+				if (!baseSpecies.prevo || newSpecies.id === 'greninjabond' || newSpecies.id === 'ursalunabloodmoon'
+					 || newSpecies.id ==='vivillonpokeball') return;
 				const prevoSpecies = this.dex.species.get(baseSpecies.prevo);
 				let statid: StatID;
 				newSpecies.bst = 0;
