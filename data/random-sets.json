@@ -6556,11 +6556,6 @@
                 "role": "Bulky Attacker",
                 "movepool": ["Calm Mind", "Focus Blast", "Psyshock", "Tachyon Cutter", "Volt Switch"],
                 "teraTypes": ["Fighting", "Steel"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Agility", "Focus Blast", "Psyshock", "Tachyon Cutter"],
-                "teraTypes": ["Fighting", "Steel"]
             }
         ]
     },
