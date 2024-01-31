@@ -2345,9 +2345,6 @@ export class RandomGen8Teams {
 		if (species.baseSpecies === 'Basculin') {
 			forme = 'Basculin' + this.sample(['', '-Blue-Striped']);
 		}
-		if (species.baseSpecies === 'Keldeo') {
-			forme = 'Keldeo' + this.sample(['', '-Resolute']);
-		}
 		if (species.baseSpecies === 'Magearna') {
 			forme = 'Magearna' + this.sample(['', '-Original']);
 		}

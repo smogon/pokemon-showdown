@@ -1643,9 +1643,6 @@ export class RandomTeams {
 		if (species.baseSpecies === 'Dudunsparce') {
 			forme = 'Dudunsparce' + this.sample(['', '-Three-Segment']);
 		}
-		if (species.baseSpecies === 'Keldeo') {
-			forme = 'Keldeo' + this.sample(['', '-Resolute']);
-		}
 		if (species.baseSpecies === 'Magearna') {
 			forme = 'Magearna' + this.sample(['', '-Original']);
 		}
