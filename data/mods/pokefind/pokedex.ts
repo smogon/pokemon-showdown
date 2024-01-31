@@ -1980,6 +1980,17 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Yellow",
 		eggGroups: ["Field", "Fairy"],
 	},
+	raichushadow: {
+		num: 26,
+		name: "Raichu-Shadow",
+		types: ["Shadow"],
+		baseStats: {hp: 60, atk: 90, def: 55, spa: 90, spd: 80, spe: 110},
+		abilities: {0: "Static", H: "Lightning Rod"},
+		heightm: 0.8,
+		weightkg: 30,
+		color: "Yellow",
+		eggGroups: ["Field", "Fairy"],
+	},
 	nidoqueenshadow: {
 		num: 31,
 		name: "Nidoqueen-Shadow",
