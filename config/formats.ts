@@ -683,7 +683,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Re-Evolution Mod', 'Overflow Stat Mod', 'Terastal Clause', 'Min Source Gen = 9'],
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Re-Evolution Mod', 'Terastal Clause', 'Min Source Gen = 9'],
 		banlist: [
 			'Basculegion-Base', 'Gholdengo', 'Gyarados', 'Houndstone', 'Lunala', 'Milotic', 'Solgaleo', 'Urshifu-Base',
 			'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass',
