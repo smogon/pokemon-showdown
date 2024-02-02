@@ -3325,7 +3325,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 4] Farceus Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/posts/9462709/">DPP Farceus Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/9462709/">DPP Farceus Ubers</a>`,
 		],
 
 		mod: 'gen4',
