@@ -820,10 +820,12 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
 		},
+		// Dodging moves is handled in BattleActions#hitStepInvulnerabilityEvent
+		// This is here for moves that manually call this event like Perish Song
+		onInvulnerability: false,
 		onBeforeTurn(pokemon) {
 			this.queue.cancelAction(pokemon);
 		},
-		// Dodging moves is handled in BattleActions#hitStepInvulnerabilityEvent
 	},
 
 	// Arceus and Silvally's actual typing is implemented here.
