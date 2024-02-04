@@ -377,7 +377,12 @@ export class Pokemon {
 		this.details = displayedSpeciesName + (this.level === 100 ? "" : ", L" + this.level) +
 			(this.gender === "" ? "" : ", " + this.gender) + (this.set.shiny ? ", shiny" : "");
 		this.status = this.set.status ? this.battle.dex.conditions.get(this.set.status).id : "";
-		this.statusState = this.status ? { id: this.status, target: this } : {};
+
+		this.statusState = this.status ? {id: this.status, target: this} : {};
+		if (this.battle.pokefindBattle && this.status === "slp") {
+			this.statusState.startTime = this.battle.random(2, 5);
+			this.statusState.time = this.statusState.startTime;
+		}
 		this.volatiles = {};
 		this.showCure = undefined;
 

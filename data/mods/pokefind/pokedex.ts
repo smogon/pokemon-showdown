@@ -238,6 +238,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 45,
 		color: "Unknown",
 		eggGroups: ["Monster"],
+		baseSpecies: "Marowak",
 	},
 	jatarotyranitar: {
 		num: -10021,
@@ -1702,6 +1703,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 45,
 		color: "Unknown",
 		eggGroups: ["Monster"],
+		baseSpecies: "Marowak",
 	},
 	jatarooctillery: {
 		num: -10145,
@@ -1824,7 +1826,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: [],
 	},
 	haikoulatias: {
-		num: -155,
+		num: 380,
 		name: "Haikou Latias",
 		types: ['water', 'grass'],
 		gender: "F",
@@ -1836,7 +1838,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		eggGroups: [],
 	},
 	haikoulatios: {
-		num: -156,
+		num: 381,
 		name: "Haikou Latios",
 		types: ['water', 'electric'],
 		gender: "M",
@@ -2084,6 +2086,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Brown",
 		evoLevel: 28,
 		eggGroups: ["Monster"],
+		baseSpecies: "Marowak",
 	},
 	rhydonshadow: {
 		num: 112,
@@ -2897,6 +2900,19 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		color: "Green",
 		eggGroups: ["Fairy", "Grass"],
 	},
+	gastrodonshadow: {
+		num: 423,
+		name: "Gastrodon-Shadow",
+		baseForme: "West",
+		types: ["Water", "Ground"],
+		baseStats: {hp: 111, atk: 83, def: 68, spa: 92, spd: 82, spe: 39},
+		abilities: {0: "Sticky Hold", 1: "Storm Drain", H: "Sand Force"},
+		heightm: 0.9,
+		weightkg: 29.9,
+		color: "Purple",
+		prevo: "Shellos",
+		eggGroups: ["Water 1", "Amorphous"],
+	},
 	mismagiusshadow: {
 		num: 429,
 		name: "Mismagius-Shadow",
@@ -3058,6 +3074,19 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 42.5,
 		color: "Purple",
 		eggGroups: ["Bug"],
+	},
+	"porygonzshadow": {
+		num: 474,
+		name: "Porygon-Z-Shadow",
+		types: ["Shadow"],
+		gender: "N",
+		baseStats: {hp: 85, atk: 80, def: 70, spa: 135, spd: 75, spe: 90},
+		abilities: {0: "Adaptability", 1: "Download", H: "Analytic"},
+		heightm: 0.9,
+		weightkg: 34,
+		prevo: "Porygon2",
+		color: "Unknown",
+		eggGroups: ["Mineral"],
 	},
 	arceusshadow: {
 		num: 493,
