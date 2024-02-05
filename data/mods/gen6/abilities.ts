@@ -54,6 +54,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.type = 'Normal';
 			}
 		},
+		onBasePower() {},
 		rating: -1,
 	},
 	parentalbond: {

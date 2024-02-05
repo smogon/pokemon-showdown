@@ -499,7 +499,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 		if (Tournament.checkBanned(this.room, replacementUser) || Punishments.isBattleBanned(replacementUser) ||
-		    replacementUser.namelocked) {
+			replacementUser.namelocked) {
 			output.errorReply(`${replacementUser.name} is banned from joining tournaments.`);
 			return;
 		}

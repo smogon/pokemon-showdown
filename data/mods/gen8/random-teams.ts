@@ -2122,6 +2122,28 @@ export class RandomGen8Teams {
 		return 80;
 	}
 
+	getForme(species: Species): string {
+		if (typeof species.battleOnly === 'string') {
+			// Only change the forme. The species has custom moves, and may have different typing and requirements.
+			return species.battleOnly;
+		}
+		if (species.cosmeticFormes) return this.sample([species.name].concat(species.cosmeticFormes));
+		if (species.name.endsWith('-Gmax')) return species.name.slice(0, -5);
+
+		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
+		if (['Magearna', 'Polteageist', 'Zarude'].includes(species.baseSpecies)) {
+			return this.sample([species.name].concat(species.otherFormes!));
+		}
+		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
+		if (species.baseSpecies === 'Keldeo' && this.gen <= 7) return 'Keldeo' + this.sample(['', '-Resolute']);
+		if (species.baseSpecies === 'Pikachu' && this.dex.currentMod === 'gen8') {
+			return 'Pikachu' + this.sample(
+				['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']
+			);
+		}
+		return species.name;
+	}
+
 	randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
@@ -2130,20 +2152,8 @@ export class RandomGen8Teams {
 		isNoDynamax = false
 	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
-		let forme = species.name;
-		let gmax = false;
-
-		if (typeof species.battleOnly === 'string') {
-			// Only change the forme. The species has custom moves, and may have different typing and requirements.
-			forme = species.battleOnly;
-		}
-		if (species.cosmeticFormes) {
-			forme = this.sample([species.name].concat(species.cosmeticFormes));
-		}
-		if (species.name.endsWith('-Gmax')) {
-			forme = species.name.slice(0, -5);
-			gmax = true;
-		}
+		const forme = this.getForme(species);
+		const gmax = species.name.endsWith('-Gmax');
 
 		const data = this.randomData[species.id];
 
@@ -2340,9 +2350,6 @@ export class RandomGen8Teams {
 		if (item === 'Leftovers' && types.has('Poison')) {
 			item = 'Black Sludge';
 		}
-		if (species.baseSpecies === 'Pikachu' && !gmax && this.dex.currentMod !== 'gen8bdsp') {
-			forme = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']);
-		}
 
 		const level: number = this.getLevel(species, isDoubles, isNoDynamax);
 
@@ -2413,11 +2420,10 @@ export class RandomGen8Teams {
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
 		pokemonList: string[]
-	) {
+	): [{[k: string]: string[]}, string[]] {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
-		const pokemonPool = [];
+		const pokemonPool: {[k: string]: string[]} = {};
 		const baseSpeciesPool = [];
-		const baseSpeciesCount: {[k: string]: number} = {};
 		for (const pokemon of pokemonList) {
 			let species = this.dex.species.get(pokemon);
 			if (exclude.includes(species.id)) continue;
@@ -2428,14 +2434,18 @@ export class RandomGen8Teams {
 					if (!species.types.includes(type)) continue;
 				}
 			}
-			pokemonPool.push(pokemon);
-			baseSpeciesCount[species.baseSpecies] = (baseSpeciesCount[species.baseSpecies] || 0) + 1;
+
+			if (species.baseSpecies in pokemonPool) {
+				pokemonPool[species.baseSpecies].push(pokemon);
+			} else {
+				pokemonPool[species.baseSpecies] = [pokemon];
+			}
 		}
 		// Include base species 1x if 1-3 formes, 2x if 4-6 formes, 3x if 7+ formes
-		for (const baseSpecies of Object.keys(baseSpeciesCount)) {
-			for (let i = 0; i < Math.min(Math.ceil(baseSpeciesCount[baseSpecies] / 3), 3); i++) {
-				baseSpeciesPool.push(baseSpecies);
-			}
+		for (const baseSpecies of Object.keys(pokemonPool)) {
+			// Squawkabilly has 4 formes, but only 2 functionally different formes, so only include it 1x
+			const weight = (baseSpecies === 'Squawkabilly') ? 1 : Math.min(Math.ceil(pokemonPool[baseSpecies].length / 3), 3);
+			for (let i = 0; i < weight; i++) baseSpeciesPool.push(baseSpecies);
 		}
 		return [pokemonPool, baseSpeciesPool];
 	}
@@ -2474,12 +2484,7 @@ export class RandomGen8Teams {
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			const currentSpeciesPool: Species[] = [];
-			for (const poke of pokemonPool) {
-				const species = this.dex.species.get(poke);
-				if (species.baseSpecies === baseSpecies) currentSpeciesPool.push(species);
-			}
-			let species = this.sample(currentSpeciesPool);
+			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
