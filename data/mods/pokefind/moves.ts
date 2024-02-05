@@ -24,7 +24,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		secondary: null,
 		target: "normal",
@@ -41,7 +41,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		critRatio: 2,
 		secondary: null,
@@ -59,7 +59,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		secondary: null,
 		target: "normal",
@@ -76,7 +76,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		secondary: {
 			chance: 10,
@@ -97,7 +97,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		secondary: null,
 		target: "normal",
@@ -114,7 +114,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		secondary: {
 			chance: 10,
@@ -135,7 +135,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			protect: 1,
 			mirror: 1,
 			heal: 1,
-			metronome: 1
+
 		},
 		secondary: null,
 		target: "normal",
@@ -162,7 +162,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		secondary: {
 			chance: 10,
@@ -182,7 +182,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		secondary: {
 			chance: 10,
@@ -204,7 +204,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: {
 			protect: 1,
 			mirror: 1,
-			metronome: 1
+
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
@@ -220,7 +220,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		priority: 0,
 		flags: {
 			protect: 1,
-			metronome: 1
+
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
@@ -234,7 +234,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Shadow Down",
 		pp: 20,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, metronome: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1,  },
 		boosts: {
 			def: -2
 		},
@@ -253,7 +253,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			protect: 1,
 			mirror: 1,
 			recharge: 1,
-			metronome: 1
+
 		},
 		damageCallback(pokemon, target) {
 			return this.clampIntRange(target.getUndynamaxedHP() / 2, 1);
@@ -269,7 +269,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Shadow Hold",
 		pp: 10,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1,  },
 		volatileStatus: "partiallytrapped",
 		secondary: null,
 		target: "allAdjacentFoes",
@@ -287,7 +287,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		pp: 5,
 		priority: 0,
 		weather: "ShadowSky",
-		flags: { metronome: 1 },
+		flags: {  },
 		secondary: null,
 		target: "all",
 		type: "Shadow"
@@ -300,7 +300,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Shadow Shed",
 		pp: 20,
 		priority: 0,
-		flags: { snatch: 1, metronome: 1 },
+		flags: { snatch: 1,  },
 		onHit(target, source) {
 			target.side.removeSideCondition("reflect");
 			target.side.removeSideCondition("lightscreen");
@@ -318,7 +318,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Shadow Panic",
 		pp: 20,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1 },
 		volatileStatus: "confusion",
 		secondary: null,
 		target: "allAdjacentFoes",
@@ -332,7 +332,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Shadow Mist",
 		pp: 15,
 		priority: 0,
-		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, reflectable: 1, mirror: 1 },
 		boosts: {
 			evasion: -2
 		},
@@ -348,7 +348,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Savage Scratch",
 		pp: 35,
 		priority: 0,
-		flags: { contact: 1, protect: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1 },
 		secondary: null,
 		target: "normal",
 		type: "Normal"
@@ -361,7 +361,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Glaring",
 		pp: 30,
 		priority: 0,
-		flags: { protect: 1, metronome: 1 },
+		flags: { protect: 1 },
 		boosts: {
 			def: -2
 		},
@@ -377,7 +377,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Savage Bite",
 		pp: 25,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1, mirror: 1 },
 		secondary: {
 			chance: 100,
 			volatileStatus: "flinch"
@@ -393,7 +393,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "OP Bite",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1 },
 		secondary: {
 			chance: 20,
 			boosts: {
@@ -411,7 +411,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Furious Swipes",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1 },
 		multihit: [2, 5],
 		secondary: null,
 		target: "normal",
@@ -425,12 +425,31 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Savage Fang",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, metronome: 1 },
+		flags: { contact: 1, protect: 1 },
 		secondary: {
 			chance: 10,
 			volatileStatus: "flinch"
 		},
 		target: "normal",
 		type: "Normal"
-	}
+	},
+	metronome: {
+		inherit: true,
+		onHit(target, source, effect) {
+			const moves = this.dex.moves.all().filter(move => (
+				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['metronome'] &&
+				move.gen < 8
+			));
+			let randomMove = '';
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves).id;
+			}
+			if (!randomMove) return false;
+			source.side.lastSelectedMove = this.toID(randomMove);
+			this.actions.useMove(randomMove, target);
+		},
+	},
 };
