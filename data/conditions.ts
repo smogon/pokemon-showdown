@@ -820,11 +820,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
 		},
-		// Override No Guard
-		onInvulnerabilityPriority: 2,
-		onInvulnerability(target, source, move) {
-			return false;
-		},
+		// Dodging moves is handled in BattleActions#hitStepInvulnerabilityEvent
+		// This is here for moves that manually call this event like Perish Song
+		onInvulnerability: false,
 		onBeforeTurn(pokemon) {
 			this.queue.cancelAction(pokemon);
 		},

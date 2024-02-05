@@ -96,6 +96,10 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Keldeo';
 	} else if (species === "Zarude-Dada") {
 		return 'Zarude';
+	} else if (species === 'Polteageist-Antique') {
+		return 'Polteageist';
+	} else if (species === 'Sinistcha-Masterpiece') {
+		return 'Sinistcha';
 	} else if (species === "Squawkabilly-Blue") {
 		return "Squawkabilly";
 	} else if (species === "Squawkabilly-White") {
@@ -167,7 +171,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		// may need to be raised again if doubles ladder takes off
 		eloFloor = 1300;
 	}
-	if (!formatData || battle.rated < eloFloor) return;
+	if (!formatData || battle.rated < eloFloor || !winner) return;
 	checkRollover();
 	for (const p of battle.players) {
 		const team = await battle.getPlayerTeam(p);

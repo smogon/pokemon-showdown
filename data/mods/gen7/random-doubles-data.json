@@ -1160,9 +1160,6 @@
     "basculin": {
         "moves": ["aquajet", "icebeam", "liquidation", "muddywater", "protect", "superpower"]
     },
-    "basculinbluestriped": {
-        "moves": ["aquajet", "icebeam", "liquidation", "muddywater", "protect", "superpower"]
-    },
     "krookodile": {
         "moves": ["earthquake", "knockoff", "protect", "stoneedge", "superpower"]
     },
@@ -1541,7 +1538,7 @@
     "lycanrocdusk": {
         "moves": ["accelerock", "drillrun", "firefang", "protect", "rockslide", "stoneedge"]
     },
-    "wishiwashischool": {
+    "wishiwashi": {
         "moves": ["earthquake", "endeavor", "helpinghand", "hiddenpowergrass", "hydropump", "icebeam", "protect"]
     },
     "toxapex": {
