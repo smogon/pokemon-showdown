@@ -152,22 +152,22 @@ export class FriendsDatabase {
 		}
 		return {sent, received};
 	}
-	all(statement: string, data: any[] | AnyObject) {
+	all(statement: string, data: any[] | AnyObject): Promise<any[] | null> {
 		return this.query({type: 'all', data, statement});
 	}
-	transaction(statement: string, data: any[] | AnyObject) {
+	transaction(statement: string, data: any[] | AnyObject): Promise<{result: any} | null> {
 		return this.query({data, statement, type: 'transaction'});
 	}
-	run(statement: string, data: any[] | AnyObject) {
+	run(statement: string, data: any[] | AnyObject): Promise<{changes: number, lastInsertRowid: number}> {
 		return this.query({statement, data, type: 'run'});
 	}
-	get(statement: string, data: any[] | AnyObject) {
+	get(statement: string, data: any[] | AnyObject): Promise<AnyObject | null> {
 		return this.query({statement, data, type: 'get'});
 	}
 	private async query(input: DatabaseRequest) {
 		const process = PM.acquire();
 		if (!process || !Config.usesqlite) {
-			return {result: null};
+			return null;
 		}
 		const result = await process.query(input);
 		if (result.error) {
