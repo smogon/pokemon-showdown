@@ -191,18 +191,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	powerherb: {
-		inherit: true,
-		onChargeMove(pokemon, target, move) {
-			if (pokemon.useItem()) {
-				this.debug('power herb - remove charge turn for ' + move.id);
-				this.attrLastMove('[still]');
-				this.addMove('-anim', pokemon, move.name, target);
-				if (pokemon.lastTurnEjected) this.addMove('-anim', pokemon, move.name, target);
-				return false; // skip charge turn
-			}
-		},
-	},
 	quickclaw: {
 		inherit: true,
 		onFractionalPriority(priority, pokemon, target, move) {
