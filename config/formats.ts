@@ -1394,6 +1394,55 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Foresighters",
+		desc: `Moves in the first moveslot with be delayed by two turns.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3735969/">Foresighters</a>`,
+		],
+
+		mod: 'foresighters',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause', 'Min Source Gen = 9'],
+		banlist: [
+			'Annihilape', 'Arceus', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chien-Pao', 'Chi-Yu', 'Deoxys-Base', 'Deoxys-Attack',
+			'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre',
+			'Kyurem-Black', 'Kyurem-White', 'Landorus-Base', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
+			'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Solgaleo', 'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu',
+			'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Sand Veil',
+			'Snow Cloak', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Dire Claw', 'Last Respects', 'Shed Tail',
+		],
+		restricted: [
+			'Belly Drum', 'Clangorous Soul', 'Dragon Dance', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Tail Glow', 'Tidy Up', 'Victory Dance',
+		],
+		onValidateSet(set) {
+			const fsMove = this.dex.moves.get(set.moves[0]);
+			if (this.ruleTable.isRestricted(`move:${fsMove.id}`) && !this.ruleTable.has(`+move:${fsMove.id}`)) {
+				return [`${set.name}'s move ${fsMove.name} cannot be used as a future move.`];
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (move.id === pokemon.moveSlots[0].id && !['doomdesire', 'futuresight'].includes(move.id)) {
+				move.flags = {...move.flags, futuremove: 1};
+				if (move.flags.protect) delete move.flags.protect;
+				move.onTry = function (source, target) { // eslint-disable-line @typescript-eslint/no-shadow
+					if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+					const futuremove = this.dex.deepClone(this.dex.moves.get(move.id));
+					futuremove.effectType = 'Move';
+					futuremove.flags.futuremove = 1;
+					if (futuremove.flags.protect) delete futuremove.flags.protect;
+					Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+						duration: 3,
+						move: futuremove.id,
+						source: source,
+						moveData: futuremove,
+					});
+					this.add('-message', `${source.name} forsaw an attack!`);
+					return this.NOT_FAIL;
+				};
+			}
+		},
+	},
+	{
 		name: "[Gen 9] Fortemons",
 		desc: `Put an attacking move in the item slot to have all of a Pok&eacute;mon's attacks inherit its properties.`,
 		threads: [
