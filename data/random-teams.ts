@@ -147,6 +147,7 @@ export class RandomTeams {
 	readonly adjustLevel: number | null;
 	readonly maxMoveCount: number;
 	readonly forceMonotype: string | undefined;
+	readonly forceTeraType: string | undefined;
 
 	/**
 	 * Checkers for move enforcement based on types or other factors
@@ -168,6 +169,9 @@ export class RandomTeams {
 		const forceMonotype = ruleTable.valueRules.get('forcemonotype');
 		this.forceMonotype = forceMonotype && this.dex.types.get(forceMonotype).exists ?
 			this.dex.types.get(forceMonotype).name : undefined;
+		const forceTeraType = ruleTable.valueRules.get('forceteratype');
+		this.forceTeraType = forceTeraType && this.dex.types.get(forceTeraType).exists ?
+			this.dex.types.get(forceTeraType).name : undefined;
 
 		this.factoryTier = '';
 		this.format = format;
@@ -1616,7 +1620,7 @@ export class RandomTeams {
 			movePool.push(this.dex.moves.get(movename).id);
 		}
 		const teraTypes = set.teraTypes;
-		const teraType = this.sampleIfArray(teraTypes);
+		let teraType = this.sampleIfArray(teraTypes);
 
 		let ability = '';
 		let item = undefined;
@@ -1695,6 +1699,9 @@ export class RandomTeams {
 			evs.spe = 0;
 			ivs.spe = 0;
 		}
+
+		// Enforce Tera Type after all set generation is done to prevent infinite generation
+		if (this.forceTeraType) teraType = this.forceTeraType;
 
 		// shuffle moves to add more randomness to camomons
 		const shuffledMoves = Array.from(moves);
@@ -2086,7 +2093,11 @@ export class RandomTeams {
 			};
 			if (this.gen === 9) {
 				// Tera type
-				set.teraType = this.sample(this.dex.types.all()).name;
+				if (this.forceTeraType) {
+					set.teraType = this.forceTeraType;
+				} else {
+					set.teraType = this.sample(this.dex.types.all()).name;
+				}
 			}
 			team.push(set);
 		}
@@ -2438,7 +2449,11 @@ export class RandomTeams {
 			};
 			if (this.gen === 9) {
 				// Random Tera type
-				set.teraType = this.sample(this.dex.types.all()).name;
+				if (this.forceTeraType) {
+					set.teraType = this.forceTeraType;
+				} else {
+					set.teraType = this.sample(this.dex.types.all()).name;
+				}
 			}
 			team.push(set);
 		}
