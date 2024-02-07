@@ -520,7 +520,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		hasValue: true,
 		onValidateRule(value) {
 			const validColors = ["Black", "Blue", "Brown", "Gray", "Green", "Pink", "Purple", "Red", "White", "Yellow"];
-			if (!validColors.map(this.toID).includes(this.dex.toID(value))) {
+			if (!validColors.map(this.dex.toID).includes(this.dex.toID(value))) {
 				throw new Error(`Invalid color "${value}"`);
 			}
 		},
