@@ -820,8 +820,8 @@ export const commands: Chat.ChatCommands = {
 					details = {
 						Gen: String(ability.gen) || 'CAP',
 					};
-					if (ability.isPermanent) details["&#10003; Not affected by Gastro Acid"] = "";
-					if (ability.isBreakable) details["&#10003; Ignored by Mold Breaker"] = "";
+					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
+					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
 				}
 				break;
 			default:
@@ -1677,12 +1677,12 @@ export const commands: Chat.ChatCommands = {
 	bugs(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (room?.battle) {
-			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/threads/3663703/">Bug Reports</a></center>`);
+			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/ps-bug-report-form/">Bug Reports</a></center>`);
 		} else {
 			this.sendReplyBox(
 				`Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />` +
 				`- <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a><br />` +
-				`- <a href="https://www.smogon.com/forums/threads/3663703/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
+				`- <a href="https://www.smogon.com/forums/ps-bug-report-form/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
 			);
 		}
 	},
@@ -2077,7 +2077,7 @@ export const commands: Chat.ChatCommands = {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/proxyhelp`}">${this.tr`Proxy lock help`}</a>`);
 		}
 		if (showAll || ['ca', 'customavatar', 'customavatars'].includes(target)) {
-			buffer.push(this.tr`Custom avatars are given to Global Staff members, contributors (coders and spriters) to Pokemon Showdown, and Smogon badgeholders at the discretion of Zarel. They are also sometimes given out as prizes for major room events or Smogon tournaments.`);
+			buffer.push(this.tr`Custom avatars are given to Global Staff members, contributors (coders and spriters) to Pokemon Showdown, and Smogon badgeholders at the discretion of the PS! Administrators. They are also sometimes given out as rewards for major events such as PSPL (Pokemon Showdown Premier League). If you're curious, you can view the entire list of <a href="https://www.smogon.com/smeargle/customs/">custom avatars</a>.`);
 		}
 		if (showAll || ['privacy', 'private'].includes(target)) {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/privacy`}">${this.tr`Pokémon Showdown privacy policy`}</a>`);
@@ -2666,15 +2666,25 @@ export const commands: Chat.ChatCommands = {
 			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
 			buf += `<twitch src="${link}" />`;
 		} else {
+			if (Chat.linkRegex.test(link)) {
+				if (/^https?:\/\/(.*)\.(mp4|mov)\b(\?|$)/i.test(link)) { // video
+					// can't fitImage video, so we're just gonna have to guess to keep it small
+					buf = Utils.html`<video src="${link}" controls="" width="300px" height="300px"></video>`;
+				} else if (/^https?:\/\/(.*)\.(mp3|wav)\b(\?|$)/i.test(link)) { // audio
+					buf = Utils.html`<audio src="${link}" controls=""></audio>`;
+				}
+			}
 			if (link.includes('data:image/png;base64')) {
 				throw new Chat.ErrorMessage('Please provide an actual link (you probably copied it wrong?).');
 			}
-			try {
-				const [width, height, resized] = await Chat.fitImage(link);
-				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
-				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
-			} catch {
-				return this.errorReply('Invalid image');
+			if (!buf) { // fall back on image
+				try {
+					const [width, height, resized] = await Chat.fitImage(link);
+					buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
+					if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
+				} catch {
+					return this.errorReply('Invalid image, audio, or video URL.');
+				}
 			}
 		}
 		if (comment) {
@@ -2687,8 +2697,8 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 	showhelp: [
-		`/show [url] - Shows you an image or YouTube video.`,
-		`!show [url] - Shows an image or YouTube to everyone in a chatroom. Requires: whitelist % @ # &`,
+		`/show [url] - Shows you an image, audio clip, video file, or YouTube video.`,
+		`!show [url] - Shows an image, audio clip, video file, or YouTube video to everyone in a chatroom. Requires: whitelist % @ # &`,
 	],
 
 	rebroadcast(target, room, user, connection) {
@@ -3103,7 +3113,8 @@ export const pages: Chat.PageTable = {
 		buf += `<p>Using a <code>+</code> instead of a <code>-</code> unbans that category.</p>`;
 		buf += `<ul><li><code>+ Blaziken</code>: Unban/unrestrict a Pok&eacute;mon.</li></ul></small></details><br />`;
 		cmd.push(`bans={bans}`);
-		buf += `Bans/Unbans: <input name="bans" /> <small>(separated by commas)</small><br /><br />`;
+		buf += `Bans/Unbans: <small>(separated by commas)</small><br /><br />`;
+		buf += `<textarea style="width: 100%" name="bans"></textarea><br />`;
 		buf += `<details class="readmore"><summary><u><strong>Clauses</strong></u></summary>`;
 		buf += `<p>The following rules can be added to challenges/tournaments to modify the style of play. `;
 		buf += `Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code>.</p>`;

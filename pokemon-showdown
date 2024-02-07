@@ -112,6 +112,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'validate-team':
 		{
 			ensureBuilt();
+			require('source-map-support/register');
 			var Teams = require('./dist/sim/teams.js').Teams;
 			var TeamValidator = require('./dist/sim/team-validator.js').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);

@@ -129,7 +129,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`The PotD is already set to ${species.name}`);
 		}
 		if (!species.exists) return this.errorReply(`Pokemon "${target}" not found.`);
-		if (!Dex.species.getLearnset(species.id)) {
+		if (!Dex.species.getFullLearnset(species.id).length) {
 			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
 		}
 		Config.potd = species.id;
@@ -986,7 +986,7 @@ export const commands: Chat.ChatCommands = {
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
 				`\t${id}: {learnset: {\n` +
 				Utils.sortBy(
-					Object.entries(Dex.species.getLearnsetData(id as ID)),
+					Object.entries(Dex.species.getLearnsetData(id as ID).learnset!),
 					([moveid]) => moveid
 				).map(([moveid, sources]) => (
 					`\t\t${moveid}: ["` + sources.join(`", "`) + `"],\n`
@@ -1309,6 +1309,11 @@ export const commands: Chat.ChatCommands = {
 
 	refreshpage(target, room, user) {
 		this.checkCan('lockdown');
+		if (user.lastCommand !== 'refreshpage') {
+			user.lastCommand = 'refreshpage';
+			this.errorReply(`Are you sure you wish to refresh the page for every user online?`);
+			return this.errorReply(`If you are sure, please type /refreshpage again to confirm.`);
+		}
 		Rooms.global.sendAll('|refresh|');
 		this.stafflog(`${user.name} used /refreshpage`);
 	},

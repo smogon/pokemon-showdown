@@ -305,7 +305,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn. The user heals 1/2 of its max HP during the charge turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Charges turn 1. Hits turn 2. No charge in sunlight. Heals 1/2 of the user's max HP, on charge.",
-		flags: {charge: 1, mirror: 1},
+		flags: {charge: 1, mirror: 1, metronome: 1},
 		breaksProtect: true,
 	},
 	razorwind: {
@@ -322,7 +322,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		desc: "Has a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. 100% chance to confuse the target. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Charges, then hits foe(s) turn 2. High crit ratio. Confuses target.",
-		flags: {charge: 1, mirror: 1},
+		flags: {charge: 1, mirror: 1, metronome: 1},
 		breaksProtect: true,
 	},
 	skullbash: {
@@ -345,7 +345,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		flags: {contact: 1, charge: 1, mirror: 1},
+		flags: {contact: 1, charge: 1, mirror: 1, metronome: 1},
 		breaksProtect: true,
 		desc: "This attack charges on the first turn and executes on the second. Raises the user's Defense, Special Defense, and Accuracy by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Raises user's Def, SpD, Acc by 1 on turn 1. Hits turn 2.",
@@ -364,7 +364,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				def: -1,
 			},
 		},
-		flags: {charge: 1, mirror: 1, distance: 1},
+		flags: {charge: 1, mirror: 1, distance: 1, metronome: 1},
 		breaksProtect: true,
 		desc: "Has a 30% chance to flinch the target and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Charges, then hits turn 2. 30% flinch. High crit.",
@@ -381,7 +381,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			status: 'par',
 		},
-		flags: {charge: 1, mirror: 1},
+		flags: {charge: 1, mirror: 1, metronome: 1},
 		breaksProtect: true,
 		desc: "Has a 100% chance to paralyze the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Charges turn 1. Hits turn 2. 100% paralyze.",
@@ -398,7 +398,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			chance: 100,
 			status: 'brn',
 		},
-		flags: {charge: 1, mirror: 1},
+		flags: {charge: 1, mirror: 1, metronome: 1},
 		breaksProtect: true,
 		desc: "Has a 100% chance to burn the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Charges turn 1. Hits turn 2. 100% burn.",
@@ -411,7 +411,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
-		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
+		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1, metronome: 1},
 		breaksProtect: true,
 		desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. If the user is holding a Power Herb, the move completes in one turn. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Bounces turn 1. Hits turn 2. 30% paralyze.",
@@ -430,7 +430,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				def: -1,
 			},
 		},
-		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
+		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1, metronome: 1},
 		breaksProtect: true,
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Flies up on first turn, then strikes the next turn. Lowers target's Def by 1 stage.",
@@ -451,7 +451,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Digs underground turn 1, strikes turn 2. Lowers target's Def by 1 stage.",
-		flags: {contact: 1, charge: 1, mirror: 1, nonsky: 1},
+		flags: {contact: 1, charge: 1, mirror: 1, nonsky: 1, metronome: 1},
 		breaksProtect: true,
 	},
 	dive: {
@@ -470,7 +470,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn. 100% chance to lower the target's Defense by one stage. This move removes the target's Substitute (if one is active), and bypasses Protect. This move is also a guaranteed critical hit.",
 		shortDesc: "Dives underwater turn 1, strikes turn 2. Lowers target's Def by 1 stage.",
-		flags: {contact: 1, charge: 1, mirror: 1, nonsky: 1},
+		flags: {contact: 1, charge: 1, mirror: 1, nonsky: 1, metronome: 1},
 		breaksProtect: true,
 	},
 	phantomforce: {
@@ -518,7 +518,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. Pokemon weighing 200kg or more cannot be lifted. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally or if the target has a substitute. Lowers the target's Defense by one stage. This move is a guaranteed critical hit. This move ignores Protection.",
 		shortDesc: "User and foe fly up turn 1. Damages on turn 2. Lowers target's Def by 1 stage.",
-		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1},
+		flags: {contact: 1, charge: 1, mirror: 1, gravity: 1, distance: 1, metronome: 1},
 		breaksProtect: true,
 	},
 	hyperbeam: {
@@ -1272,7 +1272,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 80,
 					category: "Special",
 					priority: 0,
-					flags: {futuremove: 1},
+					flags: {metronome: 1, futuremove: 1},
 					ignoreImmunity: false,
 					effectType: 'Move',
 					type: 'Normal',
@@ -2086,7 +2086,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Magikarp's Revenge",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, recharge: 1, protect: 1, mirror: 1, heal: 1},
+		flags: {contact: 1, recharge: 1, protect: 1, mirror: 1, heal: 1, metronome: 1},
 		noSketch: true,
 		drain: [1, 2],
 		onTry(pokemon) {

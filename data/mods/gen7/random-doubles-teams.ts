@@ -998,8 +998,7 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 
 		const data = this.randomDoublesData[species.id];
 
-		const randMoves = data.moves;
-		const movePool = (randMoves || Object.keys(Dex.species.getLearnset(species.id)!)).slice();
+		const movePool: string[] = [...(data.moves || this.dex.species.getMovePool(species.id))];
 		if (this.format.gameType === 'multi') {
 			// Random Multi Battle uses doubles move pools, but Ally Switch fails in multi battles
 			const allySwitch = movePool.indexOf('allyswitch');
@@ -1235,6 +1234,17 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 			item = 'Black Sludge';
 		}
 
+		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
+		if (species.baseSpecies === 'Basculin') {
+			forme = 'Basculin' + this.sample(['', '-Blue-Striped']);
+		}
+		if (species.baseSpecies === 'Keldeo') {
+			forme = 'Keldeo' + this.sample(['', '-Resolute']);
+		}
+		if (species.baseSpecies === 'Magearna') {
+			forme = 'Magearna' + this.sample(['', '-Original']);
+		}
+
 		let level: number;
 		if (this.adjustLevel) {
 			level = this.adjustLevel;
@@ -1374,19 +1384,17 @@ export class RandomGen7DoublesTeams extends RandomGen8Teams {
 				const currentSpeciesPool: Species[] = [];
 				// Check if the base species has a mega forme available
 				let canMega = false;
-				for (const poke of pokemonPool) {
+				for (const poke of pokemonPool[baseSpecies]) {
 					const species = this.dex.species.get(poke);
-					if (!hasMega && species.baseSpecies === baseSpecies && species.isMega) canMega = true;
+					if (!hasMega && species.isMega) canMega = true;
 				}
-				for (const poke of pokemonPool) {
+				for (const poke of pokemonPool[baseSpecies]) {
 					const species = this.dex.species.get(poke);
-					if (species.baseSpecies === baseSpecies) {
-						// Prevent multiple megas
-						if (hasMega && species.isMega) continue;
-						// Prevent base forme, if a mega is available
-						if (canMega && !species.isMega) continue;
-						currentSpeciesPool.push(species);
-					}
+					// Prevent multiple megas
+					if (hasMega && species.isMega) continue;
+					// Prevent base forme, if a mega is available
+					if (canMega && !species.isMega) continue;
+					currentSpeciesPool.push(species);
 				}
 				const species = this.sample(currentSpeciesPool);
 				if (!species.exists) continue;

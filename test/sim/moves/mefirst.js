@@ -10,7 +10,19 @@ describe(`Me First`, function () {
 		battle.destroy();
 	});
 
-	it(`Me First should fail to copy recharge turns from moves like Hyper Beam`, function () {
+	it(`should be selectable even if the user is Taunted or holds Assault Vest`, function () {
+		battle = common.gen(7).createBattle([[
+			{species: 'corphish', moves: ['sleeptalk']},
+			{species: 'aerodactyl', item: 'assaultvest', moves: ['mefirst']},
+		], [
+			{species: 'wynaut', moves: ['taunt', 'watergun']},
+		]]);
+		battle.makeChoices('switch 2', 'move taunt');
+		battle.makeChoices('move mefirst', 'move watergun');
+		assert.false.fullHP(battle.p2.active[0]);
+	});
+
+	it(`should not copy recharge turns from moves like Hyper Beam`, function () {
 		battle = common.gen(7).createBattle([[
 			{species: 'aerodactyl', moves: ['sleeptalk', 'mefirst']},
 		], [

@@ -229,6 +229,16 @@ describe('Transform', function () {
 		assert.false(battle.p1.active[0].transformed);
 		assert.cantMove(() => battle.choose('p1', 'move transform terastallize'));
 	});
+
+	it(`should not work if the user is Tera Stellar`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', ability: 'limber', moves: ['transform'], teraType: 'Stellar'},
+		], [
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move transform terastallize', 'auto');
+		assert.false(battle.p1.active[0].transformed);
+	});
 });
 
 describe('Transform [Gen 5]', function () {

@@ -1067,7 +1067,7 @@ export class TeamValidator {
 
 		const cantBreedNorEvolve = (species.eggGroups[0] === 'Undiscovered' && !species.prevo && !species.nfe);
 		const isLegendary = (cantBreedNorEvolve && !species.tags.includes('Paradox') && ![
-			'Pikachu', 'Unown', 'Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish',
+			'Pikachu', 'Unown', 'Dracozolt', 'Arctozolt', 'Dracovish', 'Arctovish', 'Gouging Fire', 'Raging Bolt', 'Iron Boulder', 'Iron Crown', 'Terapagos',
 		].includes(species.baseSpecies)) || [
 			'Manaphy', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala',
 		].includes(species.baseSpecies);
@@ -1391,7 +1391,7 @@ export class TeamValidator {
 			// father must be male
 			if (father.gender === 'N' || father.gender === 'F') continue;
 			// can't inherit from dex entries with no learnsets
-			if (!dex.species.getLearnset(father.id)) continue;
+			if (!dex.species.getLearnsetData(father.id).learnset) continue;
 			// something is clearly wrong if its only possible father is itself
 			// (exceptions: ExtremeSpeed Dragonite, Self-destruct Snorlax)
 			if (pokemonBlacklist.includes(father.id) && !['dragonite', 'snorlax'].includes(father.id)) continue;
@@ -1428,8 +1428,7 @@ export class TeamValidator {
 	 */
 	fatherCanLearn(baseSpecies: Species, species: Species, moves: ID[], eggGen: number, pokemonBlacklist: ID[],
 		noRecurse: boolean | undefined) {
-		let learnset = this.dex.species.getLearnset(species.id);
-		if (!learnset) return false;
+		if (!this.dex.species.getLearnsetData(species.id).learnset) return false;
 
 		if (species.id === 'smeargle') return true;
 		const canBreedWithSmeargle = species.eggGroups.includes('Field');
@@ -1437,12 +1436,10 @@ export class TeamValidator {
 		const allEggSources = new PokemonSources();
 		allEggSources.sourcesBefore = eggGen;
 		for (const move of moves) {
-			let curSpecies: Species | null = species;
 			const eggSources = new PokemonSources();
-			while (curSpecies) {
+			for (const {learnset, species: curSpecies} of this.dex.species.getFullLearnset(species.id)) {
 				const eggPokemon = curSpecies.prevo ? curSpecies.id : '';
-				learnset = this.dex.species.getLearnset(curSpecies.id);
-				if (learnset && learnset[move]) {
+				if (learnset[move]) {
 					for (const moveSource of learnset[move]) {
 						if (eggGen > 8 && parseInt(moveSource.charAt(0)) <= 8) continue;
 						if (parseInt(moveSource.charAt(0)) > eggGen) continue;
@@ -1461,7 +1458,6 @@ export class TeamValidator {
 					}
 				}
 				if (eggSources.sourcesBefore === eggGen) break;
-				curSpecies = this.learnsetParent(curSpecies);
 			}
 
 			if (eggSources.sourcesBefore === eggGen) continue;
@@ -1612,6 +1608,19 @@ export class TeamValidator {
 
 		if (species.baseSpecies === "Greninja" && toID(set.ability) === 'battlebond') {
 			set.species = "Greninja-Bond";
+		}
+
+		if (species.baseSpecies === "Unown" && dex.gen === 2) {
+			let resultBinary = '';
+			for (const iv of ['atk', 'def', 'spe', 'spa'] as const) {
+				resultBinary += set.ivs[iv].toString(2).padStart(5, '0').slice(1, 3);
+			}
+			const resultDecimal = Math.floor(parseInt(resultBinary, 2) / 10);
+			const expectedLetter = String.fromCharCode(resultDecimal + 65);
+			const unownLetter = species.forme || "A";
+			if (unownLetter !== expectedLetter) {
+				problems.push(`Unown has forme ${unownLetter}, but its DVs give it the forme ${expectedLetter}.`);
+			}
 		}
 		return problems;
 	}
@@ -2232,7 +2241,7 @@ export class TeamValidator {
 		if (dex.gen < 8 || this.format.mod === 'gen8dlc1') return null;
 		if (!pokemonGoData) {
 			// Handles forms and evolutions not obtainable from Pokemon GO
-			const otherSpecies = this.learnsetParent(species);
+			const otherSpecies = this.dex.species.learnsetParent(species);
 			// If a Pokemon is somehow not obtainable from Pokemon GO and it must be leveled up to be evolved,
 			// validation for the game should stop because it's more optimal to get the Pokemon outside of the game
 			if (otherSpecies && !species.evoLevel) {
@@ -2339,8 +2348,8 @@ export class TeamValidator {
 	/** Returns null if you can learn the move, or a string explaining why you can't learn it */
 	checkCanLearn(
 		move: Move,
-		s: Species,
-		setSources = this.allSources(s),
+		originalSpecies: Species,
+		setSources = this.allSources(originalSpecies),
 		set: Partial<PokemonSet> = {}
 	): string | null {
 		const dex = this.dex;
@@ -2348,12 +2357,10 @@ export class TeamValidator {
 
 		move = dex.moves.get(move);
 		const moveid = move.id;
-		const baseSpecies = dex.species.get(s);
-		let species: Species | null = baseSpecies;
+		const baseSpecies = dex.species.get(originalSpecies);
 
 		const format = this.format;
 		const ruleTable = dex.formats.getRuleTable(format);
-		const alreadyChecked: {[k: string]: boolean} = {};
 		const level = set.level || 100;
 
 		let cantLearnReason = null;
@@ -2385,227 +2392,211 @@ export class TeamValidator {
 		const canSketchPostGen7Moves = ruleTable.has('sketchpostgen7moves') || this.dex.currentMod === 'gen8bdsp';
 
 		let tradebackEligible = false;
-		while (species?.name && !alreadyChecked[species.id]) {
-			alreadyChecked[species.id] = true;
-			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
-			let learnset = dex.species.getLearnset(species.id);
-			if (!learnset) {
-				if ((species.changesFrom || species.baseSpecies) !== species.name) {
-					// forme without its own learnset
-					species = dex.species.get(species.changesFrom || species.baseSpecies);
-					// warning: formes with their own learnset, like Wormadam, should NOT
-					// inherit from their base forme unless they're freely switchable
-					continue;
-				}
-				if (species.isNonstandard) {
-					// It's normal for a nonstandard species not to have learnset data
+		const fullLearnset = dex.species.getFullLearnset(originalSpecies.id);
+		if (!fullLearnset.length) {
+			// It's normal for a nonstandard species not to have learnset data
 
-					// Formats should replace the `Obtainable Moves` rule if they want to
-					// allow pokemon without learnsets.
-					return ` can't learn any moves at all.`;
-				}
-				if (species.prevo && dex.species.getLearnset(toID(species.prevo))) {
-					learnset = dex.species.getLearnset(toID(species.prevo));
-					continue;
-				}
-				// should never happen
-				throw new Error(`Species with no learnset data: ${species.id}`);
-			}
-			const checkingPrevo = species.baseSpecies !== s.baseSpecies;
+			// Formats should replace the `Obtainable Moves` rule if they want to
+			// allow pokemon without learnsets.
+			return ` can't learn any moves at all.`;
+		}
+
+		for (const {species, learnset} of fullLearnset) {
+			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
+			const checkingPrevo = species.baseSpecies !== originalSpecies.baseSpecies;
 			if (checkingPrevo && !moveSources.size()) {
 				if (!setSources.babyOnly || !species.prevo) {
 					babyOnly = species.id;
 				}
 			}
 
-			let sources = learnset[moveid];
+			let sources = learnset[moveid] || [];
 			if (moveid === 'sketch') {
 				sketch = true;
 			} else if (learnset['sketch']) {
 				if (move.noSketch || move.isZ || move.isMax) {
 					cantLearnReason = `can't be Sketched.`;
-				} else if (move.gen > 7 && !canSketchPostGen7Moves) {
+				} else if (move.gen > 7 && !canSketchPostGen7Moves &&
+					(dex.gen === 8 ||
+						(dex.gen === 9 && ['gen9dlc1', 'gen9predlc'].includes(format.mod)))) {
 					cantLearnReason = `can't be Sketched because it's a Gen ${move.gen} move and Sketch isn't available in Gen ${move.gen}.`;
 				} else {
-					if (!sources || !moveSources.size()) sketch = true;
-					sources = learnset['sketch'].concat(sources || []);
+					if (!sources.length || !moveSources.size()) sketch = true;
+					sources = [...learnset['sketch'], ...sources];
 				}
 			}
 
-			if (typeof sources === 'string') sources = [sources];
-			if (sources) {
-				for (let learned of sources) {
-					// Every `learned` represents a single way a pokemon might
-					// learn a move. This can be handled one of several ways:
-					// `continue`
-					//   means we can't learn it
-					// `return null`
-					//   means we can learn it with no restrictions
-					//   (there's a way to just teach any pokemon of this species
-					//   the move in the current gen, like a TM.)
-					// `moveSources.add(source)`
-					//   means we can learn it only if obtained that exact way described
-					//   in source
-					// `moveSources.addGen(learnedGen)`
-					//   means we can learn it only if obtained at or before learnedGen
-					//   (i.e. get the pokemon however you want, transfer to that gen,
-					//   teach it, and transfer it to the current gen.)
+			for (let learned of sources) {
+				// Every `learned` represents a single way a pokemon might
+				// learn a move. This can be handled one of several ways:
+				// `continue`
+				//   means we can't learn it
+				// `return null`
+				//   means we can learn it with no restrictions
+				//   (there's a way to just teach any pokemon of this species
+				//   the move in the current gen, like a TM.)
+				// `moveSources.add(source)`
+				//   means we can learn it only if obtained that exact way described
+				//   in source
+				// `moveSources.addGen(learnedGen)`
+				//   means we can learn it only if obtained at or before learnedGen
+				//   (i.e. get the pokemon however you want, transfer to that gen,
+				//   teach it, and transfer it to the current gen.)
 
-					const learnedGen = parseInt(learned.charAt(0));
-					if (learnedGen < this.minSourceGen) {
-						if (!cantLearnReason) {
-							cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
-						}
+				const learnedGen = parseInt(learned.charAt(0));
+				if (learnedGen < this.minSourceGen) {
+					if (!cantLearnReason) {
+						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
+					}
+					continue;
+				}
+				if (noFutureGen && learnedGen > dex.gen) {
+					if (!cantLearnReason) {
+						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${dex.gen}.`;
+					}
+					continue;
+				}
+
+				// redundant
+				if (learnedGen <= moveSources.sourcesBefore) continue;
+
+				if (
+					baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8 &&
+					(dex.gen < 9 || learned.charAt(1) !== 'E')
+				) {
+					cantLearnReason = `is from a ${species.name} that can't be transferred to USUM to evolve into ${baseSpecies.name}.`;
+					continue;
+				}
+
+				const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
+				if (
+					learnedGen < 7 && setSources.isHidden && !canUseAbilityPatch &&
+					!dex.mod('gen' + learnedGen).species.get(baseSpecies.name).abilities['H']
+				) {
+					cantLearnReason = `can only be learned in gens without Hidden Abilities.`;
+					continue;
+				}
+
+				const ability = dex.abilities.get(set.ability);
+				if (dex.gen < 6 && ability.gen > learnedGen && !checkingPrevo) {
+					// You can evolve a transfered mon to reroll for its new Ability.
+					cantLearnReason = `is learned in gen ${learnedGen}, but the Ability ${ability.name} did not exist then.`;
+					continue;
+				}
+
+				if (!species.isNonstandard) {
+					// HMs can't be transferred
+					if (dex.gen >= 4 && learnedGen <= 3 && [
+						'cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive',
+					].includes(moveid)) {
+						cantLearnReason = `can't be transferred from Gen 3 to 4 because it's an HM move.`;
 						continue;
 					}
-					if (noFutureGen && learnedGen > dex.gen) {
-						if (!cantLearnReason) {
-							cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${dex.gen}.`;
-						}
+					if (dex.gen >= 5 && learnedGen <= 4 && [
+						'cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb',
+					].includes(moveid)) {
+						cantLearnReason = `can't be transferred from Gen 4 to 5 because it's an HM move.`;
 						continue;
 					}
+					// Defog and Whirlpool can't be transferred together
+					if (dex.gen >= 5 && ['defog', 'whirlpool'].includes(moveid) && learnedGen <= 4) blockedHM = true;
+				}
 
-					// redundant
-					if (learnedGen <= moveSources.sourcesBefore) continue;
-
-					if (
-						baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8 &&
-						(dex.gen < 9 || learned.charAt(1) !== 'E')
-					) {
-						cantLearnReason = `is from a ${species.name} that can't be transferred to USUM to evolve into ${baseSpecies.name}.`;
+				if (learned.charAt(1) === 'L') {
+					// special checking for level-up moves
+					if (level >= parseInt(learned.substr(2)) || learnedGen === 7) {
+						// we're past the required level to learn it
+						// (gen 7 level-up moves can be relearnered at any level)
+						// falls through to LMT check below
+					} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
+						// Pomeg Glitch
+						learned = learnedGen + 'Epomeg';
+					} else if ((!species.gender || species.gender === 'F') &&
+						learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
+						// available as egg move
+						learned = learnedGen + 'Eany';
+						// falls through to E check below
+					} else {
+						// this move is unavailable, skip it
+						cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
 						continue;
 					}
+				}
 
-					const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
-					if (
-						learnedGen < 7 && setSources.isHidden && !canUseAbilityPatch &&
-						!dex.mod('gen' + learnedGen).species.get(baseSpecies.name).abilities['H']
-					) {
-						cantLearnReason = `can only be learned in gens without Hidden Abilities.`;
-						continue;
-					}
-
-					const ability = dex.abilities.get(set.ability);
-					if (dex.gen < 6 && ability.gen > learnedGen && !checkingPrevo) {
-						// You can evolve a transfered mon to reroll for its new Ability.
-						cantLearnReason = `is learned in gen ${learnedGen}, but the Ability ${ability.name} did not exist then.`;
-						continue;
-					}
-
-					if (!species.isNonstandard) {
-						// HMs can't be transferred
-						if (dex.gen >= 4 && learnedGen <= 3 && [
-							'cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive',
-						].includes(moveid)) {
-							cantLearnReason = `can't be transferred from Gen 3 to 4 because it's an HM move.`;
-							continue;
-						}
-						if (dex.gen >= 5 && learnedGen <= 4 && [
-							'cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb',
-						].includes(moveid)) {
-							cantLearnReason = `can't be transferred from Gen 4 to 5 because it's an HM move.`;
-							continue;
-						}
-						// Defog and Whirlpool can't be transferred together
-						if (dex.gen >= 5 && ['defog', 'whirlpool'].includes(moveid) && learnedGen <= 4) blockedHM = true;
-					}
-
-					if (learned.charAt(1) === 'L') {
-						// special checking for level-up moves
-						if (level >= parseInt(learned.substr(2)) || learnedGen === 7) {
-							// we're past the required level to learn it
-							// (gen 7 level-up moves can be relearnered at any level)
-							// falls through to LMT check below
-						} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
-							// Pomeg Glitch
-							learned = learnedGen + 'Epomeg';
-						} else if ((!species.gender || species.gender === 'F') &&
-							learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
-							// available as egg move
-							learned = learnedGen + 'Eany';
-							// falls through to E check below
-						} else {
-							// this move is unavailable, skip it
-							cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
-							continue;
-						}
-					}
-
-					// Gen 8+ egg moves can be taught to any pokemon from any source
-					if (learnedGen >= 8 && learned.charAt(1) === 'E' && learned.slice(1) !== 'Eany' &&
-						learned.slice(1) !== 'Epomeg' || 'LMTR'.includes(learned.charAt(1))) {
-						if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
-							// current-gen level-up, TM or tutor moves:
-							//   always available
-							if (!(learnedGen >= 8 && learned.charAt(1) === 'E') && babyOnly) {
-								if (setSources.isFromPokemonGo && species.evoLevel) {
-									cantLearnReason = `is from a prevo, which is incompatible with its Pokemon GO origin.`;
-									continue;
-								} else {
-									setSources.babyOnly = babyOnly;
-								}
-							}
-							if (!moveSources.moveEvoCarryCount) return null;
-						}
-						// past-gen level-up, TM, or tutor moves:
-						//   available as long as the source gen was or was before this gen
-						if (learned.charAt(1) === 'R') {
-							moveSources.restrictedMove = moveid;
-						}
-						limit1 = false;
-						moveSources.addGen(learnedGen);
-					} else if (learned.charAt(1) === 'E') {
-						// egg moves:
-						//   only if hatched from an egg
-						let limitedEggMove: ID | null | undefined = undefined;
-						if (learned.slice(1) === 'Eany') {
-							if (species.gender === 'F') {
-								limitedEggMove = move.id;
-								moveSources.levelUpEggMoves = [move.id];
+				// Gen 8+ egg moves can be taught to any pokemon from any source
+				if (learnedGen >= 8 && learned.charAt(1) === 'E' && learned.slice(1) !== 'Eany' &&
+					learned.slice(1) !== 'Epomeg' || 'LMTR'.includes(learned.charAt(1))) {
+					if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
+						// current-gen level-up, TM or tutor moves:
+						//   always available
+						if (!(learnedGen >= 8 && learned.charAt(1) === 'E') && babyOnly) {
+							if (setSources.isFromPokemonGo && species.evoLevel) {
+								cantLearnReason = `is from a prevo, which is incompatible with its Pokemon GO origin.`;
+								continue;
 							} else {
-								limitedEggMove = null;
+								setSources.babyOnly = babyOnly;
 							}
-						} else if (learned.slice(1) === 'Epomeg') {
-							// Pomeg glitched moves have to be from an egg but since they aren't true egg moves,
-							// there should be no breeding restrictions
-							moveSources.pomegEggMoves = [move.id];
-						} else if (learnedGen < 6) {
-							limitedEggMove = move.id;
 						}
-						learned = learnedGen + 'E' + (species.prevo ? species.id : '');
-						if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
-							// can tradeback
-							moveSources.add('1ET' + learned.slice(2), limitedEggMove);
-						}
-						moveSources.add(learned, limitedEggMove);
-					} else if (learned.charAt(1) === 'S') {
-						// event moves:
-						//   only if that was the source
-						// Event Pokémon:
-						// 	Available as long as the past gen can get the Pokémon and then trade it back.
-						if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
-							// can tradeback
-							moveSources.add('1ST' + learned.slice(2) + ' ' + species.id);
-						}
-						moveSources.add(learned + ' ' + species.id);
-						const eventLearnset = dex.species.getLearnsetData(species.id);
-						if (eventLearnset.eventData?.[parseInt(learned.charAt(2))].emeraldEventEgg && learnedGen === 3) {
-							moveSources.pomegEventEgg = learned + ' ' + species.id;
-						}
-					} else if (learned.charAt(1) === 'D') {
-						// DW moves:
-						//   only if that was the source
-						moveSources.add(learned + species.id);
-						moveSources.dreamWorldMoveCount++;
-					} else if (learned.charAt(1) === 'V' && this.minSourceGen < learnedGen) {
-						// Virtual Console or Let's Go transfer moves:
-						//   only if that was the source
-						if (learned === '8V' && setSources.isFromPokemonGo && babyOnly && species.evoLevel) {
-							cantLearnReason = `is from a prevo, which is incompatible with its Pokemon GO origin.`;
-							continue;
-						}
-						moveSources.add(learned);
+						if (!moveSources.moveEvoCarryCount) return null;
 					}
+					// past-gen level-up, TM, or tutor moves:
+					//   available as long as the source gen was or was before this gen
+					if (learned.charAt(1) === 'R') {
+						moveSources.restrictedMove = moveid;
+					}
+					limit1 = false;
+					moveSources.addGen(learnedGen);
+				} else if (learned.charAt(1) === 'E') {
+					// egg moves:
+					//   only if hatched from an egg
+					let limitedEggMove: ID | null | undefined = undefined;
+					if (learned.slice(1) === 'Eany') {
+						if (species.gender === 'F') {
+							limitedEggMove = move.id;
+							moveSources.levelUpEggMoves = [move.id];
+						} else {
+							limitedEggMove = null;
+						}
+					} else if (learned.slice(1) === 'Epomeg') {
+						// Pomeg glitched moves have to be from an egg but since they aren't true egg moves,
+						// there should be no breeding restrictions
+						moveSources.pomegEggMoves = [move.id];
+					} else if (learnedGen < 6) {
+						limitedEggMove = move.id;
+					}
+					learned = learnedGen + 'E' + (species.prevo ? species.id : '');
+					if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
+						// can tradeback
+						moveSources.add('1ET' + learned.slice(2), limitedEggMove);
+					}
+					moveSources.add(learned, limitedEggMove);
+				} else if (learned.charAt(1) === 'S') {
+					// event moves:
+					//   only if that was the source
+					// Event Pokémon:
+					// 	Available as long as the past gen can get the Pokémon and then trade it back.
+					if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
+						// can tradeback
+						moveSources.add('1ST' + learned.slice(2) + ' ' + species.id);
+					}
+					moveSources.add(learned + ' ' + species.id);
+					const eventLearnset = dex.species.getLearnsetData(species.id);
+					if (eventLearnset.eventData?.[parseInt(learned.charAt(2))].emeraldEventEgg && learnedGen === 3) {
+						moveSources.pomegEventEgg = learned + ' ' + species.id;
+					}
+				} else if (learned.charAt(1) === 'D') {
+					// DW moves:
+					//   only if that was the source
+					moveSources.add(learned + species.id);
+					moveSources.dreamWorldMoveCount++;
+				} else if (learned.charAt(1) === 'V' && this.minSourceGen < learnedGen) {
+					// Virtual Console or Let's Go transfer moves:
+					//   only if that was the source
+					if (learned === '8V' && setSources.isFromPokemonGo && babyOnly && species.evoLevel) {
+						cantLearnReason = `is from a prevo, which is incompatible with its Pokemon GO origin.`;
+						continue;
+					}
+					moveSources.add(learned);
 				}
 			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
@@ -2636,9 +2627,6 @@ export class TeamValidator {
 					moveSources.moveEvoCarryCount = 1;
 				}
 			}
-
-			// also check to see if the mon's prevo or freely switchable formes can learn this move
-			species = this.learnsetParent(species);
 		}
 
 		if (limit1 && sketch) {
@@ -2660,7 +2648,7 @@ export class TeamValidator {
 		}
 		setSources.restrictiveMoves.push(move.name);
 
-		const checkedSpecies = babyOnly ? species : baseSpecies;
+		const checkedSpecies = babyOnly ? fullLearnset[fullLearnset.length - 1].species : baseSpecies;
 		if (checkedSpecies && setSources.isFromPokemonGo &&
 			(setSources.pokemonGoSource === 'purified' || checkedSpecies.id === 'mew')) {
 			// Pokemon that cannot be sent from Pokemon GO to Let's Go can only access Let's Go moves through HOME
@@ -2715,31 +2703,6 @@ export class TeamValidator {
 		}
 
 		if (babyOnly) setSources.babyOnly = babyOnly;
-		return null;
-	}
-
-	learnsetParent(species: Species) {
-		// Own Tempo Rockruff and Battle Bond Greninja are special event formes
-		// that are visually indistinguishable from their base forme but have
-		// different learnsets. To prevent a leak, we make them show up as their
-		// base forme, but hardcode their learnsets into Rockruff-Dusk and
-		// Greninja-Ash
-		if (['Gastrodon', 'Pumpkaboo', 'Sinistea', 'Tatsugiri'].includes(species.baseSpecies) && species.forme) {
-			return this.dex.species.get(species.baseSpecies);
-		} else if (species.name === 'Lycanroc-Dusk') {
-			return this.dex.species.get('Rockruff-Dusk');
-		} else if (species.name === 'Greninja-Bond') {
-			return null;
-		} else if (species.prevo) {
-			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
-			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
-			species = this.dex.species.get(species.prevo);
-			if (species.gen > Math.max(2, this.dex.gen)) return null;
-			return species;
-		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
-			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
-			return this.dex.species.get(species.changesFrom);
-		}
 		return null;
 	}
 

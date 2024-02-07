@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import {FS, Utils} from '../lib';
+import {FS, Utils, type Streams} from '../lib';
 import type {PartialModlogEntry} from './modlog';
 
 interface RoomlogOptions {
@@ -210,12 +210,15 @@ export class Roomlog {
 	attributedUhtmlchange(user: User, name: string, message: string) {
 		const start = `/uhtmlchange ${name},`;
 		const fullMessage = this.withTimestamp(`|c|${user.getIdentity()}|${start}${message}`);
+		let matched = false;
 		for (const [i, line] of this.log.entries()) {
 			if (this.parseChatLine(line)?.message.startsWith(start)) {
 				this.log[i] = fullMessage;
+				matched = true;
 				break;
 			}
 		}
+		if (!matched) this.log.push(fullMessage);
 		this.broadcastBuffer.push(fullMessage);
 	}
 	parseChatLine(line: string) {

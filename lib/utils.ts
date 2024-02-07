@@ -335,6 +335,20 @@ export function deepClone(obj: any): any {
 	return clone;
 }
 
+export function deepFreeze<T>(obj: T): T {
+	if (obj === null || typeof obj !== 'object') return obj;
+	// support objects with reference loops
+	if (Object.isFrozen(obj)) return obj;
+
+	Object.freeze(obj);
+	if (Array.isArray(obj)) {
+		for (const elem of obj) deepFreeze(elem);
+	} else {
+		for (const elem of Object.values(obj)) deepFreeze(elem);
+	}
+	return obj;
+}
+
 export function levenshtein(s: string, t: string, l: number): number {
 	// Original levenshtein distance function by James Westgate, turned out to be the fastest
 	const d: number[][] = [];

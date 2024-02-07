@@ -42,8 +42,9 @@ export type ReplayRow = {
 	 * 1 = private (with or without password)
 	 * 2 = NOT USED; ONLY USED IN PREPREPLAY
 	 * 3 = deleted
+	 * 10 = autosaved
 	 */
-	private: 0 | 1 | 2 | 3,
+	private: 0 | 1 | 2 | 3 | 10,
 	password: string | null,
 };
 type Replay = Omit<ReplayRow, 'formatid' | 'players' | 'password' | 'views'> & {
@@ -108,7 +109,8 @@ export const Replays = new class {
 					players: replayData.players,
 				});
 			}
-		} catch {
+		} catch (e: any) {
+			if (e?.routine !== 'NewUniquenessConstraintViolationError') throw e;
 			await replays.update(replay.id, {
 				log: replayData.log,
 				inputlog: replayData.inputlog,

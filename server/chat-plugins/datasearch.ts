@@ -180,7 +180,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
-
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		if (!target.includes('mod=')) {
+			const dex = defaultFormat.dex;
+			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
+		}
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
@@ -227,7 +231,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
-
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		if (!target.includes('mod=')) {
+			const dex = defaultFormat.dex;
+			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
+		}
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
@@ -355,7 +363,7 @@ export const commands: Chat.ChatCommands = {
 			`- <code>zmove</code>, <code>max</code>, or <code>gmax</code> as parameters will search for Z-Moves, Max Moves, and G-Max Moves respectively.<br/>` +
 			`- Move targets must be preceded with <code>targets </code>; e.g. <code>targets user</code> searches for moves that target the user.<br/>` +
 			`- Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, and user.<br/>` +
-			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, instruct, mefirst, mimic, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
+			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, instruct, metronome, mimic, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
 			`- <code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`- A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`</details><br/>` +
@@ -387,7 +395,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse('/help itemsearch');
 		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
-		if (targetGen) target += ` maxgen${targetGen}`;
+		if (targetGen) target = `maxgen${targetGen} ${target}`;
 
 		const response = await runSearch({
 			target,
@@ -1380,8 +1388,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
 		'allyanim', 'bypasssub', 'bite', 'bullet', 'cantusetwice', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore',
-		'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'mirror', 'mustpressure', 'noassist', 'nonsky', 'noparentalbond',
-		'nosleeptalk', 'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing', 'snatch', 'sound', 'wind',
+		'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'metronome', 'mirror', 'mustpressure', 'noassist', 'nonsky',
+		'noparentalbond', 'nosleeptalk', 'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing', 'snatch', 'sound',
+		'wind',
 
 		// Not flags directly from move data, but still useful to sort by
 		'highcrit', 'multihit', 'ohko', 'protection', 'secondary',
@@ -1780,47 +1789,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		};
 	}
 
-	const getFullLearnsetOfPokemon = (species: Species, natDex: boolean) => {
-		let usedSpecies: Species = Utils.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
-		if (!usedSpeciesLearnset) {
-			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.baseSpecies));
-			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id) || {});
-		}
-		const lsetData = new Set<string>();
-		for (const move in usedSpeciesLearnset) {
-			const learnset = mod.species.getLearnset(usedSpecies.id);
-			if (!learnset) break;
-			const sources = learnset[move];
-			for (const learned of sources) {
-				const sourceGen = parseInt(learned.charAt(0));
-				if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen >= 9 || natDex)) lsetData.add(move);
-			}
-		}
-
-		while (usedSpecies.prevo) {
-			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.prevo));
-			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
-			for (const move in usedSpeciesLearnset) {
-				const learnset = mod.species.getLearnset(usedSpecies.id);
-				if (!learnset) break;
-				const sources = learnset[move];
-				for (const learned of sources) {
-					const sourceGen = parseInt(learned.charAt(0));
-					if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen === 9 || natDex)) lsetData.add(move);
-				}
-			}
-		}
-
-		return lsetData;
-	};
-
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	const validMoves = new Set(Object.keys(mod.data.Moves));
+	const validMoves = new Set(Object.keys(mod.data.Moves)) as Set<ID>;
 	for (const mon of targetMons) {
 		const species = mod.species.get(mon.name);
-		const lsetData = getFullLearnsetOfPokemon(species, !!nationalSearch);
+		const lsetData = mod.species.getMovePool(species.id, !!nationalSearch);
 		// This pokemon's learnset needs to be excluded, so we perform a difference operation
 		// on the valid moveset and this pokemon's moveset.
 		if (mon.shouldBeExcluded) {
@@ -1846,7 +1820,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		if (move.gen <= mod.gen) {
 			if (
 				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
-				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past"].includes(move.isNonstandard))
+				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past", "Unobtainable"].includes(move.isNonstandard))
 			) {
 				continue;
 			} else {
