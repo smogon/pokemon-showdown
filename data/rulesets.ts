@@ -513,6 +513,29 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 	},
+	forcemonocolor: {
+		effectType: 'ValidatorRule',
+		name: 'Force Monocolor',
+		desc: `Forces all teams to have Pok&eacute;mon of the same color. Usage: Force Monocolor = [Color], e.g. "Force Monocolor = Blue"`,
+		hasValue: true,
+		onValidateRule(value) {
+			const validColors = ["Black", "Blue", "Brown", "Gray", "Green", "Pink", "Purple", "Red", "White", "Yellow"];
+			if (!validColors.map(this.dex.toID).includes(this.dex.toID(value))) {
+				throw new Error(`Invalid color "${value}"`);
+			}
+		},
+		onValidateSet(set) {
+			const color = this.toID(this.ruleTable.valueRules.get('forcemonocolor'));
+			let dex = this.dex;
+			if (dex.gen < 5) {
+				dex = dex.forGen(5);
+			}
+			const species = dex.species.get(set.species);
+			if (this.toID(species.color) !== color) {
+				return [`${set.species} must be the color ${color}.`];
+			}
+		},
+	},
 	forceteratype: {
 		effectType: 'ValidatorRule',
 		name: 'Force Tera Type',
