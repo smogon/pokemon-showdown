@@ -601,6 +601,37 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Lasen
+	idealizedworld: {
+		shortDesc: "Removes everything on Switchin.",
+		name: "Idealized World",
+		onStart(pokemon) {
+			const target = pokemon.side.foe;
+			this.add('-ability', pokemon, 'Idealized World');
+			const displayText = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			for (const targetCondition of Object.keys(target.sideConditions)) {
+				if (target.removeSideCondition(targetCondition) && displayText.includes(targetCondition)) {
+					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] ability: Idealized World', '[of] ' + pokemon);
+				}
+			}
+			for (const sideCondition of Object.keys(pokemon.side.sideConditions)) {
+				if (pokemon.side.removeSideCondition(sideCondition) && displayText.includes(sideCondition)) {
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Idealized World', '[of] ' + pokemon);
+				}
+			}
+			this.field.clearTerrain();
+			this.field.clearWeather();
+			for (const pseudoWeather of Object.keys(this.field.pseudoWeather)) {
+				this.field.removePseudoWeather(pseudoWeather);
+			}
+			this.add('-clearallboost');
+			for (const poke of this.getAllActive()) {
+				poke.clearBoosts();
+			}
+		},
+		flags: {},
+	},
+
 	// Lumari
 	pyrotechnic: {
 		shortDesc: "Critical hits are guaranteed when foe is burned.",

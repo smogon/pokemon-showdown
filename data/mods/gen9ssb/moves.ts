@@ -1084,6 +1084,55 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		contestType: "Clever",
 	},
 
+	// Lasen
+	riseabove: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Magnet Rise + Aqua Ring",
+		name: "Rise Above",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(pokemon) {
+			this.add('-anim', pokemon, 'Magnet Rise', pokemon);
+			this.add('-anim', pokemon, 'Quiver Dance', pokemon);
+		},
+		volatileStatus: 'riseabove',
+		onTry(source, target, move) {
+			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
+
+			// Additional Gravity check for Z-move variant
+			if (this.field.getPseudoWeather('Gravity')) {
+				this.add('cant', source, 'move: Gravity', move);
+				return null;
+			}
+		},
+		condition: {
+			duration: 5,
+			onStart(target) {
+				this.add('-start', target, 'Rise Above');
+			},
+			onImmunity(type) {
+				if (type === 'Ground') return false;
+			},
+			onResidualOrder: 6,
+			onResidual(pokemon) {
+				this.heal(pokemon.baseMaxhp / 16);
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Rise Above');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Steel",
+	},
+
 	// Loethalion
 	darkmooncackle: {
 		accuracy: 100,
@@ -2583,6 +2632,87 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (target && ['raindance', 'primordialsea', 'stormsurge'].includes(target.effectiveWeather())) {
 				move.accuracy = true;
 			}
+		},
+	},
+	gravity: {
+		inherit: true,
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
+					return 7;
+				}
+				return 5;
+			},
+			onFieldStart(target, source) {
+				if (source?.hasAbility('persistent')) {
+					this.add('-fieldstart', 'move: Gravity', '[persistent]');
+				} else {
+					this.add('-fieldstart', 'move: Gravity');
+				}
+				for (const pokemon of this.getAllActive()) {
+					let applies = false;
+					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
+						applies = true;
+						this.queue.cancelMove(pokemon);
+						pokemon.removeVolatile('twoturnmove');
+					}
+					if (pokemon.volatiles['skydrop']) {
+						applies = true;
+						this.queue.cancelMove(pokemon);
+
+						if (pokemon.volatiles['skydrop'].source) {
+							this.add('-end', pokemon.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
+						}
+						pokemon.removeVolatile('skydrop');
+						pokemon.removeVolatile('twoturnmove');
+					}
+					if (pokemon.volatiles['magnetrise']) {
+						applies = true;
+						delete pokemon.volatiles['magnetrise'];
+					}
+					if (pokemon.volatiles['riseabove']) {
+						applies = true;
+						delete pokemon.volatiles['riseabove'];
+					}
+					if (pokemon.volatiles['telekinesis']) {
+						applies = true;
+						delete pokemon.volatiles['telekinesis'];
+					}
+					if (applies) this.add('-activate', pokemon, 'move: Gravity');
+				}
+			},
+			onModifyAccuracy(accuracy) {
+				if (typeof accuracy !== 'number') return;
+				return this.chainModify([6840, 4096]);
+			},
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (this.dex.moves.get(moveSlot.id).flags['gravity']) {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
+			onBeforeMovePriority: 6,
+			onBeforeMove(pokemon, target, move) {
+				if (move.flags['gravity'] && !move.isZ) {
+					this.add('cant', pokemon, 'move: Gravity', move);
+					return false;
+				}
+			},
+			onModifyMove(move, pokemon, target) {
+				if (move.flags['gravity'] && !move.isZ) {
+					this.add('cant', pokemon, 'move: Gravity', move);
+					return false;
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 2,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Gravity');
+			},
 		},
 	},
 };

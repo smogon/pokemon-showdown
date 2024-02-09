@@ -217,6 +217,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Attack of Opportunity',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', shiny: 1024,
 	},
+	Lasen: {
+		species: 'Zekrom', ability: 'Idealized World', item: 'Leftovers', gender: 'M',
+		moves: ['Volt Switch', 'Fusion Bolt', 'Dragon Claw'],
+		signatureMove: 'Rise Above',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fire',
+	},
 	Loethalion: {
 		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
 		moves: [['Esper Wing', 'Lumina Crash', 'Psychic Noise'], ['Agility', 'Calm Mind'], ['Draining Kiss', 'Matcha Gotcha']],

@@ -477,6 +477,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Krytocon')}|D:`);
 		},
 	},
+	lasen: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Lasen')}|That's a Hungarian yield sign, easy Budapest guess.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Lasen')}|Will give QC 2/2 after implementation.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Lasen')}|I'm out and NOT about...`);
+		},
+	},
 	loethalion: {
 		noCopy: true,
 		onStart(pokemon) {
