@@ -83,7 +83,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	lightningrod: {
 		onFoeRedirectTarget(target, source, source2, move) {
-			if (move.type !== 'Electric') return;
+			// don't count Hidden Power as Electric-type
+			if (this.dex.moves.get(move.id).type !== 'Electric') return;
 			if (this.validTarget(this.effectState.target, source, move.target)) {
 				return this.effectState.target;
 			}
