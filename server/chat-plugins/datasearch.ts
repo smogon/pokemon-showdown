@@ -2597,8 +2597,8 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 		break;
 	}
 	let gen;
+	const dex = Dex.mod(formatid).includeData();
 	if (!format.exists) {
-		const dex = Dex.mod(formatid).includeData();
 		// can happen if you hotpatch formats without hotpatching chat
 		if (!dex) return {error: `"${formatid}" is not a supported format.`};
 
@@ -2641,6 +2641,9 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	const moveNames = [];
 	for (const arg of targets) {
 		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
+			if (gen < 5) {
+				return {error: "Hidden abilities exist only in generations 5 and later."};
+			}
 			setSources.isHidden = true;
 			continue;
 		}
@@ -2669,6 +2672,34 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 
 	let buffer = `In ${formatName}, `;
 	if (setSources.isHidden) {
+		const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
+		if (!setSources.sourcesBefore && !canUseAbilityPatch) {
+			const learnset = dex.species.getLearnsetData(species.id);
+			for (const source of setSources.sources) {
+				if (source.charAt(1) === 'S' && learnset.eventData) {
+					const eventData = learnset.eventData[parseInt(source.substr(2))];
+					const hiddenAbilityProblem = validator.validateEventHiddenAbility(
+						species.name, true, eventData, ` because it has a move only available from an event`
+					);
+					if (hiddenAbilityProblem) {
+						setSources.sources = setSources.sources.filter(invalidSource => source !== invalidSource);
+						if (!setSources.sources.length) {
+							problems.push(hiddenAbilityProblem);
+						}
+					}
+				}
+			}
+		}
+		if (species.maleOnlyHidden && setSources.sourcesBefore < 5) {
+			for (const source of setSources.sources) {
+				if (source.charAt(1) === 'E') {
+					setSources.sources = setSources.sources.filter(invalidSource => source !== invalidSource);
+					if (!setSources.sources.length) {
+						problems.push(`${species.name} has an unbreedable Hidden Ability - it can't use egg moves.`);
+					}
+				}
+			}
+		}
 		buffer += `${species.abilities['H'] || 'HA'} `;
 	}
 	buffer += `${species.name}` + (problems.length ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + toListString(moveNames);
