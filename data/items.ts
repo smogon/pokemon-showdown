@@ -7173,6 +7173,16 @@ export const Items: {[itemid: string]: ItemData} = {
 			},
 		},
 		onUpdate(pokemon) {
+			const itemUpdateIgnoredAbilities = [('grimneigh' as ID), ('beastboost' as ID), 
+				('soulheart' as ID), ('chillingneigh' as ID), ('moxie' as ID)];
+			for (const action of this.queue) {
+				const ignoredAbility = itemUpdateIgnoredAbilities.includes(pokemon.ability);
+				const passesFaintCheck = this.faintQueue.length > 0;
+				const ignoreAbilityAndFaintCheck = ignoredAbility && passesFaintCheck;
+				if (action.choice === 'runSwitch' || ignoreAbilityAndFaintCheck) {
+					return;
+				}
+			}
 			let activate = false;
 			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
