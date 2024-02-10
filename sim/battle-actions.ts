@@ -1902,6 +1902,13 @@ export class BattleActions {
 			this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 		}
 
+		if (pokemon.species.name === 'Morpeko-Hangry') {
+			pokemon.baseSpecies = this.battle.dex.species.get('Morpeko-Hangry');
+			pokemon.details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+			this.battle.add('detailschange', pokemon, pokemon.details);
+		}
+
 		const type = pokemon.teraType;
 		this.battle.add('-terastallize', pokemon, type);
 		pokemon.terastallized = type;
