@@ -224,11 +224,8 @@ export class BattleActions {
 		zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon
 	) {
 		pokemon.activeMoveActions++;
-		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
-		
-
+		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);		
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
-		
 		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
 			const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, baseMove);
@@ -244,8 +241,7 @@ export class BattleActions {
 		} else if (maxMove) {
 			move = this.getActiveMaxMove(baseMove, pokemon);
 		}
-		//console.log(move)
-		let target_aux
+
 		if (move.target === 'randomNormal'){
 			target = this.battle.getRandomTarget(pokemon, move);
 		}
