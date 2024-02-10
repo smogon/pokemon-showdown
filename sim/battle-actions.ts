@@ -245,9 +245,7 @@ export class BattleActions {
 		if (move.target === 'randomNormal'){
 			target = this.battle.getRandomTarget(pokemon, move);
 		}
-			
-
-
+		
 		move.isExternal = externalMove;
 
 		this.battle.setActiveMove(move, pokemon, target);
