@@ -336,7 +336,7 @@ export class Pokemon {
 				move = this.battle.dex.moves.get('hiddenpower');
 			}
 			let PPUps = this.set.movePPUps ? this.set.movePPUps[this.set.moves.indexOf(moveid)] : 3;
-			if (PPUps < 0) PPUps = 3; 
+			if (PPUps < 0) PPUps = 3;
 			let basepp = (move.noPPBoosts || move.isZ) ? move.pp : move.pp * (5 + PPUps) / 5;
 			if (this.battle.gen < 3) basepp = Math.min(61, basepp);
 			this.baseMoveSlots.push({
