@@ -55,6 +55,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		flags: {},
 	},
+	hustle: {
+		inherit: true,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			const physicalTypes = ['Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel'];
+			if (move.category === 'Physical' || physicalTypes.includes(move.type)) {
+				return this.chainModify([3277, 4096]);
+			}
+		},
+	},
 	intimidate: {
 		inherit: true,
 		onStart(pokemon) {
