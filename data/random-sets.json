@@ -549,7 +549,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Giga Drain", "Psyshock", "Substitute"],
+                "movepool": ["Calm Mind", "Giga Drain", "Psychic", "Psyshock", "Substitute"],
                 "teraTypes": ["Steel"]
             }
         ]
