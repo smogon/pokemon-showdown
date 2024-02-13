@@ -2519,7 +2519,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aquajet", "batonpass", "bulkup", "icepunch", "return", "substitute", "waterfall"]
+                "movepool": ["aquajet", "bulkup", "icepunch", "return", "substitute", "waterfall"]
             }
         ]
     },
