@@ -5865,12 +5865,12 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Body Press", "Coil", "Iron Tail", "Rest"],
-                "teraTypes": ["Electric", "Fighting", "Ghost"]
+                "teraTypes": ["Electric", "Fighting"]
             },
             {
                 "role": "Bulky Support",
                 "movepool": ["Body Press", "Iron Head", "Rest", "Shed Tail", "Spikes", "Stealth Rock"],
-                "teraTypes": ["Electric", "Poison"]
+                "teraTypes": ["Electric", "Ghost", "Poison"]
             }
         ]
     },
