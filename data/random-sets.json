@@ -4480,7 +4480,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Hurricane", "Quiver Dance", "Revelation Dance", "Roost"],
-                "teraTypes": ["Fighting", "Ghost", "Ground"]
+                "teraTypes": ["Fighting", "Ghost"]
             }
         ]
     },
