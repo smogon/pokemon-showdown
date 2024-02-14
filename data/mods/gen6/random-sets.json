@@ -2967,8 +2967,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["fakeout", "knockoff", "return", "uturn"],
-                "preferredTypes": ["Dark"]
+                "movepool": ["fakeout", "knockoff", "return", "uturn"]
             }
         ]
     },

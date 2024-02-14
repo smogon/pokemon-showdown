@@ -483,7 +483,7 @@ export class RandomTeams {
 			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
-		if (teamDetails.toxicSpikes && teamDetails.toxicSpikes) {
+		if (teamDetails.toxicSpikes) {
 			if (movePool.includes('toxicspikes')) this.fastPop(movePool, movePool.indexOf('toxicspikes'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
@@ -1488,7 +1488,7 @@ export class RandomTeams {
 		if (counter.get('speedsetup') && role === 'Bulky Setup') return 'Weakness Policy';
 		if (
 			!counter.get('Status') &&
-			(!['Fast Attacker', 'Wallbreaker', 'Tera Blast user'].includes(role))
+			!['Fast Attacker', 'Wallbreaker', 'Tera Blast user'].includes(role)
 		) {
 			return 'Assault Vest';
 		}
