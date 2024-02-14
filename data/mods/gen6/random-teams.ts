@@ -208,7 +208,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			[SETUP, HAZARDS],
 			[SETUP, badWithSetup],
 			[PHYSICAL_SETUP, PHYSICAL_SETUP],
-			[SPEED_SETUP, ['quickattack', 'suckerpunch']],
+			[SPEED_SETUP, 'quickattack'],
 			['defog', HAZARDS],
 			[['fakeout', 'uturn'], ['switcheroo', 'trick']],
 			['substitute', PIVOT_MOVES],
@@ -761,7 +761,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
-		if (ability === 'Unburden') return 'Sitrus Berry';
+		if (ability === 'Unburden') return (species.id === 'hitmonlee') ? 'White Herb' : 'Sitrus Berry';
 		if (moves.has('acrobatics')) return '';
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {

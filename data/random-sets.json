@@ -399,7 +399,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Fire Blast", "Psyshock", "Shell Side Arm", "Trick Room"],
+                "movepool": ["Fire Blast", "Psychic", "Shell Side Arm", "Trick Room"],
                 "teraTypes": ["Poison", "Psychic"]
             },
             {
@@ -3249,7 +3249,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Earth Power", "Judgment", "Recover", "Will-O-Wisp"],
+                "movepool": ["Earthquake", "Judgment", "Recover", "Will-O-Wisp"],
                 "teraTypes": ["Ghost"]
             },
             {

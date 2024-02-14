@@ -324,7 +324,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			[SETUP, HAZARDS],
 			[SETUP, badWithSetup],
 			[PHYSICAL_SETUP, PHYSICAL_SETUP],
-			[SPEED_SETUP, ['quickattack', 'suckerpunch']],
+			[SPEED_SETUP, 'quickattack'],
 			['defog', HAZARDS],
 			[['fakeout', 'uturn'], ['switcheroo', 'trick']],
 			['substitute', PIVOT_MOVES],
