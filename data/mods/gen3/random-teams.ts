@@ -485,6 +485,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	): string {
 		// First, the high-priority items
 		if (species.id === 'farfetchd') return 'Stick';
+		if (species.id === 'shuckle') return 'Leftovers';
 		if (species.id === 'latias' || species.id === 'latios') return 'Soul Dew';
 		if (species.id === 'linoone' && role === 'Setup Sweeper') return 'Silk Scarf';
 		if (species.id === 'marowak') return 'Thick Club';

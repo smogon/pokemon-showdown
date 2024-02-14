@@ -1843,7 +1843,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["hiddenpowerflying", "morningsun", "stunspore", "substitute", "toxic"]
+                "movepool": ["hiddenpowerfire", "morningsun", "psychic", "toxic"]
             }
         ]
     },
