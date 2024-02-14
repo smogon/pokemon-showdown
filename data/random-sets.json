@@ -1944,7 +1944,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Dragon Dance", "Earthquake", "Stone Edge", "Waterfall"],
+                "movepool": ["Dragon Dance", "Earthquake", "Liquidation", "Stone Edge"],
                 "teraTypes": ["Ground", "Steel"]
             }
         ]
@@ -4401,11 +4401,6 @@
                 "role": "Bulky Support",
                 "movepool": ["Beak Blast", "Boomburst", "Bullet Seed", "Knock Off", "Roost", "U-turn"],
                 "teraTypes": ["Steel"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Brave Bird", "Bullet Seed", "Flame Charge", "Swords Dance"],
-                "teraTypes": ["Grass", "Steel"]
             }
         ]
     },
