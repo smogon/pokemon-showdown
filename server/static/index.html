@@ -3,7 +3,7 @@
 var suffix = (document.location.port != '8000' ? '-' + (document.location.port || '80') : '');
 var port = location.hostname === 'localhost' ? "?port=" + document.location.port : "";
 document.location.replace(
-	'http://' + 'rkea.psim.us' + document.location.pathname + port
+	'http://' + document.location.hostname + suffix + '.psim.us' + document.location.pathname + port
 );
 </script>
 <p>This is a <a href="http://www.pokemonshowdown.com">Pok&eacute;mon Showdown</a> server!</p>
