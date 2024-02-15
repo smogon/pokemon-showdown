@@ -1,24 +1,26 @@
-import {PokemonEventMethods} from './dex-conditions';
-import {BasicEffect, toID} from './dex-data';
+import { PokemonEventMethods } from "./dex-conditions";
+import { BasicEffect, toID } from "./dex-data";
 
 interface FlingData {
 	basePower: number;
 	status?: string;
 	volatileStatus?: string;
-	effect?: CommonHandlers['ResultMove'];
+	effect?: CommonHandlers["ResultMove"];
 }
 
 export interface ItemData extends Partial<Item>, PokemonEventMethods {
 	name: string;
 }
 
-export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
-	inherit: true,
-	onCustap?: (this: Battle, pokemon: Pokemon) => void,
-};
+export type ModdedItemData =
+	| ItemData
+	| (Partial<Omit<ItemData, "name">> & {
+			inherit: true;
+			onCustap?: (this: Battle, pokemon: Pokemon) => void;
+	  });
 
 export class Item extends BasicEffect implements Readonly<BasicEffect> {
-	declare readonly effectType: 'Item';
+	declare readonly effectType: "Item";
 
 	/** just controls location on the item spritesheet */
 	declare readonly num: number;
@@ -92,7 +94,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly condition?: ConditionData;
 	declare readonly forcedForme?: string;
 	declare readonly isChoice?: boolean;
-	declare readonly naturalGift?: {basePower: number, type: string};
+	declare readonly naturalGift?: { basePower: number; type: string };
 	declare readonly spritenum?: number;
 	declare readonly boosts?: SparseBoostsTable | false;
 
@@ -107,7 +109,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		data = this;
 
 		this.fullname = `item: ${this.name}`;
-		this.effectType = 'Item';
+		this.effectType = "Item";
 		this.fling = data.fling || undefined;
 		this.onDrive = data.onDrive || undefined;
 		this.onMemory = data.onMemory || undefined;
@@ -143,11 +145,11 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 			// specified manually
 		}
 
-		if (this.isBerry) this.fling = {basePower: 10};
-		if (this.id.endsWith('plate')) this.fling = {basePower: 90};
-		if (this.onDrive) this.fling = {basePower: 70};
-		if (this.megaStone) this.fling = {basePower: 80};
-		if (this.onMemory) this.fling = {basePower: 50};
+		if (this.isBerry) this.fling = { basePower: 10 };
+		if (this.id.endsWith("plate")) this.fling = { basePower: 90 };
+		if (this.onDrive) this.fling = { basePower: 70 };
+		if (this.megaStone) this.fling = { basePower: 80 };
+		if (this.onMemory) this.fling = { basePower: 50 };
 	}
 }
 
@@ -161,9 +163,9 @@ export class DexItems {
 	}
 
 	get(name?: string | Item): Item {
-		if (name && typeof name !== 'string') return name;
+		if (name && typeof name !== "string") return name;
 
-		name = (name || '').trim();
+		name = (name || "").trim();
 		const id = toID(name);
 		return this.getByID(id);
 	}
@@ -178,28 +180,32 @@ export class DexItems {
 			}
 			return item;
 		}
-		if (id && !this.dex.data.Items[id] && this.dex.data.Items[id + 'berry']) {
-			item = this.getByID(id + 'berry' as ID);
+		if (id && !this.dex.data.Items[id] && this.dex.data.Items[id + "berry"]) {
+			item = this.getByID((id + "berry") as ID);
 			this.itemCache.set(id, item);
 			return item;
 		}
 		if (id && this.dex.data.Items.hasOwnProperty(id)) {
 			const itemData = this.dex.data.Items[id] as any;
-			const itemTextData = this.dex.getDescs('Items', id, itemData);
+			const itemTextData = this.dex.getDescs("Items", id, itemData);
 			item = new Item({
 				name: id,
 				...itemData,
 				...itemTextData,
 			});
 			if (item.gen > this.dex.gen) {
-				(item as any).isNonstandard = 'Future';
+				(item as any).isNonstandard = "Future";
 			}
 			// hack for allowing mega evolution in LGPE
-			if (this.dex.currentMod === 'gen7letsgo' && !item.isNonstandard && !item.megaStone) {
-				(item as any).isNonstandard = 'Past';
+			if (
+				this.dex.currentMod === "gen7letsgo" &&
+				!item.isNonstandard &&
+				!item.megaStone
+			) {
+				(item as any).isNonstandard = "Past";
 			}
 		} else {
-			item = new Item({name: id, exists: false});
+			item = new Item({ name: id, exists: false });
 		}
 
 		if (item.exists) this.itemCache.set(id, item);

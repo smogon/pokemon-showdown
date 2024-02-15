@@ -3008,12 +3008,12 @@ export class RandomTeams {
 			)
 				teamDetails.teraBlast = 1;
 		}
-		// if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
-		// 	// large teams sometimes cannot be built
-		// 	throw new Error(
-		// 		`Could not build a random team for ${this.format} (seed=${seed})`
-		// 	);
-		// }
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) {
+			// large teams sometimes cannot be built
+			throw new Error(
+				`Could not build a random team for ${this.format} (seed=${seed})`
+			);
+		}
 
 		return pokemon;
 	}

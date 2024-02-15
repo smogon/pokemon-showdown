@@ -581,7 +581,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	constructor(data: AnyObject) {
 		super(data);
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		// data = this;
 
 		this.mod = Utils.getString(data.mod) || "gen9";
 		this.effectType =

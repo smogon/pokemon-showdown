@@ -1,6 +1,7 @@
 // Note: These are the rules that formats use
 
 import { Utils } from "../../../lib";
+import { Dex } from "../../../sim";
 import { Pokemon } from "../../../sim/pokemon";
 
 // The list of formats is stored in config/formats.js
@@ -4760,10 +4761,11 @@ export const Rulesets: { [k: string]: FormatData } = {
 		name: "PotD",
 		desc: "Forces the Pokemon of the Day onto every random team.",
 		onBegin() {
-			if (global.Config && global.Config.potd) {
+			if (this.ruleTable.has("potd")) {
 				this.add(
 					"rule",
-					"Pokemon of the Day: " + this.dex.species.get(Config.potd).name
+					"Pokemon of the Day: " +
+						this.dex.species.get(this.ruleTable.get("potd")).name
 				);
 			}
 		},

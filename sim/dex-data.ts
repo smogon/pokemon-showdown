@@ -139,7 +139,7 @@ export class Nature
 	constructor(data: AnyObject) {
 		super(data);
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		// data = this;
 
 		this.fullname = `nature: ${this.name}`;
 		this.effectType = "Nature";
