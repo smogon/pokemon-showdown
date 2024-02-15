@@ -321,7 +321,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 2,
 		flags: {metronome: 1},
-		stallingMove: true,
 		onPrepareHit(pokemon) {
 			return this.runEvent('AllySwitchStallMove', pokemon);
 		},
