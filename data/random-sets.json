@@ -369,7 +369,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Double-Edge", "Earthquake", "Explosion", "Stone Edge"],
+                "movepool": ["Double-Edge", "Earthquake", "Rock Polish", "Stone Edge"],
                 "teraTypes": ["Flying", "Grass"]
             },
             {
