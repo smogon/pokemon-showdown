@@ -368,9 +368,14 @@
         "level": 92,
         "sets": [
             {
+                "role": "Setup Sweeper",
+                "movepool": ["Double-Edge", "Earthquake", "Explosion", "Stone Edge"],
+                "teraTypes": ["Flying", "Grass"]
+            },
+            {
                 "role": "Wallbreaker",
-                "movepool": ["Double-Edge", "Earthquake", "Explosion", "Rock Polish", "Stone Edge"],
-                "teraTypes": ["Ground"]
+                "movepool": ["Double-Edge", "Earthquake", "Explosion", "Stone Edge"],
+                "teraTypes": ["Electric", "Grass", "Ground"]
             }
         ]
     },
@@ -1349,7 +1354,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Brave Bird", "Drill Run", "Ice Shard", "Ice Spinner"],
+                "movepool": ["Brave Bird", "Drill Run", "Ice Shard", "Ice Spinner", "Spikes"],
                 "teraTypes": ["Flying", "Ground", "Ice"]
             },
             {

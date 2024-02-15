@@ -6495,11 +6495,11 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["bulkup", "closecombat", "icepunch", "rocktomb", "shadowsneak", "spectralthief"]
+                "movepool": ["bulkup", "closecombat", "rocktomb", "shadowsneak", "spectralthief"]
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["bulkup", "closecombat", "icepunch", "rocktomb", "shadowsneak", "spectralthief"]
+                "movepool": ["bulkup", "closecombat", "rocktomb", "shadowsneak", "spectralthief"]
             }
         ]
     },

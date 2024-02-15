@@ -1992,7 +1992,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["crunch", "dragondance", "substitute", "superpower", "waterfall"]
+                "movepool": ["crunch", "dragondance", "superpower", "waterfall"]
             }
         ]
     },
