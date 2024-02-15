@@ -490,6 +490,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'shedinja') return 'Lum Berry';
+		if (species.id === 'shuckle') return 'Leftovers';
 		if (species.id === 'unown') return counter.get('Physical') ? 'Choice Band' : 'Twisted Spoon';
 
 		if (moves.has('trick')) return 'Choice Band';

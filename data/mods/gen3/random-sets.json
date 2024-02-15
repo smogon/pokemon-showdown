@@ -1236,10 +1236,6 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["batonpass", "protect", "toxic", "wish"]
-            },
-            {
-                "role": "Generalist",
-                "movepool": ["batonpass", "meanlook", "moonlight", "toxic"]
             }
         ]
     },
@@ -1847,7 +1843,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["hiddenpowerflying", "morningsun", "stunspore", "substitute", "toxic"]
+                "movepool": ["hiddenpowerfire", "morningsun", "psychic", "toxic"]
             }
         ]
     },
