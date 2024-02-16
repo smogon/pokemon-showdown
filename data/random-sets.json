@@ -4959,7 +4959,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Boomburst", "Overdrive", "Sludge Wave", "Toxic Spikes", "Volt Switch"],
+                "movepool": ["Boomburst", "Overdrive", "Sludge Wave", "Volt Switch"],
                 "teraTypes": ["Normal"]
             },
             {
