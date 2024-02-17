@@ -355,6 +355,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Stink Bomb',
 		evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest', teraType: 'Water',
 	},
+	Teclis: {
+		species: 'Gallade', ability: 'Sharpness', item: 'Life Orb', gender: 'M',
+		moves: ['Sacred Sword', 'Psycho Cut', 'Leaf Blade'],
+		signatureMove: 'Rising Sword',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Psychic',
+	},
 	Theia: {
 		species: 'Litwick', ability: 'Power Abuse', item: 'Eviolite', gender: 'F',
 		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],

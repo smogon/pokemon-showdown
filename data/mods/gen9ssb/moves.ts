@@ -1881,6 +1881,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
+	// Teclis
+	risingsword: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Boosts Attack, Speed and Crit ratio by 1.",
+		name: "Rising Sword",
+		pp: 5,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onHit(pokemon) {
+			const success = !!this.boost({atk: 1, spe: 1});
+			return pokemon.addVolatile('risingsword') || success;
+		},
+		condition: {
+			onStart(pokemon, source) {
+				this.add('-start', pokemon, 'move: Rising Sword');
+			},
+			onModifyCritRatio(critRatio, source) {
+				return critRatio + 1;
+			},
+		},
+		flags: {},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Focus Energy', target);
+			this.add('-anim', source, 'Agility', target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
+
 	// Theia
 	bodycount: {
 		accuracy: 100,

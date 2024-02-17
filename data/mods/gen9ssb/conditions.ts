@@ -784,6 +784,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Swiffix')}|Remember: it's pp, not pfp!`);
 		},
 	},
+	teclis: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Teclis')}|Thanks for having me.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Teclis')}|Until next time!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Teclis')}|This was my last dance.`);
+		},
+	},
 	theia: {
 		noCopy: true,
 		onStart(pokemon) {
