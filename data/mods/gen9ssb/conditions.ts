@@ -32,6 +32,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Aelita')}|Well, I hope the Lyoko Warriors are at least well equipped.`);
 		},
 	},
+	aqrator: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('aQrator')}|Let me tell you my sTori.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('aQrator')}|A few Water Guns and Force Palms later, Tori and Riolu- Wait where are you going?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('aQrator')}|But I only got to part 3...`);
+		},
+	},
 	aquagtothepast: {
 		noCopy: true,
 		onStart() {

@@ -42,6 +42,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Smelt',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Steel', shiny: true,
 	},
+	aQrator: {
+		species: 'Totodile', ability: 'Neverending fHunt', item: 'Eviolite', gender: 'F',
+		moves: ['Whirlpool', 'Noble Roar', 'Slack Off'],
+		signatureMove: "Tori's Stori",
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Sassy', teraType: 'Fighting',
+	},
 	'A Quag To The Past': {
 		species: 'Quagsire', ability: 'Quag of Ruin', item: 'Leftovers', gender: 'M',
 		moves: ['Surging Strikes', 'Precipice Blades', 'Gunk Shot'],

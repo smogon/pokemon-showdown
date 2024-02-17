@@ -12,6 +12,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Fortified Metal"},
 	},
 
+	// aQrator
+	totodile: {
+		inherit: true,
+		baseStats: {hp: 85, atk: 105, def: 100, spa: 79, spd: 83, spe: 78},
+		abilities: {0: "Neverending fHunt"},
+	},
+
 	// A Quag To The Past
 	quagsire: {
 		inherit: true,

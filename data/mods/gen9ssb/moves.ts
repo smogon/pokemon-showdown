@@ -69,6 +69,50 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// aQrator
+	torisstori: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Confuses the foe and deals 1/6th of its max HP for 4-5 turns.",
+		name: "Tori's Stori",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Water Spout', target);
+			this.add('-anim', source, 'Confuse Ray', target);
+		},
+		volatileStatus: 'torisstori',
+		condition: {
+			duration: 5,
+			durationCallback(target, source) {
+				if (source?.hasItem('gripclaw')) return 8;
+				return this.random(5, 6);
+			},
+			onStart(target) {
+				this.add('-start', target, 'Tori\'s Stori');
+			},
+			onResidualOrder: 6,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / 6);
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Tori\'s Stori');
+			},
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'confusion',
+		},
+		target: "normal",
+		type: "Water",
+	},
+
 	// A Quag To The Past
 	sireswitch: {
 		accuracy: true,
