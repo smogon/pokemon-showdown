@@ -229,6 +229,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rise Above',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fire',
 	},
+	Lily: {
+		species: 'Togedemaru', ability: 'Unaware', item: 'Leftovers', gender: 'F',
+		moves: ['Victory Dance', 'Plasma Fists', 'Meteor Mash'],
+		signatureMove: 'Recharge',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Fairy', shiny: 1734,
+	},
 	Loethalion: {
 		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
 		moves: [['Esper Wing', 'Lumina Crash', 'Psychic Noise'], ['Agility', 'Calm Mind'], ['Draining Kiss', 'Matcha Gotcha']],
