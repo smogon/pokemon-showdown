@@ -41,6 +41,53 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// aegii
+	equipaegislash: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "50% +1 Atk, 50% +1 Def, eats berry.",
+		name: "Equip Aegislash",
+		gen: 9,
+		pp: 10,
+		priority: 2,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Shadow Sneak', target);
+			this.add('-anim', source, 'Swords Dance', source);
+			this.add('-anim', source, 'Iron Defense', source);
+		},
+		secondaries: [
+			{
+				chance: 50,
+				self: {
+					boosts: {
+						atk: 1,
+					},
+				},
+			}, {
+				chance: 50,
+				self: {
+					boosts: {
+						def: 1,
+					},
+				},
+			},
+		],
+		self: {
+			onHit(target, source) {
+				if (!source.getItem().isBerry) return;
+				source.eatItem(true);
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
+
 	// Aelita
 	smelt: {
 		accuracy: true,

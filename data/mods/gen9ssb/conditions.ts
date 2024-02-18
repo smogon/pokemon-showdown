@@ -20,6 +20,22 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	IMPORTANT: Obtain the username from getName
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	aegii: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('aegii')}|**It is now aegii's turn to beat you down.**`);
+		},
+		onSwitchOut(pokemon) {
+			if (this.randomChance(2, 100)) {
+				this.add(`c:|${getName('aegii')}|...right, I was saying in SSB4 to "stan loona", but this has to be changed now that we've found out that the company managing loona is shady af. I would like to amend that to "stan the individual members of loona" (or if you want, you can choose to stan any other group of your choice!)`);
+			} else {
+				this.add(`c:|${getName('aegii')}|~yes ${pokemon.side.active[0]}`);
+			}
+		},
+		onFaint() {
+			this.add(`c:|${getName('aegii')}|nerd`);
+		},
+	},
 	aelita: {
 		noCopy: true,
 		onStart() {
@@ -51,12 +67,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('A Quag To The Past')}|so true`);
-		},
-		onFoeSwitchIn(pokemon) {
-			if (pokemon.name === 'Aeonic') {
-				this.add(`c:|${getName('A Quag To The Past')}|!randpoke natdex`);
-				this.add(`c:|${getName('Aeonic')}|!randpoke natdex`);
-			}
 		},
 		onFaint() {
 			const lines = [
