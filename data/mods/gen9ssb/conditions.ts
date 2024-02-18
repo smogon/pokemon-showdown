@@ -971,6 +971,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('WigglyTree')}|Keep wiggling!`);
 		},
 	},
+	xprienzo: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('XpRienzo ☑◡☑')}|Would I lie to you?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('XpRienzo ☑◡☑')}|What? You don't trust me? >.>`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('XpRienzo ☑◡☑')}|Bleh, lame.`);
+		},
+	},
 	yellowpaint: {
 		noCopy: true,
 		onStart() {
@@ -1168,6 +1180,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	raindance: {
 		inherit: true,
 		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (move.id === 'scorchingtruth') return;
 			if (defender.hasItem('utilityumbrella') || move.id === 'geyserblast') return;
 			if (move.type === 'Water') {
 				this.debug('rain water boost');
@@ -1190,6 +1203,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (move.type === 'Water' && move.id !== 'hydrosteam') {
 				this.debug('Sunny Day water suppress');
 				return this.chainModify(0.5);
+			}
+		},
+	},
+	primordialsea: {
+		inherit: true,
+		onTryMove(attacker, defender, move) {
+			if (move.id === 'scorchingtruth') return;
+			if (move.type === 'Fire' && move.category !== 'Status') {
+				this.debug('Primordial Sea fire suppress');
+				this.add('-fail', attacker, move, '[from] Primordial Sea');
+				this.attrLastMove('[still]');
+				return null;
 			}
 		},
 	},

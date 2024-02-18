@@ -426,6 +426,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Perfect Mimic',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', teraType: 'Grass',
 	},
+	'XpRienzo ☑◡☑': {
+		species: 'Reshiram', ability: 'Turboblaze', item: 'Choice Scarf', gender: 'M',
+		moves: ['Draco Meteor', 'Volt Switch', 'Flash Cannon'],
+		signatureMove: 'Scorching Truth',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Fire',
+	},
 	'Yellow Paint': {
 		species: 'Rotom-Frost', ability: 'Yellow Magic', item: 'Chilan Berry', gender: 'N',
 		moves: ['Thunderbolt', 'Blizzard', 'Ion Deluge'],

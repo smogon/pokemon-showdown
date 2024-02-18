@@ -2296,6 +2296,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// XpRienzo
+	scorchingtruth: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		shortDesc: "Always hits at least neutral. Ignores Rain/Primordial Sea.",
+		name: "Scorching Truth",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		hasCrashDamage: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Focus Energy', source);
+			this.add('-anim', source, 'Fusion Flare', target);
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (typeMod < 0) return 0;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
+
 	// Yellow Paint
 	whiteout: {
 		accuracy: 85,
