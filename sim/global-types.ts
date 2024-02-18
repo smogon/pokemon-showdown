@@ -275,9 +275,6 @@ interface ModdedBattleActions {
 		this: BattleActions, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
 		moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	) => [SpreadMoveDamage, SpreadMoveTargets];
-	switchIn?: (
-		this: BattleActions, pokemon: Pokemon, pos: number, sourceEffect: Effect | null, isDrag?: boolean
-	) => string | boolean;
 	targetTypeChoices?: (this: BattleActions, targetType: string) => boolean;
 	terastallize?: (this: BattleActions, pokemon: Pokemon) => void;
 	tryMoveHit?: (
