@@ -116,6 +116,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// Alex
+	spicierextract: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Leech Seed + Heal Block + Infestation",
+		name: "Spicier Extract",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, powder: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Leafage', target);
+			this.add('-anim', source, 'Stun Spore', target);
+		},
+		onHit(target, source) {
+			let success = false;
+			if (target.addVolatile('partiallytrapped', source)) success = true;
+			if (target.addVolatile('leechseed', source)) success = true;
+			if (target.addVolatile('healblock', source)) success = true;
+			return success;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+	},
+
 	// aQrator
 	torisstori: {
 		accuracy: 100,

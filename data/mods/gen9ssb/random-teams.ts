@@ -48,6 +48,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Smelt',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Steel', shiny: true,
 	},
+	Alex: {
+		species: 'Sprigatito', ability: 'Pawprints', item: 'Eviolite', gender: '',
+		moves: ['Substitute', 'Protect', 'Magic Powder'],
+		signatureMove: 'Spicier Extract',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
+	},
 	aQrator: {
 		species: 'Totodile', ability: 'Neverending fHunt', item: 'Eviolite', gender: 'F',
 		moves: ['Whirlpool', 'Noble Roar', 'Slack Off'],

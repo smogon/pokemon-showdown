@@ -56,6 +56,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Aelita')}|Well, I hope the Lyoko Warriors are at least well equipped.`);
 		},
 	},
+	alex: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Alex')}|meow`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Alex')}|meow meow`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Alex')}|:3`);
+		},
+	},
 	aqrator: {
 		noCopy: true,
 		onStart() {

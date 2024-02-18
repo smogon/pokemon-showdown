@@ -19,6 +19,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Neverending fHunt"},
 	},
 
+	// Alex
+	sprigatito: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 61, def: 84, spa: 45, spd: 85, spe: 65},
+		abilities: {0: "Pawprints"},
+	},
+
 	// A Quag To The Past
 	quagsire: {
 		inherit: true,
