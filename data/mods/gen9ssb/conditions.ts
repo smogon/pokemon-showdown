@@ -25,11 +25,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart() {
 			this.add(`c:|${getName('aegii')}|**It is now aegii's turn to beat you down.**`);
 		},
-		onSwitchOut(pokemon) {
+		// @ts-ignore Support peeking at new pokemon
+		onSwitchOut(source, pokemon) {
+			// @ts-ignore
 			if (this.randomChance(2, 100)) {
+				// @ts-ignore
 				this.add(`c:|${getName('aegii')}|...right, I was saying in SSB4 to "stan loona", but this has to be changed now that we've found out that the company managing loona is shady af. I would like to amend that to "stan the individual members of loona" (or if you want, you can choose to stan any other group of your choice!)`);
 			} else {
-				this.add(`c:|${getName('aegii')}|~yes ${pokemon.side.active[0]}`);
+				// @ts-ignore
+				this.add(`c:|${getName('aegii')}|~yes ${pokemon.name}`);
 			}
 		},
 		onFaint() {
