@@ -4,7 +4,6 @@ import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
 export interface EventMethods {
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
 	onEmergencyExit?: (this: Battle, pokemon: Pokemon) => void;
-	onAllySwitchStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterHit?: MoveEventMethods['onAfterHit'];
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;
@@ -114,7 +113,6 @@ export interface EventMethods {
 	onModifyDamagePhase1?: CommonHandlers['ModifierSourceMove'];
 	onModifyDamagePhase2?: CommonHandlers['ModifierSourceMove'];
 	onFoeDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
-	onFoeAllySwitchStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
 	onFoeAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void;
 	onFoeAfterHit?: MoveEventMethods['onAfterHit'];
 	onFoeAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
@@ -214,7 +212,6 @@ export interface EventMethods {
 	onFoeModifyDamagePhase1?: CommonHandlers['ModifierSourceMove'];
 	onFoeModifyDamagePhase2?: CommonHandlers['ModifierSourceMove'];
 	onSourceDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
-	onSourceAllySwitchStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
 	onSourceAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void;
 	onSourceAfterHit?: MoveEventMethods['onAfterHit'];
 	onSourceAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
@@ -316,7 +313,6 @@ export interface EventMethods {
 	onSourceModifyDamagePhase1?: CommonHandlers['ModifierSourceMove'];
 	onSourceModifyDamagePhase2?: CommonHandlers['ModifierSourceMove'];
 	onAnyDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
-	onAnyAllySwitchStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
 	onAnyAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void;
 	onAnyAfterHit?: MoveEventMethods['onAfterHit'];
 	onAnyAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;

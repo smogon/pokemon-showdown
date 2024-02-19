@@ -445,29 +445,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.effectState.duration = 2;
 		},
 	},
-	allyswitchstall: {
-		name: 'allyswitchstall',
-		duration: 2,
-		counterMax: 729,
-		onStart() {
-			this.effectState.counter = 3;
-		},
-		onAllySwitchStallMove(pokemon) {
-			// this.effectState.counter should never be undefined here.
-			// However, just in case, use 1 if it is undefined.
-			const counter = this.effectState.counter || 1;
-			this.debug("Ally Switch success chance: " + Math.round(100 / counter) + "%");
-			const success = this.randomChance(1, counter);
-			if (!success) delete pokemon.volatiles['allyswitchstall'];
-			return success;
-		},
-		onRestart() {
-			if (this.effectState.counter < (this.effect as Condition).counterMax!) {
-				this.effectState.counter *= 3;
-			}
-			this.effectState.duration = 2;
-		},
-	},
 	gem: {
 		name: 'gem',
 		duration: 1,
