@@ -813,6 +813,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('spoo')}|dies`);
 		},
 	},
+	sulo: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Sulo')}|everybody is so damn dramatic. me included.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Sulo')}|afk sorry guys brb`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Sulo')}|Charon, take me home...`);
+		},
+	},
 	swiffix: {
 		noCopy: true,
 		onStart() {

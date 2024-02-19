@@ -367,6 +367,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'spoo',
 		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', teraType: 'Fire', skip: 'spoo',
 	},
+	Sulo: {
+		species: 'Reuniclus', ability: 'Protection of the Gelatin', item: 'Life Orb', gender: 'M',
+		moves: ['Calm Mind', 'Draining Kiss', 'Stored Power'],
+		signatureMove: 'Vengeful Mood',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold', teraType: 'Fairy', shiny: true,
+	},
 	Swiffix: {
 		species: 'Piplup', ability: 'Stinky', item: 'Loaded Dice', gender: 'M',
 		moves: ['Water Shuriken', 'Nasty Plot', 'Vacuum Wave'],

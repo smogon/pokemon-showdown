@@ -996,6 +996,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Sulo
+	protectionofthegelatin: {
+		shortDesc: "Magic Guard + Stamina",
+		name: "Protection of the Gelatin",
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({def: 1});
+		},
+	},
+
 	// Swiffix
 	stinky: {
 		desc: "10% chance to either poison or paralyze the Pokemon on hit.",
