@@ -152,6 +152,46 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
+	getActionSpeed(action) {
+		if (action.choice === 'move') {
+			let move = action.move;
+			if (action.zmove) {
+				const zMoveName = this.actions.getZMove(action.move, action.pokemon, true);
+				if (zMoveName) {
+					const zMove = this.dex.getActiveMove(zMoveName);
+					if (zMove.exists && zMove.isZ) {
+						move = zMove;
+					}
+				}
+			}
+			if (action.maxMove) {
+				const maxMoveName = this.actions.getMaxMove(action.maxMove, action.pokemon);
+				if (maxMoveName) {
+					const maxMove = this.actions.getActiveMaxMove(action.move, action.pokemon);
+					if (maxMove.exists && maxMove.isMax) {
+						move = maxMove;
+					}
+				}
+			}
+			// WHY DOES onModifyPriority TAKE A TARGET ARG WHEN IT IS ALWAYS NULL?????
+			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			// take priority from the base move, so abilities like Prankster only apply once
+			// (instead of compounding every time `getActionSpeed` is called)
+			let priority = this.dex.moves.get(move.id).priority;
+			// Grassy Glide priority
+			priority = this.singleEvent('ModifyPriority', move, null, action.pokemon, target, null, priority);
+			priority = this.runEvent('ModifyPriority', action.pokemon, target, move, priority);
+			action.priority = priority + action.fractionalPriority;
+			// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
+			if (this.gen > 5) action.move.priority = priority;
+		}
+
+		if (!action.pokemon) {
+			action.speed = 1;
+		} else {
+			action.speed = action.pokemon.getActionSpeed();
+		}
+	},
 	checkMoveMakesContact(move, attacker, defender, announcePads) {
 		if (move.flags['contact'] && attacker.hasItem('protectivepads')) {
 			if (announcePads) {

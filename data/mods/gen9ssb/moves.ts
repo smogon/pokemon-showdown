@@ -2200,71 +2200,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Violet
-	waterfowldance: {
+	buildingcharacter: {
 		accuracy: 95,
-		basePower: 7,
-		category: "Physical",
-		shortDesc: "Hits 10 times. Heals 100% of damage dealt.",
-		name: "Waterfowl Dance",
-		gen: 9,
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1, dance: 1},
-		drain: [1, 1],
-		onPrepareHit() {
-			this.attrLastMove('[anim] Sacred Sword');
+		basePower: 50,
+		basePowerCallback(pokemon, target, move) {
+			if (target?.terastallized) {
+				this.debug('BP doubled from tera');
+				return move.basePower * 2;
+			}
+			return move.basePower;
 		},
-		multihit: 10,
-		multiaccuracy: true,
+		category: "Physical",
+		shortDesc: "vs Tera'd opponent: 0 prio, 2x bp, removes Tera.",
+		name: "building character",
+		gen: 9,
+		pp: 10,
+		priority: 1,
+		onModifyPriority(move, pokemon, target) {
+			if (target?.terastallized) return 0;
+		},
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Esper Wing", target);
+			this.add('-anim', source, "Defog", source);
+		},
+		onHit(pokemon, source) {
+			// TODO: Client support for removing tera without fainting
+			if (pokemon?.terastallized) {
+				this.add(`c:|${getName('Vio͜͡let')}|lol never do that ever again thanks`);
+				delete pokemon.terastallized;
+				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				this.add('detailschange', pokemon, details);
+			}
+		},
 		secondary: null,
 		target: "normal",
-		type: "Flying",
-	},
-	scarletaeoniaterrain: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Scarlet Aeonia Terrain",
-		shortDesc: "5 turns: Contact moves have 25% to badly psn vs grounded.",
-		pp: 10,
-		priority: 0,
-		flags: {nonsky: 1},
-		pseudoWeather: 'scarletaeoniaterrain',
-		condition: {
-			duration: 5,
-			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onFieldStart(field, source, effect) {
-				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Scarlet Aeonia Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
-				} else {
-					this.add('-fieldstart', 'move: Scarlet Aeonia Terrain');
-				}
-			},
-			onModifyMove(move, source, target) {
-				if (!target?.isGrounded()) return;
-				if (!move?.flags['contact'] || move.target === 'self') return;
-				if (!move.secondaries) {
-					move.secondaries = [];
-				}
-				move.secondaries.push({
-					chance: 25,
-					status: 'tox',
-				});
-			},
-			onFieldResidualOrder: 27,
-			onFieldResidualSubOrder: 1,
-			onFieldEnd() {
-				this.add('-fieldend', 'move: Scarlet Aeonia Terrain');
-			},
-		},
-		secondary: null,
-		target: "all",
-		type: "Poison",
+		type: "Grass",
 	},
 
 	// WarriorGallade - TODO: Fix animations

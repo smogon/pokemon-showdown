@@ -1123,31 +1123,43 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Violet
-	scarletaeonia: {
-		shortDesc: "50% HP: +Flying-type, summons Scarlet Aeonia Terrain, loses item.",
-		name: "Scarlet Aeonia",
-		onStart(pokemon) {
-			if (pokemon.m.phaseChange) {
-				if (pokemon.addType('Flying')) {
-					this.add('-start', pokemon, 'typeadd', 'Flying', '[from] ability: Scarlet Aeonia');
+	seenoevilhearnoevilspeaknoevil: {
+		shortDesc: "Dark Immunity; Cornerstone: Sound immunity. Wellspring: Moves never miss. Hearthflame: 1.3x bp vs male Pokemon.",
+		name: "See No Evil, Hear No Evil, Speak No Evil",
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['sound'] && target.species.id === 'ogerponcornerstone') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: See No Evil, Hear No Evil, Speak No Evil');
 				}
-				this.field.setTerrain('scarletaeoniaterrain');
+				return null;
+			}
+
+			if (target !== source && move.type === 'Dark') {
+				this.add('-immune', target, '[from] ability: See No Evil, Hear No Evil, Speak No Evil');
+				return null;
 			}
 		},
-		onResidualOrder: 29,
-		onResidual(pokemon) {
-			if (!pokemon.hp) return;
-			if (pokemon.hp > pokemon.maxhp / 2) return;
-			this.add('-activate', pokemon, 'ability: Scarlet Aeonia');
-			this.add(`c:|${getName('Vio͜͡let')}|The scarlet bloom flowers once more. You will witness true horror. Now, rot!`);
-			pokemon.m.phaseChange = true;
-			if (pokemon.addType('Flying')) {
-				this.add('-start', pokemon, 'typeadd', 'Flying', '[from] ability: Scarlet Aeonia');
-			}
-			pokemon.takeItem();
-			this.field.setTerrain('scarletaeoniaterrain');
+		onSourceAccuracy(accuracy, target, source, move) {
+			if (source.species.id !== 'ogerponwellspring') return;
+			if (typeof accuracy !== 'number') return;
+			return true;
 		},
-		flags: {},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (source.species.id !== 'ogerponwellspring') return;
+			if (typeof move.accuracy === 'number' && move.accuracy < 100) {
+				this.debug('neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+		onBasePowerPriority: 24,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.species.id !== 'ogerponhearthflame') return;
+			if (defender.gender === 'M') {
+				this.debug('attack boost');
+				return this.chainModify(1.3);
+			}
+		},
+		flags: {breakable: 1},
 	},
 
 	// WarriorGallade

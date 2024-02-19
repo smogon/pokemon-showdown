@@ -926,19 +926,39 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	violet: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('Vio͜͡let')}|...Heed my words. I am Malenia, Blade of Miquella. And I have never known defeat.`);
+			this.add(`c:|${getName('Vio͜͡let')}|I’m not hating you just decided to be wrong`);
 		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect?.effectType === 'Move') {
-				if (source?.m.phaseChange) {
-					this.add(`c:|${getName('Vio͜͡let')}|Let your flesh be consumed. By the scarlet rot.`);
-				} else {
-					this.add(`c:|${getName('Vio͜͡let')}|I am Malenia, Blade of Miquella.`);
-				}
-			}
+		onSwitchOut() {
+			this.add(`c:|${getName('Vio͜͡let')}|anyway…`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('Vio͜͡let')}|Your strength, extraordinary… The mark... of a true Lord…`);
+			this.add(`c:|${getName('Vio͜͡let')}|blatantly carried by cheating but you’ll still find a way to downplay`);
+		},
+		innateName: "Do No Evil",
+		shortDesc: "When this Pokemon uses an attacking move, it transforms into the Ogerpon form of the corresponding type.",
+		onModifyMove(move, attacker, defender) {
+			if (attacker.species.baseSpecies !== 'Ogerpon' || attacker.transformed) return;
+			let targetForme = 'Ogerpon';
+			switch (move.type) {
+			case 'Rock':
+				targetForme += '-Cornerstone';
+				break;
+			case 'Fire':
+				targetForme += '-Hearthflame';
+				break;
+			case 'Water':
+				targetForme += '-Wellspring';
+				break;
+			case 'Grass':
+				// Do nothing
+				break;
+			default:
+				return;
+			}
+			if (attacker.species.name !== targetForme) {
+				this.add('-activate', attacker, 'ability: Do No Evil');
+				attacker.formeChange(targetForme);
+			}
 		},
 	},
 	warriorgallade: {

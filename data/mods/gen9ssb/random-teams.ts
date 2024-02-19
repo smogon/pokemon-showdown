@@ -52,7 +52,7 @@ export const ssbSets: SSBSets = {
 		species: 'Sprigatito', ability: 'Pawprints', item: 'Eviolite', gender: '',
 		moves: ['Substitute', 'Protect', 'Magic Powder'],
 		signatureMove: 'Spicier Extract',
-		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
 	},
 	aQrator: {
 		species: 'Totodile', ability: 'Neverending fHunt', item: 'Eviolite', gender: 'F',
@@ -420,10 +420,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 248, def: 244, spd: 16}, nature: 'Calm', teraType: 'Normal', shiny: 5,
 	},
 	'Vio͜͡let': {
-		species: 'Iron Valiant', ability: 'Scarlet Aeonia', item: 'Auspicious Armor', gender: 'F',
-		moves: ['Bitter Blade', 'Cross Poison', 'No Retreat'],
-		signatureMove: 'Waterfowl Dance',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy', shiny: true,
+		species: 'Ogerpon', ability: 'See No Evil, Hear No Evil, Speak No Evil', item: 'Berry Juice', gender: 'F',
+		moves: ['Crabhammer', 'Mighty Cleave', 'Fire Lash'],
+		signatureMove: 'building character',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Stellar',
 	},
 	WarriorGallade: {
 		species: 'Tropius', ability: 'Primeval Harvest', item: 'Starf Berry', gender: ['M', 'M', 'F'],
