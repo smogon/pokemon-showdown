@@ -724,6 +724,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				pokemon.volatiles['cudchew'].berry = item;
 			}
 		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['cudchew'];
+		},
 		condition: {
 			noCopy: true,
 			duration: 2,
