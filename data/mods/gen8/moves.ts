@@ -1,25 +1,8 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
 	allyswitch: {
 		inherit: true,
+		// Prevents setting the volatile used to check for Ally Switch failure
 		onPrepareHit() {},
-		onHit(pokemon) {
-			let success = true;
-			// Fail in formats where you don't control allies
-			if (this.format.gameType !== 'doubles' && this.format.gameType !== 'triples') success = false;
-
-			// Fail in triples if the Pokemon is in the middle
-			if (pokemon.side.active.length === 3 && pokemon.position === 1) success = false;
-
-			const newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
-			if (!pokemon.side.active[newPosition]) success = false;
-			if (pokemon.side.active[newPosition].fainted) success = false;
-			if (!success) {
-				this.add('-fail', pokemon, 'move: Ally Switch');
-				this.attrLastMove('[still]');
-				return this.NOT_FAIL;
-			}
-			this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
-		},
 	},
 	anchorshot: {
 		inherit: true,
