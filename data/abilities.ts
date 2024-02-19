@@ -2853,6 +2853,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					delete target.volatiles['slowstart'];
 					this.add('-end', target, 'Slow Start', '[silent]');
 				}
+				if (target.volatiles['cudchew']) {
+					delete target.volatiles['cudchew'];
+					this.add('-end', target, 'Cud Chew', '[silent]');
+				}
 				if (strongWeathers.includes(target.getAbility().id)) {
 					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
