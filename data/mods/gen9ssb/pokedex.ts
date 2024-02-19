@@ -280,6 +280,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Monke See Monke Do"},
 	},
 
+	// Quite Quiet
+	ribombee: {
+		inherit: true,
+		abilities: {0: 'Fancy Scarf'},
+	},
+
 	// Rumia
 	duskull: {
 		inherit: true,

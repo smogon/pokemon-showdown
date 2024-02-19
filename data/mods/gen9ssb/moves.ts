@@ -1738,6 +1738,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// Quite Quiet
+	worriednoises: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "*Worried Noises*",
+		shortDesc: "+1 SpA. Type varies based on user's primary type.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Tidy Up', source);
+			this.add('-anim', source, 'Bug Buzz', target);
+		},
+		onModifyType(move, pokemon) {
+			let type = pokemon.getTypes()[0];
+			if (type === "Bird") type = "???";
+			move.type = type;
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spa: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// ReturnToMonkey
 	monkemagic: {
 		accuracy: true,

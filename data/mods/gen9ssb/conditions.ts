@@ -711,6 +711,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	quitequiet: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Quite Quiet')}|what are we even doing here`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Quite Quiet')}|hm`);
+		},
+	},
 	returntomonkey: {
 		noCopy: true,
 		onStart() {

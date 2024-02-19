@@ -319,6 +319,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Meat Grinder',
 		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant', teraType: 'Flying',
 	},
+	'Quite Quiet': {
+		species: 'Ribombee', ability: 'Fancy Scarf', item: ['Life Orb', 'Leftovers'], gender: 'F',
+		moves: ['Roost', 'Moonblast', ['Aura Sphere', 'U-turn']],
+		signatureMove: '*Worried Noises*',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Flying',
+		// The nature not being Quiet is a crime
+	},
 	ReturnToMonkey: {
 		species: 'Oranguru', ability: 'Monke See Monke Do', item: 'Twisted Spoon', gender: 'M',
 		moves: ['Hyper Voice', 'Psyshock', 'Focus Blast'],
