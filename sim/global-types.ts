@@ -339,6 +339,10 @@ interface ModdedBattlePokemon {
 		maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean,
 		canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: ZMoveOptions,
 	};
+	getMoves?: (this: Pokemon, lockedMove?: string | null, restrictData?: boolean) => {
+		move: string, id: string, disabled?: string | boolean, disabledSource?: string,
+		target?: string, pp?: number, maxpp?: number,
+	}[];
 	getMoveTargets?: (this: Pokemon, move: ActiveMove, target: Pokemon) => {targets: Pokemon[], pressureTargets: Pokemon[]};
 	getStat?: (
 		this: Pokemon, statName: StatIDExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean
