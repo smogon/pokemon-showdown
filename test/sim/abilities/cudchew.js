@@ -14,10 +14,10 @@ describe('Cud Chew', function () {
 			[{species: 'Ekans', moves: ['toxic']},  {species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['sleeptalk']}],
 		]);
 		battle.makeChoices('move sleeptalk', 'move toxic');
-        battle.makeChoices('move sleeptalk', 'move toxic');
-        battle.makeChoices('move sleeptalk', 'move toxic');
-        battle.makeChoices('move sleeptalk', 'move toxic');
-        battle.makeChoices('move sleeptalk', 'move toxic');
+      battle.makeChoices('move sleeptalk', 'move toxic');
+      battle.makeChoices('move sleeptalk', 'move toxic');
+      battle.makeChoices('move sleeptalk', 'move toxic');
+      battle.makeChoices('move sleeptalk', 'move toxic');
 		const tauros = battle.p1.active[0];
 		assert.notEqual(tauros.hp, 93, `Cud Chew should cause Sitrus Berry to restore HP twice if the activation was due to residual damage.`);
 	});
@@ -28,12 +28,12 @@ describe('Cud Chew', function () {
 			[{species: 'Ekans', moves: ['toxic']},  {species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['sleeptalk']}],
 		]);
 		battle.makeChoices('move sleeptalk', 'move toxic');
-        battle.makeChoices('move sleeptalk', 'move toxic');
-        battle.makeChoices('move sleeptalk', 'move toxic');
-        battle.makeChoices('move sleeptalk', 'move toxic');
-        battle.makeChoices('move sleeptalk', 'switch 2');
+      battle.makeChoices('move sleeptalk', 'move toxic');
+      battle.makeChoices('move sleeptalk', 'move toxic');
+      battle.makeChoices('move sleeptalk', 'move toxic');
+      battle.makeChoices('move sleeptalk', 'switch 2');
 		const tauros = battle.p1.active[0];
-        assert.equal(tauros.hp, 93, `Cud Chew should not cause Sitrus Berry to restore HP twice if Neutralizing Gas becomes active on the second turn.`);
+      assert.equal(tauros.hp, 93, `Cud Chew should not cause Sitrus Berry to restore HP twice if Neutralizing Gas becomes active on the second turn.`);
 	});
 
 });
