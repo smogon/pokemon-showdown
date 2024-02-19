@@ -2116,7 +2116,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 	chimera1v1rule: {
 		effectType: 'Rule',
 		name: 'Chimera 1v1 Rule',
-		desc: "Validation and battle effects for Chimera 1v1.",
+		desc: "Merges a team of six into a single Pok\u00e9mon depending on the order chosen at team preview: It gains the typing of the first, item of the second, ability of the third, stats of the fourth, the first two moves of the fifth, and the last two moves of the sixth.",
 		ruleset: ['Team Preview', 'Picked Team Size = 6'],
 		onValidateSet(set) {
 			if (!set.item) return;

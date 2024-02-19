@@ -349,7 +349,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Fire Blast", "Heal Pulse", "Helping Hand", "Psyshock", "Scald", "Slack Off", "Trick Room"],
+                "movepool": ["Fire Blast", "Heal Pulse", "Helping Hand", "Psyshock", "Scald", "Trick Room"],
                 "teraTypes": ["Dark", "Grass"]
             },
             {
@@ -1069,7 +1069,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Chilly Reception", "Fire Blast", "Heal Pulse", "Helping Hand", "Psyshock", "Scald", "Slack Off", "Trick Room"],
+                "movepool": ["Fire Blast", "Heal Pulse", "Helping Hand", "Psyshock", "Scald", "Trick Room"],
                 "teraTypes": ["Dark", "Grass", "Steel"]
             },
             {
@@ -1929,7 +1929,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Extreme Speed", "Protect", "Psycho Boost", "Superpower"],
+                "movepool": ["Extreme Speed", "Knock Off", "Protect", "Psycho Boost", "Superpower"],
                 "teraTypes": ["Ghost", "Stellar"]
             }
         ]
@@ -3552,11 +3552,6 @@
     "kyuremblack": {
         "level": 75,
         "sets": [
-            {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Dragon Dance", "Fusion Bolt", "Icicle Spear", "Scale Shot"],
-                "teraTypes": ["Electric"]
-            },
             {
                 "role": "Offensive Protect",
                 "movepool": ["Dragon Dance", "Fusion Bolt", "Icicle Spear", "Protect"],
