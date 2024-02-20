@@ -2623,7 +2623,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
 	},
-	approvalloghelp: [`/approvallog - View a log of past media approvals in the current room. Requires: % @ # &`],
+	approvalloghelp: [`/approvallog - View a log of past media approvals in the current room. Requires: &`],
 
 	viewapprovals(target, room, user) {
 		room = this.requireRoom();
