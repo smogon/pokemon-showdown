@@ -2600,6 +2600,18 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 9] Hackmons Cup'],
 	},
 	{
+		name: "[Gen 9] BSS Factory",
+		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3737058/">Information and Suggestions Thread</a>`,
+		],
+
+		mod: 'gen9',
+		team: 'randomBSSFactory',
+		searchShow: false,
+		ruleset: ['Flat Rules', 'VGC Timer'],
+	},
+	{
 		name: "[Gen 9] Broken Cup",
 		desc: `[Gen 9] Hackmons Cup but with only the most powerful Pok&eacute;mon, moves, abilities, and items.`,
 
