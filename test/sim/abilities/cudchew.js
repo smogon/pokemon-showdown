@@ -12,13 +12,13 @@ describe('Cud Chew', function () {
 		battle = common.createBattle([[
 			{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', moves: ['sleeptalk']},
 		], [
-			{species: 'Ekans', moves: ['toxic']},
+			{species: 'Wynaut', ability: 'noguard', moves: ['toxic']},
 		]]);
-		battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
+		battle.makeChoices();
+      battle.makeChoices();
+      battle.makeChoices();
+      battle.makeChoices();
+      battle.makeChoices();
 		const tauros = battle.p1.active[0];
 		assert.notEqual(tauros.hp, 93, `Cud Chew should cause Sitrus Berry to restore HP twice if the activation was due to residual damage.`);
 	});
@@ -26,42 +26,33 @@ describe('Cud Chew', function () {
 	// need confirmation
 	it(`should not eat berry a second time if Neutralizing Gas is active`, function () {
 		battle = common.createBattle([
-			[{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', moves: ['sleeptalk']}],
-			[{species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['toxic']}, {species: 'Ekans', moves: ['sleeptalk']}],
+			[{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']}],
+			[{species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['toxic']}, {species: 'Wynaut', moves: ['sleeptalk']}],
 		]);
-		battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'switch 2');
+		battle.makeChoices();
+      battle.makeChoices('move bellydrum', 'switch 2');
 		const tauros = battle.p1.active[0];
       assert.equal(tauros.hp, 93, `Cud Chew should not cause Sitrus Berry to restore HP twice if Neutralizing Gas is active when eaten the first time.`);
 	});
 
 	it(`should not eat berry a second time if Neutralizing Gas becomes active`, function () {
 		battle = common.createBattle([
-			[{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', moves: ['sleeptalk']}],
-			[{species: 'Ekans', moves: ['toxic']},  {species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['sleeptalk']}],
+			[{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']}],
+			[{species: 'Wynaut', ability: 'noguard', moves: ['toxic']},  {species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['sleeptalk']}],
 		]);
-		battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'switch 2');
+		battle.makeChoices();
+      battle.makeChoices('move bellydrum', 'switch 2');
 		const tauros = battle.p1.active[0];
       assert.equal(tauros.hp, 93, `Cud Chew should not cause Sitrus Berry to restore HP twice if Neutralizing Gas becomes active on the second turn.`);
 	});
 
 	it.skip(`should not eat berry a second time if Unnerve becomes active`, function () {
 		battle = common.createBattle([
-			[{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', moves: ['sleeptalk']}],
-			[{species: 'Ekans', moves: ['toxic']},  {species: 'Tyranitar', ability: 'unnerve', moves: ['sleeptalk']}],
+			[{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']}],
+			[{species: 'Wynaut', abiltiy: 'noguard', moves: ['toxic']},  {species: 'Tyranitar', ability: 'unnerve', moves: ['sleeptalk']}],
 		]);
-		battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'switch 2');
+		battle.makeChoices();
+      battle.makeChoices('move bellydrum', 'switch 2');
 		const tauros = battle.p1.active[0];
       assert.equal(tauros.hp, 93, `Cud Chew should not cause Sitrus Berry to restore HP twice if Unnerve becomes active on the second turn.`);
 	});
@@ -69,13 +60,10 @@ describe('Cud Chew', function () {
 	it(`should not eat berry a second time if Cud Chew ability is lost or suppressed`, function () {
 		battle = common.createBattle([
 			[{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', moves: ['sleeptalk']}],
-			[{species: 'Ekans', moves: ['toxic', 'worryseed']}],
+			[{species: 'Wynaut', ability: 'noguard', moves: ['toxic', 'worryseed']}],
 		]);
-		battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move toxic');
-      battle.makeChoices('move sleeptalk', 'move worryseed');
+		battle.makeChoices();
+      battle.makeChoices('move bellydrum', 'move worryseed');
 		const tauros = battle.p1.active[0];
       assert.equal(tauros.hp, 93, `Cud Chew should not cause Sitrus Berry to restore HP twice if Cud Chew is lost or suppressed.`);
 	});
