@@ -1,0 +1,5689 @@
+{
+  "chienpao": {
+    "weight": 10,
+    "sets": [
+      {
+        "species": "chienpao",
+        "weight": 35,
+        "moves": [
+          ["iciclecrash"],
+          ["suckerpunch"],
+          ["sacredsword"],
+          ["sheercold", "crunch"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["ghost"],
+        "ability": "swordofruin"
+      },
+      {
+        "species": "chienpao",
+        "weight": 15,
+        "moves": [
+          ["iciclecrash"],
+          ["suckerpunch"],
+          ["sacredsword"],
+          ["terablast"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["electric"],
+        "wantsTera": true,
+        "ability": "swordofruin"
+      },
+      {
+        "species": "chienpao",
+        "weight": 5,
+        "moves": [
+          ["terablast"],
+          ["sheercold", "sacredsword"],
+          ["iciclecrash"],
+          ["suckerpunch"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [140, 236, 4, 0, 12, 116],
+        "teratype": ["fairy", "electric", "grass"],
+        "wantsTera": true,
+        "ability": "swordofruin"
+      },
+      {
+        "species": "chienpao",
+        "weight": 5,
+        "moves": [
+          ["iciclecrash", "icespinner"],
+          ["terablast"],
+          ["crunch"],
+          ["sacredsword"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["electric", "grass", "fairy"],
+        "wantsTera": true,
+        "ability": "swordofruin"
+      },
+      {
+        "species": "chienpao",
+        "weight": 10,
+        "moves": [
+          ["iciclecrash", "icespinner"],
+          ["crunch", "throatchop"],
+          ["suckerpunch", "iceshard"],
+          ["sacredsword"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["dark"],
+        "ability": "swordofruin"
+      },
+      {
+        "species": "chienpao",
+        "weight": 10,
+        "moves": [
+          ["iciclecrash", "icespinner"],
+          ["terablast"],
+          ["suckerpunch", "iceshard"],
+          ["sacredsword"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["electric", "fairy", "grass"],
+        "wantsTera": true,
+        "ability": "swordofruin"
+      },
+      {
+        "species": "chienpao",
+        "weight": 5,
+        "moves": [
+          ["iciclecrash"],
+          ["recover"],
+          ["suckerpunch", "iceshard"],
+          ["sacredsword"]
+        ],
+        "item": ["rockyhelmet"],
+        "nature": "jolly",
+        "evs": [252, 68, 180, 0, 4, 4],
+        "teratype": ["fairy", "poison"],
+        "wantsTera": true,
+        "ability": "swordofruin"
+      },
+      {
+        "species": "chienpao",
+        "weight": 15,
+        "moves": [
+          ["swordsdance"],
+          ["iciclecrash"],
+          ["terablast"],
+          ["iceshard", "suckerpunch"]
+        ],
+        "item": ["lumberry"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["electric"],
+        "wantsTera": true,
+        "ability": "swordofruin"
+      }
+    ]
+  },
+  "dragonite": {
+    "weight": 10,
+    "sets": [
+      {
+        "species": "dragonite",
+        "weight": 40,
+        "moves": [
+          ["extremespeed"],
+          ["earthquake"],
+          ["encore", "dragondance"],
+          ["roost"]
+        ],
+        "item": ["rockyhelmet", "leftovers", "heavydutyboots"],
+        "nature": "adamant",
+        "evs": [196, 204, 4, 0, 4, 100],
+        "teratype": ["normal"],
+        "wantsTera": true,
+        "ability": "multiscale"
+      },
+      {
+        "species": "dragonite",
+        "weight": 10,
+        "moves": [["terablast"], ["earthquake"], ["dragondance"], ["roost"]],
+        "item": ["rockyhelmet", "leftovers", "lumberry", "heavydutyboots"],
+        "nature": "adamant",
+        "evs": [196, 204, 4, 0, 4, 100],
+        "teratype": ["flying", "fire", "fairy"],
+        "wantsTera": true,
+        "ability": "multiscale"
+      },
+      {
+        "species": "dragonite",
+        "weight": 5,
+        "moves": [["outrage"], ["extremespeed"], ["earthquake"], ["ironhead"]],
+        "item": ["choiceband"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["normal", "steel"],
+        "wantsTera": true,
+        "ability": "multiscale"
+      },
+      {
+        "species": "dragonite",
+        "weight": 15,
+        "moves": [["outrage"], ["extremespeed"], ["earthquake"], ["terablast"]],
+        "item": ["choiceband"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["flying"],
+        "wantsTera": true,
+        "ability": "multiscale"
+      },
+      {
+        "species": "dragonite",
+        "weight": 5,
+        "moves": [
+          ["airslash"],
+          ["substitute", "encore"],
+          ["thunderwave"],
+          ["roost"]
+        ],
+        "item": ["rockyhelmet"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [244, 0, 148, 0, 0, 116],
+        "teratype": ["water", "poison", "fairy"],
+        "wantsTera": true,
+        "ability": "multiscale"
+      },
+      {
+        "species": "dragonite",
+        "weight": 20,
+        "moves": [
+          ["scaleshot"],
+          ["ironhead"],
+          ["earthquake", "lowkick"],
+          ["dragondance"]
+        ],
+        "item": ["loadeddice"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "multiscale"
+      },
+      {
+        "species": "dragonite",
+        "weight": 5,
+        "moves": [
+          ["firespin"],
+          ["earthquake", "thunderwave"],
+          ["roost"],
+          ["encore"]
+        ],
+        "item": ["leftovers"],
+        "nature": "careful",
+        "evs": [244, 4, 4, 0, 252, 4],
+        "teratype": ["poison", "steel", "fairy"],
+        "wantsTera": true,
+        "ability": "multiscale"
+      }
+    ]
+  },
+  "fluttermane": {
+    "weight": 10,
+    "sets": [
+      {
+        "species": "fluttermane",
+        "weight": 20,
+        "moves": [
+          ["moonblast"],
+          ["shadowball", "calmmind"],
+          ["charm"],
+          ["painsplit"]
+        ],
+        "item": ["boosterenergy"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [244, 0, 252, 4, 4, 4],
+        "teratype": ["fairy", "water"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "fluttermane",
+        "weight": 5,
+        "moves": [["drainingkiss"], ["shadowball"], ["charm"], ["calmmind"]],
+        "item": ["boosterenergy"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [244, 0, 252, 4, 4, 4],
+        "teratype": ["fairy", "water"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "fluttermane",
+        "weight": 15,
+        "moves": [
+          ["moonblast"],
+          ["shadowball"],
+          ["substitute", "painsplit", "mysticalfire"],
+          ["calmmind"]
+        ],
+        "item": ["boosterenergy"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [4, 0, 132, 116, 4, 252],
+        "teratype": ["fairy", "water"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "fluttermane",
+        "weight": 5,
+        "moves": [
+          ["moonblast"],
+          ["shadowball", "substitute"],
+          ["terablast"],
+          ["calmmind"]
+        ],
+        "item": ["boosterenergy"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [4, 0, 132, 116, 4, 252],
+        "teratype": ["water", "ground"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "fluttermane",
+        "weight": 10,
+        "moves": [
+          ["moonblast"],
+          ["hex"],
+          ["painsplit", "taunt"],
+          ["thunderwave"]
+        ],
+        "item": ["boosterenergy"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [228, 0, 252, 0, 0, 28],
+        "teratype": ["water"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "fluttermane",
+        "weight": 5,
+        "moves": [
+          ["moonblast"],
+          ["shadowball"],
+          ["thunderbolt", "powergem", "hypervoice"],
+          ["perishsong"]
+        ],
+        "item": ["choicescarf"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [20, 0, 44, 204, 4, 236],
+        "teratype": ["fairy"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "fluttermane",
+        "weight": 25,
+        "moves": [
+          ["moonblast"],
+          ["shadowball"],
+          ["thunderbolt", "psyshock", "powergem", "mysticalfire", "hypervoice"],
+          ["perishsong"]
+        ],
+        "item": ["choicespecs"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["fairy"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "fluttermane",
+        "weight": 10,
+        "moves": [
+          ["moonblast"],
+          ["shadowball", "hex"],
+          ["thunderwave"],
+          ["taunt"]
+        ],
+        "item": ["focussash"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["normal"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "fluttermane",
+        "weight": 5,
+        "moves": [
+          ["moonblast"],
+          ["shadowball"],
+          ["psyshock"],
+          ["mysticalfire", "energyball"]
+        ],
+        "item": ["assaultvest"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [164, 0, 28, 196, 4, 116],
+        "teratype": ["fire", "grass"],
+        "ability": "protosynthesis"
+      }
+    ]
+  },
+  "urshifurapidstrike": {
+    "weight": 10,
+    "sets": [
+      {
+        "species": "urshifurapidstrike",
+        "weight": 40,
+        "moves": [
+          ["surgingstrikes"],
+          ["closecombat", "drainpunch"],
+          ["aquajet", "substitute"],
+          ["swordsdance"]
+        ],
+        "item": ["punchingglove"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["water", "poison", "grass"],
+        "wantsTera": true,
+        "ability": "unseenfist"
+      },
+      {
+        "species": "urshifurapidstrike",
+        "weight": 25,
+        "moves": [["surgingstrikes"], ["closecombat"], ["uturn"], ["icepunch"]],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["water"],
+        "ability": "unseenfist"
+      },
+      {
+        "species": "urshifurapidstrike",
+        "weight": 15,
+        "moves": [["surgingstrikes"], ["closecombat"], ["uturn"], ["aquajet"]],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["water", "poison", "grass"],
+        "ability": "unseenfist"
+      },
+      {
+        "species": "urshifurapidstrike",
+        "weight": 20,
+        "moves": [
+          ["surgingstrikes"],
+          ["closecombat"],
+          ["aquajet"],
+          ["counter", "icepunch"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["water", "ghost"],
+        "ability": "unseenfist"
+      }
+    ]
+  },
+  "ogerponhearthflame": {
+    "weight": 10,
+    "sets": [
+      {
+        "species": "ogerponhearthflame",
+        "weight": 40,
+        "moves": [
+          ["ivycudgel"],
+          ["playrough", "knockoff"],
+          ["swordsdance", "encore"],
+          ["hornleech", "trailblaze"]
+        ],
+        "gender": "f",
+        "item": ["hearthflamemask"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["fire"],
+        "ability": "moldbreaker"
+      },
+      {
+        "species": "ogerponhearthflame",
+        "weight": 40,
+        "moves": [
+          ["ivycudgel"],
+          ["hornleech"],
+          ["swordsdance"],
+          ["substitute", "playrough", "trailblaze"]
+        ],
+        "gender": "f",
+        "item": ["hearthflamemask"],
+        "nature": "jolly",
+        "evs": [156, 36, 4, 0, 60, 252],
+        "teratype": ["fire"],
+        "ability": "moldbreaker"
+      },
+      {
+        "species": "ogerponhearthflame",
+        "weight": 20,
+        "moves": [
+          ["ivycudgel"],
+          ["substitute"],
+          ["leechseed"],
+          ["hornleech", "playrough", "encore"]
+        ],
+        "item": ["hearthflamemask"],
+        "nature": "jolly",
+        "evs": [156, 36, 4, 0, 60, 252],
+        "teratype": ["fire"],
+        "ability": "moldbreaker"
+      }
+    ]
+  },
+  "ursalunabloodmoon": {
+    "weight": 10,
+    "sets": [
+      {
+        "species": "ursalunabloodmoon",
+        "weight": 15,
+        "moves": [["bloodmoon"], ["earthpower"], ["vacuumwave"], ["bodypress"]],
+        "item": ["rockyhelmet"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [116, 0, 236, 4, 116, 36],
+        "teratype": ["poison", "fairy"],
+        "ability": "mindseye"
+      },
+      {
+        "species": "ursalunabloodmoon",
+        "weight": 25,
+        "moves": [
+          ["hypervoice", "bloodmoon"],
+          ["moonlight"],
+          ["calmmind"],
+          ["yawn"]
+        ],
+        "item": ["covertcloak", "leftovers"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [100, 0, 4, 236, 12, 156],
+        "teratype": ["poison", "fairy"],
+        "ability": "mindseye"
+      },
+      {
+        "species": "ursalunabloodmoon",
+        "weight": 60,
+        "moves": [
+          ["bloodmoon"],
+          ["vacuumwave"],
+          ["earthpower"],
+          ["hypervoice"]
+        ],
+        "item": ["assaultvest"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [4, 0, 0, 252, 252, 0],
+        "teratype": ["fairy", "normal"],
+        "ability": "mindseye"
+      }
+    ]
+  },
+  "ironbundle": {
+    "weight": 9,
+    "sets": [
+      {
+        "species": "ironbundle",
+        "weight": 10,
+        "moves": [["flipturn"], ["freezedry"], ["hydropump"], ["encore"]],
+        "item": ["focussash"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["ghost"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironbundle",
+        "weight": 70,
+        "moves": [["substitute"], ["encore"], ["hydropump"], ["freezedry"]],
+        "item": ["boosterenergy"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["ghost", "water", "steel"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironbundle",
+        "weight": 20,
+        "moves": [
+          ["icebeam"],
+          ["hydropump"],
+          ["freezedry"],
+          ["flipturn", "terablast"]
+        ],
+        "item": ["choicespecs"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["water", "fairy"],
+        "ability": "quarkdrive"
+      }
+    ]
+  },
+  "urshifu": {
+    "weight": 9,
+    "sets": [
+      {
+        "species": "urshifu",
+        "weight": 55,
+        "moves": [
+          ["swordsdance"],
+          ["wickedblow"],
+          ["closecombat", "drainpunch"],
+          ["suckerpunch"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["dark", "ghost"],
+        "ability": "unseenfist"
+      },
+      {
+        "species": "urshifu",
+        "weight": 25,
+        "moves": [
+          ["swordsdance"],
+          ["wickedblow"],
+          ["closecombat", "drainpunch"],
+          ["suckerpunch"]
+        ],
+        "item": ["blackglasses"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["dark", "poison", "ghost"],
+        "ability": "unseenfist"
+      },
+      {
+        "species": "urshifu",
+        "weight": 5,
+        "moves": [
+          ["counter"],
+          ["wickedblow"],
+          ["closecombat", "drainpunch"],
+          ["suckerpunch"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["dark", "ghost"],
+        "ability": "unseenfist"
+      },
+      {
+        "species": "urshifu",
+        "weight": 5,
+        "moves": [
+          ["wickedblow"],
+          ["closecombat", "drainpunch"],
+          ["suckerpunch"],
+          ["uturn"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["dark", "poison", "ghost"],
+        "ability": "unseenfist"
+      },
+      {
+        "species": "urshifu",
+        "weight": 5,
+        "moves": [
+          ["wickedblow"],
+          ["closecombat", "drainpunch"],
+          ["suckerpunch"],
+          ["ironhead"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "unseenfist"
+      },
+      {
+        "species": "urshifu",
+        "weight": 5,
+        "moves": [["wickedblow"], ["closecombat"], ["suckerpunch"], ["uturn"]],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["dark"],
+        "ability": "unseenfist"
+      }
+    ]
+  },
+  "tinglu": {
+    "weight": 9,
+    "sets": [
+      {
+        "species": "tinglu",
+        "weight": 65,
+        "moves": [
+          ["stealthrock"],
+          ["ruination"],
+          ["earthquake", "heavyslam"],
+          ["whirlwind"]
+        ],
+        "item": ["sitrusberry"],
+        "nature": "impish",
+        "evs": [244, 4, 116, 0, 124, 20],
+        "teratype": ["water", "fairy", "poison"],
+        "ability": "vesselofruin"
+      },
+      {
+        "species": "tinglu",
+        "weight": 15,
+        "moves": [
+          ["stealthrock"],
+          ["spikes"],
+          ["earthquake", "heavyslam"],
+          ["whirlwind"]
+        ],
+        "item": ["sitrusberry"],
+        "nature": "impish",
+        "evs": [244, 4, 116, 0, 124, 20],
+        "teratype": ["water", "fairy", "poison"],
+        "ability": "vesselofruin"
+      },
+      {
+        "species": "tinglu",
+        "weight": 5,
+        "moves": [
+          ["earthquake"],
+          ["heavyslam"],
+          ["fissure", "stoneedge"],
+          ["ruination"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [4, 252, 4, 0, 108, 140],
+        "teratype": ["steel"],
+        "ability": "vesselofruin"
+      },
+      {
+        "species": "tinglu",
+        "weight": 5,
+        "moves": [["earthquake"], ["heavyslam"], ["terablast"], ["ruination"]],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [4, 252, 4, 0, 108, 140],
+        "teratype": ["electric", "fairy"],
+        "wantsTera": true,
+        "ability": "vesselofruin"
+      },
+      {
+        "species": "tinglu",
+        "weight": 10,
+        "moves": [["earthquake"], ["heavyslam"], ["rocktomb"], ["ruination"]],
+        "item": ["sitrusberry"],
+        "nature": "impish",
+        "evs": [244, 76, 116, 0, 68, 4],
+        "teratype": ["steel"],
+        "ability": "vesselofruin"
+      }
+    ]
+  },
+  "gholdengo": {
+    "weight": 9,
+    "sets": [
+      {
+        "species": "gholdengo",
+        "weight": 25,
+        "moves": [
+          ["makeitrain"],
+          ["shadowball"],
+          ["thunderbolt", "recover", "focusblast"],
+          ["trick"]
+        ],
+        "item": ["choicespecs"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel", "flying", "water"],
+        "ability": "goodasgold"
+      },
+      {
+        "species": "gholdengo",
+        "weight": 30,
+        "moves": [
+          ["makeitrain"],
+          ["shadowball"],
+          ["thunderbolt", "recover", "focusblast"],
+          ["trick"]
+        ],
+        "item": ["choicescarf"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel", "water", "flying", "normal"],
+        "ability": "goodasgold"
+      },
+      {
+        "species": "gholdengo",
+        "weight": 15,
+        "moves": [
+          ["makeitrain", "focusblast"],
+          ["hex"],
+          ["thunderwave"],
+          ["recover"]
+        ],
+        "item": ["rockyhelmet"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 4, 0, 0],
+        "teratype": ["water", "flying"],
+        "ability": "goodasgold"
+      },
+      {
+        "species": "gholdengo",
+        "weight": 20,
+        "moves": [["makeitrain"], ["shadowball"], ["nastyplot"], ["recover"]],
+        "item": ["covertcloak"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [164, 0, 156, 36, 4, 148],
+        "teratype": ["flying"],
+        "ability": "goodasgold"
+      },
+      {
+        "species": "gholdengo",
+        "weight": 5,
+        "moves": [["terablast"], ["shadowball"], ["nastyplot"], ["recover"]],
+        "item": ["covertcloak"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [164, 0, 156, 36, 4, 148],
+        "teratype": ["water", "fighting"],
+        "wantsTera": true,
+        "ability": "goodasgold"
+      },
+      {
+        "species": "gholdengo",
+        "weight": 5,
+        "moves": [
+          ["makeitrain"],
+          ["shadowball"],
+          ["nastyplot"],
+          ["recover", "substitute", "psyshock"]
+        ],
+        "item": ["airballoon"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["flying"],
+        "ability": "goodasgold"
+      }
+    ]
+  },
+  "chiyu": {
+    "weight": 9,
+    "sets": [
+      {
+        "species": "chiyu",
+        "weight": 20,
+        "moves": [["overheat"], ["darkpulse"], ["terablast"], ["flamethrower"]],
+        "item": ["choicescarf"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [116, 0, 84, 156, 4, 148],
+        "teratype": ["fairy", "grass"],
+        "wantsTera": true,
+        "ability": "beadsofruin"
+      },
+      {
+        "species": "chiyu",
+        "weight": 35,
+        "moves": [["overheat"], ["lavaplume"], ["darkpulse"], ["psychic"]],
+        "item": ["choicescarf"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["ghost", "fire"],
+        "ability": "beadsofruin"
+      },
+      {
+        "species": "chiyu",
+        "weight": 10,
+        "moves": [
+          ["ruination", "flamecharge"],
+          ["overheat"],
+          ["darkpulse"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "calm",
+        "evs": [252, 0, 4, 76, 156, 20],
+        "teratype": ["water", "fairy", "grass", "ghost"],
+        "wantsTera": true,
+        "ability": "beadsofruin"
+      },
+      {
+        "species": "chiyu",
+        "weight": 5,
+        "moves": [["lavaplume"], ["ruination"], ["taunt"], ["darkpulse"]],
+        "item": ["focussash"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["ghost"],
+        "ability": "beadsofruin"
+      },
+      {
+        "species": "chiyu",
+        "weight": 20,
+        "moves": [["overheat"], ["flamethrower"], ["darkpulse"], ["psychic"]],
+        "item": ["choicespecs"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["fire"],
+        "ability": "beadsofruin"
+      },
+      {
+        "species": "chiyu",
+        "weight": 10,
+        "moves": [["overheat"], ["flamethrower"], ["darkpulse"], ["terablast"]],
+        "item": ["choicespecs"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["fairy", "ghost", "water"],
+        "wantsTera": true,
+        "ability": "beadsofruin"
+      }
+    ]
+  },
+  "garganacl": {
+    "weight": 9,
+    "sets": [
+      {
+        "species": "garganacl",
+        "weight": 45,
+        "moves": [
+          ["saltcure"],
+          ["protect"],
+          ["recover"],
+          ["substitute", "fissure", "stealthrock"]
+        ],
+        "item": ["leftovers"],
+        "nature": "impish",
+        "evs": [252, 4, 252, 0, 0, 0],
+        "teratype": ["fairy", "water", "poison"],
+        "wantsTera": true,
+        "ability": "purifyingsalt"
+      },
+      {
+        "species": "garganacl",
+        "weight": 20,
+        "moves": [
+          ["saltcure"],
+          ["recover"],
+          ["curse"],
+          ["substitute", "protect", "earthquake"]
+        ],
+        "item": ["leftovers"],
+        "nature": "careful",
+        "evs": [252, 4, 0, 0, 252, 0],
+        "teratype": ["ghost"],
+        "wantsTera": true,
+        "ability": "purifyingsalt"
+      },
+      {
+        "species": "garganacl",
+        "weight": 35,
+        "moves": [["saltcure"], ["recover"], ["irondefense"], ["bodypress"]],
+        "item": ["leftovers"],
+        "nature": "careful",
+        "evs": [252, 0, 0, 0, 252, 4],
+        "teratype": ["fairy", "water", "poison"],
+        "wantsTera": true,
+        "ability": "purifyingsalt"
+      }
+    ]
+  },
+  "garchomp": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "garchomp",
+        "weight": 45,
+        "moves": [
+          ["scaleshot"],
+          ["earthquake"],
+          ["ironhead", "substitute"],
+          ["swordsdance"]
+        ],
+        "item": ["loadeddice"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "roughskin"
+      },
+      {
+        "species": "garchomp",
+        "weight": 25,
+        "moves": [["stealthrock"], ["spikes"], ["earthquake"], ["dragontail"]],
+        "item": ["sitrusberry"],
+        "nature": "impish",
+        "evs": [180, 4, 36, 0, 172, 116],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "roughskin"
+      },
+      {
+        "species": "garchomp",
+        "weight": 10,
+        "moves": [
+          ["outrage", "scaleshot"],
+          ["earthquake"],
+          ["rocktomb"],
+          ["ironhead"]
+        ],
+        "item": ["choiceband", "choicescarf"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "roughskin"
+      },
+      {
+        "species": "garchomp",
+        "weight": 5,
+        "moves": [["earthquake"], ["ironhead"], ["scaleshot"], ["dragontail"]],
+        "item": ["assaultvest"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel"],
+        "ability": "roughskin"
+      },
+      {
+        "species": "garchomp",
+        "weight": 10,
+        "moves": [
+          ["outrage", "scaleshot"],
+          ["earthquake"],
+          ["rocktomb"],
+          ["terablast"]
+        ],
+        "item": ["choiceband", "choicescarf"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["fairy", "fire"],
+        "wantsTera": true,
+        "ability": "roughskin"
+      },
+      {
+        "species": "garchomp",
+        "weight": 5,
+        "moves": [["earthquake"], ["terablast"], ["scaleshot"], ["dragontail"]],
+        "item": ["assaultvest"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "roughskin"
+      }
+    ]
+  },
+  "landorustherian": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "landorustherian",
+        "weight": 30,
+        "moves": [
+          ["stealthrock"],
+          ["earthquake"],
+          ["rocktomb", "taunt"],
+          ["uturn"]
+        ],
+        "item": ["sitrusberry", "rockyhelmet", "leftovers"],
+        "nature": "impish",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["water", "steel", "fairy"],
+        "ability": "intimidate"
+      },
+      {
+        "species": "landorustherian",
+        "weight": 45,
+        "moves": [
+          ["earthquake"],
+          ["uturn"],
+          ["terablast"],
+          ["stoneedge", "rocktomb"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["flying"],
+        "wantsTera": true,
+        "ability": "intimidate"
+      },
+      {
+        "species": "landorustherian",
+        "weight": 15,
+        "moves": [
+          ["earthquake"],
+          ["uturn"],
+          ["terablast"],
+          ["stoneedge", "rocktomb"]
+        ],
+        "item": ["choicescarf", "choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["flying", "fairy"],
+        "wantsTera": true,
+        "ability": "intimidate"
+      },
+      {
+        "species": "landorustherian",
+        "weight": 5,
+        "moves": [
+          ["earthquake"],
+          ["uturn"],
+          ["terablast", "fissure"],
+          ["rocktomb", "smackdown"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 4, 0, 0, 252, 0],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "intimidate"
+      },
+      {
+        "species": "landorustherian",
+        "weight": 5,
+        "moves": [["earthquake"], ["rocktomb"], ["uturn"], ["terablast"]],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["flying", "water"],
+        "wantsTera": true,
+        "ability": "intimidate"
+      }
+    ]
+  },
+  "scizor": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "scizor",
+        "weight": 15,
+        "moves": [
+          ["swordsdance"],
+          ["bulletpunch"],
+          ["closecombat"],
+          ["knockoff", "uturn", "terablast"]
+        ],
+        "item": ["sitrusberry"],
+        "nature": "adamant",
+        "evs": [252, 28, 204, 0, 20, 4],
+        "teratype": ["water"],
+        "wantsTera": true,
+        "ability": "technician"
+      },
+      {
+        "species": "scizor",
+        "weight": 20,
+        "moves": [
+          ["swordsdance"],
+          ["bulletpunch"],
+          ["uturn", "closecombat"],
+          ["knockoff"]
+        ],
+        "item": ["sitrusberry"],
+        "nature": "adamant",
+        "evs": [252, 28, 204, 0, 20, 4],
+        "teratype": ["steel", "flying"],
+        "wantsTera": true,
+        "ability": "technician"
+      },
+      {
+        "species": "scizor",
+        "weight": 50,
+        "moves": [["bulletpunch"], ["uturn"], ["knockoff"], ["closecombat"]],
+        "item": ["choiceband", "assaultvest"],
+        "nature": "adamant",
+        "evs": [236, 244, 20, 0, 4, 4],
+        "teratype": ["steel", "water"],
+        "wantsTera": true,
+        "ability": "technician"
+      },
+      {
+        "species": "scizor",
+        "weight": 15,
+        "moves": [
+          ["bulletpunch"],
+          ["uturn"],
+          ["knockoff", "terablast"],
+          ["closecombat"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [236, 244, 20, 0, 4, 4],
+        "teratype": ["water"],
+        "wantsTera": true,
+        "ability": "technician"
+      }
+    ]
+  },
+  "toxapex": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "toxapex",
+        "weight": 60,
+        "moves": [
+          ["toxic"],
+          ["toxicspikes", "liquidation", "banefulbunker"],
+          ["recover"],
+          ["haze"]
+        ],
+        "item": ["blacksludge", "mentalherb"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["poison"],
+        "ability": "regenerator"
+      },
+      {
+        "species": "toxapex",
+        "weight": 40,
+        "moves": [["toxic"], ["liquidation"], ["recover"], ["haze"]],
+        "item": ["rockyhelmet", "leftovers"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["fairy"],
+        "ability": "regenerator"
+      }
+    ]
+  },
+  "roaringmoon": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "roaringmoon",
+        "weight": 40,
+        "moves": [
+          ["dragondance"],
+          ["acrobatics"],
+          ["earthquake", "roost", "taunt"],
+          ["knockoff"]
+        ],
+        "item": ["boosterenergy"],
+        "nature": "jolly",
+        "evs": [0, 220, 36, 0, 0, 252],
+        "teratype": ["flying"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "roaringmoon",
+        "weight": 10,
+        "moves": [
+          ["dragondance"],
+          ["ironhead"],
+          ["earthquake", "roost", "taunt"],
+          ["knockoff"]
+        ],
+        "item": ["boosterenergy"],
+        "nature": "jolly",
+        "evs": [0, 220, 36, 0, 0, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "roaringmoon",
+        "weight": 5,
+        "moves": [["jawlock"], ["roost"], ["taunt"], ["dragondance"]],
+        "item": ["leftovers", "shedshell"],
+        "nature": "impish",
+        "evs": [244, 4, 196, 0, 36, 28],
+        "teratype": ["poison", "fairy"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "roaringmoon",
+        "weight": 10,
+        "moves": [
+          ["knockoff"],
+          ["uturn"],
+          ["earthquake", "scaleshot"],
+          ["terablast"]
+        ],
+        "item": ["choicescarf", "choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["fairy", "fire"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "roaringmoon",
+        "weight": 25,
+        "moves": [
+          ["knockoff"],
+          ["uturn", "earthquake"],
+          ["ironhead"],
+          ["outrage"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel", "dark"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "roaringmoon",
+        "weight": 10,
+        "moves": [["dragondance"], ["knockoff"], ["earthquake"], ["scaleshot"]],
+        "item": ["loadeddice"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      }
+    ]
+  },
+  "dragapult": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "dragapult",
+        "weight": 30,
+        "moves": [
+          ["dragondarts"],
+          ["uturn"],
+          ["suckerpunch"],
+          ["phantomforce"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["dragon", "steel"],
+        "ability": "infiltrator"
+      },
+      {
+        "species": "dragapult",
+        "weight": 5,
+        "moves": [["dragondarts"], ["uturn"], ["suckerpunch"], ["terablast"]],
+        "item": ["choiceband", "choicescarf"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["ghost", "fire", "steel", "fairy"],
+        "wantsTera": true,
+        "ability": "infiltrator"
+      },
+      {
+        "species": "dragapult",
+        "weight": 15,
+        "moves": [
+          ["reflect"],
+          ["lightscreen"],
+          ["curse"],
+          ["shadowball", "willowisp"]
+        ],
+        "item": ["lightclay"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [244, 0, 12, 0, 0, 252],
+        "teratype": ["ghost", "normal"],
+        "ability": "cursedbody"
+      },
+      {
+        "species": "dragapult",
+        "weight": 10,
+        "moves": [
+          ["dragondarts"],
+          ["terablast", "batonpass"],
+          ["substitute"],
+          ["dragondance"]
+        ],
+        "item": ["lifeorb"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["fire"],
+        "wantsTera": true,
+        "ability": "clearbody"
+      },
+      {
+        "species": "dragapult",
+        "weight": 25,
+        "moves": [
+          ["dracometeor"],
+          ["hex", "shadowball"],
+          ["willowisp"],
+          ["thunderwave"]
+        ],
+        "item": ["focussash"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 4, 252, 0, 252],
+        "teratype": ["ghost", "normal"],
+        "ability": "cursedbody"
+      },
+      {
+        "species": "dragapult",
+        "weight": 15,
+        "moves": [
+          ["shadowball"],
+          ["dracometeor"],
+          ["thunderbolt"],
+          ["flamethrower", "uturn"]
+        ],
+        "item": ["choicespecs", "choicescarf"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["ghost", "fire", "electric", "fighting"],
+        "ability": "infiltrator"
+      }
+    ]
+  },
+  "baxcalibur": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "baxcalibur",
+        "weight": 5,
+        "moves": [
+          ["glaiverush", "scaleshot"],
+          ["earthquake"],
+          ["iceshard"],
+          ["swordsdance", "iciclespear"]
+        ],
+        "item": ["lifeorb", "focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["dragon", "ghost"],
+        "wantsTera": true,
+        "ability": "thermalexchange"
+      },
+      {
+        "species": "baxcalibur",
+        "weight": 75,
+        "moves": [
+          ["scaleshot", "iceshard"],
+          ["iciclespear"],
+          ["earthquake"],
+          ["swordsdance", "dragondance"]
+        ],
+        "item": ["loadeddice"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["ice", "ground", "ghost"],
+        "wantsTera": true,
+        "ability": "thermalexchange"
+      },
+      {
+        "species": "baxcalibur",
+        "weight": 10,
+        "moves": [
+          ["iciclespear"],
+          ["iceshard"],
+          ["glaiverush"],
+          ["earthquake"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["ground"],
+        "wantsTera": true,
+        "ability": "thermalexchange"
+      },
+      {
+        "species": "baxcalibur",
+        "weight": 5,
+        "moves": [["iciclespear"], ["iceshard"], ["terablast"], ["earthquake"]],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["fairy", "electric", "fire"],
+        "wantsTera": true,
+        "ability": "thermalexchange"
+      },
+      {
+        "species": "baxcalibur",
+        "weight": 5,
+        "moves": [
+          ["glaiverush", "scaleshot"],
+          ["earthquake"],
+          ["iceshard"],
+          ["iciclespear"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["dragon", "ice"],
+        "wantsTera": true,
+        "ability": "thermalexchange"
+      }
+    ]
+  },
+  "ninetalesalola": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "ninetalesalola",
+        "weight": 80,
+        "moves": [
+          ["auroraveil"],
+          ["moonblast"],
+          ["encore"],
+          ["blizzard", "freezedry"]
+        ],
+        "item": ["lightclay"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["ice", "water", "fire"],
+        "ability": "snowwarning"
+      },
+      {
+        "species": "ninetalesalola",
+        "weight": 10,
+        "moves": [["auroraveil"], ["moonblast"], ["encore"], ["disable"]],
+        "item": ["lightclay", "rockyhelmet"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["ice", "water", "fire"],
+        "ability": "snowwarning"
+      },
+      {
+        "species": "ninetalesalola",
+        "weight": 20,
+        "moves": [["auroraveil"], ["moonblast"], ["encore"], ["terablast"]],
+        "item": ["lightclay"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["water", "fire"],
+        "wantsTera": true,
+        "ability": "snowwarning"
+      }
+    ]
+  },
+  "ogerponcornerstone": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "ogerponcornerstone",
+        "weight": 100,
+        "moves": [
+          ["ivycudgel"],
+          ["hornleech"],
+          ["knockoff", "encore"],
+          ["quickattack", "swordsdance", "rocktomb"]
+        ],
+        "gender": "f",
+        "item": ["cornerstonemask"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["rock"],
+        "ability": "sturdy"
+      }
+    ]
+  },
+  "ogerponwellspring": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "ogerponwellspring",
+        "weight": 60,
+        "moves": [
+          ["ivycudgel"],
+          ["hornleech", "leechseed"],
+          ["encore", "substitute"],
+          ["synthesis"]
+        ],
+        "gender": "f",
+        "item": ["wellspringmask"],
+        "nature": "careful",
+        "evs": [252, 4, 4, 0, 188, 60],
+        "teratype": ["water"],
+        "ability": "waterabsorb"
+      },
+      {
+        "species": "ogerponwellspring",
+        "weight": 40,
+        "moves": [
+          ["ivycudgel"],
+          ["hornleech"],
+          ["knockoff", "playrough"],
+          ["leechseed", "swordsdance"]
+        ],
+        "gender": "f",
+        "item": ["wellspringmask"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["water"],
+        "ability": "waterabsorb"
+      }
+    ]
+  },
+  "glimmora": {
+    "weight": 8,
+    "sets": [
+      {
+        "species": "glimmora",
+        "weight": 30,
+        "moves": [["powergem"], ["energyball"], ["stealthrock"], ["endure"]],
+        "item": ["redcard"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "calm",
+        "evs": [252, 0, 0, 0, 124, 132],
+        "teratype": ["grass"],
+        "ability": "toxicdebris"
+      },
+      {
+        "species": "glimmora",
+        "weight": 30,
+        "moves": [
+          ["stealthrock"],
+          ["powergem", "sludgewave", "energyball"],
+          ["mudshot", "earthpower"],
+          ["mortalspin"]
+        ],
+        "item": ["focussash"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["flying", "grass"],
+        "ability": "toxicdebris"
+      },
+      {
+        "species": "glimmora",
+        "weight": 5,
+        "moves": [
+          ["mortalspin"],
+          ["toxicspikes", "stealthrock"],
+          ["mudshot"],
+          ["powergem", "sludgebomb"]
+        ],
+        "item": ["airballoon", "leftovers"],
+        "nature": "bold",
+        "evs": [244, 0, 76, 0, 188, 0],
+        "teratype": ["flying", "grass"],
+        "ability": "toxicdebris"
+      },
+      {
+        "species": "glimmora",
+        "weight": 20,
+        "moves": [
+          ["sludgewave", "mortalspin"],
+          ["earthpower"],
+          ["energyball"],
+          ["dazzlinggleam", "powergem"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "modest",
+        "evs": [252, 0, 0, 252, 0, 4],
+        "teratype": ["grass", "ground", "fairy"],
+        "ability": "toxicdebris"
+      },
+      {
+        "species": "glimmora",
+        "weight": 15,
+        "moves": [
+          ["sludgewave"],
+          ["earthpower"],
+          ["energyball"],
+          ["dazzlinggleam", "powergem"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["grass", "ground", "fairy"],
+        "ability": "toxicdebris"
+      }
+    ]
+  },
+  "annihilape": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "annihilape",
+        "weight": 35,
+        "moves": [
+          ["drainpunch"],
+          ["ragefist"],
+          ["bulkup"],
+          ["taunt", "encore"]
+        ],
+        "item": ["leftovers", "sitrusberry"],
+        "nature": "jolly",
+        "evs": [252, 0, 4, 0, 0, 252],
+        "teratype": ["fire", "steel", "poison"],
+        "ability": "vitalspirit"
+      },
+      {
+        "species": "annihilape",
+        "weight": 25,
+        "moves": [
+          ["stealthrock"],
+          ["ragefist"],
+          ["drainpunch"],
+          ["taunt", "finalgambit", "rocktomb"]
+        ],
+        "item": ["sitrusberry"],
+        "nature": "impish",
+        "evs": [244, 0, 244, 0, 0, 20],
+        "teratype": ["steel", "fire", "normal"],
+        "ability": "vitalspirit"
+      },
+      {
+        "species": "annihilape",
+        "weight": 25,
+        "moves": [
+          ["stealthrock"],
+          ["ragefist"],
+          ["drainpunch", "closecombat"],
+          ["taunt", "finalgambit", "rocktomb"]
+        ],
+        "item": ["focussash", "roseliberry"],
+        "nature": "jolly",
+        "evs": [252, 4, 0, 0, 0, 252],
+        "teratype": ["steel", "fire", "normal"],
+        "ability": "vitalspirit"
+      },
+      {
+        "species": "annihilape",
+        "weight": 15,
+        "moves": [
+          ["uturn"],
+          ["closecombat"],
+          ["shadowclaw", "ragefist"],
+          ["finalgambit"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [252, 4, 0, 0, 0, 252],
+        "teratype": ["ghost", "normal"],
+        "ability": "defiant"
+      }
+    ]
+  },
+  "heatran": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "heatran",
+        "weight": 35,
+        "moves": [
+          ["magmastorm"],
+          ["taunt"],
+          ["protect"],
+          ["substitute", "earthpower", "terablast"]
+        ],
+        "item": ["leftovers"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "calm",
+        "evs": [252, 0, 0, 0, 252, 4],
+        "teratype": ["grass"],
+        "wantsTera": true,
+        "ability": "flashfire"
+      },
+      {
+        "species": "heatran",
+        "weight": 40,
+        "moves": [
+          ["magmastorm"],
+          ["earthpower"],
+          ["flashcannon"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [252, 0, 0, 252, 0, 4],
+        "teratype": ["grass", "fairy"],
+        "wantsTera": true,
+        "ability": "flashfire"
+      },
+      {
+        "species": "heatran",
+        "weight": 25,
+        "moves": [
+          ["magmastorm"],
+          ["flashcannon"],
+          ["terablast", "stealthrock"],
+          ["willowisp"]
+        ],
+        "item": ["sitrusberry", "rockyhelmet"],
+        "nature": "bold",
+        "evs": [252, 0, 252, 4, 0, 0],
+        "teratype": ["fairy", "grass"],
+        "wantsTera": true,
+        "ability": "flamebody"
+      }
+    ]
+  },
+  "breloom": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "breloom",
+        "weight": 80,
+        "moves": [
+          ["bulletseed"],
+          ["machpunch"],
+          ["bulldoze", "rocktomb"],
+          ["spore"]
+        ],
+        "item": ["focussash"],
+        "nature": "adamant",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["grass", "fighting", "ground"],
+        "ability": "technician"
+      },
+      {
+        "species": "breloom",
+        "weight": 10,
+        "moves": [
+          ["bulletseed"],
+          ["machpunch"],
+          ["terablast"],
+          ["spore", "swordsdance"]
+        ],
+        "item": ["loadeddice"],
+        "nature": "adamant",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["fire"],
+        "wantsTera": true,
+        "ability": "technician"
+      },
+      {
+        "species": "breloom",
+        "weight": 10,
+        "moves": [
+          ["substitute"],
+          ["leechseed", "toxic"],
+          ["spore"],
+          ["protect"]
+        ],
+        "item": ["toxicorb"],
+        "nature": "impish",
+        "evs": [204, 4, 252, 0, 28, 20],
+        "teratype": ["steel", "fire"],
+        "wantsTera": true,
+        "ability": "poisonheal"
+      }
+    ]
+  },
+  "cresselia": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "cresselia",
+        "weight": 60,
+        "moves": [["storedpower"], ["moonblast"], ["calmmind"], ["moonlight"]],
+        "item": ["covertcloak", "leftovers"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 116, 0, 0, 140],
+        "teratype": ["electric", "poison"],
+        "wantsTera": true,
+        "ability": "levitate"
+      },
+      {
+        "species": "cresselia",
+        "weight": 40,
+        "moves": [
+          ["icebeam", "moonblast"],
+          ["thunderwave", "trickroom"],
+          ["moonlight"],
+          ["lunardance"]
+        ],
+        "item": ["rockyhelmet", "mentalherb"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 4, 0, 0],
+        "teratype": ["steel"],
+        "ability": "levitate"
+      }
+    ]
+  },
+  "dondozo": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "dondozo",
+        "weight": 60,
+        "moves": [
+          ["fissure"],
+          ["wavecrash", "heavyslam"],
+          ["protect", "rest"],
+          ["yawn"]
+        ],
+        "item": ["leftovers"],
+        "nature": "impish",
+        "evs": [244, 0, 148, 0, 116, 0],
+        "teratype": ["grass", "fairy", "steel"],
+        "ability": "unaware"
+      },
+      {
+        "species": "dondozo",
+        "weight": 20,
+        "moves": [
+          ["fissure"],
+          ["wavecrash", "bodypress"],
+          ["protect", "rest"],
+          ["yawn"]
+        ],
+        "item": ["leftovers"],
+        "nature": "impish",
+        "evs": [244, 0, 252, 0, 12, 0],
+        "teratype": ["grass", "fairy", "steel"],
+        "ability": "unaware"
+      },
+      {
+        "species": "dondozo",
+        "weight": 10,
+        "moves": [
+          ["bodypress", "earthquake", "fissure", "avalanche"],
+          ["wavecrash"],
+          ["rest"],
+          ["yawn", "sleeptalk"]
+        ],
+        "item": ["rockyhelmet"],
+        "nature": "impish",
+        "evs": [244, 0, 252, 0, 12, 0],
+        "teratype": ["grass", "fairy", "steel"],
+        "ability": "unaware"
+      },
+      {
+        "species": "dondozo",
+        "weight": 5,
+        "moves": [
+          ["wavecrash"],
+          ["avalanche"],
+          ["bodypress", "heavyslam", "earthquake"],
+          ["fissure"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "careful",
+        "evs": [44, 212, 0, 0, 252, 0],
+        "teratype": ["grass", "fairy", "steel", "ground"],
+        "ability": "unaware"
+      },
+      {
+        "species": "dondozo",
+        "weight": 5,
+        "moves": [["curse"], ["rest"], ["wavecrash"], ["fissure"]],
+        "item": ["chestoberry"],
+        "nature": "careful",
+        "evs": [252, 0, 0, 0, 252, 4],
+        "teratype": ["grass", "fairy", "steel"],
+        "ability": "unaware"
+      }
+    ]
+  },
+  "hippowdon": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "hippowdon",
+        "weight": 100,
+        "moves": [
+          ["stealthrock"],
+          ["yawn"],
+          ["earthquake"],
+          ["whirlwind", "slackoff"]
+        ],
+        "item": ["sitrusberry", "leftovers"],
+        "nature": "careful",
+        "evs": [252, 0, 4, 0, 252, 0],
+        "teratype": ["steel", "water"],
+        "ability": "sandstream"
+      }
+    ]
+  },
+  "mimikyu": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "mimikyu",
+        "weight": 25,
+        "moves": [["playrough"], ["shadowsneak"], ["curse"], ["painsplit"]],
+        "item": ["lifeorb"],
+        "nature": "jolly",
+        "evs": [4, 156, 92, 0, 4, 252],
+        "teratype": ["ghost", "fairy"],
+        "ability": "disguise"
+      },
+      {
+        "species": "mimikyu",
+        "weight": 15,
+        "moves": [["playrough"], ["shadowsneak"], ["curse"], ["trickroom"]],
+        "gender": "f",
+        "item": ["lifeorb"],
+        "nature": "adamant",
+        "evs": [36, 236, 180, 0, 4, 52],
+        "teratype": ["fairy", "ghost"],
+        "ability": "disguise"
+      },
+      {
+        "species": "mimikyu",
+        "weight": 25,
+        "moves": [
+          ["playrough"],
+          ["shadowsneak"],
+          ["drainpunch", "shadowclaw"],
+          ["swordsdance"]
+        ],
+        "item": ["lifeorb"],
+        "nature": "jolly",
+        "evs": [4, 156, 92, 0, 4, 252],
+        "teratype": ["ghost", "fairy"],
+        "ability": "disguise"
+      },
+      {
+        "species": "mimikyu",
+        "weight": 15,
+        "moves": [["playrough"], ["shadowclaw"], ["willowisp"], ["trick"]],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["fairy", "ghost"],
+        "ability": "disguise"
+      },
+      {
+        "species": "mimikyu",
+        "weight": 5,
+        "moves": [
+          ["playrough"],
+          ["shadowsneak"],
+          ["shadowclaw", "painsplit"],
+          ["curse"]
+        ],
+        "item": ["covertcloak"],
+        "nature": "jolly",
+        "evs": [36, 220, 0, 0, 0, 252],
+        "teratype": ["ghost", "fairy"],
+        "ability": "disguise"
+      },
+      {
+        "species": "mimikyu",
+        "weight": 5,
+        "moves": [["playrough"], ["shadowsneak"], ["woodhammer"], ["curse"]],
+        "item": ["lifeorb"],
+        "nature": "jolly",
+        "evs": [4, 156, 92, 0, 4, 252],
+        "teratype": ["grass"],
+        "ability": "disguise"
+      },
+      {
+        "species": "mimikyu",
+        "weight": 5,
+        "moves": [["playrough"], ["curse"], ["trickroom"], ["shadowsneak"]],
+        "gender": "f",
+        "item": ["covertcloak"],
+        "nature": "adamant",
+        "evs": [36, 236, 180, 0, 4, 52],
+        "teratype": ["fairy", "ghost"],
+        "ability": "disguise"
+      },
+      {
+        "species": "mimikyu",
+        "weight": 5,
+        "moves": [
+          ["shadowclaw", "shadowsneak"],
+          ["substitute"],
+          ["curse"],
+          ["painsplit"]
+        ],
+        "item": ["figyberry"],
+        "nature": "jolly",
+        "evs": [4, 0, 252, 0, 0, 252],
+        "teratype": ["ghost"],
+        "ability": "disguise"
+      }
+    ]
+  },
+  "rotomwash": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "rotomwash",
+        "weight": 35,
+        "moves": [["hydropump"], ["voltswitch"], ["trick"], ["willowisp"]],
+        "item": ["choicescarf"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel", "ghost"],
+        "ability": "levitate"
+      },
+      {
+        "species": "rotomwash",
+        "weight": 15,
+        "moves": [["hydropump"], ["thunderbolt"], ["voltswitch"], ["trick"]],
+        "item": ["choicespecs"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["electric"],
+        "ability": "levitate"
+      },
+      {
+        "species": "rotomwash",
+        "weight": 45,
+        "moves": [["hydropump"], ["voltswitch"], ["foulplay"], ["willowisp"]],
+        "item": ["rockyhelmet", "sitrusberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 4, 0, 0],
+        "teratype": ["steel", "ghost", "fairy"],
+        "ability": "levitate"
+      },
+      {
+        "species": "rotomwash",
+        "weight": 5,
+        "moves": [
+          ["discharge", "thunderbolt"],
+          ["terablast"],
+          ["nastyplot"],
+          ["substitute"]
+        ],
+        "item": ["leftovers"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [252, 0, 0, 4, 0, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "levitate"
+      }
+    ]
+  },
+  "basculegion": {
+    "weight": 7,
+    "sets": [
+      {
+        "species": "basculegion",
+        "weight": 20,
+        "moves": [
+          ["lastrespects"],
+          ["wavecrash"],
+          ["aquajet", "sleeptalk"],
+          ["flipturn"]
+        ],
+        "gender": "m",
+        "item": ["choicescarf"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 4, 0, 252],
+        "teratype": ["fairy", "normal", "fighting", "water", "ghost"],
+        "ability": "adaptability"
+      },
+      {
+        "species": "basculegion",
+        "weight": 10,
+        "moves": [["lastrespects"], ["wavecrash"], ["flipturn"], ["terablast"]],
+        "gender": "m",
+        "item": ["choicescarf"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 4, 0, 252],
+        "teratype": ["fairy", "fighting"],
+        "wantsTera": true,
+        "ability": "adaptability"
+      },
+      {
+        "species": "basculegion",
+        "weight": 40,
+        "moves": [
+          ["wavecrash"],
+          ["aquajet"],
+          ["agility", "endeavor"],
+          ["lastrespects"]
+        ],
+        "gender": "m",
+        "item": ["focussash"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["normal", "ghost", "water"],
+        "ability": "adaptability"
+      },
+      {
+        "species": "basculegion",
+        "weight": 20,
+        "moves": [
+          ["wavecrash"],
+          ["aquajet"],
+          ["agility", "terablast"],
+          ["lastrespects"]
+        ],
+        "gender": "m",
+        "item": ["focussash"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "adaptability"
+      },
+      {
+        "species": "basculegion",
+        "weight": 5,
+        "moves": [["wavecrash"], ["aquajet"], ["substitute"], ["lastrespects"]],
+        "gender": "m",
+        "item": ["brightpowder"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["normal", "ghost", "water"],
+        "ability": "adaptability"
+      },
+      {
+        "species": "basculegion",
+        "weight": 5,
+        "moves": [
+          ["wavecrash"],
+          ["aquajet"],
+          ["flipturn", "liquidation", "substitute"],
+          ["lastrespects"]
+        ],
+        "gender": "m",
+        "item": ["lifeorb"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["water"],
+        "ability": "swiftswim"
+      }
+    ]
+  },
+  "corviknight": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "corviknight",
+        "weight": 50,
+        "moves": [
+          ["uturn"],
+          ["roost"],
+          ["bodypress", "ironhead"],
+          ["taunt", "bravebird"]
+        ],
+        "item": ["rockyhelmet", "leftovers"],
+        "nature": "impish",
+        "evs": [252, 0, 252, 0, 0, 4],
+        "teratype": ["dragon", "fighting", "water"],
+        "ability": "mirrorarmor"
+      },
+      {
+        "species": "corviknight",
+        "weight": 40,
+        "moves": [
+          ["irondefense"],
+          ["bodypress"],
+          ["roost"],
+          ["taunt", "ironhead", "uturn"]
+        ],
+        "item": ["rockyhelmet", "sitrusberry", "safetygoggles", "covertcloak"],
+        "nature": "impish",
+        "evs": [252, 0, 252, 0, 0, 4],
+        "teratype": ["fighting", "water", "dragon"],
+        "ability": "mirrorarmor"
+      },
+      {
+        "species": "corviknight",
+        "weight": 10,
+        "moves": [["bulkup"], ["taunt"], ["roost"], ["ironhead", "bravebird"]],
+        "item": ["rockyhelmet", "sitrusberry", "safetygoggles", "covertcloak"],
+        "nature": "impish",
+        "evs": [252, 0, 252, 0, 0, 4],
+        "teratype": ["water", "dragon"],
+        "ability": "mirrorarmor"
+      }
+    ]
+  },
+  "zapdos": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "zapdos",
+        "weight": 75,
+        "moves": [["voltswitch"], ["roost"], ["hurricane"], ["discharge"]],
+        "item": ["rockyhelmet", "heavydutyboots", "sitrusberry"],
+        "nature": "bold",
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["water", "steel"],
+        "ability": "static"
+      },
+      {
+        "species": "zapdos",
+        "weight": 10,
+        "moves": [["voltswitch"], ["roost"], ["hurricane"], ["terablast"]],
+        "item": ["rockyhelmet", "heavydutyboots", "sitrusberry"],
+        "nature": "bold",
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["ice"],
+        "wantsTera": true,
+        "ability": "static"
+      },
+      {
+        "species": "zapdos",
+        "weight": 10,
+        "moves": [
+          ["thunderbolt"],
+          ["hurricane"],
+          ["voltswitch"],
+          ["terablast"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "timid",
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "evs": [0, 0, 4, 252, 0, 252],
+        "teratype": ["ice", "fairy"],
+        "wantsTera": true,
+        "ability": "static"
+      },
+      {
+        "species": "zapdos",
+        "weight": 5,
+        "moves": [["thunderbolt"], ["hurricane"], ["voltswitch"], ["heatwave"]],
+        "item": ["choicescarf", "choicespecs"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 4, 252, 0, 252],
+        "teratype": ["electric"],
+        "ability": "static"
+      }
+    ]
+  },
+  "ursaluna": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "ursaluna",
+        "weight": 85,
+        "moves": [["facade"], ["earthquake"], ["trailblaze"], ["swordsdance"]],
+        "item": ["flameorb"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["normal", "water", "grass"],
+        "ability": "guts"
+      },
+      {
+        "species": "ursaluna",
+        "weight": 15,
+        "moves": [["earthquake"], ["avalanche"], ["yawn"], ["protect"]],
+        "item": ["leftovers"],
+        "nature": "impish",
+        "evs": [156, 4, 252, 0, 92, 4],
+        "teratype": ["water", "fairy"],
+        "ability": "bulletproof"
+      }
+    ]
+  },
+  "goodrahisui": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "goodrahisui",
+        "weight": 60,
+        "moves": [
+          ["flashcannon", "heavyslam"],
+          ["dracometeor", "icebeam"],
+          ["acidspray", "thunderbolt", "flamethrower"],
+          ["earthquake"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "quiet",
+        "evs": [252, 0, 0, 252, 0, 4],
+        "teratype": ["flying", "fairy", "water"],
+        "ability": "sapsipper"
+      },
+      {
+        "species": "goodrahisui",
+        "weight": 40,
+        "moves": [
+          ["acidarmor"],
+          ["bodypress"],
+          ["heavyslam"],
+          ["protect", "dracometeor", "icebeam"]
+        ],
+        "item": ["leftovers"],
+        "nature": "careful",
+        "evs": [252, 0, 0, 0, 252, 4],
+        "teratype": ["flying", "fairy"],
+        "ability": "shellarmor"
+      }
+    ]
+  },
+  "magnezone": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "magnezone",
+        "weight": 70,
+        "moves": [
+          ["thunderbolt"],
+          ["flashcannon"],
+          ["voltswitch"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [252, 0, 0, 4, 252, 0],
+        "teratype": ["fairy", "water"],
+        "wantsTera": true,
+        "ability": "analytic"
+      },
+      {
+        "species": "magnezone",
+        "weight": 20,
+        "moves": [
+          ["thunderbolt"],
+          ["flashcannon"],
+          ["voltswitch"],
+          ["terablast"]
+        ],
+        "item": ["choicespecs"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [252, 0, 0, 4, 252, 0],
+        "teratype": ["fairy", "water"],
+        "wantsTera": true,
+        "ability": "sturdy"
+      },
+      {
+        "species": "magnezone",
+        "weight": 10,
+        "moves": [
+          ["thunderbolt"],
+          ["flashcannon", "steelbeam"],
+          ["voltswitch"],
+          ["mirrorcoat"]
+        ],
+        "item": ["custapberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [252, 0, 0, 4, 252, 0],
+        "teratype": ["flying", "water"],
+        "wantsTera": true,
+        "ability": "sturdy"
+      }
+    ]
+  },
+  "ogerpon": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "ogerpon",
+        "weight": 100,
+        "moves": [
+          ["ivycudgel"],
+          ["uturn"],
+          ["playrough"],
+          ["knockoff", "stompingtantrum"]
+        ],
+        "item": ["choiceband", "focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["grass"],
+        "ability": "defiant"
+      }
+    ]
+  },
+  "gliscor": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "gliscor",
+        "weight": 100,
+        "moves": [["substitute"], ["toxic"], ["protect"], ["earthquake"]],
+        "item": ["toxicorb"],
+        "nature": "impish",
+        "evs": [244, 0, 108, 0, 0, 156],
+        "teratype": ["water"],
+        "wantsTera": true,
+        "ability": "poisonheal"
+      }
+    ]
+  },
+  "ironmoth": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "ironmoth",
+        "weight": 20,
+        "moves": [
+          ["fierydance"],
+          ["sludgewave"],
+          ["energyball"],
+          ["dazzlinggleam", "overheat", "psychic"]
+        ],
+        "item": ["boosterenergy", "choicespecs", "assaultvest"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["grass", "water", "fire", "fairy"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironmoth",
+        "weight": 20,
+        "moves": [
+          ["fierydance"],
+          ["sludgewave"],
+          ["energyball"],
+          ["dazzlinggleam", "overheat", "psychic", "terablast"]
+        ],
+        "item": ["boosterenergy", "choicespecs", "assaultvest"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["water", "fairy"],
+        "wantsTera": true,
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironmoth",
+        "weight": 20,
+        "moves": [
+          ["toxicspikes"],
+          ["fierydance"],
+          ["morningsun"],
+          ["whirlwind", "sludgewave", "terablast"]
+        ],
+        "item": ["boosterenergy", "covertcloak", "passhoberry", "sitrusberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [244, 0, 52, 4, 12, 196],
+        "teratype": ["water", "grass", "fairy"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironmoth",
+        "weight": 20,
+        "moves": [
+          ["toxicspikes"],
+          ["fierydance"],
+          ["morningsun"],
+          ["whirlwind"]
+        ],
+        "item": ["blacksludge", "heavydutyboots"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "calm",
+        "evs": [196, 0, 0, 0, 132, 180],
+        "teratype": ["poison", "grass"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironmoth",
+        "weight": 10,
+        "moves": [
+          ["fierydance"],
+          ["sludgewave", "acidspray"],
+          ["energyball", "psychic"],
+          ["dazzlinggleam", "terablast"]
+        ],
+        "item": ["boosterenergy"],
+        "nature": "timid",
+        "evs": [0, 0, 124, 132, 0, 252],
+        "teratype": ["water"],
+        "wantsTera": true,
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironmoth",
+        "weight": 10,
+        "moves": [
+          ["fierydance"],
+          ["sludgewave", "acidspray"],
+          ["energyball"],
+          ["dazzlinggleam", "psychic"]
+        ],
+        "item": ["boosterenergy"],
+        "nature": "timid",
+        "evs": [0, 0, 124, 132, 0, 252],
+        "teratype": ["grass", "fire", "poison"],
+        "ability": "quarkdrive"
+      }
+    ]
+  },
+  "rillaboom": {
+    "weight": 6,
+    "sets": [
+      {
+        "species": "rillaboom",
+        "weight": 20,
+        "moves": [
+          ["grassyglide"],
+          ["knockoff"],
+          ["drumbeating", "woodhammer"],
+          ["uturn", "highhorsepower"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["grass", "poison"],
+        "ability": "grassysurge"
+      },
+      {
+        "species": "rillaboom",
+        "weight": 10,
+        "moves": [
+          ["grassyglide"],
+          ["knockoff"],
+          ["drumbeating", "woodhammer"],
+          ["uturn", "highhorsepower"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["grass"],
+        "ability": "grassysurge"
+      },
+      {
+        "species": "rillaboom",
+        "weight": 25,
+        "moves": [
+          ["grassyglide"],
+          ["knockoff"],
+          ["drumbeating", "woodhammer"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["rock"],
+        "wantsTera": true,
+        "ability": "grassysurge"
+      },
+      {
+        "species": "rillaboom",
+        "weight": 25,
+        "moves": [
+          ["grassyglide"],
+          ["knockoff"],
+          ["drumbeating", "woodhammer"],
+          ["terablast"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["rock"],
+        "wantsTera": true,
+        "ability": "grassysurge"
+      },
+      {
+        "species": "rillaboom",
+        "weight": 20,
+        "moves": [
+          ["grassyglide"],
+          ["highhorsepower"],
+          ["terablast"],
+          ["swordsdance"]
+        ],
+        "item": ["grassyseed"],
+        "nature": "adamant",
+        "evs": [252, 252, 4, 0, 0, 0],
+        "teratype": ["rock", "fairy"],
+        "wantsTera": true,
+        "ability": "grassysurge"
+      }
+    ]
+  },
+  "sneasler": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "sneasler",
+        "weight": 30,
+        "moves": [["direclaw"], ["closecombat"], ["fakeout"], ["toxicspikes"]],
+        "gender": "f",
+        "item": [
+          "focussash",
+          "airballoon",
+          "sitrusberry",
+          "redcard",
+          "normalgem"
+        ],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["fighting", "flying"],
+        "ability": "unburden"
+      },
+      {
+        "species": "sneasler",
+        "weight": 10,
+        "moves": [["direclaw"], ["closecombat"], ["fakeout"], ["toxicspikes"]],
+        "gender": "f",
+        "item": ["focussash", "airballoon", "sitrusberry"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["fighting", "flying"],
+        "ability": "poisontouch"
+      },
+      {
+        "species": "sneasler",
+        "weight": 55,
+        "moves": [
+          ["direclaw"],
+          ["closecombat"],
+          ["shadowclaw"],
+          ["toxicspikes"]
+        ],
+        "gender": "f",
+        "item": ["focussash", "airballoon", "sitrusberry", "redcard"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["ghost"],
+        "ability": "unburden"
+      },
+      {
+        "species": "sneasler",
+        "weight": 5,
+        "moves": [
+          ["direclaw"],
+          ["closecombat"],
+          ["swordsdance"],
+          ["acrobatics", "shadowclaw"]
+        ],
+        "item": ["grassyseed"],
+        "nature": "adamant",
+        "evs": [92, 252, 4, 0, 4, 156],
+        "teratype": ["flying", "ghost"],
+        "ability": "unburden"
+      }
+    ]
+  },
+  "clodsire": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "clodsire",
+        "weight": 50,
+        "moves": [
+          ["earthquake"],
+          ["toxic", "yawn"],
+          ["stealthrock", "haze", "counter"],
+          ["recover"]
+        ],
+        "item": ["sitrusberry", "leftovers"],
+        "nature": "impish",
+        "evs": [156, 0, 252, 0, 100, 0],
+        "teratype": ["water", "fire", "electric", "dark"],
+        "ability": "waterabsorb"
+      },
+      {
+        "species": "clodsire",
+        "weight": 50,
+        "moves": [
+          ["earthquake"],
+          ["toxic", "yawn"],
+          ["stealthrock", "haze", "counter"],
+          ["recover"]
+        ],
+        "item": ["sitrusberry", "leftovers"],
+        "nature": "impish",
+        "evs": [156, 0, 252, 0, 100, 0],
+        "teratype": ["water", "fire", "electric", "dark"],
+        "ability": "unaware"
+      }
+    ]
+  },
+  "meowscarada": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "meowscarada",
+        "weight": 25,
+        "moves": [
+          ["flowertrick"],
+          ["knockoff"],
+          ["uturn", "trick"],
+          ["playrough", "suckerpunch", "lowkick"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["grass", "dark"],
+        "ability": "protean"
+      },
+      {
+        "species": "meowscarada",
+        "weight": 10,
+        "moves": [
+          ["flowertrick"],
+          ["knockoff"],
+          ["uturn", "trick"],
+          ["terablast"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["rock", "ghost"],
+        "wantsTera": true,
+        "ability": "protean"
+      },
+      {
+        "species": "meowscarada",
+        "weight": 30,
+        "moves": [
+          ["flowertrick"],
+          ["knockoff"],
+          ["suckerpunch", "taunt"],
+          ["toxicspikes"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["grass"],
+        "ability": "overgrow"
+      },
+      {
+        "species": "meowscarada",
+        "weight": 20,
+        "moves": [
+          ["flowertrick"],
+          ["knockoff"],
+          ["terablast"],
+          ["suckerpunch", "toxicspikes"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["rock", "ghost"],
+        "wantsTera": true,
+        "ability": "overgrow"
+      },
+      {
+        "species": "meowscarada",
+        "weight": 10,
+        "moves": [
+          ["flowertrick"],
+          ["knockoff"],
+          ["uturn", "trick"],
+          ["suckerpunch"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["grass"],
+        "ability": "protean"
+      },
+      {
+        "species": "meowscarada",
+        "weight": 5,
+        "moves": [
+          ["flowertrick"],
+          ["knockoff"],
+          ["uturn", "trick", "suckerpunch"],
+          ["terablast"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["rock", "ghost"],
+        "wantsTera": true,
+        "ability": "protean"
+      }
+    ]
+  },
+  "azumarill": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "azumarill",
+        "weight": 45,
+        "moves": [["aquajet"], ["playrough"], ["liquidation"], ["superpower"]],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["water", "fairy"],
+        "ability": "hugepower"
+      },
+      {
+        "species": "azumarill",
+        "weight": 10,
+        "moves": [["aquajet"], ["playrough"], ["liquidation"], ["terablast"]],
+        "item": ["assaultvest", "choiceband"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["fire", "electric", "fairy", "grass"],
+        "wantsTera": true,
+        "ability": "hugepower"
+      },
+      {
+        "species": "azumarill",
+        "weight": 25,
+        "moves": [
+          ["bellydrum"],
+          ["aquajet"],
+          ["playrough"],
+          ["liquidation", "encore"]
+        ],
+        "item": ["sitrusberry"],
+        "nature": "adamant",
+        "evs": [244, 252, 0, 0, 0, 12],
+        "teratype": ["water"],
+        "ability": "hugepower"
+      },
+      {
+        "species": "azumarill",
+        "weight": 10,
+        "moves": [["bellydrum"], ["aquajet"], ["playrough"], ["bulldoze"]],
+        "item": ["sitrusberry"],
+        "nature": "adamant",
+        "evs": [244, 252, 0, 0, 0, 12],
+        "teratype": ["steel"],
+        "ability": "hugepower"
+      },
+      {
+        "species": "azumarill",
+        "weight": 5,
+        "moves": [["bellydrum"], ["aquajet"], ["playrough"], ["terablast"]],
+        "item": ["sitrusberry"],
+        "nature": "adamant",
+        "evs": [244, 252, 0, 0, 0, 12],
+        "teratype": ["fire"],
+        "wantsTera": true,
+        "ability": "hugepower"
+      },
+      {
+        "species": "azumarill",
+        "weight": 5,
+        "moves": [
+          ["substitute"],
+          ["encore"],
+          ["playrough"],
+          ["aquajet", "liquidation"]
+        ],
+        "item": ["leftovers"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["water"],
+        "ability": "hugepower"
+      }
+    ]
+  },
+  "ironvaliant": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "ironvaliant",
+        "weight": 35,
+        "moves": [
+          ["spiritbreak"],
+          ["reflect", "encore"],
+          ["closecombat"],
+          ["destinybond", "knockoff"]
+        ],
+        "item": ["boosterenergy"],
+        "nature": "jolly",
+        "evs": [92, 204, 4, 0, 4, 204],
+        "teratype": ["steel", "ghost"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironvaliant",
+        "weight": 25,
+        "moves": [
+          ["moonblast"],
+          ["encore", "shadowball", "shadowsneak"],
+          ["closecombat", "aurasphere", "shadowball"],
+          ["destinybond"]
+        ],
+        "item": ["focussash", "boosterenergy"],
+        "nature": "naive",
+        "evs": [0, 4, 0, 252, 0, 252],
+        "teratype": ["ghost", "fairy", "steel"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironvaliant",
+        "weight": 20,
+        "moves": [
+          ["moonblast"],
+          ["closecombat"],
+          ["encore", "shadowball"],
+          ["psyshock", "psychic", "shadowball", "thunderbolt"]
+        ],
+        "item": ["lifeorb", "boosterenergy"],
+        "nature": "naive",
+        "evs": [0, 4, 0, 252, 0, 252],
+        "teratype": ["ghost", "fairy", "steel", "electric"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironvaliant",
+        "weight": 20,
+        "moves": [
+          ["swordsdance"],
+          ["closecombat", "encore"],
+          ["spiritbreak"],
+          ["shadowsneak", "knockoff"]
+        ],
+        "item": ["focussash", "boosterenergy"],
+        "nature": "jolly",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["ghost", "steel", "fairy"],
+        "ability": "quarkdrive"
+      }
+    ]
+  },
+  "kingambit": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "kingambit",
+        "weight": 25,
+        "moves": [
+          ["kowtowcleave"],
+          ["suckerpunch"],
+          ["ironhead"],
+          ["guillotine"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["dark", "flying"],
+        "ability": "defiant"
+      },
+      {
+        "species": "kingambit",
+        "weight": 20,
+        "moves": [
+          ["kowtowcleave"],
+          ["suckerpunch"],
+          ["ironhead"],
+          ["guillotine"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["dark", "flying"],
+        "ability": "supremeoverlord"
+      },
+      {
+        "species": "kingambit",
+        "weight": 10,
+        "moves": [
+          ["kowtowcleave"],
+          ["suckerpunch", "guillotine"],
+          ["ironhead"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "defiant"
+      },
+      {
+        "species": "kingambit",
+        "weight": 10,
+        "moves": [
+          ["kowtowcleave"],
+          ["suckerpunch", "guillotine"],
+          ["ironhead"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "supremeoverlord"
+      },
+      {
+        "species": "kingambit",
+        "weight": 15,
+        "moves": [
+          ["kowtowcleave"],
+          ["suckerpunch"],
+          ["ironhead"],
+          ["swordsdance"]
+        ],
+        "item": ["blackglasses", "sitrusberry"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["dark", "flying"],
+        "ability": "supremeoverlord"
+      },
+      {
+        "species": "kingambit",
+        "weight": 10,
+        "moves": [
+          ["kowtowcleave"],
+          ["suckerpunch"],
+          ["ironhead"],
+          ["swordsdance"]
+        ],
+        "item": ["blackglasses", "sitrusberry"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["dark", "flying"],
+        "ability": "defiant"
+      },
+      {
+        "species": "kingambit",
+        "weight": 5,
+        "moves": [
+          ["stealthrock"],
+          ["kowtowcleave"],
+          ["ironhead", "guillotine"],
+          ["suckerpunch", "thunderwave"]
+        ],
+        "item": ["sitrusberry", "focussash"],
+        "nature": "adamant",
+        "evs": [244, 252, 4, 0, 4, 4],
+        "teratype": ["flying", "fairy", "dark"],
+        "ability": "defiant"
+      },
+      {
+        "species": "kingambit",
+        "weight": 5,
+        "moves": [
+          ["stealthrock"],
+          ["kowtowcleave"],
+          ["ironhead", "guillotine"],
+          ["suckerpunch", "thunderwave"]
+        ],
+        "item": ["sitrusberry", "focussash"],
+        "nature": "adamant",
+        "evs": [244, 252, 4, 0, 4, 4],
+        "teratype": ["flying", "fairy", "dark"],
+        "ability": "supremeoverlord"
+      }
+    ]
+  },
+  "volcarona": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "volcarona",
+        "weight": 55,
+        "moves": [
+          ["quiverdance"],
+          ["fierydance"],
+          ["morningsun"],
+          ["gigadrain", "willowisp", "substitute"]
+        ],
+        "item": ["heavydutyboots", "sitrusberry"],
+        "nature": "timid",
+        "evs": [244, 0, 204, 12, 4, 44],
+        "teratype": ["fairy", "grass"],
+        "wantsTera": true,
+        "ability": "flamebody"
+      },
+      {
+        "species": "volcarona",
+        "weight": 25,
+        "moves": [
+          ["quiverdance"],
+          ["fierydance"],
+          ["morningsun"],
+          ["terablast"]
+        ],
+        "item": ["heavydutyboots", "sitrusberry"],
+        "nature": "timid",
+        "evs": [244, 0, 204, 12, 4, 44],
+        "teratype": ["water"],
+        "wantsTera": true,
+        "ability": "flamebody"
+      },
+      {
+        "species": "volcarona",
+        "weight": 20,
+        "moves": [
+          ["quiverdance"],
+          ["fierydance"],
+          ["gigadrain", "bugbuzz", "psychic"],
+          ["terablast"]
+        ],
+        "item": ["heavydutyboots", "lumberry", "sitrusberry"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["water", "rock"],
+        "wantsTera": true,
+        "ability": "flamebody"
+      }
+    ]
+  },
+  "wochien": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "wochien",
+        "weight": 90,
+        "moves": [
+          ["leechseed"],
+          ["protect"],
+          ["foulplay", "knockoff", "darkpulse"],
+          ["substitute", "ruination", "gigadrain", "taunt"]
+        ],
+        "item": ["leftovers"],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 0, 4],
+        "teratype": ["poison", "fairy", "water", "fire"],
+        "wantsTera": true,
+        "ability": "tabletsofruin"
+      },
+      {
+        "species": "wochien",
+        "weight": 10,
+        "moves": [
+          ["leechseed"],
+          ["protect"],
+          ["terablast"],
+          ["substitute", "ruination", "gigadrain", "taunt"]
+        ],
+        "item": ["leftovers"],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 0, 4],
+        "teratype": ["fire"],
+        "wantsTera": true,
+        "ability": "tabletsofruin"
+      }
+    ]
+  },
+  "empoleon": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "empoleon",
+        "weight": 100,
+        "moves": [
+          ["stealthrock"],
+          ["yawn", "roar"],
+          ["flashcannon", "icebeam"],
+          ["flipturn", "surf", "roost"]
+        ],
+        "item": ["leftovers", "sitrusberry", "airballoon"],
+        "nature": "calm",
+        "evs": [252, 0, 4, 0, 252, 0],
+        "teratype": ["flying", "fairy", "grass"],
+        "ability": "competitive"
+      }
+    ]
+  },
+  "kommoo": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "kommoo",
+        "weight": 50,
+        "moves": [
+          ["clangoroussoul"],
+          ["clangingscales"],
+          ["aurasphere", "vacuumwave"],
+          ["flashcannon"]
+        ],
+        "item": ["throatspray"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "bulletproof"
+      },
+      {
+        "species": "kommoo",
+        "weight": 50,
+        "moves": [
+          ["clangoroussoul"],
+          ["drainpunch"],
+          ["ironhead"],
+          ["earthquake", "substitute"]
+        ],
+        "item": ["sitrusberry", "leftovers"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "bulletproof"
+      }
+    ]
+  },
+  "sinistcha": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "sinistcha",
+        "weight": 100,
+        "moves": [
+          ["strengthsap"],
+          ["matchagotcha"],
+          ["shadowball", "hex"],
+          ["scald", "calmmind"]
+        ],
+        "item": ["leftovers", "rockyhelmet", "covertcloak"],
+        "nature": "bold",
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "evs": [252, 0, 252, 0, 0, 4],
+        "teratype": ["water", "fairy", "normal"],
+        "wantsTera": true,
+        "ability": "heatproof"
+      }
+    ]
+  },
+  "vikavolt": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "vikavolt",
+        "weight": 100,
+        "moves": [
+          ["voltswitch", "thunderbolt", "discharge", "thunderwave"],
+          ["bugbuzz"],
+          ["stickyweb"],
+          ["guillotine"]
+        ],
+        "item": ["sitrusberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [244, 0, 212, 0, 52, 0],
+        "teratype": ["steel"],
+        "ability": "levitate"
+      }
+    ]
+  },
+  "skeledirge": {
+    "weight": 5,
+    "sets": [
+      {
+        "species": "skeledirge",
+        "weight": 30,
+        "moves": [
+          ["torchsong"],
+          ["slackoff"],
+          ["willowisp", "yawn"],
+          ["shadowball", "hex", "earthpower", "terablast"]
+        ],
+        "item": ["leftovers", "sitrusberry", "covertcloak", "heavydutyboots"],
+        "nature": "bold",
+        "evs": [252, 0, 244, 4, 4, 4],
+        "teratype": ["fairy", "water"],
+        "wantsTera": true,
+        "ability": "unaware"
+      },
+      {
+        "species": "skeledirge",
+        "weight": 60,
+        "moves": [
+          ["torchsong"],
+          ["slackoff"],
+          ["willowisp", "yawn"],
+          ["shadowball", "hex", "earthpower"]
+        ],
+        "item": ["leftovers", "sitrusberry", "covertcloak", "heavydutyboots"],
+        "nature": "bold",
+        "evs": [252, 0, 244, 4, 4, 4],
+        "teratype": ["normal", "fairy"],
+        "ability": "unaware"
+      },
+      {
+        "species": "skeledirge",
+        "weight": 5,
+        "moves": [
+          ["sing"],
+          ["torchsong"],
+          ["slackoff"],
+          ["shadowball", "earthpower", "terablast"]
+        ],
+        "item": ["blunderpolicy"],
+        "nature": "modest",
+        "evs": [204, 0, 4, 132, 4, 164],
+        "teratype": ["fairy", "water"],
+        "wantsTera": true,
+        "ability": "unaware"
+      },
+      {
+        "species": "skeledirge",
+        "weight": 5,
+        "moves": [
+          ["sing"],
+          ["torchsong"],
+          ["slackoff"],
+          ["shadowball", "earthpower"]
+        ],
+        "item": ["blunderpolicy"],
+        "nature": "modest",
+        "evs": [204, 0, 4, 132, 4, 164],
+        "teratype": ["fire"],
+        "ability": "unaware"
+      }
+    ]
+  },
+  "blissey": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "blissey",
+        "weight": 10,
+        "moves": [
+          ["softboiled"],
+          ["flamethrower"],
+          ["icebeam"],
+          ["thunderbolt"]
+        ],
+        "item": ["expertbelt"],
+        "nature": "bold",
+        "evs": [4, 0, 252, 252, 0, 0],
+        "teratype": ["dark", "fire"],
+        "ability": "naturalcure"
+      },
+      {
+        "species": "blissey",
+        "weight": 40,
+        "moves": [
+          ["calmmind"],
+          ["softboiled"],
+          ["shadowball"],
+          ["stealthrock", "terablast", "flamethrower"]
+        ],
+        "item": ["leftovers"],
+        "nature": "calm",
+        "evs": [4, 0, 252, 0, 252, 0],
+        "teratype": ["dark", "ghost", "fire"],
+        "wantsTera": true,
+        "ability": "naturalcure"
+      },
+      {
+        "species": "blissey",
+        "weight": 50,
+        "moves": [
+          ["calmmind"],
+          ["softboiled"],
+          ["shadowball", "flamethrower"],
+          ["fling"]
+        ],
+        "item": ["flameorb", "poisonbarb", "lightball"],
+        "nature": "calm",
+        "evs": [4, 0, 252, 0, 252, 0],
+        "teratype": ["dark", "fire"],
+        "ability": "naturalcure"
+      }
+    ]
+  },
+  "ceruledge": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "ceruledge",
+        "weight": 25,
+        "moves": [
+          ["bitterblade"],
+          ["bulkup"],
+          ["taunt"],
+          ["shadowsneak", "terablast", "flamecharge", "willowisp"]
+        ],
+        "item": ["leftovers"],
+        "nature": "impish",
+        "evs": [252, 4, 252, 0, 0, 0],
+        "teratype": ["fairy", "grass"],
+        "ability": "flashfire"
+      },
+      {
+        "species": "ceruledge",
+        "weight": 65,
+        "moves": [
+          ["bitterblade"],
+          ["closecombat", "shadowclaw"],
+          ["shadowsneak"],
+          ["swordsdance", "destinybond"]
+        ],
+        "item": ["focussash"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["fire", "normal", "fighting"],
+        "ability": "weakarmor"
+      },
+      {
+        "species": "ceruledge",
+        "weight": 10,
+        "moves": [
+          ["bitterblade"],
+          ["flareblitz"],
+          ["shadowsneak"],
+          ["terablast"]
+        ],
+        "item": ["choiceband"],
+        "nature": "adamant",
+        "evs": [100, 252, 156, 0, 0, 0],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "weakarmor"
+      }
+    ]
+  },
+  "chansey": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "chansey",
+        "weight": 100,
+        "moves": [
+          ["seismictoss"],
+          ["shadowball", "stealthrock", "thunderwave"],
+          ["calmmind"],
+          ["softboiled"]
+        ],
+        "item": ["eviolite"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [12, 0, 252, 0, 244, 0],
+        "teratype": ["dark", "ghost"],
+        "ability": "naturalcure"
+      }
+    ]
+  },
+  "espathra": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "espathra",
+        "weight": 35,
+        "moves": [
+          ["calmmind"],
+          ["storedpower"],
+          ["terablast"],
+          ["protect", "substitute", "roost"]
+        ],
+        "item": ["leftovers", "lumberry"],
+        "nature": "bold",
+        "evs": [244, 0, 252, 0, 0, 12],
+        "teratype": ["fighting", "fire"],
+        "wantsTera": true,
+        "ability": "speedboost"
+      },
+      {
+        "species": "espathra",
+        "weight": 20,
+        "moves": [
+          ["calmmind"],
+          ["storedpower"],
+          ["dazzlinggleam"],
+          ["protect", "substitute", "roost"]
+        ],
+        "item": ["leftovers", "lumberry"],
+        "nature": "bold",
+        "evs": [244, 0, 252, 0, 0, 12],
+        "teratype": ["fairy", "water"],
+        "ability": "speedboost"
+      },
+      {
+        "species": "espathra",
+        "weight": 30,
+        "moves": [
+          ["luminacrash"],
+          ["batonpass"],
+          ["protect", "reflect", "dazzlinggleam"],
+          ["calmmind", "substitute"]
+        ],
+        "item": ["focussash", "sitrusberry", "leftovers"],
+        "nature": "timid",
+        "evs": [252, 0, 4, 0, 0, 252],
+        "teratype": ["normal", "ghost", "water"],
+        "ability": "speedboost"
+      },
+      {
+        "species": "espathra",
+        "weight": 10,
+        "moves": [
+          ["luminacrash"],
+          ["energyball"],
+          ["shadowball"],
+          ["hypnosis", "batonpass"]
+        ],
+        "item": ["focussash"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["normal", "ghost", "grass"],
+        "ability": "speedboost"
+      },
+      {
+        "species": "espathra",
+        "weight": 5,
+        "moves": [
+          ["lightscreen"],
+          ["reflect"],
+          ["luminacrash", "protect"],
+          ["batonpass"]
+        ],
+        "item": ["lightclay"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [252, 0, 0, 4, 0, 252],
+        "teratype": ["fairy"],
+        "ability": "speedboost"
+      }
+    ]
+  },
+  "grimmsnarl": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "grimmsnarl",
+        "weight": 90,
+        "moves": [
+          ["reflect"],
+          ["lightscreen"],
+          ["taunt", "thunderwave"],
+          ["spiritbreak", "partingshot"]
+        ],
+        "item": ["lightclay"],
+        "nature": "careful",
+        "evs": [248, 0, 8, 0, 252, 0],
+        "teratype": ["steel", "poison"],
+        "ability": "prankster"
+      },
+      {
+        "species": "grimmsnarl",
+        "weight": 10,
+        "moves": [
+          ["spiritbreak", "playrough"],
+          ["crunch", "suckerpunch"],
+          ["lowkick", "hammerarm", "taunt"],
+          ["thunderwave"]
+        ],
+        "gender": "m",
+        "item": ["focussash"],
+        "nature": "adamant",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["ghost", "fairy", "dark"],
+        "ability": "prankster"
+      }
+    ]
+  },
+  "ironhands": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "ironhands",
+        "weight": 70,
+        "moves": [
+          ["drainpunch"],
+          ["thunderpunch", "wildcharge"],
+          ["earthquake", "icepunch", "heavyslam"],
+          ["voltswitch", "fakeout"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [0, 252, 0, 0, 204, 52],
+        "teratype": ["ground", "grass", "water", "fairy"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironhands",
+        "weight": 30,
+        "moves": [
+          ["drainpunch"],
+          ["thunderpunch"],
+          ["substitute"],
+          ["swordsdance"]
+        ],
+        "item": ["leftovers", "punchingglove"],
+        "nature": "impish",
+        "evs": [92, 4, 172, 0, 212, 28],
+        "teratype": ["fairy", "water", "grass"],
+        "ability": "quarkdrive"
+      }
+    ]
+  },
+  "hydreigon": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "hydreigon",
+        "weight": 45,
+        "moves": [
+          ["darkpulse"],
+          ["dracometeor"],
+          ["flashcannon"],
+          ["flamethrower", "fireblast", "uturn"]
+        ],
+        "item": ["choicespecs", "choicescarf"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "levitate"
+      },
+      {
+        "species": "hydreigon",
+        "weight": 25,
+        "moves": [
+          ["darkpulse"],
+          ["dracometeor"],
+          ["flashcannon", "uturn"],
+          ["flamethrower", "fireblast"]
+        ],
+        "item": ["choicespecs"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["poison", "fire"],
+        "wantsTera": true,
+        "ability": "levitate"
+      },
+      {
+        "species": "hydreigon",
+        "weight": 10,
+        "moves": [
+          ["stealthrock"],
+          ["darkpulse"],
+          ["taunt"],
+          ["thunderwave", "dracometeor", "flashcannon"]
+        ],
+        "item": ["focussash"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel", "poison"],
+        "wantsTera": true,
+        "ability": "levitate"
+      },
+      {
+        "species": "hydreigon",
+        "weight": 20,
+        "moves": [
+          ["darkpulse"],
+          ["flashcannon"],
+          ["nastyplot"],
+          ["substitute", "taunt", "flamethrower", "dracometeor", "earthpower"]
+        ],
+        "item": ["leftovers", "lifeorb"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "levitate"
+      }
+    ]
+  },
+  "kleavor": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "kleavor",
+        "weight": 55,
+        "moves": [
+          ["stoneaxe"],
+          ["nightslash"],
+          ["feint", "trailblaze"],
+          ["xscissor", "closecombat", "uturn"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["grass", "water", "bug"],
+        "ability": "sharpness"
+      },
+      {
+        "species": "kleavor",
+        "weight": 10,
+        "moves": [
+          ["stoneaxe"],
+          ["nightslash"],
+          ["feint", "trailblaze"],
+          ["xscissor", "closecombat", "uturn"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [140, 52, 4, 0, 244, 68],
+        "teratype": ["grass", "water", "bug"],
+        "ability": "sharpness"
+      },
+      {
+        "species": "kleavor",
+        "weight": 35,
+        "moves": [
+          ["stoneaxe"],
+          ["uturn"],
+          ["nightslash"],
+          ["xscissor", "closecombat"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["bug", "grass"],
+        "ability": "sharpness"
+      }
+    ]
+  },
+  "screamtail": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "screamtail",
+        "weight": 80,
+        "moves": [
+          ["stealthrock"],
+          ["thunderwave", "trickroom"],
+          ["encore", "perishsong", "roar"],
+          ["mistyexplosion"]
+        ],
+        "item": ["mentalherb", "boosterenergy", "sitrusberry"],
+        "nature": "calm",
+        "evs": [180, 0, 0, 0, 156, 172],
+        "teratype": ["normal"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "screamtail",
+        "weight": 10,
+        "moves": [
+          ["reflect"],
+          ["lightscreen"],
+          ["encore"],
+          ["perishsong", "dazzlinggleam", "stealthrock", "mistyexplosion"]
+        ],
+        "item": ["lightclay", "mentalherb"],
+        "nature": "timid",
+        "evs": [252, 0, 0, 0, 4, 252],
+        "teratype": ["normal"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "screamtail",
+        "weight": 5,
+        "moves": [
+          ["batonpass"],
+          ["bulkup", "calmmind"],
+          ["encore"],
+          ["dazzlinggleam", "substitute", "playrough"]
+        ],
+        "item": ["mentalherb", "sitrusberry"],
+        "nature": "careful",
+        "evs": [220, 0, 220, 0, 68, 0],
+        "teratype": ["normal"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "screamtail",
+        "weight": 5,
+        "moves": [
+          ["batonpass"],
+          ["bulkup", "calmmind"],
+          ["sing"],
+          ["playrough", "substitute"]
+        ],
+        "item": ["blunderpolicy"],
+        "nature": "careful",
+        "evs": [220, 0, 220, 0, 68, 0],
+        "teratype": ["normal"],
+        "ability": "protosynthesis"
+      }
+    ]
+  },
+  "milotic": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "milotic",
+        "weight": 100,
+        "moves": [
+          ["scald"],
+          ["recover"],
+          ["mirrorcoat", "haze"],
+          ["drainingkiss", "flipturn", "icebeam"]
+        ],
+        "item": ["flameorb"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["fairy", "fire"],
+        "ability": "marvelscale"
+      }
+    ]
+  },
+  "okidogi": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "okidogi",
+        "weight": 40,
+        "moves": [
+          ["bulkup"],
+          ["drainpunch"],
+          ["knockoff"],
+          ["icepunch", "poisonjab", "taunt", "substitute"]
+        ],
+        "item": ["leftovers", "blacksludge", "rockyhelmet"],
+        "nature": "adamant",
+        "evs": [252, 156, 0, 0, 0, 100],
+        "teratype": ["water", "poison", "flying"],
+        "ability": "toxicchain"
+      },
+      {
+        "species": "okidogi",
+        "weight": 35,
+        "moves": [
+          ["bulkup"],
+          ["drainpunch"],
+          ["knockoff"],
+          ["icepunch", "poisonjab", "taunt", "substitute"]
+        ],
+        "item": ["leftovers", "blacksludge", "rockyhelmet"],
+        "nature": "adamant",
+        "evs": [252, 156, 0, 0, 0, 100],
+        "teratype": ["water", "poison", "flying"],
+        "ability": "guarddog"
+      },
+      {
+        "species": "okidogi",
+        "weight": 15,
+        "moves": [
+          ["drainpunch"],
+          ["knockoff"],
+          ["poisonjab", "poisonfang"],
+          ["icepunch"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["poison", "water", "flying"],
+        "ability": "guarddog"
+      },
+      {
+        "species": "okidogi",
+        "weight": 10,
+        "moves": [
+          ["drainpunch"],
+          ["knockoff"],
+          ["poisonjab", "poisonfang"],
+          ["icepunch"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["poison", "water", "flying"],
+        "ability": "toxicchain"
+      }
+    ]
+  },
+  "arcaninehisui": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "arcaninehisui",
+        "weight": 45,
+        "moves": [
+          ["headsmash"],
+          ["flareblitz"],
+          ["extremespeed"],
+          ["terablast", "stealthrock"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["grass"],
+        "wantsTera": true,
+        "ability": "rockhead"
+      },
+      {
+        "species": "arcaninehisui",
+        "weight": 50,
+        "moves": [
+          ["headsmash"],
+          ["flareblitz"],
+          ["extremespeed"],
+          ["stealthrock", "wildcharge", "flamecharge"]
+        ],
+        "item": ["focussash", "choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["rock", "normal"],
+        "wantsTera": true,
+        "ability": "rockhead"
+      },
+      {
+        "species": "arcaninehisui",
+        "weight": 5,
+        "moves": [
+          ["rockblast"],
+          ["flareblitz"],
+          ["extremespeed"],
+          ["terablast"]
+        ],
+        "item": ["loadeddice"],
+        "nature": "adamant",
+        "evs": [212, 252, 4, 0, 4, 36],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "intimidate"
+      }
+    ]
+  },
+  "snorlax": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "snorlax",
+        "weight": 60,
+        "moves": [
+          ["heavyslam"],
+          ["fissure", "earthquake"],
+          ["bodyslam", "protect"],
+          ["yawn"]
+        ],
+        "item": ["leftovers"],
+        "nature": "careful",
+        "evs": [252, 0, 92, 0, 164, 0],
+        "teratype": ["fairy", "ghost"],
+        "ability": "thickfat"
+      },
+      {
+        "species": "snorlax",
+        "weight": 20,
+        "moves": [
+          ["heavyslam"],
+          ["heatcrash", "earthquake"],
+          ["doubleedge", "bodyslam"],
+          ["fissure"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [0, 252, 252, 0, 4, 0],
+        "teratype": ["steel", "ghost"],
+        "ability": "thickfat"
+      },
+      {
+        "species": "snorlax",
+        "weight": 20,
+        "moves": [
+          ["heavyslam"],
+          ["heatcrash", "earthquake"],
+          ["doubleedge", "bodyslam"],
+          ["fissure", "terablast"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [0, 252, 252, 0, 4, 0],
+        "teratype": ["fairy"],
+        "ability": "thickfat"
+      }
+    ]
+  },
+  "alomomola": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "alomomola",
+        "weight": 100,
+        "moves": [["scald"], ["flipturn"], ["mirrorcoat"], ["icywind"]],
+        "item": ["assaultvest"],
+        "nature": "sassy",
+        "evs": [4, 0, 252, 0, 252, 0],
+        "teratype": ["poison"],
+        "ability": "regenerator"
+      }
+    ]
+  },
+  "umbreon": {
+    "weight": 4,
+    "sets": [
+      {
+        "species": "umbreon",
+        "weight": 100,
+        "moves": [["foulplay"], ["protect"], ["wish"], ["yawn"]],
+        "item": ["leftovers"],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["fairy", "poison"],
+        "ability": "innerfocus"
+      }
+    ]
+  },
+  "cloyster": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "cloyster",
+        "weight": 60,
+        "moves": [
+          ["shellsmash"],
+          ["iciclespear"],
+          ["iceshard", "drillrun", "terablast"],
+          ["rockblast"]
+        ],
+        "item": ["focussash", "kingsrock"],
+        "nature": "adamant",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["ghost"],
+        "ability": "skilllink"
+      },
+      {
+        "species": "cloyster",
+        "weight": 15,
+        "moves": [
+          ["shellsmash"],
+          ["iciclespear"],
+          ["terablast"],
+          ["rockblast"]
+        ],
+        "item": ["focussash", "lifeorb", "lumberry"],
+        "nature": "adamant",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["electric"],
+        "wantsTera": true,
+        "ability": "skilllink"
+      },
+      {
+        "species": "cloyster",
+        "weight": 25,
+        "moves": [
+          ["shellsmash"],
+          ["iciclespear"],
+          ["iceshard", "drillrun"],
+          ["rockblast"]
+        ],
+        "item": ["focussash"],
+        "nature": "adamant",
+        "evs": [0, 252, 4, 0, 0, 252],
+        "teratype": ["ice"],
+        "ability": "skilllink"
+      }
+    ]
+  },
+  "tinkaton": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "tinkaton",
+        "weight": 100,
+        "moves": [
+          ["gigatonhammer", "knockoff"],
+          ["encore"],
+          ["stealthrock"],
+          ["thunderwave"]
+        ],
+        "item": ["airballoon"],
+        "nature": "careful",
+        "evs": [244, 4, 164, 0, 20, 76],
+        "teratype": ["water", "flying", "ground"],
+        "ability": "moldbreaker"
+      }
+    ]
+  },
+  "fezandipiti": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "fezandipiti",
+        "weight": 50,
+        "moves": [
+          ["calmmind", "heatwave", "charm", "taunt", "tailwind"],
+          ["moonblast"],
+          ["roost"],
+          ["uturn"]
+        ],
+        "item": ["leftovers", "covertcloak", "sitrusberry"],
+        "nature": "bold",
+        "evs": [252, 0, 220, 0, 0, 36],
+        "teratype": ["water", "flying"],
+        "ability": "toxicchain"
+      },
+      {
+        "species": "fezandipiti",
+        "weight": 50,
+        "moves": [
+          ["roost"],
+          ["toxic", "taunt"],
+          ["uturn"],
+          ["playrough", "charm"]
+        ],
+        "item": ["leftovers"],
+        "nature": "careful",
+        "evs": [252, 0, 0, 0, 220, 36],
+        "teratype": ["water", "flying"],
+        "ability": "toxicchain"
+      }
+    ]
+  },
+  "pelipper": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "pelipper",
+        "weight": 70,
+        "moves": [
+          ["uturn"],
+          ["hydropump", "surf"],
+          ["icebeam"],
+          ["hurricane", "roost"]
+        ],
+        "item": ["damprock"],
+        "nature": "quiet",
+        "ivs": [31, 31, 31, 31, 31, 0],
+        "evs": [252, 0, 4, 252, 0, 0],
+        "teratype": ["steel", "ground", "grass"],
+        "ability": "drizzle"
+      },
+      {
+        "species": "pelipper",
+        "weight": 30,
+        "moves": [["uturn"], ["hydropump", "surf"], ["icebeam"], ["hurricane"]],
+        "item": ["damprock", "choicespecs"],
+        "nature": "modest",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel", "ground", "grass", "water", "flying"],
+        "ability": "drizzle"
+      }
+    ]
+  },
+  "rotomheat": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "rotomheat",
+        "weight": 20,
+        "moves": [["voltswitch"], ["overheat"], ["trick"], ["thunderbolt"]],
+        "item": ["choicescarf", "choicespecs"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["electric"],
+        "ability": "levitate"
+      },
+      {
+        "species": "rotomheat",
+        "weight": 20,
+        "moves": [["voltswitch"], ["overheat"], ["trick"], ["terablast"]],
+        "item": ["choicescarf", "choicespecs"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "levitate"
+      },
+      {
+        "species": "rotomheat",
+        "weight": 60,
+        "moves": [
+          ["voltswitch"],
+          ["foulplay"],
+          ["overheat"],
+          ["willowisp", "thunderwave"]
+        ],
+        "item": ["sitrusberry", "rockyhelmet"],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["steel", "fairy", "ghost"],
+        "ability": "levitate"
+      }
+    ]
+  },
+  "taurospaldeablaze": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "taurospaldeablaze",
+        "weight": 50,
+        "moves": [
+          ["ragingbull"],
+          ["bodypress"],
+          ["willowisp"],
+          ["rocktomb", "earthquake", "bulkup"]
+        ],
+        "item": ["sitrusberry", "rockyhelmet"],
+        "nature": "impish",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["fairy"],
+        "ability": "intimidate"
+      },
+      {
+        "species": "taurospaldeablaze",
+        "weight": 50,
+        "moves": [
+          ["closecombat"],
+          ["ragingbull", "flareblitz"],
+          ["flamecharge", "rocktomb"],
+          ["earthquake", "terablast", "bulkup"]
+        ],
+        "item": ["ejectpack"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["grass", "fairy"],
+        "wantsTera": true,
+        "ability": "intimidate"
+      }
+    ]
+  },
+  "torkoal": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "torkoal",
+        "weight": 100,
+        "moves": [
+          ["overheat"],
+          ["yawn"],
+          ["stealthrock"],
+          ["solarbeam", "fissure", "bodypress", "clearsmog"]
+        ],
+        "item": ["ejectpack"],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["grass", "fire"],
+        "ability": "drought"
+      }
+    ]
+  },
+  "amoonguss": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "amoonguss",
+        "weight": 45,
+        "moves": [
+          ["spore"],
+          ["leafstorm"],
+          ["foulplay"],
+          ["sludgebomb", "clearsmog"]
+        ],
+        "item": ["ejectpack"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 156, 0, 100, 0],
+        "teratype": ["water"],
+        "ability": "regenerator"
+      },
+      {
+        "species": "amoonguss",
+        "weight": 35,
+        "moves": [
+          ["spore"],
+          ["sludgebomb", "clearsmog", "gigadrain"],
+          ["stompingtantrum", "foulplay"],
+          ["synthesis"]
+        ],
+        "item": ["rockyhelmet", "leftovers"],
+        "nature": "relaxed",
+        "evs": [252, 0, 156, 0, 100, 0],
+        "teratype": ["water", "fairy"],
+        "ability": "regenerator"
+      },
+      {
+        "species": "amoonguss",
+        "weight": 20,
+        "moves": [
+          ["spore"],
+          ["sludgebomb", "clearsmog", "gigadrain"],
+          ["stompingtantrum", "foulplay"],
+          ["synthesis"]
+        ],
+        "item": ["blacksludge"],
+        "nature": "relaxed",
+        "evs": [252, 0, 156, 0, 100, 0],
+        "teratype": ["poison"],
+        "ability": "regenerator"
+      }
+    ]
+  },
+  "greattusk": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "greattusk",
+        "weight": 45,
+        "moves": [
+          ["closecombat"],
+          ["earthquake", "headlongrush"],
+          ["icespinner"],
+          ["rapidspin", "knockoff", "stealthrock"]
+        ],
+        "item": ["boosterenergy", "focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel", "water", "ground"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "greattusk",
+        "weight": 15,
+        "moves": [
+          ["closecombat"],
+          ["earthquake", "headlongrush"],
+          ["icespinner"],
+          ["rapidspin", "knockoff"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel", "water", "ground"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "greattusk",
+        "weight": 25,
+        "moves": [
+          ["bulkup"],
+          ["earthquake"],
+          ["icespinner"],
+          ["taunt", "substitute"]
+        ],
+        "item": ["leftovers", "boosterenergy"],
+        "nature": "jolly",
+        "evs": [4, 0, 0, 0, 252, 252],
+        "teratype": ["water", "steel"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "greattusk",
+        "weight": 15,
+        "moves": [
+          ["closecombat"],
+          ["headlongrush", "earthquake"],
+          ["icespinner"],
+          ["knockoff"]
+        ],
+        "item": ["choicescarf", "choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["ground", "fighting", "steel"],
+        "ability": "protosynthesis"
+      }
+    ]
+  },
+  "thundurustherian": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "thundurustherian",
+        "weight": 45,
+        "moves": [
+          ["voltswitch"],
+          ["thunderbolt"],
+          ["terablast"],
+          ["grassknot", "focusblast", "sludgebomb"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "timid",
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["flying", "ice"],
+        "wantsTera": true,
+        "ability": "voltabsorb"
+      },
+      {
+        "species": "thundurustherian",
+        "weight": 45,
+        "moves": [
+          ["voltswitch"],
+          ["thunderbolt"],
+          ["terablast"],
+          ["grassknot", "focusblast", "sludgebomb"]
+        ],
+        "item": ["choicespecs", "assaultvest"],
+        "nature": "timid",
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["flying", "ice", "water"],
+        "wantsTera": true,
+        "ability": "voltabsorb"
+      },
+      {
+        "species": "thundurustherian",
+        "weight": 10,
+        "moves": [
+          ["nastyplot"],
+          ["thunderbolt"],
+          ["grassknot", "substitute"],
+          ["terablast"]
+        ],
+        "item": ["lifeorb", "sitrusberry"],
+        "nature": "timid",
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "evs": [0, 0, 4, 252, 0, 252],
+        "teratype": ["flying", "ice", "water"],
+        "wantsTera": true,
+        "ability": "voltabsorb"
+      }
+    ]
+  },
+  "arcanine": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "arcanine",
+        "weight": 50,
+        "moves": [
+          ["flareblitz"],
+          ["morningsun"],
+          ["willowisp"],
+          ["extremespeed"]
+        ],
+        "item": ["heavydutyboots", "rockyhelmet", "leftovers"],
+        "nature": "impish",
+        "evs": [236, 0, 212, 0, 0, 60],
+        "teratype": ["normal"],
+        "ability": "intimidate"
+      },
+      {
+        "species": "arcanine",
+        "weight": 50,
+        "moves": [
+          ["flareblitz", "roar"],
+          ["morningsun"],
+          ["willowisp"],
+          ["extremespeed", "snarl", "bulldoze"]
+        ],
+        "item": ["heavydutyboots", "rockyhelmet", "leftovers"],
+        "nature": "impish",
+        "evs": [236, 0, 212, 0, 0, 60],
+        "teratype": ["fairy", "grass"],
+        "ability": "intimidate"
+      }
+    ]
+  },
+  "gyarados": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "gyarados",
+        "weight": 100,
+        "moves": [
+          ["taunt"],
+          ["waterfall", "ironhead"],
+          ["earthquake", "icefang"],
+          ["thunderwave"]
+        ],
+        "item": ["rockyhelmet"],
+        "nature": "impish",
+        "evs": [228, 4, 220, 0, 4, 52],
+        "teratype": ["steel", "ground"],
+        "ability": "intimidate"
+      }
+    ]
+  },
+  "pawmot": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "pawmot",
+        "weight": 33,
+        "moves": [
+          ["doubleshock"],
+          ["closecombat"],
+          ["machpunch", "nuzzle", "icepunch"],
+          ["revivalblessing", "encore"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["electric"],
+        "ability": "ironfist"
+      },
+      {
+        "species": "pawmot",
+        "weight": 33,
+        "moves": [
+          ["doubleshock"],
+          ["closecombat"],
+          ["machpunch", "nuzzle", "icepunch"],
+          ["revivalblessing", "encore"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["electric"],
+        "ability": "voltabsorb"
+      },
+      {
+        "species": "pawmot",
+        "weight": 33,
+        "moves": [
+          ["doubleshock"],
+          ["closecombat"],
+          ["machpunch", "nuzzle", "icepunch"],
+          ["revivalblessing", "encore"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["electric"],
+        "ability": "naturalcure"
+      }
+    ]
+  },
+  "zoroarkhisui": {
+    "weight": 3,
+    "sets": [
+      {
+        "species": "zoroarkhisui",
+        "weight": 60,
+        "moves": [
+          ["bittermalice"],
+          ["willowisp"],
+          ["shadowsneak"],
+          ["curse", "terablast"]
+        ],
+        "item": ["focussash"],
+        "nature": "timid",
+        "evs": [0, 0, 4, 252, 0, 252],
+        "teratype": ["fairy", "fighting", "ghost"],
+        "wantsTera": true,
+        "ability": "illusion"
+      },
+      {
+        "species": "zoroarkhisui",
+        "weight": 40,
+        "moves": [["bittermalice"], ["curse"], ["willowisp"], ["trick"]],
+        "item": ["choicescarf"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [252, 0, 0, 4, 0, 252],
+        "teratype": ["ghost", "fairy"],
+        "ability": "illusion"
+      }
+    ]
+  },
+  "drifblim": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "drifblim",
+        "weight": 95,
+        "moves": [
+          ["minimize"],
+          ["substitute"],
+          ["batonpass"],
+          ["strengthsap", "willowisp", "airslash", "stockpile", "shadowball"]
+        ],
+        "item": ["sitrusberry", "keeberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 164, 0, 92, 252],
+        "teratype": ["water", "normal", "dark"],
+        "ability": "unburden"
+      },
+      {
+        "species": "drifblim",
+        "weight": 5,
+        "moves": [
+          ["minimize"],
+          ["substitute"],
+          ["batonpass"],
+          ["strengthsap", "willowisp", "airslash", "stockpile", "shadowball"]
+        ],
+        "item": ["grassyseed"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 164, 0, 92, 252],
+        "teratype": ["water", "normal", "dark"],
+        "ability": "unburden"
+      }
+    ]
+  },
+  "hatterene": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "hatterene",
+        "weight": 30,
+        "moves": [
+          ["drainingkiss"],
+          ["psyshock"],
+          ["calmmind"],
+          ["batonpass", "mysticalfire", "trickroom"]
+        ],
+        "item": ["wikiberry", "sitrusberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [244, 0, 252, 12, 0, 0],
+        "teratype": ["water", "normal", "fire"],
+        "ability": "magicbounce"
+      },
+      {
+        "species": "hatterene",
+        "weight": 35,
+        "moves": [
+          ["drainingkiss", "dazzlinggleam"],
+          ["psyshock"],
+          ["calmmind", "healingwish"],
+          ["trickroom"]
+        ],
+        "item": ["wikiberry", "sitrusberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [244, 0, 252, 12, 0, 0],
+        "teratype": ["water", "normal"],
+        "ability": "magicbounce"
+      },
+      {
+        "species": "hatterene",
+        "weight": 35,
+        "moves": [
+          ["dazzlinggleam"],
+          ["psyshock"],
+          ["calmmind", "healingwish"],
+          ["trickroom"]
+        ],
+        "item": ["focussash"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "quiet",
+        "evs": [252, 0, 4, 252, 0, 0],
+        "teratype": ["water", "normal", "fairy"],
+        "ability": "magicbounce"
+      }
+    ]
+  },
+  "orthworm": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "orthworm",
+        "weight": 60,
+        "moves": [
+          ["irondefense"],
+          ["bodypress"],
+          ["ironhead", "stealthrock"],
+          ["shedtail"]
+        ],
+        "item": ["sitrusberry", "rockyhelmet"],
+        "nature": "impish",
+        "evs": [252, 0, 252, 0, 0, 4],
+        "teratype": ["poison", "ghost", "fairy"],
+        "ability": "eartheater"
+      },
+      {
+        "species": "orthworm",
+        "weight": 40,
+        "moves": [
+          ["irondefense"],
+          ["bodypress"],
+          ["ironhead", "stealthrock"],
+          ["rest"]
+        ],
+        "item": ["chestoberry", "rockyhelmet"],
+        "nature": "impish",
+        "evs": [252, 0, 252, 0, 0, 4],
+        "teratype": ["poison", "ghost", "fairy"],
+        "ability": "eartheater"
+      }
+    ]
+  },
+  "sandyshocks": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "sandyshocks",
+        "weight": 10,
+        "moves": [
+          ["stealthrock"],
+          ["thunderbolt"],
+          ["earthpower"],
+          ["thunderwave", "mirrorcoat"]
+        ],
+        "item": ["focussash"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["ground", "electric"],
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "sandyshocks",
+        "weight": 10,
+        "moves": [
+          ["stealthrock", "mirrorcoat"],
+          ["thunderbolt"],
+          ["earthpower"],
+          ["terablast"]
+        ],
+        "item": ["focussash"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["ice"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "sandyshocks",
+        "weight": 60,
+        "moves": [
+          ["thunderbolt"],
+          ["earthpower"],
+          ["terablast"],
+          ["stealthrock", "flashcannon"]
+        ],
+        "item": ["boosterenergy"],
+        "nature": "timid",
+        "evs": [52, 0, 0, 204, 0, 252],
+        "teratype": ["ice", "fairy"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "sandyshocks",
+        "weight": 10,
+        "moves": [
+          ["thunderbolt"],
+          ["voltswitch"],
+          ["earthpower"],
+          ["terablast"]
+        ],
+        "item": ["choicescarf"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["ice", "fairy"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "sandyshocks",
+        "weight": 10,
+        "moves": [
+          ["thunderbolt", "mirrorcoat"],
+          ["voltswitch"],
+          ["earthpower"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["ice", "fairy"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      }
+    ]
+  },
+  "greninja": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "greninja",
+        "weight": 50,
+        "moves": [
+          ["icebeam"],
+          ["grassknot", "darkpulse"],
+          ["watershuriken"],
+          ["counter", "toxicspikes"]
+        ],
+        "item": ["focussash"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["water", "ghost"],
+        "ability": "protean"
+      },
+      {
+        "species": "greninja",
+        "weight": 50,
+        "moves": [
+          ["icebeam"],
+          ["grassknot", "darkpulse"],
+          ["watershuriken"],
+          ["counter", "toxicspikes"]
+        ],
+        "item": ["focussash"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["water", "ghost"],
+        "ability": "torrent"
+      }
+    ]
+  },
+  "palafin": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "palafin",
+        "weight": 40,
+        "moves": [
+          ["jetpunch"],
+          ["wavecrash"],
+          ["flipturn"],
+          ["icepunch", "closecombat", "drainpunch"]
+        ],
+        "item": ["choiceband"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["water"],
+        "ability": "zerotohero"
+      },
+      {
+        "species": "palafin",
+        "weight": 30,
+        "moves": [
+          ["jetpunch"],
+          ["wavecrash"],
+          ["flipturn"],
+          ["drainpunch", "closecombat"]
+        ],
+        "item": ["assaultvest", "choicescarf", "mysticwater"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["water", "fighting"],
+        "ability": "zerotohero"
+      },
+      {
+        "species": "palafin",
+        "weight": 20,
+        "moves": [
+          ["bulkup"],
+          ["jetpunch"],
+          ["drainpunch"],
+          ["substitute", "taunt"]
+        ],
+        "item": ["leftovers", "punchingglove"],
+        "nature": "jolly",
+        "evs": [252, 0, 4, 0, 0, 252],
+        "teratype": ["fighting", "water"],
+        "ability": "zerotohero"
+      },
+      {
+        "species": "palafin",
+        "weight": 10,
+        "moves": [
+          ["bulkup"],
+          ["jetpunch"],
+          ["terablast"],
+          ["substitute", "taunt"]
+        ],
+        "item": ["leftovers"],
+        "nature": "jolly",
+        "evs": [252, 0, 4, 0, 0, 252],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "zerotohero"
+      }
+    ]
+  },
+  "regieleki": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "regieleki",
+        "weight": 25,
+        "moves": [
+          ["thunderbolt"],
+          ["terablast"],
+          ["extremespeed"],
+          ["wildcharge", "voltswitch", "thunderwave"]
+        ],
+        "item": ["lifeorb", "focussash"],
+        "nature": "hasty",
+        "evs": [0, 4, 0, 252, 0, 252],
+        "teratype": ["ice"],
+        "wantsTera": true,
+        "ability": "transistor"
+      },
+      {
+        "species": "regieleki",
+        "weight": 20,
+        "moves": [
+          ["thunderbolt"],
+          ["voltswitch"],
+          ["extremespeed"],
+          ["wildcharge"]
+        ],
+        "item": ["lifeorb"],
+        "nature": "hasty",
+        "evs": [0, 4, 0, 252, 0, 252],
+        "teratype": ["electric"],
+        "ability": "transistor"
+      },
+      {
+        "species": "regieleki",
+        "weight": 25,
+        "moves": [
+          ["thunderbolt"],
+          ["terablast"],
+          ["voltswitch"],
+          ["extremespeed", "thundercage"]
+        ],
+        "item": ["choicespecs"],
+        "nature": "timid",
+        "evs": [4, 0, 0, 252, 0, 252],
+        "teratype": ["ice"],
+        "wantsTera": true,
+        "ability": "transistor"
+      },
+      {
+        "species": "regieleki",
+        "weight": 15,
+        "moves": [
+          ["thundercage", "thunderbolt"],
+          ["reflect"],
+          ["lightscreen"],
+          ["terablast"]
+        ],
+        "item": ["lightclay"],
+        "nature": "timid",
+        "evs": [252, 0, 0, 4, 0, 252],
+        "teratype": ["ice"],
+        "wantsTera": true,
+        "ability": "transistor"
+      },
+      {
+        "species": "regieleki",
+        "weight": 15,
+        "moves": [
+          ["thundercage", "thunderbolt"],
+          ["reflect"],
+          ["lightscreen"],
+          ["explosion", "thunderwave"]
+        ],
+        "item": ["lightclay"],
+        "nature": "timid",
+        "evs": [252, 0, 0, 4, 0, 252],
+        "teratype": ["ghost", "normal"],
+        "ability": "transistor"
+      }
+    ]
+  },
+  "avalugg": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "avalugg",
+        "weight": 100,
+        "moves": [
+          ["irondefense"],
+          ["bodypress"],
+          ["recover"],
+          ["iciclecrash", "avalanche"]
+        ],
+        "item": ["heavydutyboots", "rockyhelmet"],
+        "nature": "impish",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["fighting"],
+        "wantsTera": true,
+        "ability": "sturdy"
+      }
+    ]
+  },
+  "landorus": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "landorus",
+        "weight": 45,
+        "moves": [
+          ["earthpower"],
+          ["sludgebomb"],
+          ["focusblast", "psychic"],
+          ["substitute", "nastyplot"]
+        ],
+        "item": ["lifeorb"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["water", "poison", "steel"],
+        "wantsTera": true,
+        "ability": "sheerforce"
+      },
+      {
+        "species": "landorus",
+        "weight": 55,
+        "moves": [
+          ["earthpower"],
+          ["sludgebomb"],
+          ["focusblast", "substitute", "nastyplot"],
+          ["terablast"]
+        ],
+        "item": ["lifeorb"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["ice", "flying"],
+        "wantsTera": true,
+        "ability": "sheerforce"
+      }
+    ]
+  },
+  "quaquaval": {
+    "weight": 2,
+    "sets": [
+      {
+        "species": "quaquaval",
+        "weight": 65,
+        "moves": [
+          ["aquastep"],
+          ["closecombat"],
+          ["aquajet"],
+          ["icespinner", "encore", "swordsdance"]
+        ],
+        "item": ["focussash", "mysticwater"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["water", "steel"],
+        "ability": "moxie"
+      },
+      {
+        "species": "quaquaval",
+        "weight": 10,
+        "moves": [["aquastep"], ["closecombat"], ["aquajet"], ["terablast"]],
+        "item": ["focussash", "mysticwater"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["electric", "steel"],
+        "wantsTera": true,
+        "ability": "moxie"
+      },
+      {
+        "species": "quaquaval",
+        "weight": 25,
+        "moves": [
+          ["aquastep"],
+          ["roost"],
+          ["bulkup"],
+          ["taunt", "encore", "substitute"]
+        ],
+        "item": ["leftovers", "rockyhelmet", "covertcloak"],
+        "nature": "jolly",
+        "evs": [252, 0, 0, 0, 156, 100],
+        "teratype": ["steel"],
+        "ability": "moxie"
+      }
+    ]
+  },
+  "articuno": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "articuno",
+        "weight": 100,
+        "moves": [
+          ["substitute"],
+          ["protect", "freezedry"],
+          ["roost"],
+          ["sheercold"]
+        ],
+        "item": ["leftovers"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [220, 0, 228, 0, 0, 60],
+        "teratype": ["steel", "ghost"],
+        "ability": "pressure"
+      }
+    ]
+  },
+  "haxorus": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "haxorus",
+        "weight": 65,
+        "moves": [["dragondance"], ["ironhead"], ["outrage"], ["earthquake"]],
+        "item": ["lumberry", "focussash", "lifeorb"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "moldbreaker"
+      },
+      {
+        "species": "haxorus",
+        "weight": 10,
+        "moves": [["dragondance"], ["terablast"], ["outrage"], ["earthquake"]],
+        "item": ["lumberry", "focussash", "lifeorb"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["electric"],
+        "wantsTera": true,
+        "ability": "moldbreaker"
+      },
+      {
+        "species": "haxorus",
+        "weight": 25,
+        "moves": [
+          ["scaleshot"],
+          ["ironhead"],
+          ["earthquake"],
+          ["dragondance", "swordsdance"]
+        ],
+        "item": ["loadeddice"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["steel"],
+        "wantsTera": true,
+        "ability": "moldbreaker"
+      }
+    ]
+  },
+  "lucario": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "lucario",
+        "weight": 80,
+        "moves": [
+          ["extremespeed"],
+          ["closecombat"],
+          ["bulletpunch"],
+          ["swordsdance", "counter", "earthquake"]
+        ],
+        "item": ["focussash", "lifeorb"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["normal", "steel"],
+        "ability": "innerfocus"
+      },
+      {
+        "species": "lucario",
+        "weight": 20,
+        "moves": [["vacuumwave"], ["aurasphere"], ["steelbeam"], ["darkpulse"]],
+        "item": ["lifeorb", "focussash"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["steel", "fighting", "dark"],
+        "ability": "innerfocus"
+      }
+    ]
+  },
+  "mesprit": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "mesprit",
+        "weight": 100,
+        "moves": [
+          ["dazzlinggleam"],
+          ["trickroom"],
+          ["healingwish"],
+          ["encore"]
+        ],
+        "item": ["sitrusberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 4, 0, 0],
+        "teratype": ["fairy"],
+        "ability": "levitate"
+      }
+    ]
+  },
+  "moltresgalar": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "moltresgalar",
+        "weight": 100,
+        "moves": [
+          ["fierywrath"],
+          ["airslash", "hurricane"],
+          ["nastyplot"],
+          ["agility"]
+        ],
+        "item": ["sitrusberry", "weaknesspolicy"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["dark", "steel", "flying"],
+        "ability": "berserk"
+      }
+    ]
+  },
+  "sableye": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "sableye",
+        "weight": 30,
+        "moves": [
+          ["knockoff", "foulplay"],
+          ["encore"],
+          ["metalburst", "disable"],
+          ["willowisp", "thunderwave"]
+        ],
+        "item": ["focussash"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 4, 0],
+        "teratype": ["steel", "poison"],
+        "ability": "prankster"
+      },
+      {
+        "species": "sableye",
+        "weight": 30,
+        "moves": [["substitute"], ["encore"], ["disable"], ["nightshade"]],
+        "item": ["leftovers"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["steel", "poison"],
+        "ability": "prankster"
+      },
+      {
+        "species": "sableye",
+        "weight": 40,
+        "moves": [
+          ["reflect"],
+          ["lightscreen"],
+          ["willowisp", "taunt", "encore"],
+          ["foulplay", "knockoff"]
+        ],
+        "item": ["lightclay"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["steel", "poison"],
+        "ability": "prankster"
+      }
+    ]
+  },
+  "uxie": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "uxie",
+        "weight": 100,
+        "moves": [["uturn"], ["yawn"], ["encore"], ["stealthrock"]],
+        "item": ["sitrusberry"],
+        "nature": "impish",
+        "evs": [244, 0, 252, 0, 12, 0],
+        "teratype": ["fairy"],
+        "ability": "levitate"
+      }
+    ]
+  },
+  "brutebonnet": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "brutebonnet",
+        "weight": 85,
+        "moves": [
+          ["spore"],
+          ["trailblaze"],
+          ["crunch", "terablast"],
+          ["substitute"]
+        ],
+        "item": ["leftovers"],
+        "nature": "jolly",
+        "evs": [52, 204, 0, 0, 0, 252],
+        "teratype": ["water", "fire"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      },
+      {
+        "species": "brutebonnet",
+        "weight": 15,
+        "moves": [
+          ["spore"],
+          ["suckerpunch"],
+          ["bulletseed"],
+          ["terablast", "substitute"]
+        ],
+        "item": ["loadeddice"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 0, 4],
+        "teratype": ["water", "fire"],
+        "wantsTera": true,
+        "ability": "protosynthesis"
+      }
+    ]
+  },
+  "samurotthisui": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "samurotthisui",
+        "weight": 70,
+        "moves": [
+          ["ceaselessedge"],
+          ["razorshell", "aquacutter"],
+          ["suckerpunch", "aquajet"],
+          ["encore", "sacredsword"]
+        ],
+        "item": ["focussash"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["water", "dark", "ghost"],
+        "ability": "sharpness"
+      },
+      {
+        "species": "samurotthisui",
+        "weight": 30,
+        "moves": [
+          ["ceaselessedge"],
+          ["razorshell", "aquacutter"],
+          ["suckerpunch", "aquajet"],
+          ["sacredsword", "terablast"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["water", "fairy"],
+        "ability": "sharpness"
+      }
+    ]
+  },
+  "slowkinggalar": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "slowkinggalar",
+        "weight": 60,
+        "moves": [
+          ["flamethrower"],
+          ["grassknot"],
+          ["psychic", "eeriespell"],
+          ["sludgebomb"]
+        ],
+        "item": ["assaultvest"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "modest",
+        "evs": [252, 0, 0, 252, 4, 0],
+        "teratype": ["poison", "normal"],
+        "ability": "regenerator"
+      },
+      {
+        "species": "slowkinggalar",
+        "weight": 40,
+        "moves": [
+          ["eeriespell", "sludgebomb"],
+          ["toxic", "yawn"],
+          ["trickroom", "slackoff"],
+          ["chillyreception"]
+        ],
+        "item": ["blacksludge"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "relaxed",
+        "evs": [244, 0, 252, 0, 12, 0],
+        "teratype": ["poison"],
+        "ability": "regenerator"
+      }
+    ]
+  },
+  "basculegionf": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "basculegionf",
+        "weight": 70,
+        "moves": [
+          ["shadowball"],
+          ["aquajet"],
+          ["surf", "hydropump"],
+          ["endeavor"]
+        ],
+        "gender": "f",
+        "item": ["focussash"],
+        "nature": "rash",
+        "evs": [0, 4, 0, 252, 0, 252],
+        "teratype": ["water"],
+        "ability": "adaptability"
+      },
+      {
+        "species": "basculegionf",
+        "weight": 30,
+        "moves": [
+          ["shadowball"],
+          ["aquajet"],
+          ["surf", "hydropump"],
+          ["endeavor", "terablast"]
+        ],
+        "gender": "f",
+        "item": ["focussash"],
+        "nature": "rash",
+        "evs": [0, 4, 0, 252, 0, 252],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "adaptability"
+      }
+    ]
+  },
+  "irontreads": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "irontreads",
+        "weight": 15,
+        "moves": [
+          ["earthquake"],
+          ["ironhead", "heavyslam"],
+          ["rapidspin", "icespinner", "voltswitch"],
+          ["knockoff"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "jolly",
+        "evs": [252, 4, 4, 0, 244, 4],
+        "teratype": ["grass", "water", "fairy", "flying"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "irontreads",
+        "weight": 85,
+        "moves": [
+          ["earthquake", "endeavor"],
+          ["ironhead"],
+          ["stealthrock", "rapidspin", "substitute"],
+          ["knockoff", "icespinner", "terablast"]
+        ],
+        "item": ["boosterenergy"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["grass", "water", "fairy", "ground"],
+        "wantsTera": true,
+        "ability": "quarkdrive"
+      }
+    ]
+  },
+  "overqwil": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "overqwil",
+        "weight": 60,
+        "moves": [
+          ["crunch"],
+          ["barbbarrage", "toxic"],
+          ["minimize"],
+          ["substitute"]
+        ],
+        "item": ["leftovers"],
+        "nature": "jolly",
+        "evs": [252, 0, 0, 0, 4, 252],
+        "teratype": ["water", "dark"],
+        "ability": "poisonpoint"
+      },
+      {
+        "species": "overqwil",
+        "weight": 40,
+        "moves": [
+          ["crunch"],
+          ["barbbarrage", "toxic"],
+          ["minimize"],
+          ["substitute"]
+        ],
+        "item": ["blacksludge"],
+        "nature": "jolly",
+        "evs": [252, 0, 0, 0, 4, 252],
+        "teratype": ["poison"],
+        "ability": "poisonpoint"
+      }
+    ]
+  },
+  "spectrier": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "spectrier",
+        "weight": 100,
+        "moves": [
+          ["shadowball"],
+          ["drainingkiss"],
+          ["willowisp"],
+          ["calmmind"]
+        ],
+        "item": ["leftovers", "sitrusberry"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "timid",
+        "evs": [252, 0, 0, 4, 0, 252],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "grimneigh"
+      }
+    ]
+  },
+  "maushold": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "maushold",
+        "weight": 100,
+        "moves": [
+          ["populationbomb"],
+          ["bite", "mudshot"],
+          ["encore"],
+          ["thunderwave", "tidyup"]
+        ],
+        "item": ["widelens", "kingsrock"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["normal", "ghost", "poison"],
+        "ability": "technician"
+      }
+    ]
+  },
+  "polteageist": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "polteageist",
+        "weight": 100,
+        "moves": [
+          ["shellsmash"],
+          ["strengthsap"],
+          ["storedpower"],
+          ["terablast"]
+        ],
+        "item": ["whiteherb", "focussash"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [108, 0, 196, 0, 0, 204],
+        "teratype": ["water", "fighting"],
+        "wantsTera": true,
+        "ability": "cursedbody"
+      }
+    ]
+  },
+  "taurospaldeaaqua": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "taurospaldeaaqua",
+        "weight": 100,
+        "moves": [
+          ["wavecrash"],
+          ["closecombat"],
+          ["trailblaze", "aquajet"],
+          ["endeavor"]
+        ],
+        "item": ["rockyhelmet"],
+        "nature": "adamant",
+        "evs": [252, 4, 108, 0, 4, 140],
+        "teratype": ["water", "steel"],
+        "ability": "intimidate"
+      }
+    ]
+  },
+  "forretress": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "forretress",
+        "weight": 100,
+        "moves": [
+          ["bodypress"],
+          ["voltswitch"],
+          ["stealthrock"],
+          ["toxicspikes", "gyroball"]
+        ],
+        "item": ["rockyhelmet"],
+        "ivs": [31, 0, 31, 31, 31, 0],
+        "nature": "relaxed",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["fighting", "water"],
+        "ability": "sturdy"
+      }
+    ]
+  },
+  "glastrier": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "glastrier",
+        "weight": 80,
+        "moves": [
+          ["iciclecrash"],
+          ["heavyslam"],
+          ["terablast"],
+          ["closecombat", "highhorsepower"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 4, 0],
+        "teratype": ["electric", "water"],
+        "wantsTera": true,
+        "ability": "chillingneigh"
+      },
+      {
+        "species": "glastrier",
+        "weight": 20,
+        "moves": [
+          ["iciclecrash"],
+          ["heavyslam"],
+          ["closecombat"],
+          ["highhorsepower"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "adamant",
+        "evs": [252, 252, 0, 0, 4, 0],
+        "teratype": ["ghost"],
+        "wantsTera": true,
+        "ability": "chillingneigh"
+      }
+    ]
+  },
+  "gothitelle": {
+    "weight": 1,
+    "sets": [
+      {
+        "species": "gothitelle",
+        "weight": 65,
+        "moves": [
+          ["trick"],
+          ["calmmind"],
+          ["rest"],
+          ["terablast", "storedpower"]
+        ],
+        "item": ["choicescarf"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [236, 0, 196, 4, 4, 68],
+        "teratype": ["flying", "fairy"],
+        "ability": "shadowtag"
+      },
+      {
+        "species": "gothitelle",
+        "weight": 35,
+        "moves": [
+          ["charm"],
+          ["calmmind"],
+          ["rest"],
+          ["terablast", "storedpower"]
+        ],
+        "item": ["leftovers", "covertcloak"],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [236, 0, 196, 4, 4, 68],
+        "teratype": ["fairy"],
+        "wantsTera": true,
+        "ability": "shadowtag"
+      }
+    ]
+  }
+}
