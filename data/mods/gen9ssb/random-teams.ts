@@ -265,6 +265,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Mystical Bonfire',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fairy',
 	},
+	Lunell: {
+		species: 'Vaporeon', ability: 'Low Tide, High Tide', item: 'Leftovers', gender: 'F',
+		moves: ['Hydro Pump', 'Thunder', 'Moonlight'],
+		signatureMove: 'Praise the Moon',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0}, nature: 'Calm', teraType: 'Fairy', shiny: 512,
+	},
 	'Mad Monty': {
 		species: 'Castform', ability: 'Climate Change', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Weather Ball', 'Defog', ['Solar Beam', 'Thunder', 'Aurora Veil']],

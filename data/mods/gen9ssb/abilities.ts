@@ -756,6 +756,34 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Lunell
+	lowtidehightide: {
+		shortDesc: "Switch-in sets Gravity, water immune, traps water type foes.",
+		name: "Low Tide, High Tide",
+		onStart(source) {
+			this.field.addPseudoWeather('gravity', source);
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				this.add('-immune', target, '[from] ability: Low Tide, High Tide');
+				return null;
+			}
+		},
+		onFoeTrapPokemon(pokemon) {
+			if (pokemon.hasType('Water') && pokemon.isAdjacent(this.effectState.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			if (!source) source = this.effectState.target;
+			if (!source || !pokemon.isAdjacent(source)) return;
+			if (!pokemon.knownType || pokemon.hasType('Water')) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+		flags: {breakable: 1},
+	},
+
 	// Mad Monty
 	climatechange: {
 		shortDesc: "1.5x SpA in sun, 1.5x Def/SpD in snow, heals 50% in rain. Changes forme/weather.",

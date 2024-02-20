@@ -1399,6 +1399,44 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Lunell
+	praisethemoon: {
+		accuracy: 90,
+		basePower: 120,
+		category: "Special",
+		name: "Praise the Moon",
+		pp: 10,
+		priority: 0,
+		flags: {charge: 1, protect: 1, mirror: 1},
+		onTryMove(attacker, defender, move) {
+			this.attrLastMove('[still]');
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			this.boost({spa: 1}, attacker, attacker, move);
+			if (['gravity'].includes(attacker.effectiveWeather())) {
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+				return;
+			}
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		secondary: null,
+		hasSheerForce: true,
+		onPrepareHit(target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Lunar Dance', target);
+			this.add('-anim', source, 'Moongeist Beam', target);
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Mad Monty
 	stormshelter: {
 		accuracy: true,

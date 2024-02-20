@@ -1085,6 +1085,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					const isCharging = move.flags['charge'] && !this.volatiles['twoturnmove'] &&
 						!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
 						!(move.id === 'fruitfullongbow' && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
+						!(move.id === 'praisethemoon' && this.battle.field.getPseudoWeather('gravity')) &&
 						!(move.id === 'electroshot' && ['stormsurge', 'raindance', 'primordialsea'].includes(this.effectiveWeather())) &&
 						!(this.hasItem('powerherb') && move.id !== 'skydrop');
 					if (!isCharging) {
