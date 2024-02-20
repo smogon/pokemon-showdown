@@ -321,20 +321,48 @@ export const Moves: {[moveid: string]: MoveData} = {
 		pp: 15,
 		priority: 2,
 		flags: {metronome: 1},
-		stallingMove: true,
 		onPrepareHit(pokemon) {
-			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-		},
-		onTryHit(source) {
-			if (source.side.active.length === 1) return false;
-			if (source.side.active.length === 3 && source.position === 1) return false;
+			return pokemon.addVolatile('allyswitch');
 		},
 		onHit(pokemon) {
-			pokemon.addVolatile('stall');
+			let success = true;
+			// Fail in formats where you don't control allies
+			if (this.format.gameType !== 'doubles' && this.format.gameType !== 'triples') success = false;
+
+			// Fail in triples if the Pokemon is in the middle
+			if (pokemon.side.active.length === 3 && pokemon.position === 1) success = false;
+
 			const newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
-			if (!pokemon.side.active[newPosition]) return false;
-			if (pokemon.side.active[newPosition].fainted) return false;
+			if (!pokemon.side.active[newPosition]) success = false;
+			if (pokemon.side.active[newPosition].fainted) success = false;
+			if (!success) {
+				this.add('-fail', pokemon, 'move: Ally Switch');
+				this.attrLastMove('[still]');
+				return this.NOT_FAIL;
+			}
 			this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
+		},
+		condition: {
+			duration: 2,
+			counterMax: 729,
+			onStart() {
+				this.effectState.counter = 3;
+			},
+			onRestart(pokemon) {
+				// this.effectState.counter should never be undefined here.
+				// However, just in case, use 1 if it is undefined.
+				const counter = this.effectState.counter || 1;
+				this.debug("Ally Switch success chance: " + Math.round(100 / counter) + "%");
+				const success = this.randomChance(1, counter);
+				if (!success) {
+					delete pokemon.volatiles['allyswitch'];
+					return false;
+				}
+				if (this.effectState.counter < (this.effect as Condition).counterMax!) {
+					this.effectState.counter *= 3;
+				}
+				this.effectState.duration = 2;
+			},
 		},
 		secondary: null,
 		target: "self",
