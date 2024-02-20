@@ -187,6 +187,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wonder Wing',
 		evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant', teraType: 'Flying',
 	},
+	Hydrostatics: {
+		species: 'Pichu-Spiky-eared', ability: 'Hydrostatic Positivity', item: 'Eviolite', gender: 'M',
+		moves: ['Hydro Pump', 'Thunder', 'Ice Beam'],
+		signatureMove: 'Hydrostatics',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Water', shiny: 2,
+	},
 	'in the hills': {
 		species: 'Gligar', ability: 'Illiterit', item: 'Eviolite', gender: 'M',
 		moves: ['Roost', 'Knock Off', 'Tidy Up'],

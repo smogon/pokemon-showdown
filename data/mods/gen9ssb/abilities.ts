@@ -492,6 +492,63 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Hydrostatics
+	hydrostaticpositivity: {
+		shortDesc: "Sturdy + Storm Drain + Motor Drive + x1.3 accuracy of water & electric moves",
+		name: "Hydrostatic Positivity",
+		onTryHit(target, source, move) {
+			// Storm Drain
+			if (target !== source && move.type === 'Water') {
+				if (!this.boost({spa: 1})) {
+					this.add('-immune', target, '[from] ability: Hydrostatic Positivity');
+				}
+				return null;
+			}
+
+			// Motor Drive
+			if (target !== source && move.type === 'Electric') {
+				if (!this.boost({spe: 1})) {
+					this.add('-immune', target, '[from] ability: Hydrostatic Positivity');
+				}
+				return null;
+			}
+
+			// Sturdy
+			if (move.ohko) {
+				this.add('-immune', target, '[from] ability: Hydrostatic Positivity');
+				return null;
+			}
+		},
+		onAnyRedirectTarget(target, source, source2, move) {
+			// Storm Drain
+			if (move.type !== 'Water' || ['firepledge', 'grasspledge', 'waterpledge'].includes(move.id)) return;
+			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
+			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
+				if (move.smartTarget) move.smartTarget = false;
+				if (this.effectState.target !== target) {
+					this.add('-activate', this.effectState.target, 'ability: Hydrostatic Positivity');
+				}
+				return this.effectState.target;
+			}
+		},
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			// Sturdy
+			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add('-ability', target, 'Hydrostatic Positivity');
+				return target.hp - 1;
+			}
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy !== 'number') return;
+			if (['Electric', 'Water'].includes(move.type)) {
+				this.debug('Hydrostatic Positivity - enhancing accuracy');
+				return this.chainModify([5325, 4096]);
+			}
+		},
+	},
+
 	// in the hills
 	illiterit: {
 		shortDesc: "Immune to moves with 12 or more alphanumeric characters.",

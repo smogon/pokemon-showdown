@@ -824,7 +824,60 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Flying",
+	},
 
+	// Hydrostatics
+	hydrostatics: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Hydrostatics",
+		shortDesc: "70% +1 SpA, 50% prz, +water effectiveness. Tera-ed: Water-type, 80% +1 SpA, 60% to Soak, super-effective against Water",
+		pp: 20,
+		priority: 1,
+		flags: {protect: 1, mirror: 1},
+		onModifyMove(move, source, target) {
+			if (source.terastallized) {
+				move.type = 'Water';
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			if (!source.terastallized) this.add('-anim', source, 'Charge Beam', source);
+			else this.add('-anim', source, 'Water Pulse', target);
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.type === 'Electric') return typeMod + this.dex.getEffectiveness('Water', type);
+			else if (type === 'Water' && move.type === 'Water') return 1;
+		},
+		secondary: {
+			chance: 100,
+			onHit(target, source, move) {
+				// None of these stack with Serene Grace
+				if (!source.terastallized) {
+					if (this.randomChance(70, 100)) {
+						this.boost({spa: 1}, source);
+					}
+					if (this.randomChance(50, 100)) {
+						if (target.isActive) target.trySetStatus('par', source, this.effect);
+					}
+				} else {
+					if (this.randomChance(80, 100)) {
+						this.boost({spa: 1}, source);
+					}
+					if (this.randomChance(60, 100)) {
+						// Soak
+						if (target.getTypes().join() !== 'Water' && target.setType('Water')) {
+							this.add('-start', target, 'typechange', 'Water');
+						}
+					}
+				}
+			},
+		},
+		target: "normal",
+		type: "Electric",
 	},
 
 	// in the hills

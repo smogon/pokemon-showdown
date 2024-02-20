@@ -352,6 +352,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('hsy')}|https://www.youtube.com/watch?v=g104OJIh9hs`);
 		},
 	},
+	hydrostaticsuser: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Hydrostatics')}|Straighten your backs and get some hydration :]`);
+			this.add('-start', pokemon, 'typechange', 'Electric/Water', '[silent]');
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Hydrostatics')}|Brb getting some water :d`);
+		},
+		onFaint(pokemon) {
+			this.add(`c:|${getName('Hydrostatics')}|Seems like you were more hydrated than me :c`);
+			if (pokemon.side.pokemon.some(mon => mon.name === 'PartMan')) {
+				// Custom message for PartMan
+				// Yes, this reveals that the enemy has PartMan
+				this.add(`c:|${getName('PartMan')}|Hydro here have a tiara`);
+			}
+		},
+	},
 	inthehills: {
 		noCopy: true,
 		onStart() {

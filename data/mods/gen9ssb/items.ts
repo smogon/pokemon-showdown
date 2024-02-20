@@ -45,6 +45,23 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 
 	// Modified for other effects
+
+	eviolite: {
+		inherit: true,
+		onModifyDef(def, pokemon) {
+			// Added Pichu-Spiky-eared for Hydrostatics to use Eviolite
+			if (pokemon.baseSpecies.nfe || pokemon.species.id === 'pichuspikyeared') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			// Added Pichu-Spiky-eared for Hydrostatics to use Eviolite
+			if (pokemon.baseSpecies.nfe || pokemon.species.id === 'pichuspikyeared') {
+				return this.chainModify(1.5);
+			}
+		},
+	},
+
 	safetygoggles: {
 		inherit: true,
 		onImmunity(type, pokemon) {

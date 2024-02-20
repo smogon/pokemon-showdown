@@ -163,6 +163,14 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Mime knows best"},
 	},
 
+	// Hydrostatics
+	pichuspikyeared: {
+		inherit: true,
+		baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
+		abilities: {0: 'Hydrostatic Positivity'},
+		types: ["Electric", "Water"],
+	},
+
 	// Isaiah
 	medicham: {
 		inherit: true,
