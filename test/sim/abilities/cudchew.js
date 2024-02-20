@@ -9,10 +9,11 @@ describe('Cud Chew', function () {
 	afterEach(() => battle.destroy());
 
 	it(`should eat berry a second time when taking residual damage`, function () {
-		battle = common.createBattle([
-			[{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', moves: ['sleeptalk']}],
-			[{species: 'Ekans', moves: ['toxic']},  {species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['sleeptalk']}],
-		]);
+		battle = common.createBattle([[
+			{species: 'Tauros-Paldea-Combat', ability: 'cudchew', item: 'sitrusberry', moves: ['sleeptalk']},
+		], [
+			{species: 'Ekans', moves: ['toxic']},
+		]]);
 		battle.makeChoices('move sleeptalk', 'move toxic');
       battle.makeChoices('move sleeptalk', 'move toxic');
       battle.makeChoices('move sleeptalk', 'move toxic');
