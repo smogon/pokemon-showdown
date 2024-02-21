@@ -282,9 +282,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		shortDesc: "Raises the user's Sp. Atk by 2 stages for the next 2 turns, -2 Sp. Atk afterwards.",
 		name: "Anyone can be killed",
-		pp: 15,
+		pp: 10,
 		priority: 0,
-		flags: {sound: 1},
+		flags: {protect: 1, sound: 1, bypasssub: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2722,7 +2722,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		secondary: {
-			chance: 100,	
+			chance: 100,
 			onHit(target, source, move) {
 				if (this.dex.species.get(source.species).heightm > this.dex.species.get(target.species).heightm) {
 					this.boost({spa: 1}, source);
