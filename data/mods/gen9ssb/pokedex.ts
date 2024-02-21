@@ -44,6 +44,14 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Saintly Bullet"},
 	},
 
+	// Arya
+	trapinch: {
+		inherit: true,
+		types: ["Ground", "Dragon"],
+		baseStats: {hp: 80, atk: 100, def: 90, spa: 120, spd: 100, spe: 130},
+		abilities: {0: "Punk Rock"},
+	},
+
 	// berry
 	regirock: {
 		inherit: true,

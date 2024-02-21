@@ -78,6 +78,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Quiver Dance',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	Arya: {
+		species: 'Flygon', ability: 'Tinted Lens', item: 'Flygonite', gender: 'F',
+		moves: ['Clanging Scales', 'Roost', 'Bug Buzz'],
+		signatureMove: 'Anyone can be killed',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: false,
+	},
 	berry: {
 		species: 'Regirock', ability: 'Sturdy', item: 'Maranga Berry', gender: 'F',
 		moves: ['Curse', 'Salt Cure', 'Stone Axe'],

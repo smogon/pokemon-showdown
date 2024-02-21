@@ -1,14 +1,4 @@
 export const Items: {[k: string]: ModdedItemData} = {
-	// Aeonic
-	fossilizedfish: {
-		inherit: true,
-		onResidualOrder: 5,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			this.heal(pokemon.baseMaxhp / 16);
-		},
-		desc: "At the end of every turn, holder restores 1/16 of its max HP.",
-	},
 	// Archas
 	lilligantiumz: {
 		name: "Lilligantium Z",
@@ -17,6 +7,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 		zMoveFrom: "Quiver Dance",
 		itemUser: ["Lilligant"],
 		desc: "If held by a Lilligant with Quiver Dance, it can use Aura Rain.",
+	},
+	// Arya
+	flygonite: {
+		inherit: true,
+		spritenum: 111,
+		itemUser: ["Flygon"],
+		megaEvolves: "Flygon",
+		megaStone: "Trapinch",
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		desc: "If held by a Flygon, this item allows it to Mega Evolve in battle.",
 	},
 	// Irpachuza
 	irpatuziniumz: {

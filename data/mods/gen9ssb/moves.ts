@@ -275,6 +275,41 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Arya
+	anyonecanbekilled: {
+		accuracy: 95,
+		basePower: 80,
+		category: "Status",
+		shortDesc: "Raises the user's Sp. Atk by 2 stages for the next 2 turns, -2 Sp. Atk afterwards.",
+		name: "Anyone can be killed",
+		pp: 15,
+		priority: 0,
+		flags: {sound: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		self: {
+			volatileStatus: 'anyonecanbekilled',
+		},
+		condition: {
+			duration: 3,
+			onResidualOrder: 3,
+			onStart(target, source, sourceEffect) {
+				this.boost({spa: 2}, source);
+			},
+			onEnd(target) {
+				this.boost({spa: -2}, target);
+			},
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dragon Dance', target);
+			this.add('-anim', source, 'Earth Power', target);
+		},
+		target: "normal",
+		type: "Ground",
+	},
+
+
 	// berry
 	whatkind: {
 		accuracy: true,

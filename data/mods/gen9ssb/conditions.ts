@@ -127,6 +127,22 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Archas')}|What would Grandfather... think of me now...`);
 		},
 	},
+	arya: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Arya')}|NORMAL SUMMON DEEP SEA DIVA`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Arya')}|Oleeeee too good for this fight!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Arya')}|Nevermind, happy tuesday and let's pray for the 33.`);
+		},
+		onAfterMega() {
+			this.add(`c:|${getName('Arya')}|Oh yeaaaaah!!!!! Finally??!! I can finally Mega-Evolve!!! Vamossss`);
+			this.add(`c:|${getName('Arya')}|W-whats this? Oh, come on...!!!`);
+		}, // Is a message before going mega supported(unlikely)? if so, the first message in onAfterMega goes there.
+	},
 	berry: {
 		noCopy: true,
 		onStart(pokemon) {
