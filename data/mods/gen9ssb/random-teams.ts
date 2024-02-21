@@ -457,6 +457,12 @@ export const ssbSets: SSBSets = {
 		// eslint-disable-next-line max-len
 		evs: {hp: 184, atk: 112, def: 36, spd: 88, spe: 88}, ivs: {spa: 29}, nature: 'Impish', teraType: ['Dragon', 'Psychic', 'Fighting'], shiny: 20,
 	},
+	Waves: {
+		species: 'Wailord', ability: 'Primordial Sea', item: 'Assault Vest', gender: 'M',
+		moves: ['Water Spout', 'Hurricane', 'Thunder'],
+		signatureMove: 'Torrential Drain',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', ivs: {atk: 0}, teraType: 'Water', shiny: false,
+	},
 	WigglyTree: {
 		species: 'Sudowoodo', ability: 'Tree Stance', item: 'Liechi Berry', gender: 'M',
 		moves: ['Victory Dance', 'Wood Hammer', 'Head Smash'],

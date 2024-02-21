@@ -1060,6 +1060,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	waves: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Waves')}|Nice opinion, one small issue: 252+ SpA Wailord Water Spout (150 BP) vs. 0 HP / 0- SpD Your Argument in Rain: 1202-1416 (413 - 486.5%) -- guaranteed OHKO.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Waves')}|Ocean man, take me by the hand.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Waves')}|/me waves goodbye.`);
+		},
+	},
 	wigglytree: {
 		noCopy: true,
 		onStart() {

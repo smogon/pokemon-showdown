@@ -2445,6 +2445,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// Waves
+	torrentialdrain: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		name: "Torrential Drain",
+		pp: 10,
+		priority: 1,
+		flags: {protect: 1, mirror: 1, heal: 1, metronome: 1},
+		drain: [1, 2],
+		secondary: null,
+		target: "allAdjacent",
+		type: "Water",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aqua Ring', source);
+			this.add('-anim', source, 'Origin Pulse', target);
+			this.add('-anim', source, 'Parabolic Charge', target);
+		},
+	},
+
 	// WigglyTree
 	perfectmimic: {
 		accuracy: true,
