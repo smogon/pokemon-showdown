@@ -977,6 +977,42 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// PartMan
+	ctiershitposter: {
+		shortDesc: "-1 Atk/SpA, +1 Def/SpD. +1 Atk/SpA/Spe, -1 Def/SpD, Mold Breaker if 420+ dmg taken.",
+		name: "C- Tier Shitposter",
+		onDamage(damage, target, source, effect) {
+			target.m.damageTaken ??= 0;
+			target.m.damageTaken += damage;
+			if (target.set && !target.set.shiny) {
+				if (target.m.damageTaken >= 420) {
+					target.set.shiny = true;
+					if (!target.hp) {
+						return this.add(`c:|${getName('PartMan')}|MWAHAHA NOW YOU - oh I'm dead`);
+					}
+					this.add(`c:|${getName('PartMan')}|That's it. Get ready to be rapid-fire hugged.`);
+					target.clearBoosts();
+					this.add('-clearboost', target);
+					this.boost({atk: 1, def: -1, spa: 1, spd: -1, spe: 1});
+					const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
+						(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
+					target.details = details;
+					this.add('detailschange', target, details);
+				}
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.set.shiny) move.ignoreAbility = true;
+		},
+		onStart(pokemon) {
+			if (!pokemon.set.shiny) {
+				this.boost({atk: -1, def: 1, spa: -1, spd: 1});
+			} else {
+				this.boost({atk: 1, def: -1, spa: 1, spd: -1, spe: 1});
+			}
+		},
+	},
+
 	// phoopes
 	ididitagain: {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",

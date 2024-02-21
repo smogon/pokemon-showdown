@@ -264,6 +264,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Vent Crosser"},
 	},
 
+	// PartMan
+	chandelure: {
+		inherit: true,
+		abilities: {0: 'C- Tier Shitposter'},
+	},
+
 	// Peary
 	klinklang: {
 		inherit: true,

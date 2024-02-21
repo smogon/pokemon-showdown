@@ -1730,6 +1730,74 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// PartMan
+	alting: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Alting",
+		shortDesc: "Switch out+protect if moving first, Shiny: 69BP typeless move instead",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1},
+		stallingMove: true,
+		sideCondition: 'alting',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Memento', target);
+
+			this.add(`l|${getName('PartMan').split('|')[1]}`);
+			this.add(`j|FakePart`);
+		},
+		onModifyMove(move, source, target) {
+			move.type = "???";
+			if (source.set?.shiny) {
+				move.accuracy = 100;
+				move.basePower = 69;
+				move.category = "Special";
+				move.flags = {protect: 1, bypasssub: 1};
+				move.target = "normal";
+
+				delete move.selfSwitch;
+				delete move.stallingMove;
+				delete move.sideCondition;
+				delete move.condition;
+
+				// Note: Taunt will disable all forms of Alting, including the damaging one.
+				// This is intentional.
+			}
+		},
+		condition: {
+			duration: 1,
+			onSideStart(target, source) {
+				this.add('-singleturn', source, 'Alting');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect']) {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move && (move.target === 'self' || move.category === 'Status')) return;
+				this.add('-activate', target, 'move: Alting', move.name);
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return this.NOT_FAIL;
+			},
+		},
+		selfSwitch: true,
+		target: "allySide",
+		type: "Ghost", // Updated to ??? in onModifyMove
+	},
+
 	// Peary
 	"1000gears": {
 		accuracy: true,

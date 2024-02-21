@@ -313,6 +313,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: '~nyaa',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Steel',
 	},
+	PartMan: {
+		species: 'Chandelure', ability: 'C- Tier Shitposter', item: 'Leek', gender: 'M',
+		moves: ['Searing Shot', 'Hex', 'Morning Sun'],
+		signatureMove: 'Alting',
+		evs: {hp: 252, spa: 69, spe: 188}, nature: 'Timid',
+	},
 	Peary: {
 		species: 'Klinklang', ability: 'Levitate', item: 'Pearyum Z', gender: '',
 		moves: ['Lock On', 'Sheer Cold', 'Substitute'],
