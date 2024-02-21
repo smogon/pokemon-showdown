@@ -1976,6 +1976,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Rock",
 	},
 
+	// Siegfried
+	boltbeam: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Uses Thunderbolt and Ice Beam in succession, at half power.",
+		name: "BoltBeam",
+		pp: 15,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTryHit(target) {
+			target.addVolatile('boltbeam');
+			this.actions.useMove("thunderbolt", target);
+			this.actions.useMove("icebeam", target);
+			return null;
+		},
+		condition: {
+			duration: 1,
+			onBasePowerPriority: 12,
+			onBasePower(basePower) {
+				return this.chainModify(0.5);
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Electric",
+	},
+
 	// snake
 	conceptrelevant: {
 		accuracy: 100,

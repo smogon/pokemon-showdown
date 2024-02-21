@@ -356,6 +356,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Purification',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', teraType: 'Water',
 	},
+	Siegfried: {
+		species: 'Ampharos', ability: 'Static', item: 'Ampharosite', gender: 'M',
+		moves: ['Calm Mind', 'Thunderclap', 'Draco Meteor'],
+		signatureMove: 'BoltBeam',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest', shiny: 64,
+	},
 	sharp_claw: {
 		species: 'Sneasel', ability: 'Regenerator', item: 'Heavy-Duty Boots', gender: 'F',
 		moves: ['Knock Off', 'Ice Spinner', 'Ice Shard'],

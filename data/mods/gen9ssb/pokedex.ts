@@ -319,6 +319,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Rough and Tumble"},
 	},
 
+	// Siegfried
+	ampharosmega: {
+		inherit: true,
+		abilities: {0: "Magical Mystery Charge"},
+	},
+
 	// spoo
 	mumbao: {
 		inherit: true,

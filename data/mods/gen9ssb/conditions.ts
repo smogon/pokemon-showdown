@@ -828,6 +828,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		innateName: "Rough and Tumble",
 		shortDesc: "Changes Sneasel forme on switch out.",
 	},
+	siegfried: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Siegfried')}|You say goodbye and I say hello`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Siegfried')}|Oh, I get by with a little help from my friends.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Siegfried')}|Living is easy with eyes closed.`);
+		},
+	},
 	snake: {
 		noCopy: true,
 		onStart() {

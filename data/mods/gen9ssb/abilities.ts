@@ -1097,6 +1097,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Siegfried
+	magicalmysterycharge: {
+		shortDesc: "Summons Electric Terrain upon switch-in, +1 boost to Sp. Def during Electric Terrain.",
+		name: "Magical Mystery Charge",
+		onStart(source) {
+			this.field.setTerrain('electricterrain');
+		},
+		onModifySpDPriority: 5,
+		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain('electricterrain')) {
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+	},
+
 	// Sulo
 	protectionofthegelatin: {
 		shortDesc: "Magic Guard + Stamina",
