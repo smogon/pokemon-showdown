@@ -493,6 +493,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Whiteout',
 		evs: {hp: 252, spa: 252, spe: 4}, nature: 'Modest', teraType: 'Steel', shiny: 2,
 	},
+	YveltalNL: {
+		species: 'Farigiraf', ability: 'Height Advantage', item: 'Leftovers', gender: 'M',
+		moves: ['Freezing Glare', 'Ice Beam', 'Slack Off'],
+		signatureMove: 'High Ground',
+		evs: {hp: 248, spa: 252, spe: 8}, nature: 'Modest', teraType: 'Ground', shiny: false,
+	},
 	Zalm: {
 		species: 'Weedle', ability: 'Water Bubble', item: 'Clear Amulet', gender: '',
 		moves: ['Surging Strikes', 'Attack Order', 'Dire Claw'],

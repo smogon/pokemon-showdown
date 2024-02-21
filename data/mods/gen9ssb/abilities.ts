@@ -1412,6 +1412,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// YveltalNL
+	heightadvantage: {
+		shortDesc: "If this Pokemon's height is more than that of the opponent, lowers the opponent’s Atk and Sp. Atk by 1..",
+		name: "Height Advantage",
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Height Advantage', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					if (this.dex.species.get(pokemon.species).heightm > this.dex.species.get(target.species).heightm) {
+						this.boost({atk: -1, spa: -1}, target, pokemon, null, true);
+					}
+				}
+			}
+		},
+		flags: {},
+	},
+
 	// Modified abilities
 	baddreams: {
 		inherit: true,

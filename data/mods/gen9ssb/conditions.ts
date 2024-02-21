@@ -1230,6 +1230,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	yveltalnl: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('YveltalNL')}|It's over ${pokemon.side.name}, I have the high ground!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('YveltalNL')}|brb playing a draft game rq`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('YveltalNL')}|whatever i'll go watch football`);
+		},
+	},
 	zalm: {
 		noCopy: true,
 		onStart() {
