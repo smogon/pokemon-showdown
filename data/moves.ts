@@ -19991,6 +19991,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		onModifyType(move, pokemon) {
 			if (pokemon.species.name === 'Terapagos-Stellar') {
 				move.type = 'Stellar';
+
+				if (pokemon.terastallized && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+					move.category = 'Physical';
+				}
 			}
 		},
 		onModifyMove(move, pokemon) {
