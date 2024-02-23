@@ -296,6 +296,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Recharge',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Fairy', shiny: 1734,
 	},
+	Lionyx: {
+		species: 'Miltank', ability: 'EnorMOOs', item: 'Leftovers', gender: 'M',
+		moves: ['Glacial Lance', 'Bolt Strike', 'Defense Curl'],
+		signatureMove: 'Super Rollout',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0, spa: 0}, nature: 'Impish', teraType: ['Electric', 'Ice'], shiny: true,
+	},
 	Loethalion: {
 		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
 		moves: [['Esper Wing', 'Lumina Crash', 'Psychic Noise'], ['Agility', 'Calm Mind'], ['Draining Kiss', 'Matcha Gotcha']],

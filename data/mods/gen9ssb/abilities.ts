@@ -883,6 +883,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Lionyx
+	enormoos: {
+		name: "EnorMOOs",
+		shortDesc: "This Pokemon's Defense is used in damage calculation instead of Attack or Sp. Atk.",
+		onModifyMove(move, pokemon, target) {
+			if (move.category !== "Status") {
+				move.overrideOffensiveStat = 'def';
+			}
+		},
+		flags: {},
+	},
+
 	// Lumari
 	pyrotechnic: {
 		shortDesc: "Critical hits are guaranteed when foe is burned.",

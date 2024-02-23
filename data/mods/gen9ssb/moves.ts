@@ -1574,6 +1574,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
+	// Lionyx
+	superrollout: {
+		accuracy: 90,
+		basePower: 30,
+		basePowerCallback(pokemon, target, move) {
+			if (!pokemon.volatiles['superrollout'] || move.hit === 1) {
+				pokemon.addVolatile('superrollout');
+			}
+			let bp = move.basePower * pokemon.volatiles['superrollout'].multiplier;
+			if (pokemon.volatiles['defensecurl']) {
+				bp *= 2;
+			}
+			this.debug('BP: ' + bp);
+			return bp;
+		},
+		category: "Physical",
+		name: "Super Rollout",
+		pp: 20,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, noparentalbond: 1},
+		condition: {
+			duration: 2,
+			onStart() {
+				this.effectState.multiplier = 1;
+			},
+			onRestart() {
+				if (this.effectState.multiplier < 4) {
+					this.effectState.multiplier <<= 1;
+				}
+				this.effectState.duration = 2;
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+	},
+
 	// Loethalion
 	darkmooncackle: {
 		accuracy: 100,

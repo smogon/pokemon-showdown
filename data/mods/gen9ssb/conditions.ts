@@ -675,6 +675,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Lily')}|oh dear, i am dead`);
 		},
 	},
+	lionyx: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Lionyx')}| It's Lionyx busting in once again (⌐■_■)`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Lionyx')}|Wherever you go and whoever you meet, don't forget us, will you?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Lionyx')}|I don't even like milk anyway`);
+		},
+	},
 	loethalion: {
 		noCopy: true,
 		onStart(pokemon) {
