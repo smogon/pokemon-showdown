@@ -673,6 +673,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 	},
 
+	// Kiwi
+	surehitsorcery: {
+		name: "Sure Hit Sorcery",
+		shortDesc: "No Guard + Prankster + Grassy Surge.",
+		onAnyInvulnerabilityPriority: 1,
+		onAnyInvulnerability(target, source, move) {
+			if (move && (source === this.effectState.target || target === this.effectState.target)) return 0;
+		},
+		onAnyAccuracy(accuracy, target, source, move) {
+			if (move && (source === this.effectState.target || target === this.effectState.target)) {
+				return true;
+			}
+			return accuracy;
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				move.pranksterBoosted = true;
+				return priority + 1;
+			}
+		},
+		onStart(source) {
+			this.field.setTerrain('grassyterrain');
+		},
+		flags: {},
+	},
+
 	// Kris
 	cacophony: {
 		name: "Cacophony",

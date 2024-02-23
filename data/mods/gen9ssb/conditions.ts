@@ -529,6 +529,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Kennedy')}|LOOOOOOL ffs`);
 		},
 	},
+	kiwi: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Kiwi')}|Hey, are you a goldfish or a shark? I guess it depends on how quickly you get flushed down`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Kiwi')}|You're lively, but I'm not done peeling off your scales`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Kiwi')}|Too late, the manifestation has completed. You'll be reduced to a fillet one day unexpectedly...`);
+		},
+	},
 	kris: {
 		noCopy: true,
 		onStart() {

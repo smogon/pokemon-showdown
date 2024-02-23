@@ -235,6 +235,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Hat-Trick',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Any',
 	},
+	Kiwi: {
+		species: 'Minccino', ability: 'Sure Hit Sorcery', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Dynamic Punch', 'Substitute', 'Noble Roar'],
+		signatureMove: 'Mad Manifest',
+		evs: {hp: 252, atk: 144, spe: 112}, nature: 'Adamant', teraType: 'Fighting', shiny: true,
+	},
 	Kris: {
 		species: 'Nymble', ability: 'Cacophony', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Boomburst', 'Bug Buzz', 'Torch Song'],

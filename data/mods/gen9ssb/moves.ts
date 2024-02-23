@@ -1154,6 +1154,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Kiwi
+	madmanifest: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Curses foe without self-damage, 50% chance for brn/par/psn. Raises Speed by 1 stage.",
+		name: "Mad Manifest",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'curse',
+		onHit(target, source) {
+			const result = this.random(3);
+			if (result === 0) {
+				target.trySetStatus('psn', target);
+			} else if (result === 1) {
+				target.trySetStatus('par', target);
+			} else {
+				target.trySetStatus('brn', target);
+			}
+			this.boost({spe: 1}, source);
+		},
+		onPrepareHit(target, source) {
+			this.attrLastMove('[anim] Dark Void');
+		},
+		target: "normal",
+		type: "Fairy",
+
+	},
+
 	// Kris
 	ok: {
 		accuracy: true,
