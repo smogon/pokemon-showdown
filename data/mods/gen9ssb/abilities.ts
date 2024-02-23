@@ -432,6 +432,28 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Emboar02
+	hogwash: {
+		shortDesc: "Reckless; on STAB moves, also add Rock Head. On non-STAB moves, recoil is recovery.",
+		name: "Hogwash",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.recoil || move.hasCrashDamage) {
+				this.debug('Hogwash boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'recoil') {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (this.activeMove.id !== 'struggle') {
+					if (!source.hasType(this.activeMove.type)) this.heal(damage);
+					return null;
+				}
+			}
+		},
+	},
+
 	// Frozoid
 	snowballer: {
 		shortDesc: "This Pokemon's Attack is raised 1 stage if hit by an Ice move; Ice immunity.",

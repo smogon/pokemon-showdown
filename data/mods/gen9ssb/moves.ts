@@ -724,6 +724,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// Emboar02
+	insertboarpunhere: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Has 33% recoil. Switch after using.",
+		name: "Insert boar pun here",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Collision Course', target);
+			this.add('-anim', source, 'U-turn', target);
+		},
+		selfSwitch: true,
+		recoil: [33, 100],
+		secondary: null,
+		target: 'normal',
+		type: "Fighting",
+	},
+
 	// Frozoid
 	flatoutfalling: {
 		accuracy: 100,
