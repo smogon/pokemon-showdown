@@ -127,6 +127,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Storm Surge"},
 	},
 
+	// Frozoid
+	gible: {
+		inherit: true,
+		baseStats: {hp: 65, atk: 110, def: 55, spa: 50, spd: 55, spe: 108},
+		abilities: {0: "Snowballer"},
+	},
+
 	// Ganjafin
 	wiglett: {
 		inherit: true,

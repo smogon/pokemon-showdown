@@ -300,6 +300,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Elly')}|that wasn't very nice, ${enemyStaff(pokemon)}.`);
 		},
 	},
+	frozoid: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Frozoid')}|Let's do this`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Frozoid')}|Wait let me finish what i was doi-`);
+		},
+		onFaint(pokemon) {
+			this.add(`c:|${getName('Frozoid')}|Man.`);
+		},
+	},
 	ganjafin: {
 		noCopy: true,
 		onStart() {

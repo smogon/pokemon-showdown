@@ -169,6 +169,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sustained Winds',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ground',
 	},
+	Frozoid: {
+		species: 'Gible', ability: 'Snowballer', item: 'Eviolite', gender: 'M',
+		moves: ['Dragon Dance', 'Dragon Rush', 'Precipice Blades'],
+		signatureMove: 'Flat out falling',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Any', shiny: true,
+	},
 	Ganjafin: {
 		species: 'Wiglett', ability: 'Gambling Addiction', item: 'Eviolite', gender: 'M',
 		moves: ['Wrap', 'Cosmic Power', 'Strength Sap'],

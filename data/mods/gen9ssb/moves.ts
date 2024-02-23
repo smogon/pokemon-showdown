@@ -724,6 +724,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Flying",
 	},
 
+	// Frozoid
+	flatoutfalling: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
+		shortDesc: "Typeless. Sets Gravity.",
+		name: "Flat out falling",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Head Smash', target);
+			this.add('-anim', source, 'Gravity', target);
+		},
+		self: {
+			onHit(source) {
+				this.field.addPseudoWeather('gravity', source);
+			},
+		},
+		secondary: null,
+		target: 'normal',
+		type: "???",
+	},
+
 	// Ganjafin
 	wigglingstrike: {
 		accuracy: 95,
