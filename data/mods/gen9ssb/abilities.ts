@@ -1363,6 +1363,47 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Two of Roses
+	aswesee: {
+		name: "As We See",
+		desc: "Once per turn, when any active Pokemon has a stat boosted, this Pokemon has a 50% chance of copying it and a 15% chance to raise another random stat.",
+		shortDesc: "1x per turn: Stat gets boosted -> 50% chance to copy, 15% to raise another.",
+		onFoeAfterBoost(boost, target, source, effect) { // Opportunist
+			if (this.randomChance(1, 2)) {
+				if (effect && ['As We See', 'Mirror Herb', 'Opportunist'].includes(effect.name)) return;
+				const pokemon = this.effectState.target;
+				const positiveBoosts: Partial<BoostsTable> = {};
+				let i: BoostID;
+				for (i in boost) {
+					if (boost[i]! > 0) {
+						positiveBoosts[i] = boost[i];
+					}
+				}
+				if (Object.keys(positiveBoosts).length < 1) return;
+				this.boost(positiveBoosts, pokemon);
+				this.effectState.triggered = true;
+			}
+		},
+		onResidual(target, source, effect) {
+			if (this.randomChance(15, 100) && this.effectState.triggered) {
+				const stats: BoostID[] = [];
+				const boost: SparseBoostsTable = {};
+				let statPlus: BoostID;
+				for (statPlus in target.boosts) {
+					if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+					if (target.boosts[statPlus] < 6) {
+						stats.push(statPlus);
+					}
+				}
+				const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) boost[randomStat] = 1;
+				this.boost(boost, target, target);
+			}
+			this.effectState.triggered = false;
+		},
+		flags: {},
+	},
+
 	// UT
 	galeguard: {
 		shortDesc: "Only damaged by direct attacks; Flying moves +1 priority.",

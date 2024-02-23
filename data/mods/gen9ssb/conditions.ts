@@ -1110,6 +1110,71 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('trace')}|How disappointingly short a dream lasts.`);
 		},
 	},
+	twoofroses: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Two of Roses')}|I'm here! I'm uhh- Yes! Also hi! Happy to be here.`);
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Two of Roses')}|Pfft! I prefer lurking anyway.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Two of Roses')}|It matters not how much we try but only that we try. For if the tides swell the dunes of a timeless existence, and our strength wanes in the coming unlight- And if we are to be as the forsaken namesakes before us, for the yesterday that never came and the tomorrow that is forever promised, know this; We dilly, so they do not dally...`);
+		},
+		innateName: "Wonderer",
+		shortDesc: "This Pokemon's secondary type changes based on the active weather or terrain, monotype if neither.",
+		onWeatherChange(target, source, sourceEffect) {
+			const currentWeather = this.field.getWeather().id;
+			const currentTerrain = this.field.getTerrain().id;
+			const types = target.hasType;
+			let type = 'Dark';
+			if (!currentWeather && !currentTerrain && !types('Dark')) {
+				type = 'Dark';
+			} else if (currentWeather) {
+				if (['raindance', 'primordialsea'].includes(currentWeather) && !types('Water')) {
+					type = 'Water';
+				} else if (['sunnyday', 'desolateland'].includes(currentWeather) && !types('Fire')) {
+					type = 'Fire';
+				} else if (['sandstorm', 'deserteddunes'].includes(currentWeather) && !types('Rock')) {
+					type = 'Rock';
+				} else if (['hail', 'snow'].includes(currentWeather) && !types('Ice')) {
+					type = 'Ice';
+				} else {
+					// do nothing if it's not the 4 primary weathers...unless there are more?
+				}
+			}
+			target.addType(type);
+			this.add('-start', target, 'typeadd', type, '[from] ability: Wonderer');
+		},
+		onTerrainChange(target, source, sourceEffect) {
+			const currentWeather = this.field.getWeather().id;
+			const currentTerrain = this.field.getTerrain().id;
+			let type = 'Dark';
+			const types = target.hasType;
+			if (!currentWeather && !currentTerrain && !types('Dark')) {
+				type = 'Dark';
+			} else if (currentTerrain) {
+				if (currentTerrain === 'electricterrain') {
+					target.setType('Electric');
+					type = '';
+				} else if (currentTerrain === 'psychicterrain' && !types('Psychic')) {
+					type = 'Psychic';
+				} else if (currentTerrain === 'grassyterrain' && !types('Grass')) {
+					type = 'Grass';
+				} else if (currentTerrain === 'mistyterrain' && !types('Fairy')) {
+					type = 'Fairy';
+				} else if (!types('Ghost')) { // custom terrains
+					type = 'Ghost';
+				}
+			}
+			if (type) {
+				target.addType(type);
+				this.add('-start', target, 'typeadd', type, '[from] ability: Wonderer');
+			}
+		},
+	},
 	ut: {
 		noCopy: true,
 		onStart() {

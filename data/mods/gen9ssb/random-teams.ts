@@ -474,6 +474,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Chronostasis',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest', teraType: 'Psychic',
 	},
+	'Two of Roses': {
+		species: 'Luxray', ability: 'As We See', item: 'Mirror Herb', gender: 'M',
+		moves: ['Knock Off', 'Supercell Slam', 'Trailblaze'],
+		signatureMove: 'Dilly Dally',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Flying', shiny: 1024,
+	},
 	UT: {
 		species: 'Talonflame', ability: 'Gale Guard', item: 'Life Orb', gender: 'M',
 		moves: ['Brave Bird', 'Roost', ['Swords Dance', 'Flare Blitz', 'Will-O-Wisp']],
