@@ -523,6 +523,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Solar Summon',
 		evs: {hp: 80, atk: 176, spe: 252}, nature: 'Adamant', teraType: 'Fire',
 	},
+	zoro: {
+		species: 'Umbreon', ability: 'Nine Lives', item: 'Leftovers', gender: 'M',
+		moves: ['Wish', 'Protect', 'Toxic'],
+		signatureMove: 'Darkest Night',
+		evs: {hp: 252, def: 240, spd: 16}, nature: 'Calm', teraType: 'Steel', shiny: true,
+	},
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {

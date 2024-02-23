@@ -1461,6 +1461,34 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// zoro
+	ninelives: {
+		shortDesc: "Twice per battle, Umbreon will survive a lethal hit with 1 HP remaining, regardless of the HP it was at.",
+		name: "Nine Lives",
+		onTryHit(pokemon, target, move) {
+			if (move.ohko) {
+				this.add('-immune', pokemon, '[from] ability: Nine Lives');
+				return null;
+			}
+		},
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp && effect?.effectType === 'Move' && !this.effectState.busted) {
+				this.add('-ability', target, 'Nine Lives');
+				if (this.effectState.busted === 0) {
+					this.effectState.busted = 1;
+				} else {
+					this.effectState.busted = 0;
+				}
+				return target.hp - 1;
+			}
+		},
+		// Yes, this looks very patchwork-y. declaring new persistent global variables seems to be a no-go here
+		// so i repurposed one which should likely not affect anything else - have tested with clerica/zoro on both sides
+		// and their disguise/sturdy state is unaffected by modifying anything here. but let wg know if this breaks stuff.
+		flags: {breakable: 1},
+	},
+
 	// Modified abilities
 	baddreams: {
 		inherit: true,

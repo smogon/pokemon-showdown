@@ -2836,6 +2836,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// zoro
+	darkestnight: {
+		accuracy: 100,
+		basePower: 95,
+		category: "Physical",
+		name: "Darkest Night",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		overrideOffensivePokemon: 'target',
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Foul Play", target);
+		},
+	},
+
 	// Modified moves
 	bleakwindstorm: {
 		inherit: true,
