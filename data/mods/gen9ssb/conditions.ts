@@ -444,6 +444,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Isaiah')}|Bruh, nice cteam`);
 		},
 	},
+	j0rdy004: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('J0rdy004 ♫')}|Get-get-get-get, got-got-got-got`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('J0rdy004 ♫')}|I've seen footage, I stay noided`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('J0rdy004 ♫')}|So softly a supergod dies...`);
+		},
+	},
 	kenn: {
 		noCopy: true,
 		onStart(pokemon) {

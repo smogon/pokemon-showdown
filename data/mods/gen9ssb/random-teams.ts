@@ -223,6 +223,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Simple Gameplan',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
 	},
+	'J0rdy004 ♫': {
+		species: 'Vulpix-Alola', ability: 'Fortifying Frost', item: 'Never-Melt Ice', gender: 'N',
+		moves: ['Blizzard', 'Focus Blast', 'Recover'],
+		signatureMove: 'Snowy Samba',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: 4,
+	},
 	kenn: {
 		species: 'Larvitar', ability: 'Deserted Dunes', item: 'Eviolite', gender: 'M',
 		moves: ['Salt Cure', 'Shore Up', ['Precipice Blades', 'Headlong Rush']],

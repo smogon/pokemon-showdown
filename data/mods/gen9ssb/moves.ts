@@ -1031,6 +1031,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// J0rdy004
+	snowysamba: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Snowy Samba",
+		shortDesc: "Sets Snow, raises user's Sp. Atk by 1 stage and Speed by 2 stages.",
+		pp: 15,
+		priority: 0,
+		flags: {snatch: 1, metronome: 1},
+		boosts: {
+			spe: 2,
+			spa: 1,
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', target);
+			this.add('-anim', source, 'Snowscape', target);
+		},
+		weather: 'snow',
+		secondary: null,
+		target: "self",
+		type: "Ice",
+	},
+
 	// kenn
 	stonefaced: {
 		accuracy: true,

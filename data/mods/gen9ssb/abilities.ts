@@ -580,6 +580,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// J0rdy004
+	fortifyingfrost: {
+		name: "Fortifying Frost",
+		shortDesc: "If Snow is active, this Pokemon's Sp. Atk and Sp. Def are 1.5x.",
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+	},
+
 	// kenn
 	deserteddunes: {
 		onStart(source) {
