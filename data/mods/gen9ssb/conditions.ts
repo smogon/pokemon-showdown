@@ -68,6 +68,50 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Alex')}|:3`);
 		},
 	},
+	appletunalamode: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Appletun a la Mode')}|QuQ`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Appletun a la Mode')}|QnQ`);
+		},
+		innateName: "Ripen",
+		shortDesc: "When this Pokemon eats certain Berries, the effects are doubled.",
+		onTryHeal(damage, target, source, effect) {
+			if (!effect) return;
+			if (effect.name === 'Berry Juice' || effect.name === 'Leftovers') {
+				this.add('-activate', target, 'ability: Ripen');
+			}
+			if ((effect as Item).isBerry) return this.chainModify(2);
+		},
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && (effect as Item).isBerry) {
+				let b: BoostID;
+				for (b in boost) {
+					boost[b]! *= 2;
+				}
+			}
+		},
+		onSourceModifyDamagePriority: -1,
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.abilityState.berryWeaken) {
+				target.abilityState.berryWeaken = false;
+				return this.chainModify(0.5);
+			}
+		},
+		onTryEatItemPriority: -1,
+		onTryEatItem(item, pokemon) {
+			this.add('-activate', pokemon, 'ability: Ripen');
+		},
+		onEatItem(item, pokemon) {
+			const weakenBerries = [
+				'Babiri Berry', 'Charti Berry', 'Chilan Berry', 'Chople Berry', 'Coba Berry', 'Colbur Berry', 'Haban Berry', 'Kasib Berry', 'Kebia Berry', 'Occa Berry', 'Passho Berry', 'Payapa Berry', 'Rindo Berry', 'Roseli Berry', 'Shuca Berry', 'Tanga Berry', 'Wacan Berry', 'Yache Berry',
+			];
+			// Record if the pokemon ate a berry to resist the attack
+			pokemon.abilityState.berryWeaken = weakenBerries.includes(item.name);
+		},
+	},
 	aqrator: {
 		noCopy: true,
 		onStart() {

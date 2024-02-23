@@ -54,6 +54,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Spicier Extract',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
 	},
+	'Appletun a la Mode': {
+		species: 'Appletun', ability: 'Served Cold', item: 'Sitrus Berry', gender: 'F',
+		moves: ['Freeze-Dry', 'Apple Acid', 'Fickle Beam'],
+		signatureMove: "Extra Course",
+		evs: {hp: 252, spa: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm', teraType: 'Ground',
+	},
 	aQrator: {
 		species: 'Totodile', ability: 'Neverending fHunt', item: 'Eviolite', gender: 'F',
 		moves: ['Whirlpool', 'Noble Roar', 'Slack Off'],

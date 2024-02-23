@@ -145,6 +145,56 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Appletun a la Mode
+	extracourse: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Recycles held berry and boosts 2 random stats (-acc/eva) by 1.",
+		name: "Extra Course",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Recycle', target);
+		},
+		flags: {snatch: 1},
+		onHit(pokemon) {
+			if (!pokemon.item && pokemon.lastItem) {
+				const item = pokemon.lastItem;
+				pokemon.lastItem = '';
+				this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Extra Course');
+				pokemon.setItem(item);
+			}
+			let stats: BoostID[] = [];
+			const boost: SparseBoostsTable = {};
+			let statPlus: BoostID;
+			for (statPlus in pokemon.boosts) {
+				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+				if (pokemon.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) boost[randomStat] = 1;
+			stats = [];
+			for (statPlus in pokemon.boosts) {
+				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+				if (pokemon.boosts[statPlus] < 6 && statPlus !== randomStat) {
+					stats.push(statPlus);
+				}
+			}
+			randomStat = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) boost[randomStat] = 1;
+			this.boost(boost, pokemon, pokemon);
+		},
+		target: "self",
+		type: "Normal",
+	},
+
 	// aQrator
 	torisstori: {
 		accuracy: 100,

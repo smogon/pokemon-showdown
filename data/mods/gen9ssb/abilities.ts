@@ -78,6 +78,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// Appletun a la Mode
+	servedcold: {
+		shortDesc: "This Pokemon's Defense is raised 2 stages if hit by an Ice move; Ice immunity.",
+		name: "Served Cold",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ice') {
+				if (!this.boost({def: 2})) {
+					this.add('-immune', target, '[from] ability: Served Cold');
+				}
+				return null;
+			}
+		},
+		flags: {breakable: 1},
+	},
+
 	// aQrator
 	neverendingfhunt: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1. Dark types are not immune.",
