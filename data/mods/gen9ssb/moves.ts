@@ -1823,6 +1823,54 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
+	// Monkey
+	bananabreakfast: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "2 random stats +1; Lock-On/Laser Focus/Charge.",
+		name: "Banana Breakfast",
+		gen: 9,
+		pp: 10,
+		priority: 2,
+		flags: {mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Fire Fang', target);
+			this.add('-anim', source, 'Belly Drum', target);
+		},
+		onHit(target, source) {
+			const stats: BoostID[] = [];
+			const boost: SparseBoostsTable = {};
+			let statPlus: BoostID;
+			for (statPlus in source.boosts) {
+				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+				if (source.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+			const randomStat2: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) boost[randomStat] = 1;
+			if (randomStat2 && randomStat === randomStat2) boost[randomStat] = 2;
+			else if (randomStat2) boost[randomStat2] = 1;
+			this.boost(boost, source);
+			const result = this.random(3);
+			if (result === 0) {
+				this.actions.useMove("laserfocus", target);
+			} else if (result === 1) {
+				this.actions.useMove("lockon", target);
+			} else {
+				this.actions.useMove("charge", target);
+			} // This is easier than implementing each condition manually
+		},
+		secondary: null,
+		target: "self",
+		type: "grass",
+	},
+
 	// Ney
 	shadowdance: {
 		accuracy: 110,

@@ -331,6 +331,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Testing in Production',
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
 	},
+	Monkey: {
+		species: 'Infernape', ability: 'Harambe Hit', item: 'Blunder Policy', gender: 'M',
+		moves: ['Dynamic Punch', 'Plasma Fists', 'Fire Punch'],
+		signatureMove: 'Banana Breakfast',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Electric', shiny: 69,
+	},
 	Ney: {
 		species: 'Banette', ability: 'Insomnia', item: 'Banettite', gender: 'M',
 		moves: ['Destiny Bond', 'Will-O-Wisp', 'Parting Shot'],

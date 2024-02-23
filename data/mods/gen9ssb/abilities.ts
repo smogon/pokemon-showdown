@@ -1055,6 +1055,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Monkey
+	harambehit: {
+		shortDesc: "Unseen Fist + Iron Fist.",
+		name: "Harambe Hit",
+		onModifyMove(move) {
+			if (move.flags['contact']) delete move.flags['protect'];
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				this.debug('Harambe Hit boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		flags: {},
+	},
+
 	// Ney
 	pranksterplus: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1. Dark types are not immune.",

@@ -735,6 +735,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
 		},
 	},
+	monkey: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Monkey')}|Hmm, monke`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Monkey')}|Don't mind me I was just monkeying around`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Monkey')}|I'm a seeker too. But my dreams aren't like yours. I can't help thinking that somewhere in the universe there has to be something better than man. Has to be.`);
+		},
+	},
 	ney: {
 		noCopy: true,
 		onStart() {
