@@ -143,6 +143,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Arya')}|W-whats this? Oh, come on...!!!`);
 		}, // Is a message before going mega supported(unlikely)? if so, the first message in onAfterMega goes there.
 	},
+	artemis: {
+		noCopy: true,
+		onFoeAfterFaint(target, source, effect) {
+			this.add('message', `${source.name} was banned from Pok\u00e9mon Showdown!`);
+		},
+	},
 	berry: {
 		noCopy: true,
 		onStart(pokemon) {

@@ -84,6 +84,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Anyone can be killed',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: false,
 	},
+	Artemis: {
+		species: 'Genesect', ability: 'Supervised Learning', item: 'Choice Specs', gender: 'N',
+		moves: [],
+		signatureMove: 'Automated Response​',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Serious', shiny: true,
+	},
 	berry: {
 		species: 'Regirock', ability: 'Sturdy', item: 'Maranga Berry', gender: 'F',
 		moves: ['Curse', 'Salt Cure', 'Stone Axe'],

@@ -309,6 +309,53 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ground",
 	},
 
+	// Artemis
+	automatedresponse: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		shortDesc: "Changes the move's and user's type to deal super effective damage. 10% false positive rate.",
+		name: "Automated Response",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			const seTypes = [];
+			const nveTypes = [];
+			let netType = "";
+			for (const i of this.dex.types.names()) {
+				if (target) {
+					const effect = this.dex.getEffectiveness(i, target.types);
+					const immune = this.dex.getImmunity(i, target.types);
+					if (effect > 0 && immune) {
+						seTypes.push(i);
+					} else if (effect < 0 && immune) {
+						nveTypes.push(i);
+					}
+				}
+			}
+			if (this.randomChance(90, 100)) {
+				netType = this.sample(seTypes);
+			} else { // false positive
+				netType = this.sample(nveTypes);
+			}
+			if (netType === "") {
+				netType = "Electric";
+			}
+			// TODO add messages for false positive etc
+			source.setType(netType);
+			this.add('-start', source, 'typechange', netType);
+			if (move) {
+				move.type = netType;
+			}
+			this.add('-anim', source, 'Techno Blast', target);
+		},
+		target: "normal",
+		type: "Electric",
+	},
 
 	// berry
 	whatkind: {
