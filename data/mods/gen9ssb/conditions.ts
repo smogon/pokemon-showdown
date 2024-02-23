@@ -946,6 +946,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('phoopes')}|Jynx! Knock on wood`);
 		},
 	},
+	ptoad: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('ptoad')}|/me enters the stage`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('ptoad')}|Taking 5!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('ptoad')}|Who told you you're allowed to rain on my parade?`);
+		},
+	},
 	pyro: {
 		noCopy: true,
 		onStart() {

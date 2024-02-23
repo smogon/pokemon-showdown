@@ -380,6 +380,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gen 1 Blizzard',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ice',
 	},
+	ptoad: {
+		species: 'Politoed', ability: 'Drizzle', item: 'Leftovers', gender: 'M',
+		moves: ['Jet Punch', 'Ice Punch', 'Earthquake'],
+		signatureMove: 'Pleek...',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Water',
+	},
 	PYRO: {
 		species: 'Kingambit', ability: 'Hardcore Hustle', item: 'Leftovers', gender: 'M',
 		moves: ['Kowtow Cleave', 'Sucker Punch', 'Swords Dance'],

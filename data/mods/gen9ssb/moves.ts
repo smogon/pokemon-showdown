@@ -1130,7 +1130,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.attrLastMove('[anim] Doom Desire');
 		},
-		onHit(target) {
+		onHit(target, source) {
 			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup', 'gen9computergeneratedteams'];
 			const randFormat = this.sample(formats);
 			let msg;
@@ -1153,7 +1153,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.addMove('-anim', target, 'Wish', target);
 			// @ts-ignore set wants a sig but randbats sets don't have one
 			changeSet(this, target, team[0], true);
-			this.add(`c:|${getName('Irpachuza!')}|${msg}`);
+			this.add(`c:|${getName((source.illusion || source).name)}|${msg}`);
 		},
 		isZ: "irpatuziniumz",
 		secondary: null,
@@ -1705,7 +1705,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (!Object.values(pokemon.boosts).some(x => x >= 6)) {
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1, evasion: 1}, pokemon);
-				this.add(`c:|${getName('Mad Monty')}|Ope! Wrong button, sorry.`);
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
 				this.boost({atk: -1, def: -1, spa: -1, spd: -1, spe: -1, accuracy: -1, evasion: -1}, pokemon);
 			}
 		},
@@ -1728,10 +1728,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit() {
 			this.attrLastMove('[anim] Salt Cure');
 		},
-		onHit(target) {
+		onHit(target, source) {
 			if (target.getAbility().flags['cantsuppress']) return;
 			if (!target.addVolatile('gastroacid')) return;
-			this.add(`c:|${getName('Mathy')}|Sorry i tried to fix smth but accidentally broke your ability :( will fix it next week`);
+			this.add(`c:|${getName((source.illusion || source).name)}|Sorry i tried to fix smth but accidentally broke your ability :( will fix it next week`);
 		},
 		ignoreAbility: true,
 		secondary: null,
@@ -1762,7 +1762,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			const plagiarismIndex = source.moves.indexOf('plagiarism');
 			if (plagiarismIndex < 0) return false;
-			this.add(`c:|${getName('Meteordash')}|yoink`);
+			this.add(`c:|${getName((source.illusion || source).name)}|yoink`);
 			const plagiarisedMove = {
 				move: move.name,
 				id: move.id,
@@ -1831,7 +1831,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Curse');
 		},
 		onHit(pokemon) {
-			this.add(`c:|${getName('Mia')}|Please don't break...`);
+			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Please don't break...`);
 			let stats: BoostID[] = [];
 			const boost: SparseBoostsTable = {};
 			let statPlus: BoostID;
@@ -1856,7 +1856,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (randomStat) {
 				if (boost[randomStat]) {
 					boost[randomStat] = 0;
-					this.add(`c:|${getName('Mia')}|Well. Guess that broke. Time to roll back.`);
+					this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Well. Guess that broke. Time to roll back.`);
 					return;
 				} else {
 					boost[randomStat] = -2;
@@ -1867,7 +1867,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterMove(pokemon) {
 			if (this.randomChance(1, 10)) {
-				this.add(`c:|${getName('Mia')}|Ouch! That crash is really getting on my nerves...`);
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ouch! That crash is really getting on my nerves...`);
 				this.damage(pokemon.baseMaxhp / 10);
 				if (pokemon.hp <= 0) return;
 			}
@@ -1885,10 +1885,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					statusText = 'poisoned';
 				}
 
-				this.add(
-					`c:|${getName('Mia')}|` +
-					`Darn. A bug ${statusText} me. Guess I should have tested this first.`
-				);
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Darn. A bug ${statusText} me. Guess I should have tested this first.`);
 				pokemon.setStatus(status);
 			}
 		},
@@ -2007,7 +2004,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onSwap(target, source) {
 				if (!target.fainted) {
-					this.add(`c:|${getName('Notater517')}|~nyaa ${target.name}`);
+					this.add(`c:|${getName((source.illusion || source).name)}|~nyaa ${target.name}`);
 					this.add(`c:|${getName('Jeopard-E')}|**It is now ${target.name}'s turn to ask a question.**`);
 					target.side.removeSlotCondition(target, 'nyaa');
 				}
@@ -2036,7 +2033,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Memento', target);
 
-			this.add(`l|${getName('PartMan').split('|')[1]}`);
+			this.add(`l|${getName((source.illusion || source).name).split('|')[1]}`);
 			this.add(`j|FakePart`);
 		},
 		onModifyMove(move, source, target) {
@@ -2142,6 +2139,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// ptoad
+	pleek: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Pleek...",
+		shortDesc: "+4 Attack + inflict Perish Song on self.",
+		pp: 10,
+		priority: 0,
+		flags: {sound: 1, bypasssub: 1},
+		onTry(source) {
+			if (source.m.usedPleek) {
+				this.hint("Pleek... only works once per switch-in.");
+				return false;
+			}
+		},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Hyper Voice');
+			this.attrLastMove('[anim] Splash');
+		},
+		onHit(target, source, move) {
+			this.add(`c:|${getName((source.illusion || source).name)}|Pleek...`);
+			this.boost({atk: 4}, source, source, move);
+			source.addVolatile('perishsong');
+			this.add('-start', source, 'perish3', '[silent]');
+			source.m.usedPleek = true;
+		},
+		target: "self",
+		type: "Fairy",
+	},
+
 	// PYRO
 	meatgrinder: {
 		accuracy: 100,
@@ -2161,10 +2189,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-start', pokemon, 'Meat Grinder');
 			},
 			onResidualOrder: 13,
-			onResidual(pokemon) {
+			onResidual(pokemon, source) {
 				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Normal', 'Fairy']) ? 4 : 8));
 				if (!pokemon || pokemon.fainted || pokemon.hp <= 0) {
-					this.add(`c:|${getName('PYRO')}|Tripping off the beat kinda, dripping off the meat grinder`);
+					this.add(`c:|${getName((source.illusion || source).name)}|Tripping off the beat kinda, dripping off the meat grinder`);
 				}
 				const target = this.getAtSlot(pokemon.volatiles['meatgrinder'].sourceSlot);
 				if (!target || target.fainted || target.hp <= 0) {
@@ -2814,7 +2842,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(pokemon, source) {
 			// TODO: Client support for removing tera without fainting
 			if (pokemon?.terastallized) {
-				this.add(`c:|${getName('Vio͜͡let')}|lol never do that ever again thanks`);
+				this.add(`c:|${getName((source.illusion || source).name)}|lol never do that ever again thanks`);
 				delete pokemon.terastallized;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
@@ -2998,12 +3026,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Weather Ball", target);
 			this.add('-anim', source, "Snowscape", source);
 		},
-		onHit(target) {
+		onHit(target, source) {
 			this.field.setWeather('snow');
 			if (target.setAbility('normalize')) {
 				this.add('-ability', target, 'Normalize', '[from] move: Whiteout');
 			}
-			this.add(`c:|${getName('Yellow Paint')}|A blank canvas.`);
+			this.add(`c:|${getName((source.illusion || source).name)}|A blank canvas.`);
 		},
 		secondary: null,
 		target: "normal",
