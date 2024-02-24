@@ -525,6 +525,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Concept Relevant',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Water',
 	},
+	'Solaros & Lunaris': {
+		species: 'Scovillain', ability: 'Ride the Sun!', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: ['Solar Beam', 'Growth', 'Moonlight'],
+		signatureMove: 'Mind Melt',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Fire',
+	},
 	spoo: {
 		species: 'Mumbao', ability: 'Dazzling', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Will-O-Wisp', 'Strength Sap', 'Parting Shot'],

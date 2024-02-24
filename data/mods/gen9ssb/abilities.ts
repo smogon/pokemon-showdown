@@ -1473,6 +1473,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Solaros & Lunaris
+	ridethesun: {
+		shortDesc: "Drought + Chlorophyll",
+		name: "Ride the Sun!",
+		onStart(source) {
+			for (const action of this.queue) {
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'groudon') return;
+				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
+			}
+			this.field.setWeather('sunnyday');
+		},
+		onModifySpe(spe, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				return this.chainModify(2);
+			}
+		},
+		flags: {},
+	},
+
 	// Sulo
 	protectionofthegelatin: {
 		shortDesc: "Magic Guard + Stamina",

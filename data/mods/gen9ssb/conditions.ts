@@ -1245,6 +1245,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('snake')}|CAP does not accept personal creations. This refers to any idea for a Pokemon that already has predefined typing, stats, abilities, movepool, name, art, pokedex entries, weight, height, or even generic themes such as "rabbit" or "angry". These facets of a Pokemon are all decided through community discussion in CAP during the CAP process. If you think you have an idea for a Pokemon that does not define these features, you may have a concept. CAP bases our Pokemon around concepts that look to explore the mechanics behind Pokemon and we take open submissions whenever we start a new project. Examples of past concepts include Perfect Sketch User, Momentum, Trapping mechanics, delayed move user, and weather enabler.`);
 		},
 	},
+	solaroslunaris: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Solaros & Lunaris')}|Get a taste of this!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Solaros & Lunaris')}|Too hot to handle!`);
+		},
+	},
 	spoouser: {
 		noCopy: true,
 		onStart() {

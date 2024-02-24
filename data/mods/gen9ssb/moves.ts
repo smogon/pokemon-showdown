@@ -2850,6 +2850,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bug",
 	},
 
+	// Solaros & Lunaris
+	mindmelt: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		overrideDefensiveStat: 'def',
+		shortDesc: "Target's the foe's Def instead of Sp. Def.",
+		name: "Mind Melt",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Burn Up', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
+
 	// spoo
 	spoo: {
 		accuracy: 100,
