@@ -1378,6 +1378,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// Kalalokki
+	knotweak: {
+		accuracy: 80,
+		basePower: 150,
+		category: "Physical",
+		name: "Knot Weak",
+		shortDesc: "Deals 50% recoil.",
+		pp: 5,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		recoil: [1, 2],
+		secondary: null,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Focus Punch', target);
+		},
+		target: "normal",
+		type: "Fighting",
+	},
+
 	// Karthik
 	salvagedsacrifice: {
 		accuracy: 100,
