@@ -388,6 +388,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Corthius
+	grassyemperor: {
+		shortDesc: "On switch-in, summons Grassy Terrain. During Grassy Terrain, Attack is 1.33x.",
+		name: "Grassy Emperor",
+		onStart(pokemon) {
+			if (this.field.setTerrain('grassyterrain')) {
+				this.add('-activate', pokemon, 'Grassy Emperor', '[source]');
+			} else if (this.field.isTerrain('grassyterrain')) {
+				this.add('-activate', pokemon, 'ability: Grassy Emperor');
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (this.field.isTerrain('grassyterrain')) {
+				this.debug('Grassy Emperor boost');
+				return this.chainModify([5461, 4096]);
+			}
+		},
+		flags: {},
+	},
+
 	// Dawn of Artemis
 	formchange: {
 		shortDesc: ">50% HP Necrozma, else Necrozma-Ultra. SpA boosts become Atk boosts and vice versa.",

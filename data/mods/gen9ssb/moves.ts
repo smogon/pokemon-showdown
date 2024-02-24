@@ -644,6 +644,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Corthius
+	monkeybeatup: {
+		accuracy: 100,
+		basePower: 20,
+		category: "Physical",
+		shortDesc: "Hits 4-5 times. +1 priority under Grassy Terrain.",
+		name: "Monkey Beat Up",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		multihit: [4, 5],
+		flags: {protect: 1, contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Beat Up', target);
+			this.add('-anim', source, 'Wood Hammer', target);
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) {
+				return priority + 1;
+			}
+		},
+		target: "normal",
+		type: "Grass",
+	},
+
 	// Dawn of Artemis
 	magicalfocus: {
 		accuracy: 100,

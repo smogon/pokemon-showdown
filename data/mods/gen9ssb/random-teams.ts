@@ -151,6 +151,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Baker\'s Douze Off',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
 	},
+	Corthius: {
+		species: 'Thwackey', ability: 'Grassy Emperor', item: 'Eviolite', gender: 'M',
+		moves: ['Swords Dance', 'U-turn', 'Close Combat'],
+		signatureMove: 'Monkey Beat Up',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', shiny: 69,
+	},
 	'Dawn of Artemis': {
 		species: 'Necrozma', ability: 'Form Change', item: 'Expert Belt', gender: 'F',
 		moves: ['Calm Mind', 'Photon Geyser', 'Earth Power'],

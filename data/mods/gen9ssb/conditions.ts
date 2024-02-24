@@ -295,6 +295,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Coolcodename')}|mb LOL`);
 		},
 	},
+	corthius: {
+		onStart(pokemon) {
+			this.add(`c:|${getName('Corthius')}|*exessively drums on its chest*`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Corthius')}|I left my oven on, brb.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Corthius')}|Maurice, I can't "move it move it" anymore.`);
+		},
+	},
 	dawnofartemis: {
 		noCopy: true,
 		onStart(pokemon) {
