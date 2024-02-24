@@ -863,6 +863,42 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fighting",
 	},
 
+	// Fame
+	solidarity: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Creates a substitute and inflicts Leech Seed on the foe.",
+		name: "Solidarity",
+		pp: 15,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Substitute');
+			this.add('-anim', source, 'Leech Seed', target);
+		},
+		onHit(target, source) {
+			if (target.hasType('Grass')) return null;
+			target.addVolatile('leechseed', source);
+		},
+		self: {
+			onHit(target, source) {
+				if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+					this.add('-fail', source, 'move: Substitute', '[weak]');
+				} else {
+					source.addVolatile('substitute');
+					this.directDamage(source.maxhp / 4);
+				}
+			},
+		},
+		secondary: null,
+		target: 'normal',
+		type: "Grass",
+	},
+
 	// Frozoid
 	flatoutfalling: {
 		accuracy: 100,

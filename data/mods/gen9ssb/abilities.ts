@@ -506,6 +506,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// Fame
+	socialjumpluffwarrior: {
+		shortDesc: "Serene Grace + Mold Breaker.",
+		name: "Social Jumpluff Warrior",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Social Jumpluff Warrior');
+		},
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance *= 2;
+				}
+			}
+			if (move.self?.chance) move.self.chance *= 2;
+		},
+		flags: {},
+	},
+
 	// Ganjafin
 	gamblingaddiction: {
 		shortDesc: "When under 1/4 max HP: +1 Spe, heal to full HP, and all moves become Final Gambit.",

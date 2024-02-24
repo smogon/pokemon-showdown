@@ -367,6 +367,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Emboar02')}|Too much recoil D:`);
 		},
 	},
+	fame: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Fame')}|:hi:`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Fame')}|:bye:`);
+		},
+		onFaint(pokemon) {
+			this.add(`c:|${getName('Fame')}|NOOOOOOOOOOOO! I'M A STAR! PLEASE, IM A STAR!`);
+		},
+	},
 	frozoid: {
 		noCopy: true,
 		onStart() {
