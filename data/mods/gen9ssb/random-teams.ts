@@ -571,6 +571,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Hang Ten',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Water',
 	},
+	Valerian: {
+		species: 'Lucario', ability: 'Full Bloom', item: 'Clear Amulet', gender: 'F',
+		moves: ['Bullet Punch', 'Mach Punch', 'Parting Shot'],
+		signatureMove: 'First Strike',
+		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant', teraType: 'Fighting',
+	},
 	Venous: {
 		species: 'Mantine', ability: 'Concrete Over Water', item: 'Leftovers', gender: '',
 		moves: ['Scald', 'Roost', 'Clear Smog'],

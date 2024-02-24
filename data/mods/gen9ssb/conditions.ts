@@ -1396,6 +1396,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('umowu ✮彡')}|Tell.. My wife... She STINKS!!`);
 		},
 	},
+	valerian: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Valerian ✿ ♡')}|Lucario’s shiny should’ve been red.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Valerian ✿ ♡')}|As a wise man once said, “I’ll be back”.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Valerian ✿ ♡')}|My name is based on a flower, NOT the movie!`);
+		},
+	},
 	venous: {
 		noCopy: true,
 		onStart() {

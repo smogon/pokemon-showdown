@@ -3122,6 +3122,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
+	// Valerian
+	firststrike: {
+		accuracy: 100,
+		basePower: 25,
+		category: "Physical",
+		name: "First Strike",
+		shortDesc: "Turn 1: 100% flinch. +1 NVE, +2 NE, +3 SE Atk.",
+		pp: 15,
+		priority: 3,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Fake Out", target);
+		},
+		onTry(source) {
+			if (source.activeMoveActions > 1) {
+				this.hint("First Strike only works on your first turn out.");
+				return false;
+			}
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			let boost = 2;
+			const typeMod = target.getMoveHitData(move).typeMod;
+			if (typeMod > 0) {
+				boost = 3;
+			} else if (typeMod < 0) {
+				boost = 1;
+			}
+			this.boost({atk: boost}, pokemon, pokemon, move);
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Steel",
+	},
+
 	// Venous
 	yourcripplinginterest: {
 		accuracy: true,
