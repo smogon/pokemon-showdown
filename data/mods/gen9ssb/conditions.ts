@@ -217,6 +217,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('message', `${source.name} was banned from Pok\u00e9mon Showdown!`);
 		},
 	},
+	auzbat: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('AuzBat')}|I'm Batman`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('AuzBat')}|I believe what doesn't kill you simply makes you, stranger`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('AuzBat')}|All I have are negative thoughts.`);
+		},
+	},
 	berry: {
 		noCopy: true,
 		onStart(pokemon) {

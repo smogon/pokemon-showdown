@@ -108,6 +108,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Automated Response​',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Serious', shiny: true,
 	},
+	AuzBat: {
+		species: 'Swoobat', ability: 'Magic Guard', item: 'Focus Sash', gender: 'M',
+		moves: ['Stored Power', 'Hurricane', ['Roost', 'Focus Blast']],
+		signatureMove: 'Prep Time',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Psychic', shiny: 8192,
+	},
 	berry: {
 		species: 'Regirock', ability: 'Sturdy', item: 'Maranga Berry', gender: 'F',
 		moves: ['Curse', 'Salt Cure', 'Stone Axe'],

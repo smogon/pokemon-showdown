@@ -478,6 +478,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
+	// AuzBat
+	preptime: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Raises the user's Sp. Atk by 2 and Speed by 1.",
+		name: "Prep Time",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1, metronome: 1},
+		boosts: {
+			spa: 2,
+			spe: 1,
+		},
+		secondary: null,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Tidy Up', source);
+		},
+		target: "self",
+		type: "Psychic",
+	},
+
 	// berry
 	whatkind: {
 		accuracy: true,
