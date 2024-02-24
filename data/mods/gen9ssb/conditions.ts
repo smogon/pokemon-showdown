@@ -68,6 +68,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Alex')}|:3`);
 		},
 	},
+	alexander489: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Alexander489')}|gm`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Alexander489')}|gn`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Alexander489')}|kek`);
+		},
+	},
 	appletunalamode: {
 		noCopy: true,
 		onStart() {

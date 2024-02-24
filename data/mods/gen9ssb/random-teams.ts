@@ -54,6 +54,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Spicier Extract',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
 	},
+	Alexander489: {
+		species: 'Charizard', ability: 'Confirmed Town', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['No Retreat', 'Bitter Blade', 'Dual Wingbeat'],
+		signatureMove: 'Scumhunt',
+		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naughty', teraType: 'Fire', shiny: true,
+	},
 	'Appletun a la Mode': {
 		species: 'Appletun', ability: 'Served Cold', item: 'Sitrus Berry', gender: 'F',
 		moves: ['Freeze-Dry', 'Apple Acid', 'Fickle Beam'],
