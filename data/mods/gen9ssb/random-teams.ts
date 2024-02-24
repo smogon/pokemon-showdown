@@ -332,6 +332,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rise Above',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fire',
 	},
+	'Lets go shuckles': {
+		species: 'Shuckle', ability: 'Persistent', item: 'Berry Juice', gender: 'M',
+		moves: ['Diamond Storm', 'Headlong Rush', ['Glacial Lance', 'U-turn']],
+		signatureMove: 'Shuckle Power',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed', teraType: 'Ground', shiny: 213,
+	},
 	Lily: {
 		species: 'Togedemaru', ability: 'Unaware', item: 'Leftovers', gender: 'F',
 		moves: ['Victory Dance', 'Plasma Fists', 'Meteor Mash'],

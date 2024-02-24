@@ -737,6 +737,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Lasen')}|I'm out and NOT about...`);
 		},
 	},
+	letsgoshuckles: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Lets go shuckles')}|Behold the magnificence of Shuckle.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Lets go shuckles')}|Wise men don't fight battles they cannot win.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Lets go shuckles')}|He who lives by the Shuckle shall die by the Shuckle.`);
+		},
+	},
 	lily: {
 		noCopy: true,
 		onStart() {
