@@ -308,6 +308,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Mad Manifest',
 		evs: {hp: 252, atk: 144, spe: 112}, nature: 'Adamant', teraType: 'Fighting', shiny: true,
 	},
+	Klmondo: {
+		species: 'Cloyster', ability: 'Super Skilled', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Victory Dance', 'Icicle Spear', 'Rock Blast'],
+		signatureMove: 'The Better Water Shuriken',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', teraType: 'Water',
+	},
 	Kris: {
 		species: 'Nymble', ability: 'Cacophony', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Boomburst', 'Bug Buzz', 'Torch Song'],

@@ -689,6 +689,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Kiwi')}|Too late, the manifestation has completed. You'll be reduced to a fillet one day unexpectedly...`);
 		},
 	},
+	klmondo: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Klmondo')}|Gm`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Klmondo')}|I need a snack`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Klmondo')}|It's Klmondover`);
+		},
+	},
 	kris: {
 		noCopy: true,
 		onStart() {

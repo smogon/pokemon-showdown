@@ -1558,6 +1558,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	},
 
+	// Klmondo
+	thebetterwatershuriken: {
+		accuracy: 100,
+		basePower: 20,
+		category: "Physical",
+		name: "The Better Water Shuriken",
+		pp: 30,
+		priority: 1,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		multihit: [2, 5],
+		secondary: null,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Water Shuriken', target);
+			this.add('-anim', source, 'Electro Shot', target);
+		},
+		target: "normal",
+		type: "Water",
+	},
+
 	// Kris
 	ok: {
 		accuracy: true,
