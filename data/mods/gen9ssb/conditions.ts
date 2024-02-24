@@ -1228,6 +1228,25 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Teclis')}|This was my last dance.`);
 		},
 	},
+	tico: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Tico')}|oie`);
+			if (pokemon.illusion) return;
+			this.add('-ability', pokemon, 'Mold Breaker');
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Tico')}|t+`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Tico')}|It's been 3,000 years…`);
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.illusion) return;
+			move.ignoreAbility = true;
+		},
+		innateName: "Mold Breaker",
+	},
 	theia: {
 		noCopy: true,
 		onStart(pokemon) {

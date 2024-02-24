@@ -525,6 +525,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Body Count',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest', teraType: 'Ghost',
 	},
+	Tico: {
+		species: 'Floette-Eternal', ability: 'Eternal Generator', item: ['Covert Cloak', 'Red Card'], gender: 'M',
+		moves: ['Moonblast', 'Mystical Fire', 'Teleport'],
+		signatureMove: 'Eternal Wish',
+		evs: {hp: 252, def: 16, spe: 240}, ivs: {atk: 0}, nature: 'Timid', teraType: ['Fire', 'Steel'], shiny: false,
+	},
 	TheJesucristoOsAma: {
 		species: 'Arceus', ability: 'The Grace Of Jesus Christ', gender: 'N',
 		item: [

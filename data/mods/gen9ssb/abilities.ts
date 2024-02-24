@@ -1483,6 +1483,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// Tico
+	eternalgenerator: {
+		shortDesc: "Regenerator + Hazard immune.",
+		name: "Eternal Generator",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		flags: {breakable: 1},
+	},
+
 	// TheJesucristoOsAma
 	thegraceofjesuschrist: {
 		shortDesc: "Changes plates at the end of every turn.",
