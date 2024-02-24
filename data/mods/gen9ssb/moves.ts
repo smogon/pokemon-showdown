@@ -517,6 +517,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bird",
 	},
 
+	// chaos
+	outage: {
+		accuracy: 95,
+		basePower: 110,
+		category: "Special",
+		shortDesc: "Clear Smog + Taunt + Embargo.",
+		name: "Outage",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {contact: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dark Pulse', target);
+		},
+		secondaries: [
+			{
+				chance: 100,
+				volatileStatus: 'taunt',
+			}, {
+				chance: 100,
+				volatileStatus: 'embargo',
+			},
+			{
+				chance: 100,
+				onHit(target) {
+					target.clearBoosts();
+					this.add('-clearboost', target);
+				},
+			},
+		],
+		target: "normal",
+		type: "Dark",
+	},
+
 	// Chloe
 	detodaslasflores: {
 		accuracy: 90,

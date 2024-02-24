@@ -121,6 +121,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Shawn',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Ghost', shiny: 957,
 	},
+	chaos: {
+		species: 'Iron Jugulis', ability: 'Transistor', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: [['Oblivion Wing', 'Hurricane'], ['Thunderclap', 'Volt Switch'], ['Defog', 'Roost']],
+		signatureMove: 'Outage',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: ['Steel', 'Flying', 'Electric', 'Dark'],
+	},
 	Chloe: {
 		species: 'Tsareena', ability: 'Acetosa', item: 'Assault Vest', gender: 'F',
 		moves: ['Rapid Spin', 'Fishious Rend', 'Stone Axe'],
