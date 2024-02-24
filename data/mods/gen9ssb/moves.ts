@@ -3008,6 +3008,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Struchni
+	randfact: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		shortDesc: "Random type.",
+		name: "~randfact",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			move.type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
+			this.add('-anim', source, 'Nasty Plot', source);
+			this.add('-anim', source, 'Head Smash', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
+
 	// Sulo
 	vengefulmood: {
 		accuracy: 100,

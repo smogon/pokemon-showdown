@@ -1516,6 +1516,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Struchni
+	overaskedclause: {
+		shortDesc: "Moves used on the previous turn will always fail.",
+		name: "Overasked Clause",
+		onFoeBeforeMove(target, source, move) {
+			if (target.lastMove && target.lastMove.id !== 'struggle') {
+				if (move.id === target.lastMove.id) {
+					this.attrLastMove('[still]');
+					this.add('cant', this.effectState.target, 'ability: Overasked Clause', move, '[of] ' + target);
+					return false;
+				}
+			}
+		},
+	},
+
 	// Sulo
 	protectionofthegelatin: {
 		shortDesc: "Magic Guard + Stamina",
