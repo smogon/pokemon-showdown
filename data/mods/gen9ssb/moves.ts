@@ -2904,12 +2904,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Soft Flex
-	resonance2: {
+	adaptivebeam: {
 		accuracy: 100,
 		basePower: 45,
 		category: "Special",
 		shortDesc: "Power doubles if the target has more raised stats than the user.",
-		name: "Resonance2",
+		name: "Adaptive Beam",
 		pp: 15,
 		priority: 0,
 		flags: {sound: 1, protect: 1},
