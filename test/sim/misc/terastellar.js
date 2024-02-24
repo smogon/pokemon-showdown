@@ -142,4 +142,22 @@ describe("Tera Stellar", function () {
 		damage = happiny.maxhp - happiny.hp;
 		assert.bounded(damage, [24, 29], `Tera Blast should not have any boosted damage on its second use`);
 	});
+
+	it(`should increase the damage of all hits of a multi-hit move`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['surgingstrikes', 'flipturn'], teraType: 'Stellar'},
+		], [
+			{species: 'Blissey', moves: ['softboiled']},
+		]]);
+
+		const blissey = battle.p2.active[0];
+
+		battle.makeChoices('move surgingstrikes terastallize', 'auto');
+		let damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [144, 174], `Surging Strikes should have ~1.2x damage on its first use for all 3 hits`);
+
+		battle.makeChoices('move flipturn', 'auto');
+		damage = blissey.maxhp - blissey.hp;
+		assert.bounded(damage, [63, 75], `Flip Turn should have regular damage on its first use, because Water-type was already used`);
+	});
 });

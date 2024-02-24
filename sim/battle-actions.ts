@@ -1764,8 +1764,9 @@ export class BattleActions {
 			// then the Stellar tera type applies a one-time 2x STAB boost for that type,
 			// and then goes back to using the regular 1.5x STAB boost for those types.
 			if (pokemon.terastallized === 'Stellar') {
-				if (!pokemon.stellarBoostedTypes.includes(type)) {
+				if (!pokemon.stellarBoostedTypes.includes(type) || move.stellarBoosted) {
 					stab = isSTAB ? 2 : [4915, 4096];
+					move.stellarBoosted = true;
 					if (pokemon.species.name !== 'Terapagos-Stellar') {
 						pokemon.stellarBoostedTypes.push(type);
 					}
