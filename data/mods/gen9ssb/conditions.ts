@@ -530,6 +530,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('J0rdy004 ♫')}|So softly a supergod dies...`);
 		},
 	},
+	karthik: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Karthik')}|>>> const staraptor = battle.player('${pokemon.side.name}').active[0]`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c:|${getName('Karthik')}|>>> staraptor.heal(staraptor.baseMaxhp / 3)`);
+			if (!pokemon.illusion) pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Karthik')}|>>> staraptor.faint()`);
+		},
+		innateName: "Regenerator",
+		shortDesc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
+	},
 	kenn: {
 		noCopy: true,
 		onStart(pokemon) {

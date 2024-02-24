@@ -1243,6 +1243,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// Karthik
+	salvagedsacrifice: {
+		accuracy: 100,
+		basePower: 0,
+		damageCallback(pokemon) {
+			this.add('-anim', pokemon, 'Roost', pokemon);
+			this.heal(this.modify(pokemon.maxhp, 0.25), pokemon, pokemon, this.dex.getActiveMove('Salvaged Sacrifice'));
+			const damage = pokemon.hp;
+			this.add('-anim', pokemon, 'Final Gambit', this.activeTarget);
+			pokemon.faint();
+			return damage;
+		},
+		selfdestruct: "ifHit",
+		category: "Physical",
+		name: "Salvaged Sacrifice",
+		shortDesc: "Heals 25% HP, then uses Final Gambit.",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, metronome: 1, noparentalbond: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+	},
+
 	// kenn
 	stonefaced: {
 		accuracy: true,

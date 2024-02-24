@@ -260,6 +260,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Snowy Samba',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: 4,
 	},
+	Karthik: {
+		species: 'Staraptor', ability: 'Tough Claws', item: 'Choice Scarf', gender: 'M',
+		moves: ['Brave Bird', 'Head Smash', ['Flare Blitz', 'Wave Crash']],
+		signatureMove: 'Salvaged Sacrifice',
+		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Adamant', teraType: 'Flying',
+	},
 	kenn: {
 		species: 'Larvitar', ability: 'Deserted Dunes', item: 'Eviolite', gender: 'M',
 		moves: ['Salt Cure', 'Shore Up', ['Precipice Blades', 'Headlong Rush']],
