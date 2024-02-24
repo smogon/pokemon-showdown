@@ -2420,6 +2420,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// Pissog
+	asongoficeandfire: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		name: "A Song of Ice and Fire",
+		shortDesc: "Type depends on form. Switches form.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, failcopycat: 1},
+		noSketch: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			if (source.species.name === 'Volcarona') {
+				this.add('-anim', source, 'Blizzard', target);
+			} else {
+				this.add('-anim', source, 'Fiery Dance', target);
+			}
+		},
+		onModifyType(move, pokemon) {
+			if (pokemon.species.name === 'Volcarona') {
+				move.type = "Ice";
+			} else {
+				move.type = "Fire";
+			}
+		},
+		onHit(target, source, move) {
+			if (source.species.name === 'Volcarona') {
+				changeSet(this, source, ssbSets['Pissog-Frosmoth'], true);
+			} else if (source.species.name === 'Frosmoth') {
+				changeSet(this, source, ssbSets['Pissog'], true);
+			}
+		},
+		target: "normal",
+		type: "Fire",
+	},
+
 	// ptoad
 	pleek: {
 		accuracy: true,

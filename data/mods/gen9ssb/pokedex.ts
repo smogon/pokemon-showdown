@@ -297,6 +297,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "I Did It Again"},
 	},
 
+	// Pissog
+	volcarona: {
+		inherit: true,
+		abilities: {0: "Drought"},
+	},
+	frosmoth: {
+		inherit: true,
+		abilities: {0: "Snow Warning"},
+	},
+
 	// PYRO
 	kingambit: {
 		inherit: true,

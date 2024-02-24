@@ -434,6 +434,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gen 1 Blizzard',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ice',
 	},
+	Pissog: {
+		species: 'Volcarona', ability: 'Drought', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Torch Song', 'Morning Sun', 'Solar Beam'],
+		signatureMove: 'A Song Of Ice And Fire',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Fire', shiny: 1096,
+	},
+	'Pissog-Frosmoth': {
+		species: 'Frosmoth', ability: 'Snow Warning', item: 'Heavy-Duty Boots', gender: 'F',
+		moves: ['Blizzard', 'Chilly Reception', 'Aurora Veil'],
+		signatureMove: 'A Song Of Ice And Fire',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ice', skip: 'Pissog', shiny: 1096,
+	},
 	ptoad: {
 		species: 'Politoed', ability: 'Drizzle', item: 'Leftovers', gender: 'M',
 		moves: ['Jet Punch', 'Ice Punch', 'Earthquake'],

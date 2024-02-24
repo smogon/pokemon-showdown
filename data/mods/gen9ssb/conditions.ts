@@ -1044,6 +1044,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('phoopes')}|Jynx! Knock on wood`);
 		},
 	},
+	pissog: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Pissog')}|Hi I'm Pissog ^^`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Pissog')}|^^ gossiP m'I iH`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Pissog')}|Yes, there are two paths you can go by, but in the long run`);
+		},
+	},
 	ptoad: {
 		noCopy: true,
 		onStart() {
