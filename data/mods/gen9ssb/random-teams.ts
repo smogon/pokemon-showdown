@@ -25,7 +25,7 @@ export const ssbSets: SSBSets = {
 		species: 'Species', ability: 'Ability', item: 'Item', gender: '',
 		moves: ['Move Name', ['Move Name', 'Move Name']],
 		signatureMove: 'Move Name',
-		evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', teraType: 'Type', level: 100, shiny: false,
+		evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', teraType: 'Type',
 	},
 	// Species, ability, and item need to be captialized properly ex: Ludicolo, Swift Swim, Life Orb
 	// Gender can be M, F, N, or left as an empty string
@@ -59,6 +59,12 @@ export const ssbSets: SSBSets = {
 		moves: ['No Retreat', 'Bitter Blade', 'Dual Wingbeat'],
 		signatureMove: 'Scumhunt',
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naughty', teraType: 'Fire', shiny: true,
+	},
+	Alpha: {
+		species: 'Ting-Lu', ability: 'Vessel of Ruin', item: 'Leftovers', gender: 'M',
+		moves: ['Stealth Rock', 'Spikes', 'Whirlwind'],
+		signatureMove: 'Vessel of CAIO',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Fairy',
 	},
 	'Appletun a la Mode': {
 		species: 'Appletun', ability: 'Served Cold', item: 'Sitrus Berry', gender: 'F',
@@ -94,7 +100,7 @@ export const ssbSets: SSBSets = {
 		species: 'Flygon', ability: 'Tinted Lens', item: 'Flygonite', gender: 'F',
 		moves: ['Clanging Scales', 'Roost', 'Bug Buzz'],
 		signatureMove: 'Anyone can be killed',
-		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: false,
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
 	Artemis: {
 		species: 'Genesect', ability: 'Supervised Learning', item: 'Choice Specs', gender: 'N',
@@ -576,7 +582,7 @@ export const ssbSets: SSBSets = {
 		species: 'Wailord', ability: 'Primordial Sea', item: 'Assault Vest', gender: 'M',
 		moves: ['Water Spout', 'Hurricane', 'Thunder'],
 		signatureMove: 'Torrential Drain',
-		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', ivs: {atk: 0}, teraType: 'Water', shiny: false,
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', ivs: {atk: 0}, teraType: 'Water',
 	},
 	WigglyTree: {
 		species: 'Sudowoodo', ability: 'Tree Stance', item: 'Liechi Berry', gender: 'M',
@@ -600,7 +606,7 @@ export const ssbSets: SSBSets = {
 		species: 'Farigiraf', ability: 'Height Advantage', item: 'Leftovers', gender: 'M',
 		moves: ['Freezing Glare', 'Ice Beam', 'Slack Off'],
 		signatureMove: 'High Ground',
-		evs: {hp: 248, spa: 252, spe: 8}, nature: 'Modest', teraType: 'Ground', shiny: false,
+		evs: {hp: 248, spa: 252, spe: 8}, nature: 'Modest', teraType: 'Ground',
 	},
 	Zalm: {
 		species: 'Weedle', ability: 'Water Bubble', item: 'Clear Amulet', gender: '',
