@@ -1686,6 +1686,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Zarel
+	tempochange: {
+		shortDesc: "Switches Meloetta's forme between Aria and Pirouette at the end of each turn.",
+		name: "Tempo Change",
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (pokemon.species.baseSpecies !== 'Meloetta') return;
+			if (pokemon.species.name === 'Meloetta') {
+				changeSet(this, pokemon, ssbSets['Zarel-Pirouette'], true);
+			} else {
+				changeSet(this, pokemon, ssbSets['Zarel'], true);
+			}
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
+	},
+
 	// zoro
 	ninelives: {
 		shortDesc: "Twice per battle, Umbreon will survive a lethal hit with 1 HP remaining, regardless of the HP it was at.",

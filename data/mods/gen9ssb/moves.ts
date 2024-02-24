@@ -3223,6 +3223,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
+	// Zarel
+	tsignore: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		shortDesc: "Bypasses everything. Uses Higher Atk. ",
+		name: "@ts-ignore",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Conversion", source);
+			this.add('-anim', source, "Techno Blast", target);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+				move.category = 'Physical';
+			}
+		},
+		onModifyType(move, pokemon) {
+			if (pokemon.species.baseSpecies === 'Meloetta' && pokemon.terastallized) {
+				move.type = 'Stellar';
+			}
+		},
+		ignoreAbility: true,
+		ignoreImmunity: true,
+		ignoreDefensive: true,
+		ignoreNegativeOffensive: true,
+		breaksProtect: true,
+		ignoreAccuracy: true,
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// zee
 	solarsummon: {
 		accuracy: 100,
