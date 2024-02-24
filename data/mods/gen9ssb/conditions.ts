@@ -1003,6 +1003,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Quite Quiet')}|hm`);
 		},
 	},
+	ransei: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Ransei')}|Heyo, I'm hosting a program known as Pokémon Lore Tutoring this generation and I was wondering if any of you guys would be interested in tutoring. Every generation of Pokémon lore is available for tutoring, however we are in need of tutors to start off with. If you are interested let me know. Oh yeah I'm also hosting a program known as OM Tutoring.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Ransei')}|A perfect world of Pokémon has everything balanced, whether it's truth and ideals, life and death, time and space, or the organisms of nature and the organisms of whom were genetically engineered. All Pokémon are welcomed as long as they help maintain this balance. Remember this. It's what Arceus always wanted.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Ransei')}|Well, at least I tried. ripsei.`);
+		},
+	},
 	returntomonkey: {
 		noCopy: true,
 		onStart() {

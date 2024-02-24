@@ -2321,6 +2321,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Ransei
+	floodoflore: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		name: "Flood of Lore",
+		shortDesc: "Sets Psychic Terrain.",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		terrain: 'psychicterrain',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Photon Geyser', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
+
 	// ReturnToMonkey
 	monkemagic: {
 		accuracy: true,

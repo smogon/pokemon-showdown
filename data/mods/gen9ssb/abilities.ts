@@ -1237,6 +1237,50 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Ransei
+	ultramystik: {
+		shortDesc: "Stats 1.5x until hit super effectively + Magic Guard + Leftovers.",
+		name: "Ultra Mystik",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.effectState.superHit = true;
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
+			return this.chainModify(1.5);
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
+			return this.chainModify(1.5);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
+			return this.chainModify(1.5);
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
+			return this.chainModify(1.5);
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
+			return this.chainModify(1.5);
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onResidual(pokemon) {
+			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon, pokemon.getAbility());
+		},
+	},
+
 	// ReturnToMonkey
 	monkeseemonkedo: {
 		shortDesc: "Boosts Atk or SpA by 1 based on foe's defenses, then copies foe's Ability.",

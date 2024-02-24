@@ -411,6 +411,12 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Flying',
 		// The nature not being Quiet is a crime
 	},
+	Ransei: {
+		species: 'Audino-Mega', ability: 'Ultra Mystik', item: 'Safety Goggles', gender: 'M',
+		moves: ['Psystrike', 'Transform', 'Light of Ruin'],
+		signatureMove: 'Flood of Lore',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Modest', shiny: 2,
+	},
 	ReturnToMonkey: {
 		species: 'Oranguru', ability: 'Monke See Monke Do', item: 'Twisted Spoon', gender: 'M',
 		moves: ['Hyper Voice', 'Psyshock', 'Focus Blast'],
