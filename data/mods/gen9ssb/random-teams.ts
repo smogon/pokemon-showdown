@@ -540,7 +540,7 @@ export const ssbSets: SSBSets = {
 	'Soft Flex': {
 		species: 'Magnezone', ability: 'Adaptive Engineering', item: 'Leftovers', gender: 'N',
 		moves: ['Thunderbolt', 'Substitute', 'Parabolic Charge'],
-		signatureMove: 'Resonance2',
+		signatureMove: 'Adaptive Beam',
 		evs: {hp: 248, def: 8, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Flying',
 	},
 	'Solaros & Lunaris': {
