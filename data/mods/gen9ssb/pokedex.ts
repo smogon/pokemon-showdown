@@ -346,6 +346,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Magical Mystery Charge"},
 	},
 
+	// skies
+	chespin: {
+		inherit: true,
+		baseStats: {hp: 88, atk: 117, def: 122, spa: 74, spd: 85, spe: 84},
+		abilities: {0: "Spikes of Wrath"},
+	},
+
 	// spoo
 	mumbao: {
 		inherit: true,

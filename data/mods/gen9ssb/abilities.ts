@@ -1425,6 +1425,33 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// skies
+	spikesofwrath: {
+		shortDesc: "Stamina + Cheek Pouch + sets Spikes and Toxic Spikes upon KO.",
+		name: "Spikes of Wrath",
+		onDamagingHit(damage, target, source, effect) {
+			if (target.hp) {
+				this.boost({def: 1});
+			} else {
+				const side = source.isAlly(target) ? source.side.foe : source.side;
+				const spikes = side.sideConditions['spikes'];
+				const toxicSpikes = side.sideConditions['toxicspikes'];
+				if ((!spikes || spikes.layers < 3)) {
+					this.add('-activate', target, 'ability: Spikes of Wrath');
+					side.addSideCondition('spikes', target);
+				}
+				if ((!toxicSpikes || toxicSpikes.layers < 2)) {
+					this.add('-activate', target, 'ability: Spikes of Wrath');
+					side.addSideCondition('toxicspikes', target);
+				}
+			}
+		},
+		onEatItem(item, pokemon) {
+			this.heal(pokemon.baseMaxhp / 3);
+		},
+		flags: {},
+	},
+
 	// Sulo
 	protectionofthegelatin: {
 		shortDesc: "Magic Guard + Stamina",

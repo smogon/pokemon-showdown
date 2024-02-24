@@ -1167,6 +1167,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Siegfried')}|Living is easy with eyes closed.`);
 		},
 	},
+	skies: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('skies')}|the baddest in the room, so tell em to make room... `);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('skies')}|u thought i was feelin u?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('skies')}|what did i do? like?`);
+		},
+	},
 	snake: {
 		noCopy: true,
 		onStart() {

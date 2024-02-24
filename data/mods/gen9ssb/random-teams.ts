@@ -483,6 +483,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Treacherous Traversal',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Poison', skip: 'sharp_claw',
 	},
+	skies: {
+		species: 'Chespin', ability: 'Spikes of Wrath', item: 'Sitrus Berry', gender: 'F',
+		moves: ['Bulk Up', 'Strength Sap', 'Body Press'],
+		signatureMove: 'Like..?',
+		evs: {hp: 252, atk: 4, def: 252}, nature: 'Impish', teraType: ['Water', 'Steel'], shiny: 15,
+	},
 	snake: {
 		species: 'Fidgit', ability: 'Persistent', item: ['Mental Herb', 'Covert Cloak'], gender: 'M',
 		moves: ['Tailwind', 'Healing Wish', 'Taunt'],

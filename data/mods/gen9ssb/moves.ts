@@ -2649,6 +2649,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Electric",
 	},
 
+	// skies
+	like: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Recycle + Seed Bomb + Leech Seed.",
+		name: "Like..?",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Recycle', target);
+			this.add('-anim', source, 'Seed Bomb', target);
+			this.add('-anim', source, 'Leech Seed', target);
+		},
+		onHit(target, source) {
+			if (target.hasType('Grass')) return null;
+			target.addVolatile('leechseed', source);
+		},
+		self: {
+			onHit(pokemon) {
+				if (!pokemon.item && pokemon.lastItem) {
+					const item = pokemon.lastItem;
+					pokemon.lastItem = '';
+					this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Recycle');
+					pokemon.setItem(item);
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+	},
+
 	// snake
 	conceptrelevant: {
 		accuracy: 100,
