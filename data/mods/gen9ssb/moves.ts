@@ -3430,6 +3430,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// xy01
+	poisonouswind: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Poisonous Wind",
+		shortDesc: "Badly poisons the foe and forces them out.",
+		pp: 10,
+		priority: -6,
+		flags: {reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1, noassist: 1, failcopycat: 1, wind: 1},
+		forceSwitch: true,
+		status: 'tox',
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
+
 	// Yellow Paint
 	whiteout: {
 		accuracy: 85,

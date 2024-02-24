@@ -620,6 +620,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Scorching Truth',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Fire',
 	},
+	xy01: {
+		species: 'Blissey', ability: 'Panic', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Soft-Boiled', 'Seismic Toss', 'Aromatherapy'],
+		signatureMove: 'Poisonous Wind',
+		evs: {hp: 248, def: 252, spd: 8}, nature: 'Bold', teraType: 'Fairy', shiny: true,
+	},
 	'Yellow Paint': {
 		species: 'Rotom-Frost', ability: 'Yellow Magic', item: 'Chilan Berry', gender: 'N',
 		moves: ['Thunderbolt', 'Blizzard', 'Ion Deluge'],
