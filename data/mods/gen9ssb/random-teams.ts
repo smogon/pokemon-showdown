@@ -105,8 +105,14 @@ export const ssbSets: SSBSets = {
 	Artemis: {
 		species: 'Genesect', ability: 'Supervised Learning', item: 'Choice Specs', gender: 'N',
 		moves: [],
-		signatureMove: 'Automated Response​',
+		signatureMove: 'Automated Response',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Serious', shiny: true,
+	},
+	autumn: {
+		species: 'Flutter Mane', ability: 'Protosynthesis', item: 'Booster Energy', gender: 'N',
+		moves: ['Moonblast', 'Taunt', 'Strength Sap'],
+		signatureMove: 'Season\'s Smite',
+		evs: {def: 8, spa: 244, spe: 252}, nature: 'Timid', teraType: 'Fairy',
 	},
 	AuzBat: {
 		species: 'Swoobat', ability: 'Magic Guard', item: 'Focus Sash', gender: 'M',

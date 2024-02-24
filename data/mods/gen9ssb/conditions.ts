@@ -217,6 +217,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('message', `${source.name} was banned from Pok\u00e9mon Showdown!`);
 		},
 	},
+	autumn: {
+		noCopy: true,
+		onFaint() {
+			this.add(`c:|${getName('autumn')}|lost ggs`);
+		},
+	},
 	auzbat: {
 		noCopy: true,
 		onStart(pokemon) {
