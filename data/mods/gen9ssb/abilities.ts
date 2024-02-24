@@ -1473,6 +1473,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Soft Flex
+	adaptiveengineering: {
+		shortDesc: "Every turn, raises a random stat by 1 stage if the foe has more raised stats.",
+		name: "Adaptive Engineering",
+		onResidual(source) {
+			if (source === undefined || source.foes() === undefined || source.foes()[0] === undefined) return;
+			if (source.positiveBoosts() < source.foes()[0].positiveBoosts()) {
+				const stats: BoostID[] = [];
+				let stat: BoostID;
+				for (stat in source.boosts) {
+					if (stat === 'accuracy' || stat === 'evasion') continue;
+					if (source.boosts[stat] < 6) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					const randomStat = this.sample(stats);
+					this.boost({[randomStat]: 1}, source, source);
+				}
+			}
+		},
+		flags: {},
+	},
+
 	// Solaros & Lunaris
 	ridethesun: {
 		shortDesc: "Drought + Chlorophyll",

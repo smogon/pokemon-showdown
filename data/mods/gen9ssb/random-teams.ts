@@ -531,6 +531,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Concept Relevant',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Water',
 	},
+	'Soft Flex': {
+		species: 'Magnezone', ability: 'Adaptive Engineering', item: 'Leftovers', gender: 'N',
+		moves: ['Thunderbolt', 'Substitute', 'Parabolic Charge'],
+		signatureMove: 'Resonance2',
+		evs: {hp: 248, def: 8, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Flying',
+	},
 	'Solaros & Lunaris': {
 		species: 'Scovillain', ability: 'Ride the Sun!', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Solar Beam', 'Growth', 'Moonlight'],

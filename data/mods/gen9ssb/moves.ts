@@ -2875,6 +2875,66 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Bug",
 	},
 
+	// Soft Flex
+	resonance2: {
+		accuracy: 100,
+		basePower: 45,
+		category: "Special",
+		shortDesc: "Power doubles if the target has more raised stats than the user.",
+		name: "Resonance2",
+		pp: 15,
+		priority: 0,
+		flags: {sound: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		basePowerCallback(pokemon, target, move) {
+			let bp = move.basePower;
+			if (!target) return bp;
+			if (pokemon.positiveBoosts() < target.positiveBoosts()) {
+				bp *= 2;
+			}
+			return bp;
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Flash Cannon', target);
+			if (source.positiveBoosts() < target.positiveBoosts()) {
+				this.add('-anim', source, 'Extreme Evoboost', source);
+			}
+		},
+		onHit(target, source, move) {
+			if (source.positiveBoosts() < target.positiveBoosts()) {
+				const stats: BoostID[] = [];
+				let stat: BoostID;
+				for (stat in target.boosts) {
+					if (stat === 'accuracy' || stat === 'evasion') continue;
+					if (target.boosts[stat] > -6) {
+						stats.push(stat);
+					}
+				}
+				if (stats.length) {
+					const randomStat = this.sample(stats);
+					this.boost({[randomStat]: -1}, target, target, move);
+				}
+				const stats2: BoostID[] = [];
+				let stat2: BoostID;
+				for (stat2 in source.boosts) {
+					if (stat2 === 'accuracy' || stat2 === 'evasion') continue;
+					if (source.boosts[stat2] < 6) {
+						stats2.push(stat2);
+					}
+				}
+				if (stats2.length) {
+					const randomStat = this.sample(stats2);
+					this.boost({[randomStat]: 1}, source, source, move);
+				}
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
+
 	// Solaros & Lunaris
 	mindmelt: {
 		accuracy: 100,
