@@ -285,7 +285,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	muk: {
-		tier: "UUBL",
+		tier: "UU",
 	},
 	shellder: {
 		tier: "LC",
@@ -480,7 +480,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	aerodactyl: {
-		tier: "UUBL",
+		tier: "UU",
 	},
 	snorlax: {
 		tier: "OU",
