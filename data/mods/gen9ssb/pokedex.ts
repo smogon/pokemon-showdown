@@ -58,6 +58,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Sturdy"},
 	},
 
+	// Billo
+	solgaleo: {
+		inherit: true,
+		abilities: {0: "Magic Guard"},
+	},
+
 	// Blitz
 	chiyu: {
 		inherit: true,

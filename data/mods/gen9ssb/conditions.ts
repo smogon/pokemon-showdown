@@ -271,6 +271,46 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('berry')}|and all I got was this lousy t-shirt`);
 		},
 	},
+	billo: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Billo')}|So where did you say you got this mon from again?`);
+		},
+		onFaint(pokemon) {
+			if (pokemon.species.name === 'Solgaleo' && !pokemon.getVolatile('perishsong')) {
+				this.add(`c:|${getName('Billo')}|Bruh this is the worst hack I've ever seen...`);
+			} else if (pokemon.species.name === 'Solgaleo') {
+				this.add(`c:|${getName('Billo')}|@Room Owner this user needs blacklisting but I have to head to bed.`);
+			} else if (pokemon.species.name === 'Lunala') {
+				this.add(`c:|${getName('Billo')}|Someone take me to the hozzy please.`);
+			}
+		},
+		innateName: "Sheer Force/Reckless",
+		shortDesc: "Lunala: Sheer Force. Solgaleo: Reckless",
+		onModifyMove(move, pokemon) {
+			if (!pokemon.illusion && pokemon.species.name === 'Lunala') {
+				if (move.secondaries) {
+					delete move.secondaries;
+					// Technically not a secondary effect, but it is negated
+					delete move.self;
+					if (move.id === 'clangoroussoulblaze') delete move.selfBoost;
+					// Actual negation of `AfterMoveSecondary` effects implemented in scripts.js
+					move.hasSheerForce = true;
+				}
+			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.hasSheerForce) return this.chainModify([5325, 4096]);
+			if (!pokemon.illusion && pokemon.species.name === 'Solgaleo') {
+				if (move.recoil || move.hasCrashDamage) {
+					this.debug('Reckless boost');
+					return this.chainModify([4915, 4096]);
+				}
+			}
+		},
+
+	},
 	blitzuser: {
 		noCopy: true,
 		onStart(pokemon) {

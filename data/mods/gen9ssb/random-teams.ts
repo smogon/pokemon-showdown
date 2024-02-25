@@ -138,6 +138,24 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'what kind',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Rock',
 	},
+	Billo: {
+		species: 'Cosmog', ability: 'Wonder Guard', item: 'Eviolite', gender: 'N',
+		moves: [],
+		signatureMove: 'Hack Check',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
+	'Billo-Solgaleo': {
+		species: 'Solgaleo', ability: 'Magic Guard', item: 'Choice Scarf', gender: 'N',
+		moves: ['Wave Crash', 'Volt Tackle', 'Flare Blitz'],
+		signatureMove: 'Head Smash',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', skip: 'Billo', shiny: true,
+	},
+	'Billo-Lunala': {
+		species: 'Lunala', ability: 'Shadow Shield', item: 'Lunalium Z', gender: 'N',
+		moves: ['Moongeist Beam', 'Moonblast', 'Ice Beam'],
+		signatureMove: 'Thunderbolt',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', skip: 'Billo',
+	},
 	Blitz: {
 		species: 'Chi-Yu', ability: 'Blitz of Ruin', item: 'Life Orb', gender: 'N',
 		moves: ['Fiery Wrath', 'Lava Plume', 'Nasty Plot'],
