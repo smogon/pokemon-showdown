@@ -33,6 +33,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 	},
 
+	// Akir
+	takeitslow: {
+		shortDesc: "Regenerator + Psychic Surge.",
+		name: "Take it Slow",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		onStart(source) {
+			this.field.setTerrain('psychicterrain');
+		},
+		flags: {},
+		gen: 9,
+	},
+
 	// Alex
 	pawprints: {
 		shortDesc: "Oblivious. Status moves +1 priority and ignore abilities.",

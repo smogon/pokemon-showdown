@@ -217,6 +217,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('message', `${source.name} was banned from Pok\u00e9mon Showdown!`);
 		},
 	},
+	akir: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Akir')}|hey whats up`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Akir')}|ok c ya`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Akir')}|oh woops`);
+		},
+	},
 	autumn: {
 		noCopy: true,
 		onFaint() {

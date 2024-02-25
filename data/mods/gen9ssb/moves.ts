@@ -116,6 +116,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// Akir
+	freeswitchbutton: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Haze + Parting Shot + Replacement heals 33%.",
+		name: "Free Switch Button",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onHit(target, source, move) {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+			}
+			const foe = source.foes()[0];
+			if (!foe) return;
+			const success = this.boost({atk: -1, spa: -1}, foe, source);
+			if (!success && !foe.hasAbility('mirrorarmor')) {
+				delete move.selfSwitch;
+			}
+		},
+		// the foe cannot be set as the target in move properties because it breaks the 33% replacement heal
+		selfSwitch: true,
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Haze', source);
+		},
+		slotCondition: 'freeswitchbutton',
+		condition: {
+			onSwap(target) {
+				if (!target.fainted && (target.hp < target.maxhp)) {
+					target.heal(target.maxhp / 3);
+					this.add('-heal', target, target.getHealth, '[from] move: Free Switch Button');
+					target.side.removeSlotCondition(target, 'freeswitchbutton');
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Water",
+	},
+
 	// Alex
 	spicierextract: {
 		accuracy: true,

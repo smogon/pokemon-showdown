@@ -48,6 +48,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Smelt',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Steel', shiny: true,
 	},
+	Akir: {
+		species: 'Slowbro', ability: 'Take it Slow', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Future Sight', 'Slack Off', 'Steam Eruption'],
+		signatureMove: 'Free Switch Button',
+		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Relaxed', teraType: 'Fairy',
+	},
 	Alex: {
 		species: 'Sprigatito', ability: 'Pawprints', item: 'Eviolite', gender: '',
 		moves: ['Substitute', 'Protect', 'Magic Powder'],
