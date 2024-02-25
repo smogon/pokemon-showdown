@@ -121,6 +121,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Sharpness"},
 	},
 
+	// Elliot
+	sinistea: {
+		inherit: true,
+		baseStats: {hp: 69, atk: 65, def: 114, spa: 134, spd: 65, spe: 70},
+		abilities: {0: "Natural Cure"},
+	},
+
 	// Elly
 	thundurus: {
 		inherit: true,

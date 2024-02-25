@@ -205,6 +205,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Trivial Pursuit',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Poison',
 	},
+	Elliot: {
+		species: 'Sinistea', ability: 'Natural Cure', item: 'Focus Sash', gender: 'N',
+		moves: ['Moonblast', 'Shadow Ball', 'Teatime'],
+		signatureMove: 'Tea Party',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Water', shiny: true,
+	},
 	Elly: {
 		species: 'Thundurus', ability: 'Storm Surge', item: 'Heavy-Duty Boots', gender: 'F',
 		moves: ['Wildbolt Storm', 'Sandsear Storm', 'Volt Switch'],

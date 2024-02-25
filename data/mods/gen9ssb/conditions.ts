@@ -385,6 +385,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('deftinwolf')}|Death is only the beginning.`);
 		},
 	},
+	elliot: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Elliot')}|Anyone fancy a brew?`);
+		},
+		onFaint(pokemon) {
+			if (pokemon.getVolatile('boiled')) {
+				this.add(`c:|${getName('Elliot')}|Also try Vimbos!`);
+			} else {
+				this.add(`c:|${getName('Elliot')}|We've ran out of teabags :(`);
+			}
+		},
+	},
 	elly: {
 		noCopy: true,
 		onStart() {
@@ -1714,6 +1727,65 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 
 	// Custom effects
+	// Elliot
+	beefed: {
+		name: "Beefed",
+		onStart(target) {
+			this.add('-start', target, 'beefed');
+		},
+		onEnd(target) {
+			this.add('-end', target, 'beefed');
+		},
+		onModifyMovePriority: -1,
+		onModifyMove(move, pokemon, target) {
+			if (!target || !this.checkMoveMakesContact(move, pokemon, target) || move.category === "Status") return;
+			if (!move.secondaries) move.secondaries = [];
+			move.secondaries.push({
+				chance: 30,
+				status: 'brn',
+			});
+		},
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target, true)) {
+				this.damage(source.baseMaxhp / 8, source, target);
+			}
+			if (this.checkMoveMakesContact(move, source, target) && this.randomChance(3, 10)) {
+				source.trySetStatus('brn', target);
+			}
+		},
+		onResidual(target, source, effect) {
+			this.heal(target.baseMaxhp / 8);
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			this.add(`c:|${getName('Elliot')}|Get Bovriled`);
+		},
+	},
+	boiled: {
+		name: "Boiled",
+		onStart(target) {
+			this.add('-start', target, 'boiled');
+		},
+		onEnd(target) {
+			this.add('-end', target, 'boiled');
+		},
+		onModifyAtkPriority: 5,
+		onModifySpA(relayVar, source, target, move) {
+			return this.chainModify(1.5);
+		},
+		onModifyMovePriority: -1,
+		onModifyMove(move, pokemon, target) {
+			if (!target) return;
+			if (move.category !== "Status") {
+				if (!move.secondaries) move.secondaries = [];
+				move.secondaries.push({
+					chance: 30,
+					status: 'brn',
+				});
+			}
+		},
+	},
+
 	// Elly
 	stormsurge: {
 		name: 'StormSurge',

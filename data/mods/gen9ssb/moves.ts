@@ -943,6 +943,75 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Dark",
 	},
 
+	// Elliot
+	teaparty: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Heals 50% HP and cures status. 7/8 chance of Boiled forme, 1/8 for Beefed forme.",
+		name: "Tea Party",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Milk Drink', source);
+		},
+		onHit(pokemon) {
+			this.heal(pokemon.baseMaxhp / 2);
+			pokemon.cureStatus();
+			let newMove = "";
+			let backupMove = "";
+			if (this.randomChance(7, 8)) { // get boiled
+				pokemon.removeVolatile('beefed');
+				pokemon.addVolatile('boiled');
+				pokemon.setAbility("Speed Boost");
+				newMove = 'steameruption';
+				backupMove = 'bodypress';
+				if (!pokemon.hasType('Water') && pokemon.addType('Water')) {
+					this.add('-start', pokemon, 'typeadd', 'Water', '[from] move: Tea Party');
+				}
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Just tea, thank you`);
+			} else { // get beefed
+				pokemon.removeVolatile('boiled');
+				pokemon.addVolatile('beefed');
+				pokemon.setAbility("Stamina");
+				newMove = 'bodypress';
+				backupMove = 'steameruption';
+				if (!pokemon.hasType('Fighting') && pokemon.addType('Fighting')) {
+					this.add('-start', pokemon, 'typeadd', 'Fighting', '[from] move: Tea Party');
+				}
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|BOVRIL TIME`);
+			}
+			// -start for beefed and boiled is not necessary, i put it in there for an indicator
+			// as to what form sinistea is currently using. backupMove also eases the form switch
+			let teaIndex = pokemon.moves.indexOf('teatime');
+			const replacement = this.dex.moves.get(newMove);
+			if (teaIndex < 0) {
+				if (pokemon.moves.includes(backupMove)) {
+					teaIndex = pokemon.moves.indexOf(backupMove);
+				} else {
+					return;
+				}
+			}
+			const newMoveSlot = {
+				move: replacement.name,
+				id: replacement.id,
+				pp: replacement.pp,
+				maxpp: replacement.pp,
+				target: replacement.target,
+				disabled: false,
+				used: false,
+			};
+			pokemon.moveSlots[teaIndex] = newMoveSlot;
+		},
+		secondary: null,
+		target: 'self',
+		type: "Flying",
+	},
+
 	// Elly
 	sustainedwinds: {
 		accuracy: 90,
