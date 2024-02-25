@@ -442,6 +442,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Arsenal
+	megidolaon: {
+		accuracy: 100,
+		basePower: 200,
+		category: "Special",
+		shortDesc: "No additional effect.",
+		name: "Megidolaon",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hyper Beam', target);
+			this.add('-anim', source, 'Earthquake', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
+
 	// Arya
 	anyonecanbekilled: {
 		accuracy: 95,

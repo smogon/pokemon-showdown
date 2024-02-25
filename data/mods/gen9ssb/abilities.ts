@@ -218,6 +218,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 	},
 
+	// Arsenal
+	onemore: {
+		shortDesc: "Super Effective and Critical hits cause this Pokemon to flinch.",
+		name: "One More",
+		onHit(target, source, move) {
+			const hitData = target.getMoveHitData(move);
+			if (move.category === "Status" || hitData.typeMod <= 0 || !hitData.crit) return;
+			if (!move.secondaries) move.secondaries = [];
+			move.secondaries.push({
+				chance: 100,
+				volatileStatus: 'flinch',
+			});
+		},
+		flags: {},
+		gen: 9,
+	},
+
 	// Artemis
 	supervisedlearning: {
 		shortDesc: "Mold Breaker + Unaware + Clear Body.",

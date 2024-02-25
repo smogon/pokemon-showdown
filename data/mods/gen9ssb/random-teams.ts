@@ -108,6 +108,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Anyone can be killed',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	Arsenal: {
+		species: 'Rabsca', ability: 'One More', item: 'Covert Cloak', gender: 'N',
+		moves: ['Skill Swap', 'Calm Mind', 'Speed Swap'],
+		signatureMove: 'Megidolaon',
+		evs: {hp: 4, spa: 252, spd: 252}, nature: 'Modest', teraType: 'Stellar', shiny: true,
+	},
 	Artemis: {
 		species: 'Genesect', ability: 'Supervised Learning', item: 'Choice Specs', gender: 'N',
 		moves: [],

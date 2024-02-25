@@ -211,6 +211,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Arya')}|W-whats this? Oh, come on...!!!`);
 		}, // Is a message before going mega supported(unlikely)? if so, the first message in onAfterMega goes there.
 	},
+	arsenal: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Arsenal')}|Show me your true form!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Arsenal')}|I should write something`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Arsenal')}|Dont forget this feeling !`);
+		},
+	},
 	artemis: {
 		noCopy: true,
 		onFoeAfterFaint(target, source, effect) {
