@@ -835,6 +835,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Kennedy')}|LOOOOOOL ffs`);
 		},
 	},
+	kingbaruk: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('kingbaruk')}|Pressure pushing down on me`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('kingbaruk')}|Pressing down on you`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('kingbaruk')}|Why can't we give love that one more chance?`);
+		},
+	},
 	kiwi: {
 		noCopy: true,
 		onStart() {

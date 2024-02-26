@@ -362,6 +362,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Hat-Trick',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Any',
 	},
+	kingbaruk: {
+		species: 'Wigglytuff', ability: 'Peer Pressure', item: 'Leftovers', gender: 'M',
+		moves: ['Trump Card', 'Moonblast', ['Protect', 'Flamethrower', 'Eerie Spell']],
+		signatureMove: 'Platinum Record',
+		evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest', teraType: 'Normal',
+	},
 	Kiwi: {
 		species: 'Minccino', ability: 'Sure Hit Sorcery', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Dynamic Punch', 'Substitute', 'Noble Roar'],
