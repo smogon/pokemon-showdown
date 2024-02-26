@@ -132,6 +132,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Prep Time',
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Psychic', shiny: 8192,
 	},
+	avarice: {
+		species: 'Sinistcha-Masterpiece', ability: 'Serene Grace', item: ['Covert Cloak', 'Leftovers'], gender: 'N',
+		moves: ['Strength Sap', 'Calm Mind', 'Matcha Gotcha'],
+		signatureMove: 'yu-gi-oh reference',
+		evs: {hp: 252, def: 160, spe: 90}, ivs: {atk: 0}, nature: 'Bold', teraType: 'Steel',
+	},
 	berry: {
 		species: 'Regirock', ability: 'Sturdy', item: 'Maranga Berry', gender: 'F',
 		moves: ['Curse', 'Salt Cure', 'Stone Axe'],

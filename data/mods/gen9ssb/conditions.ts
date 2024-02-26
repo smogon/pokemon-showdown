@@ -259,6 +259,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('AuzBat')}|All I have are negative thoughts.`);
 		},
 	},
+	avarice: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('avarice')}|so what's tea`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('avarice')}|l8r h8r`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('avarice')}|gg ig`);
+		},
+	},
 	berry: {
 		noCopy: true,
 		onStart(pokemon) {
