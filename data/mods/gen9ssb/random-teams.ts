@@ -260,6 +260,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Solidarity',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Fire',
 	},
+	Frostyicelad: {
+		species: 'Qwilfish-Hisui', ability: 'Almost Frosty', item: 'Eviolite', gender: 'M',
+		moves: ['Darkest Lariat', 'Recover', ['Dire Claw', 'Meteor Mash', 'Bitter Malice']],
+		signatureMove: 'Puffy Spiky Destruction',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: ['Dark', 'Poison', 'Ghost', 'Steel'], shiny: 1024,
+	},
 	Frozoid: {
 		species: 'Gible', ability: 'Snowballer', item: 'Eviolite', gender: 'M',
 		moves: ['Dragon Dance', 'Dragon Rush', 'Precipice Blades'],
