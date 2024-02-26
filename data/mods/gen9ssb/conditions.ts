@@ -1011,6 +1011,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mad Monty')}|Well great. Now the llamas are gonna come back. Is that what you wanted?`);
 		},
 	},
+	maroon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('maroon')}|It's not my fault you're, like, in love with me!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('maroon')}|That’s why her hair is so big. It’s full of secrets.`);
+		},
+		onFoeSwitchOut() {
+			this.add(`c:|${getName('maroon')}|You wanna do something fun? You wanna go to Taco Bell?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('maroon')}|Gretchen, I'm sorry I laughed at you that time you got diarrhea at Barnes & Noble. And I'm sorry for telling everyone about it. And I'm sorry for repeating it now.`);
+		},
+	},
 	mathy: {
 		noCopy: true,
 		onStart() {

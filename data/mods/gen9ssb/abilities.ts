@@ -1179,6 +1179,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// maroon
+	builtdifferent: {
+		shortDesc: "Stamina + Normal type moves get +1 priority.",
+		name: "Built Different",
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({def: 1});
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Normal') return priority + 1;
+		},
+		flags: {},
+	},
+
 	// Mathy
 	dynamictyping: {
 		shortDesc: "Moves used by all Pokemon are ??? type.",

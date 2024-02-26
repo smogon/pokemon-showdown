@@ -440,6 +440,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Storm Shelter',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Rock',
 	},
+	maroon: {
+		species: 'Archaludon', ability: 'Built Different', item: 'Leftovers', gender: 'M',
+		moves: ['Body Press', 'Stealth Rock', 'Rapid Spin'],
+		signatureMove: 'Metal Blast',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Flying',
+	},
 	Mathy: {
 		species: 'Furret', ability: 'Dynamic Typing', item: 'Big Root', gender: 'M',
 		moves: ['Bitter Blade', 'Swords Dance', 'Taunt'],
