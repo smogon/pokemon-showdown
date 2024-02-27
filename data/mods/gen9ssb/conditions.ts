@@ -1576,44 +1576,44 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onWeatherChange(target, source, sourceEffect) {
 			const currentWeather = this.field.getWeather().id;
 			const currentTerrain = this.field.getTerrain().id;
-			const types = target.hasType;
-			let type = 'Dark';
-			if (!currentWeather && !currentTerrain && !types('Dark')) {
+			let type;
+			if (!currentWeather && !currentTerrain && !target.hasType('Dark')) {
 				type = 'Dark';
 			} else if (currentWeather) {
-				if (['raindance', 'primordialsea'].includes(currentWeather) && !types('Water')) {
+				if (['raindance', 'primordialsea'].includes(currentWeather) && !target.hasType('Water')) {
 					type = 'Water';
-				} else if (['sunnyday', 'desolateland'].includes(currentWeather) && !types('Fire')) {
+				} else if (['sunnyday', 'desolateland'].includes(currentWeather) && !target.hasType('Fire')) {
 					type = 'Fire';
-				} else if (['sandstorm', 'deserteddunes'].includes(currentWeather) && !types('Rock')) {
+				} else if (['sandstorm', 'deserteddunes'].includes(currentWeather) && !target.hasType('Rock')) {
 					type = 'Rock';
-				} else if (['hail', 'snow'].includes(currentWeather) && !types('Ice')) {
+				} else if (['hail', 'snow'].includes(currentWeather) && !target.hasType('Ice')) {
 					type = 'Ice';
 				} else {
 					// do nothing if it's not the 4 primary weathers...unless there are more?
 				}
 			}
-			target.addType(type);
-			this.add('-start', target, 'typeadd', type, '[from] ability: Wonderer');
+			if (type) {
+				target.addType(type);
+				this.add('-start', target, 'typeadd', type, '[from] ability: Wonderer');
+			}
 		},
 		onTerrainChange(target, source, sourceEffect) {
 			const currentWeather = this.field.getWeather().id;
 			const currentTerrain = this.field.getTerrain().id;
-			let type = 'Dark';
-			const types = target.hasType;
-			if (!currentWeather && !currentTerrain && !types('Dark')) {
+			let type;
+			if (!currentWeather && !currentTerrain && !target.hasType('Dark')) {
 				type = 'Dark';
 			} else if (currentTerrain) {
 				if (currentTerrain === 'electricterrain') {
 					target.setType('Electric');
 					type = '';
-				} else if (currentTerrain === 'psychicterrain' && !types('Psychic')) {
+				} else if (currentTerrain === 'psychicterrain' && !target.hasType('Psychic')) {
 					type = 'Psychic';
-				} else if (currentTerrain === 'grassyterrain' && !types('Grass')) {
+				} else if (currentTerrain === 'grassyterrain' && !target.hasType('Grass')) {
 					type = 'Grass';
-				} else if (currentTerrain === 'mistyterrain' && !types('Fairy')) {
+				} else if (currentTerrain === 'mistyterrain' && !target.hasType('Fairy')) {
 					type = 'Fairy';
-				} else if (!types('Ghost')) { // custom terrains
+				} else if (!target.hasType('Ghost')) { // custom terrains
 					type = 'Ghost';
 				}
 			}
