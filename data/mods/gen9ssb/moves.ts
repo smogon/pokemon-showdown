@@ -3816,8 +3816,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, "Esper Wing", target);
-			this.add('-anim', source, "Defog", source);
+			if (target?.terastallized) this.add('-anim', source, "Block", target);
+			this.add('-anim', source, "Wicked Blow", target);
 		},
 		onHit(pokemon, source) {
 			// TODO: Client support for removing tera without fainting
