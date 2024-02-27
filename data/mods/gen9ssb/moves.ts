@@ -1345,8 +1345,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "A party member is selected and faints, raising the user's Attack, Special Attack, and Speed by 2. Faints the user if there are no useable Pokemon on that side besides the user.",
-		shortDesc: "Faints a teammate, raises Atk, SpA, Spe by 2.",
+		desc: "A party member is selected and faints, raising the user's Attack, Special Attack, and Speed by 1 if the party member's hp is below 33%, by 2 if the party member's hp is between 33% and 66%, and by 3 if the party member's hp is above 66%. Fails if there are no useable Pokemon on that side besides the user.",
+		shortDesc: "Faints a teammate, raises Atk, SpA, Spe depending on teammate HP.",
 		name: "Scapegoat",
 		gen: 9,
 		pp: 5,
@@ -1354,8 +1354,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		onTryHit(source) {
 			if (!this.canSwitch(source.side)) {
-				this.add('-message', `You have noone to blame but yourself.`);
-				this.faint(source);
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
 				return this.NOT_FAIL;
 			}
 		},
@@ -1366,7 +1366,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Swords Dance', source);
 		},
 		onHit(target, source) {
-			this.add('message', `A decision must be made.`);
+			this.add('message', `A sacrifice is needed.`);
 		},
 		slotCondition: 'scapegoat',
 		// fake switch a la revival blessing
@@ -1594,7 +1594,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Doom Desire');
 		},
 		onHit(target, source) {
-			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup', 'gen9computergeneratedteams'];
+			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup1v1', 'gen9computergeneratedteams'];
 			const randFormat = this.sample(formats);
 			let msg;
 			switch (randFormat) {
@@ -1604,16 +1604,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'gen9hackmonscup':
 				msg = "Hackmons Cup is like Rands but scrambled eggs, cheese and pasta. I'm sure you'll love it too n.n";
 				break;
-			case 'gen9challengecup':
+			case 'gen9challengecup1v1':
 				msg = "The only difference between a Challenge Cup Pokémon and my in-game one is that the former actually surpassed lvl. 60, enjoy n.n";
 				break;
 			case 'gen9computergeneratedteams':
 				msg = "We asked an AI to make a randbats set. YOU WON'T BELIEVE WHAT IT CAME UP WITH N.N";
 				break;
 			}
-			// TODO: ban mons with custom stats
-			const team = Teams.generate(randFormat, {name: target.side.name});
+			let team = [] as PokemonSet[];
+			const unModdedDex = Dex.mod('base');
+			let depth = 0;
+			while (!team.length) {
+				team = Teams.generate(randFormat, {name: target.side.name});
+				if (depth >= 50) break; // Congrats you won the lottery!
+				team = team.filter(p =>
+					Object.keys(unModdedDex.species.get(p.species).baseStats).every(k =>
+						unModdedDex.species.get(p.species).baseStats[k as StatID] === this.dex.species.get(p.species).baseStats[k as StatID]));
+				depth++;
+			}
+
 			this.addMove('-anim', target, 'Wish', target);
+			target.clearBoosts();
+			this.add('-clearboost', target);
 			// @ts-ignore set wants a sig but randbats sets don't have one
 			changeSet(this, target, team[0], true);
 			this.add(`c:|${getName((source.illusion || source).name)}|${msg}`);
@@ -1734,8 +1746,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Stone Axe');
 		},
 		boosts: {
-			def: 1,
-			spe: 1,
+			def: -1,
+			spe: -1,
 		},
 		secondary: null,
 		target: "normal",
