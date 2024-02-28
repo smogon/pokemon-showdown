@@ -1976,6 +1976,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// Kaede
+	phantomweapon: {
+		accuracy: 100,
+		basePower: 65,
+		category: "Physical",
+		name: "Phantom Weapon",
+		shortDesc: "Double power if user is holding item; destroys item.",
+		pp: 20,
+		priority: 0,
+		onModifyPriority(priority, pokemon) {
+			if (!pokemon.item) return priority + 1;
+		},
+		flags: {protect: 1, mirror: 1},
+		onModifyMove(move, pokemon, target) {
+			if (!pokemon.item) {
+				move.flags['contact'] = 1;
+				move.flags['mirror'] = 1;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Shadow Force', target);
+			if (!source.item || source.ignoringItem()) return;
+			const item = source.getItem();
+			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return;
+			move.basePower *= 2;
+			source.addVolatile('phantomweapon');
+		},
+		condition: {
+			onUpdate(pokemon) {
+				const item = pokemon.getItem();
+				pokemon.setItem('');
+				pokemon.lastItem = item.id;
+				pokemon.usedItemThisTurn = true;
+				this.add('-enditem', pokemon, item.name, '[from] move: Phantom Weapon');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
+				pokemon.removeVolatile('phantomweapon');
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Kalalokki
 	knotweak: {
 		accuracy: 80,

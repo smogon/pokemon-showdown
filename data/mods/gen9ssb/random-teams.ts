@@ -391,6 +391,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Snowy Samba',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: 4,
 	},
+	Kaede: {
+		species: 'Kitsunoh', ability: 'Ghostly Hallow', item: 'Choice Band', gender: '',
+		moves: ['Meteor Mash', 'Shadow Strike', 'U-turn'],
+		signatureMove: 'Phantom Weapon',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: ['Steel', 'Ghost'], shiny: 2,
+	},
 	Kalalokki: {
 		species: 'Flamigo', ability: 'Scrappy', item: 'Choice Band', gender: 'M',
 		moves: ['Brave Bird', 'Sucker Punch', ['Drain Punch', 'Rapid Spin']],
