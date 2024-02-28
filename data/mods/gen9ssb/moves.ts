@@ -758,6 +758,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
+	// Beowulf
+	buzzerstingercounter: {
+		accuracy: 100,
+		basePower: 50,
+		category: "Physical",
+		shortDesc: "+3 priority if target uses custom move. +3 Atk if it KOs.",
+		name: "Buzzer Stinger Counter",
+		gen: 9,
+		pp: 10,
+		priority: 1,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onModifyPriority(priority, pokemon) {
+			const move = this.queue.willMove(pokemon.foes()[0])?.moveid;
+			if (move && pokemon.foes()[0].moves.indexOf(move) === pokemon.foes()[0].moves.length - 1) {
+				this.debug('BSC priority boost');
+				return priority + 2;
+			}
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) this.boost({atk: 3}, pokemon, pokemon, move);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Bug",
+	},
+
 	// berry
 	whatkind: {
 		accuracy: true,

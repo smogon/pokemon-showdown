@@ -162,6 +162,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'yu-gi-oh reference',
 		evs: {hp: 252, def: 160, spe: 90}, ivs: {atk: 0}, nature: 'Bold', teraType: 'Steel',
 	},
+	Beowulf: {
+		species: 'Beedrill', ability: 'Intrepid Sword', item: 'Beedrillite', gender: 'M',
+		moves: ['Poison Jab', 'Attack Order', ['Sacred Fire', 'Earthquake', 'Volt Tackle', 'Glacial Lance']],
+		signatureMove: 'Buzzer Stinger Counter',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: 2,
+	},
 	berry: {
 		species: 'Regirock', ability: 'Sturdy', item: 'Maranga Berry', gender: 'F',
 		moves: ['Curse', 'Salt Cure', 'Stone Axe'],
