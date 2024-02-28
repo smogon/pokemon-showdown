@@ -1455,6 +1455,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Pissog')}|Yes, there are two paths you can go by, but in the long run`);
 		},
 	},
+	pokemonvortex: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('pokemonvortex')}|i just like the bowtie`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('pokemonvortex')}|ok`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('pokemonvortex')}|人不可貌相，海水不可斗量`);
+		},
+	},
 	ptoad: {
 		noCopy: true,
 		onStart() {

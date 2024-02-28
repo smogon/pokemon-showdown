@@ -3381,6 +3381,54 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// pokemonvortex
+	roulette: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Roulette",
+		desc: "A random move is selected for use, and then the user's other three moves are replaced with random moves. Aura Wheel, Dark Void, Explosion, Final Gambit, Healing Wish, Hyperspace Fury, Lunar Dance, Memento, Misty Explosion, Revival Blessing, and Self-Destruct cannot be selected.",
+		shortDesc: "Replace target's 3 moves with random moves.",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Nasty Plot', source);
+			this.add('-anim', source, 'Metronome', target);
+			this.add('-anim', source, 'Explosion', target);
+		},
+		onHit(target, source) {
+			const bannedList = [
+				'aurawheel', 'darkvoid', 'explosion', 'finalgambit', 'healingwish', 'hyperspacefury',
+				'lunardance', 'memento', 'mistyexplosion', 'revivalblessing', 'selfdestruct',
+			];
+			const moves = this.dex.moves.all().filter(move => (
+				!source.moves.includes(move.id) &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable')
+			));
+			for (const i of target.moveSlots.keys()) {
+				if (i > 2) break;
+				const randomMove = this.sample(moves.filter(x => !bannedList.includes(x.id)));
+				bannedList.push(randomMove.id);
+				const replacement = {
+					move: randomMove.name,
+					id: randomMove.id,
+					pp: randomMove.pp,
+					maxpp: randomMove.pp,
+					target: randomMove.target,
+					disabled: false,
+					used: false,
+				};
+				target.moveSlots[i] = target.baseMoveSlots[i] = replacement;
+			}
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// ptoad
 	pleek: {
 		accuracy: true,

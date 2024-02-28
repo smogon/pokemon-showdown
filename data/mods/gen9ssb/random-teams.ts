@@ -601,6 +601,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'A Song Of Ice And Fire',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ice', skip: 'Pissog', shiny: 1096,
 	},
+	pokemonvortex: {
+		species: 'Pokestar Smeargle', ability: 'Prankster', item: 'Focus Sash', gender: 'N',
+		moves: ['Spore', 'Extreme Evoboost', 'Substitute'],
+		signatureMove: 'Roulette',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Ghost',
+	},
 	ptoad: {
 		species: 'Politoed', ability: 'Drizzle', item: 'Leftovers', gender: 'M',
 		moves: ['Jet Punch', 'Ice Punch', 'Earthquake'],
