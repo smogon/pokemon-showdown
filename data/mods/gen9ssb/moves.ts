@@ -576,6 +576,87 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
+	// ausma
+	sigilsstorm: {
+		accuracy: 90,
+		basePower: 15,
+		category: "Special",
+		shortDesc: "Hits 5 times, each hit has a 20% chance to inflict status.",
+		name: "Sigil's Storm",
+		pp: 5,
+		multihit: 5,
+		priority: 0,
+		flags: {snatch: 1, metronome: 1, protect: 1, failcopycat: 1},
+		onTry(source) {
+			if (source.illusion || source.name !== 'ausma') {
+				return;
+			}
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Aura Wheel');
+			this.hint("Only a Pokemon whose nickname is \"ausma\" can use this move.");
+			return null;
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Geomancy', source);
+			this.add('-anim', source, 'Blood Moon', target);
+		},
+		secondary: {
+			chance: 20,
+			onHit(target, source, move) {
+				move.willCrit = false;
+				const chance = this.random(100);
+				if (chance <= 10) {
+					target.trySetStatus('psn', target);
+				} else if (chance <= 20) {
+					target.trySetStatus('tox', target);
+				} else if (chance <= 30) {
+					target.trySetStatus('brn', target);
+				} else if (chance <= 50) {
+					const stats: BoostID[] = [];
+					const boost: SparseBoostsTable = {};
+					let statPlus: BoostID;
+					const recipient = this.randomChance(1, 2) ? source : target;
+					for (statPlus in recipient.boosts) {
+						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+						if (chance <= 40 && recipient.boosts[statPlus] > -6) {
+							stats.push(statPlus);
+						} else if (chance <= 50 && recipient.boosts[statPlus] < 6) {
+							stats.push(statPlus);
+						}
+					}
+					const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+					if (randomStat) {
+						boost[randomStat] = 1;
+						if (chance < 40) {
+							boost[randomStat] = -1;
+						}
+					}
+					this.boost(boost, recipient, recipient);
+				} else if (chance <= 60) {
+					move.willCrit = true;
+				} else if (chance <= 70) {
+					target.addVolatile('taunt', source);
+				} else if (chance <= 80) {
+					target.addVolatile('torment', source);
+				} else if (chance <= 90) {
+					target.addVolatile('confusion', source);
+				} else if (chance <= 98) {
+					const mistyExplosion = this.dex.getActiveMove('mistyexplosion');
+					mistyExplosion.basePower = 75;
+					this.actions.useMove(mistyExplosion, source);
+				} else {
+					changeSet(this, target, ssbSets["ausma-Fennekin"], true);
+					this.add(`c:|${getName('ausma')}|oh shit i posted to the wrong account`);
+				}
+			},
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// AuzBat
 	preptime: {
 		accuracy: true,

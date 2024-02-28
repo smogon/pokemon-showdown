@@ -275,6 +275,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 	},
 
+	// ausma
+	lattebreak: {
+		shortDesc: "Regenerator + one-time priority boost per switch-in.",
+		name: "Latte Break",
+		onModifyPriority(relayVar, source, target, move) {
+			if (this.effectState.latte) {
+				return relayVar + 0.5;
+			}
+		},
+		onAfterMove() {
+			this.effectState.latte = false;
+		},
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+			this.effectState.latte = true;
+		},
+		flags: {},
+	},
+
 	// Blitz
 	blitzofruin: {
 		shortDesc: "Active Pokemon without this Ability have their Speed multiplied by 0.75. Also Dazzling.",

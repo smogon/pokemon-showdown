@@ -126,6 +126,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Season\'s Smite',
 		evs: {def: 8, spa: 244, spe: 252}, nature: 'Timid', teraType: 'Fairy',
 	},
+	ausma: {
+		species: 'Hatterene', ability: 'Latte Break', item: 'Leftovers', gender: 'F',
+		moves: ['Future Sight', 'Detect', 'Chilly Reception'],
+		signatureMove: 'Sigil\'s Storm',
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Relaxed', teraType: 'Ghost',
+	},
+	'ausma-Fennekin': {
+		species: 'Fennekin', ability: 'Blaze', item: '', gender: '',
+		moves: ['Tackle', 'Growl'],
+		signatureMove: 'Ember',
+		evs: {}, skip: 'ausma',
+	},
 	AuzBat: {
 		species: 'Swoobat', ability: 'Magic Guard', item: 'Focus Sash', gender: 'M',
 		moves: ['Stored Power', 'Hurricane', ['Roost', 'Focus Blast']],

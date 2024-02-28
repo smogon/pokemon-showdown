@@ -247,6 +247,45 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('autumn')}|lost ggs`);
 		},
 	},
+	ausma: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('ausma')}|what it Do what it Be`);
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'umuwo':
+				this.add(`c:|${getName('ausma')}|it's.... chu......`);
+				break;
+			case 'spoo':
+				this.add(`c:|${getName('ausma')}|LOOL SPOOP?!`);
+				break;
+			case 'rumia':
+				this.add(`c:|${getName('ausma')}|oh no... it's poomia....`);
+				break;
+			case 'lumari':
+				this.add(`c:|${getName('ausma')}|we should watch the next ladybug ep after this tbh`);
+				break;
+			}
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('ausma')}|Big Stall™ will be right back (after my coffee)`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('ausma')}|God has punished me for my hubris.`);
+		},
+		onTryMove(source, target, move) {
+			this.effectState.foeMemory = target.name;
+		},
+		onFoeSwitchOut(pokemon) {
+			if (this.effectState.foeMemory && pokemon.species.name === "Fennekin") {
+				changeSet(this, pokemon, ssbSets[this.effectState.foeMemory]);
+			}
+		},
+		onFoeFaint(target, source, effect) {
+			if (this.effectState.foeMemory && target.species.name === "Fennekin") {
+				changeSet(this, target, ssbSets[this.effectState.foeMemory]);
+			}
+		},
+	},
 	auzbat: {
 		noCopy: true,
 		onStart(pokemon) {
