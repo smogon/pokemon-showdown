@@ -512,10 +512,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	emboar02: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('Emboar02')}|any`);
+			this.add(`c:|${getName('Emboar02')}|I'm the best fire-fighting starter!`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Emboar02')}|ok bye`);
+			this.add(`c:|${getName('Emboar02')}|This is boaring...`);
 		},
 		onFaint(pokemon) {
 			this.add(`c:|${getName('Emboar02')}|Too much recoil D:`);
