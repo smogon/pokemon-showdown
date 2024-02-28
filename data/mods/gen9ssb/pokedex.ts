@@ -93,6 +93,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Masquerade"},
 	},
 
+	// Clouds
+	corvisquire: {
+		inherit: true,
+		baseStats: {hp: 98, atk: 87, def: 105, spa: 53, spd: 85, spe: 67},
+		abilities: {0: "Jet Stream"},
+	},
+
 	// Coolcodename
 	victini: {
 		inherit: true,

@@ -199,6 +199,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Stockholm Syndrome',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
+	Clouds: {
+		species: 'Corvisquire', ability: 'Jet Stream', item: 'Leftovers', gender: 'M',
+		moves: ['Brave Bird', 'Roost', 'Defog'],
+		signatureMove: 'Winds of Change',
+		evs: {hp: 252, atk: 4, def: 252}, nature: 'Jolly', teraType: 'Flying', shiny: 822,
+	},
 	Coolcodename: {
 		species: 'Victini', ability: 'Firewall', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Searing Shot', 'Psychic', 'Dazzling Gleam'],

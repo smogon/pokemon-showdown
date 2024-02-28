@@ -402,6 +402,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('clerica')}|unfort`);
 		},
 	},
+	clouds: {
+		onStart() {
+			this.add(`c:|${getName('Clouds')}|i can feel it coming in the air tonight...`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Clouds')}|oh lord`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Clouds')}|and i've been waiting for this moment for all my life`);
+		},
+	},
 	coolcodename: {
 		onStart(pokemon) {
 			this.add(`c:|${getName('Coolcodename')}|LFGI ${pokemon.side.name}`);

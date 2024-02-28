@@ -407,6 +407,35 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 	},
 
+	// Clouds
+	jetstream: {
+		shortDesc: "Delta Stream + Stealth Rock Immunity.",
+		name: "Jet Stream",
+		onStart(source) {
+			this.field.setWeather('deltastream');
+			this.add('message',	`Strong air currents keep Flying-types ahead of the chase!`);
+		},
+		onAnySetWeather(target, source, weather) {
+			if (this.field.isWeather('deltastream') && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherState.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility(['deltastream', 'jetstream'])) {
+					this.field.weatherState.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.name === 'Stealth Rock') {
+				return false;
+			}
+		},
+		flags: {breakable: 1},
+	},
 
 	// Coolcodename
 	firewall: {
