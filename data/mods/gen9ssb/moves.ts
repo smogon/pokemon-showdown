@@ -3094,6 +3094,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// nya
+	'3': {
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		shortDesc: "Moves first. 50% chance to backfire. 40% infatuates.",
+		name: ":3",
+		gen: 9,
+		pp: 5,
+		priority: 1,
+		flags: {protect: 1},
+		onTry(pokemon, target, move) {
+			if (move.sourceEffect !== '3' && this.randomChance(1, 2)) {
+				this.add('-message', "The move backfired!");
+				this.actions.useMove('3', target, pokemon);
+				return null;
+			}
+		},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Attract');
+		},
+		secondary: {
+			volatileStatus: 'attract',
+			chance: 40,
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Nyx
 	cottoncandycrush: {
 		accuracy: 100,

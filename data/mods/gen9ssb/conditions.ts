@@ -1264,6 +1264,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		noCopy: true,
 		// phrases TBD
 	},
+	nya: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('nya~ ❤')}|:3`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('nya~ ❤')}|nya~`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('nya~ ❤')}|>~<`);
+		},
+	},
 	nyx: {
 		noCopy: true,
 		onStart() {
@@ -2298,7 +2310,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	attract: {
 		onStart(pokemon, source, effect) {
 			if (!(pokemon.gender === 'M' && source.gender === 'F') && !(pokemon.gender === 'F' && source.gender === 'M')) {
-				if (effect.name !== 'The Love Of Christ') {
+				if (!['The Love Of Christ', ':3'].includes(effect.name)) {
 					this.debug('incompatible gender');
 					return false;
 				}

@@ -65,6 +65,28 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 	},
 
+	// modified for nya's ability
+	focusband: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			const chance = target.hasAbility('adorablegrace') ? 2 : 1;
+			if (this.randomChance(chance, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add("-activate", target, "item: Focus Band");
+				return target.hp - 1;
+			}
+		},
+	},
+	quickclaw: {
+		inherit: true,
+		onFractionalPriority(priority, pokemon) {
+			const chance = pokemon.hasAbility('adorablegrace') ? 2 : 1;
+			if (priority <= 0 && this.randomChance(chance, 5)) {
+				this.add('-activate', pokemon, 'item: Quick Claw');
+				return 0.1;
+			}
+		},
+	},
+
 	safetygoggles: {
 		inherit: true,
 		onImmunity(type, pokemon) {
