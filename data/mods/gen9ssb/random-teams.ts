@@ -193,6 +193,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'De Todas las Flores',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Grass', shiny: true,
 	},
+	Clefable: {
+		species: 'Clefable', ability: 'That\'s Hacked', item: 'Leftovers', gender: 'M',
+		moves: ['Cosmic Power', 'Soft-Boiled', 'Thunder Wave'],
+		signatureMove: 'Giveaway!',
+		evs: {hp: 252, def: 200, spd: 56}, nature: 'Calm', teraType: 'Any', shiny: true,
+	},
 	clerica: {
 		species: 'Mimikyu', ability: 'Masquerade', item: 'Ghostium Z', gender: 'F',
 		moves: ['Protect', 'Substitute', 'Phantom Force'],

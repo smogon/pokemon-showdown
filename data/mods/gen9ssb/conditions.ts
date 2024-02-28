@@ -389,6 +389,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Chloe')}|ouch :(`);
 		},
 	},
+	clefableuser: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Clefable')}|LF: A win`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Clefable')}|Catch you on the flip side!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Clefable')}|Can't believe they don't let me in Paldea`);
+		},
+	},
 	clerica: {
 		noCopy: true,
 		onStart() {

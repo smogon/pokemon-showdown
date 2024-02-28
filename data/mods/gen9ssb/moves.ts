@@ -833,6 +833,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Clefable
+	giveaway: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "User switches, passing stat changes and more.",
+		name: "Giveaway!",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {metronome: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Teleport', target);
+			this.add('-anim', source, 'Baton Pass', target);
+		},
+		// Baton Pass clones are stupid client side so we're doing this
+		onHit(target) {
+			this.actions.useMove('batonpass', target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
 	// clerica
 	stockholmsyndrome: {
 		accuracy: true,
