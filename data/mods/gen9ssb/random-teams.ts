@@ -278,6 +278,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Solidarity',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Fire',
 	},
+	Froggeh: {
+		species: 'Toxicroak', ability: 'Super Luck', item: 'Leftovers', gender: 'M',
+		moves: ['Gunk Shot', 'Sucker Punch', 'Drain Punch'],
+		signatureMove: 'Cringe Dad Joke',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Dark',
+	},
 	Frostyicelad: {
 		species: 'Qwilfish-Hisui', ability: 'Almost Frosty', item: 'Eviolite', gender: 'M',
 		moves: ['Darkest Lariat', 'Recover', ['Dire Claw', 'Meteor Mash', 'Bitter Malice']],

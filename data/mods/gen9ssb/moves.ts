@@ -1273,6 +1273,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Froggeh
+	cringedadjoke: {
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Confuses the foe. Confusion self-hits raise user's Atk/Def.",
+		name: "Cringe Dad Joke",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dizzy Punch', target);
+			this.add('-anim', source, 'Bulk Up', source);
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'confusion',
+		},
+		target: 'normal',
+		type: "Fighting",
+		// confusion self-hit stat bonus implemented as an innate because it doesn't work as a move effect
+	},
+
 	// Frostyicelad
 	puffyspikydestruction: {
 		accuracy: true,

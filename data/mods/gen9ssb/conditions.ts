@@ -533,6 +533,36 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Fame')}|NOOOOOOOOOOOO! I'M A STAR! PLEASE, IM A STAR!`);
 		},
 	},
+	froggeh: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Froggeh')}|Hello. Froggeh the dad here. And welcome to The Happy Place!`);
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'valerian':
+				this.add(`c:|${getName('Froggeh')}|See that frog, she is green, diggin the froggy queen!`);
+				break;
+			case 'queeni':
+				this.add(`c:|${getName('Froggeh')}|Imagine if you will- a frog with a smol crown on her head.`);
+				break;
+			}
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Froggeh')}|It's not easy being dad.`);
+		},
+		onFaint(pokemon) {
+			this.add(`c:|${getName('Froggeh')}|URG! I've croaked...`);
+		},
+		onFoeMoveAborted(target, source, move) {
+			if (source.getVolatile('confusion')) {
+				if (source.foes()) {
+					for (const foe of source.foes()) {
+						if (foe.illusion || foe.name !== 'Froggeh') continue;
+						this.boost({atk: 1, def: 1}, foe);
+					}
+				}
+			}
+		},
+	},
 	frostyicelad: {
 		noCopy: true,
 		onStart(pokemon) {
