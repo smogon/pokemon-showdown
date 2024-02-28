@@ -211,6 +211,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Arya')}|W-whats this? Oh, come on...!!!`);
 		}, // Is a message before going mega supported(unlikely)? if so, the first message in onAfterMega goes there.
 	},
+	arcueid: {
+		noCopy: true,
+		onStart() {
+			const img = "https://i.ibb.co/Cv8LYmP/the-rock-look-the-rock-meme.gif";
+			this.add(`c:|${getName('Arcueid')}|/html <img src="${img}" width="32" height="32" />`);
+		},
+		onFaint() {
+			const img = "https://i.ibb.co/ss0VF8x/tRsWWx7.png";
+			this.add(`c:|${getName('Arcueid')}|/html <img src="${img}" width="32" height="32" />`);
+		},
+	},
 	arsenal: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -2097,6 +2108,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 
 	// Custom effects
+	// Arcueid
+	millenniumcastle: {
+		name: 'Millennium Castle',
+		effectType: 'Weather',
+		duration: 0,
+		onFieldStart(field, source, effect) {
+			this.add('-weather', 'Millennium Castle', '[from] ability: ' + effect.name, '[of] ' + source);
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Millennium Castle', '[upkeep]');
+			this.eachEvent('Weather');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
+
 	// Elliot
 	beefed: {
 		name: "Beefed",

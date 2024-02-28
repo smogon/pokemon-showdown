@@ -44,6 +44,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Saintly Bullet"},
 	},
 
+	// Arcueid
+	deoxysattack: {
+		inherit: true,
+		abilities: {0: "Marble Phantasm"},
+	},
+	deoxysdefense: {
+		inherit: true,
+		abilities: {0: "Marble Phantasm"},
+	},
+
 	// Arya
 	trapinch: {
 		inherit: true,

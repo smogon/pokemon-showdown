@@ -102,6 +102,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Quiver Dance',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	Arcueid: {
+		species: 'Deoxys-Defense', ability: 'Marble Phantasm', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: [['Lunar Blessing', 'Jungle Healing'], 'Body Press', ['Toxic', 'Will-O-Wisp', 'Topsy-Turvy']],
+		signatureMove: 'Funny Vamp',
+		evs: {hp: 248, spa: 8, spe: 252}, nature: 'Naive', shiny: true,
+	},
+	'Arcueid-Attack': {
+		species: 'Deoxys-Attack', ability: 'Marble Phantasm', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: [['Moonblast', 'Draining Kiss'], 'Photon Geyser', 'Flamethrower'],
+		signatureMove: 'Funny Vamp',
+		evs: {hp: 248, spa: 8, spe: 252}, nature: 'Naive', shiny: true, skip: 'Arcueid',
+	},
 	Arya: {
 		species: 'Flygon', ability: 'Tinted Lens', item: 'Flygonite', gender: 'F',
 		moves: ['Clanging Scales', 'Roost', 'Bug Buzz'],

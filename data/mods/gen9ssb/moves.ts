@@ -442,6 +442,57 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Arcueid
+	funnyvamp: {
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		shortDesc: "Changes user's forme, effects vary with forme.",
+		name: "Funny Vamp",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, failcopycat: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Moonlight', target);
+			this.add('-anim', source, 'Quiver Dance', target);
+			this.add('-anim', source, 'Geomancy', target);
+			const img = "https://i.ibb.co/3N3V3Nf/ZR0qNHd.gif";
+			this.add(`c:|${getName('Arcueid')}|/html <img src="${img}" width="32" height="32" />`);
+		},
+		onHit(target, source, move) {
+			if (source.species.name === "Deoxys-Defense") {
+				changeSet(this, source, ssbSets['Arcueid-Attack'], true);
+				let randMove = this.random(3) - 1;
+				if (randMove < 0) randMove = 0;
+				this.actions.useMove(source.moveSlots[randMove].id, target);
+			} else {
+				changeSet(this, source, ssbSets['Arcueid'], true);
+				for (let i = 0; i < 2; i++) {
+					const stats: BoostID[] = [];
+					const boost: SparseBoostsTable = {};
+					let statPlus: BoostID;
+					for (statPlus in source.boosts) {
+						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+						if (source.boosts[statPlus] < 6) {
+							stats.push(statPlus);
+						}
+					}
+					const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+					if (randomStat) boost[randomStat] = 1;
+					this.boost(boost, source, source);
+				}
+				this.heal(source.baseMaxhp / 2, source);
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
+
 	// Arsenal
 	megidolaon: {
 		accuracy: 100,

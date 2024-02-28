@@ -1,7 +1,7 @@
 import {ssbSets} from "./random-teams";
 import {changeSet, getName, enemyStaff} from "./scripts";
 
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'deserteddunes'];
+const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'deserteddunes', 'millenniumcastle'];
 
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
@@ -213,6 +213,49 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const ratio = source.getMoveHitData(move).crit ? 6 : 8;
 				this.heal(source.maxhp / ratio, source);
 			}
+		},
+		flags: {},
+		gen: 9,
+	},
+
+	// Arcueid
+	marblephantasm: {
+		shortDesc: "Sets up Millennium Castle, effects vary with user's form.",
+		name: "Marble Phantasm",
+		onStart(source) {
+			this.field.setWeather('millenniumcastle');
+			if (source.species.name === "Deoxys-Attack" && source.setType(['Psychic', 'Fairy'])) {
+				this.add('-start', source, 'typechange', source.getTypes(true).join('/'), '[from] weather: Millennium Castle');
+			} else if (source.species.name === "Deoxys-Defense" && source.setType('Psychic')) {
+				this.add('-start', source, 'typeadd', 'Psychic', '[from] weather: Milennium Castle');
+			}
+		},
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'millenniumcastle' && !STRONG_WEATHERS.includes(weather.id)) return false;
+		},
+		onTryHit(target, source, move) {
+			if (move.category === 'Status' && target !== source &&
+				target.effectiveWeather() === 'milleniumcastle' && target.species.name === "Deoxys-Defense") {
+				this.add('-immune', target, '[from] weather: Millennium Castle');
+				return null;
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (target.effectiveWeather() === 'millenniumcastle' && target.species.name === "Deoxys-Defense") {
+				this.add('-immune', target, '[from] weather: Millennium Castle');
+				return false;
+			}
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherState.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('marblephantasm')) {
+					this.field.weatherState.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
 		},
 		flags: {},
 		gen: 9,
