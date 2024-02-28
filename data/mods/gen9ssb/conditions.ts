@@ -1600,10 +1600,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	spoouser: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('spoo')}|heyy girlypop`);
+			this.add(`c:|${getName('spoo')}|hemogoblin`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('spoo')}|oh nah`);
+			this.add(`c:|${getName('spoo')}|danger`);
 		},
 		onFaint() {
 			this.add(`c:|${getName('spoo')}|dies`);

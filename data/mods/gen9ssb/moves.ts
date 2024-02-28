@@ -3682,53 +3682,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// spoo
-	spoo: {
-		accuracy: 100,
-		basePower: 100,
-		basePowerCallback(pokemon, target, move) {
-			if (pokemon.baseSpecies.baseSpecies === 'Mumbao') {
-				return 90;
-			}
-			return move.basePower;
+	cardiotraining: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Boosts Atk, Def and Sp. Def by 1 stage.",
+		name: "Cardio Training",
+		onTryMove() {
+			this.attrLastMove('[still]');
 		},
-		category: "Special",
-		shortDesc: "Changes Form. Mumbao: Fairy, 90BP, Clears boosts.",
-		name: "spoo",
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Geomancy', source);
+		},
 		gen: 9,
-		pp: 10,
+		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Mumbao') {
-				this.attrLastMove('[anim] Fleur Cannon');
-			} else {
-				this.attrLastMove('[anim] Frenzy Plant');
-			}
-		},
-		onModifyType(move, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Mumbao') {
-				move.type = 'Fairy';
-			}
-		},
-		onHit(target, pokemon, move) {
-			if (['Mumbao', 'Jumbao'].includes(pokemon.baseSpecies.baseSpecies) && !pokemon.transformed) {
-				move.willChangeForme = true;
-				if (pokemon.baseSpecies.baseSpecies === 'Mumbao') {
-					target.clearBoosts();
-					this.add('-clearboost', target);
-				}
-			}
-		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (move.willChangeForme) {
-				this.add('-anim', pokemon, 'Geomancy', pokemon);
-				const spooForme = pokemon.species.id === 'jumbao' ? '' : '-Jumbao';
-				changeSet(this, pokemon, ssbSets['spoo' + spooForme], true);
-			}
+		flags: {snatch: 1, dance: 1, metronome: 1},
+		boosts: {
+			atk: 1,
+			def: 1,
+			spd: 1,
 		},
 		secondary: null,
-		target: "normal",
-		type: "Grass",
+		target: "self",
+		type: "Fire",
 	},
 
 	// Struchni

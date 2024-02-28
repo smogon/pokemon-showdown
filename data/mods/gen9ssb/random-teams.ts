@@ -657,16 +657,10 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Fire',
 	},
 	spoo: {
-		species: 'Mumbao', ability: 'Dazzling', item: 'Heavy-Duty Boots', gender: 'M',
-		moves: ['Will-O-Wisp', 'Strength Sap', 'Parting Shot'],
-		signatureMove: 'spoo',
-		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid', teraType: 'Steel',
-	},
-	'spoo-Jumbao': {
-		species: 'Jumbao', ability: 'Drought', item: 'Heavy-Duty Boots', gender: 'M',
-		moves: ['Moonblast', 'Giga Drain', 'Fiery Dance'],
-		signatureMove: 'spoo',
-		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', teraType: 'Fire', skip: 'spoo',
+		species: 'Hemogoblin', ability: 'Pixilate', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: ['Extreme Speed', 'Bitter Blade', 'Taunt'],
+		signatureMove: 'Cardio Training',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy', shiny: 32,
 	},
 	Struchni: {
 		species: 'Aggron', ability: 'Overasked Clause', item: 'Leftovers', gender: 'M',
