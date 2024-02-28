@@ -1374,6 +1374,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
+	// Haste Inky
+	hastyrevolution: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Clear target stats+copies neg stats+inverts on user.",
+		name: "Hasty Revolution",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Pain Split', target);
+		},
+		onHit(target, source, move) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
+			let i: BoostID;
+			for (i in source.boosts) {
+				if (source.boosts[i] < 0) {
+					target.boosts[i] += source.boosts[i];
+					source.boosts[i] = -source.boosts[i];
+				}
+			}
+			this.add('-copyboost', target, source, '[from] move: Hasty Revolution');
+			this.add('-invertboost', source, '[from] move: Hasty Revolution');
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// havi
 	augurofebrietas: {
 		accuracy: 100,

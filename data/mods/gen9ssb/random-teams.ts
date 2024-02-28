@@ -296,6 +296,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wiggling Strike',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Grass', shiny: 2,
 	},
+	'Haste Inky': {
+		species: 'Falinks', ability: 'Simple', item: 'Sitrus Berry', gender: 'N',
+		moves: ['Superpower', 'Ice Hammer', 'Poison Jab'],
+		signatureMove: 'Hasty Revolution',
+		evs: {atk: 4, def: 252, spe: 252}, nature: 'Jollu', teraType: 'Poison',
+	},
 	havi: {
 		species: 'Gastly', ability: 'Mensis Cage', item: 'Leftovers', gender: 'F',
 		moves: ['Astral Barrage', 'Moonblast', 'Substitute'],

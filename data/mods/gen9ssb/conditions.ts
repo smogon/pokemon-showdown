@@ -602,6 +602,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Ganjafin')}|I knew I'd die before Silksong came out`);
 		},
 	},
+	hasteinky: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Haste Inky')}|Wanna see whatever weird thing I can do?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Haste Inky')}|Good call! I wasn’t liking this situation either.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Haste Inky')}| I am NOT feeling full of beans rn…`);
+		},
+	},
 	havi: {
 		noCopy: true,
 		onStart() {
