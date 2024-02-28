@@ -641,6 +641,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// dhelmise
+	cacophony: {
+		name: "Cacophony",
+		shortDesc: "Sound moves: 1.5x BP, ignore type-based immunities. Opposing sound fails.",
+		onBasePowerPriority: 7,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Cacophony boost');
+				return this.chainModify([6144, 4096]);
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['sound']) {
+				this.add('-immune', target, '[from] ability: Cacophony');
+				return null;
+			}
+		},
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			move.ignoreImmunity = true;
+		},
+		flags: {},
+	},
+
 	// Elly
 	stormsurge: {
 		shortDesc: "On switch-in, this Pokemon summons Storm Surge.",
@@ -1098,30 +1122,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {breakable: 1},
-	},
-
-	// Kris
-	cacophony: {
-		name: "Cacophony",
-		shortDesc: "Sound moves: 1.5x BP, ignore type-based immunities. Opposing sound fails.",
-		onBasePowerPriority: 7,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['sound']) {
-				this.debug('Cacophony boost');
-				return this.chainModify([6144, 4096]);
-			}
-		},
-		onTryHit(target, source, move) {
-			if (target !== source && move.flags['sound']) {
-				this.add('-immune', target, '[from] ability: Cacophony');
-				return null;
-			}
-		},
-		onModifyMovePriority: -5,
-		onModifyMove(move) {
-			move.ignoreImmunity = true;
-		},
-		flags: {},
 	},
 
 	// Krytocon

@@ -144,6 +144,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Sharpness"},
 	},
 
+	// dhelmise
+	nymble: {
+		inherit: true,
+		baseStats: {hp: 110, atk: 200, def: 99, spa: 101, spd: 99, spe: 35},
+		abilities: {0: "Cacophony"},
+	},
+
 	// Elliot
 	sinistea: {
 		inherit: true,
@@ -248,13 +255,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 84, atk: 119, def: 78, spa: 77, spd: 81, spe: 105},
 		abilities: {0: "You'll Never Walk Alone"},
 		weightkg: 103,
-	},
-
-	// Kris
-	nymble: {
-		inherit: true,
-		baseStats: {hp: 110, atk: 200, def: 99, spa: 101, spd: 99, spe: 35},
-		abilities: {0: "Cacophony"},
 	},
 
 	// Krytocon

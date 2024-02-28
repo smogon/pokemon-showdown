@@ -569,6 +569,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('deftinwolf')}|Death is only the beginning.`);
 		},
 	},
+	dhelmiseuser: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('dhelmise')}|ok`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('dhelmise')}|ok`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('dhelmise')}|ok`);
+		},
+	},
 	elliot: {
 		noCopy: true,
 		onStart() {
@@ -980,7 +992,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			case 'Clementine':
 				this.add(`c:|${getName('Kennedy')}|Not the Fr*nch....`);
 				break;
-			case 'Kris':
+			case 'dhelmise':
 				this.add(`c:|${getName('Kennedy')}|fuck that`);
 				this.effectState.target.faint();
 				this.add('message', 'Kennedy fainted mysteriously.....');
@@ -1055,18 +1067,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Klmondo')}|It's Klmondover`);
-		},
-	},
-	kris: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Kris')}|ok`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Kris')}|ok`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Kris')}|ok`);
 		},
 	},
 	krytocon: {

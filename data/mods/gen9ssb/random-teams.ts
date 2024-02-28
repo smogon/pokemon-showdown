@@ -282,6 +282,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Trivial Pursuit',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Poison',
 	},
+	dhelmise: {
+		species: 'Nymble', ability: 'Cacophony', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: ['Boomburst', 'Bug Buzz', 'Torch Song'],
+		signatureMove: 'ok',
+		evs: {hp: 252, def: 4, spa: 252}, nature: 'Quiet', teraType: 'Normal',
+	},
 	Elliot: {
 		species: 'Sinistea', ability: 'Natural Cure', item: 'Focus Sash', gender: 'N',
 		moves: ['Moonblast', 'Shadow Ball', 'Teatime'],
@@ -450,12 +456,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Victory Dance', 'Icicle Spear', 'Rock Blast'],
 		signatureMove: 'The Better Water Shuriken',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', teraType: 'Water',
-	},
-	Kris: {
-		species: 'Nymble', ability: 'Cacophony', item: 'Heavy-Duty Boots', gender: 'N',
-		moves: ['Boomburst', 'Bug Buzz', 'Torch Song'],
-		signatureMove: 'ok',
-		evs: {hp: 252, def: 4, spa: 252}, nature: 'Quiet', teraType: 'Normal',
 	},
 	Krytocon: {
 		species: 'Mawile', ability: 'Curse of Dexit', item: 'Mawilite', gender: 'M',
