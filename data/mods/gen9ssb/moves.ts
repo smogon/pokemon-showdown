@@ -2772,6 +2772,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// Nyx
+	cottoncandycrush: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Uses Sp. Def over Attack in damage calculation.",
+		name: "Cotton Candy Crush",
+		overrideOffensiveStat: "spd",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Fusion Bolt', target);
+			this.add('-anim', source, 'Fleur Cannon', target);
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// PartMan
 	alting: {
 		accuracy: true,

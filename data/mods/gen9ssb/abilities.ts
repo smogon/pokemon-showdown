@@ -1371,6 +1371,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Nyx
+	lasthymn: {
+		name: "Last Hymn",
+		shortDesc: "Weakens incoming attacks for each Pokemon fainted.",
+		onStart(pokemon) {
+			if (pokemon.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: Last Hymn');
+				const fallen = Math.min(pokemon.side.totalFainted, 5);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onBasePowerPriority: 21,
+		onFoeBasePower(basePower, attacker, defender, move) {
+			if (this.effectState.fallen) {
+				return this.chainModify([10, (10 + this.effectState.fallen)]);
+			}
+		},
+	},
+
 	// PartMan
 	ctiershitposter: {
 		shortDesc: "-1 Atk/SpA, +1 Def/SpD. +1 Atk/SpA/Spe, -1 Def/SpD, Mold Breaker if 420+ dmg taken.",

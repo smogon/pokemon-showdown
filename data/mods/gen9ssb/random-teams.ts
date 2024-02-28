@@ -512,6 +512,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: '~nyaa',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Steel',
 	},
+	Nyx: {
+		species: 'Altaria', ability: 'Last Hymn', item: 'Altarianite', gender: 'F',
+		moves: ['Earthquake', 'Amnesia', 'Roost'],
+		signatureMove: 'Cotton Candy Crush',
+		evs: {hp: 248, spd: 164, spe: 96}, nature: 'Careful', shiny: 4,
+	},
 	PartMan: {
 		species: 'Chandelure', ability: 'C- Tier Shitposter', item: 'Leek', gender: 'M',
 		moves: ['Searing Shot', 'Hex', 'Morning Sun'],
