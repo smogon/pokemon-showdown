@@ -212,6 +212,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Psychic Surge"},
 	},
 
+	// ken
+	jigglypuff: {
+		inherit: true,
+		baseStats: {hp: 115, atk: 65, def: 99, spa: 65, spd: 115, spe: 111},
+		abilities: {0: "Aroma Veil"},
+	},
+
 	// kenn
 	larvitar: {
 		inherit: true,

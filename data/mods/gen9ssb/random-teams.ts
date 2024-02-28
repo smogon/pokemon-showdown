@@ -379,6 +379,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Salvaged Sacrifice',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Adamant', teraType: 'Flying',
 	},
+	ken: {
+		species: 'Jigglypuff', ability: 'Aroma Veil', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Dazzling Gleam', 'Heal Order', 'Mortal Spin'],
+		signatureMove: ', (ac)',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Any',
+	},
 	kenn: {
 		species: 'Larvitar', ability: 'Deserted Dunes', item: 'Eviolite', gender: 'M',
 		moves: ['Salt Cure', 'Shore Up', ['Precipice Blades', 'Headlong Rush']],

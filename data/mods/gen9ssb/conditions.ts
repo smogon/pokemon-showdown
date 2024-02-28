@@ -850,6 +850,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		innateName: "Regenerator",
 		shortDesc: "This Pokemon restores 1/3 of its maximum HP, rounded down, when it switches out.",
 	},
+	ken: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('ken')}|gm.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('ken')}|whoopsies`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('ken')}|have a good day!`);
+		},
+	},
 	kenn: {
 		noCopy: true,
 		onStart(pokemon) {
