@@ -735,38 +735,89 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Cake
-	shawn: {
-		accuracy: 97,
-		basePower: 71,
+	rolesystem: {
+		accuracy: true,
+		basePower: 0,
 		category: "Physical",
-		shortDesc: "Force switch if newly switched. 2x BP vs Magic Guard and HDB.",
-		name: "Shawn",
+		shortDesc: "Protects user, changes set. Can't be used consecutively.",
+		// it was easier to do it this way rather than implement failing on consecutive uses
+		name: "Role System",
 		gen: 9,
-		pp: 10,
-		priority: -6,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[anim] Circle Throw');
-		},
-		basePowerCallback(pokemon, target, move) {
-			if (target.hasAbility('magicguard') || target.hasItem('heavydutyboots')) {
-				return move.basePower * 2;
+		pp: 40,
+		priority: 6,
+		flags: {protect: 1, mirror: 1, cantusetwice: 1, failcopycat: 1},
+		onTry(source) {
+			if (source.species.baseSpecies === 'Dunsparce') {
+				return;
 			}
-			return move.basePower;
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Role System');
+			this.hint("Only a Pokemon whose form is Dunsparce can use this move.");
+			return null;
 		},
-		onModifyMove(move, source, target) {
-			if (target?.newlySwitched || !!target?.positiveBoosts()) move.forceSwitch = true;
+		onTryMove() {
+			this.attrLastMove('[still]');
 		},
-		onModifyType(move) {
-			this.debug('THIS THING MUST NOT CRASH');
-			move.type = '???';
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Haze', target);
 		},
-		onMoveFail(target, source) {
-			source.forceSwitchFlag = true;
+		onHit(target, source, move) {
+			if (this.randomChance(1, 256)) {
+				this.add('-activate', target, 'move: Celebrate');
+			} else {
+				target.clearBoosts();
+				this.add('-clearboost', target);
+				target.addVolatile('protect');
+				const set = Math.floor(Math.random() * 4);
+				const newMoves = [];
+				let role = '';
+				switch (set) {
+				case 0:
+					newMoves.push('hyperdrill', 'combattorque', 'extremespeed');
+					role = 'Fast Attacker';
+					this.boost({spa: 2, spe: 4});
+					break;
+				case 1:
+					newMoves.push('coil', 'bodyslam', 'healorder');
+					role = 'Bulky Setup';
+					this.boost({atk: 1, def: 1, spd: 2});
+					break;
+				case 2:
+					const varMoves = ['Ceaseless Edge', 'Stone Axe', 'Mortal Spin', 'G-Max Steelsurge'];
+					const move1 = this.sample(varMoves);
+					const move2 = this.sample(varMoves.filter(i => i !== move1));
+					newMoves.push('healorder', move1, move2);
+					role = 'Bulky Support';
+					this.boost({def: 2, spd: 2});
+					break;
+				case 3:
+					newMoves.push('bloodmoon', 'bloodmoon', 'bloodmoon');
+					role = 'Wallbreaker';
+					this.boost({spa: 6});
+					break;
+					// removing moveslots becomes very messy so this was the next best thing
+				}
+				this.add('-message', `Cake takes up the role of ${role}!`);
+				for (let i = 0; i < 3; i++) {
+					const replacement = this.dex.moves.get(newMoves[i]);
+					const replacementMove = {
+						move: replacement.name,
+						id: replacement.id,
+						pp: replacement.pp,
+						maxpp: replacement.pp,
+						target: replacement.target,
+						disabled: false,
+						used: false,
+					};
+					source.moveSlots[i] = replacementMove;
+					source.baseMoveSlots[i] = replacementMove;
+				}
+			}
 		},
 		secondary: null,
-		target: "normal",
-		type: "Bird",
+		target: "self",
+		type: "Normal",
+		// bird type crashes during testing (runStatusImmunity for Bird at sim\pokemon.ts:2101:10). no-go.
 	},
 
 	// chaos

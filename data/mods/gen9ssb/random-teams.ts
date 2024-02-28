@@ -169,17 +169,16 @@ export const ssbSets: SSBSets = {
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Water', shiny: true,
 	},
 	Cake: {
-		species: 'Dudunsparce-Three-Segment', ability: 'Not Enough Removal', item: 'Leftovers', gender: 'N',
+		species: 'Dunsparce', ability: 'Scrappy', item: 'Eviolite', gender: 'N',
 		moves: [
-			['Silk Trap', 'Obstruct', 'Max Guard', 'Spiky Shield', 'King\'s Shield', 'Protect', 'Detect', 'Baneful Bunker'],
-			['Rapid Spin', 'Mortal Spin'],
-			[
-				'Rest', 'Lunar Blessing', 'Healing Wish', 'Aromatherapy',
-				'Heal Bell', 'Copycat', 'Grass Whistle', 'Tearful Look', 'Transform',
-			],
+			'Topsy-Turvy', 'Lunar Blessing', 'Lovely Kiss', 'Glare', 'Knock Off', 'Gastro Acid',
+			'Trick Room', 'Toxic', 'Heal Bell', 'Octolock', 'G-Max Befuddle', 'G-Max Centiferno',
+			'G-Max Cannonade', 'Magic Powder', 'Whirlwind', 'Lunar Dance', 'Power Split',
+			'Snatch', 'Heal Order', 'Parting Shot', 'Population Bomb', 'Metronome',
 		],
-		signatureMove: 'Shawn',
-		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Ghost', shiny: 957,
+		signatureMove: 'Role System',
+		// eslint-disable-next-line max-len
+		evs: {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85}, nature: 'Hardy', teraType: ['Ghost', 'Poison', 'Fairy'], shiny: 1024, level: 97,
 	},
 	chaos: {
 		species: 'Iron Jugulis', ability: 'Transistor', item: 'Heavy-Duty Boots', gender: 'N',
