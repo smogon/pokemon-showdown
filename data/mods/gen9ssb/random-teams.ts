@@ -692,6 +692,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rising Sword',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Psychic',
 	},
+	Tenshi: {
+		species: 'Sandshrew', ability: 'Sand Sleuth', item: 'Eviolite', gender: 'M',
+		moves: ['Precipice Blades', 'Dynamic Punch', 'Rapid Spin'],
+		signatureMove: 'SAND EAT',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Ground', shiny: 10,
+	},
 	Theia: {
 		species: 'Litwick', ability: 'Power Abuse', item: 'Eviolite', gender: 'F',
 		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],

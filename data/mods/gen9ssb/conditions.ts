@@ -1658,6 +1658,61 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Teclis')}|This was my last dance.`);
 		},
 	},
+	tenshi: {
+		noCopy: true,
+		onStart(pokemon) {
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'blitz':
+				this.add(`c:|${getName('Tenshi')}|le fishe`);
+				break;
+			case 'ut':
+			case 'clouds':
+				this.add(`c:|${getName('Tenshi')}|birbs cannot save u from SAND`);
+				break;
+			default:
+				this.add(`c:|${getName('Tenshi')}|he SLEUTHING`);
+			}
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c:|${getName('Tenshi')}|omg no SAND save him! :(`);
+			const replacementIndex = Math.max(
+				pokemon.moves.indexOf('pyroball'),
+				pokemon.moves.indexOf('aquatail'),
+				pokemon.moves.indexOf('tripleaxel'),
+				pokemon.moves.indexOf('stoneedge')
+			);
+			if (replacementIndex < 0) {
+				return;
+			}
+			const replacement = this.dex.moves.get('dynamicpunch');
+			const replacementMove = {
+				move: replacement.name,
+				id: replacement.id,
+				pp: replacement.pp,
+				maxpp: replacement.pp,
+				target: replacement.target,
+				disabled: false,
+				used: false,
+			};
+			pokemon.moveSlots[replacementIndex] = replacementMove;
+			pokemon.baseMoveSlots[replacementIndex] = replacementMove;
+		},
+		onFaint(pokemon) {
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'blitz':
+				this.add(`c:|${getName('Tenshi')}|YOU KILLED YOUR SON`);
+				break;
+			case 'ut':
+				this.add(`c:|${getName('Tenshi')}|worryrex`);
+				break;
+			case 'clouds':
+				this.add(`c:|${getName('Tenshi')}|SAND is no longer in the air tonight :(`);
+				break;
+			default:
+				this.add(`c:|${getName('Tenshi')}|Wait no that's illegal`);
+			}
+		},
+	},
 	tico: {
 		noCopy: true,
 		onStart(pokemon) {

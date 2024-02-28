@@ -424,6 +424,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Stinky"},
 	},
 
+	// Tenshi
+	sandshrew: {
+		inherit: true,
+		baseStats: {hp: 50, atk: 115, def: 130, spa: 50, spd: 65, spe: 98},
+		abilities: {0: "Sand Sleuth"},
+	},
+
 	// Theia
 	litwick: {
 		inherit: true,

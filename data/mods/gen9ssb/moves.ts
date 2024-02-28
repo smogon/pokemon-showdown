@@ -3841,6 +3841,65 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Tenshi
+	sandeat: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Protects user, changes type and gains a new move.",
+		name: "SAND EAT",
+		pp: 10,
+		priority: 4,
+		flags: {noassist: 1},
+		stallingMove: true,
+		volatileStatus: 'protect',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+			const types = ['Fire', 'Water', 'Ice', 'Rock'];
+			const moves = ['pyroball', 'aquatail', 'tripleaxel', 'stoneedge'];
+			const newType = this.sample(types.filter(i => !pokemon.hasType(i)));
+			const newMove = moves[types.indexOf(newType)];
+			const replacementIndex = Math.max(
+				pokemon.moves.indexOf('dynamicpunch'),
+				pokemon.moves.indexOf('pyroball'),
+				pokemon.moves.indexOf('aquatail'),
+				pokemon.moves.indexOf('tripleaxel'),
+				pokemon.moves.indexOf('stoneedge')
+			);
+			if (replacementIndex < 0) {
+				return;
+			}
+			const replacement = this.dex.moves.get(newMove);
+			const replacementMove = {
+				move: replacement.name,
+				id: replacement.id,
+				pp: replacement.pp,
+				maxpp: replacement.pp,
+				target: replacement.target,
+				disabled: false,
+				used: false,
+			};
+			pokemon.moveSlots[replacementIndex] = replacementMove;
+			pokemon.baseMoveSlots[replacementIndex] = replacementMove;
+			pokemon.addType(newType);
+			this.add('-start', pokemon, 'typeadd', newType, '[from] move: SAND EAT');
+			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|omg look HE EAT`);
+		},
+		onPrepareHit(pokemon, source) {
+			this.add('-anim', source, 'Dig', pokemon);
+			this.add('-anim', source, 'Odor Sleuth', pokemon);
+			this.add('-anim', source, 'Stuff Cheeks', pokemon);
+			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|he do be searching for rocks tho`);
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		secondary: null,
+		target: "self",
+		type: "Ground",
+	},
+
 	// Theia
 	bodycount: {
 		accuracy: 100,
