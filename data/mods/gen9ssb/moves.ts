@@ -3467,6 +3467,42 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// RSB
+	confiscate: {
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		name: "Confiscate",
+		shortDesc: "First turn only. Steals boosts and screens.",
+		pp: 5,
+		priority: 2,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTry(source) {
+			if (source.activeMoveActions > 1) {
+				this.hint("Confiscate only works on your first turn out.");
+				return false;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Crunch', target);
+			this.add('-anim', source, 'Thief', target);
+		},
+		onTryHit(target, source) {
+			this.add(`c:|${getName((source.illusion || source).name)}|Contraband detected, confiscating.`);
+			for (const condition of ['reflect', 'lightscreen', 'auroraveil']) {
+				if (target.side.removeSideCondition(condition)) {
+					source.side.addSideCondition(condition);
+				}
+			}
+		},
+		stealsBoosts: true,
+		target: "normal",
+		type: "Dark",
+	},
+
 	// Rumia
 	midnightbird: {
 		accuracy: 100,

@@ -372,6 +372,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: 'Fancy Scarf'},
 	},
 
+	// RSB
+	growlithe: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 86, def: 60, spa: 86, spd: 66, spe: 76},
+	},
+
 	// Rumia
 	duskull: {
 		inherit: true,

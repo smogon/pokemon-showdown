@@ -1500,6 +1500,35 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('ReturnToMonkey')}|Reject the humanity...if you dare...`);
 		},
 	},
+	rsb: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('RSB')}|Time to take a bite out of crime!`);
+			const dog = (this.toID(enemyStaff(pokemon)));
+			if (dog === 'rsb' || dog === 'shiloh' || dog === 'valerian' || dog === 'corjon' || dog === 'yuki') {
+				this.add(`c:|${getName('RSB')}|DOGGO!`);
+			}
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('RSB')}|Requesting backup!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('RSB')}|Officer down.`);
+		},
+		onTryHit(target, source, move) {
+			if (!target.illusion && target !== source && move.type === 'Fire') {
+				move.accuracy = true;
+				if (!target.addVolatile('flashfire')) {
+					this.add('-immune', target, '[from] ability: Flash Fire');
+				}
+				return null;
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('flashfire');
+		},
+		innateName: "Flash Fire",
+	},
 	rumia: {
 		noCopy: true,
 		onStart(pokemon) {

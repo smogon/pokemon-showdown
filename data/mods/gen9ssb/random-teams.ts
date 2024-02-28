@@ -620,6 +620,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Monke Magic',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {spe: 0}, nature: 'Quiet', teraType: 'Fighting',
 	},
+	RSB: {
+		species: 'Growlithe', ability: 'Hot Pursuit', item: 'Eviolite', gender: 'M',
+		moves: ['Fire Fang', 'Thunder Fang', 'Morning Sun'],
+		signatureMove: 'Confiscate',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Grass',
+	},
 	Rumia: {
 		species: 'Duskull', ability: 'Youkai of the Dusk', item: 'Eviolite', gender: 'F',
 		moves: ['Infernal Parade', 'Strength Sap', 'Mortal Spin'],
