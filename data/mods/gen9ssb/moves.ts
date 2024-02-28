@@ -4150,6 +4150,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
+	// za
+	shitpost: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Shitpost",
+		shortDesc: "Confuses and paralyzes the foe.",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1},
+		volatileStatus: 'confusion',
+		status: 'par',
+		ignoreImmunity: false,
+		onTryMove(pokemon, target, move) {
+			this.attrLastMove('[still]');
+			if (this.randomChance(1, 256)) {
+				this.add('-fail', pokemon);
+				return false;
+			}
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Hex", target);
+		},
+		onMoveFail() {
+			this.add('-message', '(In Gen 1, moves with 100% accuracy have a 1/256 chance to miss.)');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Zarel
 	tsignore: {
 		accuracy: 100,

@@ -2042,6 +2042,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// za
+	troll: {
+		shortDesc: "Using moves that can flinch makes user move first in their priority bracket.",
+		name: "Troll",
+		onModifyPriority(relayVar, source, target, move) {
+			if (!move) return;
+			if (move.secondary?.volatileStatus === 'flinch') {
+				return relayVar + 0.5;
+			}
+		},
+	},
+
 	// Zarel
 	tempochange: {
 		shortDesc: "Switches Meloetta's forme between Aria and Pirouette at the end of each turn.",

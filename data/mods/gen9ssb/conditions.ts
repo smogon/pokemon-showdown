@@ -1860,6 +1860,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('YveltalNL')}|whatever i'll go watch football`);
 		},
 	},
+	za: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('za')}|Benvenuto`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('za')}|mish`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('za')}|!track Between the Buried and Me - Sun Of Nothing - 2020 Remix / Remaster`);
+		},
+	},
 	zalm: {
 		noCopy: true,
 		onStart() {

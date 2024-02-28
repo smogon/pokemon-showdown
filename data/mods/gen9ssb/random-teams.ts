@@ -764,6 +764,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'High Ground',
 		evs: {hp: 248, spa: 252, spe: 8}, nature: 'Modest', teraType: 'Ground',
 	},
+	za: {
+		species: 'Greedent', ability: 'Troll', item: 'Leftovers', gender: 'M',
+		moves: ['Headbutt', 'Iron Head', 'Foul Play'],
+		signatureMove: 'Shitpost',
+		evs: {hp: 252, def: 252, spe: 6}, nature: 'Impish', teraType: 'Steel',
+	},
 	Zalm: {
 		species: 'Weedle', ability: 'Water Bubble', item: 'Clear Amulet', gender: '',
 		moves: ['Surging Strikes', 'Attack Order', 'Dire Claw'],
