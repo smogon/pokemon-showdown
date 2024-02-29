@@ -365,7 +365,7 @@ export const ssbSets: SSBSets = {
 		species: 'Falinks', ability: 'Simple', item: 'Sitrus Berry', gender: 'N',
 		moves: ['Superpower', 'Ice Hammer', 'Poison Jab'],
 		signatureMove: 'Hasty Revolution',
-		evs: {atk: 4, def: 252, spe: 252}, nature: 'Jollu', teraType: 'Poison',
+		evs: {atk: 4, def: 252, spe: 252}, nature: 'Jolly', teraType: 'Poison',
 	},
 	havi: {
 		species: 'Gastly', ability: 'Mensis Cage', item: 'Leftovers', gender: 'F',

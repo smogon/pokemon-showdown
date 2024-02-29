@@ -439,7 +439,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Klmondo
 	cloyster: {
 		inherit: true,
-		abilities: {0: "Super SKilled"},
+		abilities: {0: "Super Skilled"},
 	},
 
 	// Krytocon

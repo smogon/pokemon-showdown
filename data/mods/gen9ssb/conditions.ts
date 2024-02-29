@@ -150,8 +150,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	aqrator: {
 		noCopy: true,
-		onStart() {
+		onStart(pokemon) {
 			this.add(`c:|${getName('aQrator')}|Let me tell you my sTori.`);
+			if (this.toID(enemyStaff(pokemon)) === 'warriorgallade') {
+				this.add(`c:|${getName('aQrator')}|Hey Zeiol, how's your brother?`);
+			}
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('aQrator')}|A few Water Guns and Force Palms later, Tori and Riolu- Wait where are you going?`);
@@ -2085,10 +2088,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		noCopy: true,
 		onStart(pokemon) {
 			this.add(`c:|${getName('WarriorGallade')}|i wanted to proc berries, but it seems that i was better at proc rastinating instead. nom nom nom.`);
+			if (this.toID(enemyStaff(pokemon)) === 'aqrator') {
+				this.add(`c:|${getName('WarriorGallade')}|Hi Tori, how goes your conquest?`);
+			}
 			// innate
 			if (pokemon.illusion) return;
 			pokemon.abilityState.gluttony = true;
-			this.add('-activate', pokemon, 'ability: TBA');
+			this.add('-activate', pokemon, 'ability: Nutrient Boost');
 			this.boost({def: 1, spd: 1}, pokemon);
 		},
 		onSwitchOut() {
@@ -2100,7 +2106,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onSourceAfterFaint() {
 			this.add(`c:|${getName('WarriorGallade')}|Triumphant through trouncing tough, tenacious threats today, though testing 212 takeovers tarry. Theorizing these techniques tends to torrid, terribly tiresome tabulations, therefore torrential tactics traverse thorough thoughts.`);
 		},
-		innateName: "TBA",
+		innateName: "Nutrient Boost",
 		shortDesc: "Gluttony + Thick Fat + Neuroforce + +1 Def/Sp. Def boost.",
 		onDamage(item, pokemon) {
 			if (pokemon.illusion) return;

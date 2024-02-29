@@ -4687,7 +4687,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.add('-prepare', attacker, move.name);
 			this.attrLastMove('[anim] Tailwind');
-			this.add('-message', `${attacker.name} whipped up an intense whirlwind and began to glow a vivid green!`);
+			this.add('-message', `${attacker.name} whipped up an intense whirlwind and began to glow a vivine green!`);
 			if (attacker.getItem().isBerry) {
 				attacker.eatItem(true);
 				this.heal(attacker.maxhp / 4, attacker);

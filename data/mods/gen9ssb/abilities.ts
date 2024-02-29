@@ -413,8 +413,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				"No fun allowed",
 			];
 			this.add(`c:|${getName((target.illusion || target).name)}|${this.sample(abilMessages)}`);
-			this.add(`c:|${getName((target.illusion || target).name)}|snt are ${target.foes()[0].name} n ${(target.illusion || target).name} plus ${target.foes()[0].name}`);
-
 			for (const foe of target.foes()) {
 				if (foe && !foe.volatiles['torment']) {
 					foe.addVolatile('torment');
