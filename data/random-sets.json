@@ -3785,7 +3785,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Aura Sphere", "Calm Mind", "Flash Cannon", "Focus Blast", "Vacuum Wave"],
-                "teraTypes": ["Fighting"]
+                "teraTypes": ["Ghost", "Fighting", "Water"]
             },
             {
                 "role": "Bulky Support",
