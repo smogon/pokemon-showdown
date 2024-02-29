@@ -4647,7 +4647,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// TODO: Client support for removing tera without fainting
 			if (pokemon?.terastallized) {
 				this.add(`c:|${getName((source.illusion || source).name)}|lol never do that ever again thanks`);
-				this.add('custom', '-endterastallize', pokemon);
+				this.add('-custom', '-endterastallize', pokemon);
 				delete pokemon.terastallized;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
