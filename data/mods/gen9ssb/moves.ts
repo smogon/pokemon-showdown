@@ -933,7 +933,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				case 0:
 					newMoves.push('hyperdrill', 'combattorque', 'extremespeed');
 					role = 'Fast Attacker';
-					this.boost({spa: 2, spe: 4});
+					this.boost({atk: 2, spe: 4});
 					break;
 				case 1:
 					newMoves.push('coil', 'bodyslam', 'healorder');
