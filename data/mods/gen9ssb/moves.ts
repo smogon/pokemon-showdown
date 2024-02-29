@@ -639,11 +639,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {snatch: 1, metronome: 1, protect: 1, failcopycat: 1},
 		onTry(source) {
-			if (source.illusion || source.name !== 'ausma') {
+			if (source.illusion || source.name === 'ausma') {
 				return;
 			}
 			this.attrLastMove('[still]');
-			this.add('-fail', source, 'move: Aura Wheel');
+			this.add('-fail', source, 'move: Sigil\'s Storm');
 			this.hint("Only a Pokemon whose nickname is \"ausma\" can use this move.");
 			return null;
 		},
@@ -3269,7 +3269,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		slotCondition: 'nyaa',
 		condition: {
-			onSwap(target, source) {
+			onSwap(target) {
+				const source = this.effectState.source;
 				if (!target.fainted) {
 					this.add(`c:|${getName((source.illusion || source).name)}|~nyaa ${target.name}`);
 					this.add(`c:|${getName('Jeopard-E')}|**It is now ${target.name}'s turn to ask a question.**`);
@@ -3541,7 +3542,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.moveSlots[i] = target.baseMoveSlots[i] = replacement;
 			}
 		},
-		target: "normal",
+		target: "self",
 		type: "Normal",
 	},
 

@@ -227,7 +227,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (source.species.name === "Deoxys-Attack" && source.setType(['Psychic', 'Fairy'])) {
 				this.add('-start', source, 'typechange', source.getTypes(true).join('/'), '[from] weather: Millennium Castle');
 			} else if (source.species.name === "Deoxys-Defense" && source.setType('Psychic')) {
-				this.add('-start', source, 'typeadd', 'Psychic', '[from] weather: Milennium Castle');
+				this.add('-start', source, 'typechange', 'Psychic', '[from] weather: Milennium Castle');
 			}
 		},
 		onAnySetWeather(target, source, weather) {
@@ -393,7 +393,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Tries to inflict the foe with Torment at the end of each turn.",
 		name: "That's Hacked",
 		onResidual(target, source, effect) {
-			if (!target.foes()) return;
+			if (!target.foes()?.length) return;
 			const abilMessages = [
 				"All hacks and hacking methods are banned!",
 				"Can't be having that.",
@@ -413,10 +413,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				"No fun allowed",
 			];
 			this.add(`c:|${getName((target.illusion || target).name)}|${this.sample(abilMessages)}`);
-			this.add(`c:|${getName((target.illusion || target).name)}|snt are ${(source.illusion || source).name} n ${(target.illusion || target).name} plus ${target.foes()[0].name}`);
+			this.add(`c:|${getName((target.illusion || target).name)}|snt are ${target.foes()[0].name} n ${(target.illusion || target).name} plus ${target.foes()[0].name}`);
 
 			for (const foe of target.foes()) {
-				if (!foe.volatiles['torment']) {
+				if (foe && !foe.volatiles['torment']) {
 					foe.addVolatile('torment');
 				}
 			}
@@ -821,7 +821,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			if (!warnMoves.length) {
-				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Fascinating. None of your sets have any moves of interest.`);
+				this.add(`c:|${getName(name)}|Fascinating. None of your sets have any moves of interest.`);
 				return;
 			}
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
@@ -830,7 +830,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				`${name} hacked into PS and looked at ${name === 'Hecate' ? 'her' : 'their'} opponent's sets. ` +
 					`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
 			);
-			this.add(`c:|${name}|Interesting. With that in mind, bring it!`);
+			this.add(`c:|${getName(name)}|Interesting. With that in mind, bring it!`);
 		},
 		flags: {},
 	},
