@@ -234,6 +234,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Giveaway!',
 		evs: {hp: 252, def: 200, spd: 56}, nature: 'Calm', teraType: 'Any', shiny: true,
 	},
+	Clementine: {
+		species: 'Avalugg', ability: 'Melting Point', item: 'Heavy-Duty Boots', gender: '',
+		moves: ['Land\'s Wrath', 'Flip Turn', 'Milk Drink'],
+		signatureMove: '(╯°o°）╯︵ ┻━┻',
+		nature: 'Quirky', teraType: ['Poison', 'Steel'],
+	},
+	'Clementine-Flipped': {
+		species: 'Avalugg-Hisui', ability: 'Melting Point', item: 'Heavy-Duty Boots', gender: '',
+		moves: ['Earth Power', 'Volt Switch', 'Heal Pulse'],
+		signatureMove: '(╯°o°）╯︵ ┻━┻',
+		nature: 'Quirky', teraType: ['Poison', 'Steel'], skip: 'Clementine',
+	},
 	clerica: {
 		species: 'Mimikyu', ability: 'Masquerade', item: 'Ghostium Z', gender: 'F',
 		moves: ['Protect', 'Substitute', 'Phantom Force'],
@@ -313,6 +325,12 @@ export const ssbSets: SSBSets = {
 		// eslint-disable-next-line max-len
 		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant', teraType: ['Fire', 'Water', 'Fighting', 'Electric'], shiny: 50 / 49,
 	},
+	eva: {
+		species: 'Ceruledge', ability: 'Sword of Ruin', item: 'Life Orb', gender: 'N',
+		moves: ['Poltergeist', 'Swords Dance', 'Bitter Blade'],
+		signatureMove: 'A Soul for a Soul',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Fire',
+	},
 	Fame: {
 		species: 'Jumpluff', ability: 'Social Jumpluff Warrior', item: 'Leftovers', gender: 'F',
 		moves: ['Air Slash', 'Thunder Wave', 'Toxic'],
@@ -354,6 +372,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Astral Barrage', 'Moonblast', 'Substitute'],
 		signatureMove: 'Augur of Ebrietas',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ghost',
+	},
+	Hecate: {
+		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
+		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
+		signatureMove: 'Testing in Production',
+		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
 	},
 	HiZo: {
 		species: 'Zoroark-Hisui', ability: 'Martyr Complex', item: 'Heavy-Duty Boots', gender: 'M',
@@ -464,7 +488,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', teraType: 'Water',
 	},
 	Krytocon: {
-		species: 'Mawile', ability: 'Curse of Dexit', item: 'Mawilite', gender: 'M',
+		species: 'Mawile', ability: 'Flash Freeze', item: 'Mawilite', gender: 'M',
 		moves: ['Sucker Punch', 'Fire Lash', 'Play Rough'],
 		signatureMove: 'Attack of Opportunity',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', shiny: 1024,
@@ -540,12 +564,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Dragon Pulse', 'Flash Cannon', ['Aura Sphere', 'Volt Switch', 'Meteor Beam']],
 		signatureMove: 'Time Skip',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Steel', shiny: true,
-	},
-	Mia: {
-		species: 'Mewtwo', ability: 'Hacking', item: 'Mewtwonite X', gender: 'F',
-		moves: ['Photon Geyser', 'Drain Punch', 'Iron Head'],
-		signatureMove: 'Testing in Production',
-		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
 	},
 	Monkey: {
 		species: 'Infernape', ability: 'Harambe Hit', item: 'Blunder Policy', gender: 'M',

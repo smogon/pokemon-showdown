@@ -167,6 +167,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "That's Hacked"},
 	},
 
+	// Clementine
+	avalugg: {
+		inherit: true,
+		abilities: {0: "Melting Point"},
+	},
+	avalugghisui: {
+		inherit: true,
+		types: ["Ice"],
+		baseStats: {hp: 95, atk: 46, def: 44, spa: 184, spd: 117, spe: 95},
+		abilities: {0: "Melting Point"},
+	},
+
 	// clerica
 	mimikyu: {
 		inherit: true,
@@ -250,6 +262,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Hogwash"},
 	},
 
+	// eva
+	ceruledge: {
+		inherit: true,
+		abilities: {0: "Sword of Ruin"},
+	},
+
 	// Fame
 	jumpluff: {
 		inherit: true,
@@ -293,6 +311,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110},
 		abilities: {0: "Mensis Cage"},
+	},
+
+	// Hecate
+	mewtwo: {
+		inherit: true,
+		abilities: {0: "Hacking"},
+	},
+	mewtwomegax: {
+		inherit: true,
+		abilities: {0: "Hacking"},
 	},
 
 	// HiZo
@@ -417,7 +445,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Krytocon
 	mawile: {
 		inherit: true,
-		abilities: {0: "Curse of Dexit"},
+		abilities: {0: "Flash Freeze"},
 	},
 
 	// Lasen
@@ -503,16 +531,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	dialga: {
 		inherit: true,
 		abilities: {0: "Time Dilation"},
-	},
-
-	// Mia
-	mewtwo: {
-		inherit: true,
-		abilities: {0: "Hacking"},
-	},
-	mewtwomegax: {
-		inherit: true,
-		abilities: {0: "Hacking"},
 	},
 
 	// Monkey

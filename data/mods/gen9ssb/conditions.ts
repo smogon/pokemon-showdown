@@ -497,6 +497,29 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Clefable')}|Can't believe they don't let me in Paldea`);
 		},
 	},
+	clementine: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Clementine')}|Je suis peut-être con comme une table`);
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.volatiles['flipped']) {
+				pokemon.removeVolatile('flipped');
+				changeSet(this, pokemon, ssbSets['Clementine']);
+				this.add(`c:|${getName('Clementine')}|┬──┬◡ﾉ(° -°ﾉ)`);
+			} else {
+				this.add(`c:|${getName('Clementine')}|I fucking love air-conditioning.`);
+			}
+		},
+		onFoeSwitchIn(pokemon) {
+			if ((pokemon.illusion || pokemon).name === 'Kennedy') {
+				this.add(`c:|${getName('Clementine')}|yikes`);
+			}
+		},
+		onFaint() {
+			this.add(`c:|${getName('Clementine')}|ofc`);
+		},
+	},
 	clerica: {
 		noCopy: true,
 		onStart() {
@@ -625,8 +648,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onSwitchOut() {
 			this.add(`c:|${getName('Emboar02')}|This is boaring...`);
 		},
-		onFaint(pokemon) {
+		onFaint() {
 			this.add(`c:|${getName('Emboar02')}|Too much recoil D:`);
+		},
+	},
+	eva: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('eva')}|You kept me like a secret but I kept you like an oath`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('eva')}|They don't think it be like it is, but it do`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('eva')}|Aight Imma head out`);
 		},
 	},
 	fame: {
@@ -762,6 +797,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('havi')}|the nightmare swirls and churns unending n_n`);
+		},
+	},
+	hecate: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Hecate')}|git pull ps hecate`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Hecate')}|git switch`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Hecate')}|git checkout --detach HEAD && git commit -m "war crimes"`);
 		},
 	},
 	hizo: {
@@ -969,9 +1016,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (source && source.name === 'Clementine') {
 				if (source.volatiles['flipped']) {
 					source.removeVolatile('flipped');
+					changeSet(this, source, ssbSets['Clementine']);
 					this.add(`c:|${getName('Kennedy')}|┬──┬◡ﾉ(° -°ﾉ)`);
 				} else {
 					source.addVolatile('flipped', target, this.effect);
+					changeSet(this, source, ssbSets['Clementine-Flipped']);
 					this.add(`c:|${getName('Kennedy')}|(╯°o°）╯︵ ┻━┻`);
 				}
 			}
@@ -1089,7 +1138,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Krytocon')}|PartMan is a nerd`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('Krytocon')}|D:`);
+			this.add(`c:|${getName('Krytocon')}|Guys whatever you do don't say Farigiraf backwards`);
 		},
 	},
 	lasen: {
@@ -1257,18 +1306,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Mex')}|pain.`);
-		},
-	},
-	mia: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Mia')}|git pull ps mia`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Mia')}|git switch`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Mia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
 		},
 	},
 	monkey: {
@@ -2224,6 +2261,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
+		},
+	},
+
+	// Clementine
+	flipped: {
+		name: 'Flipped',
+		onStart(target) {
+			this.add('-start', target, 'flipped');
+		},
+		onEnd(target) {
+			this.add('-end', target, 'flipped');
 		},
 	},
 

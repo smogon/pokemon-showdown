@@ -424,6 +424,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Clementine
+	meltingpoint: {
+		shortDesc: "First Fire move to hit changes user to Water type. +2 Speed.",
+		name: "Melting Point",
+		onTryPrimaryHit(target, source, move) {
+			if (move.type === 'Fire') {
+				if (!target.setType('Water')) return;
+				this.add('-start', source, 'typechange', 'Water', '[from] ability: Melting Point');
+				this.boost({spe: 2}, target, source, this.dex.abilities.get('meltingpoint'));
+			}
+		},
+	},
+
 	// clerica
 	masquerade: {
 		shortDesc: "(Mimikyu only) The first hit is blocked: instead, takes 1/8 damage and gets +1 Atk/Spe.",
@@ -774,6 +787,55 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Hecate
+	hacking: {
+		name: "Hacking",
+		shortDesc: "Hacks into PS and finds out if the enemy has any super effective moves.",
+		onStart(pokemon) {
+			const name = (pokemon.illusion || pokemon).name;
+			this.add(`c:|${getName(name)}|One moment, please. One does not simply go into battle blind.`);
+			const side = pokemon.side.id === 'p1' ? 'p2' : 'p1';
+			this.add(
+				`message`,
+				(
+					`ssh sim@pokemonshowdown.com && nc -U logs/repl/sim <<< ` +
+					`"Users.get('${this.toID(name)}').popup(battle.sides.get('${side}').pokemon.map(m => Teams.exportSet(m)))"`
+				)
+			);
+			let warnMoves: (Move | Pokemon)[][] = [];
+			let warnBp = 1;
+			for (const target of pokemon.foes()) {
+				for (const moveSlot of target.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.move);
+					let bp = move.basePower;
+					if (move.ohko) bp = 150;
+					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
+					if (bp === 1) bp = 80;
+					if (!bp && move.category !== 'Status') bp = 80;
+					if (bp > warnBp) {
+						warnMoves = [[move, target]];
+						warnBp = bp;
+					} else if (bp === warnBp) {
+						warnMoves.push([move, target]);
+					}
+				}
+			}
+			if (!warnMoves.length) {
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Fascinating. None of your sets have any moves of interest.`);
+				return;
+			}
+			const [warnMoveName, warnTarget] = this.sample(warnMoves);
+			this.add(
+				'message',
+				`${name} hacked into PS and looked at ${name === 'Hecate' ? 'her' : 'their'} opponent's sets. ` +
+					`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
+			);
+			this.add(`c:|${name}|Interesting. With that in mind, bring it!`);
+		},
+		flags: {},
+	},
+
+
 	// HiZo
 	martyrcomplex: {
 		desc: "If this Pokemon is knocked out, next Pokemon gets +1 Speed and +1 Attack/Special Attack, whichever is higher.",
@@ -1082,21 +1144,37 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Krytocon
-	curseofdexit: {
-		name: "Curse of Dexit",
-		shortDesc: "User sets Curse against foe on entry; 25% of max HP lost.",
-		onStart(pokemon) {
-			let activated = false;
-			for (const target of pokemon.adjacentFoes()) {
-				if (!activated) {
-					this.add('-ability', pokemon, 'Curse of Dexit');
-					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
-					activated = true;
-				}
-				target.addVolatile('curse', pokemon);
+	flashfreeze: {
+		name: "Flash Freeze",
+		shortDesc: "Heatproof + moves coming off of boosted attacking stat do 75% dmg.",
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Heatproof Atk weaken');
+				return this.chainModify(0.5);
 			}
 		},
-		flags: {},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Heatproof SpA weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.id === 'brn') {
+				return damage / 2;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (
+				(move.category === 'Special' && source.boosts['spa'] > 0) ||
+				(move.category === 'Physical' && source.boosts['atk'] > 0)
+			) {
+				return this.chainModify(0.75);
+			}
+		},
+		flags: {breakable: 1},
 	},
 
 	// Lasen
@@ -1313,53 +1391,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			let bpMod = 1 + (0.1 * turnMultiplier);
 			if (bpMod > 2) bpMod = 2;
 			return this.chainModify(bpMod);
-		},
-		flags: {},
-	},
-
-	// Mia
-	hacking: {
-		name: "Hacking",
-		shortDesc: "Hacks into PS and finds out if the enemy has any super effective moves.",
-		onStart(pokemon) {
-			this.add(`c:|${getName('Mia')}|One moment, please. One does not simply go into battle blind.`);
-			const side = pokemon.side.id === 'p1' ? 'p2' : 'p1';
-			this.add(
-				`message`,
-				(
-					`ssh sim@pokemonshowdown.com && nc -U logs/repl/sim <<< ` +
-					`"Users.get('mia').popup(battle.sides.get('${side}').pokemon.map(m => Teams.exportSet(m)))"`
-				)
-			);
-			let warnMoves: (Move | Pokemon)[][] = [];
-			let warnBp = 1;
-			for (const target of pokemon.foes()) {
-				for (const moveSlot of target.moveSlots) {
-					const move = this.dex.moves.get(moveSlot.move);
-					let bp = move.basePower;
-					if (move.ohko) bp = 150;
-					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
-					if (bp === 1) bp = 80;
-					if (!bp && move.category !== 'Status') bp = 80;
-					if (bp > warnBp) {
-						warnMoves = [[move, target]];
-						warnBp = bp;
-					} else if (bp === warnBp) {
-						warnMoves.push([move, target]);
-					}
-				}
-			}
-			if (!warnMoves.length) {
-				this.add(`c:|${getName('Mia')}|Fascinating. None of your sets have any moves of interest.`);
-				return;
-			}
-			const [warnMoveName, warnTarget] = this.sample(warnMoves);
-			this.add(
-				'message',
-				`Mia hacked into PS and looked at her opponent's sets. ` +
-					`${warnTarget.name}'s move ${warnMoveName} drew her eye.`
-			);
-			this.add(`c:|${getName('Mia')}|Interesting. With that in mind, bring it!`);
 		},
 		flags: {},
 	},

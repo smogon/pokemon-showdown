@@ -1130,6 +1130,50 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Clementine
+	o: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		shortDesc: "Phys if Atk > SpA. Flips user.",
+		name: "(╯°o°）╯︵ ┻━┻",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, failcopycat: 1},
+		noSketch: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Malicious Moonsault', target);
+			this.add('-anim', source, 'Blizzard', target);
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		onModifyType(move, pokemon) {
+			let type = pokemon.getTypes()[0];
+			if (type === "Bird") type = "???";
+			if (type === "Stellar") type = pokemon.getTypes(false, true)[0];
+			move.type = type;
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (target?.name === 'Kennedy') return 1;
+		},
+		onHit(target, source, move) {
+			if (source.illusion || source.baseSpecies.name !== 'Avalugg') return;
+			if (source.volatiles['flipped']) {
+				source.removeVolatile('flipped');
+				changeSet(this, source, ssbSets['Clementine']);
+			} else {
+				source.addVolatile('flipped', source, move);
+				changeSet(this, source, ssbSets['Clementine-Flipped']);
+			}
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// clerica
 	stockholmsyndrome: {
 		accuracy: true,
@@ -1566,6 +1610,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fighting",
 	},
 
+	// eva
+	asoulforasoul: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Physical",
+		shortDesc: "KOes foe + user if ally was KOed prev. turn.",
+		name: "A Soul for a Soul",
+		pp: 5,
+		priority: 1,
+		flags: {protect: 1, contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Explosion', target);
+			this.add('-anim', source, 'Final Gambit', target);
+		},
+		onTry(source, target) {
+			if (!source.side.faintedLastTurn) return false;
+			source.faint(source);
+			target?.faint(source);
+		},
+		ignoreImmunity: true,
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Fame
 	solidarity: {
 		accuracy: 100,
@@ -1779,6 +1851,84 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		volatileStatus: 'disable',
 		target: "normal",
 		type: "Ghost",
+	},
+
+	// Hecate
+	testinginproduction: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "A description has not been added yet",
+		name: "Testing in Production",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Curse');
+		},
+		onHit(pokemon) {
+			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Please don't break...`);
+			let stats: BoostID[] = [];
+			const boost: SparseBoostsTable = {};
+			let statPlus: BoostID;
+			for (statPlus in pokemon.boosts) {
+				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+				if (pokemon.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) boost[randomStat] = 2;
+
+			stats = [];
+			let statMinus: BoostID;
+			for (statMinus in pokemon.boosts) {
+				if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
+				if (pokemon.boosts[statMinus] > -6) {
+					stats.push(statMinus);
+				}
+			}
+			randomStat = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) {
+				if (boost[randomStat]) {
+					boost[randomStat] = 0;
+					this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Well. Guess that broke. Time to roll back.`);
+					return;
+				} else {
+					boost[randomStat] = -2;
+				}
+			}
+
+			this.boost(boost, pokemon, pokemon);
+		},
+		onAfterMove(pokemon) {
+			if (this.randomChance(1, 10)) {
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ouch! That crash is really getting on my nerves...`);
+				this.damage(pokemon.baseMaxhp / 10);
+				if (pokemon.hp <= 0) return;
+			}
+
+			if (this.randomChance(1, 20)) {
+				const status = this.sample(['frz', 'brn', 'psn', 'par']);
+				let statusText = status;
+				if (status === 'frz') {
+					statusText = 'froze';
+				} else if (status === 'brn') {
+					statusText = 'burned';
+				} else if (status === 'par') {
+					statusText = 'paralyzed';
+				} else if (status === 'psn') {
+					statusText = 'poisoned';
+				}
+
+				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Darn. A bug ${statusText} me. Guess I should have tested this first.`);
+				pokemon.setStatus(status);
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Electric",
 	},
 
 	// HiZo
@@ -3009,84 +3159,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "all",
 		type: "Dragon",
-	},
-
-	// Mia
-	testinginproduction: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "A description has not been added yet",
-		name: "Testing in Production",
-		gen: 9,
-		pp: 5,
-		priority: 0,
-		flags: {},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Curse');
-		},
-		onHit(pokemon) {
-			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Please don't break...`);
-			let stats: BoostID[] = [];
-			const boost: SparseBoostsTable = {};
-			let statPlus: BoostID;
-			for (statPlus in pokemon.boosts) {
-				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-				if (pokemon.boosts[statPlus] < 6) {
-					stats.push(statPlus);
-				}
-			}
-			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 2;
-
-			stats = [];
-			let statMinus: BoostID;
-			for (statMinus in pokemon.boosts) {
-				if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
-				if (pokemon.boosts[statMinus] > -6) {
-					stats.push(statMinus);
-				}
-			}
-			randomStat = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) {
-				if (boost[randomStat]) {
-					boost[randomStat] = 0;
-					this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Well. Guess that broke. Time to roll back.`);
-					return;
-				} else {
-					boost[randomStat] = -2;
-				}
-			}
-
-			this.boost(boost, pokemon, pokemon);
-		},
-		onAfterMove(pokemon) {
-			if (this.randomChance(1, 10)) {
-				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ouch! That crash is really getting on my nerves...`);
-				this.damage(pokemon.baseMaxhp / 10);
-				if (pokemon.hp <= 0) return;
-			}
-
-			if (this.randomChance(1, 20)) {
-				const status = this.sample(['frz', 'brn', 'psn', 'par']);
-				let statusText = status;
-				if (status === 'frz') {
-					statusText = 'froze';
-				} else if (status === 'brn') {
-					statusText = 'burned';
-				} else if (status === 'par') {
-					statusText = 'paralyzed';
-				} else if (status === 'psn') {
-					statusText = 'poisoned';
-				}
-
-				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Darn. A bug ${statusText} me. Guess I should have tested this first.`);
-				pokemon.setStatus(status);
-			}
-		},
-		secondary: null,
-		target: "self",
-		type: "Electric",
 	},
 
 	// Monkey
