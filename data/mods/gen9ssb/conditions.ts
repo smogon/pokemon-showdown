@@ -1950,7 +1950,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					// do nothing if it's not the 4 primary weathers...unless there are more?
 				}
 			}
-			if (type) {
+			if (type && !target.terastallized) {
 				target.addType(type);
 				this.add('-start', target, 'typeadd', type, '[from] ability: Wonderer');
 			}
@@ -1975,7 +1975,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					type = 'Ghost';
 				}
 			}
-			if (type) {
+			if (type && !target.terastallized) {
 				target.addType(type);
 				this.add('-start', target, 'typeadd', type, '[from] ability: Wonderer');
 			}

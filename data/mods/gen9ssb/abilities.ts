@@ -322,17 +322,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	lattebreak: {
 		shortDesc: "Regenerator + one-time priority boost per switch-in.",
 		name: "Latte Break",
-		onModifyPriority(relayVar, source, target, move) {
-			if (this.effectState.latte) {
-				return relayVar + 0.5;
-			}
+		onSwitchIn() {
+			delete this.effectState.latte;
 		},
-		onAfterMove() {
-			this.effectState.latte = false;
+		onFractionalPriority(relayVar, source, target, move) {
+			if (!this.effectState.latte) {
+				this.effectState.latte = true;
+				return 0.5;
+			}
 		},
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
-			this.effectState.latte = true;
 		},
 		flags: {},
 	},
@@ -426,13 +426,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Clementine
 	meltingpoint: {
-		shortDesc: "First Fire move to hit changes user to Water type. +2 Speed.",
+		shortDesc: "Fire moves change user to Water type. +2 Speed. Fire immunity.",
 		name: "Melting Point",
-		onTryPrimaryHit(target, source, move) {
-			if (move.type === 'Fire') {
-				if (!target.setType('Water')) return;
-				this.add('-start', source, 'typechange', 'Water', '[from] ability: Melting Point');
-				this.boost({spe: 2}, target, source, this.dex.abilities.get('meltingpoint'));
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				if (target.setType('Water')) {
+					this.add('-start', target, 'typechange', 'Water', '[from] ability: Melting Point');
+					this.boost({spe: 2}, target, source, this.dex.abilities.get('meltingpoint'));
+				} else {
+					this.add('-immune', target, '[from] ability: Melting Point');
+				}
+				return null;
 			}
 		},
 	},

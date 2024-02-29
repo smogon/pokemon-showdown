@@ -446,7 +446,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	funnyvamp: {
 		accuracy: true,
 		basePower: 0,
-		category: "Special",
+		category: "Status",
 		shortDesc: "Changes user's forme, effects vary with forme.",
 		name: "Funny Vamp",
 		gen: 9,
@@ -568,8 +568,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	anyonecanbekilled: {
 		accuracy: 95,
 		basePower: 80,
-		category: "Status",
-		shortDesc: "Raises the user's Sp. Atk by 2 stages for the next 2 turns, -2 Sp. Atk afterwards.",
+		category: "Special",
+		shortDesc: "+2 SpA for 2 turns.",
 		name: "Anyone can be killed",
 		pp: 10,
 		priority: 0,
@@ -896,7 +896,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	rolesystem: {
 		accuracy: true,
 		basePower: 0,
-		category: "Physical",
+		category: "Status",
 		shortDesc: "Protects user, changes set. Can't be used consecutively.",
 		// it was easier to do it this way rather than implement failing on consecutive uses
 		name: "Role System",
@@ -2653,6 +2653,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 20,
 		category: "Physical",
+		shortDesc: "+1 Priority. Hits 2-5 times.",
 		name: "The Better Water Shuriken",
 		pp: 30,
 		priority: 1,
@@ -2865,6 +2866,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return bp;
 		},
 		category: "Physical",
+		shortDesc: "BP doubles after each hit. 2x if Defense Curl.",
 		name: "Super Rollout",
 		pp: 20,
 		priority: 0,
@@ -2956,6 +2958,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 90,
 		basePower: 120,
 		category: "Special",
+		shortDesc: "First turn: +1 SpA. No charge in Gravity.",
 		name: "Praise the Moon",
 		pp: 10,
 		priority: 0,
@@ -2967,7 +2970,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.add('-prepare', attacker, move.name);
 			this.boost({spa: 1}, attacker, attacker, move);
-			if (['gravity'].includes(attacker.effectiveWeather())) {
+			if (this.field.pseudoWeather['gravity']) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
 				return;
@@ -3247,8 +3250,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	nyaa: {
 		accuracy: true,
 		basePower: 0,
-		category: "Physical",
-		shortDesc: "100% chance to raise the user's Attack by 1.",
+		category: "Status",
+		shortDesc: "Haze and then +1 Attack.",
 		name: "~nyaa",
 		gen: 9,
 		pp: 10,
@@ -3779,6 +3782,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
+		shortDesc: "Heals 50% of max HP. Cures status.",
 		name: "Purification",
 		pp: 5,
 		priority: 0,
@@ -4711,6 +4715,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
+		shortDesc: "+1 Priority. Recovers 50% of damage dealt.",
 		name: "Torrential Drain",
 		pp: 10,
 		priority: 1,
@@ -5025,6 +5030,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 95,
 		category: "Physical",
+		shortDesc: "Literally just Foul Play.",
 		name: "Darkest Night",
 		pp: 15,
 		priority: 0,
