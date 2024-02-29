@@ -808,7 +808,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.heal(pokemon.baseMaxhp / 4, pokemon);
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Water",
 	},
 
@@ -1728,7 +1728,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			volatileStatus: 'spikyshield',
 			onHit(target, source, move) {
-				source.setType(source.getTypes(true).map(type => type === "Poison" ? "???" : type));
+				source.setType(source.getTypes(true).filter(type => type !== "Poison"));
 				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] move: Puffy Spiky Destruction');
 			},
 			boosts: {
@@ -1808,8 +1808,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		shortDesc: "Clear target stats+copies neg stats+inverts on user.",
 		name: "Hasty Revolution",
-		pp: 5,
-		priority: 0,
+		pp: 10,
+		priority: 4,
 		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1829,6 +1829,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.add('-copyboost', target, source, '[from] move: Hasty Revolution');
 			this.add('-invertboost', source, '[from] move: Hasty Revolution');
+		},
+		stallingMove: true,
+		self: {
+			volatileStatus: 'protect',
 		},
 		target: "normal",
 		type: "Normal",
@@ -3598,10 +3602,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidualOrder: 13,
 			onResidual(pokemon, source) {
 				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Normal', 'Fairy']) ? 4 : 8));
-				if (!pokemon || pokemon.fainted || pokemon.hp <= 0) {
-					this.add(`c:|${getName((source.illusion || source).name)}|Tripping off the beat kinda, dripping off the meat grinder`);
-				}
+
 				const target = this.getAtSlot(pokemon.volatiles['meatgrinder'].sourceSlot);
+				if (!pokemon || pokemon.fainted || pokemon.hp <= 0) {
+					this.add(`c:|${getName((target.illusion || target).name)}|Tripping off the beat kinda, dripping off the meat grinder`);
+				}
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to heal');
 					return;
