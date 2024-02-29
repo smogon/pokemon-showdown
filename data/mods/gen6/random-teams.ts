@@ -938,9 +938,14 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (['highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if (moves.has('substitute') && item === 'Sitrus Berry') {
-				// Two Substitutes should activate Sitrus Berry
-				if (hp % 4 === 0) break;
+			if (moves.has('substitute')) {
+				if (item === 'Sitrus Berry') {
+					// Two Substitutes should activate Sitrus Berry
+					if (hp % 4 === 0) break;
+				} else if (!['Black Sludge', 'Leftovers'].includes(item)) {
+					// Should be able to use Substitute four times from full HP without fainting
+					if (hp % 4 > 0) break;
+				}
 			} else if (moves.has('bellydrum') && item === 'Sitrus Berry') {
 				// Belly Drum should activate Sitrus Berry
 				if (hp % 2 === 0) break;

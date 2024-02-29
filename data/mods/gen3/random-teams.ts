@@ -673,6 +673,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const baseFormes: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
+		const typeDoubleWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
@@ -707,12 +708,19 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				}
 				if (skip) continue;
 
-				// Limit three weak to any type
+				// Limit three weak to any type, and one double weak to any type
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0) {
 						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
 						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+							skip = true;
+							break;
+						}
+					}
+					if (this.dex.getEffectiveness(typeName, species) > 1) {
+						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
+						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
 							skip = true;
 							break;
 						}
@@ -750,6 +758,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 				// it's weak to the type
 				if (this.dex.getEffectiveness(typeName, species) > 0) {
 					typeWeaknesses[typeName]++;
+				}
+				if (this.dex.getEffectiveness(typeName, species) > 1) {
+					typeDoubleWeaknesses[typeName]++;
 				}
 			}
 
