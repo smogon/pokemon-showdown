@@ -440,6 +440,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (species.id === 'arcanine') return 'Intimidate';
 		if (species.id === 'blissey') return 'Natural Cure';
 		if (species.id === 'heracross' && role === 'Berry Sweeper') return 'Swarm';
+		if (species.id === 'xatu') return 'Synchronize';
 		if (species.id === 'gardevoir') return 'Trace';
 
 		let abilityAllowed: Ability[] = [];
