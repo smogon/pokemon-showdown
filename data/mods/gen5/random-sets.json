@@ -384,7 +384,7 @@
                 "movepool": ["fireblast", "icebeam", "psyshock", "scald", "slackoff", "thunderwave", "toxic"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Staller",
                 "movepool": ["calmmind", "psyshock", "scald", "slackoff"]
             },
             {
