@@ -56,6 +56,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Aelita')}|Well, I hope the Lyoko Warriors are at least well equipped.`);
 		},
 	},
+	akir: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Akir')}|hey whats up`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Akir')}|ok c ya`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Akir')}|oh woops`);
+		},
+	},
 	alex: {
 		noCopy: true,
 		onStart() {
@@ -195,22 +207,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Archas')}|What would Grandfather... think of me now...`);
 		},
 	},
-	arya: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Arya')}|NORMAL SUMMON DEEP SEA DIVA`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Arya')}|Oleeeee too good for this fight!`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Arya')}|Nevermind, happy tuesday and let's pray for the 33.`);
-		},
-		onAfterMega() {
-			this.add(`c:|${getName('Arya')}|Oh yeaaaaah!!!!! Finally??!! I can finally Mega-Evolve!!! Vamossss`);
-			this.add(`c:|${getName('Arya')}|W-whats this? Oh, come on...!!!`);
-		}, // Is a message before going mega supported(unlikely)? if so, the first message in onAfterMega goes there.
-	},
 	arcueid: {
 		noCopy: true,
 		onStart() {
@@ -240,16 +236,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('message', `${source.name} was banned from Pok\u00e9mon Showdown!`);
 		},
 	},
-	akir: {
+	arya: {
 		noCopy: true,
-		onStart(pokemon) {
-			this.add(`c:|${getName('Akir')}|hey whats up`);
+		onStart() {
+			this.add(`c:|${getName('Arya')}|NORMAL SUMMON DEEP SEA DIVA`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Akir')}|ok c ya`);
+			this.add(`c:|${getName('Arya')}|Oleeeee too good for this fight!`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('Akir')}|oh woops`);
+			this.add(`c:|${getName('Arya')}|Nevermind, happy tuesday and let's pray for the 33.`);
+		},
+		onAfterMega() {
+			this.add(`c:|${getName('Arya')}|W-whats this? Oh, come on...!!!`);
 		},
 	},
 	autumn: {
@@ -472,6 +471,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Chloe')}|ouch :(`);
+		},
+	},
+	ciran: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('ciran')}|Nobody expects the Spanish Inquisition!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('ciran')}|Had enough, eh? Just a flesh wound!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('ciran')}|Alright then, we'll call it a draw.`);
 		},
 	},
 	clefableuser: {
@@ -735,7 +746,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Haste Inky')}|Wanna see whatever weird thing I can do?`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Haste Inky')}|Good call! I wasn’t liking this situation either.`);
+			this.add(`c:|${getName('Haste Inky')}|Good call! I wasn't liking this situation either.`);
 		},
 		onFaint() {
 			this.add(`c:|${getName('Haste Inky')}| I am NOT feeling full of beans rn…`);
@@ -891,18 +902,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('J0rdy004 ♫')}|So softly a supergod dies...`);
 		},
 	},
-	kaede: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Kaede')}|BOO`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Kaede')}|Into the shadows I go`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Kaede')}|I'm dead but not really (lol ghost)`);
-		},
-	},
 	kalalokki: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -981,7 +980,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Kennedy')}|Stream some Taylor Swift whilst I’m gone!`); // TODO replace
+			this.add(`c:|${getName('Kennedy')}|Stream some Taylor Swift whilst I'm gone!`); // TODO replace
 		},
 		onFoeSwitchIn(pokemon) {
 			switch ((pokemon.illusion || pokemon).name) {
@@ -1031,6 +1030,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFlinch(pokemon) {
 			if (pokemon.illusion) return;
 			this.add(`c:|${getName('Kennedy')}|LOOOOOOL ffs`);
+		},
+	},
+	keys: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('keys')}|It's Prime Time`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('keys')}|Don't worry, I'll be back`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('keys')}|...`);
 		},
 	},
 	kingbaruk: {
@@ -1203,7 +1214,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('maroon')}|It's not my fault you're, like, in love with me!`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('maroon')}|That’s why her hair is so big. It’s full of secrets.`);
+			this.add(`c:|${getName('maroon')}|That's why her hair is so big. It's full of secrets.`);
 		},
 		onFoeSwitchOut() {
 			this.add(`c:|${getName('maroon')}|You wanna do something fun? You wanna go to Taco Bell?`);
@@ -1306,7 +1317,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Nyx')}|good meowning, here's why you're wrong.`);
 		},
 		onSwitchOut(pokemon) {
-			this.add(`c:|${getName('Nyx')}|good nyight, I’m always right.`);
+			this.add(`c:|${getName('Nyx')}|good nyight, I'm always right.`);
 			if (pokemon.illusion || !pokemon.status) return;
 			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
 			pokemon.clearStatus();
@@ -1685,7 +1696,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Solaros & Lunaris')}|Too hot to handle!`);
 		},
 	},
-	spoouser: {
+	spoo: {
 		noCopy: true,
 		onStart() {
 			this.add(`c:|${getName('spoo')}|hemogoblin`);
@@ -1695,6 +1706,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('spoo')}|dies`);
+		},
+	},
+	steorra: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Steorra')}|BOO`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Steorra')}|Into the shadows I go`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Steorra')}|I'm dead but not really (lol ghost)`);
 		},
 	},
 	struchni: {
@@ -1960,10 +1983,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	valerian: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('Valerian ✿ ♡')}|Lucario’s shiny should’ve been red.`);
+			this.add(`c:|${getName('Valerian ✿ ♡')}|Lucario's shiny should've been red.`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Valerian ✿ ♡')}|As a wise man once said, “I’ll be back”.`);
+			this.add(`c:|${getName('Valerian ✿ ♡')}|As a wise man once said, "I'll be back".`);
 		},
 		onFaint() {
 			this.add(`c:|${getName('Valerian ✿ ♡')}|My name is based on a flower, NOT the movie!`);
@@ -1985,13 +2008,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	violet: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('Vio͜͡let')}|I’m not hating you just decided to be wrong`);
+			this.add(`c:|${getName('Vio͜͡let')}|I'm not hating you just decided to be wrong`);
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('Vio͜͡let')}|anyway…`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('Vio͜͡let')}|blatantly carried by cheating but you’ll still find a way to downplay`);
+			this.add(`c:|${getName('Vio͜͡let')}|blatantly carried by cheating but you'll still find a way to downplay`);
 		},
 		innateName: "Do No Evil",
 		shortDesc: "When this Pokemon uses an attacking move, it transforms into the Ogerpon form of the corresponding type.",
@@ -2014,6 +2037,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			default:
 				return;
 			}
+			if (attacker.terastallized) targetForme += (targetForme === 'Ogerpon' ? '-Teal' : '') + '-Tera';
 			if (attacker.species.name !== targetForme) {
 				this.add('-activate', attacker, 'ability: Do No Evil');
 				attacker.formeChange(targetForme);

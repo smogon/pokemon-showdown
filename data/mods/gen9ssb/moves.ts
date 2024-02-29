@@ -516,40 +516,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "???",
 	},
 
-	// Arya
-	anyonecanbekilled: {
-		accuracy: 95,
-		basePower: 80,
-		category: "Status",
-		shortDesc: "Raises the user's Sp. Atk by 2 stages for the next 2 turns, -2 Sp. Atk afterwards.",
-		name: "Anyone can be killed",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, sound: 1, bypasssub: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		self: {
-			volatileStatus: 'anyonecanbekilled',
-		},
-		condition: {
-			duration: 3,
-			onResidualOrder: 3,
-			onStart(target, source, sourceEffect) {
-				this.boost({spa: 2}, source);
-			},
-			onEnd(target) {
-				this.boost({spa: -2}, target);
-			},
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Dragon Dance', target);
-			this.add('-anim', source, 'Earth Power', target);
-		},
-		target: "normal",
-		type: "Ground",
-	},
-
 	// Artemis
 	automatedresponse: {
 		accuracy: 100,
@@ -596,6 +562,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Electric",
+	},
+
+	// Arya
+	anyonecanbekilled: {
+		accuracy: 95,
+		basePower: 80,
+		category: "Status",
+		shortDesc: "Raises the user's Sp. Atk by 2 stages for the next 2 turns, -2 Sp. Atk afterwards.",
+		name: "Anyone can be killed",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, sound: 1, bypasssub: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		self: {
+			volatileStatus: 'anyonecanbekilled',
+		},
+		condition: {
+			duration: 3,
+			onResidualOrder: 3,
+			onStart(target, source, sourceEffect) {
+				this.boost({spa: 2}, source);
+			},
+			onEnd(target) {
+				this.boost({spa: -2}, target);
+			},
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dragon Dance', target);
+			this.add('-anim', source, 'Earth Power', target);
+		},
+		target: "normal",
+		type: "Ground",
 	},
 
 	// autumn
@@ -1040,6 +1040,67 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Grass",
+	},
+
+	// ciran
+	summonmonsterviiifiendishmonstrouspiplupedecolossal: {
+		accuracy: 90,
+		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			if (move.hit === 1) return 60;
+			if (move.hit === 2) return 0;
+			return 20;
+		},
+		category: "Physical",
+		shortDesc: "60 BP Bite -> Toxic -> 2-5 multihit w/ 20 BP each.",
+		name: "Summon Monster VIII: Fiendish monstrous Piplupede, Colossal",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, contact: 1, mirror: 1},
+		multihit: 7,
+		self: {
+			volatileStatus: 'summonmonsterviiifiendishmonstrouspiplupedecolossal',
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Crunch', target);
+			this.add('-anim', source, 'Fury Swipes', target);
+		},
+		condition: {
+			duration: 1,
+			noCopy: true,
+			onAccuracy(accuracy, target, source, move) {
+				if (move.hit <= 2) return 100;
+				return 90;
+			},
+		},
+		secondaries: [
+			{
+				chance: 20,
+				onHit(target, source, move) {
+					if (move.hit !== 1) return;
+					target.addVolatile('flinch', source, move);
+				},
+			},
+			{
+				chance: 100,
+				onHit(target, source, move) {
+					if (move.hit !== 2) return;
+					target.trySetStatus('tox', source, move);
+				},
+			},
+		],
+		onModifyMove(move, pokemon, target) {
+			if (move.hit > 2) move.multiaccuracy = true;
+		},
+		onAfterMove(source, target, move) {
+			this.add(`c:|${getName((source.illusion || source).name)}|There's no way this'll faint in one punch!`);
+		},
+		target: "allAdjacentFoes",
+		type: "Poison",
 	},
 
 	// Clefable
@@ -2061,52 +2122,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
-	// Kaede
-	phantomweapon: {
-		accuracy: 100,
-		basePower: 65,
-		category: "Physical",
-		name: "Phantom Weapon",
-		shortDesc: "Double power if user is holding item; destroys item.",
-		pp: 20,
-		priority: 0,
-		onModifyPriority(priority, pokemon) {
-			if (!pokemon.item) return priority + 1;
-		},
-		flags: {protect: 1, mirror: 1},
-		onModifyMove(move, pokemon, target) {
-			if (!pokemon.item) {
-				move.flags['contact'] = 1;
-				move.flags['mirror'] = 1;
-			}
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source, move) {
-			this.add('-anim', source, 'Shadow Force', target);
-			if (!source.item || source.ignoringItem()) return;
-			const item = source.getItem();
-			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return;
-			move.basePower *= 2;
-			source.addVolatile('phantomweapon');
-		},
-		condition: {
-			onUpdate(pokemon) {
-				const item = pokemon.getItem();
-				pokemon.setItem('');
-				pokemon.lastItem = item.id;
-				pokemon.usedItemThisTurn = true;
-				this.add('-enditem', pokemon, item.name, '[from] move: Phantom Weapon');
-				this.runEvent('AfterUseItem', pokemon, null, null, item);
-				pokemon.removeVolatile('phantomweapon');
-			},
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-	},
-
 	// Kalalokki
 	knotweak: {
 		accuracy: 80,
@@ -2392,6 +2407,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// keys
+	protectoroftheskies: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Forces both Pokemon out. Can't be blocked.",
+		name: "Protector of the Skies",
+		pp: 10,
+		priority: -1,
+		flags: {},
+		onTryMove(source, target, move) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			for (const pokemon of this.getAllActive()) {
+				this.add('-anim', source, 'Whirlwind', pokemon);
+			}
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (target && Object.values(target.boosts).some(x => x !== 0)) {
+				return priority + 1;
+			}
+		},
+		forceSwitch: true,
+		secondary: null,
+		target: "all",
+		type: "Flying",
+	},
+
 	// kingbaruk
 	platinumrecord: {
 		accuracy: true,
@@ -2405,15 +2449,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sing', target);
+			this.add('-anim', source, 'Iron Defense', target);
+		},
 		onHit(target, source) {
 			this.heal(source.maxhp / 2);
 			for (const moveSlot of source.moveSlots) {
 				if (moveSlot.pp < moveSlot.maxpp) moveSlot.pp += 1;
 			}
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Sing', target);
-			this.add('-anim', source, 'Iron Defense', target);
 		},
 		target: "self",
 		type: "Normal",
@@ -3944,6 +3988,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// Steorra
+	phantomweapon: {
+		accuracy: 100,
+		basePower: 65,
+		category: "Physical",
+		name: "Phantom Weapon",
+		shortDesc: "Double power if user is holding item; destroys item.",
+		pp: 20,
+		priority: 0,
+		onModifyPriority(priority, pokemon) {
+			if (!pokemon.item) return priority + 1;
+		},
+		flags: {protect: 1, mirror: 1},
+		onModifyMove(move, pokemon, target) {
+			if (!pokemon.item) {
+				move.flags['contact'] = 1;
+				move.flags['mirror'] = 1;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Shadow Force', target);
+			if (!source.item || source.ignoringItem()) return;
+			const item = source.getItem();
+			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return;
+			move.basePower *= 2;
+			source.addVolatile('phantomweapon');
+		},
+		condition: {
+			onUpdate(pokemon) {
+				const item = pokemon.getItem();
+				pokemon.setItem('');
+				pokemon.lastItem = item.id;
+				pokemon.usedItemThisTurn = true;
+				this.add('-enditem', pokemon, item.name, '[from] move: Phantom Weapon');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
+				pokemon.removeVolatile('phantomweapon');
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Struchni
 	randfact: {
 		accuracy: 100,
@@ -4139,10 +4229,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Wish + Aromatherapy + Defog",
+		shortDesc: "Wish + Aromatherapy + Defog.",
 		name: "Eternal Wish",
 		pp: 10,
-		priority: -6,
+		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -4998,6 +5088,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePowerCallback(pokemon, target, move) {
 			if (target.status || target.hasAbility(['comatose', 'mensiscage'])) return move.basePower * 2;
 			return move.basePower;
+		},
+	},
+	ingrain: {
+		inherit: true,
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'move: Ingrain');
+			},
+			onResidualOrder: 7,
+			onResidual(pokemon) {
+				this.heal(pokemon.baseMaxhp / 16);
+			},
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
+			onDragOut(pokemon, source, move) {
+				if (source && this.queue.willMove(source)?.moveid === 'protectoroftheskies') return;
+				this.add('-activate', pokemon, 'move: Ingrain');
+				return null;
+			},
 		},
 	},
 	mistyterrain: {

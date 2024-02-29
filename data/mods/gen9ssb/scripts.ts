@@ -821,6 +821,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			const speciesid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 			if (!speciesid) return false;
 
+			if (speciesid === 'Trapinch' && pokemon.name === 'Arya') {
+				this.battle.add(`c:|${getName('Arya')}|Oh yeaaaaah!!!!! Finally??!! I can finally Mega-Evolve!!! Vamossss`);
+			}
+
 			pokemon.formeChange(speciesid, pokemon.getItem(), true);
 			if (pokemon.canMegaEvo) {
 				pokemon.canMegaEvo = null;
@@ -831,8 +835,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.runEvent('AfterMega', pokemon);
 
 			// Visual mega type changes here
-			if ([''].includes(pokemon.name) && !pokemon.illusion) {
-				this.battle.add('-start', pokemon, 'typechange', pokemon.types.join('/'));
+			if (['Arya'].includes(pokemon.name) && !pokemon.illusion) {
+				this.battle.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
 			}
 
 			this.battle.add('-ability', pokemon, `${pokemon.getAbility().name}`);

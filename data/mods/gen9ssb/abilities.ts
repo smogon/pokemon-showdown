@@ -366,36 +366,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
-	// Cake
-	notenoughremoval: {
-		shortDesc: "Sets hazards at the end of every turn.",
-		name: "Not Enough Removal",
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
-		onResidual(pokemon) {
-			const hazard = this.sample(['stealthrock', 'spikes', 'toxicspikes', 'stickyweb', 'gmaxsteelsurge']);
-			let willDoSomething = false;
-			let hasActivated = false;
-			for (const side of this.sides) {
-				if (!side.sideConditions[hazard]) {
-					willDoSomething = true;
-				} else {
-					if (hazard === 'spikes') {
-						willDoSomething = side.sideConditions[hazard].layers < 3;
-					} else if (hazard === 'toxicspikes') {
-						willDoSomething = side.sideConditions[hazard].layers < 2;
-					}
-				}
-				if (willDoSomething && !hasActivated) {
-					this.add('-activate', pokemon, 'ability: Not Enough Removal');
-					hasActivated = true;
-				}
-				side.addSideCondition(hazard);
-			}
-		},
-		flags: {},
-	},
-
 	// Chloe
 	acetosa: {
 		shortDesc: "This Pokemon's moves are changed to be Grass type and have 1.2x power.",
@@ -956,19 +926,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {},
-	},
-
-	// Kaede
-	ghostlyhallow: {
-		shortDesc: "This Pokémon can hit Normal types with Ghost-type moves.",
-		name: "Ghostly Hallow",
-		onModifyMovePriority: -5,
-		onModifyMove(move) {
-			if (!move.ignoreImmunity) move.ignoreImmunity = {};
-			if (move.ignoreImmunity !== true) {
-				move.ignoreImmunity['Ghost'] = true;
-			}
-		},
 	},
 
 	// kenn
@@ -1833,6 +1790,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Steorra
+	ghostlyhallow: {
+		shortDesc: "This Pokémon can hit Normal types with Ghost-type moves.",
+		name: "Ghostly Hallow",
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Ghost'] = true;
+			}
+		},
+	},
+
 	// Struchni
 	overaskedclause: {
 		shortDesc: "Moves used on the previous turn will always fail.",
@@ -2086,7 +2056,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Dark Immunity; Cornerstone: Sound immunity. Wellspring: Moves never miss. Hearthflame: 1.3x bp vs male Pokemon.",
 		name: "See No Evil, Hear No Evil, Speak No Evil",
 		onTryHit(target, source, move) {
-			if (target !== source && move.flags['sound'] && target.species.id === 'ogerponcornerstone') {
+			if (target !== source && move.flags['sound'] && !target.species.id.startsWith('ogerponcornerstone')) {
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: See No Evil, Hear No Evil, Speak No Evil');
 				}
@@ -2099,12 +2069,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onSourceAccuracy(accuracy, target, source, move) {
-			if (source.species.id !== 'ogerponwellspring') return;
+			if (!source.species.id.startsWith('ogerponwellspring')) return;
 			if (typeof accuracy !== 'number') return;
 			return true;
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (source.species.id !== 'ogerponwellspring') return;
+			if (!source.species.id.startsWith('ogerponwellspring')) return;
 			if (typeof move.accuracy === 'number' && move.accuracy < 100) {
 				this.debug('neutralize');
 				return this.chainModify(0.75);
@@ -2112,7 +2082,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onBasePowerPriority: 24,
 		onBasePower(basePower, attacker, defender, move) {
-			if (attacker.species.id !== 'ogerponhearthflame') return;
+			if (!attacker.species.id.startsWith('ogerponhearthflame')) return;
 			if (defender.gender === 'M') {
 				this.debug('attack boost');
 				return this.chainModify(1.3);
