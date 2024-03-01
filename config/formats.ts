@@ -686,7 +686,10 @@ export const Formats: FormatList = [
 				move.flags['futuremove'] = 1;
 				delete move.flags['protect'];
 				move.onTry = function (source, t) {
-					if (!t.side.addSlotCondition(t, 'futuremove')) return false;
+					if (!t.side.addSlotCondition(t, 'futuremove')) {
+						this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
+						return false;
+					}
 					const moveData = this.dex.getActiveMove(move.id);
 					moveData.flags['futuremove'] = 1;
 					delete moveData.flags['protect'];
