@@ -2340,7 +2340,6 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen9',
-		gameType: 'doubles',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Species Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Ability Clause = 2', 'Mega Rayquaza Clause', '!Obtainable Abilities'],
 		banlist: [
 			'Alakazam-Mega', 'Annihilape', 'Arceus', 'Archeops', 'Baxcalibur', 'Blacephalon', 'Blastoise-Mega', 'Blaziken-Mega', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chien-Pao', 'Darkrai',
