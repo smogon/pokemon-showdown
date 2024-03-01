@@ -1574,34 +1574,50 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	ultramystik: {
 		shortDesc: "Stats 1.5x until hit super effectively + Magic Guard + Leftovers.",
 		name: "Ultra Mystik",
+		onStart(target) {
+			if (!this.effectState.superHit) {
+				target.addVolatile('ultramystik');
+			}
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.effectState.superHit = true;
+				target.removeVolatile('ultramystik');
 			}
 		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, pokemon) {
-			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
-			return this.chainModify(1.5);
-		},
-		onModifyDefPriority: 6,
-		onModifyDef(def, pokemon) {
-			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
-			return this.chainModify(1.5);
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(spa, pokemon) {
-			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
-			return this.chainModify(1.5);
-		},
-		onModifySpDPriority: 6,
-		onModifySpD(spd, pokemon) {
-			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
-			return this.chainModify(1.5);
-		},
-		onModifySpe(spe, pokemon) {
-			if (this.effectState.superHit || pokemon.ignoringAbility()) return;
-			return this.chainModify(1.5);
+		condition: {
+			noCopy: true,
+			onStart(pokemon, source, effect) {
+				this.add('-activate', pokemon, 'ability: Ultra Mystik');
+				this.add('-start', pokemon, 'ultramystik');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				if (pokemon.ignoringAbility()) return;
+				return this.chainModify(1.5);
+			},
+			onModifyDefPriority: 6,
+			onModifyDef(def, pokemon) {
+				if (pokemon.ignoringAbility()) return;
+				return this.chainModify(1.5);
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(spa, pokemon) {
+				if (pokemon.ignoringAbility()) return;
+				return this.chainModify(1.5);
+			},
+			onModifySpDPriority: 6,
+			onModifySpD(spd, pokemon) {
+				if (pokemon.ignoringAbility()) return;
+				return this.chainModify(1.5);
+			},
+			onModifySpe(spe, pokemon) {
+				if (pokemon.ignoringAbility()) return;
+				return this.chainModify(1.5);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Ultra Mystik');
+			},
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {

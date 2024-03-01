@@ -2323,7 +2323,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onEnd(target) {
 			this.add('-end', target, 'boiled');
 		},
-		onModifyAtkPriority: 5,
+		onModifySpAPriority: 5,
 		onModifySpA(relayVar, source, target, move) {
 			return this.chainModify(1.5);
 		},
