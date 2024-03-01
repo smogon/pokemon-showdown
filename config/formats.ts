@@ -2729,7 +2729,7 @@ export const Formats: FormatList = [
 			'Ogerpon-Cornerstone', 'Ogerpon-Hearthflame', 'Ogerpon-Wellspring', 'Okidogi', 'Opportunist', 'Orichalcum Pulse', 'Origin Pulse',
 			'Outrage', 'Overdrive', 'Overheat', 'Pain Split', 'Palafin-Hero', 'Palkia', 'Palkia-Origin', 'Parental Bond', 'Parting Shot',
 			'Pastel Veil', 'Pecharunt', 'Perish Body', 'Perish Song', 'Petaya Berry', 'Pheromosa', 'Photon Geyser', 'Pidgeot-Mega',
-			'Pinsir-Mega', 'Pixie Plate', 'Plasma Fists', 'Play Rough', 'Poison Gas', 'Poison Heal', 'Poison Point', 
+			'Pinsir-Mega', 'Pixie Plate', 'Plasma Fists', 'Play Rough', 'Poison Gas', 'Poison Heal', 'Poison Point',
 			'Poison Touch', 'Poisonium Z', 'Pollen Puff', 'Poltergeist', 'Population Bomb', 'Porygon-Z', 'Power Gem', 'Power Spot',
 			'Power Trip', 'Power Whip', 'Prankster', 'Precipice Blades', 'Primarina', 'Primordial Sea', 'Prism Armor', 'Probopass',
 			'Propeller Tail', 'Protean', 'Protect', 'Psyblade', 'Psychic Fangs', 'Psychic Surge', 'Psychic', 'Psychium Z', 'Psycho Boost',
