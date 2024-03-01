@@ -2472,6 +2472,7 @@ export class RandomGen8Teams {
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
+		const typeDoubleWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
@@ -2523,12 +2524,19 @@ export class RandomGen8Teams {
 				}
 				if (skip) continue;
 
-				// Limit three weak to any type
+				// Limit three weak to any type, and one double weak to any type
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0) {
 						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
 						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+							skip = true;
+							break;
+						}
+					}
+					if (this.dex.getEffectiveness(typeName, species) > 1) {
+						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
+						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
 							skip = true;
 							break;
 						}
@@ -2585,6 +2593,9 @@ export class RandomGen8Teams {
 				// it's weak to the type
 				if (this.dex.getEffectiveness(typeName, species) > 0) {
 					typeWeaknesses[typeName]++;
+				}
+				if (this.dex.getEffectiveness(typeName, species) > 1) {
+					typeDoubleWeaknesses[typeName]++;
 				}
 			}
 			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;

@@ -105,8 +105,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["batonpass", "doubleedge", "drillpeck", "hiddenpowerground", "quickattack", "return"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["doubleedge", "drillpeck", "hiddenpowerground", "quickattack", "return"]
             }
         ]
     },
@@ -443,8 +442,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["batonpass", "doubleedge", "drillpeck", "hiddenpowerground", "quickattack", "return"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["doubleedge", "drillpeck", "hiddenpowerground", "quickattack", "return"]
             },
             {
                 "role": "Berry Sweeper",
@@ -1330,7 +1328,11 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"]
+                "movepool": ["earthquake", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"]
             }
         ]
     },
@@ -1834,7 +1836,8 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["bellydrum", "hiddenpowerground", "return", "shadowball", "substitute"]
+                "movepool": ["bellydrum", "hiddenpowerground", "return", "shadowball", "substitute"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -2391,10 +2394,6 @@
         "level": 77,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["icebeam", "rest", "sleeptalk", "surf", "toxic"]
-            },
-            {
                 "role": "Staller",
                 "movepool": ["icebeam", "recover", "refresh", "surf", "toxic"]
             }
@@ -2454,7 +2453,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["hiddenpowerfire", "solarbeam", "sunnyday", "synthesis"]
+                "movepool": ["earthquake", "hiddenpowerflying", "swordsdance", "synthesis"]
             },
             {
                 "role": "Staller",
@@ -2475,8 +2474,13 @@
         "level": 88,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["batonpass", "hiddenpowerfighting", "quickattack", "shadowball", "swordsdance"]
+                "role": "Setup Sweeper",
+                "movepool": ["batonpass", "doubleedge", "hiddenpowerfighting", "quickattack", "shadowball", "swordsdance"],
+                "preferredTypes": ["Fighting", "Ghost"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["doubleedge", "hiddenpowerfighting", "quickattack", "shadowball"]
             }
         ]
     },

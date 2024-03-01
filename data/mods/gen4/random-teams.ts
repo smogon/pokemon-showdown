@@ -632,7 +632,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (['batonpass', 'protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
-			(!counter.get('recoil') || ability === 'Rock Head')
+			(!counter.get('recoil') || ability === 'Rock Head') &&
+			(counter.get('hazards') || !moves.has('uturn'))
 		) return 'Focus Sash';
 
 		// Default Items

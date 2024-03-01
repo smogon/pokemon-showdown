@@ -489,8 +489,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Ice Body': case 'Moody': case 'Pickpocket': case 'Pressure':
-		case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
+		case 'Flare Boost': case 'Gluttony': case 'Ice Body': case 'Infiltrator': case 'Moody': case 'Pickpocket':
+		case 'Pressure': case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
 			return true;
 		case 'Chlorophyll':
 			// Petal Dance is for Lilligant
@@ -702,8 +702,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (moves.has('acrobatics')) return 'Flying Gem';
 		if (species.id === 'hitmonlee' && ability === 'Unburden') return moves.has('fakeout') ? 'Normal Gem' : 'Fighting Gem';
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
-		if (moves.has('rest') && !moves.has('sleeptalk') && !['Hydration', 'Natural Cure', 'Shed Skin'].includes(ability)) {
-			return 'Chesto Berry';
+		if (moves.has('rest') && !moves.has('sleeptalk') && !['Natural Cure', 'Shed Skin'].includes(ability)) {
+			return (moves.has('raindance') && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
 		}
 		if (role === 'Staller') return 'Leftovers';
 	}
@@ -763,7 +763,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
-			(!counter.get('recoil') || ability === 'Rock Head')
+			(!counter.get('recoil') || ability === 'Rock Head') &&
+			(counter.get('hazards') || !(moves.has('uturn') || moves.has('voltswitch')))
 		) return 'Focus Sash';
 
 		// Default Items
@@ -879,9 +880,14 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (['highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if (moves.has('substitute') && item === 'Sitrus Berry') {
-				// Two Substitutes should activate Sitrus Berry
-				if (hp % 4 === 0) break;
+			if (moves.has('substitute')) {
+				if (item === 'Sitrus Berry') {
+					// Two Substitutes should activate Sitrus Berry
+					if (hp % 4 === 0) break;
+				} else if (!['Black Sludge', 'Leftovers'].includes(item)) {
+					// Should be able to use Substitute four times from full HP without fainting
+					if (hp % 4 > 0) break;
+				}
 			} else if (moves.has('bellydrum') && item === 'Sitrus Berry') {
 				// Belly Drum should activate Sitrus Berry
 				if (hp % 2 === 0) break;
@@ -940,6 +946,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const baseFormes: {[k: string]: number} = {};
 		const typeCount: {[k: string]: number} = {};
 		const typeWeaknesses: {[k: string]: number} = {};
+		const typeDoubleWeaknesses: {[k: string]: number} = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
@@ -973,12 +980,19 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				}
 				if (skip) continue;
 
-				// Limit three weak to any type
+				// Limit three weak to any type, and one double weak to any type
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0) {
 						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
 						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+							skip = true;
+							break;
+						}
+					}
+					if (this.dex.getEffectiveness(typeName, species) > 1) {
+						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
+						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
 							skip = true;
 							break;
 						}
@@ -1017,6 +1031,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				// it's weak to the type
 				if (this.dex.getEffectiveness(typeName, species) > 0) {
 					typeWeaknesses[typeName]++;
+				}
+				if (this.dex.getEffectiveness(typeName, species) > 1) {
+					typeDoubleWeaknesses[typeName]++;
 				}
 			}
 
