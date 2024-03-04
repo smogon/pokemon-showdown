@@ -945,7 +945,7 @@
         "moves": [["saltcure"], ["recover"], ["irondefense"], ["bodypress"]],
         "item": ["leftovers"],
         "nature": "careful",
-        "evs": [252, 0, 0, 0, 252, 4],
+        "evs": [252, 0, 4, 0, 252, 0],
         "teratype": ["fairy", "water", "poison"],
         "wantsTera": true,
         "ability": "purifyingsalt"
@@ -1109,7 +1109,7 @@
         "moves": [["earthquake"], ["rocktomb"], ["uturn"], ["terablast"]],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 4, 0, 0, 0],
         "teratype": ["flying", "water"],
         "wantsTera": true,
         "ability": "intimidate"
@@ -1442,7 +1442,7 @@
         ],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["ground"],
         "wantsTera": true,
         "ability": "thermalexchange"
@@ -1453,7 +1453,7 @@
         "moves": [["iciclespear"], ["iceshard"], ["terablast"], ["earthquake"]],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["fairy", "electric", "fire"],
         "wantsTera": true,
         "ability": "thermalexchange"
@@ -1630,7 +1630,7 @@
         ],
         "item": ["assaultvest"],
         "nature": "modest",
-        "evs": [252, 0, 0, 252, 0, 4],
+        "evs": [252, 0, 0, 252, 4, 0],
         "teratype": ["grass", "ground", "fairy"],
         "ability": "toxicdebris"
       },
@@ -1731,7 +1731,7 @@
         "item": ["leftovers"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "calm",
-        "evs": [252, 0, 0, 0, 252, 4],
+        "evs": [252, 0, 4, 0, 252, 0],
         "teratype": ["grass"],
         "wantsTera": true,
         "ability": "flashfire"
@@ -1743,7 +1743,7 @@
         "item": ["assaultvest"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "modest",
-        "evs": [252, 0, 0, 252, 0, 4],
+        "evs": [252, 0, 4, 252, 0, 0],
         "teratype": ["grass", "fairy"],
         "wantsTera": true,
         "ability": "flashfire"
@@ -1810,8 +1810,9 @@
           ["protect"]
         ],
         "item": ["toxicorb"],
-        "nature": "impish",
-        "evs": [204, 4, 252, 0, 28, 20],
+        "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [204, 0, 252, 0, 48, 4],
         "teratype": ["steel", "fire"],
         "wantsTera": true,
         "ability": "poisonheal"
@@ -1920,7 +1921,7 @@
         "moves": [["curse"], ["rest"], ["wavecrash"], ["fissure"]],
         "item": ["chestoberry"],
         "nature": "careful",
-        "evs": [252, 0, 0, 0, 252, 4],
+        "evs": [252, 0, 4, 0, 252, 0],
         "teratype": ["grass", "fairy", "steel"],
         "ability": "unaware"
       }
@@ -2210,7 +2211,7 @@
         ],
         "item": ["rockyhelmet", "leftovers"],
         "nature": "impish",
-        "evs": [252, 0, 252, 0, 0, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["dragon", "fighting", "water"],
         "ability": "mirrorarmor"
       },
@@ -2225,7 +2226,7 @@
         ],
         "item": ["rockyhelmet", "sitrusberry", "safetygoggles", "covertcloak"],
         "nature": "impish",
-        "evs": [252, 0, 252, 0, 0, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["fighting", "water", "dragon"],
         "ability": "mirrorarmor"
       },
@@ -2235,7 +2236,7 @@
         "moves": [["bulkup"], ["taunt"], ["roost"], ["ironhead", "bravebird"]],
         "item": ["rockyhelmet", "sitrusberry", "safetygoggles", "covertcloak"],
         "nature": "impish",
-        "evs": [252, 0, 252, 0, 0, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["water", "dragon"],
         "ability": "mirrorarmor"
       }
@@ -2311,7 +2312,7 @@
         "moves": [["earthquake"], ["avalanche"], ["yawn"], ["protect"]],
         "item": ["leftovers"],
         "nature": "impish",
-        "evs": [156, 4, 252, 0, 92, 4],
+        "evs": [156, 0, 252, 0, 100, 0],
         "teratype": ["water", "fairy"],
         "ability": "bulletproof"
       }
@@ -2331,7 +2332,7 @@
         ],
         "item": ["assaultvest"],
         "nature": "quiet",
-        "evs": [252, 0, 0, 252, 0, 4],
+        "evs": [252, 0, 0, 252, 4, 0],
         "teratype": ["flying", "fairy", "water"],
         "ability": "sapsipper"
       },
@@ -2346,7 +2347,7 @@
         ],
         "item": ["leftovers"],
         "nature": "careful",
-        "evs": [252, 0, 0, 0, 252, 4],
+        "evs": [252, 0, 4, 0, 252, 0],
         "teratype": ["flying", "fairy"],
         "ability": "shellarmor"
       }
@@ -2533,6 +2534,22 @@
     "sets": [
       {
         "species": "rillaboom",
+        "weight": 50,
+        "moves": [
+          ["grassyglide"],
+          ["knockoff"],
+          ["drumbeating", "woodhammer"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest", "choiceband"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["rock"],
+        "wantsTera": true,
+        "ability": "grassysurge"
+      },
+      {
+        "species": "rillaboom",
         "weight": 20,
         "moves": [
           ["grassyglide"],
@@ -2559,38 +2576,6 @@
         "nature": "jolly",
         "evs": [0, 252, 0, 0, 4, 252],
         "teratype": ["grass"],
-        "ability": "grassysurge"
-      },
-      {
-        "species": "rillaboom",
-        "weight": 25,
-        "moves": [
-          ["grassyglide"],
-          ["knockoff"],
-          ["drumbeating", "woodhammer"],
-          ["terablast"]
-        ],
-        "item": ["assaultvest"],
-        "nature": "jolly",
-        "evs": [0, 252, 0, 0, 4, 252],
-        "teratype": ["rock"],
-        "wantsTera": true,
-        "ability": "grassysurge"
-      },
-      {
-        "species": "rillaboom",
-        "weight": 25,
-        "moves": [
-          ["grassyglide"],
-          ["knockoff"],
-          ["drumbeating", "woodhammer"],
-          ["terablast"]
-        ],
-        "item": ["choiceband"],
-        "nature": "jolly",
-        "evs": [0, 252, 0, 0, 4, 252],
-        "teratype": ["rock"],
-        "wantsTera": true,
         "ability": "grassysurge"
       },
       {
@@ -2807,7 +2792,7 @@
         "moves": [["aquajet"], ["playrough"], ["liquidation"], ["superpower"]],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["water", "fairy"],
         "ability": "hugepower"
       },
@@ -2817,7 +2802,7 @@
         "moves": [["aquajet"], ["playrough"], ["liquidation"], ["terablast"]],
         "item": ["assaultvest", "choiceband"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["fire", "electric", "fairy", "grass"],
         "wantsTera": true,
         "ability": "hugepower"
@@ -2833,7 +2818,7 @@
         ],
         "item": ["sitrusberry"],
         "nature": "adamant",
-        "evs": [244, 252, 0, 0, 0, 12],
+        "evs": [244, 252, 12, 0, 0, 0],
         "teratype": ["water"],
         "ability": "hugepower"
       },
@@ -2843,7 +2828,7 @@
         "moves": [["bellydrum"], ["aquajet"], ["playrough"], ["bulldoze"]],
         "item": ["sitrusberry"],
         "nature": "adamant",
-        "evs": [244, 252, 0, 0, 0, 12],
+        "evs": [244, 252, 12, 0, 0, 0],
         "teratype": ["steel"],
         "ability": "hugepower"
       },
@@ -2853,7 +2838,7 @@
         "moves": [["bellydrum"], ["aquajet"], ["playrough"], ["terablast"]],
         "item": ["sitrusberry"],
         "nature": "adamant",
-        "evs": [244, 252, 0, 0, 0, 12],
+        "evs": [244, 252, 12, 0, 0, 0],
         "teratype": ["fire"],
         "wantsTera": true,
         "ability": "hugepower"
@@ -2869,7 +2854,7 @@
         ],
         "item": ["leftovers"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 4, 0, 0, 0],
         "teratype": ["water"],
         "ability": "hugepower"
       }
@@ -2949,7 +2934,7 @@
         "moves": [["kowtowcleave"], ["suckerpunch"], ["ironhead"], ["guillotine"]],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["dark", "flying"],
         "ability": "defiant"
       },
@@ -2959,7 +2944,7 @@
         "moves": [["kowtowcleave"], ["suckerpunch"], ["ironhead"], ["guillotine"]],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["dark", "flying"],
         "ability": "supremeoverlord"
       },
@@ -2974,7 +2959,7 @@
         ],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["fairy"],
         "wantsTera": true,
         "ability": "defiant"
@@ -2990,7 +2975,7 @@
         ],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["fairy"],
         "wantsTera": true,
         "ability": "supremeoverlord"
@@ -3001,7 +2986,7 @@
         "moves": [["kowtowcleave"], ["suckerpunch"], ["ironhead"], ["swordsdance"]],
         "item": ["blackglasses", "sitrusberry"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["dark", "flying"],
         "ability": "supremeoverlord"
       },
@@ -3011,7 +2996,7 @@
         "moves": [["kowtowcleave"], ["suckerpunch"], ["ironhead"], ["swordsdance"]],
         "item": ["blackglasses", "sitrusberry"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["dark", "flying"],
         "ability": "defiant"
       },
@@ -3024,11 +3009,11 @@
           ["ironhead", "guillotine"],
           ["suckerpunch", "thunderwave"]
         ],
-        "item": ["sitrusberry", "focussash"],
+        "item": "focussash",
         "nature": "adamant",
-        "evs": [244, 252, 4, 0, 4, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["flying", "fairy", "dark"],
-        "ability": "defiant"
+        "ability": ["defiant", "supremeoverlord"]
       },
       {
         "species": "kingambit",
@@ -3039,12 +3024,11 @@
           ["ironhead", "guillotine"],
           ["suckerpunch", "thunderwave"]
         ],
-        "item": ["sitrusberry", "focussash"],
+        "item": "sitrusberry",
         "nature": "adamant",
-        "evs": [244, 252, 4, 0, 4, 4],
+        "evs": [244, 252, 0, 0, 12, 0],
         "teratype": ["flying", "fairy", "dark"],
-        "ability": "supremeoverlord"
-      }
+        "ability": ["defiant", "supremeoverlord"]
     ]
   },
   "volcarona": {
@@ -3114,7 +3098,7 @@
         ],
         "item": ["leftovers"],
         "nature": "bold",
-        "evs": [252, 0, 252, 0, 0, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["poison", "fairy", "water", "fire"],
         "wantsTera": true,
         "ability": "tabletsofruin"
@@ -3130,7 +3114,7 @@
         ],
         "item": ["leftovers"],
         "nature": "bold",
-        "evs": [252, 0, 252, 0, 0, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["fire"],
         "wantsTera": true,
         "ability": "tabletsofruin"
@@ -3210,7 +3194,7 @@
         "item": ["leftovers", "rockyhelmet", "covertcloak"],
         "nature": "bold",
         "ivs": [31, 0, 31, 31, 31, 31],
-        "evs": [252, 0, 252, 0, 0, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["water", "fairy", "normal"],
         "wantsTera": true,
         "ability": "heatproof"
@@ -3252,7 +3236,7 @@
         ],
         "item": ["leftovers", "sitrusberry", "covertcloak", "heavydutyboots"],
         "nature": "bold",
-        "evs": [252, 0, 244, 4, 4, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["fairy", "water"],
         "wantsTera": true,
         "ability": "unaware"
@@ -3268,7 +3252,7 @@
         ],
         "item": ["leftovers", "sitrusberry", "covertcloak", "heavydutyboots"],
         "nature": "bold",
-        "evs": [252, 0, 244, 4, 4, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["normal", "fairy"],
         "ability": "unaware"
       },
@@ -3561,7 +3545,7 @@
         "moves": [["drainpunch"], ["thunderpunch"], ["substitute"], ["swordsdance"]],
         "item": ["leftovers", "punchingglove"],
         "nature": "impish",
-        "evs": [92, 4, 172, 0, 212, 28],
+        "evs": [92, 12, 172, 0, 212, 20],
         "teratype": ["fairy", "water", "grass"],
         "ability": "quarkdrive"
       }
@@ -3826,7 +3810,7 @@
         ],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["poison", "water", "flying"],
         "ability": "guarddog"
       },
@@ -3841,7 +3825,7 @@
         ],
         "item": ["assaultvest"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["poison", "water", "flying"],
         "ability": "toxicchain"
       }
@@ -4098,7 +4082,12 @@
       {
         "species": "pelipper",
         "weight": 30,
-        "moves": [["uturn"], ["hydropump", "surf"], ["icebeam"], ["hurricane"]],
+        "moves": [
+          ["uturn"],
+          ["hydropump", "surf"],
+          ["icebeam"],
+          ["hurricane"]
+        ],
         "item": ["damprock", "choicespecs"],
         "nature": "modest",
         "evs": [0, 0, 0, 252, 4, 252],
@@ -4612,7 +4601,7 @@
         ],
         "item": ["sitrusberry", "rockyhelmet"],
         "nature": "impish",
-        "evs": [252, 0, 252, 0, 0, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["poison", "ghost", "fairy"],
         "ability": "eartheater"
       },
@@ -4627,7 +4616,7 @@
         ],
         "item": ["chestoberry", "rockyhelmet"],
         "nature": "impish",
-        "evs": [252, 0, 252, 0, 0, 4],
+        "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["poison", "ghost", "fairy"],
         "ability": "eartheater"
       }
