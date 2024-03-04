@@ -20,12 +20,7 @@
       {
         "species": "chienpao",
         "weight": 15,
-        "moves": [
-          ["iciclecrash"],
-          ["suckerpunch"],
-          ["sacredsword"],
-          ["terablast"]
-        ],
+        "moves": [["iciclecrash"], ["suckerpunch"], ["sacredsword"], ["terablast"]],
         "item": ["focussash"],
         "nature": "jolly",
         "evs": [0, 252, 0, 0, 4, 252],
@@ -519,12 +514,7 @@
       {
         "species": "ursalunabloodmoon",
         "weight": 60,
-        "moves": [
-          ["bloodmoon"],
-          ["vacuumwave"],
-          ["earthpower"],
-          ["hypervoice"]
-        ],
+        "moves": [["bloodmoon"], ["vacuumwave"], ["earthpower"], ["hypervoice"]],
         "item": ["assaultvest"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "modest",
@@ -1445,7 +1435,7 @@
         "species": "baxcalibur",
         "weight": 10,
         "moves": [
-          ["iciclespear"],
+          ["iciclecrash", "iciclespear"],
           ["iceshard"],
           ["glaiverush"],
           ["earthquake"]
@@ -1511,7 +1501,7 @@
         "item": ["lightclay", "rockyhelmet"],
         "nature": "timid",
         "evs": [4, 0, 0, 252, 0, 252],
-        "teratype": ["ice", "water", "fire"],
+        "teratype": ["water", "fire"],
         "ability": "snowwarning"
       },
       {
@@ -1749,12 +1739,7 @@
       {
         "species": "heatran",
         "weight": 40,
-        "moves": [
-          ["magmastorm"],
-          ["earthpower"],
-          ["flashcannon"],
-          ["terablast"]
-        ],
+        "moves": [["magmastorm"], ["earthpower"], ["flashcannon"], ["terablast"]],
         "item": ["assaultvest"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "modest",
@@ -2285,12 +2270,7 @@
       {
         "species": "zapdos",
         "weight": 10,
-        "moves": [
-          ["thunderbolt"],
-          ["hurricane"],
-          ["voltswitch"],
-          ["terablast"]
-        ],
+        "moves": [["thunderbolt"], ["hurricane"], ["voltswitch"], ["terablast"]],
         "item": ["choicescarf"],
         "nature": "timid",
         "ivs": [31, 0, 31, 31, 31, 31],
@@ -2378,12 +2358,7 @@
       {
         "species": "magnezone",
         "weight": 70,
-        "moves": [
-          ["thunderbolt"],
-          ["flashcannon"],
-          ["voltswitch"],
-          ["terablast"]
-        ],
+        "moves": [["thunderbolt"], ["flashcannon"], ["voltswitch"], ["terablast"]],
         "item": ["assaultvest"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "modest",
@@ -2395,12 +2370,7 @@
       {
         "species": "magnezone",
         "weight": 20,
-        "moves": [
-          ["thunderbolt"],
-          ["flashcannon"],
-          ["voltswitch"],
-          ["terablast"]
-        ],
+        "moves": [["thunderbolt"], ["flashcannon"], ["voltswitch"], ["terablast"]],
         "item": ["choicespecs"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "modest",
@@ -2517,12 +2487,7 @@
       {
         "species": "ironmoth",
         "weight": 20,
-        "moves": [
-          ["toxicspikes"],
-          ["fierydance"],
-          ["morningsun"],
-          ["whirlwind"]
-        ],
+        "moves": [["toxicspikes"], ["fierydance"], ["morningsun"], ["whirlwind"]],
         "item": ["blacksludge", "heavydutyboots"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "calm",
@@ -2631,12 +2596,7 @@
       {
         "species": "rillaboom",
         "weight": 20,
-        "moves": [
-          ["grassyglide"],
-          ["highhorsepower"],
-          ["terablast"],
-          ["swordsdance"]
-        ],
+        "moves": [["grassyglide"], ["highhorsepower"], ["terablast"], ["swordsdance"]],
         "item": ["grassyseed"],
         "nature": "adamant",
         "evs": [252, 252, 4, 0, 0, 0],
@@ -2680,12 +2640,7 @@
       {
         "species": "sneasler",
         "weight": 55,
-        "moves": [
-          ["direclaw"],
-          ["closecombat"],
-          ["shadowclaw"],
-          ["toxicspikes"]
-        ],
+        "moves": [["direclaw"], ["closecombat"], ["shadowclaw"], ["toxicspikes"]],
         "gender": "f",
         "item": ["focussash", "airballoon", "sitrusberry", "redcard"],
         "nature": "adamant",
@@ -2991,12 +2946,7 @@
       {
         "species": "kingambit",
         "weight": 25,
-        "moves": [
-          ["kowtowcleave"],
-          ["suckerpunch"],
-          ["ironhead"],
-          ["guillotine"]
-        ],
+        "moves": [["kowtowcleave"], ["suckerpunch"], ["ironhead"], ["guillotine"]],
         "item": ["assaultvest"],
         "nature": "adamant",
         "evs": [252, 252, 0, 0, 0, 4],
@@ -3006,12 +2956,7 @@
       {
         "species": "kingambit",
         "weight": 20,
-        "moves": [
-          ["kowtowcleave"],
-          ["suckerpunch"],
-          ["ironhead"],
-          ["guillotine"]
-        ],
+        "moves": [["kowtowcleave"], ["suckerpunch"], ["ironhead"], ["guillotine"]],
         "item": ["assaultvest"],
         "nature": "adamant",
         "evs": [252, 252, 0, 0, 0, 4],
@@ -3053,12 +2998,7 @@
       {
         "species": "kingambit",
         "weight": 15,
-        "moves": [
-          ["kowtowcleave"],
-          ["suckerpunch"],
-          ["ironhead"],
-          ["swordsdance"]
-        ],
+        "moves": [["kowtowcleave"], ["suckerpunch"], ["ironhead"], ["swordsdance"]],
         "item": ["blackglasses", "sitrusberry"],
         "nature": "adamant",
         "evs": [252, 252, 0, 0, 0, 4],
@@ -3068,12 +3008,7 @@
       {
         "species": "kingambit",
         "weight": 10,
-        "moves": [
-          ["kowtowcleave"],
-          ["suckerpunch"],
-          ["ironhead"],
-          ["swordsdance"]
-        ],
+        "moves": [["kowtowcleave"], ["suckerpunch"], ["ironhead"], ["swordsdance"]],
         "item": ["blackglasses", "sitrusberry"],
         "nature": "adamant",
         "evs": [252, 252, 0, 0, 0, 4],
@@ -3376,12 +3311,7 @@
       {
         "species": "blissey",
         "weight": 10,
-        "moves": [
-          ["softboiled"],
-          ["flamethrower"],
-          ["icebeam"],
-          ["thunderbolt"]
-        ],
+        "moves": [["softboiled"], ["flamethrower"], ["icebeam"], ["thunderbolt"]],
         "item": ["expertbelt"],
         "nature": "bold",
         "evs": [4, 0, 252, 252, 0, 0],
@@ -3457,12 +3387,7 @@
       {
         "species": "ceruledge",
         "weight": 10,
-        "moves": [
-          ["bitterblade"],
-          ["flareblitz"],
-          ["shadowsneak"],
-          ["terablast"]
-        ],
+        "moves": [["bitterblade"], ["flareblitz"], ["shadowsneak"], ["terablast"]],
         "item": ["choiceband"],
         "nature": "adamant",
         "evs": [100, 252, 156, 0, 0, 0],
@@ -3633,12 +3558,7 @@
       {
         "species": "ironhands",
         "weight": 30,
-        "moves": [
-          ["drainpunch"],
-          ["thunderpunch"],
-          ["substitute"],
-          ["swordsdance"]
-        ],
+        "moves": [["drainpunch"], ["thunderpunch"], ["substitute"], ["swordsdance"]],
         "item": ["leftovers", "punchingglove"],
         "nature": "impish",
         "evs": [92, 4, 172, 0, 212, 28],
@@ -3965,12 +3885,7 @@
       {
         "species": "arcaninehisui",
         "weight": 5,
-        "moves": [
-          ["rockblast"],
-          ["flareblitz"],
-          ["extremespeed"],
-          ["terablast"]
-        ],
+        "moves": [["rockblast"], ["flareblitz"], ["extremespeed"], ["terablast"]],
         "item": ["loadeddice"],
         "nature": "adamant",
         "evs": [212, 252, 4, 0, 4, 36],
@@ -4081,12 +3996,7 @@
       {
         "species": "cloyster",
         "weight": 15,
-        "moves": [
-          ["shellsmash"],
-          ["iciclespear"],
-          ["terablast"],
-          ["rockblast"]
-        ],
+        "moves": [["shellsmash"], ["iciclespear"], ["terablast"], ["rockblast"]],
         "item": ["focussash", "lifeorb", "lumberry"],
         "nature": "adamant",
         "evs": [0, 252, 4, 0, 0, 252],
@@ -4472,12 +4382,7 @@
       {
         "species": "arcanine",
         "weight": 50,
-        "moves": [
-          ["flareblitz"],
-          ["morningsun"],
-          ["willowisp"],
-          ["extremespeed"]
-        ],
+        "moves": [["flareblitz"], ["morningsun"], ["willowisp"], ["extremespeed"]],
         "item": ["heavydutyboots", "rockyhelmet", "leftovers"],
         "nature": "impish",
         "evs": [236, 0, 212, 0, 0, 60],
@@ -5204,12 +5109,7 @@
       {
         "species": "mesprit",
         "weight": 100,
-        "moves": [
-          ["dazzlinggleam"],
-          ["trickroom"],
-          ["healingwish"],
-          ["encore"]
-        ],
+        "moves": [["dazzlinggleam"], ["trickroom"], ["healingwish"], ["encore"]],
         "item": ["sitrusberry"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "bold",
@@ -5571,12 +5471,7 @@
       {
         "species": "spectrier",
         "weight": 100,
-        "moves": [
-          ["shadowball"],
-          ["drainingkiss"],
-          ["willowisp"],
-          ["calmmind"]
-        ],
+        "moves": [["shadowball"], ["drainingkiss"], ["willowisp"], ["calmmind"]],
         "item": ["leftovers", "sitrusberry"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "timid",
@@ -5613,12 +5508,7 @@
       {
         "species": "polteageist",
         "weight": 100,
-        "moves": [
-          ["shellsmash"],
-          ["strengthsap"],
-          ["storedpower"],
-          ["terablast"]
-        ],
+        "moves": [["shellsmash"], ["strengthsap"], ["storedpower"], ["terablast"]],
         "item": ["whiteherb", "focussash"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "bold",
@@ -5655,12 +5545,7 @@
       {
         "species": "forretress",
         "weight": 50,
-        "moves": [
-          ["bodypress"],
-          ["voltswitch"],
-          ["stealthrock"],
-          ["toxicspikes"]
-        ],
+        "moves": [["bodypress"], ["voltswitch"], ["stealthrock"], ["toxicspikes"]],
         "item": ["rockyhelmet"],
         "ivs": [31, 0, 31, 31, 31, 0],
         "nature": "relaxed",
