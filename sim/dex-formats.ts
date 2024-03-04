@@ -214,6 +214,36 @@ export class RuleTable extends Map<string, string> {
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
 		this.evLimit = Number(this.valueRules.get('evlimit')) || null;
 
+		const timer: Partial<GameTimerSettings> = {}
+		if (this.valueRules.has('timerstarting')) {
+			timer.starting = Number(this.valueRules.get('timerstarting'));
+		}
+		if (this.valueRules.has('dctimer')) {
+			timer.dcTimer = !!this.valueRules.get('dctimer');
+		}
+		if (this.valueRules.has('dctimerbank')) {
+			timer.dcTimer = !!this.valueRules.get('dctimerbank');
+		}
+		if (this.valueRules.has('timergrace')) {
+			timer.grace = Number(this.valueRules.get('timergrace'));
+		}
+		if (this.valueRules.has('timeraddperturn')) {
+			timer.addPerTurn = Number(this.valueRules.get('timeraddperturn'));
+		}
+		if (this.valueRules.has('timermaxperturn')) {
+			timer.maxPerTurn = Number(this.valueRules.get('timermaxperturn'));
+		}
+		if (this.valueRules.has('timermaxfirstturn')) {
+			timer.maxFirstTurn = Number(this.valueRules.get('timermaxfirstturn'));
+		}
+		if (this.valueRules.has('timeoutautochoose')) {
+			timer.timeoutAutoChoose = !!this.valueRules.get('timeoutautochoose');
+		}
+		if (this.valueRules.has('timeraccelerate')) {
+			timer.accelerate = !!this.valueRules.get('timeraccelerate');
+		}
+		if (Object.keys(timer).length) this.timer = [timer, format.name];
+
 		if (this.valueRules.get('pickedteamsize') === 'Auto') {
 			this.pickedTeamSize = (
 				['doubles', 'rotation'].includes(format.gameType) ? 4 :
@@ -367,7 +397,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/**
 	 * Only applies to rules, not formats
 	 */
-	declare readonly hasValue?: boolean | 'integer' | 'positive-integer';
+	declare readonly hasValue?: boolean | 'integer' | 'positive-integer' | 'boolean';
 	declare readonly onValidateRule?: (
 		this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string
 	) => string | void;
@@ -383,7 +413,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly searchShow?: boolean;
 	declare readonly bestOfDefault?: boolean;
 	declare readonly threads?: string[];
-	declare readonly timer?: Partial<GameTimerSettings>;
 	declare readonly tournamentShow?: boolean;
 	declare readonly checkCanLearn?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
@@ -660,9 +689,6 @@ export class DexFormats {
 		if (format.checkCanLearn) {
 			ruleTable.checkCanLearn = [format.checkCanLearn, format.name];
 		}
-		if (format.timer) {
-			ruleTable.timer = [format.timer, format.name];
-		}
 
 		// apply rule repeals before other rules
 		// repeals is a ruleid:depth map (positive: unused, negative: used)
@@ -720,20 +746,29 @@ export class DexFormats {
 				if (value === 'Current Gen') value = `${this.dex.gen}`;
 				if ((subformat.id === 'pickedteamsize' || subformat.id === 'evlimit') && value === 'Auto') {
 					// can't be resolved until later
-				} else if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
-					const intValue = parseInt(value);
-					if (isNaN(intValue) || value !== `${intValue}`) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
+				} else {
+					switch (subformat.hasValue) {
+					case 'integer': case 'positive-integer':
+						const intValue = parseInt(value);
+						if (isNaN(intValue) || value !== `${intValue}`) {
+							throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
+						}
+						if (subformat.hasValue === 'positive-integer') {
+							if (parseInt(value) === 0) {
+								throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
+							}
+							if (parseInt(value) <= 0) {
+								throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
+							}
+						}
+						break;
+					case 'boolean':
+						if (!['true', 'false'].includes(toID(value))) {
+							throw new Error(`In rule "${ruleSpec}", "${value}" must be either "True" or "False".`);
+						}
 					}
 				}
-				if (subformat.hasValue === 'positive-integer') {
-					if (parseInt(value) === 0) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
-					}
-					if (parseInt(value) <= 0) {
-						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
-					}
-				}
+				
 				const oldValue = ruleTable.valueRules.get(subformat.id);
 				if (oldValue === value) {
 					throw new Error(`Rule "${ruleSpec}" is redundant with existing rule "${subformat.id}=${value}"${ruleTable.blame(subformat.id)}.`);
@@ -808,14 +843,6 @@ export class DexFormats {
 					);
 				}
 				ruleTable.checkCanLearn = subRuleTable.checkCanLearn;
-			}
-			if (subRuleTable.timer) {
-				if (ruleTable.timer) {
-					throw new Error(
-						`"${format.name}" has conflicting timer validation rules from "${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`
-					);
-				}
-				ruleTable.timer = subRuleTable.timer;
 			}
 		}
 		ruleTable.getTagRules();
