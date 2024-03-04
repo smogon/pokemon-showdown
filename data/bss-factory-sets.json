@@ -226,7 +226,7 @@
         ],
         "item": ["leftovers"],
         "nature": "careful",
-        "evs": [244, 4, 4, 0, 252, 4],
+        "evs": [244, 12, 0, 0, 252, 0],
         "teratype": ["poison", "steel", "fairy"],
         "wantsTera": true,
         "ability": "multiscale"
@@ -248,7 +248,7 @@
         "item": ["boosterenergy"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "timid",
-        "evs": [244, 0, 252, 4, 4, 4],
+        "evs": [252, 0, 252, 4, 0, 0],
         "teratype": ["fairy", "water"],
         "ability": "protosynthesis"
       },
@@ -259,7 +259,7 @@
         "item": ["boosterenergy"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "timid",
-        "evs": [244, 0, 252, 4, 4, 4],
+        "evs": [252, 0, 252, 4, 0, 0],
         "teratype": ["fairy", "water"],
         "ability": "protosynthesis"
       },
@@ -560,18 +560,23 @@
       },
       {
         "species": "ironbundle",
-        "weight": 20,
-        "moves": [
-          ["icebeam"],
-          ["hydropump"],
-          ["freezedry"],
-          ["flipturn", "terablast"]
-        ],
+        "weight": 10,
+        "moves": [["icebeam"], ["hydropump"], ["freezedry"], ["terablast"]],
         "item": ["choicespecs"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "timid",
         "evs": [0, 0, 0, 252, 4, 252],
-        "teratype": ["water", "fairy"],
+        "teratype": ["fairy"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "ironbundle",
+        "weight": 10,
+        "moves": [["icebeam"], ["hydropump"], ["freezedry"], ["flipturn"]],
+        "item": ["choicespecs"],
+        "nature": "timid",
+        "evs": [0, 0, 0, 252, 4, 252],
+        "teratype": ["water"],
         "ability": "quarkdrive"
       }
     ]
@@ -681,7 +686,7 @@
         ],
         "item": ["sitrusberry"],
         "nature": "impish",
-        "evs": [244, 4, 116, 0, 124, 20],
+        "evs": [244, 20, 116, 0, 124, 4],
         "teratype": ["water", "fairy", "poison"],
         "ability": "vesselofruin"
       },
@@ -696,7 +701,7 @@
         ],
         "item": ["sitrusberry"],
         "nature": "impish",
-        "evs": [244, 4, 116, 0, 124, 20],
+        "evs": [244, 20, 116, 0, 124, 4],
         "teratype": ["water", "fairy", "poison"],
         "ability": "vesselofruin"
       },
@@ -1190,10 +1195,10 @@
     "sets": [
       {
         "species": "toxapex",
-        "weight": 60,
+        "weight": 40,
         "moves": [
           ["toxic"],
-          ["toxicspikes", "liquidation", "banefulbunker"],
+          ["toxicspikes", "banefulbunker"],
           ["recover"],
           ["haze"]
         ],
@@ -1206,13 +1211,12 @@
       },
       {
         "species": "toxapex",
-        "weight": 40,
+        "weight": 60,
         "moves": [["toxic"], ["liquidation"], ["recover"], ["haze"]],
         "item": ["rockyhelmet", "leftovers"],
-        "ivs": [31, 0, 31, 31, 31, 31],
-        "nature": "bold",
+        "nature": "impish",
         "evs": [252, 0, 252, 0, 4, 0],
-        "teratype": ["fairy"],
+        "teratype": ["fairy", "poison"],
         "ability": "regenerator"
       }
     ]
@@ -3832,15 +3836,25 @@
     "sets": [
       {
         "species": "milotic",
-        "weight": 100,
+        "weight": 67,
         "moves": [
           ["scald"],
           ["recover"],
           ["mirrorcoat", "haze"],
-          ["drainingkiss", "flipturn", "icebeam"]
+          ["drainingkiss", "icebeam"]
         ],
         "item": ["flameorb"],
         "ivs": [31, 0, 31, 31, 31, 31],
+        "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["fairy", "fire"],
+        "ability": "marvelscale"
+      },
+      {
+        "species": "milotic",
+        "weight": 33,
+        "moves": [["scald"], ["recover"], ["mirrorcoat", "haze"], ["flipturn"]],
+        "item": ["flameorb"],
         "nature": "bold",
         "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["fairy", "fire"],
@@ -5257,16 +5271,31 @@
       },
       {
         "species": "sableye",
-        "weight": 40,
+        "weight": 20,
         "moves": [
           ["reflect"],
           ["lightscreen"],
           ["willowisp", "taunt", "encore"],
-          ["foulplay", "knockoff"]
+          ["foulplay"]
         ],
         "item": ["lightclay"],
         "ivs": [31, 0, 31, 31, 31, 31],
         "nature": "bold",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["steel", "poison"],
+        "ability": "prankster"
+      },
+      {
+        "species": "sableye",
+        "weight": 20,
+        "moves": [
+          ["reflect"],
+          ["lightscreen"],
+          ["willowisp", "taunt", "encore"],
+          ["knockoff"]
+        ],
+        "item": ["lightclay"],
+        "nature": "impish",
         "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["steel", "poison"],
         "ability": "prankster"
@@ -5318,7 +5347,7 @@
         ],
         "item": ["loadeddice"],
         "nature": "adamant",
-        "evs": [252, 252, 0, 0, 0, 4],
+        "evs": [252, 252, 0, 0, 4, 0],
         "teratype": ["water", "fire"],
         "wantsTera": true,
         "ability": "protosynthesis"
@@ -5345,17 +5374,32 @@
       },
       {
         "species": "samurotthisui",
-        "weight": 30,
+        "weight": 15,
         "moves": [
           ["ceaselessedge"],
           ["razorshell", "aquacutter"],
           ["suckerpunch", "aquajet"],
-          ["sacredsword", "terablast"]
+          ["sacredsword"]
         ],
         "item": ["assaultvest"],
         "nature": "jolly",
         "evs": [0, 252, 0, 0, 4, 252],
-        "teratype": ["water", "fairy"],
+        "teratype": ["water"],
+        "ability": "sharpness"
+      },
+      {
+        "species": "samurotthisui",
+        "weight": 15,
+        "moves": [
+          ["ceaselessedge"],
+          ["razorshell", "aquacutter"],
+          ["suckerpunch", "aquajet"],
+          ["terablast"]
+        ],
+        "item": ["assaultvest"],
+        "nature": "jolly",
+        "evs": [0, 252, 0, 0, 4, 252],
+        "teratype": ["fairy"],
         "ability": "sharpness"
       }
     ]
@@ -5449,23 +5493,38 @@
         ],
         "item": ["assaultvest"],
         "nature": "jolly",
-        "evs": [252, 4, 4, 0, 244, 4],
+        "evs": [252, 4, 0, 0, 252, 0],
         "teratype": ["grass", "water", "fairy", "flying"],
         "ability": "quarkdrive"
       },
       {
         "species": "irontreads",
-        "weight": 85,
+        "weight": 60,
         "moves": [
           ["earthquake", "endeavor"],
           ["ironhead"],
           ["stealthrock", "rapidspin", "substitute"],
-          ["knockoff", "icespinner", "terablast"]
+          ["knockoff", "icespinner"]
         ],
         "item": ["boosterenergy"],
         "nature": "jolly",
         "evs": [4, 252, 0, 0, 0, 252],
         "teratype": ["grass", "water", "fairy", "ground"],
+        "ability": "quarkdrive"
+      },
+      {
+        "species": "irontreads",
+        "weight": 25,
+        "moves": [
+          ["earthquake", "endeavor"],
+          ["ironhead"],
+          ["stealthrock", "rapidspin", "substitute"],
+          ["terablast"]
+        ],
+        "item": ["boosterenergy"],
+        "nature": "jolly",
+        "evs": [4, 252, 0, 0, 0, 252],
+        "teratype": ["grass", "water", "fairy"],
         "wantsTera": true,
         "ability": "quarkdrive"
       }
@@ -5595,15 +5654,26 @@
     "sets": [
       {
         "species": "forretress",
-        "weight": 100,
+        "weight": 50,
         "moves": [
           ["bodypress"],
           ["voltswitch"],
           ["stealthrock"],
-          ["toxicspikes", "gyroball"]
+          ["toxicspikes"]
         ],
         "item": ["rockyhelmet"],
         "ivs": [31, 0, 31, 31, 31, 0],
+        "nature": "relaxed",
+        "evs": [252, 0, 252, 0, 4, 0],
+        "teratype": ["fighting", "water"],
+        "ability": "sturdy"
+      },
+      {
+        "species": "forretress",
+        "weight": 50,
+        "moves": [["bodypress"], ["voltswitch"], ["stealthrock"], ["gyroball"]],
+        "item": ["rockyhelmet"],
+        "ivs": [31, 31, 31, 31, 31, 0],
         "nature": "relaxed",
         "evs": [252, 0, 252, 0, 4, 0],
         "teratype": ["fighting", "water"],
