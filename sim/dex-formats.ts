@@ -214,7 +214,7 @@ export class RuleTable extends Map<string, string> {
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
 		this.evLimit = Number(this.valueRules.get('evlimit')) || null;
 
-		const timer: Partial<GameTimerSettings> = {}
+		const timer: Partial<GameTimerSettings> = {};
 		if (this.valueRules.has('timerstarting')) {
 			timer.starting = Number(this.valueRules.get('timerstarting'));
 		}
@@ -768,7 +768,7 @@ export class DexFormats {
 						}
 					}
 				}
-				
+
 				const oldValue = ruleTable.valueRules.get(subformat.id);
 				if (oldValue === value) {
 					throw new Error(`Rule "${ruleSpec}" is redundant with existing rule "${subformat.id}=${value}"${ruleTable.blame(subformat.id)}.`);
