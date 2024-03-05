@@ -404,6 +404,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (!this.queue.filter(id => this.teams[id].credits >= this.minBid && !this.teams[id].suspended).length) {
 			return this.end('There are no teams remaining that can draft players, so the auction has ended.');
 		}
+		if (!Object.keys(this.playerList).length) {
+			return this.end('There are no players remaining in the draft pool, so the auction has ended.');
+		}
 		do {
 			this.currentTeam = this.teams[this.queue.shift()!];
 			this.queue.push(this.currentTeam.id);
@@ -695,7 +698,7 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(`${user.name} added team ${team.name} to the auction.`);
 		},
 		addteamhelp: [
-			`/auction addteam [name], [credits], [manager1], [manager2], ... - Adds a team to the auction. Requires: # & auction owner`,
+			`/auction addteam [name], [manager1], [manager2], ... - Adds a team to the auction. Requires: # & auction owner`,
 		],
 		removeteam(target, room, user) {
 			room = this.requireRoom();
@@ -849,7 +852,7 @@ export const commands: Chat.ChatCommands = {
 			`- addplayer [name], [tier1], [tier2], ...: Adds a player to the auction.<br/>` +
 			`- removeplayer [name]: Removes a player from the auction.<br/>` +
 			`- assignplayer [player], [team], [price]: Assigns a player to a team. If team is blank, returns player to draft pool.<br/>` +
-			`- addteam [name], [credits], [manager1], [manager2], ...: Adds a team to the auction.<br/>` +
+			`- addteam [name], [manager1], [manager2], ...: Adds a team to the auction.<br/>` +
 			`- removeteam [name]: Removes the given team from the auction.<br/>` +
 			`- suspendteam [name]: Suspends the given team from the auction.<br/>` +
 			`- unsuspendteam [name]: Unsuspends the given team from the auction.<br/>` +
