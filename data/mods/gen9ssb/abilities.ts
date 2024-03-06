@@ -2289,7 +2289,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// YveltalNL
 	heightadvantage: {
-		shortDesc: "If this Pokemon's height is more than that of the opponent, lowers the opponent’s Atk and Sp. Atk by 1..",
+		shortDesc: "If this Pokemon's height is more than that of the opponent, lowers the opponent's Atk and Sp. Atk by 1..",
 		name: "Height Advantage",
 		onStart(pokemon) {
 			let activated = false;
@@ -2314,10 +2314,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	troll: {
 		shortDesc: "Using moves that can flinch makes user move first in their priority bracket.",
 		name: "Troll",
-		onModifyPriority(relayVar, source, target, move) {
-			if (!move) return;
-			if (move.secondary?.volatileStatus === 'flinch') {
-				return relayVar + 0.5;
+		onFractionalPriority(priority, pokemon, target, move) {
+			if (!!move?.secondaries?.some(m => m.volatileStatus === 'flinch')) {
+				this.add('-activate', pokemon, 'ability: Quick Draw');
+				return 0.1;
 			}
 		},
 	},

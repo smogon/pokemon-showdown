@@ -798,12 +798,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit() {
 			this.attrLastMove('[anim] Nasty Plot');
 		},
-		onHit(pokemon) {
+		onHit(pokemon, qwerty, move) {
 			const item = pokemon.getItem();
 			if (item.isBerry) {
 				pokemon.eatItem(true);
+				pokemon.lastItem = '';
 				const berries = ['iapapa', 'leppa', 'lum', 'maranga', 'ganlon', 'starf', 'liechi', 'enigma'];
-				pokemon.setItem(this.sample(berries) + 'berry');
+				const item = this.dex.items.get(this.sample(berries) + 'berry');
+				pokemon.setItem(item, pokemon, move);
+				this.add('-item', pokemon, item, '[from] move: what kind');
 			}
 			this.heal(pokemon.baseMaxhp / 4, pokemon);
 		},
@@ -1661,6 +1664,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			onHit(target, source) {
+				if (source.volatiles['substitute']) return;
 				if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
 					this.add('-fail', source, 'move: Substitute', '[weak]');
 				} else {
@@ -2584,7 +2588,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return priority + 1;
 			}
 		},
-		forceSwitch: true,
+		onHit(target, source, move) {
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.hp <= 0 || pokemon.fainted) continue;
+				pokemon.forceSwitchFlag = true;
+			}
+		},
 		secondary: null,
 		target: "all",
 		type: "Flying",
