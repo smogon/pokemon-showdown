@@ -691,6 +691,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Ride the Sun!"},
 	},
 
+	// spoo
+	hemogoblin: {
+		inherit: true,
+		abilities: {0: "I Can Hear The Heart Beating As One"},
+	},
+
 	// Steorra
 	kitsunoh: {
 		inherit: true,

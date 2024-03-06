@@ -799,15 +799,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Nasty Plot');
 		},
 		onHit(pokemon, qwerty, move) {
-			const item = pokemon.getItem();
-			if (item.isBerry) {
+			if (pokemon.item && pokemon.getItem().isBerry) {
 				pokemon.eatItem(true);
-				pokemon.lastItem = '';
-				const berries = ['iapapa', 'leppa', 'lum', 'maranga', 'ganlon', 'starf', 'liechi', 'enigma'];
-				const item = this.dex.items.get(this.sample(berries) + 'berry');
-				pokemon.setItem(item, pokemon, move);
-				this.add('-item', pokemon, item, '[from] move: what kind');
 			}
+			pokemon.lastItem = '';
+			const berries = ['iapapa', 'leppa', 'lum', 'maranga', 'ganlon', 'starf', 'liechi', 'enigma'];
+			const item = this.dex.items.get(this.sample(berries) + 'berry');
+			pokemon.setItem(item, pokemon, move);
+			this.add('-item', pokemon, item, '[from] move: what kind');
 			this.heal(pokemon.baseMaxhp / 4, pokemon);
 		},
 		secondary: null,
@@ -1061,7 +1060,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, contact: 1, mirror: 1},
-		multihit: 7,
+		multihit: [3, 7],
 		self: {
 			volatileStatus: 'summonmonsterviiifiendishmonstrouspiplupedecolossal',
 		},
@@ -1096,9 +1095,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				},
 			},
 		],
-		onModifyMove(move, pokemon, target) {
-			if (move.hit > 2) move.multiaccuracy = true;
-		},
 		onAfterMove(source, target, move) {
 			this.add(`c:|${getName((source.illusion || source).name)}|There's no way this'll faint in one punch!`);
 		},

@@ -747,8 +747,8 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Fire',
 	},
 	spoo: {
-		species: 'Hemogoblin', ability: 'Pixilate', item: 'Heavy-Duty Boots', gender: 'N',
-		moves: ['Extreme Speed', 'Bitter Blade', 'Taunt'],
+		species: 'Hemogoblin', ability: 'I Can Hear The Heart Beating As One', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: ['Extreme Speed', 'Bitter Blade', 'Moonlight'],
 		signatureMove: 'Cardio Training',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy', shiny: 32,
 	},

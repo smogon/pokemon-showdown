@@ -4084,7 +4084,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['slicing']) {
-				this.debug('Shapness boost');
+				this.debug('Sharpness boost');
 				return this.chainModify(1.5);
 			}
 		},
