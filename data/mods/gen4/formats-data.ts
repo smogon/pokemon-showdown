@@ -1554,4 +1554,8 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	arceuswater: {
 	},
+	arceusunknown: {
+		isNonstandard: "Unobtainable",
+		tier: "Unreleased",
+	},
 };
