@@ -3029,6 +3029,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// marillvibes
+	goodvibesonly: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Raises the user's Speed by 1 stage.",
+		name: "Good Vibes Only",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aqua Step', target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// maroon
 	metalblast: {
 		accuracy: 90,

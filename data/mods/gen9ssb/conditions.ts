@@ -1260,6 +1260,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mad Monty')}|Well great. Now the llamas are gonna come back. Is that what you wanted?`);
 		},
 	},
+	marillvibes: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('marillvibes ♫')}|Is that a __rat__?`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c:|${getName('marillvibes ♫')}|Here for a good time, not a long time!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('marillvibes ♫')}|The vibes are off... :(`);
+		},
+	},
 	maroon: {
 		noCopy: true,
 		onStart() {

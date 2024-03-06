@@ -541,6 +541,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Storm Shelter',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Rock',
 	},
+	'marillvibes ♫': {
+		species: 'Marill', ability: 'Huge Power', item: 'Life Orb', gender: 'M',
+		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],
+		signatureMove: 'Good Vibes Only',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Water', shiny: true,
+	},
 	maroon: {
 		species: 'Archaludon', ability: 'Built Different', item: 'Leftovers', gender: 'M',
 		moves: ['Body Press', 'Stealth Rock', 'Rapid Spin'],

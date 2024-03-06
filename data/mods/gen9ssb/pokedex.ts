@@ -508,6 +508,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Climate Change"},
 	},
 
+	// marillvibes
+	marill: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 50, def: 80, spa: 60, spd: 80, spe: 50},
+		abilities: {0: "Huge Power"},
+	},
+
 	// maroon
 	archaludon: {
 		inherit: true,
