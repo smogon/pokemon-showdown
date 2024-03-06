@@ -361,6 +361,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wiggling Strike',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Grass', shiny: 2,
 	},
+	'Goro Yagami': {
+		species: 'Cyndaquil', ability: 'Illusion Master', item: '', gender: 'M',
+		moves: ['Victory Dance', 'Bitter Blade', 'Thief'],
+		signatureMove: 'Shadow Ambush',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Water',
+	},
 	'Haste Inky': {
 		species: 'Falinks', ability: 'Simple', item: 'Sitrus Berry', gender: 'N',
 		moves: ['Superpower', 'Ice Hammer', 'Poison Jab'],
@@ -722,6 +728,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'BoltBeam',
 		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', shiny: 64,
 	},
+	Sificon: {
+		species: 'Hoppip', ability: 'Perfectly Imperfect', item: 'Eviolite', gender: 'M',
+		moves: ['Strength Sap', 'Spikes', 'Seismic Toss'],
+		signatureMove: 'Grass Gaming',
+		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Dragon',
+	},
 	skies: {
 		species: 'Chespin', ability: 'Spikes of Wrath', item: 'Sitrus Berry', gender: 'F',
 		moves: ['Bulk Up', 'Strength Sap', 'Body Press'],
@@ -1038,7 +1050,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Team specific tweaks occur here
 			// Swap last and second to last sets if last set has Illusion
-			if (team.length === this.maxTeamSize && set.ability === 'Illusion') {
+			if (team.length === this.maxTeamSize && (set.ability === 'Illusion' || set.ability === 'Illusion Master')) {
 				team[this.maxTeamSize - 1] = team[this.maxTeamSize - 2];
 				team[this.maxTeamSize - 2] = set;
 			}

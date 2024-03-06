@@ -300,6 +300,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Gambling Addiction"},
 	},
 
+	// Goro Yagami
+	cyndaquil: {
+		inherit: true,
+		baseStats: {hp: 78, atk: 109, def: 78, spa: 84, spd: 85, spe: 100},
+		abilities: {0: "Illusion Master"},
+	},
+
 	// Haste Inky
 	falinks: {
 		inherit: true,
@@ -670,6 +677,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	ampharosmega: {
 		inherit: true,
 		abilities: {0: "Magical Mystery Charge"},
+	},
+
+	// Sificon
+	hoppip: {
+		inherit: true,
+		baseStats: {hp: 75, atk: 55, def: 70, spa: 55, spd: 95, spe: 110},
+		abilities: {0: "Perfectly Imperfect"},
 	},
 
 	// skies

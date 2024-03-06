@@ -497,7 +497,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Clefable')}|Catch you on the flip side!`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('Clefable')}|Can't believe they don't let me in Paldea`);
+			this.add(`c:|${getName('Clefable')}|I needed a VISA to be in Paldea, Wasn't even worth it. Bloody Brexit.`);
 		},
 	},
 	clementine: {
@@ -776,6 +776,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Ganjafin')}|I knew I'd die before Silksong came out`);
+		},
+	},
+	goroyagami: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Goro Yagami')}|It's now or never!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Goro Yagami')}|Time for a special Cyndaquil retreat!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Goro Yagami')}|Until next time!`);
 		},
 	},
 	hasteinky: {
@@ -1361,7 +1373,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	notater517: {
 		noCopy: true,
-		// phrases TBD
+		onStart() {
+			this.add(`c:|${getName('Notater517')}|OwO What's This?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Notater517')}|brb, dealing with mobile connection, here's a song to listen to before I return: https://www.youtube.com/watch?v=dQw4w9WgXcQ`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Notater517')}|ngl that was pretty sus ඩ`);
+		},
 	},
 	nya: {
 		noCopy: true,
@@ -1728,6 +1748,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Siegfried')}|Living is easy with eyes closed.`);
+		},
+	},
+	sificon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Sificon')}|gm (it's 4pm and I woke up just now)`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Sificon')}|guess I'll go to bed (we all know that I won't)`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Sificon')}|oop`);
 		},
 	},
 	skies: {

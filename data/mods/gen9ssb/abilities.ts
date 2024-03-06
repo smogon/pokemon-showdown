@@ -761,6 +761,64 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Goro Yagami
+	illusionmaster: {
+		shortDesc: "This Pokemon has an illusion until it falls below 33% health.",
+		onBeforeSwitchIn(pokemon) {
+			pokemon.illusion = null;
+			// yes, you can Illusion an active pokemon but only if it's to your right
+			for (let i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
+				const possibleTarget = pokemon.side.pokemon[i];
+				if (!possibleTarget.fainted) {
+					// If Ogerpon is in the last slot while the Illusion Pokemon is Terastallized
+					// Illusion will not disguise as anything
+					if (!pokemon.terastallized || possibleTarget.species.baseSpecies !== 'Ogerpon') {
+						pokemon.illusion = possibleTarget;
+					}
+					break;
+				}
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (target.illusion && target.hp < (target.maxhp / 3)) {
+				this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, source, move);
+			}
+		},
+		onEnd(pokemon) {
+			if (pokemon.illusion) {
+				this.debug('illusion master cleared');
+				let disguisedAs = this.toID(pokemon.illusion.name);
+				pokemon.illusion = null;
+				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				this.add('replace', pokemon, details);
+				this.add('-end', pokemon, 'Illusion');
+				if (this.ruleTable.has('illusionlevelmod')) {
+					this.hint("Illusion Level Mod is active, so this Pok\u00e9mon's true level was hidden.", true);
+				}
+				// Handle various POKEMON.
+				if (this.dex.species.get(disguisedAs).exists || this.dex.moves.get(disguisedAs).exists ||
+					this.dex.abilities.get(disguisedAs).exists || disguisedAs === 'blitz') {
+					disguisedAs += 'user';
+				}
+				if (pokemon.volatiles[disguisedAs]) {
+					pokemon.removeVolatile(disguisedAs);
+				}
+				if (!pokemon.volatiles[this.toID(pokemon.name)]) {
+					const status = this.dex.conditions.get(this.toID(pokemon.name));
+					if (status?.exists) {
+						pokemon.addVolatile(this.toID(pokemon.name), pokemon);
+					}
+				}
+			}
+		},
+		onFaint(pokemon) {
+			pokemon.illusion = null;
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1},
+		name: "Illusion Master",
+	},
+
 	// havi
 	mensiscage: {
 		shortDesc: "Immune to status and is considered to be asleep. 30% chance to disable when hit.",
@@ -1808,6 +1866,33 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Sificon
+	perfectlyimperfect: {
+		shortDesc: "Magic Guard + Thick Fat.",
+		name: "Perfectly Imperfect",
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Perfectly Imperfect weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Perfectly Imperfect weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		flags: {breakable: 1},
+	},
+
 	// skies
 	spikesofwrath: {
 		shortDesc: "Stamina + Cheek Pouch + sets Spikes and Toxic Spikes upon KO.",
@@ -2046,6 +2131,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.item = '';
 			this.add('-item', pokemon, item, '[from] ability: The Grace Of Jesus Christ');
 			pokemon.setItem(item);
+			pokemon.formeChange("Arceus-" + item.onPlate!, this.dex.abilities.get('thegraceofjesuschrist'), true);
 		},
 		flags: {},
 	},

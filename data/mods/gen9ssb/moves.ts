@@ -1796,9 +1796,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 100,
 			volatileStatus: 'saltcure',
+			sideCondition: 'spikes',
 		},
 		target: "normal",
 		type: "Water",
+	},
+
+	// Goro Yagami
+	shadowambush: {
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		shortDesc: "-1 Def/SpD, gives Slow Start, user switches.",
+		name: "Shadow Ambush",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Spectral Thief', target);
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'slowstart',
+			boosts: {
+				def: -1,
+				spd: -1,
+			},
+		},
+		selfSwitch: true,
+		target: "normal",
+		type: "Ghost",
 	},
 
 	// Haste Inky
@@ -1850,6 +1881,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit() {
 			this.attrLastMove('[anim] Spirit Shackle');
+		},
+		onAfterHit(source, target, move) {
+			this.add(`c:|${getName((source.illusion || source).name)}|as you once did for the vacuous Rom,`);
 		},
 		selfSwitch: true,
 		volatileStatus: 'disable',
@@ -3332,17 +3366,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Sweet Kiss');
 			this.attrLastMove('[anim] Baton Pass');
 		},
-		onHitField() {
+		onHitField(target, source, move) {
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
 			}
-		},
-		self: {
-			boosts: {
-				atk: 1,
-				def: 1,
-			},
+			this.boost({atk: 1, def: 1}, source, source, move);
 		},
 		slotCondition: 'nyaa',
 		condition: {
@@ -3963,21 +3992,61 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onTryHit(target) {
-			target.addVolatile('boltbeam');
-			this.actions.useMove("thunderbolt", target);
-			this.actions.useMove("icebeam", target);
+			const tbolt = this.dex.getActiveMove('thunderbolt');
+			tbolt.basePower = 45;
+			const icebeam = this.dex.getActiveMove('icebeam');
+			icebeam.basePower = 45;
+			this.actions.useMove(tbolt, target);
+			this.actions.useMove(icebeam, target);
 			return null;
-		},
-		condition: {
-			duration: 1,
-			onBasePowerPriority: 12,
-			onBasePower(basePower) {
-				return this.chainModify(0.5);
-			},
 		},
 		secondary: null,
 		target: "self",
 		type: "Electric",
+	},
+
+	// Sificon
+	grassgaming: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		shortDesc: "Knock Off + Sappy Seed + Burning Jealousy but poison.",
+		name: "Grass Gaming",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'G-Max Vine Lash', target);
+		},
+		onBasePower(basePower, source, target, move) {
+			const item = target.getItem();
+			if (!this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return;
+			if (item.id) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAfterHit(target, source) {
+			if (source.hp) {
+				const item = target.takeItem();
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] move: Grass Gaming', '[of] ' + source);
+				}
+			}
+		},
+		onHit(target, source, move) {
+			if (target?.statsRaisedThisTurn) {
+				target.trySetStatus('psn', source, move);
+			}
+			if (!target.hasType('Grass')) {
+				target.addVolatile('leechseed', source);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
 	},
 
 	// skies
