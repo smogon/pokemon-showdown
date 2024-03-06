@@ -1796,7 +1796,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: {
 			chance: 100,
 			volatileStatus: 'saltcure',
-			sideCondition: 'spikes',
 		},
 		target: "normal",
 		type: "Water",
