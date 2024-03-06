@@ -2346,7 +2346,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Using moves that can flinch makes user move first in their priority bracket.",
 		name: "Troll",
 		onFractionalPriority(priority, pokemon, target, move) {
-			if (!!move?.secondaries?.some(m => m.volatileStatus === 'flinch')) {
+			if (move?.secondaries?.some(m => m.volatileStatus === 'flinch')) {
 				this.add('-activate', pokemon, 'ability: Quick Draw');
 				return 0.1;
 			}
