@@ -1323,6 +1323,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Monkey')}|I'm a seeker too. But my dreams aren't like yours. I can't help thinking that somewhere in the universe there has to be something better than man. Has to be.`);
 		},
 	},
+	mypearl: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('MyPearl')}|sim, estou no ssb, like se amaste`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('MyPearl')}|nossa, ela é tãaaao regina george`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('MyPearl')}|ta permitido isso?`);
+		},
+	},
 	ney: {
 		noCopy: true,
 		onStart() {

@@ -571,6 +571,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Banana Breakfast',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Electric', shiny: 69,
 	},
+	MyPearl: {
+		species: 'Latios', ability: 'Eon Call', item: 'Soul Dew', gender: 'M',
+		moves: ['Draco Meteor', 'Aura Sphere', 'Flip Turn'],
+		signatureMove: 'Eon Assault',
+		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Steel', shiny: 50,
+	},
+	'MyPearl-Latias': {
+		species: 'Latias', ability: 'Eon Call', item: 'Soul Dew', gender: 'F',
+		moves: ['Calm Mind', 'Recover', 'Thunder Wave'],
+		signatureMove: 'Eon Assault',
+		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Steel', shiny: 50, skip: 'MyPearl',
+	},
 	Ney: {
 		species: 'Banette', ability: 'Insomnia', item: 'Banettite', gender: 'M',
 		moves: ['Destiny Bond', 'Will-O-Wisp', 'Parting Shot'],

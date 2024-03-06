@@ -3216,10 +3216,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "grass",
 	},
 
+	// MyPearl
+	eonassault: {
+		accuracy: 100,
+		basePower: 35,
+		category: "Special",
+		shortDesc: "Hits twice. 20% chance to lower foe's Sp. Atk or Sp. Def.",
+		name: "Eon Assault",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1},
+		multihit: 2,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Mist Ball', target);
+			this.add('-anim', source, 'Luster Purge', target);
+		},
+		secondaries: [
+			{
+				chance: 20,
+				boosts: {
+					spa: -1,
+				},
+			}, {
+				chance: 20,
+				boosts: {
+					spd: -1,
+				},
+			},
+		],
+		target: "normal",
+		type: "Psychic",
+	},
+
 	// Ney
 	shadowdance: {
-		accuracy: 110,
-		basePower: 90,
+		accuracy: 90,
+		basePower: 110,
 		category: "Physical",
 		shortDesc: "100% chance to raise the user's Attack by 1.",
 		name: "Shadow Dance",

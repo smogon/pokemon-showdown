@@ -1411,6 +1411,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// MyPearl
+	eoncall: {
+		shortDesc: "Changes into Latios after Status move, Latias after Special move.",
+		name: "Eon Call",
+		onAfterMove(source, target, move) {
+			if (move.category === 'Status' && source.species.baseSpecies === 'Latias') {
+				changeSet(this, source, ssbSets['MyPearl'], true);
+			} else if (move.category === 'Special' && source.species.baseSpecies === 'Latios') {
+				changeSet(this, source, ssbSets['MyPearl-Latias'], true);
+			}
+		},
+		flags: {},
+	},
+
 	// Ney
 	pranksterplus: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1. Dark types are not immune.",
