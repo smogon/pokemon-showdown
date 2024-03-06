@@ -1587,6 +1587,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Quite Quiet')}|hm`);
 		},
 	},
+	r8: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('R8')}|!randcat`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('R8')}|wow emoji`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('R8')}|Getting KOed won't prevent me from making propaganda: https://www.smogon.com/forums/forums/national-dex-other-tiers.738/`);
+		},
+	},
 	ransei: {
 		noCopy: true,
 		onStart() {

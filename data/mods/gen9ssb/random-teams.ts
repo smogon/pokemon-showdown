@@ -668,6 +668,12 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Flying',
 		// The nature not being Quiet is a crime
 	},
+	R8: {
+		species: 'Chansey', ability: 'Anti-Pelau', item: 'Eviolite', gender: 'N',
+		moves: ['Ice Beam', 'Thunderbolt', 'Flamethrower'],
+		signatureMove: 'Magic Trick',
+		evs: {hp: 252, spa: 252, spe: 4}, ivs: {atk: 0}, nature: 'Modest', teraType: 'Ice', shiny: 256,
+	},
 	Ransei: {
 		species: 'Audino-Mega', ability: 'Ultra Mystik', item: 'Safety Goggles', gender: 'M',
 		moves: ['Psystrike', 'Transform', 'Light of Ruin'],

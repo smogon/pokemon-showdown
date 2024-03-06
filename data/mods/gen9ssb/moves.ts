@@ -3727,6 +3727,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// R8
+	magictrick: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Magic Trick",
+		shortDesc: "Teleport + Clears field effects.",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Explosion', target);
+		},
+		onHit(target, source, move) {
+			const displayText = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			for (const targetCondition of Object.keys(target.side.sideConditions)) {
+				if (target.side.removeSideCondition(targetCondition) && displayText.includes(targetCondition)) {
+					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] move: Magic Trick', '[of] ' + source);
+				}
+			}
+			for (const sideCondition of Object.keys(source.side.sideConditions)) {
+				if (source.side.removeSideCondition(sideCondition) && displayText.includes(sideCondition)) {
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Magic Trick', '[of] ' + source);
+				}
+			}
+			this.field.clearTerrain();
+			this.field.clearWeather();
+			for (const pseudoWeather of Object.keys(this.field.pseudoWeather)) {
+				this.field.removePseudoWeather(pseudoWeather);
+			}
+		},
+		self: {
+			onHit(target, source, move) {
+				return !!this.canSwitch(source.side);
+			},
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Ransei
 	floodoflore: {
 		accuracy: 100,
