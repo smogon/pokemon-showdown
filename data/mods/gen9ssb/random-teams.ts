@@ -487,7 +487,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'The Better Water Shuriken',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', teraType: 'Water',
 	},
-	Krytocon: {
+	Kry: {
 		species: 'Mawile', ability: 'Flash Freeze', item: 'Mawilite', gender: 'M',
 		moves: ['Sucker Punch', 'Fire Lash', 'Play Rough'],
 		signatureMove: 'Attack of Opportunity',
@@ -669,10 +669,10 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Grass',
 	},
 	Rumia: {
-		species: 'Duskull', ability: 'Youkai of the Dusk', item: 'Eviolite', gender: 'F',
+		species: 'Duskull', ability: 'Youkai of the Dusk', item: 'Eviolite', gender: 'N',
 		moves: ['Infernal Parade', 'Strength Sap', 'Mortal Spin'],
 		signatureMove: 'Midnight Bird',
-		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Dark',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Poison',
 	},
 	Scotteh: {
 		species: 'Suicune', ability: 'Water Absorb', item: 'Leftovers', gender: '',
@@ -799,10 +799,10 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Flying', shiny: 1024,
 	},
 	UT: {
-		species: 'Talonflame', ability: 'Gale Guard', item: 'Life Orb', gender: 'M',
-		moves: ['Brave Bird', 'Roost', ['Swords Dance', 'Flare Blitz', 'Will-O-Wisp']],
-		signatureMove: 'Wingover',
-		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Flying',
+		species: 'Talonflame', ability: 'Gale Guard', item: 'Leftovers', gender: 'M',
+		moves: ['Brave Bird', 'Roost', 'Defog'],
+		signatureMove: 'My Boys',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Flying',
 	},
 	umowu: {
 		species: 'Pikachu', ability: 'Soul Surfer', item: 'Light Ball', gender: '',

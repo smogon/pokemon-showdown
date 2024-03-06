@@ -442,7 +442,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Super Skilled"},
 	},
 
-	// Krytocon
+	// Kry
 	mawile: {
 		inherit: true,
 		abilities: {0: "Flash Freeze"},
@@ -636,6 +636,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Rumia
 	duskull: {
 		inherit: true,
+		types: ["Ghost", "Dark"],
 		baseStats: {hp: 50, atk: 55, def: 90, spa: 90, spd: 55, spe: 55},
 		abilities: {0: "Youkai of the Dusk"},
 	},

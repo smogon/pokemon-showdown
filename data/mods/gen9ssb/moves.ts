@@ -544,7 +544,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			}
-			if (this.randomChance(90, 100)) {
+			if (this.randomChance(75, 100)) {
 				netType = this.sample(seTypes);
 			} else { // false positive
 				netType = this.sample(nveTypes);
@@ -2671,14 +2671,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
-	// Krytocon
+	// Kry
 	attackofopportunity: {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback(pokemon, target, move) {
 			if (target.beingCalledBack || target.switchFlag) {
 				this.debug('Attack of Opportunity damage boost');
-				return move.basePower * 2;
+				return move.basePower * 1.5;
 			}
 			return move.basePower;
 		},
@@ -2711,7 +2711,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.accuracy = true;
 				move.onAfterMoveSecondarySelf = function (s, t, m) {
 					if (!t || t.fainted || t.hp <= 0) {
-						this.boost({atk: 2}, s, s, m);
+						this.boost({atk: 1}, s, s, m);
 					}
 				};
 			}
@@ -4480,17 +4480,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 
 	// UT
-	wingover: {
+	myboys: {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 60,
 		category: "Physical",
-		shortDesc: "Damages foe and pivots out.",
-		name: "Wingover",
+		shortDesc: "Uses two status moves, then pivots out.",
+		name: "My Boys",
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] U-turn');
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			const varMoves = ['Feather Dance', 'Growl', 'Rain Dance', 'Sunny Day', 'Tailwind', 'Taunt', 'Will-O-Wisp'];
+			const move1 = this.sample(varMoves);
+			const move2 = this.sample(varMoves.filter(i => i !== move1));
+			this.add('-message', `Fletchling used ${move1}!`);
+			this.actions.useMove(move1, source);
+			this.add('-message', `Taillow used ${move2}!`);
+			this.actions.useMove(move2, source);
+			this.add('-message', `Talonflame attacked!`);
+			this.add('-anim', source, 'U-Turn', target);
 		},
 		selfSwitch: true,
 		secondary: null,
