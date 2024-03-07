@@ -544,15 +544,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			}
+			let falsePositive = false;
+			if (!seTypes.length) seTypes.push('Electric');
+			if (!nveTypes.length) nveTypes.push('Electric');
 			if (this.randomChance(75, 100)) {
 				netType = this.sample(seTypes);
 			} else { // false positive
+				falsePositive = true;
 				netType = this.sample(nveTypes);
 			}
-			if (netType === "") {
-				netType = "Electric";
+			if (falsePositive) {
+				this.add('-message', `${getName((target.illusion || target).name)} triggered a false-positive and caused ${move.name} to become not-very effective!`)
 			}
-			// TODO add messages for false positive etc
 			source.setType(netType);
 			this.add('-start', source, 'typechange', netType);
 			if (move) {
@@ -4147,22 +4150,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	adaptivebeam: {
 		accuracy: 100,
 		basePower: 45,
+		basePowerCallback(pokemon, target, move) {
+			if (target && pokemon.positiveBoosts() < target.positiveBoosts()) {
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
 		category: "Special",
 		shortDesc: "Power doubles if the target has more raised stats than the user.",
 		name: "Adaptive Beam",
 		pp: 15,
 		priority: 0,
-		flags: {sound: 1, protect: 1},
+		flags: {sound: 1, protect: 1, bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
-		},
-		basePowerCallback(pokemon, target, move) {
-			let bp = move.basePower;
-			if (!target) return bp;
-			if (pokemon.positiveBoosts() < target.positiveBoosts()) {
-				bp *= 2;
-			}
-			return bp;
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Flash Cannon', target);
