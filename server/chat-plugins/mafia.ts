@@ -75,6 +75,7 @@ interface MafiaIDEAData {
 	// eg, GestI has 2 things to pick, role and alignment
 	picks: string[];
 }
+
 interface MafiaIDEAModule {
 	data: MafiaIDEAData | null;
 	timer: NodeJS.Timer | null;
@@ -83,10 +84,20 @@ interface MafiaIDEAModule {
 	// users that haven't picked a role yet
 	waitingPick: string[];
 }
+
 interface MafiaIDEAPlayerData {
 	choices: string[];
 	originalChoices: string[];
 	picks: {[choice: string]: string | null};
+}
+
+// The different possible ways for a player to be eliminated
+enum MafiaEliminateType {
+	ELIMINATE = "was eliminated", // standard (vote + faction kill + anything else)
+	KICK = "was kicked from the game", // staff kick
+	TREESTUMP = "was treestumped", // can still talk
+	SPIRIT = "became a restless spirit", // can still vote
+	SPIRITSTUMP = "became a restless treestump" // treestump + spirit
 }
 
 const DATA_FILE = 'config/chat-plugins/mafia-data.json';
@@ -179,8 +190,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	/** false - can't hammer (priest), true - can only hammer (actor) */
 	hammerRestriction: null | boolean;
 	lastVote: number;
-	treestump: boolean;
-	restless: boolean;
+	eliminated: MafiaEliminateType | null;
 	silenced: boolean;
 	nighttalk: boolean;
 	revealed: string;
@@ -195,8 +205,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 		this.voting = '';
 		this.hammerRestriction = null;
 		this.lastVote = 0;
-		this.treestump = false;
-		this.restless = false;
+		this.eliminated = null;
 		this.silenced = false;
 		this.nighttalk = false;
 		this.revealed = '';
@@ -212,6 +221,28 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 			color = MafiaData.alignments[this.role.alignment].buttonColor;
 		}
 		return `<span style="font-weight:bold;color:${color}">${this.role.safeName}</span>`;
+	}
+
+	isEliminated() {
+		return this.eliminated !== null;
+	}
+
+	isTreestump() {
+		return this.eliminated === MafiaEliminateType.TREESTUMP ||
+			this.eliminated === MafiaEliminateType.SPIRITSTUMP;
+	}
+
+	isSpirit() {
+		return this.eliminated === MafiaEliminateType.SPIRIT ||
+			this.eliminated === MafiaEliminateType.SPIRITSTUMP;
+	}
+
+	// Only call updateHtmlRoom if the player is still involved in the game in some way
+	tryUpdateHtmlRoom() {
+		if ([null, MafiaEliminateType.SPIRIT, MafiaEliminateType.TREESTUMP,
+			MafiaEliminateType.SPIRITSTUMP].includes(this.eliminated)) {
+			this.updateHtmlRoom();
+		}
 	}
 
 	updateHtmlRoom() {
@@ -238,7 +269,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	host: string;
 	cohostids: ID[];
 	cohosts: string[];
-	dead: {[userid: string]: MafiaPlayer};
 
 	subs: ID[];
 	autoSub: boolean;
@@ -254,7 +284,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	enableNL: boolean;
 	voteLock: boolean;
-	votingAll: boolean;
+	votingEnabled: boolean;
 	forceVote: boolean;
 	closedSetup: boolean;
 	noReveal: boolean;
@@ -288,7 +318,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.cohostids = [];
 		this.cohosts = [];
 
-		this.dead = Object.create(null);
 		this.subs = [];
 		this.autoSub = true;
 		this.requestedSub = [];
@@ -303,7 +332,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		this.enableNL = true;
 		this.voteLock = false;
-		this.votingAll = true;
+		this.votingEnabled = true;
 		this.forceVote = false;
 		this.closedSetup = false;
 		this.noReveal = true;
@@ -529,6 +558,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 		return;
 	}
+
 	static parseRole(roleString: string) {
 		const roleName = roleString.replace(/solo/, '').trim();
 
@@ -657,7 +687,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 				}
 			}
 		}
-		this.dead = {};
+
+		this.clearEliminations();
 		this.played = [this.hostid, ...this.cohostids, ...(Object.keys(this.playerTable) as ID[])];
 		this.sendDeclare(`The roles have been distributed.`);
 		this.updatePlayers();
@@ -730,11 +761,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	vote(userid: ID, target: ID) {
-		if (!this.votingAll) return this.sendUser(userid, `|error|Voting is not allowed.`);
+		if (!this.votingEnabled) return this.sendUser(userid, `|error|Voting is not allowed.`);
 		if (this.phase !== 'day') return this.sendUser(userid, `|error|You can only vote during the day.`);
-		let player = this.playerTable[userid];
-		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
-		if (!player) return;
+		const player = this.playerTable[userid];
+		if (!player || (player.isEliminated() && !player.isSpirit())) return;
 		if (!(target in this.playerTable) && target !== 'novote') {
 			return this.sendUser(userid, `|error|${target} is not a valid player.`);
 		}
@@ -793,7 +823,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			// HAMMER
 			this.sendDeclare(`Hammer! ${target === 'novote' ? 'Nobody' : Utils.escapeHTML(name)} was voted out!`);
 			this.sendRoom(`|raw|<div class="infobox">${this.voteBox()}</div>`);
-			if (target !== 'novote') this.eliminate(target, 'kill');
+			if (target !== 'novote') this.eliminate(target, MafiaEliminateType.ELIMINATE);
 			this.night(true);
 			return;
 		}
@@ -802,15 +832,22 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	unvote(userid: ID, force = false) {
 		if (this.phase !== 'day' && !force) return this.sendUser(userid, `|error|You can only vote during the day.`);
-		let player = this.playerTable[userid];
+		const player = this.playerTable[userid];
+
+		if (!player) {
+			throw new Error(`Mafia Unvote called with non-existant player.`);
+		}
+
+		if (player.isEliminated() && !player.isSpirit()) {
+			return; // can't vote
+		}
 
 		// autoselfvote blocking doesn't apply to restless spirits
-		if (player && this.forceVote && !force) {
+		if (this.forceVote && !force) {
 			return this.sendUser(userid, `|error|You can only shift your vote, not unvote.`);
 		}
 
-		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
-		if (!player?.voting) return this.sendUser(userid, `|error|You are not voting for anyone.`);
+		if (!player.voting) return this.sendUser(userid, `|error|You are not voting for anyone.`);
 		if (this.voteLock && player?.voting) {
 			return this.sendUser(userid, `|error|You cannot unvote because votes are locked.`);
 		}
@@ -860,6 +897,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 		return buf;
 	}
+
 	voteBoxFor(userid: ID) {
 		let buf = '';
 		buf += `<h3>Votes (Hammer: ${this.hammerCount || 'Disabled'}) <button class="button" name="send" value="/msgroom ${this.roomid},/mafia refreshvotes"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
@@ -870,13 +908,13 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			} else {
 				buf += `<p style="font-weight:bold">0 ${this.playerTable[key] ? `${this.playerTable[key].safeName} ${this.playerTable[key].revealed ? `[${this.playerTable[key].revealed}]` : ''}` : 'No Vote'} `;
 			}
-			const isPlayer = (this.playerTable[userid]);
-			const isSpirit = (this.dead[userid] && this.dead[userid].restless);
-			if (this.votingAll && !(this.voteLock && (isPlayer?.voting || (isSpirit && this.dead[userid].voting))) &&
-			(isPlayer || isSpirit)) {
-				if (isPlayer && this.playerTable[userid].voting === key || isSpirit && this.dead[userid].voting === key) {
+
+			const player = this.playerTable[userid];
+			if (this.votingEnabled && player && (!player.isEliminated() || player.isSpirit()) &&
+				!(this.voteLock && player.voting)) {
+				if (player.voting === key) {
 					buf += `<button class="button" name="send" value="/msgroom ${this.roomid},/mafia unvote">Unvote ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Vote'}</button>`;
-				} else if ((this.selfEnabled && !isSpirit) || userid !== key) {
+				} else if ((this.selfEnabled && !player.isSpirit()) || userid !== key) {
 					buf += `<button class="button" name="send" value="/msgroom ${this.roomid},/mafia vote ${key}">Vote ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Vote'}</button>`;
 				}
 			} else if (userid === this.hostid || this.cohostids.includes(userid)) {
@@ -888,8 +926,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 		return buf;
 	}
+
 	applyVoteModifier(user: User, target: ID, mod: number) {
-		const targetPlayer = this.playerTable[target] || this.dead[target];
+		const targetPlayer = this.playerTable[target];
 		if (!targetPlayer) return this.sendUser(user, `|error|${target} is not in the game of mafia.`);
 		const oldMod = this.voteModifiers[target];
 		if (mod === oldMod || ((isNaN(mod) || mod === 1) && oldMod === undefined)) {
@@ -912,6 +951,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			return this.sendUser(user, `${targetPlayer.name} has been given a vote modifier of ${newMod}`);
 		}
 	}
+
 	applyHammerModifier(user: User, target: ID, mod: number) {
 		if (!(target in this.playerTable || target === 'novote')) {
 			return this.sendUser(user, `|error|${target} is not in the game of mafia.`);
@@ -938,11 +978,13 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			return this.sendUser(user, `${target} has been given a hammer modifier of ${newMod}`);
 		}
 	}
+
 	clearVoteModifiers(user: User) {
-		for (const player of [...Object.keys(this.playerTable), ...Object.keys(this.dead)] as ID[]) {
+		for (const player of Object.keys(this.playerTable) as ID[]) {
 			if (this.voteModifiers[player]) this.applyVoteModifier(user, player, 1);
 		}
 	}
+
 	clearHammerModifiers(user: User) {
 		for (const player of ['novote', ...Object.keys(this.playerTable)] as ID[]) {
 			if (this.hammerModifiers[player]) this.applyHammerModifier(user, player, 0);
@@ -953,10 +995,12 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		const mod = this.voteModifiers[userid];
 		return (mod === undefined ? 1 : mod);
 	}
+
 	getHammerValue(userid: ID) {
 		const mod = this.hammerModifiers[userid];
 		return (mod === undefined ? this.hammerCount : this.hammerCount + mod);
 	}
+
 	resetHammer() {
 		this.setHammer(Math.floor(Object.keys(this.playerTable).length / 2) + 1);
 	}
@@ -1021,8 +1065,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return super.removePlayer(player);
 	}
 
-	eliminate(toEliminate: string, ability: string) {
-		if (!(toEliminate in this.playerTable || toEliminate in this.dead)) return;
+	eliminate(toEliminate: string, ability: MafiaEliminateType) {
+		if (!(toEliminate in this.playerTable)) return;
 		if (!this.started) {
 			// Game has not started, simply kick the player
 			const player = this.playerTable[toEliminate];
@@ -1036,43 +1080,22 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.removePlayer(player);
 			return;
 		}
+
+		/*
 		if (toEliminate in this.playerTable) {
 			this.dead[toEliminate] = this.playerTable[toEliminate];
 		} else {
 			this.playerCount++; // so that the playercount decrement later isn't unnecessary
+			// TODO FIXME what is this even doing? I am unable to find a related decrement anywhere
 		}
+		*/
 
-		const player = this.dead[toEliminate];
-		let msg = `${player.safeName}`;
-		switch (ability) {
-		case 'treestump':
-			this.dead[player.id].treestump = true;
-			this.dead[player.id].restless = false;
-			msg += ` has been treestumped`;
-			break;
-		case 'spirit':
-			this.dead[player.id].treestump = false;
-			this.dead[player.id].restless = true;
-			msg += ` became a restless spirit`;
-			break;
-		case 'spiritstump':
-			this.dead[player.id].treestump = true;
-			this.dead[player.id].restless = true;
-			msg += ` became a restless treestump`;
-			break;
-		case 'kick':
-			this.dead[player.id].treestump = false;
-			this.dead[player.id].restless = false;
-			msg += ` was kicked from the game`;
-			break;
-		default:
-			this.dead[player.id].treestump = false;
-			this.dead[player.id].restless = false;
-			msg += ` was eliminated`;
-		}
+		const player = this.playerTable[toEliminate];
+		player.eliminated = ability;
+
 		if (player.voting) this.unvote(player.id, true);
-		this.sendDeclare(`${msg}! ${!this.noReveal && toID(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`);
-		if (player.role && !this.noReveal && toID(ability) === 'kill') player.revealed = player.getRole()!;
+		this.sendDeclare(`${player.safeName} ${ability}! ${!this.noReveal && ability === MafiaEliminateType.ELIMINATE ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`);
+		if (player.role && !this.noReveal && ability === MafiaEliminateType.ELIMINATE) player.revealed = player.getRole()!;
 		const targetRole = player.role;
 		if (targetRole) {
 			for (const [roleIndex, role] of this.roles.entries()) {
@@ -1109,40 +1132,13 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (this.phase === 'IDEApicking') {
 			return user.sendTo(this.room, `|error|You cannot add or remove players while IDEA roles are being picked.`);
 		}
-		if (toRevive in this.playerTable) {
-			user.sendTo(this.room, `|error|The user ${toRevive} is already a living player.`);
-			return;
-		}
-		if (toRevive in this.dead) {
-			const deadPlayer = this.dead[toRevive];
-			if (deadPlayer.treestump) deadPlayer.treestump = false;
-			if (deadPlayer.restless) deadPlayer.restless = false;
-			this.sendDeclare(`${deadPlayer.safeName} was revived!`);
-			this.playerTable[deadPlayer.id] = deadPlayer;
-			const targetRole = deadPlayer.role;
-			if (targetRole) {
-				this.roles.push(targetRole);
-			} else {
-				// Should never happen
-				deadPlayer.role = {
-					name: `Unknown`,
-					safeName: `Unknown`,
-					id: `unknown`,
-					alignment: 'solo',
-					image: '',
-					memo: [
-						`You were revived, but had no role. Please let a Mafia Room Owner know this happened. To learn about your role, PM the host (${this.host}).`,
-					],
-				};
-				this.roles.push(deadPlayer.role);
-			}
-			Utils.sortBy(this.roles, r => [r.alignment, r.name]);
-			delete this.dead[deadPlayer.id];
-		} else {
+
+		let player = this.playerTable[toRevive];
+		if (!player) {
 			const targetUser = Users.get(toRevive);
 			if (!targetUser) return;
 			this.canJoin(targetUser, false, force);
-			const player = this.makePlayer(targetUser);
+			player = this.makePlayer(targetUser);
 			if (this.started) {
 				player.role = {
 					name: `Unknown`,
@@ -1163,11 +1159,42 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			if (this.subs.includes(targetUser.id)) this.subs.splice(this.subs.indexOf(targetUser.id), 1);
 			this.playerTable[targetUser.id] = player;
 			this.sendDeclare(Utils.html`${targetUser.name} has been added to the game by ${user.name}!`);
+		} else {
+			if (!player.isEliminated()) {
+				user.sendTo(this.room, `|error|The user ${toRevive} is already a living player.`);
+				return;
+			}
+
+			player.eliminated = null;
+			this.sendDeclare(`${player.safeName} was revived!`);
+			const targetRole = player.role;
+			if (targetRole) {
+				this.roles.push(targetRole);
+			} else {
+				// Should never happen
+				player.role = {
+					name: `Unknown`,
+					safeName: `Unknown`,
+					id: `unknown`,
+					alignment: 'solo',
+					image: '',
+					memo: [
+						`You were revived, but had no role. Please let a Mafia Room Owner know this happened. To learn about your role, PM the host (${this.host}).`,
+					],
+				};
+				this.roles.push(player.role);
+			}
+			Utils.sortBy(this.roles, r => [r.alignment, r.name]);
 		}
+
 		this.playerCount++;
 		this.updateRoleString();
 		this.updatePlayers();
 		return true;
+	}
+
+	getEliminatedPlayers() {
+		return this.players.filter(player => player.isEliminated());
 	}
 
 	setDeadline(minutes: number, silent = false) {
@@ -1234,10 +1261,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.votes[newPlayer.id] = this.votes[oldPlayer.id];
 			delete this.votes[oldPlayer.id];
 			for (const p in this.playerTable) {
-				if (this.playerTable[p].voting === oldPlayer.id) this.playerTable[p].voting = newPlayer.id;
-			}
-			for (const p in this.dead) {
-				if (this.dead[p].restless && this.dead[p].voting === oldPlayer.id) this.dead[p].voting = newPlayer.id;
+				const playerRef = this.playerTable[p];
+				if ((!playerRef.isEliminated() || playerRef.isSpirit()) &&
+				playerRef.voting === oldPlayer.id) playerRef.voting = newPlayer.id;
 			}
 		}
 		if (this.hasPlurality === oldPlayer.id) this.hasPlurality = newPlayer.id;
@@ -1505,10 +1531,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	updatePlayers() {
 		for (const p in this.playerTable) {
-			this.playerTable[p].updateHtmlRoom();
-		}
-		for (const p in this.dead) {
-			if (this.dead[p].restless || this.dead[p].treestump) this.dead[p].updateHtmlRoom();
+			this.playerTable[p].tryUpdateHtmlRoom();
 		}
 		// Now do the host
 		this.updateHost();
@@ -1516,10 +1539,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	updatePlayersVotes() {
 		for (const p in this.playerTable) {
-			this.playerTable[p].updateHtmlVotes();
-		}
-		for (const p in this.dead) {
-			if (this.dead[p].restless || this.dead[p].treestump) this.dead[p].updateHtmlVotes();
+			this.playerTable[p].tryUpdateHtmlRoom();
 		}
 	}
 
@@ -1581,7 +1601,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		const targetString = self ? `You are` : `${user.id} is`;
 		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
 		for (const id of [user.id, ...user.previousIDs]) {
-			if (this.playerTable[id] || this.dead[id]) throw new Chat.ErrorMessage(`${targetString} already in the game.`);
+			if (this.playerTable[id]) throw new Chat.ErrorMessage(`${targetString} already in the game.`);
 			if (!force && this.played.includes(id)) {
 				throw new Chat.ErrorMessage(`${self ? `You were` : `${user.id} was`} already in the game.`);
 			}
@@ -1651,10 +1671,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 	setVoting(user: User, setting: boolean) {
 		if (!this.started) return user.sendTo(this.room, `The game has not started yet.`);
-		if (this.votingAll === setting) {
+		if (this.votingEnabled === setting) {
 			return user.sendTo(this.room, `|error|Voting is already ${setting ? 'allowed' : 'disallowed'}.`);
 		}
-		this.votingAll = setting;
+		this.votingEnabled = setting;
 		this.clearVotes();
 		this.sendDeclare(`Voting is now ${setting ? 'allowed' : 'disallowed'}.`);
 		this.updatePlayers();
@@ -1665,6 +1685,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (!target) this.votes = Object.create(null);
 
 		for (const player of Object.values(this.playerTable)) {
+			if (player.isEliminated() && !player.isSpirit()) continue;
+
 			if (this.forceVote) {
 				if (!target || (player.voting === target)) {
 					player.voting = player.id;
@@ -1676,10 +1698,20 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 				if (!target || (player.voting === target)) player.voting = '';
 			}
 		}
-		for (const player of Object.values(this.dead)) {
-			if (player.restless && (!target || player.voting === target)) player.voting = '';
-		}
 		this.hasPlurality = null;
+	}
+
+	/**
+	 * Only intended to be used during pre-game setup.
+	 */
+	clearEliminations() {
+		if (this.started) {
+			throw new Error(`Can't clear eliminations after the game of mafia has started.`);
+		}
+
+		for (const player of this.players) {
+			player.eliminated = null;
+		}
 	}
 
 	onChatMessage(message: string, user: User) {
@@ -1696,13 +1728,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			return;
 		}
 
-		let dead = false;
-		let player = this.playerTable[user.id];
-		if (!player) {
-			player = this.dead[user.id];
-			dead = !!player;
-		}
-
+		const player = this.playerTable[user.id];
+		const eliminated = player && player.isEliminated();
 		const staff = user.can('mute', null, this.room);
 
 		if (!player) {
@@ -1718,8 +1745,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			return `You are silenced and cannot speak.${staff ? " You can remove this with /mafia unsilence." : ''}`;
 		}
 
-		if (dead) {
-			if (!player.treestump) {
+		if (eliminated) {
+			if (!player.isTreestump()) {
 				return `You are dead.${staff ? " You can treestump yourself with /mafia treestump." : ''}`;
 			}
 		}
@@ -1764,7 +1791,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (this.room.roomid === 'mafia' && this.started) {
 			// Intead of using this.played, which shows players who have subbed out as well
 			// We check who played through to the end when recording playlogs
-			const played = Object.keys(this.playerTable).concat(Object.keys(this.dead));
+			const played = Object.keys(this.playerTable);
 			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
 			if (!logs.plays[month]) logs.plays[month] = {};
 			for (const player of played) {
@@ -1795,9 +1822,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		for (const i in this.playerTable) {
 			this.playerTable[i].destroy();
 		}
-		for (const i in this.dead) {
-			this.dead[i].destroy();
-		}
 	}
 }
 
@@ -1819,15 +1843,15 @@ export const pages: Chat.PageTable = {
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.roomid}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${game.title}</h1><h3>Host: ${game.host}</h3>${game.cohostids[0] ? `<h3>Cohosts: ${game.cohosts.sort().join(', ')}</h3>` : ''}`;
 		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.values(game.playerTable).map(p => p.safeName).sort().join(', ')}</p>`;
-		if (game.started && Object.keys(game.dead).length > 0) {
+		const eliminatedPlayers = game.getEliminatedPlayers();
+		if (game.started && eliminatedPlayers.length > 0) {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Dead Players</summary>`;
-			for (const d in game.dead) {
-				const dead = game.dead[d];
-				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.revealed ? '(' + dead.revealed + ')' : ''}`;
-				if (dead.treestump) buf += ` (is a Treestump)`;
-				if (dead.restless) buf += ` (is a Restless Spirit)`;
-				if (isHost && !dead.revealed) {
-					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia revealrole ${dead.id}";">Reveal</button>`;
+			for (const eliminated of eliminatedPlayers) {
+				buf += `<p style="font-weight:bold;">${eliminated.safeName} ${eliminated.revealed ? '(' + eliminated.revealed + ')' : ''}`;
+				if (eliminated.isTreestump()) buf += ` (is a Treestump)`;
+				if (eliminated.isSpirit()) buf += ` (is a Restless Spirit)`;
+				if (isHost && !eliminated.revealed) {
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia revealrole ${eliminated.id}";">Reveal</button>`;
 				}
 				buf += `</p>`;
 			}
@@ -2012,16 +2036,15 @@ export const pages: Chat.PageTable = {
 				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia spiritstump ${player.id}">Make a Restless Treestump (Kill)</button> `;
 				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub next, ${player.id}">Force sub</button></span></details></p>`;
 			}
-			for (const d in game.dead) {
-				const dead = game.dead[d];
-				buf += `<p style="font-weight:bold;">${dead.safeName} (${dead.role ? dead.getRole() : ''})`;
-				if (dead.treestump) buf += ` (is a Treestump)`;
-				if (dead.restless) buf += ` (is a Restless Spirit)`;
-				if (game.voteModifiers[d] !== undefined) buf += ` (votes worth ${game.getVoteValue(d as ID)})`;
-				buf += dead.hammerRestriction !== null ? `(${dead.hammerRestriction ? 'actor' : 'priest'})` : '';
-				buf += dead.silenced ? '(silenced)' : '';
-				buf += dead.nighttalk ? '(insomniac)' : '';
-				buf += `: <button class="button" name="send" value="/msgroom ${room.roomid},/mafia revive ${dead.id}">Revive</button></p>`;
+			for (const eliminated of game.getEliminatedPlayers()) {
+				buf += `<p style="font-weight:bold;">${eliminated.safeName} (${eliminated.role ? eliminated.getRole() : ''})`;
+				if (eliminated.isTreestump()) buf += ` (is a Treestump)`;
+				if (eliminated.isSpirit()) buf += ` (is a Restless Spirit)`;
+				if (game.voteModifiers[eliminated.id] !== undefined) buf += ` (votes worth ${game.getVoteValue(eliminated.id)})`;
+				buf += eliminated.hammerRestriction !== null ? `(${eliminated.hammerRestriction ? 'actor' : 'priest'})` : '';
+				buf += eliminated.silenced ? '(silenced)' : '';
+				buf += eliminated.nighttalk ? '(insomniac)' : '';
+				buf += `: <button class="button" name="send" value="/msgroom ${room.roomid},/mafia revive ${eliminated.id}">Revive</button></p>`;
 			}
 			buf += `<hr/></details></p>`;
 			if (game.dayNum > 1) {
@@ -2564,8 +2587,8 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			this.checkChat(null, room);
-			if (!(user.id in game.playerTable) &&
-				(!(user.id in game.dead) || !game.dead[user.id].restless)) {
+			if (!(user.id in game.playerTable) ||
+				(game.playerTable[user.id].isEliminated() && !game.playerTable[user.id].isSpirit())) {
 				return this.errorReply(`You are not in the game of ${game.title}.`);
 			}
 			game.vote(user.id, toID(target));
@@ -2579,8 +2602,8 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			this.checkChat(null, room);
-			if (!(user.id in game.playerTable) &&
-				(!(user.id in game.dead) || !game.dead[user.id].restless)) {
+			if (!(user.id in game.playerTable) ||
+				(game.playerTable[user.id].isEliminated() && !game.playerTable[user.id].isSpirit())) {
 				return this.errorReply(`You are not in the game of ${game.title}.`);
 			}
 			game.unvote(user.id);
@@ -2627,31 +2650,39 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!target) return this.parse('/help mafia kill');
 			const player = game.playerTable[toID(target)];
-			const dead = game.dead[toID(target)];
-			let repeat;
-			if (dead) {
-				switch (cmd) {
-				case 'treestump':
-					repeat = dead.treestump && !dead.restless;
-					break;
-				case 'spirit':
-					repeat = !dead.treestump && dead.restless;
-					break;
-				case 'spiritstump':
-					repeat = dead.treestump && dead.restless;
-					break;
-				case 'kill': case 'kick':
-					repeat = !dead.treestump && !dead.restless;
-					break;
-				}
-			}
-			if (dead && repeat) return this.errorReply(`${dead.safeName} has already been ${cmd}ed.`);
-			if (player || dead) {
-				game.eliminate(toID(target), cmd);
-				game.logAction(user, `${cmd}ed ${(dead || player).safeName}`);
-			} else {
+			if (!player) {
 				this.errorReply(`${target.trim()} is not a player.`);
 			}
+
+			let repeat, elimType;
+
+			switch (cmd) {
+			case 'treestump':
+				elimType = MafiaEliminateType.TREESTUMP;
+				repeat = player.isTreestump() && !player.isSpirit();
+				break;
+			case 'spirit':
+				elimType = MafiaEliminateType.SPIRIT;
+				repeat = !player.isTreestump() && player.isSpirit();
+				break;
+			case 'spiritstump':
+				elimType = MafiaEliminateType.SPIRITSTUMP;
+				repeat = player.isTreestump() && player.isSpirit();
+				break;
+			default:
+				if (cmd === 'kick') {
+					elimType = MafiaEliminateType.KICK;
+				} else {
+					elimType = MafiaEliminateType.ELIMINATE;
+				}
+				repeat = !player.isTreestump() && !player.isSpirit();
+				break;
+			}
+
+			if (repeat) return this.errorReply(`${player.safeName} has already been ${cmd}ed.`);
+
+			game.eliminate(toID(target), elimType);
+			game.logAction(user, `${cmd}ed ${player.safeName}`);
 		},
 		killhelp: [
 			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ # &`,
@@ -2679,8 +2710,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!args[0]) return this.parse('/help mafia revealas');
 			for (const targetUsername of args) {
-				let player = game.playerTable[toID(targetUsername)];
-				if (!player) player = game.dead[toID(targetUsername)];
+				const player = game.playerTable[toID(targetUsername)];
 				if (player) {
 					game.revealRole(user, player, `${cmd === 'revealas' ? revealAs : player.getRole()}`);
 					game.logAction(user, `revealed ${player.name}`);
@@ -2872,7 +2902,7 @@ export const commands: Chat.ChatCommands = {
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 
 			target = toID(target);
-			const targetPlayer = game.playerTable[target] || game.dead[target];
+			const targetPlayer = game.playerTable[target];
 			const silence = cmd === 'silence';
 			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
 			if (silence === targetPlayer.silenced) {
@@ -2897,7 +2927,7 @@ export const commands: Chat.ChatCommands = {
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 
 			target = toID(target);
-			const targetPlayer = game.playerTable[target] || game.dead[target];
+			const targetPlayer = game.playerTable[target];
 			const nighttalk = !cmd.startsWith('un');
 			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
 			if (nighttalk === targetPlayer.nighttalk) {
@@ -2921,7 +2951,7 @@ export const commands: Chat.ChatCommands = {
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 
 			target = toID(target);
-			const targetPlayer = game.playerTable[target] || game.dead[target];
+			const targetPlayer = game.playerTable[target];
 			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
 
 			const actor = cmd.endsWith('actor');
@@ -3122,8 +3152,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Only the host can view roles.`);
 			}
 			if (!game.started) return this.errorReply(`The game has not started.`);
-			const players = [...Object.values(game.playerTable), ...Object.values(game.dead)];
-			this.sendReplyBox(players.map(
+			this.sendReplyBox(game.players.map(
 				p => `${p.safeName}: ${p.role ? (p.role.alignment === 'solo' ? 'Solo ' : '') + p.role.safeName : 'No role'}`
 			).join('<br/>'));
 		},
@@ -3303,14 +3332,15 @@ export const commands: Chat.ChatCommands = {
 			if (!room.users[targetUser.id]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
 			if (game.hostid === targetUser.id) return this.errorReply(`${targetUser.name} is already the host.`);
 			if (game.cohostids.includes(targetUser.id)) return this.errorReply(`${targetUser.name} is already a cohost.`);
-			if (targetUser.id in game.playerTable) return this.errorReply(`The host cannot be ingame.`);
-			if (targetUser.id in game.dead) {
+
+			const player = game.playerTable[targetUser.id];
+			if (player && player.isEliminated()) {
 				if (!cmd.includes('force')) {
 					return this.errorReply(`${targetUser.name} could potentially be revived. To continue anyway, use /mafia force${cmd} ${target}.`);
 				}
-				if (game.dead[targetUser.id].voting) game.unvote(targetUser.id);
-				game.dead[targetUser.id].destroy();
-				delete game.dead[targetUser.id];
+				if (player.voting) game.unvote(targetUser.id);
+				// TODO investigate if this is the best way of handling a player leaving a game of mafia (which isn't intended to happen from a technical pov)
+				game.setPlayerUser(player, null); // Unlink user from player object.
 			}
 			if (game.subs.includes(targetUser.id)) game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 			if (cmd.includes('cohost')) {
@@ -3502,7 +3532,7 @@ export const commands: Chat.ChatCommands = {
 				for (let faction of args) {
 					faction = toID(faction);
 					const inFaction = [];
-					for (const player of [...Object.values(game.playerTable), ...Object.values(game.dead)]) {
+					for (const player of game.players) {
 						if (player.role && toID(player.role.alignment) === faction) {
 							toGiveTo.push(player.id);
 							inFaction.push(player.id);
