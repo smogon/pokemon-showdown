@@ -1,15 +1,4 @@
 export const Items: {[k: string]: ModdedItemData} = {
-	// Alpha
-	caioniumz: {
-		name: "Caionium Z",
-		onTakeItem: false,
-		zMove: "Blistering Ice Age",
-		zMoveFrom: "Blizzard",
-		itemUser: ["Aurorus"],
-		gen: 8,
-		desc: "If held by an Aurorus with Blizzard, it can use Blistering Ice Age.",
-	},
-
 	// A Quag To The Past
 	quagniumz: {
 		name: "Quagnium Z",
