@@ -10,6 +10,7 @@ export interface TeamData {
 	baseFormes: {[k: string]: number};
 	megaCount?: number;
 	zCount?: number;
+	wantsTeraCount?: number;
 	has: {[k: string]: number};
 	forceResult: boolean;
 	weaknesses: {[k: string]: number};
@@ -2500,11 +2501,11 @@ export class RandomTeams {
 			// limit to 2 dedicated tera users per team
 			if (curSet.wantsTera &&	teamData.wantsTeraCount && teamData.wantsTeraCount >= maxWantsTera)	continue;
 
-			if (teamData.weather && weatherAbilities.includes(curSet.ability.id)) { continue; } // reject 2+ weather setters
+			if (teamData.weather && weatherAbilities.includes(curSet.ability)) { continue; } // reject 2+ weather setters
 
-			if (terrainAbilities[curSet.ability.id]) {
+			if (terrainAbilities[curSet.ability]) {
 				if (!teamData.terrain) teamData.terrain = [];
-				teamData.terrain.push(terrainAbilities[curSet.ability.id]);
+				teamData.terrain.push(terrainAbilities[curSet.ability]);
 			}
 
 			for (const item of curSet.item) {
@@ -2598,6 +2599,7 @@ export class RandomTeams {
 			typeComboCount: {},
 			baseFormes: {},
 			has: {},
+			wantsTeraCount: 0,
 			forceResult: forceResult,
 			weaknesses: {},
 			resistances: {},
@@ -2691,6 +2693,11 @@ export class RandomTeams {
 			teamData.baseFormes[species.baseSpecies] = 1;
 
 			teamData.has[itemData.id] = 1;
+
+			if (set.wantsTera) {
+				if (!teamData.wantsTeraCount) teamData.wantsTeraCount = 0;
+				teamData.wantsTeraCount++;
+			}
 
 			const abilityState = this.dex.abilities.get(set.ability);
 			if (abilityState.id in weatherAbilitiesSet) {

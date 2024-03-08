@@ -564,6 +564,7 @@ namespace RandomTeamsTypes {
 		moves: string[];
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
+		wantsTera?: boolean;
 		teraType?: string;
 	}
 	export interface RandomSetData {
