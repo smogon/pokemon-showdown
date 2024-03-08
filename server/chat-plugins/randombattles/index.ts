@@ -419,9 +419,11 @@ function generateSSBSet(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	}
 	let buf = ``;
 	buf += `<details><summary>Set</summary>`;
-	buf += `<ul style="list-style-type:none;"><li>${set.species}${set.gender !== '' ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(x => dex.items.get(x).name).join(' / ') : dex.items.get(set.item).name}</li>`;
+	buf += `<ul style="list-style-type:none;"><li>${set.species}${set.gender !== '' ? ` (${set.gender})` : ``}`;
+	buf += `${set.item ? ' @ ' : ''}${Array.isArray(set.item) ? set.item.map(x => dex.items.get(x).name).join(' / ') : dex.items.get(set.item).name}</li>`;
 	buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(x => dex.abilities.get(x).name).join(' / ') : dex.abilities.get(set.ability).name}</li>`;
-	if (set.shiny) buf += `<li>Shiny: ${typeof set.shiny === 'number' ? `Sometimes` : `Yes`}</li>`;
+	if (set.teraType) buf += `<li>Tera Type: ${Array.isArray(set.teraType) ? set.teraType.map(x => dex.types.get(x).name).join(' / ') : set.teraType === 'Any' ? 'Any' : dex.types.get(set.teraType).name}</li>`;
+	if (set.shiny) buf += `<li>Shiny: ${typeof set.shiny === 'number' ? `1 in ${set.shiny} chance` : `Yes`}</li>`;
 	if (set.evs) {
 		const evs: string[] = [];
 		let ev: StatID;
@@ -464,22 +466,24 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 		};
 
 		if (sigMove.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
-		if (sigMove.secondary || sigMove.secondaries) details["&#10003; Secondary effect"] = "";
-		if (sigMove.flags['contact']) details["&#10003; Contact"] = "";
-		if (sigMove.flags['sound']) details["&#10003; Sound"] = "";
-		if (sigMove.flags['bullet']) details["&#10003; Bullet"] = "";
-		if (sigMove.flags['pulse']) details["&#10003; Pulse"] = "";
-		if (!sigMove.flags['protect'] && !/(ally|self)/i.test(sigMove.target)) details["&#10003; Bypasses Protect"] = "";
+		if (sigMove.secondary || sigMove.secondaries || sigMove.hasSheerForce) details["&#10003; Boosted by Sheer Force"] = "";
+		if (sigMove.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
+		if (sigMove.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
+		if (sigMove.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
+		if (sigMove.flags['pulse'] && dex.gen >= 6) details["&#10003; Pulse"] = "";
+		if (!sigMove.flags['protect'] && sigMove.target !== 'self') details["&#10003; Bypasses Protect"] = "";
 		if (sigMove.flags['bypasssub']) details["&#10003; Bypasses Substitutes"] = "";
 		if (sigMove.flags['defrost']) details["&#10003; Thaws user"] = "";
-		if (sigMove.flags['bite']) details["&#10003; Bite"] = "";
-		if (sigMove.flags['punch']) details["&#10003; Punch"] = "";
-		if (sigMove.flags['powder']) details["&#10003; Powder"] = "";
-		if (sigMove.flags['reflectable']) details["&#10003; Bounceable"] = "";
+		if (sigMove.flags['bite'] && dex.gen >= 6) details["&#10003; Bite"] = "";
+		if (sigMove.flags['punch'] && dex.gen >= 4) details["&#10003; Punch"] = "";
+		if (sigMove.flags['powder'] && dex.gen >= 6) details["&#10003; Powder"] = "";
+		if (sigMove.flags['reflectable'] && dex.gen >= 3) details["&#10003; Bounceable"] = "";
 		if (sigMove.flags['charge']) details["&#10003; Two-turn move"] = "";
 		if (sigMove.flags['recharge']) details["&#10003; Has recharge turn"] = "";
-		if (sigMove.flags['gravity']) details["&#10007; Suppressed by Gravity"] = "";
-		if (sigMove.flags['dance']) details["&#10003; Dance move"] = "";
+		if (sigMove.flags['gravity'] && dex.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
+		if (sigMove.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
+		if (sigMove.flags['slicing'] && dex.gen >= 9) details["&#10003; Slicing move"] = "";
+		if (sigMove.flags['wind'] && dex.gen >= 9) details["&#10003; Wind move"] = "";
 
 		if (sigMove.zMove?.basePower) {
 			details["Z-Power"] = String(sigMove.zMove.basePower);
@@ -594,8 +598,10 @@ function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex)
 		buf += `<hr />`;
 		buf += Chat.getDataAbilityHTML(sigAbil);
 		const details: {[k: string]: string} = {
-			Gen: String(sigAbil.gen) || 'CAP',
+			Gen: String(sigAbil.gen || 9) || 'CAP',
 		};
+		if (sigAbil.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
+		if (sigAbil.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
 		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
 			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
 		)).join("&nbsp;|&ThickSpace;")}</font>`;
@@ -683,14 +689,15 @@ function generateSSBPokemonInfo(species: string, dex: ModdedDex, baseDex: Modded
 
 function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex) {
 	let buf = ``;
-	// Special casing for users whose usernames are already existing, i.e. Perish Song
+	// Special casing for users whose usernames are already existing, i.e. dhelmise
 	let effect = dex.conditions.get(name + 'user');
 	let longDesc = ``;
-	const baseAbility = Dex.deepClone(baseDex.abilities.get('noability'));
-	// @ts-ignore hack to record the name of the innate abilities without using name
-	if (effect.exists && effect.innateName && (effect.desc || effect.shortDesc)) {
-		// @ts-ignore hack
-		baseAbility.name = effect.innateName;
+	const baseAbility = baseDex.deepClone(baseDex.abilities.get('noability'));
+	if (effect.exists && (effect as any).innateName && (effect.desc || effect.shortDesc)) {
+		baseAbility.name = (effect as any).innateName;
+		if (!effect.desc && !effect.shortDesc) {
+			baseAbility.desc = baseAbility.shortDesc = "This innate does not have a description.";
+		}
 		if (effect.desc) baseAbility.desc = effect.desc;
 		if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
 		buf += `<hr />Innate Ability:<br />${Chat.getDataAbilityHTML(baseAbility)}`;
@@ -698,11 +705,12 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 			longDesc = effect.desc;
 		}
 	} else {
-		effect = dex.conditions.get(name);
-		// @ts-ignore hack
-		if (effect.exists && effect.innateName && (effect.desc || effect.shortDesc)) {
-			// @ts-ignore hack
-			baseAbility.name = effect.innateName;
+		effect = dex.deepClone(dex.conditions.get(name));
+		if (!effect.desc && !effect.shortDesc) {
+			effect.desc = effect.shortDesc = "This innate does not have a description.";
+		}
+		if (effect.exists && (effect as any).innateName) {
+			baseAbility.name = (effect as any).innateName;
 			if (effect.desc) baseAbility.desc = effect.desc;
 			if (effect.shortDesc) baseAbility.shortDesc = effect.shortDesc;
 			buf += `<hr />Innate Ability:<br />${Chat.getDataAbilityHTML(baseAbility)}`;
@@ -712,7 +720,7 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 		}
 	}
 	if (buf) {
-		const details: {[k: string]: string} = {Gen: '8'};
+		const details: {[k: string]: string} = {Gen: '9'};
 		buf += `<font size="1">${Object.entries(details).map(([detail, value]) => (
 			value === '' ? detail : `<font color="#686868">${detail}:</font> ${value}`
 		)).join("&nbsp;|&ThickSpace;")}</font>`;
@@ -729,45 +737,39 @@ function SSBSets(target: string) {
 	if (!Object.keys(ssbSets).map(toID).includes(toID(target))) {
 		return {e: `Error: ${target.trim()} doesn't have a [Gen 9] Super Staff Bros Ultimate set.`};
 	}
-	let displayName = '';
-	const names = [];
+	let name = '';
 	for (const member in ssbSets) {
-		if (toID(member).startsWith(toID(target))) names.push(member);
-		if (toID(member) === toID(target)) displayName = member;
+		if (toID(member) === toID(target)) name = member;
 	}
 	let buf = '';
-	for (const name of names) {
-		if (buf) buf += `<hr>`;
-		const set = ssbSets[name];
-		const mutatedSpecies = dex.species.get(set.species);
-		if (!set.skip) {
-			buf += Utils.html`<h1><psicon pokemon="${mutatedSpecies.id}">${displayName === 'yuki' ? name : displayName}</h1>`;
-		} else {
-			buf += `<details><summary><psicon pokemon="${set.species}"><strong>${name.split('-').slice(1).join('-') + ' forme'}</strong></summary>`;
-		}
-		buf += generateSSBSet(set, dex, baseDex);
-		const item = dex.items.get(set.item as string);
-		if (!set.skip || set.signatureMove !== ssbSets[set.skip].signatureMove) {
-			const sigMove = baseDex.moves.get(set.signatureMove).exists && !Array.isArray(set.item) &&
-				typeof item.zMove === 'string' ?
-				dex.moves.get(item.zMove) : dex.moves.get(set.signatureMove);
-			buf += generateSSBMoveInfo(sigMove, dex);
-			if (sigMove.id === 'blackbird') buf += generateSSBMoveInfo(dex.moves.get('gaelstrom'), dex);
-		}
-		buf += generateSSBItemInfo(set, dex, baseDex);
-		buf += generateSSBAbilityInfo(set, dex, baseDex);
-		buf += generateSSBInnateInfo(name, dex, baseDex);
-		buf += generateSSBPokemonInfo(set.species, dex, baseDex);
-		if (!Array.isArray(set.item) && item.megaStone) {
-			buf += generateSSBPokemonInfo(item.megaStone, dex, baseDex);
-		// Psynergy, Struchni, and Raj.shoot have itemless Mega Evolutions
-		} else if (['Aggron', 'Rayquaza'].includes(set.species)) {
-			buf += generateSSBPokemonInfo(`${set.species}-Mega`, dex, baseDex);
-		} else if (set.species === 'Charizard') {
-			buf += generateSSBPokemonInfo('Charizard-Mega-X', dex, baseDex);
-		}
-		if (set.skip) buf += `</details>`;
+	const set = ssbSets[name];
+	const mutatedSpecies = dex.species.get(set.species);
+	if (!set.skip) {
+		buf += Utils.html`<h1><psicon pokemon="${mutatedSpecies.id}">${name}</h1>`;
+	} else {
+		buf += `<details><summary><psicon pokemon="${set.species}"><strong>${name.split('-').slice(1).join('-') + ' forme'}</strong></summary>`;
 	}
+	buf += generateSSBSet(set, dex, baseDex);
+	const item = dex.items.get(set.item as string);
+	if (!set.skip || set.signatureMove !== ssbSets[set.skip].signatureMove) {
+		const sigMove = baseDex.moves.get(set.signatureMove).exists && !Array.isArray(set.item) &&
+			typeof item.zMove === 'string' ?
+			dex.moves.get(item.zMove) : dex.moves.get(set.signatureMove);
+		buf += generateSSBMoveInfo(sigMove, dex);
+	}
+	buf += generateSSBItemInfo(set, dex, baseDex);
+	buf += generateSSBAbilityInfo(set, dex, baseDex);
+	buf += generateSSBInnateInfo(name, dex, baseDex);
+	buf += generateSSBPokemonInfo(set.species, dex, baseDex);
+	if (!Array.isArray(set.item) && item.megaStone) {
+		buf += generateSSBPokemonInfo(item.megaStone, dex, baseDex);
+	// keys and Kennedy have an itemless forme change
+	} else if (['Rayquaza'].includes(set.species)) {
+		buf += generateSSBPokemonInfo(`${set.species}-Mega`, dex, baseDex);
+	} else if (['Cinderace'].includes(set.species)) {
+		buf += generateSSBPokemonInfo(`${set.species}-Gmax`, dex, baseDex);
+	}
+	if (set.skip) buf += `</details>`;
 	return buf;
 }
 

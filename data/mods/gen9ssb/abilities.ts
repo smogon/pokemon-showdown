@@ -2433,7 +2433,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Troll",
 		onFractionalPriority(priority, pokemon, target, move) {
 			if (move?.secondaries?.some(m => m.volatileStatus === 'flinch')) {
-				this.add('-activate', pokemon, 'ability: Quick Draw');
+				this.add('-activate', pokemon, 'ability: Troll');
 				return 0.1;
 			}
 		},
