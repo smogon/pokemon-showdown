@@ -239,29 +239,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "???",
 	},
 
-	// Alpha
-	vesselofcaio: {
-		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		shortDesc: "User recovers 75% of the damage dealt.",
-		name: "Vessel of CAIO",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Horn Leech', target);
-		},
-		drain: [3, 4],
-		secondary: null,
-		target: "normal",
-		type: "Ground",
-	},
-
 	// Appletun a la Mode
 	extracourse: {
 		accuracy: true,

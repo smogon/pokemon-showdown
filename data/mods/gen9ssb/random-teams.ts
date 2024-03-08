@@ -66,12 +66,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Scumhunt',
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naughty', teraType: 'Fire', shiny: true,
 	},
-	Alpha: {
-		species: 'Ting-Lu', ability: 'Vessel of Ruin', item: 'Leftovers', gender: 'M',
-		moves: ['Stealth Rock', 'Spikes', 'Whirlwind'],
-		signatureMove: 'Vessel of CAIO',
-		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Fairy',
-	},
 	'Appletun a la Mode': {
 		species: 'Appletun', ability: 'Served Cold', item: 'Sitrus Berry', gender: 'F',
 		moves: ['Freeze-Dry', 'Apple Acid', 'Fickle Beam'],
