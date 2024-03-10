@@ -2608,7 +2608,6 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		team: 'randomBSSFactory',
-		searchShow: false,
 		ruleset: ['Flat Rules', 'VGC Timer'],
 	},
 	{
