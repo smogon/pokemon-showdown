@@ -1755,7 +1755,6 @@ export const commands: Chat.ChatCommands = {
 		const isRandomBattle = room?.battle?.format.endsWith('randombattle');
 		const isBattleSpotBattle = (room?.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) ||
 			room.battle.format.includes("battlespotspecial")));
-
 		const {dex} = this.extractFormat(room?.battle?.format);
 		
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
