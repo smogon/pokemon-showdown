@@ -2507,15 +2507,12 @@ export class RandomTeams {
 
 		const maxWantsTera = 2;
 
-		const requiredMoves: { [k: string]: number } = {};
-
 		// Build a pool of eligible sets, given the team partners
 		// Also keep track of sets with moves the team requires
-		let effectivePool: {set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[] = [];
-		const priorityPool = [];
+		const effectivePool: {set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[] = [];
+
 		for (const curSet of setList) {
 			let reject = false;
-			let hasRequiredMove = false;
 
 			// limit to 2 dedicated tera users per team
 			if (curSet.wantsTera &&	teamData.wantsTeraCount && teamData.wantsTeraCount >= maxWantsTera)	continue;
@@ -2542,17 +2539,12 @@ export class RandomTeams {
 					reject = true;
 					break;
 				}
-				if (requiredMoves[moveId] && !teamData.has[requiredMoves[moveId]]) {
-					hasRequiredMove = true;
-				}
 				curSetMoveVariants.push(variantIndex);
 			}
 			if (reject) continue;
 			const set = {set: curSet, moveVariants: curSetMoveVariants};
 			effectivePool.push(set);
-			if (hasRequiredMove) priorityPool.push(set);
 		}
-		if (priorityPool.length) effectivePool = priorityPool;
 
 		if (!effectivePool.length) {
 			if (!teamData.forceResult) return null;
@@ -2594,9 +2586,10 @@ export class RandomTeams {
 			level: setData.set.level || 50,
 			happiness: typeof setData.set.happiness === "undefined" ? 255 :	setData.set.happiness,
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
-			ivs: {hp: 31, atk: 31,	def: 31, spa: 31, spd: 31, spe: 31,	...setData.set.ivs},
+			ivs: {hp: 31, atk: 31,	def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
 			nature: setData.set.nature || "Serious",
 			moves,
+			wantsTera: setData.set.wantsTera,
 		};
 	}
 
