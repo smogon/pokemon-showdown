@@ -221,7 +221,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 		this.safeName = Utils.escapeHTML(this.name);
 	}
 
-	getRole(button = false) {
+	getStylizedRole(button = false) {
 		if (!this.role) return;
 		let color = MafiaData.alignments[this.role.alignment].color;
 		if (button && MafiaData.alignments[this.role.alignment].buttonColor) {
@@ -1161,9 +1161,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		toEliminate.eliminated = ability;
 
 		if (toEliminate.voting) this.unvote(toEliminate, true);
-		this.sendDeclare(`${toEliminate.safeName} ${ability}! ${!this.noReveal && ability === MafiaEliminateType.ELIMINATE ? `${toEliminate.safeName}'s role was ${toEliminate.getRole()}.` : ''}`);
+		this.sendDeclare(`${toEliminate.safeName} ${ability}! ${!this.noReveal && ability === MafiaEliminateType.ELIMINATE ? `${toEliminate.safeName}'s role was ${toEliminate.getStylizedRole()}.` : ''}`);
 		if (toEliminate.role && !this.noReveal && ability === MafiaEliminateType.ELIMINATE) {
-			toEliminate.revealed = toEliminate.getRole()!;
+			toEliminate.revealed = toEliminate.getStylizedRole()!;
 		}
 
 		const targetRole = toEliminate.role;
@@ -1228,10 +1228,13 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 		Utils.sortBy(this.roles, r => [r.alignment, r.name]);
 
-		this.playerCount++;
 		this.updateRoleString();
 		this.updatePlayers();
 		return true;
+	}
+
+	getRemainingPlayers() {
+		return this.players.filter(player => !player.isEliminated());
 	}
 
 	getEliminatedPlayers() {
@@ -1561,7 +1564,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	sendPlayerList() {
-		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${this.players.map(p => p.name).sort().join(', ')}`).update();
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.getRemainingPlayers().length})**: ${this.players.map(p => p.name).sort().join(', ')}`).update();
 	}
 
 	updatePlayers() {
@@ -1879,13 +1882,16 @@ export const pages: Chat.PageTable = {
 		if (!room?.users[user.id] || !game || game.ended) {
 			return this.close();
 		}
-		const isPlayer = user.id in game.playerTable;
+
+		const isPlayer = game.getPlayer(user.id);
 		const isHost = user.id === game.hostid || game.cohostids.includes(user.id);
+		const players = game.getRemainingPlayers();
 		this.title = game.title;
 		let buf = `<div class="pad broadcast-blue">`;
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.roomid}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${game.title}</h1><h3>Host: ${game.host}</h3>${game.cohostids[0] ? `<h3>Cohosts: ${game.cohosts.sort().join(', ')}</h3>` : ''}`;
-		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.values(game.playerTable).map(p => p.safeName).sort().join(', ')}</p>`;
+		buf += `<p style="font-weight:bold;">Players (${players.length}): ${players.map(p => p.safeName).sort().join(', ')}</p>`;
+
 		const eliminatedPlayers = game.getEliminatedPlayers();
 		if (game.started && eliminatedPlayers.length > 0) {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Dead Players</summary>`;
@@ -1900,10 +1906,11 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `</details></p>`;
 		}
+
 		buf += `<hr/>`;
 		if (isPlayer && game.phase === 'IDEApicking') {
 			buf += `<p><b>IDEA information:</b><br />`;
-			const IDEA = game.playerTable[user.id].IDEA;
+			const IDEA = isPlayer.IDEA;
 			if (!IDEA) {
 				return game.sendRoom(`IDEA picking phase but no IDEA object for user: ${user.id}. Please report this to a mod.`);
 			}
@@ -1957,12 +1964,12 @@ export const pages: Chat.PageTable = {
 			}
 		}
 		if (isPlayer) {
-			const role = game.playerTable[user.id].role;
+			const role = isPlayer.role;
 			let previousActionsPL = `<br/>`;
 			if (role) {
-				buf += `<h3>${game.playerTable[user.id].safeName}, you are a ${game.playerTable[user.id].getRole()}</h3>`;
+				buf += `<h3>${isPlayer.safeName}, you are a ${isPlayer.getStylizedRole()}</h3>`;
 				if (!['town', 'solo'].includes(role.alignment)) {
-					buf += `<p><span style="font-weight:bold">Partners</span>: ${game.getPartners(role.alignment, game.playerTable[user.id])}</p>`;
+					buf += `<p><span style="font-weight:bold">Partners</span>: ${game.getPartners(role.alignment, isPlayer)}</p>`;
 				}
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role Details</summary>`;
 				buf += `<table><tr><td style="text-align:center;"><img width="75" height="75" src="//${Config.routes.client}/fx/mafia-${role.image || 'villager'}.png"></td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
@@ -1970,7 +1977,7 @@ export const pages: Chat.PageTable = {
 				if (game.dayNum > 1) {
 					for (let i = 1; i < game.dayNum; i++) {
 						previousActionsPL += `<b>Night ${i}</b><br/>`;
-						previousActionsPL += `${game.playerTable[user.id].actionArr?.[i] ? `${game.playerTable[user.id].actionArr[i]}` : ''}<br/>`;
+						previousActionsPL += `${isPlayer.actionArr?.[i] ? `${isPlayer.actionArr[i]}` : ''}<br/>`;
 					}
 					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Actions</summary>${previousActionsPL}</span></details></p>`;
 				}
@@ -1985,19 +1992,19 @@ export const pages: Chat.PageTable = {
 				buf += `<p style="font-weight:bold;">PM the host (${game.host}) the action you want to use tonight, and who you want to use it on. Or PM the host "idle".</p>`;
 			} else {
 				buf += `<b>Night Actions:</b>`;
-				if (game.playerTable[user.id].action === null) {
+				if (isPlayer.action === null) {
 					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Clear</button>`;
 					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">Idle</button>`;
 					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia action">Action</button><br/>`;
 				} else {
 					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia noresponse">Clear</button>`;
-					if (game.playerTable[user.id].action) {
+					if (isPlayer.action) {
 						buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia idle">Idle</button>`;
 						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Action</button>`;
-						if (game.playerTable[user.id].action === true) {
+						if (isPlayer.action === true) {
 							buf += `<form data-submitsend="/msgroom ${game.room.roomid},/mafia action {submission}"><label><b>Submission:</b> <input name="submission" class="textbox" placeholder="Action Details" /></label> <button class="button">Confirm</button></form>`;
 						} else {
-							buf += `<form data-submitsend="/msgroom ${game.room.roomid},/mafia action"><label><b>Submission:</b> ${game.playerTable[user.id].action} <button class="button">Clear Submission</button></label></form>`;
+							buf += `<form data-submitsend="/msgroom ${game.room.roomid},/mafia action"><label><b>Submission:</b> ${isPlayer.action} <button class="button">Clear Submission</button></label></form>`;
 						}
 					} else {
 						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">Idle</button>`;
@@ -2012,8 +2019,7 @@ export const pages: Chat.PageTable = {
 				let actions = `<br/>`;
 				let idles = `<br/>`;
 				let noResponses = `<br/>`;
-				for (const p in game.playerTable) {
-					const player = game.playerTable[p];
+				for (const player of game.getRemainingPlayers()) {
 					if (player.action) {
 						actions += `<b>${player.safeName}</b>${player.action === true ? '' : `: ${player.action}`}<br/>`;
 					} else if (player.action === false) {
@@ -2030,8 +2036,7 @@ export const pages: Chat.PageTable = {
 			if (game.dayNum > 1) {
 				for (let i = 1; i < game.dayNum; i++) {
 					previousActions += `<b>Night ${i}</b><br/>`;
-					for (const p in game.playerTable) {
-						const player = game.playerTable[p];
+					for (const player of game.players) {
 						previousActions += `<b>${player.safeName}</b>:${player.actionArr[i] ? `${player.actionArr[i]}` : ''}<br/>`;
 					}
 					previousActions += `<br/>`;
@@ -2064,11 +2069,10 @@ export const pages: Chat.PageTable = {
 			buf += `<p>To set a deadline, use <strong>/mafia deadline [minutes]</strong>.<br />To clear the deadline use <strong>/mafia deadline off</strong>.</p><hr/></details></p>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Player Options</summary>`;
 			buf += `<h3>Player Options</h3>`;
-			for (const p in game.playerTable) {
-				const player = game.playerTable[p];
+			for (const player of game.getRemainingPlayers()) {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block"><span style="font-weight:bold;">`;
-				buf += `${player.safeName} (${player.role ? player.getRole(true) : ''})`;
-				buf += game.voteModifiers[p] !== undefined ? `(votes worth ${game.getVoteValue(player)})` : '';
+				buf += `${player.safeName} (${player.role ? player.getStylizedRole(true) : ''})`;
+				buf += game.voteModifiers[player.id] !== undefined ? `(votes worth ${game.getVoteValue(player)})` : '';
 				buf += player.hammerRestriction !== null ? `(${player.hammerRestriction ? 'actor' : 'priest'})` : '';
 				buf += player.silenced ? '(silenced)' : '';
 				buf += player.nighttalk ? '(insomniac)' : '';
@@ -2080,7 +2084,7 @@ export const pages: Chat.PageTable = {
 				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub next, ${player.id}">Force sub</button></span></details></p>`;
 			}
 			for (const eliminated of game.getEliminatedPlayers()) {
-				buf += `<p style="font-weight:bold;">${eliminated.safeName} (${eliminated.role ? eliminated.getRole() : ''})`;
+				buf += `<p style="font-weight:bold;">${eliminated.safeName} (${eliminated.role ? eliminated.getStylizedRole() : ''})`;
 				if (eliminated.isTreestump()) buf += ` (is a Treestump)`;
 				if (eliminated.isSpirit()) buf += ` (is a Restless Spirit)`;
 				if (game.voteModifiers[eliminated.id] !== undefined) buf += ` (votes worth ${game.getVoteValue(eliminated)})`;
@@ -2335,9 +2339,8 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			if (game.phase !== 'signups') return this.errorReply(`Signups are already closed.`);
-			if (toID(target) === 'none') target = '20';
 			const num = parseInt(target);
-			if (isNaN(num) || num > 20 || num < 2) return this.parse('/help mafia playercap');
+			if (isNaN(num) || num > 50 || num < 2) return this.parse('/help mafia playercap');
 			if (num < game.playerCount) {
 				return this.errorReply(`Player cap has to be equal or more than the amount of players in game.`);
 			}
@@ -2347,7 +2350,7 @@ export const commands: Chat.ChatCommands = {
 			game.logAction(user, `set playercap to ${num}`);
 		},
 		playercaphelp: [
-			`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2. Requires host % @ # &`,
+			`/mafia playercap [cap]- Limit the number of players being able to join the game. Player cap cannot be more than 50 or less than 2. Default is 20. Requires host % @ # &`,
 		],
 
 		close(target, room, user) {
@@ -2510,13 +2513,14 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const args = target.split(',');
 			const game = this.requireGame(Mafia);
-			if (!(user.id in game.playerTable)) {
+			const player = game.getPlayer(user.id);
+			if (!player) {
 				return user.sendTo(room, '|error|You are not a player in the game.');
 			}
 			if (game.phase !== 'IDEApicking') {
 				return this.errorReply(`The game is not in the IDEA picking phase.`);
 			}
-			game.ideaPick(user, args);
+			game.ideaPick(user, args); // TODO use player object
 		},
 
 		ideareroll(target, room, user) {
@@ -2592,8 +2596,7 @@ export const commands: Chat.ChatCommands = {
 					if (extension > 10) extension = 10;
 				}
 				if (cmd === 'extend') {
-					for (const p in game.playerTable) {
-						const player = game.playerTable[p];
+					for (const player of game.getRemainingPlayers()) {
 						player.actionArr[game.dayNum] = '';
 					}
 				}
@@ -2612,7 +2615,7 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			if (game.phase !== 'night') return;
-			for (const player of Object.values(game.playerTable)) {
+			for (const player of game.getRemainingPlayers()) {
 				const playerid = Users.get(player.id);
 				if (playerid?.connected && player.action === null) {
 					playerid.sendTo(room, `|notify|Send in an action or idle!`);
@@ -2692,9 +2695,9 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`You cannot add or remove players while IDEA roles are being picked.`); // needs to be here since eliminate doesn't pass the user
 			}
 			if (!target) return this.parse('/help mafia kill');
-			const player = game.playerTable[toID(target)];
+			const player = game.getPlayer(toID(target));
 			if (!player) {
-				this.errorReply(`${target.trim()} is not a player.`);
+				return this.errorReply(`${target.trim()} is not a player.`);
 			}
 
 			let repeat, elimType;
@@ -2753,9 +2756,9 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!args[0]) return this.parse('/help mafia revealas');
 			for (const targetUsername of args) {
-				const player = game.playerTable[toID(targetUsername)];
+				const player = game.getPlayer(toID(targetUsername));
 				if (player) {
-					game.revealRole(user, player, `${cmd === 'revealas' ? revealAs : player.getRole()}`);
+					game.revealRole(user, player, `${cmd === 'revealas' ? revealAs : player.getStylizedRole()}`);
 					game.logAction(user, `revealed ${player.name}`);
 					if (cmd === 'revealas') {
 						game.secretLogAction(user, `fakerevealed ${player.name} as ${revealedRole!.role.name}`);
@@ -2777,7 +2780,7 @@ export const commands: Chat.ChatCommands = {
 		idle(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
-			const player = game.playerTable[user.id];
+			const player = game.getPlayer(user.id);
 			if (!player) return this.errorReply(`You are not in the game of ${game.title}.`);
 			if (game.phase !== 'night') return this.errorReply(`You can only submit an action or idle during the night phase.`);
 			if (!game.takeIdles) {
@@ -2969,7 +2972,7 @@ export const commands: Chat.ChatCommands = {
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 
 			target = toID(target);
-			const targetPlayer = game.playerTable[target];
+			const targetPlayer = game.getPlayer(target as ID);
 			const silence = cmd === 'silence';
 			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
 			if (silence === targetPlayer.silenced) {
@@ -2994,7 +2997,7 @@ export const commands: Chat.ChatCommands = {
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 
 			target = toID(target);
-			const targetPlayer = game.playerTable[target];
+			const targetPlayer = game.getPlayer(target as ID);
 			const nighttalk = !cmd.startsWith('un');
 			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
 			if (nighttalk === targetPlayer.nighttalk) {
@@ -3018,7 +3021,7 @@ export const commands: Chat.ChatCommands = {
 			if (!game.started) return this.errorReply(`The game has not started yet.`);
 
 			target = toID(target);
-			const targetPlayer = game.playerTable[target];
+			const targetPlayer = game.getPlayer(target as ID);
 			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
 
 			const actor = cmd.endsWith('actor');
@@ -3188,7 +3191,8 @@ export const commands: Chat.ChatCommands = {
 			if (this.broadcasting) {
 				game.sendPlayerList();
 			} else {
-				this.sendReplyBox(`Players (${game.playerCount}): ${Object.values(game.playerTable).map(p => p.safeName).sort().join(', ')}`);
+				const players = game.getRemainingPlayers();
+				this.sendReplyBox(`Players (${players.length}): ${players.map(p => p.safeName).sort().join(', ')}`);
 			}
 		},
 
@@ -3247,16 +3251,18 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			const args = target.split(',');
 			const action = toID(args.shift());
+			const player = game.getPlayer(user.id);
+
 			switch (action) {
 			case 'in':
-				if (user.id in game.playerTable) {
+				if (player) {
 					// Check if they have requested to be subbed out.
 					if (!game.requestedSub.includes(user.id)) {
 						return this.errorReply(`You have not requested to be subbed out.`);
 					}
 					game.requestedSub.splice(game.requestedSub.indexOf(user.id), 1);
 					this.errorReply(`You have cancelled your request to sub out.`);
-					game.playerTable[user.id].updateHtmlRoom();
+					player.updateHtmlRoom();
 				} else {
 					this.checkChat(null, room);
 					if (game.subs.includes(user.id)) return this.errorReply(`You are already on the sub list.`);
@@ -3270,12 +3276,12 @@ export const commands: Chat.ChatCommands = {
 				}
 				break;
 			case 'out':
-				if (user.id in game.playerTable) {
+				if (player) {
 					if (game.requestedSub.includes(user.id)) {
 						return this.errorReply(`You have already requested to be subbed out.`);
 					}
 					game.requestedSub.push(user.id);
-					game.playerTable[user.id].updateHtmlRoom();
+					player.updateHtmlRoom();
 					game.nextSub();
 				} else {
 					if (game.hostid === user.id || game.cohostids.includes(user.id)) {
@@ -3290,7 +3296,7 @@ export const commands: Chat.ChatCommands = {
 			case 'next':
 				if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 				const toSub = args.shift();
-				if (!(toID(toSub) in game.playerTable)) return this.errorReply(`${toSub} is not in the game.`);
+				if (!game.getPlayer(toID(toSub))) return this.errorReply(`${toSub} is not in the game.`);
 				if (!game.subs.length) {
 					if (game.hostRequestedSub.includes(toID(toSub))) {
 						return this.errorReply(`${toSub} is already on the list to be subbed out.`);
@@ -3476,8 +3482,10 @@ export const commands: Chat.ChatCommands = {
 				if (!game) {
 					return this.errorReply(`There is no game of mafia running in this room. If you meant to display information about a role, use /mafia role [role name]`);
 				}
-				if (!(user.id in game.playerTable)) return this.errorReply(`You are not in the game of ${game.title}.`);
-				const role = game.playerTable[user.id].role;
+
+				const player = game.getPlayer(user.id);
+				if (!player) return this.errorReply(`You are not in the game of ${game.title}.`);
+				const role = player.role;
 				if (!role) return this.errorReply(`You do not have a role yet.`);
 				return this.sendReplyBox(`Your role is: ${role.safeName}`);
 			}
