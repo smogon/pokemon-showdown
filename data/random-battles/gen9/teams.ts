@@ -32,6 +32,18 @@ interface BattleFactorySet {
 	evs?: Partial<StatsTable>;
 	ivs?: Partial<StatsTable>;
 }
+interface BSSFactorySet {
+	species: string;
+	weight: number;
+	item: string[];
+	ability: string;
+	nature: string;
+	moves: string[][];
+	teraType: string[];
+	wantsTera?: boolean;
+	evs?: number[];
+	ivs?: number[];
+}
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
 	ironFist: number;
@@ -2472,33 +2484,27 @@ export class RandomTeams {
 	randomBSSFactorySets: AnyObject = require("./bss-factory-sets.json");
 
 	randomBSSFactorySet(
-		species: Species,
-		teamData: RandomTeamsTypes.FactoryTeamDetails
+		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails
 	): RandomTeamsTypes.RandomFactorySet | null {
 		const id = toID(species.name);
 		const setList = this.randomBSSFactorySets[id].sets;
 
-		const movesMax: { [k: string]: number } = {
+		const movesMax: {[k: string]: number} = {
 			batonpass: 1,
 			stealthrock: 1,
 			toxicspikes: 1,
 			trickroom: 1,
 			auroraveil: 1,
 		};
-		const weatherAbilities = [
-			"drizzle",
-			"drought",
-			"snowwarning",
-			"sandstream",
-		];
-		const terrainAbilities: { [k: string]: string } = {
+		const weatherAbilities = ['drizzle', 'drought', 'snowwarning', 'sandstream'];
+		const terrainAbilities: {[k: string]: string} = {
 			electricsurge: "electric",
 			psychicsurge: "psychic",
 			grassysurge: "grassy",
 			seedsower: "grassy",
 			mistysurge: "misty",
 		};
-		const terrainItemsRequire: { [k: string]: string } = {
+		const terrainItemsRequire: {[k: string]: string} = {
 			electricseed: "electric",
 			psychicseed: "psychic",
 			grassyseed: "grassy",
@@ -2509,15 +2515,22 @@ export class RandomTeams {
 
 		// Build a pool of eligible sets, given the team partners
 		// Also keep track of sets with moves the team requires
-		const effectivePool: {set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[] = [];
+		const effectivePool: {
+			set: BSSFactorySet, moveVariants?: number[], itemVariants?: number, abilityVariants?: number,
+		}[] = [];
 
 		for (const curSet of setList) {
 			let reject = false;
 
 			// limit to 2 dedicated tera users per team
-			if (curSet.wantsTera &&	teamData.wantsTeraCount && teamData.wantsTeraCount >= maxWantsTera)	continue;
+			if (curSet.wantsTera && teamData.wantsTeraCount && teamData.wantsTeraCount >= maxWantsTera) {
+				continue;
+			}
 
-			if (teamData.weather && weatherAbilities.includes(curSet.ability)) { continue; } // reject 2+ weather setters
+			// reject 2+ weather setters
+			if (teamData.weather && weatherAbilities.includes(curSet.ability)) {
+				continue;
+			}
 
 			if (terrainAbilities[curSet.ability]) {
 				if (!teamData.terrain) teamData.terrain = [];
@@ -2575,18 +2588,34 @@ export class RandomTeams {
 		}
 
 		const setDataAbility = this.sampleIfArray(setData.set.ability);
+		const evs = setData.set.evs;
+		const ivs = setData.set.ivs;
 		return {
-			name: setData.set.nickname || setData.set.name || species.baseSpecies,
+			name: setData.set.species || species.baseSpecies,
 			species: setData.set.species,
-			teraType: this.sampleIfArray(setData.set.teratype),
-			gender:	setData.set.gender || species.gender ||	(this.randomChance(1, 2) ? "M" : "F"),
+			teraType: this.sampleIfArray(setData.set.teraType),
+			gender:	species.gender || (this.randomChance(1, 2) ? "M" : "F"),
 			item: this.sampleIfArray(setData.set.item) || "",
-			ability: setDataAbility || species.abilities["0"],
-			shiny: typeof setData.set.shiny === "undefined" ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: setData.set.level || 50,
-			happiness: typeof setData.set.happiness === "undefined" ? 255 :	setData.set.happiness,
-			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
-			ivs: {hp: 31, atk: 31,	def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
+			ability: setDataAbility || "No Ability",
+			shiny: this.randomChance(1, 1024),
+			level: 50,
+			happiness: 255,
+			evs: {
+				hp: (evs?.[0] || 0),
+				atk: (evs?.[1] || 0),
+				def: (evs?.[2] || 0),
+				spa: (evs?.[3] || 0),
+				spd: (evs?.[4] || 0),
+				spe: (evs?.[5] || 0),
+			},
+			ivs: {
+				hp: (ivs?.[0] || 31),
+				atk: (ivs?.[1] || 31),
+				def: (ivs?.[2] || 31),
+				spa: (ivs?.[3] || 31),
+				spd: (ivs?.[4] || 31),
+				spe: (ivs?.[5] || 31),
+			},
 			nature: setData.set.nature || "Serious",
 			moves,
 			wantsTera: setData.set.wantsTera,
@@ -2594,10 +2623,7 @@ export class RandomTeams {
 	}
 
 
-	randomBSSFactoryTeam(
-		side: PlayerOptions,
-		depth = 0
-	): RandomTeamsTypes.RandomFactorySet[] {
+	randomBSSFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const forceResult = depth >= 4;
@@ -2616,13 +2642,13 @@ export class RandomTeams {
 			weaknesses: {},
 			resistances: {},
 		};
-		const weatherAbilitiesSet: { [k: string]: string } = {
+		const weatherAbilitiesSet: {[k: string]: string} = {
 			drizzle: "raindance",
 			drought: "sunnyday",
 			snowwarning: "hail",
 			sandstream: "sandstorm",
 		};
-		const resistanceAbilities: { [k: string]: string[] } = {
+		const resistanceAbilities: {[k: string]: string[]} = {
 			waterabsorb: ["Water"],
 			flashfire: ["Fire"],
 			lightningrod: ["Electric"],
@@ -2640,7 +2666,7 @@ export class RandomTeams {
 		const shuffledSpecies = [];
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
-				speciesName: speciesName,
+				speciesName,
 				score: Math.pow(this.prng.next(), 1 / this.randomBSSFactorySets[speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
@@ -2649,8 +2675,7 @@ export class RandomTeams {
 
 		while (shuffledSpecies.length && pokemon.length < this.maxTeamSize) {
 			// repeated popping from weighted shuffle is equivalent to repeated weighted sampling without replacement
-			const specie = shuffledSpecies.pop()!.speciesName;
-			const species = this.dex.species.get(specie);
+			const species = this.dex.species.get(shuffledSpecies.pop()!.speciesName);
 			if (!species.exists) continue;
 
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
