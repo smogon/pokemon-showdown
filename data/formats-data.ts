@@ -2454,7 +2454,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	deoxysattack: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "Uber",
 	},
 	deoxysdefense: {
