@@ -5468,7 +5468,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	roaringmoon: {
 		tier: "OU",
-		doublesTier: "DUU",
+		doublesTier: "DBL",
 		natDexTier: "Uber",
 	},
 	irontreads: {
