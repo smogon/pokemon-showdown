@@ -1895,7 +1895,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Drain Punch", "Knock Off", "Seed Bomb", "Sucker Punch", "Swords Dance"],
-                "teraTypes": ["Dark", "Fighting"]
+                "teraTypes": ["Dark", "Fighting", "Poison"]
             }
         ]
     },
