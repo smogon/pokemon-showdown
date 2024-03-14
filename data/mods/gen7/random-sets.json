@@ -6475,7 +6475,7 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["brickbreak", "knockoff", "photongeyser", "swordsdance"]
+                "movepool": ["earthquake", "knockoff", "photongeyser", "swordsdance"]
             }
         ]
     },
