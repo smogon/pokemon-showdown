@@ -1320,7 +1320,10 @@ export class RandomTeams {
 			(species.id === 'magnezone' && moves.has('bodypress') && !isDoubles)
 		) return 'Choice Scarf';
 		if (species.id === 'rampardos' && (role === 'Fast Attacker' || isDoubles)) return 'Choice Scarf';
-		if (species.id === 'luvdisc' || moves.has('courtchange')) return 'Heavy-Duty Boots';
+		if (
+			species.id === 'luvdisc' || moves.has('courtchange') ||
+			(species.id === 'terapagos' && !moves.has('rest'))
+		) return 'Heavy-Duty Boots';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
 			['Cheek Pouch', 'Cud Chew', 'Harvest', 'Ripen'].some(m => ability === m) ||

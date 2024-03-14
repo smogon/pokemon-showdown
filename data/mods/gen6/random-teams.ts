@@ -642,6 +642,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		) return 'Guts';
 
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
+		if (species.id === 'beheeyem') return 'Analytic';
 		if (species.id === 'ninetales') return 'Drought';
 		if (species.id === 'pinsirmega') return 'Hyper Cutter';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
@@ -658,7 +659,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'zangoose') return 'Toxic Boost';
-		if (species.id === 'porygon2') return 'Trace';
+		if (species.id === 'porygon2' || species.id === 'gardevoir') return 'Trace';
 
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (abilities.has('Moxie') && (counter.get('Physical') > 3)) return 'Moxie';
