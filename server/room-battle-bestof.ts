@@ -91,7 +91,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		if (!toID(this.title).includes('bestof')) {
 			this.title += ` (Best-of-${this.bestOf})`;
 		}
-		this.room.bestof = this;
+		this.room.bestOf = this;
 		this.options = {
 			...options,
 			isBestOfSubBattle: true,

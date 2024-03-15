@@ -1088,7 +1088,7 @@ export const commands: Chat.ChatCommands = {
 	unlistroom: 'privateroom',
 	privateroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
-		const battle = room.battle || room.bestof;
+		const battle = room.battle || room.bestOf;
 		if (battle) {
 			this.checkCan('editprivacy', null, room);
 			if (battle.forcedSettings.privacy) {
@@ -1155,8 +1155,8 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
 			room.setPrivate(false);
-			if (room.bestof) {
-				for (const game of room.bestof.games) {
+			if (room.bestOf) {
+				for (const game of room.bestOf.games) {
 					game.room.setPrivate(false);
 				}
 			}
@@ -1164,7 +1164,7 @@ export const commands: Chat.ChatCommands = {
 			const settingName = (setting === true ? 'secret' : setting);
 			if (room.subRooms) {
 				if (settingName === 'secret') return this.errorReply("Secret rooms cannot have subrooms.");
-				if (!room.bestof) {
+				if (!room.bestOf) {
 					for (const subRoom of room.subRooms.values()) {
 						if (!subRoom.settings.isPrivate) {
 							return this.errorReply(`Subroom ${subRoom.title} must be private to make this room private.`);
@@ -1183,8 +1183,8 @@ export const commands: Chat.ChatCommands = {
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
 			if (!room.settings.isPersonal && !battle) room.setSection();
 			room.setPrivate(setting);
-			if (room.bestof) {
-				for (const game of room.bestof.games) {
+			if (room.bestOf) {
+				for (const game of room.bestOf.games) {
 					game.room.setPrivate(setting);
 				}
 			}

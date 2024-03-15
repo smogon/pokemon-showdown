@@ -183,7 +183,7 @@ export abstract class BasicRoom {
 	 * rooms (which can only be `GameRoom`s), `this.bestof === this.game`.
 	 * In all other rooms, `this.bestof` is `null`.
 	 */
-	bestof: BestOfGame | null;
+	bestOf: BestOfGame | null;
 	/**
 	 * The game room's current tournament. If the room is a battle room whose
 	 * battle is part of a tournament, `this.tour === this.parent.game`.
@@ -240,7 +240,7 @@ export abstract class BasicRoom {
 		this.muteQueue = [];
 
 		this.battle = null;
-		this.bestof = null;
+		this.bestOf = null;
 		this.game = null;
 		this.subGame = null;
 		this.tour = null;
@@ -831,7 +831,7 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.battle || this.bestof) {
+		if (this.battle || this.bestOf) {
 			if (privacy) {
 				if (this.roomid.endsWith('pw')) return true;
 
@@ -1896,7 +1896,7 @@ export class GameRoom extends BasicRoom {
 	 */
 	rated: number;
 	declare battle: RoomBattle | null;
-	declare bestof: BestOfGame | null;
+	declare bestOf: BestOfGame | null;
 	declare game: RoomGame;
 	modchatUser: string;
 	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
@@ -1923,7 +1923,7 @@ export class GameRoom extends BasicRoom {
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 
 		this.battle = null;
-		this.bestof = null;
+		this.bestOf = null;
 		this.game = null!;
 
 		this.modchatUser = '';
