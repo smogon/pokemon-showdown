@@ -10727,7 +10727,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {},
 		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+			const unModifiedAtk = pokemon.getStat('atk', false, true, true);
+			const unModifiedSpAtk = pokemon.getStat('spa', false, true, true);
+			if (unModifiedAtk > unModifiedSpAtk) move.category = 'Physical';
 		},
 		ignoreAbility: true,
 		isZ: "ultranecroziumz",
@@ -13812,7 +13814,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+			const unModifiedAtk = pokemon.getStat('atk', false, true, true);
+			const unModifiedSpAtk = pokemon.getStat('spa', false, true, true);
+			if (unModifiedAtk > unModifiedSpAtk) move.category = 'Physical';
 		},
 		ignoreAbility: true,
 		secondary: null,
@@ -16834,10 +16838,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 		},
 		onModifyMove(move, pokemon, target) {
 			if (!target) return;
-			const atk = pokemon.getStat('atk', false, true);
-			const spa = pokemon.getStat('spa', false, true);
-			const def = target.getStat('def', false, true);
-			const spd = target.getStat('spd', false, true);
+			const atk = pokemon.getStat('atk', false, true, true);
+			const spa = pokemon.getStat('spa', false, true, true);
+			const def = target.getStat('def', false, true, true);
+			const spd = target.getStat('spd', false, true, true);
 			const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
 			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
 			if (physical > special || (physical === special && this.random(2) === 0)) {
@@ -19968,7 +19972,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if (pokemon.terastallized && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+			if (!pokemon.terastallized) return;
+			const unModifiedAtk = pokemon.getStat('atk', false, true, true);
+			const unModifiedSpAtk = pokemon.getStat('spa', false, true, true);
+			if (unModifiedAtk > unModifiedSpAtk) {
 				move.category = 'Physical';
 			}
 			if (pokemon.terastallized === 'Stellar') {
