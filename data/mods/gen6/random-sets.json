@@ -2786,8 +2786,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["crunch", "facade", "superpower", "wildcharge"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["crunch", "facade", "superpower", "wildcharge"]
             },
             {
                 "role": "AV Pivot",
@@ -2963,8 +2962,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["encore", "fakeout", "highjumpkick", "poweruppunch", "return", "substitute"],
-                "preferredTypes": ["Normal"]
+                "movepool": ["encore", "fakeout", "highjumpkick", "poweruppunch", "return", "substitute"]
             }
         ]
     },
