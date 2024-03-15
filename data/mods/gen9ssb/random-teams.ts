@@ -331,6 +331,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Solidarity',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Fire',
 	},
+	Felucia: {
+		species: 'Vespiquen', ability: 'Mountaineer', item: 'Red Card', gender: 'F',
+		moves: ['Strength Sap', ['Bug Buzz', 'Night Shade'], ['Thief', 'Calm Mind', 'Toxic']],
+		signatureMove: 'Rigged Dice',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
+	},
 	Froggeh: {
 		species: 'Toxicroak', ability: 'Super Luck', item: 'Leftovers', gender: 'M',
 		moves: ['Gunk Shot', 'Sucker Punch', 'Drain Punch'],
@@ -1009,13 +1015,13 @@ export class RandomStaffBrosTeams extends RandomTeams {
 					this.sample(this.dex.types.names()) :
 					this.sampleIfArray(ssbSet.teraType);
 			}
-			const moves = [];
+			const moves: string[] = [];
 			while (moves.length < 3 && ssbSet.moves.length > 0) {
 				let move = this.sampleNoReplace(ssbSet.moves);
 				if (Array.isArray(move)) move = this.sampleNoReplace(move);
-				moves.push(move);
+				moves.push(this.dex.moves.get(move).name);
 			}
-			moves.push(ssbSet.signatureMove);
+			moves.push(this.dex.moves.get(ssbSet.signatureMove).name);
 			const ivs = {...{hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, ...ssbSet.ivs};
 			if (!moves.map(x => this.dex.moves.get(x)).some(x => x.category === 'Physical')) {
 				ivs.atk = 0;
@@ -1039,6 +1045,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (teraType) set.teraType = teraType;
 
 			// Any set specific tweaks occur here.
+			if (set.name === "Felucia") {
+				const cmIndex = set.moves.indexOf("Calm Mind");
+				if (cmIndex >= 0 && set.moves.includes("Night Shade")) {
+					set.moves[cmIndex] = this.sample(["Thief", "Toxic"]);
+				}
+			}
 
 			team.push(set);
 

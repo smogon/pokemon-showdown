@@ -531,7 +531,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				netType = this.sample(nveTypes);
 			}
 			if (falsePositive) {
-				this.add('-message', `${getName((target.illusion || target).name)} triggered a false-positive and caused ${move.name} to become not-very effective!`)
+				this.add('-message', `${getName((target.illusion || target).name)} triggered a false-positive and caused ${move.name} to become not-very effective!`);
 			}
 			source.setType(netType);
 			this.add('-start', source, 'typechange', netType);
@@ -1652,6 +1652,42 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: 'normal',
 		type: "Grass",
+	},
+
+	// Felucia
+	riggeddice: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Stat changes: inverts, else Taunt. User switches.",
+		name: "Rigged Dice",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		selfSwitch: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Smart Strike', source);
+		},
+		onHit(target, source) {
+			let success = false;
+			let i: BoostID;
+			for (i in target.boosts) {
+				if (target.boosts[i] === 0) continue;
+				target.boosts[i] = -target.boosts[i];
+				success = true;
+			}
+			if (success) {
+				this.add('-invertboost', target, '[from] move: Rigged Dice');
+			} else {
+				target.addVolatile('taunt', source);
+			}
+		},
+		secondary: null,
+		target: 'normal',
+		type: "Bug",
 	},
 
 	// Froggeh

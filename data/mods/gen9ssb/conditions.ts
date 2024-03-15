@@ -667,6 +667,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Fame')}|NOOOOOOOOOOOO! I'M A STAR! PLEASE, IM A STAR!`);
 		},
 	},
+	felucia: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Felucia')}|Good morning gamers! Just here to fix a few things`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c:|${getName('Felucia')}|I have bots to make and chatrooms to manage...`);
+			if (pokemon.illusion) return;
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		onFaint(pokemon) {
+			this.add(`c:|${getName('Felucia')}|Okay that's enough work for today`);
+		},
+		innateName: "Regenerator",
+	},
 	froggeh: {
 		noCopy: true,
 		onStart(pokemon) {

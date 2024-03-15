@@ -422,7 +422,9 @@ function generateSSBSet(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	buf += `<ul style="list-style-type:none;"><li>${set.species}${set.gender !== '' ? ` (${set.gender})` : ``}`;
 	buf += `${set.item ? ' @ ' : ''}${Array.isArray(set.item) ? set.item.map(x => dex.items.get(x).name).join(' / ') : dex.items.get(set.item).name}</li>`;
 	buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(x => dex.abilities.get(x).name).join(' / ') : dex.abilities.get(set.ability).name}</li>`;
-	if (set.teraType) buf += `<li>Tera Type: ${Array.isArray(set.teraType) ? set.teraType.map(x => dex.types.get(x).name).join(' / ') : set.teraType === 'Any' ? 'Any' : dex.types.get(set.teraType).name}</li>`;
+	if (set.teraType) {
+		buf += `<li>Tera Type: ${Array.isArray(set.teraType) ? set.teraType.map(x => dex.types.get(x).name).join(' / ') : set.teraType === 'Any' ? 'Any' : dex.types.get(set.teraType).name}</li>`;
+	}
 	if (set.shiny) buf += `<li>Shiny: ${typeof set.shiny === 'number' ? `1 in ${set.shiny} chance` : `Yes`}</li>`;
 	if (set.evs) {
 		const evs: string[] = [];
