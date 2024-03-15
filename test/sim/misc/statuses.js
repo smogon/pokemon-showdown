@@ -79,6 +79,15 @@ describe('Paralysis', function () {
 
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].getStat('spe'), 168); // would be 169 if both Choice Scarf and paralysis were chained
+
+		battle = common.createBattle([[
+			{species: 'hawlucha', item: 'whiteherb', ability: 'unburden', evs: {spe: 4}, moves: ['closecombat']}, // 273 Speed
+		], [
+			{species: 'wynaut', moves: ['glare']},
+		]]);
+
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].getStat('spe'), 273); // would be 272 if paralysis was applied first
 	});
 
 	it('should reduce speed to 25% of its original value in Gen 6', function () {
