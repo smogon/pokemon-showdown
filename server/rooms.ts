@@ -2240,7 +2240,7 @@ export const Rooms = {
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		let game: RoomBattle | BestOfGame;
 		if (options.isBestOfSubBattle || !isBestOf) {
-			game = new Rooms.RoomBattle(room, options);
+			game = new RoomBattle(room, options);
 		} else {
 			game = new BestOfGame(room, options);
 		}
