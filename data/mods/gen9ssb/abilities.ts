@@ -480,8 +480,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.formeChange(speciesid, this.effect, true);
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
 				this.boost({atk: 1, spe: 1});
-				const img = "https://media.discordapp.net/attachments/764667730468536320/1079168557553831947/alcremie.png";
-				this.add(`c:|${getName('clerica')}|/html <img src=${img} style="width:32px" />`);
+				this.add(`c:|${getName('clerica')}|oop`);
 			}
 		},
 		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
