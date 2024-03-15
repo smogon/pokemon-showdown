@@ -179,6 +179,12 @@ export abstract class BasicRoom {
 	 */
 	battle: RoomBattle | null;
 	/**
+	 * The room's current best-of set. Best-of sets are a type of RoomGame, so in best-of set
+	 * rooms (which can only be `GameRoom`s), `this.bestof === this.game`.
+	 * In all other rooms, `this.bestof` is `null`.
+	 */
+	bestof: BestOfGame | null;
+	/**
 	 * The game room's current tournament. If the room is a battle room whose
 	 * battle is part of a tournament, `this.tour === this.parent.game`.
 	 * In all other rooms, `this.tour` is `null`.
@@ -234,6 +240,7 @@ export abstract class BasicRoom {
 		this.muteQueue = [];
 
 		this.battle = null;
+		this.bestof = null;
 		this.game = null;
 		this.subGame = null;
 		this.tour = null;
@@ -824,7 +831,7 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.battle) {
+		if (this.battle || this.bestof) {
 			if (privacy) {
 				if (this.roomid.endsWith('pw')) return true;
 
@@ -1889,6 +1896,7 @@ export class GameRoom extends BasicRoom {
 	 */
 	rated: number;
 	declare battle: RoomBattle | null;
+	declare bestof: BestOfGame | null;
 	declare game: RoomGame;
 	modchatUser: string;
 	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
@@ -1915,6 +1923,7 @@ export class GameRoom extends BasicRoom {
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 
 		this.battle = null;
+		this.bestof = null;
 		this.game = null!;
 
 		this.modchatUser = '';
@@ -2229,13 +2238,14 @@ export const Rooms = {
 		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
+		let game: RoomBattle | BestOfGame;
 		if (options.isBestOfSubBattle || !isBestOf) {
-			const battle = new Rooms.RoomBattle(room, options);
-			room.game = battle;
-			battle.checkPrivacySettings(options);
+			game = new Rooms.RoomBattle(room, options);
 		} else {
-			room.game = new BestOfGame(room, options);
+			game = new BestOfGame(room, options);
 		}
+		room.game = game;
+		game.checkPrivacySettings(options);
 
 		for (const p of players) {
 			if (p) {

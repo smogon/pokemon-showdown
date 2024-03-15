@@ -1,6 +1,7 @@
 import {Utils} from '../lib';
 import {RoomGamePlayer, RoomGame} from "./room-game";
 import type {RoomBattlePlayerOptions, RoomBattleOptions} from './room-battle';
+import type {RoomSettings} from './rooms';
 
 const BEST_OF_IN_BETWEEN_TIME = 40;
 
@@ -68,6 +69,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	format: Format;
 	winThreshold: number;
 	options: Omit<RoomBattleOptions, 'players'> & {players: null};
+	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	ties = 0;
 	games: {room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
 	playerNum = 0;
@@ -89,6 +91,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		if (!toID(this.title).includes('bestof')) {
 			this.title += ` (Best-of-${this.bestOf})`;
 		}
+		this.room.bestof = this;
 		this.options = {
 			...options,
 			isBestOfSubBattle: true,
@@ -113,6 +116,50 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		if (!player) throw new Error(`Failed to make player ${user} in ${this.roomid}`);
 		this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
 		return player;
+	}
+	checkPrivacySettings(options: RoomBattleOptions & Partial<RoomSettings>) {
+		let inviteOnly = false;
+		const privacySetter = new Set<ID>([]);
+		for (const p of options.players) {
+			if (p.user) {
+				if (p.inviteOnly) {
+					inviteOnly = true;
+					privacySetter.add(p.user.id);
+				} else if (p.hidden) {
+					privacySetter.add(p.user.id);
+				}
+				this.checkForcedUserSettings(p.user);
+			}
+		}
+
+		if (privacySetter.size) {
+			const room = this.room;
+			if (this.forcedSettings.privacy) {
+				room.setPrivate(false);
+				room.settings.modjoin = null;
+				room.add(`|raw|<div class="broadcast-blue"><strong>This best-of set is required to be public due to a player having a name starting with '${this.forcedSettings.privacy}'.</div>`);
+			} else if (!options.tour || (room.tour?.allowModjoin)) {
+				room.setPrivate('hidden');
+				if (inviteOnly) room.settings.modjoin = '%';
+				room.privacySetter = privacySetter;
+				if (inviteOnly) {
+					room.settings.modjoin = '%';
+					room.add(`|raw|<div class="broadcast-red"><strong>This best-of set is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+				}
+			}
+		}
+	}
+	checkForcedUserSettings(user: User) {
+		this.forcedSettings = {
+			modchat: this.forcedSettings.modchat || Rooms.RoomBattle.battleForcedSetting(user, 'modchat'),
+			privacy: this.forcedSettings.privacy || Rooms.RoomBattle.battleForcedSetting(user, 'privacy'),
+		};
+		if (
+			this.players.some(p => p.getUser()?.battleSettings.special) ||
+			(this.options.rated && this.forcedSettings.modchat)
+		) {
+			this.room.settings.modchat = '\u2606';
+		}
 	}
 	clearWaiting() {
 		this.waitingBattle = null;
