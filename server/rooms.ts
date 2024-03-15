@@ -2111,7 +2111,14 @@ export class GameRoom extends BasicRoom {
 }
 
 function getRoom(roomid?: string | BasicRoom) {
-	if (typeof roomid === 'string') return Rooms.rooms.get(roomid as RoomID);
+	if (typeof roomid === 'string') {
+		// Accounts for private battles that were made public
+		if (roomid.startsWith('battle-') && roomid.endsWith('pw')) {
+			const room = Rooms.rooms.get(roomid.slice(0, roomid.lastIndexOf('-')) as RoomID);
+			if (room) return room;
+		}
+		return Rooms.rooms.get(roomid as RoomID);
+	}
 	return roomid as Room;
 }
 
