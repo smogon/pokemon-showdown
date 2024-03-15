@@ -3420,8 +3420,9 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			// Protosynthesis is not affected by Utility Umbrella
-			if (this.field.isWeather('sunnyday')) {
+			// Protosynthesis is not affected by Utility Umbrella, or any weather supressing ability
+			// As a result, we check the weather directly instead of via field#isWeather which calls field#effectiveWeather
+			if (this.field.weather === 'sunnyday') {
 				pokemon.addVolatile('protosynthesis');
 			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
 				pokemon.removeVolatile('protosynthesis');
