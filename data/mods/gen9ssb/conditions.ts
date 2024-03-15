@@ -1529,6 +1529,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Peary')}|Blood all on my gears... damn`);
 		},
 	},
+	penquin: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('PenQuin')}|'Sup ${pokemon.side.foe.name}. Wanna sling some dice? B)`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('PenQuin')}|Wait, one more roll...`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('PenQuin')}|I want my fair one. Join <<survivor>> so we can roll battle.`);
+		},
+	},
 	phoopes: {
 		noCopy: true,
 		onStart() {
@@ -1756,13 +1768,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	sificon: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('Sificon')}|gm (it's 4pm and I woke up just now)`);
+			this.add(`c:|${getName('Sificon~')}|gm (it's 4pm and I woke up just now)`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Sificon')}|guess I'll go to bed (we all know that I won't)`);
+			this.add(`c:|${getName('Sificon~')}|guess I'll go to bed (we all know that I won't)`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('Sificon')}|oop`);
+			this.add(`c:|${getName('Sificon~')}|oop`);
 		},
 	},
 	skies: {

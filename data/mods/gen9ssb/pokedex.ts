@@ -274,6 +274,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Social Jumpluff Warrior"},
 	},
 
+	// Felucia
+	vespiquen: {
+		inherit: true,
+		abilities: {0: "Regenerator"},
+	},
+
 	// Froggeh
 	toxicroak: {
 		inherit: true,
@@ -591,6 +597,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	klinklang: {
 		inherit: true,
 		abilities: {0: "Levitate"},
+	},
+
+	// PenQuin
+	empoleon: {
+		inherit: true,
+		abilities: {0: "'Poleon's Pyro Quirk"},
 	},
 
 	// phoopes

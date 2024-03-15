@@ -3558,6 +3558,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// PenQuin
+	splashnluckyblaze: {
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		name: "Splash n' Lucky Blaze",
+		shortDesc: "Raises the user's Attack by 1 stage and burns the foe.",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Jet Punch', target);
+			this.add('-anim', source, 'Flare Blitz', target);
+		},
+		secondary: {
+			chance: 100,
+			status: 'brn',
+			self: {
+				boosts: {
+					atk: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Water",
+	},
+
 	// phoopes
 	gen1blizzard: {
 		accuracy: 90,

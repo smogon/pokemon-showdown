@@ -1581,6 +1581,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// PenQuin
+	poleonspyroquirk: {
+		name: "'Poleon's Pyro Quirk",
+		shortDesc: "Burned Pokemon also become confused.",
+		onAnyAfterSetStatus(status, target, source, effect) {
+			if (source !== this.effectState.target || target === source || effect.effectType !== 'Move') return;
+			if (status.id === 'brn') {
+				target.addVolatile('confusion');
+			}
+		},
+		flags: {},
+	},
+
 	// phoopes
 	ididitagain: {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",

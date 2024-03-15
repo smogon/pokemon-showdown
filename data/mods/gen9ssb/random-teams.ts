@@ -631,6 +631,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gear Grind',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	PenQuin: {
+		species: 'Empoleon', ability: '\'Poleon\'s Pyro Quirk', item: 'Assault Vest', gender: 'M',
+		moves: ['Liquidation', 'Sacred Fire', 'Knock Off'],
+		signatureMove: 'Splash n\' Lucky Blaze',
+		evs: {atk: 252, def: 252, spe: 4}, nature: 'Adamant', teraType: 'Fire',
+	},
 	phoopes: {
 		species: 'Jynx', ability: 'I Did It Again', item: 'Red Card', gender: 'F',
 		moves: ['Lovely Kiss', 'Psychic', 'Toxic'],
@@ -728,7 +734,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'BoltBeam',
 		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', shiny: 64,
 	},
-	Sificon: {
+	'Sificon~': {
 		species: 'Hoppip', ability: 'Perfectly Imperfect', item: 'Eviolite', gender: 'M',
 		moves: ['Strength Sap', 'Spikes', 'Seismic Toss'],
 		signatureMove: 'Grass Gaming',
