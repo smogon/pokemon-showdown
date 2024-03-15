@@ -68,7 +68,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	bestOf: number;
 	format: Format;
 	winThreshold: number;
-	options: Omit<RoomBattleOptions, 'players'> & {players: null};
+	options: Omit<RoomBattleOptions, 'players'> & {parent: Room, players: null};
 	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	ties = 0;
 	games: {room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
@@ -95,6 +95,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		this.options = {
 			...options,
 			isBestOfSubBattle: true,
+			parent: this.room,
 			allowRenames: false,
 			players: null,
 		};
@@ -206,7 +207,6 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		const battleRoom = Rooms.createBattle(options);
 		// shouldn't happen even in lockdown
 		if (!battleRoom) throw new Error("Failed to create battle for " + this.title);
-		battleRoom.setParent(this.room);
 		this.games.push({
 			room: battleRoom,
 			winner: undefined,

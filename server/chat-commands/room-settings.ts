@@ -1137,7 +1137,7 @@ export const commands: Chat.ChatCommands = {
 			if (room.parent && room.parent.settings.isPrivate) {
 				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
 			}
-			if (room.settings.isPersonal && !room.battle) {
+			if (room.settings.isPersonal && !battle) {
 				return this.errorReply(`This room can't be made public.`);
 			}
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
@@ -1162,13 +1162,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
-			if (room.subRooms) {
+			if (room.subRooms && !room.bestOf) {
 				if (settingName === 'secret') return this.errorReply("Secret rooms cannot have subrooms.");
-				if (!room.bestOf) {
-					for (const subRoom of room.subRooms.values()) {
-						if (!subRoom.settings.isPrivate) {
-							return this.errorReply(`Subroom ${subRoom.title} must be private to make this room private.`);
-						}
+				for (const subRoom of room.subRooms.values()) {
+					if (!subRoom.settings.isPrivate) {
+						return this.errorReply(`Subroom ${subRoom.title} must be private to make this room private.`);
 					}
 				}
 			}

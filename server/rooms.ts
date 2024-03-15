@@ -2245,7 +2245,11 @@ export const Rooms = {
 			game = new BestOfGame(room, options);
 		}
 		room.game = game;
-		game.checkPrivacySettings(options);
+		if (options.isBestOfSubBattle) {
+			room.setPrivate(room.parent!.settings.isPrivate || false);
+		} else {
+			game.checkPrivacySettings(options);
+		}
 
 		for (const p of players) {
 			if (p) {
