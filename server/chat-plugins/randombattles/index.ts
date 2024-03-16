@@ -795,7 +795,7 @@ export const commands: Chat.ChatCommands = {
 		const {dex} = this.splitFormat(target, true);
 		const isLetsGo = (dex.currentMod === 'gen7letsgo');
 
-		const searchResults = dex.search(args[0], ['Pokedex']);
+		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
 		if (!searchResults || !searchResults.length) {
 			this.errorReply(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
