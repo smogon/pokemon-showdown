@@ -1020,7 +1020,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	gyarados: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		natDexTier: "UUBL",
 	},
@@ -4582,7 +4582,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	necrozma: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -5553,7 +5553,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	armarouge: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
