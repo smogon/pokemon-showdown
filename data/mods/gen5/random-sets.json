@@ -3604,12 +3604,8 @@
         "level": 80,
         "sets": [
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Attacker",
                 "movepool": ["bulkup", "drainpunch", "icepunch", "machpunch", "thunderpunch"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["drainpunch", "icepunch", "machpunch", "thunderpunch"]
             }
         ]
     },
