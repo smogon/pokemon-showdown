@@ -20,7 +20,7 @@ export const Repl = new class {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
 	 */
-	socketPathnames: Set<string> = new Set();
+	socketPathnames = new Set<string>();
 
 	listenersSetup = false;
 
@@ -58,43 +58,53 @@ export const Repl = new class {
 	}
 
 	/**
+	 * Delete old sockets in the REPL directory (presumably from a crashed
+	 * previous launch of PS).
+	 *
+	 * Does everything synchronously, so that the directory is guaranteed
+	 * clean and ready for new REPL sockets by the time this function returns.
+	 */
+	cleanup() {
+		const config = typeof Config !== 'undefined' ? Config : {};
+		if (!config.repl) return;
+
+		// Clean up old REPL sockets.
+		const directory = path.dirname(
+			path.resolve(FS.ROOT_PATH, config.replsocketprefix || 'logs/repl', 'app')
+		);
+		let files;
+		try {
+			files = fs.readdirSync(directory);
+		} catch {}
+		if (files) {
+			for (const file of files) {
+				const pathname = path.resolve(directory, file);
+				const stat = fs.statSync(pathname);
+				if (!stat.isSocket()) continue;
+
+				const socket = net.connect(pathname, () => {
+					socket.end();
+					socket.destroy();
+				}).on('error', () => {
+					fs.unlinkSync(pathname);
+				});
+			}
+		}
+	}
+
+	/**
 	 * Starts a REPL server, using a UNIX socket for IPC. The eval function
 	 * parametre is passed in because there is no other way to access a file's
 	 * non-global context.
 	 */
 	start(filename: string, evalFunction: (input: string) => any) {
 		const config = typeof Config !== 'undefined' ? Config : {};
-		if (config.repl !== undefined && !config.repl) return;
+		if (!config.repl) return;
 
 		// TODO: Windows does support the REPL when using named pipes. For now,
 		// this only supports UNIX sockets.
 
 		Repl.setupListeners(filename);
-
-		if (filename === 'app') {
-			// Clean up old REPL sockets.
-			const directory = path.dirname(
-				path.resolve(FS.ROOT_PATH, config.replsocketprefix || 'logs/repl', 'app')
-			);
-			let files;
-			try {
-				files = fs.readdirSync(directory);
-			} catch {}
-			if (files) {
-				for (const file of files) {
-					const pathname = path.resolve(directory, file);
-					const stat = fs.statSync(pathname);
-					if (!stat.isSocket()) continue;
-
-					const socket = net.connect(pathname, () => {
-						socket.end();
-						socket.destroy();
-					}).on('error', () => {
-						fs.unlink(pathname, () => {});
-					});
-				}
-			}
-		}
 
 		const server = net.createServer(socket => {
 			repl.start({

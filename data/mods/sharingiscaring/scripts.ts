@@ -9,20 +9,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 			if ('smackdown' in this.volatiles) return true;
 			const item = (this.ignoringItem() ? '' : this.item);
-			if (item === 'ironball' || this.volatiles['item:ironball']) return true;
+			if (item === 'ironball' || (this.volatiles['item:ironball'] && !this.ignoringItem())) return true;
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 			if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 			if (this.hasAbility('levitate') && !this.battle.suppressingAbility(this)) return null;
 			if ('magnetrise' in this.volatiles) return false;
 			if ('telekinesis' in this.volatiles) return false;
-			if (item === 'airballoon' || this.volatiles['item:airballoon']) return false;
+			if (item === 'airballoon' || (this.volatiles['item:airballoon'] && !this.ignoringItem())) return false;
 			return true;
 		},
 		hasItem(item) {
-			if (this.ignoringItem()) return false;
-			if (Array.isArray(item)) return item.some(i => this.hasItem(i));
-			const itemid = this.battle.toID(item);
-			return this.item === itemid || !!this.volatiles['item:' + itemid];
+			if (Array.isArray(item)) {
+				return item.some(i => this.hasItem(i));
+			} else {
+				if (this.battle.toID(item) !== this.item && !this.volatiles['item:' + this.battle.toID(item)]) return false;
+			}
+			return !this.ignoringItem();
 		},
 		useItem(source, sourceEffect) {
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));

@@ -2,11 +2,17 @@ import RandomGen3Teams from '../gen3/random-teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import type {MoveCounter, OldRandomBattleSpecies} from '../gen8/random-teams';
 
+// Moves that shouldn't be the only STAB moves:
+const NO_STAB = [
+	'explosion', 'icywind', 'machpunch', 'pursuit', 'quickattack', 'reversal', 'selfdestruct',
+];
+
 export class RandomGen2Teams extends RandomGen3Teams {
 	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
+		this.noStab = NO_STAB;
 		this.moveEnforcementCheckers = {
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
@@ -283,18 +289,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 			if (ivs.def === 28 || ivs.def === 24) ivs.hp -= 8;
 		}
 
-		const levelScale: {[k: string]: number} = {
-			PU: 77,
-			PUBL: 75,
-			NU: 73,
-			NUBL: 71,
-			UU: 69,
-			UUBL: 67,
-			OU: 65,
-			Uber: 61,
-		};
-
-		const level = this.adjustLevel || data.level || levelScale[species.tier] || 80;
+		const level = this.getLevel(species);
 
 		return {
 			name: species.name,

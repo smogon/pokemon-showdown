@@ -134,6 +134,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
+		flags: {breakable: 1},
+	},
+	forecast: {
+		inherit: true,
+		flags: {notrace: 1},
 	},
 	forewarn: {
 		inherit: true,
@@ -385,7 +390,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts[key]! *= 2;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Simple",
 		rating: 4,
 		num: 86,
@@ -481,7 +486,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Thick Fat",
 		rating: 3.5,
 		num: 47,
@@ -513,6 +518,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		},
+		flags: {notrace: 1},
 	},
 	unburden: {
 		inherit: true,
@@ -532,7 +538,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onTryHit(target, source, move) {
 			if (move.id === 'firefang') {
-				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.");
+				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.", true, target.side);
 				return;
 			}
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;

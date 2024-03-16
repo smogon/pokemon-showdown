@@ -293,7 +293,7 @@ export const TeamsHandler = new class {
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
-			buf += `<details class="readmore"><summary>Manage</summary>`;
+			buf += `<details class="readmore"><summary>Manage (edit/delete/etc)</summary>`;
 			buf += `<button class="button" name="send" value="/teams setprivacy ${teamData.teamid},${teamData.private ? 'no' : 'yes'}">`;
 			buf += teamData.private ? `Make public` : `Make private`;
 			buf += `</button><br />`;
@@ -315,7 +315,8 @@ export const TeamsHandler = new class {
 				teamBuf = teamBuf.replace(set.species, `<psicon pokemon="${set.species}" /> <br />${set.species}`);
 			}
 			if (set.item) {
-				teamBuf = teamBuf.replace(set.item, `${set.item} <psicon item="${set.item}" />`);
+				const tester = new RegExp(`${Utils.escapeRegex(set.item)}\\b`);
+				teamBuf = teamBuf.replace(tester, `${set.item} <psicon item="${set.item}" />`);
 			}
 			return teamBuf;
 		}).join('<hr />');

@@ -27,6 +27,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.add('-status', target, 'par');
 			}
 		},
+		onModifySpePriority: -101,
 		onModifySpe(spe, pokemon) {
 			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
 			spe = this.finalModify(spe);
@@ -393,9 +394,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 			if (data.source.hasAbility('normalize') && this.gen >= 6) {
 				data.moveData.type = 'Normal';
-			}
-			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
-				data.moveData.stab = 2;
 			}
 			const hitMove = new this.dex.Move(data.moveData) as ActiveMove;
 
@@ -823,11 +821,9 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
 		},
-		// Override No Guard
-		onInvulnerabilityPriority: 2,
-		onInvulnerability(target, source, move) {
-			return false;
-		},
+		// Dodging moves is handled in BattleActions#hitStepInvulnerabilityEvent
+		// This is here for moves that manually call this event like Perish Song
+		onInvulnerability: false,
 		onBeforeTurn(pokemon) {
 			this.queue.cancelAction(pokemon);
 		},

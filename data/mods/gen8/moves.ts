@@ -1,14 +1,8 @@
 export const Moves: {[k: string]: ModdedMoveData} = {
 	allyswitch: {
 		inherit: true,
-		stallingMove: false,
+		// Prevents setting the volatile used to check for Ally Switch failure
 		onPrepareHit() {},
-		onHit(pokemon) {
-			const newPosition = (pokemon.position === 0 ? pokemon.side.active.length - 1 : 0);
-			if (!pokemon.side.active[newPosition]) return false;
-			if (pokemon.side.active[newPosition].fainted) return false;
-			this.swapPosition(pokemon, newPosition, '[from] move: Ally Switch');
-		},
 	},
 	anchorshot: {
 		inherit: true,
@@ -138,6 +132,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dragonhammer: {
+		inherit: true,
+		flags: {contact: 1, protect: 1, mirror: 1},
+	},
 	dualchop: {
 		inherit: true,
 		isNonstandard: null,
@@ -174,7 +172,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// The animation leak target itself isn't "accurate"; the target it reveals is as if Fly weren't a charge movee
 			// (Fly, like all other charge moves, will actually target slots on its charging turn, relevant for things like Follow Me)
 			// We use a generic single-target move to represent this
-			if (this.gameType === 'doubles' || this.gameType === 'multi') {
+			if (this.sides.length > 2) {
 				const animatedTarget = attacker.getMoveTargets(this.dex.getActiveMove('aerialace'), defender).targets[0];
 				if (animatedTarget) {
 					this.hint(`${move.name}'s animation targeted ${animatedTarget.name}`);
@@ -186,7 +184,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	futuresight: {
 		inherit: true,
-		flags: {futuremove: 1},
+		flags: {metronome: 1, futuremove: 1},
 	},
 	geargrind: {
 		inherit: true,
@@ -524,6 +522,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	spectralthief: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	stickyweb: {
+		inherit: true,
+		condition: {
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Sticky Web');
+			},
+			onEntryHazard(pokemon) {
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				this.add('-activate', pokemon, 'move: Sticky Web');
+				this.boost({spe: -1}, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
+			},
+		},
 	},
 	stormthrow: {
 		inherit: true,

@@ -124,18 +124,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Akir')}|ah well maybe next time`);
 		},
 	},
-	alpha: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Alpha')}|eccomi dimmi`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Alpha')}|FRATM FACI FRIDDU`);
-		},
-		onFaint() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Alpha')}|caio`);
-		},
-	},
 	annika: {
 		noCopy: true,
 		onStart() {
@@ -966,7 +954,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		// phuck innate
 		onDamage(damage, target, source, effect) { // Magic Guard
-			if (effect.id === 'heavyhailstorm') return;
 			if (target.illusion) return;
 			if (!target.species.id.includes('unown')) return;
 			if (effect.effectType !== 'Move') {
@@ -1374,18 +1361,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rabia')}|im top 500 in relevant tiers and lead gp, i have 8 badges, im fine, gg`);
 		},
 	},
-	rach: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|Hel-lo`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|I was doing better alone`);
-		},
-		onFaint() {
-			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Rach')}|I'm all good already, so moved on, it's scary`);
-		},
-	},
 	rageuser: {
 		noCopy: true,
 		onStart() {
@@ -1784,59 +1759,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Zyg')}|At least I have a tier.`);
-		},
-	},
-	// Heavy Hailstorm status support for Alpha
-	heavyhailstorm: {
-		name: 'HeavyHailstorm',
-		effectType: 'Weather',
-		duration: 0,
-		onTryMovePriority: 1,
-		onTryMove(attacker, defender, move) {
-			if (move.type === 'Steel' && move.category !== 'Status') {
-				this.debug('Heavy Hailstorm Steel suppress');
-				this.add('-message', 'The hail suppressed the move!');
-				this.add('-fail', attacker, move, '[from] Heavy Hailstorm');
-				this.attrLastMove('[still]');
-				return null;
-			}
-		},
-		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (move.type === 'Ice') {
-				this.debug('Heavy Hailstorm ice boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onFieldStart(field, source, effect) {
-			this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
-			this.add('-message', 'The hail became extremely chilling!');
-		},
-		onModifyMove(move, pokemon, target) {
-			if (!this.field.isWeather('heavyhailstorm')) return;
-			if (move.category !== "Status") {
-				this.debug('Adding Heavy Hailstorm freeze');
-				if (!move.secondaries) move.secondaries = [];
-				for (const secondary of move.secondaries) {
-					if (secondary.status === 'frz') return;
-				}
-				move.secondaries.push({
-					chance: 10,
-					status: 'frz',
-				});
-			}
-		},
-		onFieldResidualOrder: 1,
-		onFieldResidual() {
-			this.add('-weather', 'Hail', '[upkeep]');
-			if (this.field.isWeather('heavyhailstorm')) this.eachEvent('Weather');
-		},
-		onWeather(target, source, effect) {
-			if (target.isAlly(this.effectState.source)) return;
-			// Hail is stronger from Heavy Hailstorm
-			if (!target.hasType('Ice')) this.damage(target.baseMaxhp / 8);
-		},
-		onFieldEnd() {
-			this.add('-weather', 'none');
 		},
 	},
 	// Forever Winter Hail support for piloswine gripado

@@ -7,6 +7,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	dragonscale: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	dubiousdisc: {
 		inherit: true,
 		isNonstandard: "Past",

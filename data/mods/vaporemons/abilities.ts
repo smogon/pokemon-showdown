@@ -9,7 +9,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				source.formeChange('Palafin-Hero', this.effect, true);
 			}
 		},
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		name: "Zero to Hero",
 		shortDesc: "If this Pokemon is a Palafin in Zero Form, KOing a foe has it change to Hero Form.",
 		rating: 5,
@@ -35,7 +35,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Cute Charm",
 		shortDesc: "This Pokemon takes 50% damage from moves of its own type.",
 		rating: 3,
@@ -50,14 +50,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onSwap(target) {
 				 if (!target.fainted) {
 					  const source = this.effectState.source;
-					  const damage = this.heal(target.baseMaxhp / 3, target, target);
+					  const damage = this.heal(target.baseMaxhp / 2, target, target);
 					  if (damage) this.add('-heal', target, target.getHealth, '[from] ability: Healer', '[of] ' + source);
 					  target.side.removeSlotCondition(target, 'healer');
 				 }
 			},
 	   },
 		rating: 3,
-		shortDesc: "On faint, the next Pokemon sent out heals 33% of its max HP.",
+		shortDesc: "On faint, the next Pokemon sent out heals 50% of its max HP.",
 		num: 131,
 	},
 	galewings: {
@@ -93,7 +93,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify([5461, 4096]);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Grass Pelt",
 		shortDesc: "On switch-in, summons Grassy Terrain. During Grassy Terrain, Def is 1.3333x.",
 		rating: 4.5,
@@ -846,7 +846,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			return false;
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Steely Spirit",
 		rating: 3.5,
 		shortDesc: "This Pokemon's Steel power is 2x; it can't be paralyzed; Electric power against it is halved.",
@@ -865,7 +865,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Sheer Heart",
 		shortDesc: "Special attacks have 1.3x power; stat changes to the Special Attack stat have no effect.",
 	},
@@ -943,12 +943,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.actions.useMove("Water Sport", source);
 			this.add('-message', `${source.name}'s splashed around in the mud!`);
 		},
+		onModifyMove(move, pokemon) {
+			if (['muddywater', 'mudshot', 'mudbomb', 'mudslap'].includes(move.id)) {
+				delete move.secondaries;
+				delete move.self;
+			}
+		},
 		onBasePower(basePower, attacker, defender, move) {
-			if (['Muddy Water', 'Mud Shot', 'Mud Bomb', 'Mud-Slap'].includes(move.name)) {
+			if (['muddywater', 'mudshot', 'mudbomb', 'mudslap'].includes(move.id)) {
 				return this.chainModify(2);
 			}
 		},
-		shortDesc: "On switch-in, sets Mud Sport and Water Sport. This Pokemon's mud moves deal double damage.",
+		shortDesc: "On switch-in, sets Mud Sport and Water Sport. This Pokemon's mud moves deal double damage but lose their secondary effects.",
 		rating: 5,
 	},
 	exoskeleton: {
@@ -974,7 +980,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return damage / 2;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Exoskeleton",
 		rating: 4,
 		shortDesc: "(Mostly functional) If Bug: no Bug weaknesses. If non-Bug: +Bug resistances.",
@@ -1013,7 +1019,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			return false;
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Water Veil",
 		rating: 2,
 		num: 41,
@@ -1030,7 +1036,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.67);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Shield Dust",
 		rating: 4,
 		num: 19,
@@ -1143,7 +1149,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	fairyringer: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Fairy') {
-				if (!this.boost({spa: 1})) {
+				if (!this.boost({atk: 1})) {
 					this.add('-immune', target, '[from] ability: Fairy Ringer');
 				}
 				return null;
@@ -1160,10 +1166,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.effectState.target;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Fairy Ringer",
 		rating: 3,
-		shortDesc: "This Pokemon draws Fairy moves to itself to raise Sp. Atk by 1; Fairy immunity.",
+		shortDesc: "This Pokemon draws Fairy moves to itself to raise Atk by 1; Fairy immunity.",
 	},
 	justified: {
 		onDamagingHit(damage, target, source, move) {
@@ -1185,7 +1191,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Justified",
 		rating: 3,
 		num: 154,
@@ -1422,7 +1428,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Damp",
 		rating: 0.5,
 		num: 6,
@@ -1601,12 +1607,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		num: 168,
 	},
 	adaptability: {
-		onModifyMove(move, pokemon) {
-			if (move.type === pokemon.teraType && pokemon.baseSpecies.types.includes(pokemon.teraType) &&
-				 pokemon.hasItem('terashard')) {
-				move.stab = 2.25;
-			} else {
-				move.stab = 2;
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				if (move.type === source.teraType && source.baseSpecies.types.includes(source.teraType) &&
+					source.hasItem('terashard')) {
+					return 2.25;
+				}
+				return 2;
 			}
 		},
 		name: "Adaptability",

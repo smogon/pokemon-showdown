@@ -1309,6 +1309,11 @@ export const commands: Chat.ChatCommands = {
 
 	refreshpage(target, room, user) {
 		this.checkCan('lockdown');
+		if (user.lastCommand !== 'refreshpage') {
+			user.lastCommand = 'refreshpage';
+			this.errorReply(`Are you sure you wish to refresh the page for every user online?`);
+			return this.errorReply(`If you are sure, please type /refreshpage again to confirm.`);
+		}
 		Rooms.global.sendAll('|refresh|');
 		this.stafflog(`${user.name} used /refreshpage`);
 	},

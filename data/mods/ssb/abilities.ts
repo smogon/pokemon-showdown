@@ -2,7 +2,7 @@ import {SSBSet, ssbSets} from "./random-teams";
 import {getName} from './conditions';
 
 // Used in many abilities, placed here to reduce the number of updates needed and to reduce the chance of errors
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'heavyhailstorm', 'winterhail', 'turbulence'];
+const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'winterhail', 'turbulence'];
 
 /**
  * Assigns a new set to a Pokémon
@@ -168,7 +168,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onModifyMove(move) {
 			move.ignoreAbility = true;
 		},
@@ -193,7 +193,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	setthestage: {
 		desc: "If this Pokemon is an Aegislash, it changes to Blade Forme before attempting to use an attacking move, and changes to Shield Forme before attempting to use King's Shield. This Pokemon's moves that match one of its types have a same-type attack bonus (STAB) of 2 instead of 1.5. On switch-in, this Pokemon selects a physical or special set.",
 		shortDesc: "Stance Change + Adaptability; on switch-in, selects physical or special set.",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onSwitchIn(pokemon) {
 			if (pokemon.species.baseSpecies !== 'Aegislash') return;
 			const forme = this.randomChance(1, 2) ? 'aegii-Alt' : 'aegii';
@@ -202,11 +202,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-message', `aegii currently has a ${setType} oriented set.`);
 		},
 		onModifyMove(move, attacker, defender) {
-			move.stab = 2;
 			if (attacker.species.baseSpecies !== 'Aegislash' || attacker.transformed) return;
 			if (move.category === 'Status' && move.id !== 'kingsshield' && move.id !== 'reset') return;
 			const targetForme = (move.id === 'kingsshield' || move.id === 'reset' ? 'Aegislash' : 'Aegislash-Blade');
 			if (attacker.species.name !== targetForme) attacker.formeChange(targetForme);
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				return 2;
+			}
 		},
 		name: "Set the Stage",
 		gen: 8,
@@ -236,7 +240,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "On switch-in, this Pokemon summons Rain Dance. If Rain Dance or Heavy Rain is active, this Pokemon has doubled Speed, collects a raindrop, and restores 1/8 of its maximum HP, rounded down, at the end of each turn. If this Pokemon is holding Big Root, it will restore 1/6 of its maximum HP, rounded down, at the end of the turn. If this Pokemon is holding Utility Umbrella, its HP does not get restored and it does not collect raindrops. Each raindrop raises this Pokemon's Defense and Special Defense by 1 stage while it is collected.",
 		shortDesc: "Drizzle + Swift Swim. Restore HP if raining. Collect raindrops.",
 		name: "Rainy Season",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onStart(source) {
 			for (const action of this.queue) {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
@@ -273,31 +277,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.heal(pokemon.baseMaxhp / 16);
 		},
 		name: "Fortifications",
-		gen: 8,
-	},
-
-	// Alpha
-	iceage: {
-		desc: "The weather becomes an extremely heavy hailstorm that prevents damaging Steel-type moves from executing, causes Ice-type moves to be 50% stronger, causes all non-Ice-type Pokemon on the opposing side to take 1/8 damage from hail, and causes all moves to have a 10% chance to freeze. This weather bypasses Magic Guard and Overcoat. This weather remains in effect until the 3 turns are up, or the weather is changed by Delta Stream, Desolate Land, or Primordial Sea.",
-		shortDesc: "Weather: Steel fail. 1.5x Ice.",
-		onStart(source) {
-			this.field.setWeather('heavyhailstorm');
-		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'heavyhailstorm' && !STRONG_WEATHERS.includes(weather.id)) return false;
-		},
-		onEnd(pokemon) {
-			if (this.field.weatherState.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility('iceage')) {
-					this.field.weatherState.source = target;
-					return;
-				}
-			}
-			this.field.clearWeather();
-		},
-		name: "Ice Age",
 		gen: 8,
 	},
 
@@ -555,7 +534,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onDamage(damage, target, source, effect) {
-			if (effect.id === 'heavyhailstorm') return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
@@ -627,7 +605,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon is a Kartana, then when it switches in, it changes to two random types and gets corresponding STAB attacks.",
 		shortDesc: "Kartana: User gains 2 random types and STAB moves on switch-in.",
 		name: "Bipolar",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onSwitchIn(pokemon) {
 			if (pokemon.species.baseSpecies !== 'Kartana') return;
 			const typeMap: {[key: string]: string} = {
@@ -684,7 +662,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon's species is Alcremie, it alternates one of its moves between two different options at the end of each turn, depending on the forme of Alcremie.",
 		shortDesc: "Alcremie: alternates between moves each turn.",
 		name: "Winding Song",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onResidual(pokemon) {
 			if (pokemon.species.baseSpecies !== 'Alcremie') return;
 			let coolMoves = [];
@@ -754,7 +732,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Armor Time",
 		desc: "If this Pokemon uses a status move or King Giri Giri Slash, it changes its typing and boosts one of its stats by 1 stage randomly between four options: Bug/Fire type with a Special Attack boost, Bug/Steel type with a Defense boost, Bug/Rock type with a Special Defense boost, and Bug/Electric type with a Speed boost.",
 		shortDesc: "On use of status or King Giri Giri Slash, the user changes type and gets a boost.",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onBeforeMove(source, target, move) {
 			if (move.category !== "Status" && move.id !== "kinggirigirislash") return;
 			const types = ['Fire', 'Steel', 'Rock', 'Electric'];
@@ -829,8 +807,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "While in Minior-Meteor forme, this Pokemon cannot be affected by major status conditions and is immune to critical hits. This ability cannot be ignored by Moongeist Beam, Sunsteel Strike, Mold Breaker, Teravolt, or Turboblaze.",
 		shortDesc: "Minior-Meteor: Immune to crits and status",
 		name: "Capsule Armor",
-		isPermanent: true,
-		isBreakable: false,
+		flags: {cantsuppress: 1},
 		onCriticalHit: false,
 		onSetStatus(status, target, source, effect) {
 			if (target.species.id !== 'miniormeteor' || target.transformed) return;
@@ -1005,8 +982,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	deceiver: {
 		desc: "This Pokemon's moves that match one of its types have a same-type attack bonus of 2 instead of 1.5. If this Pokemon is at full HP, it survives one hit with at least 1 HP.",
 		shortDesc: "Adaptability + Sturdy.",
-		onModifyMove(move) {
-			move.stab = 2;
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				return 2;
+			}
 		},
 		onTryHit(pokemon, target, move) {
 			if (move.ohko) {
@@ -1234,7 +1213,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon can only be damaged by direct attacks. This Pokemon blocks certain status moves and instead uses the move against the original user.",
 		shortDesc: "Magic Guard + Magic Bounce.",
 		onDamage(damage, target, source, effect) {
-			if (effect.id === 'heavyhailstorm') return;
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
@@ -1560,8 +1538,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Randomly changes this Pokemon's type at the end of every turn to the type of one of its moves; same-type attack bonus (STAB) is 2 instead of 1.5.",
 		shortDesc: "Adaptability + Randomly changes to the type of one of its moves every turn.",
 		name: "Wild Magic Surge",
-		onModifyMove(move) {
-			move.stab = 2;
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				return 2;
+			}
 		},
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
@@ -1603,30 +1583,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.field.setTerrain('swampyterrain');
 		},
 		name: "Swampy Surge",
-		gen: 8,
-	},
-
-	// Rach
-	burnitdown: {
-		desc: "On switch-in, this Pokemon lowers the foe's higher offensive stat.",
-		shortDesc: "Lower the foe's higher offensive stat.",
-		onStart(pokemon) {
-			let totalatk = 0;
-			let totalspa = 0;
-			for (const target of pokemon.foes()) {
-				totalatk += target.getStat('atk', false, true);
-				totalspa += target.getStat('spa', false, true);
-			}
-			for (const target of pokemon.foes()) {
-				this.add('-ability', pokemon, 'BURN IT DOWN!');
-				if (totalatk && totalatk >= totalspa) {
-					this.boost({atk: -1}, target, pokemon, null, true);
-				} else if (totalspa) {
-					this.boost({spa: -1}, target, pokemon, null, true);
-				}
-			}
-		},
-		name: "BURN IT DOWN!",
 		gen: 8,
 	},
 
@@ -1678,7 +1634,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon is a forme of Necrozma, its forme changes on switch-in depending on the number of unfainted Pokemon on the user's team: Necrozma-Dusk-Mane if 3 or fewer Pokemon and Necrozma-Dawn-Wings was sent out already; Necrozma-Ultra if it is the last Pokemon left on the team and Necrozma-Dusk-Mane was sent out already.",
 		shortDesc: "Changes forme on switch-in depending on # of remaining Pokemon on user's team.",
 		name: "The Numbers Game",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onStart(target) {
 			if (target.baseSpecies.baseSpecies !== 'Necrozma' || target.transformed) return;
 			if (target.side.pokemonLeft <= 3) {
@@ -1832,7 +1788,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon is an Aggron and is hit by a move that is not very effective, this Pokemon becomes Aggron-Mega and its Attack is boosted by 1 stage.",
 		shortDesc: "Aggron: If hit by resisted move, Mega Evolve and gain +1 Atk.",
 		name: "Overasked Clause",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onHit(target, source, move) {
 			if (target.getMoveHitData(move).typeMod < 0) {
 				if (!target.hp) return;
@@ -2008,7 +1964,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	combattraining: {
 		desc: "If this Pokemon is a Cosplay Pikachu forme, the first hit it takes in battle deals 0 neutral damage. Confusion damage also breaks the immunity.",
 		shortDesc: "(Pikachu-Cosplay only) First hit deals 0 damage.",
-		isPermanent: true,
+		flags: {cantsuppress: 1},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			const cosplayFormes = [
@@ -2082,7 +2038,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
-	// Modified various abilities to support Alpha's move & pilo's abiility
+	// Modified various abilities to support pilo's abiility
 	deltastream: {
 		inherit: true,
 		onAnySetWeather(target, source, weather) {
@@ -2116,7 +2072,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
 				break;
 			case 'winterhail':
-			case 'heavyhailstorm':
 			case 'hail':
 				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
 				break;
@@ -2131,23 +2086,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	icebody: {
 		inherit: true,
-		desc: "If Hail or Heavy Hailstorm is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail or Heavy Hailstorm.",
+		desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail.",
 		shortDesc: "Hail-like weather active: heals 1/16 max HP each turn; immunity to Hail-like weather.",
 		onWeather(target, source, effect) {
-			if (['heavyhailstorm', 'hail', 'winterhail'].includes(effect.id)) {
+			if (['hail', 'winterhail'].includes(effect.id)) {
 				this.heal(target.baseMaxhp / 16);
 			}
 		},
 		onImmunity(type, pokemon) {
-			if (['heavyhailstorm', 'hail', 'winterhail'].includes(type)) return false;
+			if (['hail', 'winterhail'].includes(type)) return false;
 		},
 	},
 	iceface: {
 		inherit: true,
-		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail or Heavy Hailstorm begins or when Eiscue switches in while Hail or Heavy Hailstorm is active. Confusion damage also breaks the ice face.",
+		desc: "If this Pokemon is an Eiscue, the first physical hit it takes in battle deals 0 neutral damage. Its ice face is then broken and it changes forme to Noice Face. Eiscue regains its Ice Face forme when Hail begins or when Eiscue switches in while Hail is active. Confusion damage also breaks the ice face.",
 		shortDesc: "If Eiscue, first physical hit taken deals 0 damage. Effect is restored in Hail-like weather.",
 		onStart(pokemon) {
-			if (this.field.isWeather(['heavyhailstorm', 'hail', 'winterhail']) &&
+			if (this.field.isWeather(['hail', 'winterhail']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
@@ -2156,7 +2111,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onWeatherChange() {
 			const pokemon = this.effectState.target;
-			if (this.field.isWeather(['heavyhailstorm', 'hail', 'winterhail']) &&
+			if (this.field.isWeather(['hail', 'winterhail']) &&
 				pokemon.species.id === 'eiscuenoice' && !pokemon.transformed) {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
@@ -2168,35 +2123,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		shortDesc: "If a Hail-like weather is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['heavyhailstorm', 'hail', 'winterhail'])) {
+			if (this.field.isWeather(['hail', 'winterhail'])) {
 				return this.chainModify(2);
 			}
 		},
 	},
 	snowcloak: {
 		inherit: true,
-		desc: "If Heavy Hailstorm, Winter Hail, or Hail is active, this Pokemon's evasiveness is multiplied by 1.25. This Pokemon takes no damage from Heavy Hailstorm or Hail.",
+		desc: "If Winter Hail or Hail is active, this Pokemon's evasiveness is multiplied by 1.25. This Pokemon takes no damage from or Hail.",
 		shortDesc: "If a Hail-like weather is active, 1.25x evasion; immunity to Hail-like weathers.",
 		onImmunity(type, pokemon) {
-			if (['heavyhailstorm', 'hail', 'winterhail'].includes(type)) return false;
+			if (['hail', 'winterhail'].includes(type)) return false;
 		},
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather(['heavyhailstorm', 'hail', 'winterhail'])) {
+			if (this.field.isWeather(['hail', 'winterhail'])) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return accuracy * 0.8;
-			}
-		},
-	},
-	// Modified Magic Guard for Alpha
-	magicguard: {
-		inherit: true,
-		shortDesc: "This Pokemon can only be damaged by direct attacks and Heavy Hailstorm.",
-		onDamage(damage, target, source, effect) {
-			if (effect.id === 'heavyhailstorm') return;
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
 			}
 		},
 	},
