@@ -570,7 +570,7 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 		}
-		const newTargets = dex.search(target);
+		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
 		if (!newTargets || !newTargets.length) {
 			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
@@ -890,8 +890,8 @@ export const commands: Chat.ChatCommands = {
 		let type2: any = dex.types.get(targets[1]);
 		let type3: any = dex.types.get(targets[2]);
 		if (species.name !== "" && !species.exists && type1.name !== "" && !type1.exists) {
-			const typeSearchResults = dex.search(targets[0], ['TypeChart']);
-			const speciesSearchResults = dex.search(targets[0], ['Pokedex']);
+			const typeSearchResults = dex.dataSearch(targets[0], ['TypeChart']);
+			const speciesSearchResults = dex.dataSearch(targets[0], ['Pokedex']);
 			if (typeSearchResults && typeSearchResults[0].name !== "") {
 				type1 = dex.types.get(typeSearchResults[0].name);
 				imperfectMatch = true;
@@ -904,7 +904,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (type2.name !== "" && !type2.exists) {
-			const searchResults = dex.search(targets[1], ['TypeChart']);
+			const searchResults = dex.dataSearch(targets[1], ['TypeChart']);
 			if (searchResults && searchResults[0].name !== "") {
 				type2 = dex.types.get(searchResults[0].name);
 				imperfectMatch = true;
@@ -914,7 +914,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (type3.name !== "" && !type3.exists) {
-			const searchResults = dex.search(targets[2], ['TypeChart']);
+			const searchResults = dex.dataSearch(targets[2], ['TypeChart']);
 			if (searchResults && searchResults[0].name !== "") {
 				type3 = dex.types.get(searchResults[0].name);
 				imperfectMatch = true;
