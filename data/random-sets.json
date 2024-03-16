@@ -5066,6 +5066,11 @@
                 "role": "Bulky Attacker",
                 "movepool": ["Discharge", "Recover", "Scald", "Spikes", "Toxic Spikes"],
                 "teraTypes": ["Water"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Curse", "Liquidation", "Recover", "Zing Zap"],
+                "teraTypes": ["Grass", "Water"]
             }
         ]
     },
