@@ -1155,11 +1155,6 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(`${user.name} made this room public.`);
 			this.modlog('PUBLICROOM');
 			room.setPrivate(false);
-			if (room.bestOf) {
-				for (const game of room.bestOf.games) {
-					game.room.setPrivate(false);
-				}
-			}
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
 			if (room.subRooms && !room.bestOf) {
@@ -1181,11 +1176,6 @@ export const commands: Chat.ChatCommands = {
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
 			if (!room.settings.isPersonal && !battle) room.setSection();
 			room.setPrivate(setting);
-			if (room.bestOf) {
-				for (const game of room.bestOf.games) {
-					game.room.setPrivate(setting);
-				}
-			}
 			room.privacySetter = new Set([user.id]);
 		}
 	},

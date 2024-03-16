@@ -850,6 +850,7 @@ export abstract class BasicRoom {
 				this.rename(this.title, this.roomid.slice(0, lastDashIndex) as RoomID);
 			}
 		}
+		if (this.bestOf) this.bestOf.setPrivacyOfGames(privacy);
 	}
 	validateSection(section: string) {
 		const target = toID(section);

@@ -1,7 +1,7 @@
 import {Utils} from '../lib';
 import {RoomGamePlayer, RoomGame} from "./room-game";
 import type {RoomBattlePlayerOptions, RoomBattleOptions} from './room-battle';
-import type {RoomSettings} from './rooms';
+import type {PrivacySetting, RoomSettings} from './rooms';
 
 const BEST_OF_IN_BETWEEN_TIME = 40;
 
@@ -162,6 +162,21 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			this.room.settings.modchat = '\u2606';
 		}
 	}
+	setPrivacyOfGames(privacy: PrivacySetting) {
+		for (let i = 0; i < this.games.length; i++) {
+			const room = this.games[i].room;
+			const prevRoom = this.games[i - 1]?.room;
+			const gameNum = i + 1;
+
+			room.setPrivate(privacy);
+			this.room.add(`|uhtmlchange|game${gameNum}|<a href="/${room.roomid}">${room.title}</a>`);
+			room.add(`|uhtmlchange|bestof|<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`).update();
+			if (prevRoom) {
+				prevRoom.add(`|uhtmlchange|next|Next: <a href="/${room.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`).update();
+			}
+		}
+		this.updateDisplay();
+	}
 	clearWaiting() {
 		this.waitingBattle = null;
 		for (const player of this.players) {
@@ -222,16 +237,18 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		const p2 = this.players[1];
 		battleRoom.add(
 			Utils.html`|html|<table width="100%"><tr><td align="left">${p1.name}</td><td align="right">${p2.name}</tr>` +
-			`<tr><td align="left">${this.renderWins(p1)}</td><td align="right">${this.renderWins(p2)}</tr></table>` +
-			`<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`
+			`<tr><td align="left">${this.renderWins(p1)}</td><td align="right">${this.renderWins(p2)}</tr></table>`
+		);
+		battleRoom.add(
+			`|uhtml|bestof|<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`
 		).update();
 
 		this.room.add(`|html|<h2>Game ${gameNum}</h2>`);
-		this.room.add(Utils.html`|html|<a href="/${battleRoom.roomid}">${battleRoom.title}</a>`);
+		this.room.add(Utils.html`|uhtml|game${gameNum}|<a href="/${battleRoom.roomid}">${battleRoom.title}</a>`);
 		this.updateDisplay();
 
 		prevBattleRoom?.add(
-			`|html|Next: <a href="/${battleRoom.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`
+			`|uhtml|next|Next: <a href="/${battleRoom.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`
 		).update();
 	}
 	renderWins(player: BestOfPlayer) {
