@@ -361,8 +361,7 @@ class Ladder extends LadderStore {
 		let searchRange = 100;
 		const times = matches.map(([search]) => search.time);
 		const elapsed = Date.now() - Math.min(...times);
-		if (formatid === 'gen9ou' || formatid === 'gen9oucurrent' ||
-				formatid === 'gen9oususpecttest' || formatid === 'gen9randombattle') {
+		if (formatid === `gen${Dex.gen}ou` || formatid === `gen${Dex.gen}randombattle`) {
 			searchRange = 50;
 		}
 
