@@ -3170,7 +3170,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["raindance", "rest", "surf", "toxic"]
+                "movepool": ["raindance", "rest", "scald", "toxic"]
             },
             {
                 "role": "Bulky Support",
