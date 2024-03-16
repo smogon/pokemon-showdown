@@ -362,7 +362,7 @@ export class ModdedDex {
 		return num >>> 0;
 	}
 
-	search(
+	dataSearch(
 		target: string,
 		searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures' | 'TypeChart')[] | null,
 		isInexact?: boolean
@@ -409,7 +409,7 @@ export class ModdedDex {
 				const ld = Utils.levenshtein(cmpTarget, j, maxLd);
 				if (ld <= maxLd) {
 					const word = (searchObj[j] as DexTable<any>).name || (searchObj[j] as DexTable<any>).species || j;
-					const results = this.search(word, searchIn, word);
+					const results = this.dataSearch(word, searchIn, word);
 					if (results) {
 						searchResults = results;
 						maxLd = ld;
