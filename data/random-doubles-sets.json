@@ -113,9 +113,9 @@
                 "teraTypes": ["Flying", "Water"]
             },
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Ice Shard", "Iron Head", "Protect", "Swords Dance"],
-                "teraTypes": ["Ice"]
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Drill Run", "Ice Shard", "Iron Head", "Triple Axel"],
+                "teraTypes": ["Flying", "Water"]
             }
         ]
     },
@@ -653,11 +653,6 @@
         "level": 85,
         "sets": [
             {
-                "role": "Doubles Wallbreaker",
-                "movepool": ["Freeze-Dry", "Ice Beam", "Muddy Water", "Protect"],
-                "teraTypes": ["Ground"]
-            },
-            {
                 "role": "Doubles Support",
                 "movepool": ["Freeze-Dry", "Icy Wind", "Life Dew", "Muddy Water", "Protect"],
                 "teraTypes": ["Ground"]
@@ -929,7 +924,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Eerie Impulse", "Electroweb", "Protect", "Scald"],
+                "movepool": ["Electroweb", "Protect", "Scald", "Thunderbolt"],
                 "teraTypes": ["Flying"]
             },
             {
@@ -1554,7 +1549,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Alluring Voice", "Baton Pass", "Nasty Plot", "Thunderbolt"],
+                "movepool": ["Alluring Voice", "Nasty Plot", "Protect", "Thunderbolt"],
                 "teraTypes": ["Flying"]
             },
             {
@@ -3714,7 +3709,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Baton Pass", "Knock Off", "Protect", "Psycho Cut", "Superpower", "Trick Room"],
+                "movepool": ["Knock Off", "Protect", "Psycho Cut", "Superpower", "Trick Room"],
                 "teraTypes": ["Fighting"]
             }
         ]

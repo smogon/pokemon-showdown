@@ -745,7 +745,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["bodyslam", "curse", "rest", "sleeptalk", "whirlwind"]
+                "movepool": ["bodyslam", "curse", "rest", "sleeptalk"]
             },
             {
                 "role": "Bulky Setup",
@@ -1503,7 +1503,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["bugbuzz", "roost", "toxic", "uturn", "whirlwind"]
+                "movepool": ["bugbuzz", "hiddenpowerground", "roost", "toxic", "uturn", "whirlwind"]
             }
         ]
     },
@@ -1757,8 +1757,12 @@
                 "movepool": ["batonpass", "bugbuzz", "substitute", "tailglow"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Support",
                 "movepool": ["batonpass", "bugbuzz", "encore", "tailglow"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["batonpass", "bugbuzz", "roost", "tailglow"]
             }
         ]
     },
@@ -1767,7 +1771,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["bugbuzz", "encore", "roost", "thunderbolt", "thunderwave", "toxic", "uturn"]
+                "movepool": ["bugbuzz", "encore", "roost", "thunderwave", "toxic", "uturn"]
             }
         ]
     },
@@ -2755,8 +2759,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["blizzard", "earthquake", "focusblast", "iceshard", "woodhammer"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["blizzard", "earthquake", "iceshard", "woodhammer"]
             }
         ]
     },
