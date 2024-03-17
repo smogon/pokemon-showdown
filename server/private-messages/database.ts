@@ -31,7 +31,7 @@ export const statements: {[k: string]: string} = {
 	fetchNew: 'SELECT * FROM offline_pms WHERE receiver = ? AND seen IS NULL',
 	clearDated: 'DELETE FROM offline_pms WHERE EXISTS (SELECT * FROM offline_pms WHERE should_expire(time) = 1)',
 	checkSentCount: 'SELECT count(*) as count FROM offline_pms WHERE sender = ? AND receiver = ?',
-	setSeen: 'UPDATE offline_pms SET seen = ? WHERE receiver = ?',
+	setSeen: 'UPDATE offline_pms SET seen = ? WHERE receiver = ? AND seen IS NULL',
 	clearSeen: 'DELETE FROM offline_pms WHERE seen_duration(seen) = 1',
 	getSettings: 'SELECT * FROM pm_settings WHERE userid = ?',
 	setBlock: 'REPLACE INTO pm_settings (userid, view_only) VALUES (?, ?)',
