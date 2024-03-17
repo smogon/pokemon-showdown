@@ -1042,6 +1042,10 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["earthpower", "hiddenpowerfire", "hiddenpowerice", "hiddenpowerrock", "leafstorm", "sludgebomb"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthpower", "hiddenpowerfire", "solarbeam", "sunnyday"]
             }
         ]
     },
@@ -2077,7 +2081,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["nightshade", "rest", "sleeptalk", "willowisp"]
+                "movepool": ["rest", "seismictoss", "sleeptalk", "willowisp"]
             }
         ]
     },
@@ -2443,8 +2447,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["crunch", "facade", "icefang", "superpower", "wildcharge"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["crunch", "facade", "superpower", "wildcharge"]
             },
             {
                 "role": "Bulky Attacker",
@@ -2570,7 +2573,11 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["gigadrain", "healingwish", "hiddenpowerfire", "hiddenpowerrock", "naturepower", "synthesis"]
+                "movepool": ["gigadrain", "healingwish", "hiddenpowerfire", "hiddenpowerrock", "morningsun", "naturepower"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["aromatherapy", "gigadrain", "leechseed", "morningsun", "naturepower", "toxic"]
             }
         ]
     },
@@ -2779,8 +2786,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["blizzard", "earthquake", "focusblast", "iceshard", "woodhammer"],
-                "preferredTypes": ["Grass"]
+                "movepool": ["blizzard", "earthquake", "iceshard", "woodhammer"]
             }
         ]
     },
@@ -2924,7 +2930,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["earthquake", "facade", "roost", "stoneedge", "swordsdance"]
+                "movepool": ["earthquake", "facade", "roost", "swordsdance"]
             }
         ]
     },
@@ -3164,7 +3170,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["raindance", "rest", "surf", "toxic"]
+                "movepool": ["raindance", "rest", "scald", "toxic"]
             },
             {
                 "role": "Bulky Support",
@@ -3598,12 +3604,8 @@
         "level": 80,
         "sets": [
             {
-                "role": "Bulky Setup",
+                "role": "Bulky Attacker",
                 "movepool": ["bulkup", "drainpunch", "icepunch", "machpunch", "thunderpunch"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["drainpunch", "icepunch", "machpunch", "thunderpunch"]
             }
         ]
     },
