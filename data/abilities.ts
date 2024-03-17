@@ -3681,7 +3681,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 		},
 		onAfterBoost(boost, target, source, effect) {
-			if (effect?.name === 'Intimidate') {
+			if (effect?.name === 'Intimidate' && boost.atk) {
 				this.boost({spe: 1});
 			}
 		},
