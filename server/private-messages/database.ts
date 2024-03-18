@@ -14,7 +14,7 @@ export const statements: {[k: string]: string} = {
 	clearDated: 'DELETE FROM offline_pms WHERE ? - time >= ?',
 	checkSentCount: 'SELECT count(*) as count FROM offline_pms WHERE sender = ? AND receiver = ?',
 	setSeen: 'UPDATE offline_pms SET seen = ? WHERE receiver = ? AND seen IS NULL',
-	clearSeen: 'SELECT * FROM offline_pms WHERE ? - seen >= ?',
+	clearSeen: 'DELETE FROM offline_pms WHERE ? - seen >= ?',
 	getSettings: 'SELECT * FROM pm_settings WHERE userid = ?',
 	setBlock: 'REPLACE INTO pm_settings (userid, view_only) VALUES (?, ?)',
 	deleteSettings: 'DELETE FROM pm_settings WHERE userid = ?',

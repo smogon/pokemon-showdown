@@ -214,7 +214,7 @@ if (Config.usesqlite) {
 	if (!process.send) {
 		PM.spawn(Config.pmprocesses || 1);
 		// clear super old pms on startup
-		void PM.run(statements.clearDated);
+		void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 	} else if (process.send && process.mainModule === module) {
 		global.Monitor = {
 			crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
