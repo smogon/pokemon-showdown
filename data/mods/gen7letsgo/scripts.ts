@@ -43,17 +43,17 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		runMegaEvo(pokemon) {
 			if (!pokemon.canMegaEvo) return false;
-	
+
 			pokemon.formeChange(pokemon.canMegaEvo, null, true);
 			this.battle.add('-mega', pokemon, this.dex.species.get(pokemon.canMegaEvo).baseSpecies);
-	
+
 			// Limit one mega evolution
 			for (const ally of pokemon.side.pokemon) {
 				ally.canMegaEvo = null;
 				ally.canMegaEvoX = null;
 				ally.canMegaEvoY = null;
 			}
-	
+
 			this.battle.runEvent('AfterMega', pokemon);
 			return true;
 		},
