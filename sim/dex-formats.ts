@@ -219,10 +219,10 @@ export class RuleTable extends Map<string, string> {
 			timer.starting = Number(this.valueRules.get('timerstarting'));
 		}
 		if (this.valueRules.has('dctimer')) {
-			timer.dcTimer = !!this.valueRules.get('dctimer');
+			timer.dcTimer = toID(this.valueRules.get('dctimer')) === 'true';
 		}
 		if (this.valueRules.has('dctimerbank')) {
-			timer.dcTimer = !!this.valueRules.get('dctimerbank');
+			timer.dcTimer = toID(this.valueRules.get('dctimerbank')) === 'true';
 		}
 		if (this.valueRules.has('timergrace')) {
 			timer.grace = Number(this.valueRules.get('timergrace'));
@@ -237,10 +237,10 @@ export class RuleTable extends Map<string, string> {
 			timer.maxFirstTurn = Number(this.valueRules.get('timermaxfirstturn'));
 		}
 		if (this.valueRules.has('timeoutautochoose')) {
-			timer.timeoutAutoChoose = !!this.valueRules.get('timeoutautochoose');
+			timer.timeoutAutoChoose = toID(this.valueRules.get('timeoutautochoose')) === 'true';
 		}
 		if (this.valueRules.has('timeraccelerate')) {
-			timer.accelerate = !!this.valueRules.get('timeraccelerate');
+			timer.accelerate = toID(this.valueRules.get('timeraccelerate')) === 'true';
 		}
 		if (Object.keys(timer).length) this.timer = [timer, format.name];
 
