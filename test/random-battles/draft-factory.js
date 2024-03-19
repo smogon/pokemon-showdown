@@ -6,7 +6,7 @@ const DraftFactory = require('../../dist/data/draft-factory').default;
 
 let battle;
 
-describe.only('Draft Factory', () => {
+describe('Draft Factory', () => {
 	afterEach(() => battle.destroy());
 
 	it('should only allow the designated Tera Captains to Terastallize', () => {
