@@ -42,10 +42,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			return null;
 		},
 		runMegaEvo(pokemon) {
-			if (!pokemon.canMegaEvo) return false;
+			const speciesid = pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY;
+			if (!speciesid) return false;
 
-			pokemon.formeChange(pokemon.canMegaEvo, null, true);
-			this.battle.add('-mega', pokemon, this.dex.species.get(pokemon.canMegaEvo).baseSpecies);
+			pokemon.formeChange(speciesid, null, true);
+			this.battle.add('-mega', pokemon, this.dex.species.get(speciesid).baseSpecies);
 
 			// Limit one mega evolution
 			for (const ally of pokemon.side.pokemon) {
@@ -58,11 +59,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			return true;
 		},
 		runMegaEvoX(pokemon) {
-			pokemon.canMegaEvo = pokemon.canMegaEvoX;
+			if (!pokemon.canMegaEvoX) return false;
+			pokemon.canMegaEvoY = null;
 			return this.runMegaEvo(pokemon);
 		},
 		runMegaEvoY(pokemon) {
-			pokemon.canMegaEvo = pokemon.canMegaEvoY;
+			if (!pokemon.canMegaEvoY) return false;
+			pokemon.canMegaEvoX = null;
 			return this.runMegaEvo(pokemon);
 		},
 	},
