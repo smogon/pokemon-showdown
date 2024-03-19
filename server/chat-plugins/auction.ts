@@ -434,13 +434,11 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
 
-	// bid, but named choose to use /choose aliased to /bid
-	choose(user: User, input: string) {
+	bid(user: User, amount: number) {
 		if (this.state !== 'bid') throw new Chat.ErrorMessage(`There is no one to bid on right now.`);
 		const team = Object.values(this.teams).find(t => t.managers.includes(user.id));
 		if (!team) throw new Chat.ErrorMessage(`Only managers can bid on players.`);
 
-		let amount = parseFloat(input);
 		if (amount < 500) amount *= 1000;
 		if (isNaN(amount) || amount % 500 !== 0) throw new Chat.ErrorMessage(`Your bid must be a multiple of 500.`);
 		if (amount > team.maxBid()) throw new Chat.ErrorMessage(`You cannot afford to bid that much.`);
@@ -792,7 +790,7 @@ export const commands: Chat.ChatCommands = {
 		bid(target, room, user) {
 			const auction = this.requireGame(Auction);
 			if (!target) return this.parse('/help auction bid');
-			auction.choose(user, target);
+			auction.bid(user, parseFloat(target));
 		},
 		bidhelp: [
 			`/auction bid OR /bid [amount] - Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.`,
