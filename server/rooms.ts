@@ -2084,7 +2084,7 @@ export class GameRoom extends BasicRoom {
 			players: battle.players.map(p => p.name).join(','),
 			format: format.name,
 			rating, // will probably do nothing
-			hidden,
+			hidden: hidden === 0 ? '' : hidden,
 			inputlog: battle.inputLog?.join('\n') || undefined,
 			password,
 		});
