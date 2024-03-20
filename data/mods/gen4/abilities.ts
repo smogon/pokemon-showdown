@@ -538,7 +538,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onTryHit(target, source, move) {
 			if (move.id === 'firefang') {
-				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.");
+				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.", true, target.side);
 				return;
 			}
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;

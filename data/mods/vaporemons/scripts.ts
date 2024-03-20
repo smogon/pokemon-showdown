@@ -2342,7 +2342,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "gougingfire").learnset.dragonrage = ["9L1"];
 		this.modData("Learnsets", "gougingfire").learnset.psychicfangs = ["9L1"];
 		this.modData("Learnsets", "gougingfire").learnset.rage = ["9L1"];
-		this.modData("Learnsets", "gougingfire").learnset.ragingfury = ["9L1"];
+		delete this.modData('Learnsets', 'gougingfire').learnset.ragingfury;
 		this.modData("Learnsets", "gougingfire").learnset.skullbash = ["9L1"];
 		this.modData("Learnsets", "gougingfire").learnset.rekindle = ["9L1"];
 		this.modData("Learnsets", "ragingbolt").learnset.chainlightning = ["9L1"];

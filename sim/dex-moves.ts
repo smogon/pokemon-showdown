@@ -332,6 +332,8 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	spreadHit?: boolean;
 	statusRoll?: string;
+	/** Hardcode to make Tera Stellar STAB work with multihit moves */
+	stellarBoosted?: boolean;
 	totalDamage?: number | false;
 	typeChangerBoosted?: Effect;
 	willChangeForme?: boolean;

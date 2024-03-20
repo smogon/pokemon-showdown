@@ -84,12 +84,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ravelin',
 		evs: {hp: 248, def: 252, spe: 8}, ivs: {spa: 0}, nature: 'Impish',
 	},
-	Alpha: {
-		species: 'Aurorus', ability: 'Snow Warning', item: 'Caionium Z', gender: 'M',
-		moves: ['Freeze-Dry', 'Ancient Power', 'Earth Power'],
-		signatureMove: 'Blizzard',
-		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
-	},
 	Annika: {
 		species: 'Mewtwo', ability: 'Overprotective', item: 'Mewtwonite Y', gender: 'F',
 		moves: [['Rising Voltage', 'Lava Plume'], ['Hex', 'Aurora Beam'], ['Psychic', 'Psyshock']],

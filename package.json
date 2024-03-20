@@ -58,11 +58,6 @@
   },
   "contributors": [
     {
-      "name": "Cathy J. Fitzpatrick",
-      "email": "cathy@cathyjf.com",
-      "url": "https://cathyjf.com"
-    },
-    {
       "name": "Bill Meltsner",
       "email": "bill@meltsner.com",
       "url": "http://www.meltsner.com"
@@ -79,7 +74,7 @@
     "@types/sockjs": "^0.3.33",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
-    "eslint": "^8.5.0",
+    "eslint": "8.5.0",
     "mocha": "^8.2.0",
     "smogon": "^3.0.0",
     "typescript": "^5.0.4"

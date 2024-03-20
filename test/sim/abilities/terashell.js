@@ -63,5 +63,28 @@ describe('Tera Shell', function () {
 		assert.bounded(damage, [28, 33], `Tera Shell should not reduce damage, because Tera Shell should be suppressed`);
 	});
 
-	// TODO unconfirmed behavior, currently applies resistance to each type of a possibly multi-type pokemon
+	it(`should not work if the user's species is not currently Terapagos-Terastal`, function () {
+		battle = common.createBattle([[
+			{species: 'Terapagos', ability: 'terashift', moves: ['transform']},
+		], [
+			{species: 'Umbreon', ability: 'terashell', moves: ['flowertrick']},
+		]]);
+
+		battle.makeChoices();
+		const terapagos = battle.p1.active[0];
+		let damage = terapagos.maxhp - terapagos.hp;
+		assert.bounded(damage, [51, 60], `Tera Shell should not have activated because current species is not Terapagos`);
+
+
+		battle = common.createBattle([[
+			{species: 'Espeon', moves: ['transform']},
+		], [
+			{species: 'Terapagos', ability: 'terashift', moves: ['flowertrick']},
+		]]);
+
+		battle.makeChoices();
+		const espeon = battle.p1.active[0];
+		damage = espeon.maxhp - espeon.hp;
+		assert.bounded(damage, [33, 39], `Tera Shell should have activated because current species is Terapagos`);
+	});
 });

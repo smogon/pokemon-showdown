@@ -802,7 +802,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const item = target.getItem();
 			if (this.runEvent('TakeItem', target, source, move, item)) {
 				target.itemState.knockedOff = true;
-				this.add('-enditem', target, item.name, '[from] move: Knock Off');
+				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
 				this.hint("In Gens 3-4, Knock Off only makes the target's item unusable; it cannot obtain a new item.", true);
 			}
 		},
