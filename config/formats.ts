@@ -3070,6 +3070,22 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Draft Factory",
+		desc: `Replay a random matchup from Smogon's Draft League tournaments.`,
+		team: 'draft',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Sleep Clause Mod', 'Endless Battle Clause'],
+		onBegin() {
+			for (const [i, side] of this.sides.entries()) {
+				// Order of team is not changed from the data doc
+				for (const [j, set] of this.teamGenerator.matchup[i].entries()) {
+					if (!set.teraCaptain) {
+						side.pokemon[j].canTerastallize = false;
+					}
+				}
+			}
+		},
+	},
+	{
 		name: "[Gen 8] Random Battle",
 		desc: `Randomized teams of level-balanced Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		threads: [
