@@ -1,6 +1,7 @@
 import {Utils} from '../lib';
 import {RoomGamePlayer, RoomGame} from "./room-game";
 import type {RoomBattlePlayerOptions, RoomBattleOptions} from './room-battle';
+import type {PrivacySetting, RoomSettings} from './rooms';
 
 const BEST_OF_IN_BETWEEN_TIME = 40;
 
@@ -67,7 +68,8 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	bestOf: number;
 	format: Format;
 	winThreshold: number;
-	options: Omit<RoomBattleOptions, 'players'> & {players: null};
+	options: Omit<RoomBattleOptions, 'players'> & {parent: Room, players: null};
+	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
 	ties = 0;
 	games: {room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
 	playerNum = 0;
@@ -89,9 +91,11 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		if (!toID(this.title).includes('bestof')) {
 			this.title += ` (Best-of-${this.bestOf})`;
 		}
+		this.room.bestOf = this;
 		this.options = {
 			...options,
 			isBestOfSubBattle: true,
+			parent: this.room,
 			allowRenames: false,
 			players: null,
 		};
@@ -113,6 +117,65 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		if (!player) throw new Error(`Failed to make player ${user} in ${this.roomid}`);
 		this.room.auth.set(user.id, Users.PLAYER_SYMBOL);
 		return player;
+	}
+	checkPrivacySettings(options: RoomBattleOptions & Partial<RoomSettings>) {
+		let inviteOnly = false;
+		const privacySetter = new Set<ID>([]);
+		for (const p of options.players) {
+			if (p.user) {
+				if (p.inviteOnly) {
+					inviteOnly = true;
+					privacySetter.add(p.user.id);
+				} else if (p.hidden) {
+					privacySetter.add(p.user.id);
+				}
+				this.checkForcedUserSettings(p.user);
+			}
+		}
+
+		if (privacySetter.size) {
+			const room = this.room;
+			if (this.forcedSettings.privacy) {
+				room.setPrivate(false);
+				room.settings.modjoin = null;
+				room.add(`|raw|<div class="broadcast-blue"><strong>This best-of set is required to be public due to a player having a name starting with '${this.forcedSettings.privacy}'.</div>`);
+			} else if (!options.tour || (room.tour?.allowModjoin)) {
+				room.setPrivate('hidden');
+				if (inviteOnly) room.settings.modjoin = '%';
+				room.privacySetter = privacySetter;
+				if (inviteOnly) {
+					room.settings.modjoin = '%';
+					room.add(`|raw|<div class="broadcast-red"><strong>This best-of set is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+				}
+			}
+		}
+	}
+	checkForcedUserSettings(user: User) {
+		this.forcedSettings = {
+			modchat: this.forcedSettings.modchat || Rooms.RoomBattle.battleForcedSetting(user, 'modchat'),
+			privacy: this.forcedSettings.privacy || Rooms.RoomBattle.battleForcedSetting(user, 'privacy'),
+		};
+		if (
+			this.players.some(p => p.getUser()?.battleSettings.special) ||
+			(this.options.rated && this.forcedSettings.modchat)
+		) {
+			this.room.settings.modchat = '\u2606';
+		}
+	}
+	setPrivacyOfGames(privacy: PrivacySetting) {
+		for (let i = 0; i < this.games.length; i++) {
+			const room = this.games[i].room;
+			const prevRoom = this.games[i - 1]?.room;
+			const gameNum = i + 1;
+
+			room.setPrivate(privacy);
+			this.room.add(`|uhtmlchange|game${gameNum}|<a href="/${room.roomid}">${room.title}</a>`);
+			room.add(`|uhtmlchange|bestof|<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`).update();
+			if (prevRoom) {
+				prevRoom.add(`|uhtmlchange|next|Next: <a href="/${room.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`).update();
+			}
+		}
+		this.updateDisplay();
 	}
 	clearWaiting() {
 		this.waitingBattle = null;
@@ -159,7 +222,6 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		const battleRoom = Rooms.createBattle(options);
 		// shouldn't happen even in lockdown
 		if (!battleRoom) throw new Error("Failed to create battle for " + this.title);
-		battleRoom.setParent(this.room);
 		this.games.push({
 			room: battleRoom,
 			winner: undefined,
@@ -175,16 +237,18 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		const p2 = this.players[1];
 		battleRoom.add(
 			Utils.html`|html|<table width="100%"><tr><td align="left">${p1.name}</td><td align="right">${p2.name}</tr>` +
-			`<tr><td align="left">${this.renderWins(p1)}</td><td align="right">${this.renderWins(p2)}</tr></table>` +
-			`<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`
+			`<tr><td align="left">${this.renderWins(p1)}</td><td align="right">${this.renderWins(p2)}</tr></table>`
+		);
+		battleRoom.add(
+			`|uhtml|bestof|<h2><strong>Game ${gameNum}</strong> of <a href="/${this.roomid}">a best-of-${this.bestOf}</a></h2>`
 		).update();
 
 		this.room.add(`|html|<h2>Game ${gameNum}</h2>`);
-		this.room.add(Utils.html`|html|<a href="/${battleRoom.roomid}">${battleRoom.title}</a>`);
+		this.room.add(Utils.html`|uhtml|game${gameNum}|<a href="/${battleRoom.roomid}">${battleRoom.title}</a>`);
 		this.updateDisplay();
 
 		prevBattleRoom?.add(
-			`|html|Next: <a href="/${battleRoom.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`
+			`|uhtml|next|Next: <a href="/${battleRoom.roomid}"><strong>Game ${gameNum} of ${this.bestOf}</strong></a>`
 		).update();
 	}
 	renderWins(player: BestOfPlayer) {
