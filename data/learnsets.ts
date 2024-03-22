@@ -91059,7 +91059,7 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 		},
 		eventData: [
 			{generation: 9, level: 52, shiny: 1, moves: ["shadowball", "mysticalfire", "wish", "dazzlinggleam"]},
-			{generation: 9, level: 75, perfectIVs: 4, moves: ["shadowball", "moonblast", "powergem", "icywind"]}
+			{generation: 9, level: 75, shiny: 1, perfectIVs: 4, moves: ["shadowball", "moonblast", "powergem", "icywind"]},
 		],
 		eventOnly: true,
 	},
