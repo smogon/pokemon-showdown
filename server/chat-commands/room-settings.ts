@@ -1088,10 +1088,11 @@ export const commands: Chat.ChatCommands = {
 	unlistroom: 'privateroom',
 	privateroom(target, room, user, connection, cmd) {
 		room = this.requireRoom();
-		if (room.battle) {
+		const battle = room.battle || room.bestOf;
+		if (battle) {
 			this.checkCan('editprivacy', null, room);
-			if (room.battle.forcedSettings.privacy) {
-				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${room.battle.forcedSettings.privacy}'.`);
+			if (battle.forcedSettings.privacy) {
+				return this.errorReply(`This battle is required to be public because a player has a name prefixed by '${battle.forcedSettings.privacy}'.`);
 			}
 			if (room.tour?.forcePublic) {
 				return this.errorReply(`This battle can't be hidden, because the tournament is set to be forced public.`);
@@ -1136,7 +1137,7 @@ export const commands: Chat.ChatCommands = {
 			if (room.parent && room.parent.settings.isPrivate) {
 				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
 			}
-			if (room.settings.isPersonal && !room.battle) {
+			if (room.settings.isPersonal && !battle) {
 				return this.errorReply(`This room can't be made public.`);
 			}
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
@@ -1156,7 +1157,7 @@ export const commands: Chat.ChatCommands = {
 			room.setPrivate(false);
 		} else {
 			const settingName = (setting === true ? 'secret' : setting);
-			if (room.subRooms) {
+			if (room.subRooms && !room.bestOf) {
 				if (settingName === 'secret') return this.errorReply("Secret rooms cannot have subrooms.");
 				for (const subRoom of room.subRooms.values()) {
 					if (!subRoom.settings.isPrivate) {
@@ -1173,7 +1174,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.addModAction(`${user.name} made this room ${settingName}.`);
 			this.modlog(`${settingName.toUpperCase()}ROOM`);
-			if (!room.settings.isPersonal && !room.battle) room.setSection();
+			if (!room.settings.isPersonal && !battle) room.setSection();
 			room.setPrivate(setting);
 			room.privacySetter = new Set([user.id]);
 		}
