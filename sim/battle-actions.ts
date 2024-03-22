@@ -1,6 +1,6 @@
 import {Dex, toID} from './dex';
 
-const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
+const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe','randomNormal']);
 
 export class BattleActions {
 	battle: Battle;
@@ -224,7 +224,7 @@ export class BattleActions {
 		zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon
 	) {
 		pokemon.activeMoveActions++;
-		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
+		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);		
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
 		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
@@ -242,6 +242,10 @@ export class BattleActions {
 			move = this.getActiveMaxMove(baseMove, pokemon);
 		}
 
+		if (move.target === 'randomNormal'){
+			target = this.battle.getRandomTarget(pokemon, move);
+		}
+		
 		move.isExternal = externalMove;
 
 		this.battle.setActiveMove(move, pokemon, target);
