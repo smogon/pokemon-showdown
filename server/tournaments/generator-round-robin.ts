@@ -1,13 +1,13 @@
+import {Utils} from '../../lib/utils';
+import type {BracketData, Generator, TournamentPlayer} from './index';
+
 interface Match {
 	state: string;
 	score?: number[];
 	result?: string;
 }
 
-import {Utils} from '../../lib/utils';
-import type {TournamentPlayer} from './index';
-
-export class RoundRobin {
+export class RoundRobin implements Generator {
 	readonly name: string;
 	readonly isDrawingSupported: boolean;
 	readonly isDoubles: boolean;
@@ -31,7 +31,7 @@ export class RoundRobin {
 		if (isDoubles) this.name = "Double " + this.name;
 	}
 
-	getPendingBracketData(players: TournamentPlayer[]) {
+	getPendingBracketData(players: TournamentPlayer[]): BracketData {
 		return {
 			type: 'table',
 			tableHeaders: {
@@ -51,7 +51,7 @@ export class RoundRobin {
 			scores: players.map(player => 0),
 		};
 	}
-	getBracketData() {
+	getBracketData(): BracketData {
 		const players = this.players;
 		return {
 			type: 'table',
