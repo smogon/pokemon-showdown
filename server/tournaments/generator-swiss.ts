@@ -202,21 +202,13 @@ export class Swiss implements Generator {
 				return Utils.shuffle(group);
 			});
 		} else {
-			this.players.sort((a, b) => b.user.score - a.user.score);
-
 			const groups: SwissPlayer[][] = [];
-			let currentGroup: SwissPlayer[] = [];
 			for (const player of this.players) {
-				if (!currentGroup.length || currentGroup[0].user.score - player.user.score <= 0.5) {
-					currentGroup.push(player);
-				} else {
-					groups.push(currentGroup);
-					currentGroup = [player];
-				}
+				const groupIndex = Math.ceil(player.user.score);
+				if (!groups[groupIndex]) groups[groupIndex] = [];
+				groups[groupIndex].push(player);
 			}
-			groups.push(currentGroup);
-
-			this.players = groups.flatMap(Utils.shuffle);
+			this.players = groups.filter(Boolean).reverse().flatMap(Utils.shuffle);
 		}
 	}
 	advanceRound() {
