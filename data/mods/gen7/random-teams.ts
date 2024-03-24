@@ -1108,7 +1108,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 	getLevel(species: Species): number {
 		// level set by rules
 		if (this.adjustLevel) return this.adjustLevel;
-		if (this.gen >= 3) {
+		if (this.gen >= 2) {
 			// Revamped generations use random-sets.json
 			const sets = this.randomSets[species.id];
 			if (sets.level) return sets.level;
