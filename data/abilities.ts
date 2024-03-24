@@ -739,7 +739,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			},
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
-			onEnd(pokemon) {
+			onResidual(pokemon) {
 				if (pokemon.hp) {
 					const item = this.effectState.berry;
 					this.add('-activate', pokemon, 'ability: Cud Chew');
@@ -748,6 +748,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 						this.runEvent('EatItem', pokemon, null, null, item);
 					}
 					if (item.onEat) pokemon.ateBerry = true;
+					delete pokemon.volatiles['cudchew'];
 				}
 			},
 		},
@@ -2855,6 +2856,10 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 				if (target.volatiles['slowstart']) {
 					delete target.volatiles['slowstart'];
 					this.add('-end', target, 'Slow Start', '[silent]');
+				}
+				if (target.volatiles['cudchew']) {
+					delete target.volatiles['cudchew'];
+					this.add('-end', target, 'Cud Chew', '[silent]');
 				}
 				if (strongWeathers.includes(target.getAbility().id)) {
 					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
