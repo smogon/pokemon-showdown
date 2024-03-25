@@ -1,9 +1,9 @@
-function checkMegaForme(this: BattleActions, species: Species, forme: string) {
-	const baseSpecies = this.dex.species.get(species.baseSpecies);
-	const altForme = this.dex.species.get(`${baseSpecies.name}-${forme}`);
+function checkMegaForme(species: Species, forme: string, battle: Battle) {
+	const baseSpecies = battle.dex.species.get(species.baseSpecies);
+	const altForme = battle.dex.species.get(`${baseSpecies.name}-${forme}`);
 	if (
-		altForme.exists && !this.battle.ruleTable.isBannedSpecies(altForme) &&
-		!this.battle.ruleTable.isBanned('pokemontag:mega')
+		altForme.exists && !battle.ruleTable.isBannedSpecies(altForme) &&
+		!battle.ruleTable.isBanned('pokemontag:mega')
 	) {
 		return altForme.name;
 	}
@@ -21,13 +21,13 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		canMegaEvo(pokemon) {
-			return checkMegaForme.call(this, pokemon.baseSpecies, 'Mega');
+			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle);
 		},
 		canMegaEvoX(pokemon) {
-			return checkMegaForme.call(this, pokemon.baseSpecies, 'Mega-X');
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-X', this.battle);
 		},
 		canMegaEvoY(pokemon) {
-			return checkMegaForme.call(this, pokemon.baseSpecies, 'Mega-Y');
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle);
 		},
 		runMegaEvo(pokemon) {
 			const speciesid = pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY;
