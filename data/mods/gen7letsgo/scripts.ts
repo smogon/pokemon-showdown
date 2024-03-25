@@ -1,3 +1,15 @@
+function checkMegaForme(species: Species, forme: string, battle: Battle) {
+	const baseSpecies = battle.dex.species.get(species.baseSpecies);
+	const altForme = battle.dex.species.get(`${baseSpecies.name}-${forme}`);
+	if (
+		altForme.exists && !battle.ruleTable.isBannedSpecies(altForme) &&
+		!battle.ruleTable.isBanned('pokemontag:mega')
+	) {
+		return altForme.name;
+	}
+	return null;
+}
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	init() {
@@ -9,37 +21,13 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		canMegaEvo(pokemon) {
-			const species = pokemon.baseSpecies;
-			const altForme = this.dex.species.get(species.otherFormes?.find(f => f.endsWith('-Mega')));
-			if (
-				altForme.exists && !this.battle.ruleTable.check(`pokemon:${altForme.id}`) &&
-				!this.battle.ruleTable.check('pokemontag:mega')
-			) {
-				return altForme.name;
-			}
-			return null;
+			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle);
 		},
 		canMegaEvoX(pokemon) {
-			const species = pokemon.baseSpecies;
-			const altForme = this.dex.species.get(species.otherFormes?.find(f => f.endsWith('-Mega-X')));
-			if (
-				altForme.exists && !this.battle.ruleTable.check(`pokemon:${altForme.id}`) &&
-				!this.battle.ruleTable.check('pokemontag:mega')
-			) {
-				return altForme.name;
-			}
-			return null;
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-X', this.battle);
 		},
 		canMegaEvoY(pokemon) {
-			const species = pokemon.baseSpecies;
-			const altForme = this.dex.species.get(species.otherFormes?.find(f => f.endsWith('-Mega-Y')));
-			if (
-				altForme.exists && !this.battle.ruleTable.check(`pokemon:${altForme.id}`) &&
-				!this.battle.ruleTable.check('pokemontag:mega')
-			) {
-				return altForme.name;
-			}
-			return null;
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle);
 		},
 		runMegaEvo(pokemon) {
 			const speciesid = pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY;
