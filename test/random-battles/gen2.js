@@ -16,7 +16,7 @@ describe('[Gen 2] Random Battle (slow)', () => {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			const validRoles = [
-				"Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Generalist", "Thief user",
+				"Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Generalist", "Hamburglar",
 			];
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = Dex.species.get(id);
