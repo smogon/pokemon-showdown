@@ -2556,6 +2556,12 @@ export class Battle {
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
 			break;
+		case 'megaEvoX':
+			this.actions.runMegaEvoX?.(action.pokemon);
+			break;
+		case 'megaEvoY':
+			this.actions.runMegaEvoY?.(action.pokemon);
+			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
 			action.pokemon.side.dynamaxUsed = true;
@@ -2686,7 +2692,7 @@ export class Battle {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (action.choice === 'megaEvo' && this.gen === 7) {
+		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			for (const [i, queuedAction] of this.queue.list.entries()) {

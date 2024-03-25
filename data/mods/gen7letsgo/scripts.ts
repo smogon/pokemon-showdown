@@ -4,7 +4,70 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Abilities', 'noability').isNonstandard = null;
 		for (const i in this.data.Pokedex) {
 			this.modData('Pokedex', i).abilities = {0: 'No Ability'};
+			delete this.modData('Pokedex', i).requiredItem;
 		}
+	},
+	actions: {
+		canMegaEvo(pokemon) {
+			const species = pokemon.baseSpecies;
+			const altForme = this.dex.species.get(species.otherFormes?.find(f => f.endsWith('-Mega')));
+			if (
+				altForme.exists && !this.battle.ruleTable.check(`pokemon:${altForme.id}`) &&
+				!this.battle.ruleTable.check('pokemontag:mega')
+			) {
+				return altForme.name;
+			}
+			return null;
+		},
+		canMegaEvoX(pokemon) {
+			const species = pokemon.baseSpecies;
+			const altForme = this.dex.species.get(species.otherFormes?.find(f => f.endsWith('-Mega-X')));
+			if (
+				altForme.exists && !this.battle.ruleTable.check(`pokemon:${altForme.id}`) &&
+				!this.battle.ruleTable.check('pokemontag:mega')
+			) {
+				return altForme.name;
+			}
+			return null;
+		},
+		canMegaEvoY(pokemon) {
+			const species = pokemon.baseSpecies;
+			const altForme = this.dex.species.get(species.otherFormes?.find(f => f.endsWith('-Mega-Y')));
+			if (
+				altForme.exists && !this.battle.ruleTable.check(`pokemon:${altForme.id}`) &&
+				!this.battle.ruleTable.check('pokemontag:mega')
+			) {
+				return altForme.name;
+			}
+			return null;
+		},
+		runMegaEvo(pokemon) {
+			const speciesid = pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY;
+			if (!speciesid) return false;
+
+			pokemon.formeChange(speciesid, null, true);
+			this.battle.add('-mega', pokemon, this.dex.species.get(speciesid).baseSpecies);
+
+			// Limit one mega evolution
+			for (const ally of pokemon.side.pokemon) {
+				ally.canMegaEvo = null;
+				ally.canMegaEvoX = null;
+				ally.canMegaEvoY = null;
+			}
+
+			this.battle.runEvent('AfterMega', pokemon);
+			return true;
+		},
+		runMegaEvoX(pokemon) {
+			if (!pokemon.canMegaEvoX) return false;
+			pokemon.canMegaEvoY = null;
+			return this.runMegaEvo(pokemon);
+		},
+		runMegaEvoY(pokemon) {
+			if (!pokemon.canMegaEvoY) return false;
+			pokemon.canMegaEvoX = null;
+			return this.runMegaEvo(pokemon);
+		},
 	},
 	/**
 	 * Given a table of base stats and a pokemon set, return the actual stats.
