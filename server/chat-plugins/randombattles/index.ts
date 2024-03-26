@@ -1026,7 +1026,7 @@ export const commands: Chat.ChatCommands = {
 			const data = getData(species, format);
 			if (!data) {
 				setExists = false;
-			} else if ((format.gameType === 'doubles') || format.gameType === 'freeforall') {
+			} else if (format.gameType === 'doubles' || format.gameType === 'freeforall') {
 				setExists = !!data.doublesMoves;
 			} else {
 				setExists = !!data.moves;
