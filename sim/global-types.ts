@@ -523,8 +523,10 @@ namespace RandomTeamsTypes {
 	export interface FactoryTeamDetails {
 		megaCount?: number;
 		zCount?: number;
+		wantsTeraCount?: number;
 		forceResult: boolean;
 		weather?: string;
+		terrain?: string[];
 		typeCount: {[k: string]: number};
 		typeComboCount: {[k: string]: number};
 		baseFormes: {[k: string]: number};
@@ -566,6 +568,8 @@ namespace RandomTeamsTypes {
 		moves: string[];
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
+		wantsTera?: boolean;
+		teraType?: string;
 	}
 	export interface RandomSetData {
 		role: Role;
