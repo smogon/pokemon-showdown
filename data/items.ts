@@ -1555,6 +1555,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				}
 				target.switchFlag = true;
 				if (target.useItem()) {
+					if (this.gen === 6) target.lastTurnEjected = this.turn;
 					source.switchFlag = false;
 				} else {
 					target.switchFlag = false;
