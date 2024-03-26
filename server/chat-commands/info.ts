@@ -3203,6 +3203,12 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>Requester ID:</strong> ${userid}<br />`;
 			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
 			buf += `<strong>Comment:</strong> ${entry.comment}`;
+			buf += `<form data-submitsend="/msgroom ${args[0]}, /approveshow ${userid}">`;
+			buf += `<button class="button" type="submit">Approve</button>`;
+			buf += `</form>`;
+			buf += `<form data-submitsend="/msgroom ${args[0]}, /denyshow ${userid}">`;
+			buf += `<button class="button" type="submit">Reject</button>`;
+			buf += `</form>`;
 			buf += `</div><hr />`;
 		}
 		return buf;
