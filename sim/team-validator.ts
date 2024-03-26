@@ -653,6 +653,13 @@ export class TeamValidator {
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${name} has an invalid happiness value.`);
 		}
+		if (set.movePPUps) {
+			for (const PPUps of set.movePPUps) {
+				if (!Number.isInteger(PPUps) || PPUps > 3 || PPUps < 0) {
+					problems.push(`${name} has an invalid PP Ups value.`);
+				}
+			}
+		}
 		if (set.hpType) {
 			const type = dex.types.get(set.hpType);
 			if (!type.exists || ['normal', 'fairy'].includes(type.id)) {

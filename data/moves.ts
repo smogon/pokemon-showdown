@@ -20889,7 +20889,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		isNonstandard: "Past",
 		name: "Trump Card",
 		pp: 5,
-		noPPBoosts: true,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: null,
