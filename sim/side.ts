@@ -36,6 +36,8 @@ export interface ChosenAction {
 	index?: number; // the chosen index in Team Preview
 	side?: Side; // the action's side
 	mega?: boolean | null; // true if megaing or ultra bursting
+	megax?: boolean | null; // true if megaing x
+	megay?: boolean | null; // true if megaing y
 	zmove?: string; // if zmoving, the name of the zmove
 	maxMove?: string; // if dynamaxed, the name of the max move
 	terastallize?: string; // if terastallizing, tera type
@@ -408,7 +410,7 @@ export class Side {
 	chooseMove(
 		moveText?: string | number,
 		targetLoc = 0,
-		event: 'mega' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = ''
+		event: 'mega' | 'megax' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = ''
 	) {
 		if (this.requestState !== 'move') {
 			return this.emitChoiceError(`Can't move: You need a ${this.requestState} response`);
@@ -591,10 +593,18 @@ export class Side {
 		// Mega evolution
 
 		const mega = (event === 'mega');
+		const megax = (event === 'megax');
+		const megay = (event === 'megay');
 		if (mega && !pokemon.canMegaEvo) {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
-		if (mega && this.choice.mega) {
+		if (megax && !pokemon.canMegaEvoX) {
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve X`);
+		}
+		if (megay && !pokemon.canMegaEvoY) {
+			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve Y`);
+		}
+		if ((mega || megax || megay) && this.choice.mega) {
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
 		const ultra = (event === 'ultra');
@@ -639,6 +649,8 @@ export class Side {
 			targetLoc,
 			moveid,
 			mega: mega || ultra,
+			megax: megax,
+			megay: megay,
 			zmove: zMove,
 			maxMove: maxMove ? maxMove.id : undefined,
 			terastallize: terastallize ? pokemon.teraType : undefined,
@@ -648,7 +660,7 @@ export class Side {
 			this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 		}
 
-		if (mega) this.choice.mega = true;
+		if (mega || megax || megay) this.choice.mega = true;
 		if (ultra) this.choice.ultra = true;
 		if (zMove) this.choice.zMove = true;
 		if (dynamax) this.choice.dynamax = true;
@@ -939,7 +951,7 @@ export class Side {
 				const original = data;
 				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
 				let targetLoc: number | undefined;
-				let event: 'mega' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = '';
+				let event: 'mega' | 'megax' | 'megay' | 'zmove' | 'ultra' | 'dynamax' | 'terastallize' | '' = '';
 				while (true) {
 					// If data ends with a number, treat it as a target location.
 					// We need to special case 'Conversion 2' so it doesn't get
@@ -953,6 +965,14 @@ export class Side {
 						if (event) return error();
 						event = 'mega';
 						data = data.slice(0, -5);
+					} else if (data.endsWith(' megax')) {
+						if (event) return error();
+						event = 'megax';
+						data = data.slice(0, -6);
+					} else if (data.endsWith(' megay')) {
+						if (event) return error();
+						event = 'megay';
+						data = data.slice(0, -6);
 					} else if (data.endsWith(' zmove')) {
 						if (event) return error();
 						event = 'zmove';
