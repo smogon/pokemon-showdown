@@ -282,7 +282,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		}
 
 		// Enforce Thief
-		if (role === 'Hamburglar') {
+		if (role === 'Thief user') {
 			if (movePool.includes('thief')) {
 				counter = this.addMove('thief', moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);

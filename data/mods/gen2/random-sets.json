@@ -62,7 +62,7 @@
                 "movepool": ["doubleedge", "hiddenpowerground", "hiddenpowerwater", "rest", "sleeptalk"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["hiddenpowerground", "hiddenpowerwater", "return", "thief", "toxic"]
             }
         ]
@@ -722,7 +722,7 @@
                 "movepool": ["icebeam", "lovelykiss", "nightmare", "psychic"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["icebeam", "lovelykiss", "psychic", "thief"]
             },
             {
@@ -1015,7 +1015,7 @@
     "noctowl": {
         "sets": [
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["hypnosis", "return", "thief", "toxic", "whirlwind"]
             },
             {
@@ -1093,7 +1093,7 @@
                 "movepool": ["drillpeck", "psychic", "rest", "sleeptalk"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["confuseray", "drillpeck", "hiddenpowerfire", "psychic", "thief"]
             }
         ]
@@ -1146,7 +1146,7 @@
                 "movepool": ["curse", "rest", "rockslide", "sleeptalk"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["earthquake", "rockslide", "selfdestruct", "thief"]
             }
         ]
@@ -1198,7 +1198,7 @@
                 "movepool": ["gigadrain", "hiddenpowerflying", "return", "thief"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["gigadrain", "hiddenpowerbug", "thief", "wingattack"]
             },
             {
@@ -1258,7 +1258,7 @@
                 "movepool": ["drillpeck", "hiddenpowerdark", "pursuit", "toxic"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["drillpeck", "haze", "hiddenpowerdark", "thief", "toxic"],
                 "preferredTypes": ["Dark"]
             }
@@ -1279,7 +1279,7 @@
                 "movepool": ["meanlook", "painsplit", "perishsong", "protect", "thunder"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["hypnosis", "psychic", "thief", "thunder"]
             },
             {
@@ -1358,7 +1358,7 @@
                 "movepool": ["earthquake", "hiddenpowerflying", "rest", "sleeptalk"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["counter", "earthquake", "hiddenpowerflying", "thief", "toxic"]
             }
         ]
@@ -1450,7 +1450,7 @@
                 "movepool": ["dynamicpunch", "icebeam", "moonlight", "return"]
             },
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["dynamicpunch", "return", "shadowball", "thief"]
             }
         ]
@@ -1502,7 +1502,7 @@
     "delibird": {
         "sets": [
             {
-                "role": "Hamburglar",
+                "role": "Thief user",
                 "movepool": ["hiddenpowerflying", "icebeam", "rapidspin", "spikes", "thief", "toxic"]
             }
         ]
