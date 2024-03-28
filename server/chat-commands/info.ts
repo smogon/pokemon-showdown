@@ -16,6 +16,11 @@ import {RoomSections} from './room-settings';
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
+interface DexResources {
+	url: string;
+	resources: {resource_name: string, url: string}[];
+}
+
 export function getCommonBattles(
 	userID1: ID, user1: User | null, userID2: ID, user2: User | null, connection: Connection
 ) {
@@ -65,6 +70,30 @@ export function findFormats(targetId: string, isOMSearch = false) {
 		}
 	}
 	return {totalMatches, sections};
+}
+
+export const formatsDataCache = new Map<string, DexResources | null>();
+export async function getFormatResources(format: string) {
+	const cached = formatsDataCache.get(format);
+	if (cached !== undefined) return cached;
+	try {
+		const raw = await Net(`https://www.smogon.com/dex/api/formats/by-ps-name/${format}`).get();
+		const data = JSON.parse(raw);
+		formatsDataCache.set(format, data);
+		return data;
+	} catch {
+		// some sort of json error or request can't be made
+		// so something on smogon's end. freeze the request, punt
+		formatsDataCache.set(format, null);
+		return null;
+	}
+}
+
+// clear every 15 minutes to ensure it's only minimally stale
+const resourceRefreshInterval = setInterval(() => formatsDataCache.clear(), 15 * 60 * 1000);
+
+export function destroy() {
+	clearInterval(resourceRefreshInterval);
 }
 
 export const commands: Chat.ChatCommands = {
@@ -1825,7 +1854,7 @@ export const commands: Chat.ChatCommands = {
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
 	viewbanlist: 'formathelp',
-	formathelp(target, room, user, connection, cmd) {
+	async formathelp(target, room, user, connection, cmd) {
 		if (!target && this.runBroadcast()) {
 			return this.sendReplyBox(
 				`- <a href="https://www.smogon.com/tiers/">Smogon Tiers</a><br />` +
@@ -1879,7 +1908,13 @@ export const commands: Chat.ChatCommands = {
 					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
 				}
 			}
-			const descHtml = [...(format.desc ? [format.desc] : []), ...(format.threads || [])];
+			const descHtml = format.desc ? [format.desc] : [];
+			const data = await getFormatResources(format.id);
+			if (data) {
+				for (const {resource_name, url} of data.resources) {
+					descHtml.push(`&bullet; <a href="${url}">${resource_name}</a>`);
+				}
+			}
 			return this.sendReplyBox(`${descHtml.join("<br />")}<br />${rulesetHtml}`);
 		}
 
@@ -1896,7 +1931,13 @@ export const commands: Chat.ChatCommands = {
 			for (const section of sections[sectionId].formats) {
 				const subformat = Dex.formats.get(section);
 				const nameHTML = Utils.escapeHTML(subformat.name);
-				const desc = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
+				const desc = subformat.desc ? [subformat.desc] : [];
+				const data = await getFormatResources(subformat.id);
+				if (data) {
+					for (const {resource_name, url} of data.resources) {
+						desc.push(`&bullet; <a href="${url}">${resource_name}</a>`);
+					}
+				}
 				const descHTML = desc.length ? desc.join("<br />") : "&mdash;";
 				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
 			}
