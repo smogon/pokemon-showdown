@@ -3518,4 +3518,36 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		gen: 2,
 	},
+	terapagos: {
+		inherit: true,
+		gen: 2,
+	},
+	hydrapple: {
+		inherit: true,
+		gen: 2,
+	},
+	ragingbolt: {
+		inherit: true,
+		gen: 2,
+	},
+	gougingfire: {
+		inherit: true,
+		gen: 2,
+	},
+	archaludon: {
+		inherit: true,
+		gen: 2,
+	},
+	ironcrown: {
+		inherit: true,
+		gen: 2,
+	},
+	ironboulder: {
+		inherit: true,
+		gen: 2,
+	},
+	pecharunt: {
+		inherit: true,
+		gen: 2,
+	},
 };
