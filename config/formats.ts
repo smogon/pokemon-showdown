@@ -485,17 +485,9 @@ export const Formats: FormatList = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a>`,
 		],
 		mod: 'donotuse',
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause', 'Terastal Clause', 'Z-Move Clause'],
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause', 'Terastal Clause', 'Z-Move Clause', 'Do Not Use Mod', 'Do Not Use Pokedex'],
 		banlist: ['Huge Power', 'Pure Power', 'Shadow Tag', 'Arena Trap', 'Baton Pass', 'Moody'],
 		unbanlist: ['Assist'],
-		onValidateTeam(team, format) {
-			for (const set of team) {
-				const template = this.dex.species.get(set.species);
-				if (template.tier !== 'DoNU') {
-					return [set.species + ' is not legal in [Gen 9] Do Not Use.'];
-				}
-			}
-		},
 	},
 	{
 		name: "[Gen 2] Modern Gen 2",
