@@ -4960,4 +4960,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	ironboulder: {
 		tier: "OU",
 	},
+	pecharunt: {
+		tier: "OU",
+	},
 };
