@@ -14,7 +14,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	bidoof: {
 		tier: "DoNU",
 		isNonstandard: null,
-},
+	},
 	blipbug: {
 		tier: "DoNU",
 		isNonstandard: null,
@@ -22,7 +22,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	bounsweet: {
 		tier: "DoNU",
 		isNonstandard: null,
-},
+	},
 	bramblin: {
 		tier: "DoNU",
 		isNonstandard: null,
@@ -54,7 +54,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	cherubi: {
 		tier: "DoNU",
 		isNonstandard: null,
-},
+	},
 	cleffa: {
 		tier: "DoNU",
 		isNonstandard: null,
@@ -452,7 +452,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: null,
 	},
 
-// Ubers
+	// Ubers
 	smeargle: {
 		tier: "DoNU Uber",
 		isNonstandard: null,
@@ -477,8 +477,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "DoNU Uber",
 		isNonstandard: null,
 	},
-	
-// Needed for Eviolite to work on dexited mons
+
+	// Needed for Eviolite to work on dexited mons
 	bibarel: {
 		tier: "OU",
 		isNonstandard: null,
