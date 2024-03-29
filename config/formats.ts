@@ -479,7 +479,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Do Not Use",
 		desc: [
-			"<b>Do Not Use</b>: A National Dex solomod where only Pokemon with 280 BST or less are allowed."
+			"<b>Do Not Use</b>: A National Dex solomod where only Pokemon with 280 BST or less are allowed.",
 		],
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a>`,
@@ -489,10 +489,8 @@ export const Formats: FormatList = [
 		banlist: ['Huge Power', 'Pure Power', 'Shadow Tag', 'Arena Trap', 'Baton Pass', 'Moody'],
 		unbanlist: ['Assist'],
 		onValidateTeam(team, format) {
-			let speciesTable = {};
-			let allowedTiers = ['DoNU'];
 			for (const set of team) {
-				let template = this.dex.species.get(set.species);
+				const template = this.dex.species.get(set.species);
 				if (template.tier !== 'DoNU') {
 					return [set.species + ' is not legal in [Gen 9] Do Not Use.'];
 				}
@@ -508,7 +506,7 @@ export const Formats: FormatList = [
 
 		mod: 'moderngen2',
 		ruleset: ['Standard', 'Useless Items Clause', 'Useless Moves Clause', 'MG2 Mod', 'Sleep Moves Clause', '+No Ability', '-All Abilities'],
-		banlist: ['AG', 'Uber', 'Fake Out', 'Shell Smash', 'Last Respects', 'Baton Pass', 'Alakazite', 'Soul Dew'],	
+		banlist: ['AG', 'Uber', 'Fake Out', 'Shell Smash', 'Last Respects', 'Baton Pass', 'Alakazite', 'Soul Dew'],
 	},
 	{
 		name: "[Gen 6] NEXT OU",
