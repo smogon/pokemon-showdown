@@ -33,7 +33,7 @@ export const Rulesets: {[k: string]: ModdedFormatData} = {
 		desc: "Bans moves that have no effect (to aid in teambuilding).",
 		banlist: [
 			'Electric Terrain', 'Electrify', 'Grassy Terrain', 'Healing Wish', 'Ion Deluge', 'Laser Focus', 'Lucky Chant',
-			'Lunar Dance', 'Misty Terrain', 'Psychic Terrain','Speed Swap', 'Wish', 'Telekinesis', 'Wonder Room',
+			'Lunar Dance', 'Misty Terrain', 'Psychic Terrain', 'Speed Swap', 'Wish', 'Telekinesis', 'Wonder Room',
 		],
 		onBegin() {
 			this.add('rule', 'Useless Moves Clause: Prevents trainers from bringing moves with no effect');
