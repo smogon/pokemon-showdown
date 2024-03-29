@@ -469,6 +469,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'vaporemons',
+		searchShow: false,
 		ruleset: ['Standard', 'Terastal Clause', 'VaporeMons Mod', 'Sleep Moves Clause', '!Sleep Clause Mod'],
 		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Baton Pass', 'Last Respects', 'Shed Tail', 'Light Clay', 'Fling + Segin Star Shard'],
 		onSwitchIn(pokemon) {
@@ -476,15 +477,38 @@ export const Formats: FormatList = [
 		},
 	},
 	{
-		name: "[Gen 1] Modern Gen 1",
-		desc: `A Gen 1 solomod where all Pok&eacute;mon and moves from future generations are legal.`,
+		name: "[Gen 9] Do Not Use",
+		desc: [
+			"<b>Do Not Use</b>: A National Dex solomod where only Pokemon with 280 BST or less are allowed."
+		],
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/gen-9-modern-gen-1.3711533/">Modern Gen 1</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a>`,
+		],
+		mod: 'donotuse',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause', 'Terastal Clause', 'Z-Move Clause'],
+		banlist: ['Huge Power', 'Pure Power', 'Shadow Tag', 'Arena Trap', 'Baton Pass', 'Moody'],
+		unbanlist: ['Assist'],
+		onValidateTeam(team, format) {
+			let speciesTable = {};
+			let allowedTiers = ['DoNU'];
+			for (const set of team) {
+				let template = this.dex.species.get(set.species);
+				if (template.tier !== 'DoNU') {
+					return [set.species + ' is not legal in [Gen 9] Do Not Use.'];
+				}
+			}
+		},
+	},
+	{
+		name: "[Gen 2] Modern Gen 2",
+		desc: `A Gen 2 solomod where all Pok&eacute;mon and moves from future generations are legal.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3725808/">Modern Gen 2</a>`,
 		],
 
-		mod: 'moderngen1',
-		ruleset: ['Standard', 'Partial Trapping Clause', 'Protect Clause', 'Field Effect Clause', 'Sleep Moves Clause', 'Useless Moves Clause', 'MG1 Mod'],
-		banlist: ['Uber', 'Fake Out', 'Confuse Ray', 'Supersonic', 'Swagger', 'Sweet Kiss', 'Flatter'],
+		mod: 'moderngen2',
+		ruleset: ['Standard', 'Useless Items Clause', 'Useless Moves Clause', 'MG2 Mod', 'Sleep Moves Clause', '+No Ability', '-All Abilities'],
+		banlist: ['AG', 'Uber', 'Fake Out', 'Shell Smash', 'Last Respects', 'Baton Pass', 'Alakazite', 'Soul Dew'],	
 	},
 	{
 		name: "[Gen 6] NEXT OU",
