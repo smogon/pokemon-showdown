@@ -2463,4 +2463,64 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		gen: 2,
 	},
+	psychicnoise: {
+		inherit: true,
+		gen: 2,
+	},
+	hardpess: {
+		inherit: true,
+		gen: 2,
+	},
+	supercellslam: {
+		inherit: true,
+		gen: 2,
+	},
+	temperflare: {
+		inherit: true,
+		gen: 2,
+	},
+	terastarstorm: {
+		inherit: true,
+		gen: 2,
+	},
+	malignantchain: {
+		inherit: true,
+		gen: 2,
+	},
+	mightycleave: {
+		inherit: true,
+		gen: 2,
+	},
+	tachyoncutter: {
+		inherit: true,
+		gen: 2,
+	},
+	thunderclap: {
+		inherit: true,
+		gen: 2,
+	},
+	ficklebeam: {
+		inherit: true,
+		gen: 2,
+	},
+	burningbulwark: {
+		inherit: true,
+		gen: 2,
+	},
+	electroshot: {
+		inherit: true,
+		gen: 2,
+	},
+	dragoncheer: {
+		inherit: true,
+		gen: 2,
+	},
+	alluringvoice: {
+		inherit: true,
+		gen: 2,
+	},
+	upperhand: {
+		inherit: true,
+		gen: 2,
+	},
 };
