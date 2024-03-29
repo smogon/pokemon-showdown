@@ -337,6 +337,8 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	unown: {
 		isNonstandard: null,
+		tier: "OU",
+		natDexTier: "OU",
 	},
 
 	// Ubers
