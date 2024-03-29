@@ -4939,4 +4939,25 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		inherit: true,
 		tier: "OU",
 	},
+	terapagos: {
+		tier: "OU",
+	},
+	hydrapple: {
+		tier: "OU",
+	},
+	ragingbolt: {
+		tier: "OU",
+	},
+	gougingfire: {
+		tier: "OU",
+	},
+	archaludon: {
+		tier: "OU",
+	},
+	ironcrown: {
+		tier: "OU",
+	},
+	ironboulder: {
+		tier: "OU",
+	},
 };
