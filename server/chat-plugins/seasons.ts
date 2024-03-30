@@ -74,13 +74,23 @@ export function generateFormatSchedule() {
 	for (let period = 1; period < (SEASONS_PER_YEAR + 1); period++) {
 		data.formatSchedule[period] = FIXED_FORMATS.slice();
 		const formatPool = FORMAT_POOL.filter(x => !counter[x] || counter[x] < 2);
-		for (let i = 0; i < FORMATS_PER_SEASON; i++) {
+		let i = 0;
+		while (true) {
+			i++;
+			if (i > 100) throw new Error('Could not generate format pool');
 			const format = Utils.randomElement(formatPool);
 			const idx = formatPool.indexOf(format);
-			if (counter[format] >= 2) formatPool.splice(idx, 1);
+			if (counter[format] >= 2) {
+				formatPool.splice(idx, 1);
+				continue;
+			}
+			if (data.formatSchedule[period].includes(format)) continue;
 			if (!counter[format]) counter[format] = 0;
 			counter[format]++;
 			data.formatSchedule[period].push(format);
+			if (data.formatSchedule[period].length >= (FIXED_FORMATS.length + FORMATS_PER_SEASON)) {
+				break;
+			}
 		}
 	}
 	saveData();
