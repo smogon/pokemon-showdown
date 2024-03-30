@@ -72,8 +72,7 @@ export function generateFormatSchedule() {
 	data.current.formatsGeneratedAt = getYear();
 	const counter: Record<string, number> = {};
 	for (let period = 1; period < (SEASONS_PER_YEAR + 1); period++) {
-		FIXED_FORMATS.slice();
-		data.formatSchedule[period] = [];
+		data.formatSchedule[period] = FIXED_FORMATS.slice();
 		const formatPool = FORMAT_POOL.filter(x => !counter[x] || counter[x] < 2);
 		for (let i = 0; i < FORMATS_PER_SEASON; i++) {
 			const format = Utils.randomElement(formatPool);
