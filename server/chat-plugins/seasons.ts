@@ -77,7 +77,7 @@ export function generateFormatSchedule() {
 		for (let i = 0; i < FORMATS_PER_SEASON; i++) {
 			const format = Utils.randomElement(formatPool);
 			const idx = formatPool.indexOf(format);
-			formatPool.splice(idx, 1);
+			if (counter[format] >= 2) formatPool.splice(idx, 1);
 			if (!counter[format]) counter[format] = 0;
 			counter[format]++;
 			data.formatSchedule[period].push(format);
