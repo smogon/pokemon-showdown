@@ -13,6 +13,7 @@ export const BADGE_THRESHOLDS: Record<string, number> = {
 };
 export const FIXED_FORMATS = ['randombattle', 'ou'];
 export const FORMAT_POOL = ['ubers', 'uu', 'ru', 'nu', 'pu', 'lc', 'doublesou', 'monotype'];
+export const PUBLIC_PHASE_LENGTH = 3;
 
 interface SeasonData {
 	current: {season: number, year: number, formatsGeneratedAt: number};
@@ -134,6 +135,13 @@ function findSeason() {
 	return Math.floor(new Date().getMonth() / (SEASONS_PER_YEAR - 1)) + 1;
 }
 
+/** Are we in the last three days of the month (the public phase, where badged battles are public and the room is active?) */
+function checkPublicPhase() {
+	const daysInCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+	// last 3 days of the month
+	return new Date().getDate() >= (daysInCurrentMonth - PUBLIC_PHASE_LENGTH);
+}
+
 export function saveData() {
 	FS('config/chat-plugins/seasons.json').writeUpdate(() => JSON.stringify(data));
 }
@@ -152,7 +160,7 @@ export function rollSeason() {
 
 export let updateTimeout: NodeJS.Timer | true | null = null;
 
-function rollTimer() {
+export function rollTimer() {
 	if (updateTimeout === true) return;
 	if (updateTimeout) {
 		clearTimeout(updateTimeout);
@@ -164,6 +172,24 @@ function rollTimer() {
 	next.setHours(next.getHours() + 1);
 	next.setMinutes(0, 0, 0);
 	updateTimeout = setTimeout(() => rollTimer(), next.getTime() - time);
+
+	const discussionRoom = Rooms.search('seasondiscussion');
+	if (discussionRoom) {
+		if (checkPublicPhase() && discussionRoom.settings.isPrivate) {
+			discussionRoom.setPrivate(false);
+			discussionRoom.settings.modchat = 'autoconfirmed';
+			discussionRoom.add(
+				`|html|<div class="broadcast-blue"><strong>The public phase of the month has now started!</strong>` +
+				`<br /> Badged battles are now forced public, and this room is open for use.</div>`
+			).update();
+		} else if (!checkPublicPhase() && !discussionRoom.settings.isPrivate) {
+			discussionRoom.setPrivate(true);
+			discussionRoom.settings.modchat = '#';
+			discussionRoom.add(
+				`|html|<div class="broadcast-blue">The public phase of the month has ended.</div>`
+			).update();
+		}
+	}
 }
 
 export function destroy() {
@@ -253,5 +279,31 @@ export const handlers: Chat.Handlers = {
 			battle.room.add(`|badge|${slot}|${badge.type}|${badge.format}|${BADGE_THRESHOLDS[badge.type]}-${badge.season}`);
 		}
 		battle.room.update();
+	},
+	onBattleStart(player, room) {
+		if (!room.battle) return; // should never happen, just sating TS
+		// now first verify they have a badge
+		const formatBadges = data.badgeholders[getYear() + "-" + findSeason()][room.battle.format];
+		if (!formatBadges) return;
+		let medal = false;
+		for (const k in formatBadges) {
+			if (formatBadges[k].includes(player.id)) medal = true;
+		}
+		if (!medal) return;
+
+		if (checkPublicPhase() && !room.battle.forcedSettings.privacy) {
+			room.battle.forcedSettings.privacy = 'medal';
+			room.add(
+				`|html|<div class="broadcast-red"><strong>This battle is required to be public due to one or more player having a season medal.</strong><br />` +
+				`During the public phase, you can discuss the state of the ladder <a href="/seasondiscussion">in a special chatroom.</a></div>`
+			);
+			room.setPrivate(false);
+		}
+
+		room.add(
+			`|uhtml|medal-msg|<div class="broadcast-blue">Curious what those medals under the avatar are? PS now has Ladder Seasons!` +
+			` For more information, check out the <a href="https://www.smogon.com/forums/threads/3740067/">thread on Smogon.</a></div>`
+		);
+		room.update();
 	},
 };
