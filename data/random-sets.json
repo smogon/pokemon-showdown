@@ -6075,7 +6075,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["Bullet Seed", "Crunch", "Seed Bomb", "Spore", "Stun Spore", "Synthesis"],
-                "teraTypes": ["Fairy", "Poison"]
+                "teraTypes": ["Poison"]
             }
         ]
     },
