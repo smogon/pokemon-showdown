@@ -66,34 +66,73 @@ export function getBadges(user: User, curFormat: string) {
 	return userBadges;
 }
 
-export function generateFormatSchedule() {
+export function setFormatSchedule() {
 	// guard heavily against this being overwritten
 	if (data.current.formatsGeneratedAt === getYear()) return;
 	data.current.formatsGeneratedAt = getYear();
-	const counter: Record<string, number> = {};
-	for (let period = 1; period < (SEASONS_PER_YEAR + 1); period++) {
-		data.formatSchedule[period] = FIXED_FORMATS.slice();
-		const formatPool = FORMAT_POOL.filter(x => !counter[x] || counter[x] < 2);
-		let i = 0;
-		while (true) {
-			i++;
-			if (i > 100) throw new Error('Could not generate format pool');
-			const format = Utils.randomElement(formatPool);
-			const idx = formatPool.indexOf(format);
-			if (counter[format] >= 2) {
-				formatPool.splice(idx, 1);
-				continue;
-			}
-			if (data.formatSchedule[period].includes(format)) continue;
-			if (!counter[format]) counter[format] = 0;
-			counter[format]++;
-			data.formatSchedule[period].push(format);
-			if (data.formatSchedule[period].length >= (FIXED_FORMATS.length + FORMATS_PER_SEASON)) {
-				break;
-			}
-		}
+	const formats = generateFormatSchedule();
+	for (const [i, formatList] of formats.entries()) {
+		data.formatSchedule[i + 1] = FIXED_FORMATS.concat(formatList.slice());
 	}
 	saveData();
+}
+
+class ScheduleGenerator {
+	formats: string[][];
+	items = new Map<string, number>();
+	constructor() {
+		this.formats = new Array(SEASONS_PER_YEAR).fill(null).map(() => [] as string[]);
+		for (const format of FORMAT_POOL) this.items.set(format, 0);
+	}
+	generate() {
+		for (let i = 0; i < this.formats.length; i++) {
+			this.step([i, 0]);
+		}
+		for (let i = 1; i < SEASONS_PER_YEAR; i++) {
+			this.step([0, i]);
+		}
+		return this.formats;
+	}
+	swap(x: number, y: number) {
+		const item = this.formats[x][y];
+		for (let i = 0; i < SEASONS_PER_YEAR; i++) {
+			if (this.formats[i].includes(item)) continue;
+			for (const [j, cur] of this.formats[i].entries()) {
+				if (cur === item) continue;
+				if (this.formats[x].includes(cur)) continue;
+				this.formats[i][j] = item;
+				return cur;
+			}
+		}
+		throw new Error("Couldn't find swap target for " + item + ": " + JSON.stringify(this.formats));
+	}
+	select(x: number, y: number): string {
+		const items = Array.from(this.items).filter(entry => entry[1] < 2);
+		const item = Utils.randomElement(items);
+		if (item[1] >= 2) {
+			this.items.delete(item[0]);
+			return this.select(x, y);
+		}
+		this.items.set(item[0], item[1] + 1);
+		if (item[0] && this.formats[x].includes(item[0])) {
+			this.formats[x][y] = item[0];
+			return this.swap(x, y);
+		}
+		return item[0];
+	}
+	step(start: [number, number]) {
+		let [x, y] = start;
+		while (x < this.formats.length && y < FORMATS_PER_SEASON) {
+			const item = this.select(x, y);
+			this.formats[x][y] = item;
+			x++;
+			y++;
+		}
+	}
+}
+
+export function generateFormatSchedule() {
+	return new ScheduleGenerator().generate();
 }
 
 export async function getLadderTop(format: string) {
@@ -159,7 +198,7 @@ export function rollSeason() {
 	const year = getYear();
 	if (data.current.year !== year) {
 		data.current.year = year;
-		generateFormatSchedule();
+		setFormatSchedule();
 	}
 	if (findSeason() !== data.current.season) {
 		data.current.season = findSeason();
