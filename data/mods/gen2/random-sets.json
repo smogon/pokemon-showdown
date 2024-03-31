@@ -367,9 +367,8 @@
                 "movepool": ["hiddenpowerground", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"]
             },
             {
-                "role": "Fast Attacker",
-                "movepool": ["hiddenpowerground", "razorleaf", "sleeppowder", "sludgebomb", "synthesis"],
-                "preferredTypes": ["Grass"]
+                "role": "Bulky Attacker",
+                "movepool": ["hiddenpowerground", "razorleaf", "sleeppowder", "sludgebomb", "synthesis"]
             }
         ]
     },
