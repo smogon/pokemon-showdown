@@ -1908,14 +1908,22 @@ export const commands: Chat.ChatCommands = {
 					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
 				}
 			}
-			const descHtml = format.desc ? [format.desc] : [];
+			const formatDesc = format.desc || '';
+			let descHtml = [];
 			const data = await getFormatResources(format.id);
 			if (data) {
 				for (const {resource_name, url} of data.resources) {
-					descHtml.push(`&bullet; <a href="${url}">${resource_name}</a>`);
+					let rn = resource_name;
+					rn = rn.replace(/ thread$/gi, '');
+					rn = rn.replace(/Pokemon Showdown/gi, 'PS');
+					rn = rn.split(' ').map((x: string) => x[0].toUpperCase() + x.substr(1)).join(' ');
+					descHtml.push(`&bullet; <a href="${url}">${rn}</a>`);
 				}
 			}
-			return this.sendReplyBox(`${descHtml.join("<br />")}<br />${rulesetHtml}`);
+			if (!descHtml.length && format.threads) {
+				descHtml = format.threads;
+			}
+			return this.sendReplyBox(`<h1>${format.name}</h1><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
