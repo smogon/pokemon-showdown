@@ -367,7 +367,7 @@
                 "movepool": ["hiddenpowerground", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Generalist",
                 "movepool": ["hiddenpowerground", "razorleaf", "sleeppowder", "sludgebomb", "synthesis"]
             }
         ]
