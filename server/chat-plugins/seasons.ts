@@ -16,7 +16,7 @@ export const FORMAT_POOL = ['ubers', 'uu', 'ru', 'nu', 'pu', 'lc', 'doublesou', 
 export const PUBLIC_PHASE_LENGTH = 3;
 
 interface SeasonData {
-	current: {season: number, year: number, formatsGeneratedAt: number};
+	current: {period: number, year: number, formatsGeneratedAt: number, season: number};
 	badgeholders: {[period: string]: {[format: string]: {[badgeType: string]: string[]}}};
 	formatSchedule: Record<string, string[]>;
 }
@@ -28,7 +28,7 @@ try {
 } catch {
 	data = {
 		// force a reroll
-		current: {season: null!, year: null!, formatsGeneratedAt: null!},
+		current: {season: null!, year: null!, formatsGeneratedAt: null!, period: null!},
 		formatSchedule: {},
 		badgeholders: {},
 	};
@@ -50,7 +50,7 @@ export function getBadges(user: User, curFormat: string) {
 	// find which ones we should prioritize showing - badge of current tier/season, then top badges of other formats for this season
 	let curFormatBadge;
 	// first, prioritize current tier/season
-	const curSeason = `${getYear()}-${findSeason()}`;
+	const curSeason = `${data.current.season}`;
 	for (const [i, badge] of userBadges.entries()) {
 		if (badge.format === curFormat && badge.season === curSeason) {
 			userBadges.splice(i);
@@ -148,12 +148,11 @@ export async function getLadderTop(format: string) {
 
 export async function updateBadgeholders() {
 	rollSeason();
-	const season = findSeason();
-	const period = `${getYear()}-${season}`;
+	const period = `${data.current.season}`;
 	if (!data.badgeholders[period]) {
 		data.badgeholders[period] = {};
 	}
-	for (const formatName of data.formatSchedule[season]) {
+	for (const formatName of data.formatSchedule[period]) {
 		const formatid = `gen${Dex.gen}${formatName}`;
 		const response = await getLadderTop(formatid);
 		if (!response) continue; // ??
@@ -179,7 +178,7 @@ function getYear() {
 	return new Date().getFullYear();
 }
 
-function findSeason() {
+function findPeriod() {
 	return Math.floor(new Date().getMonth() / (SEASONS_PER_YEAR - 1)) + 1;
 }
 
@@ -200,8 +199,13 @@ export function rollSeason() {
 		data.current.year = year;
 		setFormatSchedule();
 	}
-	if (findSeason() !== data.current.season) {
-		data.current.season = findSeason();
+	if (findPeriod() !== data.current.period) {
+		data.current.season++;
+		data.badgeholders[data.current.season] = {};
+		for (const k of data.formatSchedule[findPeriod()]) {
+			data.badgeholders[data.current.season][k] = {};
+		}
+		data.current.period = findPeriod();
 		saveData();
 	}
 }
@@ -261,7 +265,7 @@ export const pages: Chat.PageTable = {
 		let buf = `<div class="pad"><h2>Season schedule for ${getYear()}</h2><br />`;
 		buf += `<div class="ladder pad"><table><tr><th>Season #</th><th>Formats</th></tr>`;
 		for (const period in data.formatSchedule) {
-			const match = findSeason() === Number(period);
+			const match = findPeriod() === Number(period);
 			const formatString = data.formatSchedule[period]
 				.sort()
 				.map(x => Dex.formats.get(x).name.replace(`[Gen ${Dex.gen}]`, ''))
@@ -274,7 +278,7 @@ export const pages: Chat.PageTable = {
 	},
 	seasonladder(query, user) {
 		const format = toID(query.shift());
-		const season = query.join('-') || `${getYear()}-${findSeason()}`;
+		const season = toID(query.shift()) || `${data.current.season}`;
 		if (!data.badgeholders[season]) {
 			return this.errorReply(`Season ${season} not found.`);
 		}
@@ -289,7 +293,7 @@ export const pages: Chat.PageTable = {
 				s => s.split('-').map(x => -Number(x))
 			);
 			for (const s of seasonsDesc) {
-				buf += `<h3>${s}</h3><hr />`;
+				buf += `<h3>Season ${s}</h3><hr />`;
 				for (const f in data.badgeholders[season]) {
 					buf += `<a class="button" name="send" target="replace" href="/view-seasonladder-${f}-${s}">${Dex.formats.get(f).name}</a>`;
 				}
@@ -297,7 +301,7 @@ export const pages: Chat.PageTable = {
 			}
 			return buf;
 		}
-		this.title += ` ${format} [${season}]`;
+		this.title += ` ${format} [Season ${season}]`;
 		const uppercase = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 		let formatName = Dex.formats.get(format).name;
 		// futureproofing for gen10/etc
@@ -334,7 +338,7 @@ export const handlers: Chat.Handlers = {
 	onBattleStart(player, room) {
 		if (!room.battle) return; // should never happen, just sating TS
 		// now first verify they have a badge
-		const formatBadges = data.badgeholders[`${getYear()}-${findSeason()}`]?.[room.battle.format];
+		const formatBadges = data.badgeholders[data.current.season]?.[room.battle.format];
 		if (!formatBadges) return;
 		let medal = false;
 		for (const k in formatBadges) {
