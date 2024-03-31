@@ -295,7 +295,7 @@ export const handlers: Chat.Handlers = {
 	onBattleStart(player, room) {
 		if (!room.battle) return; // should never happen, just sating TS
 		// now first verify they have a badge
-		const formatBadges = data.badgeholders[getYear() + "-" + findSeason()][room.battle.format];
+		const formatBadges = data.badgeholders[`${getYear()}-${findSeason()}`]?.[room.battle.format];
 		if (!formatBadges) return;
 		let medal = false;
 		for (const k in formatBadges) {
