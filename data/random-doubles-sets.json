@@ -1874,7 +1874,7 @@
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Heat Crash", "Precipice Blades", "Stone Edge", "Swords Dance"],
+                "movepool": ["Heat Crash", "Precipice Blades", "Protect", "Stone Edge", "Swords Dance"],
                 "teraTypes": ["Fire"]
             }
         ]
@@ -2195,7 +2195,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Helping Hand", "High Horsepower", "Slack Off", "Stealth Rock", "Stone Edge", "Whirlwind"],
-                "teraTypes": ["Rock", "Steel"]
+                "teraTypes": ["Dragon", "Rock", "Steel", "Water"]
             }
         ]
     },
