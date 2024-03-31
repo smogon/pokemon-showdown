@@ -577,6 +577,8 @@ export class RandomTeams {
 			['trick', 'uturn'],
 			// Araquanid
 			['mirrorcoat', 'hydropump'],
+			// Brute Bonnet
+			['bulletseed', 'seedbomb'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
