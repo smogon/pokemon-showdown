@@ -102,7 +102,7 @@ export async function getLadderTop(format: string) {
 		const reply = JSON.parse(results);
 		return reply.toplist;
 	} catch (e) {
-		Monitor.crashlog(e, "a season ladder request");
+		Monitor.crashlog(e, "A season ladder request");
 		return null;
 	}
 }
@@ -252,7 +252,7 @@ export const pages: Chat.PageTable = {
 			for (const s of seasonsDesc) {
 				buf += `<h3>${s}</h3><hr />`;
 				for (const f in data.badgeholders[season]) {
-					buf += `<a class="button" name="send" target="replace" href="/view-seasonladder-${f}-${s}">${Dex.formats.get(format).name}</a>`;
+					buf += `<a class="button" name="send" target="replace" href="/view-seasonladder-${f}-${s}">${Dex.formats.get(f).name}</a>`;
 				}
 				buf += `<br />`;
 			}
@@ -267,10 +267,13 @@ export const pages: Chat.PageTable = {
 			formatName = `<a href="/${room.roomid}">${formatName}</a>`;
 		}
 		buf += `<h2>Season results for ${formatName} [${season}]</h2>`;
+		buf += `<small><a target="replace" href="/view-seasonladder">View past seasons</a></small>`;
 		let i = 0;
 		for (const badgeType in data.badgeholders[season][format]) {
 			buf += `<div class="ladder pad"><table>`;
-			buf += `<tr><h2><img src="${Config.routes.client}/sprites/misc/${badgeType}.png" /> ${uppercase(badgeType)}</h2></tr>`;
+			let formatType = format.split(/gen\d+/)[1];
+			if (!['ou', 'randombattle'].includes(formatType)) formatType = 'rotating';
+			buf += `<tr><h2><img src="${Config.routes.client}/sprites/misc/${formatType}_${badgeType}.png" /> ${uppercase(badgeType)}</h2></tr>`;
 			for (const userid of data.badgeholders[season][format][badgeType]) {
 				i++;
 				buf += `<tr><td>${i}</td><td><a href="${Config.routes.root}/users/${userid}">${userid}</a></td></tr>`;
