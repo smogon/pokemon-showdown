@@ -3699,8 +3699,8 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Alluring Voice", "Protect", "Psychic", "Shadow Ball", "Thunderbolt"],
-                "teraTypes": ["Electric", "Fairy"]
+                "movepool": ["Alluring Voice", "Dark Pulse", "Protect", "Psychic", "Thunderbolt"],
+                "teraTypes": ["Dark", "Electric", "Fairy"]
             }
         ]
     },
