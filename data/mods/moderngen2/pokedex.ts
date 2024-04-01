@@ -3806,4 +3806,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		gen: 2,
 	},
+	voltorbhisui: {
+		inherit: true,
+		gen: 2,
+	},
+	electrodehisui: {
+		inherit: true,
+		gen: 2,
+	},
 };
