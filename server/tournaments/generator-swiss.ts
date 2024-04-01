@@ -2,8 +2,9 @@ import {Utils} from '../../lib';
 import {BracketData, Generator, TournamentPlayer} from './index';
 
 interface Match {
-	/** Second player is null for bye */
-	players: [SwissPlayer, SwissPlayer | null];
+	p1: SwissPlayer,
+	/** null for bye */
+	p2: SwissPlayer | null,
 	state: 'available' | 'finished' | 'unavailable';
 	result?: string;
 	score?: number[];
@@ -78,12 +79,14 @@ export class Swiss implements Generator {
 	}
 
 	getPendingBracketData(players: TournamentPlayer[]): BracketData {
+		// Shows player list
 		return {
 			type: 'tree',
+			rootNode: null,
 		};
 	}
 	getBracketData(): BracketData {
-		if (this.ended) {
+		if (this.isTournamentEnded()) {
 			return {
 				type: 'table',
 				tableHeaders: {
@@ -112,8 +115,8 @@ export class Swiss implements Generator {
 						status.result = match.result;
 						status.score = match.score;
 					}
-					const pendingChallenge = match.players[0].user.pendingChallenge;
-					const inProgressMatch = match.players[0].user.inProgressMatch;
+					const pendingChallenge = match.p1.user.pendingChallenge;
+					const inProgressMatch = match.p1.user.inProgressMatch;
 					if (pendingChallenge) {
 						status.state = 'challenging';
 					} else if (inProgressMatch) {
@@ -121,10 +124,10 @@ export class Swiss implements Generator {
 						status.room = inProgressMatch.room.roomid;
 					}
 					return [
-						{text: match.players[0].user.name},
-						{text: match.players[0].getWL()},
-						{text: match.players[1]?.user.name || 'BYE'},
-						{text: match.players[1]?.getWL() || ''},
+						{text: match.p1.user.name},
+						{text: match.p1.getWL()},
+						{text: match.p2?.user.name || 'BYE'},
+						{text: match.p2?.getWL() || ''},
 						status,
 					];
 				}),
@@ -132,7 +135,7 @@ export class Swiss implements Generator {
 		}
 	}
 	freezeBracket(players: TournamentPlayer[]) {
-		this.players = Utils.shuffle(players.map(player => new SwissPlayer(player)));
+		this.players = players.map(player => new SwissPlayer(player));
 		this.isBracketFrozen = true;
 		this.rounds = Math.ceil(Math.log2(this.players.length));
 		this.advanceRound();
@@ -141,15 +144,15 @@ export class Swiss implements Generator {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		const player = this.players.find(p => p.user === user)!;
-		const match = this.matches.find(m => m.players[0] === player || m.players[1] === player);
+		const match = this.matches.find(m => m.p1 === player || m.p2 === player);
 		if (match && match.state === 'available') {
-			let opponent;
-			if (match.players[0] === player) {
-				opponent = match.players[1]!;
+			let opponent: SwissPlayer;
+			if (match.p1 === player) {
+				opponent = match.p2!;
 				match.result = 'loss';
 				match.score = [0, 1];
 			} else {
-				opponent = match.players[0];
+				opponent = match.p1;
 				match.result = 'win';
 				match.score = [1, 0];
 			}
@@ -167,14 +170,6 @@ export class Swiss implements Generator {
 		user.game.setPlayerUser(user, null);
 	}
 	sortPlayers(finalResults = false) {
-		// OOWP depends on OWP of all players, so we need to calculate all OWPs first
-		for (const player of this.players) {
-			player.recalculateOWP();
-		}
-		for (const player of this.players) {
-			player.recalculateOOWP();
-		}
-
 		if (finalResults) {
 			this.players.sort((a, b) => b.user.score - a.user.score || b.owp - a.owp || b.oowp - a.oowp);
 
@@ -218,20 +213,25 @@ export class Swiss implements Generator {
 		}
 		this.currentRound++;
 
-		this.sortPlayers();
+		// OOWP depends on OWP of all players, so we need to calculate all OWPs first
 		for (const player of this.players) {
+			player.recalculateOWP();
+		}
+		for (const player of this.players) {
+			player.recalculateOOWP();
 			if (player.user.isDisqualified) player.lockResistance = true;
 		}
+		this.sortPlayers();
 
 		const players = this.players.filter(p => !p.user.isDisqualified);
 		const pairedPlayers = new Set<SwissPlayer>();
 		this.matches = [];
 
 		// If odd number of players, give a bye to the lowest ranked player who has not had a bye
-		let byePlayer: SwissPlayer | undefined;
+		let byePlayer: SwissPlayer | null = null;
 		if (players.length % 2 === 1) {
 			for (let i = players.length - 1; i >= 0; i--) {
-				if (players[i].bye === 0) {
+				if (!players[i].bye) {
 					byePlayer = players[i];
 					pairedPlayers.add(byePlayer);
 					break;
@@ -252,14 +252,14 @@ export class Swiss implements Generator {
 			// If we already played everyone, just allow the repair
 			p2 ||= players.slice(i + 1).find(p => !pairedPlayers.has(p));
 			if (!p2) throw new Error(`Failed to pair player ${p1.user.name}`);
-			this.matches.push({players: [p1, p2], state: 'available'});
+			this.matches.push({p1, p2, state: 'available'});
 			pairedPlayers.add(p1);
 			pairedPlayers.add(p2);
 		}
 
 		// Doing this here so the match gets added at the end
 		if (byePlayer) {
-			this.matches.push({players: [byePlayer, null], state: 'unavailable'});
+			this.matches.push({p1: byePlayer, p2: null, state: 'unavailable'});
 			byePlayer.bye = 1;
 			byePlayer.user.wins++;
 			byePlayer.user.score++;
@@ -270,9 +270,9 @@ export class Swiss implements Generator {
 
 		const matches: [TournamentPlayer, TournamentPlayer][] = [];
 		for (const match of this.matches) {
-			if (match.state !== 'available') continue;
-			if (match.players.some(p => p!.user.isBusy)) continue;
-			matches.push([match.players[0].user, match.players[1]!.user]);
+			if (match.state !== 'available' || !match.p2) continue;
+			if (match.p1.user.isBusy || match.p2.user.isBusy) continue;
+			matches.push([match.p1.user, match.p2.user]);
 		}
 		return matches;
 	}
@@ -282,7 +282,7 @@ export class Swiss implements Generator {
 		const p1 = this.players.find(p => p.user === match[0]);
 		const p2 = this.players.find(p => p.user === match[1]);
 		if (!p1 || !p2) return 'UserNotAdded';
-		const swissMatch = this.matches.find(m => m.players[0] === p1 && m.players[1] === p2);
+		const swissMatch = this.matches.find(m => m.p1 === p1 && m.p2 === p2);
 		if (!swissMatch || swissMatch.state !== 'available') return 'InvalidMatch';
 
 		switch (result) {
