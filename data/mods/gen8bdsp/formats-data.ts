@@ -644,7 +644,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	mew: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	chikorita: {
@@ -930,7 +930,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	donphan: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	stantler: {
@@ -954,7 +954,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	suicune: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	larvitar: {
@@ -964,7 +964,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	tyranitar: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	lugia: {
@@ -1209,7 +1209,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	roserade: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	gulpin: {
@@ -1334,7 +1334,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	milotic: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	castform: {
@@ -1470,7 +1470,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DUber",
 	},
 	jirachi: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	deoxys: {
