@@ -70,7 +70,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (target === 'month') this.target = 'omofthemonth';
-		this.run('formathelp');
+		return this.run('formathelp');
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
