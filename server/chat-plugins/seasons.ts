@@ -316,10 +316,10 @@ export const pages: Chat.PageTable = {
 			buf += `<div class="ladder pad"><table>`;
 			let formatType = format.split(/gen\d+/)[1];
 			if (!['ou', 'randombattle'].includes(formatType)) formatType = 'rotating';
-			buf += `<tr><h2><img src="${Config.routes.client}/sprites/misc/${formatType}_${badgeType}.png" /> ${uppercase(badgeType)}</h2></tr>`;
+			buf += `<tr><h2><img src="https://${Config.routes.client}/sprites/misc/${formatType}_${badgeType}.png" /> ${uppercase(badgeType)}</h2></tr>`;
 			for (const userid of data.badgeholders[season][format][badgeType]) {
 				i++;
-				buf += `<tr><td>${i}</td><td><a href="${Config.routes.root}/users/${userid}">${userid}</a></td></tr>`;
+				buf += `<tr><td>${i}</td><td><a href="https://${Config.routes.root}/users/${userid}">${userid}</a></td></tr>`;
 			}
 			buf += `</table></div>`;
 		}
