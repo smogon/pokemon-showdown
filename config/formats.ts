@@ -462,26 +462,26 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Do Not Use",
-		desc: `A National Dex solomod where only Pokemon with 280 BST or less are allowed.`,
+		desc: `A National Dex solomod where only Pok&eacute;mon with 280 BST or less are allowed.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a>`,
 		],
-		mod: 'donotuse',
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause', 'Terastal Clause', 'Z-Move Clause', 'Do Not Use Mod'],
-		banlist: ['All Pokemon', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Arena Trap', 'Baton Pass', 'Moody'],
-		unbanlist: [
-			'Assist', 'Applin', 'Arrokuda', 'Azurill', 'Bidoof', 'Blipbug', 'Bounsweet', 'Bramblin', 'Budew', 'Bunnelby', 'Burmy',
-			'Cascoon', 'Caterpie', 'Charcadet', 'Cherubi', 'Cleffa', 'Combee', 'Cosmog', 'Cottonee', 'Diglett', 'Diglett-Alola', 'Dreepy',
-			'Feebas', 'Fletchling', 'Fomantis', 'Gossifleur', 'Happiny', 'Hatenna', 'Hoothoot', 'Hoppip', 'Igglybuff', 'Impidimp',
-			'Jigglypuff', 'Kakuna', 'Kirlia', 'Kricketot', 'Lechonk', 'Ledyba', 'Lillipup', 'Litwick', 'Lotad', 'Magikarp', 'Makuhita',
-			'Mareep', 'Marill', 'Meditite', 'Metapod', 'Milcery', 'Nacli', 'Nickit', 'Nidoran-F', 'Nincada', 'Noibat', 'Nymble',
-			'Patrat', 'Pawmi', 'Petilil', 'Pichu', 'Pidgey', 'Pidove', 'Pikipek', 'Poochyena', 'Ralts', 'Rattata', 'Rattata-Alola',
-			'Rellor', 'Rockruff', 'Roggenrola', 'Rolycoly', 'Rookidee', 'Scatterbug', 'Seedot', 'Sentret', 'Shedinja', 'Shinx',
-			'Silcoon', 'Skitty', 'Skwovet', 'Slakoth', 'Slugma', 'Smoliv', 'Snom', 'Spearow', 'Spewpa', 'Spinarak', 'Starly', 'Sunkern',
-			'Surskit', 'Swinub', 'Tadbulb', 'Taillow', 'Tarountula', 'Togepi', 'Toxel', 'Tynamo', 'Tyrogue', 'Venipede', 'Wattrel',
-			'Weedle', 'Whismur', 'Wiglett', 'Wimpod', 'Wooloo', 'Wooper', 'Wooper-Paldea', 'Wurmple', 'Wynaut', 'Yamper', 'Yungoos',
-			'Zigzagoon-Galar', 'Zubat', 'Luvdisc', 'Unown',
-		],
+
+		mod: 'gen9',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Z-Move Clause'],
+		banlist: ['Huge Power', 'Pure Power', 'Shadow Tag', 'Arena Trap', 'Baton Pass', 'Moody'],
+		onBegin() {
+			this.add('-message', `Welcome to Do Not Use!`);
+			this.add('-message', `This is a metagame where only Pokemon with less than 280 BST are allowed!`);
+			this.add('-message', `You can find our thread and metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3734326/`);
+		},
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			if (species.bst > 280) {
+				return [`Only Pok\u00e9mon with a BST of 280 or lower are allowed.`, `(${species.name}'s BST is ${species.bst}.)`];
+			}
+		},
 	},
 	{
 		name: "[Gen 2] Modern Gen 2",
