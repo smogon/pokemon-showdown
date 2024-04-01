@@ -832,18 +832,19 @@ export const commands: Chat.ChatCommands = {
 			const setsToCheck = [species];
 			if (dex.gen >= 8 && !isNoDMax) setsToCheck.push(dex.species.get(`${args[0]}gmax`));
 			if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
-			if ([3, 4, 5, 6, 7, 9].includes(dex.gen)) {
+			if ([2, 3, 4, 5, 6, 7, 9].includes(dex.gen)) {
 				for (const pokemon of setsToCheck) {
 					const data = getSets(pokemon, format.id);
 					if (!data) continue;
-					const {sets, level} = data;
+					const sets = data.sets;
+					const level = data.level || getLevel(pokemon, format);
 					let buf = `<span style="color:#999999;">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
 					buf += `<b>Level</b>: ${level}`;
 					for (const set of sets) {
 						buf += `<details><summary>${set.role}</summary>`;
 						if (dex.gen === 9) {
 							buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
-						} else if (([3, 4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
+						} else if (([2, 3, 4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
 							buf += `<b>Preferred Type${Chat.plural(set.preferredTypes)}</b>: ${set.preferredTypes.join(', ')}<br/>`;
 						}
 						buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}</details>`;
@@ -1019,7 +1020,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		let setExists: boolean;
-		if ([3, 4, 5, 6, 7, 9].includes(dex.gen)) {
+		if ([2, 3, 4, 5, 6, 7, 9].includes(dex.gen)) {
 			setExists = !!getSets(species, format);
 		} else {
 			const data = getData(species, format);
