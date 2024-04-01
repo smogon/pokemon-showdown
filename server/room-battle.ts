@@ -983,7 +983,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (player && !player.active) {
 			player.active = true;
 			this.timer.checkActivity();
-			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
+			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}|`);
+			Chat.runHandlers('onBattleJoin', player.slot, user, this);
 		}
 	}
 	override onLeave(user: User, oldUserid?: ID) {
@@ -1146,7 +1147,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			void this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 			if (playerOpts) player.hasTeam = true;
 
-			this.room.add(`|player|${slot}|${player.name}|${user.avatar}`);
+			this.room.add(`|player|${slot}|${player.name}|${user.avatar}|`);
+			Chat.runHandlers('onBattleJoin', slot as string, user, this);
 		} else {
 			player.active = false;
 			player.knownActive = false;
