@@ -324,23 +324,15 @@ export const pages: Chat.PageTable = {
 };
 
 export const handlers: Chat.Handlers = {
-	onBattleJoin(slot, user, battle) {
-		const badges = getBadges(user, battle.format);
-		for (const badge of badges) {
-			battle.room.add(`|badge|${slot}|${badge.type}|${badge.format}|${BADGE_THRESHOLDS[badge.type]}-${data.current.season}`);
-		}
-		battle.room.update();
-	},
-	onBattleStart(player, room) {
+	onBattleStart(user, room) {
 		if (!room.battle) return; // should never happen, just sating TS
 		// now first verify they have a badge
-		const formatBadges = data.badgeholders[data.current.season]?.[room.battle.format];
-		if (!formatBadges) return;
-		let medal = false;
-		for (const k in formatBadges) {
-			if (formatBadges[k].includes(player.id)) medal = true;
+		const badges = getBadges(user, room.battle.format);
+		const slot = room.battle.playerTable[user.id]?.slot;
+		if (!slot) return; // not in battle fsr? wack
+		for (const badge of badges) {
+			room.add(`|badge|${slot}|${badge.type}|${badge.format}|${BADGE_THRESHOLDS[badge.type]}-${data.current.season}`);
 		}
-		if (!medal) return;
 
 		if (checkPublicPhase() && !room.battle.forcedSettings.privacy) {
 			room.battle.forcedSettings.privacy = 'medal';
