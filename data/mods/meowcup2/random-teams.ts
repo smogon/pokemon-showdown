@@ -7,6 +7,7 @@ export class RandomMeowCup2Teams extends RandomTeams {
 	}
 
 	randomHCTeam(): PokemonSet[] {
+		this.enforceNoDirectCustomBanlistChanges();
 		const team = [];
 		const allowedPokemon = [
 			'Absol', 'Absol-Mega', 'Arcanine', 'Arcanine-Hisui', 'Boltund', 'Buizel', 'Braixen', 'Brionne', 'Carvanha', 'Chien-Pao', 'Chromera', 'Cyndaquil', 'Dachsbun', 'Delcatty', 'Delphox', 'Dewgong',
