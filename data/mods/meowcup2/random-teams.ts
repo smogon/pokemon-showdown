@@ -7,7 +7,6 @@ export class RandomMeowCup2Teams extends RandomTeams {
 	}
 
 	randomHCTeam(): PokemonSet[] {
-		this.enforceNoDirectCustomBanlistChanges();
 		const team = [];
 		const allowedPokemon = [
 			'Absol', 'Absol-Mega', 'Arcanine', 'Arcanine-Hisui', 'Boltund', 'Buizel', 'Braixen', 'Brionne', 'Carvanha', 'Chien-Pao', 'Chromera', 'Cyndaquil', 'Dachsbun', 'Delcatty', 'Delphox', 'Dewgong',
@@ -25,7 +24,7 @@ export class RandomMeowCup2Teams extends RandomTeams {
 			'Brute Bonnet',
 		];
 		const includedPokemon: string[] = [];
-		while (team.length < 9) {
+		while (team.length < this.maxTeamSize) {
 			let species = this.dex.species.get(this.sample(allowedPokemon));
 			if (includedPokemon.includes(species.baseSpecies)) continue;
 			includedPokemon.push(species.baseSpecies);
@@ -85,6 +84,7 @@ export class RandomMeowCup2Teams extends RandomTeams {
 			)).filter(x => x.category !== 'Status').map(x => x.type));
 			if (moves.has('Tera Blast') && this.randomChance(1, 100)) teraType = 'Stellar';
 			if (species.forceTeraType) teraType = species.forceTeraType;
+			if (this.forceTeraType) teraType = this.forceTeraType;
 			let name = species.baseSpecies;
 			if (name === 'Brute Bonnet') name = 'Among Us Impostor';
 			team.push({
@@ -97,8 +97,8 @@ export class RandomMeowCup2Teams extends RandomTeams {
 				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
 				nature: 'Serious',
 				item,
-				level: this.adjustLevel || species.nfe ? this.random(15) + 80 :
-				species.natDexTier === "Uber" ? this.random(25) + 60 : this.random(20) + 70,
+				level: this.adjustLevel || (species.nfe ? this.random(15) + 80 :
+				species.natDexTier === "Uber" ? this.random(25) + 60 : this.random(20) + 70),
 				shiny: this.randomChance(1, 1024),
 				teraType,
 			});

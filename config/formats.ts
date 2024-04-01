@@ -2859,7 +2859,7 @@ export const Formats: FormatList = [
 
 		mod: 'meowcup2',
 		team: 'randomHC',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 9'],
 		banlist: ['Nonexistent'],
 	},
 	{
@@ -2873,7 +2873,7 @@ export const Formats: FormatList = [
 		team: 'randomHC',
 		tournamentShow: false,
 		gameType: 'freeforall',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 9'],
 		banlist: ['Nonexistent'],
 	},
 
