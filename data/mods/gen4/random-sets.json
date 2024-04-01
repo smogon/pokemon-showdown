@@ -256,7 +256,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["closecombat", "earthquake", "encore", "icepunch", "stoneedge", "uturn"]
+                "movepool": ["closecombat", "earthquake", "encore", "stoneedge", "uturn"],
+                "preferredTypes": ["Rock"]
             }
         ]
     },
@@ -307,7 +308,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bulkup", "bulletpunch", "dynamicpunch", "icepunch", "payback", "stoneedge"]
+                "movepool": ["bulkup", "bulletpunch", "dynamicpunch", "payback", "stoneedge"]
             }
         ]
     },
@@ -391,8 +392,8 @@
         "level": 91,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["icebeam", "protect", "rest", "sleeptalk", "surf", "toxic"]
+                "role": "Staller",
+                "movepool": ["icebeam", "protect", "surf", "toxic"]
             },
             {
                 "role": "Fast Attacker",
@@ -870,7 +871,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["nightshade", "roost", "toxic", "whirlwind"]
+                "movepool": ["airslash", "nightshade", "roost", "toxic", "whirlwind"]
             }
         ]
     },
@@ -1356,8 +1357,11 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["extremespeed", "flareblitz", "hiddenpowergrass", "ironhead", "stoneedge"],
-                "preferredTypes": ["Normal"]
+                "movepool": ["extremespeed", "flareblitz", "ironhead", "stoneedge"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["extremespeed", "flareblitz", "hiddenpowergrass", "stoneedge"]
             }
         ]
     },
@@ -1419,7 +1423,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["healbell", "leafstorm", "psychic", "recover", "stealthrock", "thunderwave", "uturn"]
+                "movepool": ["leafstorm", "psychic", "recover", "stealthrock", "thunderwave", "uturn"]
             },
             {
                 "role": "Setup Sweeper",
@@ -1474,9 +1478,8 @@
         "level": 93,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["crunch", "doubleedge", "firefang", "suckerpunch", "superfang", "taunt", "toxic"],
-                "preferredTypes": ["Fire"]
+                "role": "Bulky Support",
+                "movepool": ["crunch", "doubleedge", "firefang", "suckerpunch", "superfang", "taunt", "toxic"]
             }
         ]
     },
@@ -1614,8 +1617,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["doubleedge", "earthquake", "firepunch", "gigaimpact", "nightslash", "return"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["doubleedge", "earthquake", "gigaimpact", "nightslash", "return"]
             }
         ]
     },
@@ -1680,10 +1682,6 @@
     "sableye": {
         "level": 99,
         "sets": [
-            {
-                "role": "Bulky Support",
-                "movepool": ["recover", "seismictoss", "taunt", "toxic", "willowisp"]
-            },
             {
                 "role": "Bulky Attacker",
                 "movepool": ["payback", "recover", "seismictoss", "toxic", "willowisp"]
@@ -2505,7 +2503,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["attackorder", "defendorder", "roost", "substitute", "toxic", "uturn"]
+                "movepool": ["hiddenpowerflying", "roost", "toxic", "uturn"]
             }
         ]
     },
@@ -2540,17 +2538,8 @@
         "level": 96,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["aromatherapy", "energyball", "hiddenpowerfire", "hiddenpowerground", "hiddenpowerrock", "synthesis", "toxic"]
-            }
-        ]
-    },
-    "cherrimsunshine": {
-        "level": 96,
-        "sets": [
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["hiddenpowerice", "solarbeam", "sunnyday", "weatherball"]
+                "role": "Staller",
+                "movepool": ["aromatherapy", "energyball", "hiddenpowerground", "leechseed", "synthesis", "toxic"]
             }
         ]
     },

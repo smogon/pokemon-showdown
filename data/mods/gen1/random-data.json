@@ -9,8 +9,8 @@
     },
     "venusaur": {
         "level": 74,
-        "moves": ["hyperbeam", "sleeppowder", "swordsdance"],
-        "essentialMoves": ["bodyslam", "razorleaf"]
+        "moves": ["bodyslam", "razorleaf", "sleeppowder"],
+        "exclusiveMoves": ["hyperbeam", "swordsdance", "swordsdance"]
     },
     "charmander": {
         "level": 90,
@@ -340,8 +340,8 @@
     },
     "victreebel": {
         "level": 74,
-        "moves": ["bodyslam", "razorleaf", "sleeppowder", "stunspore"],
-        "comboMoves": ["bodyslam", "hyperbeam", "razorleaf", "swordsdance"]
+        "moves": ["bodyslam", "razorleaf", "sleeppowder"],
+        "exclusiveMoves": ["hyperbeam", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"]
     },
     "tentacool": {
         "level": 86,

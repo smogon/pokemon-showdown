@@ -1119,7 +1119,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["brickbreak", "doubleedge", "encore", "hiddenpowerghost", "hydropump", "rest", "return", "sleeptalk"],
+                "movepool": ["brickbreak", "doubleedge", "hiddenpowerghost", "hydropump", "rest", "return", "sleeptalk"],
                 "preferredTypes": ["Normal"]
             }
         ]
@@ -1185,6 +1185,10 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["hiddenpowerfire", "leechseed", "razorleaf", "synthesis", "toxic"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["hiddenpowerfire", "solarbeam", "sunnyday", "synthesis"]
             }
         ]
     },
@@ -1479,7 +1483,11 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["fireblast", "hiddenpowergrass", "rest", "sleeptalk", "toxic"]
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "rest", "sleeptalk", "toxic"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "protect", "toxic"]
             }
         ]
     },
@@ -1564,11 +1572,11 @@
         "sets": [
             {
                 "role": "Berry Sweeper",
-                "movepool": ["crunch", "fireblast", "flamethrower", "hiddenpowergrass", "substitute"]
+                "movepool": ["crunch", "fireblast", "hiddenpowergrass", "substitute"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["crunch", "fireblast", "flamethrower", "hiddenpowergrass", "pursuit", "willowisp"]
+                "movepool": ["crunch", "fireblast", "hiddenpowergrass", "pursuit", "willowisp"]
             }
         ]
     },

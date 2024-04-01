@@ -502,7 +502,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return !counter.get('inaccurate');
 		case 'Contrary': case 'Skill Link':
 			return !counter.get(toID(ability));
-		case 'Defiant': case 'Justified': case 'Moxie':
+		case 'Defiant': case 'Justified':
 			return !counter.get('Physical');
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
@@ -524,6 +524,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
 		case 'Mold Breaker':
 			return (species.baseSpecies === 'Basculin' || species.id === 'rampardos');
+		case 'Moxie':
+			return (!counter.get('Physical') || moves.has('stealthrock'));
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Prankster':
@@ -605,6 +607,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (['spiritomb', 'vespiquen', 'weavile'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon') return 'Rough Skin';
+		if (species.id === 'stoutland') return 'Scrappy';
+		if (species.id === 'octillery') return 'Sniper';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'zangoose') return 'Toxic Boost';
 		if (species.id === 'porygon2' || species.id === 'gardevoir') return 'Trace';
@@ -881,11 +885,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (['highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if (moves.has('substitute')) {
+			if (moves.has('substitute') && !['Black Sludge', 'Leftovers'].includes(item)) {
 				if (item === 'Sitrus Berry') {
 					// Two Substitutes should activate Sitrus Berry
 					if (hp % 4 === 0) break;
-				} else if (!['Black Sludge', 'Leftovers'].includes(item)) {
+				} else {
 					// Should be able to use Substitute four times from full HP without fainting
 					if (hp % 4 > 0) break;
 				}

@@ -35,10 +35,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 1,
 		onTryBoost() {},
 	},
-	intimidate: {
-		inherit: true,
-		rating: 4,
-	},
 	moody: {
 		inherit: true,
 		onResidual(pokemon) {
