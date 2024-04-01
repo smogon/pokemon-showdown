@@ -2788,4 +2788,9 @@ export const Rulesets: {[k: string]: FormatData} = {
 		name: 'Useless Moves Clause',
 		// implemented in /mods/moderngen2/rulesets.ts
 	},
+	uselessitemsclause: {
+		effectType: 'ValidatorRule',
+		name: 'Useless Items Clause',
+		// implemented in /mods/moderngen2/rulesets.ts
+	},
 };
