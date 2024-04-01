@@ -35,31 +35,27 @@ try {
 }
 
 export function getBadges(user: User, curFormat: string) {
-	let userBadges: {type: string, format: string, season: string}[] = [];
-	for (const season in data.badgeholders) {
-		for (const format in data.badgeholders[season]) {
-			const badges = data.badgeholders[season][format];
-			for (const type in badges) {
-				if (badges[type].includes(user.id)) {
-					// ex badge-bronze-gen9ou-250-1-2024
-					userBadges.push({type, format, season});
-				}
+	let userBadges: {type: string, format: string}[] = [];
+	const season = data.current.season; // don't factor in old badges
+	for (const format in data.badgeholders[season]) {
+		const badges = data.badgeholders[season][format];
+		for (const type in badges) {
+			if (badges[type].includes(user.id)) {
+				// ex badge-bronze-gen9ou-250-1-2024
+				userBadges.push({type, format});
 			}
 		}
 	}
 	// find which ones we should prioritize showing - badge of current tier/season, then top badges of other formats for this season
 	let curFormatBadge;
-	// first, prioritize current tier/season
-	const curSeason = `${data.current.season}`;
 	for (const [i, badge] of userBadges.entries()) {
-		if (badge.format === curFormat && badge.season === curSeason) {
+		if (badge.format === curFormat) {
 			userBadges.splice(i);
 			curFormatBadge = badge;
 		}
 	}
 	// now - sort by highest levels
 	userBadges = Utils.sortBy(userBadges, x => Object.keys(BADGE_THRESHOLDS).indexOf(x.type))
-		.filter(x => x.season === curSeason)
 		.slice(0, 2);
 	if (curFormatBadge) userBadges.unshift(curFormatBadge);
 	// format and return
@@ -331,7 +327,7 @@ export const handlers: Chat.Handlers = {
 	onBattleJoin(slot, user, battle) {
 		const badges = getBadges(user, battle.format);
 		for (const badge of badges) {
-			battle.room.add(`|badge|${slot}|${badge.type}|${badge.format}|${BADGE_THRESHOLDS[badge.type]}-${badge.season}`);
+			battle.room.add(`|badge|${slot}|${badge.type}|${badge.format}|${BADGE_THRESHOLDS[badge.type]}-${data.current.season}`);
 		}
 		battle.room.update();
 	},
