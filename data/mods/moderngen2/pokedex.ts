@@ -2833,10 +2833,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		gen: 2,
 	},
-	mrrime: {
-		inherit: true,
-		gen: 2,
-	},
 	runerigus: {
 		inherit: true,
 		gen: 2,
