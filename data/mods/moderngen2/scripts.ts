@@ -4,7 +4,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		const specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
 		for (const i in this.data.Moves) {
-			if (this.moves.get(i).gen > 2) this.modData('Moves', i).gen = 2;
+			if (this.data.Moves[i].num >= 252) this.modData('Moves', i).gen = 2;
 			if (this.data.Moves[i].isNonstandard === 'Past') this.modData('Moves', i).isNonstandard = null;
 			if (this.data.Moves[i].category === 'Status') continue;
 			const newCategory = specialTypes.includes(this.data.Moves[i].type) ? 'Special' : 'Physical';
@@ -13,7 +13,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 		for (const i in this.data.Items) {
-			if (this.items.get(i).gen > 2) this.modData('Items', i).gen = 2;
+			if (!this.data.Items[i].gen > 2) this.modData('Items', i).gen = 2;
 			if (this.data.Items[i].isNonstandard === 'Past') this.modData('Items', i).isNonstandard = null;
 		}
 		for (const i in this.data.Pokedex) {
