@@ -496,16 +496,17 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Z-Move Clause'],
-		banlist: ['Huge Power', 'Pure Power', 'Shadow Tag', 'Arena Trap', 'Baton Pass', 'Moody'],
+		banlist: ['Huge Power', 'Pure Power', 'Shadow Tag', 'Arena Trap', 'Baton Pass', 'Moody', 'Dewpider', 'Smeargle', 'Zigzagoon-Base', 'Flittle', 'Nidoran-M', 'Wingull', 'Wishiwashi'],
+		unbanlist: ['Assist'],
 		onBegin() {
 			this.add('-message', `Welcome to Do Not Use!`);
-			this.add('-message', `This is a metagame where only Pokemon with less than 280 BST are allowed!`);
+			this.add('-message', `This is a metagame where only Pokemon with less than 280 BST are allowed, plus Unown and Luvdisc!`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
 			this.add('-message', `https://www.smogon.com/forums/threads/3734326/`);
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
-			if (species.bst > 280) {
+			if (species.bst > 280 && !['Luvdisc', 'Unown'].includes(species.name)) {
 				return [`Only Pok\u00e9mon with a BST of 280 or lower are allowed.`, `(${species.name}'s BST is ${species.bst}.)`];
 			}
 		},
