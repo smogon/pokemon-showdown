@@ -2856,6 +2856,40 @@ export const Formats: FormatList = [
 		searchShow: false,
 	},
 
+	// Random Meta of the Decade
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Random Meta of the Decade",
+		column: 3,
+	},
+	{
+		name: "[Gen 9] Meow Cup 2: Electric Doggaroo",
+		desc: `Randomized format with only feline and canine Pok&eacute;mon and their abilities and moves. Led by <username>nya</username>. Council members are <username>dhelmise</username> and <username>Elly</username>.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/10055942">Meow Cup 2: Electric Doggaroo</a>`,
+		],
+
+		mod: 'meowcup2',
+		team: 'randomHC',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
+	},
+	{
+		name: "[Gen 9] Meow Cup 2 FFA",
+		desc: `Randomized format with only feline and canine Pok&eacute;mon and their abilities and moves. Led by <username>nya</username>. Council members are <username>dhelmise</username> and <username>Elly</username>.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/10055942">Meow Cup 2: Electric Doggaroo FFA</a>`,
+		],
+
+		mod: 'meowcup2',
+		team: 'randomHC',
+		tournamentShow: false,
+		gameType: 'freeforall',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Nonexistent'],
+	},
+
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////
 
