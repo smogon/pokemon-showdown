@@ -203,7 +203,7 @@ export function rollSeason() {
 		data.current.season++;
 		data.badgeholders[data.current.season] = {};
 		for (const k of data.formatSchedule[findPeriod()]) {
-			data.badgeholders[data.current.season][k] = {};
+			data.badgeholders[data.current.season][`gen${Dex.gen}${k}`] = {};
 		}
 		data.current.period = findPeriod();
 		saveData();
