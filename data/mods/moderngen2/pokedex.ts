@@ -3550,4 +3550,264 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		gen: 2,
 	},
+	venusaurmega: {
+		inherit: true,
+		gen: 2,
+	},
+	charizardmegax: {
+		inherit: true,
+		gen: 2,
+	},
+	charizardmegay: {
+		inherit: true,
+		gen: 2,
+	},
+	blastoisemega: {
+		inherit: true,
+		gen: 2,
+	},
+	beedrillmega: {
+		inherit: true,
+		gen: 2,
+	},
+	pidgeotmega: {
+		inherit: true,
+		gen: 2,
+	},
+	rattataalola: {
+		inherit: true,
+		gen: 2,
+	},
+	raticatealola: {
+		inherit: true,
+		gen: 2,
+	},
+	pikachuoriginal: {
+		inherit: true,
+		gen: 2,
+	},
+	pikachuhoenn: {
+		inherit: true,
+		gen: 2,
+	},
+	pikachusinnoh: {
+		inherit: true,
+		gen: 2,
+	},
+	pikachuunova: {
+		inherit: true,
+		gen: 2,
+	},
+	pikachukalos: {
+		inherit: true,
+		gen: 2,
+	},
+	pikachualola: {
+		inherit: true,
+		gen: 2,
+	},
+	pikachupartner: {
+		inherit: true,
+		gen: 2,
+	},
+	pikachuworld: {
+		inherit: true,
+		gen: 2,
+	},
+	raichualola: {
+		inherit: true,
+		gen: 2,
+	},
+	sandshrewalola: {
+		inherit: true,
+		gen: 2,
+	},
+	sandslashalola: {
+		inherit: true,
+		gen: 2,
+	},
+	vulpixalola: {
+		inherit: true,
+		gen: 2,
+	},
+	ninetalesalola: {
+		inherit: true,
+		gen: 2,
+	},
+	diglettalola: {
+		inherit: true,
+		gen: 2,
+	},
+	dugtrioalola: {
+		inherit: true,
+		gen: 2,
+	},
+	meowthalola: {
+		inherit: true,
+		gen: 2,
+	},
+	meowthgalar: {
+		inherit: true,
+		gen: 2,
+	},
+	persianalola: {
+		inherit: true,
+		gen: 2,
+	},
+	alakazammega: {
+		inherit: true,
+		gen: 2,
+	},
+	geodudealola: {
+		inherit: true,
+		gen: 2,
+	},
+	graveleralola: {
+		inherit: true,
+		gen: 2,
+	},
+	golemalola: {
+		inherit: true,
+		gen: 2,
+	},
+	ponytagalar: {
+		inherit: true,
+		gen: 2,
+	},
+	rapidashgalar: {
+		inherit: true,
+		gen: 2,
+	},
+	slowpokegalar: {
+		inherit: true,
+		gen: 2,
+	},
+	slowbrogalar: {
+		inherit: true,
+		gen: 2,
+	},
+	slowbromega: {
+		inherit: true,
+		gen: 2,
+	},
+	slowkinggalar: {
+		inherit: true,
+		gen: 2,
+	},
+	farfetchdgalar: {
+		inherit: true,
+		gen: 2,
+	},
+	grimeralola: {
+		inherit: true,
+		gen: 2,
+	},
+	mukalola: {
+		inherit: true,
+		gen: 2,
+	},
+	gengarmega: {
+		inherit: true,
+		gen: 2,
+	},
+	steelixmega: {
+		inherit: true,
+		gen: 2,
+	},
+	exeggutoralola: {
+		inherit: true,
+		gen: 2,
+	},
+	marowakalola: {
+		inherit: true,
+		gen: 2,
+	},
+	weezinggalar: {
+		inherit: true,
+		gen: 2,
+	},
+	kangaskhanmega: {
+		inherit: true,
+		gen: 2,
+	},
+	mrmimegalar: {
+		inherit: true,
+		gen: 2,
+	},
+	mrrime: {
+		inherit: true,
+		gen: 2,
+	},
+	scizormega: {
+		inherit: true,
+		gen: 2,
+	},
+	pinsirmega: {
+		inherit: true,
+		gen: 2,
+	},
+	taurospaldeacombat: {
+		inherit: true,
+		gen: 2,
+	},
+	taurospaldeablaze: {
+		inherit: true,
+		gen: 2,
+	},
+	taurospaldeaaqua: {
+		inherit: true,
+		gen: 2,
+	},
+	gyaradosmega: {
+		inherit: true,
+		gen: 2,
+	},
+	aerodactylmega: {
+		inherit: true,
+		gen: 2,
+	},
+	articunogalar: {
+		inherit: true,
+		gen: 2,
+	},
+	zapdosgalar: {
+		inherit: true,
+		gen: 2,
+	},
+	moltresgalar: {
+		inherit: true,
+		gen: 2,
+	},
+	mewtwomegax: {
+		inherit: true,
+		gen: 2,
+	},
+	mewtwomegay: {
+		inherit: true,
+		gen: 2,
+	},
+	ampharosmega: {
+		inherit: true,
+		gen: 2,
+	},
+	wooperpaldea: {
+		inherit: true,
+		gen: 2,
+	},
+	heracrossmega: {
+		inherit: true,
+		gen: 2,
+	},
+	corsolagalar: {
+		inherit: true,
+		gen: 2,
+	},
+	houndoommega: {
+		inherit: true,
+		gen: 2,
+	},
+	tyranitarmega: {
+		inherit: true,
+		gen: 2,
+	},
 };
