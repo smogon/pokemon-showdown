@@ -281,7 +281,11 @@ export const TeamsHandler = new class {
 		buf += `<small>Uploaded on: ${Chat.toTimestamp(teamData.date, {human: true})}</small><br />`;
 		buf += `<small>Format: ${Dex.formats.get(teamData.format).name}</small><br />`;
 		buf += `<small>Views: ${teamData.views === -1 ? 0 : teamData.views}</small>`;
-		const team = Teams.unpack(teamData.team)!;
+		const team = Teams.import(teamData.team);
+		if (!team) {
+			Monitor.crashlog(new Error(`Malformed team drawn from database`), 'A teams chat page', teamData);
+			throw new Chat.ErrorMessage("Oops! Something went wrong. Try again later.");
+		}
 		let link = `view-team-${teamData.teamid}`;
 		if (teamData.private) {
 			link += `-${teamData.private}`;
