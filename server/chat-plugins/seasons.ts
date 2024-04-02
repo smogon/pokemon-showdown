@@ -148,7 +148,7 @@ export async function updateBadgeholders() {
 	if (!data.badgeholders[period]) {
 		data.badgeholders[period] = {};
 	}
-	for (const formatName of data.formatSchedule[findPeriod()]) {
+	for (const formatName of data.formatSchedule[findPeriod() - 1]) {
 		const formatid = `gen${Dex.gen}${formatName}`;
 		const response = await getLadderTop(formatid);
 		if (!response) continue; // ??
@@ -198,7 +198,7 @@ export function rollSeason() {
 	if (findPeriod() !== data.current.period) {
 		data.current.season++;
 		data.badgeholders[data.current.season] = {};
-		for (const k of data.formatSchedule[findPeriod()]) {
+		for (const k of data.formatSchedule[findPeriod() - 1]) {
 			data.badgeholders[data.current.season][`gen${Dex.gen}${k}`] = {};
 		}
 		data.current.period = findPeriod();
