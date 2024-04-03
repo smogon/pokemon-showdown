@@ -180,12 +180,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 		return buf;
 	}
 
-	display(user?: User, broadcast = true) {
-		if (broadcast) {
-			this.room.add(`|html|${this.generateAuctionTable()}`);
-		} else {
-			user?.sendTo(this.room, `|html|${this.generateAuctionTable()}`);
-		}
+	display() {
+		this.room.add(`|html|${this.generateAuctionTable()}`);
 	}
 
 	setMinBid(amount: number) {
@@ -571,7 +567,7 @@ export const commands: Chat.ChatCommands = {
 		display(target, room, user) {
 			this.runBroadcast();
 			const auction = this.requireGame(Auction);
-			auction.display(user, this.broadcasting);
+			this.sendReply(`|html|${auction.generateAuctionTable()}`);
 		},
 		pricelist(target, room, user) {
 			this.runBroadcast();
