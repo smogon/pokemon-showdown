@@ -121,18 +121,18 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<div class="infobox">`;
 		for (const id in this.teams) {
 			const team = this.teams[id];
-			buf += `<details><summary>${team.name}</summary>`;
+			buf += `<details><summary>${team.name}</summary><table>`;
 			for (const player of team.players.sort((a, b) => b.price - a.price)) {
-				buf += `<table><tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+				buf += `<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 			}
-			buf += `</details>`;
+			buf += `</table></details><br>`;
 		}
-		buf += `<details><summary>All</summary>`;
+		buf += `<details><summary>All</summary><table>`;
 		const draftedPlayers = Object.values(this.playerList).filter(p => p.team).sort((a, b) => b.price - a.price);
 		for (const player of draftedPlayers) {
-			buf += `<table><tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+			buf += `<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 		}
-		buf += `</details></div>`;
+		buf += `</table></details></div>`;
 		return buf;
 	}
 
@@ -574,8 +574,9 @@ export const commands: Chat.ChatCommands = {
 			auction.display(user, this.broadcasting);
 		},
 		pricelist(target, room, user) {
+			this.runBroadcast();
 			const auction = this.requireGame(Auction);
-			this.sendReply(auction.generatePriceList());
+			this.sendReply(`|html|${auction.generatePriceList()}`);
 		},
 		minbid(target, room, user) {
 			room = this.requireRoom();
@@ -682,7 +683,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		assignplayerhelp: [
-			`/auction assignplayer [player], [team], [price] - Assigns a player to a team. If team is blank, returns player to draft pool. Requires: # & auction owner`,
+			`/auction assignplayer [player], [team] - Assigns a player to a team. If team is blank, returns player to draft pool. Requires: # & auction owner`,
 		],
 		addteam(target, room, user) {
 			room = this.requireRoom();
@@ -839,9 +840,9 @@ export const commands: Chat.ChatCommands = {
 			`- delete: Deletes the auction.<br/>` +
 			`- display: Displays the current state of the auction.<br/>` +
 			`- pricelist: Displays the current prices of players by team.<br/>` +
-			`- nominate [player]: Nominates a player for auction.<br/>` +
+			`- nom [player]: Nominates a player for auction.<br/>` +
 			`- bid [amount]: Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.<br/>` +
-			`You can also use /bid directly without the /auction prefix.<br/><br/>` +
+			`You may use /bid and /nom directly without the /auction prefix.<br/><br/>` +
 			`<details class="readmore"><summary>Configuration Commands</summary><br/>` +
 			`- minbid [amount]: Sets the minimum bid.<br/>` +
 			`- minplayers [amount]: Sets the minimum number of players.<br/>` +
@@ -849,7 +850,7 @@ export const commands: Chat.ChatCommands = {
 			`- importplayers [pastebin url]: Imports a list of players from a pastebin.<br/>` +
 			`- addplayer [name], [tier1], [tier2], ...: Adds a player to the auction.<br/>` +
 			`- removeplayer [name]: Removes a player from the auction.<br/>` +
-			`- assignplayer [player], [team], [price]: Assigns a player to a team. If team is blank, returns player to draft pool.<br/>` +
+			`- assignplayer [player], [team]: Assigns a player to a team. If team is blank, returns player to draft pool.<br/>` +
 			`- addteam [name], [manager1], [manager2], ...: Adds a team to the auction.<br/>` +
 			`- removeteam [name]: Removes the given team from the auction.<br/>` +
 			`- suspendteam [name]: Suspends the given team from the auction.<br/>` +
