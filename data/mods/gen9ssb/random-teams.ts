@@ -692,6 +692,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Magic Trick',
 		evs: {hp: 252, spa: 252, spe: 4}, ivs: {atk: 0}, nature: 'Modest', teraType: 'Ice', shiny: 256,
 	},
+	Rainshaft: {
+		species: 'Xerneas', ability: 'Rainy\'s Aura', item: 'Rainium Z', gender: 'F',
+		moves: ['Sparkling Aria', 'Sing', 'Alluring Voice'],
+		signatureMove: 'Psychic Noise',
+		evs: {hp: 252, spa: 252, spe: 4}, nature: 'Mild',
+	},
 	Ransei: {
 		species: 'Audino-Mega', ability: 'Ultra Mystik', item: 'Safety Goggles', gender: 'M',
 		moves: ['Psystrike', 'Transform', 'Light of Ruin'],

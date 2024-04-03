@@ -3909,6 +3909,44 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Rainshaft
+	"hatsunemikusluckyorb": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Hatsune Miku's Lucky Orb",
+		shortDesc: "Boosts a random stat by 3 stages, then uses Baton Pass.",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(pokemon) {
+			this.add('-anim', pokemon, 'Life Dew', pokemon);
+			this.add('-anim', pokemon, 'Geomancy', pokemon);
+		},
+		onHit(target, pokemon, move) {
+			const stats: BoostID[] = [];
+			let stat: BoostID;
+			for (stat in target.boosts) {
+				if (stat === 'accuracy' || stat === 'evasion') continue;
+				if (target.boosts[stat] < 6) {
+					stats.push(stat);
+				}
+			}
+			if (stats.length) {
+				const randomStat = this.sample(stats);
+				this.boost({[randomStat]: 3}, pokemon, pokemon, move);
+				this.actions.useMove('Baton Pass', target);
+			}
+		},
+		isZ: "rainiumz",
+		secondary: null,
+		target: "self",
+		type: "Water",
+	},
+
 	// Ransei
 	floodoflore: {
 		accuracy: 100,

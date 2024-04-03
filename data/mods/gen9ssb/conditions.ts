@@ -1644,6 +1644,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('R8')}|Getting KOed won't prevent me from making propaganda: https://www.smogon.com/forums/forums/national-dex-other-tiers.738/`);
 		},
 	},
+	rainshaft: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Rainshaft')}|Hello ${pokemon.side.name} and ${pokemon.side.foe.name} :P`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Rainshaft')}|Hope you got lucky there...`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Rainshaft')}|You weren't lucky enough, join <<survivor>> for more practice XD`);
+		},
+	},
 	ransei: {
 		noCopy: true,
 		onStart() {

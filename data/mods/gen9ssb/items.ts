@@ -2,6 +2,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Archas
 	lilligantiumz: {
 		name: "Lilligantium Z",
+		spritenum: 633,
 		onTakeItem: false,
 		zMove: "Aura Rain",
 		zMoveFrom: "Quiver Dance",
@@ -24,6 +25,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Irpachuza
 	irpatuziniumz: {
 		name: "Irpatuzinium Z",
+		spritenum: 648,
 		onTakeItem: false,
 		zMove: "Bibbidi-Bobbidi-Rands",
 		zMoveFrom: "Fleur Cannon",
@@ -40,11 +42,22 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Peary
 	pearyumz: {
 		name: "Pearyum Z",
+		spritenum: 647,
 		onTakeItem: false,
 		zMove: "1000 Gears",
 		zMoveFrom: "Gear Grind",
 		itemUser: ["Klinklang"],
 		desc: "If held by a Klinklang with Gear Grind, it can use 1000 Gears.",
+	},
+	// Rainshaft
+	rainiumz: {
+		name: "Rainium Z",
+		spritenum: 652,
+		onTakeItem: false,
+		zMove: "Hatsune Miku's Lucky Orb",
+		zMoveFrom: "Sparkling Aria",
+		itemUser: ["Xerneas"],
+		desc: "If held by a Xerneas with Sparkling Aria, it can use Hatsune Miku's Lucky Orb.",
 	},
 
 	// Modified for other effects

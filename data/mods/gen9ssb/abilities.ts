@@ -1707,6 +1707,28 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Rainshaft
+	rainysaura: {
+		name: "Rainy's Aura",
+		shortDesc: "Switch-in sets rain and boosts all Psychic-type damage by 33%.",
+		onStart(source) {
+			if (this.suppressingAbility(source)) return;
+			for (const action of this.queue) {
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
+				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
+			}
+			this.field.setWeather('raindance');
+		},
+		onAnyBasePowerPriority: 20,
+		onAnyBasePower(basePower, source, target, move) {
+			if (target === source || move.category === 'Status' || move.type !== 'Psychic') return;
+			if (!move.auraBooster?.hasAbility('Rainy\'s Aura')) move.auraBooster = this.effectState.target;
+			if (move.auraBooster !== this.effectState.target) return;
+			return this.chainModify([move.hasAuraBreak ? 3072 : 5448, 4096]);
+		},
+		flags: {},
+	},
+
 	// Ransei
 	ultramystik: {
 		shortDesc: "Stats 1.5x until hit super effectively + Magic Guard + Leftovers.",
