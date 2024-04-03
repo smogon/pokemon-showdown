@@ -686,6 +686,12 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Flying',
 		// The nature not being Quiet is a crime
 	},
+	quziel: {
+		species: 'Chromera', ability: 'High Performance Computing', item: 'Covert Cloak', gender: 'M',
+		moves: ['Recover', 'Revelation Dance', 'Boomburst'],
+		signatureMove: 'Reshape',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ghost',
+	},
 	R8: {
 		species: 'Chansey', ability: 'Anti-Pelau', item: 'Eviolite', gender: 'N',
 		moves: ['Ice Beam', 'Thunderbolt', 'Flamethrower'],

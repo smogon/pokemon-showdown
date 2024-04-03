@@ -1680,6 +1680,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// quziel
+	highperformancecomputing: {
+		shortDesc: "Becomes a random typing at the beginning of each turn.",
+		name: "High Performance Computing",
+		flags: {},
+		onBeforeTurn(source) {
+			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
+			source.setType(type);
+			this.add('-start', source, 'typechange', type, '[from] ability: High Performance Computing');
+		},
+	},
+
 	// R8
 	antipelau: {
 		name: "Anti-Pelau",

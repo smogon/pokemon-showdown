@@ -1632,6 +1632,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Quite Quiet')}|hm`);
 		},
 	},
+	quziel: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('quziel')}|Gaze`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('quziel')}|See y-disconnects`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('quziel')}|I am become Tilt`);
+		},
+	},
 	r8: {
 		noCopy: true,
 		onStart() {

@@ -3864,6 +3864,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// quziel
+	reshape: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Reshape",
+		shortDesc: "Foe becomes a random monotype, user gains +1 SpA.",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Reflect Type', target);
+		},
+		onHit(target, source, move) {
+			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
+			target.setType(type);
+			this.add('-start', target, 'typechange', type, '[from] move: Reshape');
+			this.boost({spa: 1}, source);
+		},
+		target: "normal",
+		type: "Normal",
+	},
+
 	// R8
 	magictrick: {
 		accuracy: true,
