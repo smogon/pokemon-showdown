@@ -474,6 +474,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			);
 		case 'Reckless': case 'Rock Head':
 			return !counter.get('recoil');
+		case 'Shed Skin':
+			return !moves.has('rest');
 		case 'Skill Link':
 			return !counter.get('skilllink');
 		case 'Swarm':

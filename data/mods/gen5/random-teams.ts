@@ -532,6 +532,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return (!counter.get('Status') || (species.id === 'tornadus' && moves.has('bulkup')));
 		case 'Poison Heal':
 			return (species.id === 'breloom' && role === 'Fast Attacker');
+		case 'Shed Skin':
+			return !moves.has('rest');
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil'));
 		case 'Regenerator':

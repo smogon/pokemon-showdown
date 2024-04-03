@@ -774,6 +774,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return !counter.get('Grass');
 		case 'Power Construct':
 			return species.forme === '10%';
+		case 'Shed Skin':
+			return !moves.has('rest');
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil') || !!species.isMega);
 		case 'Regenerator':

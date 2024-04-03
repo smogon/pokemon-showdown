@@ -574,6 +574,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return types.has('Grass');
 		case 'Overgrow':
 			return !counter.get('Grass');
+		case 'Shed Skin':
+			return !moves.has('rest');
 		case 'Synchronize':
 			return (counter.get('Status') < 2 || !!counter.get('recoil') || !!species.isMega);
 		case 'Regenerator':
