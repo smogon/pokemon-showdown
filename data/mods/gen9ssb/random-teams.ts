@@ -882,6 +882,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'building character',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Stellar',
 	},
+	vmnunes: {
+		species: 'Shaymin-Sky', ability: 'Wild Growth', item: 'Big Root', gender: 'M',
+		moves: ['Giga Drain', 'Oblivion Wing', 'Draining Kiss'],
+		signatureMove: 'Gracidea\'s Blessing',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Fairy',
+	},
 	WarriorGallade: {
 		species: 'Tropius', ability: 'Primeval Harvest', item: 'Starf Berry', gender: ['M', 'M', 'F'],
 		moves: ['Sunny Day', 'Natural Gift', ['Bitter Blade', 'Sappy Seed', 'Stored Power', 'Counter']],

@@ -2363,6 +2363,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// vmnunes
+	wildgrowth: {
+		shortDesc: "Attacking moves also inflict Leech Seed on foes.",
+		name: "Wild Growth",
+		onModifyMovePriority: -1,
+		onAfterMove(source, target, move) {
+			if (target.hasType('Grass') || target.hasAbility('Sap Sipper') || !move.hit) return null;
+			target.addVolatile('leechseed', source);
+		},
+		flags: {},
+	},
+
 	// WarriorGallade
 	primevalharvest: {
 		shortDesc: "Sun: Heal 1/8 max HP, random berry if no item. Else 50% random berry if no item.",

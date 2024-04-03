@@ -4993,6 +4993,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// vmnunes
+	gracideasblessing: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Uses Wish, switches out. Recipient gets Aqua Ring.",
+		name: "Gracidea's Blessing",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		secondary: null,
+		selfSwitch: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Morning Sun', source);
+			this.add('-anim', source, 'Seed Flare', target);
+		},
+		slotCondition: 'gracideasblessing',
+		condition: {
+			duration: 2,
+			onStart(pokemon, source) {
+				this.effectState.hp = source.maxhp / 2;
+			},
+			onResidualOrder: 4,
+			onEnd(target) {
+				if (target && !target.fainted) {
+					this.heal(this.effectState.hp, target, target);
+					target.addVolatile('aquaring', target);
+				}
+			},
+		},
+		target: "self",
+		type: "Grass",
+	},
+
 	// WarriorGallade - TODO: Fix animations
 	fruitfullongbow: {
 		accuracy: 90,
