@@ -319,9 +319,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "UU",
 	},
 	vulpix: {
-		tier: "ZU",
-		doublesTier: "LC",
-		natDexTier: "LC",
+		tier: "LC",
 	},
 	vulpixalola: {
 		tier: "NFE",
@@ -966,9 +964,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	electabuzz: {
-		tier: "ZU",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	electivire: {
 		tier: "ZU",
@@ -1406,9 +1402,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	misdreavus: {
-		tier: "ZU",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	mismagius: {
 		tier: "PU",
@@ -1526,9 +1520,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	ursaring: {
-		tier: "ZU",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	ursaluna: {
 		tier: "UU",
@@ -2892,9 +2884,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	servine: {
-		tier: "ZU",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	serperior: {
 		tier: "OU",
@@ -3327,9 +3317,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	duosion: {
-		tier: "ZU",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	reuniclus: {
 		tier: "NU",
@@ -3562,9 +3550,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		natDexTier: "RU",
 	},
 	vullaby: {
-		tier: "ZU",
-		doublesTier: "LC",
-		natDexTier: "LC",
+		tier: "LC",
 	},
 	mandibuzz: {
 		tier: "UU",
@@ -3731,9 +3717,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	frogadier: {
-		tier: "ZU",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	greninja: {
 		tier: "UU",
@@ -5540,9 +5524,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "LC",
 	},
 	tinkatuff: {
-		tier: "ZU",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
+		tier: "NFE",
 	},
 	tinkaton: {
 		tier: "UU",
