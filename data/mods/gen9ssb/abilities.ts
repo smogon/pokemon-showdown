@@ -1912,6 +1912,33 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// SexyMalasada
+	ancestryritual: {
+		shortDesc: "Recoil heals. While below 50% HP, changes to Typhlosion-Hisui.",
+		name: "Ancestry Ritual",
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'recoil') {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (this.activeMove.id !== 'struggle') {
+					this.heal(damage);
+					return null;
+				}
+			}
+		},
+		onResidualOrder: 20,
+		onResidual(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Typhlosion' || pokemon.transformed) {
+				return;
+			}
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.species.id !== 'typhlosionhisui') {
+				pokemon.formeChange('Typhlosion-Hisui');
+			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.species.id === 'typhlosionhisui') {
+				pokemon.formeChange('Typhlosion');
+			}
+		},
+		flags: {},
+	},
+
 	// Siegfried
 	magicalmysterycharge: {
 		shortDesc: "Summons Electric Terrain upon switch-in, +1 boost to Sp. Def during Electric Terrain.",

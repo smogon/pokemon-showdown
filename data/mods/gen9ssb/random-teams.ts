@@ -728,6 +728,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Purification',
 		evs: {hp: 252, def: 252, spd: 4}, nature: 'Bold', teraType: 'Water',
 	},
+	SexyMalasada: {
+		species: 'Typhlosion', ability: 'Ancestry Ritual', item: 'Life Orb', gender: 'M',
+		moves: ['Calm Mind', 'Aura Sphere', 'Flamethrower'],
+		signatureMove: 'Hexadecimal Fire',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Ghost', shiny: true,
+	},
 	sharp_claw: {
 		species: 'Sneasel', ability: 'Regenerator', item: 'Heavy-Duty Boots', gender: 'F',
 		moves: ['Knock Off', 'Ice Spinner', 'Ice Shard'],

@@ -4084,6 +4084,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
+	// SexyMalasada
+	hexadecimalfire: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		shortDesc: "20% burn, 20% spite, 20% 1/4th recoil.",
+		name: "Hexadecimal Fire",
+		pp: 15,
+		priority: 0,
+		flags: {heal: 1, bypasssub: 1, allyanim: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Sacred Fire', target);
+			this.add('-anim', source, 'Hex', target);
+		},
+		secondaries: [
+			{
+				chance: 20,
+				status: 'brn',
+			},
+			{
+				chance: 20,
+				onHit(target) {
+					if (!target.hp) return;
+					let move: Move | ActiveMove | null = target.lastMove;
+					if (!move || move.isZ) return;
+					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+					const ppDeducted = target.deductPP(move.id, 4);
+					if (!ppDeducted) return;
+					this.add('-activate', target, 'move: Hexadecimal Fire', move.name, ppDeducted);
+				},
+			},
+			{
+				chance: 20,
+				onHit(target, source, move) {
+					move.recoil = [25, 100];
+				},
+			},
+		],
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// sharp_claw
 	treacheroustraversal: {
 		accuracy: 100,

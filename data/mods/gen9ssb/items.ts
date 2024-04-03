@@ -100,6 +100,20 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 	},
 
+	// modified for SexyMalasada's ability
+	lifeorb: {
+		inherit: true,
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag) {
+				if (source.hasAbility('Ancestry Ritual')) {
+					this.heal(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
+				} else {
+					this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
+				}
+			}
+		},
+	},
+
 	safetygoggles: {
 		inherit: true,
 		onImmunity(type, pokemon) {

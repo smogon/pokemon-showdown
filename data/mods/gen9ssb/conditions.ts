@@ -1290,7 +1290,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart() {
 			this.add(`c:|${getName('marillvibes ♫')}|Is that a __rat__?`);
 		},
-		onSwitchOut(pokemon) {
+		onSwitchOut() {
 			this.add(`c:|${getName('marillvibes ♫')}|Here for a good time, not a long time!`);
 		},
 		onFaint() {
@@ -1743,6 +1743,72 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Scotteh')}|\`\`Segmentation fault (core dumped)\`\``);
+		},
+	},
+	sexymalasada: {
+		noCopy: true,
+		onStart(pokemon) {
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'wigglytree':
+				this.add(`c:|${getName('SexyMalasada')}|Hey Wiggles! I made pizza again! Wanna learn more RNG btw?`);
+				break;
+			case 'appletunalamode':
+				this.add(`c:|${getName('SexyMalasada')}|And now you must learn how to RNG with nothing but a sundial for a timer! __Trust me!__`);
+				break;
+			case 'loethalion':
+				this.add(`c:|${getName('SexyMalasada')}|For the hundredth time Loe, check. the. pins.`);
+				break;
+			case 'nicolic':
+				this.add(`c:|${getName('SexyMalasada')}|Hi Nic! Why you keep postponing learning old-gen RNG? q_q`);
+				break;
+			case 'swiffix':
+				this.add(`c:|${getName('SexyMalasada')}|....something smells in here`);
+				break;
+			case 'mex':
+				this.add(`c:|${getName('SexyMalasada')}|Today is the day you finally learn RNG Mex, deal with it!`);
+				break;
+			case 'clefable':
+				this.add(`c:|${getName('SexyMalasada')}|Oi! I'm not hacking, it's RNG!`);
+				break;
+			case 'billo':
+				this.add(`c:|${getName('SexyMalasada')}|Billo help! The tool isn't working again q_q`);
+				break;
+			default:
+				this.add(`c:|${getName('SexyMalasada')}|Hello! Do you have some time to talk about RNGesus and its awesome teachings: The Art of RNG abuse??`);
+				break;
+			}
+		},
+		onSwitchOut(pokemon) {
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'loethalion':
+				this.add(`c:|${getName('SexyMalasada')}|fricking heck`);
+				break;
+			case 'swiffix':
+				this.add(`c:|${getName('SexyMalasada')}|Just shower already!`);
+				break;
+			case 'billo':
+				this.add(`c:|${getName('SexyMalasada')}|Fiiiine I'll read the wiki...`);
+				break;
+			default:
+				this.add(`c:|${getName('SexyMalasada')}|Crap! I missed my frame... Resetting... q_q`);
+				break;
+			}
+		},
+		onFaint(pokemon) {
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'loethalion':
+				this.add(`c:|${getName('SexyMalasada')}|fricking heck`);
+				break;
+			case 'swiffix':
+				this.add(`c:|${getName('SexyMalasada')}|Just shower already!`);
+				break;
+			case 'billo':
+				this.add(`c:|${getName('SexyMalasada')}|Fiiiine I'll read the wiki...`);
+				break;
+			default:
+				this.add(`c:|${getName('SexyMalasada')}|Well then.. have fun soft-resetting for your shiny! >:( Cya on the flipside 🕶️`);
+				break;
+			}
 		},
 	},
 	sharpclaw: {
