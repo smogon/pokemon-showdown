@@ -144,7 +144,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] NU'],
-		banlist: ['NU', 'PUBL', 'Drought'],
+		banlist: ['NU', 'PUBL'],
 	},
 	{
 		name: "[Gen 9] LC",
