@@ -256,13 +256,19 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	 * Updates the mafia HTML room for this player.
 	 * @param id Only provided during the destruction process to update the HTML one last time after player.id is cleared.
 	 */
-	updateHtmlRoom(id: ID | null = null) {
-		const user = Users.get(this.id || id);
-		if (!user?.connected) return;
-		if (this.game.ended) return user.send(`>view-mafia-${this.game.room.roomid}\n|deinit`);
+	updateHtmlRoom() {
+		if (this.game.ended) return this.closeHtmlRoom();
+		const user = Users.get(this.id);
+		if (!user || !user.connected) return;
 		for (const conn of user.connections) {
 			void Chat.resolvePage(`view-mafia-${this.game.room.roomid}`, user, conn);
 		}
+	}
+
+	closeHtmlRoom() {
+		const user = Users.get(this.id);
+		if (!user || !user.connected) return;
+		return user.send(`>view-mafia-${this.game.room.roomid}\n|deinit`);
 	}
 
 	updateHtmlVotes() {
@@ -403,9 +409,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		if (this.subs.includes(user.id)) this.subs.splice(this.subs.indexOf(user.id), 1);
 		player.updateHtmlRoom();
-		this.sendRoom(`${player.name} has ${staffAdd ? `been added to the game by ${staffAdd.name}.` : 'joined the game.'}.`);
 		if (staffAdd) {
+			this.sendDeclare(`${player.name} has been added to the game by ${staffAdd.name}.`);
 			this.logAction(staffAdd, 'added player'); // TODO check if this message suffices
+		} else {
+			this.sendRoom(`${player.name} has joined the game.`);
 		}
 	}
 
@@ -963,7 +971,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		]);
 		for (const [key, vote] of list) {
 			const player = this.getPlayer(toID(key));
-			buf += `${vote.count}${plur === key ? '*' : ''} ${player?.safeName || 'No Vote'} (${vote.voters.map(a => player?.safeName || a).join(', ')})<br />`;
+			buf += `${vote.count}${plur === key ? '*' : ''} ${player?.safeName || 'No Vote'} (${vote.voters.map(a => this.getPlayer(a)?.safeName || a).join(', ')})<br />`;
 		}
 		return buf;
 	}
@@ -972,8 +980,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		let buf = '';
 		buf += `<h3>Votes (Hammer: ${this.hammerCount || 'Disabled'}) <button class="button" name="send" value="/msgroom ${this.roomid},/mafia refreshvotes"><i class="fa fa-refresh"></i> Refresh</button></h3>`;
 		const plur = this.getPlurality();
+		const self = this.getPlayer(userid);
 
-		for (const key of this.players.map(p => p.id).concat((this.enableNV ? ['novote' as ID] : []))) {
+		for (const key of this.getRemainingPlayers().map(p => p.id).concat((this.enableNV ? ['novote' as ID] : []))) {
 			const votes = this.votes[key];
 			const player = this.getPlayer(key);
 			buf += `<p style="font-weight:bold">${votes?.count || 0}${plur === key ? '*' : ''} `;
@@ -987,22 +996,21 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 				buf += `(${votes.voters.map(v => this.getPlayer(v)?.safeName || v).join(', ')}) `;
 			}
 
-			if (this.votingEnabled && player && (!player.isEliminated() || player.isSpirit()) &&
-				!(this.voteLock && player.voting)) {
+			if (userid === this.hostid || this.cohostids.includes(userid)) {
+				if (votes && votes.count !== votes.trueCount) buf += `(${votes.trueCount})`;
+				if (this.hammerModifiers[key]) buf += `(${this.getHammerValue(key)} to hammer)`;
+			} else if (self && this.votingEnabled && (!this.voteLock || !self.voting) &&
+				(!self.isEliminated() || self.isSpirit())) {
 				let cmd = '';
-				if (player.voting === key) {
+				if (self.voting === key) {
 					cmd = 'unvote';
-				} else if (player.id !== key || (this.selfEnabled && !player.isSpirit())) {
+				} else if (self.id !== key || (this.selfEnabled && !self.isSpirit())) {
 					cmd = `vote ${key}`;
 				}
 
 				if (cmd) {
 					buf += `<button class="button" name="send" value="/msgroom ${this.roomid},/mafia ${cmd}">${cmd === 'unvote' ? 'Unvote' : 'Vote'} ${player?.safeName || 'No Vote'}</button>`;
 				}
-			} else if (userid === this.hostid || this.cohostids.includes(userid)) {
-				const vote = this.votes[key];
-				if (vote && vote.count !== vote.trueCount) buf += `(${vote.trueCount})`;
-				if (this.hammerModifiers[key]) buf += `(${this.getHammerValue(key)} to hammer)`;
 			}
 			buf += `</p>`;
 		}
@@ -1138,9 +1146,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	override removePlayer(player: MafiaPlayer) {
-		const id = player.id;
+		player.closeHtmlRoom();
 		const result = super.removePlayer(player);
-		player.updateHtmlRoom(id);
 		return result;
 	}
 
@@ -1183,7 +1190,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 		this.updateRoleString();
 		this.updatePlayers();
-		this.removePlayer(toEliminate);
+		if (ability === MafiaEliminateType.KICK) {
+			this.removePlayer(toEliminate);
+		}
 	}
 
 	revealRole(user: User, toReveal: MafiaPlayer, revealAs: string) {
@@ -1314,7 +1323,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			newUser.send(`>${this.room.roomid}\n|notify|You have been substituted in the mafia game for ${oldSafeName}.`);
 		}
 		if (this.started) this.played.push(player.id);
-		this.sendDeclare(`${player.safeName} has been subbed out. ${player.safeName} has joined the game.`);
+		this.sendDeclare(`${oldSafeName} has been subbed out. ${player.safeName} has joined the game.`);
 		this.updatePlayers();
 
 		if (this.room.roomid === 'mafia' && this.started) {
@@ -1641,7 +1650,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		for (const id of [user.id, ...user.previousIDs]) {
 			if (this.getPlayer(id)) throw new Chat.ErrorMessage(`${targetString} already in the game.`);
 			if (!force && this.played.includes(id)) {
-				throw new Chat.ErrorMessage(`${targetString} already in the game.`);
+				throw new Chat.ErrorMessage(`${targetString} a previous player and cannot rejoin.`);
 			}
 			if (Mafia.isGameBanned(this.room, user)) {
 				throw new Chat.ErrorMessage(`${targetString} banned from joining mafia games.`);
@@ -1754,9 +1763,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	 * Only intended to be used during pre-game setup.
 	 */
 	clearEliminations() {
-		if (this.started) {
+		// TODO handle this being used after game is started
+		/* if (this.started) {
 			throw new Error(`Can't clear eliminations after the game of mafia has started.`);
-		}
+		} */
 
 		for (const player of this.players) {
 			player.eliminated = null;
@@ -2720,8 +2730,8 @@ export const commands: Chat.ChatCommands = {
 					elimType = MafiaEliminateType.KICK;
 				} else {
 					elimType = MafiaEliminateType.ELIMINATE;
+					repeat = player.eliminated === MafiaEliminateType.ELIMINATE;
 				}
-				repeat = !player.isTreestump() && !player.isSpirit();
 				break;
 			}
 
