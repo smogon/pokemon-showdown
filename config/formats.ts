@@ -505,7 +505,7 @@ export const Formats: FormatList = [
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
-			if (species.bst > 280 && !['Luvdisc', 'Unown'].includes(species.name)) {
+			if (species.bst > 280 && !['Luvdisc', 'Unown'].includes(species.baseSpecies)) {
 				return [`Only Pok\u00e9mon with a BST of 280 or lower are allowed.`, `(${species.name}'s BST is ${species.bst}.)`];
 			}
 		},
