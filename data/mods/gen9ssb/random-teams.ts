@@ -186,6 +186,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Thunderbolt',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', skip: 'Billo',
 	},
+	blazeofvictory: {
+		species: 'Sylveon', ability: 'Prismatic Lens', item: 'Leftovers', gender: 'F',
+		moves: ['Wish', 'Baton Pass', 'Hyper Voice'],
+		signatureMove: 'Veto',
+		evs: {hp: 252, spa: 252, spe: 4}, nature: 'Modest', teraType: 'Fairy',
+	},
 	Blitz: {
 		species: 'Chi-Yu', ability: 'Blitz of Ruin', item: 'Life Orb', gender: 'N',
 		moves: ['Fiery Wrath', 'Lava Plume', 'Nasty Plot'],

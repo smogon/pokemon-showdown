@@ -375,6 +375,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 
 	},
+	blazeofvictory: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('blazeofvictory')}|blazeofvictorys in ur puter, askin u trivia questinz`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('blazeofvictory')}|I'll let you have bp... for now...`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('blazeofvictory')}|[ bleps at you sadly :( ]`);
+		},
+	},
 	blitzuser: {
 		noCopy: true,
 		onStart(pokemon) {
