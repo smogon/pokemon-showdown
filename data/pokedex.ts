@@ -14374,7 +14374,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 55.5,
 		color: "White",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	buzzwole: {
@@ -14387,7 +14387,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 2.4,
 		weightkg: 333.6,
 		color: "Red",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	pheromosa: {
@@ -14400,7 +14400,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.8,
 		weightkg: 25,
 		color: "White",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	xurkitree: {
@@ -14413,7 +14413,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.8,
 		weightkg: 100,
 		color: "Black",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	celesteela: {
@@ -14426,7 +14426,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 9.2,
 		weightkg: 999.9,
 		color: "Green",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	kartana: {
@@ -14439,7 +14439,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 0.1,
 		color: "White",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	guzzlord: {
@@ -14452,7 +14452,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 5.5,
 		weightkg: 888,
 		color: "Black",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	necrozma: {
@@ -14568,7 +14568,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.6,
 		weightkg: 1.8,
 		color: "Purple",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		evos: ["Naganadel"],
 		eggGroups: ["Undiscovered"],
 	},
@@ -14582,7 +14582,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 3.6,
 		weightkg: 150,
 		color: "Purple",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		prevo: "Poipole",
 		evoType: "levelMove",
 		evoMove: "Dragon Pulse",
@@ -14598,7 +14598,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 5.5,
 		weightkg: 820,
 		color: "Gray",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	blacephalon: {
@@ -14611,7 +14611,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.8,
 		weightkg: 13,
 		color: "White",
-		tags: ["Sub-Legendary"],
+		tags: ["Ultra Beast"],
 		eggGroups: ["Undiscovered"],
 	},
 	zeraora: {
@@ -18146,6 +18146,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.8,
 		weightkg: 92,
 		color: "Black",
+		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 	},
 	munkidori: {
@@ -18158,6 +18159,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1,
 		weightkg: 12.2,
 		color: "Black",
+		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 	},
 	fezandipiti: {
@@ -18170,6 +18172,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.4,
 		weightkg: 30.1,
 		color: "Black",
+		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 	},
 	ogerpon: {
@@ -18183,6 +18186,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.2,
 		weightkg: 39.8,
 		color: "Green",
+		tags: ["Sub-Legendary"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone", "Ogerpon-Teal-Tera", "Ogerpon-Wellspring-Tera", "Ogerpon-Hearthflame-Tera", "Ogerpon-Cornerstone-Tera"],
 		formeOrder: ["Ogerpon", "Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone", "Ogerpon-Teal-Tera", "Ogerpon-Wellspring-Tera", "Ogerpon-Hearthflame-Tera", "Ogerpon-Cornerstone-Tera"],
@@ -18408,7 +18412,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 0.3,
 		weightkg: 16,
 		color: "Blue",
-		tags: ["Restricted Legendary"],
 		eggGroups: ["Undiscovered"],
 		battleOnly: "Terapagos",
 		forceTeraType: "Stellar",
@@ -18424,7 +18427,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		heightm: 1.7,
 		weightkg: 77,
 		color: "Blue",
-		tags: ["Restricted Legendary"],
 		eggGroups: ["Undiscovered"],
 		battleOnly: "Terapagos",
 		forceTeraType: "Stellar",
