@@ -237,10 +237,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 
 	// dhelmise
-	nymble: {
+	slowkinggalar: {
 		inherit: true,
-		baseStats: {hp: 110, atk: 200, def: 99, spa: 101, spd: 99, spe: 35},
-		abilities: {0: "Cacophony"},
+		abilities: {0: "Coalescence"},
 	},
 
 	// Elliot

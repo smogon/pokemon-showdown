@@ -1476,62 +1476,114 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// dhelmise
-	ok: {
+	bioticorb: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "20% Atk -> SpA/Spe; else SpA boosts -> other stats.",
-		name: "ok",
+		shortDesc: ">1/2 HP: Damage orb on foe side. Else heal orb on user side.",
+		name: "Biotic Orb",
 		gen: 9,
-		pp: 15,
-		priority: 4,
-		flags: {},
-		stallingMove: true,
-		volatileStatus: 'protect',
-		// TODO move anims
-		onPrepareHit(pokemon) {
-			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		pp: 10,
+		priority: 0,
+		flags: {reflectable: 1, mustpressure: 1},
+		sideCondition: 'bioticorb',
+		onTryMove() {
+			this.attrLastMove('[still]');
 		},
-		onHit(pokemon) {
-			pokemon.addVolatile('stall');
-			if (this.random(100) > 20) {
-				if (!pokemon.boosts['spa'] || pokemon.boosts['spa'] < 0) return null;
-				const spaBoosts = pokemon.boosts['spa'];
-				let modifiableSpaBoosts = spaBoosts;
-				const randomStat: SparseBoostsTable = {};
-				while (modifiableSpaBoosts > 0) {
-					const randomStatID: BoostID = this.sample(['atk', 'def', 'spd', 'spe']);
-					if (!randomStat[randomStatID]) randomStat[randomStatID] = 0;
-					randomStat[randomStatID]! += 1;
-					modifiableSpaBoosts -= 1;
-				}
-				this.boost({spa: -spaBoosts, ...randomStat}, pokemon, pokemon, this.effect);
+		onPrepareHit(target, source) {
+			if (source.hp < source.maxhp / 2) {
+				this.add('-anim', source, 'Wish', source);
 			} else {
-				if (!pokemon.volatiles['ok']) pokemon.addVolatile('ok');
+				this.add('-anim', source, 'Shadow Ball', target);
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.hp < pokemon.maxhp / 2) {
+				move.target = "allySide";
+				move.flags['heal'] = 1;
+				delete move.flags['reflectable'];
+				delete move.flags['mustpressure'];
+			}
+		},
+		onModifyType(move, pokemon, target) {
+			if (pokemon.hp < pokemon.maxhp / 2) {
+				move.type = "Psychic";
 			}
 		},
 		condition: {
-			noCopy: true,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'ok');
-				this.effectState.atk = pokemon.storedStats.atk;
-				this.effectState.spa = pokemon.storedStats.spa;
-				this.effectState.spe = pokemon.storedStats.spe;
-				pokemon.storedStats.spa = Math.floor(pokemon.storedStats.atk / 10) + pokemon.storedStats.spa;
-				pokemon.storedStats.spe = Math.floor(pokemon.storedStats.atk * 9 / 10) + pokemon.storedStats.spe;
+			duration: 4,
+			onSideStart(side, source) {
+				this.effectState.source = source;
+				this.effectState.sourceSide = side === source.side;
+				this.add('-sidestart', side, 'move: Biotic Orb');
 			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'ok');
-				pokemon.storedStats.spa = this.effectState.spa;
-				pokemon.storedStats.spe = this.effectState.spe;
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
+			onResidual(target, source) {
+				let quotes: string[] = [];
+				if (this.effectState.sourceSide === target.side) {
+					quotes = [
+						`A cure for all that ails.`,
+						`A sip for the parched.`,
+						`Be nourished!`,
+						`I offer something more.`,
+						`Receive my aid.`,
+						`Be nurtured.`,
+						`Know mother's kindness.`,
+						`A salve for all that ails.`,
+						`An eldritch blessing.`,
+						`Flourish.`,
+						`Now feast.`,
+						`Recover your strength.`,
+					];
+					if (target.hp) {
+						let amount = 65;
+						if (this.effectState.duration === 4) amount = 40;
+						this.heal(amount, target, this.effectState.source || null, this.dex.getActiveMove('bioticorb'));
+					}
+				} else {
+					quotes = [
+						`A taste of poison.`,
+						`Misery made manifest`,
+						`Pain is inevitable.`,
+						`You cannot escape me!`,
+						`Your end is within my reach.`,
+						`Bí ag stangadh leat.`,
+						`Ruination is imminent.`,
+						`The weak can fend for themselves.`,
+						`Know darkness.`,
+						`Let shadow consume you.`,
+						`Your pain will be endless.`,
+					];
+					if (target.hp) {
+						this.damage(50, target, this.effectState.source || null, this.dex.getActiveMove('bioticorb'));
+					}
+					if (!target.hp || target.hp <= 0) {
+						quotes = [
+							`Expect the unexpected.`,
+							`In chaos lies opportunity.`,
+							`Mind your surroundings.`,
+							`Perhaps next time you should not stand in the way of the orb.`,
+							`A torturous gift.`,
+							`The darkness will find them.`,
+							`The gloom takes you.`,
+						];
+						source.m.bioticOrbKO = true;
+					}
+				}
+				if (quotes.length) {
+					this.add(`|c:|${getName((source ? (source.illusion || source) : this.effectState.source).name)}|${this.sample(quotes)}`);
+				}
 			},
-			onRestart(pokemon) {
-				pokemon.removeVolatile('ok');
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 5,
+			onSideEnd(side) {
+				this.add('-sideend', side, 'move: Biotic Orb');
 			},
 		},
 		secondary: null,
-		target: "self",
-		type: "Fairy",
+		target: "foeSide",
+		type: "Poison",
 	},
 
 	// Elliot

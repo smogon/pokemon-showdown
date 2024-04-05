@@ -301,10 +301,10 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Poison',
 	},
 	dhelmise: {
-		species: 'Nymble', ability: 'Cacophony', item: 'Heavy-Duty Boots', gender: 'N',
-		moves: ['Boomburst', 'Bug Buzz', 'Torch Song'],
-		signatureMove: 'ok',
-		evs: {hp: 252, def: 4, spa: 252}, nature: 'Quiet', teraType: 'Normal',
+		species: 'Slowking-Galar', ability: 'Coalescence', item: 'Black Sludge', gender: 'N',
+		moves: ['Sludge Bomb', 'Psychic Noise', 'Parting Shot'],
+		signatureMove: 'Biotic Orb',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Stellar',
 	},
 	Elliot: {
 		species: 'Sinistea', ability: 'Natural Cure', item: 'Focus Sash', gender: 'N',

@@ -651,25 +651,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// dhelmise
-	cacophony: {
-		name: "Cacophony",
-		shortDesc: "Sound moves: 1.5x BP, ignore type-based immunities. Opposing sound fails.",
-		onBasePowerPriority: 7,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['sound']) {
-				this.debug('Cacophony boost');
-				return this.chainModify([6144, 4096]);
+	coalescence: {
+		name: "Coalescence",
+		desc: "All moves heal 37% of damage dealt. Unfainted allies heal 5% HP at the end of each turn. If this Pokemon's HP is less than 25%, moves heal 114% of damage dealt, and allies restore 10% of their health.",
+		shortDesc: "Moves drain 37%. Allies heal 5% HP. <25% HP, moves drain 114%, allies get 10%.",
+		onModifyMove(move, pokemon, target) {
+			if (move.category !== "Status") {
+				move.flags['heal'] = 1; // For Heal Block
+				if (pokemon.hp > pokemon.maxhp / 4) {
+					move.drain = [37, 100];
+				} else {
+					move.drain = [114, 100];
+				}
 			}
 		},
-		onTryHit(target, source, move) {
-			if (target !== source && move.flags['sound']) {
-				this.add('-immune', target, '[from] ability: Cacophony');
-				return null;
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			for (const ally of pokemon.allies()) {
+				ally.heal(ally.baseMaxhp * (pokemon.hp > pokemon.maxhp / 4 ? 5 : 10) / 100);
 			}
-		},
-		onModifyMovePriority: -5,
-		onModifyMove(move) {
-			move.ignoreImmunity = true;
 		},
 		flags: {},
 	},
