@@ -995,6 +995,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		weightkg: 42.0,
 		color: "Unknown",
 		eggGroups: ["Field", "Flying"],
+		baseSpecies: "farfetchd",
 	},
 	galarianweezing: {
 		num: -10084,
