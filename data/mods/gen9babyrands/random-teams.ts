@@ -479,7 +479,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		if (role === 'Fast Attacker' && !counter.get('Status')) {
 			return 'Choice Scarf';
 		}
-		if (!['Setup Sweeper', 'Wallbreaker'].includes(role)) {
+		if (['Setup Sweeper', 'Wallbreaker'].includes(role)) {
 			return 'Life Orb';
 		}
 		return "Eviolite";
