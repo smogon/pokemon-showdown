@@ -518,7 +518,6 @@ export class RandomBabyrandsTeams extends RandomTeams {
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		console.log(species.id);
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets = [];
 
@@ -756,11 +755,12 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
 				teamDetails.screens = 1;
 			}
-			if (set.role === 'Tera Blast user' || species.baseSpecies === "Ogerpon" || species.baseSpecies === "Terapagos") {
+			if (set.role === 'Tera Blast user') {
 				teamDetails.teraBlast = 1;
 			}
 		}
-		if (pokemon.length < this.maxTeamSize && pokemon.length < 12) { // large teams sometimes cannot be built
+		// large teams sometimes cannot be built, and monotype is also at user's own risk
+		if (pokemon.length < this.maxTeamSize && pokemon.length < 12 && !isMonotype) {
 			throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 		}
 

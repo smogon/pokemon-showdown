@@ -525,7 +525,7 @@
             {
                 "role": "Tera Blast User",
                 "movepool": ["Earthquake", "Stone Edge", "Tera Blast", "Throat Chop"],
-                "teraTypes": ["???"]
+                "teraTypes": ["Stellar"]
             }
         ]
     },
