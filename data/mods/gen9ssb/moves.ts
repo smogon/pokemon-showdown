@@ -1521,7 +1521,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidualSubOrder: 1,
 			onResidual(target, source) {
 				let quotes: string[] = [];
-				if (this.effectState.sourceSide === target.side) {
+				if (this.effectState.sourceSide === source.side) {
 					quotes = [
 						`A cure for all that ails.`,
 						`A sip for the parched.`,
@@ -1572,7 +1572,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				if (quotes.length) {
-					this.add(`|c:|${getName((source ? (source.illusion || source) : this.effectState.source).name)}|${this.sample(quotes)}`);
+					this.add(`c:|${getName((source ? (source.illusion || source) : this.effectState.source).name)}|${this.sample(quotes)}`);
 				}
 			},
 			onSideResidualOrder: 26,
