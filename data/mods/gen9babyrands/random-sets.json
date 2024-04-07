@@ -13,7 +13,7 @@
         "level": 9,
         "sets": [
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Pounce", "Recycle", "Sucker Punch", "Tera Blast"],
                 "teraTypes": ["Dragon", "Grass"]
             },
@@ -135,7 +135,7 @@
         ]
     },
     "bounsweet": {
-        "level": 10,
+        "level": 9,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -209,7 +209,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bullet Seed", "Drain Punch", "Seed Bomb", "Sucker Punch", "Swords Dance", "Thunder Punch", "Trailblaze"],
+                "movepool": ["Bullet Seed", "Drain Punch", "Sucker Punch", "Swords Dance", "Thunder Punch", "Trailblaze"],
                 "teraTypes": ["Dark", "Electric", "Fighting", "Grass"]
             }
         ]
@@ -468,7 +468,7 @@
                 "teraTypes": ["Ghost"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Bug Buzz", "Moonblast", "Quiver Dance", "Tera Blast"],
                 "teraTypes": ["Ground"]
             }
@@ -528,7 +528,7 @@
                 "teraTypes": ["Fairy", "Ground", "Rock"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Earthquake", "Stone Edge", "Tera Blast", "Throat Chop"],
                 "teraTypes": ["Fairy", "Grass"]
             }
@@ -673,7 +673,7 @@
                 "teraTypes": ["Ghost", "Normal"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Calm Mind", "Protect", "Tera Blast", "Wish"],
                 "teraTypes": ["Ghost"]
             }
@@ -688,7 +688,7 @@
                 "teraTypes": ["Dark", "Ground"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Coil", "Earthquake", "Gunk Shot", "Trailblaze"],
                 "teraTypes": ["Dark", "Ground"]
             }
@@ -783,7 +783,7 @@
                 "teraTypes": ["Poison", "Steel"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Calm Mind", "Draining Kiss", "Moonblast", "Synthesis", "Tera Blast"],
                 "teraTypes": ["Ground"]
             }
@@ -793,7 +793,7 @@
         "level": 6,
         "sets": [
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Acrobatics", "Flare Blitz", "Swords Dance", "Tera Blast"],
                 "teraTypes": ["Ground"]
             },
@@ -813,7 +813,7 @@
                 "teraTypes": ["Fairy"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Calm Mind", "Protect", "Roost", "Stored Power", "Tera Blast"],
                 "teraTypes": ["Fairy", "Fighting"]
             }
@@ -928,7 +928,7 @@
                 "teraTypes": ["Fairy"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Nasty Plot", "Power Gem", "Shadow Ball", "Substitute", "Tera Blast"],
                 "teraTypes": ["Fairy", "Fighting"]
             }
@@ -943,7 +943,7 @@
                 "teraTypes": ["Fairy", "Ghost"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Nasty Plot", "Shadow Ball", "Substitute", "Tera Blast"],
                 "teraTypes": ["Fairy", "Fighting"]
             }
@@ -1334,7 +1334,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Flamethrower", "Hyper Voice", "Trailblaze", "Will-O-Wisp", "Work Up"],
+                "movepool": ["Flamethrower", "Hyper Voice", "Will-O-Wisp", "Work Up"],
                 "teraTypes": ["Fire", "Normal"]
             }
         ]
@@ -1753,7 +1753,7 @@
                 "teraTypes": ["Water"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Encore", "Nasty Plot", "Surf", "Tera Blast", "Thunderbolt"],
                 "teraTypes": ["Ice"]
             }
@@ -1798,7 +1798,7 @@
                 "teraTypes": ["Fairy", "Steel"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Belly Drum", "Body Slam", "Tera Blast", "Waterfall"],
                 "teraTypes": ["Fire", "Ground"]
             }
@@ -1843,7 +1843,7 @@
                 "teraTypes": ["Electric", "Ghost", "Poison"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Agility", "Recover", "Shadow Ball", "Tera Blast"],
                 "teraTypes": ["Fairy", "Fighting"]
             }
@@ -2243,7 +2243,7 @@
                 "teraTypes": ["Fairy", "Psychic"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Giga Drain", "Shadow Ball", "Shell Smash", "Tera Blast", "Will-O-Wisp"],
                 "teraTypes": ["Fighting"]
             }
@@ -2323,7 +2323,7 @@
                 "teraTypes": ["Steel", "Water"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Earth Power", "Giga Drain", "Leaf Storm", "Strength Sap", "Tera Blast"],
                 "teraTypes": ["Fairy"]
             }
@@ -2368,7 +2368,7 @@
                 "teraTypes": ["Grass", "Poison", "Water"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Glare", "Knock Off", "Leaf Storm", "Substitute", "Synthesis", "Tera Blast"],
                 "teraTypes": ["Stellar"]
             }
@@ -2399,7 +2399,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bullet Seed", "Ice Shard", "Icicle Spear", "Swords Dance", "Trailblaze", "Wood Hammer"],
+                "movepool": ["Bullet Seed", "Ice Shard", "Icicle Spear", "Swords Dance", "Trailblaze"],
                 "teraTypes": ["Grass", "Ice", "Water"]
             },
             {
@@ -2469,7 +2469,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Bullet Seed", "Petal Blizzard", "Play Rough", "Shadow Claw", "Sucker Punch", "U-turn"],
+                "movepool": ["Bullet Seed", "Play Rough", "Shadow Claw", "Sucker Punch", "U-turn"],
                 "teraTypes": ["Fairy", "Grass"]
             }
         ]
@@ -2503,7 +2503,7 @@
                 "teraTypes": ["Bug", "Ghost", "Ground"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Calm Mind", "Earth Power", "Shadow Ball", "Tera Blast", "Thunderbolt"],
                 "teraTypes": ["Fairy"]
             }
@@ -2678,7 +2678,7 @@
                 "teraTypes": ["Dragon", "Fire", "Rock"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Focus Energy", "Overheat", "Protect", "Tera Blast"],
                 "teraTypes": ["Fighting", "Ground"]
             }
@@ -2698,13 +2698,13 @@
         "level": 8,
         "sets": [
             {
-                "role": "Tera Blast User",
-                "movepool": ["Encore", "Metal Sound", "Nuzzle", "Tera Blast"],
-                "teraTypes": ["Electric", "Poison"]
+                "role": "Tera Blast user",
+                "movepool": ["Belch", "Encore", "Nuzzle", "Tera Blast"],
+                "teraTypes": ["Electric"]
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Belch", "Encore", "Endure", "Nuzzle"],
+                "movepool": ["Belch", "Endeavor", "Endure", "Nuzzle"],
                 "teraTypes": ["Poison"]
             }
         ]
@@ -2748,7 +2748,7 @@
         "level": 8,
         "sets": [
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Knock Off", "Spark", "Tera Blast", "Thunder Wave"],
                 "teraTypes": ["Ground", "Ice"]
             },
@@ -2764,7 +2764,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bulk Up", "High Jump Kick", "Mach Punch", "Rapid Spin", "Rock Slide"],
+                "movepool": ["Bulk Up", "High Jump Kick", "Rapid Spin", "Rock Slide"],
                 "teraTypes": ["Fighting", "Rock"]
             }
         ]
@@ -2798,7 +2798,7 @@
                 "teraTypes": ["Dark", "Electric"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Tera Blast", "Thunder Wave", "Thunderbolt", "Volt Switch"],
                 "teraTypes": ["Ice"]
             }
@@ -2833,7 +2833,7 @@
                 "teraTypes": ["Grass"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Energy Ball", "Fire Blast", "Nasty Plot", "Tera Blast"],
                 "teraTypes": ["Rock"]
             }
@@ -2853,7 +2853,7 @@
                 "teraTypes": ["Steel", "Water"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Blizzard", "Moonblast", "Nasty Plot", "Tera Blast"],
                 "teraTypes": ["Ground"]
             }
@@ -2933,7 +2933,7 @@
                 "teraTypes": ["Bug", "Flying", "Grass"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Aerial Ace", "Double-Edge", "Leech Life", "Protect", "Swords Dance", "Tera Blast"],
                 "teraTypes": ["Ground"]
             }
@@ -2973,7 +2973,7 @@
                 "teraTypes": ["Fairy", "Ghost"]
             },
             {
-                "role": "Tera Blast User",
+                "role": "Tera Blast user",
                 "movepool": ["Bitter Malice", "Burning Jealousy", "Nasty Plot", "Tera Blast", "Will-O-Wisp"],
                 "teraTypes": ["Fairy"]
             }

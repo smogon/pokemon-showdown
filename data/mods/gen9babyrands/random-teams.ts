@@ -17,6 +17,11 @@ const SPEED_SETUP = [
 	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
 ];
 
+// Moves that drop stats:
+const CONTRARY_MOVES = [
+	'armorcannon', 'closecombat', 'leafstorm', 'makeitrain', 'overheat', 'spinout', 'superpower', 'vcreate',
+];
+
 // Setup (stat-boosting) moves
 const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse',
@@ -113,7 +118,6 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		}
 
 		// General incompatibilities
-		// //TODO: lots of shit removed here
 		const incompatiblePairs = [
 			// These moves don't mesh well with other aspects of the set
 			[SETUP, 'defog'],
@@ -122,13 +126,18 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			[SETUP, HAZARDS],
 			[statusMoves, ['healingwish', 'trick']],
 
-			// These attacks are redundant with each other
+			// These moves are redundant with each other
 			[['alluringvoice', 'dazlinggleam', 'drainingkiss', 'moonblast'], ['alluringvoice', 'dazlinggleam', 'drainingkiss', 'moonblast']],
+			[['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'], ['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb']],
 			[['thunderwave', 'toxic', 'willowisp'], ['thunderwave', 'toxic', 'willowisp']],
+			['roar', 'yawn'],
+			['flipturn', 'raindance'],
+			['dragonclaw', 'outrage'],
+			['dracometeor', 'dragonpulse'],
 			['toxic', 'toxicspikes'],
 			['rockblast', 'stoneedge'],
 			['bodyslam', 'doubleedge'],
-			['gigadrain', 'leafstorm'],
+			['gunkshot', 'poisonjab']
 		]
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -283,6 +292,17 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			}
 		}
 
+		// Enforce contrary moves
+		if (abilities.has('Contrary')) {
+			const contraryMoves = movePool.filter(moveid => CONTRARY_MOVES.includes(moveid));
+			console.log(contraryMoves);
+			for (const moveid of contraryMoves) {
+				console.log(moveid);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce recovery
 		if (['Bulky Support', 'Bulky Attacker', 'Bulky Setup'].includes(role)) {
 			const recoveryMoves = movePool.filter(moveid => RECOVERY_MOVES.includes(moveid));
@@ -328,7 +348,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		}
 
 		// Enforce coverage move
-		if (!['Fast Support', 'Bulky Support'].includes(role)) {
+		if (!['Fast Support', 'Bulky Support'].includes(role) || species.id === 'magnemite') {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
 				const currentAttackType = counter.damagingMoves.values().next().value.type;
@@ -395,10 +415,36 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		if (abilityData.length <= 1) return abilityData[0].name;
 
 		// Hard-code abilities here
+		// Culling method is inherited, but it makes some format-specific assumptions
+		// so it requires some adjusting here
 		if (species.id === 'applin') return 'Ripen';
+		if (species.id === 'gligar') return 'Immunity';
+		if (species.id === 'riolu') return 'Inner Focus';
+		if (species.id === 'silicobra') return 'Shed Skin';
+		if (species.id === 'blitzle') return 'Sap Sipper';
+		if (species.id === 'rellor') return 'Shed Skin';
+		if (species.id === 'timburr') return 'Guts';
+		if (species.id === 'tyrogue') return 'Guts';
+		if (species.id === 'chinchou') return 'Volt Absorb';
+		if (species.id === 'geodudealola') return 'Galvanize';
+		if (species.id === 'deerling') return 'Serene Grace';
+		if (species.id === 'solosis') return this.randomChance(4, 5) ? 'Magic Guard': 'Regenerator';
+
+		if (species.id === 'cranidos' && moves.has('trailblaze')) return 'Mold Breaker';
+		if (species.id === 'murkrow' && role === 'Setup Sweeper') return 'Super Luck';
+
+		if (abilities.has('Poison Heal') && moves.has('protect')) return 'Poison Heal';
+		if (abilities.has('Solar Power') && moves.has('sunnyday')) return 'Solar Power';
+		if (abilities.has('Unburden') && moves.has('acrobatics')) return 'Unburden';
+		if (abilities.has('Guts') && moves.has('facade')) return 'Guts';
+		if (abilities.has('Quick Feet') && moves.has('facade')) return 'Quick Feet';
+		if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
+		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
+
+		if (abilities.has('Harvest') && role === 'Bulky Attacker') return 'Harvest';
 
 		let abilityAllowed: Ability[] = [];
-		// Obtain a list of abilities that are allowed (not culled)
+		// Obtain a list of abilities that are allowed (not culled and rating>=1)
 		for (const ability of abilityData) {
 			if (ability.rating >= 1 && !this.shouldCullAbility(
 				ability.name, types, moves, abilities, counter, teamDetails, species, isLead, isDoubles, teraType, role
@@ -407,8 +453,10 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			}
 		}
 
-		// If all abilities are rejected, re-allow all abilities
 		if (!abilityAllowed.length) {
+			// Pickup is much better in babyrands, so if everything is culled favor it
+			if (abilities.has('Pickup')) return 'Pickup';
+			// If all abilities are rejected, re-allow all abilities
 			for (const ability of abilityData) {
 				if (ability.rating > 0) abilityAllowed.push(ability);
 			}
@@ -457,11 +505,20 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		if (species.requiredItems) {
 			return this.sample(species.requiredItems);
 		}
-		if (species.id === 'applin') return 'Oran Berry';
+		if (species.id === 'minccino') return 'Loaded Dice';
+		if (species.id === 'nymble') return 'Silver Powder';
 		if (moves.has('thief')) return '';
 		if (moves.has('trick')) return 'Choice Scarf';
 		if (moves.has('focusenergy')) return 'Scope Lens';
+		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
+		if (moves.has('acrobatics')) return ability === 'Unburden' ? 'Oran Berry' : '';
+		if (ability === 'Guts' && moves.has('facade')) return 'Flame Orb';
+		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
 
+		if (
+			['Harvest', 'Ripen', 'Unburden'].some(abil => abil === ability) ||
+			moves.has('belch') || moves.has('bellydrum')
+		) return "Oran Berry";
 		if (this.dex.getEffectiveness('Rock', species) >= 2 ) return 'Heavy-Duty Boots';
 	}
 
