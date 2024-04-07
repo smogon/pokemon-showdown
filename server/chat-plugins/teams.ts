@@ -310,7 +310,11 @@ export const TeamsHandler = new class {
 	renderTeam(teamData: StoredTeam, user?: User) {
 		let buf = this.preview(teamData, user, true);
 		buf += `<hr />`;
-		const team = Teams.unpack(teamData.team)!;
+		const team = Teams.unpack(teamData.team);
+		if (!team) {
+			Monitor.crashlog(new Error("Invalid team retrieved from database"), "A teams database request", teamData);
+			throw new Chat.ErrorMessage("An error occurred with retrieving the team. Please try again later.");
+		}
 		buf += team.map(set => {
 			let teamBuf = Teams.exportSet(set).replace(/\n/g, '<br />');
 			if (set.name && set.name !== set.species) {
