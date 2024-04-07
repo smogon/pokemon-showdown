@@ -1519,7 +1519,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
-			onResidual(target, source) {
+			onResidual(target) {
+				const source = this.effectState.source;
 				let quotes: string[] = [];
 				if (this.effectState.sourceSide === source.side) {
 					quotes = [
@@ -1539,7 +1540,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					if (target.hp) {
 						let amount = 65;
 						if (this.effectState.duration === 4) amount = 40;
-						this.heal(amount, target, this.effectState.source || null, this.dex.getActiveMove('bioticorb'));
+						this.heal(amount, target, source, this.dex.getActiveMove('bioticorb'));
 					}
 				} else {
 					quotes = [
@@ -1556,7 +1557,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						`Your pain will be endless.`,
 					];
 					if (target.hp) {
-						this.damage(50, target, this.effectState.source || null, this.dex.getActiveMove('bioticorb'));
+						this.damage(50, target, source, this.dex.getActiveMove('bioticorb'));
 					}
 					if (!target.hp || target.hp <= 0) {
 						quotes = [
@@ -1572,7 +1573,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				if (quotes.length) {
-					this.add(`c:|${getName((source ? (source.illusion || source) : this.effectState.source).name)}|${this.sample(quotes)}`);
+					this.add(`c:|${getName((source.illusion || source).name)}|${this.sample(quotes)}`);
 				}
 			},
 			onSideResidualOrder: 26,
