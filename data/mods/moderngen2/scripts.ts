@@ -6,7 +6,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (const i in this.data.Moves) {
 			if (this.data.Moves[i].num! >= 252) this.modData('Moves', i).gen = 2;
 			const illegalities = ['Past', 'LGPE', 'Unobtainable'];
-			if (illegalities.includes(this.data.Moves[i].isNonstandard)) this.modData('Moves', i).isNonstandard = null;
+			if (illegalities.includes(this.data.Moves[i].isNonstandard!)) this.modData('Moves', i).isNonstandard = null;
 			if (this.data.Moves[i].category === 'Status') continue;
 			const newCategory = specialTypes.includes(this.data.Moves[i].type) ? 'Special' : 'Physical';
 			if (newCategory !== this.data.Moves[i].category) {
