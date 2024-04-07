@@ -26,7 +26,8 @@ const CONTRARY_MOVES = [
 const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse',
 	'dragondance', 'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch',
-	'quiverdance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup', 'victorydance',
+	'quiverdance', 'raindance', 'rockpolish', 'shellsmash', 'shiftgear', 'snowscape', 'sunnyday', 'swordsdance', 'tailglow', 'tidyup',
+	'trailblaze', 'workup', 'victorydance',
 ];
 
 // Hazard-setting moves
@@ -131,7 +132,6 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			[['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'], ['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb']],
 			[['thunderwave', 'toxic', 'willowisp'], ['thunderwave', 'toxic', 'willowisp']],
 			['roar', 'yawn'],
-			['flipturn', 'raindance'],
 			['dragonclaw', 'outrage'],
 			['dracometeor', 'dragonpulse'],
 			['toxic', 'toxicspikes'],
@@ -295,9 +295,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		// Enforce contrary moves
 		if (abilities.has('Contrary')) {
 			const contraryMoves = movePool.filter(moveid => CONTRARY_MOVES.includes(moveid));
-			console.log(contraryMoves);
 			for (const moveid of contraryMoves) {
-				console.log(moveid);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
@@ -434,12 +432,12 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		if (species.id === 'murkrow' && role === 'Setup Sweeper') return 'Super Luck';
 
 		if (abilities.has('Poison Heal') && moves.has('protect')) return 'Poison Heal';
-		if (abilities.has('Solar Power') && moves.has('sunnyday')) return 'Solar Power';
 		if (abilities.has('Unburden') && moves.has('acrobatics')) return 'Unburden';
 		if (abilities.has('Guts') && moves.has('facade')) return 'Guts';
 		if (abilities.has('Quick Feet') && moves.has('facade')) return 'Quick Feet';
 		if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
+		if (moves.has('sunnyday') && abilities.has('Solar Power') && !abilities.has('Chlorophyll')) return 'Solar Power';
 
 		if (abilities.has('Harvest') && role === 'Bulky Attacker') return 'Harvest';
 
