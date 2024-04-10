@@ -1501,8 +1501,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.hp < pokemon.maxhp / 2) {
 				move.target = "allySide";
 				move.flags['heal'] = 1;
-				delete move.slotCondition;
-				move.self = {slotCondition: 'bioticorb'};
+				delete move.sideCondition;
+				move.self = {sideCondition: 'bioticorb'};
 				delete move.flags['reflectable'];
 				delete move.flags['mustpressure'];
 			}
