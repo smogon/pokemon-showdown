@@ -1486,7 +1486,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {reflectable: 1, mustpressure: 1},
-		slotCondition: 'bioticorb',
+		sideCondition: 'bioticorb',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1561,7 +1561,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					if (target.hp) {
 						this.damage(50, target, source, this.dex.getActiveMove('bioticorb'));
 					}
-					if (!target.hp || target.hp <= 0) {
+					if (target.fainted) {
 						quotes = [
 							`Expect the unexpected.`,
 							`In chaos lies opportunity.`,
