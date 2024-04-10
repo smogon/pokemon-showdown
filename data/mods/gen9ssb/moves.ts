@@ -1516,7 +1516,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 4,
 			onSideStart(side, source) {
 				this.effectState.source = source;
-				this.effectState.sourceSide = source.side;
+				this.effectState.side = side;
 				this.add('-sidestart', side, 'move: Biotic Orb');
 			},
 			onResidualOrder: 5,
@@ -1524,7 +1524,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidual(target) {
 				const source = this.effectState.source;
 				let quotes: string[] = [];
-				if (this.effectState.sourceSide === source.side) {
+				if (this.effectState.side === source.side) {
 					quotes = [
 						`A cure for all that ails.`,
 						`A sip for the parched.`,
