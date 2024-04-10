@@ -1486,7 +1486,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {reflectable: 1, mustpressure: 1},
-		sideCondition: 'bioticorb',
+		slotCondition: 'bioticorb',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1501,6 +1501,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.hp < pokemon.maxhp / 2) {
 				move.target = "allySide";
 				move.flags['heal'] = 1;
+				delete move.slotCondition;
+				move.self = {slotCondition: 'bioticorb'};
 				delete move.flags['reflectable'];
 				delete move.flags['mustpressure'];
 			}
@@ -1514,7 +1516,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 4,
 			onSideStart(side, source) {
 				this.effectState.source = source;
-				this.effectState.sourceSide = side === source.side;
+				this.effectState.sourceSide = source.side;
 				this.add('-sidestart', side, 'move: Biotic Orb');
 			},
 			onResidualOrder: 5,
@@ -1545,7 +1547,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					quotes = [
 						`A taste of poison.`,
-						`Misery made manifest`,
+						`Misery made manifest.`,
 						`Pain is inevitable.`,
 						`You cannot escape me!`,
 						`Your end is within my reach.`,
@@ -1569,7 +1571,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 							`The darkness will find them.`,
 							`The gloom takes you.`,
 						];
-						source.m.bioticOrbKO = true;
 					}
 				}
 				if (quotes.length) {

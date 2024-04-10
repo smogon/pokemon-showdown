@@ -657,7 +657,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Moves drain 37%. Allies heal 5% HP. <25% HP, moves drain 114%, allies get 10%.",
 		onModifyMove(move, pokemon, target) {
 			if (move.category !== "Status") {
-				move.flags['heal'] = 1; // For Heal Block
+				// move.flags['heal'] = 1; // For Heal Block
 				if (pokemon.hp > pokemon.maxhp / 4) {
 					move.drain = [37, 100];
 				} else {
@@ -668,8 +668,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			for (const ally of pokemon.allies()) {
-				ally.heal(ally.baseMaxhp * (pokemon.hp > pokemon.maxhp / 4 ? 5 : 10) / 100);
+			for (const ally of pokemon.side.pokemon) {
+				if (!ally.hp || ally === pokemon) continue;
+				this.heal(ally.baseMaxhp * (pokemon.hp > pokemon.maxhp / 4 ? 5 : 10) / 100, ally, pokemon);
 			}
 		},
 		flags: {},
