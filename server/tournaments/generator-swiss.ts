@@ -2,9 +2,9 @@ import {Utils} from '../../lib';
 import {BracketData, Generator, TournamentPlayer} from './index';
 
 interface Match {
-	p1: SwissPlayer,
+	p1: SwissPlayer;
 	/** null for bye */
-	p2: SwissPlayer | null,
+	p2: SwissPlayer | null;
 	state: 'available' | 'finished' | 'unavailable';
 	result?: string;
 	score?: number[];
