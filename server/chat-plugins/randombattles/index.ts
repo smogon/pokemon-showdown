@@ -143,6 +143,11 @@ function formatItem(item: Item | string) {
 	}
 }
 
+function formatType(type: TypeInfo | string) {
+	type = Dex.types.get(type);
+	return type.name;
+}
+
 /**
  * Gets the sets for a Pokemon for a format that uses the new schema.
  * Old formats will use getData()
@@ -316,41 +321,73 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		const format = Dex.formats.get(`${gen}bssfactory`);
 		if (!(species.id in statsFile)) return {e: `${species.name} doesn't have any sets in ${format.name}.`};
 		const setObj = statsFile[species.id];
-		buf += `<span style="color:#999999;">Sets for ${species.name} in ${format.name}:</span><br />`;
-		for (const [i, set] of setObj.sets.entries()) {
-			buf += `<details><summary>Set ${i + 1}</summary>`;
-			buf += `<ul style="list-style-type:none;padding-left:0;">`;
-			buf += `<li>${set.species}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
-			buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
-			if (!set.level) buf += `<li>Level: 50</li>`;
-			if (set.level && set.level < 50) buf += `<li>Level: ${set.level}</li>`;
-			if (set.shiny) buf += `<li>Shiny: Yes</li>`;
-			if (set.happiness) buf += `<li>Happiness: ${set.happiness}</li>`;
-			if (set.evs) {
-				buf += `<li>EVs: `;
-				const evs: string[] = [];
-				let ev: string;
-				for (ev in set.evs) {
-					if (set.evs[ev] === 0) continue;
-					evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
+		if (genNum >= 9) {
+			buf += `Species rarity: ${setObj.weight} (higher is more common, max 10)<br />`;
+			buf += `Sets for ${species.name} in ${format.name}:<br />`;
+			for (const [i, set] of setObj.sets.entries()) {
+				buf += `<details><summary>Set ${i + 1} (${set.weight}%)</summary>`;
+				buf += `<ul style="list-style-type:none;padding-left:0;">`;
+				buf += `<li>${Dex.forFormat(format).species.get(set.species).name} @ ${set.item.map(formatItem).join(" / ")}</li>`;
+				buf += `<li>Ability: ${formatAbility(set.ability)}</li>`;
+				buf += `<li>Level: 50</li>`;
+				buf += `<li>Tera Type: ${set.teraType.map(formatType).join(' / ')}</li>`;
+				buf += `<li> EVs: `;
+				const evs = [];
+				for (const [j, stat] of Object.values(STAT_NAMES).entries()) {
+					if (set.evs[j] > 0) evs.push(`${set.evs[j]} ${stat}`);
 				}
 				buf += `${evs.join(" / ")}</li>`;
-			}
-			buf += `<li>${Array.isArray(set.nature) ? set.nature.map(formatNature).join(" / ") : formatNature(set.nature)} Nature</li>`;
-			if (set.ivs) {
-				buf += `<li>IVs: `;
-				const ivs: string[] = [];
-				let iv: string;
-				for (iv in set.ivs) {
-					if (set.ivs[iv] === 31) continue;
-					ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
+				buf += `<li>${formatNature(set.nature)} Nature</li>`;
+				if (set.ivs) {
+					buf += `<li>IVs: `;
+					const ivs = [];
+					for (const [j, stat] of Object.values(STAT_NAMES).entries()) {
+						if (set.ivs[j] < 31) ivs.push(`${set.ivs[j]} ${stat}`);
+					}
+					buf += `${ivs.join(" / ")}</li>`;
 				}
-				buf += `${ivs.join(" / ")}</li>`;
+				for (const moveSlot of set.moves) {
+					buf += `<li>- ${moveSlot.map(formatMove).join(' / ')}</li>`;
+				}
+				buf += `</ul></details>`;
 			}
-			for (const moveid of set.moves) {
-				buf += `<li>- ${Array.isArray(moveid) ? moveid.map(formatMove).join(" / ") : formatMove(moveid)}</li>`;
+		} else {
+			buf += `<span style="color:#999999;">Sets for ${species.name} in ${format.name}:</span><br />`;
+			for (const [i, set] of setObj.sets.entries()) {
+				buf += `<details><summary>Set ${i + 1}</summary>`;
+				buf += `<ul style="list-style-type:none;padding-left:0;">`;
+				buf += `<li>${set.species}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
+				buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
+				if (!set.level) buf += `<li>Level: 50</li>`;
+				if (set.level && set.level < 50) buf += `<li>Level: ${set.level}</li>`;
+				if (set.shiny) buf += `<li>Shiny: Yes</li>`;
+				if (set.happiness) buf += `<li>Happiness: ${set.happiness}</li>`;
+				if (set.evs) {
+					buf += `<li>EVs: `;
+					const evs: string[] = [];
+					let ev: string;
+					for (ev in set.evs) {
+						if (set.evs[ev] === 0) continue;
+						evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
+					}
+					buf += `${evs.join(" / ")}</li>`;
+				}
+				buf += `<li>${Array.isArray(set.nature) ? set.nature.map(formatNature).join(" / ") : formatNature(set.nature)} Nature</li>`;
+				if (set.ivs) {
+					buf += `<li>IVs: `;
+					const ivs: string[] = [];
+					let iv: string;
+					for (iv in set.ivs) {
+						if (set.ivs[iv] === 31) continue;
+						ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
+					}
+					buf += `${ivs.join(" / ")}</li>`;
+				}
+				for (const moveid of set.moves) {
+					buf += `<li>- ${Array.isArray(moveid) ? moveid.map(formatMove).join(" / ") : formatMove(moveid)}</li>`;
+				}
+				buf += `</ul></details>`;
 			}
-			buf += `</ul></details>`;
 		}
 	}
 	return buf;
@@ -543,7 +580,7 @@ export const commands: Chat.ChatCommands = {
 			if (!species.exists) {
 				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
-			let mod = 'gen8';
+			let mod = 'gen9';
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen >= 7) mod = toID(args[1]);
 			const bssSets = battleFactorySets(species, null, mod, true);
 			if (!bssSets) return this.parse(`/help battlefactory`);
