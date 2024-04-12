@@ -112,6 +112,7 @@ export interface PokemonSet {
 	startingMaxPPs?: number[];
 	startingHP?: number;
 	status?: string;
+	obedient?: boolean;
 }
 
 export const Teams = new class Teams {

@@ -287,6 +287,7 @@ export class Pokemon {
 		originalSpecies?: string, // Mix and Mega
 		[key: string]: any,
 	};
+	obedient?: boolean;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
@@ -416,6 +417,8 @@ export class Pokemon {
 				this.set.ivs[stat] &= 30;
 			}
 		}
+
+		this.obedient = this.set.obedient !== undefined ? this.set.obedient : true;
 
 		const hpData = this.battle.dex.getHiddenPower(this.set.ivs);
 		this.hpType = set.hpType || hpData.type;
