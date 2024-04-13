@@ -12451,6 +12451,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Sliggoo",
 		evoLevel: 50,
+		evoCondition: "during rain",
 		eggGroups: ["Dragon"],
 		otherFormes: ["Goodra-Hisui"],
 		formeOrder: ["Goodra", "Goodra-Hisui"],
@@ -12468,6 +12469,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Purple",
 		prevo: "Sliggoo-Hisui",
 		evoLevel: 50,
+		evoCondition: "during rain",
 		eggGroups: ["Dragon"],
 	},
 	klefki: {
