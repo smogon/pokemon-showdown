@@ -1535,6 +1535,25 @@ export const Formats: FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Fervent Impersonation",
+		desc: `Nickname a Pok&eacute;mon after another Pok&eacute;mon that it shares a moveset with, and it will transform into the Pok&eacute;mon it's nicknamed after once it drops to or below 50% health.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3740523/">Fervent Impersonation</a>`,
+		],
+
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Fervent Impersonation Mod', 'Min Source Gen = 9', '!Nickname Clause'],
+		banlist: ['Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Dire Claw', 'Shed Tail', 'Last Respects'],
+		restricted: [
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Espathra', 'Eternatus',
+			'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna',
+			'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Reshiram', 'Shaymin-Sky',
+			'Solgaleo', 'Terapagos', 'Urshifu-Base', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom',
+		],
+		// Implemented the mechanics as a Rule because I'm too lazy to make battles read base format for `onResidual` at the moment
+	},
+	{
 		name: "[Gen 9] Foresighters",
 		desc: `Moves in the first moveslot will be delayed by two turns.`,
 		threads: [
