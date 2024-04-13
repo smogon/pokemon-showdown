@@ -16431,7 +16431,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		weightkg: 89,
 		color: "Brown",
 		prevo: "Scyther",
-		evoType: "other",
+		evoType: "useItem",
 		evoCondition: "Black Augurite",
 		eggGroups: ["Bug"],
 	},
