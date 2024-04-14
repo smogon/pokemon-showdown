@@ -2999,13 +2999,19 @@ export const commands: Chat.ChatCommands = {
 		this.runBroadcast();
 		this.sendReply(Utils.html`|html|<div class="broadcast-blue">${Utils.randomElement(room.settings.topics)}</div>`);
 	},
+	randtopichelp: [
+		`/randtopic - Randomly selects a topic from the room's discussion topic pool and displays it.`,
+		`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`,
+		`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`,
+		`/randomtopics - View the discussion topic pool for the current room.`,
+	],
 
 	addtopic(target, room, user) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
 		target = target.trim();
 		if (!toID(target).length) {
-			return this.parse(`/help addtopic`);
+			return this.parse(`/help randtopic`);
 		}
 		if (!room.settings.topics) room.settings.topics = [];
 		room.settings.topics.push(target);
@@ -3018,6 +3024,9 @@ export const commands: Chat.ChatCommands = {
 	removetopic(target, room, user) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
+		if (!toID(target)) {
+			return this.parse(`/help randtopic`);
+		}
 		const index = Number(toID(target)) - 1;
 		if (isNaN(index)) {
 			return this.errorReply(`Invalid topic index: ${target}. Must be a number.`);
@@ -3032,6 +3041,8 @@ export const commands: Chat.ChatCommands = {
 	},
 	removetopichelp: [`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`],
 
+	listtopics: 'randomtopics',
+	randtopics: 'randomtopics',
 	randomtopics(target, room, user) {
 		room = this.requireRoom();
 		return this.parse(`/join view-topics-${room}`);
