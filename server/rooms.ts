@@ -121,6 +121,7 @@ export interface RoomSettings {
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
+	topics?: string[];
 	autoModchat?: {
 		rank: GroupSymbol,
 		time: number,
