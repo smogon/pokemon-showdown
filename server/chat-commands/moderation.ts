@@ -698,9 +698,11 @@ export const commands: Chat.ChatCommands = {
 			const displayMessage = `${targetUser.name}'s ac account: ${targetUser.autoconfirmed}`;
 			this.privateModAction(displayMessage);
 		}
-		const userid = targetUser.getLastId();
-		this.add(`|hidelines|unlink|${userid}`);
-		if (userid !== toID(inputUsername)) this.add(`|hidelines|unlink|${toID(inputUsername)}`);
+		const ids = [targetUser.getLastId()];
+		if (ids[0] !== toID(inputUsername)) {
+			ids.push(toID(inputUsername));
+		}
+		room.hideText(ids);
 
 		room.mute(targetUser, muteDuration);
 	},
