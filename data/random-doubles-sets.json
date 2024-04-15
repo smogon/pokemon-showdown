@@ -4769,13 +4769,8 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Behemoth Bash", "Body Press", "Coaching", "Iron Defense", "Protect"],
+                "movepool": ["Body Press", "Coaching", "Heavy Slam", "Iron Defense", "Protect", "Snarl", "Wide Guard"],
                 "teraTypes": ["Fighting", "Fire", "Steel"]
-            },
-            {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Body Press", "Iron Defense", "Protect", "Snarl", "Wide Guard"],
-                "teraTypes": ["Fighting", "Fire"]
             }
         ]
     },
