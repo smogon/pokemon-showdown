@@ -2762,7 +2762,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["drainpunch", "earthquake", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
+                "movepool": ["drainpunch", "earthquake", "icepunch", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
             }
         ]
     },
