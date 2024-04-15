@@ -1169,6 +1169,7 @@ export class RandomTeams {
 		if (species.id === 'zebstrika') return (moves.has('thunderbolt')) ? 'Lightning Rod' : 'Sap Sipper';
 		if (species.id === 'sandaconda' || (species.id === 'scrafty' && moves.has('rest'))) return 'Shed Skin';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
+		if (species.id === 'charizard' && moves.has('sunnyday')) return 'Solar Power';
 		if (species.id === 'dipplin') return 'Sticky Hold';
 		if (species.id === 'breloom' || species.id === 'cinccino') return 'Technician';
 		if (species.id === 'shiftry' && moves.has('tailwind')) return 'Wind Rider';
