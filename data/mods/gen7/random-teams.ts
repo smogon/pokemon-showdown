@@ -337,7 +337,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
 			['scald', ['hydropump', 'originpulse', 'waterpulse']],
-			['return', ['bodyslam', 'doubleedge']],
+			['return', ['bodyslam', 'doubleedge', 'headbutt']],
 			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
 			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
 			['hornleech', 'woodhammer'],
@@ -870,13 +870,15 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (['dusknoir', 'raikou', 'suicune', 'vespiquen'].includes(species.id)) return 'Pressure';
 		if (species.id === 'tsareena') return 'Queenly Majesty';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
+		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'stoutland' || species.id === 'pangoro' && !counter.get('ironfist')) return 'Scrappy';
+		if (species.baseSpecies === 'sawsbuck' && moves.has('headbutt')) return 'Serene Grace';
 		if (species.id === 'octillery') return 'Sniper';
 		if (species.id === 'kommoo' && role === 'Z-Move user') return 'Soundproof';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'zangoose') return 'Toxic Boost';
-		if (species.id === 'porygon2' || species.id === 'gardevoir') return 'Trace';
+		if (counter.get('setup') && (species.id === 'magcargo' || species.id === 'kabutops')) return 'Weak Armor';
 
 		if (abilities.has('Gluttony') && (moves.has('recycle') || moves.has('bellydrum'))) return 'Gluttony';
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
@@ -885,7 +887,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
 		if (abilities.has('Sniper') && moves.has('focusenergy')) return 'Sniper';
 		if (abilities.has('Unburden') && ['acrobatics', 'bellydrum', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
-		if (abilities.has('Weak Armor') && types.has('Water') && counter.get('setup')) return 'Weak Armor';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
@@ -998,6 +999,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				return 'Sitrus Berry';
 			}
 		}
+		if (moves.has('waterspout')) return 'Choice Scarf';
 		if (moves.has('geomancy') || moves.has('skyattack')) return 'Power Herb';
 		if (moves.has('shellsmash')) {
 			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
@@ -1347,14 +1349,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				}
 				const species = this.sample(currentSpeciesPool);
 
-				if (this.gen === 7) {
-					// If the team has a Z-Move user, reject Pokemon that only have the Z-Move user role
-					if (
-						this.randomSets[species.id]["sets"].length === 1 &&
-						this.randomSets[species.id]["sets"][0]["role"] === 'Z-Move user' &&
-						teamDetails.zMove
-					) continue;
-				}
 				if (!species.exists) continue;
 
 				// Limit to one of each species (Species Clause)

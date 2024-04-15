@@ -1790,8 +1790,12 @@
         "level": 85,
         "sets": [
             {
+                "role": "Wallbreaker",
+                "movepool": ["aquajet", "crunch", "earthquake", "hydropump", "icebeam"]
+            },
+            {
                 "role": "Fast Attacker",
-                "movepool": ["aquajet", "crunch", "earthquake", "hiddenpowergrass", "hydropump", "icebeam", "waterfall"]
+                "movepool": ["aquajet", "crunch", "earthquake", "icebeam", "waterfall"]
             }
         ]
     },

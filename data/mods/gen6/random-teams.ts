@@ -659,12 +659,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'muk') return 'Poison Touch';
 		if (['dusknoir', 'vespiquen'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
+		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'stoutland' || species.id === 'pangoro' && !counter.get('ironfist')) return 'Scrappy';
 		if (species.id === 'octillery') return 'Sniper';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'breloom') return 'Technician';
 		if (species.id === 'zangoose') return 'Toxic Boost';
-		if (species.id === 'porygon2' || species.id === 'gardevoir') return 'Trace';
 
 		if (abilities.has('Harvest') && (role === 'Bulky Support' || role === 'Staller')) return 'Harvest';
 		if (abilities.has('Regenerator') && role === 'AV Pivot') return 'Regenerator';
@@ -753,6 +753,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			}
 		}
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
+		if (moves.has('waterspout')) return 'Choice Scarf';
 		if (moves.has('geomancy') || moves.has('skyattack')) return 'Power Herb';
 		if (moves.has('shellsmash')) {
 			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';

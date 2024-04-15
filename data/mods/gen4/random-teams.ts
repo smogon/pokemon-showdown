@@ -515,7 +515,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 
 		if (abilities.has('Guts') && !abilities.has('Quick Feet') && moves.has('facade')) return 'Guts';
 		if (abilities.has('Hydration') && moves.has('raindance') && moves.has('rest')) return 'Hydration';
-		if (abilities.has('Trace')) return 'Trace';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
@@ -578,6 +577,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
+		if (moves.has('waterspout')) return 'Choice Scarf';
 		if (ability === 'Magic Guard') return 'Life Orb';
 		if (moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && !moves.has('sleeptalk') && !['Natural Cure', 'Shed Skin'].includes(ability)) {

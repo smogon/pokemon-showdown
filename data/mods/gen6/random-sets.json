@@ -163,7 +163,8 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["encore", "hiddenpowerice", "knockoff", "nastyplot", "nuzzle", "thunderbolt", "voltswitch"]
+                "movepool": ["encore", "hiddenpowerice", "knockoff", "nastyplot", "nuzzle", "thunderbolt", "voltswitch"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Fast Attacker",
@@ -710,7 +711,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["focusblast", "icebeam", "lovelykiss", "nastyplot", "psyshock", "substitute"]
+                "movepool": ["focusblast", "icebeam", "lovelykiss", "nastyplot", "psyshock"]
             }
         ]
     },
@@ -1954,7 +1955,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["firefang", "ironhead", "playrough", "suckerpunch", "swordsdance"]
+                "movepool": ["ironhead", "knockoff", "playrough", "suckerpunch", "swordsdance"]
             }
         ]
     },
@@ -2326,6 +2327,10 @@
                 "role": "Fast Support",
                 "movepool": ["drainpunch", "fakeout", "knockoff", "recover", "shadowsneak", "stealthrock", "suckerpunch"],
                 "preferredTypes": ["Fighting"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["drainpunch", "knockoff", "recover", "stealthrock", "thunderwave", "toxic"]
             }
         ]
     },
@@ -3131,7 +3136,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["drainpunch", "gunkshot", "icepunch", "substitute", "suckerpunch", "swordsdance"]
+                "movepool": ["drainpunch", "earthquake", "gunkshot", "knockoff", "substitute", "suckerpunch", "swordsdance"]
             }
         ]
     },
@@ -3381,8 +3386,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "haze", "icepunch", "painsplit", "shadowsneak", "willowisp"],
+                "movepool": ["earthquake", "haze", "icepunch", "painsplit", "shadowsneak", "toxic", "willowisp"],
                 "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["earthquake", "protect", "shadowsneak", "toxic"]
             }
         ]
     },
@@ -4489,7 +4498,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["highjumpkick", "knockoff", "poisonjab", "stoneedge", "swordsdance", "uturn"],
                 "preferredTypes": ["Dark"]
             },
@@ -4880,7 +4889,11 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["energyball", "hurricane", "quiverdance", "sleeppowder", "substitute"]
+                "movepool": ["energyball", "hurricane", "quiverdance", "sleeppowder"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["bugbuzz", "hurricane", "quiverdance", "sleeppowder"]
             }
         ]
     },
@@ -5126,8 +5139,12 @@
         "level": 88,
         "sets": [
             {
-                "role": "Staller",
+                "role": "Bulky Support",
                 "movepool": ["protect", "recycle", "thunderbolt", "toxic"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["recycle", "substitute", "superfang", "thunderbolt", "toxic", "uturn"]
             }
         ]
     },
@@ -5154,7 +5171,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["dazzlinggleam", "foulplay", "spikes", "thunderwave", "toxic"]
+                "movepool": ["dazzlinggleam", "foulplay", "spikes", "thunderwave"]
             },
             {
                 "role": "Bulky Attacker",

@@ -609,11 +609,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (['spiritomb', 'vespiquen', 'weavile'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon') return 'Rough Skin';
+		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'stoutland') return 'Scrappy';
 		if (species.id === 'octillery') return 'Sniper';
 		if (species.id === 'stunfisk') return 'Static';
 		if (species.id === 'zangoose') return 'Toxic Boost';
-		if (species.id === 'porygon2' || species.id === 'gardevoir') return 'Trace';
 
 		if (abilities.has('Harvest')) return 'Harvest';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
@@ -699,6 +699,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			}
 		}
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
+		if (moves.has('waterspout')) return 'Choice Scarf';
 		if (moves.has('shellsmash')) return 'White Herb';
 		if (moves.has('psychoshift')) return 'Flame Orb';
 		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
