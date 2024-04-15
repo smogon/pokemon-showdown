@@ -4105,11 +4105,6 @@
             {
                 "role": "Fast Support",
                 "movepool": ["defog", "dragonpulse", "glare", "hiddenpowerfire", "leafstorm", "leechseed", "substitute"]
-            },
-            {
-                "role": "Z-Move user",
-                "movepool": ["glare", "hiddenpowerfire", "hyperbeam", "leafstorm"],
-                "preferredTypes": ["Normal"]
             }
         ]
     },
