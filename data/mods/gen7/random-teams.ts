@@ -322,6 +322,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const incompatiblePairs = [
 			// These moves don't mesh well with other aspects of the set
 			[statusMoves, ['healingwish', 'memento', 'switcheroo', 'trick']],
+			[PIVOT_MOVES, PIVOT_MOVES],
 			[SETUP, PIVOT_MOVES],
 			[SETUP, HAZARDS],
 			[SETUP, badWithSetup],
