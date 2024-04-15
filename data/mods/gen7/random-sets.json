@@ -6052,10 +6052,6 @@
         "level": 87,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["crunch", "explosion", "flamethrower", "icebeam", "return", "surf", "uturn"]
-            },
-            {
                 "role": "Setup Sweeper",
                 "movepool": ["crunch", "doubleedge", "explosion", "flamecharge", "ironhead", "return", "swordsdance"],
                 "preferredTypes": ["Dark"]
@@ -6067,7 +6063,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "icebeam", "thunderbolt", "uturn"]
+                "movepool": ["defog", "flamethrower", "icebeam", "thunderbolt", "toxic", "uturn"]
             }
         ]
     },
@@ -6085,11 +6081,11 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "dracometeor", "flamethrower", "ironhead", "partingshot"]
+                "movepool": ["defog", "dracometeor", "flamethrower", "ironhead", "partingshot", "toxic", "uturn"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["flamecharge", "ironhead", "multiattack", "swordsdance"]
+                "movepool": ["flamecharge", "ironhead", "outrage", "swordsdance"]
             }
         ]
     },
@@ -6098,7 +6094,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"],
+                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic", "uturn"],
                 "preferredTypes": ["Ice"]
             }
         ]
@@ -6108,7 +6104,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "multiattack", "partingshot", "rockslide", "thunderwave"]
+                "movepool": ["defog", "flamethrower", "multiattack", "partingshot", "surf", "toxic", "uturn"]
             }
         ]
     },
@@ -6117,7 +6113,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "shadowball", "toxic"]
+                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "shadowball", "toxic", "uturn"]
             },
             {
                 "role": "Setup Sweeper",
@@ -6131,7 +6127,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "icebeam", "multiattack", "surf", "thunderbolt", "toxic", "uturn"]
+                "movepool": ["defog", "icebeam", "multiattack", "partingshot", "surf", "thunderbolt", "toxic", "uturn"]
             }
         ]
     },
@@ -6140,7 +6136,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "ironhead", "multiattack", "partingshot", "thunderwave"]
+                "movepool": ["defog", "flamethrower", "ironhead", "multiattack", "partingshot", "toxic", "uturn"]
             }
         ]
     },
@@ -6149,7 +6145,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"]
+                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic", "uturn"]
             },
             {
                 "role": "Setup Sweeper",
@@ -6162,7 +6158,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"]
+                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic", "uturn"]
             }
         ]
     },
@@ -6171,7 +6167,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic"]
+                "movepool": ["defog", "flamethrower", "icebeam", "multiattack", "partingshot", "toxic", "uturn"]
             },
             {
                 "role": "Setup Sweeper",
@@ -6184,7 +6180,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "multiattack", "thunderbolt", "toxic", "uturn"],
+                "movepool": ["defog", "flamethrower", "multiattack", "partingshot", "thunderbolt", "toxic", "uturn"],
                 "preferredTypes": ["Electric"]
             }
         ]
@@ -6194,7 +6190,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "grasspledge", "multiattack", "partingshot", "surf", "toxic"]
+                "movepool": ["defog", "flamethrower", "multiattack", "partingshot", "surf", "toxic", "uturn"]
             }
         ]
     },
@@ -6203,7 +6199,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "multiattack", "toxic", "uturn"]
+                "movepool": ["defog", "flamethrower", "multiattack", "partingshot", "toxic", "uturn"]
             }
         ]
     },
@@ -6212,7 +6208,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "grasspledge", "multiattack", "partingshot", "toxic"]
+                "movepool": ["defog", "flamethrower", "grasspledge", "multiattack", "partingshot", "toxic", "uturn"]
             }
         ]
     },
@@ -6221,7 +6217,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "flamethrower", "multiattack", "partingshot", "thunderbolt", "toxic"]
+                "movepool": ["defog", "flamethrower", "multiattack", "partingshot", "thunderbolt", "toxic", "uturn"]
             }
         ]
     },
@@ -6230,7 +6226,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["defog", "icebeam", "multiattack", "partingshot", "thunderbolt"]
+                "movepool": ["defog", "icebeam", "multiattack", "partingshot", "thunderbolt", "toxic", "uturn"]
             }
         ]
     },
