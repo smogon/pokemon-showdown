@@ -1203,7 +1203,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		const level = this.getLevel(species);
 
 		// Minimize confusion damage
-		if (!counter.get('Physical') && !moves.has('copycat') && !moves.has('transform')) {
+		if (
+			(!counter.get('Physical') || counter.get('Physical') === 1 && moves.has('foulplay')) &&
+			!moves.has('copycat') && !moves.has('transform')
+		) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
