@@ -535,7 +535,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Energy Ball", "Leaf Storm", "Taunt", "Thunder Wave", "Thunderbolt", "Volt Switch"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Electric", "Grass"]
             },
             {
                 "role": "Fast Support",
