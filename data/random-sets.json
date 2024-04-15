@@ -6409,7 +6409,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Dragon Pulse", "Dragon Tail", "Giga Drain", "Recover", "Sucker Punch"],
+                "movepool": ["Dragon Pulse", "Dragon Tail", "Giga Drain", "Recover"],
                 "teraTypes": ["Steel"]
             }
         ]
