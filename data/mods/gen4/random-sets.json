@@ -2721,7 +2721,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["crosschop", "icepunch", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
+                "movepool": ["crosschop", "earthquake", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
             }
         ]
     },
