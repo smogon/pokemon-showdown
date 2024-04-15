@@ -2069,12 +2069,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Body Press", "Iron Defense", "Rest", "Stealth Rock", "Stone Edge", "Thunder Wave"],
+                "movepool": ["Body Press", "Iron Defense", "Stealth Rock", "Stone Edge", "Thunder Wave"],
                 "teraTypes": ["Fighting"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Body Press", "Curse", "Rest", "Stone Edge"],
+                "movepool": ["Body Press", "Curse", "Iron Defense", "Rest", "Stone Edge"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -3365,7 +3365,7 @@
             {
                 "role": "AV Pivot",
                 "movepool": ["Aqua Jet", "Flip Turn", "Grass Knot", "Hydro Pump", "Ice Beam", "Knock Off", "Megahorn", "Sacred Sword"],
-                "teraTypes": ["Dark", "Water"]
+                "teraTypes": ["Dark", "Grass", "Water"]
             },
             {
                 "role": "Setup Sweeper",
