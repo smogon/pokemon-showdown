@@ -313,8 +313,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['defog', 'dragontail', 'haze', 'healbell', 'nuzzle', 'pursuit', 'rapidspin', 'toxic'];
+		// Nature Power is Tri Attack this gen
 		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
+			.filter(move => move.category === 'Status' && move.id !== 'naturepower')
 			.map(move => move.id);
 
 		// General incompatibilities
