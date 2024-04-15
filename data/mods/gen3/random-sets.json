@@ -1157,7 +1157,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["icebeam", "sleeptalk", "rest", "surf", "toxic"]
+                "movepool": ["icebeam", "rest", "sleeptalk", "surf", "toxic"]
             }
         ]
     },

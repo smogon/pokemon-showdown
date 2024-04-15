@@ -1555,7 +1555,7 @@
                 "movepool": ["ancientpower", "lavaplume", "recover", "stealthrock", "toxic"]
             },
             {
-                "role": "Z-Move User",
+                "role": "Z-Move user",
                 "movepool": ["ancientpower", "earthpower", "fireblast", "shellsmash"],
                 "preferredTypes": ["Fire", "Rock"]
             }
