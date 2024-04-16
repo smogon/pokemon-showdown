@@ -212,7 +212,8 @@ export class RuleTable extends Map<string, string> {
 		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || 0;
 		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
-		this.evLimit = Number(this.valueRules.get('evlimit')) || null;
+		this.evLimit = Number(this.valueRules.get('evlimit'));
+		if (isNaN(this.evLimit)) this.evLimit = null;
 
 		if (this.valueRules.get('pickedteamsize') === 'Auto') {
 			this.pickedTeamSize = (
