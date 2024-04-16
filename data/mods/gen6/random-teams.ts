@@ -913,7 +913,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		// Minimize confusion damage
 		if (
-			(!counter.get('Physical') || counter.get('Physical') === 1 && moves.has('foulplay')) &&
+			(counter.get('Physical') || 0) <= 1 && moves.has('foulplay') &&
 			!moves.has('copycat') && !moves.has('transform')
 		) {
 			evs.atk = 0;
