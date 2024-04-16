@@ -1478,6 +1478,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		innateName: "Natural Cure",
 	},
+	opple: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Opple')}|I'm boutta Wopple with Opple!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Opple')}|Opple you glad I am leavin'!? Get it? Opple instead of Orange? I'm wasted here! Bu-Bye!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Opple')}|Who's the floppling? Opple? AGAIN?!`);
+		},
+	},
 	partman: {
 		noCopy: true,
 		onStart(pokemon) {

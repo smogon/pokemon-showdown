@@ -625,6 +625,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cotton Candy Crush',
 		evs: {hp: 248, spd: 164, spe: 96}, nature: 'Careful', shiny: 4,
 	},
+	Opple: {
+		species: 'Applin', ability: 'Orchard\'s Gift', item: 'Lum Berry', gender: ['M', 'F'],
+		moves: ['Apple Acid', 'Leech Seed', 'Dragon Pulse'],
+		signatureMove: 'Wopple or Flopple',
+		evs: {hp: 252, spa: 4, spd: 252}, nature: 'Sassy', shiny: 2, teraType: 'Dragon',
+	},
 	PartMan: {
 		species: 'Chandelure', ability: 'C- Tier Shitposter', item: 'Leek', gender: 'M',
 		moves: ['Searing Shot', 'Hex', 'Morning Sun'],
