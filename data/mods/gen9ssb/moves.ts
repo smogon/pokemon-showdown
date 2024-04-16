@@ -116,6 +116,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// Aethernum
+	iamatomic: {
+		accuracy: 100,
+		basePower: 140,
+		category: "Special",
+		shortDesc: "Lowers user's Def, Sp. Atk and Speed by 2 stages.",
+		name: "I. AM. ATOMIC.",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Trick Room', target);
+			this.add('-anim', source, 'Clangerous Soul', source);
+			this.add('-anim', source, 'Flash', target);
+			this.add(`c:|${getName((source.illusion || source).name)}|I`);
+			this.add(`c:|${getName((source.illusion || source).name)}|AM`);
+			this.add(`c:|${getName((source.illusion || source).name)}|ATOMIC.`);
+		},
+		self: {
+			boosts: {
+				spe: -2,
+				def: -2,
+				spa: -2,
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Akir
 	freeswitchbutton: {
 		accuracy: true,

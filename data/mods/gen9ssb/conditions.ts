@@ -56,6 +56,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Aelita')}|Well, I hope the Lyoko Warriors are at least well equipped.`);
 		},
 	},
+	aethernum: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Aethernum')}|We are the Shadow Garden, and your time has come. Prepare yourself`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Aethernum')}|Better play the side character for now, i'll wait a more favorable opportunity`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Aethernum')}|There are important things that i have to attend, i don't have any more time for you`);
+		},
+	},
 	akir: {
 		noCopy: true,
 		onStart(pokemon) {

@@ -18,6 +18,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Fortified Metal"},
 	},
 
+	// Aethernum
+	giratinaorigin: {
+		inherit: true,
+		abilities: {0: "The Eminince in the Shadow"},
+	},
+
 	// Akir
 	slowbro: {
 		inherit: true,

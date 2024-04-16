@@ -33,6 +33,47 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 	},
 
+	// Aethernum
+	theeminenceintheshadow: {
+		shortDesc: "Unaware + Supreme Overlord with half the boost.",
+		name: "The Eminence in the Shadow",
+		onAnyModifyBoost(boosts, pokemon) {
+			const unawareUser = this.effectState.target;
+			if (unawareUser === pokemon) return;
+			if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+				boosts['evasion'] = 0;
+			}
+			if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['def'] = 0;
+				boosts['spa'] = 0;
+				boosts['accuracy'] = 0;
+			}
+		},
+		onStart(pokemon) {
+			if (pokemon.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: The Eminence in the Shadow');
+				const fallen = Math.min(pokemon.side.totalFainted, 5);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effectState.fallen) {
+				const powMod = [20, 21, 22, 23, 24, 25];
+				this.debug(`Supreme Overlord boost: ${powMod[this.effectState.fallen]}/25`);
+				return this.chainModify([powMod[this.effectState.fallen], 20]);
+			}
+		},
+		flags: {breakable: 1},
+	},
+
 	// Akir
 	takeitslow: {
 		shortDesc: "Regenerator + Psychic Surge.",

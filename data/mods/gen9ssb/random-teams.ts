@@ -48,6 +48,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Smelt',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Steel', shiny: true,
 	},
+	Aethernum: {
+		species: 'Giratina-Origin', ability: 'The Eminence in the Shadow', item: 'Griseous Core', gender: '',
+		moves: ['Fiery Wrath', 'Moonlight', 'Dragon Energy'],
+		signatureMove: 'I. AM. ATOMIC.',
+		evs: {atk: 4, spa: 252, spe: 252}, nature: 'Hasty', teraType: 'Dark', shiny: true,
+	},
 	Akir: {
 		species: 'Slowbro', ability: 'Take it Slow', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Future Sight', 'Slack Off', 'Steam Eruption'],
