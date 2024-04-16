@@ -274,13 +274,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			case 'rumia':
 				this.add(`c:|${getName('ausma')}|oh no... it's poomia....`);
 				break;
+			case 'lily':
+				this.add(`c:|${getName('ausma')}|togedemaru`);
+				break;
 			case 'lumari':
 				this.add(`c:|${getName('ausma')}|we should watch the next ladybug ep after this tbh`);
 				break;
 			}
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('ausma')}|Big Stall™ will be right back (after my coffee)`);
+			const phrases = [
+				'vr shift',
+				'commission',
+				'bio lab',
+				'lab report',
+				'council post',
+				'anti-tera blast propaganda post',
+			];
+			this.add(`c:|${getName('ausma')}|oh shit i forgot to do this ${this.sample(phrases)} hang on`);
 		},
 		onFaint() {
 			this.add(`c:|${getName('ausma')}|God has punished me for my hubris.`);

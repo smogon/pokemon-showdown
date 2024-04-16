@@ -643,15 +643,41 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// ausma
 	sigilsstorm: {
-		accuracy: 90,
-		basePower: 15,
+		accuracy: 100,
+		basePower: 123,
 		category: "Special",
-		shortDesc: "Hits 5 times, each hit has a 20% chance to inflict status.",
+		shortDesc: "If user is hit, sets Trick Room. If not, random effect happens.",
 		name: "Sigil's Storm",
 		pp: 5,
-		multihit: 5,
-		priority: 0,
+		priority: -6,
 		flags: {snatch: 1, metronome: 1, protect: 1, failcopycat: 1},
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('sigilsstorm');
+			this.add('-anim', pokemon, 'Calm Mind', pokemon);
+		},
+		beforeMoveCallback(pokemon) {
+			if (pokemon.volatiles['sigilsstorm']?.lostFocus) {
+				this.add('cant', pokemon, 'sigilsstorm', 'sigilsstorm');
+				this.actions.useMove('trickroom', pokemon);
+				this.add(`c:|${getName('ausma')}|dog can you not`);
+				return true;
+			}
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Sigil\'s Storm');
+			},
+			onHit(pokemon, source, move) {
+				if (move.category !== 'Status') {
+					this.effectState.lostFocus = true;
+				}
+			},
+			onTryAddVolatile(status, pokemon) {
+				if (status.id === 'flinch') return null;
+			},
+		},
+
 		onTry(source) {
 			if (source.illusion || source.name === 'ausma') {
 				return;
@@ -669,49 +695,53 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Blood Moon', target);
 		},
 		secondary: {
-			chance: 20,
+			chance: 100,
 			onHit(target, source, move) {
-				move.willCrit = false;
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 				const chance = this.random(100);
 				if (chance <= 10) {
 					target.trySetStatus('psn', target);
 				} else if (chance <= 20) {
-					target.trySetStatus('tox', target);
+					target.trySetStatus('par', target);
 				} else if (chance <= 30) {
 					target.trySetStatus('brn', target);
 				} else if (chance <= 50) {
 					const stats: BoostID[] = [];
 					const boost: SparseBoostsTable = {};
 					let statPlus: BoostID;
-					const recipient = this.randomChance(1, 2) ? source : target;
-					for (statPlus in recipient.boosts) {
+					const statTarget = chance <= 40 ? target : source;
+					for (statPlus in statTarget.boosts) {
 						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-						if (chance <= 40 && recipient.boosts[statPlus] > -6) {
+						if (chance <= 40 && statTarget.boosts[statPlus] > -6) {
 							stats.push(statPlus);
-						} else if (chance <= 50 && recipient.boosts[statPlus] < 6) {
+						} else if (chance <= 50 && statTarget.boosts[statPlus] < 6) {
 							stats.push(statPlus);
 						}
 					}
 					const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-					if (randomStat) {
-						boost[randomStat] = 1;
-						if (chance < 40) {
+					const randomStat2: BoostID | undefined = stats.length ? this.sample(stats.filter(s => s !== randomStat)) : undefined;
+					if (randomStat && randomStat2) {
+						if (chance <= 40) {
 							boost[randomStat] = -1;
+							boost[randomStat2] = -1;
+						} else {
+							boost[randomStat] = 1;
+							boost[randomStat2] = 1;
+						}
+						this.boost(boost, statTarget, statTarget);
+					}
+				} else if (chance <= 60) {
+					target.addVolatile('confusion', source);
+				} else if (chance <= 70) {
+					for (const condition of sideConditions) {
+						if (source.side.removeSideCondition(condition)) {
+							this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: Sigil\'s Storm', '[of] ' + source);
 						}
 					}
-					this.boost(boost, recipient, recipient);
-				} else if (chance <= 60) {
-					move.willCrit = true;
-				} else if (chance <= 70) {
-					target.addVolatile('taunt', source);
 				} else if (chance <= 80) {
-					target.addVolatile('torment', source);
+					target.side.addSideCondition(this.sample(sideConditions.filter(hazard => !target.side.getSideCondition(hazard))));
 				} else if (chance <= 90) {
-					target.addVolatile('confusion', source);
-				} else if (chance <= 98) {
-					const mistyExplosion = this.dex.getActiveMove('mistyexplosion');
-					mistyExplosion.basePower = 75;
-					this.actions.useMove(mistyExplosion, source);
+					move.drain = [3, 4];
 				} else {
 					changeSet(this, target, ssbSets["ausma-Fennekin"], true);
 					this.add(`c:|${getName('ausma')}|oh shit i posted to the wrong account`);
@@ -3254,7 +3284,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Storm Shelter",
-		shortDesc: "User protects and sets up a substitute.",
+		shortDesc: "User protects and boosts a random stat by 1 stage.",
 		pp: 5,
 		priority: 4,
 		flags: {},
@@ -3266,18 +3296,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
-			if (!pokemon.volatiles['substitute']) {
-				if (pokemon.hp <= pokemon.maxhp / 4 || pokemon.maxhp === 1) { // Shedinja clause
-					this.add('-fail', pokemon, 'move: Substitute', '[weak]');
-				} else {
-					pokemon.addVolatile('substitute');
-					this.directDamage(pokemon.maxhp / 4);
+			const boosts = pokemon.boosts;
+			const maxBoostIDs: BoostID[] = [];
+			for (const boost in boosts) {
+				if (boosts[boost as BoostID] >= 6) {
+					maxBoostIDs.push(boost as BoostID);
+					continue;
 				}
+				this.boost({[boost]: 1}, pokemon);
 			}
-			if (!Object.values(pokemon.boosts).some(x => x >= 6)) {
-				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1, evasion: 1}, pokemon);
-				this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
-				this.boost({atk: -1, def: -1, spa: -1, spd: -1, spe: -1, accuracy: -1, evasion: -1}, pokemon);
+			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
+			const unloweredStat = this.sample(Object.keys(pokemon.boosts).filter(x => x !== ('evasion' as BoostID)));
+			for (const boost in boosts) {
+				if ((boosts[boost as BoostID] >= 6 && maxBoostIDs.includes(boost as BoostID)) || boost === unloweredStat) continue;
+				this.boost({[boost]: -1}, pokemon);
 			}
 		},
 		secondary: null,
