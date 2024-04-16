@@ -248,6 +248,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Coalescence"},
 	},
 
+	// DianaNicole
+	abomasnow: {
+		inherit: true,
+		abilities: {0: "Snow Problem"},
+	},
+	abomasnowmega: {
+		inherit: true,
+		abilities: {0: "Flash Fire"},
+	},
+
 	// Elliot
 	sinistea: {
 		inherit: true,

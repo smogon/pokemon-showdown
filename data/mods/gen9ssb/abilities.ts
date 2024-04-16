@@ -717,6 +717,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// DianaNicole
+	snowproblem: {
+		shortDesc: "On switch-in, this Pokemon summons snow and its Sp. Atk is raised by 1 stage.",
+		name: "Snow Problem",
+		onStart(source) {
+			this.field.setWeather('snow');
+			this.boost({spa: 1}, source);
+		},
+		flags: {},
+	},
+
 	// Elly
 	stormsurge: {
 		shortDesc: "On switch-in, this Pokemon summons Storm Surge.",

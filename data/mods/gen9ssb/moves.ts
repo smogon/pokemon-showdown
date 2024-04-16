@@ -1619,6 +1619,56 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Poison",
 	},
 
+	// DianaNicole
+	breathoftiamat: {
+		accuracy: 95,
+		basePower: 20,
+		category: "Special",
+		shortDesc: "Hits 5 times. In order, each hit's type is Fire, Ice, Poison, Electric, Poison. Skips hits if a foe would be immune.",
+		name: "Breath of Tiamat",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			if (target.runImmunity('Fire')) {
+				this.add('-anim', source, 'Flamethrower', target);
+			}
+		},
+		onHit(target, source, move) {
+			const moveTypes = ['Fire', 'Ice', 'Poison', 'Electric', 'Poison'];
+			const hitTypes = moveTypes.filter(x => target.runImmunity(x));
+			if (move.hit >= hitTypes.length) {
+				move.basePower = 0;
+				move.category = 'Status';
+				/* Problem here - we can't retroactively change the multihit parameter.
+				With this specific code, the move functions as intended, but will display the incorrect
+				number of hits if a target is immune to any of them. Even if you try to return false, null, etc
+				during this step, it will not interrupt the move. Nor will a this.add(-fail) do so either.
+				This seems to be the only way to get it to work and is a decent enough compromise for now. */
+			} else {
+				move.type = hitTypes[move.hit];
+				const moveAnims = ['Flamethrower', 'Ice Beam', 'Gunk Shot', 'Charge Beam', 'Sludge Bomb'];
+				const hitAnims = [];
+				for (const [i, anim] of moveAnims.entries()) {
+					const index2 = Math.min(i, hitTypes.length - 1);
+					if (moveTypes[i] === hitTypes[index2]) {
+						hitAnims.push(anim);
+					}
+				}
+				this.add('-anim', source, hitAnims[move.hit], target);
+			}
+		},
+		multihit: 5,
+		multiaccuracy: true,
+		forceSTAB: true,
+		secondary: null,
+		target: 'normal',
+		type: "Fire",
+	},
+
 	// Elliot
 	teaparty: {
 		accuracy: true,
