@@ -2820,7 +2820,10 @@ export const Rulesets: {[k: string]: FormatData} = {
 					`(Restricted Pok\u00e9mon can only be used as impersonations.)`,
 				];
 			}
-			if (this.toID(set.name) !== species.id && this.toID(set.name) !== impersonation.id) {
+			const rt = this.ruleTable;
+			if ((this.toID(set.name) !== species.id && this.toID(set.name) !== impersonation.id) ||
+				(impersonation.isNonstandard && !(rt.has(`+pokemontag:${this.toID(impersonation.isNonstandard)}`) ||
+					rt.has(`+pokemon:${impersonation.id}`) || rt.has(`+basepokemon:${this.toID(impersonation.baseSpecies)}`)))) {
 				return [`All Pok\u00e9mon must either have no nickname or must be nicknamed after a Pok\u00e9mon.`];
 			}
 		},
