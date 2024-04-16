@@ -25,6 +25,10 @@
                 "role": "Setup Sweeper",
                 "movepool": ["bellydrum", "earthquake", "hiddenpowerflying", "rockslide", "substitute"],
                 "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Berry Sweeper",
+                "movepool": ["dragonclaw", "fireblast", "hiddenpowergrass", "substitute"]
             }
         ]
     },
@@ -288,6 +292,10 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["bulkup", "crosschop", "hiddenpowerghost", "rockslide", "substitute"]
+            },
+            {
+                "role": "Berry Sweeper",
+                "movepool": ["bulkup", "hiddenpowerghost", "reversal", "substitute"]
             }
         ]
     },
@@ -468,11 +476,12 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["brickbreak", "explosion", "fireblast", "haze", "hiddenpowerghost", "rest", "sludgebomb", "toxic"]
+                "movepool": ["explosion", "fireblast", "hiddenpowerground", "rest", "sludgebomb", "toxic"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["brickbreak", "curse", "hiddenpowerghost", "rest", "sludgebomb"]
+                "movepool": ["curse", "hiddenpowerground", "rest", "sludgebomb"]
             }
         ]
     },
@@ -1145,6 +1154,10 @@
             {
                 "role": "Staller",
                 "movepool": ["encore", "icebeam", "protect", "surf", "toxic"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["icebeam", "rest", "sleeptalk", "surf", "toxic"]
             }
         ]
     },
@@ -2088,6 +2101,10 @@
                 "role": "Setup Sweeper",
                 "movepool": ["brickbreak", "bulkup", "recover", "rockslide", "shadowball", "substitute"],
                 "preferredTypes": ["Ghost"]
+            },
+            {
+                "role": "Berry Sweeper",
+                "movepool": ["bulkup", "reversal", "shadowball", "substitute"]
             }
         ]
     },
@@ -2239,10 +2256,6 @@
             {
                 "role": "Staller",
                 "movepool": ["encore", "protect", "seismictoss", "shadowball", "substitute", "toxic"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["bodyslam", "focuspunch", "shadowball", "substitute"]
             },
             {
                 "role": "Bulky Support",

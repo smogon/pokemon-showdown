@@ -1108,7 +1108,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	trace: {
 		inherit: true,
-		rating: 2.5,
+		rating: 3,
 	},
 	transistor: {
 		inherit: true,

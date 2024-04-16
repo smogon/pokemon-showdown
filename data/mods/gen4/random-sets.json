@@ -1790,8 +1790,12 @@
         "level": 85,
         "sets": [
             {
+                "role": "Wallbreaker",
+                "movepool": ["aquajet", "crunch", "earthquake", "hydropump", "icebeam"]
+            },
+            {
                 "role": "Fast Attacker",
-                "movepool": ["aquajet", "crunch", "earthquake", "hiddenpowergrass", "hydropump", "icebeam", "waterfall"]
+                "movepool": ["aquajet", "crunch", "earthquake", "icebeam", "waterfall"]
             }
         ]
     },
@@ -2717,7 +2721,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["crosschop", "icepunch", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
+                "movepool": ["crosschop", "earthquake", "icepunch", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
             }
         ]
     },

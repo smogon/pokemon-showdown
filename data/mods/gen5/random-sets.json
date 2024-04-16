@@ -46,8 +46,12 @@
         "level": 93,
         "sets": [
             {
+                "role": "Setup Sweeper",
+                "movepool": ["bugbuzz", "quiverdance", "sleeppowder", "substitute"]
+            },
+            {
                 "role": "Bulky Setup",
-                "movepool": ["bugbuzz", "hiddenpowerrock", "psychic", "quiverdance", "sleeppowder", "substitute"]
+                "movepool": ["bugbuzz", "quiverdance", "roost", "sleeppowder"]
             }
         ]
     },
@@ -634,7 +638,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["focusblast", "icebeam", "lovelykiss", "nastyplot", "psyshock", "substitute"]
+                "movepool": ["focusblast", "icebeam", "lovelykiss", "nastyplot", "psyshock"]
             }
         ]
     },
@@ -2758,7 +2762,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["drainpunch", "icepunch", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
+                "movepool": ["drainpunch", "earthquake", "icepunch", "poisonjab", "substitute", "suckerpunch", "swordsdance"]
             }
         ]
     },
