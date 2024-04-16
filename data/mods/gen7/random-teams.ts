@@ -874,7 +874,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
 		if (species.id === 'zebstrika') return moves.has('wildcharge') ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'stoutland' || species.id === 'pangoro' && !counter.get('ironfist')) return 'Scrappy';
-		if (species.baseSpecies === 'sawsbuck' && moves.has('headbutt')) return 'Serene Grace';
+		if (species.baseSpecies === 'Sawsbuck' && moves.has('headbutt')) return 'Serene Grace';
 		if (species.id === 'octillery') return 'Sniper';
 		if (species.id === 'kommoo' && role === 'Z-Move user') return 'Soundproof';
 		if (species.id === 'stunfisk') return 'Static';
@@ -1203,9 +1203,9 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		const level = this.getLevel(species);
 
-		// Minimize confusion damage
+		// Minimize confusion damage, including if Foul Play is its only physical attack
 		if (
-			(counter.get('Physical') || 0) <= 1 && moves.has('foulplay') &&
+			(!counter.get('Physical') || (counter.get('Physical') <= 1 && moves.has('foulplay'))) &&
 			!moves.has('copycat') && !moves.has('transform')
 		) {
 			evs.atk = 0;

@@ -6,7 +6,7 @@ import {toID} from '../../../sim/dex';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
-	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'slackoff', 'softboiled', 'synthesis',
+	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'recycle', 'roost', 'slackoff', 'softboiled', 'synthesis',
 ];
 // Moves that boost Attack:
 const PHYSICAL_SETUP = [
@@ -911,9 +911,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		const level = this.getLevel(species);
 
-		// Minimize confusion damage
+		// Minimize confusion damage, including if Foul Play is its only physical attack
 		if (
-			(counter.get('Physical') || 0) <= 1 && moves.has('foulplay') &&
+			(!counter.get('Physical') || (counter.get('Physical') <= 1 && moves.has('foulplay'))) &&
 			!moves.has('copycat') && !moves.has('transform')
 		) {
 			evs.atk = 0;
