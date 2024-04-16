@@ -1658,6 +1658,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		// implemented in rulesets.ts
 	},
 
+	// Pulse_kS
+	notorichalcumpulse: {
+		shortDesc: "Mega Launcher + Super Luck.",
+		name: "Not Orichalcum Pulse",
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['pulse']) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyCritRatio(critRatio) {
+			return critRatio + 1;
+		},
+		flags: {},
+	},
+
 	// PYRO
 	hardcorehustle: {
 		shortDesc: "Moves have 15% more power and -5% Acc for each fainted ally, up to 5 allies.",

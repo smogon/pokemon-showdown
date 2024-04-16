@@ -1665,6 +1665,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('ptoad')}|Who told you you're allowed to rain on my parade?`);
 		},
 	},
+	pulseks: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Pulse_kS')}|Mid Skill, God Luck`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Pulse_kS')}|brb lemme run the numbers`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Pulse_kS')}|If my model is accurate (it isn't)`);
+		},
+	},
 	pyro: {
 		noCopy: true,
 		onStart() {
