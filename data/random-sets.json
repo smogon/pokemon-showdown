@@ -4773,11 +4773,6 @@
                 "teraTypes": ["Dark", "Fighting"]
             },
             {
-                "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Flare Blitz", "Knock Off", "Psychic Fangs", "Sunsteel Strike"],
-                "teraTypes": ["Dark", "Fighting"]
-            },
-            {
                 "role": "Bulky Attacker",
                 "movepool": ["Close Combat", "Flare Blitz", "Knock Off", "Morning Sun", "Psychic Fangs", "Sunsteel Strike"],
                 "teraTypes": ["Water"]
