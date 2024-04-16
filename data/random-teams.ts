@@ -1166,7 +1166,7 @@ export class RandomTeams {
 		if (species.id === 'toucannon' && !counter.get('skilllink')) return 'Keen Eye';
 		if (species.id === 'reuniclus') return 'Magic Guard';
 		if (species.id === 'smeargle' && !counter.get('technician')) return 'Own Tempo';
-		if (species.id === 'zebstrika') return (moves.has('thunderbolt')) ? 'Lightning Rod' : 'Sap Sipper';
+		if (species.id === 'zebstrika') return moves.has('thunderbolt') ? 'Lightning Rod' : 'Sap Sipper';
 		if (species.id === 'sandaconda' || (species.id === 'scrafty' && moves.has('rest'))) return 'Shed Skin';
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'charizard' && moves.has('sunnyday')) return 'Solar Power';
