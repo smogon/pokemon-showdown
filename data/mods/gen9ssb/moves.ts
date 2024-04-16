@@ -5255,7 +5255,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Violet
 	buildingcharacter: {
-		accuracy: 95,
+		accuracy: 100,
 		basePower: 50,
 		basePowerCallback(pokemon, target, move) {
 			if (target?.terastallized) {
@@ -5282,7 +5282,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, "Wicked Blow", target);
 		},
 		onHit(pokemon, source) {
-			// TODO: Client support for removing tera without fainting
 			if (pokemon?.terastallized) {
 				this.add(`c:|${getName((source.illusion || source).name)}|lol never do that ever again thanks`);
 				this.add('custom', '-endterastallize', pokemon);
