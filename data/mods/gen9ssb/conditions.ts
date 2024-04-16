@@ -2589,7 +2589,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onResidualSubOrder: 1,
 		onResidual(target, pokemon, effect) {
 			const source = this.effectState.source;
-			let quotes: string[] = [
+			const quotes: string[] = [
 				`A cure for all that ails.`,
 				`A sip for the parched.`,
 				`Be nourished!`,
@@ -2657,7 +2657,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				];
 			}
 			this.add(`c:|${getName((source.illusion || source).name)}|${this.sample(quotes)}`);
-		
 		},
 		onSideResidualOrder: 26,
 		onSideResidualSubOrder: 5,
