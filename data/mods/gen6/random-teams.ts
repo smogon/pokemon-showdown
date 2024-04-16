@@ -659,7 +659,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'muk') return 'Poison Touch';
 		if (['dusknoir', 'vespiquen'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon' && role === 'Bulky Support') return 'Rough Skin';
-		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
+		if (species.id === 'zebstrika') return moves.has('wildcharge') ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'stoutland' || species.id === 'pangoro' && !counter.get('ironfist')) return 'Scrappy';
 		if (species.id === 'octillery') return 'Sniper';
 		if (species.id === 'stunfisk') return 'Static';
