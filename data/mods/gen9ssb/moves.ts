@@ -5463,12 +5463,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Waves
 	torrentialdrain: {
 		accuracy: 100,
-		basePower: 100,
+		basePower: 60,
 		category: "Special",
-		shortDesc: "+1 Priority. Recovers 50% of damage dealt.",
+		shortDesc: "Recovers 50% of damage dealt.",
 		name: "Torrential Drain",
 		pp: 10,
-		priority: 1,
+		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1, metronome: 1},
 		drain: [1, 2],
 		secondary: null,
