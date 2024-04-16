@@ -2575,6 +2575,97 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 	},
 
+	// dhelmise
+	bioticorbself: {
+		name: "Biotic Orb (Self)",
+		// side condition
+		effectType: 'Condition',
+		duration: 4,
+		onSideStart(side, source) {
+			this.effectState.source = source;
+			this.add('-sidestart', side, 'move: Biotic Orb (Self)');
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 1,
+		onResidual(target, pokemon, effect) {
+			const source = this.effectState.source;
+			let quotes: string[] = [
+				`A cure for all that ails.`,
+				`A sip for the parched.`,
+				`Be nourished!`,
+				`I offer something more.`,
+				`Receive my aid.`,
+				`Be nurtured.`,
+				`Know mother's kindness.`,
+				`A salve for all that ails.`,
+				`An eldritch blessing.`,
+				`Flourish.`,
+				`Now feast.`,
+				`Recover your strength.`,
+			];
+			if (target.hp) {
+				let amount = 65;
+				if (this.effectState.duration === 4) amount = 40;
+				this.heal(amount, target, source, effect);
+			}
+			this.add(`c:|${getName((source.illusion || source).name)}|${this.sample(quotes)}`);
+		},
+		onSideResidualOrder: 26,
+		onSideResidualSubOrder: 5,
+		onSideEnd(side) {
+			this.add('-sideend', side, 'move: Biotic Orb (Self)');
+		},
+	},
+	bioticorbfoe: {
+		name: "Biotic Orb (Foe)",
+		// side condition
+		effectType: 'Condition',
+		duration: 4,
+		onSideStart(side, source) {
+			this.effectState.source = source;
+			this.add('-sidestart', side, 'move: Biotic Orb (Foe)');
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 1,
+		onResidual(target, pokemon, effect) {
+			const source = this.effectState.source;
+			let quotes: string[] = [
+				`A taste of poison.`,
+				`Misery made manifest.`,
+				`Pain is inevitable.`,
+				`You cannot escape me!`,
+				`Your end is within my reach.`,
+				`Bí ag stangadh leat.`,
+				`Ruination is imminent.`,
+				`The weak can fend for themselves.`,
+				`Know darkness.`,
+				`Let shadow consume you.`,
+				`Your pain will be endless.`,
+			];
+			if (target.hp) {
+				this.damage(50, target, source, effect);
+			}
+			if (target.fainted || target.hp <= 0) {
+				quotes = [
+					`Expect the unexpected.`,
+					`In chaos lies opportunity.`,
+					`Mind your surroundings.`,
+					`Perhaps next time you should not stand in the way of the orb.`,
+					`A torturous gift.`,
+					`The darkness will find them.`,
+					`The gloom takes you.`,
+				];
+			}
+			this.add(`c:|${getName((source.illusion || source).name)}|${this.sample(quotes)}`);
+		
+		},
+		onSideResidualOrder: 26,
+		onSideResidualSubOrder: 5,
+		onSideEnd(side) {
+			this.add('-sideend', side, 'move: Biotic Orb (Foe)');
+		},
+	},
+
 	// Elliot
 	beefed: {
 		name: "Beefed",

@@ -1553,7 +1553,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {reflectable: 1, mustpressure: 1},
-		sideCondition: 'bioticorb',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1564,94 +1563,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-anim', source, 'Shadow Ball', target);
 			}
 		},
-		onModifyMove(move, pokemon, target) {
-			if (pokemon.hp < pokemon.maxhp / 2) {
-				move.target = "allySide";
-				move.flags['heal'] = 1;
-				delete move.sideCondition;
-				move.self = {sideCondition: 'bioticorb'};
-				delete move.flags['reflectable'];
-				delete move.flags['mustpressure'];
-			}
-		},
-		onModifyType(move, pokemon, target) {
-			if (pokemon.hp < pokemon.maxhp / 2) {
-				move.type = "Psychic";
-			}
-		},
-		condition: {
-			duration: 4,
-			onSideStart(side, source) {
-				this.effectState.source = source;
-				this.effectState.side = side;
-				this.add('-sidestart', side, 'move: Biotic Orb');
-			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 1,
-			onResidual(target) {
-				const source = this.effectState.source;
-				let quotes: string[] = [];
-				if (this.effectState.side === source.side) {
-					quotes = [
-						`A cure for all that ails.`,
-						`A sip for the parched.`,
-						`Be nourished!`,
-						`I offer something more.`,
-						`Receive my aid.`,
-						`Be nurtured.`,
-						`Know mother's kindness.`,
-						`A salve for all that ails.`,
-						`An eldritch blessing.`,
-						`Flourish.`,
-						`Now feast.`,
-						`Recover your strength.`,
-					];
-					if (target.hp) {
-						let amount = 65;
-						if (this.effectState.duration === 4) amount = 40;
-						this.heal(amount, target, source, this.dex.getActiveMove('bioticorb'));
-					}
-				} else {
-					quotes = [
-						`A taste of poison.`,
-						`Misery made manifest.`,
-						`Pain is inevitable.`,
-						`You cannot escape me!`,
-						`Your end is within my reach.`,
-						`Bí ag stangadh leat.`,
-						`Ruination is imminent.`,
-						`The weak can fend for themselves.`,
-						`Know darkness.`,
-						`Let shadow consume you.`,
-						`Your pain will be endless.`,
-					];
-					if (target.hp) {
-						this.damage(50, target, source, this.dex.getActiveMove('bioticorb'));
-					}
-					if (target.fainted) {
-						quotes = [
-							`Expect the unexpected.`,
-							`In chaos lies opportunity.`,
-							`Mind your surroundings.`,
-							`Perhaps next time you should not stand in the way of the orb.`,
-							`A torturous gift.`,
-							`The darkness will find them.`,
-							`The gloom takes you.`,
-						];
-					}
+		// Volatiles implemented in conditions.ts
+		onHit(target, source, move) {
+			if (source.hp < source.maxhp / 2) {
+				if (source.side.sideConditions['bioticorbself']) {
+					return null;
 				}
-				if (quotes.length) {
-					this.add(`c:|${getName((source.illusion || source).name)}|${this.sample(quotes)}`);
+				source.side.addSideCondition('bioticorbself', source, move);
+			} else {
+				if (source.side.foe.sideConditions['bioticorbfoe']) {
+					return null;
 				}
-			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 5,
-			onSideEnd(side) {
-				this.add('-sideend', side, 'move: Biotic Orb');
-			},
+				source.side.foe.addSideCondition('bioticorbfoe', source, move);
+			}
 		},
 		secondary: null,
-		target: "foeSide",
+		target: "normal",
 		type: "Poison",
 	},
 
