@@ -910,7 +910,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		// Minimize confusion damage
-		if ((!counter.get('Physical') || counter.get('Physical') === 1 && moves.has('foulplay')) && !moves.has('transform')) {
+		if ((counter.get('Physical') || 0) <= 1 && moves.has('foulplay') && !moves.has('transform')) {
 			evs.atk = 0;
 			ivs.atk = hasHiddenPower ? (ivs.atk || 31) - 28 : 0;
 		}
