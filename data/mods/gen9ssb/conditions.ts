@@ -2627,6 +2627,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	stormsurge: {
 		name: 'StormSurge',
 		effectType: 'Weather',
+		shortDesc: "Rain + Wind moves: perfect acc, 20% boost",
+		desc: "Wind moves get perfect accuracy and become 20% stronger. Water moves are 50% stronger, Fire moves are 50% weaker.",
 		duration: 5,
 		durationCallback(source, effect) {
 			if (source?.hasItem('damprock')) {

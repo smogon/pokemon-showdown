@@ -973,37 +973,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
-
-	// HiZo
-	martyrcomplex: {
-		desc: "If this Pokemon is knocked out, next Pokemon gets +1 Speed and +1 Attack/Special Attack, whichever is higher.",
-		shortDesc: "If this Pokemon is KOed, next Pokemon gets +1 Spe and +1 Atk or SpA.",
-		name: "Martyr Complex",
-		onDamagingHitOrder: 1,
-		onDamagingHit(damage, target, source, move) {
-			if (!target.hp) {
-				this.add('-activate', target, 'ability: Martyr Complex');
-				this.add('-message', `${target.name} will be avenged!`);
-				target.side.addSlotCondition(target, 'martyrcomplex');
-			}
-		},
-		condition: {
-			onSwap(target) {
-				const boosts: SparseBoostsTable = {};
-				boosts['spe'] = 1;
-				if (target.getStat('atk', false, true) > target.getStat('spa', false, true)) {
-					boosts['atk'] = 1;
-				} else {
-					boosts['spa'] = 1;
-				}
-				this.boost(boosts, target, target, this.effect);
-				target.side.removeSlotCondition(target, 'martyrcomplex');
-			},
-		},
-		// Permanent sleep "status" implemented in the relevant sleep-checking effects
-		flags: {},
-	},
-
 	// HoeenHero
 	misspelled: {
 		shortDesc: "SpA 1.5x, Accuracy 0.8x, Never misses, only misspells moves.",
@@ -1149,6 +1118,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		flags: {},
 		name: "Deserted Dunes",
+		desc: "On switch-in, the weather becomes Deserted Dunes, which removes the weaknesses of the Rock type from Rock-type Pokemon. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by the Desolate Land, Primordial Sea or Delta Stream Abilities.",
+		shortDesc: "On switch-in, a strong Sandstorm begins until this Ability is not active in battle.",
 		gen: 9,
 	},
 
@@ -1284,7 +1255,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Kry
 	flashfreeze: {
 		name: "Flash Freeze",
-		shortDesc: "Heatproof + moves coming off of boosted attacking stat do 75% dmg.",
+		shortDesc: "Heatproof + foe's moves coming off of boosted attacking stat do 75% dmg.",
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Fire') {
@@ -2514,6 +2485,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// WarriorGallade
 	primevalharvest: {
 		shortDesc: "Sun: Heal 1/8 max HP, random berry if no item. Else 50% random berry if no item.",
+		desc: "In Sun, the user restores 1/8th of its max HP at the end of the turn and has a 100% chance to get a random berry if it has no item. Outside of sun, there is a 50% chance to get a random berry. Berry given will be one of: Cheri, Chesto, Pecha, Lum, Aguav, Liechi, Ganlon, Petaya, Apicot, Salac, Micle, Lansat, Enigma, Custap, Kee or Maranga.",
 		name: "Primeval Harvest",
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
@@ -2580,6 +2552,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Yellow Paint
 	yellowmagic: {
 		shortDesc: "+25% HP, +1 SpA, +1 Spe, Charge, or Paralyzes attacker when hit by an Electric move; Electric immunity.",
+		desc: "This Pokemon is immune to Electric type moves. When this Pokemon is hit by one, it either: restores 25% of its max HP, boosts Sp. Atk by 1 stage, boosts Speed by 1 stage, begins charging or paralyzes the attacker.",
 		name: "Yellow Magic",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
@@ -2616,7 +2589,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// YveltalNL
 	heightadvantage: {
-		shortDesc: "If this Pokemon's height is more than that of the opponent, lowers the opponent's Atk and Sp. Atk by 1..",
+		shortDesc: "If this Pokemon's height is more than that of the opponent, lowers the opponent's Atk and Sp. Atk by 1.",
 		name: "Height Advantage",
 		onStart(pokemon) {
 			let activated = false;

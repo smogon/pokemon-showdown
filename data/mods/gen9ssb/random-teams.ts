@@ -404,7 +404,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Jolly',
 	},
 	HiZo: {
-		species: 'Zoroark-Hisui', ability: 'Martyr Complex', item: 'Heavy-Duty Boots', gender: 'M',
+		species: 'Zoroark-Hisui', ability: 'Justified', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Last Respects', 'Blood Moon', 'Spirit Break'],
 		signatureMove: 'Scapegoat',
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naive', teraType: 'Fairy',

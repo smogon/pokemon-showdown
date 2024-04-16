@@ -354,7 +354,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// HiZo
 	zoroarkhisui: {
 		inherit: true,
-		abilities: {0: "Martyr Complex"},
+		abilities: {0: "Justified"},
 	},
 
 	// HoeenHero
