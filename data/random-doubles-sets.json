@@ -4,7 +4,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Earth Power", "Knock Off", "Leaf Storm", "Protect", "Sludge Bomb"],
+                "movepool": ["Earth Power", "Giga Drain", "Knock Off", "Leaf Storm", "Protect", "Sludge Bomb"],
                 "teraTypes": ["Dark", "Water"]
             }
         ]
@@ -1491,6 +1491,16 @@
                 "role": "Doubles Fast Attacker",
                 "movepool": ["Bullet Seed", "Close Combat", "Mach Punch", "Protect", "Rock Tomb", "Spore"],
                 "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "vigoroth": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["After You", "Double-Edge", "Encore", "Icy Wind", "Knock Off", "Slack Off", "Thunder Wave"],
+                "teraTypes": ["Ghost"]
             }
         ]
     },
@@ -3684,7 +3694,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Charm", "Fake Out", "Helping Hand", "Light Screen", "Psychic", "Reflect"],
+                "movepool": ["Fake Out", "Fake Tears", "Helping Hand", "Light Screen", "Psychic", "Reflect"],
                 "teraTypes": ["Dark", "Steel"]
             },
             {
@@ -4759,13 +4769,8 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Behemoth Bash", "Body Press", "Coaching", "Iron Defense", "Protect"],
+                "movepool": ["Body Press", "Coaching", "Heavy Slam", "Iron Defense", "Protect", "Snarl", "Wide Guard"],
                 "teraTypes": ["Fighting", "Fire", "Steel"]
-            },
-            {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Body Press", "Iron Defense", "Protect", "Snarl", "Wide Guard"],
-                "teraTypes": ["Fighting", "Fire"]
             }
         ]
     },
@@ -5044,7 +5049,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Bug Bite", "Circle Throw", "Knock Off", "Sticky Web", "String Shot", "U-turn"],
+                "movepool": ["Circle Throw", "Knock Off", "Lunge", "Sticky Web", "String Shot", "U-turn"],
                 "teraTypes": ["Water"]
             }
         ]
