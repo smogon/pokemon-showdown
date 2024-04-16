@@ -609,7 +609,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
 		if (['spiritomb', 'vespiquen', 'weavile'].includes(species.id)) return 'Pressure';
 		if (species.id === 'druddigon') return 'Rough Skin';
-		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
+		if (species.id === 'zebstrika') return moves.has('wildcharge') ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'stoutland') return 'Scrappy';
 		if (species.id === 'octillery') return 'Sniper';
 		if (species.id === 'stunfisk') return 'Static';
