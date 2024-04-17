@@ -1374,6 +1374,74 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Lunell')}|*sad vaporeon noises*`);
 		},
 	},
+	lyna: {
+		noCopy: true,
+		onStart(pokemon) {
+			let phrase = '';
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'alex':
+			case 'nya':
+				this.add(`c:|${getName('Lyna 氷')}|Oh, a cat <3`);
+				break;
+			case 'r8':
+			case 'clementine':
+			case 'lionyx':
+			case 'teclis':
+			case 'swiffix':
+			case 'ironwater':
+				phrase = 'slt';
+				break;
+			default:
+				phrase = 'Hey <3';
+				break;
+			}
+			this.add(`c:|${getName('Lyna 氷')}|${phrase}`);
+		},
+		onSwitchOut(pokemon) {
+			let phrase = '';
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'alex':
+			case 'nya':
+				phrase = 'You\'re so cute, I can\'t hit you...';
+				break;
+			case 'r8':
+			case 'clementine':
+			case 'lionyx':
+			case 'teclis':
+			case 'swiffix':
+			case 'ironwater':
+				phrase = '**Tournoi Hebdo sur <<arcade>> !**';
+				break;
+			default:
+				phrase = 'Nvm I\'m too busy for that, cya!';
+				break;
+			}
+			this.add(`c:|${getName('Lyna 氷')}|${phrase}`);
+		},
+		onFaint(pokemon) {
+			let phrase = '';
+			switch (this.toID(enemyStaff(pokemon))) {
+			case 'alex':
+			case 'nya':
+				phrase = 'You\'re definitely too cute...';
+				break;
+			case 'r8':
+				phrase = 'ok mais on dit pain au chocolat.';
+				break;
+			case 'clementine':
+			case 'lionyx':
+			case 'teclis':
+			case 'swiffix':
+			case 'ironwater':
+				phrase = 't\'as de la chance que je sois sympa..';
+				break;
+			default:
+				phrase = 'The flames were too frozen...';
+				break;
+			}
+			this.add(`c:|${getName('Lyna 氷')}|${phrase}`);
+		},
+	},
 	madmonty: {
 		noCopy: true,
 		onStart() {

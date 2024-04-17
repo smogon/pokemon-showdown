@@ -3246,6 +3246,38 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Lyna
+	wrathoffrozenflames: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		shortDesc: "After use, 80% chance to get Ice type, 20% chance to get Fire type.",
+		name: "Wrath of Frozen Flames",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Clangorous Soulblaze', target);
+		},
+		onHit(target, source, move) {
+			if (source.terastallized) return;
+			if (this.randomChance(8, 10)) {
+				source.addType('Ice');
+				this.add('-start', source, 'typeadd', 'Ice', '[from] move: Wrath of Frozen Flames');
+			} else {
+				source.addType('Fire');
+				this.add('-start', source, 'typeadd', 'Fire', '[from] move: Wrath of Frozen Flames');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+	},
+
 	// Mad Monty
 	stormshelter: {
 		accuracy: true,

@@ -518,6 +518,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Low Tide, High Tide"},
 	},
 
+	// Lyna
+	dragonair: {
+		inherit: true,
+		baseStats: {hp: 82, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
+		abilities: {0: "Magic Aura"},
+	},
+
 	// Mad Monty
 	castform: {
 		inherit: true,

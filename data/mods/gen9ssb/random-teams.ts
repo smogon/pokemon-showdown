@@ -565,6 +565,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Praise the Moon',
 		evs: {hp: 252, def: 4, spa: 252}, nature: 'Calm', teraType: 'Fairy', shiny: 512,
 	},
+	'Lyna 氷': {
+		species: 'Dragonair', ability: 'Magic Aura', item: 'Eviolite', gender: 'F',
+		moves: ['Victory Dance', 'V-create', 'Glacial Lance'],
+		signatureMove: 'Wrath of Frozen Flames',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Dragon',
+	},
 	'Mad Monty': {
 		species: 'Castform', ability: 'Climate Change', item: 'Heavy-Duty Boots', gender: 'M',
 		moves: ['Weather Ball', 'Defog', ['Solar Beam', 'Thunder', 'Aurora Veil']],
