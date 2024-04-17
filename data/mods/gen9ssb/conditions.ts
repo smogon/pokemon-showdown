@@ -705,6 +705,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('DianaNicole')}|Guess I didn't roll high enough`);
 		},
 	},
+	easyonthehills: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('EasyOnTheHills')}|Yo`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('EasyOnTheHills')}|Would you rather have unlimited bacon, but no more video games, or would you rather have games, unlimited games, but no more games.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('EasyOnTheHills')}|__loud Dorito bag crinkling noises__`);
+		},
+	},
 	elliot: {
 		noCopy: true,
 		onStart() {
@@ -2662,6 +2674,23 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onSideResidualSubOrder: 5,
 		onSideEnd(side) {
 			this.add('-sideend', side, 'move: Biotic Orb (Foe)');
+		},
+	},
+
+	// EasyOnTheHills
+	snack: {
+		name: "Snack",
+		duration: 3,
+		onStart(target) {
+			this.add('-start', target, 'snack');
+		},
+		onEnd(target) {
+			this.add('-end', target, 'snack');
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onResidual(target, source, effect) {
+			this.heal(target.baseMaxhp / 4);
 		},
 	},
 
