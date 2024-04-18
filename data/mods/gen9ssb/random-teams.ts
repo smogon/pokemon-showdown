@@ -930,6 +930,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'building character',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Stellar',
 	},
+	Vistar: {
+		species: 'Zeraora', ability: 'Prankster', item: 'Throat Spray', gender: 'M',
+		moves: ['Encore', 'Volt Switch', 'Copycat'],
+		signatureMove: 'Virtual Avatar',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Electric',
+	},
+	'Vistar-Idol': {
+		species: 'Zeraora', ability: 'Virtual Idol', item: 'Throat Spray', gender: 'M',
+		moves: ['Sparkling Aria', 'Torch Song', 'Teeter Dance'],
+		signatureMove: 'Overdrive',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Electric', shiny: true, skip: 'Vistar',
+	},
 	vmnunes: {
 		species: 'Shaymin-Sky', ability: 'Wild Growth', item: 'Big Root', gender: 'M',
 		moves: ['Giga Drain', 'Oblivion Wing', 'Draining Kiss'],

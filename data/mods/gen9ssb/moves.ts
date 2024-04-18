@@ -5366,6 +5366,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Vistar
+	virtualavatar: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Changes to Idol forme and sets a substitute.",
+		name: "Virtual Avatar",
+		pp: 1,
+		priority: 0,
+		flags: {sound: 1},
+		secondary: null,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Morning Sun', source);
+			this.add('-anim', source, 'Seed Flare', target);
+		},
+		onHit(target, source) {
+			changeSet(this, target, ssbSets['Vistar-Idol'], true);
+			this.add(`c:|${getName((source.illusion || source).name)}|Finally, I'm making my debut`);
+			if (source.volatiles['substitute']) return;
+			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+				this.add('-fail', source, 'move: Substitute', '[weak]');
+			} else {
+				source.addVolatile('substitute');
+				this.directDamage(source.maxhp / 4);
+			}
+		},
+		target: "self",
+		type: "Normal",
+	},
+
 	// vmnunes
 	gracideasblessing: {
 		accuracy: 100,

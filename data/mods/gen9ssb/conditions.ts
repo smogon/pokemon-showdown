@@ -2458,6 +2458,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	vistar: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Vistar')}|Oh hi! (0_0)/`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Vistar')}|I'll go on a break, wait for me!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Vistar')}|So... this is how my career ends...`);
+		},
+	},
 	warriorgallade: {
 		noCopy: true,
 		onStart(pokemon) {

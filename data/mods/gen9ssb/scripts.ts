@@ -1088,7 +1088,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const dancers = [];
 				for (const currentPoke of this.battle.getAllActive()) {
 					if (pokemon === currentPoke) continue;
-					if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
+					if (currentPoke.hasAbility(['dancer', 'virtualidol']) && !currentPoke.isSemiInvulnerable()) {
 						dancers.push(currentPoke);
 					}
 				}
@@ -1103,12 +1103,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				for (const dancer of dancers) {
 					if (this.battle.faintMessages()) break;
 					if (dancer.fainted) continue;
-					this.battle.add('-activate', dancer, 'ability: Dancer');
+					this.battle.add('-activate', dancer, 'ability: ' + dancer.getAbility().name);
 					const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
 						targetOf1stDance :
 						pokemon;
 					const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-					this.runMove(move.id, dancer, dancersTargetLoc, this.dex.abilities.get('dancer'), undefined, true);
+					this.runMove(move.id, dancer, dancersTargetLoc, dancer.getAbility(), undefined, true);
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];

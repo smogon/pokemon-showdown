@@ -2518,6 +2518,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// Vistar
+	virtualidol: {
+		shortDesc: "Dancer + Punk Rock.",
+		name: "Virtual Idol",
+		onBasePowerPriority: 7,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['sound']) {
+				this.debug('Punk Rock boost');
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['sound']) {
+				this.debug('Punk Rock weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		flags: {breakable: 1},
+	},
+
 	// vmnunes
 	wildgrowth: {
 		shortDesc: "Attacking moves also inflict Leech Seed on foes.",
