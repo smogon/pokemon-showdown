@@ -1823,7 +1823,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Solidarity",
 		pp: 15,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},

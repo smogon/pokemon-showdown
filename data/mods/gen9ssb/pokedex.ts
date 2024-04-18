@@ -99,7 +99,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// ausma
 	hatterene: {
 		inherit: true,
-		abilities: {0: "Latte Break"},
+		abilities: {0: "Cascade"},
 	},
 
 	// AuzBat

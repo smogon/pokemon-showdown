@@ -744,34 +744,42 @@ function SSBSets(target: string) {
 		if (toID(member) === toID(target)) name = member;
 	}
 	let buf = '';
-	const set = ssbSets[name];
-	const mutatedSpecies = dex.species.get(set.species);
-	if (!set.skip) {
-		buf += Utils.html`<h1><psicon pokemon="${mutatedSpecies.id}">${name}</h1>`;
-	} else {
-		buf += `<details><summary><psicon pokemon="${set.species}"><strong>${name.split('-').slice(1).join('-') + ' forme'}</strong></summary>`;
+	const sets: string[] = [];
+	for (const set in ssbSets) {
+		if (!set.startsWith(name)) continue;
+		if (!ssbSets[set].skip && set !== name) continue;
+		sets.push(set);
 	}
-	buf += generateSSBSet(set, dex, baseDex);
-	const item = dex.items.get(set.item as string);
-	if (!set.skip || set.signatureMove !== ssbSets[set.skip].signatureMove) {
-		const sigMove = baseDex.moves.get(set.signatureMove).exists && !Array.isArray(set.item) &&
-			typeof item.zMove === 'string' ?
-			dex.moves.get(item.zMove) : dex.moves.get(set.signatureMove);
-		buf += generateSSBMoveInfo(sigMove, dex);
+	for (const setName of sets) {
+		const set = ssbSets[setName];
+		const mutatedSpecies = dex.species.get(set.species);
+		if (!set.skip) {
+			buf += Utils.html`<h1><psicon pokemon="${mutatedSpecies.id}">${setName}</h1>`;
+		} else {
+			buf += `<details><summary><psicon pokemon="${set.species}"><strong>${setName.split('-').slice(1).join('-') + ' forme'}</strong></summary>`;
+		}
+		buf += generateSSBSet(set, dex, baseDex);
+		const item = dex.items.get(set.item as string);
+		if (!set.skip || set.signatureMove !== ssbSets[set.skip].signatureMove) {
+			const sigMove = baseDex.moves.get(set.signatureMove).exists && !Array.isArray(set.item) &&
+				typeof item.zMove === 'string' ?
+				dex.moves.get(item.zMove) : dex.moves.get(set.signatureMove);
+			buf += generateSSBMoveInfo(sigMove, dex);
+		}
+		buf += generateSSBItemInfo(set, dex, baseDex);
+		buf += generateSSBAbilityInfo(set, dex, baseDex);
+		buf += generateSSBInnateInfo(setName, dex, baseDex);
+		buf += generateSSBPokemonInfo(set.species, dex, baseDex);
+		if (!Array.isArray(set.item) && item.megaStone) {
+			buf += generateSSBPokemonInfo(item.megaStone, dex, baseDex);
+		// keys and Kennedy have an itemless forme change
+		} else if (['Rayquaza'].includes(set.species)) {
+			buf += generateSSBPokemonInfo(`${set.species}-Mega`, dex, baseDex);
+		} else if (['Cinderace'].includes(set.species)) {
+			buf += generateSSBPokemonInfo(`${set.species}-Gmax`, dex, baseDex);
+		}
+		if (set.skip) buf += `</details>`;
 	}
-	buf += generateSSBItemInfo(set, dex, baseDex);
-	buf += generateSSBAbilityInfo(set, dex, baseDex);
-	buf += generateSSBInnateInfo(name, dex, baseDex);
-	buf += generateSSBPokemonInfo(set.species, dex, baseDex);
-	if (!Array.isArray(set.item) && item.megaStone) {
-		buf += generateSSBPokemonInfo(item.megaStone, dex, baseDex);
-	// keys and Kennedy have an itemless forme change
-	} else if (['Rayquaza'].includes(set.species)) {
-		buf += generateSSBPokemonInfo(`${set.species}-Mega`, dex, baseDex);
-	} else if (['Cinderace'].includes(set.species)) {
-		buf += generateSSBPokemonInfo(`${set.species}-Gmax`, dex, baseDex);
-	}
-	if (set.skip) buf += `</details>`;
 	return buf;
 }
 
