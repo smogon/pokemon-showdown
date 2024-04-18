@@ -749,7 +749,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		},
 		target: "normal",
-		type: "Fairy",
+		type: "Psychic",
 	},
 
 	// AuzBat
@@ -1654,7 +1654,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-anim', attacker, 'Shell Smash', attacker);
 				return;
 			}
-			this.add('-prepare', attacker, move.name);
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, 'Geomancy', attacker);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
@@ -2833,7 +2832,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return priority + 1;
 			}
 		},
-		onHit(target, source, move) {
+		onHitField(target, source, move) {
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.hp <= 0 || pokemon.fainted) continue;
 				pokemon.forceSwitchFlag = true;
@@ -3222,7 +3221,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			this.add('-prepare', attacker, move.name);
 			this.boost({spa: 1}, attacker, attacker, move);
 			if (this.field.pseudoWeather['gravity']) {
 				this.attrLastMove('[still]');
@@ -3707,13 +3705,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Moonlight', source);
 		},
-		onHit(pokemon, target, move) {
+		onHit(target, source, move) {
 			if (this.randomChance(1, 2)) {
 				target.addVolatile('confusion');
-				this.boost({spa: 2, spd: 2}, pokemon);
+				this.boost({spa: 2, spd: 2}, source);
 			} else {
-				pokemon.addVolatile('confusion');
-				this.boost({spa: -1, spd: -1}, pokemon);
+				source.addVolatile('confusion');
+				this.boost({spa: -1, spd: -1}, source);
 			}
 		},
 		secondary: null,
@@ -5464,7 +5462,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.attrLastMove('[anim] Psycho Cut');
 				return;
 			}
-			this.add('-prepare', attacker, move.name);
 			this.attrLastMove('[anim] Tailwind');
 			this.add('-message', `${attacker.name} whipped up an intense whirlwind and began to glow a vivine green!`);
 			if (attacker.getItem().isBerry) {

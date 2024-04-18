@@ -193,6 +193,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', pokemon, 'Quag of Ruin');
 		},
 		onAnyModifyDef(def, target, source, move) {
+			if (!move) return;
 			const abilityHolder = this.effectState.target;
 			if (target.hasAbility('Quag of Ruin')) return;
 			if (!move.ruinedDef?.hasAbility('Quag of Ruin')) move.ruinedDef = abilityHolder;
@@ -214,6 +215,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-ability', pokemon, 'Clod of Ruin');
 		},
 		onAnyModifyAtk(atk, target, source, move) {
+			if (!move) return;
 			const abilityHolder = this.effectState.target;
 			if (target.hasAbility('Clod of Ruin')) return;
 			if (!move.ruinedAtk?.hasAbility('Clod of Ruin')) move.ruinedAtk = abilityHolder;
@@ -361,26 +363,47 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Switches out when below 50% HP. First re-entry gives +1 Def/SpD and +3 Spe.",
 		name: "Cascade",
 		onEmergencyExit(target) {
-			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
-			for (const side of this.sides) {
-				for (const active of side.active) {
+			if (target.volatiles['sigilsstorm']?.lostFocus) {
+				// delays the switch-out if using sigil's storm and it fails, such that the switch happens after trick room is used.
+				this.effectState.cascadeSigil = true;
+			} else {
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+				for (const active of this.getAllActive()) {
 					active.switchFlag = false;
 				}
+				target.switchFlag = true;
+				if (this.effectState.cascade === undefined) {
+					this.effectState.cascade = 1;
+				} else {
+					this.effectState.cascade = 0;
+				}
+				this.add(`c:|${getName('ausma')}|uuuuuuuuuuuuuuuuuuuuuuuuugggggghhhhhhhh [dizzy sound effect] sec bitte`);
+				this.add('-activate', target, 'ability: Cascade');
 			}
-			target.switchFlag = true;
-			if (this.effectState.cascade === undefined) {
-				this.effectState.cascade = 1;
-			} else {
-				this.effectState.cascade = 0;
-			}
-			this.add(`c:|${getName('ausma')}|uuuuuuuuuuuuuuuuuuuuuuuuugggggghhhhhhhh [dizzy sound effect] sec bitte`);
-			this.add('-activate', target, 'ability: Cascade');
 		},
 		onSwitchIn() {
 			if (this.effectState.cascade) {
 				this.boost({def: 1, spd: 1, spe: 3});
 				this.add(`c:|${getName('ausma')}|ok i got my coffee yall mfs r about to face the wrath of Big Stall™`);
 				this.effectState.cascade = 0;
+			}
+			delete this.effectState.cascadeSigil;
+		},
+		onResidual(target, source, effect) {
+			if (this.effectState.cascadeSigil) {
+				delete this.effectState.cascadeSigil;
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+				for (const active of this.getAllActive()) {
+					active.switchFlag = false;
+				}
+				target.switchFlag = true;
+				if (this.effectState.cascade === undefined) {
+					this.effectState.cascade = 1;
+				} else {
+					this.effectState.cascade = 0;
+				}
+				this.add(`c:|${getName('ausma')}|uuuuuuuuuuuuuuuuuuuuuuuuugggggghhhhhhhh [dizzy sound effect] sec bitte`);
+				this.add('-activate', target, 'ability: Cascade');
 			}
 		},
 		flags: {},
@@ -436,7 +459,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const dazzlingHolder = this.effectState.target;
 			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Blitz of Ruin', move, '[of] ' + target);
+				this.add('cant', target, 'ability: Blitz of Ruin', move, '[of] ' + source);
 				return false;
 			}
 		},
@@ -1802,6 +1825,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "High Performance Computing",
 		flags: {},
 		onBeforeTurn(source) {
+			if (source.terastallized) return;
 			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
 			source.setType(type);
 			this.add('-start', source, 'typechange', type, '[from] ability: High Performance Computing');
@@ -2232,7 +2256,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.lastMove && target.lastMove.id !== 'struggle') {
 				if (move.id === target.lastMove.id) {
 					this.attrLastMove('[still]');
-					this.add('cant', this.effectState.target, 'ability: Overasked Clause', move, '[of] ' + target);
+					this.add('cant', target, 'ability: Overasked Clause', move, '[of] ' + source);
 					return false;
 				}
 			}
@@ -2300,7 +2324,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const dazzlingHolder = this.effectState.target;
 				if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 					this.attrLastMove('[still]');
-					this.add('cant', dazzlingHolder, 'ability: Sand Sleuth', move, '[of] ' + target);
+					this.add('cant', target, 'ability: Sand Sleuth', move, '[of] ' + source);
 					return false;
 				}
 			}
