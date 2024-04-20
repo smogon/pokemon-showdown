@@ -1613,22 +1613,34 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			case 'partman':
 				message = 'Hii Q - oh, it\'s just me.';
 				break;
-			case 'hydrostatics':
-				message = 'Here to bully Hydro';
+			case 'arsenal':
+				message = 'Do I count as a gunner?';
 				break;
-			case 'softflex':
-				message = '/me softly flexes';
+			case 'aqrator':
+				message = 'Speaking of cafes - this Pokemon is so popular, it has an entire cafe dedicated to it in the Pokemon world! Alongside the cafe, there\'s also stuff like a bus tour where you can sit one-on-one with the Pokemon and admire its beauty.';
+				break;
+			case 'beowulf':
+				message = 'BEE';
+				break;
+			case 'clerica':
+				message = 'SMELY HIIII';
 				break;
 			case 'computerwizard8800':
 				message = 'CWIZ SLEEP';
+				break;
+			case 'corjon':
+				message = 'BREADBOWL';
+				break;
+			case 'hydrostatics':
+				message = 'Here to bully Hydro';
+				break;
+			case 'kennedy':
+				message = 'Down the reds!';
 				break;
 			case 'kry':
 				this.add(`c:|${getName('PartMan')}|%r 14 // @Kry`);
 				this.add(`c:|${getName('Ice Kyubs')}|Roll: 14`);
 				message = null;
-				break;
-			case 'kennedy':
-				message = 'Down the reds!';
 				break;
 			case 'mex':
 				message = 'Probopass moment';
@@ -1636,17 +1648,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			case 'monkey':
 				message = 'Remember to smile!';
 				break;
+			case 'notater517':
+				message = 'E-excuse me s-senpai >///<';
+				break;
 			case 'pissog':
 				message = 'Ma ciaomi queste noci';
-				break;
-			case 'sulo':
-				message = '...Sulo\'s AFK again, aren\'t they?';
-				break;
-			case 'warriorgallade':
-				message = 'Berry nice to meet you!';
-				break;
-			case 'corjon':
-				message = 'BREADBOWL';
 				break;
 			case 'pyro':
 				message = 'Fight me you boiled potato';
@@ -1654,30 +1660,27 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			case 'rsb':
 				message = '/me hugs';
 				break;
-			case 'zalm':
-				message = '<(:O)00000>';
+			case 'siegfried':
+				message = 'Is Sieg baked or boiled?';
+				break;
+			case 'softflex':
+				message = '/me softly flexes';
+				break;
+			case 'sulo':
+				message = '...Sulo\'s AFK again, aren\'t they?';
 				break;
 			case 'trace':
 				this.add('-message', `PartMan's Neutralizing Gas filled the area! (but not really)`);
 				message = null;
 				break;
+			case 'warriorgallade':
+				message = 'Berry nice to meet you!';
+				break;
 			case 'za':
 				message = '/me shitposts';
 				break;
-			case 'arsenal':
-				message = 'Do I count as a gunner?';
-				break;
-			case 'notater517':
-				message = 'E-excuse me s-senpai >///<';
-				break;
-			case 'siegfried':
-				message = 'Is Sieg baked or boiled?';
-				break;
-			case 'clerica':
-				message = 'SMELY HIIII';
-				break;
-			case 'beowulf':
-				message = 'BEE';
+			case 'zalm':
+				message = '<(:O)00000>';
 				break;
 			default:
 				message = 'Hiii QT :3';
