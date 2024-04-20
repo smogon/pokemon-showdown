@@ -529,7 +529,7 @@ const OFFICIAL_AVATARS = new Set([
 ]);
 
 const OFFICIAL_AVATARS_BELIOT419 = new Set([
-	'acerola', 'aetheremployee', 'aetheremployeef', 'aetherfoundation', 'aetherfoundationf', 'anabel',
+	'acerola', 'aetheremployee', 'aetheremployeef', 'aetherfoundation', 'aetherfoundationf', 'anabel-gen7',
 	'beauty-gen7', 'blue-gen7', 'burnet', 'colress-gen7', 'dexio', 'elio', 'faba', 'gladion-stance',
 	'gladion', 'grimsley-gen7', 'hapu', 'hau-stance', 'hau', 'hiker-gen7', 'ilima', 'kahili', 'kiawe',
 	'kukui-stand', 'kukui', 'lana', 'lass-gen7', 'lillie-z', 'lillie', 'lusamine-nihilego', 'lusamine',
@@ -633,6 +633,13 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'miku-grass', 'miku-psychic', 'miku-water', 'mina-masters', 'mustard-champion', 'nate-masters', 'nate-pokestar', 'ogreclan',
 	'perrin', 'piers-masters', 'red-masters3', 'rosa-pokestar2', 'roxanne-masters', 'roxie-masters', 'ruffian', 'sycamore-masters',
 	'tate-gen6', 'tucker', 'victor-league', 'victor-tundra', 'viola-masters', 'wallace-masters', 'worker-gen9', 'yukito-hideko',
+	'aarune', 'adaman-masters', 'allister-unmasked', 'anabel', 'aquagrunt-rse', 'aquagruntf-rse', 'aquasuit', 'archie-usum',
+	'arlo', 'barry-masters', 'blanche-casual', 'blanche', 'brandon', 'candela-casual', 'candela', 'candice-masters', 'christoph',
+	'cliff', 'curtis', 'dana', 'gladion-masters', 'greta', 'gurkinn', 'heath', 'irida-masters', 'jamie', 'magmagrunt-rse',
+	'magmagruntf-rse', 'magmasuit', 'magnus', 'mateo', 'mirror', 'mohn-anime', 'mohn', 'mom-paldea', 'mom-unova', 'mrbriney',
+	'mrstone', 'nancy', 'nate-pokestar3', 'neroli', 'peony-league', 'phil', 'player-go', 'playerf-go', 'rhi', 'rita', 'river',
+	'rosa-pokestar3', 'sabrina-frlg', 'selene-masters', 'sierra', 'spark-casual', 'spark', 'spenser', 'toddsnap', 'toddsnap2',
+	'victor-masters', 'vince', 'wally-rse', 'willow-casual', 'willow', 'yancy', 'zinnia-masters',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
