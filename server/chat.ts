@@ -1236,7 +1236,9 @@ export class CommandContext extends MessageContext {
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
 		if (Config.restrictLinks && !user.autoconfirmed) {
 			if (this.checkBannedLinks(message).length && !(targetUser?.can('lock') || room?.settings.isHelp)) {
-				throw new Chat.ErrorMessage("Your account must be autoconfirmed to send links to other users, except for global staff.");
+				throw new Chat.ErrorMessage("Your account must be autoconfirmed " +
+					"(have won at least one rated battle and been registered for one week or longer) " +
+					"to send links to other users, except for global staff.");
 			}
 		}
 

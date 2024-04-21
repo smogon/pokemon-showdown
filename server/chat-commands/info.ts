@@ -2772,7 +2772,7 @@ export const commands: Chat.ChatCommands = {
 		if (Monitor.countNetRequests(connection.ip)) {
 			return this.errorReply(`You are using this command too quickly. Wait a bit and try again.`);
 		}
-		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command.`);
+		if (!user.autoconfirmed) return this.errorReply(`Only autoconfirmed users can use this command. Autoconfirmed users have won at least one rated battle and been registered for one week or longer`);
 		target = toID(target);
 		if (!target) target = user.id;
 		let rawResult;
