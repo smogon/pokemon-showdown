@@ -4243,6 +4243,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			onStart(target) {
 				this.add('-start', target, 'ability: Slow Start');
 			},
+			onResidual(pokemon) {
+				if (!pokemon.activeTurns) {
+					this.effectState.duration += 1;
+				}
+			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
 				return this.chainModify(0.5);
