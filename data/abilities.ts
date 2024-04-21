@@ -1994,6 +1994,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	illusion: {
 		onBeforeSwitchIn(pokemon) {
 			pokemon.illusion = null;
+			let details
 			// yes, you can Illusion an active pokemon but only if it's to your right
 			for (let i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
 				const possibleTarget = pokemon.side.pokemon[i];
@@ -2002,10 +2003,13 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					// Illusion will not disguise as anything
 					if (!pokemon.terastallized || possibleTarget.species.baseSpecies !== 'Ogerpon') {
 						pokemon.illusion = possibleTarget;
+						details = possibleTarget.species.name + (possibleTarget.level === 100 ? '' : ', L' + possibleTarget.level) +
+							(possibleTarget.gender === '' ? '' : ', ' + possibleTarget.gender) + (possibleTarget.set.shiny ? ', shiny' : '');
 					}
 					break;
 				}
 			}
+			this.add('replace', pokemon, details);
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (target.illusion) {
