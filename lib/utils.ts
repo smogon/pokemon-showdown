@@ -314,13 +314,12 @@ export function clearRequireCache(options: {exclude?: string[]} = {}) {
 	}
 }
 
-export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[], depth = 0) {
-	depth++;
-	if (depth >= 10) return;
-	if (!mod.children || excludes.some(p => mod.filename.includes(p))) return;
-	for (const child of mod.children) {
+export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[]) {
+	if (!mod.children?.length || excludes.some(p => mod.filename.includes(p))) return;
+	for (const [i, child] of mod.children.entries()) {
 		if (excludes.some(p => child.filename.includes(p))) continue;
-		uncacheModuleTree(child, excludes, depth);
+		mod.children?.splice(i, 1);
+		uncacheModuleTree(child, excludes);
 	}
 	delete (mod as any).children;
 }
