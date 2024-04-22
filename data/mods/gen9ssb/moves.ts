@@ -127,7 +127,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Trick Room', target);
 			this.add('-anim', source, 'Clangerous Soul', source);
@@ -3528,7 +3528,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: null,
 		target: "self",
-		type: "grass",
+		type: "Grass",
 	},
 
 	// MyPearl
@@ -3838,15 +3838,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Jet Punch', target);
 			this.add('-anim', source, 'Flare Blitz', target);
 		},
-		secondary: {
-			chance: 100,
-			status: 'brn',
-			self: {
-				boosts: {
-					atk: 1,
+		secondaries: [
+			{
+				chance: 100,
+				status: 'brn',
+			}, {
+				chance: 100,
+				self: {
+					boosts: {
+						atk: 1,
+					},
 				},
 			},
-		},
+		],
 		target: "normal",
 		type: "Water",
 	},

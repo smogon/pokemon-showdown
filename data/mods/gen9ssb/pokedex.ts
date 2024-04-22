@@ -84,6 +84,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Marble Phantasm"},
 	},
 
+	// Artemis
+	genesect: {
+		inherit: true,
+		abilities: {0: "Supervised Learning"},
+	},
+
 	// Arya
 	trapinch: {
 		inherit: true,
@@ -134,6 +140,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	solgaleo: {
 		inherit: true,
 		abilities: {0: "Magic Guard"},
+	},
+
+	// blazeofvictory
+	sylveon: {
+		inherit: true,
+		abilities: {0: "Prismatic Lens"},
 	},
 
 	// Blitz
@@ -258,6 +270,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Flash Fire"},
 	},
 
+	// EasyOnTheHills
+	snorlax: {
+		inherit: true,
+		abilities: {0: "Immunity"},
+	},
+
 	// Elliot
 	sinistea: {
 		inherit: true,
@@ -292,7 +310,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Felucia
 	vespiquen: {
 		inherit: true,
-		abilities: {0: "Regenerator"},
+		abilities: {0: "Mountaineer"},
 	},
 
 	// Froggeh
@@ -405,6 +423,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	vulpixalola: {
 		inherit: true,
 		abilities: {0: "Fortifying Frost"},
+	},
+
+	// Kalalokki
+	flamigo: {
+		inherit: true,
+		abilities: {0: "Scrappy"},
 	},
 
 	// Karthik
@@ -581,7 +605,21 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Harambe Hit"},
 	},
 
+	// MyPearl
+	latios: {
+		inherit: true,
+		abilities: {0: "Eon Call"},
+	},
+	latias: {
+		inherit: true,
+		abilities: {0: "Eon Call"},
+	},
+
 	// Ney
+	banette: {
+		inherit: true,
+		abilities: {0: "Insomnia"},
+	},
 	banettemega: {
 		inherit: true,
 		abilities: {0: "Prankster Plus"},
@@ -657,6 +695,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Prankster"},
 	},
 
+	// ptoad
+	politoed: {
+		inherit: true,
+		abilities: {0: "Drizzle"},
+	},
+
+	// Pulse_kS
+	hydreigon: {
+		inherit: true,
+		abilities: {0: "Not Orichalcum Pulse"},
+	},
+
 	// PYRO
 	kingambit: {
 		inherit: true,
@@ -667,6 +717,24 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	ribombee: {
 		inherit: true,
 		abilities: {0: "Fancy Scarf"},
+	},
+
+	// quziel
+	chromera: {
+		inherit: true,
+		abilities: {0: "High Performance Computing"},
+	},
+
+	// R8
+	chansey: {
+		inherit: true,
+		abilities: {0: "Anti-Pelau"},
+	},
+
+	// Rainshaft
+	xerneas: {
+		inherit: true,
+		abilities: {0: "Rainy's Aura"},
 	},
 
 	// Ransei
@@ -702,6 +770,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Water Absorb"},
 	},
 
+	// SexyMalasada
+	typhlosion: {
+		inherit: true,
+		abilities: {0: "Ancestry Ritual"},
+	},
+	typhlosionhisui: {
+		inherit: true,
+		abilities: {0: "Ancestry Ritual"},
+	},
+
 	// sharp_claw
 	sneasel: {
 		inherit: true,
@@ -715,6 +793,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 
 	// Siegfried
+	ampharos: {
+		inherit: true,
+		abilities: {0: "Static"},
+	},
 	ampharosmega: {
 		inherit: true,
 		abilities: {0: "Magical Mystery Charge"},
@@ -732,6 +814,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 88, atk: 117, def: 122, spa: 74, spd: 85, spe: 84},
 		abilities: {0: "Spikes of Wrath"},
+	},
+
+	// snake
+	fidgit: {
+		inherit: true,
+		abilities: {0: "Persistent"},
 	},
 
 	// Soft Flex
@@ -775,6 +863,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 84, atk: 66, def: 88, spa: 81, spd: 101, spe: 50},
 		abilities: {0: "Stinky"},
+	},
+
+	// Teclis
+	gallade: {
+		inherit: true,
+		abilities: {0: "Sharpness"},
 	},
 
 	// Tenshi
@@ -941,6 +1035,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "See No Evil, Hear No Evil, Speak No Evil"},
 	},
 
+	// Vistar
+	zeraora: {
+		inherit: true,
+		abilities: {0: "Prankster"},
+	},
+
+	// vmnunes
+	shayminsky: {
+		inherit: true,
+		abilities: {0: "Wild Growth"},
+	},
+
 	// WarriorGallade
 	tropius: {
 		inherit: true,
@@ -987,6 +1093,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	weedle: {
 		inherit: true,
 		baseStats: {hp: 100, atk: 90, def: 100, spa: 35, spd: 90, spe: 100},
+		abilities: {0: "Water Bubble"},
 	},
 
 	// Zarel
@@ -997,6 +1104,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	meloettapirouette: {
 		inherit: true,
 		abilities: {0: "Tempo Change"},
+	},
+
+	// zee
+	lilliganthisui: {
+		inherit: true,
+		abilities: {0: "Chlorophyll"},
 	},
 
 	// zoro
