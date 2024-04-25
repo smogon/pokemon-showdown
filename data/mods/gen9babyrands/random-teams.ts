@@ -45,7 +45,14 @@ const MOVE_PAIRS = [
 export class RandomBabyrandsTeams extends RandomTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
+
+		// Overwrite enforcementcheckers where needed here
+		this.moveEnforcementCheckers['Bug'] = (movePool, moves, abilities, types, counter) => (
+			movePool.includes('megahorn') || movePool.includes('xscissor') ||
+			(!counter.get('Bug') && (types.includes('Electric') || types.includes('Water')))
+		);
 	}
+
 
 	cullMovePool(
 		types: string[],
@@ -125,10 +132,13 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			[SETUP, SETUP],
 			[SETUP, PIVOT_MOVES],
 			[SETUP, HAZARDS],
-			[statusMoves, ['healingwish', 'trick']],
+			[statusMoves, ['healingwish', 'trick', 'destinybond']],
 
 			// These moves are redundant with each other
-			[['alluringvoice', 'dazlinggleam', 'drainingkiss', 'moonblast'], ['alluringvoice', 'dazlinggleam', 'drainingkiss', 'moonblast']],
+			[
+				['alluringvoice', 'dazlinggleam', 'drainingkiss', 'moonblast'],
+			    ['alluringvoice', 'dazlinggleam', 'drainingkiss', 'moonblast'],
+			],
 			[['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'], ['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb']],
 			[['thunderwave', 'toxic', 'willowisp'], ['thunderwave', 'toxic', 'willowisp']],
 			['roar', 'yawn'],
@@ -137,8 +147,9 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			['toxic', 'toxicspikes'],
 			['rockblast', 'stoneedge'],
 			['bodyslam', 'doubleedge'],
-			['gunkshot', 'poisonjab']
-		]
+			['gunkshot', 'poisonjab'],
+			['liquidation', 'surf'],
+		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 	}
@@ -259,7 +270,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		}
 
 		// Enforce Tera STAB
-		if (!counter.get('stabtera') && 'Bulky Support' !== role) {
+		if (!counter.get('stabtera') && role !== 'Bulky Support') {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
@@ -425,13 +436,16 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		if (species.id === 'tyrogue') return 'Guts';
 		if (species.id === 'chinchou') return 'Volt Absorb';
 		if (species.id === 'geodudealola') return 'Galvanize';
+		if (species.id === 'shroomish') return 'Effect Spore';
 		if (species.id === 'deerling') return 'Serene Grace';
-		if (species.id === 'solosis') return this.randomChance(4, 5) ? 'Magic Guard': 'Regenerator';
+		if (species.id === 'tinkatink') return this.randomChance(1, 2) ? 'Mold Breaker' : 'Pickpocket';
+		if (species.id === 'litwick') return this.randomChance(1, 2) ? 'Flame Body' : 'Flash Fire';
+		if (species.id === 'solosis') return this.randomChance(4, 5) ? 'Magic Guard' : 'Regenerator';
 
 		if (species.id === 'cranidos' && moves.has('trailblaze')) return 'Mold Breaker';
 		if (species.id === 'murkrow' && role === 'Setup Sweeper') return 'Super Luck';
+		if (species.id === 'cetoddle' && role === 'Wallbreaker') return 'Sheer Force';
 
-		if (abilities.has('Poison Heal') && moves.has('protect')) return 'Poison Heal';
 		if (abilities.has('Unburden') && moves.has('acrobatics')) return 'Unburden';
 		if (abilities.has('Guts') && moves.has('facade')) return 'Guts';
 		if (abilities.has('Quick Feet') && moves.has('facade')) return 'Quick Feet';
@@ -509,15 +523,16 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		if (moves.has('trick')) return 'Choice Scarf';
 		if (moves.has('focusenergy')) return 'Scope Lens';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
+		if (moves.has('rest') && moves.has('sleeptalk')) return 'Eviolite';
 		if (moves.has('acrobatics')) return ability === 'Unburden' ? 'Oran Berry' : '';
 		if (ability === 'Guts' && moves.has('facade')) return 'Flame Orb';
-		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
+		if (ability === 'Quick Feet') return 'Toxic Orb';
 
 		if (
 			['Harvest', 'Ripen', 'Unburden'].some(abil => abil === ability) ||
 			moves.has('belch') || moves.has('bellydrum')
 		) return "Oran Berry";
-		if (this.dex.getEffectiveness('Rock', species) >= 2 ) return 'Heavy-Duty Boots';
+		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
 	}
 
 	getItem(
@@ -531,7 +546,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
-		if (role === 'Fast Attacker' && !counter.get('Status')) {
+		if (role === 'Fast Attacker' && (!counter.get('Status') || (counter.get('Status') === 1 && moves.has('destinybond')))) {
 			return 'Choice Scarf';
 		}
 		if (['Setup Sweeper', 'Wallbreaker'].includes(role)) {
@@ -693,7 +708,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-			let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
+			const species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
@@ -753,8 +768,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			// Limit three of any type combination in Monotype
 			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
 
-			let set: RandomTeamsTypes.RandomSet;
-			set = this.randomSet(species, teamDetails, false, false);
+			const set: RandomTeamsTypes.RandomSet = this.randomSet(species, teamDetails, false, false);
 			pokemon.push(set);
 
 
