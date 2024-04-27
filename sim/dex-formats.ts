@@ -325,6 +325,22 @@ export class RuleTable extends Map<string, string> {
 			throw new Error(`EV Limit ${this.evLimit}${this.blame('evlimit')} can't be less than 0 (you might have meant: "! EV Limit" to remove the limit, or "EV Limit = 0" to ban EVs).`);
 		}
 
+		if (timer.starting && (timer.starting < 10 || timer.starting > 1200)) {
+			throw new Error(`Timer starting value ${timer.starting}${this.blame('timerstarting')} must be between 10 and 1200 seconds.`);
+		}
+		if (timer.grace && timer.grace > 300) {
+			throw new Error(`Timer grace value ${timer.grace}${this.blame('timergrace')} must be at most 300 seconds.`);
+		}
+		if (timer.addPerTurn && timer.addPerTurn > 30) {
+			throw new Error(`Timer add per turn value ${timer.addPerTurn}${this.blame('timeraddperturn')} must be at most 30 seconds.`);
+		}
+		if (timer.maxPerTurn && (timer.maxPerTurn < 10 || timer.maxPerTurn > 1200)) {
+			throw new Error(`Timer max per turn value ${timer.maxPerTurn}${this.blame('timermaxperturn')} must be between 10 and 1200 seconds.`);
+		}
+		if (timer.maxFirstTurn && (timer.maxFirstTurn < 10 || timer.maxFirstTurn > 1200)) {
+			throw new Error(`Timer max first turn value ${timer.maxFirstTurn}${this.blame('timermaxfirstturn')} must be between 10 and 1200 seconds.`);
+		}
+
 		if ((format as any).cupLevelLimit) {
 			throw new Error(`cupLevelLimit.range[0], cupLevelLimit.range[1], cupLevelLimit.total are now rules, respectively: "Min Level = NUMBER", "Max Level = NUMBER", and "Max Total Level = NUMBER"`);
 		}
