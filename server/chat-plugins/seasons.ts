@@ -328,6 +328,7 @@ export const handlers: Chat.Handlers = {
 		if (!room.battle) return; // should never happen, just sating TS
 		// now first verify they have a badge
 		const badges = getBadges(user, room.battle.format);
+		if (!badges.length) return;
 		const slot = room.battle.playerTable[user.id]?.slot;
 		if (!slot) return; // not in battle fsr? wack
 		for (const badge of badges) {
