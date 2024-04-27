@@ -337,7 +337,7 @@ export const handlers: Chat.Handlers = {
 
 		if (
 			checkPublicPhase() && !room.battle.forcedSettings.privacy &&
-			badges.filter(x => x.format === room.battle!.format).length
+			badges.filter(x => x.format === room.battle!.format).length && room.battle.rated
 		) {
 			room.battle.forcedSettings.privacy = 'medal';
 			room.add(
