@@ -335,7 +335,10 @@ export const handlers: Chat.Handlers = {
 			room.add(`|badge|${slot}|${badge.type}|${badge.format}|${BADGE_THRESHOLDS[badge.type]}-${data.current.season}`);
 		}
 
-		if (checkPublicPhase() && !room.battle.forcedSettings.privacy) {
+		if (
+			checkPublicPhase() && !room.battle.forcedSettings.privacy &&
+			badges.filter(x => x.format === room.battle!.format).length
+		) {
 			room.battle.forcedSettings.privacy = 'medal';
 			room.add(
 				`|html|<div class="broadcast-red"><strong>This battle is required to be public due to one or more player having a season medal.</strong><br />` +
