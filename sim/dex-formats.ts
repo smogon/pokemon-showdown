@@ -218,11 +218,11 @@ export class RuleTable extends Map<string, string> {
 		if (this.valueRules.has('timerstarting')) {
 			timer.starting = Number(this.valueRules.get('timerstarting'));
 		}
-		if (this.valueRules.has('dctimer')) {
-			timer.dcTimer = toID(this.valueRules.get('dctimer')) === 'true';
+		if (this.has('dctimer')) {
+			timer.dcTimer = true;
 		}
-		if (this.valueRules.has('dctimerbank')) {
-			timer.dcTimer = toID(this.valueRules.get('dctimerbank')) === 'true';
+		if (this.has('dctimerbank')) {
+			timer.dcTimer = true;
 		}
 		if (this.valueRules.has('timergrace')) {
 			timer.grace = Number(this.valueRules.get('timergrace'));
@@ -236,11 +236,11 @@ export class RuleTable extends Map<string, string> {
 		if (this.valueRules.has('timermaxfirstturn')) {
 			timer.maxFirstTurn = Number(this.valueRules.get('timermaxfirstturn'));
 		}
-		if (this.valueRules.has('timeoutautochoose')) {
-			timer.timeoutAutoChoose = toID(this.valueRules.get('timeoutautochoose')) === 'true';
+		if (this.has('timeoutautochoose')) {
+			timer.timeoutAutoChoose = true;
 		}
-		if (this.valueRules.has('timeraccelerate')) {
-			timer.accelerate = toID(this.valueRules.get('timeraccelerate')) === 'true';
+		if (this.has('timeraccelerate')) {
+			timer.accelerate = true;
 		}
 		if (Object.keys(timer).length) this.timer = [timer, format.name];
 
@@ -413,7 +413,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	/**
 	 * Only applies to rules, not formats
 	 */
-	declare readonly hasValue?: boolean | 'integer' | 'positive-integer' | 'boolean';
+	declare readonly hasValue?: boolean | 'integer' | 'positive-integer';
 	declare readonly onValidateRule?: (
 		this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string
 	) => string | void;
@@ -762,25 +762,17 @@ export class DexFormats {
 				if (value === 'Current Gen') value = `${this.dex.gen}`;
 				if ((subformat.id === 'pickedteamsize' || subformat.id === 'evlimit') && value === 'Auto') {
 					// can't be resolved until later
-				} else {
-					switch (subformat.hasValue) {
-					case 'integer': case 'positive-integer':
-						const intValue = parseInt(value);
-						if (isNaN(intValue) || value !== `${intValue}`) {
-							throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
+				} else if (subformat.hasValue === 'integer' || subformat.hasValue === 'positive-integer') {
+					const intValue = parseInt(value);
+					if (isNaN(intValue) || value !== `${intValue}`) {
+						throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
+					}
+					if (subformat.hasValue === 'positive-integer') {
+						if (parseInt(value) === 0) {
+							throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
 						}
-						if (subformat.hasValue === 'positive-integer') {
-							if (parseInt(value) === 0) {
-								throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
-							}
-							if (parseInt(value) <= 0) {
-								throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
-							}
-						}
-						break;
-					case 'boolean':
-						if (!['true', 'false'].includes(toID(value))) {
-							throw new Error(`In rule "${ruleSpec}", "${value}" must be either "True" or "False".`);
+						if (parseInt(value) <= 0) {
+							throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
 						}
 					}
 				}

@@ -702,14 +702,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'DC Timer',
 		desc: "Enables or disables the disconnection timer",
-		hasValue: 'boolean',
 		// hardcoded in server/room-battle.ts
 	},
 	dctimerbank: {
 		effectType: 'Rule',
 		name: 'DC Timer Bank',
 		desc: "Enables or disables the disconnection timer bank",
-		hasValue: 'boolean',
 		// hardcoded in server/room-battle.ts
 	},
 	timergrace: {
@@ -744,14 +742,12 @@ export const Rulesets: {[k: string]: FormatData} = {
 		effectType: 'Rule',
 		name: 'Timeout Auto Choose',
 		desc: "Enables or disables automatic selection of moves when a player times out",
-		hasValue: 'boolean',
 		// hardcoded in server/room-battle.ts
 	},
 	timeraccelerate: {
 		effectType: 'Rule',
 		name: 'Timer Accelerate',
 		desc: "Enables or disables timer acceleration",
-		hasValue: 'boolean',
 		// hardcoded in server/room-battle.ts
 	},
 	blitz: {
@@ -775,7 +771,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		ruleset: [
 			'Timer Starting = 420', 'Timer Grace = 90',
 			'Timer Add Per Turn = 0', 'Timer Max Per Turn = 55', 'Timer Max First Turn = 90',
-			'Timeout Auto Choose = true', 'DC Timer Bank = false',
+			'Timeout Auto Choose', 'DC Timer Bank',
 		],
 	},
 	speciesclause: {
