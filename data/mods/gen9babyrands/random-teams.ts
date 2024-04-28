@@ -572,9 +572,8 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		}
 		if (species.cosmeticFormes) return this.sample([species.name].concat(species.cosmeticFormes));
 
-		// //TODO: new list
 		// Consolidate mostly-cosmetic formes, at least for the purposes of Random Battles
-		if (['Dudunsparce', 'Magearna', 'Maushold', 'Polteageist', 'Sinistcha', 'Zarude'].includes(species.baseSpecies)) {
+		if (['Poltchageist', 'Sinistea'].includes(species.baseSpecies)) {
 			return this.sample([species.name].concat(species.otherFormes!));
 		}
 		return species.name;
