@@ -913,10 +913,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (pokemon.volatiles[disguisedAs]) {
 					pokemon.removeVolatile(disguisedAs);
 				}
-				if (!pokemon.volatiles[this.toID(pokemon.name)]) {
-					const status = this.dex.conditions.get(this.toID(pokemon.name));
+				if (!pokemon.volatiles[this.toID(pokemon.set.name)]) {
+					const status = this.dex.conditions.get(this.toID(pokemon.set.name));
 					if (status?.exists) {
-						pokemon.addVolatile(this.toID(pokemon.name), pokemon);
+						pokemon.addVolatile(this.toID(pokemon.set.name), pokemon);
 					}
 				}
 			}
