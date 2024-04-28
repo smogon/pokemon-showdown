@@ -4353,7 +4353,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "First turn only. Steals boosts and screens.",
 		pp: 5,
 		priority: 2,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, bite: 1},
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
 				this.hint("Confiscate only works on your first turn out.");
