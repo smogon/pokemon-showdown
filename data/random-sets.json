@@ -420,7 +420,7 @@
         ]
     },
     "dodrio": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1445,7 +1445,7 @@
         ]
     },
     "smeargle": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Fast Support",
@@ -1775,7 +1775,7 @@
         ]
     },
     "plusle": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2380,7 +2380,7 @@
         ]
     },
     "pachirisu": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -2600,7 +2600,7 @@
         ]
     },
     "sneasler": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2655,7 +2655,7 @@
         ]
     },
     "magmortar": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3140,7 +3140,7 @@
         ]
     },
     "arceuselectric": {
-        "level": 69,
+        "level": 70,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3440,7 +3440,7 @@
         ]
     },
     "whimsicott": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3710,7 +3710,7 @@
         ]
     },
     "cryogonal": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4105,7 +4105,7 @@
         ]
     },
     "vivillon": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -4210,7 +4210,7 @@
         ]
     },
     "sylveon": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -4615,7 +4615,7 @@
         ]
     },
     "lurantis": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5030,7 +5030,7 @@
         ]
     },
     "hatterene": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -5150,7 +5150,7 @@
         ]
     },
     "indeedee": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5725,7 +5725,7 @@
         ]
     },
     "mabosstiff": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -6015,7 +6015,7 @@
         ]
     },
     "farigiraf": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -6445,7 +6445,7 @@
         ]
     },
     "fezandipiti": {
-        "level": 81,
+        "level": 82,
         "sets": [
             {
                 "role": "AV Pivot",
