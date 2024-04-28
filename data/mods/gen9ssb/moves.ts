@@ -1001,7 +1001,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.directDamage(target.maxhp / 4);
 		},
 		onAfterHit(target, source, move) {
-			if (!!this.canSwitch(source.side)) {
+			if (this.canSwitch(source.side)) {
 				this.actions.useMove('batonpass', source);
 			}
 		},
