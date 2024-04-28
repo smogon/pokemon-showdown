@@ -3435,7 +3435,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, m) {
 			const sigMoveName = ssbSets[(target.illusion || target).name].signatureMove;
 			const move = this.dex.getActiveMove(sigMoveName);
-			if (!target || target.beingCalledBack || move.flags['failcopycat'] || move.noSketch) {
+			if (!target || this.queue.willSwitch(target) || target.beingCalledBack ||
+				move.flags['failcopycat'] || move.noSketch) {
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1}, source, source, m);
 				return;
 			}
