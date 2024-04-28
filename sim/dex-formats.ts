@@ -767,13 +767,13 @@ export class DexFormats {
 					if (isNaN(intValue) || value !== `${intValue}`) {
 						throw new Error(`In rule "${ruleSpec}", "${value}" must be an integer number.`);
 					}
-					if (subformat.hasValue === 'positive-integer') {
-						if (parseInt(value) === 0) {
-							throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
-						}
-						if (parseInt(value) <= 0) {
-							throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
-						}
+				}
+				if (subformat.hasValue === 'positive-integer') {
+					if (parseInt(value) === 0) {
+						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive (to remove it, use the rule "! ${subformat.name}").`);
+					}
+					if (parseInt(value) <= 0) {
+						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
 					}
 				}
 
