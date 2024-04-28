@@ -758,7 +758,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Elly
 	stormsurge: {
-		shortDesc: "On switch-in, this Pokemon summons Storm Surge.",
+		shortDesc: "Rain+wind moves have perfect acc, 1.2x BP.",
+		desc: "Wind moves get perfect accuracy and become 20% stronger. Water moves are 50% stronger, Fire moves are 50% weaker.",
 		name: "Storm Surge",
 		onStart(source) {
 			this.field.setWeather('stormsurge');
