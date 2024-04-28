@@ -636,8 +636,30 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		// Get level
 		const level = this.getLevel(species);
 
-		// //TODO: do we want this? Every hp counts here
-		// Prepare optimal HP
+		// Prepare optimal HP for Life Orb mons with HP close to the X9 threshold
+		if (item === "Life Orb") {
+			let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+			const minimum_hp = Math.floor(Math.floor(2 * species.baseStats.hp + 100) * level / 100 + 10);
+			const target_hp = Math.floor(hp / 10) * 10 - 1;
+
+			// Don't subtract more than 3, that's not worth it
+			if (hp - target_hp <= 3 && minimum_hp <= target_hp) {
+				// If setting evs to 0 is sufficient, decrement evs, otherwise decrement ivs with evs set to 0
+				if (Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + 100) * level / 100 + 10) >= target_hp) {
+					evs.hp = 0;
+					hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+					while (hp > target_hp) {
+						ivs.hp -= 1;
+						hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+					}
+				} else {
+					while (hp > target_hp) {
+						evs.hp -= 4;
+						hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
+					}
+				}
+			}
+		}
 
 		// Minimize confusion damage
 		const noAttackStatMoves = [...moves].every(m => {

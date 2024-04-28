@@ -1018,13 +1018,8 @@
         "level": 7,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Dark Pulse", "Psychic", "Thunderbolt", "Trick"],
-                "teraTypes": ["Dark", "Electric", "Fairy"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Dark Pulse", "Nasty Plot", "Psychic", "Thunderbolt"],
+                "role": "Bulky Attacker",
+                "movepool": ["Dark Pulse", "Nasty Plot", "Psychic", "Thunderbolt", "Trick"],
                 "teraTypes": ["Dark", "Electric", "Fairy"]
             }
         ]
@@ -1794,7 +1789,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Acrobatics", "Bullet Seed", "Flame Charge", "Knock Off", "Roost", "Swords Dance"],
+                "movepool": ["Acrobatics", "Bullet Seed", "Flame Charge", "Knock Off", "Swords Dance"],
                 "teraTypes": ["Flying", "Grass", "Steel"]
             },
             {
@@ -2009,7 +2004,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Brave Bird", "Defog", "Giga Drain", "Knock Off", "Roost", "Sucker Punch"],
+                "movepool": ["Brave Bird", "Defog", "Giga Drain", "Knock Off", "Roost"],
                 "teraTypes": ["Steel", "Water"]
             }
         ]
