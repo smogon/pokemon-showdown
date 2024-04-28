@@ -155,6 +155,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Blitz of Ruin"},
 	},
 
+	// Breadstycks
+	dachsbun: {
+		inherit: true,
+		abilities: {0: "Painful Exit"},
+	},
+
 	// Cake
 	dunsparce: {
 		inherit: true,
@@ -218,12 +224,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	victini: {
 		inherit: true,
 		abilities: {0: "Firewall"},
-	},
-
-	// Cor'Jon
-	dachsbun: {
-		inherit: true,
-		abilities: {0: "Painful Exit"},
 	},
 
 	// Corthius

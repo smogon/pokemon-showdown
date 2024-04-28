@@ -973,24 +973,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
-	// BreadLoeuf
+	// Breadstycks
 	bakersdouzeoff: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "User wakes up, then switches out.",
+		shortDesc: "Wake up->Wish+Sub->Baton Pass.",
 		name: "Baker's Douze Off",
 		gen: 9,
 		pp: 15,
-		priority: 0,
+		priority: 1,
 		flags: {},
 		sleepUsable: true,
-		onTry(pokemon) {
-			return !!this.canSwitch(pokemon.side);
-		},
+		slotCondition: 'Wish',
+		volatileStatus: 'substitute',
 		onPrepareHit(pokemon) {
 			this.attrLastMove('[anim] Teleport');
 			if (pokemon.status === 'slp') pokemon.cureStatus();
+		},
+		onTryHit(source, target, move) {
+			if (source.volatiles['substitute'] ||
+				source.hp <= source.maxhp / 4 || source.maxhp === 1) {
+				delete move.volatileStatus;
+			}
+		},
+		onHit(target) {
+			this.directDamage(target.maxhp / 4);
+		},
+		onAfterHit(target, source, move) {
+			if (!!this.canSwitch(source.side)) {
+				this.actions.useMove('batonpass', source);
+			}
 		},
 		selfSwitch: true,
 		secondary: null,
@@ -1265,7 +1278,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (target?.name === 'Kennedy') return 1;
 		},
 		onHit(target, source, move) {
-			if (source.illusion || source.baseSpecies.name !== 'Avalugg') return;
+			if (source.illusion || source.baseSpecies.baseSpecies !== 'Avalugg') return;
 			if (source.volatiles['flipped']) {
 				source.removeVolatile('flipped');
 				changeSet(this, source, ssbSets['Clementine']);
@@ -1566,15 +1579,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		// Volatiles implemented in conditions.ts
 		onHit(target, source, move) {
 			if (source.hp < source.maxhp / 2) {
-				if (source.side.sideConditions['bioticorbself']) {
-					return null;
+				if (!source.side.addSideCondition('bioticorbself', source, move)) {
+					if (!source.side.foe.addSideCondition('bioticorbfoe', source, move)) return null;
 				}
-				source.side.addSideCondition('bioticorbself', source, move);
 			} else {
-				if (source.side.foe.sideConditions['bioticorbfoe']) {
-					return null;
+				if (!source.side.foe.addSideCondition('bioticorbfoe', source, move)) {
+					if (!source.side.addSideCondition('bioticorbself', source, move)) return null;
 				}
-				source.side.foe.addSideCondition('bioticorbfoe', source, move);
 			}
 		},
 		secondary: null,
@@ -1832,7 +1843,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Leech Seed', target);
 		},
 		onHit(target, source) {
-			if (target.hasType('Grass')) return null;
+			if (target.hasType('Grass') || target.isProtected()) return null;
 			target.addVolatile('leechseed', source);
 		},
 		self: {
@@ -1860,7 +1871,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Rigged Dice",
 		pp: 10,
 		priority: 0,
-		flags: {},
+		flags: {protect: 1, reflectable: 1},
 		selfSwitch: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2094,7 +2105,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit() {
 			this.attrLastMove('[anim] Spirit Shackle');
 		},
-		onAfterHit(source, target, move) {
+		onAfterHit(target, source, move) {
 			this.add(`c:|${getName((source.illusion || source).name)}|as you once did for the vacuous Rom,`);
 		},
 		selfSwitch: true,
@@ -3412,7 +3423,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Plagiarism",
-		shortDesc: "Steals and uses the foe's sig move, imprisons.",
+		shortDesc: "Steal+use foe sig move+imprison. Fail: +1 stats.",
 		pp: 1,
 		noPPBoosts: true,
 		priority: 1,
@@ -3421,11 +3432,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Mimic');
 			this.attrLastMove('[anim] Imprison');
 		},
-		onHit(target, source) {
-			const sigMoveName = ssbSets[target.name].signatureMove;
+		onHit(target, source, m) {
+			const sigMoveName = ssbSets[(target.illusion || target).name].signatureMove;
 			const move = this.dex.getActiveMove(sigMoveName);
-			if (move.flags['failcopycat'] || move.noSketch) {
-				return false;
+			if (!target || target.beingCalledBack || move.flags['failcopycat'] || move.noSketch) {
+				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1}, source, source, m);
+				return;
 			}
 			const plagiarismIndex = source.moves.indexOf('plagiarism');
 			if (plagiarismIndex < 0) return false;
@@ -3459,7 +3471,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Time Skip",
-		shortDesc: "Clears hazards. +10 turns.",
+		shortDesc: "Clears hazards. +10 turns. +1 Spe.",
 		pp: 10,
 		priority: 0,
 		flags: {},
@@ -3476,6 +3488,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				// 9 turn addition so the +1 from nextTurn totals to 10 turns
 				this.turn += 9;
+			},
+			boosts: {
+				spe: 1,
 			},
 		},
 		secondary: null,
@@ -3639,16 +3654,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// nya
 	'3': {
 		accuracy: 100,
-		basePower: 40,
+		basePower: 70,
 		category: "Special",
-		shortDesc: "Moves first. 50% chance to backfire. 40% infatuates.",
+		shortDesc: "Moves first. 10% chance to backfire. 40% infatuates.",
 		name: ":3",
 		gen: 9,
 		pp: 5,
 		priority: 1,
 		flags: {protect: 1},
 		onTry(pokemon, target, move) {
-			if (move.sourceEffect !== '3' && this.randomChance(1, 2)) {
+			if (move.sourceEffect !== '3' && this.randomChance(1, 10)) {
 				this.add('-message', "The move backfired!");
 				this.actions.useMove('3', target, pokemon);
 				return null;
@@ -4016,7 +4031,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
 			move.type = type;
 		},
-		slotCondition: 'pulseluck',
+		self: {
+			slotCondition: 'Pulse Luck',
+		},
 		condition: {
 			duration: 999,
 			onStart(pokemon, source) {
@@ -4046,12 +4063,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					'Kyouko Sakura',
 					'KyrgyzStan',
 				];
-				this.effectState.ks_name = this.sample(messages);
-				this.add(`c:|${getName('Pulse_kS')}|The kS stands for ${this.effectState.ks_name}`);
+				this.effectState.ksName = this.sample(messages);
+				this.add(`c:|${getName('Pulse_kS')}|The kS stands for ${this.effectState.ksName}`);
 			},
 			onTryHit(source, target, move) {
 				if (source.species.baseSpecies === 'Hydreigon' && move.name === 'Pulse Luck') {
-					this.add(`c:|${getName('Pulse_kS')}|The kS stands for ${this.effectState.ks_name}`);
+					this.add(`c:|${getName('Pulse_kS')}|The kS stands for ${this.effectState.ksName}`);
 				}
 			},
 		},
@@ -5377,7 +5394,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Virtual Avatar",
 		pp: 1,
 		priority: 0,
-		flags: {sound: 1},
+		flags: {sound: 1, failcopycat: 1},
 		secondary: null,
 		onTryMove() {
 			this.attrLastMove('[still]');

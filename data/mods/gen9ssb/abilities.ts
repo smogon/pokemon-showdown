@@ -90,16 +90,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Alex
 	pawprints: {
-		shortDesc: "Oblivious. Status moves +1 priority and ignore abilities.",
+		shortDesc: "Oblivious + status moves ignore abilities.",
 		name: "Pawprints",
 		onUpdate(pokemon) {
 			if (pokemon.volatiles['attract']) {
-				this.add('-activate', pokemon, 'ability: Oblivious');
+				this.add('-activate', pokemon, 'ability: Paw Prints');
 				pokemon.removeVolatile('attract');
-				this.add('-end', pokemon, 'move: Attract', '[from] ability: Oblivious');
+				this.add('-end', pokemon, 'move: Attract', '[from] ability: Paw Prints');
 			}
 			if (pokemon.volatiles['taunt']) {
-				this.add('-activate', pokemon, 'ability: Oblivious');
+				this.add('-activate', pokemon, 'ability: Paw Prints');
 				pokemon.removeVolatile('taunt');
 				// Taunt's volatile already sends the -end message when removed
 			}
@@ -109,20 +109,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onTryHit(pokemon, target, move) {
 			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt') {
-				this.add('-immune', pokemon, '[from] ability: Oblivious');
+				this.add('-immune', pokemon, '[from] ability: Paw Prints');
 				return null;
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
-			}
-		},
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.category === 'Status') {
-				move.pranksterBoosted = true;
-				return priority + 1;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Paw Prints', '[of] ' + target);
 			}
 		},
 		onModifyMove(move) {
@@ -466,6 +460,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// Breadstycks
+	painfulexit: {
+		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
+		name: "Painful Exit",
+		onBeforeSwitchOutPriority: -1,
+		onBeforeSwitchOut(pokemon) {
+			if (enemyStaff(pokemon) === "Mad Monty") {
+				this.add(`c:|${getName('Breadstycks')}|Welp`);
+			} else {
+				this.add(`c:|${getName('Breadstycks')}|Just kidding!! Take this KNUCKLE SANDWICH`);
+			}
+			for (const foe of pokemon.foes()) {
+				if (!foe || foe.fainted || !foe.hp) continue;
+				this.add(`-anim`, pokemon, "Tackle", foe);
+				this.damage(foe.hp / 4, foe, pokemon);
+			}
+		},
+		flags: {},
+	},
+
 	// Chloe
 	acetosa: {
 		shortDesc: "This Pokemon's moves are changed to be Grass type and have 1.2x power.",
@@ -632,26 +646,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {breakable: 1},
-	},
-
-	// Cor'Jon
-	painfulexit: {
-		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
-		name: "Painful Exit",
-		onBeforeSwitchOutPriority: -1,
-		onBeforeSwitchOut(pokemon) {
-			if (enemyStaff(pokemon) === "Mad Monty") {
-				this.add(`c:|${getName('BreadLoeuf')}|Welp`);
-			} else {
-				this.add(`c:|${getName('BreadLoeuf')}|Just kidding!! Take this KNUCKLE SANDWICH`);
-			}
-			for (const foe of pokemon.foes()) {
-				if (!foe || foe.fainted || !foe.hp) continue;
-				this.add(`-anim`, pokemon, "Tackle", foe);
-				this.damage(foe.hp / 4, foe, pokemon);
-			}
-		},
-		flags: {},
 	},
 
 	// Corthius

@@ -204,6 +204,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Geyser Blast',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Water', shiny: true,
 	},
+	Breadstycks: {
+		species: 'Dachsbun', ability: 'Painful Exit', item: 'Leftovers', gender: '',
+		moves: ['Protect', 'Rest', 'Play Rough'],
+		signatureMove: 'Baker\'s Douze Off',
+		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Steel',
+	},
 	Cake: {
 		species: 'Dunsparce', ability: 'Scrappy', item: 'Eviolite', gender: 'N',
 		moves: [
@@ -269,12 +275,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Searing Shot', 'Psychic', 'Dazzling Gleam'],
 		signatureMove: 'Haxer\'s Will',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Fairy', shiny: 1024,
-	},
-	'Cor\'Jon': {
-		species: 'Dachsbun', ability: 'Painful Exit', item: 'Leftovers', gender: '',
-		moves: ['Wish', 'Rest', 'Play Rough'],
-		signatureMove: 'Baker\'s Douze Off',
-		evs: {hp: 252, def: 252, spd: 4}, nature: 'Impish', teraType: 'Fairy',
 	},
 	Corthius: {
 		species: 'Thwackey', ability: 'Grassy Emperor', item: 'Eviolite', gender: 'M',
@@ -639,7 +639,7 @@ export const ssbSets: SSBSets = {
 	},
 	'nya~ ❤': {
 		species: 'Delcatty', ability: 'Adorable Grace', item: 'Focus Band', gender: 'F',
-		moves: ['Frost Breath', 'Tri Attack', 'Volt Switch'],
+		moves: ['Freeze-Dry', 'Tri Attack', 'Volt Switch'],
 		signatureMove: ':3',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Naive', teraType: 'Ice',
 	},

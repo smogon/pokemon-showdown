@@ -37,7 +37,7 @@ export function getName(name: string): string {
 
 	let group = usergroups[userid] || ' ';
 	if (name === 'Artemis') group = '@';
-	if (name === 'Jeopard-E') group = '*';
+	if (name === 'Jeopard-E' || name === 'Ice Kyubs') group = '*';
 	return Math.floor(Date.now() / 1000) + '|' + group + name;
 }
 
