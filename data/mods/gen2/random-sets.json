@@ -166,7 +166,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["bodyslam", "encore", "fireblast", "flamethrower", "moonlight", "return", "thunderwave"]
+                "movepool": ["fireblast", "flamethrower", "moonlight", "return", "thunderwave"]
             },
             {
                 "role": "Setup Sweeper",
@@ -575,7 +575,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch", "rest"]
+                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch"]
             },
             {
                 "role": "Bulky Setup",
@@ -782,7 +782,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["doubleedge", "hiddenpowerflying", "hydropump", "rest", "sleeptalk"]
+                "movepool": ["doubleedge", "hiddenpowerflying", "hydropump", "rest", "sleeptalk", "surf"]
             },
             {
                 "role": "Bulky Setup",
@@ -1007,7 +1007,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["curse", "irontail", "quickattack", "rest", "return"]
+                "movepool": ["curse", "irontail", "quickattack", "return"]
             }
         ]
     },
@@ -1442,7 +1442,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["irontail", "moonlight", "return", "toxic"]
+                "movepool": ["hiddenpowerground", "moonlight", "return", "toxic"]
             },
             {
                 "role": "Bulky Attacker",
@@ -1450,7 +1450,7 @@
             },
             {
                 "role": "Thief user",
-                "movepool": ["dynamicpunch", "return", "shadowball", "thief"]
+                "movepool": ["dynamicpunch", "moonlight", "return", "thief"]
             }
         ]
     },
@@ -1600,7 +1600,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch", "rest"]
+                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch"]
             },
             {
                 "role": "Bulky Setup",

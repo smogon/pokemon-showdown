@@ -838,12 +838,12 @@
         "level": 75,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["dragondance", "earthquake", "extremespeed", "firepunch", "outrage"]
+                "role": "Wallbreaker",
+                "movepool": ["earthquake", "extremespeed", "outrage", "superpower"]
             },
             {
-                "role": "Bulky Setup",
-                "movepool": ["dragonclaw", "dragondance", "earthquake", "firepunch", "roost"]
+                "role": "Setup Sweeper",
+                "movepool": ["dragondance", "earthquake", "firepunch", "outrage", "roost"]
             }
         ]
     },
@@ -2118,8 +2118,8 @@
         "level": 87,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["fireblast", "nightslash", "psychocut", "pursuit", "suckerpunch", "superpower"],
+                "role": "Bulky Attacker",
+                "movepool": ["nightslash", "psychocut", "pursuit", "suckerpunch", "superpower"],
                 "preferredTypes": ["Fighting"]
             },
             {
@@ -2543,7 +2543,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["airslash", "roost", "toxic", "uturn"]
+                "movepool": ["acrobatics", "roost", "toxic", "uturn"]
             }
         ]
     },

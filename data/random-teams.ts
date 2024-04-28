@@ -83,7 +83,7 @@ const SETUP = [
 	'quiverdance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup', 'victorydance',
 ];
 const SPEED_CONTROL = [
-	'electroweb', 'glare', 'icywind', 'lowsweep', 'quash', 'rocktomb', 'stringshot', 'tailwind', 'thunderwave', 'trickroom',
+	'electroweb', 'glare', 'icywind', 'lowsweep', 'quash', 'stringshot', 'tailwind', 'thunderwave', 'trickroom',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
@@ -1157,6 +1157,7 @@ export class RandomTeams {
 		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'empoleon') return 'Competitive';
 		if (species.id === 'swampert' && !counter.get('Water') && !moves.has('flipturn')) return 'Damp';
+		if ((species.id === 'thundurus') && moves.has('terablast')) return 'Defiant';
 		if (species.id === 'dodrio') return 'Early Bird';
 		if (species.id === 'chandelure') return 'Flash Fire';
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
@@ -1205,7 +1206,6 @@ export class RandomTeams {
 			if (species.id === 'conkeldurr' && role === 'Doubles Wallbreaker') return 'Guts';
 			if (species.id !== 'arboliva' && abilities.has('Harvest')) return 'Harvest';
 			if (species.id === 'dragonite' || species.id === 'lucario') return 'Inner Focus';
-			if (species.id === 'ariados') return 'Insomnia';
 			if (species.id === 'primarina') return 'Liquid Voice';
 			if (species.id === 'kommoo') return 'Soundproof';
 			if (
@@ -1221,10 +1221,7 @@ export class RandomTeams {
 
 			// just doubles and multi
 			if (this.format.gameType !== 'freeforall') {
-				if (
-					species.id === 'clefairy' ||
-					(species.baseSpecies === 'Maushold' && role === 'Doubles Support')
-				) return 'Friend Guard';
+				if (species.id === 'clefairy') return 'Friend Guard';
 				if (species.id === 'blissey') return 'Healer';
 				if (species.id === 'sinistcha') return 'Hospitality';
 				if (species.id === 'duraludon') return 'Stalwart';
@@ -1517,9 +1514,13 @@ export class RandomTeams {
 			(species.id === 'garchomp' && role === 'Fast Support') || (
 				ability === 'Regenerator' && (role === 'Bulky Support' || role === 'Bulky Attacker') &&
 				(species.baseStats.hp + species.baseStats.def) >= 180 && this.randomChance(1, 2)
+			) || (
+				ability !== 'Regenerator' && !counter.get('setup') && counter.get('recovery') &&
+				this.dex.getEffectiveness('Fighting', species) < 1 &&
+				(species.baseStats.hp + species.baseStats.def) > 200 && this.randomChance(1, 2)
 			)
 		) return 'Rocky Helmet';
-		if (moves.has('outrage')) return 'Lum Berry';
+		if (moves.has('outrage') && this.randomChance(1, 2)) return 'Lum Berry';
 		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead &&

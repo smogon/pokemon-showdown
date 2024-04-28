@@ -338,7 +338,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
-			['scald', ['hydropump', 'originpulse', 'waterpulse']],
+			[['scald', 'surf'], ['hydropump', 'originpulse', 'waterpulse']],
 			['return', ['bodyslam', 'doubleedge', 'headbutt']],
 			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
 			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
@@ -858,11 +858,12 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'beheeyem') return 'Analytic';
 		if (species.id === 'drampa' && moves.has('roost')) return 'Berserk';
 		if (species.id === 'ninetales') return 'Drought';
+		if (species.baseSpecies === 'Gourgeist') return 'Frisk';
 		if (species.id === 'talonflame' && role === 'Z-Move user') return 'Gale Wings';
 		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
 		if (species.id === 'raticatealola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
-		if (species.id === 'arcanine') return 'Intimidate';
+		if (species.id === 'arcanine' || species.id === 'stantler') return 'Intimidate';
 		if (species.id === 'lucariomega') return 'Justified';
 		if (species.id === 'toucannon' && !counter.get('sheerforce') && !counter.get('skilllink')) return 'Keen Eye';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
