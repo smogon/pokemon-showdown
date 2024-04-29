@@ -2713,9 +2713,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
 			if (!channelId) return this.errorReply(`Specify a Twitch channel.`);
-			const info = await Twitch.getChannel(channelId);
-			if (!info) return this.errorReply(`Channel ${channelId} not found.`);
-			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
+			buf = Utils.html`Watching <b><a class="subtle" href="https://twitch.tv/${toID(channelId)}">${channelId}</a></b>...<br />`;
 			buf += `<twitch src="${link}" />`;
 		} else {
 			if (Chat.linkRegex.test(link)) {
