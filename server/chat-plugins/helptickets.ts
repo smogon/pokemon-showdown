@@ -1867,7 +1867,8 @@ export const pages: Chat.PageTable = {
 					logUrl = `/view-chatlog-help-${ticket.userid}--${Chat.toTimestamp(created).split(' ')[0]}`;
 				}
 				const room = Rooms.get(roomid);
-				if (room) {
+				// room exists, and there's no newer text ticket that should override
+				if (room && ticket === room.getGame(HelpTicket)?.ticket) {
 					const ticketGame = room.getGame(HelpTicket)!;
 					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
 				} else if (ticket.text) {
