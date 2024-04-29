@@ -2120,7 +2120,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["nightslash", "psychocut", "pursuit", "suckerpunch", "superpower"],
+                "movepool": ["nightslash", "pursuit", "suckerpunch", "superpower", "zenheadbutt"],
                 "preferredTypes": ["Fighting"]
             },
             {

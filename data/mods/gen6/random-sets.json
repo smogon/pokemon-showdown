@@ -4993,10 +4993,6 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["ironhead", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["ironhead", "sacredsword", "shadowclaw", "shadowsneak"]
             }
         ]
     },

@@ -5346,10 +5346,6 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["ironhead", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["ironhead", "sacredsword", "shadowclaw", "shadowsneak"]
             }
         ]
     },
@@ -6136,8 +6132,8 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["flamecharge", "ironhead", "multiattack", "shadowclaw", "swordsdance"],
-                "preferredTypes": ["Ghost"]
+                "movepool": ["crunch", "flamecharge", "ironhead", "multiattack", "rockslide", "swordsdance"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },

@@ -166,7 +166,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["fireblast", "flamethrower", "moonlight", "return", "thunderwave"]
+                "movepool": ["bodyslam", "encore", "fireblast", "flamethrower", "moonlight"]
             },
             {
                 "role": "Setup Sweeper",
@@ -707,10 +707,6 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["batonpass", "doubleedge", "hiddenpowerground", "swordsdance"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["doubleedge", "hiddenpowerground", "swordsdance", "wingattack"]
             }
         ]
     },
@@ -1398,7 +1394,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["curse", "haze", "hydropump", "sludgebomb", "spikes"]
+                "movepool": ["curse", "haze", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
             }
         ]
     },

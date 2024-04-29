@@ -599,7 +599,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bodyslam", "flamethrower", "protect", "wish"]
+                "movepool": ["bodyslam", "earthquake", "protect", "wish"]
             },
             {
                 "role": "Bulky Support",
