@@ -557,7 +557,7 @@ export class RandomTeams {
 
 			// These status moves are redundant with each other
 			['taunt', 'disable'],
-			['toxic', ['willowisp', 'thunderwave']],
+			[['thunderwave', 'toxic'], ['thunderwave', 'willowisp']],
 			[['thunderwave', 'toxic', 'willowisp'], 'toxicspikes'],
 
 			// This space reserved for assorted hardcodes that otherwise make little sense out of context
@@ -1039,8 +1039,6 @@ export class RandomTeams {
 		case 'Hustle':
 			// some of this is just for Delibird in singles/doubles
 			return (!counter.get('Physical') || moves.has('fakeout') || moves.has('rapidspin'));
-		case 'Infiltrator':
-			return (isDoubles && abilities.has('Clear Body'));
 		case 'Insomnia':
 			return (role === 'Wallbreaker');
 		case 'Intimidate':
@@ -1195,7 +1193,7 @@ export class RandomTeams {
 		if (isDoubles) {
 			if (species.id === 'gumshoos' || species.id === 'porygonz') return 'Adaptability';
 			if (species.id === 'farigiraf') return 'Armor Tail';
-			if (species.id === 'dragapult') return 'Clear Body';
+			if (['carbink', 'dragapult', 'regirock', 'tentacruel'].includes(species.id)) return 'Clear Body';
 			if (species.id === 'altaria') return 'Cloud Nine';
 			if (species.id === 'kilowattrel' || species.id === 'meowsticf') return 'Competitive';
 			if (species.id === 'armarouge' && !moves.has('meteorbeam')) return 'Flash Fire';

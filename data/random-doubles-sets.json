@@ -15,7 +15,7 @@
             {
                 "role": "Offensive Protect",
                 "movepool": ["Heat Wave", "Hurricane", "Protect", "Scorching Sands", "Will-O-Wisp"],
-                "teraTypes": ["Fire", "Grass", "Ground"]
+                "teraTypes": ["Dragon", "Fire", "Ground"]
             }
         ]
     },
@@ -398,7 +398,7 @@
         "level": 88,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Drain Punch", "Gunk Shot", "Haze", "Helping Hand", "Ice Punch", "Knock Off", "Poison Gas", "Poison Jab", "Shadow Sneak"],
                 "teraTypes": ["Dark"]
             }
@@ -596,6 +596,11 @@
                 "role": "Bulky Protect",
                 "movepool": ["Bulk Up", "Protect", "Raging Bull", "Stone Edge"],
                 "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Close Combat", "High Horsepower", "Iron Head", "Rock Slide", "Stone Edge", "Throat Chop"],
+                "teraTypes": ["Dark", "Fighting", "Steel"]
             }
         ]
     },
@@ -970,7 +975,7 @@
             {
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Head Smash", "High Horsepower", "Protect", "Sucker Punch", "Wood Hammer"],
-                "teraTypes": ["Grass", "Steel"]
+                "teraTypes": ["Grass"]
             }
         ]
     },
@@ -1185,7 +1190,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Brave Bird", "Fake Out", "Helping Hand", "Icy Wind", "Tailwind"],
-                "teraTypes": ["Steel"]
+                "teraTypes": ["Ground", "Steel"]
             },
             {
                 "role": "Doubles Wallbreaker",
@@ -1744,7 +1749,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Helping Hand", "Hurricane", "Leaf Storm", "Tailwind", "Wide Guard"],
+                "movepool": ["Helping Hand", "Hurricane", "Leaf Storm", "Protect", "Tailwind", "Wide Guard"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -1994,7 +1999,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Flash Cannon", "Hydro Pump", "Ice Beam", "Protect", "Yawn"],
+                "movepool": ["Flash Cannon", "Hydro Pump", "Ice Beam", "Icy Wind", "Protect", "Yawn"],
                 "teraTypes": ["Flying", "Grass"]
             },
             {
@@ -2023,7 +2028,7 @@
         "level": 100,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Bug Bite", "Helping Hand", "Knock Off", "Sticky Web", "Taunt"],
                 "teraTypes": ["Bug", "Steel"]
             }
@@ -2063,7 +2068,7 @@
         "level": 100,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Helping Hand", "Hurricane", "Pollen Puff", "Roost", "Toxic Spikes"],
                 "teraTypes": ["Steel"]
             }
@@ -4070,7 +4075,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Moonblast", "Pollen Puff", "Protect", "Tailwind"],
-                "teraTypes": ["Dark"]
+                "teraTypes": ["Steel"]
             },
             {
                 "role": "Tera Blast user",
@@ -4645,6 +4650,11 @@
             {
                 "role": "Doubles Fast Attacker",
                 "movepool": ["Heat Crash", "High Horsepower", "Protect", "Rock Polish", "Stone Edge"],
+                "teraTypes": ["Fire", "Rock"]
+            },
+            {
+                "role": "Choice Item user",
+                "movepool": ["Heat Crash", "High Horsepower", "Rock Slide", "Stone Edge"],
                 "teraTypes": ["Fire", "Rock"]
             }
         ]
