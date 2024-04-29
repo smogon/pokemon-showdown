@@ -2406,6 +2406,11 @@
                 "role": "Bulky Attacker",
                 "movepool": ["Clear Smog", "Earthquake", "Ice Beam", "Recover", "Stealth Rock", "Surf"],
                 "teraTypes": ["Poison", "Steel"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Recover", "Sludge Bomb", "Stealth Rock", "Surf"],
+                "teraTypes": ["Poison"]
             }
         ]
     },
