@@ -1108,7 +1108,8 @@ export const commands: Chat.ChatCommands = {
 			const action = cmd === 'monthban' ? 'MONTHGIVEAWAYBAN' : cmd === 'permaban' ? 'PERMAGIVEAWAYBAN' : 'GIVEAWAYBAN';
 			this.modlog(action, targetUser, reason);
 			const reasonMessage = reason ? ` (${reason})` : ``;
-			this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${reasonMessage}`);
+			const durationMsg = cmd === 'monthban' ? ' for a month' : cmd === 'permaban' ? ' permanently' : '';
+			this.privateModAction(`${targetUser.name} was banned from entering giveaways${durationMsg} by ${user.name}.${reasonMessage}`);
 		},
 		unban(target, room, user) {
 			if (!target) return false;
