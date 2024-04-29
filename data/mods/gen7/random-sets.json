@@ -3281,7 +3281,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["darkpulse", "painsplit", "pursuit", "suckerpunch", "willowisp"]
+                "movepool": ["foulplay", "painsplit", "pursuit", "suckerpunch", "willowisp"]
             }
         ]
     },
