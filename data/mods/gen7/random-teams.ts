@@ -866,6 +866,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'arcanine' || species.id === 'stantler') return 'Intimidate';
 		if (species.id === 'lucariomega') return 'Justified';
 		if (species.id === 'toucannon' && !counter.get('sheerforce') && !counter.get('skilllink')) return 'Keen Eye';
+		if (species.id === 'persian' && !counter.get('technician')) return 'Limber';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
