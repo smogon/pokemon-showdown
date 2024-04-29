@@ -1172,10 +1172,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFoeSwitchIn(pokemon) {
 			switch ((pokemon.illusion || pokemon).name) {
-			case 'Links':
-				this.add(`c:|${getName('Kennedy')}|Blue and white shite, blue and white shite, hello, hello.`);
-				this.add(`c:|${getName('Kennedy')}|Blue and white shite, blue and white shite, hello, hello.`);
-				break;
 			case 'Clementine':
 				this.add(`c:|${getName('Kennedy')}|Not the Fr*nch....`);
 				break;

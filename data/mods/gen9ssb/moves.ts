@@ -2773,11 +2773,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return 6;
 			},
+			onUpdate(pokemon) {
+				if (pokemon.volatiles['confusion']) {
+					pokemon.removeVolatile('confusion');
+				}
+			},
 			onFieldStart(target, source) {
 				if (source?.hasAbility('persistent')) {
 					this.add('-fieldstart', 'move: Anfield Atmosphere', '[of] ' + source, '[persistent]');
 				} else {
 					this.add('-fieldstart', 'move: Anfield Atmosphere', '[of] ' + source);
+				}
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.volatiles['confusion']) {
+						pokemon.removeVolatile('confusion');
+					}
 				}
 			},
 			onFieldRestart(target, source) {
@@ -2799,7 +2809,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryAddVolatile(status, target) {
 				if (target.isSemiInvulnerable()) return;
-				if (status.id === 'yawn') {
+				if (status.id === 'yawn' || status.id === 'confusion') {
 					this.add('-activate', target, 'move: Anfield Atmosphere');
 					return null;
 				}
