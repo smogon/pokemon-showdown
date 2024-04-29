@@ -1155,7 +1155,7 @@ export class RandomTeams {
 		if (species.id === 'scovillain') return 'Chlorophyll';
 		if (species.id === 'empoleon') return 'Competitive';
 		if (species.id === 'swampert' && !counter.get('Water') && !moves.has('flipturn')) return 'Damp';
-		if ((species.id === 'thundurus') && moves.has('terablast')) return 'Defiant';
+		if (species.id === 'thundurus' && (role === 'Offensive Protect' || moves.has('terablast'))) return 'Defiant';
 		if (species.id === 'dodrio') return 'Early Bird';
 		if (species.id === 'chandelure') return 'Flash Fire';
 		if (species.id === 'golemalola' && moves.has('doubleedge')) return 'Galvanize';
