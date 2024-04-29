@@ -4540,7 +4540,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Wallbreaker",
                 "movepool": ["darkpulse", "flamethrower", "focusblast", "nastyplot", "sludgebomb", "trick", "uturn"],
                 "preferredTypes": ["Poison"]
             }
