@@ -794,7 +794,8 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["dragondance", "earthquake", "firepunch", "outrage", "roost"]
+                "movepool": ["dragondance", "earthquake", "firepunch", "outrage", "roost"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
