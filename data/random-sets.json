@@ -2785,7 +2785,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Destiny Bond", "Poltergeist", "Spikes", "Taunt", "Triple Axel", "Will-O-Wisp"],
-                "teraTypes": ["Ghost"]
+                "teraTypes": ["Ghost", "Ice"]
             }
         ]
     },
