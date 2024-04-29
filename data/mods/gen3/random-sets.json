@@ -1096,8 +1096,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "calmmind", "hiddenpowerfire", "psychic", "rest"],
-                "preferredTypes": ["Fire"]
+                "movepool": ["batonpass", "calmmind", "hiddenpowerfire", "psychic", "rest"]
             },
             {
                 "role": "Bulky Attacker",
@@ -2590,8 +2589,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "explosion", "meteormash", "rockslide"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["earthquake", "explosion", "meteormash", "rockslide"]
             },
             {
                 "role": "Setup Sweeper",

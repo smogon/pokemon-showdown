@@ -448,11 +448,8 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["explosion", "fireblast", "hiddenpowerground", "sludgebomb"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "explosion", "hiddenpowerground", "sludgebomb"]
+                "movepool": ["curse", "explosion", "fireblast", "hiddenpowerground", "sludgebomb"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },

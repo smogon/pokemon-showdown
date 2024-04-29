@@ -1090,12 +1090,9 @@
                 "preferredTypes": ["Flying"]
             },
             {
-                "role": "Bulky Attacker",
-                "movepool": ["dragondance", "earthquake", "outrage", "roost"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["dragondance", "earthquake", "ironhead", "outrage"]
+                "role": "Setup Sweeper",
+                "movepool": ["dragondance", "earthquake", "ironhead", "outrage", "roost"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -4935,8 +4932,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["closecombat", "ironhead", "stealthrock", "stoneedge", "swordsdance"],
-                "preferredTypes": ["Steel"]
+                "movepool": ["closecombat", "ironhead", "stealthrock", "stoneedge", "swordsdance"]
             },
             {
                 "role": "Z-Move user",
@@ -5355,15 +5351,11 @@
             {
                 "role": "Staller",
                 "movepool": ["ironhead", "kingsshield", "shadowball", "substitute", "toxic"]
-            }
-        ]
-    },
-    "aegislashblade": {
-        "level": 78,
-        "sets": [
+            },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["ironhead", "kingsshield", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"]
+                "movepool": ["ironhead", "kingsshield", "sacredsword", "shadowclaw", "shadowsneak", "swordsdance"],
+                "preferredTypes": ["Steel"]
             }
         ]
     },
@@ -5763,8 +5755,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["agility", "bugbuzz", "energyball", "thunderbolt", "voltswitch"],
-                "preferredTypes": ["Bug"]
+                "movepool": ["agility", "bugbuzz", "energyball", "thunderbolt", "voltswitch"]
             },
             {
                 "role": "Bulky Attacker",

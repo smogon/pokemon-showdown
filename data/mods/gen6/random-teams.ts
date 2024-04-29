@@ -59,7 +59,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'aegislashblade', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'honchkrow', 'scizor', 'scizormega', 'shedinja',
+	'aegislash', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'honchkrow', 'scizor', 'scizormega', 'shedinja',
 ];
 
 export class RandomGen6Teams extends RandomGen7Teams {
