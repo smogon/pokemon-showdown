@@ -920,6 +920,12 @@ export const handlers: Chat.Handlers = {
 			saveData();
 		}
 	},
+	onPunishUser(type, user, room) {
+		const game = room?.getGame(LotteryGiveaway) || room?.getGame(QuestionGiveaway);
+		if (game) {
+			game.kickUser(user);
+		}
+	},
 };
 
 export const commands: Chat.ChatCommands = {
