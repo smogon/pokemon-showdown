@@ -602,7 +602,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'beheeyem') return 'Analytic';
 		if (species.id === 'ninetales') return 'Drought';
 		if (species.id === 'gligar') return 'Immunity';
-		if (species.id === 'arcanine') return 'Intimidate';
+		if (species.id === 'arcanine' || species.id === 'stantler') return 'Intimidate';
 		if (species.id === 'altaria') return 'Natural Cure';
 		if (species.id === 'mandibuzz') return 'Overcoat';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it

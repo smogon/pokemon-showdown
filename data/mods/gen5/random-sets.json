@@ -2703,7 +2703,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["foulplay", "painsplit", "pursuit", "shadowsneak", "suckerpunch", "willowisp"]
+                "movepool": ["darkpulse", "painsplit", "pursuit", "suckerpunch", "willowisp"]
             }
         ]
     },
@@ -4038,7 +4038,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["bugbuzz", "encore", "focusblast", "gigadrain", "hiddenpowerground", "hiddenpowerrock", "spikes", "yawn"]
+                "movepool": ["bugbuzz", "encore", "focusblast", "hiddenpowerground", "hiddenpowerrock", "spikes", "uturn"]
             }
         ]
     },
