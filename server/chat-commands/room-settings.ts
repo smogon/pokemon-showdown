@@ -185,7 +185,7 @@ export const commands: Chat.ChatCommands = {
 				return this.parse(`/help automodchat`);
 			}
 		}
-		const validGroups = [...Config.groupsranking as string[], 'trusted'];
+		const validGroups = [...Config.groupsranking as string[], 'trusted', 'autoconfirmed'];
 		if (!validGroups.includes(rank)) {
 			return this.errorReply(`Invalid rank.`);
 		}
