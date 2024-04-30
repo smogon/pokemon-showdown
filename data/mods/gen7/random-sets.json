@@ -5637,11 +5637,15 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
+                "movepool": ["extremespeed", "irontail", "outrage", "thousandarrows"]
+            },
+            {
+                "role": "Setup Sweeper",
                 "movepool": ["coil", "extremespeed", "irontail", "outrage", "thousandarrows"]
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["coil", "extremespeed", "outrage", "thousandarrows"],
+                "movepool": ["coil", "extremespeed", "irontail", "outrage", "thousandarrows"],
                 "preferredTypes": ["Dragon"]
             }
         ]
@@ -6479,7 +6483,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["airslash", "autotomize", "earthquake", "fireblast", "flashcannon"]
+                "movepool": ["airslash", "autotomize", "earthquake", "fireblast", "heavyslam"]
             }
         ]
     },
