@@ -2769,7 +2769,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const types = this.ruleTable.valueRules.get('typebanclause')!.split(";");
 			types.forEach(typeString => {
 				const type = this.dex.types.get(typeString);
-				if (species.types.includes(type.id)) {
+				if (species.types.includes(type.name)) {
 					errors.push(`${set.species} has banned type ${type.name}.`);
 				}
 			});
