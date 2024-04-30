@@ -2502,7 +2502,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Dark Immunity; Cornerstone: Sound immunity. Wellspring: Moves never miss. Hearthflame: 1.3x bp vs male Pokemon.",
 		name: "See No Evil, Hear No Evil, Speak No Evil",
 		onTryHit(target, source, move) {
-			if (target !== source && move.flags['sound'] && !target.species.id.startsWith('ogerponcornerstone')) {
+			if (target !== source && move.flags['sound'] && target.species.id.startsWith('ogerponcornerstone')) {
 				if (!this.heal(target.baseMaxhp / 4)) {
 					this.add('-immune', target, '[from] ability: See No Evil, Hear No Evil, Speak No Evil');
 				}
