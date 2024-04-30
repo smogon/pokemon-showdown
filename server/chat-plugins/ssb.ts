@@ -44,7 +44,7 @@ function canMegaEvo(species: string, item: string | string[]): string {
 		return forceMega[toID(species)];
 	} else {
 		if (!Array.isArray(item)) item = [item];
-		for (let i of item) {
+		for (const i of item) {
 			const itemObj = dex.items.get(i);
 			if (toID(species) === toID(itemObj.megaEvolves) && itemObj.megaStone) {
 				return itemObj.megaStone.toLowerCase();
@@ -53,7 +53,10 @@ function canMegaEvo(species: string, item: string | string[]): string {
 	}
 	return ``;
 }
-function speciesToImageUrl(species: string, item: string | string[] | undefined, shiny: boolean, anim: boolean): string {
+function speciesToImageUrl(
+	species: string, item: string | string[] | undefined,
+	shiny: boolean, anim: boolean
+): string {
 	// Just the URL
 	// These don't have models yet, use the BW sprites in all cases
 	const forceBW = [
@@ -109,11 +112,11 @@ function genItemHTML(item: string | string[]): string {
 	}
 	item = item.slice();
 	let html = ``;
-	for (let i of item) {
+	for (const i of item) {
 		let sprite = i;
 		if (sprite === 'leek') sprite = 'stick';
 		if (!Dex.items.get(sprite).exists && dex.items.get(sprite).zMove) {
-			let move = dex.items.get(sprite).zMove;
+			const move = dex.items.get(sprite).zMove;
 			if (move === true) throw new Error(`Unexpected true for ${sprite}.`);
 			sprite = zTable[toID(dex.moves.get(move).type)];
 		}
@@ -141,29 +144,29 @@ function genSetHeader(name: string): string {
 }
 function genSetBody(name: string): string {
 	// Generates the body of a set and all of its alts
-	let setAlts: string[] = [];
+	const setAlts: string[] = [];
 	const userid = toID(name);
-	for (let key in ssbSets) {
+	for (const key in ssbSets) {
 		if (toID(key.split('-')[0]) === userid) setAlts.push(key);
 	}
 	let html = ``;
-	for (let setID of setAlts) {
+	for (const setID of setAlts) {
 		const set = ssbSets[setID];
 		html += `\t<div class="bar">\n`;
-		html += `\t\t<img src="${speciesToImageUrl(set.species, set.item, set.shiny === true ? true : false, true)}" alt="${set.species}" /> ${genItemHTML(set.item)}\n`;
+		html += `\t\t<img src="${speciesToImageUrl(set.species, set.item, set.shiny === true, true)}" alt="${set.species}" /> ${genItemHTML(set.item)}\n`;
 		html += `\t\t<ul>\n\t\t\t<li><strong>${set.species}</strong>`;
 		const itemsList = (Array.isArray(set.item) ? set.item : [set.item]).slice().map(i => {
 			if (!Dex.items.get(i).exists) return `<em>${i}</em>`;
 			return i;
 		});
 		html += ` @ ${itemsList.join(' / ')}</li>\n`;
-		
+
 		const abilities = (Array.isArray(set.ability) ? set.ability : [set.ability]).slice().map(a => {
 			if (!Dex.abilities.get(a).exists) return `<em>${a}</em>`;
 			return a;
 		});
 		html += `\t\t\t<li>Ability: ${abilities.join(' / ')}`;
-		let canMega = canMegaEvo(set.species, set.item);
+		const canMega = canMegaEvo(set.species, set.item);
 		let mega: Species | null = null;
 		if (canMega) {
 			mega = dex.species.get(canMega);
@@ -176,12 +179,12 @@ function genSetBody(name: string): string {
 				}
 			}
 		}
-		
+
 		html += `</li>\n`;
 		html += `\t\t\t<li>EVs: `;
 		const DEFAULT_EVS: {[ev: string]: number} = {hp: 82, atk: 82, def: 82, spa: 82, spd: 82, spe: 82};
 		const evs = set.evs || DEFAULT_EVS;
-		for (let ev in evs) {
+		for (const ev in evs) {
 			// @ts-ignore, its fine were using a for-in.
 			html += `${evs[ev]} ${STAT_FORMAT[ev]} / `;
 		}
@@ -191,7 +194,7 @@ function genSetBody(name: string): string {
 		html += `\t\t\t<li>${parseNature(set.nature)}</li>\n`;
 		if (set.ivs) {
 			html += `\t\t\t<li>IVs: `;
-			for (let iv in set.ivs) {
+			for (const iv in set.ivs) {
 				// @ts-ignore, its fine were using a for-in.
 				html += `${set.ivs[iv]} ${STAT_FORMAT[iv]} / `;
 			}
@@ -203,15 +206,15 @@ function genSetBody(name: string): string {
 		const movepool = set.moves.slice().concat(set.signatureMove);
 		// Z move check
 		let zMoveBase: Item | null = null;
-		const itemArr = (Array.isArray(set.item) ? set.item : [set.item]).slice(); 
-		for (let i of itemArr) {
+		const itemArr = (Array.isArray(set.item) ? set.item : [set.item]).slice();
+		for (const i of itemArr) {
 			const itemObj = dex.items.get(i);
 			if (!Dex.items.get(i).exists && itemObj.zMoveFrom) {
 				zMoveBase = itemObj;
 				break;
 			}
 		}
-		for (let m of movepool) {
+		for (const m of movepool) {
 			let move;
 			if (typeof m === 'string') {
 				if (!Dex.moves.get(m).exists) {
@@ -236,9 +239,9 @@ function genSetBody(name: string): string {
 }
 function genSetDescriptions(name: string): string {
 	// Generates the set's descriptions which appear under the set body(s).
-	let setAlts: string[] = [];
+	const setAlts: string[] = [];
 	const userid = toID(name);
-	for (let key in ssbSets) {
+	for (const key in ssbSets) {
 		if (toID(key.split('-')[0]) === userid) setAlts.push(key);
 	}
 	let baseStatHtml = ``;
@@ -247,12 +250,12 @@ function genSetDescriptions(name: string): string {
 	let moveHtml = ``;
 	let innateHtml = ``;
 	let customZ: Item | null = null;
-	let cache: {[key: string]: string[]} = {
+	const cache: {[key: string]: string[]} = {
 		items: [],
 		moves: [],
 		abilities: [],
 	};
-	for (let alt of setAlts) {
+	for (const alt of setAlts) {
 		const set = ssbSets[alt];
 
 		// base stats
@@ -289,14 +292,14 @@ function genSetDescriptions(name: string): string {
 			}
 			baseStatHtml += `)</small></dd>\n\t</dl>\n`;
 		}
-		
+
 		// item
 		const items = (Array.isArray(set.item) ? set.item : [set.item]).slice();
-		for (let i of items) {
+		for (const i of items) {
 			if (Dex.items.get(i).exists && toID(i) !== 'rarebone') continue; // Not custom
 			if (cache.items.includes(toID(i))) continue; // Already got this description
 			cache.items.push(toID(i));
-			let itemResult = itemDesc(dex.items.get(i));
+			const itemResult = itemDesc(dex.items.get(i));
 			itemHtml += itemResult[0];
 			if (itemResult[1]) {
 				if (customZ) throw new Error(`Duplicate unqiue custom Z-Crystals found on set (${name}).`);
@@ -305,14 +308,14 @@ function genSetDescriptions(name: string): string {
 		}
 		// ability
 		const abilities = (Array.isArray(set.ability) ? set.ability : [set.ability]).slice();
-		for (let a of abilities) {
+		for (const a of abilities) {
 			if (Dex.abilities.get(a).exists && !['mountaineer'].includes(toID(a))) continue; // Not custom
 			if (cache.abilities.includes(toID(a))) continue;
 			cache.abilities.push(toID(a));
 			abilityHtml += abilityDesc(dex.abilities.get(a));
 		}
 		// moves
-		let move = dex.moves.get(set.signatureMove);
+		const move = dex.moves.get(set.signatureMove);
 		if (!Dex.moves.get(set.signatureMove).exists && !cache.moves.includes(toID(set.signatureMove))) {
 			// Is custom
 			cache.moves.push(toID(set.signatureMove));
@@ -368,7 +371,7 @@ function sigMoveDesc(move: Move, header?: string): string {
 	if (move.category !== 'Status') html += `<strong>Base Power:</strong> ${move.basePower} `;
 	html += `<strong>Accuracy:</strong> ${move.accuracy === true ? '-' : move.accuracy + '%'} `;
 	html += `<strong>PP:</strong> ${move.pp}`;
-	if (!move.noPPBoosts) html += ` (max: ${move.pp  * 8 / 5})`;
+	if (!move.noPPBoosts) html += ` (max: ${move.pp * 8 / 5})`;
 	html += `</dd>\n`;
 	if (!move.desc) {
 		if (move.shortDesc) {
@@ -396,8 +399,8 @@ function genSetCSS(name: string): string {
 	// Generates the appropriate CSS statement for this set.
 	const set = ssbSets[name];
 	if (!set) throw new Error(`Set not found for ${name}.`);
-	//.xthetap {background-image: url(//play.pokemonshowdown.com/sprites/bw-shiny/arcanine.png);}
-	return `\t.${getClassName(name)} {background-image: url(${speciesToImageUrl(set.species, set.item, set.shiny === true ? true : false, false)});}\n`;
+	// .xthetap {background-image: url(//play.pokemonshowdown.com/sprites/bw-shiny/arcanine.png);}
+	return `\t.${getClassName(name)} {background-image: url(${speciesToImageUrl(set.species, set.item, set.shiny === true, false)});}\n`;
 }
 function genRosterHTML(): string {
 	// Generates all the buttons at once.
@@ -419,7 +422,7 @@ function genRosterHTML(): string {
 	};
 	let html = `<table class="roster">\n\t<tr><td class="head" colspan="14"><h2>Choose your Fighter!</h2></td></tr>\n`;
 	// Get an array of all set names we need a button for, alts NOT included.
-	let pool = Object.keys(ssbSets).filter(s => !s.includes('-'));
+	const pool = Object.keys(ssbSets).filter(s => !s.includes('-'));
 	let slotsInRow = 0;
 	// Counter controlled so we can see the index
 	for (let i = 0; i < pool.length; i++) {
@@ -433,7 +436,7 @@ function genRosterHTML(): string {
 			} else if (i + 14 > pool.length) {
 				// Last row, and there aren't 14 sets left, fill in blanks.
 				// For an odd remianing amount, have extra blanks to the right (end)
-				let difference =  Math.floor((14 - ((pool.length - 1) - i)) / 2);
+				let difference = Math.floor((14 - ((pool.length - 1) - i)) / 2);
 				for (difference; difference > 0; difference--) {
 					html += `\t\t<td><button class="button blank"></button></td>\n`;
 					slotsInRow++;
@@ -442,7 +445,7 @@ function genRosterHTML(): string {
 		}
 		// Add next set
 		html += `\t\t<td><button class="button ${getClassName(pool[i])}`;
-		for (let key in imagePositions) {
+		for (const key in imagePositions) {
 			// Image positioning
 			if (imagePositions[key].includes(toID(pool[i]))) html += ` ${key}`;
 		}
@@ -465,7 +468,7 @@ function genRosterHTML(): string {
 			// Next row
 			html += `\t</tr>\n`;
 			slotsInRow = 0;
-		} 
+		}
 	}
 	html += `</table>`;
 	return html;
@@ -476,11 +479,11 @@ export const commands: Chat.ChatCommands = {
 	genarticle(target, room, user) {
 		this.checkCan('lockdown');
 		let css = ``;
-		let roster = genRosterHTML();
+		const roster = genRosterHTML();
 		let data = ``;
 		// Skip alts, they are added as appropriate
-		let pool = Object.keys(ssbSets).filter(s => !s.includes('-'));
-		for (let set of pool) {
+		const pool = Object.keys(ssbSets).filter(s => !s.includes('-'));
+		for (const set of pool) {
 			css += genSetCSS(set);
 			data += genSetHeader(set);
 			data += genSetBody(set);
@@ -488,11 +491,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		data = data.replace(/\u00ED/g, '&iacute;');
 		data = data.replace(/\u00F6/g, '&ouml;');
-		data = data.replace(/Pok[eé]/g, 'Pok&eacute;')
+		data = data.replace(/Pok[eé]/g, 'Pok&eacute;');
 		FS('logs/ssb_article').mkdirIfNonexistentSync();
 		FS('logs/ssb_article/css.txt').writeSync(css);
 		FS('logs/ssb_article/roster.txt').writeSync(roster);
 		FS('logs/ssb_article/roster-details.txt').writeSync(data);
 		return this.sendReply('Done, check logs/ssb_article/*');
-	}
+	},
 };
