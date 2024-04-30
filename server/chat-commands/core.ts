@@ -131,6 +131,19 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 		}
 		return roominfo;
 	},
+	fullformat(target, user, trustable) {
+		if (!trustable) return false;
+
+		if (target.length > 225) {
+			return null;
+		}
+		const targetRoom = Rooms.get(target);
+		if (!targetRoom?.battle?.playerTable[user.id]) {
+			return null;
+		}
+
+		return targetRoom.battle.format;
+	},
 };
 
 export const commands: Chat.ChatCommands = {

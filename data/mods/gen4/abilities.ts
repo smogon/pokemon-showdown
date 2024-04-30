@@ -2,7 +2,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	airlock: {
 		inherit: true,
 		onSwitchIn() {},
-		onStart() {},
+		onStart(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 	},
 	angerpoint: {
 		inherit: true,
@@ -35,7 +37,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	cloudnine: {
 		inherit: true,
 		onSwitchIn() {},
-		onStart() {},
+		onStart(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 	},
 	colorchange: {
 		inherit: true,

@@ -25,6 +25,10 @@
                 "role": "Setup Sweeper",
                 "movepool": ["bellydrum", "earthquake", "hiddenpowerflying", "rockslide", "substitute"],
                 "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Berry Sweeper",
+                "movepool": ["dragonclaw", "fireblast", "hiddenpowergrass", "substitute"]
             }
         ]
     },
@@ -101,7 +105,7 @@
         ]
     },
     "fearow": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -134,7 +138,7 @@
         ]
     },
     "raichu": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -256,7 +260,7 @@
         ]
     },
     "persian": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Berry Sweeper",
@@ -288,11 +292,15 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["bulkup", "crosschop", "hiddenpowerghost", "rockslide", "substitute"]
+            },
+            {
+                "role": "Berry Sweeper",
+                "movepool": ["bulkup", "hiddenpowerghost", "reversal", "substitute"]
             }
         ]
     },
     "arcanine": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -438,7 +446,7 @@
         ]
     },
     "dodrio": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -468,16 +476,17 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["brickbreak", "explosion", "fireblast", "haze", "hiddenpowerghost", "rest", "sludgebomb", "toxic"]
+                "movepool": ["explosion", "fireblast", "hiddenpowerground", "rest", "sludgebomb", "toxic"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["brickbreak", "curse", "hiddenpowerghost", "rest", "sludgebomb"]
+                "movepool": ["curse", "hiddenpowerground", "rest", "sludgebomb"]
             }
         ]
     },
     "cloyster": {
-        "level": 81,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -582,7 +591,7 @@
         ]
     },
     "lickitung": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -792,7 +801,7 @@
         ]
     },
     "jolteon": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Staller",
@@ -1069,7 +1078,7 @@
         ]
     },
     "togetic": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Staller",
@@ -1145,6 +1154,10 @@
             {
                 "role": "Staller",
                 "movepool": ["encore", "icebeam", "protect", "surf", "toxic"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["icebeam", "rest", "sleeptalk", "surf", "toxic"]
             }
         ]
     },
@@ -1394,7 +1407,7 @@
         ]
     },
     "qwilfish": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1479,7 +1492,7 @@
         ]
     },
     "magcargo": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1524,7 +1537,7 @@
         ]
     },
     "delibird": {
-        "level": 96,
+        "level": 97,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1877,7 +1890,7 @@
         ]
     },
     "shiftry": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1926,7 +1939,7 @@
         ]
     },
     "masquerain": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1970,7 +1983,7 @@
         ]
     },
     "ninjask": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2028,7 +2041,7 @@
         ]
     },
     "delcatty": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2088,6 +2101,10 @@
                 "role": "Setup Sweeper",
                 "movepool": ["brickbreak", "bulkup", "recover", "rockslide", "shadowball", "substitute"],
                 "preferredTypes": ["Ghost"]
+            },
+            {
+                "role": "Berry Sweeper",
+                "movepool": ["bulkup", "reversal", "shadowball", "substitute"]
             }
         ]
     },
@@ -2157,7 +2174,7 @@
         ]
     },
     "roselia": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2234,15 +2251,11 @@
         ]
     },
     "spinda": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Staller",
                 "movepool": ["encore", "protect", "seismictoss", "shadowball", "substitute", "toxic"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["bodyslam", "focuspunch", "shadowball", "substitute"]
             },
             {
                 "role": "Bulky Support",
@@ -2343,7 +2356,7 @@
         ]
     },
     "whiscash": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2493,7 +2506,7 @@
         ]
     },
     "glalie": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Generalist",
@@ -2568,7 +2581,7 @@
         ]
     },
     "metagross": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2614,7 +2627,7 @@
         ]
     },
     "latias": {
-        "level": 67,
+        "level": 66,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2722,7 +2735,7 @@
         ]
     },
     "deoxysspeed": {
-        "level": 76,
+        "level": 77,
         "sets": [
             {
                 "role": "Setup Sweeper",

@@ -1867,10 +1867,7 @@ export const pages: Chat.PageTable = {
 					logUrl = `/view-chatlog-help-${ticket.userid}--${Chat.toTimestamp(created).split(' ')[0]}`;
 				}
 				const room = Rooms.get(roomid);
-				if (room) {
-					const ticketGame = room.getGame(HelpTicket)!;
-					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
-				} else if (ticket.text) {
+				if (ticket.text) {
 					let title = Object.entries(ticket.notes || {})
 						.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
 						.join('&#10;');
@@ -1878,6 +1875,9 @@ export const pages: Chat.PageTable = {
 						title = `title="Staff notes:&#10;${title}"`;
 					}
 					buf += `<a class="button" ${title} href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
+				} else if (room) {
+					const ticketGame = room.getGame(HelpTicket)!;
+					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
 				}
 				if (logUrl) {
 					buf += `<a href="${logUrl}"><button class="button">${this.tr`Log`}</button></a>`;
@@ -1955,7 +1955,15 @@ export const pages: Chat.PageTable = {
 				for (const staff in ticket.notes) {
 					buf += Utils.html`<p>${ticket.notes[staff]} (by ${staff})</p>`;
 				}
+				buf += `<br /><form data-submitsend="/ht addnote ${ticket.userid},{note}&#10;/j view-help-text-${ticket.userid}">`;
+				buf += `Add note: <input name="note" /> <button type="submit" class="button">Submit</button>`;
+				buf += `</form>`;
 				buf += `</details></div>`;
+			} else {
+				buf += `<br /><div class="infobox">`;
+				buf += `<form data-submitsend="/ht note ${ticket.userid},{note}&#10;/j view-help-text-${ticket.userid}">`;
+				buf += `Add note: <input name="note" /> <button type="submit" class="button">Submit</button>`;
+				buf += `</form></div>`;
 			}
 
 			if (!ticket.resolved) {

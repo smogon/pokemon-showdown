@@ -5,7 +5,7 @@
   "main": "dist/sim/index.js",
   "dependencies": {
     "esbuild": "^0.16.10",
-    "mysql2": "^3.6.5",
+    "mysql2": "^3.9.7",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
     "probe-image-size": "^7.2.3",

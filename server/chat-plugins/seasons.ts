@@ -148,7 +148,7 @@ export async function updateBadgeholders() {
 	if (!data.badgeholders[period]) {
 		data.badgeholders[period] = {};
 	}
-	for (const formatName of data.formatSchedule[period]) {
+	for (const formatName of data.formatSchedule[findPeriod()]) {
 		const formatid = `gen${Dex.gen}${formatName}`;
 		const response = await getLadderTop(formatid);
 		if (!response) continue; // ??
@@ -328,13 +328,17 @@ export const handlers: Chat.Handlers = {
 		if (!room.battle) return; // should never happen, just sating TS
 		// now first verify they have a badge
 		const badges = getBadges(user, room.battle.format);
+		if (!badges.length) return;
 		const slot = room.battle.playerTable[user.id]?.slot;
 		if (!slot) return; // not in battle fsr? wack
 		for (const badge of badges) {
 			room.add(`|badge|${slot}|${badge.type}|${badge.format}|${BADGE_THRESHOLDS[badge.type]}-${data.current.season}`);
 		}
 
-		if (checkPublicPhase() && !room.battle.forcedSettings.privacy) {
+		if (
+			checkPublicPhase() && !room.battle.forcedSettings.privacy &&
+			badges.filter(x => x.format === room.battle!.format).length && room.battle.rated
+		) {
 			room.battle.forcedSettings.privacy = 'medal';
 			room.add(
 				`|html|<div class="broadcast-red"><strong>This battle is required to be public due to one or more player having a season medal.</strong><br />` +
