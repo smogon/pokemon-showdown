@@ -496,6 +496,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Cake')}|livid washed is a nerd`);
 		},
 	},
+	chaos: {
+		noCopy: true,
+	},
 	chloe: {
 		noCopy: true,
 		onStart() {
@@ -2378,7 +2381,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	ut: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('UT')}|__being this young is art, aquamarine_`);
+			this.add(`c:|${getName('UT')}|__being this young is art, aquamarine__`);
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('UT')}|__make sure nobody sees you leave__`);
@@ -2486,6 +2489,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Vistar')}|So... this is how my career ends...`);
 		},
 	},
+	vmnunes: {
+		noCopy: true,
+	},
 	warriorgallade: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -2573,6 +2579,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('XpRienzo ☑◡☑')}|Bleh, lame.`);
 		},
 	},
+	xy01: {
+		noCopy: true,
+	},
 	yellowpaint: {
 		noCopy: true,
 		onStart() {
@@ -2627,6 +2636,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c:|${getName('Zalm')}|I should have picked an actual fish pokémon like veluza instead...`);
 		},
+	},
+	zarel: {
+		noCopy: true,
 	},
 	zee: {
 		noCopy: true,
