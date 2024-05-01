@@ -166,7 +166,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["bodyslam", "encore", "fireblast", "flamethrower", "moonlight", "return", "thunderwave"]
+                "movepool": ["bodyslam", "encore", "fireblast", "flamethrower", "moonlight"]
             },
             {
                 "role": "Setup Sweeper",
@@ -448,11 +448,8 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["explosion", "fireblast", "hiddenpowerground", "sludgebomb"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "explosion", "hiddenpowerground", "sludgebomb"]
+                "movepool": ["curse", "explosion", "fireblast", "hiddenpowerground", "sludgebomb"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -575,7 +572,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch", "rest"]
+                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch"]
             },
             {
                 "role": "Bulky Setup",
@@ -707,10 +704,6 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["batonpass", "doubleedge", "hiddenpowerground", "swordsdance"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["doubleedge", "hiddenpowerground", "swordsdance", "wingattack"]
             }
         ]
     },
@@ -782,7 +775,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["doubleedge", "hiddenpowerflying", "hydropump", "rest", "sleeptalk"]
+                "movepool": ["doubleedge", "hiddenpowerflying", "hydropump", "rest", "sleeptalk", "surf"]
             },
             {
                 "role": "Bulky Setup",
@@ -1007,7 +1000,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["curse", "irontail", "quickattack", "rest", "return"]
+                "movepool": ["curse", "irontail", "quickattack", "return"]
             }
         ]
     },
@@ -1398,7 +1391,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["curse", "haze", "hydropump", "sludgebomb", "spikes"]
+                "movepool": ["curse", "haze", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
             }
         ]
     },
@@ -1442,7 +1435,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["irontail", "moonlight", "return", "toxic"]
+                "movepool": ["hiddenpowerground", "moonlight", "return", "toxic"]
             },
             {
                 "role": "Bulky Attacker",
@@ -1450,7 +1443,7 @@
             },
             {
                 "role": "Thief user",
-                "movepool": ["dynamicpunch", "return", "shadowball", "thief"]
+                "movepool": ["dynamicpunch", "moonlight", "return", "thief"]
             }
         ]
     },
@@ -1600,7 +1593,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch", "rest"]
+                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch"]
             },
             {
                 "role": "Bulky Setup",
