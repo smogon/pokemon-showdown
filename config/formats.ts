@@ -2472,7 +2472,7 @@ export const Formats: FormatList = [
 		team: 'random',
 		ruleset: ['[Gen 9 Random Battle]', 'Chimera 1v1 Rule'],
 		onBegin() {
-			this.add(`raw|<div class="broadcast-blue"><b>Chimera Rands is a 1v1 format where you combine your 6 Pokemon into one "Chimera." The order you select during team preview is important! In sequence, your picks determine your chimera's Type, Item, Ability, Stats, Moves 1 & 2, then finally Moves 3 & 4.</b></div>`);
+			this.add(`raw|<div class="broadcast-blue"><b>Chimera Rands is a 1v1 format where you combine your 6 Pokemon into one "Chimera." The order you select during team preview is important! In sequence, your picks determine your Chimera's Type, Item, Ability, Stats, Moves 1 & 2, then finally Moves 3 & 4.</b></div>`);
 		},
 	},
 	{
