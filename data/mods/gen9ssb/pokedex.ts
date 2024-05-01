@@ -494,6 +494,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Super Skilled"},
 	},
 
+	// kolohe
+	pikachu: {
+		inherit: true,
+		baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120},
+		abilities: {0: "Soul Surfer"},
+	},
+
 	// Kry
 	mawile: {
 		inherit: true,
@@ -980,13 +987,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	talonflame: {
 		inherit: true,
 		abilities: {0: "Gale Guard"},
-	},
-
-	// umowu
-	pikachu: {
-		inherit: true,
-		baseStats: {hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120},
-		abilities: {0: "Soul Surfer"},
 	},
 
 	// Valerian

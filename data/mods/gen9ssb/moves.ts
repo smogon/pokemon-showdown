@@ -2945,6 +2945,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
+	// kolohe
+	hangten: {
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		name: "Hang Ten",
+		shortDesc: "User sets Electric Terrain on hit.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Stoked Sparksurfer', target);
+			this.add('-anim', source, 'Surf', target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				onHit() {
+					this.field.setTerrain('electricterrain');
+				},
+			},
+		},
+		target: "normal",
+		type: "Water",
+	},
+
 	// Kry
 	attackofopportunity: {
 		accuracy: 100,
@@ -5236,35 +5265,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-	},
-
-	// umowu
-	hangten: {
-		accuracy: 100,
-		basePower: 75,
-		category: "Special",
-		name: "Hang Ten",
-		shortDesc: "User sets Electric Terrain on hit.",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Stoked Sparksurfer', target);
-			this.add('-anim', source, 'Surf', target);
-		},
-		secondary: {
-			chance: 100,
-			self: {
-				onHit() {
-					this.field.setTerrain('electricterrain');
-				},
-			},
-		},
-		target: "normal",
-		type: "Water",
 	},
 
 	// Valerian

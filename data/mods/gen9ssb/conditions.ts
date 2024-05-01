@@ -1267,6 +1267,29 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Klmondo')}|It's Klmondover`);
 		},
 	},
+	kolohe: {
+		noCopy: true,
+		onStart(pokemon) {
+			const foe = enemyStaff(pokemon);
+			if (foe === 'Rumia') {
+				this.add(`c:|${getName('kolohe ✮彡')}|You come around here often?`);
+			} else if (foe === 'spoo') {
+				this.add(`c:|${getName('kolohe ✮彡')}|Big bald head spotted...`);
+			} else if (foe === 'ausma') {
+				this.add(`c:|${getName('kolohe ✮彡')}|The weekly Smogon furry convention starts NOW`);
+			} else if (foe === 'Peary') {
+				this.add(`c:|${getName('kolohe ✮彡')}|Any arters or culturers?`);
+			} else {
+				this.add(`c:|${getName('kolohe ✮彡')}|Hey, howzit!`);
+			}
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('kolohe ✮彡')}|Wait, I just got started!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('kolohe ✮彡')}|change da world... my final message. goodbye`);
+		},
+	},
 	kry: {
 		noCopy: true,
 		onStart() {
@@ -1936,21 +1959,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	rumia: {
 		noCopy: true,
 		onStart(pokemon) {
-			if (enemyStaff(pokemon) === 'umowu') {
+			if (enemyStaff(pokemon) === 'kolohe') {
 				this.add(`c:|${getName('Rumia')}|OMG who could that be (⁠●⁠♡⁠∀⁠♡⁠)`);
 			} else {
 				this.add(`c:|${getName('Rumia')}|is the mon in front of me the edible kind?`);
 			}
 		},
 		onSwitchOut(pokemon) {
-			if (enemyStaff(pokemon) === 'umowu') {
+			if (enemyStaff(pokemon) === 'kolohe') {
 				this.add(`c:|${getName('Rumia')}|i cant bring myself to do this...`);
 			} else {
 				this.add(`c:|${getName('Rumia')}|brb ^_^`);
 			}
 		},
 		onFaint(pokemon) {
-			if (enemyStaff(pokemon) === 'umowu') {
+			if (enemyStaff(pokemon) === 'kolohe') {
 				this.add(`c:|${getName('Rumia')}|this is the best way to go out...`);
 			} else {
 				this.add(`c:|${getName('Rumia')}|is that sooooo...`);
@@ -2388,29 +2411,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('UT')}|__swaying as the room burnded down__`);
-		},
-	},
-	umowu: {
-		noCopy: true,
-		onStart(pokemon) {
-			const foe = enemyStaff(pokemon);
-			if (foe === 'Rumia') {
-				this.add(`c:|${getName('umowu ✮彡')}|You come around here often?`);
-			} else if (foe === 'spoo') {
-				this.add(`c:|${getName('umowu ✮彡')}|Big bald head spotted...`);
-			} else if (foe === 'ausma') {
-				this.add(`c:|${getName('umowu ✮彡')}|The weekly Smogon furry convention starts NOW`);
-			} else if (foe === 'Peary') {
-				this.add(`c:|${getName('umowu ✮彡')}|Any arters or culturers?`);
-			} else {
-				this.add(`c:|${getName('umowu ✮彡')}|Hey, howzit!`);
-			}
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('umowu ✮彡')}|Wait, I just got started!`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('umowu ✮彡')}|change da world... my final message. goodbye`);
 		},
 	},
 	valerian: {

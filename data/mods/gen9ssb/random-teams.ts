@@ -517,6 +517,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'The Better Water Shuriken',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', teraType: 'Water',
 	},
+	'kolohe ✮彡': {
+		species: 'Pikachu', ability: 'Soul Surfer', item: 'Light Ball', gender: '',
+		moves: ['Thunder', 'Volt Switch', 'Bouncy Bubble'],
+		signatureMove: 'Hang Ten',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Water',
+	},
 	Kry: {
 		species: 'Mawile', ability: 'Flash Freeze', item: 'Mawilite', gender: 'M',
 		moves: ['Sucker Punch', 'Fire Lash', 'Play Rough'],
@@ -905,12 +911,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Brave Bird', 'Roost', 'Defog'],
 		signatureMove: 'My Boys',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Flying',
-	},
-	umowu: {
-		species: 'Pikachu', ability: 'Soul Surfer', item: 'Light Ball', gender: '',
-		moves: ['Thunder', 'Volt Switch', 'Bouncy Bubble'],
-		signatureMove: 'Hang Ten',
-		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Water',
 	},
 	Valerian: {
 		species: 'Lucario', ability: 'Full Bloom', item: 'Clear Amulet', gender: 'F',
