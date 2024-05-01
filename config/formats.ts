@@ -417,7 +417,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU', 'ZUBL', 'Heat Rock'],
+		banlist: ['PU', 'ZUBL'],
 	},
 	{
 		name: "[Gen 9] Free-For-All",
