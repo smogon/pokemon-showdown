@@ -2467,6 +2467,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Chimera 1v1 Random Battle",
+		desc: "Merges a team of six into a single Pok\u00e9mon depending on the order chosen at team preview: It gains the typing of the first, item of the second, ability of the third, stats of the fourth, the first two moves of the fifth, and the last two moves of the sixth.",
 
 		team: 'random',
 		ruleset: ['[Gen 9 Random Battle]', 'Chimera 1v1 Rule'],
