@@ -92,7 +92,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'aegislashblade', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'golisopod', 'honchkrow', 'mimikyu', 'scizor', 'scizormega', 'shedinja',
+	'aegislash', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'golisopod', 'honchkrow', 'mimikyu', 'scizor', 'scizormega', 'shedinja',
 ];
 function sereneGraceBenefits(move: Move) {
 	return move.secondary?.chance && move.secondary.chance >= 20 && move.secondary.chance < 100;
@@ -338,7 +338,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 			// These attacks are redundant with each other
 			['psychic', 'psyshock'],
-			['scald', ['hydropump', 'originpulse', 'waterpulse']],
+			[['scald', 'surf'], ['hydropump', 'originpulse', 'waterpulse']],
 			['return', ['bodyslam', 'doubleedge', 'headbutt']],
 			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
 			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
@@ -858,13 +858,15 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'beheeyem') return 'Analytic';
 		if (species.id === 'drampa' && moves.has('roost')) return 'Berserk';
 		if (species.id === 'ninetales') return 'Drought';
+		if (species.baseSpecies === 'Gourgeist') return 'Frisk';
 		if (species.id === 'talonflame' && role === 'Z-Move user') return 'Gale Wings';
 		if (species.id === 'golemalola' && moves.has('return')) return 'Galvanize';
 		if (species.id === 'raticatealola') return 'Hustle';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
-		if (species.id === 'arcanine') return 'Intimidate';
+		if (species.id === 'arcanine' || species.id === 'stantler') return 'Intimidate';
 		if (species.id === 'lucariomega') return 'Justified';
 		if (species.id === 'toucannon' && !counter.get('sheerforce') && !counter.get('skilllink')) return 'Keen Eye';
+		if (species.id === 'persian' && !counter.get('technician')) return 'Limber';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';

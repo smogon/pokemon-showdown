@@ -491,6 +491,10 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["explosion", "icebeam", "rapidspin", "spikes", "surf", "toxic"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["explosion", "rapidspin", "spikes", "surf", "toxic"]
             }
         ]
     },
@@ -595,7 +599,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bodyslam", "flamethrower", "protect", "wish"]
+                "movepool": ["bodyslam", "earthquake", "protect", "wish"]
             },
             {
                 "role": "Bulky Support",
@@ -997,7 +1001,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake", "hiddenpowerflying", "hydropump", "rockslide", "swordsdance"]
+                "movepool": ["earthquake", "hiddenpowerflying", "hydropump", "rockslide", "swordsdance"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -1091,8 +1096,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["batonpass", "calmmind", "gigadrain", "hiddenpowerfire", "psychic"],
-                "preferredTypes": ["Fire"]
+                "movepool": ["batonpass", "calmmind", "hiddenpowerfire", "psychic", "rest"]
             },
             {
                 "role": "Bulky Attacker",
@@ -1332,7 +1336,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "calmmind", "crunch", "protect", "psychic", "substitute", "thunderbolt", "wish"]
+                "movepool": ["batonpass", "calmmind", "crunch", "psychic", "rest", "substitute", "thunderbolt"]
             },
             {
                 "role": "Wallbreaker",
@@ -2236,7 +2240,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["explosion", "fireblast", "flamethrower", "hiddenpowergrass", "rest", "toxic", "yawn"]
+                "movepool": ["explosion", "fireblast", "flamethrower", "hiddenpowergrass", "rest", "toxic"]
             }
         ]
     },
@@ -2425,7 +2429,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["flamethrower", "icebeam", "return", "thunderbolt", "thunderwave"]
+                "movepool": ["fireblast", "icebeam", "return", "thunderbolt", "thunderwave"]
             }
         ]
     },
@@ -2585,6 +2589,10 @@
         "sets": [
             {
                 "role": "Wallbreaker",
+                "movepool": ["earthquake", "explosion", "meteormash", "rockslide"]
+            },
+            {
+                "role": "Setup Sweeper",
                 "movepool": ["agility", "earthquake", "explosion", "meteormash", "psychic", "rockslide"],
                 "preferredTypes": ["Ground"]
             }
