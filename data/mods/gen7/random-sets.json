@@ -1897,8 +1897,9 @@
         "level": 94,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["crunch", "irontail", "playrough", "suckerpunch"]
+                "role": "Wallbreaker",
+                "movepool": ["crunch", "irontail", "playrough", "suckerpunch", "toxic"],
+                "preferredTypes": ["Fairy"]
             }
         ]
     },
