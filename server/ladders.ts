@@ -145,7 +145,9 @@ class Ladder extends LadderStore {
 
 		if (Dex.formats.get(this.formatid).gameType === 'multi' && !noPartner) {
 			if (!user.battleSettings.teammate) {
-				connection.popup(`You must have a teammate consent to play with you before playing this tier.`);
+				connection.popup(
+					`You must have a teammate consent to play with you before playing this tier. Just fill out their name in the box and hit enter.`
+				);
 				return null;
 			}
 		}
@@ -262,6 +264,9 @@ class Ladder extends LadderStore {
 			if (!search) continue;
 			formatTable.searches.delete(user.id);
 			cancelCount++;
+		}
+		if (user.battleSettings.teammate) {
+			delete user.battleSettings.teammate;
 		}
 
 		Ladder.updateSearch(user);
@@ -476,6 +481,7 @@ class Ladder extends LadderStore {
 			}
 			if (user.battleSettings.teammate) {
 				readies.push(user.battleSettings.teammate);
+				delete user.battleSettings.teammate;
 			}
 			players.push({
 				user,
