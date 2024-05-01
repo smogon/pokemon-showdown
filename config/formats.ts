@@ -401,10 +401,10 @@ export const Formats: FormatList = [
 		ruleset: ['[Gen 9] Ubers'],
 		banlist: [
 			// Ubers OU
-			'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Basculegion-Base', 'Calyrex-Ice', 'Clodsire', 'Deoxys-Attack', 'Eternatus',
-			'Flutter Mane', 'Giratina-Origin', 'Glimmora', 'Gliscor', 'Grimmsnarl', 'Groudon', 'Hatterene', 'Ho-Oh', 'Iron Bundle',
-			'Kingambit', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Miraidon', 'Necrozma-Dusk-Mane', 'Rayquaza', 'Ribombee', 'Skeledirge',
-			'Ting-Lu', 'Zacian-Crowned',
+			'Arceus-Base', 'Arceus-Fairy', 'Arceus-Ground', 'Calyrex-Ice', 'Clodsire', 'Deoxys-Attack', 'Eternatus', 'Flutter Mane',
+			'Giratina-Origin', 'Glimmora', 'Gliscor', 'Grimmsnarl', 'Groudon', 'Hatterene', 'Ho-Oh', 'Iron Bundle', 'Kingambit',
+			'Koraidon', 'Kyogre', 'Kyurem-Black', 'Miraidon', 'Necrozma-Dusk-Mane', 'Rayquaza', 'Ribombee', 'Skeledirge', 'Ting-Lu',
+			'Zacian-Crowned',
 			// Ubers UUBL
 			'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost', 'Arceus-Steel', 'Arceus-Water', 'Lunala', 'Shaymin-Sky', 'Zekrom',
 		],
