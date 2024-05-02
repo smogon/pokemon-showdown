@@ -479,8 +479,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Moonlight', target);
 			this.add('-anim', source, 'Quiver Dance', target);
 			this.add('-anim', source, 'Geomancy', target);
-			const img = "https://i.ibb.co/3N3V3Nf/ZR0qNHd.gif";
-			this.add(`c:|${getName('Arcueid')}|/html <img src="${img}" width="32" height="32" />`);
+			this.add(`c:|${getName('Arcueid')}|I've got nine lives 🐈. You knew that about cats, right, 😹? That means I haven't lost until you beat me nine times 🙀!`);
 		},
 		onHit(target, source, move) {
 			if (source.species.name === "Deoxys-Defense") {

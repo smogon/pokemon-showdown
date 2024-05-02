@@ -213,12 +213,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	arcueid: {
 		noCopy: true,
 		onStart() {
-			const img = "https://i.ibb.co/Cv8LYmP/the-rock-look-the-rock-meme.gif";
-			this.add(`c:|${getName('Arcueid')}|/html <img src="${img}" width="32" height="32" />`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠛⠛⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⢿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⠋⠈⠀⠀⠀⠀⠐⠺⣖⢄⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⡏⢀⡆⠀⠀⠀⢋⣭⣽⡚⢮⣲⠆⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⡇⡼⠀⠀⠀⠀⠈⠻⣅⣨⠇⠈⠀⠰⣀⣀⣀⡀⠀⢸⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⡇⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣟⢷⣶⠶⣃⢀⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⡅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⠀⠈⠓⠚⢸⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⢀⡠⠀⡄⣀⠀⠀⠀⢻⠀⠀⠀⣠⣿⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠐⠉⠀⠀⠙⠉⠀⠠⡶⣸⠁⠀⣠⣿⣿⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⣦⡆⠀⠐⠒⠢⢤⣀⡰⠁⠇⠈⠘⢶⣿⣿⣿⣿⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠠⣄⣉⣙⡉⠓⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿`);
+			this.add('-message', `⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⣀⣀⠀⣀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿`);
 		},
 		onFaint() {
-			const img = "https://i.ibb.co/ss0VF8x/tRsWWx7.png";
-			this.add(`c:|${getName('Arcueid')}|/html <img src="${img}" width="32" height="32" />`);
+			this.add(`c:|${getName('Arcueid')}|change da world,,, my final message. Goodb ye`);
 		},
 	},
 	arsenal: {
@@ -2668,23 +2680,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 
 	// Custom effects
-	// Arcueid
-	millenniumcastle: {
-		name: 'Millennium Castle',
-		effectType: 'Weather',
-		duration: 0,
-		onFieldStart(field, source, effect) {
-			this.add('-weather', 'Millennium Castle', '[from] ability: ' + effect.name, '[of] ' + source);
-		},
-		onFieldResidualOrder: 1,
-		onFieldResidual() {
-			this.add('-weather', 'Millennium Castle', '[upkeep]');
-			this.eachEvent('Weather');
-		},
-		onFieldEnd() {
-			this.add('-weather', 'none');
-		},
-	},
 
 	// Clementine
 	flipped: {
