@@ -420,57 +420,57 @@ function genRosterHTML(): string {
 		shiftRight: ['aethernum', 'alexander489', 'breadstycks', 'hasteinky', 'keys', 'lasen',
 			'mex', 'scotteh', 'steorra', 'waves', 'xprienzo', 'thejesucristoosama', 'appletunalamode'],
 	};
-	let html = `<table class="roster">\n\t<tr><td class="head" colspan="14"><h2>Choose your Fighter!</h2></td></tr>\n`;
+	let html = `<h2 class="align-center">Choose your Fighter!</h2>\n\t<div class="roster">\n`;
 	// Get an array of all set names we need a button for, alts NOT included.
-	const pool = Object.keys(ssbSets).filter(s => !s.includes('-'));
+	const pool = Object.keys(ssbSets).filter(s => !ssbSets[s].skip);
 	let slotsInRow = 0;
 	// Counter controlled so we can see the index
 	for (let i = 0; i < pool.length; i++) {
 		if (slotsInRow === 0) {
 			// Start of a row
-			html += `\t<tr>\n`;
+			html += `\t<div class="row">\n\t\t`;
 			if (i === 0) {
 				// First row
-				html += `\t\t<td><button class="button blank"></button></td>\n`;
+				// html += `\t\t<span class="cell"><button class="button blank"></button></span>\n`;
 				slotsInRow++;
-			} else if (i + 14 > pool.length) {
-				// Last row, and there aren't 14 sets left, fill in blanks.
+			} else if (i + 13 > pool.length) {
+				// Last row, and there aren't 13 sets left, fill in blanks.
 				// For an odd remianing amount, have extra blanks to the right (end)
-				let difference = Math.floor((14 - ((pool.length - 1) - i)) / 2);
+				let difference = Math.floor((13 - ((pool.length - 1) - i)) / 2);
 				for (difference; difference > 0; difference--) {
-					html += `\t\t<td><button class="button blank"></button></td>\n`;
+					// html += `\t\t<span class="cell"><button class="button blank"></button></span>\n`;
 					slotsInRow++;
 				}
 			}
 		}
 		// Add next set
-		html += `\t\t<td><button class="button ${getClassName(pool[i])}`;
+		html += `<span class="cell"><button class="button ${getClassName(pool[i])}`;
 		for (const key in imagePositions) {
 			// Image positioning
 			if (imagePositions[key].includes(toID(pool[i]))) html += ` ${key}`;
 		}
-		html += `"><div class="nameTag">${pool[i]}</div></button></td>\n`;
+		html += `"><div class="nameTag">${pool[i]}</div></button></span>`;
 		slotsInRow++;
 		// End of set pool, fill EVERYTHING else in this row with blanks
 		if (i + 1 === pool.length) {
-			while (slotsInRow < 14) {
-				html += `\t\t<td><button class="button blank"></button></td>\n`;
+			while (slotsInRow < 13) {
+				// html += `\t\t<span class="cell"><button class="button blank"></button></span>\n`;
 				slotsInRow++;
 			}
 		}
-		if (slotsInRow === 13 && i < 14) {
+		if (slotsInRow === 12 && i < 13) {
 			// first row ends
-			html += `\t\t<td><button class="button blank"></button></td>\n`;
+			// html += `\t\t<span class="cell"><button class="button blank"></button></span>\n`;
 			slotsInRow++;
 		}
 		// End of row, cap it off for the next row/end of roster
-		if (slotsInRow === 14) {
+		if (slotsInRow === 13) {
 			// Next row
-			html += `\t</tr>\n`;
+			html += `\n\t</div>\n`;
 			slotsInRow = 0;
 		}
 	}
-	html += `</table>`;
+	html += `</div>`;
 	return html;
 }
 
@@ -482,7 +482,7 @@ export const commands: Chat.ChatCommands = {
 		const roster = genRosterHTML();
 		let data = ``;
 		// Skip alts, they are added as appropriate
-		const pool = Object.keys(ssbSets).filter(s => !s.includes('-'));
+		const pool = Object.keys(ssbSets).filter(s => !ssbSets[s].skip);
 		for (const set of pool) {
 			css += genSetCSS(set);
 			data += genSetHeader(set);
