@@ -1425,6 +1425,9 @@ export const commands: Chat.ChatCommands = {
 		if (targetUser.locked && !user.locked) {
 			return this.popupReply(`That user is locked and cannot be invited to battles.`);
 		}
+		if (targetUser.id === user.id) {
+			return this.popupReply(`You cannot be your own partner.`);
+		}
 		if (user.locked && !targetUser.locked) {
 			return this.errorReply(`You are locked and cannot invite others to battles.`);
 		}
