@@ -1029,14 +1029,6 @@ export const ssbSets: SSBSets = {
 	},
 };
 
-const afdSSBSets: SSBSets = {
-	'Fox': {
-		species: 'Fennekin', ability: 'No Ability', item: '', gender: '',
-		moves: [],
-		signatureMove: 'Super Metronome',
-	},
-};
-
 export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -1044,11 +1036,10 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
-		const memeformat = ruleTable.has('dynamaxclause');
 		const monotype = ruleTable.has('sametypeclause') ?
 			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false;
 
-		let pool = debug.length ? debug : memeformat ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
+		let pool = Object.keys(ssbSets);
 		if (debug.length) {
 			while (debug.length < 6) {
 				const staff = this.sampleNoReplace(pool);
@@ -1065,12 +1056,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
-			const name = memeformat ? this.sample(pool) : this.sampleNoReplace(pool);
-			const ssbSet: SSBSet = memeformat ? this.dex.deepClone(afdSSBSets[name]) : this.dex.deepClone(ssbSets[name]);
+			const name = this.sampleNoReplace(pool);
+			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
-			if (!(debug.length || monotype || memeformat)) { // Type limits are ignored for debugging, monotype, or memes.
+			if (!(debug.length || monotype)) { // Type limits are ignored for debugging, monotype, or memes.
 				const species = this.dex.species.get(ssbSet.species);
 				if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
