@@ -263,39 +263,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "If this Pokemon is a Deoxys-Defense, it is immune to status moves and cannot be afflicted with any non-volatile status condition. If this Pokemon is a Deoxys-Attack, it gains an additional Fairy typing for as long as this Ability remains active.",
 		name: "Marble Phantasm",
 		onStart(source) {
-			this.field.setWeather('millenniumcastle');
 			if (source.species.name === "Deoxys-Attack" && source.setType(['Psychic', 'Fairy'])) {
-				this.add('-start', source, 'typechange', source.getTypes(true).join('/'), '[from] weather: Millennium Castle');
+				this.add('-start', source, 'typechange', source.getTypes(true).join('/'), '[from] ability: Marble Phantasm');
 			} else if (source.species.name === "Deoxys-Defense" && source.setType('Psychic')) {
-				this.add('-start', source, 'typechange', 'Psychic', '[from] weather: Milennium Castle');
+				this.add('-start', source, 'typechange', 'Psychic', '[from] ability: Marble Phantasm');
 			}
 		},
-		onAnySetWeather(target, source, weather) {
-			if (this.field.getWeather().id === 'millenniumcastle' && !STRONG_WEATHERS.includes(weather.id)) return false;
-		},
 		onTryHit(target, source, move) {
-			if (move.category === 'Status' && target !== source &&
-				target.effectiveWeather() === 'milleniumcastle' && target.species.name === "Deoxys-Defense") {
-				this.add('-immune', target, '[from] weather: Millennium Castle');
+			if (move.category === 'Status' && target !== source && target.species.name === "Deoxys-Defense") {
+				this.add('-immune', target, '[from] ability: Marble Phantasm');
 				return null;
 			}
 		},
 		onSetStatus(status, target, source, effect) {
-			if (target.effectiveWeather() === 'millenniumcastle' && target.species.name === "Deoxys-Defense") {
-				this.add('-immune', target, '[from] weather: Millennium Castle');
+			if (target.species.name === "Deoxys-Defense") {
+				this.add('-immune', target, '[from] ability: Marble Phantasm');
 				return false;
 			}
-		},
-		onEnd(pokemon) {
-			if (this.field.weatherState.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility('marblephantasm')) {
-					this.field.weatherState.source = target;
-					return;
-				}
-			}
-			this.field.clearWeather();
 		},
 		flags: {},
 		gen: 9,
