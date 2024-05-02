@@ -2631,10 +2631,15 @@ export const Formats: FormatList = [
 			// https://discordapp.com/channels/630837856075513856/630845310033330206/716126469528485909
 			// Requires client change
 			// this.add(`raw|<div class='broadcast-green'><b>Wondering what all these custom moves, abilities, and items do?<br />Check out the <a href="https://www.smogon.com/articles/super-staff-bros-4" target="_blank">Super Staff Bros 4 Guide</a> or use /ssb to find out!</b></div>`);
+			if (this.ruleTable.has('dynamaxclause')) {
+				// Old joke format we're bringing back
+				this.add('message', 'Fox only');
+				this.add('message', 'No items');
+				this.add('message', 'Final Destination');
+				return;
+			}
 
-			this.add('message', [
-				'THE BATTLE FOR SURVIVAL BEGINS!', 'WHO WILL SURVIVE?', 'GET READY TO KEEP UP!', 'GET READY!', 'DARE TO BELIEVE YOU CAN SURVIVE!', 'THERE CAN BE ONLY ONE WINNER!', 'GET READY FOR THE FIGHT OF YOUR LIFE!', 'WHO WILL PREVAIL?', 'ONLY ONE TEAM WILL BE LEFT STANDING!', 'BATTLE WITHOUT LIMITS!',
-			][this.random(10)]);
+			this.add('message', 'EVERYONE IS HERE!');
 			this.add('message', 'FIGHT!');
 		},
 		onSwitchInPriority: 100,

@@ -2264,6 +2264,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Swords Dance', source);
 		},
 		onHit(target, source) {
+			this.add(`c:|${getName((source.illusion || source).name)}|Ok I have a stupid idea, just hear me out`);
 			this.add('message', `A sacrifice is needed.`);
 		},
 		slotCondition: 'scapegoat',
@@ -4162,48 +4163,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
 			move.type = type;
 		},
-		self: {
-			slotCondition: 'Luck Pulse',
-		},
-		condition: {
-			duration: 999,
-			onStart(pokemon, source) {
-				const messages = [
-					'Kai Shinden',
-					'Kaio Sama',
-					'Kaiba, Seto',
-					'Kairyu-Shin',
-					'Kaito Shizuki',
-					'Kanga Skhan',
-					'KanSas',
-					'Karakuri Shogun',
-					'Kartana Swords dance',
-					'Kate Stewart',
-					'Kendo Spirit',
-					'Keratan Sulfate',
-					'Kernel Streaming',
-					'Key Stage',
-					'Kids Suck',
-					'KillSteal',
-					'Kilometers / Second',
-					'KiloSecond',
-					'King of the Swamp',
-					'King\'s Shield',
-					'Kirk/Spock',
-					'Klingon Security',
-					'Kpop Star',
-					'Kuroudo (Cloud) Strife',
-					'Kyouko Sakura',
-					'KyrgyzStan',
-				];
-				this.effectState.ksName = this.sample(messages);
-				this.add(`c:|${getName('Pulse_kS')}|The kS stands for ${this.effectState.ksName}`);
-			},
-			onTryHit(source, target, move) {
-				if (source.species.baseSpecies === 'Hydreigon' && move.name === 'Luck Pulse') {
-					this.add(`c:|${getName('Pulse_kS')}|The kS stands for ${this.effectState.ksName}`);
-				}
-			},
+		onTryHit(target, source, move) {
+			const messages = [
+				'Kai Shinden',
+				'Kaio Sama',
+				'Kaiba, Seto',
+				'Kairyu-Shin',
+				'Kaito Shizuki',
+				'Kanga Skhan',
+				'KanSas',
+				'Karakuri Shogun',
+				'Kate Stewart',
+				'Kendo Spirit',
+				'Keratan sulfate',
+				'Kernel streaming',
+				'Key Stage',
+				'Kids Suck',
+				'KillSteal',
+				'Kilometers / Second',
+				'Kilosecond',
+				'King of the Swamp',
+				'King\'s Shield',
+				'Kirk/Spock',
+				'Klingon Security',
+				'Kuroudo (Cloud) Strife',
+				'Kyouko Sakura',
+				'KyrgyzStan',
+				'Kpop Star',
+				'Kartana Swords dance',
+			];
+			this.add(`c:|${getName((source.illusion || source).name)}|The kS stands for ${this.sample(messages)}`);
 		},
 		secondary: {
 			chance: 40,
@@ -6631,5 +6620,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-fieldend', 'move: Gravity');
 			},
 		},
+	},
+
+	// Try playing Staff Bros with dynamax clause and see what happens
+	supermetronome: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Uses 2-5 random moves. Does not include 1-Base Power Z-Moves, Super Metronome, Metronome, or 10-Base Power Max moves.",
+		shortDesc: "Uses 2-5 random moves.",
+		name: "Super Metronome",
+		isNonstandard: "Custom",
+		pp: 100,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {},
+		onTryMove(pokemon) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Metronome", source);
+		},
+		onHit(target, source, effect) {
+			const moves = [];
+			for (const move of this.dex.moves.all()) {
+				if (move.realMove || move.id.includes('metronome')) continue;
+				// Calling 1 BP move is somewhat lame and disappointing. However,
+				// signature Z moves are fine, as they actually have a base power.
+				if (move.isZ && move.basePower === 1) continue;
+				if (move.gen > this.gen) continue;
+				if (move.isMax) continue;
+				moves.push(move.name);
+			}
+			let randomMove: string;
+			if (moves.length) {
+				randomMove = this.sample(moves);
+			} else {
+				return false;
+			}
+			this.actions.useMove(randomMove, target);
+		},
+		multihit: [2, 5],
+		secondary: null,
+		target: "self",
+		type: "???",
 	},
 };

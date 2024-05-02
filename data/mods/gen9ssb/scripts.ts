@@ -385,6 +385,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.boost({atk: 1, spa: 1, spe: 1}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat'));
 			}
 			// @ts-ignore
+			this.add(`c:|${getName((action.pokemon.illusion || action.pokemon).name)}|Don't worry, if this plan fails we can just blame ${action.target.name}`);
+			// @ts-ignore
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'scapegoat');
 			break;
 		case 'runUnnerve':
