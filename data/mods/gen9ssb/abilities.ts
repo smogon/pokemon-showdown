@@ -731,10 +731,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Moves drain 37%. Allies heal 5% HP. <25% HP, moves drain 114%, allies get 10%.",
 		desc: "All moves heal 37% of damage dealt. Unfainted allies heal 5% HP at the end of each turn. If this Pokemon's HP is less than 25%, moves heal 114% of damage dealt, and allies restore 10% of their health.",
 		name: "Coalescence",
-		onModifyMove(move, pokemon, target) {
+		onModifyMove(move, source, target) {
 			if (move.category !== "Status") {
 				// move.flags['heal'] = 1; // For Heal Block
-				if (pokemon.hp > pokemon.maxhp / 4) {
+				if (source.hp > source.maxhp / 4) {
 					move.drain = [37, 100];
 				} else {
 					move.drain = [114, 100];
@@ -2022,7 +2022,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyMove(move, source, target) {
 			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
 		},
-		onTryHit(target, pokemon) {
+		onTryHit(source, target) {
 			target.side.removeSideCondition('hotpursuit');
 		},
 		condition: {

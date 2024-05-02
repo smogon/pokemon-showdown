@@ -5866,14 +5866,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 			if (this.randomChance(1, 256)) {
 				this.add('-fail', pokemon);
+				this.add('-message', '(In Gen 1, moves with 100% accuracy have a 1/256 chance to miss.)');
 				return false;
 			}
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Hex", target);
-		},
-		onMoveFail() {
-			this.add('-message', '(In Gen 1, moves with 100% accuracy have a 1/256 chance to miss.)');
 		},
 		secondary: null,
 		target: "normal",
