@@ -266,6 +266,8 @@ class Ladder extends LadderStore {
 			cancelCount++;
 		}
 		if (user.battleSettings.teammate) {
+			const partner = Users.get(user.battleSettings.teammate.userid);
+			if (partner) Ladder.updateSearch(partner);
 			delete user.battleSettings.teammate;
 		}
 
