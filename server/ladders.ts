@@ -267,7 +267,7 @@ class Ladder extends LadderStore {
 		}
 		if (user.battleSettings.teammate) {
 			const partner = Users.get(user.battleSettings.teammate.userid);
-			if (partner) Ladder.cancelSearches(partner);
+			if (partner) partner.send(`|updatesearch|${JSON.stringify({searching: [], games: null})}`);
 		}
 
 		Ladder.updateSearch(user);
