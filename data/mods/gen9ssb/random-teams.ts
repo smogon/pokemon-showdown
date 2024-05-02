@@ -710,9 +710,9 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant', teraType: 'Water',
 	},
 	Pulse_kS: {
-		species: 'Hydreigon', ability: 'Not Orichalcum Pulse', item: 'Quick Claw', gender: 'N',
+		species: 'Hydreigon', ability: 'Pulse Luck', item: 'Quick Claw', gender: 'N',
 		moves: ['Dark Pulse', 'Dragon Pulse', 'Origin Pulse'],
-		signatureMove: 'Pulse Luck',
+		signatureMove: 'Lucky Pulse',
 		evs: {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85}, nature: 'Serious', teraType: ['Steel', 'Poison'],
 	},
 	PYRO: {

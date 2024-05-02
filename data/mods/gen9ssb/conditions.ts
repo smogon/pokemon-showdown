@@ -2073,7 +2073,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				if (pokemon.illusion) return;
 				changeSet(this, pokemon, ssbSets['sharp_claw-Rough']);
 			} else {
-				this.add(`c:|${getName('sharp_claw')}|brb, getting my sister C:`);
+				this.add(`c:|${getName('sharp_claw')}|brb, getting my sister c:`);
 				if (pokemon.illusion) return;
 				changeSet(this, pokemon, ssbSets['sharp_claw']);
 			}

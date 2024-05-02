@@ -711,7 +711,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Pulse_kS
 	hydreigon: {
 		inherit: true,
-		abilities: {0: "Not Orichalcum Pulse"},
+		abilities: {0: "Pulse Luck"},
 	},
 
 	// PYRO
