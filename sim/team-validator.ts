@@ -1496,20 +1496,25 @@ export class TeamValidator {
 		const species = dex.species.get(set.species);
 
 		if (species.name === 'Necrozma-Ultra') {
-			const whichMoves = (set.moves.includes('sunsteelstrike') ? 1 : 0) +
-				(set.moves.includes('moongeistbeam') ? 2 : 0);
+			const whichMoves = (set.moves.map(toID).includes('sunsteelstrike' as ID) ? 1 : 0) +
+				(set.moves.map(toID).includes('moongeistbeam' as ID) ? 2 : 0);
 			if (item.name !== 'Ultranecrozium Z') {
 				// Necrozma-Ultra transforms from one of two formes, and neither one is the base forme
 				problems.push(`Necrozma-Ultra must start the battle holding Ultranecrozium Z.`);
 			} else if (whichMoves === 1) {
 				set.species = 'Necrozma-Dusk-Mane';
+				set.ability = 'Prism Armor';
 			} else if (whichMoves === 2) {
 				set.species = 'Necrozma-Dawn-Wings';
+				set.ability = 'Prism Armor';
 			} else {
 				problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dusk-Mane or Necrozma-Dawn-Wings holding Ultranecrozium Z. Please specify which Necrozma it should start as.`);
 			}
 		} else if (species.name === 'Zygarde-Complete') {
 			problems.push(`Zygarde-Complete must start the battle as Zygarde or Zygarde-10% with Power Construct. Please specify which Zygarde it should start as.`);
+		} else if (species.baseSpecies === 'Terapagos') {
+			set.species = 'Terapagos';
+			set.ability = 'Tera Shift';
 		} else if (species.battleOnly) {
 			if (species.requiredAbility && set.ability !== species.requiredAbility) {
 				// Darmanitan-Zen
