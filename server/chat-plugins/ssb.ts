@@ -2,6 +2,7 @@
 import {ssbSets} from '../../data/mods/gen9ssb/random-teams';
 import {Utils} from '../../lib';
 import {FS} from '../../lib/fs';
+import {RoomSections} from '../chat-commands/room-settings';
 const dex = Dex.mod('gen9ssb');
 const STAT_FORMAT = {hp: 'HP', atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 // Similar to User.usergroups, but is a custom group from a custom csv file
@@ -16,13 +17,25 @@ for (const row of usergroupData) {
 function getPosition(name: string): string {
 	// Special checks first
 	const id = toID(name);
-	const ssbContribs: string[] = ['ausma', 'blitz', 'hizo'];
+	const ssbContribs: string[] = ['ausma', 'blitz', 'hizo', 'violet'];
+	if (id === 'artemis') {
+		return `Server Automatic Moderation`;
+	}
 	if (ssbContribs.includes(id)) return `Super Staff Bros Contributor`;
 	// Override + -> public RO for retired staff.
-	const retiredStaff: string[] = ['dragonwhale'];
+	const retiredStaff: string[] = [
+		'kennedy', 'billo', 'breadstycks', 'chloe', 'clerica', 'coolcodename', 'corthius',
+		'dawnofartemis', 'frostyicelad', 'ganjafin', 'inthehills', 'j0rdy004', 'kolohe',
+		'peary', 'phoopes', 'pissog', 'returntomonkey', 'skies', 'swiffix'];
 	if (retiredStaff.includes(id)) return `Retired Staff`;
 	let group = usergroups[id] || ' ';
 	if (id === 'artemis') group = '@';
+	const sectionid = Users.globalAuth.sectionLeaders.get(id);
+	let section = '';
+	if (sectionid && group === '§') {
+		section = RoomSections.sectionNames[sectionid];
+		return `${Utils.escapeHTML(section.split(' ').map((x: string) => x[0].toUpperCase() + x.substr(1)).join(' '))} Section Leader`;
+	}
 	const symbolToGroup: {[group: string]: string} = {
 		' ': `Retired Staff`,
 		'+': `Public Room Owner`,
@@ -113,14 +126,53 @@ function genItemHTML(item: string | string[]): string {
 	item = item.slice();
 	let html = ``;
 	for (const i of item) {
+		if (!i) {
+			html = ``;
+			continue;
+		}
 		let sprite = i;
-		if (sprite === 'leek') sprite = 'stick';
+		const spriteid = toID(sprite);
+		if (spriteid === 'leek') sprite = 'stick';
+		if (spriteid === 'lilligantiumz') sprite = 'waterium_z';
+		if (spriteid === 'irpatuziniumz') sprite = 'fairium_z';
+		if (spriteid === 'pearyumz') sprite = 'steelium_z';
+		if (spriteid === 'rainiumz') sprite = 'primarium_z';
 		if (!Dex.items.get(sprite).exists && dex.items.get(sprite).zMove) {
 			const move = dex.items.get(sprite).zMove;
 			if (move === true) throw new Error(`Unexpected true for ${sprite}.`);
 			sprite = zTable[toID(dex.moves.get(move).type)];
 		}
-		html += `<img src="/dex/media/sprites/xyitems/${sprite = sprite.toLowerCase().replace(/ /g, '_').replace(/'/g, '')}.png" alt="${i}"/> `;
+		let url = `/dex/media/sprites/xyitems/${sprite = sprite.toLowerCase().replace(/ /g, '_').replace(/'/g, '')}.png`;
+		let width;
+		let height;
+		if (spriteid === 'boosterenergy') {
+			url = `/articles/images/sprites/booster_energy.png`;
+			width = height = 32;
+		}
+		if (spriteid === 'covertcloak') {
+			url = `/articles/images/sprites/covert_cloak.png`;
+			width = height = 32;
+		}
+		if (spriteid === 'clearamulet') {
+			url = `/articles/images/sprites/clear_amulet.png`;
+			width = height = 32;
+		}
+		if (spriteid === 'griseouscore') {
+			url = `/articles/images/sprites/griseous_core.png`;
+			width = height = 32;
+		}
+		if (spriteid === 'mirrorherb') {
+			url = `/articles/images/sprites/mirror_herb.png`;
+			width = height = 32;
+		}
+		if (spriteid === 'loadeddice') {
+			url = `/articles/images/sprites/loaded_dice.png`;
+			width = height = 32;
+		}
+		if (spriteid === 'flygonite') {
+			url = `//play.pokemonshowdown.com/sprites/itemicons/dream-ball.png`;
+		}
+		html += `<img src="${url}"${width ? ` width="${width}"` : ''}${height ? ` height="${height}"` : ''} alt="${i}"/> `;
 	}
 	return html;
 }
@@ -155,11 +207,13 @@ function genSetBody(name: string): string {
 		html += `\t<div class="bar">\n`;
 		html += `\t\t<img src="${speciesToImageUrl(set.species, set.item, set.shiny === true, true)}" alt="${set.species}" /> ${genItemHTML(set.item)}\n`;
 		html += `\t\t<ul>\n\t\t\t<li><strong>${set.species}</strong>`;
-		const itemsList = (Array.isArray(set.item) ? set.item : [set.item]).slice().map(i => {
-			if (!Dex.items.get(i).exists) return `<em>${i}</em>`;
-			return i;
-		});
-		html += ` @ ${itemsList.join(' / ')}</li>\n`;
+		const itemsList = (Array.isArray(set.item) ? set.item : [set.item]).slice()
+			.filter(i => !!i).map(i => {
+				if (!Dex.items.get(i).exists) return `<em>${i}</em>`;
+				return i;
+			});
+		if (itemsList.length) html += ` @ ${itemsList.join(' / ')}`;
+		html += `</li>\n`;
 
 		const abilities = (Array.isArray(set.ability) ? set.ability : [set.ability]).slice().map(a => {
 			if (!Dex.abilities.get(a).exists) return `<em>${a}</em>`;
@@ -179,28 +233,34 @@ function genSetBody(name: string): string {
 				}
 			}
 		}
-
 		html += `</li>\n`;
-		html += `\t\t\t<li>EVs: `;
-		const DEFAULT_EVS: {[ev: string]: number} = {hp: 82, atk: 82, def: 82, spa: 82, spd: 82, spe: 82};
-		const evs = set.evs || DEFAULT_EVS;
-		for (const ev in evs) {
-			// @ts-ignore, its fine were using a for-in.
-			html += `${evs[ev]} ${STAT_FORMAT[ev]} / `;
+		const teraTypes = (Array.isArray(set.teraType) ? set.teraType : set.teraType ? [set.teraType] : [])
+			.slice().map(type => Dex.types.getByID(toID(type)).name);
+		if (teraTypes.length) {
+			html += `<li>Tera Type: ${Array.from(new Set(teraTypes)).join(' / ')}</li>\n`;
 		}
-		// cut off last /
-		html = html.slice(0, html.length - 3);
-		html += `</li>\n`;
-		html += `\t\t\t<li>${parseNature(set.nature)}</li>\n`;
-		if (set.ivs) {
-			html += `\t\t\t<li>IVs: `;
-			for (const iv in set.ivs) {
-				// @ts-ignore, its fine were using a for-in.
-				html += `${set.ivs[iv]} ${STAT_FORMAT[iv]} / `;
+		if (set.species !== 'Fennekin') {
+			html += `\t\t\t<li>EVs: `;
+			const DEFAULT_EVS: {[ev in StatID]: number} = {hp: 82, atk: 82, def: 82, spa: 82, spd: 82, spe: 82};
+			const evs = set.evs || DEFAULT_EVS;
+			let ev: StatID;
+			for (ev in evs) {
+				html += `${evs[ev]} ${STAT_FORMAT[ev]} / `;
 			}
 			// cut off last /
 			html = html.slice(0, html.length - 3);
 			html += `</li>\n`;
+			html += `\t\t\t<li>${parseNature(set.nature)}</li>\n`;
+			if (set.ivs) {
+				html += `\t\t\t<li>IVs: `;
+				let iv: StatID;
+				for (iv in set.ivs) {
+					html += `${set.ivs[iv]} ${STAT_FORMAT[iv]} / `;
+				}
+				// cut off last /
+				html = html.slice(0, html.length - 3);
+				html += `</li>\n`;
+			}
 		}
 		// Moves
 		const movepool = set.moves.slice().concat(set.signatureMove);
@@ -296,7 +356,7 @@ function genSetDescriptions(name: string): string {
 		// item
 		const items = (Array.isArray(set.item) ? set.item : [set.item]).slice();
 		for (const i of items) {
-			if (Dex.items.get(i).exists && toID(i) !== 'rarebone') continue; // Not custom
+			if (Dex.items.get(i).exists || !i) continue; // Not custom
 			if (cache.items.includes(toID(i))) continue; // Already got this description
 			cache.items.push(toID(i));
 			const itemResult = itemDesc(dex.items.get(i));
@@ -330,9 +390,15 @@ function genSetDescriptions(name: string): string {
 	if (condition.innateName) {
 		// @ts-ignore Custom condition
 		innateHtml += `\t<dl>\n\t\t<dt>Innate Ability - ${condition.innateName}</dt>\n`;
+		let desc = condition.desc;
+		let shortDesc = condition.shortDesc;
+		if (Dex.abilities.get((condition as any).innateName).exists) {
+			desc = Dex.abilities.get((condition as any).innateName).desc;
+			shortDesc = Dex.abilities.get((condition as any).innateName).shortDesc;
+		}
 		// @ts-ignore Custom condition
-		if (!condition.desc && !condition.shortDesc) console.log(condition.innateName + " needs desc/shortDesc.");
-		innateHtml += `\t\t<dd>${condition.desc || condition.shortDesc || 'No description provided.'}</dd>\n\t</dl>\n`;
+		if (!desc && !shortDesc) console.log(condition.innateName + " needs desc/shortDesc. (Innate)");
+		innateHtml += `\t\t<dd>${desc || shortDesc || 'No description provided.'}</dd>\n\t</dl>\n`;
 	}
 	// custom z
 	if (customZ && typeof customZ.zMove === 'string') {
@@ -345,19 +411,15 @@ function itemDesc(item: Item): [string, Item | null] {
 	let html = ``;
 	let customZCrystal: Item | null = null;
 	const type = item.megaStone ? `Mega Stone` : (item.zMove ? `Z Crystal` : `Item`);
-	if (!item.desc) console.log(item.name + " needs desc.");
-	html += `\t<dl>\n\t\t<dt>Custom ${type}</dt>\n\t\t<dd>${item.desc || `No description yet!`}</dd>\n\t</dl>\n`;
+	if (!item.desc && !item.shortDesc) console.log(item.name + " needs desc/shortDesc. (Item)");
+	html += `\t<dl>\n\t\t<dt>Custom ${type}</dt>\n\t\t<dd>${item.desc || item.shortDesc || `No description yet!`}</dd>\n\t</dl>\n`;
 	if (item.zMove && typeof item.zMove === 'string') customZCrystal = item;
 	return [html, customZCrystal];
 }
 function abilityDesc(ability: Ability): string {
 	let html = `\t<dl>\n\t\t<dt>Custom Ability - ${ability.name}</dt>\n`;
-	if (!ability.desc) {
-		if (ability.shortDesc) {
-			console.log(ability.name + "needs long desc.");
-		} else {
-			console.log(ability.name + " needs desc.");
-		}
+	if (!ability.desc && !ability.shortDesc) {
+		console.log(ability.name + " needs desc/shortDesc. (Ability)");
 	}
 	html += `\t\t<dd>${ability.desc || ability.shortDesc || `No description yet!`}</dd>\n\t</dl>\n`;
 	return html;
@@ -373,12 +435,8 @@ function sigMoveDesc(move: Move, header?: string): string {
 	html += `<strong>PP:</strong> ${move.pp}`;
 	if (!move.noPPBoosts) html += ` (max: ${move.pp * 8 / 5})`;
 	html += `</dd>\n`;
-	if (!move.desc) {
-		if (move.shortDesc) {
-			console.log(move.name + "needs long desc.");
-		} else {
-			console.log(move.name + " needs desc.");
-		}
+	if (!move.desc && !move.shortDesc) {
+		console.log(move.name + " needs desc/shortDesc. (Move)");
 	}
 	html += `\t\t<dd>${move.desc || move.shortDesc || 'No description provided.'}</dd>\n\t</dl>\n`;
 	return html;
@@ -413,14 +471,14 @@ function genRosterHTML(): string {
 		tall: ['aelita', 'arcueid', 'arya', 'breadstycks', 'elly', 'lasen',
 			'maroon', 'mex', 'notater517', 'penquin', 'rainshaft', 'siegfried', 'solaroslunaris',
 			'struchni', 'thejesucristoosama', 'violet', 'warriorgallade', 'xprienzo', 'yveltalnl'],
-		short: ['frostyicelad', 'partman', 'rumia', 'spoo', 'ut', 'venous', 'waves'],
+		short: ['frostyicelad', 'partman', 'rumia', 'spoo', 'ut', 'venous', 'waves', 'hasteinky'],
 		supershort: ['appletunalamode', 'arsenal'],
 		shiftLeft: ['arsenal', 'coolcodename', 'blitz', 'easyonthehills', 'eva', 'goroyagami',
 			'havi', 'ken', 'kry', 'pokemonvortex', 'r8', 'rainshaft', 'solaroslunaris', 'spoo'],
 		shiftRight: ['aethernum', 'alexander489', 'breadstycks', 'hasteinky', 'keys', 'lasen',
 			'mex', 'scotteh', 'steorra', 'waves', 'xprienzo', 'thejesucristoosama', 'appletunalamode'],
 	};
-	let html = `<h2 class="align-center">Choose your Fighter!</h2>\n\t<div class="roster">\n`;
+	let html = `<h3 class="align-center">Choose your Fighter!</h3>\n\t<div class="roster">\n`;
 	// Get an array of all set names we need a button for, alts NOT included.
 	const pool = Object.keys(ssbSets).filter(s => !ssbSets[s].skip);
 	let slotsInRow = 0;

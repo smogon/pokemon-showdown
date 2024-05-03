@@ -310,7 +310,7 @@ export const ssbSets: SSBSets = {
 		species: 'Slowking-Galar', ability: 'Coalescence', item: 'Black Sludge', gender: 'N',
 		moves: ['Sludge Bomb', 'Psychic Noise', 'Parting Shot'],
 		signatureMove: 'Biotic Orb',
-		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Stellar',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: ['Psychic', 'Poison'],
 	},
 	DianaNicole: {
 		species: 'Abomasnow', ability: 'Snow Problem', item: 'Abomasite', gender: 'F',

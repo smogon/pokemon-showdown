@@ -775,6 +775,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				oldActive.usedItemThisTurn = false;
 				oldActive.statsRaisedThisTurn = false;
 				oldActive.statsLoweredThisTurn = false;
+				// ptoad
 				delete oldActive.m.usedPleek;
 				oldActive.position = pokemon.position;
 				pokemon.position = pos;

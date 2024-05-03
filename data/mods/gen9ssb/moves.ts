@@ -573,7 +573,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				netType = this.sample(nveTypes);
 			}
 			if (falsePositive) {
-				this.add('-message', `${getName((target.illusion || target).name)} triggered a false-positive and caused ${move.name} to become not-very effective!`);
+				this.add('-message', `${(target.illusion || target).name} triggered a false-positive and caused ${move.name} to become not-very effective!`);
 			}
 			source.setType(netType);
 			this.add('-start', source, 'typechange', netType);
