@@ -2365,7 +2365,7 @@ export const Formats: FormatList = [
 			'Groudon-Primal', 'Ho-Oh', 'Kyogre-Primal', 'Lunala', 'Marshadow', 'Melmetal', 'Mewtwo-Mega-Y', 'Necrozma-Dusk-Mane', 'Necrozma-Ultra', 'Rayquaza',
 			'Salamence-Mega', 'Yveltal', 'Zacian-Crowned', 'Zygarde-Base',
 			// UUBL
-			'Arceus-Fairy', 'Arceus-Ghost', 'Chi-Yu', 'Shaymin-Sky', 'Zacian', 'Power Construct', 'Ultranecrozium Z', 'Last Respects',
+			'Arceus-Fairy', 'Arceus-Ghost', 'Chi-Yu', 'Shaymin-Sky', 'Zacian', 'Power Construct', 'Ultranecrozium Z', 'Last Respects', 'Light Clay', 'Kyurem-Black', 'Flutter Mane',
 		],
 	},
 	{
