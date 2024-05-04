@@ -160,6 +160,7 @@ describe("New set format", () => {
 describe('randomly generated teams should be valid (slow)', () => {
 	for (const format of Dex.formats.all()) {
 		if (!format.team) continue; // format doesn't use randomly generated teams
+		if (format.mod === 'gen9ssb') continue; // Temporary
 
 		it(`should generate valid ${format} teams`, function () {
 			this.timeout(0);

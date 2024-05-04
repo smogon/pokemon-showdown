@@ -91,7 +91,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				throw new Chat.ErrorMessage(`A mod by the name of '${mod.trim()}' does not exist.`);
 			}
-			if (dex === Dex.dexes['ssb']) {
+			if (dex === Dex.dexes['gen9ssb']) {
 				throw new Chat.ErrorMessage(`The SSB mod supports custom elements for Mega Stones that have the capability of crashing the server.`);
 			}
 		}
@@ -208,7 +208,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				throw new Chat.ErrorMessage(`A mod by the name of '${sep[1].trim()}' does not exist.`);
 			}
-			if (dex === Dex.dexes['ssb']) {
+			if (dex === Dex.dexes['gen9ssb']) {
 				throw new Chat.ErrorMessage(`The SSB mod supports custom elements for Mega Stones that have the capability of crashing the server.`);
 			}
 		}
