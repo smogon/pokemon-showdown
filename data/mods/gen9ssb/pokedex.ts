@@ -422,6 +422,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// J0rdy004
 	vulpixalola: {
 		inherit: true,
+		baseStats: {hp: 73, atk: 67, def: 75, spa: 81, spd: 100, spe: 109},
 		abilities: {0: "Fortifying Frost"},
 	},
 
