@@ -374,6 +374,17 @@ function SSBSets(target: string) {
 	return buf;
 }
 
+
+export const disabledSets = Chat.oldPlugins.ssb?.disabledSets || [];
+
+function enforceDisabledSets() {
+	for (const process of Rooms.PM.processes) {
+		process.getProcess().send(`EVAL\n\nConfig.disabledssbsets = ${JSON.stringify(disabledSets)}`);
+	}
+}
+
+enforceDisabledSets();
+
 export const commands: Chat.ChatCommands = {
 	ssb(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -387,4 +398,27 @@ export const commands: Chat.ChatCommands = {
 	ssbhelp: [
 		`/ssb [staff member] - Displays a staff member's Super Staff Bros. set and custom features.`,
 	],
+	enablessbset: 'disablessbset',
+	disablessbset(target, room, user, connection, cmd) {
+		this.checkCan('rangeban');
+		target = toID(target);
+		if (!Object.keys(ssbSets).map(toID).includes(target as ID)) {
+			throw new Chat.ErrorMessage(`${target} has no SSB set.`);
+		}
+		const disableIdx = disabledSets.indexOf(target);
+		if (cmd.startsWith('enable')) {
+			if (disableIdx < 0) {
+				throw new Chat.ErrorMessage(`${target}'s set is not disabled.`);
+			}
+			disabledSets.splice(disableIdx, 1);
+			this.privateGlobalModAction(`${user.name} enabled ${target}'s SSB set.`);
+		} else {
+			if (disableIdx > -1) {
+				throw new Chat.ErrorMessage(`That set is already disabled.`);
+			}
+			disabledSets.push(target);
+			this.privateGlobalModAction(`${user.name} disabled the SSB set for ${target}`);
+		}
+		enforceDisabledSets();
+	},
 };

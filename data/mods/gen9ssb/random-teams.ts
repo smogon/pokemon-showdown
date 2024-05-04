@@ -1051,6 +1051,9 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		if (monotype && !debug.length) {
 			pool = pool.filter(x => this.dex.species.get(ssbSets[x].species).types.includes(monotype));
 		}
+		if (global.Config?.disabledssbsets?.length) {
+			pool = pool.filter(x => !global.Config.disabledssbsets.includes(this.dex.toID(x)));
+		}
 		const typePool: {[k: string]: number} = {};
 		let depth = 0;
 		while (pool.length && team.length < this.maxTeamSize) {
