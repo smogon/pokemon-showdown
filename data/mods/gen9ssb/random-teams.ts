@@ -1037,8 +1037,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const monotype = this.forceMonotype ||
-			(ruleTable.has('sametypeclause') ?
-			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
+						 (ruleTable.has('sametypeclause') ?
+						 this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
 
 		let pool = Object.keys(ssbSets);
 		if (debug.length) {
