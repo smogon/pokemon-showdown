@@ -404,6 +404,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		volatileStatus: 'protect',
 		onModifyMove(move, pokemon) {
 			if (pokemon.species.name === 'Clodsire') {
+				move.flags['heal'] = 1;
 				move.heal = [1, 2];
 				delete move.volatileStatus;
 			}
@@ -1014,15 +1015,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				delete move.volatileStatus;
 			}
 		},
-		onHit(target) {
-			this.directDamage(target.maxhp / 4);
+		onHit(target, source, move) {
+			if (move.volatileStatus) this.directDamage(target.maxhp / 4);
 		},
 		onAfterHit(target, source, move) {
 			if (this.canSwitch(source.side)) {
 				this.actions.useMove('batonpass', source);
 			}
 		},
-		selfSwitch: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -1590,7 +1590,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: ">50% HP:Set orb that damages foes.<50% heals you.",
-		desc: "If the user's HP is at or above 50% of its maximum HP, a damaging orb is set on the opponent's side of the field, dealing 50 points of damage at the end of each turn for 4 turns. If the user's HP is below 50% of its maximum HP, a healing orb is set on the user's side of the field, healing the active Pokemon for 65 HP at the end of each turn until it has healed a total of 300 HP. This move fails if an orb is already in place on the side an orb would be set.",
+		desc: "If the user's HP is at or above 50% of its maximum HP, a damaging orb is set on the opponent's side of the field, dealing 50 points of damage at the end of each turn for 4 turns. If the user's HP is below 50% of its maximum HP, a healing orb is set on the user's side of the field, healing the active Pokemon for 65 HP at the end of each turn until it has healed a total of 300 HP. If the appropriate side already has its orb, this move will try to place the other orb down. This move fails if an orb is already in place on the side an orb would be set.",
 		name: "Biotic Orb",
 		gen: 9,
 		pp: 10,
@@ -2522,9 +2522,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			while (!team.length) {
 				team = Teams.generate(randFormat, {name: target.side.name});
 				if (depth >= 50) break; // Congrats you won the lottery!
-				team = team.filter(p =>
-					Object.keys(unModdedDex.species.get(p.species).baseStats).every(k =>
-						unModdedDex.species.get(p.species).baseStats[k as StatID] === this.dex.species.get(p.species).baseStats[k as StatID]));
+				team = team.filter(p => {
+					const baseSpecies = unModdedDex.species.get(p.species);
+					const curSpecies = this.dex.species.get(p.species);
+					if (Object.values(baseSpecies.baseStats).join() !== Object.values(curSpecies.baseStats).join()) {
+						return false;
+					}
+					if (Object.values(baseSpecies.abilities).join() !== Object.values(curSpecies.abilities).join()) {
+						return false;
+					}
+					if (baseSpecies.types.join() !== curSpecies.types.join()) {
+						return false;
+					}
+					return true;
+				});
 				depth++;
 			}
 
@@ -4217,7 +4228,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					Dragon: {volatileStatus: 'taunt'},
 					Fairy: {volatileStatus: 'attract'},
 				};
-				const condition = table[move.type];
+				let condition = table[move.type];
+				if (!condition) condition = table['Normal'];
 				if (condition.status) {
 					target.trySetStatus(condition.status);
 				} else if (condition.volatileStatus) {
@@ -4631,13 +4643,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		selfSwitch: true,
 		self: {
 			onHit(source) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					if (source.species.name === 'Sneasel') {
-						side.addSideCondition('spikes');
-					} else {
-						side.addSideCondition('toxicspikes');
+				let success = false;
+				const removeTarget = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				];
+				const removeAll = [
+					'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+				];
+				const targetSide = source.side.foe;
+				for (const targetCondition of removeTarget) {
+					if (targetSide.removeSideCondition(targetCondition)) {
+						if (!removeAll.includes(targetCondition)) continue;
+						this.add('-sideend', targetSide, this.dex.conditions.get(targetCondition).name, '[from] move: Treacherous Traversal', '[of] ' + source);
+						success = true;
 					}
 				}
+				for (const sideCondition of removeAll) {
+					if (source.side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Treacherous Traversal', '[of] ' + source);
+						success = true;
+					}
+				}
+				success = this.field.clearTerrain();
+				for (const side of source.side.foeSidesWithConditions()) {
+					if (source.species.name === 'Sneasel') {
+						success = side.addSideCondition('spikes');
+					} else {
+						success = side.addSideCondition('toxicspikes');
+					}
+				}
+				return success;
 			},
 		},
 		secondary: {}, // allows sheer force to trigger
@@ -5601,12 +5636,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
-				this.attrLastMove('[anim] Signal Beam');
-				this.attrLastMove('[anim] Twister');
-				this.attrLastMove('[anim] Psycho Cut');
+				this.attrLastMove('[still]');
+				this.add('-anim', attacker, 'Signal Beam', defender);
+				this.add('-anim', attacker, 'Twister', defender);
+				this.add('-anim', attacker, 'Psycho Cut', defender);
 				return;
 			}
-			this.attrLastMove('[anim] Tailwind');
+			this.add('-anim', attacker, 'Tailwind', attacker);
 			this.add('-message', `${attacker.name} whipped up an intense whirlwind and began to glow a vivine green!`);
 			if (attacker.getItem().isBerry) {
 				attacker.eatItem(true);
@@ -5614,9 +5650,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (['sunnyday', 'desolateland'].includes(attacker.effectiveWeather())) {
 				this.attrLastMove('[still]');
-				this.attrLastMove('[anim] Signal Beam');
-				this.attrLastMove('[anim] Twister');
-				this.attrLastMove('[anim] Psycho Cut');
+				this.add('-anim', attacker, 'Signal Beam', defender);
+				this.add('-anim', attacker, 'Twister', defender);
+				this.add('-anim', attacker, 'Psycho Cut', defender);
 				return;
 			}
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
@@ -5859,9 +5895,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1},
-		volatileStatus: 'confusion',
-		status: 'par',
-		ignoreImmunity: false,
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
 			if (this.randomChance(1, 256)) {
@@ -5872,6 +5905,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Hex", target);
+		},
+		onHit(target, source, move) {
+			if (!target.volatiles['confusion']) {
+				target.addVolatile('confusion', source, move);
+			}
+			target.trySetStatus('par', source, move);
 		},
 		secondary: null,
 		target: "normal",

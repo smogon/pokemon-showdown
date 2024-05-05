@@ -361,6 +361,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				this.add(`c:|${getName('ausma')}|uuuuuuuuuuuuuuuuuuuuuuuuugggggghhhhhhhh [dizzy sound effect] sec bitte`);
 				this.add('-activate', target, 'ability: Cascade');
+				target.m.cascade = true;
 			}
 		},
 		onSwitchIn() {
@@ -2135,7 +2136,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// skies
 	spikesofwrath: {
-		shortDesc: "Stamina + Cheek Pouch + sets Spikes and Toxic Spikes upon KO.",
+		shortDesc: "Stamina + Cheek Pouch + sets Spikes and Toxic Spikes upon getting KOed.",
 		name: "Spikes of Wrath",
 		onDamagingHit(damage, target, source, effect) {
 			if (target.hp) {
@@ -2144,11 +2145,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const side = source.isAlly(target) ? source.side.foe : source.side;
 				const spikes = side.sideConditions['spikes'];
 				const toxicSpikes = side.sideConditions['toxicspikes'];
-				if ((!spikes || spikes.layers < 3)) {
+				if (!spikes || spikes.layers < 3) {
 					this.add('-activate', target, 'ability: Spikes of Wrath');
 					side.addSideCondition('spikes', target);
 				}
-				if ((!toxicSpikes || toxicSpikes.layers < 2)) {
+				if (!toxicSpikes || toxicSpikes.layers < 2) {
 					this.add('-activate', target, 'ability: Spikes of Wrath');
 					side.addSideCondition('toxicspikes', target);
 				}
@@ -2249,7 +2250,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Struchni
 	overaskedclause: {
-		shortDesc: "Moves used on the previous turn will always fail.",
+		shortDesc: "Moves used by opposing Pokemon on the previous turn will always fail.",
 		name: "Overasked Clause",
 		onFoeBeforeMove(target, source, move) {
 			if (target.lastMove && target.lastMove.id !== 'struggle') {
