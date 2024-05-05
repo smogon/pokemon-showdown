@@ -1161,7 +1161,7 @@ export class Battle {
 			}
 			return false;
 		}
-		return move.flags['contact'];
+		return !!move.flags['contact'];
 	}
 
 	getPokemon(fullname: string | Pokemon) {

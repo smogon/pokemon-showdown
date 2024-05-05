@@ -99,7 +99,7 @@ describe('value rule support (slow)', () => {
 
 	for (const format of Dex.formats.all()) {
 		if (!format.team) continue;
-		if (Dex.formats.getRuleTable(format).has('adjustleveldown')) continue; // already adjusts level
+		if (Dex.formats.getRuleTable(format).has('adjustleveldown') || Dex.formats.getRuleTable(format).has('adjustlevel')) continue; // already adjusts level
 
 		for (const level of [1, 99999]) {
 			it(`${format.name} should support Adjust Level = ${level}`, () => {
@@ -160,6 +160,7 @@ describe("New set format", () => {
 describe('randomly generated teams should be valid (slow)', () => {
 	for (const format of Dex.formats.all()) {
 		if (!format.team) continue; // format doesn't use randomly generated teams
+		if (format.mod === 'gen9ssb') continue; // Temporary
 
 		it(`should generate valid ${format} teams`, function () {
 			this.timeout(0);

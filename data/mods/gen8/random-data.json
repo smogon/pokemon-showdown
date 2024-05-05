@@ -1443,7 +1443,7 @@
     },
     "gothitelle": {
         "level": 87,
-        "moves": ["nastyplot", "psychic", "shadowball", "thunderbolt", "trick"],
+        "moves": ["darkpulse", "nastyplot", "psychic", "thunderbolt", "trick"],
         "doublesLevel": 83,
         "doublesMoves": ["fakeout", "healpulse", "helpinghand", "hypnosis", "protect", "psychic", "trickroom"]
     },
@@ -1503,7 +1503,7 @@
     },
     "beheeyem": {
         "level": 87,
-        "moves": ["psychic", "shadowball", "thunderbolt", "trick", "trickroom"],
+        "moves": ["darkpulse", "psychic", "thunderbolt", "trick", "trickroom"],
         "doublesLevel": 88,
         "doublesMoves": ["protect", "psychic", "shadowball", "thunderbolt", "trickroom"]
     },
@@ -1744,7 +1744,7 @@
     },
     "meowsticf": {
         "level": 86,
-        "moves": ["energyball", "nastyplot", "psychic", "shadowball", "thunderbolt"],
+        "moves": ["darkpulse", "energyball", "nastyplot", "psychic", "thunderbolt"],
         "doublesLevel": 88,
         "doublesMoves": ["fakeout", "nastyplot", "psychic", "shadowball", "thunderbolt"]
     },
@@ -2584,7 +2584,7 @@
     },
     "falinks": {
         "level": 84,
-        "moves": ["closecombat", "noretreat", "poisonjab", "rockslide", "throatchop"],
+        "moves": ["closecombat", "ironhead", "noretreat", "rockslide", "throatchop"],
         "doublesLevel": 86,
         "doublesMoves": ["closecombat", "noretreat", "poisonjab", "rockslide", "throatchop"]
     },

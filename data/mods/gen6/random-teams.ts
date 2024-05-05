@@ -59,7 +59,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'aegislashblade', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'honchkrow', 'scizor', 'scizormega', 'shedinja',
+	'aegislash', 'banette', 'breloom', 'cacturne', 'doublade', 'dusknoir', 'honchkrow', 'scizor', 'scizormega', 'shedinja',
 ];
 
 export class RandomGen6Teams extends RandomGen7Teams {
@@ -648,11 +648,13 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
 		if (species.id === 'beheeyem') return 'Analytic';
 		if (species.id === 'ninetales') return 'Drought';
+		if (species.baseSpecies === 'Gourgeist') return 'Frisk';
 		if (species.id === 'pinsirmega') return 'Hyper Cutter';
 		if (species.id === 'ninjask' || species.id === 'seviper') return 'Infiltrator';
-		if (species.id === 'lucariomega') return 'Justified';
 		if (species.id === 'gligar') return 'Immunity';
-		if (species.id === 'arcanine') return 'Intimidate';
+		if (species.id === 'arcanine' || species.id === 'stantler') return 'Intimidate';
+		if (species.id === 'lucariomega') return 'Justified';
+		if (species.id === 'persian' && !counter.get('technician')) return 'Limber';
 		if (species.baseSpecies === 'Altaria') return 'Natural Cure';
 		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
 		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';

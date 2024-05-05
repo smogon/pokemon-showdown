@@ -46,6 +46,7 @@ function getDefaultStats() {
 			// so i'm not spending the time to add commands to toggle this
 			gen9randombattle: {mons: {}},
 			gen9randomdoublesbattle: {mons: {}},
+			gen9superstaffbrosultimate: {mons: {}},
 			gen8randombattle: {mons: {}},
 			gen7randombattle: {mons: {}},
 			gen6randombattle: {mons: {}},
@@ -171,7 +172,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		// may need to be raised again if doubles ladder takes off
 		eloFloor = 1300;
 	}
-	if (!formatData || battle.rated < eloFloor || !winner) return;
+	if (!formatData || (format.mod !== 'gen9ssb' && battle.rated < eloFloor) || !winner) return;
 	checkRollover();
 	for (const p of battle.players) {
 		const team = await battle.getPlayerTeam(p);
