@@ -1884,6 +1884,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				target.addVolatile('ultramystik');
 			}
 		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['ultramystik'];
+			this.add('-end', pokemon, 'Ultra Mystik', '[silent]');
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.effectState.superHit = true;

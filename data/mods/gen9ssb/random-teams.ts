@@ -768,7 +768,7 @@ export const ssbSets: SSBSets = {
 		species: 'Duskull', ability: 'Youkai of the Dusk', item: 'Eviolite', gender: 'N',
 		moves: ['Infernal Parade', 'Strength Sap', 'Mortal Spin'],
 		signatureMove: 'Midnight Bird',
-		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Poison',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Poison', shiny: true,
 	},
 	Scotteh: {
 		species: 'Suicune', ability: 'Water Absorb', item: 'Leftovers', gender: '',

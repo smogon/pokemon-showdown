@@ -5514,7 +5514,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Changes to Idol forme and sets a substitute.",
 		desc: "If the user is a Zeraora, the user's ability changes to Virtual Idol and its full moveset becomes Overdrive, Sparkling Aria, Torch Song, and Teeter Dance, replacing every currently present move. The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle.",
 		name: "Virtual Avatar",
-		pp: 1,
+		pp: 10,
 		priority: 0,
 		flags: {sound: 1, failcopycat: 1},
 		secondary: null,
