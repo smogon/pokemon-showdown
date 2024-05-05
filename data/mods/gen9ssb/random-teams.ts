@@ -1036,8 +1036,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
-		const monotype = ruleTable.has('sametypeclause') ?
-			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false;
+		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
+			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
 
 		let pool = Object.keys(ssbSets);
 		if (debug.length) {
@@ -1066,7 +1066,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			// Enforce typing limits
 			if (!(debug.length || monotype)) { // Type limits are ignored for debugging, monotype, or memes.
 				const species = this.dex.species.get(ssbSet.species);
-				if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
 
 				const weaknesses = [];
 				for (const type of this.dex.types.names()) {
