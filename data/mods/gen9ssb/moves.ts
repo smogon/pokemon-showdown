@@ -1018,11 +1018,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, move) {
 			if (move.volatileStatus) this.directDamage(target.maxhp / 4);
 		},
-		onAfterHit(target, source, move) {
-			if (this.canSwitch(source.side)) {
-				this.actions.useMove('batonpass', source);
-			}
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
 		},
+		// TODO: Client support
+		selfSwitch: 'shedtail',
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -5601,11 +5603,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon, source) {
 				this.effectState.hp = source.maxhp / 2;
 			},
+			onSwap(target) {
+				if (!target.fainted) target.addVolatile('aquaring', target);
+			},
 			onResidualOrder: 4,
 			onEnd(target) {
 				if (target && !target.fainted) {
 					this.heal(this.effectState.hp, target, target);
-					target.addVolatile('aquaring', target);
 				}
 			},
 		},

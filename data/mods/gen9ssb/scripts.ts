@@ -369,7 +369,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'scapegoat':
 			// @ts-ignore
 			const percent = (action.target.hp / action.target.baseMaxhp) * 100;
-			// @ts-ignore
+			// @ts-ignore TODO: Client support for custom faint
 			action.target.faint();
 			if (percent > 66) {
 				this.add('message', `Your courage will be greatly rewarded.`);
