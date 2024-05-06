@@ -1009,10 +1009,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Teleport');
 			if (pokemon.status === 'slp') pokemon.cureStatus();
 		},
-		onTryHit(source, target, move) {
+		onTry(source, target, move) {
 			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
-				this.add('-fail', source, 'move: Baker\'s Douze Off', '[weak]');
-				return this.NOT_FAIL;
+				delete move.volatileStatus;
 			}
 		},
 		onHit(target, source, move) {
@@ -1492,7 +1491,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 5,
 		priority: -7,
-		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1685,7 +1684,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Snack Time",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {},
 		volatileStatus: 'snack',
 		onTryMove(attacker, defender, move) {
 			if (attacker.volatiles['snack']) {
@@ -1972,7 +1971,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Nearly always moves first. Protects the user from most attacks made by other Pokemon this turn, removes the user's Poison typing if it has one, and boosts the user's Attack and Speed by 1 stage. Sets one layer of Toxic Spikes on the opposing side of the field, poisoning all grounded, non-Poison-type Pokemon that switch in. Fails unless it's the user's first turn on the field.",
 		name: "Puffy Spiky Destruction",
 		pp: 5,
-		priority: 0,
+		priority: 4,
 		flags: {},
 		sideCondition: 'toxicspikes',
 		onTry(source) {
@@ -3850,7 +3849,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 1,
-		flags: {protect: 1},
+		flags: {protect: 1,reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4764,7 +4763,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Like..?",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {reflectable: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5557,6 +5556,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
+		onTry(source) {
+			if (source.species.name === 'Zeraora') {
+				return;
+			}
+			this.hint("Only Zeraora can use this move.");
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Virtual Avatar');
+			return null;
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Morning Sun', source);
 			this.add('-anim', source, 'Seed Flare', target);
@@ -5897,7 +5905,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Confuses and paralyzes the target.",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
 			if (this.randomChance(1, 256)) {
