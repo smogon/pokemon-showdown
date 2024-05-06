@@ -1010,9 +1010,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.status === 'slp') pokemon.cureStatus();
 		},
 		onTryHit(source, target, move) {
-			if (source.volatiles['substitute'] ||
-				source.hp <= source.maxhp / 4 || source.maxhp === 1) {
-				delete move.volatileStatus;
+			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+				this.add('-fail', source, 'move: Baker\'s Douze Off', '[weak]');
+				return this.NOT_FAIL;
 			}
 		},
 		onHit(target, source, move) {
