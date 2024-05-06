@@ -258,7 +258,7 @@ describe('[Gen 8] Free-for-All Random Battle (slow)', () => {
 
 describe('[Gen 8 BDSP] Random Battle (slow)', () => {
 	const options = {format: 'gen8bdsprandombattle'};
-	const dataJSON = require(`../../dist/data/mods/gen8bdsp/random-data.json`);
+	const dataJSON = require(`../../dist/data/random-battles/gen8bdsp-data.json`);
 	const dex = Dex.forFormat(options.format);
 
 	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];
