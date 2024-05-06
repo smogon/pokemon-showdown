@@ -1,8 +1,8 @@
-import type {PRNG} from '../../../sim';
-import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from '../gen8/random-teams';
+import type {PRNG} from '../../sim';
+import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from './gen8-teams';
 
 export class RandomLetsGoTeams extends RandomGen8Teams {
-	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./gen7letsgo-data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);

@@ -8,11 +8,11 @@ const {testTeam, testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove, 
 
 describe('[Gen 7] Random Battle (slow)', () => {
 	const options = {format: 'gen7randombattle'};
-	const setsJSON = require(`../../dist/data/mods/gen7/random-sets.json`);
+	const setsJSON = require(`../../dist/data/random-battles/gen7-sets.json`);
 	const dex = Dex.forFormat(options.format);
 
 	describe("New set format", () => {
-		const filename = '../../data/mods/gen7/random-sets.json';
+		const filename = '../../data/random-battles/gen7-sets.json';
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			const validRoles = [

@@ -617,12 +617,11 @@ export const Teams = new class Teams {
 
 	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
 		let TeamGenerator;
+		format = Dex.formats.get(format);
 		if (toID(format).includes('gen9computergeneratedteams')) {
 			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
-		} else if (toID(format).includes('gen7randomdoublesbattle')) {
-			TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-doubles-teams').default;
 		} else {
-			TeamGenerator = require(Dex.forFormat(format).dataDir + '/random-teams').default;
+			TeamGenerator = require(`../data/random-battles/${format.mod}-teams`).default;
 		}
 
 		return new TeamGenerator(format, seed);

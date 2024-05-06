@@ -10,7 +10,7 @@ const Dex = require('./../../dist/sim/dex').Dex;
 
 describe('[Gen 9] Random Battle (slow)', () => {
 	const options = {format: 'gen9randombattle'};
-	const setsJSON = require(`../../dist/data/random-sets.json`);
+	const setsJSON = require(`../../dist/data/random-battles/gen9-sets.json`);
 	const dex = Dex.forFormat(options.format);
 
 	it('all Pokemon should have 4 moves, except for Ditto', function () {
@@ -78,7 +78,7 @@ describe('[Gen 9] Monotype Random Battle (slow)', () => {
 
 describe('[Gen 9] Random Doubles Battle (slow)', () => {
 	const options = {format: 'gen9randomdoublesbattle'};
-	const setsJSON = require(`../../dist/data/random-doubles-sets.json`);
+	const setsJSON = require(`../../dist/data/random-battles/gen9-doubles-sets.json`);
 	const dex = Dex.forFormat(options.format);
 
 	it('all Pokemon should have 4 moves, except for Ditto', function () {

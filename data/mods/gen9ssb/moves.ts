@@ -1,4 +1,4 @@
-import {ssbSets} from "./random-teams";
+import {ssbSets} from "../../random-battles/gen9ssb-teams";
 import {changeSet, getName} from "./scripts";
 import {Teams} from '../../../sim/teams';
 

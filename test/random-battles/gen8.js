@@ -8,7 +8,7 @@ const assert = require('../assert');
 
 describe('[Gen 8] Random Battle (slow)', () => {
 	const options = {format: 'gen8randombattle'};
-	const dataJSON = require(`../../dist/data/mods/gen8/random-data.json`);
+	const dataJSON = require(`../../dist/data/random-battles/gen8-data.json`);
 	const dex = Dex.forFormat(options.format);
 	const generator = Teams.getGenerator(options.format);
 
