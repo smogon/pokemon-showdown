@@ -289,7 +289,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	onemore: {
 		shortDesc: "Super effective and critical hits cause this Pokemon to flinch.",
 		name: "One More",
-		onHit(target, source, move) {
+		onTryHit(target, source, move) {
 			const hitData = target.getMoveHitData(move);
 			if (move.category === "Status" || hitData.typeMod <= 0 || !hitData.crit) return;
 			if (!move.secondaries) move.secondaries = [];
