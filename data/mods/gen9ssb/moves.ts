@@ -3849,7 +3849,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 1,
-		flags: {protect: 1,reflectable: 1},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
