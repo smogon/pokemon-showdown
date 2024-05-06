@@ -291,7 +291,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "One More",
 		onHit(target, source, move) {
 			if (!target.hp) return;
-			let hitData = target.getMoveHitData(move);
+			const hitData = target.getMoveHitData(move);
 			if (move?.category === "Status") return;
 			if (move?.effectType === 'Move' && (hitData.crit || hitData.typeMod > 0)) {
 				target.addVolatile('flinch', this.effectState.target);
