@@ -1018,13 +1018,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, move) {
 			if (move.volatileStatus) this.directDamage(target.maxhp / 4);
 		},
-		self: {
-			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
-			},
+		onAfterMoveSecondarySelf(source) {
+			if (this.canSwitch(source.side)) {
+				this.actions.useMove('batonpass', source);
+				source.skipBeforeSwitchOutEventFlag = false;
+			}
 		},
-		// TODO: Client support
-		selfSwitch: 'shedtail',
 		secondary: null,
 		target: "self",
 		type: "Normal",
