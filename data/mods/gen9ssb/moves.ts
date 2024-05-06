@@ -4161,7 +4161,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Luck Pulse",
 		shortDesc: "Random type. 40% random effect. High crit.",
 		desc: "This move's typing is chosen randomly between the 18 standard types, and each type has a 40% chance to apply a status effect to the target specific to that type. This move has an increased chance to result in a critical hit. The list of effects per type are as follows: Normal can apply drowsy; Fire can apply burn; Water can apply Aqua Ring; Grass can apply Leech Seed; Flying can apply confusion; Fighting can apply partial trapping; Poison can apply Toxic poison; Electric can apply paralysis; Ground can apply No Retreat, trapping the target without granting boosts; Rock can apply Salt Cure; Psychic can apply sleep; Ice can apply freeze; Bug can apply poison; Ghost can apply Disable; Steel can cause the target to flinch; Dragon can cause the target to recharge on their next turn, as if they had just used Hyper Beam; Dark can apply Taunt; and Fairy can apply infatuation.",
-		critRatio: 1,
+		critRatio: 2,
 		pp: 10,
 		priority: 0,
 		flags: {pulse: 1, protect: 1},
