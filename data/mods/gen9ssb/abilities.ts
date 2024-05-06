@@ -289,14 +289,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	onemore: {
 		shortDesc: "Super effective and critical hits cause this Pokemon to flinch.",
 		name: "One More",
-		onTryHit(target, source, move) {
-			const hitData = target.getMoveHitData(move);
-			if (move.category === "Status" || hitData.typeMod <= 0 || !hitData.crit) return;
-			if (!move.secondaries) move.secondaries = [];
-			move.secondaries.push({
-				chance: 100,
-				volatileStatus: 'flinch',
-			});
+		onHit(target, source, move) {
+			if (!target.hp) return;
+			let hitData = target.getMoveHitData(move);
+			if (move?.category === "Status") return;
+			if (move?.effectType === 'Move' && (hitData.crit || hitData.typeMod > 0)) {
+				target.addVolatile('flinch', this.effectState.target);
+			}
 		},
 		flags: {},
 		gen: 9,
