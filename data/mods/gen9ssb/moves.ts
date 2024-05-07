@@ -1010,7 +1010,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (pokemon.status === 'slp') pokemon.cureStatus();
 		},
 		onTry(source, target, move) {
-			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+			if (source.volatiles['substitute'] ||
+				source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
 				delete move.volatileStatus;
 			}
 		},
