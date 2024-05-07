@@ -1009,18 +1009,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[anim] Teleport');
 			if (pokemon.status === 'slp') pokemon.cureStatus();
 		},
-		onTryHit(source, target, move) {
+		onTry(source, target, move) {
 			if (source.volatiles['substitute'] ||
-				source.hp <= source.maxhp / 4 || source.maxhp === 1) {
+				source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
 				delete move.volatileStatus;
 			}
 		},
 		onHit(target, source, move) {
 			if (move.volatileStatus) this.directDamage(target.maxhp / 4);
 		},
-		onAfterHit(target, source, move) {
+		onAfterMoveSecondarySelf(source) {
 			if (this.canSwitch(source.side)) {
 				this.actions.useMove('batonpass', source);
+				source.skipBeforeSwitchOutEventFlag = false;
 			}
 		},
 		secondary: null,
@@ -1491,7 +1492,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 5,
 		priority: -7,
-		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1684,7 +1685,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Snack Time",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {},
 		volatileStatus: 'snack',
 		onTryMove(attacker, defender, move) {
 			if (attacker.volatiles['snack']) {
@@ -1971,7 +1972,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Nearly always moves first. Protects the user from most attacks made by other Pokemon this turn, removes the user's Poison typing if it has one, and boosts the user's Attack and Speed by 1 stage. Sets one layer of Toxic Spikes on the opposing side of the field, poisoning all grounded, non-Poison-type Pokemon that switch in. Fails unless it's the user's first turn on the field.",
 		name: "Puffy Spiky Destruction",
 		pp: 5,
-		priority: 0,
+		priority: 4,
 		flags: {},
 		sideCondition: 'toxicspikes',
 		onTry(source) {
@@ -3749,8 +3750,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Haze and then +1 Attack.",
-		desc: "Resets the stat stages of all active Pokemon to 0, and then raises the user's Attack stat by 1 stage.",
+		shortDesc: "Haze and then +1 Atk / Def.",
+		desc: "Resets the stat stages of all active Pokemon to 0, and then raises the user's Attack and Defense by 1 stage.",
 		name: "~nyaa",
 		gen: 9,
 		pp: 10,
@@ -3849,7 +3850,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 10,
 		priority: 1,
-		flags: {protect: 1},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4160,7 +4161,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Luck Pulse",
 		shortDesc: "Random type. 40% random effect. High crit.",
 		desc: "This move's typing is chosen randomly between the 18 standard types, and each type has a 40% chance to apply a status effect to the target specific to that type. This move has an increased chance to result in a critical hit. The list of effects per type are as follows: Normal can apply drowsy; Fire can apply burn; Water can apply Aqua Ring; Grass can apply Leech Seed; Flying can apply confusion; Fighting can apply partial trapping; Poison can apply Toxic poison; Electric can apply paralysis; Ground can apply No Retreat, trapping the target without granting boosts; Rock can apply Salt Cure; Psychic can apply sleep; Ice can apply freeze; Bug can apply poison; Ghost can apply Disable; Steel can cause the target to flinch; Dragon can cause the target to recharge on their next turn, as if they had just used Hyper Beam; Dark can apply Taunt; and Fairy can apply infatuation.",
-		critRatio: 1,
+		critRatio: 2,
 		pp: 10,
 		priority: 0,
 		flags: {pulse: 1, protect: 1},
@@ -4763,7 +4764,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Like..?",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {reflectable: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5549,13 +5550,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Changes to Idol forme and sets a substitute.",
 		desc: "If the user is a Zeraora, the user's ability changes to Virtual Idol and its full moveset becomes Overdrive, Sparkling Aria, Torch Song, and Teeter Dance, replacing every currently present move. The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle.",
 		name: "Virtual Avatar",
-		pp: 1,
-		noPPBoosts: true,
+		pp: 10,
 		priority: 0,
 		flags: {sound: 1, failcopycat: 1},
 		secondary: null,
 		onTryMove() {
 			this.attrLastMove('[still]');
+		},
+		onTry(source) {
+			if (source.species.name === 'Zeraora') {
+				return;
+			}
+			this.hint("Only Zeraora can use this move.");
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Virtual Avatar');
+			return null;
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Morning Sun', source);
@@ -5602,11 +5611,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon, source) {
 				this.effectState.hp = source.maxhp / 2;
 			},
+			onSwap(target) {
+				if (!target.fainted) target.addVolatile('aquaring', target);
+			},
 			onResidualOrder: 4,
 			onEnd(target) {
 				if (target && !target.fainted) {
 					this.heal(this.effectState.hp, target, target);
-					target.addVolatile('aquaring', target);
 				}
 			},
 		},
@@ -5895,7 +5906,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Confuses and paralyzes the target.",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, reflectable: 1},
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
 			if (this.randomChance(1, 256)) {

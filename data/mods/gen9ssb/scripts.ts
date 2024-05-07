@@ -192,6 +192,79 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.speed = action.pokemon.getActionSpeed();
 		}
 	},
+	// For some god forsaken reason removing the boolean declarations causes the "battles dont end automatically" bug
+	// I don't know why but in any case please don't touch this unless you know how to fix this
+	faintMessages(lastFirst = false, forceCheck = false, checkWin = true) {
+		if (this.ended) return;
+		const length = this.faintQueue.length;
+		if (!length) {
+			if (forceCheck && this.checkWin()) return true;
+			return false;
+		}
+		if (lastFirst) {
+			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
+			this.faintQueue.pop();
+		}
+		let faintQueueLeft, faintData;
+		while (this.faintQueue.length) {
+			faintQueueLeft = this.faintQueue.length;
+			faintData = this.faintQueue.shift()!;
+			const pokemon: Pokemon = faintData.target;
+			if (!pokemon.fainted &&
+					this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
+				if (!pokemon.isActive) {
+					this.add('message', `${pokemon.name} was killed by ${pokemon.side.name}!`);
+					// TODO: Custom Protocol needed for teambar update
+				} else {
+					this.add('faint', pokemon);
+				}
+				if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
+				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
+				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				pokemon.clearVolatile(false);
+				pokemon.fainted = true;
+				pokemon.illusion = null;
+				pokemon.isActive = false;
+				pokemon.isStarted = false;
+				delete pokemon.terastallized;
+				pokemon.side.faintedThisTurn = pokemon;
+				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
+			}
+		}
+
+		if (this.gen <= 1) {
+			// in gen 1, fainting skips the rest of the turn
+			// residuals don't exist in gen 1
+			this.queue.clear();
+			// Fainting clears accumulated Bide damage
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
+					pokemon.volatiles['bide'].damage = 0;
+					this.hint("Desync Clause Mod activated!");
+					this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
+				}
+			}
+		} else if (this.gen <= 3 && this.gameType === 'singles') {
+			// in gen 3 or earlier, fainting in singles skips to residuals
+			for (const pokemon of this.getAllActive()) {
+				if (this.gen <= 2) {
+					// in gen 2, fainting skips moves only
+					this.queue.cancelMove(pokemon);
+				} else {
+					// in gen 3, fainting skips all moves and switches
+					this.queue.cancelAction(pokemon);
+				}
+			}
+		}
+
+		if (checkWin && this.checkWin(faintData)) return true;
+
+		if (faintData && length) {
+			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
+		}
+		return false;
+	},
 	checkMoveMakesContact(move, attacker, defender, announcePads) {
 		if (move.flags['contact'] && attacker.hasItem('protectivepads')) {
 			if (announcePads) {
@@ -369,7 +442,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'scapegoat':
 			// @ts-ignore
 			const percent = (action.target.hp / action.target.baseMaxhp) * 100;
-			// @ts-ignore
+			// @ts-ignore TODO: Client support for custom faint
 			action.target.faint();
 			if (percent > 66) {
 				this.add('message', `Your courage will be greatly rewarded.`);
@@ -525,77 +598,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.queue.sort();
 		}
 
-		return false;
-	},
-	faintMessages(lastFirst, forceCheck, checkWin) {
-		if (this.ended) return;
-		const length = this.faintQueue.length;
-		if (!length) {
-			if (forceCheck && this.checkWin()) return true;
-			return false;
-		}
-		if (lastFirst) {
-			this.faintQueue.unshift(this.faintQueue[this.faintQueue.length - 1]);
-			this.faintQueue.pop();
-		}
-		let faintQueueLeft, faintData;
-		while (this.faintQueue.length) {
-			faintQueueLeft = this.faintQueue.length;
-			faintData = this.faintQueue.shift()!;
-			const pokemon: Pokemon = faintData.target;
-			if (!pokemon.fainted &&
-					this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
-				if (!pokemon.isActive) {
-					this.add('message', `${pokemon.name} was killed by ${pokemon.side.name}!`);
-					// TODO: Custom Protocol needed for teambar update
-				} else {
-					this.add('faint', pokemon);
-				}
-				if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
-				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
-				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
-				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
-				pokemon.clearVolatile(false);
-				pokemon.fainted = true;
-				pokemon.illusion = null;
-				pokemon.isActive = false;
-				pokemon.isStarted = false;
-				delete pokemon.terastallized;
-				pokemon.side.faintedThisTurn = pokemon;
-				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
-			}
-		}
-
-		if (this.gen <= 1) {
-			// in gen 1, fainting skips the rest of the turn
-			// residuals don't exist in gen 1
-			this.queue.clear();
-			// Fainting clears accumulated Bide damage
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
-					pokemon.volatiles['bide'].damage = 0;
-					this.hint("Desync Clause Mod activated!");
-					this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
-				}
-			}
-		} else if (this.gen <= 3 && this.gameType === 'singles') {
-			// in gen 3 or earlier, fainting in singles skips to residuals
-			for (const pokemon of this.getAllActive()) {
-				if (this.gen <= 2) {
-					// in gen 2, fainting skips moves only
-					this.queue.cancelMove(pokemon);
-				} else {
-					// in gen 3, fainting skips all moves and switches
-					this.queue.cancelAction(pokemon);
-				}
-			}
-		}
-
-		if (checkWin && this.checkWin(faintData)) return true;
-
-		if (faintData && length) {
-			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
-		}
 		return false;
 	},
 	actions: {
