@@ -1,4 +1,4 @@
-import {SSBSet, ssbSets} from "../../../data/random-battles/gen9ssb-teams";
+import {SSBSet, ssbSets} from "../../../data/mods/gen9ssb/random-teams";
 import {Utils} from "../../../lib";
 import {formatNature, STAT_NAMES} from ".";
 

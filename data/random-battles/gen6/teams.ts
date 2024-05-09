@@ -1,8 +1,8 @@
-import {MoveCounter, TeamData} from './gen8-teams';
-import RandomGen7Teams, {BattleFactorySpecies, ZeroAttackHPIVs} from './gen7-teams';
-import {PRNG, PRNGSeed} from '../../sim/prng';
-import {Utils} from '../../lib';
-import {toID} from '../../sim/dex';
+import {MoveCounter, TeamData} from '../gen8/teams';
+import RandomGen7Teams, {BattleFactorySpecies, ZeroAttackHPIVs} from '../gen7/teams';
+import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {Utils} from '../../../lib';
+import {toID} from '../../../sim/dex';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -63,7 +63,7 @@ const PRIORITY_POKEMON = [
 ];
 
 export class RandomGen6Teams extends RandomGen7Teams {
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./gen6-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -994,7 +994,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 	}
 
-	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./gen6-factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species,

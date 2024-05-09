@@ -1,8 +1,8 @@
-import RandomGen6Teams from './gen6-teams';
-import {Utils} from '../../lib';
-import {toID} from '../../sim/dex';
-import {PRNG} from '../../sim';
-import {MoveCounter} from './gen8-teams';
+import RandomGen6Teams from '../gen6/teams';
+import {Utils} from '../../../lib';
+import {toID} from '../../../sim/dex';
+import {PRNG} from '../../../sim';
+import {MoveCounter} from '../gen8/teams';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -52,7 +52,7 @@ const PRIORITY_POKEMON = [
 ];
 
 export class RandomGen5Teams extends RandomGen6Teams {
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./gen5-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);

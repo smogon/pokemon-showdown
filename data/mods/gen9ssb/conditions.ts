@@ -1,4 +1,4 @@
-import {ssbSets} from "../../random-battles/gen9ssb-teams";
+import {ssbSets} from "./random-teams";
 import {changeSet, getName, enemyStaff} from './scripts';
 
 export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {

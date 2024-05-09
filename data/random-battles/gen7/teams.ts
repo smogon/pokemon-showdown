@@ -1,7 +1,7 @@
-import {MoveCounter, TeamData, RandomGen8Teams} from './gen8-teams';
-import {PRNG, PRNGSeed} from '../../sim/prng';
-import {Utils} from '../../lib';
-import {toID} from '../../sim/dex';
+import {MoveCounter, TeamData, RandomGen8Teams} from '../gen8/teams';
+import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {Utils} from '../../../lib';
+import {toID} from '../../../sim/dex';
 
 export interface BattleFactorySpecies {
 	flags: {megaOnly?: 1, zmoveOnly?: 1, limEevee?: 1};
@@ -99,7 +99,7 @@ function sereneGraceBenefits(move: Move) {
 }
 
 export class RandomGen7Teams extends RandomGen8Teams {
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./gen7-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -1498,7 +1498,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./gen7-factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
@@ -1817,7 +1817,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomBSSFactorySets: AnyObject = require('./gen7-bss-factory-sets.json');
+	randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
 
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails

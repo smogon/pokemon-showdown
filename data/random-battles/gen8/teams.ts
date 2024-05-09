@@ -1,8 +1,8 @@
-import {Dex, toID} from '../../sim/dex';
-import {Utils} from '../../lib';
-import {PRNG, PRNGSeed} from '../../sim/prng';
-import {RuleTable} from '../../sim/dex-formats';
-import {Tags} from './../tags';
+import {Dex, toID} from '../../../sim/dex';
+import {Utils} from '../../../lib';
+import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {RuleTable} from '../../../sim/dex-formats';
+import {Tags} from './../../tags';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
@@ -111,7 +111,7 @@ export class RandomGen8Teams {
 	readonly maxMoveCount: number;
 	readonly forceMonotype: string | undefined;
 
-	randomData: {[species: string]: OldRandomBattleSpecies} = require('./gen8-data.json');
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./data.json');
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors
@@ -2625,7 +2625,7 @@ export class RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomCAP1v1Sets: AnyObject = require('./gen8-cap-1v1-sets.json');
+	randomCAP1v1Sets: AnyObject = require('./cap-1v1-sets.json');
 
 	randomCAP1v1Team() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -2658,7 +2658,7 @@ export class RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./gen8-factory-sets.json');
+	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
@@ -2960,7 +2960,7 @@ export class RandomGen8Teams {
 		return pokemon;
 	}
 
-	randomBSSFactorySets: AnyObject = require('./gen8-bss-factory-sets.json');
+	randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
 
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails

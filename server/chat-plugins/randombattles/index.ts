@@ -156,7 +156,7 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 	species = dex.species.get(species);
 	const isDoubles = format.gameType === 'doubles';
 	const setsFile = JSON.parse(
-		FS(`data/random-battles/${format.mod}-${isDoubles ? `doubles-` : ``}sets.json`)
+		FS(`data/random-battles/${format.mod}/${isDoubles ? `doubles-` : ``}sets.json`)
 			.readIfExistsSync() || '{}'
 	);
 	const data = setsFile[species.id];
@@ -172,7 +172,7 @@ function getData(species: string | Species, format: string | Format): any | null
 	format = Dex.formats.get(format);
 	species = dex.species.get(species);
 	const dataFile = JSON.parse(
-		FS(`data/random-battles/${format.mod}-data.json`).readIfExistsSync() || '{}'
+		FS(`data/random-battles/${format.mod}/data.json`).readIfExistsSync() || '{}'
 	);
 	const data = dataFile[species.id];
 	if (!data) return null;
@@ -259,7 +259,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 	const genNum = parseInt(gen[3]);
 	if (isNaN(genNum) || genNum < 6 || (isBSS && genNum < 7)) return null;
 	const statsFile = JSON.parse(
-		FS(`data/random-battles/gen${genNum}-${isBSS ? `bss-` : ``}factory-sets.json`).readIfExistsSync() ||
+		FS(`data/random-battles/gen${genNum}/${isBSS ? `bss-` : ``}factory-sets.json`).readIfExistsSync() ||
 		"{}"
 	);
 	if (!Object.keys(statsFile).length) return null;
@@ -359,7 +359,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 function CAP1v1Sets(species: string | Species) {
 	species = Dex.species.get(species);
 	const statsFile = JSON.parse(
-		FS(`data/random-battles/gen8-cap-1v1-sets.json`).readIfExistsSync() ||
+		FS(`data/random-battles/gen8/cap-1v1-sets.json`).readIfExistsSync() ||
 		"{}"
 	);
 	if (!Object.keys(statsFile).length) return null;

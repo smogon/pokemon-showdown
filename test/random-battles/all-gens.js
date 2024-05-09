@@ -34,7 +34,7 @@ describe('value rule support (slow)', () => {
 				// Due to frontloading of moveset generation, formats with the new set format do not support
 				// Max Move Counts less than 4
 				if (count < 4) continue;
-				const setsJSON = require(`../../dist/data/random-battles/gen${gen}-sets.json`);
+				const setsJSON = require(`../../dist/data/random-battles/gen${gen}/sets.json`);
 
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
 					testTeam({format, rounds: 50}, team => {
@@ -114,12 +114,12 @@ describe('value rule support (slow)', () => {
 });
 
 describe("New set format", () => {
-	const files = ['../../data/random-battles/gen9-sets.json', '../../data/random-battles/gen9-doubles-sets.json'];
+	const files = ['../../data/random-battles/gen9/sets.json', '../../data/random-battles/gen9/doubles-sets.json'];
 	for (const filename of files) {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			let validRoles = [];
-			if (filename === '../../data/random-battles/gen9-sets.json') {
+			if (filename === '../../data/random-battles/gen9/sets.json') {
 				validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
 					"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
 			} else {
