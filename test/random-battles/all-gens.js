@@ -178,11 +178,11 @@ describe('randomly generated teams should be valid (slow)', () => {
 });
 
 describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
-	for (const filename of ['gen8-bss-factory-sets', 'gen7-bss-factory-sets', 'gen7-factory-sets', 'gen6-factory-sets']) {
+	for (const filename of ['gen8/bss-factory-sets', 'gen7/bss-factory-sets', 'gen7/factory-sets', 'gen6/factory-sets']) {
 		it(`${filename}.json should contain valid sets`, function () {
 			this.timeout(0);
 			const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
-			const mod = filename.split('-')[0];
+			const mod = filename.split('/')[0] || 'gen' + Dex.gen;
 			const genNum = isNaN(mod[3]) ? Dex.gen : mod[3];
 
 			for (const type in setsJSON) {
