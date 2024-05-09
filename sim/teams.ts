@@ -623,7 +623,7 @@ export const Teams = new class Teams {
 		} else if (toID(format).includes('gen9ssb')) {
 			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
 		} else {
-			TeamGenerator = require(`../data/random-battles/${format.mod}-teams`).default;
+			TeamGenerator = require(`../data/random-battles/${format.mod}/teams`).default;
 		}
 
 		return new TeamGenerator(format, seed);
