@@ -60,6 +60,16 @@ REGEXFREE SOURCE FOR LINKREGEX
 */
 export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:(?:com?|org|net|edu|info|us|jp)\b|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
 
+/**
+ * A span is a part of the text that's formatted. In the text:
+ *
+ *     Hi, **this** is an example.
+ *
+ * The word `this` is a `*` span. Many spans are just a symbol repeated, and
+ * that symbol is the span type, but also many are more complicated.
+ * For an explanation of all of these, see the `TextFormatter#get` function
+ * implementation.
+ */
 type SpanType = '_' | '*' | '~' | '^' | '\\' | '|' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
 
 type FormatSpan = [SpanType, number];
@@ -122,6 +132,15 @@ class TextFormatter {
 		return this.str.charAt(start);
 	}
 
+	/**
+	 * We've encountered a possible start for a span. It's pushed onto our span
+	 * stack.
+	 *
+	 * The span stack saves the start position so it can be replaced with HTML
+	 * if we find an end for the span, but we don't actually replace it until
+	 * `closeSpan` is called, so nothing happens (it stays plaintext) if no end
+	 * is found.
+	 */
 	pushSpan(spanType: SpanType, start: number, end: number) {
 		this.pushSlice(start);
 		this.stack.push([spanType, this.buffers.length]);
@@ -155,7 +174,8 @@ class TextFormatter {
 	}
 
 	/**
-	 * Attempt to close a span.
+	 * We've encountered a possible end for a span. If it's in the span stack,
+	 * we transform it into HTML.
 	 */
 	closeSpan(spanType: SpanType, start: number, end: number) {
 		// loop backwards
@@ -230,9 +250,15 @@ class TextFormatter {
 		return encodeURIComponent(component);
 	}
 
+	/**
+	 * Handles special cases.
+	 */
 	runLookahead(spanType: SpanType, start: number) {
 		switch (spanType) {
 		case '`':
+			// code span. Not only are the contents not formatted, but
+			// the start and end delimiters must match in length.
+			// ``Neither `this` nor ```this``` end this code span.``
 			{
 				let delimLength = 0;
 				let i = start;
@@ -274,6 +300,11 @@ class TextFormatter {
 			}
 			return true;
 		case '[':
+			// Link span. Several possiblilities:
+			// [[text <uri>]] - a link with custom text
+			// [[search term]] - Google search
+			// [[wiki: search term]] - Wikipedia search
+			// [[pokemon: species name]] - icon (also item:, type:, category:)
 			{
 				if (this.slice(start, start + 2) !== '[[') return false;
 				let i = start + 2;
@@ -352,6 +383,9 @@ class TextFormatter {
 			}
 			return true;
 		case 'a':
+			// URL span. Skip to the end of the link - where `</a>` is.
+			// Nothing inside should be formatted further (obviously we don't want
+			// `example.com/__foo__` to turn `foo` italic).
 			{
 				let i = start + 1;
 				while (this.at(i) !== '/' || this.at(i + 1) !== 'a' || this.at(i + 2) !== '>') i++; // </a>
@@ -375,7 +409,10 @@ class TextFormatter {
 			case '^':
 			case '\\':
 			case '|':
+				// Must be exactly two chars long.
 				if (this.at(i + 1) === char && this.at(i + 2) !== char) {
+					// This is a completely normal two-char span. Close it if it's
+					// already open, open it if it's not.
 					if (!(this.at(i - 1) !== ' ' && this.closeSpan(char, i, i + 2))) {
 						if (this.at(i + 2) !== ' ') this.pushSpan(char, i, i + 2);
 					}
@@ -387,9 +424,11 @@ class TextFormatter {
 				while (this.at(i + 1) === char) i++;
 				break;
 			case '(':
+				// `(` span - does nothing except end spans
 				this.stack.push(['(', -1]);
 				break;
 			case ')':
+				// end of `(` span
 				this.closeParenSpan(i);
 				if (i < this.offset) {
 					i = this.offset - 1;
@@ -397,6 +436,9 @@ class TextFormatter {
 				}
 				break;
 			case '`':
+				// ` ``code`` ` span. Uses lookahead because its contents are not
+				// formatted.
+				// Must be at least two `` ` `` in a row.
 				if (this.at(i + 1) === '`') this.runLookahead('`', i);
 				if (i < this.offset) {
 					i = this.offset - 1;
@@ -405,6 +447,9 @@ class TextFormatter {
 				while (this.at(i + 1) === '`') i++;
 				break;
 			case '[':
+				// `[` (link) span. Uses lookahead because it might contain a
+				// URL which can't be formatted, or search terms that can't be
+				// formatted.
 				this.runLookahead('[', i);
 				if (i < this.offset) {
 					i = this.offset - 1;
@@ -413,6 +458,9 @@ class TextFormatter {
 				while (this.at(i + 1) === '[') i++;
 				break;
 			case ':':
+				// Looks behind for `spoiler:` or `spoilers:`. Spoiler spans
+				// are also weird because they don't require an ending symbol,
+				// although that's not handled here.
 				if (i < 7) break;
 				if (this.slice(i - 7, i + 1).toLowerCase() === 'spoiler:' ||
 					this.slice(i - 8, i + 1).toLowerCase() === 'spoilers:') {
@@ -421,11 +469,16 @@ class TextFormatter {
 				}
 				break;
 			case '&': // escaped '<' or '>'
+				// greentext or roomid
 				if (i === beginningOfLine && this.slice(i, i + 4) === '&gt;') {
+					// greentext span, normal except it lacks an ending span
+					// check for certain emoticons like `>_>` or `>w<`
 					if (!"._/=:;".includes(this.at(i + 4)) && !['w&lt;', 'w&gt;'].includes(this.slice(i + 4, i + 9))) {
 						this.pushSpan('>', i, i);
 					}
 				} else {
+					// completely normal `<<roomid>>` span
+					// uses lookahead because roomids can't be formatted.
 					this.runLookahead('<', i);
 				}
 				if (i < this.offset) {
@@ -435,6 +488,9 @@ class TextFormatter {
 				while (this.slice(i + 1, i + 5) === 'lt;&') i += 4;
 				break;
 			case '<': // guaranteed to be <a
+				// URL span
+				// The constructor has already converted `<` to `&lt;` and URLs
+				// to links, so `<` must be the start of a URL link.
 				this.runLookahead('a', i);
 				if (i < this.offset) {
 					i = this.offset - 1;
@@ -444,6 +500,7 @@ class TextFormatter {
 				break;
 			case '\r':
 			case '\n':
+				// End of the line. No spans span multiple lines.
 				this.popAllSpans(i);
 				if (this.replaceLinebreaks) {
 					this.buffers.push(`<br />`);
