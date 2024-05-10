@@ -1,8 +1,8 @@
-import {Dex, toID} from '../sim/dex';
-import {Utils} from '../lib';
-import {PRNG, PRNGSeed} from '../sim/prng';
-import {RuleTable} from '../sim/dex-formats';
-import {Tags} from './tags';
+import {Dex, toID} from '../../../sim/dex';
+import {Utils} from '../../../lib';
+import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {RuleTable} from '../../../sim/dex-formats';
+import {Tags} from './../../tags';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
@@ -1755,8 +1755,8 @@ export class RandomTeams {
 		return [pokemonPool, baseSpeciesPool];
 	}
 
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
-	randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-doubles-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
+	randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./doubles-sets.json');
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
