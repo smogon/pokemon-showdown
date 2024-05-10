@@ -1,6 +1,6 @@
-import RandomGen3Teams from '../gen3/random-teams';
+import RandomGen3Teams from '../gen3/teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../gen8/random-teams';
+import type {MoveCounter} from '../gen8/teams';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -26,7 +26,7 @@ const MOVE_PAIRS = [
 ];
 
 export class RandomGen2Teams extends RandomGen3Teams {
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);

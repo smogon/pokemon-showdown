@@ -8,11 +8,11 @@ const {testTeam, validateLearnset} = require('./tools');
 
 describe('[Gen 2] Random Battle (slow)', () => {
 	const options = {format: 'gen2randombattle'};
-	const setsJSON = require(`../../dist/data/mods/gen2/random-sets.json`);
+	const setsJSON = require(`../../dist/data/random-battles/gen2/sets.json`);
 	const dex = Dex.forFormat(options.format);
 
 	describe("New set format", () => {
-		const filename = '../../data/mods/gen2/random-sets.json';
+		const filename = '../../data/random-battles/gen2/sets.json';
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			const validRoles = [

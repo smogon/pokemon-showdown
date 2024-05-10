@@ -1,4 +1,4 @@
-import {MoveCounter, TeamData, RandomGen8Teams} from '../gen8/random-teams';
+import {MoveCounter, TeamData, RandomGen8Teams} from '../gen8/teams';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {Utils} from '../../../lib';
 import {toID} from '../../../sim/dex';
@@ -99,7 +99,7 @@ function sereneGraceBenefits(move: Move) {
 }
 
 export class RandomGen7Teams extends RandomGen8Teams {
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);

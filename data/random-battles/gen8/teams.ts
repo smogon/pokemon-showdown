@@ -111,7 +111,7 @@ export class RandomGen8Teams {
 	readonly maxMoveCount: number;
 	readonly forceMonotype: string | undefined;
 
-	randomData: {[species: string]: OldRandomBattleSpecies} = require('./random-data.json');
+	randomData: {[species: string]: OldRandomBattleSpecies} = require('./data.json');
 
 	/**
 	 * Checkers for move enforcement based on a Pokémon's types or other factors

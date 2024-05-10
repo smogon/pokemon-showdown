@@ -1,4 +1,4 @@
-import RandomGen2Teams from '../gen2/random-teams';
+import RandomGen2Teams from '../gen2/teams';
 import {Utils} from '../../../lib';
 
 interface HackmonsCupEntry {
@@ -15,7 +15,7 @@ interface Gen1RandomBattleSpecies {
 }
 
 export class RandomGen1Teams extends RandomGen2Teams {
-	randomData: {[species: string]: Gen1RandomBattleSpecies} = require('./random-data.json');
+	randomData: {[species: string]: Gen1RandomBattleSpecies} = require('./data.json');
 
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam() {

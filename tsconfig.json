@@ -27,6 +27,7 @@
         "./config/*.ts",
         "./data/*",
         "./data/text/*",
+        "./data/random-battles/**/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
         "./lib/*.ts",
