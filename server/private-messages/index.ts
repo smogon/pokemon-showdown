@@ -125,7 +125,7 @@ export const PrivateMessages = new class {
 		for (const {message, time, sender} of messages) {
 			user.send(
 				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|/html ` +
-				`${Utils.escapeHTML(message)} __[sent offline, <time>${new Date(time).toISOString()}</time>]__`
+				`${Utils.escapeHTML(message)} <i>[sent offline, <time>${new Date(time).toISOString()}</time>]</i>`
 			);
 		}
 	}
