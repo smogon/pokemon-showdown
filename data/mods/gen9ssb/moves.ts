@@ -2108,14 +2108,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Hasty Revolution",
 		pp: 10,
 		priority: 4,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, noassist: 1, failcopycat: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Pain Split', target);
+			return !!this.queue.willAct() && this.runEvent('StallMove', source);
 		},
 		onHit(target, source, move) {
+			source.addVolatile('stall');
 			target.clearBoosts();
 			this.add('-clearboost', target);
 			let i: BoostID;
@@ -2132,6 +2134,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			volatileStatus: 'protect',
 		},
+		secondary: null,
 		target: "normal",
 		type: "Normal",
 	},
