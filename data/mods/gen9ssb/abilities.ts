@@ -290,13 +290,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Super effective and critical hits cause this Pokemon to flinch.",
 		name: "One More",
 		onHit(target, source, move) {
+			if (!target.hp) return;
 			const hitData = target.getMoveHitData(move);
-			if (move.category === "Status" || hitData.typeMod <= 0 || !hitData.crit) return;
-			if (!move.secondaries) move.secondaries = [];
-			move.secondaries.push({
-				chance: 100,
-				volatileStatus: 'flinch',
-			});
+			if (move?.category === "Status") return;
+			if (move?.effectType === 'Move' && (hitData.crit || hitData.typeMod > 0)) {
+				target.addVolatile('flinch', this.effectState.target);
+			}
 		},
 		flags: {},
 		gen: 9,
@@ -1884,6 +1883,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!this.effectState.superHit) {
 				target.addVolatile('ultramystik');
 			}
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['ultramystik'];
+			this.add('-end', pokemon, 'Ultra Mystik', '[silent]');
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {

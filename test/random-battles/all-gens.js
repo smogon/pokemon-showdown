@@ -34,7 +34,7 @@ describe('value rule support (slow)', () => {
 				// Due to frontloading of moveset generation, formats with the new set format do not support
 				// Max Move Counts less than 4
 				if (count < 4) continue;
-				const setsJSON = require(`../../dist/data/${gen === 9 ? '' : `mods/gen${gen}/`}random-sets.json`);
+				const setsJSON = require(`../../dist/data/random-battles/gen${gen}/sets.json`);
 
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
 					testTeam({format, rounds: 50}, team => {
@@ -66,7 +66,7 @@ describe('value rule support (slow)', () => {
 					});
 				});
 			} else {
-				const dataJSON = require(`../../dist/data/mods/gen${gen}/random-data.json`);
+				const dataJSON = require(`../../dist/data/random-battles/gen${gen}/data.json`);
 
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
 					testTeam({format, rounds: 50}, team => {
@@ -114,12 +114,12 @@ describe('value rule support (slow)', () => {
 });
 
 describe("New set format", () => {
-	const files = ['../../data/random-sets.json', '../../data/random-doubles-sets.json'];
+	const files = ['../../data/random-battles/gen9/sets.json', '../../data/random-battles/gen9/doubles-sets.json'];
 	for (const filename of files) {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			let validRoles = [];
-			if (filename === '../../data/random-sets.json') {
+			if (filename === '../../data/random-battles/gen9/sets.json') {
 				validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
 					"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
 			} else {
@@ -178,16 +178,16 @@ describe('randomly generated teams should be valid (slow)', () => {
 });
 
 describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
-	for (const filename of ['mods/gen8/bss-factory-sets', 'mods/gen7/bss-factory-sets', 'mods/gen7/factory-sets', 'mods/gen6/factory-sets']) {
+	for (const filename of ['gen8/bss-factory-sets', 'gen7/bss-factory-sets', 'gen7/factory-sets', 'gen6/factory-sets']) {
 		it(`${filename}.json should contain valid sets`, function () {
 			this.timeout(0);
-			const setsJSON = require(`../../dist/data/${filename}.json`);
-			const mod = filename.split('/')[1] || 'gen' + Dex.gen;
+			const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
+			const mod = filename.split('/')[0] || 'gen' + Dex.gen;
 			const genNum = isNaN(mod[3]) ? Dex.gen : mod[3];
 
 			for (const type in setsJSON) {
 				const typeTable = filename.includes('bss-factory-sets') ? setsJSON : setsJSON[type];
-				const vType = filename === 'bss-factory-sets' ? `battle${genNum === 8 ? 'stadium' : 'spot'}singles` :
+				const vType = filename.includes('bss-factory-sets') ? `battle${genNum === 8 ? 'stadium' : 'spot'}singles` :
 					type === 'Mono' ? 'monotype' : type.toLowerCase();
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
