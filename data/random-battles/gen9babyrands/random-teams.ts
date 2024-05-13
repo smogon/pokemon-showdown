@@ -1,5 +1,5 @@
 import {PRNG, PRNGSeed} from "../../../sim/prng";
-import {RandomTeams, MoveCounter} from "../../random-teams";
+import {RandomTeams, MoveCounter} from "../gen9/teams";
 import {Utils} from '../../../lib';
 
 // Moves that switch the user out
