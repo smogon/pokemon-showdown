@@ -702,7 +702,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		};
 	}
 
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-sets.json');
+	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
