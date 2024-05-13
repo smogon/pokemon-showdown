@@ -2,6 +2,17 @@ import {PRNG, PRNGSeed} from "../../../sim/prng";
 import {RandomTeams, MoveCounter} from "../gen9/teams";
 import {Utils} from '../../../lib';
 
+
+// Moves that drop stats:
+const CONTRARY_MOVES = [
+	'armorcannon', 'closecombat', 'leafstorm', 'makeitrain', 'overheat', 'spinout', 'superpower', 'vcreate',
+];
+
+// Hazard-setting moves
+const HAZARDS = [
+	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
+];
+
 // Moves that switch the user out
 const PIVOT_MOVES = [
 	'chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch',
@@ -12,16 +23,6 @@ const RECOVERY_MOVES = [
 	'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'shoreup', 'slackoff', 'softboiled', 'strengthsap', 'synthesis',
 ];
 
-// Some moves that only boost Speed:
-const SPEED_SETUP = [
-	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
-];
-
-// Moves that drop stats:
-const CONTRARY_MOVES = [
-	'armorcannon', 'closecombat', 'leafstorm', 'makeitrain', 'overheat', 'spinout', 'superpower', 'vcreate',
-];
-
 // Setup (stat-boosting) moves
 const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse',
@@ -30,9 +31,9 @@ const SETUP = [
 	'trailblaze', 'workup', 'victorydance',
 ];
 
-// Hazard-setting moves
-const HAZARDS = [
-	'spikes', 'stealthrock', 'stickyweb', 'toxicspikes',
+// Some moves that only boost Speed:
+const SPEED_SETUP = [
+	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
 ];
 
 // Moves that would want to generate together
@@ -82,7 +83,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			}
 		}
 
-		// These moves are paired, and shouldn't appear if there is not room for them both.
+		// These moves are paired, and shouldn't appear if there isn't room for both.
 		if (moves.size === this.maxMoveCount - 1) {
 			for (const pair of MOVE_PAIRS) {
 				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
@@ -92,7 +93,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			}
 		}
 
-		// Develop additional move lists
+		// Create list of all status moves to be used later
 		const statusMoves = this.dex.moves.all()
 			.filter(move => move.category === 'Status')
 			.map(move => move.id);
@@ -178,6 +179,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			return moves;
 		}
 
+		// Helper function for (STAB-)move enforcement later on
 		const runEnforcementChecker = (checkerName: string) => {
 			if (!this.moveEnforcementCheckers[checkerName]) return false;
 			return this.moveEnforcementCheckers[checkerName](
@@ -189,6 +191,7 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			counter = this.addMove('terablast', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
 		}
+
 		// Add required move (e.g. Relic Song for Meloetta-P)
 		if (species.requiredMove) {
 			const move = this.dex.moves.get(species.requiredMove).id;
@@ -427,33 +430,36 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		// Culling method is inherited, but it makes some format-specific assumptions
 		// so it requires some adjusting here
 		if (species.id === 'applin') return 'Ripen';
-		if (species.id === 'gligar') return 'Immunity';
-		if (species.id === 'riolu') return 'Inner Focus';
-		if (species.id === 'silicobra') return 'Shed Skin';
 		if (species.id === 'blitzle') return 'Sap Sipper';
+		if (species.id === 'chinchou') return 'Volt Absorb';
+		if (species.id === 'deerling') return 'Serene Grace';
+		if (species.id === 'geodudealola') return 'Galvanize';
+		if (species.id === 'gligar') return 'Immunity';
 		if (species.id === 'rellor') return 'Shed Skin';
+		if (species.id === 'riolu') return 'Inner Focus';
+		if (species.id === 'shroomish') return 'Effect Spore';
+		if (species.id === 'silicobra') return 'Shed Skin';
 		if (species.id === 'timburr') return 'Guts';
 		if (species.id === 'tyrogue') return 'Guts';
-		if (species.id === 'chinchou') return 'Volt Absorb';
-		if (species.id === 'geodudealola') return 'Galvanize';
-		if (species.id === 'shroomish') return 'Effect Spore';
-		if (species.id === 'deerling') return 'Serene Grace';
-		if (species.id === 'tinkatink') return this.randomChance(1, 2) ? 'Mold Breaker' : 'Pickpocket';
+
+		// Random abilities
 		if (species.id === 'litwick') return this.randomChance(1, 2) ? 'Flame Body' : 'Flash Fire';
 		if (species.id === 'solosis') return this.randomChance(4, 5) ? 'Magic Guard' : 'Regenerator';
+		if (species.id === 'tinkatink') return this.randomChance(1, 2) ? 'Mold Breaker' : 'Pickpocket';
 
+		// Abilities based on something else
+		if (species.id === 'cetoddle' && role === 'Wallbreaker') return 'Sheer Force';
 		if (species.id === 'cranidos' && moves.has('trailblaze')) return 'Mold Breaker';
 		if (species.id === 'murkrow' && role === 'Setup Sweeper') return 'Super Luck';
-		if (species.id === 'cetoddle' && role === 'Wallbreaker') return 'Sheer Force';
 
-		if (abilities.has('Unburden') && moves.has('acrobatics')) return 'Unburden';
+		// Non-pokemon-specific ability rules
+		if (abilities.has('Harvest') && role === 'Bulky Attacker') return 'Harvest';
 		if (abilities.has('Guts') && moves.has('facade')) return 'Guts';
 		if (abilities.has('Quick Feet') && moves.has('facade')) return 'Quick Feet';
-		if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
 		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
+		if (abilities.has('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
+		if (abilities.has('Unburden') && moves.has('acrobatics')) return 'Unburden';
 		if (moves.has('sunnyday') && abilities.has('Solar Power') && !abilities.has('Chlorophyll')) return 'Solar Power';
-
-		if (abilities.has('Harvest') && role === 'Bulky Attacker') return 'Harvest';
 
 		let abilityAllowed: Ability[] = [];
 		// Obtain a list of abilities that are allowed (not culled and rating>=1)
@@ -517,22 +523,26 @@ export class RandomBabyrandsTeams extends RandomTeams {
 		if (species.requiredItems) {
 			return this.sample(species.requiredItems);
 		}
+
 		if (species.id === 'minccino') return 'Loaded Dice';
 		if (species.id === 'nymble') return 'Silver Powder';
+
+		if (moves.has('focusenergy')) return 'Scope Lens';
 		if (moves.has('thief')) return '';
 		if (moves.has('trick')) return 'Choice Scarf';
-		if (moves.has('focusenergy')) return 'Scope Lens';
+
+		if (moves.has('acrobatics')) return ability === 'Unburden' ? 'Oran Berry' : '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (moves.has('rest') && moves.has('sleeptalk')) return 'Eviolite';
-		if (moves.has('acrobatics')) return ability === 'Unburden' ? 'Oran Berry' : '';
+
 		if (ability === 'Guts' && moves.has('facade')) return 'Flame Orb';
 		if (ability === 'Quick Feet') return 'Toxic Orb';
 
+		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
 		if (
-			['Harvest', 'Ripen', 'Unburden'].some(abil => abil === ability) ||
+			['Harvest', 'Ripen', 'Unburden'].includes(ability) ||
 			moves.has('belch') || moves.has('bellydrum')
 		) return "Oran Berry";
-		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
 	}
 
 	getItem(
@@ -665,12 +675,11 @@ export class RandomBabyrandsTeams extends RandomTeams {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm') return false;
-			// Magearna and doubles Dragonite, though these can work well as a general rule
 			if (move.id === 'terablast' && species.baseStats.atk > species.baseStats.spa) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 
-		if (noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime') {
+		if (noAttackStatMoves) {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
@@ -827,19 +836,19 @@ export class RandomBabyrandsTeams extends RandomTeams {
 
 			// Track what the team has
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
-			if (set.ability === 'Drought' || set.ability === 'Orichalcum Pulse' || set.moves.includes('sunnyday')) {
+			if (set.ability === 'Drought' || set.moves.includes('sunnyday')) {
 				teamDetails.sun = 1;
 			}
 			if (set.ability === 'Sand Stream') teamDetails.sand = 1;
 			if (set.ability === 'Snow Warning' || set.moves.includes('snowscape') || set.moves.includes('chillyreception')) {
 				teamDetails.snow = 1;
 			}
-			if (set.moves.includes('spikes') || set.moves.includes('ceaselessedge')) {
+			if (set.moves.includes('spikes')) {
 				teamDetails.spikes = (teamDetails.spikes || 0) + 1;
 			}
-			if (set.moves.includes('toxicspikes') || set.ability === 'Toxic Debris') teamDetails.toxicSpikes = 1;
-			if (set.moves.includes('stealthrock') || set.moves.includes('stoneaxe')) teamDetails.stealthRock = 1;
+			if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
 			if (set.moves.includes('stickyweb')) teamDetails.stickyWeb = 1;
+			if (set.moves.includes('toxicspikes') || set.ability === 'Toxic Debris') teamDetails.toxicSpikes = 1;
 			if (set.moves.includes('defog')) teamDetails.defog = 1;
 			if (set.moves.includes('rapidspin') || set.moves.includes('mortalspin')) teamDetails.rapidSpin = 1;
 			if (set.moves.includes('auroraveil') || (set.moves.includes('reflect') && set.moves.includes('lightscreen'))) {
