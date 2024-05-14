@@ -43,7 +43,7 @@ const MOVE_PAIRS = [
 	['protect', 'wish'],
 ];
 
-export class RandomBabyrandsTeams extends RandomTeams {
+export class RandomBabyTeams extends RandomTeams {
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 
@@ -867,4 +867,4 @@ export class RandomBabyrandsTeams extends RandomTeams {
 	}
 }
 
-export default RandomBabyrandsTeams;
+export default RandomBabyTeams;
