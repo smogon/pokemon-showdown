@@ -1289,7 +1289,12 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Bulk Up", "Close Combat", "Ice Punch", "Iron Head", "Swords Dance"],
+                "movepool": ["Close Combat", "Ice Punch", "Iron Head", "Swords Dance"],
+                "teraTypes": ["Fighting", "Steel"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Ice Punch", "Iron Head", "Swords Dance", "U-turn"],
                 "teraTypes": ["Fighting", "Steel"]
             }
         ]
@@ -1484,7 +1489,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bulk Up", "Drain Punch", "Psycho Cut", "Trailblaze"],
+                "movepool": ["Bulk Up", "Drain Punch", "Trailblaze", "Zen Headbutt"],
                 "teraTypes": ["Fighting", "Psychic", "Steel"]
             },
             {
@@ -1659,12 +1664,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Body Press", "Iron Defense", "Pain Split", "Power Gem"],
-                "teraTypes": ["Fighting"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["Body Press", "Power Gem", "Stealth Rock", "Thunder Wave", "Volt Switch"],
+                "movepool": ["Body Press", "Iron Defense", "Pain Split", "Power Gem", "Thunder Wave"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -2086,6 +2086,11 @@
                 "role": "Wallbreaker",
                 "movepool": ["Flare Blitz", "Gunk Shot", "High Jump Kick", "Sucker Punch", "U-turn"],
                 "teraTypes": ["Fighting", "Fire"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Flare Blitz", "Gunk Shot", "High Jump Kick", "U-turn"],
+                "teraTypes": ["Fighting", "Fire", "Poison"]
             }
         ]
     },
@@ -2249,7 +2254,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Coil", "Earthquake", "Glare", "Rock Blast", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Coil", "Earthquake", "Glare", "Rest", "Rock Blast", "Stealth Rock", "Stone Edge"],
                 "teraTypes": ["Dragon", "Steel"]
             }
         ]
@@ -2773,7 +2778,7 @@
         "level": 6,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Gunk Shot", "Iron Head", "Parting Shot", "Taunt", "Toxic Spikes"],
                 "teraTypes": ["Poison", "Steel", "Water"]
             }
