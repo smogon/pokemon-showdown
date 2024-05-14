@@ -2495,7 +2495,7 @@ export const Formats: FormatList = [
 	{
 		name: "[Gen 9] Baby Random Battle",
 
-		mod: 'gen9babyrands',
+		mod: 'gen9baby',
 		team: 'random',
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
