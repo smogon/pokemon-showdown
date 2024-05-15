@@ -239,7 +239,7 @@ export class Roomlog {
 		this.broadcastBuffer.push(fullMessage);
 	}
 	parseChatLine(line: string) {
-		const prefixes = [['|c:|', 4], ['|c|', 3]] satisfies [string, number][];
+		const prefixes: [string, number][] = [['|c:|', 4], ['|c|', 3]];
 		for (const [messageStart, section] of prefixes) {
 			// const messageStart = !this.noLogTimes ? '|c:|' : '|c|';
 			// const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
