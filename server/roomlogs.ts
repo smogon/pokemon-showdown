@@ -28,7 +28,7 @@ interface RoomlogRow {
 	content: string | null;
 }
 
-export const roomlogDB = Config.replaysdb ? new PGDatabase(Config.replaysdb) : null;
+export const roomlogDB = global.Config?.replaysdb ? new PGDatabase(Config.replaysdb) : null;
 export const roomlogTable = roomlogDB?.getTable<RoomlogRow>('roomlogs');
 
 /**
