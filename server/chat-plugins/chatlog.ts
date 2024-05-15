@@ -92,14 +92,13 @@ export class LogReaderRoom {
 
 	async getLog(day: string) {
 		if (roomlogTable) {
-			const dayStart = new Date(day).getTime();
 			const logs = await roomlogTable.selectAll(
 				['log', 'time']
-			)`WHERE roomid = ${this.roomid} AND time > ${dayStart - 1} AND time < ${dayStart + DAY + 1}`;
+			)`WHERE roomid = ${this.roomid} AND time::DATE = ${day}`;
 			return new Streams.ObjectReadStream<string>({
 				read(this: Streams.ObjectReadStream<string>) {
 					for (const {log, time} of logs) {
-						this.buf.push(`${Chat.toTimestamp(new Date(Number(time))).split(' ')[1]} ${log}`);
+						this.buf.push(`${Chat.toTimestamp(time).split(' ')[1]} ${log}`);
 					}
 					this.pushEnd();
 				},

@@ -22,7 +22,7 @@ interface RoomlogRow {
 	type: string;
 	roomid: string;
 	user: string | null;
-	time: number;
+	time: Date;
 	log: string;
 	// tsvector, really don't use
 	content: string | null;
@@ -256,7 +256,7 @@ export class Roomlog {
 			const type = message.split('|')[1] || "";
 			const insertQuery = SQL`INSERT INTO roomlogs (type, roomid, userid, time, log)`;
 			insertQuery.append(SQL` VALUES (${type}, ${this.roomid}, ${toID(chatData?.user) || null}, `);
-			insertQuery.append(SQL`${date.getTime()}, ${message})`);
+			insertQuery.append(SQL`now(), ${message})`);
 			void this.insertLog(insertQuery);
 
 			const dateStr = Chat.toTimestamp(date).split(' ')[0];
