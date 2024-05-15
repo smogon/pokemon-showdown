@@ -258,6 +258,11 @@ export class Roomlog {
 			insertQuery.append(SQL` VALUES (${type}, ${this.roomid}, ${toID(chatData?.user) || null}, `);
 			insertQuery.append(SQL`${date.getTime()}, ${message})`);
 			void this.insertLog(insertQuery);
+
+			const dateStr = Chat.toTimestamp(date).split(' ')[0];
+			const dateQuery = SQL`INSERT INTO roomlog_dates (roomid, month, date) VALUES `;
+			dateQuery.append(SQL`(${this.roomid}, ${dateStr.slice(0, -3)}, ${dateStr});`);
+			void this.insertLog(dateQuery);
 		} else if (this.roomlogStream) {
 			const timestamp = Chat.toTimestamp(date).split(' ')[1] + ' ';
 			void this.roomlogStream.write(timestamp + message + '\n');
