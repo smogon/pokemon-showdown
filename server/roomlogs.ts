@@ -261,21 +261,21 @@ export class Roomlog {
 
 			const dateStr = Chat.toTimestamp(date).split(' ')[0];
 			const dateQuery = SQL`INSERT INTO roomlog_dates (roomid, month, date) VALUES `;
-			dateQuery.append(SQL`(${this.roomid}, ${dateStr.slice(0, -3)}, ${dateStr});`);
+			dateQuery.append(SQL`(${this.roomid}, ${dateStr.slice(0, -3)}, ${dateStr}) ON CONFLICT (roomid, date) DO NOTHING;`);
 			void this.insertLog(dateQuery);
 		} else if (this.roomlogStream) {
 			const timestamp = Chat.toTimestamp(date).split(' ')[1] + ' ';
 			void this.roomlogStream.write(timestamp + message + '\n');
 		}
 	}
-	private async insertLog(query: SQLStatement): Promise<void> {
+	private async insertLog(query: SQLStatement, ignoreFailure = false): Promise<void> {
 		if (!roomlogTable) return;
 		try {
 			await roomlogTable.query(query);
 		} catch (e: any) {
 			if (e?.code === '42P01') { // table not found
 				await roomlogDB!._query(FS('databases/schemas/roomlogs.sql').readSync(), []);
-				return this.insertLog(query);
+				return this.insertLog(query, ignoreFailure);
 			}
 			const [q, vals] = roomlogDB!._resolveSQL(query);
 			Monitor.crashlog(e, 'a roomlog database query', {

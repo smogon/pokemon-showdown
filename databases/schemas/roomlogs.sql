@@ -16,5 +16,6 @@ CREATE TABLE public.roomlog_dates (
 	-- YYYY-MM
 	month STRING NOT NULL,
 	-- YYYY-MM-DD
-	date STRING NOT NULL PRIMARY KEY
+	date STRING NOT NULL,
+	PRIMARY KEY (roomid, date)
 );
