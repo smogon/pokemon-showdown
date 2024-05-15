@@ -293,7 +293,7 @@ export class Roomlog {
 	}
 	async rename(newID: RoomID): Promise<true> {
 		if (roomlogTable) {
-			await roomlogTable.updateAll({roomid: this.roomid})`WHERE room = ${this.roomid}`;
+			await roomlogTable.updateAll({roomid: this.roomid})`WHERE roomid = ${this.roomid}`;
 			return true;
 		} else {
 			const roomlogPath = `logs/chat`;
