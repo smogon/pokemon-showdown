@@ -22,11 +22,8 @@ interface RoomlogRow {
 	type: string;
 	room: string;
 	user: string | null;
-	day: string;
-	month: string;
-	year: string;
 	timestamp: number;
-	message: string;
+	log: string;
 	// tsvector, really don't use
 	content: string | null;
 }
@@ -255,11 +252,10 @@ export class Roomlog {
 	roomlog(message: string, date = new Date()) {
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 		if (roomlogDB && !(!Config.logchat || this.roomid.startsWith('battle-'))) {
-			const [year, month, day] = Chat.toTimestamp(new Date()).split(' ')[0].split('-');
 			const chatData = this.parseChatLine(message);
 			const type = message.split('|')[1] || "";
-			const insertQuery = SQL`INSERT INTO roomlogs (type, room, userid, day, month, year, timestamp, log)`;
-			insertQuery.append(SQL` VALUES (${type}, ${this.roomid}, ${toID(chatData?.user) || null}, ${day}, ${month}, ${year}, `);
+			const insertQuery = SQL`INSERT INTO roomlogs (type, room, userid, time, log)`;
+			insertQuery.append(SQL` VALUES (${type}, ${this.roomid}, ${toID(chatData?.user) || null}, `);
 			insertQuery.append(SQL`${date.getTime()}, ${message})`);
 			void this.insertLog(insertQuery);
 		} else if (this.roomlogStream) {
