@@ -64,8 +64,8 @@ export class LogReaderRoom {
 
 	async listMonths() {
 		if (roomlogTable) {
-			const dates = await roomlogTable.query()`SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}`;
-			return dates.map(x => (x as any).month);
+			const dates = await roomlogTable.query<any>()`SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}`;
+			return dates.map(x => x.month);
 		}
 		try {
 			const listing = await FS(`logs/chat/${this.roomid}`).readdir();
@@ -78,9 +78,9 @@ export class LogReaderRoom {
 	async listDays(month: string) {
 		if (roomlogTable) {
 			const dates = await (
-				roomlogTable.query()`SELECT DISTINCT date FROM roomlog_dates WHERE roomid = ${this.roomid} AND month = ${month}`
+				roomlogTable.query<any>()`SELECT DISTINCT date FROM roomlog_dates WHERE roomid = ${this.roomid} AND month = ${month}`
 			);
-			return dates.map(x => (x as any).date);
+			return dates.map(x => x.date);
 		}
 		try {
 			const listing = await FS(`logs/chat/${this.roomid}/${month}`).readdir();
