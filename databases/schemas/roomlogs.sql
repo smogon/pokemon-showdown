@@ -4,10 +4,9 @@ CREATE TABLE public.roomlogs (
 	userid STRING NULL,
 	time INT NOT NULL,
 	log STRING NOT NULL,
-	INDEX userid (userid),
-	INDEX room (room),
-	INDEX type (type),
-	INDEX fulldate (day, month, year)
+	INDEX linecount (userid, room, time),
+	INDEX month (room, time),
+	INDEX type (room, type, time),
 );
 -- computed columns have to be added after apparently
 ALTER TABLE roomlogs ADD COLUMN content TSVECTOR AS (to_tsvector('english', log)) STORED;
