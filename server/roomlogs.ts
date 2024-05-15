@@ -254,15 +254,20 @@ export class Roomlog {
 		if (roomlogTable && !(!Config.logchat || this.roomid.startsWith('battle-'))) {
 			const chatData = this.parseChatLine(message);
 			const type = message.split('|')[1] || "";
-			const insertQuery = SQL`INSERT INTO roomlogs (type, roomid, userid, time, log)`;
-			insertQuery.append(SQL` VALUES (${type}, ${this.roomid}, ${toID(chatData?.user) || null}, `);
-			insertQuery.append(SQL`now(), ${message})`);
-			void this.insertLog(insertQuery);
+			void this.insertLog(SQL`INSERT INTO roomlogs (${{
+				type: type,
+				roomid: this.roomid,
+				userid: toID(chatData?.user) || null,
+				time: SQL`now()`,
+				log: message,
+		  }})`);
 
 			const dateStr = Chat.toTimestamp(date).split(' ')[0];
-			const dateQuery = SQL`INSERT INTO roomlog_dates (roomid, month, date) VALUES `;
-			dateQuery.append(SQL`(${this.roomid}, ${dateStr.slice(0, -3)}, ${dateStr}) ON CONFLICT (roomid, date) DO NOTHING;`);
-			void this.insertLog(dateQuery);
+			void this.insertLog(SQL`INSERT INTO roomlog_dates (${{
+				roomid: this.roomid,
+				month: dateStr.slice(0, -3),
+				date: dateStr,
+			}}) ON CONFLICT (roomid, date) DO NOTHING;`);
 		} else if (this.roomlogStream) {
 			const timestamp = Chat.toTimestamp(date).split(' ')[1] + ' ';
 			void this.roomlogStream.write(timestamp + message + '\n');
