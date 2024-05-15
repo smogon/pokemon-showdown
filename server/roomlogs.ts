@@ -286,8 +286,8 @@ export class Roomlog {
 		void Rooms.Modlog.write(this.roomid, entry, overrideID);
 	}
 	async rename(newID: RoomID): Promise<true> {
-		if (roomlogDB) {
-			await roomlogTable!.updateAll({room: this.roomid})`WHERE room = ${this.roomid}`;
+		if (roomlogTable) {
+			await roomlogTable.updateAll({room: this.roomid})`WHERE room = ${this.roomid}`;
 			return true;
 		} else {
 			const roomlogPath = `logs/chat`;
