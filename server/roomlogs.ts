@@ -260,7 +260,7 @@ export class Roomlog {
 			const type = message.split('|')[1] || "";
 			const insertQuery = SQL`INSERT INTO roomlogs (type, room, userid, day, month, year, timestamp, log)`;
 			insertQuery.append(SQL` VALUES (${type}, ${this.roomid}, ${toID(chatData?.user) || null}, ${day}, ${month}, ${year}, `);
-			insertQuery.append(SQL`${Date.now()}, ${message})`);
+			insertQuery.append(SQL`${date.getTime()}, ${message})`);
 			void this.insertLog(insertQuery);
 		} else if (this.roomlogStream) {
 			const timestamp = Chat.toTimestamp(date).split(' ')[1] + ' ';
