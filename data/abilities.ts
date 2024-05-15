@@ -4607,12 +4607,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			if (pokemon.syrupTriggered) return;
 			pokemon.syrupTriggered = true;
 			this.add('-ability', pokemon, 'Supersweet Syrup');
-			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
-				if (!activated) {
-					this.add('-ability', pokemon, 'Supersweet Syrup', 'boost');
-					activated = true;
-				}
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
