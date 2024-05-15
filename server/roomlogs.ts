@@ -31,7 +31,7 @@ interface RoomlogRow {
 	content: string | null;
 }
 
-export const roomlogDB = Config.replaysdb ? new PGDatabase(Config.replaysdb) : null!;
+export const roomlogDB = Config.replaysdb ? new PGDatabase(Config.replaysdb) : null;
 export const roomlogTable = roomlogDB?.getTable<RoomlogRow>('roomlogs');
 
 /**
@@ -268,6 +268,7 @@ export class Roomlog {
 		}
 	}
 	private async insertLog(query: SQLStatement): Promise<void> {
+		if (!roomlogDB) return;
 		try {
 			await roomlogDB.query(query);
 		} catch (e: any) {
@@ -286,7 +287,7 @@ export class Roomlog {
 	}
 	async rename(newID: RoomID): Promise<true> {
 		if (roomlogDB) {
-			await roomlogTable.updateAll({room: this.roomid})`WHERE room = ${this.roomid}`;
+			await roomlogTable!.updateAll({room: this.roomid})`WHERE room = ${this.roomid}`;
 			return true;
 		} else {
 			const roomlogPath = `logs/chat`;
