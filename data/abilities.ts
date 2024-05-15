@@ -1213,6 +1213,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		num: 302,
 	},
 	emergencyexit: {
+		onEntryHazard(pokemon) {
+		    if (pokemon.hasAbility('emergencyexit') && this.canSwitch(pokemon.side) && pokemon.hp < pokemon.maxhp/2 ) {
+					pokemon.switchFlag = true;
+					return false;
+			 }
+		},
 		onEmergencyExit(target) {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
