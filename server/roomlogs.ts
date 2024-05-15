@@ -20,9 +20,9 @@ interface RoomlogOptions {
 
 interface RoomlogRow {
 	type: string;
-	room: string;
+	roomid: string;
 	user: string | null;
-	timestamp: number;
+	time: number;
 	log: string;
 	// tsvector, really don't use
 	content: string | null;
@@ -254,7 +254,7 @@ export class Roomlog {
 		if (roomlogDB && !(!Config.logchat || this.roomid.startsWith('battle-'))) {
 			const chatData = this.parseChatLine(message);
 			const type = message.split('|')[1] || "";
-			const insertQuery = SQL`INSERT INTO roomlogs (type, room, userid, time, log)`;
+			const insertQuery = SQL`INSERT INTO roomlogs (type, roomid, userid, time, log)`;
 			insertQuery.append(SQL` VALUES (${type}, ${this.roomid}, ${toID(chatData?.user) || null}, `);
 			insertQuery.append(SQL`${date.getTime()}, ${message})`);
 			void this.insertLog(insertQuery);
@@ -283,7 +283,7 @@ export class Roomlog {
 	}
 	async rename(newID: RoomID): Promise<true> {
 		if (roomlogTable) {
-			await roomlogTable.updateAll({room: this.roomid})`WHERE room = ${this.roomid}`;
+			await roomlogTable.updateAll({roomid: this.roomid})`WHERE room = ${this.roomid}`;
 			return true;
 		} else {
 			const roomlogPath = `logs/chat`;
