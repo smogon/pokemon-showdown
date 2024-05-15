@@ -122,7 +122,7 @@ export class Roomlog {
 		return log.join('\n') + '\n';
 	}
 	async setupRoomlogStream(sync = false) {
-		if (this.roomlogStream === null || roomlogDB) return;
+		if (this.roomlogStream === null || roomlogTable) return;
 		if (!Config.logchat) {
 			this.roomlogStream = null;
 			return;
@@ -251,7 +251,7 @@ export class Roomlog {
 	}
 	roomlog(message: string, date = new Date()) {
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
-		if (roomlogDB && !(!Config.logchat || this.roomid.startsWith('battle-'))) {
+		if (roomlogTable && !(!Config.logchat || this.roomid.startsWith('battle-'))) {
 			const chatData = this.parseChatLine(message);
 			const type = message.split('|')[1] || "";
 			const insertQuery = SQL`INSERT INTO roomlogs (type, roomid, userid, time, log)`;
@@ -264,15 +264,15 @@ export class Roomlog {
 		}
 	}
 	private async insertLog(query: SQLStatement): Promise<void> {
-		if (!roomlogDB) return;
+		if (!roomlogTable) return;
 		try {
-			await roomlogDB.query(query);
+			await roomlogTable.query(query);
 		} catch (e: any) {
 			if (e?.code === '42P01') { // table not found
-				await roomlogDB._query(FS('databases/schemas/roomlogs.sql').readSync(), []);
+				await roomlogDB!._query(FS('databases/schemas/roomlogs.sql').readSync(), []);
 				return this.insertLog(query);
 			}
-			const [q, vals] = roomlogDB._resolveSQL(query);
+			const [q, vals] = roomlogDB!._resolveSQL(query);
 			Monitor.crashlog(e, 'a roomlog database query', {
 				query: q, values: vals,
 			});
