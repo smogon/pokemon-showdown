@@ -896,7 +896,7 @@ export const ssbSets: SSBSets = {
 	},
 	Tico: {
 		species: 'Floette-Eternal', ability: 'Eternal Generator', item: ['Covert Cloak', 'Red Card'], gender: 'M',
-		moves: ['Moonblast', 'Mystical Fire', 'Teleport'],
+		moves: ['Light of Ruin', 'Lava Plume', 'Teleport'],
 		signatureMove: 'Eternal Wish',
 		evs: {hp: 252, def: 16, spe: 240}, nature: 'Timid', teraType: ['Fire', 'Steel'], shiny: false,
 	},
@@ -1040,7 +1040,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team: PokemonSet[] = [];
-		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
+		const debug: string[] = ['nya~ ❤']; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
 			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);

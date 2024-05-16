@@ -1840,7 +1840,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.effectState.superHit = true;
 				target.removeVolatile('ultramystik');
-				target.setAbility('Healer', target, true);
+				target.setAbility('Healer', undefined, true);
 			}
 		},
 		condition: {
@@ -2298,10 +2298,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Tico
 	eternalgenerator: {
-		shortDesc: "Regenerator + Hazard immune.",
+		shortDesc: "Regenerator + Magic Guard + immune to Sticky Web.",
 		name: "Eternal Generator",
 		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
 		},
 		flags: {breakable: 1},
 	},

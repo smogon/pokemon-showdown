@@ -1645,7 +1645,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (this.randomChance(3, 10)) {
 				let allOutAnim = 'Draco Meteor';
 				switch (move.id) {
-				case 'voltswitch': allOutAnim = '10,000,000 Volt Thunderbolt'; break;
+				case 'voltswitch': allOutAnim = 'Thunder'; break;
 				case 'freezedry': allOutAnim = 'Glacial Lance'; break;
 				case 'triattack': allOutAnim = 'Blood Moon'; break;
 				case '3': allOutAnim = 'Fleur Cannon'; break;
