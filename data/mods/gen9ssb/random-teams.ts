@@ -115,7 +115,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 248, spa: 8, spe: 252}, nature: 'Naive', shiny: true, skip: 'Arcueid',
 	},
 	Arsenal: {
-		species: 'Rabsca', ability: 'One More', item: 'Covert Cloak', gender: 'N',
+		species: 'Rabsca', ability: 'Absorb Phys', item: 'Covert Cloak', gender: 'N',
 		moves: ['Recover', 'Calm Mind', 'Speed Swap'],
 		signatureMove: 'Megidolaon',
 		evs: {hp: 4, spa: 252, spd: 252}, nature: 'Modest', teraType: 'Stellar', shiny: true,

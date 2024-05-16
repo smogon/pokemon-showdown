@@ -88,7 +88,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	rabsca: {
 		inherit: true,
 		baseStats: {hp: 100, atk: 50, def: 100, spa: 115, spd: 100, spe: 45},
-		abilities: {0: "One More"},
+		abilities: {0: "Absorb Phys"},
 	},
 
 	// Artemis

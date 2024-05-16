@@ -286,13 +286,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Arsenal
-	onemore: {
+	absorbphys: {
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Normal moves; Normal immunity.",
-		name: "One More",
+		name: "Absorb Phys",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Normal') {
 				if (!this.heal(target.baseMaxhp / 4)) {
-					this.add('-immune', target, '[from] ability: One More');
+					this.add('-immune', target, '[from] ability: Absorb Phys');
 				}
 				return null;
 			}

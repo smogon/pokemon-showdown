@@ -1789,13 +1789,13 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.add(`c:|${getName('PartMan')}|That's what she said!`);
 			}
 		},
-		innateName: "Super Sturdy",
+		innateName: "Skill Issue",
 		shortDesc: "Any move that does damage equal to this Pokemon's max HP fails.",
 		// onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (target.illusion) return;
 			if (effect?.effectType === 'Move' && damage >= target.maxhp) {
-				this.add('-activate', target, 'ability: Super Sturdy');
+				this.add('-activate', target, 'ability: Skill Issue');
 				this.add(`c:|${getName('PartMan')}|THAT'S WHAT SHE SAID!`);
 				return false;
 			}
