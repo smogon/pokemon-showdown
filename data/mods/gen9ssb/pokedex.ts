@@ -84,6 +84,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Marble Phantasm"},
 	},
 
+	// Arsenal
+	rabsca: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 50, def: 100, spa: 115, spd: 100, spe: 45},
+		abilities: {0: "One More"},
+	},
+
 	// Artemis
 	genesect: {
 		inherit: true,
@@ -263,7 +270,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// DianaNicole
 	abomasnow: {
 		inherit: true,
-		abilities: {0: "Snow Problem"},
+		abilities: {0: "Snow Warning"},
 	},
 	abomasnowmega: {
 		inherit: true,
@@ -541,6 +548,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Lumari
 	ponytagalar: {
 		inherit: true,
+		baseStats: {hp: 65, atk: 100, def: 70, spa: 80, spd: 80, spe: 105},
 		abilities: {0: "Pyrotechnic"},
 	},
 
@@ -642,6 +650,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// nya
 	delcatty: {
 		inherit: true,
+		types: ["Fairy"],
 		abilities: {0: "Adorable Grace"},
 	},
 
@@ -683,6 +692,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// phoopes
 	jynx: {
 		inherit: true,
+		baseStats: {hp: 65, atk: 50, def: 35, spa: 115, spd: 115, spe: 95},
 		abilities: {0: "I Did It Again"},
 	},
 
@@ -748,7 +758,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Ransei
 	audinomega: {
 		inherit: true,
-		abilities: {0: "Ultra Mystik"},
+		abilities: {0: "Healer", 1: "Ultra Mystik"},
 	},
 
 	// ReturnToMonkey
@@ -820,7 +830,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// skies
 	chespin: {
 		inherit: true,
-		baseStats: {hp: 88, atk: 117, def: 122, spa: 74, spd: 85, spe: 84},
+		baseStats: {hp: 88, atk: 107, def: 122, spa: 74, spd: 75, spe: 64},
 		abilities: {0: "Spikes of Wrath"},
 	},
 
@@ -869,7 +879,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Swiffix
 	piplup: {
 		inherit: true,
-		baseStats: {hp: 84, atk: 66, def: 88, spa: 81, spd: 101, spe: 50},
+		baseStats: {hp: 64, atk: 66, def: 68, spa: 81, spd: 76, spe: 50},
 		abilities: {0: "Stinky"},
 	},
 

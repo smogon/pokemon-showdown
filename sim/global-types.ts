@@ -398,7 +398,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	side?: ModdedBattleSide;
 	boost?: (
 		this: Battle, boost: SparseBoostsTable, target: Pokemon, source?: Pokemon | null,
-		effect?: Effect | string | null, isSecondary?: boolean, isSelf?: boolean
+		effect?: Effect | null, isSecondary?: boolean, isSelf?: boolean
 	) => boolean | null | 0;
 	debug?: (this: Battle, activity: string) => void;
 	getActionSpeed?: (this: Battle, action: AnyObject) => void;
