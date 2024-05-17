@@ -3446,7 +3446,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					this.add('-activate', pokemon, 'ability: Protosynthesis');
 				}
 				this.effectState.bestStat = pokemon.getBestStat(false, true);
-				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
+				this.add('-start', pokemon, 'protosynthesis', this.effectState.bestStat);
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
@@ -3581,7 +3581,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 					this.add('-activate', pokemon, 'ability: Quark Drive');
 				}
 				this.effectState.bestStat = pokemon.getBestStat(false, true);
-				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
+				this.add('-start', pokemon, 'quarkdrive', this.effectState.bestStat);
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
