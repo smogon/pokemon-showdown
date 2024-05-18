@@ -115,13 +115,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		innateName: "Ripen",
 		shortDesc: "When this Pokemon eats certain Berries, the effects are doubled.",
 		onTryHeal(damage, target, source, effect) {
-			if (!effect) return;
+			if (!effect || target.illusion) return;
 			if (effect.name === 'Berry Juice' || effect.name === 'Leftovers') {
 				this.add('-activate', target, 'ability: Ripen');
 			}
 			if ((effect as Item).isBerry) return this.chainModify(2);
 		},
 		onChangeBoost(boost, target, source, effect) {
+			if (target.illusion) return;
 			if (effect && (effect as Item).isBerry) {
 				let b: BoostID;
 				for (b in boost) {
@@ -131,6 +132,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onSourceModifyDamagePriority: -1,
 		onSourceModifyDamage(damage, source, target, move) {
+			if (target.illusion) return;
 			if (target.abilityState.berryWeaken) {
 				target.abilityState.berryWeaken = false;
 				return this.chainModify(0.5);
@@ -138,9 +140,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onTryEatItemPriority: -1,
 		onTryEatItem(item, pokemon) {
+			if (pokemon.illusion) return;
 			this.add('-activate', pokemon, 'ability: Ripen');
 		},
 		onEatItem(item, pokemon) {
+			if (pokemon.illusion) return;
 			const weakenBerries = [
 				'Babiri Berry', 'Charti Berry', 'Chilan Berry', 'Chople Berry', 'Coba Berry', 'Colbur Berry', 'Haban Berry', 'Kasib Berry', 'Kebia Berry', 'Occa Berry', 'Passho Berry', 'Payapa Berry', 'Rindo Berry', 'Roseli Berry', 'Shuca Berry', 'Tanga Berry', 'Wacan Berry', 'Yache Berry',
 			];
@@ -817,6 +821,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Felucia')}|Okay that's enough work for today`);
 		},
 		innateName: "Regenerator",
+		shortDesc: "Regenerator + innate +1 Speed.",
+		onModifySpe(spe, pokemon) {
+			if (pokemon.illusion) return;
+			return this.chainModify(1.5);
+		},
 	},
 	froggeh: {
 		noCopy: true,
@@ -1256,6 +1265,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c:|${getName('kingbaruk')}|Why can't we give love that one more chance?`);
 		},
+		innateName: "Multiscale",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.illusion) return;
+			if (target.hp >= target.maxhp) {
+				this.debug('Multiscale weaken');
+				return this.chainModify(0.5);
+			}
+		},
 	},
 	kiwi: {
 		noCopy: true,
@@ -1622,6 +1639,22 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c:|${getName('nya~ ❤')}|>~<`);
 		},
+		innateName: "Fickle Beam",
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.illusion) return;
+			if (this.randomChance(3, 10)) {
+				let allOutAnim = 'Draco Meteor';
+				switch (move.id) {
+				case 'voltswitch': allOutAnim = 'Thunder'; break;
+				case 'freezedry': allOutAnim = 'Glacial Lance'; break;
+				case 'triattack': allOutAnim = 'Blood Moon'; break;
+				case '3': allOutAnim = 'Fleur Cannon'; break;
+				}
+				this.attrLastMove('[anim] ' + allOutAnim);
+				this.add('-activate', attacker, 'move: Fickle Beam');
+				return this.chainModify(2);
+			}
+		},
 	},
 	nyx: {
 		noCopy: true,
@@ -1754,6 +1787,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onHit(target, source, move) {
 			if (!move.num) {
 				this.add(`c:|${getName('PartMan')}|That's what she said!`);
+			}
+		},
+		innateName: "Skill Issue",
+		shortDesc: "Any move that does damage equal to this Pokemon's max HP fails.",
+		// onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (target.illusion) return;
+			if (effect?.effectType === 'Move' && damage >= target.maxhp) {
+				this.add('-activate', target, 'ability: Skill Issue');
+				this.add(`c:|${getName('PartMan')}|THAT'S WHAT SHE SAID!`);
+				return false;
 			}
 		},
 	},
@@ -2226,6 +2270,16 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('Swiffix')}|Remember: it's pp, not pfp!`);
+		},
+		innateName: "Skill Link",
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.illusion) return;
+			if (move.multihit && Array.isArray(move.multihit) && move.multihit.length) {
+				move.multihit = move.multihit[1];
+			}
+			if (move.multiaccuracy) {
+				delete move.multiaccuracy;
+			}
 		},
 	},
 	teclis: {
@@ -3092,7 +3146,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	raindance: {
 		inherit: true,
 		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (move.id === 'scorchingtruth') return;
 			if (defender.hasItem('utilityumbrella') || move.id === 'geyserblast') return;
 			if (move.type === 'Water') {
 				this.debug('rain water boost');
@@ -3127,6 +3180,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.add('-fail', attacker, move, '[from] Primordial Sea');
 				this.attrLastMove('[still]');
 				return null;
+			}
+		},
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (defender.hasItem('utilityumbrella')) return;
+			if (move.type === 'Water') {
+				this.debug('Rain water boost');
+				return this.chainModify(1.5);
+			}
+			if (move.id === 'scorchingtruth') {
+				this.debug('Scorching Truth debuff');
+				this.add('-fail', attacker, move, '[from] Primordial Sea');
+				return this.chainModify(0.5);
 			}
 		},
 	},
