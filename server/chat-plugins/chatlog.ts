@@ -6,6 +6,7 @@
  */
 
 import {Utils, FS, Dashycode, ProcessManager, Repl, Net, Streams} from '../../lib';
+import {SQL} from '../../lib/database';
 import {Config} from '../config-loader';
 import {Dex} from '../../sim/dex';
 import {Chat} from '../chat';
@@ -482,7 +483,7 @@ export abstract class Searcher {
 			return buf;
 		} else if (user) {
 			buf += '<hr /><ol>';
-			const sortedDays = Utils.sortBy(Object.keys(results), day => ({reverse: day}));
+			const sortedDays = Utils.sortBy(Object.keys(results));
 			let total = 0;
 			for (const day of sortedDays) {
 				const dayResults = results[day][user];
@@ -496,7 +497,7 @@ export abstract class Searcher {
 			buf += '<hr /><ol>';
 			// squish the results together
 			const totalResults: {[k: string]: number} = {};
-			for (const date in results) {
+			for (const date of Utils.sortBy(Object.keys(results))) {
 				for (const userid in results[date]) {
 					if (!totalResults[userid]) totalResults[userid] = 0;
 					totalResults[userid] += results[date][userid];
@@ -521,8 +522,7 @@ export abstract class Searcher {
 		context.setHTML(
 			`<div class="pad"><h2>Searching linecounts on room ${roomid}${user ? ` for the user ${user}` : ''}.</h2></div>`
 		);
-		const results = await PM.query({roomid, date: month, search: user, queryType: 'linecount'});
-		context.setHTML(results);
+		context.setHTML(await LogSearcher.searchLinecounts(roomid, month, user));
 	}
 	runSearch() {
 		throw new Chat.ErrorMessage(`This functionality is currently disabled.`);
@@ -810,7 +810,34 @@ export class RipgrepLogSearcher extends Searcher {
 	}
 }
 
+export class DatabaseLogSearcher extends Searcher {
+	async searchLinecounts(roomid: RoomID, monthString: string, user?: ID) {
+		user = toID(user);
+		if (!Rooms.Roomlogs.table) throw new Error(`Database search made while database is disabled.`);
+		const results: {[date: string]: {[user: string]: number}} = {};
+		const [year, month] = monthString.split('-').map(Number);
+		const rows = await Rooms.Roomlogs.table.selectAll()` 
+			WHERE EXTRACT("year" FROM time::DATE) = ${year} AND EXTRACT("month" FROM time::DATE) = ${month} AND 
+			roomid = ${roomid} AND type = ${'c'}${user ? SQL` AND userid = ${user}` : SQL``}
+		`;
+
+		for (const row of rows) {
+			// 'c' rows should always have userids, so this should never be an issue.
+			// this is just to appease TS.
+			if (!row.userid) continue;
+			const day = Chat.toTimestamp(row.time).split(' ')[0];
+			if (!results[day]) results[day] = {};
+			if (!results[day][row.userid]) results[day][row.userid] = 0;
+			results[day][row.userid]++;
+		}
+
+		return this.renderLinecountResults(results, roomid, monthString, user);
+	}
+}
+
 export const LogSearcher: Searcher = new (
+	Rooms.Roomlogs.table ? DatabaseLogSearcher :
+	// no db, determine fs reader type.
 	Config.chatlogreader === 'ripgrep' ? RipgrepLogSearcher : FSLogSearcher
 )();
 
@@ -818,11 +845,8 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, any>(module,
 	const start = Date.now();
 	try {
 		let result: any;
-		const {date, search, roomid, queryType} = data;
+		const {search, roomid, queryType} = data;
 		switch (queryType) {
-		case 'linecount':
-			result = await LogSearcher.searchLinecounts(roomid, date, search);
-			break;
 		case 'roomstats':
 			result = await LogSearcher.activityStats(roomid, search);
 			break;
