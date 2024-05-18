@@ -244,7 +244,10 @@ export const LogViewer = new class {
 			buf += `<p class="message-error">Room "${roomid}" doesn't have logs for ${day}</p>`;
 		} else {
 			for await (const line of stream) {
-				buf += this.renderLine(line, opts, {roomid, date: day});
+				// sometimes there can be newlines in there. parse accordingly
+				for (const part of line.split('\n')) {
+					buf += this.renderLine(part, opts, {roomid, date: day});
+				}
 			}
 		}
 		buf += `</div>`;
@@ -816,8 +819,8 @@ export class DatabaseLogSearcher extends Searcher {
 		if (!Rooms.Roomlogs.table) throw new Error(`Database search made while database is disabled.`);
 		const results: {[date: string]: {[user: string]: number}} = {};
 		const [year, month] = monthString.split('-').map(Number);
-		const rows = await Rooms.Roomlogs.table.selectAll()` 
-			WHERE EXTRACT("year" FROM time::DATE) = ${year} AND EXTRACT("month" FROM time::DATE) = ${month} AND 
+		const rows = await Rooms.Roomlogs.table.selectAll()`
+			WHERE EXTRACT("year" FROM time::DATE) = ${year} AND EXTRACT("month" FROM time::DATE) = ${month} AND
 			roomid = ${roomid} AND type = ${'c'}${user ? SQL` AND userid = ${user}` : SQL``}
 		`;
 
