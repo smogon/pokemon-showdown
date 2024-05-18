@@ -21,7 +21,7 @@ interface RoomlogOptions {
 interface RoomlogRow {
 	type: string;
 	roomid: string;
-	user: string | null;
+	userid: string | null;
 	time: Date;
 	log: string;
 	// tsvector, really don't use
