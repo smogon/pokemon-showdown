@@ -16,7 +16,7 @@ export const translations: Translations = {
 		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Ils supervisent les rooms d'une section donnée",
 		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir des utilisateurs du site",
-		"* <strong>Global Bot</strong> - An automated account that can mute, warn, and use HTML": "* <strong>Global Bot</strong> - Un compte automatisé qui peut mute, warn et utiliser le HTML",
+		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "* <strong>Global Bot</strong> - Un compte automatisé qui peut utiliser le HTML n'importe où",
 		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
 
 		"<strong>Room ranks</strong>": "<strong>Rangs des rooms</strong>",
@@ -24,7 +24,7 @@ export const translations: Translations = {
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Comme ci-dessus, en plus de pouvoir mute et warn",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir un utilisateur de la room",
-		"* <strong>Bot</strong> - An automated account that can use HTML anywhere": "* <strong>Bot</strong> - Un compte automatisé qui peut utiliser le HTML n'importe où",
+		"* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML": "* <strong>Bot</strong> - Un compte automatisé qui peut mute, warn et utiliser le HTML",
 		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>Room Owner</strong> - Ce sont les chefs de la room et ils peuvent la contrôler quasiment en totalité",
 
 		"/help OR /h OR /? - Gives you help.": "Te donne de l'aide.",
