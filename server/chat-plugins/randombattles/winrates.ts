@@ -21,13 +21,13 @@ interface FormatData {
 	period?: number; // how often it resets - defaults to 1mo
 }
 
-const STATS_PATH = 'logs/randbats/{{MONTH}}-winrates.json';
+const STATS_PATH = Monitor.logPath('randbats/{{MONTH}}-winrates.json').path;
 export const stats: Stats = getDefaultStats();
 
 try {
 	const path = STATS_PATH.replace('{{MONTH}}', getMonth());
-	if (!FS('logs/randbats/').existsSync()) {
-		FS('logs/randbats/').mkdirSync();
+	if (!Monitor.logPath('randbats/').existsSync()) {
+		Monitor.logPath('randbats/').mkdirSync();
 	}
 	const savedStats = JSON.parse(FS(path).readSync());
 	stats.elo = savedStats.elo;

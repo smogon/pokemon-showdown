@@ -29,11 +29,11 @@ interface BattleSearchResults {
 const MAX_BATTLESEARCH_PROCESSES = 1;
 export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
 	const useRipgrep = await checkRipgrepAvailability();
-	const pathString = `logs/${month}/${tierid}/`;
+	const pathString = `${month}/${tierid}/`;
 	const results: {[k: string]: BattleSearchResults} = {};
 	let files = [];
 	try {
-		files = await FS(pathString).readdir();
+		files = await Monitor.logPath(pathString).readdir();
 	} catch (err: any) {
 		if (err.code === 'ENOENT') {
 			return results;
@@ -41,7 +41,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 		throw err;
 	}
 	const [userid] = userids;
-	files = files.filter(item => item.startsWith(month)).map(item => `logs/${month}/${tierid}/${item}`);
+	files = files.filter(item => item.startsWith(month)).map(item => Monitor.logPath(`${month}/${tierid}/${item}`).path);
 
 	if (useRipgrep) {
 		// Matches non-word (including _ which counts as a word) characters between letters/numbers
@@ -276,7 +276,7 @@ async function rustBattleSearch(
 		const day = date.getDate().toString().padStart(2, '0');
 
 		directories.push(
-			FS(path.join('logs', `${year}-${month}`, format, `${year}-${month}-${day}`)).path
+			Monitor.logPath(path.join(`${year}-${month}`, format, `${year}-${month}-${day}`)).path
 		);
 	}
 
@@ -340,7 +340,7 @@ export const pages: Chat.PageTable = {
 		buf += `</p>`;
 
 		const months = Utils.sortBy(
-			(await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')),
+			(await Monitor.logPath('/').readdir()).filter(f => f.length === 7 && f.includes('-')),
 			name => ({reverse: name})
 		);
 		if (!month) {
@@ -357,7 +357,7 @@ export const pages: Chat.PageTable = {
 		}
 
 		const tierid = toID(formatid);
-		const tiers = Utils.sortBy(await FS(`logs/${month}/`).readdir(), tier => [
+		const tiers = Utils.sortBy(await Monitor.logPath(`${month}/`).readdir(), tier => [
 			// First sort by gen with the latest being first
 			tier.startsWith('gen') ? -parseInt(tier.charAt(3)) : -6,
 			// Then sort alphabetically

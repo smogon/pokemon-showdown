@@ -134,28 +134,28 @@ export class Roomlog {
 		const date = new Date();
 		const dateString = Chat.toTimestamp(date).split(' ')[0];
 		const monthString = dateString.split('-', 2).join('-');
-		const basepath = `logs/chat/${this.roomid}/`;
+		const basepath = `chat/${this.roomid}/`;
 		const relpath = `${monthString}/${dateString}.txt`;
 
 		if (relpath === this.roomlogFilename) return;
 
 		if (sync) {
-			FS(basepath + monthString).mkdirpSync();
+			Monitor.logPath(basepath + monthString).mkdirpSync();
 		} else {
-			await FS(basepath + monthString).mkdirp();
+			await Monitor.logPath(basepath + monthString).mkdirp();
 			if (this.roomlogStream === null) return;
 		}
 		this.roomlogFilename = relpath;
 		if (this.roomlogStream) void this.roomlogStream.writeEnd();
-		this.roomlogStream = FS(basepath + relpath).createAppendStream();
+		this.roomlogStream = Monitor.logPath(basepath + relpath).createAppendStream();
 		// Create a symlink to today's lobby log.
 		// These operations need to be synchronous, but it's okay
 		// because this code is only executed once every 24 hours.
 		const link0 = basepath + 'today.txt.0';
-		FS(link0).unlinkIfExistsSync();
+		Monitor.logPath(link0).unlinkIfExistsSync();
 		try {
-			FS(link0).symlinkToSync(relpath); // intentionally a relative link
-			FS(link0).renameSync(basepath + 'today.txt');
+			Monitor.logPath(link0).symlinkToSync(relpath); // intentionally a relative link
+			Monitor.logPath(link0).renameSync(basepath + 'today.txt');
 		} catch {} // OS might not support symlinks or atomic rename
 		if (!Roomlogs.rollLogTimer) void Roomlogs.rollLogs();
 	}
@@ -296,15 +296,15 @@ export class Roomlog {
 			await roomlogTable.updateAll({roomid: this.roomid})`WHERE roomid = ${this.roomid}`;
 			return true;
 		} else {
-			const roomlogPath = `logs/chat`;
+			const roomlogPath = `chat`;
 			const roomlogStreamExisted = this.roomlogStream !== null;
 			await this.destroy();
 			const [roomlogExists, newRoomlogExists] = await Promise.all([
-				FS(roomlogPath + `/${this.roomid}`).exists(),
-				FS(roomlogPath + `/${newID}`).exists(),
+				Monitor.logPath(roomlogPath + `/${this.roomid}`).exists(),
+				Monitor.logPath(roomlogPath + `/${newID}`).exists(),
 			]);
 			if (roomlogExists && !newRoomlogExists) {
-				await FS(roomlogPath + `/${this.roomid}`).rename(roomlogPath + `/${newID}`);
+				await Monitor.logPath(roomlogPath + `/${this.roomid}`).rename(Monitor.logPath(roomlogPath + `/${newID}`).path);
 			}
 			await Rooms.Modlog.rename(this.roomid, newID);
 			this.roomid = newID;
