@@ -99472,7 +99472,6 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 			terablast: ["9M"],
 		},
 	},
-
 	pokestarsmeargle: {
 		eventData: [
 			{generation: 5, level: 60, gender: "M", abilities: ["owntempo"], moves: ["mindreader", "guillotine", "tailwhip", "gastroacid"]},
