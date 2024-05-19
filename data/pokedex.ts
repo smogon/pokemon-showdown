@@ -19499,6 +19499,18 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Amorphous", "Water 3"],
 		gen: 9,
 	},
+	chuggalong: {
+		num: -75,
+		name: "Chuggalong",
+		types: ["Dragon", "Poison"],
+		baseStats: {hp: 45, atk: 43, def: 117, spa: 120, spd: 110, spe: 115},
+		abilities: {0: "Armor Tail"},
+		heightm: 6.2,
+		weightkg: 201.6,
+		color: "Black",
+		eggGroups: ["Undiscovered"],
+		gen: 9,
+	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {
 		num: -5000,
