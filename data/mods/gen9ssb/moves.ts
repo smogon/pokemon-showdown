@@ -838,9 +838,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onModifyPriority(priority, pokemon) {
-			const move = this.queue.willMove(pokemon.foes()[0])?.moveid;
-			if (move && pokemon.foes()[0].moves.indexOf(move) === pokemon.foes()[0].moves.length - 1) {
+		onModifyPriority(priority, pokemon, target) {
+			if (!target) return;
+			const move = this.queue.willMove(target)?.moveid;
+			if (move && target.moves.indexOf(move) === target.moves.length - 1) {
 				this.debug('BSC priority boost');
 				return priority + 3;
 			}
