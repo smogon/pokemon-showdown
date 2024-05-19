@@ -342,7 +342,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	cascade: {
 		shortDesc: "At 25% HP, transforms into a Mismagius. Sigil's Storm becomes Ghost type and doesn't charge.",
 		name: "Cascade",
-		onDamagingHit(damage, pokemon, source, move) {
+		onUpdate(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Hatterene' || pokemon.transformed || !pokemon.hp) return;
 			if (pokemon.species.id === 'mismagius' || pokemon.hp > pokemon.maxhp / 4) return;
 			this.add(`c:|${getName('ausma')}|that's it, yall mfs are about to face the wrath of Big Stall™`);
@@ -350,6 +350,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-activate', pokemon, 'ability: Cascade');
 			changeSet(this, pokemon, ssbSets['ausma-Mismagius'], true);
 			pokemon.cureStatus();
+			this.heal(pokemon.maxhp / 3);
 			if (this.field.pseudoWeather['trickroom']) {
 				this.field.removePseudoWeather('trickroom');
 				this.boost({spe: 2}, pokemon, pokemon, this.effect);
@@ -684,7 +685,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidual(pokemon) {
 			for (const ally of pokemon.side.pokemon) {
 				if (!ally.hp || ally === pokemon) continue;
-				this.heal(ally.baseMaxhp * (pokemon.hp > pokemon.maxhp / 4 ? 5 : 10) / 100, ally, pokemon);
+				if (ally.heal(this.modify(ally.baseMaxhp, pokemon.hp > pokemon.maxhp / 4 ? 0.05 : 0.1))) {
+					this.add('-heal', ally, ally.getHealth, '[from] ability: Coalescence', '[of] ' + pokemon);
+				}
 			}
 		},
 		flags: {},
