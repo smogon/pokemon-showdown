@@ -59,7 +59,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
-			Flying: (movePool, moves, abilities, types, counter, species) => (!counter.get('Flying') && species.id !== 'mantine'),
+			Flying: (movePool, moves, abilities, types, counter, species) => !counter.get('Flying'),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
 			Grass: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Grass') &&
@@ -201,6 +201,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			['bodyslam', 'healingwish'],
 			// Blaziken
 			['agility', 'vacuumwave'],
+			// Shuckle
+			['knockoff', 'protect'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -208,6 +210,18 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
 		if (role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
+		}
+
+		// Cull filler moves for otherwise fixed set Stealth Rock users
+		if (!teamDetails.stealthRock) {
+			if (species.id === 'registeel' && role === 'Staller') {
+				if (movePool.includes('thunderwave')) this.fastPop(movePool, movePool.indexOf('thunderwave'));
+				if (moves.size + movePool.length <= this.maxMoveCount) return;
+			}
+			if (species.id === 'wormadamtrash' && role === 'Staller') {
+				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
+				if (moves.size + movePool.length <= this.maxMoveCount) return;
+			}
 		}
 	}
 
@@ -635,8 +649,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (['batonpass', 'protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
-			(!counter.get('recoil') || ability === 'Rock Head') &&
-			(counter.get('hazards') || !moves.has('uturn'))
+			(counter.get('hazards') || counter.get('setup')) && (!counter.get('recoil') || ability === 'Rock Head')
 		) return 'Focus Sash';
 
 		// Default Items
@@ -755,7 +768,8 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				if (hp % 2 === 0) break;
 			} else {
 				// Maximize number of Stealth Rock switch-ins
-				if (srWeakness <= 0 || ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
+				if (srWeakness <= 0) break;
+				if (srWeakness === 1 && ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
 				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
 				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
 				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;

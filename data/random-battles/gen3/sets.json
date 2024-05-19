@@ -1387,8 +1387,8 @@
                 "movepool": ["doubleedge", "earthquake", "explosion", "hiddenpowerrock", "irontail", "rest", "roar", "toxic"]
             },
             {
-                "role": "Bulky Support",
-                "movepool": ["doubleedge", "earthquake", "hiddenpowerrock", "rest", "sleeptalk"]
+                "role": "Staller",
+                "movepool": ["doubleedge", "earthquake", "hiddenpowerrock", "protect", "toxic"]
             }
         ]
     },
@@ -1976,10 +1976,6 @@
     "slaking": {
         "level": 79,
         "sets": [
-            {
-                "role": "Wallbreaker",
-                "movepool": ["doubleedge", "earthquake", "focuspunch", "return", "shadowball"]
-            },
             {
                 "role": "Fast Attacker",
                 "movepool": ["doubleedge", "earthquake", "hyperbeam", "return", "shadowball"]
