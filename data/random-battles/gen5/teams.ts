@@ -219,6 +219,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			['switcheroo', 'suckerpunch'],
 			// Jirachi
 			['bodyslam', 'healingwish'],
+			// Shuckle
+			['knockoff', 'protect'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -231,6 +233,18 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		if (abilities.has('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
+
+		// Cull filler moves for otherwise fixed set Stealth Rock users
+		if (!teamDetails.stealthRock) {
+			if (species.id === 'registeel' && role === 'Staller') {
+				if (movePool.includes('thunderwave')) this.fastPop(movePool, movePool.indexOf('thunderwave'));
+				if (moves.size + movePool.length <= this.maxMoveCount) return;
+			}
+			if (species.baseSpecies === 'Wormadam' && role === 'Staller') {
+				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
+				if (moves.size + movePool.length <= this.maxMoveCount) return;
+			}
+		}
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
@@ -392,7 +406,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		// Enforce Staller moves
 		if (role === 'Staller') {
-			const enforcedMoves = ['protect', 'toxic', 'wish'];
+			const enforcedMoves = ['protect', 'toxic'];
 			for (const move of enforcedMoves) {
 				if (movePool.includes(move)) {
 					counter = this.addMove(move, moves, types, abilities, teamDetails, species, isLead,
@@ -504,7 +518,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			return !counter.get(toID(ability));
 		case 'Defiant': case 'Justified':
 			return !counter.get('Physical');
-		case 'Guts':
+		case 'Guts': case 'Quick Feet':
 			return (!moves.has('facade') && !moves.has('sleeptalk'));
 		case 'Hustle':
 			return (counter.get('Physical') < 2 || species.id === 'delibird');
@@ -771,8 +785,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 		if (
 			role === 'Fast Support' && isLead && defensiveStatTotal < 255 && !counter.get('recovery') &&
-			(!counter.get('recoil') || ability === 'Rock Head') &&
-			(counter.get('hazards') || !(moves.has('uturn') || moves.has('voltswitch')))
+			(counter.get('hazards') || counter.get('setup')) && (!counter.get('recoil') || ability === 'Rock Head')
 		) return 'Focus Sash';
 
 		// Default Items
@@ -883,9 +896,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		// Prepare optimal HP
 		const srImmunity = ability === 'Magic Guard';
-		let srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
-		// Crash damage move users want an odd HP to survive two misses
-		if (['highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
+		const srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if (moves.has('substitute') && !['Black Sludge', 'Leftovers'].includes(item)) {
@@ -899,9 +910,13 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			} else if (moves.has('bellydrum') && item === 'Sitrus Berry') {
 				// Belly Drum should activate Sitrus Berry
 				if (hp % 2 === 0) break;
+			} else if (['highjumpkick', 'jumpkick'].some(m => moves.has(m))) {
+				// Crash damage move users want an odd HP to survive two misses
+				if (hp % 2 > 0) break;
 			} else {
 				// Maximize number of Stealth Rock switch-ins
-				if (srWeakness <= 0 || ability === 'Regenerator' || ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
+				if (srWeakness <= 0 || ability === 'Regenerator') break;
+				if (srWeakness === 1 && ['Black Sludge', 'Leftovers', 'Life Orb'].includes(item)) break;
 				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
 				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
 				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;

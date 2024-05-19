@@ -621,11 +621,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "thunderwave", "toxic"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["seismictoss", "softboiled", "toxic", "wish"]
+                "movepool": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "thunderwave", "toxic", "wish"]
             }
         ]
     },
@@ -968,7 +964,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["aromatherapy", "dragontail", "earthquake", "gigadrain", "leechseed", "synthesis", "toxic"]
+                "movepool": ["aromatherapy", "dragontail", "earthquake", "energyball", "leechseed", "synthesis", "toxic"]
             }
         ]
     },
@@ -1692,7 +1688,7 @@
         "level": 74,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["flareblitz", "highjumpkick", "knockoff", "protect", "stoneedge", "swordsdance"]
             }
         ]
@@ -2025,6 +2021,10 @@
                 "preferredTypes": ["Ice"]
             },
             {
+                "role": "Setup Sweeper",
+                "movepool": ["grassknot", "hiddenpowerice", "nastyplot", "thunderbolt"]
+            },
+            {
                 "role": "Bulky Attacker",
                 "movepool": ["encore", "hiddenpowerice", "nuzzle", "thunderbolt", "toxic", "voltswitch"]
             }
@@ -2037,6 +2037,10 @@
                 "role": "Bulky Setup",
                 "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
                 "preferredTypes": ["Ice"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["grassknot", "hiddenpowerice", "nastyplot", "thunderbolt"]
             },
             {
                 "role": "Bulky Attacker",
@@ -2513,7 +2517,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["agility", "earthquake", "hammerarm", "icepunch", "meteormash", "zenheadbutt"]
+                "movepool": ["agility", "earthquake", "hammerarm", "meteormash", "zenheadbutt"],
+                "preferredTypes": ["Psychic"]
             }
         ]
     },
@@ -2560,7 +2565,7 @@
             },
             {
                 "role": "Staller",
-                "movepool": ["protect", "seismictoss", "stealthrock", "toxic"]
+                "movepool": ["protect", "seismictoss", "stealthrock", "thunderwave", "toxic"]
             }
         ]
     },
@@ -2860,7 +2865,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["earthquake", "protect", "stealthrock", "toxic"]
+                "movepool": ["earthquake", "protect", "stealthrock", "suckerpunch", "toxic"]
             }
         ]
     },
@@ -2869,7 +2874,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["flashcannon", "protect", "stealthrock", "toxic"]
+                "movepool": ["flashcannon", "protect", "stealthrock", "suckerpunch", "toxic"]
             }
         ]
     },
@@ -3005,7 +3010,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["fakeout", "knockoff", "return", "uturn"]
+                "movepool": ["fakeout", "knockoff", "return", "uturn", "wakeupslap"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },
@@ -3023,11 +3029,13 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "ironhead", "psychic", "stealthrock", "toxic"]
+                "movepool": ["earthquake", "ironhead", "psychic", "stealthrock", "toxic"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Staller",
-                "movepool": ["earthquake", "ironhead", "protect", "psychic", "toxic"]
+                "movepool": ["earthquake", "ironhead", "protect", "psychic", "toxic"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -3102,7 +3110,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["bulletpunch", "closecombat", "icepunch", "swordsdance"]
+                "movepool": ["bulletpunch", "closecombat", "irontail", "swordsdance"]
             },
             {
                 "role": "Setup Sweeper",
@@ -3708,8 +3716,8 @@
         "level": 71,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["calmmind", "earthpower", "icebeam", "judgment", "recover", "thunderbolt"]
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "earthpower", "energyball", "judgment", "recover"]
             }
         ]
     },
@@ -3780,11 +3788,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["defog", "earthquake", "fireblast", "icebeam", "recover", "sludgebomb"]
+                "movepool": ["defog", "earthquake", "icebeam", "recover", "sludgebomb"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "earthpower", "fireblast", "icebeam", "recover", "sludgebomb"]
+                "movepool": ["calmmind", "earthpower", "icebeam", "recover", "sludgebomb"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -4684,7 +4694,7 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["focusblast", "hiddenpowerflying", "hiddenpowerice", "knockoff", "taunt", "thunderbolt", "thunderwave"]
+                "movepool": ["hiddenpowerflying", "hiddenpowerice", "knockoff", "superpower", "taunt", "thunderbolt", "thunderwave"]
             }
         ]
     },
@@ -4831,7 +4841,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["drainpunch", "leechseed", "spikes", "synthesis", "woodhammer"]
+                "movepool": ["bulkup", "drainpunch", "spikes", "synthesis", "toxic", "woodhammer"]
             },
             {
                 "role": "Staller",
