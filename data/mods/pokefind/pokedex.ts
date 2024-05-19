@@ -2,6 +2,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotodragonite: {
 		num: -10001,
 		name: "Kyoto Dragonite",
+		tags: ["Kyoto"],
 		types: ["Electric", "Water"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 91, atk: 134, def: 95, spa: 100, spd: 100, spe: 80},
@@ -14,6 +15,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotosnorlax: {
 		num: -10002,
 		name: "Kyoto Snorlax",
+		tags: ["Kyoto"],
 		types: ["Dark", "Poison"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 160, atk: 110, def: 65, spa: 65, spd: 110, spe: 30},
@@ -26,6 +28,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotogengar: {
 		num: -10003,
 		name: "Kyoto Gengar",
+		tags: ["Kyoto"],
 		types: ["Ghost", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 65, def: 60, spa: 130, spd: 75, spe: 110},
@@ -38,6 +41,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotoarcanine: {
 		num: -10004,
 		name: "Kyoto Arcanine",
+		tags: ["Kyoto"],
 		types: ["Water"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 90, atk: 110, def: 80, spa: 100, spd: 80, spe: 95},
@@ -50,6 +54,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotoalakazam: {
 		num: -10005,
 		name: "Kyoto Alakazam",
+		tags: ["Kyoto"],
 		types: ["Water", "Psychic"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 55, atk: 50, def: 45, spa: 135, spd: 95, spe: 120},
@@ -62,6 +67,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotorhydon: {
 		num: -10006,
 		name: "Kyoto Rhydon",
+		tags: ["Kyoto"],
 		types: ["Ice", "Electric"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 105, atk: 130, def: 120, spa: 45, spd: 45, spe: 40},
@@ -74,6 +80,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotocharizard: {
 		num: -10007,
 		name: "Kyoto Charizard",
+		tags: ["Kyoto"],
 		types: ["Dragon", "Electric"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
@@ -243,6 +250,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarotyranitar: {
 		num: -10021,
 		name: "Jataro Tyranitar",
+		tags: ["Jataro"],
 		types: ["Fire", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 100, atk: 134, def: 110, spa: 95, spd: 100, spe: 61},
@@ -255,6 +263,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarotyphlosion: {
 		num: -10022,
 		name: "Jataro Typhlosion",
+		tags: ["Jataro"],
 		types: ["Electric", "Dark"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 78, atk: 84, def: 78, spa: 109, spd: 85, spe: 100},
@@ -267,6 +276,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarosteelix: {
 		num: -10023,
 		name: "Jataro Steelix",
+		tags: ["Jataro"],
 		types: ["Fire", "Dark"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 85, def: 200, spa: 55, spd: 65, spe: 30},
@@ -279,6 +289,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroscizor: {
 		num: -10024,
 		name: "Jataro Scizor",
+		tags: ["Jataro"],
 		types: ["Dragon", "Steel"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 130, def: 100, spa: 55, spd: 80, spe: 65},
@@ -291,6 +302,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikoumetagross: {
 		num: -10025,
 		name: "Haikou Metagross",
+		tags: ["Haikou"],
 		types: ["Rock", "Bug"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 135, def: 130, spa: 95, spd: 90, spe: 70},
@@ -303,6 +315,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikousalamence: {
 		num: -10026,
 		name: "Haikou Salamence",
+		tags: ["Haikou"],
 		types: ["Dark", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 135, def: 80, spa: 110, spd: 80, spe: 100},
@@ -315,6 +328,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikoublaziken: {
 		num: -10027,
 		name: "Haikou Blaziken",
+		tags: ["Haikou"],
 		types: ["Water", "Ice"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 120, def: 70, spa: 110, spd: 70, spe: 80},
@@ -327,6 +341,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikougardevoir: {
 		num: -10028,
 		name: "Haikou Gardevoir",
+		tags: ["Haikou"],
 		types: ["Steel", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 68, atk: 65, def: 65, spa: 125, spd: 115, spe: 80},
@@ -339,6 +354,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikouaggron: {
 		num: -10029,
 		name: "Haikou Aggron",
+		tags: ["Haikou"],
 		types: ["Dragon", "Poison"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 110, def: 180, spa: 60, spd: 60, spe: 50},
@@ -351,6 +367,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikouflygon: {
 		num: -10030,
 		name: "Haikou Flygon",
+		tags: ["Haikou"],
 		types: ["Steel", "Poison"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 100, def: 80, spa: 80, spd: 80, spe: 100},
@@ -471,6 +488,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohtoxicroak: {
 		num: -10040,
 		name: "Shiloh Toxicroak",
+		tags: ["Shiloh"],
 		types: ["Water", "Grass"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 83, atk: 106, def: 65, spa: 86, spd: 65, spe: 85},
@@ -483,6 +501,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohmamoswine: {
 		num: -10041,
 		name: "Shiloh Mamoswine",
+		tags: ["Shiloh"],
 		types: ["Dark", "Fire"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 110, atk: 130, def: 80, spa: 70, spd: 60, spe: 80},
@@ -495,6 +514,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohtogekiss: {
 		num: -10042,
 		name: "Shiloh Togekiss",
+		tags: ["Shiloh"],
 		types: ["Ghost", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 85, atk: 50, def: 95, spa: 120, spd: 115, spe: 80},
@@ -507,6 +527,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohgarchomp: {
 		num: -10043,
 		name: "Shiloh Garchomp",
+		tags: ["Shiloh"],
 		types: ["Water", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 108, atk: 130, def: 95, spa: 80, spd: 85, spe: 102},
@@ -519,6 +540,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohrampardos: {
 		num: -10044,
 		name: "Shiloh Rampardos",
+		tags: ["Shiloh"],
 		types: ["Dark", "Fighting"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 97, atk: 165, def: 60, spa: 65, spd: 50, spe: 58},
@@ -531,6 +553,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotoweedle: {
 		num: -10045,
 		name: "Kyoto Weedle",
+		tags: ["Kyoto"],
 		types: ["Dragon", "Bug"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 105, atk: 105, def: 105, spa: 105, spd: 105, spe: 105},
@@ -543,6 +566,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohbastiodon: {
 		num: -10046,
 		name: "Shiloh Bastiodon",
+		tags: ["Shiloh"],
 		types: ["Grass", "Steel"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 52, def: 168, spa: 47, spd: 138, spe: 30},
@@ -555,6 +579,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikousceptile: {
 		num: -10047,
 		name: "Haikou Sceptile",
+		tags: ["Haikou"],
 		types: ["Bug", "Psychic"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 85, def: 65, spa: 105, spd: 85, spe: 120},
@@ -567,6 +592,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroampharos: {
 		num: -10048,
 		name: "Jataro Ampharos",
+		tags: ["Jataro"],
 		types: ["Fire", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 90, atk: 75, def: 85, spa: 115, spd: 90, spe: 55},
@@ -579,6 +605,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotostarmie: {
 		num: -10049,
 		name: "Kyoto Starmie",
+		tags: ["Kyoto"],
 		types: ["Ice", "Ghost"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 75, def: 85, spa: 100, spd: 85, spe: 115},
@@ -591,6 +618,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarohoundoom: {
 		num: -10050,
 		name: "Jataro Houndoom",
+		tags: ["Jataro"],
 		types: ["Water", "Psychic"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 90, def: 50, spa: 110, spd: 80, spe: 95},
@@ -603,6 +631,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikoubreloom: {
 		num: -10051,
 		name: "Haikou Breloom",
+		tags: ["Haikou"],
 		types: ["Grass", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 130, def: 80, spa: 60, spd: 60, spe: 70},
@@ -615,6 +644,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotoexeggutor: {
 		num: -10052,
 		name: "Kyoto Exeggutor",
+		tags: ["Kyoto"],
 		types: ["Steel", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 95, def: 85, spa: 125, spd: 75, spe: 55},
@@ -627,6 +657,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohvespiquen: {
 		num: -10053,
 		name: "Shiloh Vespiquen",
+		tags: ["Shiloh"],
 		types: ["Poison", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 80, def: 102, spa: 80, spd: 102, spe: 40},
@@ -639,6 +670,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohluxray: {
 		num: -10054,
 		name: "Shiloh Luxray",
+		tags: ["Shiloh"],
 		types: ["Electric", "Ghost"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 120, def: 79, spa: 95, spd: 79, spe: 70},
@@ -651,6 +683,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohempoleon: {
 		num: -10055,
 		name: "Shiloh Empoleon",
+		tags: ["Shiloh"],
 		types: ["Ice", "Dark"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 84, atk: 86, def: 88, spa: 111, spd: 101, spe: 60},
@@ -663,6 +696,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotovenusaur: {
 		num: -10056,
 		name: "Kyoto Venusaur",
+		tags: ["Kyoto"],
 		types: ["Ground", "Fire"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80},
@@ -675,6 +709,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikoumilotic: {
 		num: -10057,
 		name: "Haikou Milotic",
+		tags: ["Haikou"],
 		types: ["Ice", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 60, def: 79, spa: 100, spd: 125, spe: 81},
@@ -687,6 +722,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroferaligatr: {
 		num: -10058,
 		name: "Jataro Feraligatr",
+		tags: ["Jataro"],
 		types: ["Fighting", "Rock"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 85, atk: 105, def: 100, spa: 79, spd: 83, spe: 78},
@@ -699,6 +735,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohroserade: {
 		num: -10059,
 		name: "Shiloh Roserade",
+		tags: ["Shiloh"],
 		types: ["Ice", "Fighting"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 70, def: 65, spa: 125, spd: 105, spe: 90},
@@ -711,6 +748,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohlucario: {
 		num: -10060,
 		name: "Shiloh Lucario",
+		tags: ["Shiloh"],
 		types: ["Electric", "Poison"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 110, def: 70, spa: 115, spd: 70, spe: 90},
@@ -723,6 +761,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohrhyperior: {
 		num: -10061,
 		name: "Shiloh Rhyperior",
+		tags: ["Shiloh"],
 		types: ["Ice", "Electric"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 115, atk: 140, def: 130, spa: 55, spd: 55, spe: 40},
@@ -1060,6 +1099,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohgliscor: {
 		num: -10089,
 		name: "Shiloh Gliscor",
+		tags: ["Shiloh"],
 		types: ["Electric", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 95, def: 125, spa: 45, spd: 75, spe: 95},
@@ -1072,6 +1112,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohinfernape: {
 		num: -10090,
 		name: "Shiloh Infernape",
+		tags: ["Shiloh"],
 		types: ["Ice", "Ground"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 76, atk: 104, def: 71, spa: 104, spd: 71, spe: 108},
@@ -1084,6 +1125,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyototentacruel: {
 		num: -10091,
 		name: "Kyoto Tentacruel",
+		tags: ["Kyoto"],
 		types: ["Electric", "Ghost"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 70, def: 65, spa: 80, spd: 120, spe: 100},
@@ -1096,6 +1138,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohhippowdon: {
 		num: -10092,
 		name: "Shiloh Hippowdon",
+		tags: ["Shiloh"],
 		types: ["Water", "Fire"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 108, atk: 112, def: 118, spa: 68, spd: 72, spe: 47},
@@ -1108,6 +1151,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarosunflora: {
 		num: -10093,
 		name: "Jataro Sunflora",
+		tags: ["Jataro"],
 		types: ["Electric", "Grass"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 75, def: 55, spa: 105, spd: 85, spe: 30},
@@ -1120,6 +1164,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarokingdra: {
 		num: -10094,
 		name: "Jataro Kingdra",
+		tags: ["Jataro"],
 		types: ["Dragon", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 95, def: 95, spa: 95, spd: 95, spe: 85},
@@ -1132,6 +1177,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotolapras: {
 		num: -10095,
 		name: "Kyoto Lapras",
+		tags: ["Kyoto"],
 		types: ["Rock", "Ghost"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 130, atk: 85, def: 80, spa: 85, spd: 95, spe: 60},
@@ -1144,6 +1190,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroheracross: {
 		num: -10096,
 		name: "Jataro Heracross",
+		tags: ["Jataro"],
 		types: ["Dragon", "Fighting"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 125, def: 75, spa: 40, spd: 95, spe: 85},
@@ -1156,6 +1203,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikouabsol: {
 		num: -10097,
 		name: "Haikou Absol",
+		tags: ["Haikou"],
 		types: ["Ghost", "Bug"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 65, atk: 130, def: 60, spa: 75, spd: 60, spe: 75},
@@ -1168,6 +1216,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotododrio: {
 		num: -10098,
 		name: "Kyoto Dodrio",
+		tags: ["Kyoto"],
 		types: ["Fire", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 110, def: 70, spa: 60, spd: 60, spe: 110},
@@ -1180,6 +1229,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovagothitelle: {
 		num: -10099,
 		name: "Zeinova Gothitelle",
+		tags: ["Zeinova"],
 		types: ["Dark", "Steel"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 55, def: 95, spa: 95, spd: 110, spe: 65},
@@ -1192,6 +1242,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaexcadrill: {
 		num: -10100,
 		name: "Zeinova Excadrill",
+		tags: ["Zeinova"],
 		types: ["Rock", "Grass"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 110, atk: 135, def: 60, spa: 50, spd: 65, spe: 88},
@@ -1204,6 +1255,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovascolipede: {
 		num: -10101,
 		name: "Zeinova Scolipede",
+		tags: ["Zeinova"],
 		types: ["Bug", "Fire"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 100, def: 89, spa: 55, spd: 69, spe: 112},
@@ -1216,6 +1268,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovagolurk: {
 		num: -10102,
 		name: "Zeinova Golurk",
+		tags: ["Zeinova"],
 		types: ["Ghost", "Steel"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 89, atk: 124, def: 80, spa: 55, spd: 80, spe: 55},
@@ -1228,6 +1281,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovadruddigon: {
 		num: -10103,
 		name: "Zeinova Druddigon",
+		tags: ["Zeinova"],
 		types: ["Steel", "Rock"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 77, atk: 120, def: 90, spa: 60, spd: 90, spe: 48},
@@ -1240,6 +1294,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaaudino: {
 		num: -10104,
 		name: "Zeinova Audino",
+		tags: ["Zeinova"],
 		types: ["Psychic"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 103, atk: 60, def: 86, spa: 60, spd: 86, spe: 50},
@@ -1252,6 +1307,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohtorterra: {
 		num: -10105,
 		name: "Shiloh Torterra",
+		tags: ["Shiloh"],
 		types: ["Grass", "Fire"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 109, def: 105, spa: 75, spd: 85, spe: 56},
@@ -1264,6 +1320,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotoaerodactyl: {
 		num: -10106,
 		name: "Kyoto Aerodactyl",
+		tags: ["Kyoto"],
 		types: ["Dragon", "Ghost"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 105, def: 65, spa: 60, spd: 75, spe: 130},
@@ -1276,6 +1333,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovahydreigon: {
 		num: -10107,
 		name: "Zeinova Hydreigon",
+		tags: ["Zeinova"],
 		types: ["Electric", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 92, atk: 105, def: 90, spa: 125, spd: 90, spe: 98},
@@ -1288,6 +1346,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarocrobat: {
 		num: -10108,
 		name: "Jataro Crobat",
+		tags: ["Jataro"],
 		types: ["Poison", "Psychic"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 85, atk: 90, def: 80, spa: 70, spd: 80, spe: 130},
@@ -1300,6 +1359,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohfroslass: {
 		num: -10109,
 		name: "Shiloh Froslass",
+		tags: ["Shiloh"],
 		types: ["Ice", "Fire"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 80, def: 70, spa: 80, spd: 70, spe: 110},
@@ -1312,6 +1372,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataromeganium: {
 		num: -10110,
 		name: "Jataro Meganium",
+		tags: ["Jataro"],
 		types: ["Electric", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 82, def: 100, spa: 83, spd: 100, spe: 80},
@@ -1324,6 +1385,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotoslowbro: {
 		num: -10111,
 		name: "Kyoto Slowbro",
+		tags: ["Kyoto"],
 		types: ["Steel", "Water"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 75, def: 110, spa: 100, spd: 80, spe: 30},
@@ -1336,6 +1398,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovabeheeyem: {
 		num: -10112,
 		name: "Zeinova Beheeyem",
+		tags: ["Zeinova"],
 		types: ["Ghost", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 75, def: 75, spa: 125, spd: 95, spe: 40},
@@ -1348,6 +1411,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikouslaking: {
 		num: -10113,
 		name: "Haikou Slaking",
+		tags: ["Haikou"],
 		types: ["Grass", "Fighting"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 150, atk: 160, def: 100, spa: 95, spd: 65, spe: 100},
@@ -1360,6 +1424,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohgallade: {
 		num: -10114,
 		name: "Shiloh Gallade",
+		tags: ["Shiloh"],
 		types: ["Fighting", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 68, atk: 125, def: 65, spa: 65, spd: 115, spe: 80},
@@ -1372,6 +1437,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaserperior: {
 		num: -10115,
 		name: "Zeinova Serperior",
+		tags: ["Zeinova"],
 		types: ["Grass", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 75, def: 95, spa: 75, spd: 95, spe: 113},
@@ -1384,6 +1450,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroslowking: {
 		num: -10116,
 		name: "Jataro Slowking",
+		tags: ["Jataro"],
 		types: ["Psychic", "Fighting"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 75, def: 80, spa: 100, spd: 110, spe: 30},
@@ -1396,6 +1463,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovamusharna: {
 		num: -10117,
 		name: "Zeinova Musharna",
+		tags: ["Zeinova"],
 		types: ["Fire", "Psychic"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 116, atk: 55, def: 85, spa: 107, spd: 95, spe: 29},
@@ -1408,6 +1476,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaalomomola: {
 		num: -10118,
 		name: "Zeinova Alomomola",
+		tags: ["Zeinova"],
 		types: ["Psychic", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 165, atk: 75, def: 80, spa: 40, spd: 45, spe: 65},
@@ -1420,6 +1489,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaarcheops: {
 		num: -10119,
 		name: "Zeinova Archeops",
+		tags: ["Zeinova"],
 		types: ["Flying", "Ground"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 140, def: 65, spa: 112, spd: 65, spe: 110},
@@ -1432,6 +1502,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovabouffalant: {
 		num: -10120,
 		name: "Zeinova Bouffalant",
+		tags: ["Zeinova"],
 		types: ["Normal", "Grass"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 110, def: 95, spa: 40, spd: 95, spe: 55},
@@ -1444,6 +1515,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovachandelure: {
 		num: -10121,
 		name: "Zeinova Chandelure",
+		tags: ["Zeinova"],
 		types: ["Ice", "Electric"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 55, def: 90, spa: 145, spd: 90, spe: 80},
@@ -1456,6 +1528,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikouchimecho: {
 		num: -10122,
 		name: "Haikou Chimecho",
+		tags: ["Haikou"],
 		types: ["Dark", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 50, def: 80, spa: 95, spd: 90, spe: 65},
@@ -1468,6 +1541,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotoclefable: {
 		num: -10123,
 		name: "Kyoto Clefable",
+		tags: ["Kyoto"],
 		types: ["Normal", "Ghost"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 70, def: 73, spa: 95, spd: 90, spe: 60},
@@ -1480,6 +1554,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovacrustle: {
 		num: -10124,
 		name: "Zeinova Crustle",
+		tags: ["Zeinova"],
 		types: ["Bug", "Water"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 95, def: 125, spa: 65, spd: 75, spe: 45},
@@ -1492,6 +1567,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarodonphan: {
 		num: -10125,
 		name: "Jataro Donphan",
+		tags: ["Jataro"],
 		types: ["Ice", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 90, atk: 120, def: 120, spa: 60, spd: 60, spe: 50},
@@ -1504,6 +1580,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarodunsparce: {
 		num: -10126,
 		name: "Jataro Dunsparce",
+		tags: ["Jataro"],
 		types: ["Electric"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 100, atk: 70, def: 70, spa: 65, spd: 65, spe: 45},
@@ -1516,6 +1593,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaeelektross: {
 		num: -10127,
 		name: "Zeinova Eelektross",
+		tags: ["Zeinova"],
 		types: ["Bug", "Dark"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 85, atk: 115, def: 80, spa: 105, spd: 80, spe: 50},
@@ -1528,6 +1606,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotogyarados: {
 		num: -10128,
 		name: "Kyoto Gyarados",
+		tags: ["Kyoto"],
 		types: ["Rock", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 95, atk: 125, def: 79, spa: 60, spd: 100, spe: 81},
@@ -1540,6 +1619,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikouludicolo: {
 		num: -10129,
 		name: "Haikou Ludicolo",
+		tags: ["Haikou"],
 		types: ["Grass", "Fire"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 80, atk: 70, def: 70, spa: 90, spd: 100, spe: 70},
@@ -1552,6 +1632,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotomuk: {
 		num: -10130,
 		name: "Kyoto Muk",
+		tags: ["Kyoto"],
 		types: ["Poison", "Water"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 105, atk: 105, def: 75, spa: 65, spd: 100, spe: 50},
@@ -1564,6 +1645,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroporygon2: {
 		num: -10131,
 		name: "Jataro Porygon2",
+		tags: ["Jataro"],
 		types: ["Ghost", "Dark"],
 		gender: "N",
 		baseStats: {hp: 85, atk: 80, def: 90, spa: 105, spd: 95, spe: 60},
@@ -1576,6 +1658,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	"shilohporygonz": {
 		num: -10132,
 		name: "Shiloh Porygon-Z",
+		tags: ["Shiloh"],
 		types: ["Ghost", "Fighting"],
 		gender: "N",
 		baseStats: {hp: 85, atk: 80, def: 70, spa: 135, spd: 75, spe: 90},
@@ -1588,6 +1671,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohtangrowth: {
 		num: -10133,
 		name: "Shiloh Tangrowth",
+		tags: ["Shiloh"],
 		types: ["Electric", "Steel"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 100, atk: 100, def: 125, spa: 110, spd: 50, spe: 50},
@@ -1600,6 +1684,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikoutorkoal: {
 		num: -10134,
 		name: "Haikou Torkoal",
+		tags: ["Haikou"],
 		types: ["Steel"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 70, atk: 85, def: 140, spa: 85, spd: 70, spe: 20},
@@ -1612,6 +1697,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroursaring: {
 		num: -10135,
 		name: "Jataro Ursaring",
+		tags: ["Jataro"],
 		types: ["Dark", "Fighting"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 90, atk: 130, def: 75, spa: 75, spd: 75, spe: 55},
@@ -1624,6 +1710,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotochansey: {
 		num: -10136,
 		name: "Kyoto Chansey",
+		tags: ["Kyoto"],
 		types: ["Rock", "Ghost"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 250, atk: 5, def: 5, spa: 35, spd: 105, spe: 50},
@@ -1636,6 +1723,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroblissey: {
 		num: -10137,
 		name: "Jataro Blissey",
+		tags: ["Jataro"],
 		types: ["Rock", "Ghost"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 255, atk: 10, def: 10, spa: 75, spd: 135, spe: 55},
@@ -1648,6 +1736,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaconkeldurr: {
 		num: -10138,
 		name: "Zeinova Conkeldurr",
+		tags: ["Zeinova"],
 		types: ["Grass", "Ground"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 105, atk: 140, def: 95, spa: 55, spd: 65, spe: 45},
@@ -1660,6 +1749,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovadurant: {
 		num: -10139,
 		name: "Zeinova Durant",
+		tags: ["Zeinova"],
 		types: ["Fire", "Electric"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 58, atk: 109, def: 112, spa: 48, spd: 48, spe: 109},
@@ -1672,6 +1762,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaemolga: {
 		num: -10142,
 		name: "Zeinova Emolga",
+		tags: ["Zeinova"],
 		types: ["Flying", "Fairy"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 55, atk: 75, def: 60, spa: 75, spd: 60, spe: 103},
@@ -1684,6 +1775,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovahaxorus: {
 		num: -10143,
 		name: "Zeinova Haxorus",
+		tags: ["Zeinova"],
 		types: ["Dark", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 76, atk: 147, def: 90, spa: 60, spd: 70, spe: 97},
@@ -1696,6 +1788,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotomarowak: {
 		num: -10144,
 		name: "Kyoto Marowak",
+		tags: ["Kyoto"],
 		types: ["Bug", "Poison"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 60, atk: 80, def: 110, spa: 50, spd: 80, spe: 45},
@@ -1709,6 +1802,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jatarooctillery: {
 		num: -10145,
 		name: "Jataro Octillery",
+		tags: ["Jataro"],
 		types: ["Dark", "Psychic"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 105, def: 75, spa: 105, spd: 75, spe: 45},
@@ -1721,6 +1815,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikouswampert: {
 		num: -10146,
 		name: "Haikou Swampert",
+		tags: ["Haikou"],
 		types: ["Electric", "Fighting"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 100, atk: 110, def: 90, spa: 85, spd: 90, spe: 60},
@@ -1733,6 +1828,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovavolcarona: {
 		num: -10147,
 		name: "Zeinova Volcarona",
+		tags: ["Zeinova"],
 		types: ["Ice", "Bug"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 85, atk: 60, def: 65, spa: 135, spd: 105, spe: 100},
@@ -1745,6 +1841,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovazebstrika: {
 		num: -10148,
 		name: "Zeinova Zebstrika",
+		tags: ["Zeinova"],
 		types: ["Psychic", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 100, def: 63, spa: 80, spd: 63, spe: 116},
@@ -1757,6 +1854,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	kyotoblastoise: {
 		num: -149,
 		name: "Kyoto Blastoise",
+		tags: ["Kyoto"],
 		types: ["Steel", "Bug"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 79, atk: 83, def: 100, spa: 85, spd: 105, spe: 78},
@@ -1769,6 +1867,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovacofagrigus: {
 		num: -150,
 		name: "Zeinova Cofagrigus",
+		tags: ["Zeinova"],
 		types: ["Psychic", "Dragon"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 58, atk: 50, def: 145, spa: 95, spd: 105, spe: 30},
@@ -1781,6 +1880,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovacryogonal: {
 		num: -151,
 		name: "Zeinova Cryogonal",
+		tags: ["Zeinova"],
 		types: ["Ice", "Steel"],
 		gender: "N",
 		baseStats: {hp: 80, atk: 50, def: 50, spa: 95, spd: 135, spe: 105},
@@ -1793,6 +1893,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovadarmanitan: {
 		num: -152,
 		name: "Zeinova Darmanitan",
+		tags: ["Zeinova"],
 		types: ["Poison", "Dark"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 105, atk: 140, def: 55, spa: 30, spd: 55, spe: 95},
@@ -1805,6 +1906,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovaemboar: {
 		num: -153,
 		name: "Zeinova Emboar",
+		tags: ["Zeinova"],
 		types: ["Grass", "Electric"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 110, atk: 123, def: 65, spa: 100, spd: 65, spe: 65},
@@ -1817,6 +1919,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	jataroforretress: {
 		num: -154,
 		name: "Jataro Forretress",
+		tags: ["Jataro"],
 		types: ["Ground", "Rock"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 75, atk: 90, def: 140, spa: 60, spd: 60, spe: 40},
@@ -1829,6 +1932,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikoulatias: {
 		num: 380,
 		name: "Haikou Latias",
+		tags: ["Haikou"],
 		types: ["Water", "Grass"],
 		gender: "F",
 		baseStats: {hp: 80, atk: 80, def: 90, spa: 110, spd: 130, spe: 110},
@@ -1841,6 +1945,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikoulatios: {
 		num: 381,
 		name: "Haikou Latios",
+		tags: ["Haikou"],
 		types: ["Water", "Electric"],
 		gender: "M",
 		baseStats: {hp: 80, atk: 90, def: 80, spa: 130, spd: 110, spe: 110},
@@ -1853,6 +1958,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovascrafty: {
 		num: -156,
 		name: "Zeinova Scrafty",
+		tags: ["Zeinova"],
 		types: ["Water", "Steel"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 65, atk: 90, def: 115, spa: 45, spd: 115, spe: 58},
@@ -1865,6 +1971,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovasigilyph: {
 		num: -157,
 		name: "Zeinova Sigilyph",
+		tags: ["Zeinova"],
 		types: ["Ice", "Poison"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 72, atk: 58, def: 80, spa: 103, spd: 80, spe: 97},
@@ -1877,6 +1984,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohstaraptor: {
 		num: -158,
 		name: "Shiloh Staraptor",
+		tags: ["Shiloh"],
 		types: ["Fighting", "Flying"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 85, atk: 120, def: 70, spa: 50, spd: 60, spe: 100},
@@ -1889,6 +1997,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovavanilluxe: {
 		num: -159,
 		name: "Zeinova Vanilluxe",
+		tags: ["Zeinova"],
 		types: ["Rock", "Fire"],
 		genderRatio: {M: 0.5, F: 0.5},
 		baseStats: {hp: 71, atk: 95, def: 85, spa: 110, spd: 95, spe: 79},
@@ -1901,6 +2010,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	zeinovazoroark: {
 		num: -160,
 		name: "Zeinova Zoroark",
+		tags: ["Zeinova"],
 		types: ["Fairy", "Fighting"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 60, atk: 105, def: 60, spa: 120, spd: 60, spe: 105},
@@ -1913,6 +2023,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	shilohmismagius: {
 		num: -161,
 		name: "Shiloh Mismagius",
+		tags: ["Shiloh"],
 		types: ["Rock", "Fairy"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 60, atk: 105, def: 60, spa: 120, spd: 60, spe: 105},
@@ -1925,6 +2036,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	haikousharpedo: {
 		num: 319,
 		name: "Haikou Sharpedo",
+		tags: ["Haikou"],
 		types: ["Steel", "Poison"],
 		baseStats: {hp: 70, atk: 120, def: 40, spa: 95, spd: 40, spe: 95},
 		abilities: {0: "Rough Skin", H: "Speed Boost"},

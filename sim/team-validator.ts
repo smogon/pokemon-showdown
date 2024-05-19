@@ -304,7 +304,7 @@ export class TeamValidator {
 
 	readonly toID: (str: any) => ID;
 	constructor(format: string | Format, dex = Dex) {
-		this.format = dex.formats.get(format);
+		this.format = dex.formats.get(format, true);
 		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(this.format);

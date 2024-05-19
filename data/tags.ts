@@ -50,6 +50,26 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Paradox",
 		speciesFilter: species => species.tags.includes("Paradox"),
 	},
+	jataro: {
+		name: "Jataro",
+		speciesFilter: species => species.tags.includes("Jataro"),
+	},
+	kyoto: {
+		name: "Kyoto",
+		speciesFilter: species => species.tags.includes("Kyoto"),
+	},
+	haikou: {
+		name: "Haikou",
+		speciesFilter: species => species.tags.includes("Haikou"),
+	},
+	shiloh: {
+		name: "Shiloh",
+		speciesFilter: species => species.tags.includes("Shiloh"),
+	},
+	zeinova: {
+		name: "Zeinova",
+		speciesFilter: species => species.tags.includes("Zeinova"),
+	},
 
 	// Move tags
 	// ---------
