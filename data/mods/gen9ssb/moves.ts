@@ -3804,7 +3804,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTry(pokemon, target, move) {
 			if (move.sourceEffect !== '3' && this.randomChance(1, 10)) {
 				this.add('-message', "The move backfired!");
-				this.actions.useMove('3', target, pokemon);
+				const activeMove = this.dex.getActiveMove(':3');
+				activeMove.hasBounced = true;
+				this.actions.useMove(activeMove, target, pokemon);
 				return null;
 			}
 		},
@@ -4766,8 +4768,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-		shortDesc: "User: Recycle; Target: Leech Seed.",
-		desc: "If this attack is successful, the user regains its last used held item, unless it was forcibly removed. This move summons Leech Seed on the foe.",
+		shortDesc: "The user recycles their item.",
+		desc: "If this attack is successful, the user regains its last used held item, unless it was forcibly removed.",
 		name: "Like..?",
 		pp: 5,
 		priority: 0,
@@ -4778,11 +4780,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Recycle', target);
 			this.add('-anim', source, 'Seed Bomb', target);
-			this.add('-anim', source, 'Leech Seed', target);
-		},
-		onHit(target, source) {
-			if (target.hasType('Grass')) return null;
-			target.addVolatile('leechseed', source);
 		},
 		self: {
 			onHit(pokemon) {

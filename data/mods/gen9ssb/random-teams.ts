@@ -106,13 +106,13 @@ export const ssbSets: SSBSets = {
 		species: 'Deoxys-Defense', ability: 'Marble Phantasm', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Lunar Blessing', 'Jungle Healing'], 'Body Press', ['Toxic', 'Will-O-Wisp', 'Topsy-Turvy']],
 		signatureMove: 'Funny Vamp',
-		evs: {hp: 248, spa: 8, spe: 252}, nature: 'Naive', shiny: true,
+		evs: {hp: 248, def: 252, spd: 8}, nature: 'Bold', teraType: 'Fairy', shiny: true,
 	},
 	'Arcueid-Attack': {
 		species: 'Deoxys-Attack', ability: 'Marble Phantasm', item: 'Heavy-Duty Boots', gender: 'N',
-		moves: [['Moonblast', 'Draining Kiss'], 'Photon Geyser', 'Flamethrower'],
+		moves: ['Moonblast', 'Photon Geyser', 'Flamethrower'],
 		signatureMove: 'Funny Vamp',
-		evs: {hp: 248, spa: 8, spe: 252}, nature: 'Naive', shiny: true, skip: 'Arcueid',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Fairy', shiny: true, skip: 'Arcueid',
 	},
 	Arsenal: {
 		species: 'Rabsca', ability: 'Absorb Phys', item: 'Covert Cloak', gender: 'N',
@@ -139,13 +139,13 @@ export const ssbSets: SSBSets = {
 		evs: {def: 8, spa: 244, spe: 252}, nature: 'Timid', teraType: 'Fairy',
 	},
 	ausma: {
-		species: 'Hatterene', ability: 'Cascade', item: 'Iapapa Berry', gender: 'F',
+		species: 'Hatterene', ability: 'Cascade', item: 'Leftovers', gender: 'F',
 		moves: ['Light of Ruin', 'Strength Sap', 'Substitute'],
 		signatureMove: 'Sigil\'s Storm',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Modest', teraType: 'Fairy',
 	},
 	'ausma-Mismagius': {
-		species: 'Mismagius', ability: 'Levitate', item: 'Iapapa Berry', gender: 'F',
+		species: 'Mismagius', ability: 'Levitate', item: 'Leftovers', gender: 'F',
 		moves: ['Light of Ruin', 'Strength Sap', 'Substitute'],
 		signatureMove: 'Sigil\'s Storm',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest', teraType: 'Fairy', skip: 'ausma',
@@ -399,9 +399,9 @@ export const ssbSets: SSBSets = {
 	},
 	'Haste Inky': {
 		species: 'Falinks', ability: 'Simple', item: 'Sitrus Berry', gender: 'N',
-		moves: ['Superpower', 'Ice Hammer', 'Poison Jab'],
+		moves: ['Superpower', 'Ice Hammer', 'Throat Chop'],
 		signatureMove: 'Hasty Revolution',
-		evs: {atk: 4, def: 252, spe: 252}, nature: 'Jolly', teraType: 'Poison',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Dark',
 	},
 	havi: {
 		species: 'Gastly', ability: 'Mensis Cage', item: 'Leftovers', gender: 'F',
