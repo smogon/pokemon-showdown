@@ -1265,7 +1265,7 @@ export class GlobalRoomState {
 
 		// init battle room logging
 		if (Config.logladderip) {
-			this.ladderIpLog = FS('logs/ladderip/ladderip.txt').createAppendStream();
+			this.ladderIpLog = Monitor.logPath('ladderip/ladderip.txt').createAppendStream();
 		} else {
 			// Prevent there from being two possible hidden classes an instance
 			// of GlobalRoom can have.
@@ -1289,7 +1289,7 @@ export class GlobalRoomState {
 
 		let lastBattle;
 		try {
-			lastBattle = FS('logs/lastbattle.txt').readSync('utf8');
+			lastBattle = Monitor.logPath('lastbattle.txt').readSync('utf8');
 		} catch {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
@@ -1346,7 +1346,7 @@ export class GlobalRoomState {
 
 	async saveBattles() {
 		let count = 0;
-		const out = FS('logs/battles.jsonl.progress').createAppendStream();
+		const out = Monitor.logPath('battles.jsonl.progress').createAppendStream();
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
 			room.battle.frozen = true;
@@ -1357,7 +1357,7 @@ export class GlobalRoomState {
 			count++;
 		}
 		await out.writeEnd();
-		await FS('logs/battles.jsonl.progress').rename('logs/battles.jsonl');
+		await Monitor.logPath('battles.jsonl.progress').rename(Monitor.logPath('battles.jsonl').path);
 		return count;
 	}
 
@@ -1374,7 +1374,7 @@ export class GlobalRoomState {
 		let count = 0;
 		let input;
 		try {
-			const stream = FS('logs/battles.jsonl').createReadStream();
+			const stream = Monitor.logPath('battles.jsonl').createReadStream();
 			await stream.fd;
 			input = stream.byLine();
 		} catch (e) {
@@ -1387,7 +1387,7 @@ export class GlobalRoomState {
 		for (const u of Users.users.values()) {
 			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
 		}
-		await FS('logs/battles.jsonl').unlinkIfExists();
+		await Monitor.logPath('battles.jsonl').unlinkIfExists();
 		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
 		this.battlesLoading = false;
 	}
@@ -1426,7 +1426,7 @@ export class GlobalRoomState {
 			if (this.lastBattle < this.lastWrittenBattle) return;
 			this.lastWrittenBattle = this.lastBattle + LAST_BATTLE_WRITE_THROTTLE;
 		}
-		FS('logs/lastbattle.txt').writeUpdate(
+		Monitor.logPath('lastbattle.txt').writeUpdate(
 			() => `${this.lastWrittenBattle}`
 		);
 	}
