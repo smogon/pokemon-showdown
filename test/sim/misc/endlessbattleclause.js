@@ -190,6 +190,17 @@ describe('Endless Battle Clause (slow)', () => {
 		battle.makeChoices('switch 2', 'switch 2');
 		assert(battle.ended);
 	});
+
+	it('Skill Swap should remove the user\'s staleness', () => {
+		battle = common.createBattle({endlessBattleClause: true}, [[
+			{species: "Furret", moves: ['skillswap']},
+		], [
+			{species: "Ampharos", moves: ['skillswap']},
+		]]);
+		skipTurns(battle, 100);
+		for (let i = 0; i < 8; i++) battle.makeChoices();
+		assert.false(battle.ended);
+	});
 });
 
 // Endless Battle Clause doesn't take effect for 100 turns, so we artificially skip turns
