@@ -85,6 +85,19 @@ describe('Team Validator', function () {
 			{species: 'kyurem-white', ability: 'turboblaze', moves: ['scaryface'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
+
+		// Hoopa's Hyperspace moves are form-specific in Generation 9
+		team = [
+			{species: 'hoopa-confined', ability: 'magician', moves: ['hyperspacefury'], evs: {hp: 1}},
+			{species: 'hoopa-unbound', ability: 'magician', moves: ['hyperspacehole'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen9anythinggoes');
+
+		team = [
+			{species: 'hoopa-confined', ability: 'magician', moves: ['hyperspacefury'], evs: {hp: 1}},
+			{species: 'hoopa-unbound', ability: 'magician', moves: ['hyperspacehole'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen7anythinggoes');
 	});
 
 	// Zamazenta is unreleased currently
@@ -98,5 +111,17 @@ describe('Team Validator', function () {
 			{species: 'zamazenta', ability: 'dauntlessshield', item: 'lifeorb', moves: ['howl'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen9almostanyability');
+	});
+
+	it('should validate Unown formes in Gen 2 based on DVs', () => {
+		team = [
+			{species: 'unowng', moves: ['hiddenpower'], ivs: {hp: 12, atk: 20, def: 18, spa: 28, spd: 28, spe: 2}},
+		];
+		assert.legalTeam(team, 'gen2ou');
+
+		team = [
+			{species: 'unown', moves: ['hiddenpower'], ivs: {hp: 0, atk: 4, def: 4, spa: 4, spd: 4, spe: 4}},
+		];
+		assert.false.legalTeam(team, 'gen2ou');
 	});
 });

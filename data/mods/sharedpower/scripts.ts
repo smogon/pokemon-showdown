@@ -39,7 +39,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				((this.volatiles['gastroacid'] ||
 					(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
 						this.m.abils?.includes('ability:neutralizinggas'))
-					)) && !this.getAbility().isPermanent
+					)) && !this.getAbility().flags['cantsuppress']
 				)
 			);
 		},

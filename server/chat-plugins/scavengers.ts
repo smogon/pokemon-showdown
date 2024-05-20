@@ -319,6 +319,7 @@ class ScavengerHuntDatabase {
 	}
 }
 export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
+	override readonly gameid = 'scavengerhunt' as ID;
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
@@ -330,7 +331,6 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	mods: {[k: string]: ModEvent[]};
 	staffHostId: string;
 	staffHostName: string;
-	gameid: ID;
 	scavGame: true;
 	timerEnd: number | null;
 	timer: NodeJS.Timer | null;
@@ -372,7 +372,6 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		this.staffHostName = staffHost.name;
 		this.cacheUserIps(staffHost); // store it in case of host subbing
 
-		this.gameid = 'scavengerhunt' as ID;
 		this.title = 'Scavenger Hunt';
 		this.scavGame = true;
 
@@ -487,7 +486,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		if (player.completed) return user.sendTo(this.room, "You have already completed this scavenger hunt.");
 		this.runEvent('Leave', player);
 		this.joinedIps = this.joinedIps.filter(ip => !player.joinIps.includes(ip));
-		this.removePlayer(user);
+		this.removePlayer(player);
 		this.leftHunt[user.id] = 1;
 		user.sendTo(this.room, "You have left the scavenger hunt.");
 	}
@@ -904,8 +903,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		// do not remove players that have completed - they should still get to see the answers
 		if (player.completed) return true;
 
-		player.destroy();
-		delete this.playerTable[userid];
+		this.removePlayer(player);
 		return true;
 	}
 

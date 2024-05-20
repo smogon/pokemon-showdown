@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-shadow */
 
-type Config = typeof import('../config/config-example') & AnyObject;
-
 type GroupSymbol = import('./user-groups').GroupSymbol;
 type AuthLevel = import('./user-groups').AuthLevel;
 
@@ -14,6 +12,7 @@ namespace Chat {
 	export type PageContext = import('./chat').PageContext;
 	export type SettingsHandler = import('./chat').SettingsHandler;
 	export type PageTable = import('./chat').PageTable;
+	export type PageHandler = import('./chat').PageHandler;
 	export type ChatCommands = import('./chat').ChatCommands;
 	export type ChatHandler = import('./chat').ChatHandler;
 	export type ChatFilter = import('./chat').ChatFilter;
@@ -37,7 +36,6 @@ type BasicRoom = Rooms.BasicRoom;
 type RoomGame = Rooms.RoomGame;
 type MinorActivity = Rooms.MinorActivity;
 type RoomBattle = Rooms.RoomBattle;
-type Roomlog = Rooms.Roomlog;
 type Room = Rooms.Room;
 type RoomID = "" | "lobby" | "staff" | "upperstaff" | "development" | string & {__isRoomID: true};
 namespace Rooms {
@@ -51,19 +49,9 @@ namespace Rooms {
 	export type MinorActivity = import('./room-minor-activity').MinorActivity;
 	export type MinorActivityData = import('./room-minor-activity').MinorActivityData;
 	export type RoomBattle = import('./room-battle').RoomBattle;
+	export type BestOfGame = import('./room-battle-bestof').BestOfGame;
 	export type Roomlog = import('./roomlogs').Roomlog;
 	export type Room = import('./rooms').Room;
-}
-
-// Streams
-// (I don't understand why eslint only has a problem with this - it's used in room-battle)
-namespace Streams {
-	export type WriteStream = import('../lib/streams').WriteStream;
-	export type ReadStream = import('../lib/streams').ReadStream;
-	export type ReadWriteStream = import('../lib/streams').ReadWriteStream;
-	export type ObjectWriteStream<T> = import('../lib/streams').ObjectWriteStream<T>;
-	export type ObjectReadStream<T> = import('../lib/streams').ObjectReadStream<T>;
-	export type ObjectReadWriteStream<T> = import('../lib/streams').ObjectReadWriteStream<T>;
 }
 
 namespace JSX {

@@ -46,6 +46,10 @@ export const Tags: {[id: string]: TagData} = {
 		name: "Restricted Legendary",
 		speciesFilter: species => species.tags.includes("Restricted Legendary"),
 	},
+	ultrabeast: {
+		name: "Ultra Beast",
+		speciesFilter: species => species.tags.includes("Ultra Beast"),
+	},
 	paradox: {
 		name: "Paradox",
 		speciesFilter: species => species.tags.includes("Paradox"),
@@ -168,9 +172,13 @@ export const Tags: {[id: string]: TagData} = {
 		name: "PU",
 		speciesFilter: species => species.tier === 'PU' || species.tier === '(NU)',
 	},
+	zubl: {
+		name: "ZUBL",
+		speciesFilter: species => species.tier === 'ZUBL',
+	},
 	zu: {
 		name: "ZU",
-		speciesFilter: species => species.tier === '(PU)',
+		speciesFilter: species => species.tier === '(PU)' || species.tier === 'ZU',
 	},
 	nfe: {
 		name: "NFE",

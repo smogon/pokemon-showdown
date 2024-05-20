@@ -12,7 +12,7 @@ import {LogViewer} from './chatlog';
 import {roomFaqs, visualizeFaq} from './room-faqs';
 
 const DATA_PATH = 'config/chat-plugins/responder.json';
-const LOG_PATH = 'logs/responder.jsonl';
+const LOG_PATH = Monitor.logPath('responder.jsonl').path;
 
 export let answererData: {[roomid: string]: PluginData} = {};
 
@@ -378,7 +378,7 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(num)) return this.errorReply("Invalid index.");
 			room.responder.tryRemoveRegex(faq, num - 1);
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
-			this.modlog('AUTOFILTER REMOVE', null, index);
+			this.modlog('AUTOFILTER REMOVE', null, `removed regex ${index} for FAQ ${faq}`);
 			const pages = [`keys`, `pairs`];
 			for (const p of pages) {
 				this.refreshPage(`autofilter-${room.roomid}-${p}`);

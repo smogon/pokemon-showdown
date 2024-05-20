@@ -194,15 +194,11 @@ export class DexItems {
 			if (item.gen > this.dex.gen) {
 				(item as any).isNonstandard = 'Future';
 			}
-			// hack for allowing mega evolution in LGPE
-			if (this.dex.currentMod === 'gen7letsgo' && !item.isNonstandard && !item.megaStone) {
-				(item as any).isNonstandard = 'Past';
-			}
 		} else {
 			item = new Item({name: id, exists: false});
 		}
 
-		if (item.exists) this.itemCache.set(id, item);
+		if (item.exists) this.itemCache.set(id, this.dex.deepFreeze(item));
 		return item;
 	}
 
@@ -212,7 +208,7 @@ export class DexItems {
 		for (const id in this.dex.data.Items) {
 			items.push(this.getByID(id as ID));
 		}
-		this.allCache = items;
+		this.allCache = Object.freeze(items);
 		return this.allCache;
 	}
 }

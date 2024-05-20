@@ -11,7 +11,7 @@ Punishments.addRoomPunishmentType({
 	desc: 'banned from giveaways',
 });
 
-const BAN_DURATION = 7 * 24 * 60 * 60 * 1000;
+const DAY = 24 * 60 * 60 * 1000;
 const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
 
 const DATA_FILE = 'config/chat-plugins/wifi.json';
@@ -96,7 +96,9 @@ const gameidToGame: {[k: string]: Game} = {
 	sv: 'SV',
 };
 
-class Giveaway extends Rooms.SimpleRoomGame {
+abstract class Giveaway extends Rooms.SimpleRoomGame {
+	override readonly gameid = 'giveaway' as ID;
+	abstract type: string;
 	gaNumber: number;
 	host: User;
 	giver: User;
@@ -231,11 +233,11 @@ class Giveaway extends Rooms.SimpleRoomGame {
 		return Punishments.hasRoomPunishType(room, toID(user), 'GIVEAWAYBAN');
 	}
 
-	static ban(room: Room, user: User, reason: string) {
+	static ban(room: Room, user: User, reason: string, duration: number) {
 		Punishments.roomPunish(room, user, {
 			type: 'GIVEAWAYBAN',
 			id: toID(user),
-			expireTime: Date.now() + BAN_DURATION,
+			expireTime: Date.now() + duration,
 			reason,
 		});
 	}
@@ -346,7 +348,7 @@ class Giveaway extends Rooms.SimpleRoomGame {
 			</table>
 			<p style={{textAlign: 'center', fontSize: '7pt', fontWeight: 'bold'}}>
 				<u>Note:</u> You must have a Switch, Pok&eacute;mon {gameName[this.game]}, {}
-				and Nintendo Switch Online to receive the prize. {}
+				and NSO to receive the prize. {}
 				Do not join if you are currently unable to trade. Do not enter if you have already won this exact Pok&eacute;mon, {}
 				unless it is explicitly allowed.
 			</p>
@@ -716,6 +718,7 @@ export class LotteryGiveaway extends Giveaway {
 				<p style={{textAlign: 'center'}}>{Chat.count(this.joined.size, 'users')} joined the giveaway.<br />
 				Our lucky winner{Chat.plural(this.winners)}: <b>{winnerNames}</b>!<br />Congratulations!</p>
 			</>));
+			this.room.sendMods(`|c|&|Participants: ${[...this.joined.values()].join(', ')}`);
 			for (const winner of this.winners) {
 				winner.sendTo(
 					this.room,
@@ -733,6 +736,7 @@ export class LotteryGiveaway extends Giveaway {
 }
 
 export class GTS extends Rooms.SimpleRoomGame {
+	override readonly gameid = 'gts' as ID;
 	gtsNumber: number;
 	room: Room;
 	giver: User;
@@ -916,6 +920,12 @@ export const handlers: Chat.Handlers = {
 			saveData();
 		}
 	},
+	onPunishUser(type, user, room) {
+		const game = room?.getGame(LotteryGiveaway) || room?.getGame(QuestionGiveaway);
+		if (game) {
+			game.kickUser(user);
+		}
+	},
 };
 
 export const commands: Chat.ChatCommands = {
@@ -1075,7 +1085,9 @@ export const commands: Chat.ChatCommands = {
 				giveaway.removeUser(user);
 			}
 		},
-		ban(target, room, user) {
+		monthban: 'ban',
+		permaban: 'ban',
+		ban(target, room, user, connection, cmd) {
 			if (!target) return false;
 			room = this.requireRoom('wifi' as RoomID);
 			this.checkCan('warn', null, room);
@@ -1088,11 +1100,16 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`User '${targetUser.name}' is already giveawaybanned.`);
 			}
 
-			Giveaway.ban(room, targetUser, reason);
+			const duration = cmd === 'monthban' ? 30 * DAY : cmd === 'permaban' ? 3650 * DAY : 7 * DAY;
+			Giveaway.ban(room, targetUser, reason, duration);
+
 			(room.getGame(LotteryGiveaway) || room.getGame(QuestionGiveaway))?.kickUser(targetUser);
-			this.modlog('GIVEAWAYBAN', targetUser, reason);
+
+			const action = cmd === 'monthban' ? 'MONTHGIVEAWAYBAN' : cmd === 'permaban' ? 'PERMAGIVEAWAYBAN' : 'GIVEAWAYBAN';
+			this.modlog(action, targetUser, reason);
 			const reasonMessage = reason ? ` (${reason})` : ``;
-			this.privateModAction(`${targetUser.name} was banned from entering giveaways by ${user.name}.${reasonMessage}`);
+			const durationMsg = cmd === 'monthban' ? ' for a month' : cmd === 'permaban' ? ' permanently' : '';
+			this.privateModAction(`${targetUser.name} was banned from entering giveaways${durationMsg} by ${user.name}.${reasonMessage}`);
 		},
 		unban(target, room, user) {
 			if (!target) return false;

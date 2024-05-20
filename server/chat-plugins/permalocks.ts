@@ -26,9 +26,9 @@ interface IPData {
 	lon: number;
 }
 
-function getIPData(ip: string) {
+export function getIPData(ip: string) {
 	try {
-		return Net("http://ip-api.com/json/" + ip).get().then(JSON.parse) as Promise<IPData>;
+		return Net("https://miapi.dev/api/ip/" + ip).get().then(JSON.parse) as Promise<IPData>;
 	} catch {
 		return null;
 	}
@@ -68,12 +68,19 @@ export const Smogon = new class {
 
 export const Nominations = new class {
 	noms: Nomination[] = [];
+	icons: Record<string, string> = {};
 	constructor() {
 		this.load();
 	}
 	load() {
 		try {
-			this.noms = JSON.parse(FS('config/chat-plugins/permas.json').readSync());
+			let data = JSON.parse(FS('config/chat-plugins/permas.json').readSync());
+			if (Array.isArray(data)) {
+				data = {noms: data, icons: {}};
+				FS('config/chat-plugins/permas.json').writeSync(JSON.stringify(data));
+			}
+			this.noms = data.noms;
+			this.icons = data.icons;
 		} catch {}
 	}
 	fetchModlog(id: string) {
@@ -86,7 +93,7 @@ export const Nominations = new class {
 		}, undefined, true);
 	}
 	save() {
-		FS('config/chat-plugins/permas.json').writeUpdate(() => JSON.stringify(this.noms));
+		FS('config/chat-plugins/permas.json').writeUpdate(() => JSON.stringify({noms: this.noms, icons: this.icons}));
 	}
 	notifyStaff() {
 		const usRoom = Rooms.get('upperstaff');
@@ -144,6 +151,7 @@ export const Nominations = new class {
 		Utils.sortBy(this.noms, nom => -nom.date);
 		this.save();
 		this.notifyStaff();
+		Rooms.get('staff')?.addByUser(user, `${user.name} submitted a perma nomination for ${primaryID}`);
 	}
 	find(id: string) {
 		return this.noms.find(f => f.primaryID === id);
@@ -163,10 +171,13 @@ export const Nominations = new class {
 		// todo fix when on good comp
 		return context.closePage(`permalocks-view-${entry.primaryID}`);
 	}
-	display(nom: Nomination) {
+	display(nom: Nomination, canEdit?: boolean) {
 		let buf = `<div class="infobox">`;
-		buf += `<strong><a href="/view-permalocks-view-${nom.primaryID}" target="_replace">${nom.primaryID}</a>`;
-		buf += `</strong> (submitted by ${nom.by})<br />`;
+		let title = nom.primaryID as string;
+		if (canEdit) {
+			title = `<a href="/view-permalocks-view-${nom.primaryID}" target="_replace">${nom.primaryID}</a>`;
+		}
+		buf += `<strong>${title}</strong> (submitted by ${nom.by})<br />`;
 		buf += `Submitted ${Chat.toTimestamp(new Date(nom.date), {human: true})}<br />`;
 		buf += `${Chat.count(nom.alts, 'alts')}, ${Chat.count(nom.ips, 'IPs')}`;
 		buf += `</div>`;
@@ -301,7 +312,7 @@ export const Nominations = new class {
 		};
 		return Config.standings;
 	}
-	displayAll() {
+	displayAll(canEdit: boolean) {
 		let buf = `<div class="pad">`;
 		buf += `<button class="button" name="send" value="/perma noms" style="float:right"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<h3>Pending perma nominations</h3><hr />`;
@@ -310,7 +321,7 @@ export const Nominations = new class {
 			return buf;
 		}
 		for (const nom of this.noms) {
-			buf += this.display(nom);
+			buf += this.display(nom, canEdit);
 			buf += `<br />`;
 		}
 		return buf;
@@ -371,7 +382,7 @@ export const commands: Chat.ChatCommands = {
 			return Nominations.add(target, this.connection);
 		},
 		list() {
-			this.checkCan('rangeban');
+			this.checkCan('lock');
 			return this.parse(`/j view-permalocks-list`);
 		},
 		nom() {
@@ -395,8 +406,9 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage("The link to the perma has not been set - the post could not be made.");
 			}
 			let postBuf = `[b][url="https://${Config.routes.root}/users/${primary}"]${primary}[/url][/b]`;
-			postBuf += ` was added to ${standings[standing]} by ${user.name} (${postReason}). `;
-			postBuf += `Nominated by ${nom.by}.\n`;
+			const icon = Nominations.icons[user.id] ? `:${Nominations.icons[user.id]}: - ` : ``;
+			postBuf += ` was added to ${standings[standing]} by ${user.name} (${icon}${postReason}).\n`;
+			postBuf += `Nominated by ${nom.by}.\n[spoiler=Nomination notes]${nom.info}[/spoiler]\n`;
 			postBuf += `${nom.alts.length ? `[spoiler=Alts]${nom.alts.join(', ')}[/spoiler]` : ""}\n`;
 			if (nom.ips.length) {
 				postBuf += `[spoiler=IPs]`;
@@ -495,6 +507,31 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('rangeban');
 			Nominations.close(target, this);
 		},
+		seticon(target, room, user) {
+			this.checkCan('rangeban');
+			let [monName, targetId] = target.split(',');
+			if (!targetId) targetId = user.id;
+			const mon = Dex.species.get(monName);
+			if (!mon.exists) {
+				return this.errorReply(`Species ${monName} does not exist.`);
+			}
+			Nominations.icons[targetId] = mon.name.toLowerCase();
+			Nominations.save();
+			this.sendReply(
+				`|html|Updated ${targetId === user.id ? 'your' : `${targetId}'s`} permalock post icon to ` +
+				`<psicon pokemon='${mon.name.toLowerCase()}' />`
+			);
+		},
+		deleteicon(target, room, user) {
+			this.checkCan('rangeban');
+			const targetID = toID(target);
+			if (!Nominations.icons[targetID]) {
+				return this.errorReply(`${targetID} does not have an icon set.`);
+			}
+			delete Nominations.icons[targetID];
+			Nominations.save();
+			this.sendReply(`Removed ${targetID}'s permalock post icon.`);
+		},
 		help: [
 			'/perma nom OR /perma - Open the page to make a nomination for a permanent punishment. Requires: % @ &',
 			'/perma list - View open nominations. Requires: &',
@@ -506,9 +543,9 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	permalocks: {
 		list(query, user, conn) {
-			this.checkCan('rangeban');
+			this.checkCan('lock');
 			this.title = '[Permalock Nominations]';
-			return Nominations.displayAll();
+			return Nominations.displayAll(user.can('rangeban'));
 		},
 		view(query, user) {
 			this.checkCan('rangeban');

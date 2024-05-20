@@ -10,6 +10,55 @@ describe('Encore', function () {
 		battle.destroy();
 	});
 
+	it(`should cause the target to be forced to repeat its move`, function () {
+		battle = common.createBattle([[
+			{species: 'slowbro', moves: ['tackle', 'irondefense']},
+		], [
+			{species: 'whimsicott', moves: ['encore', 'sleeptalk']},
+		]]);
+
+		const whims = battle.p2.active[0];
+		battle.makeChoices('move irondefense', 'move sleeptalk');
+		battle.makeChoices('move tackle', 'move encore');
+
+		assert.fullHP(whims);
+		assert.cantMove(() => battle.choose('p1', 'move tackle'));
+	});
+
+	it(`should cause the target to move with its Encored attack at the priority of the originally selected move once`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'regieleki', moves: ['sleeptalk', 'substitute']},
+			{species: 'pichu', moves: ['sleeptalk']},
+		], [
+			{species: 'whimsicott', ability: 'prankster', moves: ['sleeptalk', 'encore']},
+			{species: 'terrakion', moves: ['quickattack', 'headlongrush']},
+		]]);
+
+		const eleki = battle.p1.active[0];
+		battle.makeChoices('auto', 'move sleeptalk, move headlongrush 2');
+		battle.makeChoices('move substitute', 'move encore -2, move quickattack 1');
+
+		assert.fainted(eleki, `Encore + Quick Attack being selected gives Headlong Rush priority.`);
+	});
+
+	it.skip(`should cause the target to move with its Encored attack at the priority of the originally selected move once and get blocked when appropriate`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'regieleki', moves: ['psychicterrain']},
+			{species: 'pichu', moves: ['sleeptalk']},
+		], [
+			{species: 'whimsicott', ability: 'prankster', moves: ['sleeptalk', 'encore']},
+			{species: 'terrakion', moves: ['quickattack', 'headlongrush']},
+		]]);
+
+		const eleki = battle.p1.active[0];
+		battle.makeChoices('auto', 'move sleeptalk, move headlongrush 2');
+		battle.makeChoices('auto', 'move encore -2, move quickattack 1');
+		assert.false.fainted(eleki, `Psychic Terrain should have prevented the priority Headlong Rush from doing damage.`);
+
+		battle.makeChoices();
+		assert.fainted(eleki, `Headlong Rush should no longer be moving with priority.`);
+	});
+
 	it('should not affect Focus Punch if the the user\'s decision is not changed', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[

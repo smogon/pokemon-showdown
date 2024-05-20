@@ -903,7 +903,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Type effectiveness.
 			// In Gen 1, type effectiveness is applied against each of the target's types.
 			for (const targetType of target.types) {
-				const typeMod = this.battle.dex.getEffectiveness(type, targetType);
+				let typeMod = this.battle.dex.getEffectiveness(type, targetType);
+				typeMod = this.battle.runEvent('Effectiveness', this.battle, targetType, move, typeMod);
 				if (typeMod > 0) {
 					// Super effective against targetType
 					damage *= 20;

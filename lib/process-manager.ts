@@ -418,7 +418,6 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	processes: T[] = [];
 	releasingProcesses: T[] = [];
 	crashedProcesses: T[] = [];
-	readonly module: NodeJS.Module;
 	readonly filename: string;
 	readonly basename: string;
 	readonly isParentProcess: boolean;
@@ -426,7 +425,6 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	crashRespawnCount = 0;
 
 	constructor(module: NodeJS.Module) {
-		this.module = module;
 		this.filename = module.filename;
 		this.basename = path.basename(module.filename);
 		this.isParentProcess = (process.mainModule !== module || !process.send);
@@ -556,8 +554,9 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 		const timeout = setTimeout(() => {
 			const debugInfo = process.debug || "No debug information found.";
 			process.destroy();
+			this.spawnOne();
 			throw new Error(
-				`A query originating in ${this.basename} took too long to complete; the process has been killed.\n${debugInfo}`
+				`A query originating in ${this.basename} took too long to complete; the process has been respawned.\n${debugInfo}`
 			);
 		}, this.timeout);
 

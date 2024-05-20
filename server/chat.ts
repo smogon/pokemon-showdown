@@ -30,6 +30,7 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import * as Artemis from './artemis';
 import {Dex} from '../sim';
+import {PrivateMessages} from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 
@@ -84,6 +85,10 @@ interface Handlers {
 	) => void;
 	onRename: (user: User, oldID: ID, newID: ID) => void;
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
+	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
+	onMessageOffline: (context: Chat.CommandContext, message: string, targetUserID: ID) => void;
+	onBattleJoin: (slot: string, user: User, battle: RoomBattle) => void;
+	onPunishUser: (type: string, user: User, room?: Room | null) => void;
 }
 
 export interface ChatPlugin {
@@ -688,12 +693,10 @@ export class CommandContext extends MessageContext {
 					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
 				}
 			}
-			Chat.sendPM(message, this.user, this.pmTarget);
+			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
-			if (this.room.game && this.room.game.onLogMessage) {
-				this.room.game.onLogMessage(message, this.user);
-			}
+			this.room.game?.onLogMessage?.(message, this.user);
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
 		}
@@ -781,8 +784,7 @@ export class CommandContext extends MessageContext {
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
 	checkGameFilter() {
-		if (!this.room?.game || !this.room.game.onChatMessage) return;
-		return this.room.game.onChatMessage(this.message, this.user);
+		return this.room?.game?.onChatMessage?.(this.message, this.user);
 	}
 	pmTransform(originalMessage: string, sender?: User, receiver?: User | null | string) {
 		if (!sender) {
@@ -874,12 +876,18 @@ export class CommandContext extends MessageContext {
 
 	/** like privateModAction, but also notify Staff room */
 	privateGlobalModAction(msg: string) {
+		if (this.room && !this.room.roomid.endsWith('staff')) {
+			msg = msg.replace(IPTools.ipRegex, '<IP>');
+		}
 		this.privateModAction(msg);
 		if (this.room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();
 		}
 	}
 	addGlobalModAction(msg: string) {
+		if (this.room && !this.room.roomid.endsWith('staff')) {
+			msg = msg.replace(IPTools.ipRegex, '<IP>');
+		}
 		this.addModAction(msg);
 		if (this.room?.roomid !== 'staff') {
 			Rooms.get('staff')?.addByUser(this.user, `${this.room ? `<<${this.room.roomid}>>` : `<PM:${this.pmTarget}>`} ${msg}`).update();
@@ -1139,9 +1147,13 @@ export class CommandContext extends MessageContext {
 				}
 				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
-						throw new Chat.ErrorMessage(
-							this.tr`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
+						this.errorReply(
+							this.tr`Moderated chat is set. To speak in this room, your account must be autoconfirmed, which means being registered for at least one week and winning at least one rated game (any game started through the 'Battle!' button).`
 						);
+						if (!user.registered) {
+							this.sendReply(this.tr`|html|You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`);
+						}
+						throw new Chat.Interruption();
 					}
 					if (room.settings.modchat === 'trusted') {
 						throw new Chat.ErrorMessage(
@@ -1531,6 +1543,7 @@ export const Chat = new class {
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
 	readonly Friends = new FriendsDatabase();
 	readonly PM = PM;
+	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
 
@@ -1792,7 +1805,7 @@ export const Chat = new class {
 	 */
 	database = SQL(module, {
 		file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH,
-		processes: global.Config?.chatdbprocesses || 1,
+		processes: global.Config?.chatdbprocesses,
 	});
 	databaseReadyPromise: Promise<void> | null = null;
 
@@ -1800,7 +1813,7 @@ export const Chat = new class {
 		// PLEASE NEVER ACTUALLY ADD MIGRATIONS
 		// things break in weird ways that are hard to reason about, probably because of subprocesses
 		// it WILL crash and it WILL make your life and that of your users extremely unpleasant until it is fixed
-		if (!PM.isParentProcess) return; // We don't need a database in a subprocess that requires Chat.
+		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
 		const {hasDBInfo} = await this.database.get(
@@ -1830,7 +1843,10 @@ export const Chat = new class {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
-		Chat.destroyHandlers.push(() => void Chat.database?.destroy());
+		Chat.destroyHandlers.push(
+			() => void Chat.database?.destroy(),
+			() => Chat.PrivateMessages.destroy(),
+		);
 	}
 
 	readonly MessageContext = MessageContext;
@@ -1907,14 +1923,6 @@ export const Chat = new class {
 		);
 
 		Monitor.slow(logMessage);
-	}
-	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
-		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
-		if (onlyRecipient) return onlyRecipient.send(buf);
-		user.send(buf);
-		if (pmTarget !== user) pmTarget.send(buf);
-		pmTarget.lastPM = user.id;
-		user.lastPM = pmTarget.id;
 	}
 
 	packageData: AnyObject = {};
@@ -2590,6 +2598,7 @@ export const Chat = new class {
 			}
 		}
 	}
+
 	readonly formatText = formatText;
 	readonly linkRegex = linkRegex;
 	readonly stripFormatting = stripFormatting;
@@ -2622,6 +2631,7 @@ export const Chat = new class {
 // they're just there so forks have time to slowly transition
 (Chat as any).escapeHTML = Utils.escapeHTML;
 (Chat as any).splitFirst = Utils.splitFirst;
+(Chat as any).sendPM = Chat.PrivateMessages.send.bind(Chat.PrivateMessages);
 (CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
 (CommandContext.prototype as any).canTalk = CommandContext.prototype.checkChat;
 (CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;

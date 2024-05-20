@@ -287,6 +287,50 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 1);
 	});
 
+	it(`should not reactivate abilities that were protected by Ability Shield`, function () {
+		battle = common.createBattle([[
+			{species: 'Porygon', ability: 'download', item: 'abilityshield', moves: ['sleeptalk']},
+		], [
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move sleeptalk', 'auto');
+		battle.makeChoices('auto', 'switch 2');
+		const porygon = battle.p1.active[0];
+		assert.statStage(porygon, 'spa', 1);
+	});
+
+	it(`should not reactivate instances of Embody Aspect that had previously activated`, function () {
+		battle = common.createBattle({gameType: 'freeforall'}, [[
+			{species: 'Ogerpon-Hearthflame', ability: 'moldbreaker', item: 'hearthflamemask', moves: ['bellydrum']},
+		], [
+			{species: 'Ogerpon-Wellspring', ability: 'waterabsorb', item: 'wellspringmask', moves: ['sleeptalk']},
+		], [
+			{species: 'Ogerpon-Cornerstone', ability: 'sturdy', item: 'cornerstonemask', moves: ['sleeptalk']},
+		], [
+			{species: 'Cosmog', moves: ['splash', 'teleport']},
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['memento']},
+		]]);
+
+		// only wellspring teras this turn
+		battle.makeChoices('auto', 'move sleeptalk terastallize', 'auto', 'auto');
+		// only hearthflame teras this turn; embody aspect cannot boost its attack any further
+		battle.makeChoices('move bellydrum terastallize', 'auto', 'auto', 'move teleport');
+		// note that cornerstone has not tera'd yet
+		battle.makeChoices('', '', '', 'switch 2');
+		const hearthflame = battle.p1.active[0];
+		const wellspring = battle.p2.active[0];
+		const cornerstone = battle.p3.active[0];
+		assert.statStage(hearthflame, 'atk', 6);
+		assert.statStage(wellspring, 'spd', 1);
+		assert.statStage(cornerstone, 'def', 0);
+		battle.makeChoices('auto', 'auto', 'move sleeptalk terastallize', 'move memento 1');
+		assert.statStage(hearthflame, 'atk', 4, `Ogerpon-Hearthflame-Tera's Embody Aspect should not have been reactivated`);
+		assert.statStage(wellspring, 'spd', 1, `Ogerpon-Wellspring-Tera's Embody Aspect should not have activated twice`);
+		assert.statStage(cornerstone, 'def', 1, `Ogerpon-Cornerstone-Tera's Embody Aspect should have been activated by Neutalizing Gas ending`);
+	});
+
 	describe(`Ability reactivation order`, function () {
 		it(`should cause entrance Abilities to reactivate in order of Speed`, function () {
 			battle = common.createBattle({gameType: 'doubles'}, [[

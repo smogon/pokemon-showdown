@@ -36,6 +36,9 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.modifyStat!(statName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[statName]] / 100);
 					}
 				}
+				if (this.modifiedStats![statName] > 999) {
+					this.modifiedStats![statName] = 999;
+				}
 			}
 		},
 		// Stadium's fixed boosting function.
@@ -688,7 +691,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
-			// This is what cuases the roll over bugs.
+			// This is what causes the rollover bugs.
 			if (attack >= 256 || defense >= 256) {
 				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.

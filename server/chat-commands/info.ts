@@ -16,6 +16,11 @@ import {RoomSections} from './room-settings';
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
+interface DexResources {
+	url: string;
+	resources: {resource_name: string, url: string}[];
+}
+
 export function getCommonBattles(
 	userID1: ID, user1: User | null, userID2: ID, user2: User | null, connection: Connection
 ) {
@@ -65,6 +70,30 @@ export function findFormats(targetId: string, isOMSearch = false) {
 		}
 	}
 	return {totalMatches, sections};
+}
+
+export const formatsDataCache = new Map<string, DexResources | null>();
+export async function getFormatResources(format: string) {
+	const cached = formatsDataCache.get(format);
+	if (cached !== undefined) return cached;
+	try {
+		const raw = await Net(`https://www.smogon.com/dex/api/formats/by-ps-name/${format}`).get();
+		const data = JSON.parse(raw);
+		formatsDataCache.set(format, data);
+		return data;
+	} catch {
+		// some sort of json error or request can't be made
+		// so something on smogon's end. freeze the request, punt
+		formatsDataCache.set(format, null);
+		return null;
+	}
+}
+
+// clear every 15 minutes to ensure it's only minimally stale
+const resourceRefreshInterval = setInterval(() => formatsDataCache.clear(), 15 * 60 * 1000);
+
+export function destroy() {
+	clearInterval(resourceRefreshInterval);
 }
 
 export const commands: Chat.ChatCommands = {
@@ -552,6 +581,7 @@ export const commands: Chat.ChatCommands = {
 	pokedex: 'data',
 	data(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
+		target = target.trim();
 		const gen = parseInt(cmd.substr(-1));
 		if (gen) target += `, gen${gen}`;
 
@@ -664,6 +694,9 @@ export const commands: Chat.ChatCommands = {
 								evos.push(`${evo.name} (${evo.evoLevel}${condition})`);
 							}
 						}
+					}
+					if (pokemon.prevo) {
+						details["Pre-Evolution"] = pokemon.prevo;
 					}
 					if (!evos.length) {
 						details[`<font color="#686868">Does Not Evolve</font>`] = "";
@@ -817,8 +850,8 @@ export const commands: Chat.ChatCommands = {
 					details = {
 						Gen: String(ability.gen) || 'CAP',
 					};
-					if (ability.isPermanent) details["&#10003; Not affected by Gastro Acid"] = "";
-					if (ability.isBreakable) details["&#10003; Ignored by Mold Breaker"] = "";
+					if (ability.flags['cantsuppress']) details["&#10003; Not affected by Gastro Acid"] = "";
+					if (ability.flags['breakable']) details["&#10003; Ignored by Mold Breaker"] = "";
 				}
 				break;
 			default:
@@ -1504,7 +1537,7 @@ export const commands: Chat.ChatCommands = {
 	statcalchelp: [
 		`/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.`,
 		`!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.`,
-		`Inputing 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature.`,
+		`Inputting 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature.`,
 		`An actual stat can be given in place of a base stat or EVs. In this case, the minumum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
 	],
 
@@ -1674,12 +1707,12 @@ export const commands: Chat.ChatCommands = {
 	bugs(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (room?.battle) {
-			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/threads/3663703/">Bug Reports</a></center>`);
+			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/ps-bug-report-form/">Bug Reports</a></center>`);
 		} else {
 			this.sendReplyBox(
 				`Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />` +
 				`- <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a><br />` +
-				`- <a href="https://www.smogon.com/forums/threads/3663703/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
+				`- <a href="https://www.smogon.com/forums/ps-bug-report-form/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
 			);
 		}
 	},
@@ -1746,20 +1779,19 @@ export const commands: Chat.ChatCommands = {
 		const DEFAULT_CALC_COMMANDS = ['honkalculator', 'honkocalc'];
 		const RANDOMS_CALC_COMMANDS = ['randomscalc', 'randbatscalc', 'rcalc'];
 		const BATTLESPOT_CALC_COMMANDS = ['bsscalc', 'cantsaycalc'];
-		const SUPPORTED_RANDOM_FORMATS = [
-			'gen8randombattle', 'gen8unratedrandombattle', 'gen7randombattle', 'gen6randombattle', 'gen5randombattle', 'gen4randombattle', 'gen3randombattle', 'gen2randombattle', 'gen1randombattle',
-		];
 		const SUPPORTED_BATTLESPOT_FORMATS = [
 			'gen5gbusingles', 'gen5gbudoubles', 'gen6battlespotsingles', 'gen6battlespotdoubles', 'gen6battlespottriples', 'gen7battlespotsingles', 'gen7battlespotdoubles', 'gen7bssfactory',
 		];
-		const isRandomBattle = (room?.battle && SUPPORTED_RANDOM_FORMATS.includes(room.battle.format));
+		const isRandomBattle = room?.battle?.format.endsWith('randombattle');
 		const isBattleSpotBattle = (room?.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) ||
 			room.battle.format.includes("battlespotspecial")));
+		const {dex} = this.extractFormat(room?.battle?.format);
+
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
 			(isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
 				`Random Battles damage calculator. (Courtesy of Austin)<br />` +
-				`- <a href="https://calc.pokemonshowdown.com/randoms.html">Random Battles Damage Calculator</a>`
+				`- <a href="https://calc.pokemonshowdown.com/randoms.html?gen=${dex.gen}">Random Battles Damage Calculator</a>`
 			);
 		}
 		if (BATTLESPOT_CALC_COMMANDS.includes(cmd) || (isBattleSpotBattle && !DEFAULT_CALC_COMMANDS.includes(cmd))) {
@@ -1770,7 +1802,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, &amp; Kris)<br />` +
-			`- <a href="https://calc.pokemonshowdown.com/index.html">Damage Calculator</a>`
+			`- <a href="https://calc.pokemonshowdown.com/index.html?gen=${dex.gen}">Damage Calculator</a>`
 		);
 	},
 	calchelp: [
@@ -1789,7 +1821,7 @@ export const commands: Chat.ChatCommands = {
 			`- <a href="https://www.smogon.com/forums/forums/66/">CAP project discussion forum</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/48782/">What Pok&eacute;mon have been made?</a><br />` +
 			`- <a href="https://www.smogon.com/forums/forums/477">Talk about the metagame here</a><br />` +
-			`- <a href="https://www.smogon.com/forums/threads/3671157/">Sample SS CAP teams</a>`
+			`- <a href="https://www.smogon.com/forums/threads/3718107/">Sample SV CAP teams</a>`
 		);
 	},
 	caphelp: [
@@ -1823,7 +1855,7 @@ export const commands: Chat.ChatCommands = {
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
 	viewbanlist: 'formathelp',
-	formathelp(target, room, user, connection, cmd) {
+	async formathelp(target, room, user, connection, cmd) {
 		if (!target && this.runBroadcast()) {
 			return this.sendReplyBox(
 				`- <a href="https://www.smogon.com/tiers/">Smogon Tiers</a><br />` +
@@ -1877,8 +1909,22 @@ export const commands: Chat.ChatCommands = {
 					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
 				}
 			}
-			const descHtml = [...(format.desc ? [format.desc] : []), ...(format.threads || [])];
-			return this.sendReplyBox(`${descHtml.join("<br />")}<br />${rulesetHtml}`);
+			const formatDesc = format.desc || '';
+			let descHtml = [];
+			const data = await getFormatResources(format.id);
+			if (data) {
+				for (const {resource_name, url} of data.resources) {
+					let rn = resource_name;
+					rn = rn.replace(/ thread$/gi, '');
+					rn = rn.replace(/Pokemon Showdown/gi, 'PS');
+					rn = rn.split(' ').map((x: string) => x[0].toUpperCase() + x.substr(1)).join(' ');
+					descHtml.push(`&bullet; <a href="${url}">${rn}</a>`);
+				}
+			}
+			if (!descHtml.length && format.threads) {
+				descHtml = format.threads;
+			}
+			return this.sendReplyBox(`<h1>${format.name}</h1><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
@@ -1894,7 +1940,13 @@ export const commands: Chat.ChatCommands = {
 			for (const section of sections[sectionId].formats) {
 				const subformat = Dex.formats.get(section);
 				const nameHTML = Utils.escapeHTML(subformat.name);
-				const desc = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
+				const desc = subformat.desc ? [subformat.desc] : [];
+				const data = await getFormatResources(subformat.id);
+				if (data) {
+					for (const {resource_name, url} of data.resources) {
+						desc.push(`&bullet; <a href="${url}">${resource_name}</a>`);
+					}
+				}
 				const descHTML = desc.length ? desc.join("<br />") : "&mdash;";
 				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
 			}
@@ -2077,7 +2129,7 @@ export const commands: Chat.ChatCommands = {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/proxyhelp`}">${this.tr`Proxy lock help`}</a>`);
 		}
 		if (showAll || ['ca', 'customavatar', 'customavatars'].includes(target)) {
-			buffer.push(this.tr`Custom avatars are given to Global Staff members, contributors (coders and spriters) to Pokemon Showdown, and Smogon badgeholders at the discretion of Zarel. They are also sometimes given out as prizes for major room events or Smogon tournaments.`);
+			buffer.push(this.tr`Custom avatars are given to Global Staff members, contributors (coders and spriters) to Pokemon Showdown, and Smogon badgeholders at the discretion of the PS! Administrators. They are also sometimes given out as rewards for major events such as PSPL (Pokemon Showdown Premier League). If you're curious, you can view the entire list of <a href="https://www.smogon.com/smeargle/customs/">custom avatars</a>.`);
 		}
 		if (showAll || ['privacy', 'private'].includes(target)) {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/privacy`}">${this.tr`Pokémon Showdown privacy policy`}</a>`);
@@ -2143,7 +2195,7 @@ export const commands: Chat.ChatCommands = {
 			generation = 'rb';
 			genNumber = 1;
 		} else {
-			generation = 'ss';
+			generation = 'sv';
 		}
 
 		// Pokemon
@@ -2623,7 +2675,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		return this.parse(`/sl approved showing media from, ${room.roomid}`);
 	},
-	approvalloghelp: [`/approvallog - View a log of past media approvals in the current room. Requires: % @ # &`],
+	approvalloghelp: [`/approvallog - View a log of past media approvals in the current room. Requires: &`],
 
 	viewapprovals(target, room, user) {
 		room = this.requireRoom();
@@ -2661,20 +2713,28 @@ export const commands: Chat.ChatCommands = {
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
 			if (!channelId) return this.errorReply(`Specify a Twitch channel.`);
-			const info = await Twitch.getChannel(channelId);
-			if (!info) return this.errorReply(`Channel ${channelId} not found.`);
-			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
+			buf = Utils.html`Watching <b><a class="subtle" href="https://twitch.tv/${toID(channelId)}">${channelId}</a></b>...<br />`;
 			buf += `<twitch src="${link}" />`;
 		} else {
+			if (Chat.linkRegex.test(link)) {
+				if (/^https?:\/\/(.*)\.(mp4|mov)\b(\?|$)/i.test(link)) { // video
+					// can't fitImage video, so we're just gonna have to guess to keep it small
+					buf = Utils.html`<video src="${link}" controls="" width="300px" height="300px"></video>`;
+				} else if (/^https?:\/\/(.*)\.(mp3|wav)\b(\?|$)/i.test(link)) { // audio
+					buf = Utils.html`<audio src="${link}" controls=""></audio>`;
+				}
+			}
 			if (link.includes('data:image/png;base64')) {
 				throw new Chat.ErrorMessage('Please provide an actual link (you probably copied it wrong?).');
 			}
-			try {
-				const [width, height, resized] = await Chat.fitImage(link);
-				buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
-				if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
-			} catch {
-				return this.errorReply('Invalid image');
+			if (!buf) { // fall back on image
+				try {
+					const [width, height, resized] = await Chat.fitImage(link);
+					buf = Utils.html`<img src="${link}" width="${width}" height="${height}" />`;
+					if (resized) buf += Utils.html`<br /><a href="${link}" target="_blank">full-size image</a>`;
+				} catch {
+					return this.errorReply('Invalid image, audio, or video URL.');
+				}
 			}
 		}
 		if (comment) {
@@ -2687,8 +2747,8 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(buf);
 	},
 	showhelp: [
-		`/show [url] - Shows you an image or YouTube video.`,
-		`!show [url] - Shows an image or YouTube to everyone in a chatroom. Requires: whitelist % @ # &`,
+		`/show [url] - Shows you an image, audio clip, video file, or YouTube video.`,
+		`!show [url] - Shows an image, audio clip, video file, or YouTube video to everyone in a chatroom. Requires: whitelist % @ # &`,
 	],
 
 	rebroadcast(target, room, user, connection) {
@@ -2908,7 +2968,7 @@ export const commands: Chat.ChatCommands = {
 					const text = Array.isArray(help) ?
 						help.join(' | ') : typeof help === 'function' ?
 							`<button class="button" name="send" value="/${cmdList[0] + 'help'}">Get help</button>` : '';
-					buf += text ? ` (<code><small>${text}</small></code>)` : `(no help found)`;
+					buf += text ? ` (<code><small>${text}</small></code>)` : ` (no help found)`;
 				}
 			}
 			buf += `<br />`;
@@ -2929,6 +2989,63 @@ export const commands: Chat.ChatCommands = {
 	altsloghelp: [
 		`/altslog [userid] - View the alternate account history for the given [userid]. Requires: % @ &`,
 	],
+
+	randtopic(target, room, user) {
+		room = this.requireRoom();
+		if (!room.settings.topics?.length) {
+			return this.errorReply(`This room has no random topics to select from.`);
+		}
+		this.runBroadcast();
+		this.sendReply(Utils.html`|html|<div class="broadcast-blue">${Utils.randomElement(room.settings.topics)}</div>`);
+	},
+	randtopichelp: [
+		`/randtopic - Randomly selects a topic from the room's discussion topic pool and displays it.`,
+		`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`,
+		`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`,
+		`/randomtopics - View the discussion topic pool for the current room.`,
+	],
+
+	addtopic(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
+		target = target.trim();
+		if (!toID(target).length) {
+			return this.parse(`/help randtopic`);
+		}
+		if (!room.settings.topics) room.settings.topics = [];
+		room.settings.topics.push(target);
+		this.privateModAction(`${user.name} added the topic "${target}" to the random topic pool.`);
+		this.modlog('ADDTOPIC', null, target);
+		room.saveSettings();
+	},
+	addtopichelp: [`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`],
+
+	removetopic(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
+		if (!toID(target)) {
+			return this.parse(`/help randtopic`);
+		}
+		const index = Number(toID(target)) - 1;
+		if (isNaN(index)) {
+			return this.errorReply(`Invalid topic index: ${target}. Must be a number.`);
+		}
+		if (!room.settings.topics?.[index]) {
+			return this.errorReply(`Topic ${index + 1} not found.`);
+		}
+		const topic = room.settings.topics.splice(index, 1)[0];
+		room.saveSettings();
+		this.privateModAction(`${user.name} removed topic ${index + 1} from the random topic pool.`);
+		this.modlog('REMOVETOPIC', null, topic);
+	},
+	removetopichelp: [`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`],
+
+	listtopics: 'randomtopics',
+	randtopics: 'randomtopics',
+	randomtopics(target, room, user) {
+		room = this.requireRoom();
+		return this.parse(`/join view-topics-${room}`);
+	},
 };
 
 export const handlers: Chat.Handlers = {
@@ -3004,6 +3121,22 @@ export const pages: Chat.PageTable = {
 		}
 		return buf;
 	},
+	topics(query, user) {
+		const room = this.requireRoom();
+		this.title = `[Topics] ${room.title}`;
+		const topics = room.settings.topics || [];
+		let buf;
+		if (!topics.length) {
+			buf = `<div class="pad"><h2>This room has no discussion topics saved.</h2></div>`;
+			return buf;
+		}
+		buf = `<div class="pad"><h2>Random topics for ${room.title} (${topics.length}):</h2><ul>`;
+		for (const [i, topic] of topics.entries()) {
+			buf += Utils.html`<li>${i + 1}: "${topic}"</li>`;
+		}
+		buf += `</ul></div>`;
+		return buf;
+	},
 	battlerules(query, user) {
 		const rules = Object.values(Dex.data.Rulesets).filter(rule => rule.effectType !== "Format");
 		const tourHelp = `https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-forum-rules-resources-read-here-first.3570628/#post-6777489`;
@@ -3073,7 +3206,7 @@ export const pages: Chat.PageTable = {
 				buf += `<div class="message-error">The format '${formatId}' does not exist.</div><br />`;
 			}
 			buf += `<form data-submitsend="/buildformat {format}">`;
-			buf += `Choose your format: <input name="format" /><br />`;
+			buf += `Choose your format: <formatselect name="format">[Gen ${Dex.gen}] Random Battle</formatselect><br />`;
 			buf += `<button type="submit" class="button notifying">Continue</button>`;
 			buf += `</form>`;
 			return buf;
@@ -3103,7 +3236,8 @@ export const pages: Chat.PageTable = {
 		buf += `<p>Using a <code>+</code> instead of a <code>-</code> unbans that category.</p>`;
 		buf += `<ul><li><code>+ Blaziken</code>: Unban/unrestrict a Pok&eacute;mon.</li></ul></small></details><br />`;
 		cmd.push(`bans={bans}`);
-		buf += `Bans/Unbans: <input name="bans" /> <small>(separated by commas)</small><br /><br />`;
+		buf += `Bans/Unbans: <small>(separated by commas)</small><br /><br />`;
+		buf += `<textarea style="width: 100%" name="bans"></textarea><br />`;
 		buf += `<details class="readmore"><summary><u><strong>Clauses</strong></u></summary>`;
 		buf += `<p>The following rules can be added to challenges/tournaments to modify the style of play. `;
 		buf += `Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code>.</p>`;
@@ -3190,6 +3324,12 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>Requester ID:</strong> ${userid}<br />`;
 			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
 			buf += `<strong>Comment:</strong> ${entry.comment}`;
+			buf += `<form data-submitsend="/msgroom ${args[0]}, /approveshow ${userid}">`;
+			buf += `<button class="button" type="submit">Approve</button>`;
+			buf += `</form>`;
+			buf += `<form data-submitsend="/msgroom ${args[0]}, /denyshow ${userid}">`;
+			buf += `<button class="button" type="submit">Reject</button>`;
+			buf += `</form>`;
 			buf += `</div><hr />`;
 		}
 		return buf;

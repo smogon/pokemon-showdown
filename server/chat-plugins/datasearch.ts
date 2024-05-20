@@ -106,11 +106,15 @@ export const commands: Chat.ChatCommands = {
 				target = split.join(',');
 			}
 		}
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
 		if (!target.includes('mod=')) {
-			const dex = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format).dex;
+			const dex = defaultFormat.dex;
 			if (dex) target += `, mod=${dex.currentMod}`;
 		}
-		if (cmd === 'nds') target += ', natdex';
+		if (cmd === 'nds' ||
+			(defaultFormat.format && Dex.formats.getRuleTable(defaultFormat.format).has('standardnatdex'))) {
+			target += ', natdex';
+		}
 		const response = await runSearch({
 			target,
 			cmd: 'dexsearch',
@@ -133,7 +137,7 @@ export const commands: Chat.ChatCommands = {
 			`|html| <details class="readmore"><summary><code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria<br/>` +
 			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
-			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZU/NFE/LC/CAP/CAP NFE/CAP LC.<br/>` +
+			`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZUBL/ZU/NFE/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.</summary>` +
 			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
 			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
@@ -176,7 +180,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
-
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		if (!target.includes('mod=')) {
+			const dex = defaultFormat.dex;
+			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
+		}
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
@@ -223,7 +231,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
-
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		if (!target.includes('mod=')) {
+			const dex = defaultFormat.dex;
+			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
+		}
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
@@ -351,7 +363,7 @@ export const commands: Chat.ChatCommands = {
 			`- <code>zmove</code>, <code>max</code>, or <code>gmax</code> as parameters will search for Z-Moves, Max Moves, and G-Max Moves respectively.<br/>` +
 			`- Move targets must be preceded with <code>targets </code>; e.g. <code>targets user</code> searches for moves that target the user.<br/>` +
 			`- Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, and user.<br/>` +
-			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, instruct, mefirst, mimic, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
+			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, instruct, metronome, mimic, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
 			`- <code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`- A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`</details><br/>` +
@@ -383,7 +395,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse('/help itemsearch');
 		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
-		if (targetGen) target += ` maxgen${targetGen}`;
+		if (targetGen) target = `maxgen${targetGen} ${target}`;
 
 		const response = await runSearch({
 			target,
@@ -509,11 +521,12 @@ export const commands: Chat.ChatCommands = {
 	bw2learn: 'learn',
 	oraslearn: 'learn',
 	usumlearn: 'learn',
+	sslearn: 'learn',
 	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
 		if (target.length > 300) throw new Chat.ErrorMessage(`Query too long.`);
 
-		const GENS: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7};
+		const GENS: {[k: string]: number} = {rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7, ss: 8};
 		const cmdGen = GENS[cmd.slice(0, -5)];
 		if (cmdGen) target = `gen${cmdGen}, ${target}`;
 
@@ -543,7 +556,7 @@ export const commands: Chat.ChatCommands = {
 		`A value of 'min source gen [number]' indicates that trading (or Pokémon Bank) from generations before [number] is not allowed.`,
 		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
-		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum`,
+		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum ss`,
 	],
 	randtype: 'randomtype',
 	async randomtype(target, room, user, connection, cmd, message) {
@@ -619,7 +632,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		uubl: 'UUBL', uu: 'UU',
 		rubl: 'RUBL', ru: 'RU',
 		nubl: 'NUBL', nu: 'NU',
-		publ: 'PUBL', pu: 'PU', zu: '(PU)',
+		publ: 'PUBL', pu: 'PU',
+		zubl: 'ZUBL', zu: 'ZU',
 		nfe: 'NFE',
 		lc: 'LC',
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
@@ -1118,7 +1132,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
 				if (nationalSearch) tier = dex[mon].natDexTier;
-				if (tier.startsWith('(') && tier !== '(PU)') tier = tier.slice(1, -1) as TierTypes.Singles;
+				if (tier.startsWith('(')) tier = tier.slice(1, -1) as TierTypes.Singles;
 				// if (tier === 'New') tier = 'OU';
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
@@ -1258,9 +1272,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
 			const formatStr = format ? format[1].name : 'gen9ou';
-			const validator = TeamValidator.get(
-				`${formatStr}${nationalSearch && !Dex.formats.getRuleTable(Dex.formats.get(formatStr)).has('standardnatdex') ? '@@@standardnatdex' : ''}`
-			);
+			const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(formatStr));
+			const additionalRules = [];
+			if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
+			if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
+			const validator = TeamValidator.get(`${formatStr}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
 			const pokemonSource = validator.allSources();
 			for (const move of Object.keys(alts.moves).map(x => mod.moves.get(x))) {
 				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
@@ -1296,11 +1312,16 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
 		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
-		const isRegionalForm = ["Alola", "Galar", "Hisui", "Paldea"].includes(dex[mon].forme) &&
-			dex[mon].name !== "Pikachu-Alola";
+		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(dex[mon].forme) || dex[mon].forme.startsWith("Paldea")) &&
+			dex[mon].baseSpecies !== "Pikachu";
+		const maskForm = dex[mon].baseSpecies === "Ogerpon" && !dex[mon].forme.endsWith("Tera");
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isRegionalForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
+		if (!isRegionalForm && !maskForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
 			getSortValue(mon) === getSortValue(dex[mon].baseSpecies)) continue;
+		const teraFormeChangesFrom = dex[mon].forme.endsWith("Tera") ? !Array.isArray(dex[mon].battleOnly) ?
+			dex[mon].battleOnly as string : null : null;
+		if (teraFormeChangesFrom && results.includes(teraFormeChangesFrom) &&
+			getSortValue(mon) === getSortValue(teraFormeChangesFrom)) continue;
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
@@ -1366,9 +1387,10 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
-		'allyanim', 'bypasssub', 'bite', 'bullet', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore', 'failinstruct',
-		'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'mirror', 'mustpressure', 'noassist', 'nonsky', 'noparentalbond', 'nosleeptalk',
-		'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing', 'snatch', 'sound', 'wind',
+		'allyanim', 'bypasssub', 'bite', 'bullet', 'cantusetwice', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore',
+		'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'metronome', 'mirror', 'mustpressure', 'noassist', 'nonsky',
+		'noparentalbond', 'nosleeptalk', 'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing', 'snatch', 'sound',
+		'wind',
 
 		// Not flags directly from move data, but still useful to sort by
 		'highcrit', 'multihit', 'ohko', 'protection', 'secondary',
@@ -1484,7 +1506,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (target === 'crit' || toID(target) === 'highcrit') target = 'highcrit';
 			if (['thaw', 'thaws', 'melt', 'melts', 'defrosts'].includes(target)) target = 'defrost';
 			if (target === 'slices' || target === 'slice') target = 'slicing';
-			if (target === 'sheerforce') target = 'secondary';
+			if (toID(target) === 'sheerforce') target = 'secondary';
 			if (target === 'bounceable' || toID(target) === 'magiccoat' || toID(target) === 'magicbounce') target = 'reflectable';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) {
@@ -1767,47 +1789,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		};
 	}
 
-	const getFullLearnsetOfPokemon = (species: Species, natDex: boolean) => {
-		let usedSpecies: Species = Utils.deepClone(species);
-		let usedSpeciesLearnset: LearnsetData = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
-		if (!usedSpeciesLearnset) {
-			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.baseSpecies));
-			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id) || {});
-		}
-		const lsetData = new Set<string>();
-		for (const move in usedSpeciesLearnset) {
-			const learnset = mod.species.getLearnset(usedSpecies.id);
-			if (!learnset) break;
-			const sources = learnset[move];
-			for (const learned of sources) {
-				const sourceGen = parseInt(learned.charAt(0));
-				if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen >= 9 || natDex)) lsetData.add(move);
-			}
-		}
-
-		while (usedSpecies.prevo) {
-			usedSpecies = Utils.deepClone(mod.species.get(usedSpecies.prevo));
-			usedSpeciesLearnset = Utils.deepClone(mod.species.getLearnset(usedSpecies.id));
-			for (const move in usedSpeciesLearnset) {
-				const learnset = mod.species.getLearnset(usedSpecies.id);
-				if (!learnset) break;
-				const sources = learnset[move];
-				for (const learned of sources) {
-					const sourceGen = parseInt(learned.charAt(0));
-					if (sourceGen <= mod.gen && (mod.gen < 9 || sourceGen === 9 || natDex)) lsetData.add(move);
-				}
-			}
-		}
-
-		return lsetData;
-	};
-
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	const validMoves = new Set(Object.keys(mod.data.Moves));
+	const validMoves = new Set(Object.keys(mod.data.Moves)) as Set<ID>;
 	for (const mon of targetMons) {
 		const species = mod.species.get(mon.name);
-		const lsetData = getFullLearnsetOfPokemon(species, !!nationalSearch);
+		const lsetData = mod.species.getMovePool(species.id, !!nationalSearch);
 		// This pokemon's learnset needs to be excluded, so we perform a difference operation
 		// on the valid moveset and this pokemon's moveset.
 		if (mon.shouldBeExcluded) {
@@ -1833,7 +1820,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		if (move.gen <= mod.gen) {
 			if (
 				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
-				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past"].includes(move.isNonstandard))
+				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past", "Unobtainable"].includes(move.isNonstandard))
 			) {
 				continue;
 			} else {
@@ -2114,14 +2101,11 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	let gen = 0;
 	let randomOutput = 0;
 
-	target = target.trim();
 	const targetSplit = target.split(',');
-	const lastCommaIndex = target.lastIndexOf(',');
-	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
-	if (lastArgumentSubstr === 'all') {
+	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
 		if (!canAll) return {error: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
-		target = target.substr(0, lastCommaIndex);
+		targetSplit.pop();
 	}
 
 	const sanitizedTargets = [];
@@ -2398,28 +2382,25 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	let gen = 0;
 	let randomOutput = 0;
 
-	target = target.trim();
-	const target_split = target.split(',');
-	const lastCommaIndex = target.lastIndexOf(',');
-	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
-	if (lastArgumentSubstr === 'all') {
+	const targetSplit = target.split(',');
+	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
 		if (!canAll) return {error: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
-		target = target.substr(0, lastCommaIndex);
+		targetSplit.pop();
 	}
 
-	const sanitized_targets = [];
-	for (const index of target_split.keys()) {
-		const local_target = target_split[index].trim();
+	const sanitizedTargets = [];
+	for (const index of targetSplit.keys()) {
+		const localTarget = targetSplit[index].trim();
 		// Check if the target contains "random<digit>".
-		if (local_target.startsWith('random') && cmd === 'randability') {
+		if (localTarget.startsWith('random') && cmd === 'randability') {
 			// Validation for this is in the /randpoke command
-			randomOutput = parseInt(local_target.substr(6));
+			randomOutput = parseInt(localTarget.substr(6));
 		} else {
-			sanitized_targets.push(local_target);
+			sanitizedTargets.push(localTarget);
 		}
 	}
-	target = sanitized_targets.join(',');
+	target = sanitizedTargets.join(',');
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
 	const rawSearch = target.replace(/(max ?)?gen \d/g, match => toID(match)).split(' ');
@@ -2622,12 +2603,14 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 		if (!dex) return {error: `"${formatid}" is not a supported format.`};
 
 		gen = dex.gen;
-		format = new Dex.Format({mod: formatid});
 		formatName = `Gen ${gen}`;
+		format = new Dex.Format({mod: formatid});
+		const ruleTable = dex.formats.getRuleTable(format);
 		if (minSourceGen) {
 			formatName += ` (Min Source Gen = ${minSourceGen})`;
-			const ruleTable = dex.formats.getRuleTable(format);
 			ruleTable.minSourceGen = minSourceGen;
+		} else if (gen >= 9) {
+			ruleTable.minSourceGen = gen;
 		}
 	} else {
 		gen = Dex.forFormat(format).gen;
