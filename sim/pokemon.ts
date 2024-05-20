@@ -519,7 +519,7 @@ export class Pokemon {
 		this.baseMaxhp = 0;
 		this.hp = 0;
 		this.clearVolatile();
-		this.hp = this.set.startingHP ? this.set.startingHP : this.maxhp;
+		this.hp = this.set.startingHP !== undefined ? this.set.startingHP : this.maxhp;
 	}
 
 	get moves(): readonly string[] {
