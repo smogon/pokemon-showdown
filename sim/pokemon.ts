@@ -360,8 +360,8 @@ export class Pokemon {
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,
-				pp: (this.set.startingPPs && this.set.startingPPs[index]) ? this.set.startingPPs[index] : basepp,
-				maxpp: (this.set.startingMaxPPs && this.set.startingMaxPPs[index]) ? this.set.startingMaxPPs[index] : basepp,
+				pp: (this.set.startingPPs && this.set.startingPPs[index] !== undefined) ? this.set.startingPPs[index] : basepp,
+				maxpp: (this.set.startingMaxPPs && this.set.startingMaxPPs[index] !== undefined) ? this.set.startingMaxPPs[index] : basepp,
 				target: move.target,
 				disabled: false,
 				disabledSource: "",
