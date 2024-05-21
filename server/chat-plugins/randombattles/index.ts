@@ -155,8 +155,9 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 	format = Dex.formats.get(format);
 	species = dex.species.get(species);
 	const isDoubles = format.gameType === 'doubles';
+	const isBaby = format.team === 'randomBaby';
 	const setsFile = JSON.parse(
-		FS(`data/random-battles/${format.mod}/${isDoubles ? `doubles-` : ``}sets.json`)
+		FS(`data/random-battles/${format.mod}${isBaby ? 'baby' : ''}/${isDoubles ? 'doubles-' : ''}sets.json`)
 			.readIfExistsSync() || '{}'
 	);
 	const data = setsFile[species.id];
@@ -414,16 +415,20 @@ export const commands: Chat.ChatCommands = {
 	randbats: 'randombattles',
 	randomdoublesbattle: 'randombattles',
 	randdubs: 'randombattles',
+	babyrandombattle: 'randombattles',
+	babyrands: 'randombattles',
 	// randombattlenodmax: 'randombattles',
 	// randsnodmax: 'randombattles',
 	randombattles(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		const battle = room?.battle;
 		let isDoubles = cmd === 'randomdoublesbattle' || cmd === 'randdubs';
+		let isBaby = cmd === 'babyrandombattle' || cmd === 'babyrands';
 		let isNoDMax = cmd.includes('nodmax');
 		if (battle) {
 			if (battle.format.includes('nodmax')) isNoDMax = true;
 			if (battle.format.includes('doubles') || battle.gameType === 'freeforall') isDoubles = true;
+			if (battle.format.includes('baby')) isBaby = true;
 		}
 
 		const args = target.split(',');
@@ -445,9 +450,10 @@ export const commands: Chat.ChatCommands = {
 		}
 		const species = dex.species.get(searchResults[0].name);
 		const extraFormatModifier = isLetsGo ? 'letsgo' : (dex.currentMod === 'gen8bdsp' ? 'bdsp' : '');
+		const babyModifier = isBaby ? 'baby' : '';
 		const doublesModifier = isDoubles ? 'doubles' : '';
 		const noDMaxModifier = isNoDMax ? 'nodmax' : '';
-		const format = dex.formats.get(`gen${dex.gen}${extraFormatModifier}random${doublesModifier}battle${noDMaxModifier}`);
+		const format = dex.formats.get(`gen${dex.gen}${extraFormatModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`);
 
 		const movesets = [];
 		let setCount = 0;
