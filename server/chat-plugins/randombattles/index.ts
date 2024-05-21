@@ -453,7 +453,8 @@ export const commands: Chat.ChatCommands = {
 		const babyModifier = isBaby ? 'baby' : '';
 		const doublesModifier = isDoubles ? 'doubles' : '';
 		const noDMaxModifier = isNoDMax ? 'nodmax' : '';
-		const format = dex.formats.get(`gen${dex.gen}${extraFormatModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`);
+		const formatName = `gen${dex.gen}${extraFormatModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
+		const format = dex.formats.get(formatName);
 
 		const movesets = [];
 		let setCount = 0;
