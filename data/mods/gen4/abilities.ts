@@ -75,16 +75,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	download: {
 		inherit: true,
 		onStart(pokemon) {
-			let activate = false;
 			let totaldef = 0;
 			let totalspd = 0;
 			for (const target of pokemon.foes()) {
 				if (target.volatiles.substitute) continue;
-				activate = true;
 				totaldef += target.getStat('def', false, true);
 				totalspd += target.getStat('spd', false, true);
 			}
-			if (!activate) return;
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa: 1});
 			} else if (totalspd) {
