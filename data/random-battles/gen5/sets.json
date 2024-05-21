@@ -567,11 +567,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "thunderwave", "toxic"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["seismictoss", "softboiled", "toxic", "wish"]
+                "movepool": ["aromatherapy", "seismictoss", "softboiled", "stealthrock", "thunderwave", "toxic", "wish"]
             }
         ]
     },
@@ -1068,7 +1064,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["calmmind", "hiddenpowerfire", "morningsun", "psychic", "psyshock", "signalbeam", "trick"]
+                "movepool": ["calmmind", "hiddenpowerfighting", "morningsun", "psychic", "psyshock", "signalbeam", "trick"]
             }
         ]
     },
@@ -1220,11 +1216,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["encore", "knockoff", "stealthrock", "toxic"]
-            },
-            {
-                "role": "Staller",
-                "movepool": ["encore", "protect", "stealthrock", "toxic"]
+                "movepool": ["encore", "knockoff", "protect", "stealthrock", "toxic"]
             }
         ]
     },
@@ -1805,6 +1797,10 @@
                 "role": "Bulky Setup",
                 "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
                 "preferredTypes": ["Ice"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["grassknot", "hiddenpowerice", "nastyplot", "thunderbolt"]
             }
         ]
     },
@@ -1815,6 +1811,10 @@
                 "role": "Bulky Setup",
                 "movepool": ["encore", "hiddenpowerice", "nastyplot", "substitute", "thunderbolt"],
                 "preferredTypes": ["Ice"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["grassknot", "hiddenpowerice", "nastyplot", "thunderbolt"]
             }
         ]
     },
@@ -2245,7 +2245,8 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["icebeam", "rest", "sleeptalk", "thunderbolt"]
+                "movepool": ["focusblast", "icebeam", "rest", "sleeptalk", "thunderbolt", "thunderwave"],
+                "preferredTypes": ["Electric"]
             },
             {
                 "role": "Setup Sweeper",
@@ -2266,7 +2267,7 @@
             },
             {
                 "role": "Staller",
-                "movepool": ["protect", "seismictoss", "stealthrock", "toxic"]
+                "movepool": ["protect", "seismictoss", "stealthrock", "thunderwave", "toxic"]
             }
         ]
     },
@@ -2517,7 +2518,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["earthquake", "protect", "stealthrock", "toxic"]
+                "movepool": ["earthquake", "protect", "stealthrock", "suckerpunch", "toxic"]
             }
         ]
     },
@@ -2526,7 +2527,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["flashcannon", "protect", "stealthrock", "toxic"]
+                "movepool": ["flashcannon", "protect", "stealthrock", "suckerpunch", "toxic"]
             }
         ]
     },
@@ -2726,7 +2727,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["closecombat", "crunch", "extremespeed", "icepunch", "swordsdance"],
+                "movepool": ["closecombat", "crunch", "extremespeed", "stoneedge", "swordsdance"],
                 "preferredTypes": ["Normal"]
             },
             {
@@ -2987,8 +2988,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "icepunch", "painsplit", "shadowsneak", "trick", "willowisp"],
+                "movepool": ["earthquake", "icepunch", "painsplit", "shadowsneak", "toxic", "trick", "willowisp"],
                 "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["earthquake", "protect", "shadowsneak", "toxic"]
             }
         ]
     },
@@ -3069,11 +3074,11 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["calmmind", "healingwish", "hiddenpowerfire", "icebeam", "psychic", "psyshock", "signalbeam", "thunderbolt", "trick", "uturn"]
+                "movepool": ["calmmind", "healingwish", "hiddenpowerfighting", "icebeam", "psychic", "psyshock", "signalbeam", "thunderbolt", "trick", "uturn"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["hiddenpowerfire", "psychic", "stealthrock", "thunderwave", "toxic", "uturn"]
+                "movepool": ["hiddenpowerfighting", "psychic", "stealthrock", "thunderwave", "toxic", "uturn"]
             }
         ]
     },
@@ -3359,11 +3364,13 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "earthpower", "fireblast", "recover", "sludgebomb"]
+                "movepool": ["calmmind", "earthpower", "fireblast", "recover", "sludgebomb"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "fireblast", "icebeam", "recover", "sludgebomb", "stealthrock", "willowisp"]
+                "movepool": ["earthquake", "fireblast", "icebeam", "recover", "sludgebomb", "stealthrock", "willowisp"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -4239,7 +4246,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["focusblast", "hiddenpowerflying", "hiddenpowerice", "taunt", "thunderbolt", "thunderwave"]
+                "movepool": ["hiddenpowerflying", "hiddenpowerice", "superpower", "taunt", "thunderbolt", "thunderwave"]
             }
         ]
     },

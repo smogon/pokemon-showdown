@@ -17247,6 +17247,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			target.ability = sourceAbility.id;
 			source.abilityState = {id: this.toID(source.ability), target: source};
 			target.abilityState = {id: this.toID(target.ability), target: target};
+			source.volatileStaleness = undefined;
 			if (!target.isAlly(source)) target.volatileStaleness = 'external';
 			this.singleEvent('Start', targetAbility, source.abilityState, source);
 			this.singleEvent('Start', sourceAbility, target.abilityState, target);
