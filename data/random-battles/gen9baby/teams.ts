@@ -713,7 +713,7 @@ export class RandomBabyTeams extends RandomTeams {
 
 	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 
-	randomTeam() {
+	randomBabyTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.seed;
