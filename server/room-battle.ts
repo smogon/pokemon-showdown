@@ -450,7 +450,7 @@ export class RoomBattleTimer {
 				didSomething = true;
 			} else {
 				this.battle.forfeitPlayer(player, ' lost due to inactivity.');
-				return true;
+				didSomething = true;
 			}
 		}
 		return didSomething;
