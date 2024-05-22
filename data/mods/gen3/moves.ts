@@ -532,6 +532,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 20,
 	},
+	rest: {
+		inherit: true,
+		onTry(source) {
+			if (source.status === 'slp') {
+				this.add('-fail', source, 'slp');
+				return null;
+			}
+			if (source.hp === source.maxhp) {
+				this.add('-fail', source, 'heal');
+				return null;
+			}
+			if (source.hasAbility(['insomnia', 'vitalspirit'])) {
+				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
+				return null;
+			}
+		},
+	},
 	rocksmash: {
 		inherit: true,
 		basePower: 20,
