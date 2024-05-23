@@ -5723,7 +5723,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		num: 175,
 		accuracy: 100,
 		basePower: 0,
-		basePowerCallback(pokemon, target) {
+		basePowerCallback(pokemon) {
 			const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
 			let bp;
 			if (ratio < 2) {
@@ -15620,7 +15620,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		num: 179,
 		accuracy: 100,
 		basePower: 0,
-		basePowerCallback(pokemon, target) {
+		basePowerCallback(pokemon) {
 			const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
 			let bp;
 			if (ratio < 2) {
