@@ -16,11 +16,6 @@ import {RoomSections} from './room-settings';
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
-interface DexResources {
-	url: string;
-	resources: {resource_name: string, url: string}[];
-}
-
 export function getCommonBattles(
 	userID1: ID, user1: User | null, userID2: ID, user2: User | null, connection: Connection
 ) {
@@ -70,30 +65,6 @@ export function findFormats(targetId: string, isOMSearch = false) {
 		}
 	}
 	return {totalMatches, sections};
-}
-
-export const formatsDataCache = new Map<string, DexResources | null>();
-export async function getFormatResources(format: string) {
-	const cached = formatsDataCache.get(format);
-	if (cached !== undefined) return cached;
-	try {
-		const raw = await Net(`https://www.smogon.com/dex/api/formats/by-ps-name/${format}`).get();
-		const data = JSON.parse(raw);
-		formatsDataCache.set(format, data);
-		return data;
-	} catch {
-		// some sort of json error or request can't be made
-		// so something on smogon's end. freeze the request, punt
-		formatsDataCache.set(format, null);
-		return null;
-	}
-}
-
-// clear every 15 minutes to ensure it's only minimally stale
-const resourceRefreshInterval = setInterval(() => formatsDataCache.clear(), 15 * 60 * 1000);
-
-export function destroy() {
-	clearInterval(resourceRefreshInterval);
 }
 
 export const commands: Chat.ChatCommands = {
@@ -581,7 +552,6 @@ export const commands: Chat.ChatCommands = {
 	pokedex: 'data',
 	data(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		target = target.trim();
 		const gen = parseInt(cmd.substr(-1));
 		if (gen) target += `, gen${gen}`;
 
@@ -912,40 +882,92 @@ export const commands: Chat.ChatCommands = {
 			targets.pop();
 		}
 
+		const originalSearch = target;
+		let imperfectMatch = false;
+		let isMatch = false;
 		let species: {types: string[], [k: string]: any} = dex.species.get(targets[0]);
-		const type1 = dex.types.get(targets[0]);
-		const type2 = dex.types.get(targets[1]);
-		const type3 = dex.types.get(targets[2]);
-
-		if (species.exists) {
-			target = species.name;
-		} else {
-			const types = [];
-			if (type1.exists) {
-				types.push(type1.name);
-				if (type2.exists && type2 !== type1) {
-					types.push(type2.name);
-				}
-				if (type3.exists && type3 !== type1 && type3 !== type2) {
-					types.push(type3.name);
-				}
+		let type1: any = dex.types.get(targets[0]);
+		let type2: any = dex.types.get(targets[1]);
+		let type3: any = dex.types.get(targets[2]);
+		if (species.name !== "" && !species.exists && type1.name !== "" && !type1.exists) {
+			const typeSearchResults = dex.dataSearch(targets[0], ['TypeChart']);
+			const speciesSearchResults = dex.dataSearch(targets[0], ['Pokedex']);
+			if (typeSearchResults && typeSearchResults[0].name !== "") {
+				type1 = dex.types.get(typeSearchResults[0].name);
+				imperfectMatch = true;
+			} else if (speciesSearchResults && speciesSearchResults[0].name !== "") {
+				species = dex.species.get(speciesSearchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
 			}
-
-			if (types.length === 0) {
-				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
-			}
-			species = {types: types};
-			target = types.join("/");
 		}
 
+		if (type2.name !== "" && !type2.exists) {
+			const searchResults = dex.dataSearch(targets[1], ['TypeChart']);
+			if (searchResults && searchResults[0].name !== "") {
+				type2 = dex.types.get(searchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+			}
+		}
+
+		if (type3.name !== "" && !type3.exists) {
+			const searchResults = dex.dataSearch(targets[2], ['TypeChart']);
+			if (searchResults && searchResults[0].name !== "") {
+				type3 = dex.types.get(searchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+			}
+		}
+
+		const types = [];
+		if (species.exists) {
+			types.push(species.types);
+			target = species.name;
+			isMatch = true;
+		} else if (type1.exists) {
+			types.push(type1.name);
+			target = type1.name;
+			isMatch = true;
+		}
+
+		let alreadyFoundType2 = false;
+		let alreadyFoundType3 = false;
+		if (types.toString().toLowerCase().includes(type2.name.toLowerCase())) {
+			alreadyFoundType2 = true;
+		}
+		if (types.toString().toLowerCase().includes(type3.name.toLowerCase())) {
+			alreadyFoundType3 = true;
+		}
+
+		if (isMatch) {
+			const searchTarget = [];
+			searchTarget.push(target);
+			if (type2.exists && !alreadyFoundType2) {
+				types.push(type2.name);
+				searchTarget.push(type2.name);
+			}
+			if (type3.exists && !alreadyFoundType3) {
+				types.push(type3.name);
+				searchTarget.push(type3.name);
+			}
+			target = searchTarget.join("/");
+		}
+
+		if (imperfectMatch) {
+			this.sendReply(`No Pok\u00e9mon or type named '${originalSearch}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${target}' instead.`);
+		}
 		const weaknesses = [];
 		const resistances = [];
 		const immunities = [];
 		for (const type of dex.types.names()) {
-			const notImmune = dex.getImmunity(type, species);
+			const notImmune = dex.getImmunity(type, types);
 			if (notImmune || isInverse) {
 				let typeMod = !notImmune && isInverse ? 1 : 0;
-				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, species);
+				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, types);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -983,13 +1005,13 @@ export const commands: Chat.ChatCommands = {
 			trapped: "Trapping",
 		};
 		for (const status in statuses) {
-			if (!dex.getImmunity(status, species)) {
+			if (!dex.getImmunity(status, types)) {
 				immunities.push(statuses[status]);
 			}
 		}
 
 		const buffer = [];
-		buffer.push(`${species.exists ? `${species.name} (ignoring abilities):` : `${target}:`}`);
+		buffer.push(`${species.exists ? `${target} (ignoring abilities):` : `${target}:`}`);
 		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<font color=#999999>None</font>'}`);
 		buffer.push(`<span class="message-effect-resist">Resistances</span>: ${resistances.join(', ') || '<font color=#999999>None</font>'}`);
 		buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immunities.join(', ') || '<font color=#999999>None</font>'}`);
@@ -997,9 +1019,11 @@ export const commands: Chat.ChatCommands = {
 	},
 	weaknesshelp: [
 		`/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.`,
-		`/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
+		`/weakness [type 1], [type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
+		`/weakness [pokemon], [type 1], [type 2] - Provides a Pok\u00e9mon's type and type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
 		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
-		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
+		`!weakness [type 1], [type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
+		`!weakness [pokemon], [type 1], [type 2] - Shows everyone a Pok\u00e9mon's type and type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
 	],
 
 	eff: 'effectiveness',
@@ -1785,13 +1809,11 @@ export const commands: Chat.ChatCommands = {
 		const isRandomBattle = room?.battle?.format.endsWith('randombattle');
 		const isBattleSpotBattle = (room?.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) ||
 			room.battle.format.includes("battlespotspecial")));
-		const {dex} = this.extractFormat(room?.battle?.format);
-
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
 			(isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
 				`Random Battles damage calculator. (Courtesy of Austin)<br />` +
-				`- <a href="https://calc.pokemonshowdown.com/randoms.html?gen=${dex.gen}">Random Battles Damage Calculator</a>`
+				`- <a href="https://calc.pokemonshowdown.com/randoms.html">Random Battles Damage Calculator</a>`
 			);
 		}
 		if (BATTLESPOT_CALC_COMMANDS.includes(cmd) || (isBattleSpotBattle && !DEFAULT_CALC_COMMANDS.includes(cmd))) {
@@ -1802,7 +1824,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, &amp; Kris)<br />` +
-			`- <a href="https://calc.pokemonshowdown.com/index.html?gen=${dex.gen}">Damage Calculator</a>`
+			`- <a href="https://calc.pokemonshowdown.com/index.html">Damage Calculator</a>`
 		);
 	},
 	calchelp: [
@@ -1855,7 +1877,7 @@ export const commands: Chat.ChatCommands = {
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
 	viewbanlist: 'formathelp',
-	async formathelp(target, room, user, connection, cmd) {
+	formathelp(target, room, user, connection, cmd) {
 		if (!target && this.runBroadcast()) {
 			return this.sendReplyBox(
 				`- <a href="https://www.smogon.com/tiers/">Smogon Tiers</a><br />` +
@@ -1909,22 +1931,8 @@ export const commands: Chat.ChatCommands = {
 					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
 				}
 			}
-			const formatDesc = format.desc || '';
-			let descHtml = [];
-			const data = await getFormatResources(format.id);
-			if (data) {
-				for (const {resource_name, url} of data.resources) {
-					let rn = resource_name;
-					rn = rn.replace(/ thread$/gi, '');
-					rn = rn.replace(/Pokemon Showdown/gi, 'PS');
-					rn = rn.split(' ').map((x: string) => x[0].toUpperCase() + x.substr(1)).join(' ');
-					descHtml.push(`&bullet; <a href="${url}">${rn}</a>`);
-				}
-			}
-			if (!descHtml.length && format.threads) {
-				descHtml = format.threads;
-			}
-			return this.sendReplyBox(`<h1>${format.name}</h1><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
+			const descHtml = [...(format.desc ? [format.desc] : []), ...(format.threads || [])];
+			return this.sendReplyBox(`${descHtml.join("<br />")}<br />${rulesetHtml}`);
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
@@ -1940,13 +1948,7 @@ export const commands: Chat.ChatCommands = {
 			for (const section of sections[sectionId].formats) {
 				const subformat = Dex.formats.get(section);
 				const nameHTML = Utils.escapeHTML(subformat.name);
-				const desc = subformat.desc ? [subformat.desc] : [];
-				const data = await getFormatResources(subformat.id);
-				if (data) {
-					for (const {resource_name, url} of data.resources) {
-						desc.push(`&bullet; <a href="${url}">${resource_name}</a>`);
-					}
-				}
+				const desc = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
 				const descHTML = desc.length ? desc.join("<br />") : "&mdash;";
 				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
 			}
@@ -2713,7 +2715,9 @@ export const commands: Chat.ChatCommands = {
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
 			if (!channelId) return this.errorReply(`Specify a Twitch channel.`);
-			buf = Utils.html`Watching <b><a class="subtle" href="https://twitch.tv/${toID(channelId)}">${channelId}</a></b>...<br />`;
+			const info = await Twitch.getChannel(channelId);
+			if (!info) return this.errorReply(`Channel ${channelId} not found.`);
+			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
 			buf += `<twitch src="${link}" />`;
 		} else {
 			if (Chat.linkRegex.test(link)) {
@@ -2989,63 +2993,6 @@ export const commands: Chat.ChatCommands = {
 	altsloghelp: [
 		`/altslog [userid] - View the alternate account history for the given [userid]. Requires: % @ &`,
 	],
-
-	randtopic(target, room, user) {
-		room = this.requireRoom();
-		if (!room.settings.topics?.length) {
-			return this.errorReply(`This room has no random topics to select from.`);
-		}
-		this.runBroadcast();
-		this.sendReply(Utils.html`|html|<div class="broadcast-blue">${Utils.randomElement(room.settings.topics)}</div>`);
-	},
-	randtopichelp: [
-		`/randtopic - Randomly selects a topic from the room's discussion topic pool and displays it.`,
-		`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`,
-		`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`,
-		`/randomtopics - View the discussion topic pool for the current room.`,
-	],
-
-	addtopic(target, room, user) {
-		room = this.requireRoom();
-		this.checkCan('mute', null, room);
-		target = target.trim();
-		if (!toID(target).length) {
-			return this.parse(`/help randtopic`);
-		}
-		if (!room.settings.topics) room.settings.topics = [];
-		room.settings.topics.push(target);
-		this.privateModAction(`${user.name} added the topic "${target}" to the random topic pool.`);
-		this.modlog('ADDTOPIC', null, target);
-		room.saveSettings();
-	},
-	addtopichelp: [`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`],
-
-	removetopic(target, room, user) {
-		room = this.requireRoom();
-		this.checkCan('mute', null, room);
-		if (!toID(target)) {
-			return this.parse(`/help randtopic`);
-		}
-		const index = Number(toID(target)) - 1;
-		if (isNaN(index)) {
-			return this.errorReply(`Invalid topic index: ${target}. Must be a number.`);
-		}
-		if (!room.settings.topics?.[index]) {
-			return this.errorReply(`Topic ${index + 1} not found.`);
-		}
-		const topic = room.settings.topics.splice(index, 1)[0];
-		room.saveSettings();
-		this.privateModAction(`${user.name} removed topic ${index + 1} from the random topic pool.`);
-		this.modlog('REMOVETOPIC', null, topic);
-	},
-	removetopichelp: [`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`],
-
-	listtopics: 'randomtopics',
-	randtopics: 'randomtopics',
-	randomtopics(target, room, user) {
-		room = this.requireRoom();
-		return this.parse(`/join view-topics-${room}`);
-	},
 };
 
 export const handlers: Chat.Handlers = {
@@ -3119,22 +3066,6 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `</table></div>`;
 		}
-		return buf;
-	},
-	topics(query, user) {
-		const room = this.requireRoom();
-		this.title = `[Topics] ${room.title}`;
-		const topics = room.settings.topics || [];
-		let buf;
-		if (!topics.length) {
-			buf = `<div class="pad"><h2>This room has no discussion topics saved.</h2></div>`;
-			return buf;
-		}
-		buf = `<div class="pad"><h2>Random topics for ${room.title} (${topics.length}):</h2><ul>`;
-		for (const [i, topic] of topics.entries()) {
-			buf += Utils.html`<li>${i + 1}: "${topic}"</li>`;
-		}
-		buf += `</ul></div>`;
 		return buf;
 	},
 	battlerules(query, user) {
@@ -3324,12 +3255,6 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>Requester ID:</strong> ${userid}<br />`;
 			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
 			buf += `<strong>Comment:</strong> ${entry.comment}`;
-			buf += `<form data-submitsend="/msgroom ${args[0]}, /approveshow ${userid}">`;
-			buf += `<button class="button" type="submit">Approve</button>`;
-			buf += `</form>`;
-			buf += `<form data-submitsend="/msgroom ${args[0]}, /denyshow ${userid}">`;
-			buf += `<button class="button" type="submit">Reject</button>`;
-			buf += `</form>`;
 			buf += `</div><hr />`;
 		}
 		return buf;
