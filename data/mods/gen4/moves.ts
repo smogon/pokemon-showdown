@@ -476,7 +476,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	flail: {
 		inherit: true,
-		basePowerCallback(pokemon, target) {
+		basePowerCallback(pokemon) {
 			const ratio = Math.max(Math.floor(pokemon.hp * 64 / pokemon.maxhp), 1);
 			let bp;
 			if (ratio < 2) {
@@ -1289,7 +1289,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	reversal: {
 		inherit: true,
-		basePowerCallback(pokemon, target) {
+		basePowerCallback(pokemon) {
 			const ratio = Math.max(Math.floor(pokemon.hp * 64 / pokemon.maxhp), 1);
 			let bp;
 			if (ratio < 2) {
