@@ -2,6 +2,7 @@ import {PRNG, PRNGSeed} from "../../../sim/prng";
 import {RandomTeams, MoveCounter} from "../gen9/teams";
 import {Utils} from '../../../lib';
 
+// First, some lists of moves that can be used for rules throughout set generation. Taken from regular gen9.
 
 // Moves that drop stats:
 const CONTRARY_MOVES = [
@@ -16,6 +17,11 @@ const HAZARDS = [
 // Moves that switch the user out
 const PIVOT_MOVES = [
 	'chillyreception', 'flipturn', 'partingshot', 'shedtail', 'teleport', 'uturn', 'voltswitch',
+];
+
+// Moves that boost Attack:
+const PHYSICAL_SETUP = [
+	'bellydrum', 'bulkup', 'coil', 'curse', 'dragondance', 'honeclaws', 'howl', 'meditate', 'poweruppunch', 'swordsdance', 'tidyup', 'victorydance',
 ];
 
 // Moves that restore HP:
@@ -130,9 +136,9 @@ export class RandomBabyTeams extends RandomTeams {
 		const incompatiblePairs = [
 			// These moves don't mesh well with other aspects of the set
 			[SETUP, 'defog'],
-			[SETUP, SETUP],
 			[SETUP, PIVOT_MOVES],
 			[SETUP, HAZARDS],
+			[PHYSICAL_SETUP, PHYSICAL_SETUP],
 			[statusMoves, ['healingwish', 'trick', 'destinybond']],
 
 			// These moves are redundant with each other
