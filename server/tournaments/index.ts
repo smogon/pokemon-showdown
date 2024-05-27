@@ -2290,22 +2290,25 @@ const commands: Chat.ChatCommands = {
 				this.parse(`${this.cmdToken}help tour settings`);
 			},
 		},
-		settingshelp: [
-			`/tour settings autodq <minutes|off> - Sets the automatic disqualification timeout for every tournament.`,
-			`/tour settings autostart <on|minutes|off> - Sets the automatic start timeout for every tournament.`,
-			`/tour settings forcepublic <on|off> - Specifies whether users can hide their battles for every tournament.`,
-			`/tour settings forcetimer <on|off> - Specifies whether users can toggle the timer for every tournament.`,
-			`/tour settings modjoin <on|off> - Specifies whether users can modjoin their battles for every tournament.`,
-			`/tour settings autoconfirmedonly: <on|off> - Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.`,
-			`/tour settings playercap <number> - Sets the playercap for every tournament.`,
-			`/tour settings scouting <on|off> - Specifies whether users can spectate other participants for every tournament.`,
-			`/tour settings recenttours <number|off|forcedelete> - Specifies the amount of recent tournaments to list in /recenttours.`,
-			`/tour settings blockrecents <on|off> - Toggles blocking tours in /recenttours from being made.`,
-			`Requires: # &`,
-		],
 	},
-	tournamenthelp() {
+	tournamenthelp(target) {
 		if (!this.runBroadcast()) return;
+		if (target.endsWith('settings')) {
+			return this.sendReplyBox(
+				`<code>/tour settings autodq &lt;minutes|off></code> - Sets the automatic disqualification timeout for every tournament.<br />` +
+				`<code>/tour settings autostart &lt;on|minutes|off></code> - Sets the automatic start timeout for every tournament.<br />` +
+				`<code>/tour settings forcepublic &lt;on|off></code> - Specifies whether users can hide their battles for every tournament.<br />` +
+				`<code>/tour settings forcetimer &lt;on|off></code> - Specifies whether users can toggle the timer for every tournament.<br />` +
+				`<code>/tour settings modjoin &lt;on|off></code> - Specifies whether users can modjoin their battles for every tournament.<br />`	+
+				`<code>/tour settings autoconfirmedonly&lt;on|off></code> - Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.<br />`	+
+				`<code>/tour settings playercap &lt;number></code> - Sets the playercap for every tournament.<br />` +
+				`<code>/tour settings scouting &lt;on|off></code> - Specifies whether users can spectate other participants for every tournament.<br />` +
+				`<code>/tour settings recenttours &lt;number|off|forcedelete></code> - Specifies the amount of recent tournaments to list in /recenttours.<br />` +
+				`<code>/tour settings blockrecents &lt;on|off></code> - Toggles blocking tours in /recenttours from being made.<br />` +
+				`Requires: # &`,
+			);
+		}
+
 		this.sendReplyBox(
 			`Tournament Commands<br/>` +
 			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
