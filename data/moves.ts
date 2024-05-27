@@ -19504,9 +19504,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Syrup Bomb');
 			},
+			onUpdate(pokemon) {
+				if (this.effectState.source && !this.effectState.source.isActive) {
+					pokemon.removeVolatile('syrupbomb');
+				}
+			},
 			onResidualOrder: 14,
-			onResidual() {
-				this.boost({spe: -1});
+			onResidual(pokemon) {
+				this.boost({spe: -1}, pokemon, this.effectState.source);
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Syrup Bomb', '[silent]');
