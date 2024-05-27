@@ -18,7 +18,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	ancientpower: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+	},
+	assist: {
+		inherit: true,
+		flags: {metronome: 1, noassist: 1, nosleeptalk: 1},
 	},
 	astonish: {
 		inherit: true,
@@ -196,7 +200,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	disable: {
 		inherit: true,
 		accuracy: 55,
-		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
 		volatileStatus: 'disable',
 		condition: {
 			durationCallback() {
@@ -253,7 +257,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				name: "Doom Desire",
 				basePower: 120,
 				category: "Physical",
-				flags: {},
+				flags: {metronome: 1, futuremove: 1},
 				willCrit: false,
 				type: '???',
 			} as unknown as ActiveMove;
@@ -269,7 +273,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					basePower: 0,
 					damage: damage,
 					category: "Physical",
-					flags: {futuremove: 1},
+					flags: {metronome: 1, futuremove: 1},
 					effectType: 'Move',
 					type: '???',
 				},
@@ -335,11 +339,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	fakeout: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 	},
 	feintattack: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
+	},
+	flail: {
+		inherit: true,
+		basePowerCallback(pokemon) {
+			const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
+			let bp;
+			if (ratio < 2) {
+				bp = 200;
+			} else if (ratio < 5) {
+				bp = 150;
+			} else if (ratio < 10) {
+				bp = 100;
+			} else if (ratio < 17) {
+				bp = 80;
+			} else if (ratio < 33) {
+				bp = 40;
+			} else {
+				bp = 20;
+			}
+			this.debug('BP: ' + bp);
+			return bp;
+		},
 	},
 	flash: {
 		inherit: true,
@@ -473,6 +499,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	mirrormove: {
 		inherit: true,
+		flags: {metronome: 1, failencore: 1, nosleeptalk: 1, noassist: 1},
 		onTryHit() { },
 		onHit(pokemon) {
 			const noMirror = [
@@ -517,7 +544,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	overheat: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 	},
 	petaldance: {
 		inherit: true,
@@ -526,6 +553,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	recover: {
 		inherit: true,
 		pp: 20,
+	},
+	reversal: {
+		inherit: true,
+		basePowerCallback(pokemon) {
+			const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
+			let bp;
+			if (ratio < 2) {
+				bp = 200;
+			} else if (ratio < 5) {
+				bp = 150;
+			} else if (ratio < 10) {
+				bp = 100;
+			} else if (ratio < 17) {
+				bp = 80;
+			} else if (ratio < 33) {
+				bp = 40;
+			} else {
+				bp = 20;
+			}
+			this.debug('BP: ' + bp);
+			return bp;
+		},
 	},
 	rocksmash: {
 		inherit: true,
@@ -602,7 +651,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	taunt: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1},
+		flags: {protect: 1, bypasssub: 1, metronome: 1},
 		condition: {
 			duration: 2,
 			onStart(target) {
@@ -630,11 +679,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	teeterdance: {
 		inherit: true,
-		flags: {protect: 1},
+		flags: {protect: 1, metronome: 1},
 	},
 	tickle: {
 		inherit: true,
-		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1},
 	},
 	uproar: {
 		inherit: true,

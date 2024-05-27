@@ -185,10 +185,15 @@ export const commands: Chat.ChatCommands = {
 				if (baseResult === expression) baseResult = '';
 			}
 			let resultStr = '';
+			const resultTruncated = parseFloat(result.toPrecision(15));
+			let resultDisplay = resultTruncated.toString();
+			if (resultTruncated > 10 ** 15) {
+				resultDisplay = resultTruncated.toExponential();
+			}
 			if (baseResult) {
-				resultStr = `<strong>${baseResult}</strong> = ${result}`;
+				resultStr = `<strong>${baseResult}</strong> = ${resultDisplay}`;
 			} else {
-				resultStr = `<strong>${result}</strong>`;
+				resultStr = `<strong>${resultDisplay}</strong>`;
 			}
 			this.sendReplyBox(`${expression}<br />= ${resultStr}`);
 		} catch (e: any) {

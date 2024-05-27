@@ -129,7 +129,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`The PotD is already set to ${species.name}`);
 		}
 		if (!species.exists) return this.errorReply(`Pokemon "${target}" not found.`);
-		if (!Dex.species.getLearnset(species.id)) {
+		if (!Dex.species.getFullLearnset(species.id).length) {
 			return this.errorReply(`That Pokemon has no learnset and cannot be used as the PotD.`);
 		}
 		Config.potd = species.id;
@@ -986,7 +986,7 @@ export const commands: Chat.ChatCommands = {
 			Object.entries(Dex.data.Learnsets).map(([id, entry]) => (
 				`\t${id}: {learnset: {\n` +
 				Utils.sortBy(
-					Object.entries(Dex.species.getLearnsetData(id as ID)),
+					Object.entries(Dex.species.getLearnsetData(id as ID).learnset!),
 					([moveid]) => moveid
 				).map(([moveid, sources]) => (
 					`\t\t${moveid}: ["` + sources.join(`", "`) + `"],\n`
@@ -1215,6 +1215,28 @@ export const commands: Chat.ChatCommands = {
 		`/endemergency - Turns off emergency mode. Requires: &`,
 	],
 
+	remainingbattles() {
+		this.checkCan('lockdown');
+
+		if (!Rooms.global.lockdown) {
+			return this.errorReply("The server is not under lockdown right now.");
+		}
+
+		const battleRooms = [...Rooms.rooms.values()].filter(x => x.battle?.rated && !x.battle?.ended);
+		let buf = `Total remaining rated battles: <b>${battleRooms.length}</b>`;
+		if (battleRooms.length > 10) buf += `<details><summary>View all battles</summary>`;
+		for (const battle of battleRooms) {
+			buf += `<br />`;
+			buf += `<a href="${battle.roomid}">${battle.title}</a>`;
+			if (battle.settings.isPrivate) buf += ' (Private)';
+		}
+		if (battleRooms.length > 10) buf += `</details>`;
+		this.sendReplyBox(buf);
+	},
+	remainingbattleshelp: [
+		`/remainingbattles - View a list of the remaining battles during lockdown. Requires: &`,
+	],
+
 	async savebattles(target, room, user) {
 		this.checkCan('rangeban'); // admins can restart, so they should be able to do this if needed
 		this.sendReply(`Saving battles...`);
@@ -1287,6 +1309,11 @@ export const commands: Chat.ChatCommands = {
 
 	refreshpage(target, room, user) {
 		this.checkCan('lockdown');
+		if (user.lastCommand !== 'refreshpage') {
+			user.lastCommand = 'refreshpage';
+			this.errorReply(`Are you sure you wish to refresh the page for every user online?`);
+			return this.errorReply(`If you are sure, please type /refreshpage again to confirm.`);
+		}
 		Rooms.global.sendAll('|refresh|');
 		this.stafflog(`${user.name} used /refreshpage`);
 	},
@@ -1337,7 +1364,7 @@ export const commands: Chat.ChatCommands = {
 		if (err) {
 			Rooms.global.notifyRooms(
 				['staff', 'development'],
-				`|c|&|/log ${user.name} used /updateloginserver - but something failed while updating.`
+				`|c|${user.getIdentity()}|/log ${user.name} used /updateloginserver - but something failed while updating.`
 			);
 			return this.errorReply(err.message + '\n' + err.stack);
 		}
@@ -1354,7 +1381,7 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(`FAILED. Conflicts were found while updating - the restart was aborted.`);
 		}
 		Rooms.global.notifyRooms(
-			['staff', 'development'], `|c|&|/log ${message}`
+			['staff', 'development'], `|c|${user.getIdentity()}|/log ${message}`
 		);
 	},
 	updateloginserverhelp: [
@@ -1370,7 +1397,7 @@ export const commands: Chat.ChatCommands = {
 		if (err) {
 			Rooms.global.notifyRooms(
 				['staff', 'development'],
-				`|c|&|/log ${user.name} used /updateclient - but something failed while updating.`
+				`|c|${user.getIdentity()}|/log ${user.name} used /updateclient - but something failed while updating.`
 			);
 			return this.errorReply(err.message + '\n' + err.stack);
 		}
@@ -1387,7 +1414,7 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(`FAILED. Conflicts were found while updating.`);
 		}
 		Rooms.global.notifyRooms(
-			['staff', 'development'], `|c|&|/log ${message}`
+			['staff', 'development'], `|c|${user.getIdentity()}|/log ${message}`
 		);
 	},
 	updateclienthelp: [

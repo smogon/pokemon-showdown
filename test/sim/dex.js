@@ -6,14 +6,14 @@ describe('Mod loader', function () {
 	it('should work fine in any order', function () {
 		{
 			const Dex = require('./../../dist/sim/dex').Dex;
-			assert.equal(Dex.mod('gen2').species.getLearnset('nidoking').bubblebeam.join(','), '1M');
+			assert.equal(Dex.mod('gen2').species.getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').moves.get('crunch').secondaries[0].boosts.def, undefined);
 		}
 		{
 			const Dex = require('./../../dist/sim/dex').Dex;
-			Dex.mod('gen2').species.getLearnset('nidoking');
+			Dex.mod('gen2').species.getLearnsetData('nidoking');
 			Dex.mod('gen4').moves.get('crunch');
-			assert.equal(Dex.mod('gen2').species.getLearnset('nidoking').bubblebeam.join(','), '1M');
+			assert.equal(Dex.mod('gen2').species.getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').moves.get('crunch').secondaries[0].boosts.def, undefined);
 		}
 	});
@@ -36,7 +36,8 @@ describe('Dex#getSpecies', function () {
 	});
 
 	it('should handle Minior-Meteor formes', function () {
-		assert(Dex.species.get('Minior-Meteor').isNonstandard);
+		assert(!Dex.species.get('Minior-Meteor').isNonstandard);
+		assert(Dex.forGen(8).species.get('Minior-Meteor').isNonstandard);
 		assert(!Dex.forGen(7).species.get('Minior-Meteor').isNonstandard);
 	});
 

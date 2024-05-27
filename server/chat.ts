@@ -87,6 +87,8 @@ interface Handlers {
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
 	onMessageOffline: (context: Chat.CommandContext, message: string, targetUserID: ID) => void;
+	onBattleJoin: (slot: string, user: User, battle: RoomBattle) => void;
+	onPunishUser: (type: string, user: User, room?: Room | null) => void;
 }
 
 export interface ChatPlugin {
@@ -694,9 +696,7 @@ export class CommandContext extends MessageContext {
 			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
-			if (this.room.game && this.room.game.onLogMessage) {
-				this.room.game.onLogMessage(message, this.user);
-			}
+			this.room.game?.onLogMessage?.(message, this.user);
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
 		}
@@ -784,8 +784,7 @@ export class CommandContext extends MessageContext {
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
 	checkGameFilter() {
-		if (!this.room?.game || !this.room.game.onChatMessage) return;
-		return this.room.game.onChatMessage(this.message, this.user);
+		return this.room?.game?.onChatMessage?.(this.message, this.user);
 	}
 	pmTransform(originalMessage: string, sender?: User, receiver?: User | null | string) {
 		if (!sender) {
@@ -1148,9 +1147,13 @@ export class CommandContext extends MessageContext {
 				}
 				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
-						throw new Chat.ErrorMessage(
-							this.tr`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
+						this.errorReply(
+							this.tr`Moderated chat is set. To speak in this room, your account must be autoconfirmed, which means being registered for at least one week and winning at least one rated game (any game started through the 'Battle!' button).`
 						);
+						if (!user.registered) {
+							this.sendReply(this.tr`|html|You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`);
+						}
+						throw new Chat.Interruption();
 					}
 					if (room.settings.modchat === 'trusted') {
 						throw new Chat.ErrorMessage(
@@ -2595,6 +2598,7 @@ export const Chat = new class {
 			}
 		}
 	}
+
 	readonly formatText = formatText;
 	readonly linkRegex = linkRegex;
 	readonly stripFormatting = stripFormatting;

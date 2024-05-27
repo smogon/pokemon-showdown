@@ -5,10 +5,12 @@
   "main": "dist/sim/index.js",
   "dependencies": {
     "esbuild": "^0.16.10",
+    "mysql2": "^3.9.7",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
     "probe-image-size": "^7.2.3",
-    "sockjs": "^0.3.21"
+    "sockjs": "^0.3.21",
+    "source-map-support": "^0.5.21"
   },
   "optionalDependencies": {
     "better-sqlite3": "^7.6.2",
@@ -17,7 +19,7 @@
     "node-static": "^0.7.11",
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
-    "pg": "^8.8.0",
+    "pg": "^8.11.3",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^3.0.6",
     "sucrase": "^3.15.0"
@@ -40,7 +42,7 @@
     "test": "mocha",
     "posttest": "npm run tsc",
     "full-test": "npm run lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\"",
-    "full-test-ci": "eslint ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
+    "full-test-ci": "eslint --no-error-on-unmatched-pattern ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
     "postinstall": "npm run build postinstall"
   },
   "bin": "./pokemon-showdown",
@@ -55,11 +57,6 @@
     "url": "http://guangcongluo.com"
   },
   "contributors": [
-    {
-      "name": "Cathy J. Fitzpatrick",
-      "email": "cathy@cathyjf.com",
-      "url": "https://cathyjf.com"
-    },
     {
       "name": "Bill Meltsner",
       "email": "bill@meltsner.com",
@@ -77,9 +74,9 @@
     "@types/sockjs": "^0.3.33",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
-    "eslint": "^8.5.0",
+    "eslint": "8.5.0",
     "mocha": "^8.2.0",
-    "smogon": "^2.2.1",
+    "smogon": "^3.0.0",
     "typescript": "^5.0.4"
   }
 }

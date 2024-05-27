@@ -595,6 +595,7 @@ export class BattleActions {
 			if (!hitResults) continue;
 			targets = targets.filter((val, i) => hitResults[i] || hitResults[i] === 0);
 			atLeastOneFailure = atLeastOneFailure || hitResults.some(val => val === false);
+			if (move.smartTarget && atLeastOneFailure) move.smartTarget = false;
 			if (!targets.length) {
 				// console.log(step.name);
 				break;
@@ -608,11 +609,16 @@ export class BattleActions {
 		return moveResult;
 	}
 	hitStepInvulnerabilityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
-		if (move.id === 'helpinghand' || (this.battle.gen >= 8 && move.id === 'toxic' && pokemon.hasType('Poison'))) {
-			return new Array(targets.length).fill(true);
-		}
-		const hitResults = this.battle.runEvent('Invulnerability', targets, pokemon, move);
+		if (move.id === 'helpinghand') return new Array(targets.length).fill(true);
+		const hitResults: boolean[] = [];
 		for (const [i, target] of targets.entries()) {
+			if (target.volatiles['commanding']) {
+				hitResults[i] = false;
+			} else if (this.battle.gen >= 8 && move.id === 'toxic' && pokemon.hasType('Poison')) {
+				hitResults[i] = true;
+			} else {
+				hitResults[i] = this.battle.runEvent('Invulnerability', target, pokemon, move);
+			}
 			if (hitResults[i] === false) {
 				if (move.smartTarget) {
 					move.smartTarget = false;
@@ -644,7 +650,6 @@ export class BattleActions {
 		for (const i of targets.keys()) {
 			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) ||
 				targets[i].runImmunity(move.type, !move.smartTarget);
-			if (move.smartTarget && !hitResults[i]) move.smartTarget = false;
 		}
 
 		return hitResults;
@@ -662,7 +667,9 @@ export class BattleActions {
 			} else if (this.battle.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') &&
 				!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 				this.battle.debug('natural prankster immunity');
-				if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
+				if (target.illusion || !(move.status && !this.dex.getImmunity(move.status, target))) {
+					this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
+				}
 				this.battle.add('-immune', target);
 				hitResults[i] = false;
 			} else {
@@ -738,7 +745,9 @@ export class BattleActions {
 		if (move.breaksProtect) {
 			for (const target of targets) {
 				let broke = false;
-				for (const effectid of ['banefulbunker', 'kingsshield', 'obstruct', 'protect', 'silktrap', 'spikyshield']) {
+				for (const effectid of [
+					'banefulbunker', 'burningbulwark', 'kingsshield', 'obstruct', 'protect', 'silktrap', 'spikyshield',
+				]) {
 					if (target.removeVolatile(effectid)) broke = true;
 				}
 				if (this.battle.gen >= 6 || !target.isAlly(pokemon)) {
@@ -781,7 +790,9 @@ export class BattleActions {
 					boosts[statName2] = 0;
 				}
 				target.setBoost(boosts);
-				this.battle.addMove('-anim', pokemon, "Spectral Thief", target);
+				if (move.id === "Spectral Thief") {
+					this.battle.addMove('-anim', pokemon, "Spectral Thief", target);
+				}
 			}
 		}
 		return undefined;
@@ -919,13 +930,22 @@ export class BattleActions {
 			const moveData = move;
 			if (!moveData.flags) moveData.flags = {};
 
+			let moveDamageThisHit;
 			// Modifies targetsCopy (which is why it's a copy)
-			[moveDamage, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
+			[moveDamageThisHit, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
+			// When Dragon Darts targets two different pokemon, targetsCopy is a length 1 array each hit
+			// so spreadMoveHit returns a length 1 damage array
+			if (move.smartTarget) {
+				moveDamage.push(...moveDamageThisHit);
+			} else {
+				moveDamage = moveDamageThisHit;
+			}
 
 			if (!moveDamage.some(val => val !== false)) break;
 			nullDamage = false;
 
 			for (const [i, md] of moveDamage.entries()) {
+				if (move.smartTarget && i !== hit - 1) continue;
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage[i] = md === true || !md ? 0 : md;
@@ -978,18 +998,14 @@ export class BattleActions {
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
 		if (move.smartTarget) {
-			if (move.smartTarget && targets.length > 1) {
-				targetsCopy = [targets[hit - 1]];
-			} else {
-				targetsCopy = targets.slice(0);
-			}
+			targetsCopy = targets.slice(0);
 		}
 
 		for (const [i, target] of targetsCopy.entries()) {
 			if (target && pokemon !== target) {
 				target.gotAttacked(move, moveDamage[i] as number | false | undefined, pokemon);
 				if (typeof moveDamage[i] === 'number') {
-					target.timesAttacked += hit - 1;
+					target.timesAttacked += move.smartTarget ? 1 : hit - 1;
 				}
 			}
 		}
@@ -1730,20 +1746,40 @@ export class BattleActions {
 		baseDamage = this.battle.randomizer(baseDamage);
 
 		// STAB
-		if (move.forceSTAB || (type !== '???' &&
-			(pokemon.hasType(type) || (pokemon.terastallized && pokemon.getTypes(false, true).includes(type))))) {
-			// The "???" type never gets STAB
-			// Not even if you Roost in Gen 4 and somehow manage to use
-			// Struggle in the same turn.
-			// (On second thought, it might be easier to get a MissingNo.)
+		// The "???" type never gets STAB
+		// Not even if you Roost in Gen 4 and somehow manage to use
+		// Struggle in the same turn.
+		// (On second thought, it might be easier to get a MissingNo.)
+		if (type !== '???') {
+			let stab: number | [number, number] = 1;
 
-			let stab = move.stab || 1.5;
-			if (type === pokemon.terastallized && pokemon.getTypes(false, true).includes(type)) {
-				// In my defense, the game hardcodes the Adaptability check like this, too.
-				stab = stab === 2 ? 2.25 : 2;
-			} else if (pokemon.terastallized && type !== pokemon.terastallized) {
+			const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type);
+			if (isSTAB) {
 				stab = 1.5;
 			}
+
+			// The Stellar tera type makes this incredibly confusing
+			// If the move's type does not match one of the user's base types,
+			// the Stellar tera type applies a one-time 1.2x damage boost for that type.
+			//
+			// If the move's type does match one of the user's base types,
+			// then the Stellar tera type applies a one-time 2x STAB boost for that type,
+			// and then goes back to using the regular 1.5x STAB boost for those types.
+			if (pokemon.terastallized === 'Stellar') {
+				if (!pokemon.stellarBoostedTypes.includes(type) || move.stellarBoosted) {
+					stab = isSTAB ? 2 : [4915, 4096];
+					move.stellarBoosted = true;
+					if (pokemon.species.name !== 'Terapagos-Stellar') {
+						pokemon.stellarBoostedTypes.push(type);
+					}
+				}
+			} else {
+				if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
+					stab = 2;
+				}
+				stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
+			}
+
 			baseDamage = this.battle.modify(baseDamage, stab);
 		}
 
@@ -1862,6 +1898,12 @@ export class BattleActions {
 		return true;
 	}
 
+	// Let's Go
+	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | null;
+	canMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => string | null;
+	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
+	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
+
 	canTerastallize(pokemon: Pokemon) {
 		if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) {
 			return null;
@@ -1870,7 +1912,7 @@ export class BattleActions {
 	}
 
 	terastallize(pokemon: Pokemon) {
-		if (pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
+		if (pokemon.illusion && ['Ogerpon', 'Terapagos'].includes(pokemon.illusion.species.baseSpecies)) {
 			this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 		}
 
@@ -1885,7 +1927,17 @@ export class BattleActions {
 		pokemon.apparentType = type;
 		if (pokemon.species.baseSpecies === 'Ogerpon') {
 			const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
-			pokemon.formeChange(pokemon.species.id + tera, pokemon.getItem(), true);
+			pokemon.formeChange(pokemon.species.id + tera, null, true);
+		}
+		if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
+			pokemon.formeChange('Terapagos-Stellar', null, true);
+			pokemon.baseMaxhp = Math.floor(Math.floor(
+				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
+			) * pokemon.level / 100 + 10);
+			const newMaxHP = pokemon.baseMaxhp;
+			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
+			pokemon.maxhp = newMaxHP;
+			this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		}
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}

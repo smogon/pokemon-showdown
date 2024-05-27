@@ -50,6 +50,9 @@ export const PrivateMessages = new class {
 	getSettings(userid: string) {
 		return PM.get(statements.getSettings, [toID(userid)]);
 	}
+	deleteSettings(userid: string) {
+		return PM.run(statements.deleteSettings, [toID(userid)]);
+	}
 	async checkCanSend(to: string, from: User | string) {
 		from = toID(from);
 		to = toID(to);
@@ -119,12 +122,10 @@ export const PrivateMessages = new class {
 		const userid = toID(user);
 		// we only want to send the unseen pms to them when they login - they can replay the rest at will otherwise
 		const messages = await this.fetchUnseen(userid);
-		const serverTimezone = -new Date().getTimezoneOffset() / 60;
-		const gmtStr = serverTimezone >= 0 ? `+${serverTimezone}` : serverTimezone;
 		for (const {message, time, sender} of messages) {
 			user.send(
-				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|` +
-				`${message} __[sent offline, ${Chat.toTimestamp(new Date(time))} GMT ${gmtStr}]__`
+				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|/html ` +
+				`${Utils.escapeHTML(message)} <i>[sent offline, <time>${new Date(time).toISOString()}</time>]</i>`
 			);
 		}
 	}
@@ -150,7 +151,7 @@ export const PrivateMessages = new class {
 		return this.clearInterval;
 	}
 	clearSeen() {
-		return PM.run(statements.clearSeen);
+		return PM.run(statements.clearSeen, [Date.now(), SEEN_EXPIRY_TIME]);
 	}
 	send(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
@@ -190,7 +191,7 @@ export const PrivateMessages = new class {
 			buf += `<div class="pm-log"><div class="pm-buttonbar">`;
 			for (const {message, time} of messages) {
 				buf += `<div class="chat chatmessage-${toID(sender)}">&nbsp;&nbsp;`;
-				buf += `<small>[${Chat.toTimestamp(new Date(time))}] </small>`;
+				buf += `<small>[<time>${new Date(time).toISOString()}</time>] </small>`;
 				buf += Utils.html`<small>${group}</small>`;
 				buf += Utils.html`<span class="username" data-roomgroup="${group}" data-name="${name}"><username>${name}</username></span>: `;
 				buf += `<em>${message}</em></div>`;
@@ -202,7 +203,7 @@ export const PrivateMessages = new class {
 		return buf;
 	}
 	clearOffline() {
-		return PM.run(statements.clearDated);
+		return PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 	}
 	destroy() {
 		void PM.destroy();
@@ -213,7 +214,7 @@ if (Config.usesqlite) {
 	if (!process.send) {
 		PM.spawn(Config.pmprocesses || 1);
 		// clear super old pms on startup
-		void PM.run(statements.clearDated);
+		void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 	} else if (process.send && process.mainModule === module) {
 		global.Monitor = {
 			crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {

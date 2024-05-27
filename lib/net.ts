@@ -172,6 +172,8 @@ export class NetStream extends Streams.ReadWriteStream {
 }
 export class NetRequest {
 	uri: string;
+	/** Response from last request, made so response stuff is available without being hacky */
+	response?: http.IncomingMessage;
 	constructor(uri: string) {
 		this.uri = uri;
 	}
@@ -202,6 +204,7 @@ export class NetRequest {
 	async get(opts: NetRequestOptions = {}): Promise<string> {
 		const stream = this.getStream(opts);
 		const response = await stream.response;
+		if (response) this.response = response;
 		if (response && response.statusCode !== 200) {
 			throw new HttpError(response.statusMessage || "Connection error", response.statusCode, await stream.readAll());
 		}

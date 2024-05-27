@@ -8,11 +8,11 @@ const {testTeam, testNotBothMoves, testSet, testHiddenPower, testAlwaysHasMove, 
 
 describe('[Gen 7] Random Battle (slow)', () => {
 	const options = {format: 'gen7randombattle'};
-	const setsJSON = require(`../../dist/data/mods/gen7/random-sets.json`);
+	const setsJSON = require(`../../dist/data/random-battles/gen7/sets.json`);
 	const dex = Dex.forFormat(options.format);
 
 	describe("New set format", () => {
-		const filename = '../../data/mods/gen7/random-sets.json';
+		const filename = '../../data/random-battles/gen7/sets.json';
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			const validRoles = [
@@ -75,7 +75,7 @@ describe('[Gen 7] Random Battle (slow)', () => {
 					// Generate a moveset as the lead, teamDetails is always empty for this
 					const preferredType = preferredTypes ? preferredTypes[j % preferredTypes.length] : '';
 					const movePool = set.movepool.map(m => dex.moves.get(m).id);
-					const moveSet = generator.randomMoveset(types, abilities, {}, species, true, false, movePool, preferredType, role);
+					const moveSet = generator.randomMoveset(types, abilities, {}, species, true, movePool, preferredType, role);
 					for (const move of moveSet) moves.delete(move);
 					if (!moves.size) break;
 					// Generate a moveset for each combination of relevant teamDetails
@@ -86,7 +86,7 @@ describe('[Gen 7] Random Battle (slow)', () => {
 						teamDetails = {defog, stealthRock, stickyWeb};
 						// randomMoveset() deletes moves from the movepool, so recreate it every time
 						const movePool = set.movepool.map(m => dex.moves.get(m).id);
-						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, false, movePool, preferredType, role);
+						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, preferredType, role);
 						for (const move of moveSet) moves.delete(move);
 						if (!moves.size) break;
 					}
@@ -135,12 +135,6 @@ describe('[Gen 7] Random Battle (slow)', () => {
 
 	it('should prevent double Hidden Power', () => testHiddenPower('thundurustherian', options));
 
-	it('should give Meganium STAB', () => {
-		testSet('meganium', options, set => {
-			assert(set.moves.includes('gigadrain'), `Meganium: got ${set.moves}`);
-		});
-	});
-
 	it('should never give Xerneas Assault Vest', () => {
 		testSet('xerneas', options, set => assert.notEqual(set.item, 'Assault Vest'));
 	});
@@ -167,22 +161,6 @@ describe('[Gen 7] Random Battle (slow)', () => {
 		testSet('dianciemega', options, set => {
 			if (!set.moves.includes('calmmind')) return;
 			assert(set.moves.includes('moonblast'), `Diancie: got ${set.moves}`);
-		});
-	});
-});
-
-describe('[Gen 7] Random Doubles Battle (slow)', () => {
-	const options = {format: 'gen7randomdoublesbattle'};
-
-	it("shouldn't give Manectric Intimidate before Mega Evolving", () => {
-		testSet('manectricmega', options, set => {
-			assert.notEqual(set.ability, 'Intimidate');
-		});
-	});
-
-	it("should give Mawile Intimidate before Mega Evolving", () => {
-		testSet('mawilemega', options, set => {
-			assert.equal(set.ability, 'Intimidate');
 		});
 	});
 });

@@ -125,8 +125,10 @@ describe('Matchmaker', function () {
 			try {
 				room = Rooms.createBattle({
 					format: FORMATID,
-					p1: {user: this.p1, team: this.s1.team},
-					p2: {user: this.p1, team: this.s2.team},
+					players: [
+						{user: this.p1, team: this.s1.team},
+						{user: this.p1, team: this.s2.team},
+					],
 					rated: 1000,
 				});
 			} catch {}
@@ -144,8 +146,12 @@ describe('Matchmaker', function () {
 		});
 
 		it('should prevent battles from starting if the server is in lockdown', function () {
-			const room = Rooms.createBattle(FORMATID, {p1: this.p1, p2: this.p2, p1team: this.s1.team, p2team: this.s2.team, rated: 1000});
-			assert.equal(room, undefined);
+			const room = Rooms.createBattle({
+				format: FORMATID,
+				players: [{user: this.p1, team: this.s1.team}, {user: this.p2, team: this.s2.team}],
+				rated: 1000,
+			});
+			assert.equal(room, null);
 		});
 	});
 });

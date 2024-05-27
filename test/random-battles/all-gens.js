@@ -30,11 +30,11 @@ describe('value rule support (slow)', () => {
 			if (gen === 1 && count !== 1) continue;
 			const format = Dex.formats.get(`${formatID}@@@Max Move Count = ${count}`);
 			// New set format
-			if ([4, 5, 6, 7, 9].includes(gen)) {
+			if ([2, 3, 4, 5, 6, 7, 9].includes(gen)) {
 				// Due to frontloading of moveset generation, formats with the new set format do not support
 				// Max Move Counts less than 4
 				if (count < 4) continue;
-				const setsJSON = require(`../../dist/data/${gen === 9 ? '' : `mods/gen${gen}/`}random-sets.json`);
+				const setsJSON = require(`../../dist/data/random-battles/gen${gen}/sets.json`);
 
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
 					testTeam({format, rounds: 50}, team => {
@@ -66,7 +66,7 @@ describe('value rule support (slow)', () => {
 					});
 				});
 			} else {
-				const dataJSON = require(`../../dist/data/mods/gen${gen}/random-data.json`);
+				const dataJSON = require(`../../dist/data/random-battles/gen${gen}/data.json`);
 
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
 					testTeam({format, rounds: 50}, team => {
@@ -99,7 +99,7 @@ describe('value rule support (slow)', () => {
 
 	for (const format of Dex.formats.all()) {
 		if (!format.team) continue;
-		if (Dex.formats.getRuleTable(format).has('adjustleveldown')) continue; // already adjusts level
+		if (Dex.formats.getRuleTable(format).has('adjustleveldown') || Dex.formats.getRuleTable(format).has('adjustlevel')) continue; // already adjusts level
 
 		for (const level of [1, 99999]) {
 			it(`${format.name} should support Adjust Level = ${level}`, () => {
@@ -114,12 +114,12 @@ describe('value rule support (slow)', () => {
 });
 
 describe("New set format", () => {
-	const files = ['../../data/random-sets.json', '../../data/random-doubles-sets.json'];
+	const files = ['../../data/random-battles/gen9/sets.json', '../../data/random-battles/gen9/doubles-sets.json'];
 	for (const filename of files) {
 		it(`${filename} should have valid set data`, () => {
 			const setsJSON = require(filename);
 			let validRoles = [];
-			if (filename === '../../data/random-sets.json') {
+			if (filename === '../../data/random-battles/gen9/sets.json') {
 				validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
 					"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
 			} else {
@@ -160,6 +160,7 @@ describe("New set format", () => {
 describe('randomly generated teams should be valid (slow)', () => {
 	for (const format of Dex.formats.all()) {
 		if (!format.team) continue; // format doesn't use randomly generated teams
+		if (format.mod === 'gen9ssb') continue; // Temporary
 
 		it(`should generate valid ${format} teams`, function () {
 			this.timeout(0);
@@ -177,16 +178,16 @@ describe('randomly generated teams should be valid (slow)', () => {
 });
 
 describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
-	for (const filename of ['mods/gen8/bss-factory-sets', 'mods/gen7/bss-factory-sets', 'mods/gen7/factory-sets', 'mods/gen6/factory-sets']) {
+	for (const filename of ['gen8/bss-factory-sets', 'gen7/bss-factory-sets', 'gen7/factory-sets', 'gen6/factory-sets']) {
 		it(`${filename}.json should contain valid sets`, function () {
 			this.timeout(0);
-			const setsJSON = require(`../../dist/data/${filename}.json`);
-			const mod = filename.split('/')[1] || 'gen' + Dex.gen;
+			const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
+			const mod = filename.split('/')[0] || 'gen' + Dex.gen;
 			const genNum = isNaN(mod[3]) ? Dex.gen : mod[3];
 
 			for (const type in setsJSON) {
 				const typeTable = filename.includes('bss-factory-sets') ? setsJSON : setsJSON[type];
-				const vType = filename === 'bss-factory-sets' ? `battle${genNum === 8 ? 'stadium' : 'spot'}singles` :
+				const vType = filename.includes('bss-factory-sets') ? `battle${genNum === 8 ? 'stadium' : 'spot'}singles` :
 					type === 'Mono' ? 'monotype' : type.toLowerCase();
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
@@ -202,26 +203,26 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 
 						for (const itemName of [].concat(set.item)) {
 							if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;
-							const item = Dex.items.get(itemName);
+							const item = Dex.forGen(genNum).items.get(itemName);
 							assert(item.exists, `invalid item "${itemName}" of ${species}`);
 							assert.equal(item.name, itemName, `miscapitalized item "${itemName}" of ${species}`);
 						}
 
 						for (const abilityName of [].concat(set.ability)) {
-							const ability = Dex.abilities.get(abilityName);
+							const ability = Dex.forGen(genNum).abilities.get(abilityName);
 							assert(ability.exists, `invalid ability "${abilityName}" of ${species}`);
 							assert.equal(ability.name, abilityName, `miscapitalized ability "${abilityName}" of ${species}`);
 						}
 
 						for (const natureName of [].concat(set.nature)) {
-							const nature = Dex.natures.get(natureName);
+							const nature = Dex.forGen(genNum).natures.get(natureName);
 							assert(nature.exists, `invalid nature "${natureName}" of ${species}`);
 							assert.equal(nature.name, natureName, `miscapitalized nature "${natureName}" of ${species}`);
 						}
 
 						for (const moveSpec of set.moves) {
 							for (const moveName of [].concat(moveSpec)) {
-								const move = Dex.moves.get(moveName);
+								const move = Dex.forGen(genNum).moves.get(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
 								assert.equal(move.name, moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${species}`);
 								assert(validateLearnset(move, set, vType, mod), `illegal move "${moveName}" of ${species}`);

@@ -212,7 +212,8 @@ export class RuleTable extends Map<string, string> {
 		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || 0;
 		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
-		this.evLimit = Number(this.valueRules.get('evlimit')) || null;
+		this.evLimit = Number(this.valueRules.get('evlimit'));
+		if (isNaN(this.evLimit)) this.evLimit = null;
 
 		if (this.valueRules.get('pickedteamsize') === 'Auto') {
 			this.pickedTeamSize = (
@@ -341,6 +342,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	readonly rated: boolean | string;
 	/** Game type. */
 	readonly gameType: GameType;
+	/** Number of players, based on game type, for convenience */
+	readonly playerCount: 2 | 4;
 	/** List of rule names. */
 	readonly ruleset: string[];
 	/**
@@ -431,6 +434,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.ruleTable = null;
 		this.onBegin = data.onBegin || undefined;
 		this.noLog = !!data.noLog;
+		this.playerCount = (this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2);
 	}
 }
 
@@ -630,6 +634,9 @@ export class DexFormats {
 
 	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
 		if (format.ruleTable && !repeals) return format.ruleTable;
+		if (format.name.length > 50) {
+			throw new Error(`Format "${format.name}" has a name longer than 50 characters`);
+		}
 		if (depth === 1) {
 			const dex = this.dex.mod(format.mod);
 			if (dex !== this.dex) {

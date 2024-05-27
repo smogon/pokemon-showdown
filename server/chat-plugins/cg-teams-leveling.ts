@@ -35,30 +35,15 @@ async function updateStats(battle: RoomBattle, winner: ID) {
 	if (!incrementWins || !incrementLosses) await dbSetupPromise;
 	if (battle.rated < 1000 || toID(battle.format) !== 'gen9computergeneratedteams') return;
 
-	const p1 = Users.get(battle.p1.name);
-	const p2 = Users.get(battle.p2.name);
-	if (!p1 || !p2) return;
+	for (const player of battle.players) {
+		const team = await battle.getPlayerTeam(player);
+		if (!team) return;
+		const increment = (player.id === winner ? incrementWins : incrementLosses);
 
-	const p1team = await battle.getTeam(p1);
-	const p2team = await battle.getTeam(p2);
-	if (!p1team || !p2team) return;
-
-	let loserTeam, winnerTeam;
-	if (winner === p1.id) {
-		loserTeam = p2team;
-		winnerTeam = p1team;
-	} else {
-		loserTeam = p1team;
-		winnerTeam = p2team;
-	}
-
-	for (const species of winnerTeam) {
-		await addPokemon?.run([toID(species.species), species.level]);
-		await incrementWins?.run([toID(species.species)]);
-	}
-	for (const species of loserTeam) {
-		await addPokemon?.run([toID(species.species), species.level]);
-		await incrementLosses?.run([toID(species.species)]);
+		for (const species of team) {
+			await addPokemon?.run([toID(species.species), species.level]);
+			await increment?.run([toID(species.species)]);
+		}
 	}
 }
 
