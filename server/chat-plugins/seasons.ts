@@ -231,8 +231,7 @@ export function rollTimer() {
 				`<br /> Badged battles are now forced public, and this room is open for use.</div>`
 			).update();
 		} else if (!checkPublicPhase() && !discussionRoom.settings.isPrivate) {
-			discussionRoom.setPrivate(true);
-			discussionRoom.settings.modchat = '#';
+			discussionRoom.setPrivate('hidden');
 			discussionRoom.add(
 				`|html|<div class="broadcast-blue">The public phase of the month has ended.</div>`
 			).update();
