@@ -548,7 +548,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (
 			['Harvest', 'Ripen', 'Unburden'].includes(ability) ||
 			moves.has('belch') || moves.has('bellydrum')
-		) return "Oran Berry";
+		) return 'Oran Berry';
 	}
 
 	getItem(
@@ -568,17 +568,15 @@ export class RandomBabyTeams extends RandomTeams {
 		if (['Setup Sweeper', 'Wallbreaker'].includes(role)) {
 			return 'Life Orb';
 		}
-		return "Eviolite";
+		return 'Eviolite';
 	}
 
 	getLevel(
 		species: Species,
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
-		// This should frankly always work
-		if (this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
-		// Default in case something bad happens
-		return 10;
+		// This should frankly always work, but 10 is the default level in case something bad happens
+		return this.randomSets[species.id]?.level || 10;
 	}
 
 	getForme(species: Species): string {
@@ -731,12 +729,12 @@ export class RandomBabyTeams extends RandomTeams {
 		const typePool = this.dex.types.names().filter(name => name !== "Stellar");
 		const type = this.forceMonotype || this.sample(typePool);
 
-		const baseFormes: {[k: string]: number} = {};
+		const baseFormes = new Set<string>();
 
-		const typeCount: {[k: string]: number} = {};
-		const typeComboCount: {[k: string]: number} = {};
-		const typeWeaknesses: {[k: string]: number} = {};
-		const typeDoubleWeaknesses: {[k: string]: number} = {};
+		const typeCount = new Utils.Multiset<string>();
+		const typeComboCount = new Utils.Multiset<string>();
+		const typeWeaknesses = new Utils.Multiset<string>();
+		const typeDoubleWeaknesses = new Utils.Multiset<string>();
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		const pokemonList = Object.keys(this.randomSets);
@@ -748,7 +746,7 @@ export class RandomBabyTeams extends RandomTeams {
 			if (!species.exists) continue;
 
 			// Limit to one of each species (Species Clause)
-			if (baseFormes[species.baseSpecies]) continue;
+			if (baseFormes.has(species.baseSpecies)) continue;
 
 			// Illusion shouldn't be on the last slot
 			if (species.baseSpecies === 'Zorua' && pokemon.length >= (this.maxTeamSize - 1)) continue;
@@ -767,7 +765,7 @@ export class RandomBabyTeams extends RandomTeams {
 
 				// Limit two of any type
 				for (const typeName of types) {
-					if (typeCount[typeName] >= 2 * limitFactor) {
+					if ((typeCount.get(typeName) || 0) >= 2 * limitFactor) {
 						skip = true;
 						break;
 					}
@@ -778,15 +776,13 @@ export class RandomBabyTeams extends RandomTeams {
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0) {
-						if (!typeWeaknesses[typeName]) typeWeaknesses[typeName] = 0;
-						if (typeWeaknesses[typeName] >= 3 * limitFactor) {
+						if ((typeWeaknesses.get(typeName) || 0) >= 3 * limitFactor) {
 							skip = true;
 							break;
 						}
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
-						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
+						if ((typeDoubleWeaknesses.get(typeName) || 0) >= 1 * limitFactor) {
 							skip = true;
 							break;
 						}
@@ -796,13 +792,12 @@ export class RandomBabyTeams extends RandomTeams {
 
 				// Limit four weak to Freeze-Dry
 				if (weakToFreezeDry) {
-					if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
-					if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
+					if ((typeWeaknesses.get('Freeze-Dry') || 0) >= 4 * limitFactor) continue;
 				}
 			}
 
 			// Limit three of any type combination in Monotype
-			if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
+			if (!this.forceMonotype && isMonotype && ((typeComboCount.get(typeCombo) || 0) >= 3 * limitFactor)) continue;
 
 			const set: RandomTeamsTypes.RandomSet = this.randomSet(species, teamDetails, false, false);
 			pokemon.push(set);
@@ -812,39 +807,29 @@ export class RandomBabyTeams extends RandomTeams {
 			if (pokemon.length === this.maxTeamSize) break;
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
-			baseFormes[species.baseSpecies] = 1;
+			baseFormes.add(species.baseSpecies);
 
 			// Increment type counters
 			for (const typeName of types) {
-				if (typeName in typeCount) {
-					typeCount[typeName]++;
-				} else {
-					typeCount[typeName] = 1;
-				}
+				typeCount.add(typeName);
 			}
-			if (typeCombo in typeComboCount) {
-				typeComboCount[typeCombo]++;
-			} else {
-				typeComboCount[typeCombo] = 1;
-			}
+			typeComboCount.add(typeCombo);
 
 			// Increment weakness counter
 			for (const typeName of this.dex.types.names()) {
 				// it's weak to the type
 				if (this.dex.getEffectiveness(typeName, species) > 0) {
-					typeWeaknesses[typeName]++;
+					typeWeaknesses.add(typeName);
 				}
 				if (this.dex.getEffectiveness(typeName, species) > 1) {
-					typeDoubleWeaknesses[typeName]++;
+					typeDoubleWeaknesses.add(typeName);
 				}
 			}
-			if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
+			if (weakToFreezeDry) typeWeaknesses.add('Freeze-Dry');
 
 			// Track what the team has
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails.rain = 1;
-			if (set.ability === 'Drought' || set.moves.includes('sunnyday')) {
-				teamDetails.sun = 1;
-			}
+			if (set.ability === 'Drought' || set.moves.includes('sunnyday')) teamDetails.sun = 1;
 			if (set.ability === 'Sand Stream') teamDetails.sand = 1;
 			if (set.ability === 'Snow Warning' || set.moves.includes('snowscape') || set.moves.includes('chillyreception')) {
 				teamDetails.snow = 1;
