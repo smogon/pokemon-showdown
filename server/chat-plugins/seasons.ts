@@ -174,15 +174,15 @@ function getYear() {
 	return new Date().getFullYear();
 }
 
-function findPeriod() {
-	return Math.floor(new Date().getMonth() / (SEASONS_PER_YEAR - 1)) + 1;
+function findPeriod(modifier = 0) {
+	return Math.floor((new Date().getMonth() + modifier) / (SEASONS_PER_YEAR - 1)) + 1;
 }
 
 /** Are we in the last three days of the month (the public phase, where badged battles are public and the room is active?) */
 function checkPublicPhase() {
 	const daysInCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
-	// last 3 days of the month
-	return new Date().getDate() >= (daysInCurrentMonth - PUBLIC_PHASE_LENGTH);
+	// last 3 days of the month, and next month is a new season
+	return new Date().getDate() >= (daysInCurrentMonth - PUBLIC_PHASE_LENGTH) && findPeriod() !== findPeriod(1);
 }
 
 export function saveData() {
@@ -345,6 +345,14 @@ export const handlers: Chat.Handlers = {
 				`During the public phase, you can discuss the state of the ladder <a href="/seasondiscussion">in a special chatroom.</a></div>`
 			);
 			room.setPrivate(false);
+			const seasonRoom = Rooms.search('seasondiscussion');
+			if (seasonRoom) {
+				const players = Object.keys(room.battle.playerTable).map(toID);
+				seasonRoom.add(
+					`|raw|<a href="/${room.roomid}" class="ilink">Battle started between ` +
+					`<username>${players[0]}</username> and <username>${players[1]}</username>. (rating: ${room.battle.rated})</a>`
+				).update();
+			}
 		}
 
 		room.add(
