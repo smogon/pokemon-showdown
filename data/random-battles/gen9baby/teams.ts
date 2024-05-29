@@ -652,21 +652,21 @@ export class RandomBabyTeams extends RandomTeams {
 		// Prepare optimal HP for Life Orb mons with HP close to the X9 threshold
 		if (item === "Life Orb") {
 			let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			const minimum_hp = Math.floor(Math.floor(2 * species.baseStats.hp + 100) * level / 100 + 10);
-			const target_hp = Math.floor(hp / 10) * 10 - 1;
+			const minimumHP = Math.floor(Math.floor(2 * species.baseStats.hp + 100) * level / 100 + 10);
+			const targetHP = Math.floor(hp / 10) * 10 - 1;
 
 			// Don't subtract more than 3, that's not worth it
-			if (hp - target_hp <= 3 && minimum_hp <= target_hp) {
+			if (hp - targetHP <= 3 && minimumHP <= targetHP) {
 				// If setting evs to 0 is sufficient, decrement evs, otherwise decrement ivs with evs set to 0
-				if (Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + 100) * level / 100 + 10) >= target_hp) {
+				if (Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + 100) * level / 100 + 10) >= targetHP) {
 					evs.hp = 0;
 					hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-					while (hp > target_hp) {
+					while (hp > targetHP) {
 						ivs.hp -= 1;
 						hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 					}
 				} else {
-					while (hp > target_hp) {
+					while (hp > targetHP) {
 						evs.hp -= 4;
 						hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 					}
