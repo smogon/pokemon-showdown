@@ -230,7 +230,7 @@
         ]
     },
     "persian": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -385,7 +385,7 @@
         ]
     },
     "slowbro": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -860,7 +860,7 @@
         ]
     },
     "moltresgalar": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1275,7 +1275,7 @@
         ]
     },
     "qwilfishhisui": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1445,7 +1445,7 @@
         ]
     },
     "smeargle": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Fast Support",
@@ -2065,7 +2065,7 @@
         ]
     },
     "regirock": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2630,7 +2630,7 @@
         ]
     },
     "electivire": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2895,7 +2895,7 @@
         ]
     },
     "dialga": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3045,7 +3045,7 @@
         ]
     },
     "shaymin": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3415,7 +3415,7 @@
         ]
     },
     "leavanny": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3775,7 +3775,7 @@
         ]
     },
     "mandibuzz": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4300,7 +4300,7 @@
         ]
     },
     "avalugg": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4400,7 +4400,7 @@
         ]
     },
     "decidueyehisui": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4800,7 +4800,7 @@
         ]
     },
     "necrozmaduskmane": {
-        "level": 68,
+        "level": 69,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -5530,7 +5530,7 @@
         ]
     },
     "oinkolognef": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -6135,7 +6135,7 @@
         ]
     },
     "roaringmoon": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Setup Sweeper",

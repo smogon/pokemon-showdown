@@ -60,7 +60,7 @@
         "noDynamaxMoves": ["encore", "focusblast", "grassknot", "nastyplot", "surf", "thunderbolt", "voltswitch"]
     },
     "raichualola": {
-        "level": 83,
+        "level": 84,
         "moves": ["focusblast", "grassknot", "nastyplot", "psyshock", "thunderbolt", "voltswitch"],
         "doublesLevel": 86,
         "doublesMoves": ["focusblast", "nastyplot", "psyshock", "thunderbolt", "voltswitch"]
@@ -100,7 +100,7 @@
         "doublesMoves": ["fireblast", "followme", "healpulse", "helpinghand", "moonblast", "protect", "thunderwave"]
     },
     "ninetales": {
-        "level": 83,
+        "level": 82,
         "moves": ["fireblast", "nastyplot", "scorchingsands", "solarbeam", "willowisp"],
         "doublesLevel": 84,
         "doublesMoves": ["heatwave", "nastyplot", "protect", "scorchingsands", "solarbeam"]
@@ -130,7 +130,7 @@
         "doublesMoves": ["highhorsepower", "memento", "protect", "rockslide", "suckerpunch"]
     },
     "dugtrioalola": {
-        "level": 82,
+        "level": 81,
         "moves": ["earthquake", "ironhead", "stealthrock", "stoneedge", "suckerpunch"],
         "doublesLevel": 88,
         "doublesMoves": ["highhorsepower", "ironhead", "memento", "protect", "rockslide", "suckerpunch"]
@@ -231,7 +231,7 @@
         "doublesMoves": ["focusblast", "nastyplot", "protect", "shadowball", "sludgebomb", "thunderbolt", "willowisp"]
     },
     "kingler": {
-        "level": 84,
+        "level": 83,
         "moves": ["agility", "liquidation", "rockslide", "superpower", "swordsdance", "xscissor"]
     },
     "kinglergmax": {
@@ -301,7 +301,7 @@
         "doublesMoves": ["doubleedge", "drainpunch", "fakeout", "protect", "rockslide", "suckerpunch"]
     },
     "seaking": {
-        "level": 88,
+        "level": 89,
         "moves": ["drillrun", "knockoff", "megahorn", "swordsdance", "waterfall"],
         "doublesLevel": 88,
         "doublesMoves": ["drillrun", "knockoff", "megahorn", "protect", "scaleshot", "swordsdance", "waterfall"]
@@ -329,7 +329,7 @@
         "doublesMoves": ["brickbreak", "bugbite", "dualwingbeat", "uturn"]
     },
     "jynx": {
-        "level": 86,
+        "level": 85,
         "moves": ["focusblast", "icebeam", "lovelykiss", "nastyplot", "psyshock", "trick"],
         "doublesLevel": 86,
         "doublesMoves": ["focusblast", "icebeam", "lovelykiss", "nastyplot", "psychic"]
@@ -389,7 +389,7 @@
         "doublesMoves": ["earthpower", "icebeam", "muddywater", "shellsmash"]
     },
     "kabutops": {
-        "level": 82,
+        "level": 83,
         "moves": ["aquajet", "knockoff", "liquidation", "rapidspin", "stoneedge", "swordsdance"],
         "doublesLevel": 86,
         "doublesMoves": ["aquajet", "protect", "stoneedge", "superpower", "swordsdance", "waterfall"]
@@ -450,7 +450,7 @@
         "noDynamaxMoves": ["agility", "fierywrath", "hurricane", "nastyplot", "rest"]
     },
     "dragonite": {
-        "level": 75,
+        "level": 76,
         "moves": ["dragondance", "dualwingbeat", "earthquake", "extremespeed", "outrage"],
         "doublesLevel": 82,
         "doublesMoves": ["dragonclaw", "dragondance", "dualwingbeat", "extremespeed", "firepunch"],
@@ -720,7 +720,7 @@
         "doublesMoves": ["highhorsepower", "icywind", "muddywater", "protect", "stealthrock", "wideguard"]
     },
     "linoone": {
-        "level": 84,
+        "level": 85,
         "moves": ["bellydrum", "extremespeed", "stompingtantrum", "throatchop"],
         "doublesLevel": 90,
         "doublesMoves": ["bellydrum", "extremespeed", "protect", "throatchop"]
@@ -757,7 +757,7 @@
         "doublesMoves": ["acrobatics", "defog", "leechlife", "protect", "swordsdance"]
     },
     "shedinja": {
-        "level": 90,
+        "level": 91,
         "moves": ["poltergeist", "shadowsneak", "swordsdance", "willowisp", "xscissor"],
         "doublesLevel": 95,
         "doublesMoves": ["poltergeist", "protect", "shadowsneak", "swordsdance", "willowisp", "xscissor"]
@@ -776,7 +776,7 @@
         "noDynamaxMoves": ["encore", "knockoff", "recover", "taunt", "toxic", "willowisp"]
     },
     "mawile": {
-        "level": 88,
+        "level": 89,
         "moves": ["ironhead", "playrough", "stealthrock", "suckerpunch", "swordsdance"],
         "doublesLevel": 88,
         "doublesMoves": ["firefang", "ironhead", "playrough", "protect", "suckerpunch", "swordsdance"]
@@ -842,7 +842,7 @@
         "doublesMoves": ["dragondance", "earthquake", "liquidation", "protect", "stoneedge"]
     },
     "crawdaunt": {
-        "level": 84,
+        "level": 85,
         "moves": ["aquajet", "closecombat", "crabhammer", "dragondance", "knockoff"],
         "doublesLevel": 86,
         "doublesMoves": ["aquajet", "closecombat", "crabhammer", "knockoff", "protect", "swordsdance"]
@@ -915,7 +915,7 @@
         "doublesMoves": ["bodypress", "curse", "rest", "rockslide"]
     },
     "regice": {
-        "level": 84,
+        "level": 85,
         "moves": ["focusblast", "icebeam", "rest", "rockpolish", "sleeptalk", "thunderbolt"],
         "doublesLevel": 87,
         "doublesMoves": ["focusblast", "icebeam", "icywind", "rockpolish", "thunderbolt"]
@@ -1095,7 +1095,7 @@
         "doublesMoves": ["focusblast", "knockoff", "powerwhip", "ragepowder", "sleeppowder"]
     },
     "electivire": {
-        "level": 82,
+        "level": 81,
         "moves": ["crosschop", "earthquake", "flamethrower", "icepunch", "voltswitch", "wildcharge"],
         "doublesLevel": 88,
         "doublesMoves": ["crosschop", "flamethrower", "icepunch", "stompingtantrum", "wildcharge"]
@@ -1210,7 +1210,7 @@
         "doublesMoves": ["energyball", "fireblast", "nastyplot", "psychic", "shadowball", "uturn"]
     },
     "dialga": {
-        "level": 74,
+        "level": 73,
         "moves": ["dracometeor", "fireblast", "flashcannon", "stealthrock", "thunderbolt", "toxic"],
         "doublesLevel": 74,
         "doublesMoves": ["dracometeor", "earthpower", "fireblast", "flashcannon", "protect", "thunderbolt", "thunderwave"]
@@ -1265,7 +1265,7 @@
         "doublesMoves": ["facade", "helpinghand", "superpower", "thunderwave"]
     },
     "liepard": {
-        "level": 88,
+        "level": 89,
         "moves": ["copycat", "encore", "knockoff", "playrough", "thunderwave", "uturn"],
         "doublesLevel": 88,
         "doublesMoves": ["copycat", "encore", "fakeout", "foulplay", "snarl", "taunt", "thunderwave"]
@@ -1283,13 +1283,13 @@
         "doublesMoves": ["bravebird", "nightslash", "quickattack", "tailwind", "uturn"]
     },
     "gigalith": {
-        "level": 82,
+        "level": 83,
         "moves": ["earthquake", "explosion", "stealthrock", "stoneedge", "superpower"],
         "doublesLevel": 88,
         "doublesMoves": ["bodypress", "explosion", "protect", "rockslide", "stealthrock", "stompingtantrum", "stoneedge", "wideguard"]
     },
     "swoobat": {
-        "level": 87,
+        "level": 88,
         "moves": ["airslash", "calmmind", "heatwave", "roost", "storedpower"],
         "doublesLevel": 86,
         "doublesMoves": ["airslash", "calmmind", "heatwave", "psychic"]
@@ -1317,7 +1317,7 @@
         "doublesMoves": ["closecombat", "drainpunch", "icepunch", "knockoff", "machpunch", "protect"]
     },
     "seismitoad": {
-        "level": 84,
+        "level": 83,
         "moves": ["earthquake", "liquidation", "raindance", "sludgebomb", "stealthrock"],
         "doublesLevel": 86,
         "doublesMoves": ["earthpower", "knockoff", "muddywater", "powerwhip", "protect", "raindance"]
@@ -1394,7 +1394,7 @@
         "doublesMoves": ["knockoff", "protect", "rockslide", "shellsmash", "xscissor"]
     },
     "scrafty": {
-        "level": 82,
+        "level": 83,
         "moves": ["closecombat", "dragondance", "icepunch", "knockoff", "poisonjab"],
         "doublesLevel": 84,
         "doublesMoves": ["closecombat", "coaching", "drainpunch", "fakeout", "icepunch", "knockoff"]
@@ -1412,13 +1412,13 @@
         "doublesMoves": ["bodypress", "irondefense", "painsplit", "shadowball", "trickroom", "willowisp"]
     },
     "carracosta": {
-        "level": 84,
+        "level": 83,
         "moves": ["aquajet", "hydropump", "shellsmash", "stoneedge", "superpower"],
         "doublesLevel": 88,
         "doublesMoves": ["aquajet", "liquidation", "shellsmash", "stoneedge", "superpower"]
     },
     "archeops": {
-        "level": 83,
+        "level": 82,
         "moves": ["dualwingbeat", "earthquake", "roost", "stoneedge", "uturn"],
         "doublesLevel": 86,
         "doublesMoves": ["aquatail", "dualwingbeat", "earthquake", "protect", "rockslide", "uturn"]
@@ -1484,7 +1484,7 @@
         "doublesMoves": ["scald", "shadowball", "strengthsap", "trickroom", "willowisp"]
     },
     "galvantula": {
-        "level": 82,
+        "level": 81,
         "moves": ["bugbuzz", "gigadrain", "stickyweb", "thunder", "voltswitch"],
         "doublesLevel": 85,
         "doublesMoves": ["bugbuzz", "electroweb", "energyball", "protect", "stickyweb", "thunder"]
@@ -1502,7 +1502,7 @@
         "doublesMoves": ["geargrind", "protect", "shiftgear", "wildcharge"]
     },
     "beheeyem": {
-        "level": 87,
+        "level": 88,
         "moves": ["darkpulse", "psychic", "thunderbolt", "trick", "trickroom"],
         "doublesLevel": 88,
         "doublesMoves": ["protect", "psychic", "shadowball", "thunderbolt", "trickroom"]
@@ -1551,7 +1551,7 @@
         "doublesMoves": ["earthquake", "stealthrock", "stoneedge", "thunderwave", "yawn"]
     },
     "mienshao": {
-        "level": 82,
+        "level": 81,
         "moves": ["closecombat", "fakeout", "knockoff", "poisonjab", "stoneedge", "swordsdance", "uturn"],
         "doublesLevel": 84,
         "doublesMoves": ["closecombat", "fakeout", "knockoff", "poisonjab", "protect", "uturn"]
@@ -1581,7 +1581,7 @@
         "doublesMoves": ["closecombat", "headcharge", "lashout", "protect", "wildcharge"]
     },
     "braviary": {
-        "level": 80,
+        "level": 81,
         "moves": ["bravebird", "bulkup", "closecombat", "roost"],
         "doublesLevel": 82,
         "doublesMoves": ["bravebird", "bulkup", "closecombat", "roost", "tailwind"]
@@ -1623,7 +1623,7 @@
         "doublesMoves": ["closecombat", "ironhead", "protect", "stoneedge", "swordsdance", "thunderwave"]
     },
     "terrakion": {
-        "level": 77,
+        "level": 78,
         "moves": ["closecombat", "earthquake", "quickattack", "stoneedge", "swordsdance"],
         "doublesLevel": 80,
         "doublesMoves": ["closecombat", "protect", "rockslide", "swordsdance"]
@@ -1636,7 +1636,7 @@
         "noDynamaxMoves": ["closecombat", "leafblade", "stoneedge", "swordsdance"]
     },
     "tornadus": {
-        "level": 80,
+        "level": 79,
         "moves": ["defog", "grassknot", "heatwave", "hurricane", "nastyplot"],
         "doublesLevel": 80,
         "doublesMoves": ["heatwave", "hurricane", "nastyplot", "superpower", "tailwind", "taunt"]
@@ -1691,7 +1691,7 @@
         "doublesMoves": ["dracometeor", "earthpower", "freezedry", "glaciate", "protect", "roost"]
     },
     "kyuremblack": {
-        "level": 71,
+        "level": 70,
         "moves": ["dragondance", "fusionbolt", "iciclespear", "outrage"],
         "doublesLevel": 75,
         "doublesMoves": ["dragonclaw", "dragondance", "fusionbolt", "iciclespear", "protect"]
@@ -1825,7 +1825,7 @@
         "doublesMoves": ["calmmind", "hypervoice", "mysticalfire", "protect", "psyshock"]
     },
     "hawlucha": {
-        "level": 78,
+        "level": 79,
         "moves": ["bravebird", "closecombat", "roost", "stoneedge", "swordsdance", "throatchop"],
         "doublesLevel": 80,
         "doublesMoves": ["bravebird", "closecombat", "protect", "swordsdance"]
@@ -1909,13 +1909,13 @@
         "doublesMoves": ["darkpulse", "heatwave", "knockoff", "oblivionwing", "roost", "suckerpunch", "tailwind"]
     },
     "zygarde": {
-        "level": 70,
+        "level": 69,
         "moves": ["dragondance", "outrage", "substitute", "thousandarrows"],
         "doublesLevel": 72,
         "doublesMoves": ["coil", "dragondance", "extremespeed", "glare", "irontail", "thousandarrows"]
     },
     "zygarde10": {
-        "level": 82,
+        "level": 81,
         "moves": ["coil", "extremespeed", "irontail", "outrage", "thousandarrows"],
         "doublesLevel": 77,
         "doublesMoves": ["dragondance", "extremespeed", "irontail", "protect", "stoneedge", "thousandarrows"]
@@ -2030,7 +2030,7 @@
         "doublesMoves": ["closecombat", "darkestlariat", "doubleedge", "drainpunch", "icepunch", "protect", "wideguard"]
     },
     "tsareena": {
-        "level": 84,
+        "level": 85,
         "moves": ["highjumpkick", "knockoff", "powerwhip", "rapidspin", "synthesis", "tripleaxel", "uturn"],
         "doublesLevel": 88,
         "doublesMoves": ["highjumpkick", "knockoff", "playrough", "powerwhip", "rapidspin", "tripleaxel", "uturn"]
@@ -2294,13 +2294,13 @@
         "doublesMoves": ["knockoff", "leafblade", "sacredsword", "smartstrike", "swordsdance"]
     },
     "guzzlord": {
-        "level": 84,
+        "level": 83,
         "moves": ["darkpulse", "dracometeor", "fireblast", "knockoff", "sludgebomb"],
         "doublesLevel": 88,
         "doublesMoves": ["dracometeor", "fireblast", "knockoff", "protect", "sludgebomb"]
     },
     "necrozma": {
-        "level": 80,
+        "level": 81,
         "moves": ["calmmind", "heatwave", "moonlight", "photongeyser", "stealthrock"],
         "doublesLevel": 80,
         "doublesMoves": ["calmmind", "earthpower", "heatwave", "moonlight", "photongeyser", "protect"]
@@ -2431,7 +2431,7 @@
         "doublesMoves": ["doubleedge", "swordsdance", "thunderwave", "wildcharge", "zenheadbutt"]
     },
     "drednaw": {
-        "level": 83,
+        "level": 82,
         "moves": ["liquidation", "stealthrock", "stoneedge", "superpower", "swordsdance"],
         "doublesLevel": 84,
         "doublesMoves": ["highhorsepower", "liquidation", "protect", "rockslide", "superpower", "swordsdance"],
@@ -2450,7 +2450,7 @@
         "doublesMoves": ["fireblast", "incinerate", "protect", "stealthrock", "stoneedge", "willowisp"]
     },
     "flapple": {
-        "level": 83,
+        "level": 84,
         "moves": ["dragondance", "gravapple", "outrage", "suckerpunch", "uturn"],
         "doublesLevel": 89,
         "doublesMoves": ["acrobatics", "dragondance", "dragonrush", "gravapple", "protect"]
@@ -2552,7 +2552,7 @@
         "doublesMoves": ["closecombat", "fakeout", "ironhead", "lashout", "protect", "uturn"]
     },
     "cursola": {
-        "level": 87,
+        "level": 88,
         "moves": ["earthpower", "hydropump", "icebeam", "shadowball", "stealthrock", "strengthsap"],
         "doublesLevel": 88,
         "doublesMoves": ["earthpower", "hydropump", "icebeam", "protect", "shadowball", "strengthsap"]
@@ -2631,13 +2631,13 @@
         "doublesMoves": ["aurawheel", "fakeout", "partingshot", "protect", "rapidspin", "superfang"]
     },
     "copperajah": {
-        "level": 84,
+        "level": 83,
         "moves": ["earthquake", "ironhead", "playrough", "rockslide", "stealthrock"],
         "doublesLevel": 88,
         "doublesMoves": ["heatcrash", "highhorsepower", "ironhead", "playrough", "powerwhip", "protect", "stoneedge"]
     },
     "copperajahgmax": {
-        "level": 84,
+        "level": 83,
         "moves": ["earthquake", "heatcrash", "heavyslam", "powerwhip", "stoneedge"]
     },
     "dracozolt": {
@@ -2690,7 +2690,7 @@
         "doublesMoves": ["behemothblade", "closecombat", "playrough", "protect", "psychicfangs", "swordsdance"]
     },
     "zamazenta": {
-        "level": 72,
+        "level": 71,
         "moves": ["closecombat", "crunch", "psychicfangs", "wildcharge"],
         "doublesLevel": 74,
         "doublesMoves": ["closecombat", "crunch", "playrough", "protect", "psychicfangs"]
