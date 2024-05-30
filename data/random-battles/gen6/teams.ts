@@ -276,7 +276,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 			if (species.baseSpecies === 'Wormadam' && role === 'Staller') {
-				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
+				if (movePool.includes('infestation')) this.fastPop(movePool, movePool.indexOf('infestation'));
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 		}

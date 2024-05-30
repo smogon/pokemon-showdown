@@ -642,14 +642,9 @@
         "level": 87,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["closecombat", "earthquake", "stealthrock", "stoneedge", "xscissor"],
-                "preferredTypes": ["Rock"]
-            },
-            {
                 "role": "Fast Attacker",
-                "movepool": ["closecombat", "earthquake", "quickattack", "stoneedge", "swordsdance", "xscissor"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["closecombat", "earthquake", "stealthrock", "stoneedge", "swordsdance", "xscissor"],
+                "preferredTypes": ["Rock"]
             }
         ]
     },
@@ -2297,7 +2292,7 @@
                 "movepool": ["icebeam", "surf", "thunder", "waterspout"]
             },
             {
-                "role": "Bulky Support",
+                "role": "Bulky Setup",
                 "movepool": ["calmmind", "icebeam", "rest", "sleeptalk", "surf", "thunder"]
             }
         ]
@@ -2787,6 +2782,10 @@
             {
                 "role": "Staller",
                 "movepool": ["icebeam", "protect", "scald", "toxic", "uturn"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["hiddenpowergrass", "icebeam", "scald", "toxic"]
             }
         ]
     },
@@ -3536,7 +3535,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["focusblast", "hiddenpowergrass", "hydropump", "icebeam", "nastyplot", "substitute"],
+                "movepool": ["grassknot", "hydropump", "icebeam", "nastyplot", "substitute"],
                 "preferredTypes": ["Ice"]
             }
         ]
@@ -4158,7 +4157,7 @@
         "level": 79,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Setup Sweeper",
                 "movepool": ["honeclaws", "ironhead", "rockslide", "superpower", "xscissor"],
                 "preferredTypes": ["Fighting"]
             }
@@ -4344,12 +4343,16 @@
         "level": 77,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Setup Sweeper",
                 "movepool": ["calmmind", "hiddenpowerelectric", "hiddenpowerflying", "hydropump", "icywind", "scald", "secretsword"]
             },
             {
                 "role": "Bulky Setup",
                 "movepool": ["calmmind", "scald", "secretsword", "substitute"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["focusblast", "hydropump", "scald", "secretsword"]
             }
         ]
     },

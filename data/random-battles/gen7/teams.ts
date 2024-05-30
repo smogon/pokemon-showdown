@@ -131,7 +131,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!counter.get('Ice') || (!moves.has('blizzard') && movePool.includes('freezedry')) ||
 				abilities.has('Refrigerate') && (movePool.includes('return') || movePool.includes('hypervoice'))
 			),
-			Normal: movePool => movePool.includes('boomburst'),
+			Normal: movePool => (movePool.includes('boomburst') || movePool.includes('hypervoice')),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (
@@ -395,7 +395,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 			if (species.baseSpecies === 'Wormadam' && role === 'Staller') {
-				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
+				if (movePool.includes('infestation')) this.fastPop(movePool, movePool.indexOf('infestation'));
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 		}
