@@ -250,7 +250,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Dark Pulse", "Hypnosis", "Nasty Plot", "Tera Blast"],
-                "teraTypes": ["Fairy", "Fire", "Poison"]
+                "teraTypes": ["Fairy", "Poison"]
             }
         ]
     },
