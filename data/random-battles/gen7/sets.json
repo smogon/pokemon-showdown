@@ -3079,7 +3079,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["bugbuzz", "gigadrain", "hiddenpowerground", "hiddenpowerrock", "energyball", "quiverdance"],
+                "movepool": ["bugbuzz", "energyball", "gigadrain", "hiddenpowerground", "hiddenpowerrock", "quiverdance"],
                 "preferredType": ["Grass"]
             }
         ]
