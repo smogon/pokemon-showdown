@@ -249,7 +249,7 @@
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Dark Pulse", "Hypnosis", "Nasty Plot", "Tera Blast"],
+                "movepool": ["Dark Pulse", "Thunderbolt", "Nasty Plot", "Tera Blast"],
                 "teraTypes": ["Fairy", "Poison"]
             }
         ]
@@ -2950,6 +2950,11 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["Draco Meteor", "Fire Blast", "Flash Cannon", "Heavy Slam", "Stealth Rock", "Thunder Wave"],
+                "teraTypes": ["Dragon", "Fire", "Flying", "Steel"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Draco Meteor", "Dragon Tail", "Fire Blast", "Flash Cannon", "Heavy Slam", "Stealth Rock"],
                 "teraTypes": ["Dragon", "Fire", "Flying", "Steel"]
             }
         ]
