@@ -3200,7 +3200,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Body Press", "Iron Defense", "Recover", "Shadow Ball"],
-                "teraTypes": ["Ghost", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
