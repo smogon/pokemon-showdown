@@ -626,7 +626,7 @@ export const commands: Chat.ChatCommands = {
 	battlefactoryhelp: [
 		`/battlefactory [pokemon], [tier], [gen] - Displays a Pok\u00e9mon's Battle Factory sets. Supports Gens 6-8. Defaults to Gen 8. If no tier is provided, defaults to OU.`,
 		`- Supported tiers: OU, Ubers, UU, RU, NU, PU, Monotype (Gen 7 only), LC (Gen 7 only)`,
-		`/bssfactory [pokemon], [gen] - Displays a Pok\u00e9mon's BSS Factory sets. Supports Gen 7-8. Defaults to Gen 8.`,
+		`/bssfactory [pokemon], [gen] - Displays a Pok\u00e9mon's BSS Factory sets. Supports Gen 7-9. Defaults to Gen 9.`,
 	],
 
 	cap1v1(target, room, user) {
