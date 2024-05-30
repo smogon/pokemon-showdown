@@ -292,7 +292,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				user.lastCommand = 'pm';
 				return this.errorReply(
-					this.tr`User ${targetUsername} is offline. If you still want to PM them, send the message again, or use /offlinemsg.`
+					this.tr`User ${targetUsername} is offline. Send the message again to confirm. If you are using /msg, use /offlinemsg instead.`
 				);
 			}
 			let error = this.tr`User ${targetUsername} not found. Did you misspell their name?`;
@@ -312,7 +312,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				user.lastCommand = 'pm';
 				return this.errorReply(
-					this.tr`User ${targetUsername} is offline. If you still want to PM them, send the message again to confirm.`
+					this.tr`User ${targetUsername} is offline. Send the message again to confirm. If you are using /msg, use /offlinemsg instead.`
 				);
 			}
 			return this.errorReply(`${targetUsername} is offline.`);
