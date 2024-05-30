@@ -1143,13 +1143,8 @@
         "level": 81,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Curse", "Earthquake", "Gunk Shot", "Poison Jab", "Recover"],
-                "teraTypes": ["Flying", "Steel"]
-            },
-            {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Gunk Shot", "Poison Jab", "Recover", "Stealth Rock", "Toxic", "Toxic Spikes"],
+                "movepool": ["Curse", "Earthquake", "Gunk Shot", "Poison Jab", "Recover", "Stealth Rock", "Toxic", "Toxic Spikes"],
                 "teraTypes": ["Flying", "Steel"]
             }
         ]
@@ -3415,12 +3410,12 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Ceaseless Edge", "Razor Shell", "Sucker Punch", "Swords Dance"],
-                "teraTypes": ["Dark", "Water"]
+                "teraTypes": ["Dark", "Poison", "Water"]
             },
             {
                 "role": "Wallbreaker",
                 "movepool": ["Aqua Jet", "Ceaseless Edge", "Flip Turn", "Razor Shell"],
-                "teraTypes": ["Dark", "Water"]
+                "teraTypes": ["Dark", "Poison", "Water"]
             }
         ]
     },

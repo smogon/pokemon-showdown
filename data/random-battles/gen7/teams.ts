@@ -343,7 +343,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
 			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
 			['hornleech', 'woodhammer'],
-			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
+			[['gigadrain', 'leafstorm'], ['energyball', 'leafstorm', 'petaldance', 'powerwhip']],
 			['wildcharge', 'thunderbolt'],
 			['gunkshot', 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],

@@ -2935,7 +2935,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Glare", "Leaf Storm", "Protect", "Tera Blast"],
-                "teraTypes": ["Stellar"]
+                "teraTypes": ["Fire", "Rock"]
             }
         ]
     },

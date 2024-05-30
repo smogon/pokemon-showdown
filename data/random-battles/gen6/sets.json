@@ -1006,7 +1006,8 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["airslash", "defog", "hypervoice", "roost", "toxic"]
+                "movepool": ["airslash", "defog", "hypervoice", "roost", "toxic"],
+                "preferredTypes": ["Normal"]
             }
         ]
     },

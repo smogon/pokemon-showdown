@@ -1411,8 +1411,11 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["dazzlinggleam", "hypervoice", "nastyplot", "psychic", "psyshock", "substitute", "thunderbolt"],
-                "preferredTypes": ["Psychic"]
+                "movepool": ["dazzlinggleam", "nastyplot", "psychic", "psyshock", "substitute", "thunderbolt"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["hypervoice", "nastyplot", "psyshock", "thunderbolt"]
             }
         ]
     },
@@ -3079,8 +3082,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["bugbuzz", "energyball", "gigadrain", "hiddenpowerground", "hiddenpowerrock", "quiverdance"],
-                "preferredType": ["Grass"]
+                "movepool": ["bugbuzz", "energyball", "gigadrain", "hiddenpowerground", "hiddenpowerrock", "quiverdance"]
             }
         ]
     },

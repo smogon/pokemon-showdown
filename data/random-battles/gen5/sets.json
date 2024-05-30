@@ -92,8 +92,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["doubleedge", "drillpeck", "drillrun", "pursuit", "quickattack", "return", "uturn"],
-                "preferredTypes": ["Normal"]
+                "movepool": ["doubleedge", "drillpeck", "drillrun", "return", "uturn"]
             },
             {
                 "role": "Fast Attacker",
@@ -907,7 +906,8 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["airslash", "heatwave", "hypervoice", "roost", "toxic", "whirlwind"]
+                "movepool": ["airslash", "heatwave", "hypervoice", "roost", "toxic", "whirlwind"],
+                "preferredTypes": ["Normal"]
             }
         ]
     },
