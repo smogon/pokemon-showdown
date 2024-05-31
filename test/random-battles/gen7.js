@@ -92,7 +92,6 @@ describe('[Gen 7] Random Battle (slow)', () => {
 					}
 					if (!moves.size) break;
 				}
-				if (moves.size) console.log(moves, species);
 				assert(!moves.size, species);
 			}
 		}

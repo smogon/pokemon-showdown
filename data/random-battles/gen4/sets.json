@@ -1874,7 +1874,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["bodyslam", "encore", "shadowball", "teeterdance", "toxic"]
+                "movepool": ["encore", "protect", "seismictoss", "shadowball", "substitute", "toxic"]
             },
             {
                 "role": "Bulky Support",
