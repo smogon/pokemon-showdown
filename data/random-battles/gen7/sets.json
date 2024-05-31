@@ -5697,7 +5697,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["focusblast", "nastyplot", "psyshock", "shadowball", "trick"]
+                "movepool": ["focusblast", "nastyplot", "psychic", "psyshock", "shadowball", "trick"]
             }
         ]
     },
