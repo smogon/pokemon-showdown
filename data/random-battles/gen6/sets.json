@@ -2689,7 +2689,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["extremespeed", "firepunch", "icebeam", "knockoff", "psychoboost", "stealthrock", "superpower"],
+                "movepool": ["extremespeed", "icebeam", "knockoff", "psychoboost", "stealthrock", "superpower"],
                 "preferredTypes": ["Fighting"]
             }
         ]
@@ -2699,7 +2699,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["extremespeed", "firepunch", "icebeam", "knockoff", "psychoboost", "superpower"],
+                "movepool": ["extremespeed", "icebeam", "knockoff", "psychoboost", "superpower"],
                 "preferredTypes": ["Fighting"]
             }
         ]
