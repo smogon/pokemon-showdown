@@ -4344,7 +4344,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "hiddenpowerelectric", "hiddenpowerflying", "hydropump", "icywind", "scald", "secretsword"]
+                "movepool": ["calmmind", "hiddenpowerelectric", "hiddenpowerflying", "hiddenpowerice", "hydropump", "scald", "secretsword"]
             },
             {
                 "role": "Bulky Setup",
