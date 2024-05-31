@@ -67,14 +67,14 @@ describe('[Gen 6] Random Battle (slow)', () => {
 			if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 			for (const set of sets) {
 				const role = set.role;
-				const moves = new Set(set.movepool.map(Array.from(set.movepool)));
+				const moves = new Set(Array.from(set.movepool));
 				const preferredTypes = set.preferredTypes;
 				let teamDetails = {};
 				// Go through all possible teamDetails combinations, if necessary
 				for (let j = 0; j < rounds; j++) {
 					// Generate a moveset as the lead, teamDetails is always empty for this
 					const preferredType = preferredTypes ? preferredTypes[j % preferredTypes.length] : '';
-					const movePool = set.movepool.map(Array.from(set.movepool));
+					const movePool = Array.from(set.movepool);
 					const moveSet = generator.randomMoveset(types, abilities, {}, species, true, movePool, preferredType, role);
 					for (const move of moveSet) moves.delete(move);
 					if (!moves.size) break;
@@ -85,7 +85,7 @@ describe('[Gen 6] Random Battle (slow)', () => {
 						const stickyWeb = Math.floor(i / 4) % 2;
 						teamDetails = {defog, stealthRock, stickyWeb};
 						// randomMoveset() deletes moves from the movepool, so recreate it every time
-						const movePool = set.movepool.map(Array.from(set.movepool));
+						const movePool = Array.from(set.movepool);
 						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, preferredType, role);
 						for (const move of moveSet) moves.delete(move);
 						if (!moves.size) break;
