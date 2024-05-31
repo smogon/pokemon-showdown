@@ -1469,7 +1469,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Close Combat", "Earthquake", "Rapid Spin", "Stone Edge", "Sucker Punch"],
+                "movepool": ["Close Combat", "Earthquake", "Rapid Spin", "Sucker Punch", "Triple Axel"],
                 "teraTypes": ["Steel"]
             },
             {

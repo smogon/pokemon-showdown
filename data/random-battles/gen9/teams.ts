@@ -1050,7 +1050,6 @@ export class RandomTeams {
 		case 'Intimidate':
 			if (abilities.has('Hustle')) return true;
 			if (abilities.has('Sheer Force') && !!counter.get('sheerforce')) return true;
-			if (species.id === 'hitmontop' && role === 'Bulky Setup') return true;
 			return (abilities.has('Stakeout'));
 		case 'Iron Fist':
 			return !counter.ironFist || moves.has('dynamicpunch');
@@ -1181,6 +1180,7 @@ export class RandomTeams {
 		// singles
 		if (!isDoubles) {
 			if (species.id === 'hypno') return 'Insomnia';
+			if (species.id === 'hitmontop') return (role === 'Bulky Setup') ? 'Technician' : 'Intimidate';
 			if (species.id === 'staraptor') return 'Reckless';
 			if (species.id === 'arcaninehisui') return 'Rock Head';
 			if (['raikou', 'suicune', 'vespiquen'].includes(species.id)) return 'Pressure';
