@@ -156,7 +156,7 @@ export class RandomBabyTeams extends RandomTeams {
 			['rockblast', 'stoneedge'],
 			['bodyslam', 'doubleedge'],
 			['gunkshot', 'poisonjab'],
-			['liquidation', 'surf'],
+			[['hydropump', 'liquidation'], 'surf'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
