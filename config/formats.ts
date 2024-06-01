@@ -2500,8 +2500,8 @@ export const Formats: FormatList = [
 		mod: 'gen9',
 		team: 'randomBSSFactory',
 		ruleset: ['Flat Rules', 'VGC Timer'],
-  },
-  {
+	},
+	{
 		name: "[Gen 9] Baby Random Battle",
 
 		mod: 'gen9',
