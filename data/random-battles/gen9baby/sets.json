@@ -2730,7 +2730,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Drain Punch", "Giga Drain", "Leaf Storm", "Rock Slide", "Synthesis", "Thunder Punch"],
-                "teraTypes": ["Electric", "Fighting", "Grass. Rock"]
+                "teraTypes": ["Electric", "Fighting", "Grass", "Rock"]
             },
             {
                 "role": "Setup Sweeper",

@@ -140,6 +140,7 @@ export class RandomBabyTeams extends RandomTeams {
 			[SETUP, HAZARDS],
 			[PHYSICAL_SETUP, PHYSICAL_SETUP],
 			[statusMoves, ['healingwish', 'trick', 'destinybond']],
+			['curse', 'rapidspin'],
 
 			// These moves are redundant with each other
 			[
