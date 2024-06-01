@@ -2598,7 +2598,8 @@ export class RandomTeams {
 		return {
 			name: setData.set.species || species.baseSpecies,
 			species: setData.set.species,
-			teraType: this.sampleIfArray(setData.set.teraType),
+			// Temporary fix
+			teraType: this.dex.types.get(this.sampleIfArray(setData.set.teraType)).name,
 			gender:	species.gender || (this.randomChance(1, 2) ? "M" : "F"),
 			item: this.sampleIfArray(setData.set.item) || "",
 			ability: setDataAbility || "No Ability",
