@@ -53,10 +53,6 @@ export class MoveCounter extends Utils.Multiset<string> {
 		this.damagingMoves = new Set();
 		this.ironFist = 0;
 	}
-
-	get(key: string): number {
-		return super.get(key) || 0;
-	}
 }
 
 type MoveEnforcementChecker = (
