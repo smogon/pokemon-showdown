@@ -442,6 +442,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (species.id === 'deerling') return 'Serene Grace';
 		if (species.id === 'geodudealola') return 'Galvanize';
 		if (species.id === 'gligar') return 'Immunity';
+		if (species.id === 'minccino') return 'Skill Link';
 		if (species.id === 'rellor') return 'Shed Skin';
 		if (species.id === 'riolu') return 'Inner Focus';
 		if (species.id === 'shroomish') return 'Effect Spore';
@@ -531,7 +532,6 @@ export class RandomBabyTeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 
-		if (species.id === 'minccino') return 'Loaded Dice';
 		if (species.id === 'nymble') return 'Silver Powder';
 
 		if (moves.has('focusenergy')) return 'Scope Lens';
