@@ -66,7 +66,7 @@ describe('[Gen 2] Random Battle (slow)', () => {
 			if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 			for (const set of sets) {
 				const role = set.role;
-				const moves = new Set(set.movepool.map(m => dex.moves.get(m).id));
+				const moves = new Set(Array.from(set.movepool));
 				const preferredTypes = set.preferredTypes;
 				let teamDetails = {};
 				// Go through all possible teamDetails combinations, if necessary
@@ -78,7 +78,7 @@ describe('[Gen 2] Random Battle (slow)', () => {
 						const spikes = Math.floor(i / 2) % 2;
 						teamDetails = {rapidSpin, spikes};
 						// randomMoveset() deletes moves from the movepool, so recreate it every time
-						const movePool = set.movepool.map(m => dex.moves.get(m).id);
+						const movePool = Array.from(set.movepool);
 						const moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, preferredType, role);
 						for (const move of moveSet) moves.delete(move);
 						if (!moves.size) break;

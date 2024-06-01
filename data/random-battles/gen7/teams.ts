@@ -62,9 +62,9 @@ const SETUP = [
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
 	'accelerock', 'aquajet', 'bulletpunch', 'clearsmog', 'dragontail', 'eruption', 'explosion',
-	'fakeout', 'firstimpression', 'flamecharge', 'futuresight', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'nuzzle',
-	'pluck', 'poweruppunch', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack',
-	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'fakeout', 'firstimpression', 'flamecharge', 'futuresight', 'iceshard', 'icywind', 'incinerate', 'infestation', 'machpunch',
+	'nuzzle', 'pluck', 'poweruppunch', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
+	'skyattack', 'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const HAZARDS = [
@@ -131,7 +131,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!counter.get('Ice') || (!moves.has('blizzard') && movePool.includes('freezedry')) ||
 				abilities.has('Refrigerate') && (movePool.includes('return') || movePool.includes('hypervoice'))
 			),
-			Normal: movePool => movePool.includes('boomburst'),
+			Normal: movePool => (movePool.includes('boomburst') || movePool.includes('hypervoice')),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (
@@ -343,7 +343,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
 			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
 			['hornleech', 'woodhammer'],
-			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
+			[['gigadrain', 'leafstorm'], ['energyball', 'leafstorm', 'petaldance', 'powerwhip']],
 			['wildcharge', 'thunderbolt'],
 			['gunkshot', 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
@@ -395,7 +395,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 			if (species.baseSpecies === 'Wormadam' && role === 'Staller') {
-				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
+				if (movePool.includes('infestation')) this.fastPop(movePool, movePool.indexOf('infestation'));
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 		}

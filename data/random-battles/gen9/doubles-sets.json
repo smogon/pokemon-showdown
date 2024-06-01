@@ -325,7 +325,7 @@
             {
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Fire Punch", "High Horsepower", "Rock Slide", "Stone Edge"],
-                "teraTypes": ["Fire", "Grass"]
+                "teraTypes": ["Grass"]
             }
         ]
     },
@@ -1019,7 +1019,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Helping Hand", "High Horsepower", "Icy Wind", "Liquidation", "Stealth Rock", "Yawn"],
+                "movepool": ["Helping Hand", "High Horsepower", "Icy Wind", "Liquidation", "Recover", "Yawn"],
                 "teraTypes": ["Fire", "Poison", "Steel"]
             }
         ]
@@ -1704,7 +1704,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Helping Hand", "High Horsepower", "Icy Wind", "Muddy Water", "Stealth Rock"],
+                "movepool": ["Helping Hand", "High Horsepower", "Icy Wind", "Muddy Water", "Protect"],
                 "teraTypes": ["Fire", "Steel"]
             }
         ]
@@ -1954,7 +1954,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Icy Wind", "Knock Off", "Night Shade", "Teleport", "Thunder Wave"],
+                "movepool": ["Icy Wind", "Knock Off", "Night Shade", "Spikes", "Thunder Wave"],
                 "teraTypes": ["Fairy", "Steel"]
             }
         ]
@@ -2935,7 +2935,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Glare", "Leaf Storm", "Protect", "Tera Blast"],
-                "teraTypes": ["Stellar"]
+                "teraTypes": ["Fire", "Rock"]
             }
         ]
     },

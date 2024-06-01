@@ -215,7 +215,7 @@
     },
     "cloyster": {
         "level": 80,
-        "moves": ["explosion", "hydropump", "iciclespear", "rockblast", "shellsmash"],
+        "moves": ["hydropump", "iciclespear", "rockblast", "shellsmash"],
         "doublesLevel": 84,
         "doublesMoves": ["hydropump", "iciclespear", "protect", "rockblast", "shellsmash"],
         "noDynamaxMoves": ["hydropump", "iciclespear", "rockblast", "shellsmash"]
@@ -880,7 +880,7 @@
     },
     "glalie": {
         "level": 94,
-        "moves": ["earthquake", "explosion", "freezedry", "spikes", "superfang", "taunt"],
+        "moves": ["earthquake", "freezedry", "spikes", "superfang", "taunt"],
         "doublesLevel": 94,
         "doublesMoves": ["disable", "foulplay", "freezedry", "helpinghand", "icywind", "protect"]
     },
@@ -1588,7 +1588,7 @@
     },
     "mandibuzz": {
         "level": 82,
-        "moves": ["bravebird", "defog", "foulplay", "roost", "toxic"],
+        "moves": ["bravebird", "defog", "foulplay", "roost", "toxic", "uturn"],
         "doublesLevel": 88,
         "doublesMoves": ["foulplay", "roost", "snarl", "tailwind", "taunt"]
     },

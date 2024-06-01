@@ -82,8 +82,12 @@
         "level": 86,
         "sets": [
             {
+                "role": "Fast Attacker",
+                "movepool": ["doubleedge", "drillpeck", "quickattack", "return", "uturn"]
+            },
+            {
                 "role": "Wallbreaker",
-                "movepool": ["doubleedge", "drillpeck", "pursuit", "quickattack", "return", "uturn"]
+                "movepool": ["doubleedge", "drillpeck", "pursuit", "return", "uturn"]
             }
         ]
     },
@@ -1680,11 +1684,15 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["healbell", "protect", "return", "thunderwave", "wish"]
+                "movepool": ["doubleedge", "protect", "thunderwave", "toxic", "wish"]
             },
             {
                 "role": "Fast Support",
                 "movepool": ["doubleedge", "fakeout", "healbell", "suckerpunch", "thunderwave", "toxic"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["batonpass", "calmmind", "icebeam", "thunderbolt"]
             }
         ]
     },
@@ -1866,7 +1874,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["bodyslam", "encore", "shadowball", "teeterdance", "toxic"]
+                "movepool": ["encore", "protect", "seismictoss", "shadowball", "substitute", "toxic"]
             },
             {
                 "role": "Bulky Support",
@@ -3170,10 +3178,6 @@
     "giratina": {
         "level": 69,
         "sets": [
-            {
-                "role": "Fast Support",
-                "movepool": ["dragonpulse", "rest", "roar", "sleeptalk", "willowisp"]
-            },
             {
                 "role": "Bulky Setup",
                 "movepool": ["calmmind", "dragonpulse", "rest", "sleeptalk"]

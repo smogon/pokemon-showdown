@@ -2050,6 +2050,10 @@
             {
                 "role": "Generalist",
                 "movepool": ["batonpass", "bodyslam", "healbell", "protect", "wish"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["batonpass", "calmmind", "icebeam", "thunderbolt"]
             }
         ]
     },
