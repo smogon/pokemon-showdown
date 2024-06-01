@@ -320,6 +320,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	vulpix: {
 		tier: "NFE",
+		natDexTier: "LC",
 	},
 	vulpixalola: {
 		tier: "NFE",
@@ -862,7 +863,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	tangela: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "LC",
+		natDexTier: "NFE",
 	},
 	tangrowth: {
 		isNonstandard: "Past",
@@ -1561,7 +1562,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	corsolagalar: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "LC",
+		natDexTier: "NFE",
 	},
 	cursola: {
 		isNonstandard: "Past",
@@ -1744,7 +1745,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	zigzagoon: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "LC",
+		natDexTier: "NFE",
 	},
 	zigzagoongalar: {
 		isNonstandard: "Past",
@@ -2315,7 +2316,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	clamperl: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "LC",
+		natDexTier: "NFE",
 	},
 	huntail: {
 		isNonstandard: "Past",
@@ -2617,6 +2618,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	drifloon: {
 		tier: "LC",
+		natDexTier: "NFE",
 	},
 	drifblim: {
 		tier: "ZU",
@@ -3034,7 +3036,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	woobat: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "LC",
+		natDexTier: "NFE",
 	},
 	swoobat: {
 		isNonstandard: "Past",
@@ -3845,7 +3847,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	swirlix: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "LC",
+		natDexTier: "NFE",
 	},
 	slurpuff: {
 		isNonstandard: "Past",
