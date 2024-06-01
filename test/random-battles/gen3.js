@@ -67,14 +67,14 @@ describe('[Gen 3] Random Battle (slow)', () => {
 			if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 			for (const set of sets) {
 				const role = set.role;
-				const moves = new Set(set.movepool.map(m => dex.moves.get(m).id));
+				const moves = new Set(Array.from(set.movepool));
 				const preferredTypes = set.preferredTypes;
 				// Go through all possible teamDetails combinations, if necessary
 				for (let j = 0; j < rounds; j++) {
 					// Generate a moveset
 					// randomMoveset() deletes moves from the movepool, so recreate it every time
 					const preferredType = preferredTypes ? preferredTypes.join() : '';
-					const movePool = set.movepool.map(m => dex.moves.get(m).id);
+					const movePool = Array.from(set.movepool);
 					const moveSet = generator.randomMoveset(types, abilities, {}, species, false, movePool, preferredType, role);
 					for (const move of moveSet) moves.delete(move);
 					if (!moves.size) break;

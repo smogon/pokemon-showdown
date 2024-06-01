@@ -9487,7 +9487,7 @@
           "item": "Leftovers",
           "ability": "Sturdy",
           "evs": {"hp": 252, "atk": 0, "def": 4, "spa": 0, "spd": 252, "spe": 0},
-          "nature": "Modest",
+          "nature": "Calm",
           "moves": [["Stealth Rock"], ["Flash Cannon"], ["Volt Switch"], ["Earth Power", "Toxic", "Thunder Wave"]]
         }
       ]

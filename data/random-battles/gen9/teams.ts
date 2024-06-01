@@ -130,7 +130,7 @@ const MOVE_PAIRS = [
 
 /** Pokemon who always want priority STAB, and are fine with it as its only STAB move of that type */
 const PRIORITY_POKEMON = [
-	'breloom', 'brutebonnet', 'honchkrow', 'mimikyu', 'ragingbolt', 'scizor',
+	'breloom', 'brutebonnet', 'cacturne', 'honchkrow', 'mimikyu', 'ragingbolt', 'scizor',
 ];
 
 /** Pokemon who should never be in the lead slot */
@@ -142,7 +142,7 @@ const DOUBLES_NO_LEAD_POKEMON = [
 ];
 
 const DEFENSIVE_TERA_BLAST_USERS = [
-	'alcremie', 'bellossom', 'comfey', 'florges',
+	'alcremie', 'bellossom', 'comfey', 'fezandipiti', 'florges',
 ];
 
 function sereneGraceBenefits(move: Move) {
@@ -195,7 +195,14 @@ export class RandomTeams {
 				movePool.includes('megahorn') || movePool.includes('xscissor') ||
 				(!counter.get('Bug') && types.includes('Electric'))
 			),
-			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
+			Dark: (
+				movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles, teraType, role
+			) => {
+				if (
+					counter.get('Dark') < 2 && PRIORITY_POKEMON.includes(species.id) && role === 'Wallbreaker'
+				) return true;
+				return !counter.get('Dark');
+			},
 			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fairy: (movePool, moves, abilities, types, counter) => !counter.get('Fairy'),
@@ -566,6 +573,7 @@ export class RandomTeams {
 			['closecombat', 'drainpunch'],
 			['bugbite', 'pounce'],
 			[['dragonpulse', 'spacialrend'], 'dracometeor'],
+			['heavyslam', 'flashcannon'],
 			['alluringvoice', 'dazzlinggleam'],
 
 			// These status moves are redundant with each other
@@ -580,8 +588,6 @@ export class RandomTeams {
 			['switcheroo', 'fakeout'],
 			// Beartic
 			['snowscape', 'swordsdance'],
-			// Magnezone
-			['bodypress', 'mirrorcoat'],
 			// Amoonguss, though this can work well as a general rule later
 			['toxic', 'clearsmog'],
 			// Chansey and Blissey
@@ -1057,7 +1063,6 @@ export class RandomTeams {
 		case 'Intimidate':
 			if (abilities.has('Hustle')) return true;
 			if (abilities.has('Sheer Force') && !!counter.get('sheerforce')) return true;
-			if (species.id === 'hitmontop' && moves.has('tripleaxel')) return true;
 			return (abilities.has('Stakeout'));
 		case 'Iron Fist':
 			return !counter.ironFist || moves.has('dynamicpunch');
@@ -1070,7 +1075,8 @@ export class RandomTeams {
 		case 'Mold Breaker':
 			return (['Sharpness', 'Sheer Force', 'Unburden'].some(m => abilities.has(m)));
 		case 'Moxie':
-			return (!counter.get('Physical') || moves.has('stealthrock'));
+			// AV Pivot part is currently only for Mightyena)
+			return (!counter.get('Physical') || moves.has('stealthrock') || role === 'AV Pivot');
 		case 'Natural Cure':
 			return species.id === 'pawmot';
 		case 'Neutralizing Gas':
@@ -1125,8 +1131,6 @@ export class RandomTeams {
 			const hbraviaryCase = (species.id === 'braviaryhisui' && (role === 'Setup Sweeper' || role === 'Doubles Wallbreaker'));
 			const yanmegaCase = (species.id === 'yanmega' && moves.has('protect'));
 			return (yanmegaCase || hbraviaryCase || species.id === 'illumise');
-		case 'Unaware':
-			return (species.id === 'clefable' && role !== 'Bulky Support');
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup') || species.id === 'sceptile');
 		case 'Vital Spirit':
@@ -1189,6 +1193,7 @@ export class RandomTeams {
 		// singles
 		if (!isDoubles) {
 			if (species.id === 'hypno') return 'Insomnia';
+			if (species.id === 'hitmontop') return (role === 'Bulky Setup') ? 'Technician' : 'Intimidate';
 			if (species.id === 'staraptor') return 'Reckless';
 			if (species.id === 'arcaninehisui') return 'Rock Head';
 			if (['raikou', 'suicune', 'vespiquen'].includes(species.id)) return 'Pressure';
@@ -1330,8 +1335,7 @@ export class RandomTeams {
 		) return 'Weakness Policy';
 		if (['dragonenergy', 'lastrespects', 'waterspout'].some(m => moves.has(m))) return 'Choice Scarf';
 		if (
-			ability === 'Imposter' ||
-			(species.id === 'magnezone' && moves.has('bodypress') && !isDoubles)
+			ability === 'Imposter' || (species.id === 'magnezone' && role === 'Fast Attacker')
 		) return 'Choice Scarf';
 		if (species.id === 'rampardos' && (role === 'Fast Attacker' || isDoubles)) return 'Choice Scarf';
 		if (species.id === 'palkia' && counter.get('Special') < 4) return 'Lustrous Orb';
@@ -1363,7 +1367,7 @@ export class RandomTeams {
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (species.id === 'reuniclus' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
+		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
 		if (ability === 'Anger Shell') return this.sample(['Rindo Berry', 'Passho Berry', 'Scope Lens', 'Sitrus Berry']);
 		if (moves.has('dragondance') && isDoubles) return 'Clear Amulet';
 		if (counter.get('skilllink') && ability !== 'Skill Link' && species.id !== 'breloom') return 'Loaded Dice';
@@ -1440,6 +1444,7 @@ export class RandomTeams {
 			species.id === 'eternatus' || species.id === 'regigigas'
 		) return 'Leftovers';
 		if (species.id === 'sylveon') return 'Pixie Plate';
+		if (ability === 'Intimidate' && this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
 		if (
 			(offensiveRole || (role === 'Tera Blast user' && (species.baseStats.spe >= 80 || moves.has('trickroom')))) &&
 			(!moves.has('fakeout') || species.id === 'ambipom') && !moves.has('incinerate') &&
@@ -1531,7 +1536,7 @@ export class RandomTeams {
 				(species.baseStats.hp + species.baseStats.def) > 200 && this.randomChance(1, 2)
 			)
 		) return 'Rocky Helmet';
-		if (moves.has('outrage') && this.randomChance(1, 2)) return 'Lum Berry';
+		if (moves.has('outrage')) return 'Lum Berry';
 		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead &&
