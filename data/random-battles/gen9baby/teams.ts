@@ -441,6 +441,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (species.id === 'chinchou') return 'Volt Absorb';
 		if (species.id === 'deerling') return 'Serene Grace';
 		if (species.id === 'geodudealola') return 'Galvanize';
+		if (species.id === 'growlithehisui') return 'Rock Head';
 		if (species.id === 'gligar') return 'Immunity';
 		if (species.id === 'minccino') return 'Skill Link';
 		if (species.id === 'rellor') return 'Shed Skin';
