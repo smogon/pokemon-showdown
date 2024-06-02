@@ -1645,7 +1645,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["Curse", "Earthquake", "Recover", "Stealth Rock", "Stone Edge"],
-                "teraTypes": ["Dragon", "Fairy", "Ghost"]
+                "teraTypes": ["Dragon", "Fairy"]
             }
         ]
     },
@@ -2390,7 +2390,7 @@
             {
                 "role": "Tera Blast user",
                 "movepool": ["Glare", "Knock Off", "Leaf Storm", "Substitute", "Synthesis", "Tera Blast"],
-                "teraTypes": ["Stellar"]
+                "teraTypes": ["Fire", "Rock"]
             }
         ]
     },
