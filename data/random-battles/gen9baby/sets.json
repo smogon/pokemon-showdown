@@ -2614,7 +2614,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Crunch", "Double-Edge", "Encore", "Low Sweep", "Play Rough", "Thief", "Thunder Wave", "U-turn"],
+                "movepool": ["Crunch", "Double-Edge", "Encore", "Low Sweep", "Switcheroo", "Thunder Wave", "U-turn"],
                 "teraTypes": ["Ghost"]
             }
         ]
