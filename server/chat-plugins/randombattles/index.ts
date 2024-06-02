@@ -332,18 +332,24 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 				buf += `<li>Ability: ${formatAbility(set.ability)}</li>`;
 				buf += `<li>Level: 50</li>`;
 				buf += `<li>Tera Type: ${set.teraType.map(formatType).join(' / ')}</li>`;
-				buf += `<li> EVs: `;
-				const evs = [];
-				for (const [j, stat] of Object.values(STAT_NAMES).entries()) {
-					if (set.evs[j] > 0) evs.push(`${set.evs[j]} ${stat}`);
+				if (set.evs) {
+					buf += `<li>EVs: `;
+					const evs: string[] = [];
+					let ev: string;
+					for (ev in set.evs) {
+						if (!set.evs[ev]) continue;
+						evs.push(`${set.evs[ev]} ${STAT_NAMES[ev]}`);
+					}
+					buf += `${evs.join(" / ")}</li>`;
 				}
-				buf += `${evs.join(" / ")}</li>`;
 				buf += `<li>${formatNature(set.nature)} Nature</li>`;
 				if (set.ivs) {
 					buf += `<li>IVs: `;
-					const ivs = [];
-					for (const [j, stat] of Object.values(STAT_NAMES).entries()) {
-						if (set.ivs[j] < 31) ivs.push(`${set.ivs[j]} ${stat}`);
+					const ivs: string[] = [];
+					let iv: string;
+					for (iv in set.ivs) {
+						if (set.ivs[iv] === 31) continue;
+						ivs.push(`${set.ivs[iv]} ${STAT_NAMES[iv]}`);
 					}
 					buf += `${ivs.join(" / ")}</li>`;
 				}

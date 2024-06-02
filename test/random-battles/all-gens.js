@@ -246,3 +246,71 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 		});
 	}
 });
+
+describe('[Gen 9] BSS Factory data should be valid (slow)', () => {
+	it(`gen9/bss-factory-sets.json should contain valid sets`, function () {
+		this.timeout(0);
+		const setsJSON = require(`../../dist/data/random-battles/gen9/bss-factory-sets.json`);
+		const mod = 'gen9';
+		const genNum = 9;
+
+		for (const speciesid in setsJSON) {
+			const vType = 'battlestadiumsingles';
+			let totalWeight = 0;
+			for (const set of setsJSON[speciesid].sets) {
+				totalWeight += set.weight;
+				const species = Dex.species.get(set.species);
+				assert(species.exists, `invalid species "${set.species}" of ${speciesid}`);
+				assert(!species.isNonstandard, `illegal species "${set.species}" of ${speciesid}`);
+				assert.equal(species.name, set.species, `miscapitalized species "${set.species}" of ${speciesid}`);
+
+				assert(species.id.startsWith(toID(species.baseSpecies)), `non-matching species "${set.species}" of ${speciesid}`);
+
+				assert(!species.battleOnly, `invalid battle-only forme "${set.species}" of ${speciesid}`);
+
+				for (const itemName of [].concat(set.item)) {
+					if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;
+					const item = Dex.forGen(genNum).items.get(itemName);
+					assert(item.exists, `invalid item "${itemName}" of ${speciesid}`);
+					assert.equal(item.name, itemName, `miscapitalized item "${itemName}" of ${speciesid}`);
+				}
+
+				for (const abilityName of [].concat(set.ability)) {
+					const ability = Dex.forGen(genNum).abilities.get(abilityName);
+					assert(ability.exists, `invalid ability "${abilityName}" of ${speciesid}`);
+					assert.equal(ability.name, abilityName, `miscapitalized ability "${abilityName}" of ${speciesid}`);
+				}
+
+				for (const natureName of [].concat(set.nature)) {
+					const nature = Dex.forGen(genNum).natures.get(natureName);
+					assert(nature.exists, `invalid nature "${natureName}" of ${speciesid}`);
+					assert.equal(nature.name, natureName, `miscapitalized nature "${natureName}" of ${speciesid}`);
+				}
+
+				for (const moveSpec of set.moves) {
+					for (const moveName of [].concat(moveSpec)) {
+						const move = Dex.forGen(genNum).moves.get(moveName);
+						assert(move.exists, `invalid move "${moveName}" of ${speciesid}`);
+						assert.equal(move.name, moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${speciesid}`);
+						assert(validateLearnset(move, set, vType, mod), `illegal move "${moveName}" of ${speciesid}`);
+					}
+				}
+
+				assert(!!set.evs, `Set of ${speciesid} has no EVs specified`);
+				const keys = Object.keys(set.evs);
+				let totalEVs = 0;
+				for (const ev of keys) {
+					assert(Dex.stats.ids().includes(ev), `Invalid EV key (${ev}) on set of ${speciesid}`);
+					totalEVs += set.evs[ev];
+					assert.equal(set.evs[ev] % 4, 0, `EVs of ${ev} not divisible by 4 on ${speciesid}`);
+				}
+				const sortedKeys = Utils.sortBy([...keys], ev => Dex.stats.ids().indexOf(ev));
+				assert.deepEqual(keys, sortedKeys, `EVs out of order on set of ${speciesid}, possibly because one of them is for the wrong stat`);
+				assert(totalEVs <= 510, `more than 510 EVs on set of ${speciesid}`);
+			}
+			// Some species have 1/3 probability for each set
+			if (totalWeight === 99) totalWeight += 1;
+			assert.equal(totalWeight, 100, `Total set weight for ${speciesid} is ${totalWeight < 100 ? 'less' : 'greater'} than 100%`);
+		}
+	});
+});
