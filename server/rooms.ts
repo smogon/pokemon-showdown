@@ -1396,7 +1396,9 @@ export class GlobalRoomState {
 		for (const room of Rooms.rooms.values()) {
 			const player = room.game && !room.game.ended && room.game.playerTable[user.id];
 			if (!player) continue;
-
+			if(room.roomid == "scavengers"){
+				if(player.completed) continue;
+			}
 			user.games.add(room.roomid);
 			player.name = user.name;
 			user.joinRoom(room.roomid);
