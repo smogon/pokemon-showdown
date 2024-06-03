@@ -99,7 +99,7 @@ export class Roomlog {
 
 		this.numTruncatedLines = 0;
 
-		if (!Config.replaysdb) {
+		if (!roomlogTable) {
 			void this.setupRoomlogStream(true);
 		}
 	}
