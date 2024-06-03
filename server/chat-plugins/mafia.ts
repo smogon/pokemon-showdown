@@ -1,4 +1,4 @@
-import {Utils, FS} from '../../lib';
+import { Utils, FS } from '../../lib';
 
 interface MafiaData {
 	// keys for all of these are IDs
@@ -3927,21 +3927,192 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`The entry ${entry} was deleted from the ${source} database.`);
 		},
 		deletedatahelp: [`/mafia deletedata source,entry - Removes an entry from the database. Requires % @ # &`],
-		listdata(target, room, user) {
-			if (!(target in MafiaData)) {
-				return this.errorReply(`Invalid source. Valid sources are ${Object.keys(MafiaData).join(', ')}`);
+
+		randtheme: 'listdata',
+		randrole: 'listdata',
+		randalignment: 'listdata',
+		randidea: 'listdata',
+		randterm: 'listdata',
+		randdata: 'listdata',
+		randomtheme: 'listdata',
+		randomrole: 'listdata',
+		randomalignment: 'listdata',
+		randomidea: 'listdata',
+		randomterm: 'listdata',
+		randomdata: 'listdata',
+		listthemes: 'listdata',
+		listroles: 'listdata',
+		listalignments: 'listdata',
+		listideas: 'listdata',
+		listterms: 'listdata',
+		themes: 'listdata',
+		roles: 'listdata',
+		alignments: 'listdata',
+		ideas: 'listdata',
+		terms: 'listdata',
+		ds: 'listdata',
+		search: 'listdata',
+		random: 'listdata',
+		list: 'listdata',
+		async listdata(target, room, user, connection, cmd, message) {
+			if (!this.runBroadcast()) return false;
+
+			// Determine non-search targets first, afterwards searching is done with the remainder
+			let targets = target.split(',').map(x => x.trim());
+
+			// Determine search type
+			let searchType = null;
+			if (cmd === 'randtheme' || cmd === 'randomtheme' || cmd === 'listthemes' || cmd === 'themes' || targets.includes(`themes`)) {
+				searchType = `themes`;
+				if (targets.includes(`themes`)) targets.splice(targets.indexOf(`themes`), 1);
 			}
-			const dataSource = MafiaData[target as keyof MafiaData];
+			else if (cmd === 'randrole' || cmd === 'randomrole' || cmd === 'listroles' || cmd === 'roles' || targets.includes(`roles`)) {
+				searchType = `roles`;
+				if (targets.includes(`roles`)) targets.splice(targets.indexOf(`roles`), 1);
+			}
+			else if (cmd === 'randalignment' || cmd === 'randomalignment' || cmd === 'listalignments' || cmd === 'alignments' || targets.includes(`alignments`)) {
+				searchType = `alignments`;
+				if (targets.includes(`alignments`)) targets.splice(targets.indexOf(`alignments`), 1);
+			}
+			else if (cmd === 'randidea' || cmd === 'randomidea' || cmd === 'listideas' || cmd === 'ideas' || targets.includes(`ideas`)) {
+				searchType = `IDEAs`;
+				if (targets.includes(`ideas`)) targets.splice(targets.indexOf(`ideas`), 1);
+			}
+			else if (cmd === 'randterm' || cmd === 'randomterm' || cmd === 'listterms' || cmd === 'terms' || targets.includes(`terms`)) {
+				searchType = `terms`;
+				if (targets.includes(`terms`)) targets.splice(targets.indexOf(`terms`), 1);
+			}
+			else if (targets.includes(`aliases`)) {
+				searchType = `aliases`;
+			}
+			else if (targets.includes(`tags`)) {
+				searchType = `tags`;
+			}
+			else if (cmd === 'random' || cmd === 'randomdata' || cmd === 'randdata') {
+				searchType = [`themes`, `roles`, `alignments`, `IDEAs`, `terms`][Math.floor(Math.random() * 5)];
+			}
+			else {
+				return this.errorReply(`Invalid source. Valid sources are ${Object.keys(MafiaData).filter(key => key != `aliases`).join(', ')}.`);
+			}
+
+			const dataSource = MafiaData[searchType as keyof MafiaData];
+
+			const random = (cmd === 'random' || cmd === 'randdata' || cmd === 'randomdata' || cmd === 'randrole' || cmd === 'randomrole' || cmd === 'randalignment' || cmd === 'randomalignment' || cmd === 'randtheme' || cmd === 'randomtheme' || cmd === 'randterm' || cmd === 'randomterm' || cmd === 'randidea' || cmd === 'randomidea' || targets.includes(`random`));
+			if (targets.includes(`random`)) targets.splice(targets.indexOf(`random`), 1);
+
+			const hidden = (targets.includes(`hidden`));
+			if (hidden) targets.splice(targets.indexOf(`hidden`), 1);
+
+			let shuffle = function (array: any[]) {
+				for (let i = array.length - 1; i > 0; i--) {
+					let j = Math.floor(Math.random() * (i + 1));
+					[array[j], array[i]] = [array[i], array[j]];
+				}
+				return array;
+			}
+
+			let search = function (entries: any[], searchTarget) {
+				if (searchTarget.length == 0) return entries;
+				const negation = searchTarget[0] == '!';
+
+				if (negation) searchTarget = searchTarget.substring(1).trim();
+				let entriesCopy = entries.slice();
+
+				if (searchType == `themes` && searchTarget.includes(`players`)) {
+					const inequalities = ['<=', '>=', '=', '<', '>'];
+					const inequality = inequalities.find(x => searchTarget.includes(x));
+					if (!inequality) return this.errorReply(`Please provide a valid inequality for the players.`);
+
+					const players = searchTarget.split(inequality)[1].trim();
+					if (((players != null) &&
+						(players !== '') &&
+						!isNaN(Number(players.toString())))) {
+						if (inequality == '=') entries = entries.filter(([key, data]) => players in (MafiaData[searchType][key]));
+						else if (inequality == '<' || inequality == '<=') entries = entries.filter(([key, data]) => ([...Array(+players + (inequality == '<=' ? +1 : +0)).keys()]).some(playerCount => playerCount in (MafiaData[searchType][key])));
+						else if (inequality == '>' || inequality == '>=') entries = entries.filter(([key, data]) => ([...Array(30 - players).keys()].map(num => +num + +players + (inequality == '>=' ? +0 : +1))).some(playerCount => playerCount in (MafiaData[searchType][key])));
+					} else {
+						return this.errorReply(`Please ensure the amount of players is numeric.`);
+					}
+				}
+				else if ((searchType == `roles`) && toID(searchTarget) in MafiaData[`themes`]) {
+					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`themes`][toID(searchTarget)]).filter(newKey => toID((MafiaData[`themes`][toID(searchTarget)])[newKey].toString()).includes(key)).length > 0);
+				}
+				else if ((searchType == `roles`) && toID(searchTarget) in MafiaData[`IDEAs`]) {
+					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`IDEAs`][toID(searchTarget)]).filter(newKey => toID((MafiaData[`IDEAs`][toID(searchTarget)])[newKey].toString()).includes(key)).length > 0);
+				}
+				else {
+					entries = entries.filter(([key, data]) => Object.keys((MafiaData[searchType][key])).filter(newKey => (MafiaData[searchType][key])[newKey].toString().toLowerCase().includes(searchTarget)).length > 0);
+				}
+				return negation ? entriesCopy.filter(element => !entries.includes(element)) : entries;
+			}
+
+			// Number of results
+			let number = random ? 1 : 0;
+			for (let i = 0; i < targets.length; i++) {
+				if (((targets[i] != null) &&
+					(targets[i] !== '') &&
+					!isNaN(Number(targets[i].toString())))) {
+					number = Number(targets[i]);
+					targets.splice(i, 1);
+					break;
+				}
+			}
+
+			// Convert to rows
+			let themeRow = function (theme, players = 0) {
+				return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia theme ${theme.name}" > ${theme.name} </button> </td><td style="text-align:left;width:70%">${players > 0 ? theme[players] : theme.desc} </td></tr >`;
+			}
+			let ideaRow = function (idea) {
+				return `<tr><td style="text-align:left;width:100%" ><button class="button" name = "send" value = "/mafia dt ${idea.name}" > ${idea.name} </button> </td></tr >`;
+			}
+			let row = function (role) {
+				return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia role ${role.name}" > ${role.name} </button> </td><td style="text-align:left;width:70%">${role.memo.join(' ')} </td></tr >`;
+			}
+
 			if (dataSource === MafiaData.aliases) {
+				this.checkCan('mute', null, room);
 				const aliases = Object.entries(MafiaData.aliases)
 					.map(([from, to]) => `${from}: ${to}`)
 					.join('<br/>');
 				return this.sendReplyBox(`Mafia aliases:<br/>${aliases}`);
+			} else if (dataSource === MafiaData.tags) {
+				this.checkCan('mute', null, room);
+				const tags = Object.entries(MafiaData.tags)
+					.map(([key, data]) => `${key}: Alignments ${data.alignments}; Roles: ${data.roles}; Themes: ${data.themes}; IDEAs: ${data.ideas}; Terms: ${data.terms}`)
+					.join('<br/>');
+				return this.sendReplyBox(`Mafia tags:<br/>${tags}`);
 			} else {
-				const entries = Object.entries(dataSource)
-					.map(([key, data]) => `<button class="button" name="send" value="/mafia dt ${key}">${data.name}</button>`)
+				let table = `<div style="max-height:300px;overflow:auto;"><table border="1" style="border: 1px solid black;width: 100%">`;
+				let entries = Object.entries(dataSource).sort();
+
+				// Remove probably
+				entries.forEach(([key, data]) => {
+					if (!(MafiaData[searchType][key][`tags`])) MafiaData[searchType][key][`tags`] = [];
+				});
+
+				if (!hidden) entries = entries.filter(([key, data]) => !MafiaData[searchType][key][`tags`].includes(`hidden`));
+
+				for (let i = 0; i < targets.length; i++) {
+					entries = targets[i].split('|').map(x => x.trim()).map(searchTerm => search(entries.slice(), searchTerm)).reduce((aggregate, result) => [...new Set([...aggregate, ...result])]);
+				}
+
+				if (random) entries = shuffle(entries);
+				if (number > 0) entries = entries.slice(0, number)
+
+				if (entries.length == 0) {
+					return this.errorReply(`No ${searchType} found.`);
+				}
+
+				if (entries.length == 1) {
+					this.target = entries[0][0];
+					return this.run(Chat.commands.mafia.data);
+				}
+
+				table += entries
+					.map(([key, data]) => searchType == `themes` ? themeRow(MafiaData[searchType][key]) : searchType == `IDEAs` ? ideaRow(MafiaData[searchType][key]) : row(MafiaData[searchType][key]))
 					.join('');
-				return this.sendReplyBox(`Mafia ${target}:<br/>${entries}`);
+				table += `</table></div>`
+				return this.sendReplyBox(table);
 			}
 		},
 
