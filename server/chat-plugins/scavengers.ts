@@ -393,7 +393,12 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			this.loadMod(this.room.settings.scavSettings?.officialtwist);
 		}
 
-		this.runEvent('Load');
+		try {
+			this.runEvent('Load', questions);
+		} catch (err) {
+			this.destroy();
+			throw err;
+		}
 		this.onLoad(questions);
 		this.runEvent('AfterLoad');
 	}
@@ -521,7 +526,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		this.room.add(message).update();
 	}
 
-	// returns whether or not the next action should be stopped
+	// returns whether the next action should be stopped
 	runEvent(event_id: string, ...args: any[]) {
 		const events = this.mods['on' + event_id];
 		if (!events) return;
