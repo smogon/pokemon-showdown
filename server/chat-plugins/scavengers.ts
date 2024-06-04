@@ -8,9 +8,9 @@
  * @license MIT license
  */
 
-import { FS, Utils } from '../../lib';
-import { ScavMods, type TwistEvent } from './scavenger-games';
-import type { ChatHandler } from '../chat';
+import {FS, Utils} from '../../lib';
+import {ScavMods, type TwistEvent, type TwistCollection} from './scavenger-games';
+import type {ChatHandler} from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
 
@@ -414,21 +414,20 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	}
 
 	loadMod(modData: string | ID | AnyObject) {
-		let twist;
+		let twist: Twist;
 		if (typeof modData === 'string') {
 			const modId = toID(modData) as string;
-			if (!ScavMods.twists[modId]) return this.announce(`Invalid mod. Starting the hunt without the mod ${modId}.`);
-
-			twist = ScavMods.twists[modId];
+			if (modId in ScavMods.twists) twist = ScavMods.twists[modId as keyof TwistCollection] as Twist;
+			else return this.announce(`Invalid mod. Starting the hunt without the mod ${modId}.`);
 		} else {
-			twist = modData;
+			twist = modData as Twist;
 		}
 		this.modsList.push(twist.id);
 		for (const key in twist) {
 			if (!key.startsWith('on')) continue;
-			const priority = twist[key + 'Priority'] || 0;
+			const priority = twist[`${key}Priority` as `on${string}Priority`] || 0;
 			if (!this.mods[key]) this.mods[key] = [];
-			this.mods[key].push({ exec: twist[key], priority });
+			this.mods[key].push({exec: twist[key as `on${string}`] as TwistEvent, priority});
 		}
 		if (twist.isGameMode) {
 			this.announce(`This hunt is part of an ongoing ${twist.name}.`);
@@ -2188,7 +2187,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			room.settings.scavSettings.officialtwist = null;
 		} else {
 			const twist = toID(target);
-			if (!ScavMods.twists[twist] || twist === 'constructor') throw new Chat.ErrorMessage('Invalid twist.');
+			if (!(twist in ScavMods.twists) || twist === 'constructor') throw new Chat.ErrorMessage('Invalid twist.');
 
 			room.settings.scavSettings.officialtwist = twist;
 			room.saveSettings();
