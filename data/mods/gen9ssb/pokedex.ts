@@ -21,7 +21,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Aethernum
 	giratinaorigin: {
 		inherit: true,
-		abilities: {0: "The Eminince in the Shadow"},
+		abilities: {0: "The Eminence in the Shadow"},
 	},
 
 	// Akir
@@ -237,6 +237,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	thwackey: {
 		inherit: true,
 		abilities: {0: "Grassy Emperor"},
+	},
+
+	// Daki
+	ragingbolt: {
+		inherit: true,
+		abilities: {0: "Astrothunder"},
 	},
 
 	// Dawn of Artemis
@@ -629,6 +635,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	latias: {
 		inherit: true,
 		abilities: {0: "Eon Call"},
+	},
+
+	// Neko
+	chienpao: {
+		inherit: true,
+		abilities: {0: "Weatherproof"},
 	},
 
 	// Ney

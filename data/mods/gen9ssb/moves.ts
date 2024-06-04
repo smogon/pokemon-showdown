@@ -1,5 +1,5 @@
 import {ssbSets} from "./random-teams";
-import {changeSet, getName} from "./scripts";
+import {PSEUDO_WEATHERS, changeSet, getName} from "./scripts";
 import {Teams} from '../../../sim/teams';
 
 export const Moves: {[k: string]: ModdedMoveData} = {
@@ -521,7 +521,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		volatileStatus: 'flinch',
 		onHit(target, source, move) {
-			if (!source.getMoveHitData(move).crit) {
+			if (target && !target.getMoveHitData(move).crit) {
 				delete move.volatileStatus;
 			}
 		},
@@ -1445,6 +1445,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
+	// Daki
+	antidote: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Antidote",
+		shortDesc: "Recover + Magnet Rise for 3 turns.",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1, gravity: 1, metronome: 1},
+		heal: [1, 2],
+		onTry(source, target, move) {
+			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
+
+			// Additional Gravity check for Z-move variant
+			if (this.field.getPseudoWeather('Gravity')) {
+				this.add('cant', source, 'move: Gravity', move);
+				return null;
+			}
+		},
+		onHit(target, source, move) {
+			if (!source.volatiles['magnetrise']) {
+				source.addVolatile('magnetrise', source, move);
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
 	// Dawn of Artemis
 	magicalfocus: {
 		accuracy: 100,
@@ -1982,7 +2012,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: 4,
 		flags: {},
-		sideCondition: 'toxicspikes',
 		onTry(source) {
 			if (source.activeMoveActions > 1) {
 				this.hint("Puffy Spiky Destruction only works on your first turn out.");
@@ -1997,19 +2026,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Spiky Shield', source);
 			this.add('-anim', source, 'Toxic Spikes', target);
 		},
-		self: {
-			volatileStatus: 'spikyshield',
-			onHit(target, source, move) {
-				source.setType(source.getTypes(true).filter(type => type !== "Poison"));
-				this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] move: Puffy Spiky Destruction');
-			},
-			boosts: {
-				spe: 1,
-				atk: 1,
-			},
+		volatileStatus: 'spikyshield',
+		onHit(target, source, move) {
+			source.setType(source.getTypes(true).filter(type => type !== "Poison"));
+			this.add('-start', source, 'typechange', source.getTypes().join('/'), '[from] move: Puffy Spiky Destruction');
+			const foeSide = source.side.foe;
+			if (!foeSide.sideConditions['toxicspikes'] || foeSide.sideConditions['toxicspikes'].layers < 2) {
+				foeSide.addSideCondition('toxicspikes', source, move);
+			}
+		},
+		boosts: {
+			spe: 1,
+			atk: 1,
 		},
 		secondary: null,
-		target: 'normal',
+		target: 'self',
 		type: "Poison",
 	},
 
@@ -2961,7 +2992,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (moveSlot.pp < moveSlot.maxpp) moveSlot.pp += 1;
 			}
 		},
-		target: "self",
+		target: "normal",
 		type: "Fairy",
 
 	},
@@ -3719,6 +3750,61 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Neko
+	qualitycontrolzoomies: {
+		accuracy: 100,
+		basePower: 50,
+		basePowerCallback(pokemon, target, move) {
+			if (pokemon.side.pokemonLeft === 1) return move.basePower + 30;
+			return move.basePower;
+		},
+		category: "Physical",
+		shortDesc: "User swap, replacement Booster Energy boost.",
+		name: "Quality Control Zoomies",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Ice Spinner', target);
+			this.add('-anim', source, 'Chilly Reception', source);
+		},
+		self: {
+			slotCondition: 'Quality Control Zoomies',
+		},
+		condition: {
+			onSwap(target) {
+				if (!target.fainted) {
+					target.addVolatile('catstampofapproval');
+				}
+			},
+		},
+		onHit(target, source, move) {
+			let message = 'Meow has no other options, so ;w;';
+			if (source.side.pokemonLeft > 1) {
+				message = 'Meow is not the right Pokemon to be an example here, swap meow out please.';
+			}
+			this.add(`c:|${getName('Neko')}|${message}`);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.side.pokemonLeft === 1) {
+				move.self = {
+					onHit(t, source, m) {
+						source.addVolatile('catstampofapproval');
+					},
+				};
+				delete move.condition;
+			}
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+	},
+
 	// Ney
 	shadowdance: {
 		accuracy: 90,
@@ -4390,7 +4476,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.field.clearTerrain();
 			this.field.clearWeather();
-			for (const pseudoWeather of Object.keys(this.field.pseudoWeather)) {
+			for (const pseudoWeather of PSEUDO_WEATHERS) {
 				this.field.removePseudoWeather(pseudoWeather);
 			}
 		},
@@ -5633,7 +5719,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Grass",
 	},
 
-	// WarriorGallade - TODO: Fix animations
+	// WarriorGallade
 	fruitfullongbow: {
 		accuracy: 90,
 		basePower: 160,
@@ -6595,6 +6681,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onFieldResidualSubOrder: 2,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Gravity');
+			},
+		},
+	},
+	magnetrise: {
+		inherit: true,
+		condition: {
+			duration: 5,
+			durationCallback(target, source, effect) {
+				if (effect?.name === 'Antidote') return 3;
+				return 5;
+			},
+			onStart(target) {
+				this.add('-start', target, 'Magnet Rise');
+			},
+			onImmunity(type) {
+				if (type === 'Ground') return false;
+			},
+			onResidualOrder: 18,
+			onEnd(target) {
+				this.add('-end', target, 'Magnet Rise');
 			},
 		},
 	},

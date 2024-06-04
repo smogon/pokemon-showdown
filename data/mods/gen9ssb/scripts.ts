@@ -115,6 +115,13 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	context.add('message', `${pokemon.name} changed form!`);
 }
 
+export const PSEUDO_WEATHERS = [
+	// Normal pseudo weathers
+	'fairylock', 'gravity', 'iondeluge', 'magicroom', 'mudsport', 'trickroom', 'watersport', 'wonderroom',
+	// SSB pseudo weathers
+	'anfieldatmosphere',
+];
+
 /**
  * Assigns new moves to a Pokemon
  * @param pokemon The Pokemon whose moveset is to be modified
@@ -611,7 +618,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			for (const [pokemon, originalHP] of residualPokemon) {
 				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
 				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					if (!pokemon.m.cascade) this.runEvent('EmergencyExit', pokemon);
+					this.runEvent('EmergencyExit', pokemon);
 				}
 			}
 		}
@@ -619,7 +626,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (action.choice === 'runSwitch') {
 			const pokemon = action.pokemon;
 			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				if (!pokemon.m.cascade) this.runEvent('EmergencyExit', pokemon);
+				this.runEvent('EmergencyExit', pokemon);
 			}
 		}
 
@@ -676,6 +683,39 @@ export const Scripts: ModdedBattleScriptsData = {
 		return false;
 	},
 	actions: {
+		terastallize(pokemon) {
+			if (pokemon.illusion && ['Ogerpon', 'Terapagos'].includes(pokemon.illusion.species.baseSpecies)) {
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
+			}
+
+			const type = pokemon.teraType;
+			this.battle.add('-terastallize', pokemon, type);
+			pokemon.terastallized = type;
+			for (const ally of pokemon.side.pokemon) {
+				ally.canTerastallize = null;
+			}
+			pokemon.addedType = '';
+			pokemon.knownType = true;
+			pokemon.apparentType = type;
+			if (pokemon.species.baseSpecies === 'Ogerpon') {
+				const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
+				pokemon.formeChange(pokemon.species.id + tera, null, true);
+			}
+			if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
+				pokemon.formeChange('Terapagos-Stellar', null, true);
+				pokemon.baseMaxhp = Math.floor(Math.floor(
+					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
+				) * pokemon.level / 100 + 10);
+				const newMaxHP = pokemon.baseMaxhp;
+				pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
+				pokemon.maxhp = newMaxHP;
+				this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			}
+			if (!pokemon.illusion && pokemon.name === 'Neko') {
+				this.battle.add(`c:|${getName('Neko')}|Possible thermal failure if operation continues (Meow on fire ?)`);
+			}
+			this.battle.runEvent('AfterTerastallization', pokemon);
+		},
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
 			const tr = this.battle.trunc;
 			if (!move.type) move.type = '???';
@@ -1355,7 +1395,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 				if (pokemon && pokemon !== target && move.category !== 'Status') {
 					if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
-						if (!pokemon.m.cascade) this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 					}
 				}
 			}
@@ -1476,7 +1516,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get(move.id), true);
 					move.mindBlownRecoil = false;
 					if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-						if (!pokemon.m.cascade) this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 					}
 				}
 				this.battle.eachEvent('Update');
@@ -1497,7 +1537,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const hpBeforeRecoil = pokemon.hp;
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
 				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					if (!pokemon.m.cascade) this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 				}
 			}
 
@@ -1511,7 +1551,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				this.battle.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as Condition);
 				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					if (!pokemon.m.cascade) this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 				}
 			}
 
@@ -1545,7 +1585,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (typeof curDamage === 'number' && targets[i].hp) {
 						const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
 						if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
-							if (!targets[i].m.cascade) this.battle.runEvent('EmergencyExit', targets[i], pokemon);
+							this.battle.runEvent('EmergencyExit', targets[i], pokemon);
 						}
 					}
 				}
@@ -1678,7 +1718,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
-					if (!pokemon.m.cascade) this.battle.runEvent('EmergencyExit', pokemon);
+					this.battle.runEvent('EmergencyExit', pokemon);
 				}
 			}
 

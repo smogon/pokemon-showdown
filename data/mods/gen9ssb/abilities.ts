@@ -1,5 +1,5 @@
 import {ssbSets} from "./random-teams";
-import {changeSet, getName, enemyStaff} from "./scripts";
+import {changeSet, getName, enemyStaff, PSEUDO_WEATHERS} from "./scripts";
 
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'deserteddunes', 'millenniumcastle'];
 
@@ -614,6 +614,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 	},
 
+	// Daki
+	astrothunder: {
+		shortDesc: "Drizzle + Static.",
+		name: "Astrothunder",
+		onStart(source) {
+			for (const action of this.queue) {
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
+				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
+			}
+			this.field.setWeather('raindance');
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('par', target);
+				}
+			}
+		},
+	},
+
 	// Dawn of Artemis
 	formchange: {
 		shortDesc: ">50% HP Necrozma, else Necrozma-Ultra. SpA boosts become Atk boosts and vice versa.",
@@ -1111,14 +1131,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				];
 				for (const sideCondition of remove) {
 					if (side.removeSideCondition(sideCondition)) {
-						success = true;
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Anfield', '[of] ' + target);
 					}
 				}
 			}
-			if (Object.keys(this.field.pseudoWeather).length) {
-				for (const pseudoWeather in this.field.pseudoWeather) {
-					if (this.field.removePseudoWeather(pseudoWeather)) success = true;
-				}
+			for (const pseudoWeather of PSEUDO_WEATHERS) {
+				if (this.field.removePseudoWeather(pseudoWeather)) success = true;
 			}
 			if (success) {
 				this.add('-activate', target, 'ability: Anfield');
@@ -1280,7 +1298,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.field.clearTerrain();
 			this.field.clearWeather();
-			for (const pseudoWeather of Object.keys(this.field.pseudoWeather)) {
+			for (const pseudoWeather of PSEUDO_WEATHERS) {
 				this.field.removePseudoWeather(pseudoWeather);
 			}
 			this.add('-clearallboost');
@@ -1546,6 +1564,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {},
+	},
+
+	// Neko
+	weatherproof: {
+		shortDesc: "Water-/Fire-type moves against this Pokemon deal damage with a halved offensive stat.",
+		name: "Weatherproof",
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Water' || move.type === 'Fire') {
+				this.debug('Weatherproof weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Water' || move.type === 'Fire') {
+				this.debug('Weatherproof weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		flags: {breakable: 1},
 	},
 
 	// Ney
@@ -2524,7 +2563,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Wild Growth",
 		onModifyMovePriority: -1,
 		onAfterMove(source, target, move) {
-			if (target.hasType('Grass') || target.hasAbility('Sap Sipper') || !move.hit) return null;
+			if (target.hasType('Grass') || target.hasAbility('Sap Sipper') || !move.hit || target === source) return null;
 			target.addVolatile('leechseed', source);
 		},
 		flags: {},
