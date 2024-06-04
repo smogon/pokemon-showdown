@@ -2674,6 +2674,108 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// yeet dab xd
+	treasurebag: {
+		shortDesc: "Cycles between Blast Seed, Oran Berry, Petrify Orb, Luminous Orb and Reviver Seed.",
+		name: "Treasure Bag",
+		onStart(target) {
+			this.add('-ability', target, 'Treasure Bag');
+			target.addVolatile('treasurebag');
+		},
+		condition: {
+			onStart(pokemon, source, sourceEffect) {
+				if (!pokemon.m.bag) {
+					pokemon.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
+				}
+			},
+			onEnd(target) {
+				delete target.volatiles['treasurebag'];
+			},
+			onResidual(pokemon, source, effect) {
+				if (!pokemon.m.bag) {
+					pokemon.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
+				}
+				if (!pokemon.m.cycledTreasureBag) {
+					const currentItem = pokemon.m.bag.shift();
+					const foe = pokemon.foes()[0];
+					switch (currentItem) {
+					case 'Blast Seed': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (foe) {
+							this.damage(100, foe, pokemon, this.effect);
+						} else {
+							this.add('-message', `But there was no target!`);
+						}
+						break;
+					}
+					case 'Oran Berry': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found an ${currentItem}!`);
+						this.heal(100, pokemon, pokemon, this.dex.items.get('Oran Berry'));
+						break;
+					}
+					case 'Petrify Orb': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (foe?.trySetStatus('par', pokemon, this.effect)) {
+							this.add('-message', `${pokemon.name} petrified ${foe.name}`);
+						} else if (!foe) {
+							this.add('-message', `But there was no target!`);
+						} else {
+							this.add('-message', `But it failed!`);
+						}
+						break;
+					}
+					case 'Luminous Orb': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (!pokemon.side.addSideCondition('auroraveil', pokemon, this.effect)) {
+							this.add('-message', `But it failed!`);
+						}
+						break;
+					}
+					// Handled separately
+					case 'Reviver Seed': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a Reviver Seed!`);
+						break;
+					}
+					}
+					pokemon.m.bag = [...pokemon.m.bag, currentItem];
+				}
+				delete pokemon.m.cycledTreasureBag;
+			},
+			onDamage(damage, pokemon, source, effect) {
+				if (damage >= pokemon.hp && pokemon.m.bag?.[0] === 'Reviver Seed') {
+					pokemon.m.seedActive = true;
+					if (!pokemon.m.reviverSeedTriggered) {
+						// Can't set hp to 0 because it causes visual bugs
+						pokemon.hp = 1;
+						this.add('-damage', pokemon, pokemon.getHealth, '[silent]');
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a Reviver Seed!`);
+						pokemon.m.reviverSeedTriggered = true;
+						pokemon.hp = Math.floor(pokemon.maxhp / 2);
+						this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+						this.add('-message', `${pokemon.name} was revived!`);
+						return 0;
+					} else {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} was revived!`);
+						this.add('-message', `...thought it was the right one...`);
+						this.add('-message', `...looking closer, this is...`);
+						this.add('-message', `Not a Reviver Seed, but a Reviser Seed!`);
+						this.add(`c:|${getName('yeet dab xd')}|An "s"?`);
+						this.add('-message', `that wasn't a "v", but an "s"!`);
+						this.add('-message', `yeet dab xd burst into spontaneous laughter and fainted!`);
+						return damage;
+					}
+				}
+			},
+		},
+	},
+
 	// YveltalNL
 	heightadvantage: {
 		shortDesc: "If this Pokemon's height is more than that of the foe, -1 to foe's Attack/Sp. Atk.",

@@ -1000,6 +1000,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Eyes of Eternity"},
 	},
 
+	// Tuthur
+	screamtail: {
+		inherit: true,
+		abilities: {0: "Poison Heal"},
+	},
+
 	// Two of Roses
 	luxray: {
 		inherit: true,
@@ -1092,6 +1098,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	blissey: {
 		inherit: true,
 		abilities: {0: "Panic"},
+	},
+
+	// yeet dab xd
+	kecleon: {
+		inherit: true,
+		abilities: {0: "Treasure Bag"},
 	},
 
 	// Yellow Paint

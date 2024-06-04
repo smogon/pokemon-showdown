@@ -918,6 +918,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Chronostasis',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Psychic',
 	},
+	Tuthur: {
+		species: 'Scream Tail', ability: 'Poison Heal', item: 'Toxic Orb', gender: 'M',
+		moves: ['Spikes', 'Burning Bulwark', 'Encore'],
+		signatureMove: 'Symphonie du Ze\u0301ro',
+		evs: {hp: 244, def: 12, spe: 252}, nature: 'Timid', teraType: 'Water',
+	},
 	'Two of Roses': {
 		species: 'Luxray', ability: 'As We See', item: 'Mirror Herb', gender: 'M',
 		moves: ['Knock Off', 'Supercell Slam', 'Trailblaze'],
@@ -997,6 +1003,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Poisonous Wind',
 		evs: {hp: 248, def: 252, spd: 8}, nature: 'Bold', teraType: 'Fairy', shiny: true,
 	},
+	'yeet dab xd': {
+		species: 'Kecleon', ability: 'Treasure Bag', item: 'Silk Scarf', gender: 'M', happiness: 0,
+		moves: ['Frustration', 'Shadow Sneak', 'Fake Out'],
+		signatureMove: 'top kek',
+		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Ghost',
+	},
 	'Yellow Paint': {
 		species: 'Rotom-Frost', ability: 'Yellow Magic', item: 'Chilan Berry', gender: 'N',
 		moves: ['Thunderbolt', 'Blizzard', 'Ion Deluge'],
@@ -1052,7 +1064,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team: PokemonSet[] = [];
-		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
+		const debug: string[] = ['yeet dab xd']; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
 			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
