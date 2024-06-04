@@ -514,11 +514,9 @@ const TWISTS: {[k: string]: Twist} = {
 			const sliceIndex = this.gameType === 'official' ? 5 : 3;
 			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
 
-			const gameMines = this.mines as string[][];
-
 			const mines: {mine: string, users: string[]}[][] = [];
 
-			for (const mineSet of gameMines) {
+			for (const mineSet of this.mines as string[][]) {
 				mines.push(mineSet.map(mine => ({mine: mine.substr(1), users: [] as string[]})));
 			}
 
