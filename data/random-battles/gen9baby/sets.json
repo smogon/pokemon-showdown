@@ -2881,11 +2881,6 @@
                 "role": "Wallbreaker",
                 "movepool": ["Aqua Jet", "Ice Beam", "Liquidation", "Stomping Tantrum", "Throat Chop"],
                 "teraTypes": ["Dark", "Ground", "Water"]
-            },
-            {
-                "role": "Fast Support",
-                "movepool": ["Liquidation", "Pain Split", "Substitute", "Throat Chop"],
-                "teraTypes": ["Poison", "Steel"]
             }
         ]
     },
