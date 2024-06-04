@@ -40,8 +40,9 @@ interface BSSFactorySet {
 	nature: string;
 	moves: string[][];
 	teraType: string[];
+	gender?: string;
 	wantsTera?: boolean;
-	evs?: number[];
+	evs: number[];
 	ivs?: number[];
 }
 export class MoveCounter extends Utils.Multiset<string> {
@@ -2592,35 +2593,18 @@ export class RandomTeams {
 			moves.push(setData.moveVariants ? moveSlot[setData.moveVariants[i]] : this.sample(moveSlot));
 		}
 
-		const setDataAbility = this.sampleIfArray(setData.set.ability);
-		const evs = setData.set.evs;
-		const ivs = setData.set.ivs;
 		return {
 			name: setData.set.species || species.baseSpecies,
 			species: setData.set.species,
-			teraType: this.sampleIfArray(setData.set.teraType),
-			gender:	species.gender || (this.randomChance(1, 2) ? "M" : "F"),
+			teraType: (this.sampleIfArray(setData.set.teraType)),
+			gender:	setData.set.gender || species.gender || (this.randomChance(1, 2) ? "M" : "F"),
 			item: this.sampleIfArray(setData.set.item) || "",
-			ability: setDataAbility || "No Ability",
+			ability: this.sampleIfArray(setData.set.ability),
 			shiny: this.randomChance(1, 1024),
 			level: 50,
 			happiness: 255,
-			evs: {
-				hp: (evs?.[0] || 0),
-				atk: (evs?.[1] || 0),
-				def: (evs?.[2] || 0),
-				spa: (evs?.[3] || 0),
-				spd: (evs?.[4] || 0),
-				spe: (evs?.[5] || 0),
-			},
-			ivs: {
-				hp: (ivs?.[0] || 31),
-				atk: (ivs?.[1] || 31),
-				def: (ivs?.[2] || 31),
-				spa: (ivs?.[3] || 31),
-				spd: (ivs?.[4] || 31),
-				spe: (ivs?.[5] || 31),
-			},
+			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
+			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
 			nature: setData.set.nature || "Serious",
 			moves,
 			wantsTera: setData.set.wantsTera,

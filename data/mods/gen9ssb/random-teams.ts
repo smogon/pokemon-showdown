@@ -288,6 +288,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Monkey Beat Up',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', shiny: 69,
 	},
+	Daki: {
+		species: 'Raging Bolt', ability: 'Astrothunder', item: 'Leftovers', gender: 'N',
+		moves: ['Thunder', 'Dragon Pulse', 'Calm Mind'],
+		signatureMove: 'Antidote',
+		evs: {hp: 148, def: 156, spa: 204}, nature: 'Quiet', teraType: 'Steel',
+	},
 	'Dawn of Artemis': {
 		species: 'Necrozma', ability: 'Form Change', item: 'Expert Belt', gender: 'F',
 		moves: ['Calm Mind', 'Photon Geyser', 'Earth Power'],
@@ -636,6 +642,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Calm Mind', 'Recover', 'Thunder Wave'],
 		signatureMove: 'Eon Assault',
 		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Steel', shiny: 50, skip: 'MyPearl',
+	},
+	Neko: {
+		species: 'Chien-Pao', ability: 'Weatherproof', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: ['Swords Dance', 'Bitter Blade', ['Crunch', 'Sucker Punch']],
+		signatureMove: 'Quality Control Zoomies',
+		evs: {atk: 252, def: 4, spa: 252}, nature: 'Jolly', teraType: 'Fire',
 	},
 	Ney: {
 		species: 'Banette', ability: 'Insomnia', item: 'Banettite', gender: 'M',

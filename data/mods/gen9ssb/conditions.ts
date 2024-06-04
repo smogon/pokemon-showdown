@@ -619,6 +619,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Corthius')}|Maurice, I can't "move it move it" anymore.`);
 		},
 	},
+	daki: {
+		onStart() {
+			this.add(`c:|${getName('Daki')}|Sun is down, freezing cold`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Daki')}|She thought it was the ocean, it's just the pool!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Daki')}|Had me out like a light (like a light)`);
+		},
+	},
 	dawnofartemis: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -1602,6 +1613,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('MyPearl')}|ta permitido isso?`);
+		},
+	},
+	neko: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Neko')}|Gmeow :3`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Neko')}|Meow go poof :3c`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Neko')}|Chien-Meow is cute when it doesn't scratch the ground, between it and Flutter Mane its dangerous to go out and ladder. You have been warned ;w;`);
 		},
 	},
 	ney: {
@@ -2971,22 +2994,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 	},
 
-	// HoeenHero
-	virus: {
-		name: 'Virus',
-		onStart(target, source, sourceEffect) {
-			this.effectState.stage = 0;
-			this.add('-start', target, 'virus');
-		},
-		onResidualOrder: 9,
-		onResidual(pokemon) {
-			if (this.effectState.stage < 15) {
-				this.effectState.stage++;
-			}
-			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
-		},
-	},
-
 	// kenn
 	deserteddunes: {
 		name: 'DesertedDunes',
@@ -3018,6 +3025,48 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
+		},
+	},
+
+	// Neko
+	catstampofapproval: {
+		name: "Cat Stamp of Approval",
+		noCopy: true,
+		onStart(target) {
+			this.add('-start', target, 'Cat Stamp of Approval');
+			this.effectState.bestStat = target.getBestStat(false, true);
+		},
+		onEnd(target) {
+			this.add('-end', target, 'Cat Stamp of Approval');
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+			this.debug('Cat Stamp of Approval atk boost');
+			return this.chainModify([5325, 4096]);
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+			this.debug('Cat Stamp of Approval def boost');
+			return this.chainModify([5325, 4096]);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+			this.debug('Cat Stamp of Approval spa boost');
+			return this.chainModify([5325, 4096]);
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+			this.debug('Cat Stamp of Approval spd boost');
+			return this.chainModify([5325, 4096]);
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+			this.debug('Cat Stamp of Approval spe boost');
+			return this.chainModify(1.5);
 		},
 	},
 

@@ -28,7 +28,10 @@ interface RoomlogRow {
 	content: string | null;
 }
 
-export const roomlogDB = global.Config?.replaysdb ? new PGDatabase(Config.replaysdb) : null;
+export const roomlogDB = (() => {
+	if (!global.Config || Config.replaysdb || Config.disableroomlogdb) return null;
+	return new PGDatabase(Config.replaysdb);
+})();
 export const roomlogTable = roomlogDB?.getTable<RoomlogRow>('roomlogs');
 
 /**
@@ -96,7 +99,7 @@ export class Roomlog {
 
 		this.numTruncatedLines = 0;
 
-		if (!Config.replaysdb) {
+		if (!roomlogTable) {
 			void this.setupRoomlogStream(true);
 		}
 	}

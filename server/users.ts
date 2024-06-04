@@ -188,7 +188,7 @@ function isUsername(name: string) {
 function isTrusted(userid: ID) {
 	if (globalAuth.has(userid)) return userid;
 	for (const room of Rooms.global.chatRooms) {
-		if (room.persist && room.settings.isPrivate !== true && room.auth.isStaff(userid)) {
+		if (room.persist && !room.settings.isPrivate && room.auth.isStaff(userid)) {
 			return userid;
 		}
 	}
