@@ -5427,21 +5427,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Tuthur
+	symphonieduzero: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		shortDesc: "Salt cures target. Ignores abilities.",
+		name: "Symphonie du Ze\u0301ro",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Alluring Voice', target);
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'saltcure',
+		},
+		ignoreAbility: true,
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// Two of Roses
 	dillydally: {
 		accuracy: 90,
 		basePower: 40,
 		category: "Physical",
-		shortDesc: "2 hits, +1 random stat/hit. Type = User 2nd type.",
+		shortDesc: "2 hits, +1 random stat/hit. Type=User 2nd type.",
 		desc: "This move hits 2 times. For each successful hit, the user boosts a random stat, except Accuracy and Evasion, by 1 stage. The typing of this move is equal to the user's secondary type; it will instead use the user's primary type if the user lacks a secondary type.",
 		name: "Dilly Dally",
 		pp: 20,
 		priority: 0,
 		multihit: 2,
 		flags: {protect: 1, contact: 1},
-		type: "???",
 		onTryMove() {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Volt Tackle', source);
+			this.add('-anim', source, 'Extreme Speed', target);
 		},
 		onModifyType(move, pokemon) {
 			let type = pokemon.getTypes()[pokemon.getTypes().length - 1];
@@ -5466,11 +5494,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.boost(boost, source, source);
 			},
 		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Volt Tackle', source);
-			this.add('-anim', source, 'Extreme Speed', target);
-		},
 		target: "normal",
+		type: "???",
 	},
 
 
@@ -5896,6 +5921,88 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
+	},
+
+	// yeet dab xd
+	topkek: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		shortDesc: "Gives foe Miracle Seed. Cycles Treasure Bag.",
+		name: "top kek",
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Thief", target);
+			this.add('-anim', source, "Trick", target);
+			this.add('-anim', source, "Nasty Plot", source);
+		},
+		onAfterHit(target, source, move) {
+			if (source.hp) {
+				if (!target.hasItem('Miracle Seed')) {
+					const item = target.takeItem();
+					if (item) {
+						this.add('-enditem', target, item.name, '[from] move: top kek', '[of] ' + source);
+						target.setItem('Miracle Seed', source, move);
+					}
+				}
+				if (source.m.bag) {
+					const currentItem = source.m.bag.shift();
+					switch (currentItem) {
+					case 'Blast Seed': {
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (target) {
+							this.damage(100, target, source, this.effect);
+						} else {
+							this.add('-message', `But there was no target!`);
+						}
+						break;
+					}
+					case 'Oran Berry': {
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found an ${currentItem}!`);
+						this.heal(100, source, source, this.dex.items.get('Oran Berry'));
+						break;
+					}
+					case 'Petrify Orb': {
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (target?.trySetStatus('par', source, this.effect)) {
+							this.add('-message', `${source.name} petrified ${target.name}`);
+						} else if (!target) {
+							this.add('-message', `But there was no target!`);
+						} else {
+							this.add('-message', `But it failed!`);
+						}
+						break;
+					}
+					case 'Luminous Orb': {
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (!source.side.addSideCondition('auroraveil', source, this.effect)) {
+							this.add('-message', `But it failed!`);
+						}
+						break;
+					}
+					case 'Reviver Seed': {
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						break;
+					}
+					}
+					source.m.bag = [...source.m.bag, currentItem];
+					source.m.cycledTreasureBag = currentItem;
+				}
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
 	},
 
 	// Yellow Paint

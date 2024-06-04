@@ -2427,6 +2427,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('trace')}|How disappointingly short a dream lasts.`);
 		},
 	},
+	tuthur: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Tuthur')}|QUEUE !`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Tuthur')}|feur`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Tuthur')}|this wouldn't have gone like this if we'd played kunc`);
+		},
+	},
 	twoofroses: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -2672,6 +2684,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	},
 	xy01: {
 		noCopy: true,
+	},
+	yeetdabxd: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('yeet dab xd')}|Ah, welcome~! The merchandise you have chosen will cost your soul. Is that acceptable?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('yeet dab xd')}|brb mum's getting the camera`);
+		},
+		onFaint(pokemon) {
+			if (pokemon.m.seedActivated) return;
+			this.add(`c:|${getName('yeet dab xd')}|wait no you didn't join QW yet`);
+		},
 	},
 	yellowpaint: {
 		noCopy: true,
