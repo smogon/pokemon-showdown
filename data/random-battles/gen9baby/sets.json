@@ -224,8 +224,13 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Crunch", "Giga Drain", "Growth", "Leaf Storm", "Stomping Tantrum"],
+                "movepool": ["Bullet Seed", "Crunch", "Leaf Storm", "Stomping Tantrum"],
                 "teraTypes": ["Dark", "Ground"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Leaf Storm", "Giga Drain", "Stomping Tantrum", "Super Fang", "Thief"],
+                "teraTypes": ["Poison", "Water"]
             }
         ]
     },
