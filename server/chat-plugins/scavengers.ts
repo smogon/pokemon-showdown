@@ -9,8 +9,8 @@
  */
 
 import {FS, Utils} from '../../lib';
-import {ScavMods, type TwistEvent, type TwistCollection} from './scavenger-games';
-import type {ChatHandler} from '../chat';
+import {ScavMods, Twist, TwistEvent, TwistCollection} from './scavenger-games';
+import {ChatHandler} from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
 
@@ -29,7 +29,7 @@ export interface FakeUser {
 }
 interface ModEvent {
 	priority: number;
-	exec: TwistEvent;
+	exec: TwistEvent<ScavengerHunt>;
 }
 
 const RATED_TYPES = ['official', 'regular', 'mini'];
@@ -322,13 +322,15 @@ class ScavengerHuntDatabase {
 		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
 	}
 }
+
+export interface ScavengerHuntFinish {name: string; id: string; time: string; blitz?: boolean}
 export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	override readonly gameid = 'scavengerhunt' as ID;
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
 	questions: { hint: string, answer: string[], spoilers: string[] }[];
-	completed: AnyObject[];
+	completed: ScavengerHuntFinish[];
 	leftHunt: { [userid: string]: 1 | undefined };
 	hosts: FakeUser[];
 	isHTML: boolean;
@@ -427,7 +429,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			if (!key.startsWith('on')) continue;
 			const priority = twist[`${key}Priority` as `on${string}Priority`] || 0;
 			if (!this.mods[key]) this.mods[key] = [];
-			this.mods[key].push({exec: twist[key as `on${string}`] as TwistEvent, priority});
+			this.mods[key].push({ exec: twist[key as `on${string}`] as TwistEvent<ScavengerHunt>, priority });
 		}
 		if (twist.isGameMode) {
 			this.announce(`This hunt is part of an ongoing ${twist.name}.`);
@@ -706,7 +708,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		player.completed = true;
 		let result = this.runEvent('Complete', player, time, blitz);
 		if (result === true) return;
-		result = result || { name: player.name, time, blitz };
+		result = result || { name: player.name, id: player.id, time, blitz };
 		this.completed.push(result);
 		const place = Utils.formatOrder(this.completed.length);
 
