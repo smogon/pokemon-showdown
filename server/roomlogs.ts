@@ -29,7 +29,7 @@ interface RoomlogRow {
 }
 
 export const roomlogDB = (() => {
-	if (!global.Config || Config.replaysdb || Config.disableroomlogdb) return null;
+	if (!global.Config || !Config.replaysdb || Config.disableroomlogdb) return null;
 	return new PGDatabase(Config.replaysdb);
 })();
 export const roomlogTable = roomlogDB?.getTable<RoomlogRow>('roomlogs');
