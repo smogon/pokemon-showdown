@@ -1663,7 +1663,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Fur Coat + All moves hit off of Sp. Atk stat.",
 		name: "TatsuGlare",
 		onModifyMove(move, pokemon, target) {
-			move.overrideOffensiveStat = 'spa';
+			if (move.category !== "Status") move.overrideOffensiveStat = 'spa';
 		},
 		onModifyDefPriority: 6,
 		onModifyDef(def) {
