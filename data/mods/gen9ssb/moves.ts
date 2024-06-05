@@ -242,9 +242,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const i of this.dex.types.names()) {
 				if (i === "Stellar") continue;
 				if (target) {
-					const effect = this.dex.getEffectiveness(i, target.types);
-					const immune = this.dex.getImmunity(i, target.types);
-					if (effect >= 0 && immune) {
+					const effect = this.dex.getEffectiveness(i, target);
+					const immune = !this.dex.getImmunity(i, target);
+					if (effect >= 0 && !immune) {
 						nresTypes.push(i);
 					}
 				}
@@ -3007,7 +3007,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Platinum Record",
 		pp: 5,
 		priority: 0,
-		flags: {sound: 1, heal: 1},
+		flags: {sound: 1, heal: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3016,7 +3016,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Iron Defense', target);
 		},
 		onHit(target, source, move) {
-			this.heal(source.maxhp / 2);
+			this.heal(source.maxhp / 2, source, source, move);
 			for (const moveSlot of source.moveSlots) {
 				if (moveSlot.id === move.id) continue;
 				if (moveSlot.pp < moveSlot.maxpp) moveSlot.pp += 1;
