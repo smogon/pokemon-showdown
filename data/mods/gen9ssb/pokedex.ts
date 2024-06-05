@@ -109,6 +109,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Tinted Lens"},
 	},
 
+	// Audiino
+	audino: {
+		inherit: true,
+		abilities: {0: "Mitosis"},
+	},
+
 	// ausma
 	hatterene: {
 		inherit: true,

@@ -623,6 +623,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ground",
 	},
 
+	// Audiino
+	thinkinginprogress: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Cure status, +1 Def/SpA/SpD.",
+		name: "Thinking In Progress",
+		gen: 9,
+		pp: 20,
+		priority: 0,
+		flags: {snatch: 1, metronome: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Calm Mind', source);
+		},
+		onHit(target, source, move) {
+			source.cureStatus();
+		},
+		boosts: {
+			def: 1,
+			spa: 1,
+			spd: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
+
 	// autumn
 	seasonssmite: {
 		accuracy: 100,

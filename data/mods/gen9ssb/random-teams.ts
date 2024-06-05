@@ -132,6 +132,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Anyone can be killed',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	Audiino: {
+		species: 'Audino', ability: 'Mitosis', item: 'Leftovers', gender: 'N',
+		moves: ['Recover', 'Moongeist Beam', 'Hyper Voice'],
+		signatureMove: 'Thinking In Progress',
+		evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest', teraType: 'Ghost',
+	},
 	autumn: {
 		species: 'Flutter Mane', ability: 'Protosynthesis', item: 'Booster Energy', gender: 'N',
 		moves: ['Moonblast', 'Taunt', 'Strength Sap'],
