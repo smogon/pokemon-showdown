@@ -186,6 +186,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'what kind',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Rock',
 	},
+	Bert122: {
+		species: 'Sableye', ability: 'Prankster', item: 'Sablenite', gender: '',
+		moves: ['Metal Burst', 'Recover', 'Will-O-Wisp'],
+		signatureMove: 'Shatter and Scatter',
+		evs: {hp: 252, def: 28, spd: 224}, ivs: {atk: 0, spe: 0}, nature: 'Relaxed',
+	},
 	Billo: {
 		species: 'Cosmog', ability: 'Wonder Guard', item: 'Eviolite', gender: 'N',
 		moves: [],
@@ -457,6 +463,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: '10-20-40',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
 	},
+	Irly: {
+		species: 'Spheal', ability: 'The Rolling Spheal', item: 'Choice Band', gender: '',
+		moves: ['Liquidation', 'Collision Course', 'Flip Turn'],
+		signatureMove: 'vruuuuuum',
+		evs: {hp: 8, atk: 252, spd: 4, spe: 244}, nature: 'Jolly', teraType: 'Fighting', shiny: 363,
+	},
 	ironwater: {
 		species: 'Jirachi', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
 		moves: ['Swords Dance', 'Zen Headbutt', 'Hammer Arm'],
@@ -619,9 +631,15 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Breaking Change',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Ghost',
 	},
+	Merritty: {
+		species: 'Torchic', ability: 'End Round', item: 'Eviolite', gender: 'M',
+		moves: ['Quiver Dance', 'Fiery Dance', 'Strength Sap'],
+		signatureMove: 'New Bracket',
+		evs: {hp: 4, def: 36, spa: 196, spd: 36, spe: 236}, nature: 'Timid', teraType: 'Flying', shiny: true,
+	},
 	Meteordash: {
-		species: 'Tatsugiri', ability: 'Shadow Shield', item: 'Heavy-Duty Boots', gender: 'M',
-		moves: ['Fickle Beam', 'Scald', 'Glare'],
+		species: 'Tatsugiri', ability: 'TatsuGlare', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Spacial Rend', 'Steam Eruption', 'Glare'],
 		signatureMove: 'Plagiarism',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Steel',
 	},
@@ -690,6 +708,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Searing Shot', 'Hex', 'Morning Sun'],
 		signatureMove: 'Alting',
 		evs: {hp: 252, spa: 69, spe: 188}, nature: 'Timid',
+	},
+	'Pastor Gigas': {
+		species: 'Regigigas', ability: 'God\'s Mercy', item: 'Clear Amulet', gender: 'N',
+		moves: ['Sacred Fire', 'Knock Off', 'Healing Wish'],
+		signatureMove: 'Call to Repentance',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy',
 	},
 	Peary: {
 		species: 'Klinklang', ability: 'Levitate', item: 'Pearyum Z', gender: '',
@@ -853,6 +877,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Solar Beam', 'Growth', 'Moonlight'],
 		signatureMove: 'Mind Melt',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Fire',
+	},
+	Spiderz: {
+		species: 'Iron Thorns', ability: 'Poison Heal', item: 'Toxic Orb', gender: 'M',
+		moves: ['Spiky Shield', 'Stone Axe', 'Thousand Arrows'],
+		signatureMove: 'Shepherd of the Mafia Room',
+		evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant', teraType: 'Steel', shiny: true,
 	},
 	spoo: {
 		species: 'Hemogoblin', ability: 'I Can Hear The Heart Beating As One', item: 'Heavy-Duty Boots', gender: 'N',
@@ -1020,6 +1050,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Thunderbolt', 'Blizzard', 'Ion Deluge'],
 		signatureMove: 'Whiteout',
 		evs: {hp: 252, spa: 252, spe: 4}, nature: 'Modest', teraType: 'Steel', shiny: 2,
+	},
+	'yuki ♪': {
+		species: 'Ninetales-Alola', ability: 'Party Up', item: 'Light Clay', gender: '',
+		moves: ['Blizzard', 'Aurora Veil', ['Encore', 'Lovely Kiss']],
+		signatureMove: 'Tag, You\'re It!',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ghost',
 	},
 	YveltalNL: {
 		species: 'Farigiraf', ability: 'Height Advantage', item: 'Leftovers', gender: 'M',
