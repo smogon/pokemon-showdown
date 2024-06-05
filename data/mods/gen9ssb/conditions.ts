@@ -270,6 +270,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Arya')}|W-whats this? Oh, come on...!!!`);
 		},
 	},
+	audiino: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Audiino')}|anyone up for othello, scrabble, connect 4, splendor, codenames, catan, actually that's a long enough list already so don't actually take me up on all of those simultaneously`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Audiino')}|im only thinking, ill be back...`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Audiino')}|ggs, with that i take my leave`);
+		},
+	},
 	autumn: {
 		noCopy: true,
 		onFaint() {
