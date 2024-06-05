@@ -145,6 +145,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Sturdy"},
 	},
 
+	// Bert122
+	sableye: {
+		inherit: true,
+		abilities: {0: "Prankster"},
+	},
+	sableyemega: {
+		inherit: true,
+		abilities: {0: "Pestering Assault"},
+	},
+
 	// Billo
 	cosmog: {
 		inherit: true,
@@ -420,6 +430,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Illterit"},
 	},
 
+	// Irly
+	spheal: {
+		inherit: true,
+		baseStats: {hp: 110, atk: 95, def: 90, spa: 80, spd: 90, spe: 65},
+		abilities: {0: "The Rolling Spheal"},
+	},
+
 	// ironwater
 	jirachi: {
 		inherit: true,
@@ -615,10 +632,17 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Dynamic Typing"},
 	},
 
+	// Merritty
+	torchic: {
+		inherit: true,
+		baseStats: {hp: 65, atk: 60, def: 60, spa: 80, spd: 70, spe: 85},
+		abilities: {0: "End Round"},
+	},
+
 	// Meteordash
 	tatsugiri: {
 		inherit: true,
-		abilities: {0: "Shadow Shield"},
+		abilities: {0: "TatsuGlare"},
 	},
 
 	// Mex
@@ -693,6 +717,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	chandelure: {
 		inherit: true,
 		abilities: {0: "C- Tier Shitposter"},
+	},
+
+	// Pastor Gigas
+	regigigas: {
+		inherit: true,
+		abilities: {0: "God's Mercy"},
 	},
 
 	// Peary
@@ -868,6 +898,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	scovillain: {
 		inherit: true,
 		abilities: {0: "Ride the Sun!"},
+	},
+
+	// Spiderz
+	ironthorns: {
+		inherit: true,
+		types: ['Dark', 'Ground'],
+		abilities: {0: "Poison Heal"},
 	},
 
 	// spoo
@@ -1116,6 +1153,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	rotomfrost: {
 		inherit: true,
 		abilities: {0: "Yellow Magic"},
+	},
+
+	ninetaleslola: {
+		inherit: true,
+		abilities: {0: "Party Up"},
 	},
 
 	// YveltalNL

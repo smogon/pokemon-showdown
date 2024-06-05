@@ -915,6 +915,91 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Water",
 	},
 
+	// Bert122
+	shatterandscatter: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Shatter and Scatter",
+		pp: 10,
+		priority: 4,
+		flags: {failinstruct: 1, failcopycat: 1},
+		stallingMove: true,
+		volatileStatus: 'shatterandscatter',
+		onTry(source) {
+			if (source.species.name === 'Sableye-Mega') {
+				return;
+			}
+			this.hint("Only Sableye-Mega can use this move.");
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Shatter and Scatter');
+			return null;
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(pokemon) {
+			this.add('-anim', pokemon, 'Protect', pokemon);
+			this.add('-anim', pokemon, 'Rock Polish', pokemon);
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect']) {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				let statDebuff = 'spe';
+				if (move.category === 'Special') statDebuff = 'spa';
+				if (move.category === 'Physical') statDebuff = 'atk';
+				const success = this.boost({[statDebuff]: -2}, source, target, this.dex.getActiveMove("Shatter and Scatter"));
+				if (success) {
+					target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
+					target.canMegaEvo = 'Sableye-Mega';
+					target.switchFlag = 'shatterandscatter' as ID;
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered) {
+					let statDebuff = 'spe';
+					if (move.category === 'Special') statDebuff = 'spa';
+					if (move.category === 'Physical') statDebuff = 'atk';
+					const success = this.boost({[statDebuff]: -2}, source, target, this.dex.getActiveMove("Shatter and Scatter"));
+					if (success) {
+						target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
+						target.canMegaEvo = 'Sableye-Mega';
+						target.switchFlag = 'shatterandscatter' as ID;
+					}
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Dark",
+	},
+
 	// Billo
 	hackcheck: {
 		accuracy: true,
@@ -2521,6 +2606,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ground",
 	},
 
+	// Irly
+	vruuuuuum: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Super effective on Water.",
+		name: "vruuuuuum",
+		pp: 20,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Shift Gear', source);
+			this.add('-anim', source, 'Ice Spinner', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ice",
+	},
+
 	// ironwater
 	jirachibanhammer: {
 		accuracy: 100,
@@ -3609,6 +3719,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
+	// Merritty
+	newbracket: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Forces both Pokemon out. Can't be blocked.",
+		desc: "Both the target and the user are forced to switch out and be replaced with random unfainted allies. This effect cannot be blocked by any means other than having no valid allies that can be sent out.",
+		name: "New Bracket",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTry(source) {
+			if (source.side.pokemonLeft === 1) return false;
+			if (!source.hasAbility('endround')) {
+				this.hint(`The user's ability needs to be End Round for New Bracket to work.`);
+				return false;
+			}
+		},
+		onTryMove(source, target, move) {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.attrLastMove(`[anim] Trick Room`);
+		},
+		onHitField(target, source, move) {
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.hp <= 0 || pokemon.fainted || pokemon.isSemiInvulnerable()) {
+					continue;
+				}
+				pokemon.forceSwitchFlag = true;
+			}
+		},
+		secondary: null,
+		target: "all",
+		type: "Electric",
+	},
+
 	// Meteordash
 	plagiarism: {
 		accuracy: 100,
@@ -3617,10 +3764,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Plagiarism",
 		shortDesc: "Steal+use foe sig move+imprison. Fail: +1 stats.",
 		desc: "User copies opponents signature move and adds it to its own movepool, replacing this move. The user then uses the copied move immediately and gains the Imprison condition, preventing foes from using moves in the user's moveset. The PP of the copied move will be adjusted to match the PP the copied signature move is supposed to have. If the copied custom move would fail if used in this manner, Plagiarism fails and the user boosts all stats by 1 stage, except Accuracy and Evasion.",
-		pp: 1,
-		noPPBoosts: true,
+		pp: 5,
 		priority: 1,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		onTry(source) {
+			if (source.m.usedPlagiarism) {
+				this.hint("Plagiarism only works once per switch-in.");
+				return false;
+			}
+		},
 		onPrepareHit() {
 			this.attrLastMove('[anim] Mimic');
 			this.attrLastMove('[anim] Imprison');
@@ -3630,10 +3782,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const move = this.dex.getActiveMove(sigMoveName);
 			if (!target || this.queue.willSwitch(target) || target.beingCalledBack ||
 				move.flags['failcopycat'] || move.noSketch) {
-				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1}, source, source, m);
+				this.boost({spa: 1, spd: 1, spe: 1}, source, source, m);
 				return;
 			}
 			const plagiarismIndex = source.moves.indexOf('plagiarism');
+			const plagiarism = source.moveSlots[plagiarismIndex];
 			if (plagiarismIndex < 0) return false;
 			this.add(`c:|${getName((source.illusion || source).name)}|yoink`);
 			const plagiarisedMove = {
@@ -3652,6 +3805,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(move.id, source, target);
 			delete target.volatiles['imprison'];
 			source.addVolatile('imprison', source);
+			source.addVolatile('plagiarism');
+			source.volatiles['plagiarism'].moveSlot = plagiarism;
+			source.volatiles['plagiarism'].index = plagiarismIndex;
+			source.m.usedPlagiarism = true;
+		},
+		condition: {
+			onSwitchOut(source) {
+				const index = this.effectState.index;
+				source.moveSlots[index] = source.baseMoveSlots[index] = this.effectState.plagiarism;
+			},
 		},
 		noSketch: true,
 		secondary: null,
@@ -3803,12 +3966,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Chilly Reception', source);
 		},
 		self: {
-			slotCondition: 'Quality Control Zoomies',
+			slotCondition: 'qualitycontrolzoomies',
 		},
 		condition: {
 			onSwap(target) {
 				if (!target.fainted) {
 					target.addVolatile('catstampofapproval');
+					target.side.removeSlotCondition(target, 'qualitycontrolzoomies');
 				}
 			},
 		},
@@ -3953,7 +4117,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4064,6 +4228,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		selfSwitch: true,
 		target: "allySide",
 		type: "Ghost", // Updated to ??? in onModifyMove
+	},
+
+	// Pastor Gigas
+	calltorepentance: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Applies Heal Block + taunts target.",
+		name: "Call to Repentance",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hyper Voice', target);
+			this.add('-anim', source, 'Judgment', target);
+		},
+		secondaries: [
+			{
+				chance: 100,
+				volatileStatus: 'healblock',
+			}, {
+				chance: 100,
+				volatileStatus: 'taunt',
+			},
+		],
+		target: "normal",
+		type: "Normal",
 	},
 
 	// Peary
@@ -5058,6 +5253,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 
+	// Spiderz
+	shepherdofthemafiaroom: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Sets Sticky Web. 1.3x BP if faster.",
+		name: "Shepherd of the Mafia Room",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Explosion', source);
+			this.add('-anim', source, 'Explosion', source);
+			this.add('-anim', source, 'Explosion', source);
+			this.add('-anim', source, 'Explosion', source);
+			this.add('-anim', source, 'Explosion', source);
+			this.add('-anim', source, 'Explosion', source);
+		},
+		onBasePower(relayVar, source, target, move) {
+			if (source.getStat('spe', false, true) > target.getStat('spe', false, true)) {
+				return this.chainModify([5325, 4096]);
+			}
+		},
+		onAfterHit(target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stickyweb');
+				}
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stickyweb');
+				}
+			}
+		},
+		secondary: {}, // Sheer Force-boosted
+		target: "normal",
+		type: "Dark",
+	},
+
 	// spoo
 	cardiotraining: {
 		accuracy: true,
@@ -5066,16 +5307,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Boosts Atk, Def, and Sp. Def by 1 stage.",
 		desc: "Boosts the user's Attack, Defense, and Special Defense by 1 stage.",
 		name: "Cardio Training",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1, dance: 1, metronome: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Geomancy', source);
 		},
-		gen: 9,
-		pp: 5,
-		priority: 0,
-		flags: {snatch: 1, dance: 1, metronome: 1},
 		boosts: {
 			atk: 1,
 			def: 1,
@@ -6065,6 +6306,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ice",
 	},
 
+	// yuki
+	tagyoureit: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "User swaps, replacement: Focus Energy, +1 Spe.",
+		name: "Tag, You're It!",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Baton Pass", target);
+		},
+		slotCondition: 'tagyoureit',
+		condition: {
+			onSwap(target) {
+				if (target && !target.fainted) {
+					this.add('-anim', target, "Baton Pass", target);
+					target.addVolatile('focusenergy');
+					this.boost({spe: 1}, target, this.effectState.source, this.dex.getActiveMove('tagyoureit'));
+					target.side.removeSlotCondition(target, 'tagyoureit');
+				}
+			},
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "self",
+		type: "Dark",
+	},
+
 	// YveltalNL
 	highground: {
 		accuracy: 100,
@@ -6381,7 +6655,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onDragOut(pokemon, source, move) {
-				if (source && this.queue.willMove(source)?.moveid === 'protectoroftheskies') return;
+				if (source && this.queue.willMove(source)?.moveid !== 'protectoroftheskies') return;
 				this.add('-activate', pokemon, 'move: Ingrain');
 				return null;
 			},

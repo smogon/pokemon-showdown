@@ -386,6 +386,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('berry')}|and all I got was this lousy t-shirt`);
 		},
 	},
+	bert122: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Bert122')}|*cackling laughter and gem crunching noises*`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Bert122')}|Off to collect more shiny rocks! Hehehe!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Bert122')}|Ack, all my gems are gone!`);
+		},
+	},
 	billo: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -1079,6 +1091,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('in the hills')}|im starting to feel kinda stupid can i please leave`);
 		},
 	},
+	irly: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Irly')}|They see me rollin'`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Irly')}|They hatin'`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Irly')}|Em caso de investigação policial, eu declaro que não tenho envolvimento com este grupo e não sei como estou no mesmo, provavelmente fui inserido por terceiros, declaro que estou disposto a colaborar com as investigações e estou disposto a me apresentar a depoimento se necessário`);
+		},
+	},
 	ironwater: {
 		noCopy: true,
 		onStart() {
@@ -1148,7 +1172,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		innateName: "Tinted Lens",
 		shortDesc: "Resisted moves hit with double power.",
 		onModifyDamage(damage, source, target, move) {
-			if (!source || source.illusion) return;
+			if (source.illusion) return;
 			if (target.getMoveHitData(move).typeMod < 0) {
 				this.debug('Tinted Lens boost');
 				return this.chainModify(2);
@@ -1579,6 +1603,34 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mathy')}|thanks for making my job harder :/`);
 		},
 	},
+	merritty: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Merritty')}|Deadline.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Merritty')}|If you believe there's been a mistake, please let me know ASAP.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Merritty')}|congratulations to our winner`);
+		},
+		innateName: "Tourban",
+		shortDesc: "Takes half damage from Ghost moves, deals double damge to Ghost-types.",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (source.illusion) return;
+			if (move.type === 'Ghost') {
+				this.debug('Tourban Ghost weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.illusion) return;
+			if (target?.hasType('Ghost')) {
+				this.debug('Tourban boost');
+				return this.chainModify(2);
+			}
+		},
+	},
 	meteordash: {
 		noCopy: true,
 		onStart() {
@@ -1833,6 +1885,35 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.add('-activate', target, 'ability: Skill Issue');
 				this.add(`c:|${getName('PartMan')}|THAT'S WHAT SHE SAID!`);
 				return false;
+			}
+		},
+	},
+	pastorgigas: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Pastor Gigas')}|Turn back to God`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Pastor Gigas')}|I'll leave, but God stays forever`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Pastor Gigas')}|I'm going to pray for you`);
+		},
+		innateName: "Scrappy",
+		onModifyMovePriority: -5,
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.illusion) return;
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (target.illusion) return;
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
 			}
 		},
 	},
@@ -2245,6 +2326,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('Solaros & Lunaris')}|Too hot to handle!`);
+		},
+	},
+	spiderz: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Spiderz')}|whats good gangy`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Spiderz')}|im moving DIFFERENT`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Spiderz')}|fuck 12`);
 		},
 	},
 	spoo: {
@@ -2729,6 +2822,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	yuki: {
+		noCopy: true,
+		innateName: "Snow Warning",
+		onStart(source) {
+			if (source.illusion) return;
+			this.field.setWeather('snow', source, this.dex.abilities.get('snowwarning'));
+		},
+	},
 	yveltalnl: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -2803,6 +2904,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd(target) {
 			this.add('-end', target, 'flipped');
+			if (target.species.name !== 'Avalugg') {
+				target.formeChange('Avalugg-Hisui', null, true);
+				target.removeVolatile('flipped');
+			}
 		},
 	},
 
