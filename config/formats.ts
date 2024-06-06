@@ -834,7 +834,7 @@ export const Formats: FormatList = [
 		},
 		onValidateTeam(team, f, teamHas) {
 			if (this.ruleTable.has('abilityclause')) {
-				const abilityTable = new Map<string, number>();
+				const abilityTable = new this.dex.Multiset<string>();
 				const base: {[k: string]: string} = {
 					airlock: 'cloudnine',
 					armortail: 'queenlymajesty',
@@ -860,13 +860,13 @@ export const Formats: FormatList = [
 					let ability = this.toID(set.ability.split('0')[0]);
 					if (!ability) continue;
 					if (ability in base) ability = base[ability] as ID;
-					if ((abilityTable.get(ability) || 0) >= num) {
+					if (abilityTable.get(ability) >= num) {
 						return [
 							`You are limited to ${num} of each ability by ${num} Ability Clause.`,
 							`(You have more than ${num} ${this.dex.abilities.get(ability).name} variants)`,
 						];
 					}
-					abilityTable.set(ability, (abilityTable.get(ability) || 0) + 1);
+					abilityTable.add(ability);
 				}
 			}
 
@@ -2158,9 +2158,9 @@ export const Formats: FormatList = [
 		],
 		onValidateTeam(team, format, teamHas) {
 			const problems = [];
-			for (const trademark in teamHas.trademarks) {
-				if (teamHas.trademarks[trademark] > 1) {
-					problems.push(`You are limited to 1 of each Trademark.`, `(You have ${teamHas.trademarks[trademark]} Pok\u00e9mon with ${trademark} as a Trademark.)`);
+			for (const trademark of teamHas.trademarks.keys()) {
+				if (teamHas.trademarks.get(trademark) > 1) {
+					problems.push(`You are limited to 1 of each Trademark.`, `(You have ${teamHas.trademarks.get(trademark)} Pok\u00e9mon with ${trademark} as a Trademark.)`);
 				}
 			}
 			return problems;
@@ -2199,8 +2199,8 @@ export const Formats: FormatList = [
 			set.ability = 'No Ability';
 			problems = problems.concat(validator.validateSet(set, teamHas) || []);
 			set.ability = ability.id;
-			if (!teamHas.trademarks) teamHas.trademarks = {};
-			teamHas.trademarks[ability.name] = (teamHas.trademarks[ability.name] || 0) + 1;
+			if (!teamHas.trademarks) teamHas.trademarks = new this.dex.Multiset<string>();
+			teamHas.trademarks.add(ability.name);
 			return problems.length ? problems : null;
 		},
 	},
@@ -2424,11 +2424,11 @@ export const Formats: FormatList = [
 		restricted: ['Arceus'],
 		onValidateTeam(team, format) {
 			// baseSpecies:count
-			const restrictedPokemonCount = new Map<string, number>();
+			const restrictedPokemonCount = new this.dex.Multiset<string>();
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				if (!this.ruleTable.isRestrictedSpecies(species)) continue;
-				restrictedPokemonCount.set(species.baseSpecies, (restrictedPokemonCount.get(species.baseSpecies) || 0) + 1);
+				restrictedPokemonCount.add(species.baseSpecies);
 			}
 			for (const [baseSpecies, count] of restrictedPokemonCount) {
 				if (count > 1) {

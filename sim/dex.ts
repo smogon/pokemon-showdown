@@ -123,6 +123,7 @@ export class ModdedDex {
 
 	deepClone = Utils.deepClone;
 	deepFreeze = Utils.deepFreeze;
+	Multiset = Utils.Multiset;
 
 	readonly formats: DexFormats;
 	readonly abilities: DexAbilities;

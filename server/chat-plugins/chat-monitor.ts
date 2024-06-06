@@ -428,7 +428,7 @@ export const namefilter: Chat.NameFilter = (name, user) => {
 	if (Punishments.namefilterwhitelist.has(id)) return name;
 	if (Monitor.forceRenames.has(id)) {
 		if (typeof Monitor.forceRenames.get(id) === 'number') {
-			// we check this for hotpatching reasons, since on the initial chat patch this will still be a Utils.MultiSet
+			// we check this for hotpatching reasons, since on the initial chat patch this will still be a Utils.Multiset
 			// we're gonna assume no one has seen it since that covers people who _haven't_ actually, and those who have
 			// likely will not be attempting to log into it
 			Monitor.forceRenames.set(id, false);
