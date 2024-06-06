@@ -1648,6 +1648,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				for (const volatile of volatilesToClear) {
 					if (mon.volatiles[volatile]) {
 						mon.removeVolatile(volatile);
+						if (volatile === 'flipped') {
+							changeSet(this, mon, ssbSets['Clementine']);
+							this.add(`c:|${getName('Clementine')}|┬──┬◡ﾉ(° -°ﾉ)`);
+						}
 						this.add('-activate', pokemon, 'ability: End Round');
 					}
 				}
