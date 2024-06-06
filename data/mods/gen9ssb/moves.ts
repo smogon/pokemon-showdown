@@ -691,7 +691,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "If hit, Trick Room. Else, attack+random effect.",
 		desc: "Begins to charge an attack at the start of the turn. Nearly always moves last. If the user is directly damaged while charging, Trick Room is set instead, making the slower Pokemon move first for 5 turns. The Trick Room effect occurs before Cascade if both would activate on the same turn. If the user was not directly damaged while charging, the attack executes and one random effect will occur from the following: poison; burn; paralysis; confusion; the user recovers HP equal to 75% of damage dealt; all entry hazards are removed from the field; a random entry hazard is set, except G-Max Steelsurge; two random stats of the user are raised by 1 stage each, except Accuracy and Evasion; two random stats of the target are lowered by 1 stage each, except Accuracy and Evasion; or the target transforms into a Fennekin with Ember, Scratch, and Growl until they switch out.",
 		name: "Sigil's Storm",
-		pp: 5,
+		pp: 20,
 		priority: -6,
 		onModifyPriority(priority, source, target, move) {
 			if (source.species.id === 'mismagius') return priority + 6;
