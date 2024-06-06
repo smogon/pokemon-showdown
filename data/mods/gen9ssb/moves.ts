@@ -3786,7 +3786,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			const plagiarismIndex = source.moves.indexOf('plagiarism');
-			const plagiarism = source.moveSlots[plagiarismIndex];
 			if (plagiarismIndex < 0) return false;
 			this.add(`c:|${getName((source.illusion || source).name)}|yoink`);
 			const plagiarisedMove = {
@@ -3799,22 +3798,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				used: false,
 			};
 			source.moveSlots[plagiarismIndex] = plagiarisedMove;
-			source.baseMoveSlots[plagiarismIndex] = plagiarisedMove;
 			this.add('-activate', source, 'move: Plagiarism', move.name);
 			this.add('-message', `${source.name} plagiarised ${target.name}'s ${move.name}!`);
 			this.actions.useMove(move.id, source, target);
 			delete target.volatiles['imprison'];
 			source.addVolatile('imprison', source);
-			source.addVolatile('plagiarism');
-			source.volatiles['plagiarism'].moveSlot = plagiarism;
-			source.volatiles['plagiarism'].index = plagiarismIndex;
 			source.m.usedPlagiarism = true;
-		},
-		condition: {
-			onSwitchOut(source) {
-				const index = this.effectState.index;
-				source.moveSlots[index] = source.baseMoveSlots[index] = this.effectState.plagiarism;
-			},
 		},
 		noSketch: true,
 		secondary: null,

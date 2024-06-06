@@ -2905,7 +2905,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onEnd(target) {
 			this.add('-end', target, 'flipped');
 			if (target.species.name !== 'Avalugg') {
-				target.formeChange('Avalugg-Hisui', null, true);
+				target.formeChange('Avalugg', null, true);
 				target.removeVolatile('flipped');
 			}
 		},
