@@ -1899,23 +1899,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onFaint() {
 			this.add(`c:|${getName('Pastor Gigas')}|I'm going to pray for you`);
 		},
-		innateName: "Scrappy",
-		onModifyMovePriority: -5,
-		onModifyMove(move, pokemon, target) {
-			if (pokemon.illusion) return;
-			if (!move.ignoreImmunity) move.ignoreImmunity = {};
-			if (move.ignoreImmunity !== true) {
-				move.ignoreImmunity['Fighting'] = true;
-				move.ignoreImmunity['Normal'] = true;
-			}
-		},
-		onTryBoost(boost, target, source, effect) {
-			if (target.illusion) return;
-			if (effect.name === 'Intimidate' && boost.atk) {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
-			}
-		},
 	},
 	peary: {
 		noCopy: true,
