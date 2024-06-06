@@ -671,7 +671,7 @@ export const ssbSets: SSBSets = {
 		species: 'Chien-Pao', ability: 'Weatherproof', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Swords Dance', 'Bitter Blade', ['Crunch', 'Sucker Punch']],
 		signatureMove: 'Quality Control Zoomies',
-		evs: {atk: 252, def: 4, spa: 252}, nature: 'Jolly', teraType: 'Fire',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fire',
 	},
 	Ney: {
 		species: 'Banette', ability: 'Insomnia', item: 'Banettite', gender: 'M',
