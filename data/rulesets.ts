@@ -2854,6 +2854,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			)) || "0";
 			const newAbility: string = (impersonation.abilities as any)[oldAbilityKey] || impersonation.abilities["0"];
 			pokemon.setAbility(newAbility, null, true);
+			// Ability persists through switching
+			pokemon.baseAbility = pokemon.ability;
 		},
 	},
 };
