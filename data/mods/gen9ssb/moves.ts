@@ -6655,7 +6655,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onDragOut(pokemon, source, move) {
-				if (source && this.queue.willMove(source)?.moveid !== 'protectoroftheskies') return;
+				if (source && this.queue.willMove(source)?.moveid === 'protectoroftheskies') return;
 				this.add('-activate', pokemon, 'move: Ingrain');
 				return null;
 			},
