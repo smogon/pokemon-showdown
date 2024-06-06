@@ -1976,11 +1976,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Becomes a random typing at the beginning of each turn.",
 		name: "High Performance Computing",
 		flags: {},
-		onBeforeTurn(source) {
-			if (source.terastallized) return;
+		onResidual(source) {
 			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
-			source.setType(type);
-			this.add('-start', source, 'typechange', type, '[from] ability: High Performance Computing');
+			if (source.setType(type)) {
+				this.add('-start', source, 'typechange', type, '[from] ability: High Performance Computing');
+			}
 		},
 	},
 
@@ -2051,7 +2051,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.effectState.superHit = true;
 				target.removeVolatile('ultramystik');
-				target.setAbility('Healer', undefined, true);
+				target.setAbility('Healer', null, true);
+				target.baseAbility = target.ability;
 			}
 		},
 		condition: {
