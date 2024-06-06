@@ -47,10 +47,6 @@ export class MoveCounter extends Utils.Multiset<string> {
 		this.damagingMoves = new Set();
 		this.setupType = '';
 	}
-
-	get(key: string): number {
-		return super.get(key) || 0;
-	}
 }
 
 type MoveEnforcementChecker = (
