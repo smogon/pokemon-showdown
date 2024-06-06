@@ -920,6 +920,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
+		shortDesc: "Protect, hit=-2 Atk/SpA/or Spe, user swap.",
 		name: "Shatter and Scatter",
 		pp: 10,
 		priority: 4,
