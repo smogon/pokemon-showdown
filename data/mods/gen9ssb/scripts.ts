@@ -742,6 +742,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			const isCrit = target.getMoveHitData(move).crit;
 			if (isCrit) {
 				baseDamage = tr(baseDamage * (move.critModifier || (this.battle.gen >= 6 ? 1.5 : 2)));
+			} else {
+				if (move.id === 'megidolaon') delete move.volatileStatus;
 			}
 
 			// random factor - also not a modifier

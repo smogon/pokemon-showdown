@@ -520,11 +520,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Earthquake', target);
 		},
 		volatileStatus: 'flinch',
-		onHit(target, source, move) {
-			if (target && !target.getMoveHitData(move).crit) {
-				delete move.volatileStatus;
-			}
-		},
 		secondary: null,
 		target: "normal",
 		type: "???",
