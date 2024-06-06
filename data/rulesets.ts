@@ -2839,7 +2839,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const oldAbilityName = pokemon.getAbility().name;
 			const oldPokemon = pokemon.species;
 			const impersonation = this.dex.species.get(pokemon.set.name);
-			if (pokemon.species.id === impersonation.id || pokemon.hp > pokemon.maxhp / 2) return;
+			if (pokemon.species.baseSpecies === impersonation.baseSpecies || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange(impersonation.name, this.effect, true);
 			pokemon.baseMaxhp = Math.floor(Math.floor(
