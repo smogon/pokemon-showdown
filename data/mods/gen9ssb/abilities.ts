@@ -1640,10 +1640,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					'syrupbomb', 'tarshot', 'taunt', 'telekinesis', 'torment', 'uproar', 'yawn', 'flashfire', 'protosynthesis',
 					'quarkdrive', 'slowstart', 'truant', 'unburden', 'metronome', 'beakblast', 'charge', 'echoedvoice', 'encore',
 					'focuspunch', 'furycutter', 'gmaxcannonade', 'gmaxchistrike', 'gmaxvinelash', 'gmaxvolcalith', 'gmaxwildfire',
-					'iceball', 'rollout', 'laserfocus', 'lockon', 'perishsong', 'shelltrap', 'throatchop', 'trapped', 'trapper',
+					'iceball', 'rollout', 'laserfocus', 'lockon', 'perishsong', 'shelltrap', 'throatchop', 'trapped', 'ultramystik',
 					'choicelock', 'stall', 'catstampofapproval', 'beefed', 'boiled', 'flipped', 'therollingspheal', 'treasurebag',
 					'torisstori', 'anyonecanbekilled', 'sigilsstorm', 'wonderwing', 'riseabove', 'superrollout', 'meatgrinder',
-					'risingsword', 'ultramystik',
+					'risingsword',
 				];
 				for (const volatile of volatilesToClear) {
 					if (mon.volatiles[volatile]) {
