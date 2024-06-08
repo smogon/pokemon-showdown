@@ -7,8 +7,8 @@ export interface SSBSet {
 	gender: GenderName | GenderName[];
 	moves: (string | string[])[];
 	signatureMove: string;
-	evs?: {hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number};
-	ivs?: {hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number};
+	evs?: { hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number };
+	ivs?: { hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number };
 	nature?: string | string[];
 	shiny?: number | boolean;
 	level?: number;
@@ -16,7 +16,7 @@ export interface SSBSet {
 	skip?: string;
 	teraType?: string | string[];
 }
-interface SSBSets {[k: string]: SSBSet}
+interface SSBSets { [k: string]: SSBSet }
 
 export const ssbSets: SSBSets = {
 	/*
@@ -36,6 +36,15 @@ export const ssbSets: SSBSets = {
 	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+
+	'Lord of Extinction': {
+		species: 'Grimmsnarl-Gmax', ability: 'Impending Rot', item: 'Black Lotus', gender: '',
+		moves: ['Spirit Break', 'Jaw Lock', ['Phantom Force', 'Pain Split', 'Comeuppance']],
+		signatureMove: 'Commence the Endgame',
+		evs: { hp: 252, atk: 252, spd: 4 }, nature: 'Adamant', teraType: 'Ghost',
+	},
+
+	/*
 	aegii: {
 		species: 'Scizor', ability: 'Unburden', item: 'Lansat Berry', gender: 'M',
 		moves: ['Acrobatics', 'Attack Order', ['Cross Chop', 'Night Slash']],
@@ -671,7 +680,7 @@ export const ssbSets: SSBSets = {
 		species: 'Chien-Pao', ability: 'Weatherproof', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Swords Dance', 'Bitter Blade', ['Crunch', 'Sucker Punch']],
 		signatureMove: 'Quality Control Zoomies',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fire',
+		evs: {atk: 252, def: 4, spa: 252}, nature: 'Jolly', teraType: 'Fire',
 	},
 	Ney: {
 		species: 'Banette', ability: 'Insomnia', item: 'Banettite', gender: 'M',
@@ -1099,10 +1108,11 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Darkest Night',
 		evs: {hp: 252, def: 240, spd: 16}, nature: 'Calm', teraType: 'Steel', shiny: true,
 	},
+	*/
 };
 
 export class RandomStaffBrosTeams extends RandomTeams {
-	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
+	randomStaffBrosTeam(options: { inBattle?: boolean } = {}) {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team: PokemonSet[] = [];
@@ -1126,7 +1136,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		if (global.Config?.disabledssbsets?.length) {
 			pool = pool.filter(x => !global.Config.disabledssbsets.includes(this.dex.toID(x)));
 		}
-		const typePool: {[k: string]: number} = {};
+		const typePool: { [k: string]: number } = {};
 		let depth = 0;
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
@@ -1180,7 +1190,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves.push(this.dex.moves.get(move).name);
 			}
 			moves.push(this.dex.moves.get(ssbSet.signatureMove).name);
-			const ivs = {...{hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, ...ssbSet.ivs};
+			const ivs = { ...{ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }, ...ssbSet.ivs };
 			if (!moves.map(x => this.dex.moves.get(x)).some(x => x.category === 'Physical')) {
 				ivs.atk = 0;
 			}
@@ -1193,8 +1203,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves,
 				nature: ssbSet.nature ? Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature : 'Serious',
 				gender: ssbSet.gender ? this.sampleIfArray(ssbSet.gender) : this.sample(['M', 'F', 'N']),
-				evs: ssbSet.evs ? {...{hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, ...ssbSet.evs} :
-				{hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
+				evs: ssbSet.evs ? { ...{ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, ...ssbSet.evs } :
+					{ hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 },
 				ivs,
 				level: this.adjustLevel || ssbSet.level || 100,
 				happiness: typeof ssbSet.happiness === 'number' ? ssbSet.happiness : 255,
