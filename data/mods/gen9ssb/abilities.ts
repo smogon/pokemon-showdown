@@ -15,6 +15,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Lord of Extinction
+	impendingrot: {
+		name: "Impending Rot",
+		onResidualOrder: 28,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			this.damage(pokemon.baseMaxhp / 8);
+		},
+		onDamagingHit(damage, target, source, move) {
+			const sourceAbility = source.getAbility();
+			if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'impendingrot') {
+				return;
+			}
+			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
+				const oldAbility = source.setAbility('impendingrot', target);
+				if (oldAbility) {
+					this.add('-activate', target, 'ability: Impending Rot', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
+				}
+			}
+		},
+		gen: 9,
+	},
+	/*
 	// Aelita
 	fortifiedmetal: {
 		shortDesc: "This Pokemon's weight is doubled and Attack is 1.5x when statused.",
@@ -3212,4 +3235,5 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+ */
 };
