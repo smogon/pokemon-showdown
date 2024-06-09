@@ -43,6 +43,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Commence the Endgame',
 		evs: { hp: 252, atk: 252, spd: 4 }, nature: 'Adamant', teraType: 'Ghost',
 	},
+	Pablo: {
+		species: 'Smeargle', ability: 'Artist Block', item: 'Sketchbook', gender: 'M',
+		moves: ['Sketch', 'Me First', 'Assist'],
+		signatureMove: 'Plagiarize',
+		evs: { hp: 252, spe: 252, spa: 4 }, nature: 'Naive', teraType: 'Normal',
+	},
 
 	/*
 	aegii: {
