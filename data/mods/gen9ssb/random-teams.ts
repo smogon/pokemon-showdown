@@ -37,11 +37,11 @@ export const ssbSets: SSBSets = {
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
 
-	'Lord of Extinction': {
-		species: 'Grimmsnarl-Gmax', ability: 'Impending Rot', item: 'Black Lotus', gender: '',
-		moves: ['Spirit Break', 'Jaw Lock', ['Phantom Force', 'Pain Split', 'Comeuppance']],
-		signatureMove: 'Commence the Endgame',
-		evs: { hp: 252, atk: 252, spd: 4 }, nature: 'Adamant', teraType: 'Ghost',
+	Finger: {
+		species: 'Reuniclus', ability: 'Absolute Zen', item: 'Matter Mirror', gender: 'M',
+		moves: ['Luster Purge', 'Drain Punch', 'Recover'],
+		signatureMove: 'Mega Metronome',
+		evs: { hp: 252, spa: 252, def: 4 }, nature: 'Modest', teraType: 'Psychic',
 	},
 	Pablo: {
 		species: 'Smeargle', ability: 'Artist Block', item: 'Sketchbook', gender: 'M',
@@ -51,6 +51,12 @@ export const ssbSets: SSBSets = {
 	},
 
 	/*
+ 	'Lord of Extinction': {
+		species: 'Grimmsnarl-Gmax', ability: 'Impending Rot', item: 'Black Lotus', gender: '',
+		moves: ['Spirit Break', 'Jaw Lock', ['Phantom Force', 'Pain Split', 'Comeuppance']],
+		signatureMove: 'Commence the Endgame',
+		evs: { hp: 252, atk: 252, spd: 4 }, nature: 'Adamant', teraType: 'Ghost',
+	},
 	aegii: {
 		species: 'Scizor', ability: 'Unburden', item: 'Lansat Berry', gender: 'M',
 		moves: ['Acrobatics', 'Attack Order', ['Cross Chop', 'Night Slash']],
