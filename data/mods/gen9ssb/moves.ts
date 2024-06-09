@@ -6568,73 +6568,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
-		stallingMove: true,
-		volatileStatus: 'protect',
+		volatileStatus: 'magiccoat',
 		condition: {
 			duration: 1,
-			
-			// Attack Reflection
-			
 			onStart(target, source, effect) {
 				this.add('-singleturn', target, 'move: Sketch');
 				if (effect?.effectType === 'Move') {
 					this.effectState.pranksterBoosted = effect.pranksterBoosted;
 				}
 			},
-			
 			onTryHitPriority: 2,
 			onTryHit(target, source, move) {
-				if (target === source || move.hasBounced) {
-					return;
-				}
-				move.secondaries.push({volatileStatus: 'magiccoat'});
+				if (target === source) return;
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
 				this.actions.useMove(newMove, target, source);
 				return null;
 			},
-			
 			onAllyTryHitSide(target, source, move) {
-				if (target.isAlly(source) || move.hasBounced) {
-					return;
-				}
+				if (target.isAlly(source)) return;
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
 				this.actions.useMove(newMove, this.effectState.target, source);
 				return null;
 			},
-
-			// Protection
-			
-			onTryHitPriority: 3,
-			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
-					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
-					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
-				if (move.smartTarget) {
-					move.smartTarget = false;
-				} else {
-					this.add('-activate', target, 'move: Protect');
-				}
-				const lockedmove = source.getVolatile('lockedmove');
-				if (lockedmove) {
-					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
-					}
-				}
-				return this.NOT_FAIL;
-			},
-		},
-		onPrepareHit(pokemon) {
-			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-		},
-		onHit(pokemon) {
-			pokemon.addVolatile('stall');
 		},
 	},
 	electroshot: {
