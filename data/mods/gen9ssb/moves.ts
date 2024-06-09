@@ -41,52 +41,48 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
-	// aegii
-	equipaegislash: {
+	// Pablo
+	plagiarize: {
 		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		shortDesc: "50% +1 Atk, 50% +1 Def, eats berry.",
-		desc: "This move has a 50% chance to raise the user's Attack by 1 stage and a 50% chance to raise the user's Defense by 1 stage. After using the move, the user eats its berry if holding one.",
-		name: "Equip Aegislash",
+		basePower: 0,
+		category: "Status",
+		desc: "Replaces this move with target's last move. Lowers that move's PP to 0.",
+		name: "Plagiarize",
 		gen: 9,
-		pp: 10,
+		pp: 16,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
+		// Sketch
+		onHit(target, source) {
+			const move = target.lastMove;
+			if (source.transformed || !move || source.moves.includes(move.id)) return false;
+			if (move.noSketch || move.isZ || move.isMax) return false;
+			const sketchIndex = source.moves.indexOf('sketch');
+			if (sketchIndex < 0) return false;
+			const sketchedMove = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			source.moveSlots[sketchIndex] = sketchedMove;
+			source.baseMoveSlots[sketchIndex] = sketchedMove;
+			this.add('-activate', source, 'move: Sketch', move.name);
 		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Shadow Sneak', target);
-			this.add('-anim', source, 'Swords Dance', source);
-			this.add('-anim', source, 'Iron Defense', source);
+		// PP Nullification
+		onTryHit(target) {
+			let move: Move | ActiveMove | null = target.lastMove;
+			if (!move || move.isZ) return false;
+			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+			const ppDeducted = target.deductPP(move.id, 64);
+			if (!ppDeducted) return false;
+			this.add("-activate", target, 'move: Plagiarize', move.name, ppDeducted);
 		},
-		secondaries: [
-			{
-				chance: 50,
-				self: {
-					boosts: {
-						atk: 1,
-					},
-				},
-			}, {
-				chance: 50,
-				self: {
-					boosts: {
-						def: 1,
-					},
-				},
-			},
-		],
-		self: {
-			onHit(target, source) {
-				if (!source.getItem().isBerry) return;
-				source.eatItem(true);
-			},
-		},
-		secondary: null,
+		flags: {},
 		target: "normal",
-		type: "Steel",
+		type: "Normal",
 	},
 
 	// Aelita
