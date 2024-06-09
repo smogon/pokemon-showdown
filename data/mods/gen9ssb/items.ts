@@ -1,55 +1,23 @@
 export const Items: {[k: string]: ModdedItemData} = {
-	// Lord of Extinction
-	blacklotus: {
-		name: "Black Lotus",
-		spritenum: 158,
-		onTakeItem: false,
-		desc: "HP >= 33%: All of holder's stats are x1.33. Cannot be taken or removed.",
+	// Finger
+	mattermirror: {
+		name: "Matter Mirror",
+		spritenum: 69,
+		desc: "This Pokemon's physical attacks become special. Allows use of Fear the Finger.",
 		gen: 9,
-		onModifyAtkPriority: 1,
-		onModifyAtk(atk, pokemon) {
-			if (pokemon.hp >= (pokemon.hp / 3)) {
-				return this.chainModify(1.33);
+		onUpdate(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				const move = this.dex.moves.get(moveSlot.id);
+				if (move.category === 'Physical') {
+					pokemon.disableMove(moveSlot.id);
+					move.category = 'Special';
+				}
 			}
 		},
-		onModifySpaPriority: 1,
-		onModifySpa(spa, pokemon) {
-			if (pokemon.hp >= (pokemon.hp / 3)) {
-				return this.chainModify(1.33);
-			}
-		},
-		onModifyDefPriority: 1,
-		onModifyDef(def, pokemon) {
-			if (pokemon.hp >= (pokemon.hp / 3)) {
-				return this.chainModify(1.33);
-			}
-		},
-		onModifySpdPriority: 1,
-		onModifySpd(spd, pokemon) {
-			if (pokemon.hp >= (pokemon.hp / 3)) {
-				return this.chainModify(1.33);
-			}
-		},
-		onModifySpePriority: 1,
-		onModifySpe(spe, pokemon) {
-			if (pokemon.hp >= (pokemon.hp / 3)) {
-				return this.chainModify(1.33);
-			}
-		},
-		onSourceModifyAccuracyPriority: 1,
-		onSourceModifyAccuracy(accuracy, source) {
-			if (typeof accuracy !== 'number') return;
-			if (source.hp >= (source.hp / 3)) {
-				return this.chainModify([5448, 4096]);
-			}
-		},
-		onModifyAccuracyPriority: -1,
-		onModifyAccuracy(accuracy, source) {
-			if (typeof accuracy !== 'number') return;
-			if (source.hp >= (source.hp / 3)) {
-				return this.chainModify([3072, 4096]);
-			}
-		},
+		onTakeItem: false,
+		zMove: "Fear the Finger",
+		zMoveFrom: "Mega Metronome",
+		itemUser: ["Reuniclus"],
 	},
 	// Pablo
 	sketchbook: {
