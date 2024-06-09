@@ -40,26 +40,35 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	artistblock: {
 		name: 'Artist Block',
 		gen: 9,
-		onTryHitPriority: 1,
-		onTryHit(target, source, move) {
-			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+		// Sketch function is handled in moves.js
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
 				return;
 			}
-			const newMove = this.dex.getActiveMove(move.id);
-			newMove.hasBounced = true;
-			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, target, source);
-			return null;
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({atk: 2}, target, target, null, false, true);
+				this.boost({spa: 2}, target, target, null, false, true);
+				this.boost({spe: 2}, target, target, null, false, true);
+			}
 		},
-		onAllyTryHitSide(target, source, move) {
-			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
-				return;
+		onUpdate(pokemon) {
+			if (pokemon.volatiles['taunt']) {
+				this.add('-activate', pokemon, 'ability: Artist Block');
+				pokemon.removeVolatile('taunt');
 			}
-			const newMove = this.dex.getActiveMove(move.id);
-			newMove.hasBounced = true;
-			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, this.effectState.target, source);
-			return null;
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.id === 'taunt') {
+				this.add('-immune', pokemon, '[from] ability: Artist Block');
+				return null;
+			}
 		},
 	},
 	/*
