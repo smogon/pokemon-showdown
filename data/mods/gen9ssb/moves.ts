@@ -148,29 +148,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Normal",
 	},
 
-	// Aelita
-	smelt: {
+	// Pablo
+	sketchbook: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "User burns itself and gains +2 Spe/+1 Atk.",
-		desc: "This move burns the user, raises their Speed by 2 stages, and raises their Attack by 1 stage.",
-		name: "Smelt",
+		name: "Sketchbook",
 		gen: 9,
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onPrepareHit(pokemon) {
-			this.attrLastMove('[still]');
-		},
-		onHit(pokemon) {
-			pokemon.trySetStatus('brn');
-			this.add('-anim', pokemon, 'Shift Gear', pokemon);
-			this.boost({spe: 2, atk: 1});
+		onHit(target, source) {
+			let i: BoostID;
+			for (i in target.boosts) {
+				source.boosts[i] = target.boosts[i];
+			}
+			this.add('-copyboost', source, target, '[from] move: Sketchbook');
 		},
 		secondary: null,
 		target: "self",
-		type: "Steel",
+		type: "Normal",
 	},
 
 	// Aethernum
