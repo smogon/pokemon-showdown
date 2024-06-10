@@ -6628,7 +6628,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
-				this.add('-singleturn', target, 'move: Sketch');
+				this.add('-singleturn', source, 'move: Sketch');
 				if (effect?.effectType === 'Move') {
 					this.effectState.pranksterBoosted = effect.pranksterBoosted;
 				}
