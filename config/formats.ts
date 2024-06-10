@@ -2159,6 +2159,7 @@ export const Formats: FormatList = [
 		],
 		onValidateTeam(team, format, teamHas) {
 			const problems = [];
+			if (!teamHas.trademarks) return;
 			for (const trademark of teamHas.trademarks.keys()) {
 				if (teamHas.trademarks.get(trademark) > 1) {
 					problems.push(`You are limited to 1 of each Trademark.`, `(You have ${teamHas.trademarks.get(trademark)} Pok\u00e9mon with ${trademark} as a Trademark.)`);
