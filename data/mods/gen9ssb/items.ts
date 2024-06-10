@@ -22,6 +22,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "On switch-in, this Pokemon copies the stat changes of the opposing Pokemon.",
 		gen: 9,
 		onStart(target, pokemon) {
+			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
 			for (i in target.boosts) {
 				pokemon.boosts[i] = target.boosts[i];
