@@ -27,7 +27,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			for (i in target.boosts) {
 				this.add(target.boosts[i]);
 			}
-			this.add('-copyboost', pokemon, target, '[from] item: Sketchbook');
+			// this.add('-copyboost', pokemon, target, '[from] item: Sketchbook');
 		},
 	},
 };
