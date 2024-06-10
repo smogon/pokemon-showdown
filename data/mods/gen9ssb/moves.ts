@@ -41,6 +41,69 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// Finger
+	megametronome: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Mega Metronome",
+		pp: 8,
+		priority: 0,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
+		onHit(target, source, effect) {
+			const moves = this.dex.moves.all().filter(move => (
+				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['metronome']
+			));
+			for (let i = 0; i < 3; i++) {
+				let randomMove = '';
+				if (moves.length) {
+					moves.sort((a, b) => a.num - b.num);
+					randomMove = this.sample(moves).id;
+				}
+				if (!randomMove) return false;
+				source.side.lastSelectedMove = this.toID(randomMove);
+				this.actions.useMove(randomMove, target);
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		contestType: "Cute",
+	},
+	// Finger
+	fearthefinger: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Fear the Finger",
+		pp: 1,
+		priority: 0,
+		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
+		onHit(target, source, effect) {
+			const moves = this.dex.moves.all().filter(move => (
+				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['metronome']
+			));
+			for (let i = 0; i < 10; i++) {
+				let randomMove = '';
+				if (moves.length) {
+					moves.sort((a, b) => a.num - b.num);
+					randomMove = this.sample(moves).id;
+				}
+				if (!randomMove) return false;
+				source.side.lastSelectedMove = this.toID(randomMove);
+				this.actions.useMove(randomMove, target);
+			}
+		},
+		isZ: "mattermirror",
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		contestType: "Cute",
+	},
 	// Pablo
 	plagiarize: {
 		accuracy: 100,
