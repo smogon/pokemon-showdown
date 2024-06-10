@@ -21,13 +21,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 		spritenum: 200,
 		desc: "On switch-in, this Pokemon copies the stat changes of the opposing Pokemon.",
 		gen: 9,
-		onStart(target) {
+		onStart(pokemon, target) {
 			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
 			for (i in target.boosts) {
-				this.add(target.boosts[i]);
+				pokemon.boosts[i] = target.boosts[i];
 			}
-			// this.add('-copyboost', pokemon, target, '[from] item: Sketchbook');
+			this.add('-copyboost', pokemon, target, '[from] item: Sketchbook');
 		},
 	},
 };
