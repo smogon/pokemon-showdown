@@ -469,7 +469,7 @@ export const Formats: FormatList = [
 
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Z-Move Clause'],
-		banlist: ['Dewpider', 'Diglett-Alola', 'Flittle', 'Nidoran-M', 'Smeargle', 'Wingull', 'Wishiwashi', 'Zigzagoon-Base', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Dewpider', 'Diglett-Alola', 'Flittle', 'Nidoran-M', 'Smeargle', 'Wattrel', 'Wingull', 'Wishiwashi', 'Zigzagoon-Base', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
 		onBegin() {
 			this.add('-message', `Welcome to Do Not Use!`);
 			this.add('-message', `This is a National Dex metagame where only Pokemon with less than 280 BST are allowed, plus a select few others!`);

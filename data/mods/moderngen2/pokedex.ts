@@ -3814,4 +3814,24 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		gen: 2,
 	},
+	sneaselhisui: {
+		inherit: true,
+		gen: 2,
+	},
+	growlithehisui: {
+		inherit: true,
+		gen: 2,
+	},
+	arcaninehisui: {
+		inherit: true,
+		gen: 2,
+	},
+	typhlosionhisui: {
+		inherit: true,
+		gen: 2,
+	},
+	qwilfishhisui: {
+		inherit: true,
+		gen: 2,
+	},
 };
