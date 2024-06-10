@@ -118,9 +118,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source) {
 			const move = target.lastMove;
 			if (source.transformed || !move || source.moves.includes(move.id)) return false;
-			if (move.noSketch || move.isZ || move.isMax) return false;
-			const sketchIndex = source.moves.indexOf('sketch');
-			if (sketchIndex < 0) return false;
+			if (move.isZ || move.isMax) return false;
+			const index = source.moves.indexOf('plagiarize');
+			if (index < 0) return false;
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
@@ -130,9 +130,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				disabled: false,
 				used: false,
 			};
-			source.moveSlots[sketchIndex] = sketchedMove;
-			source.baseMoveSlots[sketchIndex] = sketchedMove;
-			this.add('-activate', source, 'move: Sketch', move.name);
+			source.moveSlots[index] = sketchedMove;
+			source.baseMoveSlots[index] = sketchedMove;
+			this.add('-activate', source, 'move: Plagiarize', move.name);
 		},
 		// PP Nullification
 		onTryHit(target) {
