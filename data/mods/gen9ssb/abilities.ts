@@ -15,27 +15,42 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
-	// Lord of Extinction
-	impendingrot: {
-		name: "Impending Rot",
-		onResidualOrder: 28,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			this.damage(pokemon.baseMaxhp / 8);
-		},
-		onDamagingHit(damage, target, source, move) {
-			const sourceAbility = source.getAbility();
-			if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'impendingrot') {
-				return;
-			}
-			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
-				const oldAbility = source.setAbility('impendingrot', target);
-				if (oldAbility) {
-					this.add('-activate', target, 'ability: Impending Rot', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
-				}
-			}
-		},
+	// Finger
+	absolutezen: {
+		name: "Absolute Zen",
 		gen: 9,
+		// Damage Recovery
+		onDamagingHitOrder: 1,
+		onDamagingHit(target) {
+			this.heal(target.baseMaxhp / 6);
+		},
+		onUpdate(pokemon) {
+			// Infatuation Immunity
+			if (pokemon.volatiles['attract']) {
+				this.add('-activate', pokemon, 'ability: Absolute Zen');
+				pokemon.removeVolatile('attract');
+				this.add('-end', pokemon, 'move: Attract', '[from] ability: Absolute Zen');
+			}
+			// Taunt Immunity
+			if (pokemon.volatiles['taunt']) {
+				this.add('-activate', pokemon, 'ability: Absolute Zen');
+				pokemon.removeVolatile('taunt');
+			}
+			// Confusion Immunity
+			if (pokemon.volatiles['confusion']) {
+				this.add('-activate', pokemon, 'ability: Absolute Zen');
+				pokemon.removeVolatile('confusion');
+			}
+		},
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'confusion') return null;
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt' || move?.volatileStatus === 'confusion') {
+				this.add('-immune', pokemon, '[from] ability: Absolute Zen');
+				return null;
+			}
+		},
 	},
 	artistblock: {
 		name: 'Artist Block',
