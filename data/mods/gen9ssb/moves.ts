@@ -6623,19 +6623,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 	},
 	sketch: {
-		inherit: true,
+		num: 166,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Sketch",
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {
+			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1,
+		},
+		// Reflection
 		volatileStatus: 'magiccoat',
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
-				this.add('-singleturn', source, 'move: Sketch');
+				this.add('-singleturn', target, 'move: Magic Coat');
 				if (effect?.effectType === 'Move') {
 					this.effectState.pranksterBoosted = effect.pranksterBoosted;
 				}
 			},
 			onTryHitPriority: 2,
 			onTryHit(target, source, move) {
-				if (target === source) return;
+				if (target === source || move.hasBounced || !move.flags['reflectable']) {
+					return;
+				}
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
@@ -6643,7 +6656,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return null;
 			},
 			onAllyTryHitSide(target, source, move) {
-				if (target.isAlly(source)) return;
+				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+					return;
+				}
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
@@ -6651,6 +6666,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return null;
 			},
 		},
+		// Sketch
+		onHit(target, source) {
+			const move = target.lastMove;
+			if (source.transformed || !move || source.moves.includes(move.id)) return false;
+			if (move.noSketch || move.isZ || move.isMax) return false;
+			const sketchIndex = source.moves.indexOf('sketch');
+			if (sketchIndex < 0) return false;
+			const sketchedMove = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			source.moveSlots[sketchIndex] = sketchedMove;
+			source.baseMoveSlots[sketchIndex] = sketchedMove;
+			this.add('-activate', source, 'move: Sketch', move.name);
+		},
+		noSketch: true,
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
+		contestType: "Clever",
 	},
 	electroshot: {
 		inherit: true,
