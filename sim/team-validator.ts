@@ -102,6 +102,10 @@ export class PokemonSources {
 	 */
 	pomegEventEgg?: string | null;
 	/**
+	 * For event-only Pokemon that do not have a minimum source gen identified by its moves
+	 */
+	eventOnlyMinSourceGen?: number;
+	/**
 	 * Some Pokemon evolve by having a move in their learnset (like Piloswine
 	 * with Ancient Power). These can only carry three other moves from their
 	 * prevo, because the fourth move must be the evo move. This restriction
@@ -151,6 +155,7 @@ export class PokemonSources {
 		this.limitedEggMoves = null;
 	}
 	minSourceGen() {
+		if (this.eventOnlyMinSourceGen) return this.eventOnlyMinSourceGen;
 		if (this.sourcesBefore) return this.sourcesAfter || 1;
 		let min = 10;
 		for (const source of this.sources) {
@@ -877,6 +882,7 @@ export class TeamValidator {
 			let legal = false;
 			for (const event of eventData) {
 				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
+				setSources.eventOnlyMinSourceGen = event.generation;
 				legal = true;
 				break;
 			}
