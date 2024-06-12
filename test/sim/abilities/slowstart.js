@@ -10,7 +10,7 @@ describe(`Slow Start`, function () {
 		battle.destroy();
 	});
 
-	it(`should not delay activation on switch-in, unlike Speed Boost`, function () {
+	it(`should delay activation on switch-in, like Speed Boost`, function () {
 		battle = common.createBattle([[
 			{species: 'diglett', moves: ['sleeptalk']},
 			{species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['sleeptalk']},
@@ -19,9 +19,14 @@ describe(`Slow Start`, function () {
 		]]);
 		battle.makeChoices('switch 2', 'auto');
 		for (let i = 0; i < 4; i++) { battle.makeChoices(); }
-		const log = battle.getDebugLog();
-		const slowStartEnd = log.indexOf('|-end|p1a: Regigigas|Slow Start');
-		assert(slowStartEnd > -1, 'Slow Start should end in 5 turns, including the turn it switched in.');
+		let log = battle.getDebugLog();
+		let slowStartEnd = log.indexOf('|-end|p1a: Regigigas|Slow Start');
+		assert.false(slowStartEnd > -1, 'Slow Start should remain in effect after 4 active turns.');
+
+		battle.makeChoices();
+		log = battle.getDebugLog();
+		slowStartEnd = log.indexOf('|-end|p1a: Regigigas|Slow Start');
+		assert(slowStartEnd > -1, 'Slow Start should not be in effect after 5 active turns.');
 	});
 
 	it(`[Gen 7] should halve the user's Special Attack when using a special Z-move`, function () {
