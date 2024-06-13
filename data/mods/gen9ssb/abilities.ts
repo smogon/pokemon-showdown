@@ -83,7 +83,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.lastMoveUsed.id === 'sketch') {
 				this.add('-immune', pokemon, '[from] move: Sketch');
 				return null;
-			},
+			}
 			if (move.id === 'taunt') {
 				this.add('-immune', pokemon, '[from] ability: Artist Block');
 				return null;
