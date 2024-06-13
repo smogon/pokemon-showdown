@@ -87,19 +87,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				move.flags['metronome']
 			));
-			for (let i = 0; i < 10; i++) {
-				let randomMove = '';
-				if (moves.length) {
-					moves.sort((a, b) => a.num - b.num);
-					randomMove = this.sample(moves).id;
-				}
-				if (!randomMove) return false;
-				source.side.lastSelectedMove = this.toID(randomMove);
-				this.actions.useMove(randomMove, target);
+			let randomMove = '';
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves).id;
 			}
+			if (!randomMove) return false;
+			source.side.lastSelectedMove = this.toID(randomMove);
+			this.actions.useMove(randomMove, target);
 		},
 		isZ: "mattermirror",
 		secondary: null,
+		multihit: 10,
 		target: "self",
 		type: "Normal",
 		contestType: "Cute",
