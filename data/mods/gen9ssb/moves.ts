@@ -6654,6 +6654,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-activate', source, 'move: Sketch', move.name);
 		},
 		volatileStatus: 'sketcharmor',
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('sketcharmor');
+		},
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
@@ -6663,7 +6666,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryHit(target, source, move) {
 				const newMove = this.dex.getActiveMove(move.id);
 				this.actions.useMove(newMove, source, target);
-				this.add(`${move.name} was reflected by Sketch\'s armor!`);
+				this.add('message', `${move.name} was reflected by Sketch\'s armor!`);
 				return null;
 			},
 		},
