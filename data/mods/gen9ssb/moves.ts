@@ -6634,39 +6634,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1,
 		},
-		// Reflection
-		volatileStatus: 'magiccoat',
-		condition: {
-			duration: 1,
-			onStart(target, source, effect) {
-				this.add('-singleturn', target, 'move: Magic Coat');
-				if (effect?.effectType === 'Move') {
-					this.effectState.pranksterBoosted = effect.pranksterBoosted;
-				}
-			},
-			onTryHitPriority: 2,
-			onTryHit(target, source, move) {
-				if (target === source || move.hasBounced) {
-					return;
-				}
-				const newMove = this.dex.getActiveMove(move.id);
-				newMove.hasBounced = true;
-				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
-				this.actions.useMove(newMove, target, source);
-				return null;
-			},
-			onAllyTryHitSide(target, source, move) {
-				if (target.isAlly(source) || move.hasBounced) {
-					return;
-				}
-				const newMove = this.dex.getActiveMove(move.id);
-				newMove.hasBounced = true;
-				newMove.pranksterBoosted = false;
-				this.actions.useMove(newMove, this.effectState.target, source);
-				return null;
-			},
-		},
-		// Sketch
 		onHit(target, source) {
 			const move = target.lastMove;
 			if (source.transformed || !move || source.moves.includes(move.id)) return false;
@@ -6686,9 +6653,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.baseMoveSlots[sketchIndex] = sketchedMove;
 			this.add('-activate', source, 'move: Sketch', move.name);
 		},
+		condition: {
+			duration: 1,
+			onStart(target, source, effect) {
+				this.add('-singleturn', source, 'move: Sketch');
+			},
+			onTryHitPriority: 2,
+			onTryHit(target, source, move) {
+				const newMove = this.dex.getActiveMove(move.id);
+				this.actions.useMove(newMove, source, target);
+				this.add(`${move.name} was reflected by Sketch\'s armor!`);
+				return null;
+			},
+		},
 		noSketch: true,
 		secondary: null,
-		target: "self",
+		target: "normal",
 		type: "Normal",
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Clever",
