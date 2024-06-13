@@ -6653,6 +6653,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.baseMoveSlots[sketchIndex] = sketchedMove;
 			this.add('-activate', source, 'move: Sketch', move.name);
 		},
+		volatileStatus: 'sketcharmor',
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
