@@ -6635,13 +6635,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1,
 		},
 		// Reflection
-		priorityChargeCallback(pokemon) {
-			pokemon.addVolatile('magiccoat');
-		},
+		volatileStatus: 'magiccoat',
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
-				this.add('-singleturn', source, 'move: Sketch');
+				this.add('-singleturn', target, 'move: Magic Coat');
 				if (effect?.effectType === 'Move') {
 					this.effectState.pranksterBoosted = effect.pranksterBoosted;
 				}
@@ -6664,7 +6662,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
-				this.actions.useMove(newMove, this.effectState.source, target);
+				this.actions.useMove(newMove, this.effectState.target, source);
 				return null;
 			},
 		},
@@ -6690,7 +6688,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		noSketch: true,
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Normal",
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Clever",
