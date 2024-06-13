@@ -84,7 +84,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
-				this.actions.useMove(newMove, target, pokemon);
+				this.actions.useMove(newMove, pokemon, target);
 				this.add('-immune', pokemon, '[from] move: Sketch');
 				return null;
 			}
