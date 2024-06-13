@@ -6636,13 +6636,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onStart(target, source, effect) {
 				this.add('-singleturn', target, 'move: Sketch');
-				this.add('message', `Move started... Sketch volatile applied to ${target}.`);
+				this.add('-message', `Move started... Sketch volatile applied to ${target}.`);
 			},
 			onTryHitPriority: 2,
 			onTryHit(target, source, move) {
 				const newMove = this.dex.getActiveMove(move.id);
 				this.actions.useMove(newMove, target, source);
-				this.add('message', `${move.name} was reflected by Sketch\'s armor!`);
+				this.add('-message', `${move.name} was reflected by Sketch\'s armor!`);
 				return null;
 			},
 		},
