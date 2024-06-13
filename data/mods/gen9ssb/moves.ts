@@ -6636,13 +6636,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onStart(target, source, effect) {
 				this.add('-singleturn', target, 'move: Magic Coat');
-				this.add('-message', `Starting...`);
+				this.add('-message', `onStart() triggered.`);
 				if (effect?.effectType === 'Move') {
 					this.effectState.pranksterBoosted = effect.pranksterBoosted;
 				}
 			},
 			onTryHitPriority: 2,
 			onTryHit(target, source, move) {
+				this.add('-message', `onTryHit() triggered.`);
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
@@ -6650,6 +6651,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return null;
 			},
 			onAllyTryHitSide(target, source, move) {
+				this.add('-message', `onAllyTryHitSide() triggered.`);
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
