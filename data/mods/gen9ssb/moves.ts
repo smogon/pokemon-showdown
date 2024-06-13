@@ -6631,18 +6631,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
-		volatileStatus: 'sketcharmor',
+		volatileStatus: 'magiccoat',
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
-				this.add('-singleturn', target, 'move: Sketch');
-				this.add('-message', `Move started... Sketch volatile applied to ${target}.`);
+				this.add('-singleturn', target, 'move: Magic Coat');
+				this.add('-message', `Starting...`);
+				if (effect?.effectType === 'Move') {
+					this.effectState.pranksterBoosted = effect.pranksterBoosted;
+				}
 			},
 			onTryHitPriority: 2,
 			onTryHit(target, source, move) {
 				const newMove = this.dex.getActiveMove(move.id);
+				newMove.hasBounced = true;
+				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
 				this.actions.useMove(newMove, target, source);
-				this.add('-message', `${move.name} was reflected by Sketch\'s armor!`);
+				return null;
+			},
+			onAllyTryHitSide(target, source, move) {
+				const newMove = this.dex.getActiveMove(move.id);
+				newMove.hasBounced = true;
+				newMove.pranksterBoosted = false;
+				this.actions.useMove(newMove, this.effectState.target, source);
 				return null;
 			},
 		},
