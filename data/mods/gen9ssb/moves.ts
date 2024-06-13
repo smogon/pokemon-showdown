@@ -6635,7 +6635,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1,
 		},
 		// Reflection
-		volatileStatus: 'magiccoat',
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('magiccoat');
+		},
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
