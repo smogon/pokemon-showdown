@@ -6623,48 +6623,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 	},
 	sketch: {
-		num: 166,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Sketch",
-		pp: 1,
-		noPPBoosts: true,
-		priority: 0,
-		volatileStatus: 'magiccoat',
-		condition: {
-			duration: 1,
-			onStart(target, source, effect) {
-				this.add('-singleturn', target, 'move: Magic Coat');
-				this.add('-message', `onStart() triggered.`);
-				if (effect?.effectType === 'Move') {
-					this.effectState.pranksterBoosted = effect.pranksterBoosted;
-				}
-			},
-			onTryHitPriority: 2,
-			onTryHit(target, source, move) {
-				this.add('-message', `onTryHit() triggered.`);
-				const newMove = this.dex.getActiveMove(move.id);
-				newMove.hasBounced = true;
-				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
-				this.actions.useMove(newMove, target, source);
-				return null;
-			},
-			onAllyTryHitSide(target, source, move) {
-				this.add('-message', `onAllyTryHitSide() triggered.`);
-				const newMove = this.dex.getActiveMove(move.id);
-				newMove.hasBounced = true;
-				newMove.pranksterBoosted = false;
-				this.actions.useMove(newMove, this.effectState.target, source);
-				return null;
-			},
-		},
-		noSketch: true,
-		secondary: null,
-		target: "self",
-		type: "Normal",
-		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
-		contestType: "Clever",
+		inherit: true,
 	},
 	electroshot: {
 		inherit: true,
