@@ -237,7 +237,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				effectType: 'Move',
 				type: 'Flying',
 			},
-			return this.NOT_FAIL;
 		},
 		drain: [1, 2],
 		secondary: {
