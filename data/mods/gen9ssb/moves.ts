@@ -218,7 +218,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			move: 'granddelta',
-			source: source,
 			moveData: {
 				id: 'granddelta',
 				name: 'Grand Delta',
