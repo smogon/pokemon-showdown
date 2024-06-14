@@ -25,4 +25,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.actions.useMove('Sketchbook', target);
 		},
 	},
+	// Trey
+	yoichisbow: {
+		name: "Yoichi's Bow",
+		spritenum: 429,
+		onTakeItem: false,
+		zMove: "Grand Delta",
+		zMoveFrom: "Burst Delta",
+		itemUser: ["Decidueye-Hisui"],
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Flying') {
+				return this.chainModify(1.3);
+			}
+		},
+		desc: "Holder's Flying-type attacks have 1.3x power. If held by Decidueye-Hiseui with Burst Delta, it can use Grand Delta.",
+		gen: 9,
+	},
 };
