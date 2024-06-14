@@ -49,6 +49,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Plagiarize',
 		evs: { hp: 252, spe: 252, spa: 4 }, nature: 'Naive', teraType: 'Normal',
 	},
+	Trey: {
+		species: "Decidueye-Hisui", ability: "Concentration", item: "Yoichi's Bow", gender: "M",
+		moves: ["Triple Arrows", "Pursuit", "Trop Kick"],
+		signatureMove: "Burst Delta",
+		evs: {hp: 4, atk: 252, spe: 252}, nature: "Adamant",
+	},
+
 
 	/*
  	'Lord of Extinction': {
