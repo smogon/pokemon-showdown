@@ -52,10 +52,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	// Pablo
 	artistblock: {
 		name: 'Artist Block',
 		gen: 9,
-		// Sketch function is handled in moves.js
 		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.isAlly(source)) {
 				return;
@@ -93,6 +93,35 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
+	},
+	// Trey
+	concentration: {
+		desc: "Uses Dynamite Arrow upon switching in. x1.3 Speed; Moves always hit. On switch-in/after not taking damage for a turn, attacks have 1.5x power and raises critical hit ratio by 2.",
+		shortDesc: "Dynamite Arrow on switch-in; Moves always hit; 1.3x Speed; 1.5x Damage/+2 Crit on switch-in/after no damage.",
+		onStart(target) {
+			this.actions.useMove('Dynamite Arrow', target);
+		},
+		onModifySpe(spe) {
+			return this.chainModify(1.3);
+		},
+		onBasePowerPriority: 29,
+		onBasePower(basePower, pokemon, target, move) {
+			const damagedByTarget = pokemon.attackedBy.some(p => p.source === target && p.damage > 0 && p.lastTurn);
+			if (pokemon.newlySwitched || !damagedByTarget) {
+				return move.basePower * 1.5;
+			}
+			return move.basePower;
+		},
+		onModifyCritRatio(critRatio, pokemon, target, move) {
+			const damagedByTarget = pokemon.attackedBy.some(p => p.source === target && p.damage > 0 && p.lastTurn);
+			if (pokemon.newlySwitched || !damagedByTarget) {
+				return move.critRatio + 2;
+			}
+			return move.critRatio;
+			},
+		flags: {},
+		name: "Concentration",
+		gen: 9,
 	},
 	/*
 	// Aelita
