@@ -1088,14 +1088,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mudsport: {
 		inherit: true,
 		condition: {
-			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Mud Sport');
 			},
 			onAnyBasePowerPriority: 3,
 			onAnyBasePower(basePower, user, target, move) {
 				if (move.type === 'Electric') {
-					this.debug('mud sport weaken');
+					this.debug('Mud Sport weaken');
 					return this.chainModify(0.5);
 				}
 			},
@@ -1752,14 +1751,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	watersport: {
 		inherit: true,
 		condition: {
-			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Water Sport');
 			},
 			onAnyBasePowerPriority: 3,
 			onAnyBasePower(basePower, user, target, move) {
 				if (move.type === 'Fire') {
-					this.debug('water sport weaken');
+					this.debug('Water Sport weaken');
 					return this.chainModify(0.5);
 				}
 			},
