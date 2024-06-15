@@ -20,16 +20,18 @@ describe('[Gen 9] Random Battle (slow)', () => {
 		});
 	});
 
-	it('all moves on all sets should be obtainable', function () {
+	it('all moves on all sets should exist and be obtainable', function () {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {
 			const species = dex.species.get(pokemon);
+			assert(species.exists, `Pokemon ${species} does not exist`);
 			const sets = setsJSON[pokemon]["sets"];
 			const types = species.types;
 			const abilities = new Set(Object.values(species.abilities));
 			if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 			for (const set of sets) {
+				assert(set.movepool.every(m => dex.moves.get(m).exists), `One of ${set.movepool} does not exist.`);
 				const role = set.role;
 				const moves = new Set(set.movepool.map(m => dex.moves.get(m).id));
 				const teraTypes = set.teraTypes;
@@ -78,16 +80,18 @@ describe('[Gen 9] Baby Random Battle (slow)', () => {
 		});
 	});
 
-	it('all moves on all sets should be obtainable', function () {
+	it('all moves on all sets should exist and be obtainable', function () {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {
 			const species = dex.species.get(pokemon);
+			assert(species.exists, `Pokemon ${species} does not exist`);
 			const sets = setsJSON[pokemon]["sets"];
 			const types = species.types;
 			const abilities = new Set(Object.values(species.abilities));
 			if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 			for (const set of sets) {
+				assert(set.movepool.every(m => dex.moves.get(m).exists), `One of ${set.movepool} does not exist.`);
 				const role = set.role;
 				const moves = new Set(set.movepool.map(m => dex.moves.get(m).id));
 				const teraTypes = set.teraTypes;
@@ -142,16 +146,18 @@ describe('[Gen 9] Random Doubles Battle (slow)', () => {
 		});
 	});
 
-	it('all moves on all sets should be obtainable', function () {
+	it('all moves on all sets should exist and be obtainable', function () {
 		const generator = Teams.getGenerator(options.format);
 		const rounds = 100;
 		for (const pokemon of Object.keys(setsJSON)) {
 			const species = dex.species.get(pokemon);
+			assert(species.exists, `Pokemon ${species} does not exist`);
 			const sets = setsJSON[pokemon]["sets"];
 			const types = species.types;
 			const abilities = new Set(Object.values(species.abilities));
 			if (species.unreleasedHidden) abilities.delete(species.abilities.H);
 			for (const set of sets) {
+				assert(set.movepool.every(m => dex.moves.get(m).exists), `One of ${set.movepool} does not exist.`);
 				const role = set.role;
 				const moves = new Set(set.movepool.map(m => dex.moves.get(m).id));
 				const teraTypes = set.teraTypes;
