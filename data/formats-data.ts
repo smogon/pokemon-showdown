@@ -4489,7 +4489,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "NFE",
 	},
 	kommoo: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "UUBL",
 	},
