@@ -290,4 +290,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Yukari Yakumo
+	gap: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "User and foe switch to a random ally.",
+		shortDesc: "User and foe are forcibly switch out.",
+		name: "Gap",
+		gen: 9,
+		pp: 5,
+		priority: -6,
+		flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
+		forceSwitch: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dark Void', target);
+		},
+		secondary: null,
+		target: "all",
+		type: "Psychic",
+	},
 };
