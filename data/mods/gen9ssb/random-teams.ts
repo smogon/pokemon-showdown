@@ -55,6 +55,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Burst Delta",
 		evs: {hp: 4, atk: 252, spe: 252}, nature: "Adamant",
 	},
+	'Yukari Yakumo': {
+		species: 'Lunala', ability: 'Regenerator', item: 'Leftovers', gender: 'F',
+		moves: ['Stealth Rock', 'Spikes', 'Toxic Spikes'],
+		signatureMove: 'Gap',
+		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
+	},
 
 
 	/*
