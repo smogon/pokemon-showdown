@@ -270,6 +270,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Arya')}|W-whats this? Oh, come on...!!!`);
 		},
 	},
+	audiino: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Audiino')}|anyone up for othello, scrabble, connect 4, splendor, codenames, catan, actually that's a long enough list already so don't actually take me up on all of those simultaneously`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Audiino')}|im only thinking, ill be back...`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Audiino')}|ggs, with that i take my leave`);
+		},
+	},
 	autumn: {
 		noCopy: true,
 		onFaint() {
@@ -372,6 +384,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('berry')}|and all I got was this lousy t-shirt`);
+		},
+	},
+	bert122: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Bert122')}|*cackling laughter and gem crunching noises*`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Bert122')}|Off to collect more shiny rocks! Hehehe!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Bert122')}|Ack, all my gems are gone!`);
 		},
 	},
 	billo: {
@@ -1067,6 +1091,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('in the hills')}|im starting to feel kinda stupid can i please leave`);
 		},
 	},
+	irly: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Irly')}|They see me rollin'`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Irly')}|They hatin'`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Irly')}|Em caso de investigação policial, eu declaro que não tenho envolvimento com este grupo e não sei como estou no mesmo, provavelmente fui inserido por terceiros, declaro que estou disposto a colaborar com as investigações e estou disposto a me apresentar a depoimento se necessário`);
+		},
+	},
 	ironwater: {
 		noCopy: true,
 		onStart() {
@@ -1136,7 +1172,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		innateName: "Tinted Lens",
 		shortDesc: "Resisted moves hit with double power.",
 		onModifyDamage(damage, source, target, move) {
-			if (!source || source.illusion) return;
+			if (source.illusion) return;
 			if (target.getMoveHitData(move).typeMod < 0) {
 				this.debug('Tinted Lens boost');
 				return this.chainModify(2);
@@ -1567,6 +1603,34 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Mathy')}|thanks for making my job harder :/`);
 		},
 	},
+	merritty: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Merritty')}|Deadline.`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Merritty')}|If you believe there's been a mistake, please let me know ASAP.`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Merritty')}|congratulations to our winner`);
+		},
+		innateName: "Tourban",
+		shortDesc: "Takes half damage from Ghost moves, deals double damge to Ghost-types.",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (source.illusion) return;
+			if (move.type === 'Ghost') {
+				this.debug('Tourban Ghost weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.illusion) return;
+			if (target?.hasType('Ghost')) {
+				this.debug('Tourban boost');
+				return this.chainModify(2);
+			}
+		},
+	},
 	meteordash: {
 		noCopy: true,
 		onStart() {
@@ -1822,6 +1886,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				this.add(`c:|${getName('PartMan')}|THAT'S WHAT SHE SAID!`);
 				return false;
 			}
+		},
+	},
+	pastorgigas: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Pastor Gigas')}|Turn back to God`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Pastor Gigas')}|I'll leave, but God stays forever`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Pastor Gigas')}|I'm going to pray for you`);
 		},
 	},
 	peary: {
@@ -2235,6 +2311,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add(`c:|${getName('Solaros & Lunaris')}|Too hot to handle!`);
 		},
 	},
+	spiderz: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Spiderz')}|whats good gangy`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Spiderz')}|im moving DIFFERENT`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Spiderz')}|fuck 12`);
+		},
+	},
 	spoo: {
 		noCopy: true,
 		onStart() {
@@ -2425,6 +2513,18 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${getName('trace')}|How disappointingly short a dream lasts.`);
+		},
+	},
+	tuthur: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Tuthur')}|QUEUE !`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Tuthur')}|feur`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Tuthur')}|this wouldn't have gone like this if we'd played kunc`);
 		},
 	},
 	twoofroses: {
@@ -2673,6 +2773,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	xy01: {
 		noCopy: true,
 	},
+	yeetdabxd: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('yeet dab xd')}|Ah, welcome~! The merchandise you have chosen will cost your soul. Is that acceptable?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('yeet dab xd')}|brb mum's getting the camera`);
+		},
+		onFaint(pokemon) {
+			if (pokemon.m.seedActivated) return;
+			this.add(`c:|${getName('yeet dab xd')}|wait no you didn't join QW yet`);
+		},
+	},
 	yellowpaint: {
 		noCopy: true,
 		onStart() {
@@ -2690,6 +2803,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 					this.add(`c:|${getName('Yellow Paint')}|Paint it Yellow!`);
 				};
 			}
+		},
+	},
+	yuki: {
+		noCopy: true,
+		innateName: "Snow Warning",
+		onStart(source) {
+			if (source.illusion) return;
+			this.field.setWeather('snow', source, this.dex.abilities.get('snowwarning'));
 		},
 	},
 	yveltalnl: {

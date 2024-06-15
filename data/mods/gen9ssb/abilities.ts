@@ -338,6 +338,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 	},
 
+	// Audiino
+	mitosis: {
+		shortDesc: "Regenerator + Multiscale.",
+		name: "Mitosis",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.hp >= target.maxhp) {
+				this.debug('Multiscale weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		flags: {breakable: 1},
+	},
+
 	// ausma
 	cascade: {
 		shortDesc: "At 25% HP, transforms into a Mismagius. Sigil's Storm becomes Ghost type and doesn't charge.",
@@ -354,6 +370,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (this.field.pseudoWeather['trickroom']) {
 				this.field.removePseudoWeather('trickroom');
 				this.boost({spe: 2}, pokemon, pokemon, this.effect);
+			}
+		},
+		flags: {},
+	},
+
+	// Bert122
+	pesteringassault: {
+		shortDesc: "Uses Knock Off, Taunt, Torment, Soak, and Confuse Ray with 40% accuracy at turn end.",
+		name: "Pestering Assault",
+		onResidual(pokemon, s, effect) {
+			const moves = ['knockoff', 'taunt', 'torment', 'soak', 'confuseray'];
+			for (const moveid of moves) {
+				const move = this.dex.getActiveMove(moveid);
+				move.accuracy = 40;
+				const target = pokemon.foes()[0];
+				if (target && !target.fainted) {
+					this.actions.useMove(move, pokemon, target, effect);
+				}
 			}
 		},
 		flags: {},
@@ -472,7 +506,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			];
 			this.add(`c:|${getName((target.illusion || target).name)}|${this.sample(abilMessages)}`);
 			for (const foe of target.foes()) {
-				if (foe && !foe.volatiles['torment']) {
+				if (foe && !foe.fainted && !foe.volatiles['torment']) {
 					foe.addVolatile('torment');
 				}
 			}
@@ -1054,6 +1088,58 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 	},
 
+	// Irly
+	therollingspheal: {
+		shortDesc: "1.5x dmg boost for every repeated move use. Up to 5 uses. +1 Spe when use contact.",
+		name: "The Rolling Spheal",
+		onStart(pokemon) {
+			pokemon.addVolatile('therollingspheal');
+		},
+		onSourceHit(target, source, move) {
+			if (move.flags['contact'] && move.category === 'Physical') {
+				this.add('-activate', source, 'ability: The Rolling Spheal');
+				this.boost({spe: 1}, source, source, move);
+			}
+		},
+		condition: {
+			onStart(pokemon) {
+				this.effectState.lastMove = '';
+				this.effectState.numConsecutive = 0;
+			},
+			onTryMovePriority: -2,
+			onTryMove(pokemon, target, move) {
+				if (!pokemon.hasAbility('therollingspheal')) {
+					pokemon.removeVolatile('therollingspheal');
+					return;
+				}
+				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
+					this.effectState.numConsecutive++;
+				} else if (pokemon.volatiles['twoturnmove']) {
+					if (this.effectState.lastMove !== move.id) {
+						this.effectState.numConsecutive = 1;
+					} else {
+						this.effectState.numConsecutive++;
+					}
+				} else {
+					this.effectState.numConsecutive = 0;
+				}
+				this.effectState.lastMove = move.id;
+			},
+			onModifyDamage(damage, source, target, move) {
+				if (this.effectState.numConsecutive > 0) {
+					this.debug(`Current Metronome boost: 6144/4096`);
+					return this.chainModify([6144, 4096]);
+				}
+			},
+			onAfterMove(source, target, move) {
+				if (this.effectState.numConsecutive > 5) {
+					this.effectState.numConsecutive = 0;
+				}
+			},
+		},
+		flags: {},
+	},
+
 	// Irpachuza
 	mimeknowsbest: {
 		shortDesc: "When this Pokemon switches in, it uses a random screen or protect move.",
@@ -1490,7 +1576,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		flags: {},
+		flags: {cantsuppress: 1},
 	},
 
 	// maroon
@@ -1518,6 +1604,76 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			move.type = "???";
 		},
 		flags: {},
+	},
+
+	// Merritty
+	endround: {
+		shortDesc: "Clears everything.",
+		name: "End Round",
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'End Round');
+			this.add('-message', 'A new round is starting! Resetting the field...');
+			this.field.clearWeather();
+			this.field.clearTerrain();
+			for (const pseudoWeather of PSEUDO_WEATHERS) {
+				this.field.removePseudoWeather(pseudoWeather);
+			}
+			for (const side of this.sides) {
+				const remove = [
+					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
+					'bioticorbfoe', 'bioticorbself', 'tailwind', 'luckychant', 'alting',
+				];
+				for (const sideCondition of remove) {
+					if (side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: End Round', '[of] ' + pokemon);
+					}
+				}
+			}
+			for (const mon of this.getAllActive()) {
+				const volatilesToClear = [
+					'substitute', 'aquaring', 'snack', 'attract', 'confusion', 'bide', 'partiallytrapped', 'perfectmimic',
+					'mustrecharge', 'defensecurl', 'disable', 'focusenergy', 'dragoncheer', 'embargo', 'endure', 'gastroacid',
+					'foresight', 'glaiverush', 'grudge', 'healblock', 'imprison', 'curse', 'leechseed', 'magnetrise', 'minimize',
+					'miracleeye', 'nightmare', 'noretreat', 'octolock', 'lockedmove', 'powder', 'powershift', 'powertrick',
+					'rage', 'ragepowder', 'roost', 'saltcure', 'smackdown', 'snatch', 'sparklingaria', 'spotlight', 'stockpile',
+					'syrupbomb', 'tarshot', 'taunt', 'telekinesis', 'torment', 'uproar', 'yawn', 'flashfire', 'protosynthesis',
+					'quarkdrive', 'slowstart', 'truant', 'unburden', 'metronome', 'beakblast', 'charge', 'echoedvoice', 'encore',
+					'focuspunch', 'furycutter', 'gmaxcannonade', 'gmaxchistrike', 'gmaxvinelash', 'gmaxvolcalith', 'gmaxwildfire',
+					'iceball', 'rollout', 'laserfocus', 'lockon', 'perishsong', 'shelltrap', 'throatchop', 'trapped', 'ultramystik',
+					'choicelock', 'stall', 'catstampofapproval', 'beefed', 'boiled', 'flipped', 'therollingspheal', 'treasurebag',
+					'torisstori', 'anyonecanbekilled', 'sigilsstorm', 'wonderwing', 'riseabove', 'superrollout', 'meatgrinder',
+					'risingsword',
+				];
+				for (const volatile of volatilesToClear) {
+					if (mon.volatiles[volatile]) {
+						mon.removeVolatile(volatile);
+						if (volatile === 'flipped') {
+							changeSet(this, mon, ssbSets['Clementine']);
+							this.add(`c:|${getName('Clementine')}|┬──┬◡ﾉ(° -°ﾉ)`);
+						}
+						this.add('-activate', pokemon, 'ability: End Round');
+					}
+				}
+				mon.clearBoosts();
+				this.add('-clearboost', mon, '[from] ability: End Round', '[of] ' + pokemon);
+			}
+		},
+		flags: {cantsuppress: 1},
+	},
+
+	// Meteordash
+	tatsuglare: {
+		shortDesc: "Fur Coat + All moves hit off of Sp. Atk stat.",
+		name: "TatsuGlare",
+		onModifyMove(move, pokemon, target) {
+			if (move.category !== "Status") move.overrideOffensiveStat = 'spa';
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def) {
+			return this.chainModify(2);
+		},
+		flags: {breakable: 1},
 	},
 
 	// Mex
@@ -1714,6 +1870,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 	},
 
+	// Pastor Gigas
+	godsmercy: {
+		shortDesc: "Summons Misty Surge and cures the team's status conditions on switch-in.",
+		name: "God's Mercy",
+		onStart(source) {
+			this.field.setTerrain('mistyterrain');
+			const allies = [...source.side.pokemon, ...source.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (ally !== source && ally.hasAbility('sapsipper')) {
+					continue;
+				}
+				ally.cureStatus();
+			}
+		},
+		flags: {},
+	},
+
 	// PenQuin
 	poleonspyroquirk: {
 		shortDesc: "Burned Pokemon also become confused.",
@@ -1807,11 +1980,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Becomes a random typing at the beginning of each turn.",
 		name: "High Performance Computing",
 		flags: {},
-		onBeforeTurn(source) {
-			if (source.terastallized) return;
+		onResidual(source) {
 			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
-			source.setType(type);
-			this.add('-start', source, 'typechange', type, '[from] ability: High Performance Computing');
+			if (source.setType(type)) {
+				this.add('-start', source, 'typechange', type, '[from] ability: High Performance Computing');
+			}
 		},
 	},
 
@@ -1882,7 +2055,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.effectState.superHit = true;
 				target.removeVolatile('ultramystik');
-				target.setAbility('Healer', undefined, true);
+				target.setAbility('Healer', null, true);
+				target.baseAbility = target.ability;
 			}
 		},
 		condition: {
@@ -2672,6 +2846,124 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		flags: {breakable: 1},
+	},
+
+	// yeet dab xd
+	treasurebag: {
+		shortDesc: "Cycles between Blast Seed, Oran Berry, Petrify Orb, Luminous Orb and Reviver Seed.",
+		name: "Treasure Bag",
+		onStart(target) {
+			this.add('-ability', target, 'Treasure Bag');
+			target.addVolatile('treasurebag');
+		},
+		onResidual(target, source, effect) {
+			if (!target.volatiles['treasurebag']) target.addVolatile('treasurebag');
+		},
+		condition: {
+			onStart(pokemon, source, sourceEffect) {
+				if (!pokemon.m.bag) {
+					pokemon.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
+				}
+			},
+			onEnd(target) {
+				delete target.volatiles['treasurebag'];
+			},
+			onResidual(pokemon, source, effect) {
+				if (!pokemon.m.bag) {
+					pokemon.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
+				}
+				if (!pokemon.m.cycledTreasureBag) {
+					const currentItem = pokemon.m.bag.shift();
+					const foe = pokemon.foes()[0];
+					switch (currentItem) {
+					case 'Blast Seed': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (foe) {
+							this.damage(100, foe, pokemon, this.effect);
+						} else {
+							this.add('-message', `But there was no target!`);
+						}
+						break;
+					}
+					case 'Oran Berry': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found an ${currentItem}!`);
+						this.heal(100, pokemon, pokemon, this.dex.items.get('Oran Berry'));
+						break;
+					}
+					case 'Petrify Orb': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (foe?.trySetStatus('par', pokemon, this.effect)) {
+							this.add('-message', `${pokemon.name} petrified ${foe.name}`);
+						} else if (!foe) {
+							this.add('-message', `But there was no target!`);
+						} else {
+							this.add('-message', `But it failed!`);
+						}
+						break;
+					}
+					case 'Luminous Orb': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (!pokemon.side.addSideCondition('auroraveil', pokemon, this.effect)) {
+							this.add('-message', `But it failed!`);
+						}
+						break;
+					}
+					// Handled separately
+					case 'Reviver Seed': {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a Reviver Seed!`);
+						break;
+					}
+					}
+					pokemon.m.bag = [...pokemon.m.bag, currentItem];
+				}
+				delete pokemon.m.cycledTreasureBag;
+			},
+			onDamage(damage, pokemon, source, effect) {
+				if (damage >= pokemon.hp && pokemon.m.bag?.[0] === 'Reviver Seed') {
+					pokemon.m.seedActive = true;
+					if (!pokemon.m.reviverSeedTriggered) {
+						// Can't set hp to 0 because it causes visual bugs
+						pokemon.hp = 1;
+						this.add('-damage', pokemon, pokemon.getHealth, '[silent]');
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a Reviver Seed!`);
+						pokemon.m.reviverSeedTriggered = true;
+						pokemon.hp = Math.floor(pokemon.maxhp / 2);
+						this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+						this.add('-message', `${pokemon.name} was revived!`);
+						return 0;
+					} else {
+						this.add('-activate', pokemon, 'ability: Treasure Bag');
+						this.add('-message', `${pokemon.name} was revived!`);
+						this.add('-message', `...thought it was the right one...`);
+						this.add('-message', `...looking closer, this is...`);
+						this.add('-message', `Not a Reviver Seed, but a Reviser Seed!`);
+						this.add(`c:|${getName('yeet dab xd')}|An "s"?`);
+						this.add('-message', `that wasn't a "v", but an "s"!`);
+						this.add('-message', `yeet dab xd burst into spontaneous laughter and fainted!`);
+						return damage;
+					}
+				}
+			},
+		},
+	},
+
+	// yuki
+	partyup: {
+		shortDesc: "On switch-in, this Pokemon's ability is replaced with a random teammate's ability.",
+		name: "Party Up",
+		onStart(target) {
+			this.add('-ability', target, 'Party Up');
+			const abilities = target.side.pokemon.map(x => x.getAbility()).filter(x => !x.flags['notrace']);
+			target.setAbility(this.sample(abilities), target);
+			this.add('-ability', target, target.getAbility().name);
+		},
+		flags: {notrace: 1},
 	},
 
 	// YveltalNL

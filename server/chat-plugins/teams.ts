@@ -225,6 +225,10 @@ export const TeamsHandler = new class {
 			return null;
 		}
 		rawTeam = Teams.pack(team);
+		if (!rawTeam.trim()) { // extra sanity check
+			connection.popup("Invalid team provided.");
+			return null;
+		}
 		// the && existing doesn't really matter because we've verified it above, this is just for TS
 		if (isUpdate && existing) {
 			const differenceExists = (

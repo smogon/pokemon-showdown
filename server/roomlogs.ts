@@ -29,7 +29,7 @@ interface RoomlogRow {
 }
 
 export const roomlogDB = (() => {
-	if (!global.Config || Config.replaysdb || Config.disableroomlogdb) return null;
+	if (!global.Config || !Config.replaysdb || Config.disableroomlogdb) return null;
 	return new PGDatabase(Config.replaysdb);
 })();
 export const roomlogTable = roomlogDB?.getTable<RoomlogRow>('roomlogs');
@@ -295,8 +295,12 @@ export class Roomlog {
 		void Rooms.Modlog.write(this.roomid, entry, overrideID);
 	}
 	async rename(newID: RoomID): Promise<true> {
+		await Rooms.Modlog.rename(this.roomid, newID);
+		this.roomid = newID;
 		if (roomlogTable) {
-			await roomlogTable.updateAll({roomid: this.roomid})`WHERE roomid = ${this.roomid}`;
+			if (!(!Config.logchat || this.roomid.startsWith('battle-'))) {
+				await roomlogTable.updateAll({roomid: this.roomid})`WHERE roomid = ${this.roomid}`;
+			}
 			return true;
 		} else {
 			const roomlogPath = `chat`;
@@ -309,8 +313,6 @@ export class Roomlog {
 			if (roomlogExists && !newRoomlogExists) {
 				await Monitor.logPath(roomlogPath + `/${this.roomid}`).rename(Monitor.logPath(roomlogPath + `/${newID}`).path);
 			}
-			await Rooms.Modlog.rename(this.roomid, newID);
-			this.roomid = newID;
 			Roomlogs.roomlogs.set(newID, this);
 			if (roomlogStreamExisted) {
 				this.roomlogStream = undefined;

@@ -1,6 +1,5 @@
 // Note: These are the rules that formats use
 
-import {Utils} from "../lib";
 import type {Learnset} from "../sim/dex-species";
 import {Pokemon} from "../sim/pokemon";
 
@@ -812,7 +811,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onValidateTeam(team) {
 			if (this.format.id === 'gen8multibility') return;
-			const abilityTable = new Map<string, number>();
+			const abilityTable = new this.dex.Multiset<string>();
 			const base: {[k: string]: string} = {
 				airlock: 'cloudnine',
 				armortail: 'queenlymajesty',
@@ -838,13 +837,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 				let ability = this.toID(set.ability);
 				if (!ability) continue;
 				if (ability in base) ability = base[ability] as ID;
-				if ((abilityTable.get(ability) || 0) >= num) {
+				if (abilityTable.get(ability) >= num) {
 					return [
 						`You are limited to ${num} of each ability by Ability Clause.`,
 						`(You have more than ${num} ${this.dex.abilities.get(ability).name} variant${num === 1 ? '' : 's'})`,
 					];
 				}
-				abilityTable.set(ability, (abilityTable.get(ability) || 0) + 1);
+				abilityTable.add(ability);
 			}
 		},
 	},
@@ -1590,7 +1589,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return null;
 		},
 		onValidateTeam(team) {
-			const sketches = new Utils.Multiset<string>();
+			const sketches = new this.dex.Multiset<string>();
 			for (const set of team) {
 				if ((set as any).sketchMove) {
 					sketches.add((set as any).sketchMove);
@@ -2697,7 +2696,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 		onValidateTeam(team, format) {
-			const donors = new Utils.Multiset<string>();
+			const donors = new this.dex.Multiset<string>();
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				const fusion = this.dex.species.get(set.name);
@@ -2839,7 +2838,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const oldAbilityName = pokemon.getAbility().name;
 			const oldPokemon = pokemon.species;
 			const impersonation = this.dex.species.get(pokemon.set.name);
-			if (pokemon.species.id === impersonation.id || pokemon.hp > pokemon.maxhp / 2) return;
+			if (pokemon.species.baseSpecies === impersonation.baseSpecies || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange(impersonation.name, this.effect, true);
 			pokemon.baseMaxhp = Math.floor(Math.floor(
@@ -2854,6 +2853,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			)) || "0";
 			const newAbility: string = (impersonation.abilities as any)[oldAbilityKey] || impersonation.abilities["0"];
 			pokemon.setAbility(newAbility, null, true);
+			// Ability persists through switching
+			pokemon.baseAbility = pokemon.ability;
 		},
 	},
 };
