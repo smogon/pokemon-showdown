@@ -623,7 +623,7 @@ export class DexSpecies {
 		return out;
 	}
 
-	learnsetParent(species: Species, checkingMoves?: boolean) {
+	learnsetParent(species: Species, checkingMoves = false) {
 		// Own Tempo Rockruff and Battle Bond Greninja are special event formes
 		// that are visually indistinguishable from their base forme but have
 		// different learnsets. To prevent a leak, we make them show up as their
