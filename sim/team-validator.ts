@@ -2379,6 +2379,7 @@ export class TeamValidator {
 		let limit1 = true;
 		let sketch = false;
 		let blockedHM = false;
+		let eggMovesOnly = false;
 
 		let babyOnly = '';
 
@@ -2418,6 +2419,14 @@ export class TeamValidator {
 			if (checkingPrevo && !moveSources.size()) {
 				if (!setSources.babyOnly || !species.prevo) {
 					babyOnly = species.id;
+				}
+			}
+
+			if (checkingPrevo && !originalSpecies.prevo) {
+				if (dex.gen >= 9) {
+					eggMovesOnly = true;
+				} else {
+					break;
 				}
 			}
 
@@ -2467,6 +2476,8 @@ export class TeamValidator {
 					}
 					continue;
 				}
+
+				if (eggMovesOnly && learned.charAt(1) !== 'E') continue;
 
 				// redundant
 				if (learnedGen <= moveSources.sourcesBefore) continue;

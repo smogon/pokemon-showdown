@@ -592,7 +592,7 @@ export class DexSpecies {
 			const learnset = this.getLearnsetData(species.id);
 			if (learnset.learnset) {
 				out.push(learnset as any);
-				species = this.learnsetParent(species);
+				species = this.learnsetParent(species, true);
 				continue;
 			}
 
@@ -623,7 +623,7 @@ export class DexSpecies {
 		return out;
 	}
 
-	learnsetParent(species: Species) {
+	learnsetParent(species: Species, checkingMoves?: boolean) {
 		// Own Tempo Rockruff and Battle Bond Greninja are special event formes
 		// that are visually indistinguishable from their base forme but have
 		// different learnsets. To prevent a leak, we make them show up as their
@@ -633,8 +633,6 @@ export class DexSpecies {
 			return this.get(species.baseSpecies);
 		} else if (species.name === 'Lycanroc-Dusk') {
 			return this.get('Rockruff-Dusk');
-		} else if (species.name === 'Greninja-Bond') {
-			return null;
 		} else if (species.prevo) {
 			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
 			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
@@ -644,6 +642,15 @@ export class DexSpecies {
 		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
 			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
 			return this.get(species.changesFrom);
+		} else if (
+			checkingMoves && !species.prevo && species.baseSpecies && this.get(species.baseSpecies).prevo
+		) {
+			// For Pokemon like Cap Pikachu, who should be able to have egg moves in Gen 9
+			let baseEvo = this.get(species.baseSpecies);
+			while (baseEvo.prevo) {
+				baseEvo = this.get(baseEvo.prevo);
+			}
+			return baseEvo;
 		}
 		return null;
 	}
