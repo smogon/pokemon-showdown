@@ -55,8 +55,7 @@ export class RandomBabyTeams extends RandomTeams {
 
 		// Overwrite enforcementcheckers where needed here
 		this.moveEnforcementCheckers['Bug'] = (movePool, moves, abilities, types, counter) => (
-			movePool.includes('megahorn') || movePool.includes('xscissor') ||
-			(!counter.get('Bug') && (types.includes('Electric') || types.includes('Water')))
+			!counter.get('Bug')
 		);
 	}
 
@@ -139,7 +138,7 @@ export class RandomBabyTeams extends RandomTeams {
 			[SETUP, PIVOT_MOVES],
 			[SETUP, HAZARDS],
 			[PHYSICAL_SETUP, PHYSICAL_SETUP],
-			[statusMoves, ['healingwish', 'trick', 'destinybond']],
+			[statusMoves, ['destinybond', 'healingwish', 'switcheroo', 'trick']],
 			['curse', 'rapidspin'],
 
 			// These moves are redundant with each other
@@ -148,7 +147,7 @@ export class RandomBabyTeams extends RandomTeams {
 			    ['alluringvoice', 'dazlinggleam', 'drainingkiss', 'moonblast'],
 			],
 			[['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'], ['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb']],
-			[['thunderwave', 'toxic', 'willowisp'], ['thunderwave', 'toxic', 'willowisp']],
+			[['hypnosis', 'thunderwave', 'toxic', 'willowisp', 'yawn'], ['hypnosis', 'thunderwave', 'toxic', 'willowisp', 'yawn']],
 			['roar', 'yawn'],
 			['dragonclaw', 'outrage'],
 			['dracometeor', 'dragonpulse'],
@@ -448,6 +447,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (species.id === 'riolu') return 'Inner Focus';
 		if (species.id === 'shroomish') return 'Effect Spore';
 		if (species.id === 'silicobra') return 'Shed Skin';
+		if (species.id === 'tepig') return 'Blaze';
 		if (species.id === 'timburr') return 'Guts';
 		if (species.id === 'tyrogue') return 'Guts';
 
@@ -537,7 +537,7 @@ export class RandomBabyTeams extends RandomTeams {
 
 		if (moves.has('focusenergy')) return 'Scope Lens';
 		if (moves.has('thief')) return '';
-		if (moves.has('trick')) return 'Choice Scarf';
+		if (moves.has('trick') || moves.has('switcheroo')) return 'Choice Scarf';
 
 		if (moves.has('acrobatics')) return ability === 'Unburden' ? 'Oran Berry' : '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
@@ -547,10 +547,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (ability === 'Quick Feet') return 'Toxic Orb';
 
 		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
-		if (
-			['Harvest', 'Ripen', 'Unburden'].includes(ability) ||
-			moves.has('belch') || moves.has('bellydrum')
-		) return 'Oran Berry';
+		if (['Harvest', 'Ripen', 'Unburden'].includes(ability) || moves.has('bellydrum')) return 'Oran Berry';
 	}
 
 	getItem(
