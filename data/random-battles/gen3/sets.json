@@ -517,7 +517,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["batonpass", "firepunch", "protect", "psychic", "wish"]
+                "movepool": ["firepunch", "protect", "psychic", "toxic", "wish"]
             },
             {
                 "role": "Staller",
@@ -2049,7 +2049,7 @@
             },
             {
                 "role": "Generalist",
-                "movepool": ["batonpass", "bodyslam", "healbell", "protect", "wish"]
+                "movepool": ["bodyslam", "healbell", "protect", "wish"]
             },
             {
                 "role": "Setup Sweeper",
