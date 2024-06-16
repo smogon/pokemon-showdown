@@ -1338,7 +1338,7 @@
                 "teraTypes": ["Dragon", "Grass"]
             },
             {
-                "role": "Doubles Support",
+                "role": "Bulky Protect",
                 "movepool": ["Calm Mind", "Ice Beam", "Protect", "Scald"],
                 "teraTypes": ["Dragon", "Grass"]
             }
