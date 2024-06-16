@@ -2379,7 +2379,6 @@ export class TeamValidator {
 		let limit1 = true;
 		let sketch = false;
 		let blockedHM = false;
-		let eggMovesOnly = false;
 
 		let babyOnly = '';
 
@@ -2422,13 +2421,7 @@ export class TeamValidator {
 				}
 			}
 
-			if (checkingPrevo && !originalSpecies.prevo) {
-				if (dex.gen >= 9) {
-					eggMovesOnly = true;
-				} else {
-					break;
-				}
-			}
+			if (checkingPrevo && !originalSpecies.prevo && dex.gen < 9) break;
 
 			let sources = learnset[moveid] || [];
 			if (moveid === 'sketch') {
@@ -2477,7 +2470,7 @@ export class TeamValidator {
 					continue;
 				}
 
-				if (eggMovesOnly && learned.charAt(1) !== 'E') continue;
+				if (checkingPrevo && !originalSpecies.prevo && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
 
 				// redundant
 				if (learnedGen <= moveSources.sourcesBefore) continue;
