@@ -4316,11 +4316,6 @@
                 "role": "AV Pivot",
                 "movepool": ["Draco Meteor", "Dragon Tail", "Earthquake", "Fire Blast", "Heavy Slam", "Hydro Pump", "Knock Off", "Thunderbolt"],
                 "teraTypes": ["Dragon", "Flying", "Ground", "Water"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Curse", "Iron Head", "Rest", "Sleep Talk"],
-                "teraTypes": ["Flying"]
             }
         ]
     },
