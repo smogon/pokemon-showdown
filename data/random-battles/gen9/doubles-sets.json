@@ -1096,6 +1096,11 @@
                 "role": "Choice Item user",
                 "movepool": ["Body Press", "Explosion", "Iron Head", "Lunge"],
                 "teraTypes": ["Fighting", "Fire"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Body Press", "Iron Defense", "Iron Head", "Rest", "Thunder Wave"],
+                "teraTypes": ["Fighting", "Fire"]
             }
         ]
     },
@@ -5444,7 +5449,7 @@
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Body Press", "Helping Hand", "Iron Head", "Protect", "Shed Tail", "Stealth Rock"],
+                "movepool": ["Body Press", "Heavy Slam", "Helping Hand", "Protect", "Shed Tail"],
                 "teraTypes": ["Electric", "Poison"]
             }
         ]

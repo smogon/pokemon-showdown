@@ -1723,12 +1723,8 @@
                 "movepool": ["calmmind", "rest", "sleeptalk", "surf"]
             },
             {
-                "role": "Staller",
-                "movepool": ["protect", "roar", "substitute", "surf", "toxic"]
-            },
-            {
                 "role": "Bulky Attacker",
-                "movepool": ["calmmind", "icebeam", "rest", "substitute", "surf", "toxic"]
+                "movepool": ["calmmind", "icebeam", "rest", "substitute", "surf"]
             }
         ]
     },
