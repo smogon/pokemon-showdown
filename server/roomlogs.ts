@@ -296,8 +296,8 @@ export class Roomlog {
 	}
 	async rename(newID: RoomID): Promise<true> {
 		await Rooms.Modlog.rename(this.roomid, newID);
-		this.roomid = newID;
 		if (roomlogTable) {
+			this.roomid = newID;
 			if (!(!Config.logchat || this.roomid.startsWith('battle-'))) {
 				await roomlogTable.updateAll({roomid: this.roomid})`WHERE roomid = ${this.roomid}`;
 			}
@@ -313,6 +313,7 @@ export class Roomlog {
 			if (roomlogExists && !newRoomlogExists) {
 				await Monitor.logPath(roomlogPath + `/${this.roomid}`).rename(Monitor.logPath(roomlogPath + `/${newID}`).path);
 			}
+			this.roomid = newID;
 			Roomlogs.roomlogs.set(newID, this);
 			if (roomlogStreamExisted) {
 				this.roomlogStream = undefined;
