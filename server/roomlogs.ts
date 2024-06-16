@@ -126,11 +126,7 @@ export class Roomlog {
 	}
 	async setupRoomlogStream(sync = false) {
 		if (this.roomlogStream === null || roomlogTable) return;
-		if (!Config.logchat) {
-			this.roomlogStream = null;
-			return;
-		}
-		if (this.roomid.startsWith('battle-')) {
+		if (!Config.logchat || this.roomid.startsWith('battle-')) {
 			this.roomlogStream = null;
 			return;
 		}
@@ -296,6 +292,7 @@ export class Roomlog {
 	}
 	async rename(newID: RoomID): Promise<true> {
 		await Rooms.Modlog.rename(this.roomid, newID);
+		const roomlogStreamExisted = this.roomlogStream !== null;
 		await this.destroy();
 		if (roomlogTable) {
 			if (!(!Config.logchat || this.roomid.startsWith('battle-'))) {
@@ -303,7 +300,6 @@ export class Roomlog {
 			}
 		} else {
 			const roomlogPath = `chat`;
-			const roomlogStreamExisted = this.roomlogStream !== null;
 			const [roomlogExists, newRoomlogExists] = await Promise.all([
 				Monitor.logPath(roomlogPath + `/${this.roomid}`).exists(),
 				Monitor.logPath(roomlogPath + `/${newID}`).exists(),
