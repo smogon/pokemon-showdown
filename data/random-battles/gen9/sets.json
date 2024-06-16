@@ -574,8 +574,8 @@
             },
             {
                 "role": "AV Pivot",
-                "movepool": ["Draco Meteor", "Flamethrower", "Giga Drain", "Knock Off"],
-                "teraTypes": ["Fire", "Steel"]
+                "movepool": ["Draco Meteor", "Dragon Tail", "Flamethrower", "Giga Drain", "Knock Off"],
+                "teraTypes": ["Fire"]
             }
         ]
     },
