@@ -105,7 +105,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onHit(pokemon) {
-			// According to bug reports, this also burns the opponent.
 			pokemon.trySetStatus('brn');
 			this.add('-anim', pokemon, 'Shift Gear', pokemon);
 			this.boost({spe: 2, atk: 1});
