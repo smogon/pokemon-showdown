@@ -566,6 +566,10 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["doubleedge", "earthquake", "rockslide", "swordsdance"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["bonemerang", "doubleedge", "rockslide", "swordsdance"]
             }
         ]
     },
