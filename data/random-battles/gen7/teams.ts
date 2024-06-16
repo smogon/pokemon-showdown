@@ -516,8 +516,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Blizzard, Seismic Toss, Spore, and Sticky Web
-		for (const moveid of ['blizzard', 'seismictoss', 'spore', 'stickyweb']) {
+		// Enforce Aurora Veil, Blizzard, Seismic Toss, Spore, and Sticky Web
+		for (const moveid of ['auroraveil', 'blizzard', 'seismictoss', 'spore', 'stickyweb']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);

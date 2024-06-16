@@ -293,7 +293,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["auroraveil", "blizzard", "freezedry", "hiddenpowerground", "moonblast", "nastyplot"]
+                "movepool": ["auroraveil", "blizzard", "encore", "freezedry", "hiddenpowerground", "moonblast", "nastyplot"]
             }
         ]
     },
