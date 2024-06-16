@@ -62,6 +62,7 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	 * `this.getUser().games`.
 	 */
 	readonly id: ID;
+	completed: boolean;
 	constructor(user: User | string | null, game: GameClass, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;
@@ -69,6 +70,7 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 		this.name = (typeof user === 'string' ? user : user.name);
 		if (typeof user === 'string') user = null;
 		this.id = user ? user.id : '';
+		this.completed = false;
 		if (user && !this.game.isSubGame) {
 			user.games.add(this.game.roomid);
 			user.updateSearch();
