@@ -3,17 +3,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 	mattermirror: {
 		name: "Matter Mirror",
 		spritenum: 69,
-		desc: "This Pokemon's physical attacks become special. Allows use of Fear the Finger.",
+		desc: "This Pokemon's Physical attacks become Special.",
 		gen: 9,
 		onModifyMove(move, pokemon) {
 			if (move.category === 'Physical') {
 				move.category = 'Special';
 			}
 		},
-		onTakeItem: false,
-		zMove: "Fear the Finger",
-		zMoveFrom: "Mega Metronome",
-		itemUser: ["Reuniclus"],
 	},
 	// Pablo
 	sketchbook: {
