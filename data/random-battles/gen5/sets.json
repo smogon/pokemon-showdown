@@ -1603,8 +1603,12 @@
         "level": 83,
         "sets": [
             {
+                "role": "Fast Attacker",
+                "movepool": ["bravebird", "facade", "protect", "uturn"]
+            },
+            {
                 "role": "Wallbreaker",
-                "movepool": ["bravebird", "facade", "protect", "quickattack", "uturn"]
+                "movepool": ["bravebird", "facade", "quickattack", "uturn"]
             }
         ]
     },
@@ -3169,7 +3173,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psyshock", "substitute"]
+                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psyshock", "signalbeam", "substitute"]
             },
             {
                 "role": "Bulky Support",
@@ -3575,8 +3579,9 @@
         "level": 86,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["earthquake", "explosion", "stealthrock", "stoneedge", "superpower"]
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "explosion", "stealthrock", "stoneedge", "superpower", "toxic"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },

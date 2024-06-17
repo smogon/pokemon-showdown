@@ -119,8 +119,7 @@
     },
     "sandslash": {
         "level": 76,
-        "moves": ["bodyslam", "earthquake", "rockslide"],
-        "exclusiveMoves": ["slash", "swordsdance", "swordsdance", "swordsdance"]
+        "moves": ["bodyslam", "earthquake", "rockslide", "swordsdance"]
     },
     "nidoranf": {
         "level": 90,

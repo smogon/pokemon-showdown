@@ -620,7 +620,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Torrent':
 			return (!counter.get('Water') || !!species.isMega);
 		case 'Unaware':
-			return (role !== 'Bulky Support' && role !== 'Staller');
+			return (!['Bulky Setup', 'Bulky Support', 'Staller'].includes(role));
 		case 'Unburden':
 			return (!!species.isMega || !counter.get('setup') && !moves.has('acrobatics'));
 		case 'Water Absorb':
@@ -776,9 +776,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return species.name === 'Conkeldurr' ? 'Flame Orb' : 'Toxic Orb';
 		}
-		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
-			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
-		}
+		if (ability === 'Magic Guard') return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (ability === 'Unburden') return (species.id === 'hitmonlee') ? 'White Herb' : 'Sitrus Berry';

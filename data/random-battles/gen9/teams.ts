@@ -76,7 +76,7 @@ const PHYSICAL_SETUP = [
 ];
 // Moves which boost Special Attack:
 const SPECIAL_SETUP = [
-	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow', 'torchsong',
+	'calmmind', 'chargebeam', 'geomancy', 'nastyplot', 'quiverdance', 'tailglow', 'takeheart', 'torchsong',
 ];
 // Moves that boost Attack AND Special Attack:
 const MIXED_SETUP = [
@@ -88,16 +88,16 @@ const SPEED_SETUP = [
 ];
 // Conglomerate for ease of access
 const SETUP = [
-	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse',
-	'dragondance', 'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch',
-	'quiverdance', 'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'tidyup', 'trailblaze', 'workup', 'victorydance',
+	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
+	'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance',
+	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
 ];
 const SPEED_CONTROL = [
 	'electroweb', 'glare', 'icywind', 'lowsweep', 'quash', 'stringshot', 'tailwind', 'thunderwave', 'trickroom',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
-	'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'clearsmog', 'covet',
+	'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'circlethrow', 'clearsmog', 'covet',
 	'dragontail', 'doomdesire', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'futuresight',
 	'grassyglide', 'iceshard', 'icywind', 'incinerate', 'infestation', 'machpunch', 'meteorbeam', 'mortalspin', 'nuzzle', 'pluck', 'pursuit',
 	'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'uturn',
@@ -1099,10 +1099,9 @@ export class RandomTeams {
 		case 'Seed Sower':
 			return role === 'Bulky Support';
 		case 'Sheer Force':
-			const braviaryCase = (species.id === 'braviaryhisui' && (role === 'Wallbreaker' || role === 'Bulky Protect'));
 			const abilitiesCase = (abilities.has('Guts') || abilities.has('Sharpness'));
 			const movesCase = (moves.has('bellydrum') || moves.has('flamecharge'));
-			return (!counter.get('sheerforce') || braviaryCase || abilitiesCase || movesCase);
+			return (!counter.get('sheerforce') || abilitiesCase || movesCase);
 		case 'Slush Rush':
 			return !teamDetails.snow;
 		case 'Solar Power':
@@ -1125,9 +1124,8 @@ export class RandomTeams {
 		case 'Technician':
 			return (!counter.get('technician') || abilities.has('Punk Rock') || abilities.has('Fur Coat'));
 		case 'Tinted Lens':
-			const hbraviaryCase = (species.id === 'braviaryhisui' && (role === 'Setup Sweeper' || role === 'Doubles Wallbreaker'));
 			const yanmegaCase = (species.id === 'yanmega' && moves.has('protect'));
-			return (yanmegaCase || hbraviaryCase || species.id === 'illumise');
+			return (yanmegaCase || species.id === 'illumise');
 		case 'Unburden':
 			return (abilities.has('Prankster') || !counter.get('setup') || species.id === 'sceptile');
 		case 'Vital Spirit':
@@ -1167,6 +1165,7 @@ export class RandomTeams {
 		if (species.id === 'florges') return 'Flower Veil';
 		if (species.id === 'bombirdier' && !counter.get('Rock')) return 'Big Pecks';
 		if (species.id === 'scovillain') return 'Chlorophyll';
+		if (species.id === 'regirock' || (species.id === 'carbink' && moves.has('irondefense'))) return 'Clear Body';
 		if (species.id === 'empoleon') return 'Competitive';
 		if (species.id === 'swampert' && !counter.get('Water') && !moves.has('flipturn')) return 'Damp';
 		if (species.id === 'thundurus' && (role === 'Offensive Protect' || moves.has('terablast'))) return 'Defiant';
@@ -1181,6 +1180,9 @@ export class RandomTeams {
 		if (species.id === 'smeargle' && !counter.get('technician')) return 'Own Tempo';
 		if (species.id === 'zebstrika') return moves.has('thunderbolt') ? 'Lightning Rod' : 'Sap Sipper';
 		if (species.id === 'sandaconda' || (species.id === 'scrafty' && moves.has('rest'))) return 'Shed Skin';
+		if (species.id === 'braviaryhisui') {
+			return (role === 'Setup Sweeper' || role === 'Doubles Wallbreaker') ? 'Sheer Force' : 'Tinted Lens';
+		}
 		if (species.id === 'cetitan' && (role === 'Wallbreaker' || isDoubles)) return 'Sheer Force';
 		if (species.id === 'charizard' && moves.has('sunnyday')) return 'Solar Power';
 		if (species.id === 'dipplin') return 'Sticky Hold';
@@ -1208,7 +1210,7 @@ export class RandomTeams {
 		if (isDoubles) {
 			if (species.id === 'gumshoos' || species.id === 'porygonz') return 'Adaptability';
 			if (species.id === 'farigiraf') return 'Armor Tail';
-			if (['carbink', 'dragapult', 'regirock', 'tentacruel'].includes(species.id)) return 'Clear Body';
+			if (['dragapult', 'tentacruel'].includes(species.id)) return 'Clear Body';
 			if (species.id === 'altaria') return 'Cloud Nine';
 			if (species.id === 'kilowattrel' || species.id === 'meowsticf') return 'Competitive';
 			if (species.id === 'armarouge' && !moves.has('meteorbeam')) return 'Flash Fire';

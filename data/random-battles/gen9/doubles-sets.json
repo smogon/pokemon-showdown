@@ -1096,6 +1096,11 @@
                 "role": "Choice Item user",
                 "movepool": ["Body Press", "Explosion", "Iron Head", "Lunge"],
                 "teraTypes": ["Fighting", "Fire"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Body Press", "Iron Defense", "Iron Head", "Rest", "Thunder Wave"],
+                "teraTypes": ["Fighting", "Fire"]
             }
         ]
     },
@@ -1333,7 +1338,7 @@
                 "teraTypes": ["Dragon", "Grass"]
             },
             {
-                "role": "Doubles Support",
+                "role": "Bulky Protect",
                 "movepool": ["Calm Mind", "Ice Beam", "Protect", "Scald"],
                 "teraTypes": ["Dragon", "Grass"]
             }
@@ -2353,9 +2358,9 @@
                 "teraTypes": ["Ghost", "Ice"]
             },
             {
-                "role": "Tera Blast user",
-                "movepool": ["Blizzard", "Calm Mind", "Freeze-Dry", "Tera Blast"],
-                "teraTypes": ["Fire", "Ground"]
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Blizzard", "Calm Mind", "Freeze-Dry", "Mud Shot"],
+                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -5444,7 +5449,7 @@
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Body Press", "Helping Hand", "Iron Head", "Protect", "Shed Tail", "Stealth Rock"],
+                "movepool": ["Body Press", "Heavy Slam", "Helping Hand", "Protect", "Shed Tail"],
                 "teraTypes": ["Electric", "Poison"]
             }
         ]

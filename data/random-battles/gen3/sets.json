@@ -517,7 +517,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["batonpass", "firepunch", "protect", "psychic", "wish"]
+                "movepool": ["firepunch", "protect", "psychic", "toxic", "wish"]
             },
             {
                 "role": "Staller",
@@ -566,6 +566,10 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["doubleedge", "earthquake", "rockslide", "swordsdance"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["bonemerang", "doubleedge", "rockslide", "swordsdance"]
             }
         ]
     },
@@ -1723,12 +1727,8 @@
                 "movepool": ["calmmind", "rest", "sleeptalk", "surf"]
             },
             {
-                "role": "Staller",
-                "movepool": ["protect", "roar", "substitute", "surf", "toxic"]
-            },
-            {
                 "role": "Bulky Attacker",
-                "movepool": ["calmmind", "icebeam", "rest", "substitute", "surf", "toxic"]
+                "movepool": ["calmmind", "icebeam", "rest", "substitute", "surf"]
             }
         ]
     },
@@ -2049,7 +2049,7 @@
             },
             {
                 "role": "Generalist",
-                "movepool": ["batonpass", "bodyslam", "healbell", "protect", "wish"]
+                "movepool": ["bodyslam", "healbell", "protect", "wish"]
             },
             {
                 "role": "Setup Sweeper",

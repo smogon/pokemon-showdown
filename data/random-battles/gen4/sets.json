@@ -1553,8 +1553,12 @@
         "level": 82,
         "sets": [
             {
+                "role": "Fast Attacker",
+                "movepool": ["bravebird", "facade", "protect", "uturn"]
+            },
+            {
                 "role": "Wallbreaker",
-                "movepool": ["bravebird", "facade", "protect", "quickattack", "uturn"]
+                "movepool": ["bravebird", "facade", "quickattack", "uturn"]
             }
         ]
     },

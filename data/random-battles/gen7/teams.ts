@@ -516,8 +516,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Blizzard, Seismic Toss, Spore, and Sticky Web
-		for (const moveid of ['blizzard', 'seismictoss', 'spore', 'stickyweb']) {
+		// Enforce Aurora Veil, Blizzard, Seismic Toss, Spore, and Sticky Web
+		for (const moveid of ['auroraveil', 'blizzard', 'seismictoss', 'spore', 'stickyweb']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);
@@ -829,7 +829,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'Torrent':
 			return (!counter.get('Water') || !!species.isMega);
 		case 'Unaware':
-			return (role !== 'Bulky Support' && role !== 'Staller');
+			return (!['Bulky Setup', 'Bulky Support', 'Staller'].includes(role));
 		case 'Unburden':
 			return (!!species.isMega || !counter.get('setup') && !moves.has('acrobatics'));
 		case 'Water Absorb':
@@ -1023,9 +1023,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
-			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
-		}
+		if (ability === 'Magic Guard') return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
