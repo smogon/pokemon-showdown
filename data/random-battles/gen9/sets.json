@@ -161,11 +161,6 @@
                 "role": "Fast Bulky Setup",
                 "movepool": ["Aurora Veil", "Blizzard", "Moonblast", "Nasty Plot"],
                 "teraTypes": ["Steel", "Water"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Blizzard", "Moonblast", "Nasty Plot", "Tera Blast"],
-                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -4678,9 +4673,9 @@
                 "teraTypes": ["Flying", "Grass"]
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Dragon Pulse", "Fire Blast", "Nasty Plot", "Sludge Wave"],
-                "teraTypes": ["Dragon", "Fire", "Poison"]
+                "role": "Tera Blast user",
+                "movepool": ["Fire Blast", "Nasty Plot", "Sludge Wave", "Tera Blast"],
+                "teraTypes": ["Grass"]
             }
         ]
     },
