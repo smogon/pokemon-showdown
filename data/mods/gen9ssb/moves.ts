@@ -206,41 +206,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 1,
 		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
+		isZ: "yoichisbow",
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Splintered Stormshards', target);
 		},
-		isZ: "yoichisbow",
-		slotCondition: "Grand Delta",
-		condition: {
-			duration: 2,
-			move: 'granddelta',
-			moveData: {
-				id: 'granddelta',
-				name: 'Grand Delta',
-				accuracy: true,
-				basePower: 55,
-				category: "Physical",
-				priority: 0,
-				flags: {},
-				secondary: {
-					chance: 100,
-					boosts: {
-						def: -1,
+		onTry(source, target) {
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 2,
+				move: 'granddelta',
+				moveData: {
+					id: 'granddelta',
+					name: 'Grand Delta',
+					accuracy: true,
+					basePower: 55,
+					category: "Physical",
+					priority: 0,
+					flags: {},
+					secondary: {
+						chance: 100,
+						boosts: {
+							def: -1,
+						},
 					},
+					drain: [1, 2],
+					effectType: 'Move',
+					type: 'Flying',
 				},
-				drain: [1, 2],
-				effectType: 'Move',
-				type: 'Flying',
-			},
-			onEnd(pokemon, target) {
-				this.addMove('-anim', pokemon, 'Grand Delta', target);
-			},
+			});
+			this.add('-start', source, 'move: Grand Delta');
 		},
 		drain: [1, 2],
+		flags: {},
 		secondary: {
 			chance: 100,
 			boosts: {
