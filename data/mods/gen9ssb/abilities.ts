@@ -94,30 +94,45 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+
 	// Trey
+
 	concentration: {
 		desc: "Uses Dynamite Arrow upon switching in. x1.3 Speed; Moves always hit. Attacks have 1.5x power and +2 crit ratio unless this Pokemon was hit by an attacking move this turn or last turn.",
 		shortDesc: "Dynamite Arrow on switch-in; Moves always hit; 1.3x Speed; 1.5x Damage/+2 Crit unless hit by attack.",
+	
 		onStart(target) {
 			this.actions.useMove('Dynamite Arrow', target);
 			this.effectState.lostConcentration = false;
+			this.effectState.damaged = false;
 		},
+	
 		onModifySpe(spe) {
 			return this.chainModify(1.3);
 		},
+	
 		onDamagingHit(damage, target, source, move) {
 			this.effectState.lostConcentration = true;
+			this.effectState.undamagedTurns = 0;
+			this.effectState.damaged = true;
 			this.add('-message', `${move.name} made ${target.name} lose their focus!`);
 		},
+
 		onResidual(pokemon, target) {
-			const damagedByTarget = pokemon.attackedBy.some(
-				p => p.source === target && p.damage > 0 && p.thisTurn
-			);
-			if (!damagedByTarget) {
-				this.effectState.lostConcentration = false;
-				this.add('-message', `${pokemon.name} is building concentration!`);
+			if (this.effectState.damaged) {
+				this.effectState.damaged = false;
+				return null;
 			}
+
+			if (!this.effectState.damaged) {
+				this.effectState.undamagedTurns++;
+				if (this.effectState.undamagedTurns > 1 && this.effectState.lostConcentration) {
+					this.effectState.lostConcentration = false;
+					this.add('-message', `${pokemon.name} is building concentration!`);
+				}
+			}	
 		},
+		
 		onBasePowerPriority: 29,
 		onBasePower(basePower, pokemon, target, move) {
 			if (!this.effectState.lostConcentration) {
@@ -125,16 +140,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			return move.basePower;
 		},
+
 		onModifyCritRatio(critRatio, pokemon, target, move) {
 			if (!this.effectState.lostConcentration) {
 				return move.critRatio + 2;
 			}
 			return move.critRatio;
 		},
+
 		flags: {},
 		name: "Concentration",
 		gen: 9,
+	
 	},
+
 	/*
 	// Aelita
 	fortifiedmetal: {
