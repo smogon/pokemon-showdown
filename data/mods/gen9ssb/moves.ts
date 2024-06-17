@@ -265,6 +265,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Searing Shot', target);
 		},
 		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 2,
 				move: 'dynamitearrow',
