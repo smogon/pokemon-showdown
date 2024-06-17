@@ -236,8 +236,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				effectType: 'Move',
 				type: 'Flying',
 			},
-			onEnd(pokemon, target, move) {
-				this.addMove('-anim', pokemon, move.name, target);
+			onEnd(pokemon, target) {
+				this.addMove('-anim', pokemon, 'Grand Delta', target);
 			},
 		},
 		drain: [1, 2],
