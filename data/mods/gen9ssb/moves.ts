@@ -90,6 +90,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Megahorn', source);
 		},
 		basePowerCallback(pokemon, target, move) {
+			if (!this.effectState.metronomeCharge) return 0;
 			const bp = 50 * this.effectState.metronomeCharge;
 			this.debug('BP: ' + bp);
 			return bp;
