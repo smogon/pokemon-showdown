@@ -298,8 +298,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "User and foe switch to a random ally.",
-		shortDesc: "User and foe are forcibly switch out.",
+		shortDesc: "User and target switch to a random ally.",
 		name: "Gap",
 		gen: 9,
 		pp: 5,
@@ -312,8 +311,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Dark Void', target);
 		},
-		secondary: null,
-		target: "all",
+		onHit(target, source, move) {
+			if (source.forceSwitchFlag) return;
+			source.forceSwitchFlag = true;
+		},
+		target: "normal",
 		type: "Psychic",
 	},
 };
