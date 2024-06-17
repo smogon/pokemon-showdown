@@ -236,6 +236,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				effectType: 'Move',
 				type: 'Flying',
 			},
+			onEnd(pokemon, target, move) {
+				this.addMove('-anim', pokemon, move.name, target);
+			},
 		},
 		drain: [1, 2],
 		secondary: {
