@@ -916,6 +916,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Protect, hit=-2 Atk/SpA/or Spe, user swap.",
+		desc: "Nearly always moves first. This move can only be used by Mega Sableye. The user is protected from most attacks made by other Pokemon during this turn. If a targeted move is blocked during this effect, the attacker's stats are lowered depending on the move used. If the attacker used a physical attack, their Attack is lowered by 2 stages. If the attacker used a special attack, their Special Attack is lowere dby 2 stages. If the attacker used a status move, their Speed is lowered by 2 stages. If this move successfully decreases a Pokemon's stat stages, this Pokemon's Mega Evolution is removed, and it immediately switches out and is replaced by a selected party member. This move fails if the user moves last, and has an increasing chance to fail when used consecutively.",
 		name: "Shatter and Scatter",
 		pp: 10,
 		priority: 4,
@@ -5240,8 +5241,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Spiderz
 	shepherdofthemafiaroom: {
-		accuracy: 100,
-		basePower: 90,
+		accuracy: 90,
+		basePower: 65,
 		category: "Physical",
 		shortDesc: "Sets Sticky Web. 1.3x BP if faster.",
 		name: "Shepherd of the Mafia Room",
