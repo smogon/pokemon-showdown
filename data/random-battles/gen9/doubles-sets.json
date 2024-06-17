@@ -2358,9 +2358,9 @@
                 "teraTypes": ["Ghost", "Ice"]
             },
             {
-                "role": "Tera Blast user",
-                "movepool": ["Blizzard", "Calm Mind", "Freeze-Dry", "Tera Blast"],
-                "teraTypes": ["Fire", "Ground"]
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Blizzard", "Calm Mind", "Freeze-Dry", "Mud Shot"],
+                "teraTypes": ["Ground"]
             }
         ]
     },
