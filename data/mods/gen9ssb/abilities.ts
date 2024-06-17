@@ -119,18 +119,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 
 		onResidual(pokemon, target) {
+
+			if (!this.effectState.damaged) {
+				this.effectState.undamagedTurns++;
+				if (this.effectState.undamagedTurns > 0 && this.effectState.lostConcentration) {
+					this.effectState.lostConcentration = false;
+					this.add('-message', `${pokemon.name} is building concentration!`);
+				}
+			}
+
 			if (this.effectState.damaged) {
 				this.effectState.damaged = false;
 				return null;
 			}
 
-			if (!this.effectState.damaged) {
-				this.effectState.undamagedTurns++;
-				if (this.effectState.undamagedTurns > 1 && this.effectState.lostConcentration) {
-					this.effectState.lostConcentration = false;
-					this.add('-message', `${pokemon.name} is building concentration!`);
-				}
-			}	
 		},
 		
 		onBasePowerPriority: 29,
