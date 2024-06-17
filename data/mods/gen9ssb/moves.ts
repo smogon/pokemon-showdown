@@ -80,7 +80,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		name: "Fear the Finger",
 		desc: "Increased power for each time this Pokemon has used Metronome since switching in. Breaks through protection.",
-		shortDesc: "Increased power for each use of Metronome. Breaks protection.",
+		shortDesc: "+50BP/Metronome. Breaks protection.",
 		pp: 1,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
