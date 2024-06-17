@@ -18,6 +18,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Finger
 	absolutezen: {
 		name: "Absolute Zen",
+		desc: "Immune to Taunt/Confusion/Attract; Heals 1/6 max HP after being attacked.",
 		gen: 9,
 		// Damage Recovery
 		onDamagingHitOrder: 1,
@@ -49,6 +50,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt' || move?.volatileStatus === 'confusion') {
 				this.add('-immune', pokemon, '[from] ability: Absolute Zen');
 				return null;
+			}
+		},
+		onHit(target, source, move) {
+			if (move.id === 'metronome') {
+				if (!this.effectState.metronomeCharge) this.effectState.metronomeCharge = 0;
+				this.effectState.metronomeCharge++;
 			}
 		},
 	},
