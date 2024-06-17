@@ -126,11 +126,7 @@ export class Roomlog {
 	}
 	async setupRoomlogStream(sync = false) {
 		if (this.roomlogStream === null || roomlogTable) return;
-		if (!Config.logchat) {
-			this.roomlogStream = null;
-			return;
-		}
-		if (this.roomid.startsWith('battle-')) {
+		if (!Config.logchat || this.roomid.startsWith('battle-')) {
 			this.roomlogStream = null;
 			return;
 		}
@@ -296,16 +292,14 @@ export class Roomlog {
 	}
 	async rename(newID: RoomID): Promise<true> {
 		await Rooms.Modlog.rename(this.roomid, newID);
-		this.roomid = newID;
+		const roomlogStreamExisted = this.roomlogStream !== null;
+		await this.destroy();
 		if (roomlogTable) {
 			if (!(!Config.logchat || this.roomid.startsWith('battle-'))) {
-				await roomlogTable.updateAll({roomid: this.roomid})`WHERE roomid = ${this.roomid}`;
+				await roomlogTable.updateAll({roomid: newID})`WHERE roomid = ${this.roomid}`;
 			}
-			return true;
 		} else {
 			const roomlogPath = `chat`;
-			const roomlogStreamExisted = this.roomlogStream !== null;
-			await this.destroy();
 			const [roomlogExists, newRoomlogExists] = await Promise.all([
 				Monitor.logPath(roomlogPath + `/${this.roomid}`).exists(),
 				Monitor.logPath(roomlogPath + `/${newID}`).exists(),
@@ -313,14 +307,15 @@ export class Roomlog {
 			if (roomlogExists && !newRoomlogExists) {
 				await Monitor.logPath(roomlogPath + `/${this.roomid}`).rename(Monitor.logPath(roomlogPath + `/${newID}`).path);
 			}
-			Roomlogs.roomlogs.set(newID, this);
 			if (roomlogStreamExisted) {
 				this.roomlogStream = undefined;
 				this.roomlogFilename = "";
 				await this.setupRoomlogStream(true);
 			}
-			return true;
 		}
+		Roomlogs.roomlogs.set(newID, this);
+		this.roomid = newID;
+		return true;
 	}
 	static async rollLogs() {
 		if (Roomlogs.rollLogTimer === true) return;
