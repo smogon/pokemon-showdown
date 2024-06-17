@@ -1,4 +1,16 @@
-export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
+	cloyster: {
+		tier: "OU"
+	},
+	deoxysdefense: {
+		tier: "OU"
+	},
+	garchomp: {
+		tier: "Uber"
+	},
+	excadrill: {
+		tier: "Uber"
+	},
 	tornadustherian: {
 		isNonstandard: "Future",
 		tier: "Illegal",
@@ -6,6 +18,9 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	thundurustherian: {
 		isNonstandard: "Future",
 		tier: "Illegal",
+	},
+	landorus: {
+		tier: "OU"
 	},
 	landorustherian: {
 		isNonstandard: "Future",
