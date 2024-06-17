@@ -47,6 +47,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Mega Metronome",
+		desc: "Uses three randomly selected moves.",
 		pp: 8,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
@@ -76,32 +77,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	fearthefinger: {
 		accuracy: true,
 		basePower: 0,
-		category: "Status",
+		category: "Physical",
 		name: "Fear the Finger",
+		desc: "Increased power for each time this Pokemon has used Metronome since switching in. Breaks through protection.",
+		shortDesc: "Increased power for each use of Metronome. Breaks protection.",
 		pp: 1,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
-		onHit(target, source, effect) {
-			const moves = this.dex.moves.all().filter(move => (
-				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
-				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
-				move.flags['metronome']
-			));
-			let randomMove = '';
-			if (moves.length) {
-				moves.sort((a, b) => a.num - b.num);
-				randomMove = this.sample(moves).id;
-			}
-			if (!randomMove) return false;
-			source.side.lastSelectedMove = this.toID(randomMove);
-			this.actions.useMove(randomMove, target);
+		breaksProtect: true,
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Springtide Storm', source);
+			this.add('-anim', source, 'Megahorn', source);
+		},
+		basePowerCallback(pokemon, target, move) {
+			const bp = 50 * this.effectState.metronomeCharge;
+			this.debug('BP: ' + bp);
+			return bp;
 		},
 		isZ: "mattermirror",
 		secondary: null,
-		multihit: 10,
-		target: "self",
-		type: "Normal",
-		contestType: "Cute",
+		target: "normal",
+		type: "Dark",
+		contestType: "Cool",
 	},
 	// Pablo
 	plagiarize: {
