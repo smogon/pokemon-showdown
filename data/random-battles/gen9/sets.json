@@ -153,13 +153,18 @@
         "level": 79,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Support",
                 "movepool": ["Aurora Veil", "Blizzard", "Encore", "Moonblast"],
                 "teraTypes": ["Steel", "Water"]
             },
             {
                 "role": "Fast Bulky Setup",
                 "movepool": ["Aurora Veil", "Blizzard", "Moonblast", "Nasty Plot"],
+                "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Aurora Veil", "Blizzard", "Freeze-Dry", "Moonblast"],
                 "teraTypes": ["Steel", "Water"]
             }
         ]
