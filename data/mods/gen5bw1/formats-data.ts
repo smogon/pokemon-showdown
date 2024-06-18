@@ -23,6 +23,9 @@ export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
 	donphan: {
 		tier: "OU",
 	},
+	froslass: {
+		tier: "UU",
+	},
 	metagross: {
 		tier: "OU",
 	},
@@ -52,6 +55,9 @@ export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
 	},
 	scrafty: {
 		tier: "OU",
+	},
+	gothitelle: {
+		tier: "PU",
 	},
 	chandelure: {
 		tier: "UU",
