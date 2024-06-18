@@ -1679,7 +1679,7 @@ export const commands: Chat.ChatCommands = {
 			this.refreshPage('abusemonitor-settings');
 		},
 		edithistory(target, room, user) {
-			this.checkCan('globalban');
+			this.checkCan('lock');
 			target = toID(target);
 			if (!target) {
 				return this.parse(`/help abusemonitor`);
@@ -1688,7 +1688,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		ignoremodlog: {
 			add(target, room, user) {
-				this.checkCan('globalban');
+				this.checkCan('lock');
 				let targetUser: string;
 				[targetUser, target] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
@@ -1721,7 +1721,7 @@ export const commands: Chat.ChatCommands = {
 				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
 			},
 			remove(target, room, user) {
-				this.checkCan('globalban');
+				this.checkCan('lock');
 				let [targetUser, rawNum] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
 				const num = Number(rawNum);
@@ -2312,7 +2312,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async edithistory(query, user) {
-			this.checkCan('globalban');
+			this.checkCan('lock');
 			const targetUser = toID(query[0]);
 			if (!targetUser) {
 				return this.errorReply(`Specify a user.`);
