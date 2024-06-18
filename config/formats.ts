@@ -4375,6 +4375,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 3] ADV 200",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/adv-200-general-discussion-thread.3594876/">ADV 200 General Discussion Thread</a>`,
+			`&bullet; <a href="https://www.smogon.com/rs/articles/200_metagame">The 200 Metagame</a>`,
+		],
+		mod: 'gen3adv200',
+		searchShow: false,
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'Swagger']
+	},
+	{
 		name: "[Gen 3] UU",
 		mod: 'gen3',
 		searchShow: false,
