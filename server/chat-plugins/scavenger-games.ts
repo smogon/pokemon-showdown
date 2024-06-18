@@ -356,7 +356,8 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onComplete(player, time, blitz) {
 			const now = Date.now();
-			const takenTime = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
+			const takenTimeInitial = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
+			const takenTime = takenTimeInitial.length === 5 ? "00:" + takenTimeInitial : takenTimeInitial;
 			const result = {name: player.name, id: player.id, time: takenTime, blitz};
 			this.completed.push(result);
 			const place = Utils.formatOrder(this.completed.length);
