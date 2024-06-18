@@ -745,13 +745,8 @@ const TWISTS: TwistCollection = {
 
 			const mines: { mine: string; users: string[] }[][] = [];
 
-			for (const mineSet of this.mines as string[][]) {
-				mines.push(
-					mineSet.map((mine) => ({
-						mine: mine.substr(1),
-						users: [] as string[],
-					}))
-				);
+			for (const mineSet of this.mines) {
+				mines.push(mineSet.map(mine => ({mine: mine.substr(1), users: [] as string[]})));
 			}
 
 			for (const player of Object.values(this.playerTable)) {
@@ -990,7 +985,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				this.setTimer(1);
 			},
 
-			onJoin(user) {
+			onJoin(user: User) {
 				const game = this.room.scavgame!;
 				if (game.playerlist && !game.playerlist.includes(user.id)) {
 					user.sendTo(
@@ -1304,7 +1299,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				this.allowRenames = false;
 			},
 
-			onViewHunt(user) {
+			onViewHunt(user: User) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(user);
 				const player = this.playerTable[user.id];
@@ -1316,7 +1311,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				if (team.completed) player.completed = true;
 			},
 
-			onSendQuestion(player) {
+			onSendQuestion(player: Scavenger) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
 
@@ -1331,7 +1326,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 			},
 
-			onConnect(user) {
+			onConnect(user: User) {
 				const player = this.playerTable[user.id];
 				if (!player) return;
 
@@ -1345,7 +1340,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 			},
 
-			onJoin(user) {
+			onJoin(user: User) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(user);
 				if (!team) {
@@ -1370,7 +1365,7 @@ const MODES: { [k: string]: GameMode | string } = {
 
 			// -1 so that blind incog takes precedence of this
 			onCorrectAnswerPriority: -1,
-			onCorrectAnswer(player, value) {
+			onCorrectAnswer(player: Scavenger, value: string) {
 				const game = this.room.scavgame!;
 
 				if (player.currentQuestion + 1 < this.questions.length) {
@@ -1388,7 +1383,7 @@ const MODES: { [k: string]: GameMode | string } = {
 				}
 			},
 
-			onAnySubmit(player, value) {
+			onAnySubmit(player: Scavenger, value: string) {
 				const game = this.room.scavgame!;
 
 				const team = game.getPlayerTeam(player);
@@ -1410,7 +1405,7 @@ const MODES: { [k: string]: GameMode | string } = {
 			},
 
 			onCompletePriority: 2,
-			onComplete(player, time, blitz) {
+			onComplete(player: Scavenger, time: string, blitz: boolean) {
 				const game = this.room.scavgame!;
 
 				const team = game.getPlayerTeam(player);
@@ -1418,7 +1413,7 @@ const MODES: { [k: string]: GameMode | string } = {
 			},
 
 			// workaround that gives the answer after verifying that completion should not be hidden
-			onConfirmCompletion(player, time, blitz) {
+			onConfirmCompletion(player: Scavenger, time: string, blitz: boolean) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
 				team.completed = true;
