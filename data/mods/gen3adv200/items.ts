@@ -20,6 +20,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		isNonstandard: "Unobtainable",
 	},
 	berryjuice: {
 		inherit: true,
@@ -108,6 +109,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		isNonstandard: "Unobtainable",
 	},
 	hardstone: {
 		inherit: true,
@@ -159,6 +161,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		isNonstandard: "Unobtainable",
 	},
 	laxincense: {
 		inherit: true,
@@ -286,6 +289,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		isNonstandard: "Unobtainable",
 	},
 	poisonbarb: {
 		inherit: true,
@@ -312,6 +316,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		isNonstandard: "Unobtainable",
 	},
 	seaincense: {
 		inherit: true,
@@ -401,6 +406,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.eatItem();
 			}
 		},
+		isNonstandard: "Unobtainable",
 	},
 	twistedspoon: {
 		inherit: true,
