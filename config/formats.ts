@@ -4247,6 +4247,10 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 5] BW1 OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/bw1-overused.3744853/">BW1 OU</a>`
+		],
+
 		mod: 'gen5bw1',
 		searchShow: false,
 		ruleset: ['Standard', 'Sleep Clause Mod', 'Swagger Clause'],
