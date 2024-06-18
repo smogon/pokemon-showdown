@@ -83,7 +83,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "+40BP/time Metronome used. Breaks protection.",
 		pp: 1,
 		priority: 0,
-		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
+		flags: {},
 		breaksProtect: true,
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Springtide Storm', source);
