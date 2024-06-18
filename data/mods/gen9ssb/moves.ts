@@ -80,20 +80,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		name: "Fear the Finger",
 		desc: "Increased power for each time this Pokemon has used Metronome since switching in. Breaks through protection.",
-		shortDesc: "+50BP/Metronome. Breaks protection.",
+		shortDesc: "+40BP/time Metronome used. Breaks protection.",
 		pp: 1,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		breaksProtect: true,
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Springtide Storm', source);
-			this.add('-anim', source, 'Megahorn', source);
-		},
-		basePowerCallback(pokemon, target, move) {
-			if (!pokemon.metronomeCharge) return 0;
-			const bp = 50 * pokemon.metronomeCharge;
-			this.debug('BP: ' + bp);
-			return bp;
+			this.add('-anim', source, 'Megahorn', target);
 		},
 		isZ: "mattermirror",
 		secondary: null,
