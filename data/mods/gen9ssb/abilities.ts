@@ -52,10 +52,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
-		onHit(target, source, move) {
+		onModifyMovePriority: -1,
+		onAfterMove(source, target, move) {
 			if (move.id === 'megametronome') {
 				if (!this.effectState.metronomeCharge) this.effectState.metronomeCharge = 0;
 				this.effectState.metronomeCharge++;
+				this.add('-message', `Metronome Charge Added - Count: ${this.effectState.metronomeCharge}`);
 			}
 		},
 		onBasePowerPriority: 21,
