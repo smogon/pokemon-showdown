@@ -54,8 +54,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onHit(target, source, move) {
 			if (move.id === 'metronome') {
-				if (!source.metronomeCharge) source.metronomeCharge = 0;
-				source.metronomeCharge++;
+				if (!this.effectState.metronomeCharge) this.effectState.metronomeCharge = 0;
+				this.effectState.metronomeCharge++;
+			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.id === 'fearthefinger') {
+				if (!this.effectState.metronomeCharge) return null;
+				return this.effectState.metronomeCharge * 40;
 			}
 		},
 	},
