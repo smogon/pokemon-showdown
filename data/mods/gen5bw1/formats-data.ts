@@ -1,15 +1,72 @@
 export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
+	venusaur: {
+		tier: "OU"
+	},
+	dugtrio: {
+		tier: "OU",
+	},
 	cloyster: {
 		tier: "OU"
 	},
+	chansey: {
+		tier: "OU",
+	},
+	vaporeon: {
+		tier: "OU",
+	},
+	jolteon: {
+		tier: "OU",
+	},
+	espeon: {
+		tier: "OU",
+	},
+	donphan: {
+		tier: "OU",
+	},
+	metagross: {
+		tier: "OU",
+	},
 	deoxysdefense: {
-		tier: "OU"
+		tier: "UUBL"
+	},
+	infernape: {
+		tier: "OU",
+	},
+	lucario: {
+		tier: "OU",
+	},
+	hippowdon: {
+		tier: "UUBL",
+	},
+	snover: {
+		tier: "UUBL",
+	},
+	abomasnow: {
+		tier: "UUBL",
 	},
 	garchomp: {
 		tier: "Uber"
 	},
 	excadrill: {
 		tier: "Uber"
+	},
+	scrafty: {
+		tier: "OU",
+	},
+	chandelure: {
+		tier: "UU",
+	},
+	haxorus: {
+		tier: "OU",
+	},
+	mienshao: {
+		tier: "OU",
+	},
+	virizion: {
+		tier: "OU",
+	},
+	tornadus: {
+		tier: "OU",
 	},
 	tornadustherian: {
 		isNonstandard: "Future",
