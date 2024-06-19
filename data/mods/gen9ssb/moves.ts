@@ -85,9 +85,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		breaksProtect: true,
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Searing Shot', target);
-		},
 		isZ: "mattermirror",
 		secondary: null,
 		target: "normal",
