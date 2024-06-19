@@ -44,8 +44,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Finger
 	megametronome: {
 		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		basePower: 10,
+		category: "Physical",
 		name: "Mega Metronome",
 		desc: "Uses three randomly selected moves.",
 		pp: 8,
