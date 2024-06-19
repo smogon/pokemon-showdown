@@ -22,7 +22,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Chimeraplex"},
 		baseStats: {hp: 100, atk: 100, def: 60, spa: 100, spd: 60, spe: 120},
 	},
-	miniorvindigo: {
+	miniorindigo: {
 		inherit: true,
 		types: ['Rock', 'Water'],
 		abilities: {0: "Chimeraplex"},
@@ -52,7 +52,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Chimeraplex"},
 		baseStats: {hp: 100, atk: 100, def: 80, spa: 80, spd: 80, spe: 100},
 	},
-	minior: {
+	miniorred: {
 		inherit: true,
 		types: ['Rock', 'Fire'],
 		abilities: {0: "Chimeraplex"},
