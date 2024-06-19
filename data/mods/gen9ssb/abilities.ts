@@ -20,9 +20,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Augment the Giants",
 		gen: 9,
 		onBeforeMove(pokemon, target, move) {
-			if (move.id !== 'doubleironbash') return;
+			if (move.category !== 'Physical') return;
+			this.add('-activate', pokemon, 'ability: Augment the Giants');
+			changeSet(this, pokemon, ssbSets['Glint-Melmetal']);
 		},
-		
+		onAfterMove(source, target, move) {
+			if (source.species.id === 'meltan') return;
+			this.add('-activate', pokemon, 'ability: Augment the Giants');
+			changeSet(this, pokemon, ssbSets['Glint']);
+		},
 	},
 	// Finger
 	absolutezen: {
