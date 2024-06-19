@@ -15,6 +15,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Glint
+	augmentthegiants: {
+		name: "Augment the Giants",
+		gen: 9,
+		onBeforeMove(pokemon, target, move) {
+			if (move.id !== 'doubleironbash') return;
+		},
+		
+	},
 	// Finger
 	absolutezen: {
 		name: "Absolute Zen",
@@ -51,13 +60,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt' || move?.volatileStatus === 'confusion') {
 				this.add('-immune', pokemon, '[from] ability: Absolute Zen');
 				return null;
-			}
-		},
-		onModifyMove(move) {
-			if (move.id === 'megametronome') {
-				if (!this.effectState.metronomeCharge) this.effectState.metronomeCharge = 0;
-				this.effectState.metronomeCharge++;
-				this.add('-message', `Metronome Charge Added - Count: ${this.effectState.metronomeCharge}`);
 			}
 		},
 	},
