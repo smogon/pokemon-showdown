@@ -1,4 +1,20 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Mitz
+	kindlingcore: {
+		name: "Kindling Core",
+		gen: 9,
+		desc: "If holder is hit by a contact move, the attacker is burned. The attacker also loses 1/5 of its max HP if its Grass-type or Steel-type.",
+		shortDesc: "Attackers are burned on contact, lose 1/5 HP if Grass/Steel.",
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				source.trySetStatus('brn', source);
+				if (source.hasType('Grass') || source.hasType('Steel')) {
+					this.damage(source.baseMaxhp / 5, source, target);
+				}
+			}
+		},
+	},
 	// Finger
 	mattermirror: {
 		name: "Matter Mirror",
