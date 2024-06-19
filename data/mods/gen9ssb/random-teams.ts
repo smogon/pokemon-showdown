@@ -104,7 +104,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 220, def: 252, spa: 36}, nature: 'Modest', skip: 'Mitz',
 	},
 	Vens: {
-		species: 'Minior', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
+		species: 'Minior-Red', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
 		moves: ['Paleo Wave', 'Searing Shot', 'Shell Trap'],
 		signatureMove: 'Into the Supernova',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Jolly', skip: 'Mitz',
