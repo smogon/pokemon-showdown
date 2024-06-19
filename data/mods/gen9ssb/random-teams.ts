@@ -75,7 +75,7 @@ export const ssbSets: SSBSets = {
 	'Glint-Melmetal': {
 		species: 'Melmetal', ability: 'Augment the Giants', item: '', gender: 'M',
 		moves: ['Double Iron Bash'],
-		evs: {atk: 252}, nature: 'Adamant', skip: 'Glint',
+		evs: {atk: 252, def: 252}, nature: 'Adamant', skip: 'Glint',
 	},
 	/*
  	'Lord of Extinction': {
