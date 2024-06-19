@@ -67,6 +67,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
 	},
+	Mitz: {
+		species: 'Minior-Violet', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
+		moves: ['Paleo Wave', 'Infernal Parade', 'Wish'],
+		signatureMove: 'Into the Supernova',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid',
+	},
 
 
 	/*
