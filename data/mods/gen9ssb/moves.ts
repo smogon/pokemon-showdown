@@ -85,12 +85,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		breaksProtect: true,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Springtide Storm', source);
-			this.add('-anim', source, 'Megahorn', target);
+			this.add('-anim', source, 'Searing Shot', target);
 		},
 		isZ: "mattermirror",
 		secondary: null,
