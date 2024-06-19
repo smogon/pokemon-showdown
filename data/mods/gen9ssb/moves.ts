@@ -385,10 +385,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Petal Dance', target);
 		},
-		onAfterHit(source, target) {
+		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 0,
+				duration: 1,
 				move: 'blissfulbreeze',
 				moveData: {
 					id: 'blissfulbreeze',
