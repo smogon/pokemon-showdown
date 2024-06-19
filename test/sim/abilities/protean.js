@@ -22,6 +22,20 @@ describe('Protean', function () {
 		assert(cinder.hasType('Fighting'));
 	});
 
+	it.skip(`should change the user's type for submoves to the type of that submove, not the move calling it`, function () {
+		battle = common.gen(6).createBattle([[
+			{species: 'Wynaut', ability: 'protean', moves: ['sleeptalk', 'flamethrower']},
+		], [
+			{species: 'Regieleki', moves: ['spore']},
+		]]);
+
+		battle.makeChoices();
+		const wynaut = battle.p1.active[0];
+		console.log(battle.log);
+		assert(battle.log.every(line => !line.includes('|Normal|')), `It should not temporarily become Normal-type`);
+		assert(wynaut.hasType('Fire'));
+	});
+
 	it(`should not change the user's type when using moves that fail earlier than Protean will activate`, function () {
 		battle = common.createBattle([[
 			{species: 'Kecleon', ability: 'protean', moves: ['fling', 'suckerpunch', 'steelroller', 'aurawheel']},
