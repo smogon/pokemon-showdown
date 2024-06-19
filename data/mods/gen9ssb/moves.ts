@@ -435,7 +435,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 											type: 'Flying',
 										},
 									});
-									this.add('-start', source, 'move: Blissful Breeze');
+									this.add('-start', target, 'move: Blissful Breeze');
 								},
 								secondary: {
 									chance: 100,
@@ -448,7 +448,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 								type: 'Flying',
 							},
 						});
-						this.add('-start', source, 'move: Blissful Breeze');
+						this.add('-start', target, 'move: Blissful Breeze');
 					},
 					secondary: {
 						chance: 100,
@@ -461,7 +461,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					type: 'Flying',
 				},
 			});
-			this.add('-start', source, 'move: Blissful Breeze');
+			this.add('-start', target, 'move: Blissful Breeze');
 		},
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Blissful Breeze');
