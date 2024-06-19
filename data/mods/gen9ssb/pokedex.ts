@@ -58,4 +58,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Chimeraplex"},
 		baseStats: {hp: 100, atk: 120, def: 40, spa: 120, spd: 40, spe: 120},
 	},
+	miniormeteor: {
+		inherit: true,
+		abilities: {0: "Chimeraplex"},
+	},
 };
