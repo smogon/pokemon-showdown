@@ -67,53 +67,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
 	},
-	Mitz: {
-		species: 'Minior-Violet', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
-		moves: ['Paleo Wave', 'Infernal Parade', 'Wish'],
-		signatureMove: 'Into the Supernova',
-		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid',
-	},
-	Oona: {
-		species: 'Minior-Indigo', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
-		moves: ['Ancient Power', 'Water Shuriken', 'Flip Turn'],
-		signatureMove: 'Into the Supernova',
-		evs: {def: 4, spa: 252, spd: 252}, nature: 'Modest', skip: 'Mitz',
-	},
-	Rii: {
-		species: 'Minior-Blue', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
-		moves: ['Rock Blast', 'Icicle Spear', 'Chilly Reception'],
-		signatureMove: 'Into the Supernova',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', skip: 'Mitz',
-	},
-	Gyll: {
-		species: 'Minior-Green', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
-		moves: ['Power Gem', 'Frenzy Plant', 'Worry Seed'],
-		signatureMove: 'Into the Supernova',
-		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Jolly', skip: 'Mitz',
-	},
-	Pyrh: {
-		species: 'Minior-Yellow', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
-		moves: ['Meteor Beam', 'Buzzy Buzz', 'Electro Ball'],
-		signatureMove: 'Into the Supernova',
-		evs: {def: 56, spa: 200, spe: 252}, nature: 'Timid', skip: 'Mitz',
-	},
-	Godo: {
-		species: 'Minior-Orange', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
-		moves: ['Ancient Power', 'Thousand Waves', 'Shore Up'],
-		signatureMove: 'Into the Supernova',
-		evs: {hp: 220, def: 252, spa: 36}, nature: 'Modest', skip: 'Mitz',
-	},
-	Vens: {
-		species: 'Minior-Red', ability: 'Chimeraplex', item: 'Kindling Core', gender: 'F',
-		moves: ['Paleo Wave', 'Searing Shot', 'Shell Trap'],
-		signatureMove: 'Into the Supernova',
-		evs: {def: 4, spa: 252, spe: 252}, nature: 'Jolly', skip: 'Mitz',
-	},
-	'Empty Vessel': {
-		species: 'Minior-Meteor', ability: 'Stasis', item: '', gender: 'F',
-		moves: ['Struggle', 'Screech'],
-		evs: {}, nature: 'Lonely', skip: 'Mitz',
-	},
 	/*
  	'Lord of Extinction': {
 		species: 'Grimmsnarl-Gmax', ability: 'Impending Rot', item: 'Black Lotus', gender: '',
