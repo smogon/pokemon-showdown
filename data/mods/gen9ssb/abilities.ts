@@ -20,20 +20,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Chimeraplex",
 		onStart(pokemon) {
 			if (pokemon.transformed || !pokemon.hp) return;
-			this.add('-activate', pokemon, 'ability: Chimeraplex');
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target.hasType('Steel') || target.hasType('Fire')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Oona'], true);
+				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Oona']);
+				this.add('-activate', pokemon, 'ability: Chimeraplex');
 			} else if (target.hasType('Grass') || target.hasType('Dragon')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Rii'], true);
+				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Rii']);
+				this.add('-activate', pokemon, 'ability: Chimeraplex');
 			} else if (target.hasType('Rock') || target.hasType('Ground')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Gyll'], true);
+				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Gyll']);
+				this.add('-activate', pokemon, 'ability: Chimeraplex');
 			} else if (target.hasType('Water') || target.hasType('Flying')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Pyrh'], true);
+				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Pyrh']);
+				this.add('-activate', pokemon, 'ability: Chimeraplex');
 			} else if (target.hasType('Electric') || target.hasType('Normal')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Godo'], true);
+				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Godo']);
+				this.add('-activate', pokemon, 'ability: Chimeraplex');
 			} else if (target.hasType('Bug') || target.hasType('Fairy')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Vens'], true);
+				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Vens']);
+				this.add('-activate', pokemon, 'ability: Chimeraplex');
 			}
 		},
 	},
