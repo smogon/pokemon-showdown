@@ -22,18 +22,37 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.transformed || !pokemon.hp) return;
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target.hasType('Steel') || target.hasType('Fire')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Oona']);
+				if (this.randomChance(7, 10)) {
+					changeSet(this, pokemon, ssbSets['Oona']);
+					pokemon.setType(['Rock', 'Water'])
+				}
 			} else if (target.hasType('Grass') || target.hasType('Dragon')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Rii']);
+				if (this.randomChance(7, 10)) {
+					changeSet(this, pokemon, ssbSets['Rii']);
+					pokemon.setType(['Rock', 'Ice'])
+				}
 			} else if (target.hasType('Rock') || target.hasType('Ground')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Gyll']);
+				if (this.randomChance(7, 10)) {
+					changeSet(this, pokemon, ssbSets['Gyll']);
+					pokemon.setType(['Rock', 'Grass'])
+				}
 			} else if (target.hasType('Water') || target.hasType('Flying')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Pyrh']);
+				if (this.randomChance(7, 10)) {
+					changeSet(this, pokemon, ssbSets['Pyrh']);
+					pokemon.setType(['Rock', 'Electric'])
+				}
 			} else if (target.hasType('Electric') || target.hasType('Normal')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Godo']);
+				if (this.randomChance(7, 10)) {
+					changeSet(this, pokemon, ssbSets['Godo']);
+					pokemon.setType(['Rock', 'Ground'])
+				}
 			} else if (target.hasType('Bug') || target.hasType('Fairy')) {
-				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Vens']);
+				if (this.randomChance(7, 10)) {
+					changeSet(this, pokemon, ssbSets['Vens']);
+					pokemon.setType(['Rock', 'Fire'])
+				}
 			}
+			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[from] ability: Chimeraplex');
 			this.add('-activate', pokemon, 'ability: Chimeraplex');
 		},
 	},
