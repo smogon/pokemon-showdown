@@ -16,4 +16,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ['Flying'],
 		baseStats: {hp: 95, atk: 45, def: 50, spa: 90, spd: 80, spe: 100},
 	},
+	meltan: {
+		inherit: true,
+		abilities: {0: "Augment the Giants"},
+	},
+	melmetal: {
+		inherit: true,
+		abilities: {0: "Augment the Giants"},
+	},
 };
