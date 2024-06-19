@@ -15,62 +15,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
-	// Mitz
-	chimeraplex: {
-		name: "Chimeraplex",
-		onStart(pokemon) {
-			pokemon.chimera = false;
-			if (pokemon.transformed || !pokemon.hp) return;
-			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-			pokemon.setType(['Rock', 'Ghost'])
-			changeSet(this, pokemon, ssbSets['Mitz']);
-			if (target.hasType('Steel') || target.hasType('Fire')) {
-				if (this.randomChance(7, 10)) {
-					if (pokemon.chimera) return;
-					changeSet(this, pokemon, ssbSets['Oona']);
-					pokemon.setType(['Rock', 'Water'])
-					pokemon.chimera = true;
-				}
-			} else if (target.hasType('Grass') || target.hasType('Dragon')) {
-				if (this.randomChance(7, 10)) {
-					if (pokemon.chimera) return;
-					changeSet(this, pokemon, ssbSets['Rii']);
-					pokemon.setType(['Rock', 'Ice'])
-					pokemon.chimera = true;
-				}
-			} else if (target.hasType('Rock') || target.hasType('Ground')) {
-				if (this.randomChance(7, 10)) {
-					if (pokemon.chimera) return;
-					changeSet(this, pokemon, ssbSets['Gyll']);
-					pokemon.setType(['Rock', 'Grass'])
-					pokemon.chimera = true;
-				}
-			} else if (target.hasType('Water') || target.hasType('Flying')) {
-				if (this.randomChance(7, 10)) {
-					if (pokemon.chimera) return;
-					changeSet(this, pokemon, ssbSets['Pyrh']);
-					pokemon.setType(['Rock', 'Electric'])
-					pokemon.chimera = true;
-				}
-			} else if (target.hasType('Electric') || target.hasType('Normal')) {
-				if (this.randomChance(7, 10)) {
-					if (pokemon.chimera) return;
-					changeSet(this, pokemon, ssbSets['Godo']);
-					pokemon.setType(['Rock', 'Ground'])
-					pokemon.chimera = true;
-				}
-			} else if (target.hasType('Bug') || target.hasType('Fairy')) {
-				if (this.randomChance(7, 10)) {
-					if (pokemon.chimera) return;
-					changeSet(this, pokemon, ssbSets['Vens']);
-					pokemon.setType(['Rock', 'Fire'])
-					pokemon.chimera = true;
-				}
-			}
-			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[from] ability: Chimeraplex');
-			this.add('-activate', pokemon, 'ability: Chimeraplex');
-		},
-	},
 	// Finger
 	absolutezen: {
 		name: "Absolute Zen",
@@ -161,30 +105,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Trey
-
 	concentration: {
 		desc: "Uses Dynamite Arrow upon switching in. x1.3 Speed; Moves always hit. Attacks have 1.5x power and +2 crit ratio unless this Pokemon was hit by an attacking move this turn or last turn.",
 		shortDesc: "Dynamite Arrow on switch-in; Moves always hit; 1.3x Speed; 1.5x Damage/+2 Crit unless hit by attack.",
-	
 		onStart(target) {
 			this.actions.useMove('Dynamite Arrow', target);
 			this.effectState.lostConcentration = false;
 			this.effectState.damaged = false;
 		},
-	
 		onModifySpe(spe) {
 			return this.chainModify(1.3);
 		},
-	
 		onDamagingHit(damage, target, source, move) {
 			this.effectState.lostConcentration = true;
 			this.effectState.undamagedTurns = 0;
 			this.effectState.damaged = true;
 			this.add('-message', `${move.name} made ${target.name} lose their focus!`);
 		},
-
 		onResidual(pokemon, target) {
-
 			if (!this.effectState.damaged) {
 				this.effectState.undamagedTurns++;
 				if (this.effectState.undamagedTurns > 0 && this.effectState.lostConcentration) {
@@ -192,14 +130,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', `${pokemon.name} is building concentration!`);
 				}
 			}
-
 			if (this.effectState.damaged) {
 				this.effectState.damaged = false;
 				return null;
 			}
-
 		},
-		
 		onBasePowerPriority: 29,
 		onBasePower(basePower, pokemon, target, move) {
 			if (!this.effectState.lostConcentration) {
@@ -214,11 +149,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			return move.critRatio;
 		},
-
 		flags: {},
 		name: "Concentration",
 		gen: 9,
-	
 	},
 
 	/*
