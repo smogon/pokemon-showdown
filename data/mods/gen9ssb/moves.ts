@@ -398,6 +398,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					category: "Special",
 					priority: 0,
 					flags: {},
+					onHit(target, source, move) {
+						this.add('-end', source, 'move: Blissful Breeze');
+					},
 					secondary: null,
 					drain: [1, 2],
 					effectType: 'Move',
