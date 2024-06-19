@@ -15,6 +15,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	butterfreegmax: {
 		inherit: true,
 		types: ['Flying'],
-		baseStats: {hp: 95, spe: 100},
+		baseStats: {hp: 95, atk: 45, def: 50, spa: 90, spd: 80, spe: 100},
 	},
 };
