@@ -424,12 +424,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 											category: "Special",
 											priority: 0,
 											flags: {},
-											secondary: {
-												chance: 100,
-												boosts: {
-													def: -1,
-												},
-											},
+											secondary: null,
 											drain: [1, 2],
 											effectType: 'Move',
 											type: 'Flying',
@@ -437,12 +432,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 									});
 									this.add('-start', target, 'move: Blissful Breeze');
 								},
-								secondary: {
-									chance: 100,
-									boosts: {
-										def: -1,
-									},
-								},
+								secondary: null,
 								drain: [1, 2],
 								effectType: 'Move',
 								type: 'Flying',
@@ -450,12 +440,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						});
 						this.add('-start', target, 'move: Blissful Breeze');
 					},
-					secondary: {
-						chance: 100,
-						boosts: {
-							def: -1,
-						},
-					},
+					secondary: null,
 					drain: [1, 2],
 					effectType: 'Move',
 					type: 'Flying',
