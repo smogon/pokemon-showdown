@@ -369,4 +369,111 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
+	// Aeri
+	blissfulbreeze: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		name: "Blissful Breeze",
+		gen: 9,
+		pp: 16,
+		priority: 0,
+		flags: {},
+		forceSwitch: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Petal Dance', target);
+		},
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 2,
+				move: 'blissfulbreeze',
+				moveData: {
+					id: 'blissfulbreeze',
+					name: 'Blissful Breeze',
+					accuracy: 100,
+					basePower: 80,
+					category: "Special",
+					priority: 0,
+					flags: {},
+					onTry(source, target) {
+						if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+						Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+							duration: 1,
+							move: 'blissfulbreeze',
+							moveData: {
+								id: 'blissfulbreeze',
+								name: 'Blissful Breeze',
+								accuracy: 100,
+								basePower: 80,
+								category: "Special",
+								priority: 0,
+								flags: {},
+								onTry(source, target) {
+									if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+									Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+										duration: 1,
+										move: 'blissfulbreeze',
+										moveData: {
+											id: 'blissfulbreeze',
+											name: 'Blissful Breeze',
+											accuracy: 100,
+											basePower: 80,
+											category: "Special",
+											priority: 0,
+											flags: {},
+											secondary: {
+												chance: 100,
+												boosts: {
+													def: -1,
+												},
+											},
+											drain: [1, 2],
+											effectType: 'Move',
+											type: 'Flying',
+										},
+									});
+									this.add('-start', source, 'move: Blissful Breeze');
+								},
+								secondary: {
+									chance: 100,
+									boosts: {
+										def: -1,
+									},
+								},
+								drain: [1, 2],
+								effectType: 'Move',
+								type: 'Flying',
+							},
+						});
+						this.add('-start', source, 'move: Blissful Breeze');
+					},
+					secondary: {
+						chance: 100,
+						boosts: {
+							def: -1,
+						},
+					},
+					drain: [1, 2],
+					effectType: 'Move',
+					type: 'Flying',
+				},
+			});
+			this.add('-start', source, 'move: Blissful Breeze');
+		},
+		onHit(target, source, move) {
+			this.add('-activate', source, 'move: Blissful Breeze');
+			let success = false;
+			const allies = [...source.side.pokemon, ...source.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
+		},
+		target: "normal",
+		type: "Flying",
+	},
 };
