@@ -112,7 +112,7 @@ export const ssbSets: SSBSets = {
 	'Empty Vessel': {
 		species: 'Minior-Meteor', ability: 'Stasis', item: '', gender: 'F',
 		moves: ['Struggle', 'Screech'],
-		evs: {}, nature: 'Lonely',
+		evs: {}, nature: 'Lonely', skip: 'Mitz',
 	},
 	/*
  	'Lord of Extinction': {
