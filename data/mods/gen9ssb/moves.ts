@@ -48,7 +48,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		name: "Mega Metronome",
 		desc: "Uses two-to-five randomly selected moves.",
-		pp: 8,
+		pp: 5,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		onTryMove() {
@@ -79,6 +79,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!target.mCount) target.mCount = 0;
 			target.mCount++;
 			if (!target.mCount || target.mCount < 5) return;
+			if (target.ftfActivated) return;
 
 			// Replaces Mega Metronome with Fear the Finger if mCount >= 5
 			const mmIndex = target.moves.indexOf('megametronome');
@@ -94,6 +95,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			};
 			target.moveSlots[mmIndex] = ftf;
 			target.baseMoveSlots[mmIndex] = ftf;
+			target.ftfActivated = true;
 			this.add('-activate', target, 'move: Mega Metronome', 'Fear the Finger');
 		},
 		secondary: null,
