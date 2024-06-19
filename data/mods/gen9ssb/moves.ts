@@ -400,28 +400,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					flags: {},
 					onHit(target, source, move) {
 						this.add('-end', source, 'move: Blissful Breeze');
-						if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-						Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-							duration: 1,
-							move: 'blissfulbreeze',
-							moveData: {
-								id: 'blissfulbreeze',
-								name: 'Blissful Breeze',
-								accuracy: 100,
-								basePower: 80,
-								category: "Special",
-								priority: 0,
-								flags: {},
-								onHit(target, source, move) {
-									this.add('-end', source, 'move: Blissful Breeze');
-								},
-								secondary: null,
-								drain: [1, 2],
-								effectType: 'Move',
-								type: 'Flying',
-							},
-						});
-						this.add('-start', source, 'move: Blissful Breeze');
 					},
 					secondary: null,
 					drain: [1, 2],
