@@ -23,6 +23,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		// Damage Recovery
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
+			this.add('-activate', target, 'ability: Absolute Zen');
 			this.heal(target.baseMaxhp / 6);
 		},
 		onUpdate(pokemon) {
