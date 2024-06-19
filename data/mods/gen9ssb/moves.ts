@@ -44,20 +44,86 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Finger
 	megametronome: {
 		accuracy: true,
-		basePower: 10,
-		category: "Physical",
+		basePower: 0,
+		category: "Status",
 		name: "Mega Metronome",
-		desc: "Uses three randomly selected moves.",
+		desc: "Uses two-to-five randomly selected moves.",
 		pp: 8,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, 'Geomancy', target);
+			this.add('-anim', target, 'Metronome', target);
+		},
 		onHit(target, source, effect) {
+			// Metronome
 			const moves = this.dex.moves.all().filter(move => (
 				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				move.flags['metronome']
 			));
-			for (let i = 0; i < 3; i++) {
+			let randomMove = '';
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves).id;
+			}
+			if (!randomMove) return false;
+			source.side.lastSelectedMove = this.toID(randomMove);
+			this.actions.useMove(randomMove, target);
+
+			// Check if metronome count exists, add 1 to it, then exit the function
+			// unless mCount is more than or equal to 5
+			if (!target.mCount) target.mCount = 0;
+			target.mCount++;
+			if (!target.mCount || target.mCount < 5) return;
+
+			// Replaces Mega Metronome with Fear the Finger if mCount >= 5
+			const mmIndex = target.moves.indexOf('megametronome');
+			if (mmIndex < 0) return;
+			const ftf = {
+				move: 'Fear the Finger',
+				id: 'fearthefinger',
+				pp: 1,
+				maxpp: 1,
+				target: 'normal',
+				disabled: false,
+				used: false,
+			};
+			target.moveSlots[mmIndex] = ftf;
+			target.baseMoveSlots[mmIndex] = ftf;
+			this.add('-activate', target, 'move: Mega Metronome', 'Fear the Finger');
+		},
+		secondary: null,
+		multihit: [2, 5],
+		target: "self",
+		type: "Normal",
+	},
+	// Finger
+	fearthefinger: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Fear the Finger",
+		shortDesc: "Uses ten randomly selected moves. Breaks protection.",
+		pp: 1,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, 'Springtide Storm', target);
+		},
+		onHit(target, source, effect) {
+			// Metronome
+			const moves = this.dex.moves.all().filter(move => (
+				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['metronome']
+			));
+			for (let i = 0; i < 10; i++) {
 				let randomMove = '';
 				if (moves.length) {
 					moves.sort((a, b) => a.num - b.num);
@@ -67,29 +133,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.side.lastSelectedMove = this.toID(randomMove);
 				this.actions.useMove(randomMove, target);
 			}
+
+			// Turns Fear the Finger back into Mega Metronome after use
+			const ftfIndex = target.moves.indexOf('fearthefinger');
+			if (ftfIndex < 0) return;
+			const mm = {
+				move: 'Mega Metronome',
+				id: 'megametronome',
+				pp: 8,
+				maxpp: 8,
+				target: 'self',
+				disabled: false,
+				used: false,
+			};
+			target.moveSlots[ftfIndex] = mm;
+			target.baseMoveSlots[ftfIndex] = mm;
+			this.add('-activate', target, 'move: Fear the Finger', 'Mega Metronome');
 		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-		contestType: "Cute",
-	},
-	// Finger
-	fearthefinger: {
-		accuracy: true,
-		basePower: 150,
-		category: "Special",
-		name: "Fear the Finger",
-		desc: "Increased power for each time this Pokemon has used Metronome since switching in. Breaks through protection.",
-		shortDesc: "+40BP/time Metronome used. Breaks protection.",
-		pp: 1,
-		priority: 0,
 		flags: {},
 		breaksProtect: true,
-		isZ: "mattermirror",
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Dark",
-		contestType: "Cool",
 	},
 	// Pablo
 	plagiarize: {
