@@ -6,7 +6,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
-	// Yukari Yakumo
 	lunala: {
 		inherit: true,
 		types: ['Psychic', 'Dark'],
@@ -16,5 +15,40 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ['Flying'],
 		baseStats: {hp: 95, atk: 45, def: 50, spa: 90, spd: 80, spe: 100},
+	},
+	miniorviolet: {
+		inherit: true,
+		types: ['Rock', 'Ghost'],
+		baseStats: {hp: 100, atk: 100, def: 60, spa: 100, spd: 60, spe: 120},
+	},
+	miniorvindigo: {
+		inherit: true,
+		types: ['Rock', 'Water'],
+		baseStats: {hp: 120, atk: 80, def: 60, spa: 100, spd: 60, spe: 120},
+	},
+	miniorgreen: {
+		inherit: true,
+		types: ['Rock', 'Grass'],
+		baseStats: {hp: 100, atk: 80, def: 60, spa: 120, spd: 80, spe: 100},
+	},
+	miniorblue: {
+		inherit: true,
+		types: ['Rock', 'Ice'],
+		baseStats: {hp: 100, atk: 80, def: 80, spa: 100, spd: 60, spe: 120},
+	},
+	minioryellow: {
+		inherit: true,
+		types: ['Rock', 'Electric'],
+		baseStats: {hp: 80, atk: 100, def: 60, spa: 100, spd: 60, spe: 140},
+	},
+	miniororange: {
+		inherit: true,
+		types: ['Rock', 'Ground'],
+		baseStats: {hp: 100, atk: 100, def: 80, spa: 80, spd: 80, spe: 100},
+	},
+	minior: {
+		inherit: true,
+		types: ['Rock', 'Fire'],
+		baseStats: {hp: 100, atk: 120, def: 40, spa: 120, spd: 40, spe: 120},
 	},
 };
