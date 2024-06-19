@@ -385,7 +385,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Petal Dance', target);
 		},
-		onAfterHit(target, source) {
+		onAfterHit(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 2,
@@ -398,7 +398,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					category: "Special",
 					priority: 0,
 					flags: {},
-					onAfterHit(target, source) {
+					onAfterHit(source, target) {
 						if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 						Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 							duration: 1,
@@ -411,7 +411,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 								category: "Special",
 								priority: 0,
 								flags: {},
-								onAfterHit(target, source) {
+								onAfterHit(source, target) {
 									if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 									Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 										duration: 1,
