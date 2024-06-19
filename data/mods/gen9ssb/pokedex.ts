@@ -12,4 +12,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ['Psychic', 'Dark'],
 		abilities: {0: "Regenerator"},
 	},
+	butterfreegmax: {
+		inherit: true,
+		types: ['Flying'],
+		baseStats: {hp: 95, spe: 100},
+	},
 };
