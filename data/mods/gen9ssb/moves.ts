@@ -76,8 +76,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Finger
 	fearthefinger: {
 		accuracy: true,
-		basePower: 50,
-		category: "Physical",
+		basePower: 150,
+		category: "Special",
 		name: "Fear the Finger",
 		desc: "Increased power for each time this Pokemon has used Metronome since switching in. Breaks through protection.",
 		shortDesc: "+40BP/time Metronome used. Breaks protection.",
