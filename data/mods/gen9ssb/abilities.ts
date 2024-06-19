@@ -33,6 +33,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Godo']);
 			} else if (target.hasType('Bug') || target.hasType('Fairy')) {
 				if (this.randomChance(7, 10)) changeSet(this, pokemon, ssbSets['Vens']);
+			} else {
+				continue;
 			}
 			this.add('-activate', pokemon, 'ability: Chimeraplex');
 		},
