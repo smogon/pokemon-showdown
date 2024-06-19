@@ -5,6 +5,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 		spritenum: 69,
 		desc: "This Pokemon's Physical attacks become Special. Allows holder to use Fear the Finger.",
 		gen: 9,
+		onModifyMove(move, pokemon) {
+			if (move.category === 'Physical') {
+				move.category = 'Special';
+			}
+		},
 		onTakeItem: false,
 		zMove: "Fear the Finger",
 		zMoveFrom: "Mega Metronome",
