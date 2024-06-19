@@ -52,19 +52,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
-		onModifyMovePriority: -1,
-		onAfterMove(source, target, move) {
+		onModifyMove(move) {
 			if (move.id === 'megametronome') {
 				if (!this.effectState.metronomeCharge) this.effectState.metronomeCharge = 0;
 				this.effectState.metronomeCharge++;
 				this.add('-message', `Metronome Charge Added - Count: ${this.effectState.metronomeCharge}`);
-			}
-		},
-		onBasePowerPriority: 21,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.id === 'fearthefinger') {
-				if (!this.effectState.metronomeCharge) return null;
-				return this.effectState.metronomeCharge * 120;
 			}
 		},
 	},
