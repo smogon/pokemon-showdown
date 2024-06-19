@@ -67,6 +67,11 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
 	},
+	Glint: {
+		species: 'Meltan', ability: 'Augment the Giants', item: '', gender: 'M',
+		moves: ['Double Iron Bash'],
+		evs: {}, nature: 'Adamant',
+	},
 	/*
  	'Lord of Extinction': {
 		species: 'Grimmsnarl-Gmax', ability: 'Impending Rot', item: 'Black Lotus', gender: '',
