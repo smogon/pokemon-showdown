@@ -385,10 +385,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Petal Dance', target);
 		},
-		onAfterHit(target, source) {
+		onAfterHit(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 2,
+				duration: 0,
 				move: 'blissfulbreeze',
 				moveData: {
 					id: 'blissfulbreeze',
@@ -398,48 +398,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					category: "Special",
 					priority: 0,
 					flags: {},
-					onAfterHit(target, source) {
-						if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-						Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-							duration: 1,
-							move: 'blissfulbreeze',
-							moveData: {
-								id: 'blissfulbreeze',
-								name: 'Blissful Breeze',
-								accuracy: 100,
-								basePower: 80,
-								category: "Special",
-								priority: 0,
-								flags: {},
-								onAfterHit(target, source) {
-									if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-									Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-										duration: 1,
-										move: 'blissfulbreeze',
-										moveData: {
-											id: 'blissfulbreeze',
-											name: 'Blissful Breeze',
-											accuracy: 100,
-											basePower: 80,
-											category: "Special",
-											priority: 0,
-											flags: {},
-											secondary: null,
-											drain: [1, 2],
-											effectType: 'Move',
-											type: 'Flying',
-										},
-									});
-									this.add('-start', source, 'move: Blissful Breeze');
-								},
-								secondary: null,
-								drain: [1, 2],
-								effectType: 'Move',
-								type: 'Flying',
-							},
-						});
-						this.add('-start', source, 'move: Blissful Breeze');
-					},
 					secondary: null,
 					drain: [1, 2],
 					effectType: 'Move',
