@@ -40,7 +40,24 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
-
+	// Mitz
+	intothesupernova: {
+		accuracy: 95,
+		basePower: 150,
+		category: "Special",
+		name: "Into the Supernova",
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onHit(target, source, move) {
+			const oppParty = target.side.pokemon.filter(opp => opp === target || !opp.fainted);
+			this.add('-message', `${oppParty}`);
+			changeSet(this, source, ssbSets['Empty Vessel'], true);
+		},
+		secondary: null,
+		target: 'normal',
+		type: 'Stellar',
+	},
 	// Finger
 	megametronome: {
 		accuracy: true,
