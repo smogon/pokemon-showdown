@@ -26,8 +26,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onAfterMove(source, target, move) {
 			if (source.species.id === 'meltan') return;
-			this.add('-activate', pokemon, 'ability: Augment the Giants');
-			changeSet(this, pokemon, ssbSets['Glint']);
+			this.add('-activate', source, 'ability: Augment the Giants');
+			changeSet(this, source, ssbSets['Glint']);
 		},
 	},
 	// Finger
