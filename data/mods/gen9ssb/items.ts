@@ -38,4 +38,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "Holder's Flying-type attacks have 1.3x power. If held by Decidueye-Hiseui with Burst Delta, it can use Grand Delta.",
 		gen: 9,
 	},
+	// Aeri
+	fleetingwinds: {
+		name: "Fleeting Winds",
+		onStart(source) {
+			this.field.setTerrain('mistyterrain');
+		},
+		onFaint(pokemon) {
+			this.add("-activate", pokemon, "item: Fleeting Winds");
+			this.actions.useMove('Healing Wish', pokemon);
+			pokemon.side.addSideCondition('tailwind', pokemon);
+		},
+		desc: "On switch-in, starts Misty Terrain. If this Pokemon would faint, starts Tailwind and uses Healing Wish.",
+		shortDesc: "Switch-in: Misty Terrain; Faint; Tailwind + Healing Wish.",
+		gen: 9,
+	},
 };
