@@ -22,6 +22,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.transformed || !pokemon.hp) return;
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			pokemon.setType(['Rock', 'Ghost'])
+			changeSet(this, pokemon, ssbSets['Mitz']);
 			if (target.hasType('Steel') || target.hasType('Fire')) {
 				if (this.randomChance(7, 10)) {
 					changeSet(this, pokemon, ssbSets['Oona']);
