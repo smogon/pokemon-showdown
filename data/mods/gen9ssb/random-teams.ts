@@ -61,6 +61,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gap',
 		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
 	},
+	Aeri: {
+		species: 'Butterfree-Gmax', ability: 'Woven Together, Cohere Forever', item: 'Fleeting Winds', gender: 'F',
+		moves: ['U-turn', 'Alluring Voice', 'Mystical Fire'],
+		signatureMove: 'Blissful Breeze',
+		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
+	},
 
 
 	/*
