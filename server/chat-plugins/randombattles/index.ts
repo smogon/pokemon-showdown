@@ -329,7 +329,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 				buf += `<details><summary>Set ${i + 1} (${set.weight}%)</summary>`;
 				buf += `<ul style="list-style-type:none;padding-left:0;">`;
 				buf += `<li>${Dex.forFormat(format).species.get(set.species).name} @ ${set.item.map(formatItem).join(" / ")}</li>`;
-				buf += `<li>Ability: ${formatAbility(set.ability)}</li>`;
+				buf += `<li>Ability: ${set.ability.map(formatAbility).join(" / ")}</li>`;
 				buf += `<li>Level: 50</li>`;
 				buf += `<li>Tera Type: ${set.teraType.map(formatType).join(' / ')}</li>`;
 				if (set.evs) {
