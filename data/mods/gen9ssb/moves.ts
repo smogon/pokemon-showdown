@@ -313,6 +313,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 40,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, futuremove: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Searing Shot', target);
 		},
