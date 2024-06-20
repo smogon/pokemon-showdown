@@ -2421,6 +2421,8 @@ export class TeamValidator {
 				}
 			}
 
+			if (checkingPrevo && !originalSpecies.prevo && dex.gen < 9) break;
+
 			let sources = learnset[moveid] || [];
 			if (moveid === 'sketch') {
 				sketch = true;
@@ -2467,6 +2469,8 @@ export class TeamValidator {
 					}
 					continue;
 				}
+
+				if (checkingPrevo && !originalSpecies.prevo && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
 
 				// redundant
 				if (learnedGen <= moveSources.sourcesBefore) continue;
