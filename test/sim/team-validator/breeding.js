@@ -233,6 +233,7 @@ describe('Team Validator', function () {
 		team = [
 			{species: 'ursalunabloodmoon', ability: 'mindseye', moves: ['yawn', 'bellydrum'], evs: {hp: 1}},
 			{species: 'greninjabond', ability: 'battlebond', moves: ['counter', 'switcheroo'], evs: {hp: 1}},
+			{species: 'pikachualola', ability: 'static', moves: ['wish', 'fakeout'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen9anythinggoes');
 	});
