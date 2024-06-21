@@ -2421,7 +2421,8 @@ export class TeamValidator {
 				}
 			}
 
-			if (checkingPrevo && !originalSpecies.prevo && dex.gen < 9) break;
+			const formeCantInherit = checkingPrevo && !originalSpecies.prevo && !originalSpecies.changesFrom;
+			if (formeCantInherit && dex.gen < 9) break;
 
 			let sources = learnset[moveid] || [];
 			if (moveid === 'sketch') {
@@ -2470,7 +2471,7 @@ export class TeamValidator {
 					continue;
 				}
 
-				if (checkingPrevo && !originalSpecies.prevo && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
+				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
 
 				// redundant
 				if (learnedGen <= moveSources.sourcesBefore) continue;
