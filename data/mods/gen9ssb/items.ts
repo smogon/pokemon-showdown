@@ -4,9 +4,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Slag",
 		spritenum: 34,
 		gen: 9,
-		desc: "Serves no purposes. Gets a bit slippery sometimes.",
+		desc: "Serves no purpose. Gets slippery sometimes.",
 		onTryMove(pokemon, target, move) {
-			if (this.randomChance(1, 3)) {
+			if (this.randomChance(1, 5)) {
 				this.add('-message', `Oops! ${pokemon.name} slipped on the Slag!`);
 				this.add('-message', `Why is he carrying slag?`);
 				return null;
