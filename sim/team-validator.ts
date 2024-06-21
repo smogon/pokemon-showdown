@@ -2421,7 +2421,8 @@ export class TeamValidator {
 				}
 			}
 
-			const formeCantInherit = checkingPrevo && !originalSpecies.prevo && !originalSpecies.changesFrom;
+			const formeCantInherit = checkingPrevo && !originalSpecies.prevo &&
+				(!originalSpecies.changesFrom || originalSpecies.name === "Greninja-Ash");
 			if (formeCantInherit && dex.gen < 9) break;
 
 			let sources = learnset[moveid] || [];
