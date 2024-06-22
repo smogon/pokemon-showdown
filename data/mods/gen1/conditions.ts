@@ -59,7 +59,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			} else {
 				this.add('-status', target, 'slp');
 			}
-			// 1-7 turns
+			// Pokemon are put to sleep for 1-7 turns.
 			// Since RBY gets the number of sleep turns by taking the 3 lowest bits
 			// of the current rng value (current rng value mod 8), and then if those are not
 			// all zero, it sets that as the number of sleep turns, otherwise it re-rolls the rng
