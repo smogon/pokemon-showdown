@@ -1493,6 +1493,15 @@ export class TeamValidator {
 		return true;
 	}
 
+	motherCanLearn(species: ID, move: ID) {
+		if (!species) return false;
+		const fullLearnset = this.dex.species.getFullLearnset(species);
+		for (const {learnset} of fullLearnset) {
+			if (learnset[move]) return true;
+		}
+		return false;
+	}
+
 	validateForme(set: PokemonSet) {
 		const dex = this.dex;
 		const name = set.name || set.species;
@@ -2531,13 +2540,10 @@ export class TeamValidator {
 					} else if (species.gender !== 'N' &&
 						learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
 						// available as egg move
-						if (species.gender === 'M') {
-							// male-only Pokemon can have level-up egg moves if it can have a mother
-							const motherLearnset = this.dex.species.getLearnset(toID(species.mother));
-							if (!motherLearnset || !motherLearnset[move.id]) {
-								cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
-								continue;
-							}
+						if (species.gender === 'M' && !this.motherCanLearn(toID(species.mother), moveid)) {
+							// male-only Pokemon can have level-up egg moves if it can have a mother that learns the move
+							cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
+							continue;
 						}
 						learned = learnedGen + 'Eany';
 						// falls through to E check below
@@ -2546,7 +2552,7 @@ export class TeamValidator {
 						cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
 						continue;
 					}
-        }
+				}
 
 				// Gen 8+ egg moves can be taught to any pokemon from any source
 				if (learnedGen >= 8 && learned.charAt(1) === 'E' && learned.slice(1) !== 'Eany' &&
@@ -2578,11 +2584,6 @@ export class TeamValidator {
 					if (learned.slice(1) === 'Eany') {
 						if (species.gender === 'F') {
 							limitedEggMove = move.id;
-						} else {
-							const motherLearnset = this.dex.species.getLearnset(toID(species.mother));
-							if (motherLearnset && !motherLearnset[move.id]) {
-								limitedEggMove = move.id;
-							}
 							moveSources.levelUpEggMoves = [move.id];
 						} else {
 							limitedEggMove = null;
@@ -2591,7 +2592,7 @@ export class TeamValidator {
 						// Pomeg glitched moves have to be from an egg but since they aren't true egg moves,
 						// there should be no breeding restrictions
 						moveSources.pomegEggMoves = [move.id];
-					} else if (learnedGen < 6) {
+					} else if (learnedGen < 6 || (species.mother && !this.motherCanLearn(toID(species.mother), moveid))) {
 						limitedEggMove = move.id;
 					}
 					learned = learnedGen + 'E' + (species.prevo ? species.id : '');
