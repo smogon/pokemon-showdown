@@ -60,7 +60,15 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 				this.add('-status', target, 'slp');
 			}
 			// 1-7 turns
-			this.effectState.startTime = this.random(1, 8);
+			// Since RBY gets the number of sleep turns by taking the 3 lowest bits
+			// of the current rng value (current rng value mod 8), and then if those are not
+			// all zero, it sets that as the number of sleep turns, otherwise it re-rolls the rng
+			// and does the same thing. But because rby's link battles rng formula is (in pseudocode):
+			// next_rng_val = (current_rng_val * 5 + 1 ) % 256
+			// this means that if the current rng value mod 8 is 0, then the next rng value mod 8 will always be 1
+			// making it a 1/4 chance for 1 turn sleep and 1/8'th chance for 2-7 turns of sleep.
+
+			this.effectState.startTime = this.clampIntRange(this.random(0, 8), 1, 7);
 			this.effectState.time = this.effectState.startTime;
 
 			if (target.removeVolatile('nightmare')) {
