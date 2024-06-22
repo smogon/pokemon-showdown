@@ -43,6 +43,7 @@ interface MoveFlags {
 	futuremove?: 1; // Targets a slot, and in 2 turns damages that slot.
 	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
 	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
+	metronome?: 1; // Can be selected by Metronome.
 	mirror?: 1; // Can be copied by Mirror Move.
 	mustpressure?: 1; // Additional PP is deducted due to Pressure when it ordinarily would not.
 	noassist?: 1; // Cannot be selected by Assist.
@@ -265,12 +266,12 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	 */
 	tracksTarget?: boolean;
 	willCrit?: boolean;
+	callsMove?: boolean;
 
 	// Mechanics flags
 	// ---------------
 	hasCrashDamage?: boolean;
 	isConfusionSelfHit?: boolean;
-	noMetronome?: string[];
 	noSketch?: boolean;
 	stallingMove?: boolean;
 	baseMove?: string;
@@ -331,8 +332,9 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	selfDropped?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	spreadHit?: boolean;
-	stab?: number;
 	statusRoll?: string;
+	/** Hardcode to make Tera Stellar STAB work with multihit moves */
+	stellarBoosted?: boolean;
 	totalDamage?: number | false;
 	typeChangerBoosted?: Effect;
 	willChangeForme?: boolean;
@@ -466,8 +468,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly forceSTAB: boolean;
 	/** True if it can't be copied with Sketch. */
 	readonly noSketch: boolean;
-	/** STAB multiplier (can be modified by other effects) (default 1.5). */
-	readonly stab?: number;
 
 	readonly volatileStatus?: ID;
 
@@ -511,7 +511,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.spreadHit = data.spreadHit || false;
 		this.forceSTAB = !!data.forceSTAB;
 		this.noSketch = !!data.noSketch;
-		this.stab = data.stab || undefined;
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (this.category !== 'Status' && !this.maxMove && this.id !== 'struggle') {
@@ -654,7 +653,7 @@ export class DexMoves {
 				name: id, exists: false,
 			});
 		}
-		if (move.exists) this.moveCache.set(id, move);
+		if (move.exists) this.moveCache.set(id, this.dex.deepFreeze(move));
 		return move;
 	}
 
@@ -664,7 +663,7 @@ export class DexMoves {
 		for (const id in this.dex.data.Moves) {
 			moves.push(this.getByID(id as ID));
 		}
-		this.allCache = moves;
+		this.allCache = Object.freeze(moves);
 		return this.allCache;
 	}
 }

@@ -172,6 +172,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	competitive: {
 		inherit: true,
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
+				if (effect.id === 'stickyweb') {
+					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Competitive only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({spa: 2}, target, target, null, false, true);
+			}
+		},
 		rating: 2.5,
 	},
 	compoundeyes: {
@@ -231,6 +249,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	defiant: {
 		inherit: true,
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
+				if (effect.id === 'stickyweb') {
+					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Defiant only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({atk: 2}, target, target, null, false, true);
+			}
+		},
 		rating: 2.5,
 	},
 	deltastream: {
@@ -371,6 +407,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	gulpmissile: {
 		inherit: true,
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1},
 		rating: 2.5,
 	},
 	guts: {
@@ -442,7 +479,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onTryBoost() {},
 		onModifyMove() {},
-		isBreakable: undefined,
+		flags: {},
 		rating: 0,
 	},
 	illusion: {
@@ -515,7 +552,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	libero: {
 		inherit: true,
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
@@ -736,7 +773,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	protean: {
 		inherit: true,
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
@@ -1071,7 +1108,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	trace: {
 		inherit: true,
-		rating: 2.5,
+		rating: 3,
 	},
 	transistor: {
 		inherit: true,
@@ -1163,6 +1200,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	wonderguard: {
 		inherit: true,
+		flags: {failroleplay: 1, noreceiver: 1, failskillswap: 1, breakable: 1},
 		rating: 5,
 	},
 	wonderskin: {

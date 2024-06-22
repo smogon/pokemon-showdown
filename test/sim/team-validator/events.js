@@ -149,4 +149,25 @@ describe('Team Validator', function () {
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
+
+	it('should identify the minimum source gen of event-only Pokemon which haven\'t already been identified by its moves', function () {
+		let team = [
+			{species: 'jirachi', ability: 'serenegrace', shiny: true, moves: ['aurasphere'], evs: {hp: 1}, ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}},
+		];
+		assert.legalTeam(team, 'gen9ou');
+
+		team = [
+			{species: 'jirachi', ability: 'serenegrace', shiny: true, moves: ['hiddenpowerfighting'], nature: 'serious', evs: {hp: 1}, ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}},
+		];
+		assert.false.legalTeam(team, 'gen7ou');
+	});
+
+	it.skip('should allow evolved Pokemon obtainable from events at lower levels than they could otherwise be obtained', function () {
+		const team = [
+			{species: 'dragonite', ability: 'innerfocus', moves: ['dracometeor'], evs: {hp: 1}, level: 50},
+			{species: 'magmar', ability: 'flamebody', moves: ['ember'], evs: {hp: 1}, level: 10},
+			{species: 'electivire', ability: 'motordrive', moves: ['quickattack'], evs: {hp: 1}, level: 10},
+		];
+		assert.legalTeam(team, 'gen4ou');
+	});
 });

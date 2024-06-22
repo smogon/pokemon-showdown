@@ -670,11 +670,11 @@ function getFlaggedRooms() {
 }
 
 export function writeStats(type: string, entry: AnyObject) {
-	const path = `logs/artemis/${type}/${Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3)}.jsonl`;
+	const path = `artemis/${type}/${Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3)}.jsonl`;
 	try {
-		FS(path).parentDir().mkdirpSync();
+		Monitor.logPath(path).parentDir().mkdirpSync();
 	} catch {}
-	void FS(path).append(JSON.stringify(entry) + "\n");
+	void Monitor.logPath(path).append(JSON.stringify(entry) + "\n");
 }
 
 function saveSettings(path?: string) {
@@ -1679,7 +1679,7 @@ export const commands: Chat.ChatCommands = {
 			this.refreshPage('abusemonitor-settings');
 		},
 		edithistory(target, room, user) {
-			this.checkCan('globalban');
+			this.checkCan('lock');
 			target = toID(target);
 			if (!target) {
 				return this.parse(`/help abusemonitor`);
@@ -1688,7 +1688,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		ignoremodlog: {
 			add(target, room, user) {
-				this.checkCan('globalban');
+				this.checkCan('lock');
 				let targetUser: string;
 				[targetUser, target] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
@@ -1721,7 +1721,7 @@ export const commands: Chat.ChatCommands = {
 				this.refreshPage(`abusemonitor-edithistory-${targetUser}`);
 			},
 			remove(target, room, user) {
-				this.checkCan('globalban');
+				this.checkCan('lock');
 				let [targetUser, rawNum] = this.splitOne(target).map(f => f.trim());
 				targetUser = toID(targetUser);
 				const num = Number(rawNum);
@@ -2092,7 +2092,7 @@ export const pages: Chat.PageTable = {
 				types: {} as Record<string, number>,
 			};
 			const inaccurate = new Set();
-			const logPath = FS(`logs/artemis/punishments/${dateString}.jsonl`);
+			const logPath = Monitor.logPath(`artemis/punishments/${dateString}.jsonl`);
 			if (await logPath.exists()) {
 				const stream = logPath.createReadStream();
 				for await (const line of stream.byLine()) {
@@ -2107,7 +2107,7 @@ export const pages: Chat.PageTable = {
 				}
 			}
 
-			const reviewLogPath = FS(`logs/artemis/reviews/${dateString}.jsonl`);
+			const reviewLogPath = Monitor.logPath(`artemis/reviews/${dateString}.jsonl`);
 			if (await reviewLogPath.exists()) {
 				const stream = reviewLogPath.createReadStream();
 				for await (const line of stream.byLine()) {
@@ -2312,7 +2312,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		async edithistory(query, user) {
-			this.checkCan('globalban');
+			this.checkCan('lock');
 			const targetUser = toID(query[0]);
 			if (!targetUser) {
 				return this.errorReply(`Specify a user.`);

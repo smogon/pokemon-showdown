@@ -304,7 +304,11 @@ export const handlers: Chat.Handlers = {
 };
 
 export const commands: Chat.ChatCommands = {
-	sampleteams: {
+	sampleteams(target, room, user) {
+		this.sendReply(`Sample Teams are being deprecated. Please do \`\`/tier [formatid]\`\` to view their resources.`);
+		this.sendReply(`If you are room staff for a room and would like to access old samples for your room's formats, please contact an admin.`);
+	},
+	/* sampleteams: {
 		''(target, room, user) {
 			this.runBroadcast();
 			let [formatid, category] = target.split(',');
@@ -432,158 +436,5 @@ export const commands: Chat.ChatCommands = {
 		`/sampleteams remove [format], [category], [team name] - Removes a sample team for [format] in [category].`,
 		`/sampleteams whitelist add [formatid], [formatid] | [roomid], [roomid], ... - Whitelists room staff for the provided roomids to add sample teams. Requires: &`,
 		`/sampleteams whitelist remove [formatid], [roomid] - Unwhitelists room staff for the provided room to add sample teams. Requires: &`,
-	],
+	], */
 };
-
-function formatFakeButton(url: string, text: string) {
-	return `<a class="button" style="text-decoration:inherit" target="replace" href="${url}">${text}</a>`;
-}
-
-export const pages: Chat.PageTable = {
-	sampleteams: {
-		whitelist(query, user, connection) {
-			this.title = `Sample Teams Whitelist`;
-			if (!(SampleTeams.isDevMod(user) || user.can('bypassall'))) {
-				return `<div class="pad"><h2>Access denied.</h2></div>`;
-			}
-			const staffRoomAccess = Rooms.get('staff')?.checkModjoin(user);
-			let buf = `<div class="pad"><button style="float:right" class="button" name="send" value="/j view-sampleteams-whitelist${query.length ? `-${query.join('-')}` : ''}"><i class="fa fa-refresh"></i> Refresh</button><h2>Sample Teams Rooms Whitelist</h2>`;
-			if ((!teamData.whitelist || !Object.keys(teamData.whitelist).length) && !query.length) {
-				buf += `<p>No rooms are whitelisted for any formats.</p>`;
-			}
-			if (query[0] === 'add') {
-				buf += `<form data-submitsend="${staffRoomAccess ? `/msgroom staff,` : SampleTeams.isDevMod(user) ? `/msgroom development,` : ``}/sampleteams whitelist add {formats}|{roomids}">`;
-				buf += `<label>Enter a list formats, separated by comma: <input name="formats" /></label><br /><br />`;
-				buf += `<label>Enter a list of rooms, separated by comma: <input name="roomids" /></label><br />`;
-				buf += `<br /><button class="button" type="submit">Whitelist rooms</button></form>`;
-				buf += `<br />${formatFakeButton("view-sampleteams-whitelist", "Return to list")}`;
-			} else {
-				buf += `<dl>`;
-				for (const formatid of Object.keys(teamData.whitelist).sort().reverse()) {
-					if (!teamData.whitelist[formatid]?.length) continue;
-					buf += `<dt>${SampleTeams.getFormatName(formatid)}</dt>`;
-					for (const roomid of teamData.whitelist[formatid]) {
-						buf += `<dd>${Rooms.get(roomid)?.title || roomid}`;
-						buf += ` <button class="button" name="send" value="/sampleteams whitelist remove ${formatid},${roomid}">Remove</button></dd>`;
-					}
-				}
-				buf += `</dl>`;
-			}
-			buf += `${query.length ? '' : formatFakeButton("view-sampleteams-whitelist-add", "Whitelist room")}</div>`;
-			return buf;
-		},
-		view(query, user, connection) {
-			this.title = `Sample Teams`;
-			let buf = `<div class="pad">`;
-			if (query.slice(0, query.length - 1).join('-')) {
-				buf += `${formatFakeButton(`view-sampleteams-view-${query.slice(0, query.length - 1).join('-')}`, "&laquo; Back")}`;
-			} else {
-				buf += `<button class="button disabled" disabled>&laquo; Back</button>`;
-			}
-			buf += `<button style="float:right" class="button" name="send" value="/j view-sampleteams-view${query.join('-') ? `-${query.join('-')}` : ``}"><i class="fa fa-refresh"></i> Refresh</button>`;
-			buf += `<center><h2>Sample Teams</h2></center><hr />`;
-			const q0Teams = teamData.teams[query[0]];
-			const q0TeamKeys = q0Teams ? Object.keys(q0Teams) : [];
-			if (!query[0]) {
-				const formats = Object.keys(teamData.teams);
-				if (!formats.length) return `${buf}<p>No teams found.</p></div>`;
-				buf += `<h3>Pick a format</h3><ul>`;
-				for (const formatid of formats) {
-					if (!formatid) continue;
-					buf += `<li>${formatFakeButton(`view-sampleteams-view-${formatid}`, `${SampleTeams.getFormatName(formatid)}`)}</button></li>`;
-				}
-				buf += `</ul>`;
-			} else if (!q0Teams || !q0TeamKeys.length ||
-				(!Object.keys(q0Teams.uncategorized).length && !q0TeamKeys.filter(x => x !== 'uncategorized').length)) {
-				const name = Dex.formats.get(query[0]).exists ? Dex.formats.get(query[0]).name : query[0];
-				return `${buf}<p>No teams for ${name} were found.</p></div>`;
-			} else if (!query[1] || (!SampleTeams.findCategory(query[0], query[1]) && query[1] !== 'allteams')) {
-				buf += `<h3>Pick a category</h3><ul>`;
-				for (const category of Object.keys(teamData.teams[query[0]])) {
-					buf += `<li><a class="button" style="text-decoration:inherit;color:inherit" target="replace" href="view-sampleteams-view-${query[0]}-${toID(category)}">${category}</button></li>`;
-				}
-				buf += `<li><a class="button" style="text-decoration:inherit;color:inherit" target="replace" href="view-sampleteams-view-${query[0]}-allteams">ALL</button></li></ul>`;
-			} else if (query[1] === 'allteams') {
-				buf += `<h3>All teams for ${SampleTeams.getFormatName(query[0])}</h3>`;
-				for (const categoryName in teamData.teams[query[0]]) {
-					const category = teamData.teams[query[0]][categoryName];
-					if (!Object.keys(category).length) continue;
-					buf += `<details><summary><h4 style="display:inline">${categoryName}</h4></summary>`;
-					for (const teamName in category) {
-						const team = category[teamName];
-						if (SampleTeams.checkPermissions(user, teamData.whitelist[query[0]] || [])) {
-							buf += `<button class="button" style="float:right" name="send" value="/sampleteams remove ${query[0]},${categoryName},${teamName}">Delete team</button>`;
-						}
-						buf += SampleTeams.formatTeam(teamName, team);
-					}
-					buf += `</details>`;
-					const index = Object.keys(teamData.teams[query[0]]).indexOf(categoryName);
-					if (index !== Object.keys(teamData.teams[query[0]]).length - 1) buf += `<hr />`;
-				}
-			} else if (SampleTeams.findCategory(query[0], query[1])) {
-				const categoryName = SampleTeams.findCategory(query[0], query[1])!;
-				buf += `<h3>Sample teams for ${SampleTeams.getFormatName(query[0])} in the ${categoryName} category</h3>`;
-				for (const teamName in teamData.teams[query[0]][categoryName]) {
-					const team = teamData.teams[query[0]][categoryName][teamName];
-					buf += SampleTeams.formatTeam(teamName, team);
-				}
-			}
-			buf += `</div>`;
-			return buf;
-		},
-		add(query, user, connection) {
-			this.title = `Sample Teams`;
-			const trimFormatName = (name: string) => (name.includes('(') ? name.slice(0, name.indexOf('(')) : name).trim();
-			const formatsSet = new Set(Dex.formats.all().map(format => trimFormatName(format.name)));
-			const formatsArr = Array.from(formatsSet);
-			const formats = formatsArr.map(formatName => Dex.formats.get(formatName))
-				.filter(format => (
-					!format.name.includes('Custom') && format.effectType === 'Format' &&
-					!format.team && SampleTeams.checkPermissions(user, SampleTeams.whitelistedRooms(format.id) || [])
-				));
-			if (!formats.length) return `<div class="pad"><h2>Access denied.</h2></div>`;
-			let buf = `<div class="pad">`;
-			if (query.slice(0, query.length - 1).join('-')) {
-				buf += `${formatFakeButton(`view-sampleteams-add-${query.slice(0, query.length - 1).join('-')}`, "&laquo; Back")}`;
-			} else {
-				buf += `<button class="button disabled" disabled>&laquo; Back</button>`;
-			}
-			let buttonTitle = 'Refresh';
-			if (query[2] === 'submit') buttonTitle = 'Add another team';
-			buf += `<button style="float:right" class="button" name="send" value="/j view-sampleteams-add${query.join('-') ? `-${query.join('-')}` : ``}"><i class="fa fa-refresh"></i> ${buttonTitle}</button>`;
-			buf += `<div class="pad"><h2>Add a sample team</h2>`;
-			if (!query[0] || !Dex.formats.get(query[0]).exists) {
-				buf += `<h3>Pick a format</h3><ul>`;
-				for (const format of formats) {
-					buf += `<li>${formatFakeButton(`view-sampleteams-add-${format.id}`, format.name)}</button></li>`;
-				}
-				buf += `</ul>`;
-			} else if (!query[1] || !SampleTeams.findCategory(query[0], query[1]) || query[1] === 'addnewcategory') {
-				const name = SampleTeams.getFormatName(query[0]);
-				if (query[1] === 'addnewcategory') {
-					buf += `<h3>Add a category for ${name}</h3>`;
-					buf += `<form data-submitsend="/sampleteams addcategory ${query[0]},{categoryname}">`;
-					buf += `<input name="categoryname" />`;
-					buf += `<button class="button" type="submit">Add category</button></form>`;
-				} else {
-					buf += `<h3>Pick a category for ${name}</h3><ul>`;
-					for (const category of Object.keys(teamData.teams[query[0]] || {}) || []) {
-						buf += `<li style="padding-top:5px">${formatFakeButton(`view-sampleteams-add-${query[0]}-${toID(category)}-submit`, category)}</li>`;
-					}
-					buf += `<li style="padding-top:5px">${formatFakeButton(`view-sampleteams-add-${query[0]}-addnewcategory`, `<strong>Add new category</strong>`)}</li></ul>`;
-				}
-			}
-			const categoryName = SampleTeams.findCategory(query[0], query[1]);
-			if (categoryName) {
-				buf += `<form data-submitsend="/sampleteams add ${query[0]}, ${categoryName}, {teamName}, {team}">`;
-				buf += `<h3>Enter a team name</h3><input name="teamName" />`;
-				buf += `<h3>Enter team importable</h3><textarea style="width:100%;height:400px" name="team"></textarea><br />`;
-				buf += `<button class="button" type="submit">Add sample team</button></form>`;
-			}
-			buf += `</div>`;
-			return buf;
-		},
-	},
-};
-
-Chat.multiLinePattern.register(`/sampleteams add `);

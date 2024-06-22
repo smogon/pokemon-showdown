@@ -63,7 +63,7 @@ The beginning of a battle will look something like this:
 
 `|gen|GENNUM`
 
-> Generation number, from 1 to 7. Stadium counts as its respective gens;
+> Generation number, from 1 to 9. Stadium counts as its respective gens;
 > Let's Go counts as 7, and modded formats count as whatever gen they were
 > based on.
 
@@ -603,7 +603,7 @@ stat boosts are minor actions.
 `|-nothing`
 
 > **DEPRECATED**: A move did absolutely nothing. (For example: Splash). In the
-> future this will be of the form `|-activate||move:Splash`.
+> future this will be of the form `|-activate|POKEMON|move: Splash`.
 
 `|-hitcount|POKEMON|NUM`
 

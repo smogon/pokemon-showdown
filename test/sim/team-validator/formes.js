@@ -112,4 +112,16 @@ describe('Team Validator', function () {
 		];
 		assert.false.legalTeam(team, 'gen9almostanyability');
 	});
+
+	it('should validate Unown formes in Gen 2 based on DVs', () => {
+		team = [
+			{species: 'unowng', moves: ['hiddenpower'], ivs: {hp: 12, atk: 20, def: 18, spa: 28, spd: 28, spe: 2}},
+		];
+		assert.legalTeam(team, 'gen2ou');
+
+		team = [
+			{species: 'unown', moves: ['hiddenpower'], ivs: {hp: 0, atk: 4, def: 4, spa: 4, spd: 4, spe: 4}},
+		];
+		assert.false.legalTeam(team, 'gen2ou');
+	});
 });

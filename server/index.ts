@@ -43,7 +43,7 @@
  *
  * @license MIT
  */
-
+require('source-map-support').install();
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
 // can successfully print the "We require Node.js 16+" message.
@@ -71,6 +71,7 @@ function setupGlobals() {
 	void Monitor.version().then((hash: any) => {
 		global.__version.tree = hash;
 	});
+	Repl.cleanup();
 
 	if (Config.watchconfig) {
 		FS('config/config.js').onModify(() => {
