@@ -266,6 +266,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	 */
 	tracksTarget?: boolean;
 	willCrit?: boolean;
+	callsMove?: boolean;
 
 	// Mechanics flags
 	// ---------------
