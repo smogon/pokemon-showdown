@@ -6047,3 +6047,4 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
         tier: "OU", // Set the appropriate tier for your Pokémon
     },
 };
+

@@ -99608,19 +99608,20 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 			{generation: 5, level: 47, moves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
 		],
 	},
-  zombie: {
-    learnset: {
-      tackle: ["8L1"],
-      growl: ["8L1"],
-      scratch: ["8L4"],
-      bite: ["8L7"],
-      scaryface: ["8L13"],
-      pound: ["8L16"],
-      headbutt: ["8L19"],
-      stomp: ["8L22"],
-      poisonfang: ["8L25"],
-      crunch: ["8L28"],
-      superfang: ["8L31"],
+	zombie: {
+        learnset: {
+            tackle: ["8L1"],
+            growl: ["8L1"],
+            scratch: ["8L4"],
+            bite: ["8L7"],
+            scaryface: ["8L13"],
+            lick: ["8L1"], // Added the move Lick
+            pound: ["8L16"],
+            headbutt: ["8L19"],
+            stomp: ["8L22"],
+            poisonfang: ["8L25"],
+            crunch: ["8L28"],
+            superfang: ["8L31"],
     },
   },
 
