@@ -61,7 +61,6 @@ interface MoveFlags {
 	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
 	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
-	calling?: 1; // Calls another move.
 }
 
 export interface HitEffect {
@@ -267,6 +266,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	 */
 	tracksTarget?: boolean;
 	willCrit?: boolean;
+	callsMove?: boolean;
 
 	// Mechanics flags
 	// ---------------
