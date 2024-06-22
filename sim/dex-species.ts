@@ -175,6 +175,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * This is mainly relevant to Gen 5.
 	 */
 	readonly maleOnlyHidden: boolean;
+	/** Possible mother for a male-only Pokemon. */
+	readonly mother?: string;
 	/** True if a pokemon is mega. */
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */

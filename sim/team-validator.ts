@@ -1354,7 +1354,7 @@ export class TeamValidator {
 		const fathers: ID[] = [];
 		// Gen 6+ don't have egg move incompatibilities
 		// (except for certain cases with baby Pokemon not handled here)
-		if (!getAll && eggGen >= 6 && !setSources.levelUpEggMoves) return true;
+		if (!getAll && eggGen >= 6 && !setSources.levelUpEggMoves && !species.mother) return true;
 
 		let eggMoves = setSources.limitedEggMoves;
 		if (eggGen === 3) eggMoves = eggMoves?.filter(eggMove => !setSources.pomegEggMoves?.includes(eggMove));
@@ -1491,6 +1491,15 @@ export class TeamValidator {
 			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, false, pokemonBlacklist, true);
 		}
 		return true;
+	}
+
+	motherCanLearn(species: ID, move: ID) {
+		if (!species) return false;
+		const fullLearnset = this.dex.species.getFullLearnset(species);
+		for (const {learnset} of fullLearnset) {
+			if (learnset[move]) return true;
+		}
+		return false;
 	}
 
 	validateForme(set: PokemonSet) {
@@ -2528,9 +2537,14 @@ export class TeamValidator {
 					} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
 						// Pomeg Glitch
 						learned = learnedGen + 'Epomeg';
-					} else if ((!species.gender || species.gender === 'F') &&
+					} else if (species.gender !== 'N' &&
 						learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
 						// available as egg move
+						if (species.gender === 'M' && !this.motherCanLearn(toID(species.mother), moveid)) {
+							// male-only Pokemon can have level-up egg moves if it can have a mother that learns the move
+							cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
+							continue;
+						}
 						learned = learnedGen + 'Eany';
 						// falls through to E check below
 					} else {
@@ -2578,7 +2592,7 @@ export class TeamValidator {
 						// Pomeg glitched moves have to be from an egg but since they aren't true egg moves,
 						// there should be no breeding restrictions
 						moveSources.pomegEggMoves = [move.id];
-					} else if (learnedGen < 6) {
+					} else if (learnedGen < 6 || (species.mother && !this.motherCanLearn(toID(species.mother), moveid))) {
 						limitedEggMove = move.id;
 					}
 					learned = learnedGen + 'E' + (species.prevo ? species.id : '');
