@@ -40,6 +40,78 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Glint
+	gigameld: {
+		accuracy: true,
+		basePower: 0,
+		category: "Physical",
+		name: "GigaMeld",
+		pp: 5,
+		noPPBoosts: true,
+		flags: {contact: 1},
+		volatileStatus: 'meld',
+		ignoreImmunity: true,
+		beforeMoveCallback(pokemon) {
+			if (pokemon.volatiles['bide']) return true;
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.effectState.totalDamage = 0;
+				this.add('-start', pokemon, 'move: GigaMeld');
+				this.add('-message', `${pokemon.name} is preparing to meld with ${pokemon.side.foe.active[0].name}!`);
+			},
+			onDamagePriority: -101,
+			onDamage(damage, target, source, move) {
+				if (!move || move.effectType !== 'Move' || !source) return;
+				this.effectState.totalDamage += damage;
+				this.effectState.lastDamageSource = source;
+			},
+			onBeforeMove(pokemon, target, move) {
+				if (this.effectState.duration === 1) {
+					this.add('-end', pokemon, 'move: GigaMeld');
+					target = this.effectState.lastDamageSource;
+					if (!target || !this.effectState.totalDamage) {
+						this.attrLastMove('[still]');
+						this.add('-fail', pokemon);
+						return false;
+					}
+					if (!target.isActive) {
+						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
+						if (!possibleTarget) {
+							this.add('-miss', pokemon);
+							return false;
+						}
+						target = possibleTarget;
+					}
+					const moveData: Partial<ActiveMove> = {
+						id: 'bide' as ID,
+						name: "Bide",
+						accuracy: true,
+						damage: this.effectState.totalDamage * 2,
+						category: "Physical",
+						priority: 1,
+						flags: {contact: 1, protect: 1},
+						effectType: 'Move',
+						type: 'Normal',
+					};
+					this.actions.tryMoveHit(target, pokemon, moveData as ActiveMove);
+					pokemon.removeVolatile('bide');
+					return false;
+				}
+				this.add('-activate', pokemon, 'move: Bide');
+			},
+			onMoveAborted(pokemon) {
+				pokemon.removeVolatile('bide');
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'move: Bide', '[silent]');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Steel",
+	},
 	// Finger
 	megametronome: {
 		accuracy: true,
@@ -48,6 +120,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Mega Metronome",
 		desc: "Uses two-to-five randomly selected moves.",
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		onTryMove() {
@@ -110,6 +183,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Fear the Finger",
 		shortDesc: "Uses ten randomly selected moves. Breaks protection.",
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -166,6 +240,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Plagiarize",
 		gen: 9,
 		pp: 16,
+		noPPBoosts: true,
 		priority: 0,
 		// Sketch
 		onHit(target, source) {
@@ -208,6 +283,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Sketchbook",
 		gen: 9,
 		pp: 10,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {},
 		onHit(target, source) {
@@ -231,6 +307,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Burst Delta",
 		gen: 9,
 		pp: 5,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, cantusetwice: 1},
 		onTryMove() {
@@ -259,6 +336,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Grand Delta",
 		gen: 9,
 		pp: 1,
+		noPPBoosts: true,
 		priority: 0,
 		isZ: "yoichisbow",
 		onPrepareHit(target, source) {
@@ -310,6 +388,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Dynamite Arrow",
 		gen: 9,
 		pp: 40,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, futuremove: 1},
 		onTryMove() {
@@ -352,6 +431,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Gap",
 		gen: 9,
 		pp: 5,
+		noPPBoosts: true,
 		priority: -6,
 		flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
 		forceSwitch: true,
@@ -376,6 +456,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Blissful Breeze",
 		gen: 9,
 		pp: 16,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {},
 		onTryMove() {
