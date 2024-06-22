@@ -19747,7 +19747,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		gen: 5,
 	},
     zombie: {
-        num: 9000, // Use a unique number to avoid conflicts with existing Pokémon
+        num: -1000, // Use a unique number to avoid conflicts with existing Pokémon
         name: "Zombie",
         types: ["Poison", "Normal"], // Updated types
         baseStats: {hp: 80, atk: 100, def: 90, spa: 60, spd: 90, spe: 50},
