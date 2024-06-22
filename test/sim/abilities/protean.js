@@ -22,7 +22,7 @@ describe('Protean', function () {
 		assert(cinder.hasType('Fighting'));
 	});
 
-	it.skip(`should change the user's type for submoves to the type of that submove, not the move calling it`, function () {
+	it(`should change the user's type for submoves to the type of that submove, not the move calling it`, function () {
 		battle = common.gen(6).createBattle([[
 			{species: 'Wynaut', ability: 'protean', moves: ['sleeptalk', 'flamethrower']},
 		], [
@@ -31,7 +31,6 @@ describe('Protean', function () {
 
 		battle.makeChoices();
 		const wynaut = battle.p1.active[0];
-		console.log(battle.log);
 		assert(battle.log.every(line => !line.includes('|Normal|')), `It should not temporarily become Normal-type`);
 		assert(wynaut.hasType('Fire'));
 	});
