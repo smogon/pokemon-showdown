@@ -99614,7 +99614,6 @@ export const Learnsets: {[k: string]: LearnsetData} = {
       growl: ["8L1"],
       scratch: ["8L4"],
       bite: ["8L7"],
-      lick: ["8L10"],
       scaryface: ["8L13"],
       pound: ["8L16"],
       headbutt: ["8L19"],
