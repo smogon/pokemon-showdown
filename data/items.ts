@@ -3652,6 +3652,7 @@ export const Items: {[itemid: string]: ItemData} = {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
+				if (move.callsMove) return;
 				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
 					this.effectState.numConsecutive++;
 				} else if (pokemon.volatiles['twoturnmove']) {

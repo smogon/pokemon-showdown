@@ -97,7 +97,7 @@ describe('Metronome (item)', function () {
 		assert.bounded(damage, [80, 95], `Solar Beam should be Metronome 1 boosted`);
 	});
 
-	it.skip(`should use called moves to determine the Metronome multiplier`, function () {
+	it(`should use called moves to determine the Metronome multiplier`, function () {
 		battle = common.createBattle([[
 			{species: 'goomy', item: 'metronome', moves: ['copycat', 'surf']},
 		], [
