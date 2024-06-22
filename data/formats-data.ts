@@ -6043,4 +6043,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		isNonstandard: "Custom",
 		tier: "Illegal",
 	},
+	zombie: {
+        tier: "OU", // Set the appropriate tier for your Pokémon
+    },
 };
