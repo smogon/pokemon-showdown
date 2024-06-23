@@ -15,6 +15,63 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Aeri
+	woventogethercohereforever: {
+		name: "Woven Together, Cohere Forever",
+		gen: 9,
+		onBeforeMove(pokemon, target, move) {
+			if (move.type !== 'Flying' || !pokemon.lastMoveUsed) return;
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 1,
+				move: move.name,
+				source: pokemon,
+				moveData: {
+					id: move.id,
+					name: move.name,
+					accuracy: true,
+					basePower: move.basePower,
+					category: move.category,
+					priority: 0,
+					flags: {futuremove: 1},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					type: pokemon.lastMoveUsed.type,
+				},
+			});
+			this.abilityState.imprintedMove = move;
+			this.abilityState.imprintedType = pokemon.lastMoveUsed.type;
+			this.add('-start', source, 'move: ' + move.name);
+			return this.NOT_FAIL;
+		},
+		condition: {
+			duration: 3,
+			onAfterMoveSecondarySelf(source, target, move) {
+				if (!move || !target || !move.flags['futuremove']) return;
+				target.side.removeSlotCondition(target, 'futuremove');
+				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+					duration: 1,
+					move: this.abilityState.imprintedMove.name,
+					source: source,
+					moveData: {
+						id: this.abilityState.imprintedMove.id,
+						name: this.abilityState.imprintedMove.name,
+						accuracy: true,
+						basePower: this.abilityState.imprintedMove.basePower,
+						category: this.abilityState.imprintedMove.category,
+						priority: 0,
+						flags: {futuremove: 1},
+						ignoreImmunity: false,
+						effectType: 'Move',
+						type: this.abilityState.imprintedType,
+					},
+				});
+				this.add('-start', source, 'move: ' + move.name);
+				return this.NOT_FAIL;
+			},
+		},
+	},
 	// Glint
 	augmentthegiants: {
 		name: "Augment the Giants",
