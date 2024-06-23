@@ -34,9 +34,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					category: move.category,
 					priority: 0,
 					flags: {futuremove: 1},
-					onHit(target) {
-						target.side.removeSlotCondition(target, 'futuremove');
-					},
 					ignoreImmunity: false,
 					effectType: 'Move',
 					type: pokemon.lastMoveUsed.type,
@@ -54,7 +51,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (source.abilityState.hits > 0) return false;
 				if (!source.abilityState.hits) source.abilityState.hits = 0;
 				source.abilityState.hits++;
-				target.side.removeSlotCondition(target, 'futuremove');
+				if (!target.side.removeSlotCondition(target, 'futuremove')) return false;
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					duration: 1,
