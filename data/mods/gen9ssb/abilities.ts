@@ -51,16 +51,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		condition: {
 			duration: 3,
 			onAfterMoveSecondarySelf(source, target, move) {
-				if (!move.flags['futuremove']) {
-					this.add('-message', `No move flagged 'futuremove' found.`);
-					return;
-				}
-				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-				this.add('-message', `Removing futuremove...`);
+				if (!move.flags['futuremove']) return;
+				if (!source.abilityState.hits) source.abilityState.hits = 0;
+				source.abilityState.hits++;
+				if (source.abilityState.hits > 1) return;
 				target.side.removeSlotCondition(target, 'futuremove');
-				this.add('-message', `Next futuremove going through!`);
+				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-					duration: 2,
+					duration: 1,
 					move: source.abilityState.imprintedMove.name,
 					source: source,
 					moveData: {
@@ -78,6 +76,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				});
 				this.add('-start', source, 'move: ' + move.name);
 				return;
+			},
+			onResidual(pokemon) {
+				source.abilityState.hits = 0;
 			},
 		},
 	},
