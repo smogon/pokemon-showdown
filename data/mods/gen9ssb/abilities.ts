@@ -22,8 +22,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBeforeMove(pokemon, target, move) {
 			if (move.type !== 'Flying' || !pokemon.lastMoveUsed) return;
 			if (!target.side.addSlotCondition(target, 'futuremove')) return;
-			pokemon.addVolatile('wtcf');
-			this.add('-start', pokemon, 'ability: Woven Together, Cohere Forever');
+			pokemon.addVolatile('woventogethercohereforever');
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 1,
 				move: move.name,
@@ -49,7 +48,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		condition: {
 			duration: 3,
 			onStart(pokemon) {
-				this.add('-message', `Hello!`);
+				this.add('-start', pokemon, 'ability: Woven Together, Cohere Forever');
 			},
 			onAfterMoveSecondarySelf(source, target, move) {
 				if (!move.flags['futuremove']) return false;
@@ -79,10 +78,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			},
 			onResidual(pokemon) {
-				source.abilityState.hits = 0;
+				pokemon.abilityState.hits = 0;
 			},
 			onEnd(pokemon) {
-				delete pokemon.volatiles['wtcf'];
+				delete pokemon.volatiles['woventogethercohereforever'];
 				this.add('-end', pokemon, 'Woven Together, Cohere Forever');
 			},
 		},
