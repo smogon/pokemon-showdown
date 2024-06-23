@@ -49,16 +49,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			duration: 3,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'ability: Woven Together, Cohere Forever');
-				this.add('-message', `Ability onStart triggered.`);
 			},
 			onResidual(pokemon) {
 				const move = pokemon.abilityState.imprintedMove;
 				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-				this.add('-message', `Checking if move has futuremove flag...`);
 				if (!move.flags['futuremove']) return false;
-				this.add('-message', `Checking if a futuremove can be added...`);
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-				this.add('-message', `Success!`);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					duration: 1,
 					move: move.name,
@@ -80,7 +76,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			},
 			onEnd(pokemon) {
-				delete pokemon.volatiles['woventogethercohereforever'];
+				pokemon.removeVolatile('woventogethercohereforever');
 				this.add('-end', pokemon, 'Woven Together, Cohere Forever');
 			},
 		},
