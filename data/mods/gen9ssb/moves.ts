@@ -54,11 +54,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		beforeMoveCallback(pokemon) {
 			if (pokemon.volatiles['bide']) return true;
 		},
-		onHit(target, source, move) {
-			const targetFoe = target.side.pokemon[this.random(1, 6)];
-			targetFoe.hp -= 100;
-			this.add('-message', `${targetFoe.name} was hurt!`);
-		},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
@@ -249,6 +244,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		// Sketch
 		onHit(target, source) {
+			const targetFoe = target.side.pokemon[this.random(1, 6)];
+			targetFoe.hp -= 100;
+			this.add('-message', `${targetFoe.name} was hurt!`);
 			const move = target.lastMove;
 			if (source.transformed || !move || source.moves.includes(move.id)) return false;
 			if (move.isZ || move.isMax) return false;
