@@ -45,7 +45,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			});
 			pokemon.abilityState.imprintedMove = move;
 			pokemon.abilityState.imprintedType = pokemon.lastMoveUsed.type;
-			this.abilityState.firstHit = true;
 			this.add('-start', pokemon, 'move: ' + move.name);
 			return;
 		},
