@@ -492,8 +492,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (typeCheck === 1) EFF = 0;
 				if (typeCheck === 2) EFF = 0.5;
 				if (typeCheck === 3) EFF = 0.25;
-				this.damage((1.5*EFF)*(72576/(5*DEF)+2)*rand, target);
+				const damage = (1.5*EFF)*(72576/(5*DEF)+2)*rand;
+				this.damage(damage, target);
 				this.add('-message', `${target.name} was damaged by Blissful Breeze!`);
+				this.add('-message', `${damage}`);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
