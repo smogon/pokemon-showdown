@@ -99624,6 +99624,7 @@ export const Learnsets: {[k: string]: LearnsetData} = {
             superfang: ["8L31"],
     },
   },
-
+ 
 };
+
 

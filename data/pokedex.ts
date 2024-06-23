@@ -1,4 +1,4 @@
-export const Pokedex: {[speciesid: string]: SpeciesData} = {
+export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	bulbasaur: {
 		num: 1,
 		name: "Bulbasaur",
@@ -19746,19 +19746,26 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
-	zombie: {
-        num: 2001,
+    zombie: {
+        num: -2001, // Use a unique number
         name: "Zombie",
-        types: ["Poison", "Normal"],
-		gender: "M",
+        types: ["Ghost", "Dark"],
         baseStats: {hp: 80, atk: 100, def: 90, spa: 60, spd: 90, spe: 50},
-        abilities: {0: "Dry Skin",},
+        abilities: {0: "Dry Skin", H: "Cursed Body"},
         heightm: 1.6,
         weightkg: 50,
         color: "Green",
-        eggGroups: ["Human-Like"],
+        eggGroups: ["Undead", "Human-Like"],
     },
 };
+
+	
+
+
+	
+   
+
+
 
 
 
