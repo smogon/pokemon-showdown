@@ -47,7 +47,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return;
 		},
 		condition: {
-			duration: 3,
+			duration: 2,
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'ability: Woven Together, Cohere Forever');
 			},
