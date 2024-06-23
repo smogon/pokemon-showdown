@@ -42,7 +42,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.abilityState.imprintedMove = move;
 			pokemon.abilityState.imprintedType = pokemon.lastMoveUsed.type;
 			this.add('-start', pokemon, 'move: ' + move.name);
-			return this.NOT_FAIL;
+			return;
 		},
 		condition: {
 			duration: 3,
@@ -50,6 +50,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (!move || !target || !move.flags['futuremove']) return;
 				target.side.removeSlotCondition(target, 'futuremove');
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+				this.add('-message', `Next future move going through!`);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					duration: 1,
 					move: source.abilityState.imprintedMove.name,
@@ -68,7 +69,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					},
 				});
 				this.add('-start', source, 'move: ' + move.name);
-				return this.NOT_FAIL;
+				return;
 			},
 		},
 	},
