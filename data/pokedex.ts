@@ -19749,7 +19749,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
     zombie: {
         num: -2001, // Use a unique number
         name: "Zombie",
-        types: ["Ghost", "Dark"],
+        types: ["Poison", "Normal"],
         baseStats: {hp: 80, atk: 100, def: 90, spa: 60, spd: 90, spe: 50},
         abilities: {0: "Dry Skin", H: "Cursed Body"},
         heightm: 1.6,

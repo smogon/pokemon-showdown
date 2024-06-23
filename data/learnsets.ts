@@ -99603,12 +99603,12 @@ export const Learnsets: {[k: string]: LearnsetData} = {
 			{generation: 5, level: 99, moves: ["crushgrip", "doubleslap", "teeterdance", "stomp"]},
 		],
 	},
-	pokestarufopropu2: {
+	pokesarufopropu2: {
 		eventData: [
 			{generation: 5, level: 47, moves: ["darkpulse", "flamethrower", "hyperbeam", "icebeam"]},
 		],
 	},
-	zombie: {
+	zomie: {
         learnset: {
             tackle: ["8L1"],
             growl: ["8L1"],
