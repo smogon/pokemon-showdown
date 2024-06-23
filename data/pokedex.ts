@@ -19746,7 +19746,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
-    zombie: {
+	zombie: {
         num: -1000, // Use a unique number to avoid conflicts with existing Pokémon
         name: "Zombie",
         types: ["Poison", "Normal"], // Updated types
@@ -19758,7 +19758,6 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
         eggGroups: ["Undead", "Human-Like"],
     },
 };
-
 
 
 
