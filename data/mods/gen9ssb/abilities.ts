@@ -75,9 +75,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'move: ' + move.name);
 				return;
 			},
-			onEnd(pokemon) {
-				pokemon.removeVolatile('woventogethercohereforever');
-			},
 		},
 	},
 	// Glint
