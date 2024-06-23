@@ -56,8 +56,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 				this.add('-message', `Checking if move has futuremove flag...`);
 				if (!move.flags['futuremove']) return false;
-				this.add('-message', `Checking if there's a futuremove to remove...`);
-				if (!target.side.removeSlotCondition(target, 'futuremove')) return false;
 				this.add('-message', `Checking if a futuremove can be added...`);
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 				this.add('-message', `Success!`);
