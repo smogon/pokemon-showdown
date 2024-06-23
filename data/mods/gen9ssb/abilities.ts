@@ -49,14 +49,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			duration: 3,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'ability: Woven Together, Cohere Forever');
+				this.add('-message', `Ability onStart triggered.`);
 			},
 			onAfterMoveSecondarySelf(source, target, move) {
+				this.add('-message', `Checking if move has futuremove flag...`);
 				if (!move.flags['futuremove']) return false;
+				this.add('-message', `Checking if move has already hit this instance...`);
 				if (source.abilityState.hits > 0) return false;
 				if (!source.abilityState.hits) source.abilityState.hits = 0;
 				source.abilityState.hits++;
+				this.add('-message', `Checking if there's a futuremove to remove...`);
 				if (!target.side.removeSlotCondition(target, 'futuremove')) return false;
+				this.add('-message', `Checking if a futuremove can be added...`);
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+				this.add('-message', `Success!`);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					duration: 1,
 					move: source.abilityState.imprintedMove.name,
