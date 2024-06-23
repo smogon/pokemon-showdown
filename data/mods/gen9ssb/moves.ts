@@ -465,30 +465,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Petal Dance', target);
 		},
-		onTry(source, target) {
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 1,
-				move: 'blissfulbreeze',
-				moveData: {
-					id: 'blissfulbreeze',
-					name: 'Blissful Breeze',
-					accuracy: 100,
-					basePower: 80,
-					category: "Special",
-					priority: 0,
-					flags: {},
-					onHit(target, source, move) {
-						this.add('-end', source, 'move: Blissful Breeze');
-					},
-					secondary: null,
-					drain: [1, 2],
-					effectType: 'Move',
-					type: 'Flying',
-				},
-			});
-			this.add('-start', source, 'move: Blissful Breeze');
-		},
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Blissful Breeze');
 			let success = false;
@@ -497,6 +473,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (ally.cureStatus()) success = true;
 			}
 			return success;
+		},
+		sideCondition: 'blissfulbreeze',
+		condition: {
+			duration: 3,
+			onSideStart(targetSide) {
+				this.add('-sidestart', targetSide, 'Blissful Breeze');
+			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
+			onResidual(target) {
+				const type = target.type;
+				const typeCheck = this.dex.types.get(type).damageTaken['Flying'];
+				const rand = this.random(85, 100) / 100;
+				const DEF = target.getStat('spd', false, true);
+				if (typeCheck === 0) const EFF = 2;
+				if (typeCheck === 1) const EFF = 0;
+				if (typeCheck === 2) const EFF = 0.5;
+				if (typeCheck === 3) const EFF = 0.25;
+				this.damage((1.5*EFF)*(72576/(5*DEF)+2)*rand, target);
+				this.add('-message', `${target.name} was damaged by Blissful Breeze!`);
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 11,
+			onSideEnd(targetSide) {
+				this.add('-sideend', targetSide, 'Blissful Breeze');
+			},
 		},
 		target: "normal",
 		type: "Flying",
