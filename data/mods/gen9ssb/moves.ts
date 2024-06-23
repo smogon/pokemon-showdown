@@ -54,6 +54,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		beforeMoveCallback(pokemon) {
 			if (pokemon.volatiles['bide']) return true;
 		},
+		onHit(target, source, move) {
+			const targetFoe = target.side.pokemon[this.random(1, 6)];
+			targetFoe.hp -= 100;
+			this.add('-message', `${targetFoe.name} was hurt!`);
+		},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
