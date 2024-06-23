@@ -53,7 +53,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (!move.flags['futuremove']) {
 					this.add('-message', `No move flagged 'futuremove' found.`);
 					return;
-				},
+				}
 				target.side.removeSlotCondition(target, 'futuremove');
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 				this.add('-message', `Next future move going through!`);
