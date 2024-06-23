@@ -52,14 +52,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-sidestart', targetSide, 'ability: Woven Together, Cohere Forever');
 			},
 			onResidual(pokemon) {
-				const move = pokemon.abilityState.imprintedMove;
 				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+				const move = target.abilityState.imprintedMove;
 				if (!move.flags['futuremove']) return false;
-				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				if (!pokemon.side.addSlotCondition(pokemon, 'futuremove')) return false;
+				Object.assign(pokemon.side.slotConditions[pokemon.position]['futuremove'], {
 					duration: 1,
 					move: move.name,
-					source: pokemon,
+					source: target,
 					moveData: {
 						id: move.id,
 						name: move.name,
@@ -70,7 +70,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 						flags: {futuremove: 1},
 						ignoreImmunity: false,
 						effectType: 'Move',
-						type: pokemon.abilityState.imprintedType,
+						type: target.abilityState.imprintedType,
 					},
 				});
 				this.add('-start', pokemon, 'move: ' + move.name);
