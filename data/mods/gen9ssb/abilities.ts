@@ -39,8 +39,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					type: pokemon.lastMoveUsed.type,
 				},
 			});
-			this.abilityState.imprintedMove = move;
-			this.abilityState.imprintedType = pokemon.lastMoveUsed.type;
+			pokemon.abilityState.imprintedMove = move;
+			pokemon.abilityState.imprintedType = pokemon.lastMoveUsed.type;
 			this.add('-start', pokemon, 'move: ' + move.name);
 			return this.NOT_FAIL;
 		},
@@ -52,19 +52,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					duration: 1,
-					move: this.abilityState.imprintedMove.name,
+					move: source.abilityState.imprintedMove.name,
 					source: source,
 					moveData: {
-						id: this.abilityState.imprintedMove.id,
-						name: this.abilityState.imprintedMove.name,
+						id: source.abilityState.imprintedMove.id,
+						name: source.abilityState.imprintedMove.name,
 						accuracy: true,
-						basePower: this.abilityState.imprintedMove.basePower,
-						category: this.abilityState.imprintedMove.category,
+						basePower: source.abilityState.imprintedMove.basePower,
+						category: source.abilityState.imprintedMove.category,
 						priority: 0,
 						flags: {futuremove: 1},
 						ignoreImmunity: false,
 						effectType: 'Move',
-						type: this.abilityState.imprintedType,
+						type: source.abilityState.imprintedType,
 					},
 				});
 				this.add('-start', source, 'move: ' + move.name);
