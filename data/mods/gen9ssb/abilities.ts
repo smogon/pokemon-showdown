@@ -48,6 +48,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		condition: {
 			duration: 3,
+			onStart(pokemon) {
+				this.add('-message', `Hello!`);
+			},
 			onAfterMoveSecondarySelf(source, target, move) {
 				if (!move.flags['futuremove']) return false;
 				if (source.abilityState.hits > 0) return false;
