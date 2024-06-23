@@ -60,7 +60,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				target.side.removeSlotCondition(target, 'futuremove');
 				this.add('-message', `Next futuremove going through!`);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-					duration: 1,
+					duration: 2,
 					move: source.abilityState.imprintedMove.name,
 					source: source,
 					moveData: {
