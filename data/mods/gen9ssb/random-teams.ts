@@ -67,6 +67,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
 	},
+	Xyris: {
+		species: 'Type: Null', ability: "Yidris's Malediction", item: 'Knowledge Pool', gender: 'N',
+		moves: ['Boomburst', 'Armor Cannon', 'Detect'],
+		signatureMove: 'Interplanar Storm',
+		evs: {hp: 252, spa: 4, spe: 252},
+	},
+	/*
 	Glint: {
 		species: 'Meltan', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
 		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
@@ -79,7 +86,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'GigaMeld',
 		evs: {hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252}, nature: 'Adamant', skip: 'Glint',
 	},
-	/*
  	'Lord of Extinction': {
 		species: 'Grimmsnarl-Gmax', ability: 'Impending Rot', item: 'Black Lotus', gender: '',
 		moves: ['Spirit Break', 'Jaw Lock', ['Phantom Force', 'Pain Split', 'Comeuppance']],
