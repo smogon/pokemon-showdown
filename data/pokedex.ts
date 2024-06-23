@@ -19747,9 +19747,10 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		gen: 5,
 	},
 	zombie: {
-        num: -1001,
+        num: 2001,
         name: "Zombie",
         types: ["Poison", "Normal"],
+		gender: "M",
         baseStats: {hp: 80, atk: 100, def: 90, spa: 60, spd: 90, spe: 50},
         abilities: {0: "Dry Skin",},
         heightm: 1.6,
