@@ -36,7 +36,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					flags: {futuremove: 1},
 					onHit(target) {
 						target.side.removeSlotCondition(target, 'futuremove');
-						this.add('-message', `onHit: futuremove  removed.`);
 					},
 					ignoreImmunity: false,
 					effectType: 'Move',
@@ -51,10 +50,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		condition: {
 			duration: 3,
 			onAfterMoveSecondarySelf(source, target, move) {
-				if (!move.flags['futuremove']) return;
+				if (!move.flags['futuremove']) return false;
+				if (source.abilityState.hits > 0) return false;
 				if (!source.abilityState.hits) source.abilityState.hits = 0;
 				source.abilityState.hits++;
-				if (source.abilityState.hits > 1) return;
 				target.side.removeSlotCondition(target, 'futuremove');
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
