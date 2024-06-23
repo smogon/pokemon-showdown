@@ -77,7 +77,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onEnd(pokemon) {
 				pokemon.removeVolatile('woventogethercohereforever');
-				this.add('-end', pokemon, 'Woven Together, Cohere Forever');
 			},
 		},
 	},
