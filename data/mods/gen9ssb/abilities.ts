@@ -42,6 +42,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			});
 			pokemon.abilityState.imprintedMove = move;
 			pokemon.abilityState.imprintedType = pokemon.lastMoveUsed.type;
+			pokemon.abilityState.imprintedMove.flags.push('futuremove');
 			this.add('-start', pokemon, 'move: ' + move.name);
 			return;
 		},
@@ -51,13 +52,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'ability: Woven Together, Cohere Forever');
 				this.add('-message', `Ability onStart triggered.`);
 			},
-			onAfterMoveSecondarySelf(source, target, move) {
+			onResidual(pokemon) {
+				const move = pokemon.abilityState.imprintedMove;
+				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 				this.add('-message', `Checking if move has futuremove flag...`);
 				if (!move.flags['futuremove']) return false;
-				this.add('-message', `Checking if move has already hit this instance...`);
-				if (source.abilityState.hits > 0) return false;
-				if (!source.abilityState.hits) source.abilityState.hits = 0;
-				source.abilityState.hits++;
 				this.add('-message', `Checking if there's a futuremove to remove...`);
 				if (!target.side.removeSlotCondition(target, 'futuremove')) return false;
 				this.add('-message', `Checking if a futuremove can be added...`);
@@ -65,26 +64,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `Success!`);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					duration: 1,
-					move: source.abilityState.imprintedMove.name,
-					source: source,
+					move: move.name,
+					source: pokemon,
 					moveData: {
-						id: source.abilityState.imprintedMove.id,
-						name: source.abilityState.imprintedMove.name,
+						id: move.id,
+						name: move.name,
 						accuracy: true,
-						basePower: source.abilityState.imprintedMove.basePower,
-						category: source.abilityState.imprintedMove.category,
+						basePower: move.basePower,
+						category: move.category,
 						priority: 0,
 						flags: {futuremove: 1},
 						ignoreImmunity: false,
 						effectType: 'Move',
-						type: source.abilityState.imprintedType,
+						type: pokemon.abilityState.imprintedType,
 					},
 				});
-				this.add('-start', source, 'move: ' + move.name);
+				this.add('-start', pokemon, 'move: ' + move.name);
 				return;
-			},
-			onResidual(pokemon) {
-				pokemon.abilityState.hits = 0;
 			},
 			onEnd(pokemon) {
 				delete pokemon.volatiles['woventogethercohereforever'];
