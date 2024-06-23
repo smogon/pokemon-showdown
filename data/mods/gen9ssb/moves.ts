@@ -483,21 +483,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(target) {
-				//let EFF;
-				//const type = target.type;
-				//const typeCheck = this.dex.types.get(type).damageTaken['Flying'];
 				const rand = this.random(85, 100) / 100;
-				const DEF = target.getStat('spd', false, true);
-				const EFF = 1;
-				//if (typeCheck === 0) EFF = 2;
-				//if (typeCheck === 1) EFF = 0;
-				//if (typeCheck === 2) EFF = 0.5;
-				//if (typeCheck === 3) EFF = 0.25;
-				//if (!typeCheck) EFF = 1;
-				const damage = (1.5*EFF)*(72576/(5*DEF)+2)*rand;
+				const def = target.getStat('spd', false, true);
+				const damage = (1.5)*(72576/(5*def)+2)*rand;
 				this.damage(damage, target);
 				this.add('-message', `${target.name} was damaged by Blissful Breeze!`);
-				this.add('-message', `${damage}`);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
