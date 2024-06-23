@@ -21,7 +21,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		onBeforeMove(pokemon, target, move) {
 			if (move.type !== 'Flying' || !pokemon.lastMoveUsed) return;
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			if (!target.side.addSlotCondition(target, 'futuremove')) return;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 1,
 				move: move.name,
@@ -36,6 +36,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					flags: {futuremove: 1},
 					onHit(target) {
 						target.side.removeSlotCondition(target, 'futuremove');
+						this.add('-message', `onHit: futuremove  removed.`);
 					},
 					ignoreImmunity: false,
 					effectType: 'Move',
@@ -44,6 +45,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			});
 			pokemon.abilityState.imprintedMove = move;
 			pokemon.abilityState.imprintedType = pokemon.lastMoveUsed.type;
+			this.abilityState.firstHit = true;
 			this.add('-start', pokemon, 'move: ' + move.name);
 			return;
 		},
@@ -54,9 +56,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', `No move flagged 'futuremove' found.`);
 					return;
 				}
-				target.side.removeSlotCondition(target, 'futuremove');
 				if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-				this.add('-message', `Next future move going through!`);
+				this.add('-message', `Removing futuremove...`);
+				target.side.removeSlotCondition(target, 'futuremove');
+				this.add('-message', `Next futuremove going through!`);
 				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 					duration: 1,
 					move: source.abilityState.imprintedMove.name,
