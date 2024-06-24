@@ -67,13 +67,16 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
 	},
+	/*
+	Nibirus: {
+		species: 'Sableye-Mega', ability: 'Hall of Gemstone', item: 
+	},
 	Xyris: {
 		species: 'Type: Null', ability: "Yidris's Malediction", item: 'Knowledge Pool', gender: 'N',
 		moves: ['Boomburst', 'Armor Cannon', 'Detect'],
 		signatureMove: 'Interplanar Storm',
 		evs: {hp: 252, spa: 4, spe: 252},
 	},
-	/*
 	Glint: {
 		species: 'Meltan', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
 		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
