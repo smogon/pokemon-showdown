@@ -72,13 +72,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			let i: BoostID;
 			if (!target.boosts) return;
 			for (i in target.boosts) {
-				if (target.boosts[i] < 0) continue;
-				pokemon.boosts[i] = target.boosts[i];
-				pokemon.setBoost(target.boosts[i]);
-				this.add('-message', `Found a boost! Your boosts = ${pokemon.boosts}, Opponent's boosts = ${target.boosts}`);
+				if (target.boosts[i] > 0) boosts[i] = target.boosts[i];
 			}
 			this.add("-activate", pokemon, "item: Sketchbook");
 			this.add('-message', `${pokemon.name} sketched ${target.name}'s stat changes!`);
+			this.boost(boosts, pokemon);
 		},
 	},
 	// Trey
