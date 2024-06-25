@@ -15,6 +15,42 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Gizmo
+	headonbattery: {
+		name: "Head-On Battery",
+		onModifyMove(move, pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			if (move.id === 'charge') {
+				if (!pokemon.abilityState.charges) pokemon.abilityState.charges = 0;
+				if (pokemon.abilityState.charges >= 3) return;
+				pokemon.abilityState.charges += 1;
+				if (pokemon.abilityState.charges >= 3) {
+					this.add('-message', `${pokemon.name} is overflowing with charge!`);
+					this.add('-message', `${pokemon.name} unleashed Head-On Battery on ${target.name}!`);
+					this.add(`-anim`, pokemon, "Volt Tackle", target);
+					this.damage(100*pokemon.abilityState.charges, target, pokemon);
+					pokemon.abilityState.charges = 0;
+					this.add('-message', `${pokemon.name} was launched away by the impact!`);
+					this.damage(pokemon.maxhp / 4, pokemon, pokemon);
+					if (pokemon.hp && pokemon.hp > 0) pokemon.forceSwitchFlag = true;
+				}
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (!pokemon.abilityState.charges) return;
+			// Formula gives 20% (1.2x) boost per charge, 1.2x, 1.4x, 1.6x, etc.
+			this.debug('Charge boost');
+			return this.chainModify(1+(0.2*pokemon.abilityState.charges));
+		},
+		onModifySpe(spe, pokemon) {
+			if (!pokemon.abilityState.charges) return;
+			// Formula gives 20% (1.2x) boost per charge, 1.2x, 1.4x, 1.6x, etc.
+			this.debug('Charge boost');
+			return this.chainModify(1+(0.2*pokemon.abilityState.charges));
+		},
+		gen: 9,
+	},
 	// Aeri
 	woventogethercohereforever: {
 		name: "Woven Together, Cohere Forever",
