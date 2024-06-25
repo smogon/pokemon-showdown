@@ -70,13 +70,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
-			activate = false;
 			if (!target.boosts) return;
 			for (i in target.boosts) {
 				if (target.boosts[i] < 0) continue;
 				pokemon.boosts[i] = target.boosts[i];
 			}
-			activate = true;
 			pokemon.setBoost(pokemon.boosts);
 			this.add("-activate", pokemon, "item: Sketchbook");
 			this.add('-message', `${pokemon.name} sketched ${target.name}'s stat changes!`);
