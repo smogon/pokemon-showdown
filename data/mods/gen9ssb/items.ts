@@ -27,7 +27,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onModifyDamage(damage, source, target, move) {
 			if (!source.abilityState.charges || source.abilityState.charges === 0) return;
 			const chance = 5/(1+source.abilityState.charges);
-			this.add('-message', 'Chance: ' + 1/chance);
 			if (this.randomChance(1, chance) && move.basePower <= 60) {
 				this.add('-message', `${source.name} used the Inconspicuous Coin's charge to strengthen ${move.name}'s impact!`);
 				return this.chainModify(2);
