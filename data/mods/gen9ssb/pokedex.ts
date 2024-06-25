@@ -30,4 +30,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ['Ghost', 'Electric'],
 		baseStats: {hp: 45, atk: 50, def: 45, spa: 75, spd: 45, spe: 80},
 	},
+	// Mima
+	mismagius: {
+		inherit: true,
+		types: ['Ghost', 'Dark'],
+		abilities: {0: "Vengeful Spirit"},
+	},
 };
