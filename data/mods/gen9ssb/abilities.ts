@@ -25,6 +25,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.abilityState.recallActive = false;
 			}
 		},
+		onSwitchOut(pokemon) {
+			pokemon.abilityState.firedUp = false;
+		},
 		onModifyMove(move, pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (move.id === 'charge') {
@@ -55,6 +58,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			// Formula gives 20% (1.2x) boost per charge, 1.2x, 1.4x, 1.6x, etc.
 			this.debug('Charge boost');
 			return this.chainModify(1+(0.2*pokemon.abilityState.charges));
+		},
+		onModifyCritRatio(critRatio, source, target) {
+			if (source.abilityState.firedUp) return critRatio + 2;
+		},
+		onModifyAccuracyPriority: -1,
+		onModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy !== 'number') return;
+			if (target.abilityState.firedUp) {
+				return this.chainModify([3277, 4096]);
+			}
 		},
 		gen: 9,
 	},
