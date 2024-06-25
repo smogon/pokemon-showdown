@@ -140,12 +140,26 @@ function writeFile(path: string, data: AnyObject) {
 MafiaData = readFile(DATA_FILE) || {alignments: {}, roles: {}, themes: {}, IDEAs: {}, terms: {}, aliases: {}};
 if (!MafiaData.alignments.town) {
 	MafiaData.alignments.town = {
-		name: 'town', plural: 'town', memo: [`This alignment is required for the script to function properly.`],
+		name: 'Town',
+		plural: 'Town',
+		memo: [`This alignment is required for the script to function properly.`],
 	};
 }
 if (!MafiaData.alignments.solo) {
 	MafiaData.alignments.solo = {
-		name: 'solo', plural: 'solo', memo: [`This alignment is required for the script to function properly.`],
+		name: 'Solo',
+		plural: 'Solo',
+		memo: [`This alignment is required for the script to function properly.`],
+	};
+}
+if (!MafiaData.themes.nominations) {
+	MafiaData.themes.nominations = {
+		name: `Nominations`,
+		desc: `Every odd night, the Mafia select three players. The next day, you can only vote for one of these three players.`,
+		7: `Mafia Goon, Mafia Goon, Villager, Villager, Villager, Villager, Villager`,
+		11: `Mafia Goon, Mafia Goon, Mafia Goon, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager`,
+		15: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager`,
+		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager`,
 	};
 }
 
@@ -273,7 +287,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	dlAt: number;
 
 	IDEA: MafiaIDEAModule;
-	constructor(room: ChatRoom, host: User) {
+
+	constructor(room: ChatRoom, host?: User) {
 		super(room);
 
 		this.title = 'Mafia';
@@ -282,9 +297,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.started = false;
 
 		this.theme = null;
-
-		this.hostid = host.id;
-		this.host = Utils.escapeHTML(host.name);
+		if(host != undefined) {
+			this.hostid = host?.id;
+			this.host = Utils.escapeHTML(host?.name);
+		}
 		this.cohostids = [];
 		this.cohosts = [];
 
@@ -2108,7 +2124,15 @@ export const commands: Chat.ChatCommands = {
 			}
 			return this.parse('/help mafia');
 		},
+		autohost(target, room, user, cmd) {
+			room = this.requireRoom();
+			if (room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			this.checkChat();
+			if (room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
+			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 
+			room.game = new Mafia(room, null);
+		},
 		forcehost: 'host',
 		nexthost: 'host',
 		host(target, room, user, connection, cmd) {
