@@ -41,6 +41,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Mima
+	reincarnation: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "User fully restores HP and status condition and resets boosts before permanently transforming into foe.",
+		shortDesc: "Full restore & boost reset; transformation.",
+		name: "Reincarnation",
+		gen: 9,
+		pp: 1,
+		priority: 0,
+		flags: {defrost: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Revival Blessing', source);
+		},
+		onHit(target, pokemon) {
+			pokemon.clearBoosts();
+			pokemon.cureStatus();
+			changeSet(this, pokemon, target);
+			this.heal(pokemon.baseMaxhp);
+		},
+		isZ: "crescentstaff",
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+	// Mima
 	completedarkness: {
 		accuracy: 100,
 		basePower: 90,
