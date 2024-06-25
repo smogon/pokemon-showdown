@@ -53,8 +53,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		spritenum: 200,
 		desc: "On switch-in, this Pokemon copies the stat changes of the opposing Pokemon.",
 		gen: 9,
-		onStart(target) {
-			this.actions.useMove('Sketchbook', target);
+		onStart(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			const boosts: SparseBoostsTable = {};
+			let i: BoostID;
+			for (i in target.boosts) {
+				pokemon.boosts[i] = target.boosts[i];
+			}
+			pokemon.setBoost(pokemon.boosts);
+			this.add('-copyboost', pokemon, target, '[from] item: Sketchbook');
 		},
 	},
 	// Trey
