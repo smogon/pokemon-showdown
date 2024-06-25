@@ -121,6 +121,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 20,
 		category: "Physical",
 		name: "Coin Clash",
+		desc: "Hits 3-5 times. Flings coin at target after use. 50% chance to gain +2 crit ratio and 1.25x evasion until switch/faint. Fails if not holding Inconspicuous Coin.",
+		shortDesc: "See this entry with '/ssb Gizmo'!",
 		pp: 10,
 		noPPBoosts: true,
 		flags: {contact: 1},
