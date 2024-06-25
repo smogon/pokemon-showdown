@@ -29,20 +29,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onBeforeMovePriority: 6,
-		onBeforeMove(pokemon, move) {
-			for (const target of pokemon.foes()) {
-				if (move.flags['heal'] && !move.isZ && !move.isMax) {
-					this.add('cant', target, 'ability: Angel of Death', move);
-					return false;
-				}
-			}
-		},
-		onModifyMove(pokemon, move) {
-			for (const target of pokemon.foes()) {
-				if (move.flags['heal'] && !move.isZ && !move.isMax) {
-					this.add('cant', target, 'ability: Angel of Death', move);
-					return false;
-				}
+		onFoeTryMove(target, source, move) {
+			if (move.flags['heal'] && !move.isZ && !move.isMax) {
+				this.attrLastMove('[still]');
+				this.add('cant', target, 'ability: Angel of Death', move);
+				return false;
 			}
 		},
 		onResidualOrder: 28,
