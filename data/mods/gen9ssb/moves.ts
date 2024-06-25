@@ -40,6 +40,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Mima
+	completedarkness: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		desc: "The target's positive stat changes are stolen and applied to the user before dealing damage.",
+		shortDesc: "Steals target's boosts before dealing damage.",
+		name: "Complete Darkness",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {bypasssub: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Spectral Thief', target);
+		},
+		stealsBoosts: true,
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+	},
 	// Gizmo
 	coinclash: {
 		accuracy: 80,
