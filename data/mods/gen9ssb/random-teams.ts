@@ -79,6 +79,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Complete Darkness',
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
+	Sariel: {
+		species: 'Yveltal', ability: 'Angel of Death', item: 'Leftovers', gender: 'N',
+		moves: ['Recover', 'Protect', 'Foul Play'],
+		signatureMove: 'Civilisation of Magic',
+		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
+	},
 	/*
 	Nibirus: {
 		species: 'Sableye-Mega', ability: 'Hall of Gemstone', item: 
