@@ -1,4 +1,15 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Mima
+	crescentstaff: {
+		name: "Crescent Staff",
+		spritenum: 698,
+		onTakeItem: false,
+		zMove: "Reincarnation",
+		zMoveFrom: "Complete Darkness",
+		itemUser: ["Mismagius"],
+		desc: "If held by a Mismagius with Complete Darkness, it can use Reincarnation.",
+		gen: 9,
+	},
 	// Gizmo
 	inconspicuouscoin: {
 		name: "Inconspicuous Coin",
