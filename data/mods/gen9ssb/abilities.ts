@@ -45,6 +45,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					if (pokemon.hp && pokemon.hp > 0) pokemon.forceSwitchFlag = true;
 					return false;
 				}
+				this.add('-message', `${pokemon.name} is building charge!`);
 			}
 		},
 		onModifyAtkPriority: 5,
