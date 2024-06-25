@@ -15,6 +15,55 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Mima
+	vengefulspirit: {
+		desc: "This Pokemon's attacks hit before the target switches.",
+		shortDesc: "This Pokemon's attacks hit before target switches.",
+		onBeforeTurn(pokemon) {
+			for (const side of this.sides) {
+				if (side.hasAlly(pokemon)) continue;
+				side.addSideCondition('vengefulspirit', pokemon);
+				const data = side.getSideConditionData('vengefulspirit');
+				if (!data.sources) {
+					data.sources = [];
+				}
+				data.sources.push(pokemon);
+			}
+		},
+		onTryHit(source, target) {
+			target.side.removeSideCondition('vengefulspirit');
+		},
+		condition: {
+			duration: 1,
+			onBeforeSwitchOut(pokemon) {
+				const move = this.queue.willMove(pokemon.foes()[0]);
+				const moveName = move && move.moveid ? move.moveid.toString() : "";
+				this.debug('Pursuit start');
+				let alreadyAdded = false;
+				pokemon.removeVolatile('destinybond');
+				for (const source of this.effectState.sources) {
+					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
+					if (!alreadyAdded) {
+						this.add('-activate', pokemon.foes()[0], 'ability: Vengeful Spirit');
+						alreadyAdded = true;
+					}
+					if (source.canMegaEvo || source.canUltraBurst) {
+						for (const [actionIndex, action] of this.queue.entries()) {
+							if (action.pokemon === source && action.choice === 'megaEvo') {
+								this.actions.runMegaEvo(source);
+								this.queue.list.splice(actionIndex, 1);
+								break;
+							}
+						}
+					}
+					this.actions.runMove(moveName, source, source.getLocOf(pokemon));
+				}
+			},
+		},
+		flags: {},
+		name: "Vengeful Spirit",
+		gen: 9,
+	},
 	// Gizmo
 	headonbattery: {
 		name: "Head-On Battery",
