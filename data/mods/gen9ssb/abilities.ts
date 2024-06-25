@@ -53,13 +53,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!pokemon.abilityState.charges) return;
 			// Formula gives 20% (1.2x) boost per charge, 1.2x, 1.4x, 1.6x, etc.
 			this.debug('Charge boost');
-			return this.chainModify(1+(0.2*pokemon.abilityState.charges));
+			return this.chainModify(1+(0.5*pokemon.abilityState.charges));
 		},
 		onModifySpe(spe, pokemon) {
 			if (!pokemon.abilityState.charges) return;
 			// Formula gives 20% (1.2x) boost per charge, 1.2x, 1.4x, 1.6x, etc.
 			this.debug('Charge boost');
-			return this.chainModify(1+(0.2*pokemon.abilityState.charges));
+			return this.chainModify(1+(0.5*pokemon.abilityState.charges));
 		},
 		onModifyCritRatio(critRatio, source, target) {
 			if (source.abilityState.firedUp) return critRatio + 2;
