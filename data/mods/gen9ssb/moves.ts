@@ -40,6 +40,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Sariel
+	civilizationofmagic: {
+		accuracy: 100,
+		basePower: 95,
+		category: "Special",
+		desc: "Target's Special Attack is used in damage calculation.",
+		shortDesc: "Uses foe's SpA.",
+		name: "Civilization of Magic",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit() {
+			this.add('-anim', source, 'Dazzling Gleam', target);
+		},
+		overrideOffensivePokemon: 'target',
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
 	// Mima
 	reincarnation: {
 		accuracy: true,
