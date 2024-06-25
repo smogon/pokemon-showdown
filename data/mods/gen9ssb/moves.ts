@@ -84,7 +84,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		multihit: [3, 5],
 		secondary: null,
-		target: "target",
+		target: "normal",
 		type: "Steel",
 	},
 	// Glint
