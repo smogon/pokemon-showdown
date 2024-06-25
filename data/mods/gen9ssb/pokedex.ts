@@ -15,6 +15,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ['Flying'],
 		baseStats: {hp: 95, atk: 45, def: 50, spa: 90, spd: 80, spe: 100},
+		abilities: {0: "Woven Together, Cohere Forever"},
 	},
 	meltan: {
 		inherit: true,
@@ -26,9 +27,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	gimmighoulroaming: {
 		inherit: true,
-		abilities: {0: "Head-On Battery"},
 		types: ['Ghost', 'Electric'],
 		baseStats: {hp: 45, atk: 50, def: 45, spa: 75, spd: 45, spe: 80},
+		abilities: {0: "Head-On Battery"},
 	},
 	mismagius: {
 		inherit: true,
