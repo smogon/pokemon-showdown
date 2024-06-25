@@ -13,6 +13,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Gizmo
 	inconspicuouscoin: {
 		name: "Inconspicuous Coin",
+		desc: "When the holder is hit by a damaging move: ~16% chance to do halved damage. When the holder uses a damaging move: 20% chance to do doubled damage. Chances roughly double for each charge this Pokemon has (~16%, ~33%, ~50% | 20%, 40%, 60%)",
+		shortDesc: "See this entry with '/ssb Gizmo'!",
 		gen: 9,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (!target.abilityState.charges) target.abilityState.charges = 0;
