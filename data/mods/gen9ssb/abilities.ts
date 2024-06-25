@@ -41,8 +41,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.damage(100*pokemon.abilityState.charges, target, pokemon);
 					pokemon.abilityState.charges = 0;
 					this.add('-message', `${pokemon.name} was launched away by the impact!`);
-					this.damage(pokemon.maxhp / 4, pokemon, pokemon);
+					this.damage(pokemon.maxhp / this.random(4, 8), pokemon, pokemon);
 					if (pokemon.hp && pokemon.hp > 0) pokemon.forceSwitchFlag = true;
+					return false;
 				}
 			}
 		},
