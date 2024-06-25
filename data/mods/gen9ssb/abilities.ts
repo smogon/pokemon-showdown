@@ -312,16 +312,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onTryHit(pokemon, target, move) {
+			if (move.id === 'taunt') {
+				this.add('-immune', pokemon, '[from] ability: Artist Block');
+				return null;
+			}
+			if (!pokemon.lastMoveUsed) return;
 			if (pokemon.lastMoveUsed.id === 'sketch') {
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
 				this.actions.useMove(newMove, pokemon, target);
 				this.add('-immune', pokemon, '[from] move: Sketch');
-				return null;
-			}
-			if (move.id === 'taunt') {
-				this.add('-immune', pokemon, '[from] ability: Artist Block');
 				return null;
 			}
 		},
