@@ -62,10 +62,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterMove(source, target, move) {
 			this.add('-message', `${source.name} hurled the Inconspicuous Coin at ${target.name}!`);
-			this.damage(target.maxhp / 8, source, target);
+			this.damage(target.maxhp / this.random(6, 10), source, target);
 			this.add('-enditem', source, 'Inconspicuous Coin', '[from] move: Coin Clash', '[of] ' + source);
 			source.addVolatile('coinrecall');
 			source.abilityState.recallActive = true;
+			if (this.randomChance(1, 2)) {
+				this.add('-message', `Hey! The coin landed on heads!`);
+				this.add('-message', `${source.name} is fired up!`);
+				this.heal(source.maxhp / this.random(4, 8));
+				source.abilityState.firedUp = true;
+			}
 		},
 		condition: {
 			duration: 2,
