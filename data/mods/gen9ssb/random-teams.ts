@@ -67,6 +67,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
 	},
+	Gizmo: {
+		species: 'Gimmighoul-Roaming', ability: 'Head-On Battery', item: 'Inconspicuous Coin', gender: 'M',
+		moves: ['Astonish', 'Nuzzle', 'Charge'],
+		signatureMove: 'Coin Toss',
+		evs: {hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252}, nature: 'Naive',
+	},
 	/*
 	Nibirus: {
 		species: 'Sableye-Mega', ability: 'Hall of Gemstone', item: 
