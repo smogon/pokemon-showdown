@@ -57,10 +57,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onPrepareHit(target, source) {
+			if (!source.item) return;
 			this.add('-anim', source, 'Magnetic Flux', source);
 			this.add('-anim', source, 'Pay Day', target);
 		},
 		onAfterMove(source, target, move) {
+			if (!pokemon.item) return;
 			this.add('-message', `${source.name} hurled the Inconspicuous Coin at ${target.name}!`);
 			this.damage(target.maxhp / this.random(6, 10), target, source);
 			this.add('-enditem', source, 'Inconspicuous Coin', '[from] move: Coin Clash', '[of] ' + source);
