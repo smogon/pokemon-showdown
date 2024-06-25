@@ -1,4 +1,25 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Gizmo
+	inconspicuouscoin: {
+		name: "Inconspicuous Coin",
+		gen: 9,
+		onSourceModifyDamage(damage, source, target, move) {
+			if (!target.abilityState.charges) target.abilityState.charges = 0;
+			const chance = 6/(1+target.abilityState.charges);
+			if (this.randomChance(1, chance)) {
+				this.add('-message', `${target.name} defended itself with the Inconspicuous Coin!`);
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (!source.abilityState.charges || source.abilityState.charges === 0) return;
+			const chance = 5/(1+source.abilityState.charges);
+			if (this.randomChance(1, chance) && move.basePower <= 60) {
+				this.add('-message', `${source.name} used the Inconspicuous Coin's charge to strengthen ${move.name}'s impact!`);
+				return this.chainModify(2);
+			}
+		},
+	},
 	// Glint
 	slag: {
 		name: "Slag",
