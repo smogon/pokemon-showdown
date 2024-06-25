@@ -40,6 +40,47 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Gizmo
+	coinclash: {
+		accuracy: 80,
+		basePower: 20,
+		category: "Physical",
+		name: "Coin Clash",
+		pp: 10,
+		noPPBoosts: true,
+		flags: {contact: 1},
+		onTryMove(pokemon, target, move) {
+			this.attrLastMove('[still]');
+			if (!pokemon.item || pokemon.item.id !== 'inconspicuouscoin') {
+				this.add('-message', `${pokemon.name} couldn't find their coin!`);
+				return false;
+			}
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Magnetic Flux', source);
+			this.add('-anim', source, 'Pay Day', target);
+		},
+		onAfterMove(source, target, move) {
+			this.add('-message', `${source.name} hurled the Inconspicuous Coin at ${target.name}!`);
+			this.damage(target.maxhp / 8, source, target);
+			this.add('-enditem', source, 'Inconspicuous Coin', '[from] move: Coin Clash', '[of] ' + source);
+			source.addVolatile('coinrecall');
+			source.abilityState.recallActive = true;
+		},
+		condition: {
+			duration: 2,
+			onEnd(pokemon) {
+				if (pokemon.item || pokemon.name !== 'Gizmo') return;
+				pokemon.setItem('inconspicuouscoin');
+				this.add('-item', pokemon, pokemon.getItem(), '[from] item: Inconspicuous Coin');
+				pokemon.abilityState.recallActive = false;
+			},
+		},
+		multihit: [3, 5],
+		secondary: null,
+		target: "target",
+		type: "Steel",
+	},
 	// Glint
 	gigameld: {
 		accuracy: true,
@@ -112,7 +153,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Steel",
 	},
-	// Finger
 	megametronome: {
 		accuracy: true,
 		basePower: 0,
