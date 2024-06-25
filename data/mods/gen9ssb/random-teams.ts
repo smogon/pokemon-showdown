@@ -73,6 +73,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Coin Clash',
 		evs: {hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252}, nature: 'Jolly',
 	},
+	Mima: {
+		species: 'Mismagius', ability: 'Vengeful Spirit', item: 'Crescent Staff', gender: 'F',
+		moves: ['Corrosive Gas', 'Secret Sword', 'Shadow Ball'],
+		signatureMove: 'Complete Darkness',
+		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	/*
 	Nibirus: {
 		species: 'Sableye-Mega', ability: 'Hall of Gemstone', item: 
