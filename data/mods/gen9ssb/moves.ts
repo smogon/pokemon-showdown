@@ -51,7 +51,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {contact: 1},
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
-			if (!pokemon.item || pokemon.item.id !== 'inconspicuouscoin') {
+			if (!pokemon.item) {
 				this.add('-message', `${pokemon.name} couldn't find their coin!`);
 				return false;
 			}
@@ -62,7 +62,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterMove(source, target, move) {
 			this.add('-message', `${source.name} hurled the Inconspicuous Coin at ${target.name}!`);
-			this.damage(target.maxhp / this.random(6, 10), source, target);
+			this.damage(target.maxhp / this.random(6, 10), target, source);
 			this.add('-enditem', source, 'Inconspicuous Coin', '[from] move: Coin Clash', '[of] ' + source);
 			source.addVolatile('coinrecall');
 			source.abilityState.recallActive = true;
