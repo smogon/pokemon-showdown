@@ -115,6 +115,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Gizmo
 	headonbattery: {
 		name: "Head-On Battery",
+		desc: "Allows this Pokemon to use Charge up to three times. Deals (100HP*number of charges) damage to target after reaching three charges. 12.5-25% recoil. Forces user to switch to a random ally. Increases Attack and Speed by 50% for each charge this Pokemon has.",
+		shortDesc: "See this entry with '/ssb Gizmo'!",
 		onStart(pokemon) {
 			if (pokemon.abilityState.recallActive && !pokemon.item) {
 				pokemon.setItem('inconspicuouscoin');
