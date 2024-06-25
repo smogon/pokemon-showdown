@@ -18,6 +18,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Gizmo
 	headonbattery: {
 		name: "Head-On Battery",
+		onStart(pokemon) {
+			if (pokemon.abilityState.recallActive && !pokemon.item) {
+				pokemon.setItem('inconspicuouscoin');
+				this.add('-item', pokemon, pokemon.getItem(), '[from] item: Inconspicuous Coin');
+				pokemon.abilityState.recallActive = false;
+			}
+		},
 		onModifyMove(move, pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (move.id === 'charge') {
