@@ -35,4 +35,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ['Ghost', 'Dark'],
 		abilities: {0: "Vengeful Spirit"},
 	},
+	yveltal: {
+		inherit: true,
+		types: ['Dark', 'Fairy'],
+		abilities: {0: "Angel of Death"},
+	},
 };
