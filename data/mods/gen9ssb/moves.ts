@@ -55,7 +55,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onPrepareHit() {
+		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Dazzling Gleam', target);
 		},
 		overrideOffensivePokemon: 'target',
