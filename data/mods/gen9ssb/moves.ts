@@ -142,10 +142,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!source.item) return;
 			this.add('-message', `${source.name} hurled the Inconspicuous Coin at ${target.name}!`);
 			this.damage(target.maxhp / this.random(6, 10), target, source);
-			source.setItem('');
-			this.add('-enditem', source, 'Inconspicuous Coin', '[from] move: Coin Clash');
-			this.runEvent('AfterUseItem', source, null, null, 'Inconspicuous Coin');
-			source.addVolatile('coinrecall');
+			source.addVolatile('coinclash');
 			source.abilityState.recallActive = true;
 			if (this.randomChance(1, 2)) {
 				this.add('-message', `Hey! The coin landed on heads!`);
@@ -156,6 +153,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 2,
+			onStart(pokemon) {
+				const item = pokemon.getItem();
+				pokemon.setItem('');
+				pokemon.lastItem = item.id;
+				pokemon.usedItemThisTurn = true;
+				this.add('-enditem', pokemon, item.name, '[from] move: Coin Clash');
+				this.runEvent('AfterUseItem', pokemon, null, null, item);
+			},
 			onEnd(pokemon) {
 				if (pokemon.item || pokemon.name !== 'Gizmo') return;
 				pokemon.setItem('inconspicuouscoin');
