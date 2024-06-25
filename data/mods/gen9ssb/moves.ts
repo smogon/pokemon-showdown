@@ -142,7 +142,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!source.item) return;
 			this.add('-message', `${source.name} hurled the Inconspicuous Coin at ${target.name}!`);
 			this.damage(target.maxhp / this.random(6, 10), target, source);
-			this.add('-enditem', source, 'Inconspicuous Coin', '[from] move: Coin Clash', '[of] ' + source);
+			source.setItem('');
+			this.add('-enditem', source, 'Inconspicuous Coin', '[from] move: Coin Clash');
+			this.runEvent('AfterUseItem', source, null, null, 'Inconspicuous Coin');
 			source.addVolatile('coinrecall');
 			source.abilityState.recallActive = true;
 			if (this.randomChance(1, 2)) {
