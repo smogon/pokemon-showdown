@@ -85,6 +85,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Civilization of Magic',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
+	Urabrask: {
+		species: 'Smokomodo', ability: 'Praetor\'s Grasp', item: 'Urabrask\'s Forge', gender: 'M',
+		moves: [['Blazing Torque', 'Fire Lash', 'Raging Fury'], ['Drill Run', 'Headlong Rush', 'Stomping Tantrum'], ['Burning Bulwark', 'Hone Claws', 'Shed Tail']],
+		signatureMove: 'Blasphemous Act',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	/*
 	Nibirus: {
 		species: 'Sableye-Mega', ability: 'Hall of Gemstone', item: 
