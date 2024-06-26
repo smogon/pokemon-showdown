@@ -102,18 +102,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Inferno', source);
 			this.add('-anim', source, 'G-Max Fireball', target);
 		},
-		basePowerCallback(target, source, move) {
+		basePowerCallback(pokemon, target, move) {
 			this.effectState.totaldrain = 0;
-			for (const ally of source.side.pokemon) {
-				this.add('-message', ally.hp);
-				if (ally === source) continue;
+			for (const ally of pokemon.side.pokemon) {
+				if (ally === pokemon) continue;
 				if (ally.hp <= ally.baseMaxhp / 3) continue;
 				let dmg = ally.baseMaxhp / this.random(3, 10);
 				ally.hp -= dmg;
 				this.effectState.totaldrain += dmg;
 			}
 			if (!this.effectState.totaldrain) return false;
-			this.heal(this.effectState.totaldrain, source, source, move);
+			this.heal(this.effectState.totaldrain, pokemon, pokemon, move);
 			return this.effectState.totaldrain / 1.5;
 		},
 		onAfterHit(target, source) {
@@ -121,6 +120,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (this.randomChance(4, 10)) {
 					pokemon.status === 'brn';
 					pokemon.setStatus('brn', source);
+					this.add('-message', `${pokemon.name} was burned admist the chaos!`);
 				}
 			}
 		},
