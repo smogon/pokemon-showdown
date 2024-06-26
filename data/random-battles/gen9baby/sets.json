@@ -229,7 +229,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Leaf Storm", "Giga Drain", "Stomping Tantrum", "Super Fang", "Thief"],
+                "movepool": ["Giga Drain", "Leaf Storm", "Stomping Tantrum", "Super Fang", "Thief"],
                 "teraTypes": ["Poison", "Water"]
             }
         ]
@@ -436,11 +436,6 @@
                 "role": "Bulky Setup",
                 "movepool": ["Bulk Up", "Drain Punch", "Earthquake", "Gunk Shot", "Knock Off", "Sucker Punch"],
                 "teraTypes": ["Dark", "Fighting", "Ground"]
-            },
-            {
-                "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Earthquake", "Gunk Shot", "Knock Off", "Swords Dance"],
-                "teraTypes": ["Dark"]
             }
         ]
     },
@@ -1004,7 +999,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Dynamic Punch", "Earthquake", "Poltergeist", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Dynamic Punch", "Earthquake", "Poltergeist", "Rock Tomb", "Stealth Rock"],
                 "teraTypes": ["Fighting"]
             }
         ]
@@ -1534,7 +1529,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Iron Head", "Knock Off", "Play Rough", "Stealth Rock", "Thunder Wave", "U-turn"],
+                "movepool": ["Iron Head", "Knock Off", "Play Rough", "Stealth Rock", "U-turn"],
                 "teraTypes": ["Fairy", "Water"]
             }
         ]
@@ -1549,7 +1544,7 @@
             },
             {
                 "role": "Fast Support",
-                "movepool": ["High Jump Kick", "Fake Out", "Knock Off", "U-turn"],
+                "movepool": ["Fake Out", "High Jump Kick", "Knock Off", "U-turn"],
                 "teraTypes": ["Dark", "Steel"]
             },
             {
