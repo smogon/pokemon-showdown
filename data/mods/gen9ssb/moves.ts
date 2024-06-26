@@ -46,7 +46,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 		category: "Special",
 		desc: "Hits the opposing Pokemon and one random inactive Pokemon on the opposing side.",
-		desc: "Hits a random inactive opposing Pokemon.",
+		shortDesc: "Hits a random inactive opposing Pokemon.",
 		name: "Terrorize the Peaks",
 		gen: 9,
 		pp: 8,
