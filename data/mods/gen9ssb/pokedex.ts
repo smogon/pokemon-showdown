@@ -6,6 +6,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	smokomodo: {
+		inherit: true,
+		baseStats: {hp: 98, atk: 116, def: 77, spa: 88, spd: 78, spe: 97},
+		abilities: {0: "Praetor's Grasp"},
+	},
 	lunala: {
 		inherit: true,
 		types: ['Psychic', 'Dark'],
