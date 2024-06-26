@@ -41,33 +41,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Urabrask
-	reincarnation: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "User fully restores HP and status condition and resets boosts before permanently transforming into foe.",
-		shortDesc: "Full restore & boost reset; transformation.",
-		name: "Reincarnation",
+	terrorizethepeaks: {
+		accuracy: 70,
+		basePower: 100,
+		category: "Special",
+		desc: "Targets a random inactive Pokemon on the opposing side.",
+		name: "Terrorize the Peaks",
 		gen: 9,
-		pp: 1,
+		pp: 8,
+		noPPBoosts: true,
 		priority: 0,
-		flags: {defrost: 1},
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Revival Blessing', source);
+			this.add('-anim', source, 'Roar', target);
+			this.add('-anim', source, 'Searing Shot', target);
 		},
-		onHit(target, pokemon) {
-			pokemon.clearBoosts();
-			pokemon.cureStatus();
-			changeSet(this, pokemon, target);
-			this.heal(pokemon.baseMaxhp);
+		onHit(target, source, move) {
+			let possibleTargets = [];
+			for (const foe of target.allies()) {
+				if (foe.hp) possibleTargets.push(foe);
+			}
+			const newTarget = this.sample(possibleTargets);
+			const dmg = this.actions.getDamage(source, newTarget, move);
+			newTarget.hp -= dmg;
+			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 10) / 10}% from Terrorize the Peaks!`);
+			if (this.randomChance(1, 5) {
+				newTarget.status === 'brn';
+				newTarget.setStatus('brn', source);
+				this.add('-message', `${newTarget.name} was burned!`);
+			}
+			return null;
 		},
-		isZ: "crescentstaff",
 		secondary: null,
 		target: "normal",
-		type: "Ghost",
+		type: "Fire",
 	},
 	// Urabrask
 	blasphemousact: {
@@ -82,7 +92,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {contact: 1},
 		breaksProtect: true,
-		isZ: "Urabrask's Forge",
+		isZ: "urabrasksforge",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
