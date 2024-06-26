@@ -789,6 +789,7 @@ export const Aliases: {[alias: string]: string} = {
 	pex: "Toxapex",
 	phero: "Pheromosa",
 	pika: "Pikachu",
+	pikablue: "Marill",
 	pory2: "Porygon2",
 	poryz: "Porygon-Z",
 	pyuku: "Pyukumuku",
