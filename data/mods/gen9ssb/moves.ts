@@ -104,22 +104,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onBasePower(basePower, source, target, move) {
 			this.effectState.totaldrain = 0;
-			for (const ally of source.allies()) {
-				if (ally.hp > ally.baseMaxhp / 3) {
-					let dmg = ally.baseMaxhp / this.random(3, 10);
-					ally.hp -= dmg;
-					this.effectState.totaldrain += dmg;
-				}
+			for (const pokemon of source.side.pokemon) {
+				if (pokemon === source) continue;
+				if (pokemon.hp <= pokemon.baseMaxhp / 3) continue;
+				let dmg = pokemon.baseMaxhp / this.random(3, 10);
+				pokemon.hp -= dmg;
+				this.effectState.totaldrain += dmg;
 			}
 			if (!this.effectState.totaldrain) return false;
 			this.heal(this.effectState.totaldrain, source, source, move);
 			return this.chainModify(this.effectState.totaldrain / 1.5);
 		},
 		onAfterHit(target, source) {
-			for (const foe of target.allies()) {
+			for (const pokemon of target.side.pokemon) {
 				if (this.randomChance(4, 10)) {
-					foe.status === 'brn';
-					foe.setStatus('brn', source);
+					pokemon.status === 'brn';
+					pokemon.setStatus('brn', source);
 				}
 			}
 		},
