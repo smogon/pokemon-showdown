@@ -15,6 +15,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Urabrask
+	praetorsgrasp: {
+		name: "Praetor's Grasp",
+		desc: "While this Pokemon is active, opposing Pokemon must be active for at least 2 turns before switching. This Pokemon's moves of power 80 or greater have 1.2x power and accuracy, and always make contact.",
+		shortDesc: "Foes must be active for 2 turns; 80BP+ Moves: Contact, 1.2x Power/Accuracy.",
+		gen: 9,
+		onFoeTrapPokemon(pokemon) {
+			if (!pokemon.activeTurns || pokemon.activeTurns < 2) pokemon.tryTrap(true);
+		},
+		onBasePowerPriority: 30,
+		onBasePower(basePower, attacker, defender, move) {
+			if (basePower >= 80) {
+				this.debug('Praetor\'s Grasp Boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifyAccuracyPriority: 10,
+		onModifyAccuracy(accuracy, target, source, move) {
+			if (move.basePower >= 80) {
+				this.debug('Praetor\'s Grasp Boost');
+				return this.chainModify(1.2);
+			}
+		},
+	},
 	// Sariel
 	angelofdeath: {
 		desc: "While this Pokemon is active, opposing Pokemon are prevented from healing and lose HP equal to 1/16 of their max HP per turn.",
