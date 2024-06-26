@@ -105,7 +105,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePowerCallback(target, source, move) {
 			this.effectState.totaldrain = 0;
 			for (const ally of source.side.pokemon) {
-				this.add('-message', ally.name);
+				this.add('-message', ally.hp);
 				if (ally === source) continue;
 				if (ally.hp <= ally.baseMaxhp / 3) continue;
 				let dmg = ally.baseMaxhp / this.random(3, 10);
