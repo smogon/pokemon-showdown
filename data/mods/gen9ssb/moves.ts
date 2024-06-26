@@ -45,7 +45,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 70,
 		basePower: 100,
 		category: "Special",
-		desc: "Targets a random inactive Pokemon on the opposing side.",
+		desc: "Hits the opposing Pokemon and one random inactive Pokemon on the opposing side.",
+		desc: "Hits a random inactive opposing Pokemon.",
 		name: "Terrorize the Peaks",
 		gen: 9,
 		pp: 8,
@@ -68,7 +69,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const newTarget = this.sample(possibleTargets);
 			const dmg = this.actions.getDamage(source, newTarget, move);
 			newTarget.hp -= dmg;
-			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 10) / 10}% from Terrorize the Peaks!`);
+			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from Terrorize the Peaks!`);
 			if (this.randomChance(1, 5)) {
 				newTarget.status === 'brn';
 				newTarget.setStatus('brn', source);
