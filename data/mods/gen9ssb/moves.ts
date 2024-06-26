@@ -61,8 +61,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			let possibleTargets = [];
-			for (const foe of target.allies()) {
-				if (foe.hp) possibleTargets.push(foe);
+			for (const pokemon of target.side.pokemon) {
+				if (pokemon === target) continue;
+				this.add('-message', `Foe Name: ${pokemon.name}`);
+				//if (foe.hp) possibleTargets.push(foe);
 			}
 			const newTarget = this.sample(possibleTargets);
 			const dmg = this.actions.getDamage(source, newTarget, move);
