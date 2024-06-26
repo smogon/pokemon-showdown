@@ -91,13 +91,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Blasphemous Act',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'N',
 		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
 		signatureMove: 'Omen of Defeat',
-		evs: {hp: 252, atk: 4, spe: 252}, nature: Jolly,
+		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
-	/*
 	Nibirus: {
 		species: 'Sableye-Mega', ability: 'Hall of Gemstone', item: 
 	},
