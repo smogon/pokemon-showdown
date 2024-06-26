@@ -4246,17 +4246,6 @@ export const Formats: FormatList = [
 		ruleset: ['Standard', 'Sleep Clause Mod'],
 	},
 	{
-		name: "[Gen 5] BW1 OU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/bw1-overused.3744853/">BW1 OU</a>`
-		],
-
-		mod: 'gen5bw1',
-		searchShow: false,
-		ruleset: ['Standard', 'Sleep Clause Mod', 'Swagger Clause'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'King\'s Rock', 'Razor Fang', 'Soul Dew', 'Acupressure', 'Assist'],
-	},
-	{
 		name: "[Gen 5] UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3474024/">BW2 UU Viability Rankings</a>`,
@@ -4290,6 +4279,17 @@ export const Formats: FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 5] RU', '!Sleep Moves Clause', 'Sleep Clause Mod'],
 		banlist: ['RU', 'NUBL', 'Assist', 'Copycat'],
+	},
+	{
+		name: "[Gen 5] BW1 OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/bw1-overused.3744853/">BW1 OU</a>`
+		],
+
+		mod: 'gen5bw1',
+		searchShow: false,
+		ruleset: ['Standard', 'Sleep Clause Mod', 'Swagger Clause'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'King\'s Rock', 'Razor Fang', 'Soul Dew', 'Acupressure', 'Assist'],
 	},
 	{
 		name: "[Gen 5] PU",
