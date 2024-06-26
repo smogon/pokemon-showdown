@@ -102,13 +102,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Inferno', source);
 			this.add('-anim', source, 'G-Max Fireball', target);
 		},
-		onBasePower(basePower, source, target, move) {
+		basePowerCallback(target, source, move) {
 			this.effectState.totaldrain = 0;
-			for (const pokemon of source.side.pokemon) {
-				if (pokemon === source) continue;
-				if (pokemon.hp <= pokemon.baseMaxhp / 3) continue;
-				let dmg = pokemon.baseMaxhp / this.random(3, 10);
-				pokemon.hp -= dmg;
+			for (const ally of source.side.pokemon) {
+				this.add('-message', ally.name);
+				if (ally === source) continue;
+				if (ally.hp <= ally.baseMaxhp / 3) continue;
+				let dmg = ally.baseMaxhp / this.random(3, 10);
+				ally.hp -= dmg;
 				this.effectState.totaldrain += dmg;
 			}
 			if (!this.effectState.totaldrain) return false;
