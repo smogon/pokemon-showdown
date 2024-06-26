@@ -58,7 +58,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Roar', target);
-			this.add('-anim', source, 'Searing Shot', target);
+			this.add('-anim', source, 'Eruption', target);
 		},
 		onHit(target, source, move) {
 			let possibleTargets = [];
@@ -100,7 +100,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Inferno', source);
-			this.add('-anim', source, 'Eruption', target);
+			this.add('-anim', source, 'G-Max Fireball', target);
 		},
 		onBasePower(basePower, source, target, move) {
 			this.effectState.totaldrain = 0;
