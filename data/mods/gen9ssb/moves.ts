@@ -113,7 +113,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (!this.effectState.totaldrain) return false;
 			this.heal(this.effectState.totaldrain, source, source, move);
-			return this.chainModify(this.effectState.totaldrain / 1.5);
+			return this.effectState.totaldrain / 1.5;
 		},
 		onAfterHit(target, source) {
 			for (const pokemon of target.side.pokemon) {
