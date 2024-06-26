@@ -1,4 +1,14 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Urabrask
+	urabrasksforge: {
+		name: "Urabrask's Forge",
+		onTakeItem: false,
+		zMove: "Blasphemous Act",
+		zMoveFrom: "Terrorize the Peaks",
+		itemUser: ["Smokomodo"],
+		desc: "If held by a Smokomodo with Terorrize the Peaks, it can use Blasphemous Act.",
+		gen: 9,
+	},
 	// Mima
 	crescentstaff: {
 		name: "Crescent Staff",
