@@ -115,7 +115,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterHit(target, source) {
 			for (const foe of target.allies()) {
-				if (this.randomChance(4, 10) {
+				if (this.randomChance(4, 10)) {
 					foe.status === 'brn';
 					foe.setStatus('brn', source);
 				}
