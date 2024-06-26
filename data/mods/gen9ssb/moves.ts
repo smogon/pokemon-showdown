@@ -40,6 +40,81 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Urabrask
+	reincarnation: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "User fully restores HP and status condition and resets boosts before permanently transforming into foe.",
+		shortDesc: "Full restore & boost reset; transformation.",
+		name: "Reincarnation",
+		gen: 9,
+		pp: 1,
+		priority: 0,
+		flags: {defrost: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Revival Blessing', source);
+		},
+		onHit(target, pokemon) {
+			pokemon.clearBoosts();
+			pokemon.cureStatus();
+			changeSet(this, pokemon, target);
+			this.heal(pokemon.baseMaxhp);
+		},
+		isZ: "crescentstaff",
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+	// Urabrask
+	blasphemousact: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Physical",
+		desc: "Steals 10-33% HP from all healthy allies. This Pokemon recovers HP equal to the stolen HP. This move's power is equal to (HP Stolen / 1.5). 40% chance to burn each Pokemon affected by this move. If the affected Pokemon already has a status condition, it will be replaced with burn. (30% chance per Pokemon, not 30% chance that all Pokemon are burned)",
+		shortDesc: "Steals allies' HP to determine power. 40% to burn each affected foe.",
+		name: "Blasphemous Act",
+		gen: 9,
+		pp: 1,
+		priority: 0,
+		flags: {contact: 1},
+		breaksProtect: true,
+		isZ: "Urabrask's Forge",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Inferno', source);
+			this.add('-anim', source, 'Eruption', target);
+		},
+		onBasePower(basePower, source, target, move) {
+			this.effectState.totaldrain = 0;
+			for (const ally of source.allies()) {
+				if (ally.hp > ally.baseMaxhp / 3) {
+					let dmg = ally.baseMaxhp / this.random(3, 10);
+					ally.hp -= dmg;
+					this.effectState.totaldrain += dmg;
+				}
+			}
+			if (!this.effectState.totaldrain) return false;
+			this.heal(this.effectState.totaldrain, source, source, move);
+			return this.chainModify(this.effectState.totaldrain / 1.5);
+		},
+		onAfterHit(target, source) {
+			for (const foe of target.allies()) {
+				if (this.randomChance(4, 10) {
+					foe.status === 'brn';
+					foe.setStatus('brn', source);
+				}
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
 	// Sariel
 	civilizationofmagic: {
 		accuracy: 100,
@@ -49,7 +124,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Uses foe's SpA.",
 		name: "Civilization of Magic",
 		gen: 9,
-		pp: 15,
+		pp: 24,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
 		onTryMove() {
@@ -101,7 +177,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Steals target's boosts before dealing damage.",
 		name: "Complete Darkness",
 		gen: 9,
-		pp: 10,
+		pp: 16,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {bypasssub: 1, mirror: 1, protect: 1},
 		onTryMove() {
