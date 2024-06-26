@@ -68,7 +68,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const dmg = this.actions.getDamage(source, newTarget, move);
 			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 10) / 10}% from Terrorize the Peaks!`);
-			if (this.randomChance(1, 5) {
+			if (this.randomChance(1, 5)) {
 				newTarget.status === 'brn';
 				newTarget.setStatus('brn', source);
 				this.add('-message', `${newTarget.name} was burned!`);
