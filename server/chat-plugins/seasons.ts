@@ -346,10 +346,26 @@ export const handlers: Chat.Handlers = {
 			room.setPrivate(false);
 			const seasonRoom = Rooms.search('seasondiscussion');
 			if (seasonRoom) {
-				const players = Object.keys(room.battle.playerTable).map(toID);
+				const p1 = room.battle.playerTable.p1;
+				const p2 = room.battle.playerTable.p2;
+				const p1u = user.id === p1.id ? user : p1.getUser();
+				const p2u = user.id === p2.id ? user : p2.getUser();
+				const p1badges = user.id === p1.id ?
+					badges.filter(x => x.format === room.battle!.format) :
+					p1u && getBadges(p1u, room.battle.format).filter(x => x.format === room.battle!.format);
+				const p2badges = user.id === p2.id ?
+					badges.filter(x => x.format === room.battle!.format) :
+					p2u && getBadges(p2u, room.battle.format).filter(x => x.format === room.battle!.format);
+				const p1html = p1badges?.length ?
+					`<img src="https://${Config.routes.client}/sprites/misc/${room.battle.format}_${p1badges[0].type}.png" /><username>${p1.name}</username>` :
+					`<username>${p1.name}</username>`;
+				const p2html = p2badges?.length ?
+					`<img src="https://${Config.routes.client}/sprites/misc/${room.battle.format}_${p2badges[0].type}.png" /><username>${p2.name}</username>` :
+					`<username>${p2.name}</username>`;
+				const formatName = Dex.formats.get(room.battle.format).name;
 				seasonRoom.add(
-					`|raw|<a href="/${room.roomid}" class="ilink">Battle started between ` +
-					`<username>${players[0]}</username> and <username>${players[1]}</username>. (rating: ${room.battle.rated})</a>`
+					`|raw|<a href="/${room.roomid}" class="ilink">${formatName} battle started between ` +
+					`${p1html} and ${p2html}. (rating: ${Math.floor(room.battle.rated)})</a>`
 				).update();
 			}
 		}
