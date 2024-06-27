@@ -15,6 +15,41 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	scrapworker: {
+		desc: "1.1x Accuracy. Reduces damage from Physical Attacks by 75% and Special Attacks by 30%. Loses 25% for Physical and 10% for Special with each attack received.",
+		shortdesc: "1.1x Accuracy. 75% Damage Reduction vs Physical and 30% vs Special. Loses 1/3rd damage reduction when attacked.",
+		onStart(pokemon) {
+			pokemon.abilityState.armor = 3;
+		},
+	   onSourceModifyDamage(damage, source, target, move) {
+      	if (move.category === 'Physical') {
+            if (!target.abilityState.armor) return;
+            if (target.abilityState.armor === 3) return this.chainModify(0.25);
+				if (target.abilityState.armor === 2) return this.chainModify(0.5);
+				if (target.abilityState.armor === 1) return this.chainModify(0.75);
+         }
+         if (move.category === 'Special') {
+         	if (!target.abilityState.armor) return;
+            if (target.abilityState.armor === 3) return this.chainModify(0.7);
+				if (target.abilityState.armor === 2) return this.chainModify(0.8);
+				if (target.abilityState.armor === 1) return this.chainModify(0.9);
+         }
+		},
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('Scrapworker - enhancing accuracy');
+			return accuracy * 1.1;
+		},
+		onDamagingHit(damage, source, target, move) {
+			if (target.abilityState.armor && target.abilityState.armor > 0) target.abilityState.armor -= 1;
+		},
+		onBasePower(basePower, pokemon, move) {
+			if (!pokemon.abilityState.enhancement) return;
+			if (pokemon.abilityState.enhancement === 1) return this.chainModify(1.3);
+			if (pokemon.abilityState.enhancement === 2) return this.chainModify(1.82);
+			if (pokemon.abilityState.enhancement === 3) return this.chainModify(2.73);
+		},
+	},
 	// Urabrask
 	praetorsgrasp: {
 		name: "Praetor's Grasp",
