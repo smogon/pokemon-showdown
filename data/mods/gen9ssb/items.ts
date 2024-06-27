@@ -1,4 +1,18 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Kozuchi
+	forgedhammer: {
+		name: "forgedhammer",
+		onTakeItem: false,
+		spritenum: 761,
+		onModifyMove(move) {
+			delete move.flags['contact'];
+		},
+		zMove: "Emergency Upgrades",
+		zMoveFrom: "Weapon Enhancement",
+		itemUser: ["Tinkaton"],
+		gen: 9,
+		desc: "Protects from contact effects. If held by a Tinkaton with 'Weapon Enhancement', allows the usage of the Z-Move 'Emergency Upgrades'.",
+	},
 	// Urabrask
 	urabrasksforge: {
 		name: "Urabrask's Forge",
