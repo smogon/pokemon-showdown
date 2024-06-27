@@ -91,6 +91,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Terrorize the Peaks',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	Kozuchi: {
+		species: 'Tinkaton', ability: 'Scrapworker', item: 'Forged Hammer', gender: 'F',
+		moves: ['Gigaton Hammer', 'Play Rough', 'High Horsepower'],
+		signatureMove: 'Weapon Enhancement',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
 	/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'N',
