@@ -173,8 +173,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, pokemon) {
 			pokemon.clearBoosts();
 			pokemon.cureStatus();
+			let move: Move | ActiveMove | null = pokemon.lastMove;
 			changeSet(this, pokemon, target);
-			this.heal(pokemon.baseMaxhp);
+			this.heal(pokemon.baseMaxhp, pokemon, pokemon, move);
 		},
 		isZ: "crescentstaff",
 		secondary: null,
