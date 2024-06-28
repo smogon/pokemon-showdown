@@ -192,18 +192,44 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 			// Random Status Move
 			let r = this.random(9);
-			if (r === 0) this.actions.useMove('Laser Focus', source);
-			if (r === 1) this.actions.useMove('Wish', source);
-			if (r === 2) this.actions.useMove('Assist', source);
+			if (r === 0) source.addVolatile('laserfocus', source);
+			if (r === 1) source.side.addSlotCondition(source, 'Wish');
+			if (r === 2) {
+				// Assist
+				const moves = [];
+				for (const pokemon of source.side.pokemon) {
+					if (pokemon === source) continue;
+					for (const moveSlot of pokemon.moveSlots) {
+						const moveid = moveSlot.id;
+						const move = this.dex.moves.get(moveid);
+						if (move.flags['noassist'] || move.isZ || move.isMax) {
+							continue;
+						}
+						moves.push(moveid);
+					}
+				}
+				let randomMove = '';
+				if (moves.length) randomMove = this.sample(moves);
+				if (!randomMove) {
+					return false;
+				}
+				this.actions.useMove(randomMove, source);
+			}
 			if (r === 3) this.actions.useMove('Baton Pass', source);
-			if (r === 4) this.actions.useMove('Aqua Ring', source);
-			if (r === 5) this.actions.useMove('Reflect', source);
-			if (r === 6) this.actions.useMove('Light Screen', source);
-			if (r === 7) this.actions.useMove('Recycle', source);
-			if (r === 8) this.actions.useMove('Safeguard', source);
-			if (r === 9) this.actions.useMove('Tailwind', source);
+			if (r === 4) source.addVolatile('aquaring', source);
+			if (r === 5) source.side.addSideCondition('reflect', source);
+			if (r === 6) source.side.addSideCondition('lightscreen', source);
+			if (r === 7) {
+				// Recycle
+				if (source.item || !source.lastItem) return false;
+				const item = source.lastItem;
+				source.lastItem = '';
+				this.add('-item', source, this.dex.items.get(item), '[from] move: Recycle');
+				source.setItem(item);
+			}
+			if (r === 8) source.side.addSideCondition('safeguard', source);
+			if (r === 9) source.side.addSideCondition('tailwind', source);
 		},
-		
 		onModifyType(move, pokemon) {
 			// Type Changing
 			switch (pokemon.effectiveWeather()) {
