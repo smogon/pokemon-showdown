@@ -185,10 +185,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onStart(source) {
 			this.field.setTerrain('mistyterrain');
 		},
-		onFaint(pokemon) {
-			this.add("-activate", pokemon, "item: Fleeting Winds");
-			this.actions.useMove('Healing Wish', pokemon);
-			pokemon.side.addSideCondition('tailwind', pokemon);
+		onDamagePriority: -40,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp) {
+				this.add("-activate", pokemon, "item: Fleeting Winds");
+				return target.hp - 1;
+				this.actions.useMove('Healing Wish', pokemon);
+				pokemon.side.addSideCondition('tailwind', pokemon);
+			}
 		},
 		desc: "On switch-in, starts Misty Terrain. If this Pokemon would faint, starts Tailwind and uses Healing Wish.",
 		shortDesc: "Switch-in: Misty Terrain; Faint; Tailwind + Healing Wish.",
