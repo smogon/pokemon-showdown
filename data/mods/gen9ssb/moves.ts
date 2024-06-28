@@ -56,9 +56,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Hex', source);
 		},
-		onHit(target, source, move) {
-			this.add('-anim', source, 'Spectral Thief', target);
-		},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('omenofdefeat');
 		},
@@ -66,6 +63,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Omen of Defeat');
+				this.add('-message', `${pokemon.name} prepared to endure!`);
 			},
 			onDamage(damage, target, source, effect) {
 				if (effect?.effectType === 'Move' && damage >= target.hp) {
@@ -75,6 +73,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onEnd(pokemon) {
 				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+				this.add('-anim', pokemon, 'Spectral Thief', target);
 				this.damage(pokemon.maxBasehp, pokemon);
 			},
 		},
