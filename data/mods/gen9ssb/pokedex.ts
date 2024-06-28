@@ -6,6 +6,20 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	mimikyu: {
+		inherut: true,
+		baseStats: {hp: 75, atk: 90, def: 80, spa: 105, spd: 105, spe: 96},
+		abilities: {0: "Dollkeeper"},
+	},
+	mimikyubusted: {
+		inherut: true,
+		baseStats: {hp: 75, atk: 90, def: 105, spa: 50, spd: 105, spe: 96},
+		abilities: {0: "Dollkeeper"},
+	},
+	kecleon: {
+		inherit: true,
+		abilities: {0: "Quick Camo"},
+	},
 	smokomodo: {
 		inherit: true,
 		baseStats: {hp: 98, atk: 116, def: 77, spa: 88, spd: 78, spe: 97},
