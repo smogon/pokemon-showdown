@@ -56,7 +56,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Confuse Ray', source);
-			this.add('-anim', pokemon, 'Moongeist Beam', target);
+			this.add('-anim', source, 'Moongeist Beam', target);
 		},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('omenofdefeat');
