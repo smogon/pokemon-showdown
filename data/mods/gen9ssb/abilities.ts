@@ -15,6 +15,47 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Morte
+	dollkeeper: {
+		name: "Dollkeeper",
+		gen: 9,
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp && !target.abilityState.dollForm) {
+				this.add('-ability', target, 'Dollkeeper');
+				return target.hp - 1;
+				target.formeChange('Mimikyu-Busted');
+				this.add('-message', `${target.name} changed into Doll form!`);
+				this.heal(target.baseMaxhp, target);
+				target.abilityState.dollForm = true;
+				target.abilityState.duration = 4;
+			}
+		},
+		onBeforeMove(pokemon, target, move) {
+			if (pokemon.abilityState.dollForm) {
+				this.debug("Disabled by Dollkeeper");
+				this.add('-fail', pokemon);
+				return false;
+			}
+		},
+		onResidual(target, source, effect) {
+			if (!source.ability.dollForm) return;
+			if (source.abilityState.duration > 0) source.abilityState.duration -= 1;
+			if (source.abilityState.duration <= 0) {
+				source.formeChange('Mimikyu');
+				this.add('-message', `${target.name} transformed back to Mimikyu!`);
+				source.abilityState.dollForm = false;
+				source.abilityState.duration = 0;
+				return;
+			}
+			if (target.hp && source.ability.dollForm && source.abilityState.duration > 0) {
+				this.add('-activate', target, 'ability: Dollkeeper');
+				this.damage(target.baseMaxhp / 6, target);
+				target.addVolatile('yawn');
+				this.add('-message', `${target.name} is tormented by the Cursed Doll!`);
+			}
+		},
+	},
 	// Marisa Kirisame
 	ordinarymagician: {
 		desc: "This Pokemon changes its type to the type of the move it uses and moves first in its priority bracket.",
