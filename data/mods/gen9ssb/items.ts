@@ -29,16 +29,25 @@ export const Items: {[k: string]: ModdedItemData} = {
       },
       onUpdate(pokemon) {
          if (pokemon.hp <= pokemon.maxhp / 4) {
+				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
             const r = this.random(100);
-            if (r < 30) {
-               pokemon.addVolatile('grudge') && pokemon.useItem;
-            } else if (r < 30) {
-            	this.heal(pokemon.baseMaxhp / 2) && pokemon.useItem;
-            } else if (r < 30) {
-            	pokemon.addVolatile('destinybond') && pokemon.useItem;
+            if (r < 33) {
+					pokemon.useItem;
+               pokemon.addVolatile('grudge');
+            } else if (r >= 33 && r < 66) {
+					pokemon.useItem;
+            	this.heal(pokemon.baseMaxhp / 2, pokemon, pokemon);
+            } else if (r >= 66) {
+					pokemon.useItem;
+					let dmg = this.actions.getDamage(pokemon, target, 'Explosion');
+					this.add('-message', `${pokemon.name}'s crown exploded!`);
+					this.addMove('-anim', pokemon, 'Explosion', pokemon);
+					this.damage(dmg, target, pokemon);
+					pokemon.faint(pokemon);
 				}
       	}
 		},
+		shortDesc: "Use '/ssb Prince Smurf' to see this entry!",
    	desc: "Prevents other Pokemon from lowering the holder's stats; after an attack, holder recovers 1/4 of the damage dealt to the Target. When the holder is at 1/4 HP or less it will trigger 1 of 3 reactions: Applies Grudge to the holder for a turn, item is then disposed; Heals the holder for 50% HP and cures party of status, item is then disposed; Forces the holder to explode.",
    },
 	// Kozuchi
