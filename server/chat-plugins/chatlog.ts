@@ -827,7 +827,7 @@ export class DatabaseLogSearcher extends Searcher {
 		const results: {[date: string]: {[user: string]: number}} = {};
 		const [monthStart, monthEnd] = LogReader.monthToRange(month);
 		const rows = await Rooms.Roomlogs.table.selectAll()`
-			WHERE ${user ? SQL`userid = ${user} AND` : SQL``}roomid = ${roomid} AND
+			WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}roomid = ${roomid} AND
 			time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
 			type = ${'c'}
 		`;
