@@ -19,6 +19,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	dollkeeper: {
 		name: "Dollkeeper",
 		gen: 9,
+		onStart(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && !target.abilityState.dollForm) {
@@ -52,6 +55,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-activate', target, 'ability: Dollkeeper');
 				this.damage(target.baseMaxhp / 6, target);
 				target.addVolatile('yawn');
+				target.addVolatile('lag');
 				this.add('-message', `${target.name} is tormented by the Cursed Doll!`);
 			}
 		},
