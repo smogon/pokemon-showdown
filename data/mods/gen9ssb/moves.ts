@@ -185,7 +185,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (w === 2) this.field.setWeather('sandstorm');
 			if (w === 3) this.field.setWeather('snowscape');
 			if (w === 4) this.field.setWeather('primordialsea');
-			if (w === 5) this.field.setWeather('desolateland");
+			if (w === 5) this.field.setWeather('desolateland');
 
 			// Random Status Move
 			let r = this.random(9);
