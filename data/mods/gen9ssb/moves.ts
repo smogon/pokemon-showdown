@@ -40,6 +40,62 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Sanae Kochiya
+	miracle: {
+		accuracy: true,
+		basePower: 80,
+		category: "Special",
+		desc: "Summons a random weather condition, uses either Wish, Assist, Baton Pass, Aqua Ring, Reflect, Light Screen, Assist, Recycle, Laser Focus or Safeguard. Changes type to match weather condition.",
+		shortDesc: "Summons random weather/status move. Typing matches weather.",
+		name: "Miracle",
+		gen: 9,
+		pp: 8,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Core Enforcer', target);
+		},
+		onHit(source) {
+			let r = this.random(9);
+			if (r === 0) this.actions.useMove('Laser Focus', source);
+			if (r === 1) this.actions.useMove('Wish', source);
+			if (r === 2) this.actions.useMove('Assist', source);
+			if (r === 3) this.actions.useMove('Baton Pass', source);
+			if (r === 4) this.actions.useMove('Aqua Ring', source);
+			if (r === 5) this.actions.useMove('Reflect', source);
+			if (r === 6) this.actions.useMove('Light Screen', source);
+			if (r === 7) this.actions.useMove('Recycle', source);
+			if (r === 8) this.actions.useMove('Safeguard', source);
+			if (r === 9) this.actions.useMove('Tailwind', source);
+		},
+		onModifyType(move, pokemon) {
+			switch (pokemon.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				move.type = 'Fire';
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				move.type = 'Water';
+				break;
+			case 'sandstorm':
+				move.type = 'Rock';
+				break;
+			case 'hail':
+			case 'snow':
+				move.type = 'Ice';
+				break;
+			}
+		},
+		weather: {'raindance', 'sunnyday', 'sandstorm', 'snowscape'},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
 	// Prince Smurf
 	youfilthypeasant: {
       accuracy: 100,
