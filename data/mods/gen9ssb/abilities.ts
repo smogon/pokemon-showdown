@@ -67,17 +67,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return false;
 			}
 		},
-		onResidual(target, source, effect) {
-			if (!source.abilityState.dollForm) return;
-			if (source.abilityState.duration > 0) source.abilityState.duration -= 1;
-			if (source.abilityState.duration <= 0) {
-				source.formeChange('Mimikyu');
-				this.add('-message', `${spurce.name} transformed back to Mimikyu!`);
-				source.abilityState.dollForm = false;
-				source.abilityState.duration = 0;
+		onResidual(pokemon) {
+			const target = pokemon.side.foe;
+			if (!pokemon.abilityState.dollForm) {
+				pokemon.abilityState.dollForm = false;
+				return false;
+			}
+			if (pokemon.abilityState.duration > 0) pokemon.abilityState.duration -= 1;
+			if (pokemon.abilityState.duration <= 0) {
+				pokemon.formeChange('Mimikyu');
+				this.add('-message', `${pokemon.name} transformed back to Mimikyu!`);
+				pokemon.abilityState.dollForm = false;
+				pokemon.abilityState.duration = 0;
 				return;
 			}
-			if (target.hp && source.abilityState.dollForm && source.abilityState.duration > 0) {
+			if (target.hp && pokemon.abilityState.dollForm && pokemon.abilityState.duration > 0) {
 				this.add('-activate', target, 'ability: Dollkeeper');
 				this.damage(target.baseMaxhp / 6, target);
 				target.addVolatile('yawn');
