@@ -62,6 +62,15 @@ export function getBadges(user: User, curFormat: string) {
 	return userBadges;
 }
 
+function getUserHTML(user: User, format: string) {
+	const buf = `<username>${user.name}</username>`;
+	const badgeType = getBadges(user, format).filter(x => x.format === format)[0]?.type;
+	if (badgeType) {
+		return `<img src="https://${Config.routes.client}/sprites/misc/${format}_${badgeType}.png" />` + buf;
+	}
+	return buf;
+}
+
 export function setFormatSchedule() {
 	// guard heavily against this being overwritten
 	if (data.current.formatsGeneratedAt === getYear()) return;
@@ -346,22 +355,10 @@ export const handlers: Chat.Handlers = {
 			room.setPrivate(false);
 			const seasonRoom = Rooms.search('seasondiscussion');
 			if (seasonRoom) {
-				const p1 = room.battle.playerTable.p1;
-				const p2 = room.battle.playerTable.p2;
-				const p1u = user.id === p1.id ? user : p1.getUser();
-				const p2u = user.id === p2.id ? user : p2.getUser();
-				const p1badges = user.id === p1.id ?
-					badges.filter(x => x.format === room.battle!.format) :
-					p1u && getBadges(p1u, room.battle.format).filter(x => x.format === room.battle!.format);
-				const p2badges = user.id === p2.id ?
-					badges.filter(x => x.format === room.battle!.format) :
-					p2u && getBadges(p2u, room.battle.format).filter(x => x.format === room.battle!.format);
-				const p1html = p1badges?.length ?
-					`<img src="https://${Config.routes.client}/sprites/misc/${room.battle.format}_${p1badges[0].type}.png" /><username>${p1.name}</username>` :
-					`<username>${p1.name}</username>`;
-				const p2html = p2badges?.length ?
-					`<img src="https://${Config.routes.client}/sprites/misc/${room.battle.format}_${p2badges[0].type}.png" /><username>${p2.name}</username>` :
-					`<username>${p2.name}</username>`;
+				const p1html = getUserHTML(user, room.battle.format);
+				const otherPlayer = user.id === room.battle.p1.id ? room.battle.p2 : room.battle.p1;
+				const otherUser = otherPlayer.getUser();
+				const p2html = otherUser ? getUserHTML(otherUser, room.battle.format) : `<username>${otherPlayer.name}</username>`;
 				const formatName = Dex.formats.get(room.battle.format).name;
 				seasonRoom.add(
 					`|raw|<a href="/${room.roomid}" class="ilink">${formatName} battle started between ` +
