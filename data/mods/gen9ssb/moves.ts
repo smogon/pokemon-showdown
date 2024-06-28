@@ -178,6 +178,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Core Enforcer', target);
 		},
 		onHit(source) {
+			// Random Weather
+			let w = this.random(5);
+			if (w === 0) this.field.setWeather('sunnyday');
+			if (w === 1) this.field.setWeather('raindance');
+			if (w === 2) this.field.setWeather('sandstorm');
+			if (w === 3) this.field.setWeather('snowscape");
+			if (w === 4) this.field.setWeather('primordialsea');
+			if (w === 5) this.field.setWeather('desolateland");
+
+			// Random Status Move
 			let r = this.random(9);
 			if (r === 0) this.actions.useMove('Laser Focus', source);
 			if (r === 1) this.actions.useMove('Wish', source);
@@ -190,7 +200,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (r === 8) this.actions.useMove('Safeguard', source);
 			if (r === 9) this.actions.useMove('Tailwind', source);
 		},
+		
 		onModifyType(move, pokemon) {
+			// Type Changing
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
@@ -209,7 +221,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				break;
 			}
 		},
-		weather: {'raindance', 'sunnyday', 'sandstorm', 'snowscape'},
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
