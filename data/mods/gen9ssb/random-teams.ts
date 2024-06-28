@@ -103,6 +103,18 @@ export const ssbSets: SSBSets = {
       signatureMove: 'You Filthy Peasant',
       evs: {hp: 252, def: 196, spd: 60}, nature: 'Careful',
    },
+	'Marisa Kirisame': {
+		species: 'Hatterene', ability: 'Ordinary Magician', item: 'Mini-Hakkero', gender: 'F',
+		moves: ['Flamethrower', 'Ice Beam', 'Thunderbolt'],
+		signatureMove: 'Orb Shield',
+		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
+	},
+	'Sanae Kochiya': {
+		species: 'Togekiss', ability: 'Wind Priestess', item: 'Leftovers', gender: 'F',
+		moves: ['Protect', 'Sparkly Swirl', 'Oblivion Wing'],
+		signatureMove: 'Miracle',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'N',
