@@ -68,7 +68,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onResidual(target, source, effect) {
-			if (!source.ability.dollForm) return;
+			if (!source.abilityState.dollForm) return;
 			if (source.abilityState.duration > 0) source.abilityState.duration -= 1;
 			if (source.abilityState.duration <= 0) {
 				source.formeChange('Mimikyu');
