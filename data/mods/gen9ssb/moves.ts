@@ -56,7 +56,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Substitute', source);
+			this.add('-anim', source, 'Defense Curl', source);
+			this.add('-anim', source, 'Protect', source);
 		},
 		onTryHit(source) {
 			if (source.volatiles['orbshield']) {
