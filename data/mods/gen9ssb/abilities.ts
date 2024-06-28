@@ -47,7 +47,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamagingHit(damage, source, target, move) {
 			if (source.abilityState.armor && source.abilityState.armor > 0) {
-				target.abilityState.armor -= 1;
+				source.abilityState.armor -= 1;
 				if (source.abilityState.armor > 0) this.add('-message', `${source.name}'s armor was chipped!`);
 				if (source.abilityState.armor === 0) this.add('-message', `${source.name}'s armor broke!`);
 			}
