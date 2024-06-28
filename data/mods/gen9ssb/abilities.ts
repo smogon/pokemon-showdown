@@ -16,15 +16,40 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
 	// Morte
+	curseddoll: {
+		name: "Cursed Doll",
+		gen: 9,
+		desc: "Field condition for Morte. Not an obtainable ability.",
+		condition: {
+			duration: 4,
+			onStart(pokemon) {
+				this.add('-message', `Cursed Doll started on ${pokemon.name}!`);
+				this.add('-message', `${pokemon.name}'s defense dropped!`);
+				this.add('-message', `${pokemon.name}'s special defense dropped!`);
+			},
+			onModifyDef(def, pokemon) {
+				return this.chainModify(0.7);
+			},
+			onModifySpd(spd, pokemon) {
+				return this.chainModify(0.7);
+			},
+		},
+	},
+	// Morte
 	dollkeeper: {
 		name: "Dollkeeper",
 		gen: 9,
 		onStart(pokemon) {
-			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			if (pokemon.abilityState.dollForm && pokemon.abilityState.duration <= 0) {
+				pokemon.formeChange('Mimikyu');
+				this.add('-message', `${pokemon.name} transformed back to Mimikyu!`);
+				pokemon.abilityState.dollForm = false;
+				pokemon.abilityState.duration = 0;
+			}
 		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp && !target.abilityState.dollForm) {
+			if (damage >= target.hp && effect?.effectType === 'Move' && !target.abilityState.dollForm) {
 				this.add('-ability', target, 'Dollkeeper');
 				return target.hp - 1;
 				target.formeChange('Mimikyu-Busted');
@@ -32,6 +57,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.heal(target.baseMaxhp, target);
 				target.abilityState.dollForm = true;
 				target.abilityState.duration = 4;
+				source.side.addSideCondition('curseddoll');
 			}
 		},
 		onBeforeMove(pokemon, target, move) {
@@ -46,17 +72,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (source.abilityState.duration > 0) source.abilityState.duration -= 1;
 			if (source.abilityState.duration <= 0) {
 				source.formeChange('Mimikyu');
-				this.add('-message', `${target.name} transformed back to Mimikyu!`);
+				this.add('-message', `${spurce.name} transformed back to Mimikyu!`);
 				source.abilityState.dollForm = false;
 				source.abilityState.duration = 0;
 				return;
 			}
-			if (target.hp && source.ability.dollForm && source.abilityState.duration > 0) {
+			if (target.hp && source.abilityState.dollForm && source.abilityState.duration > 0) {
 				this.add('-activate', target, 'ability: Dollkeeper');
 				this.damage(target.baseMaxhp / 6, target);
 				target.addVolatile('yawn');
 				target.addVolatile('lag');
-				this.add('-message', `${target.name} is tormented by the Cursed Doll!`);
 			}
 		},
 	},
