@@ -54,7 +54,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Hex', source);
+			this.add('-anim', source, 'Confuse Ray', source);
 		},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('omenofdefeat');
@@ -71,10 +71,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return target.hp - 1;
 				}
 			},
+			onHit(pokemon) {
+				const target = pokemon.side.foe;
+				this.add('-anim', pokemon, 'Moongeist Beam', target);
+			},
 			onEnd(pokemon) {
-				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-				this.add('-anim', pokemon, 'Spectral Thief', target);
-				this.damage(pokemon.maxBasehp, pokemon);
+				this.damage(pokemon.baseMaxhp, pokemon);
 			},
 		},
 		secondary: null,
