@@ -20,6 +20,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	IMPORTANT: Obtain the username from getName
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+
+	lag: {
+		name: "Lag",
+		onModifyPriority(priority, pokemon, target, move) {
+			return priority - 8;
+		},
+	},
+	
 	aegii: {
 		noCopy: true,
 		onStart() {
@@ -2937,7 +2945,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		effectType: 'Condition',
 		duration: 4,
 		onSideStart(side, source) {
-			this.effectState.source = source;
+			this.effectState.source = source;e
 			this.add('-sidestart', side, 'move: Biotic Orb (Foe)');
 		},
 		onResidualOrder: 5,
