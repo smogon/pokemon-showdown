@@ -40,6 +40,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Prince Smurf
+	youfilthypeasant: {
+      accuracy: 100,
+      basePower: 0,
+      category: "Status",
+      shortDesc: "Target becomes Normal-type/Gains Normalize; Torments target.",
+      desc: "Ignores Abilities; Makes the target Normal type and changes their ability to Normalize. Torments them. Cannot be used two turns in a row.",
+      name: "You Filthy Peasant",
+      pp: 15,
+		noPPBoosts: true,
+      priority: 0,
+      flags: {protect: 1, mirror: 1, metronome: 1, cantusetwice: 1},
+      ignoreAbility: true,
+      volatileStatus: 'torment',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+         this.add('-anim', source, "Hyper Voice", target);
+      },
+      onTryHit(target) {
+         if (target.getAbility().flags['cantsuppress'] || target.ability === 'normalize' || target.ability === 'truant') return false;
+      },
+      onHit(target, pokemon) {
+         if (target.getTypes().join() === 'Normal' || !target.setType('Normal')) {
+            this.add('-fail', target);
+            return null;
+         }
+         const oldAbility = target.setAbility('normalize');
+         if (oldAbility) {
+            this.add('-ability', target, 'Normalize', '[from] move: You Filthy Peasant');
+            return;
+         }
+         this.add('-start', target, 'typechange', 'Normal');
+         return oldAbility as false | null;
+      },
+		secondary: null,
+   	target: "normal",
+      type: "Normal",
+   },
 	// Kozuchi
 	emergencyupgrades: {
       name: "Emergency Upgrades",
