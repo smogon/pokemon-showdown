@@ -1,4 +1,46 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Prince Smurf
+	smurfscrown: {
+   	name: "Smurf\'s Crown",
+      spritenum: 236,
+      onTakeItem: false,
+      fling: {
+         basePower: 300,
+      },
+      onTryBoost(boost, target, source, effect) {
+         if (source && target === source) return;
+         let showMsg = false;
+         let i: BoostID;
+         for (i in boost) {
+            if (boost[i]! < 0) {
+                  delete boost[i];
+                  showMsg = true;
+            }
+         }
+         if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+             this.add('-fail', target, 'unboost', '[from] item: Smurf\'s Crown', '[of] ' + target);
+         }
+      },
+      onAfterMoveSecondarySelfPriority: -1,
+      onAfterMoveSecondarySelf(pokemon, target, move) {
+         if (move.totalDamage && !pokemon.forceSwitchFlag) {
+            this.heal(move.totalDamage / 4, pokemon);
+         }
+      },
+      onUpdate(pokemon) {
+         if (pokemon.hp <= pokemon.maxhp / 4) {
+            const r = this.random(100);
+            if (r < 30) {
+               pokemon.addVolatile('grudge') && pokemon.useItem;
+            } else if (r < 30) {
+            	this.heal(pokemon.baseMaxhp / 2) && pokemon.useItem;
+            } else if (r < 30) {
+            	pokemon.addVolatile('destinybond') && pokemon.useItem;
+				}
+      	}
+		},
+   	desc: "Prevents other Pokemon from lowering the holder's stats; after an attack, holder recovers 1/4 of the damage dealt to the Target. When the holder is at 1/4 HP or less it will trigger 1 of 3 reactions: Applies Grudge to the holder for a turn, item is then disposed; Heals the holder for 50% HP and cures party of status, item is then disposed; Forces the holder to explode.",
+   },
 	// Kozuchi
 	forgedhammer: {
 		name: "forgedhammer",
