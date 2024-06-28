@@ -40,6 +40,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Morte
+	omenofdefeat: {
+		accuracy: 100,
+		basePower: 150,
+		category: "Physical",
+		name: "Omen of Defeat",
+		pp: 16,
+		noPPBoosts: true,
+		priority: -8,
+		flags: {contact: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hex', source);
+		},
+		onHit(target, source, move) {
+			this.add('-anim', source, 'Spectral Thief', target);
+		},
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('omenofdefeat');
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Focus Punch');
+			},
+			onDamage(damage, target, source, effect) {
+				if (effect?.effectType === 'Move' && damage >= target.hp) {
+					this.add('-activate', target, 'move: Omen of Defeat');
+					return target.hp - 1;
+				}
+			},
+			onEnd(pokemon) {
+				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+				this.add('-anim', source, 'Spectral Thief', target);
+				this.damage(pokemon.maxBasehp, pokemon);
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
 	// Marisa Kirisame
 	orbshield: {
 		accuracy: true,
@@ -861,7 +904,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Thousand Arrows', target);
+			this.add('-anim', source, 'Aeroblast', target);
 		},
 		drain: [1, 3],
 		secondary: {
@@ -887,7 +930,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		isZ: "yoichisbow",
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Splintered Stormshards', target);
+			this.add('-anim', source, 'Thousand Arrows', target);
+			this.add('-anim', source, 'Heal Pulse', target);
 		},
 		onTry(source, target) {
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
