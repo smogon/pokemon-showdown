@@ -864,6 +864,7 @@ export const Aliases: {[alias: string]: string} = {
 	faintattack: "Feint Attack",
 	glowpunch: "Power-up Punch",
 	gterrain: "Grassy Terrain",
+	hhp: "High Horsepower",
 	hp: "Hidden Power",
 	hpbug: "Hidden Power Bug",
 	hpdark: "Hidden Power Dark",
