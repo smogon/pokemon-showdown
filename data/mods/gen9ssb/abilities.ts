@@ -15,6 +15,48 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Kozuchi
+	quickcamo: {
+      shortDesc: "Changes type to resist move before hit + Protean. First move slot always stab.",
+      name: "Quick Camo",
+      onTryHit(target, source, move) {
+      	if (target === source) return;
+         const possibleTypes = [];
+         const attackType = move.type;
+         for (const type of this.dex.types.names()) {
+            if (target.hasType(type)) continue;
+            const typeCheck = this.dex.types.get(type).damageTaken[attackType];
+            if (typeCheck > 1) {
+            	possibleTypes.push(type);
+            }
+         }
+         if (!possibleTypes.length) return;
+         const randomType = this.sample(possibleTypes);
+         if (!target.setType(randomType)) return false;
+         this.add('-start', target, 'typechange', randomType);
+      },
+      onPrepareHit(source, target, move) {
+         if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+         const type = move.type;
+         if (type && type !== '???' && source.getTypes().join() !== type) {
+            if (!source.setType(type)) return;
+            this.add('-start', source, 'typechange', type, '[from] ability: Quick Camo');
+         }
+      },
+      onModifyMove(move, pokemon, target) {
+         const types = pokemon.getTypes(true);
+         const noModifyType = [
+            'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+         ];
+         if (noModifyType.includes(move.id)) return;
+         for (const [i, type] of types.entries()) {
+            if (!this.dex.types.isName(type)) continue;
+            if (pokemon.moveSlots[i] && move.id === pokemon.moveSlots[i].id) move.type = type;
+         }
+      },
+      flags: {},
+   },
+	// Kozuchi
 	scrapworker: {
 		desc: "1.1x Accuracy. Reduces damage from Physical Attacks by 75% and Special Attacks by 30%. Loses 25% for Physical and 10% for Special with each attack received.",
 		shortdesc: "1.1x Accuracy. 75% Damage Reduction vs Physical and 30% vs Special. Loses 1/3rd damage reduction when attacked.",
