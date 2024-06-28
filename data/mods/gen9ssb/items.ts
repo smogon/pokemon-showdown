@@ -45,13 +45,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
          const r = this.random(100);
          if (r < 33) {
-				pokemon.useItem;
             pokemon.addVolatile('grudge');
          } else if (r >= 33 && r < 66) {
-				pokemon.useItem;
             this.heal(pokemon.baseMaxhp / 2, pokemon, pokemon);
          } else if (r >= 66) {
-				pokemon.useItem;
 				let dmg = this.actions.getDamage(pokemon, target, 'Explosion');
 				this.add('-message', `${pokemon.name}'s crown exploded!`);
 				this.addMove('-anim', pokemon, 'Explosion', pokemon);
