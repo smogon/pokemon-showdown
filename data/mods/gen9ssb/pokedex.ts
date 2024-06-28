@@ -7,12 +7,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	},
 	*/
 	mimikyu: {
-		inherut: true,
+		inherit: true,
 		baseStats: {hp: 75, atk: 90, def: 80, spa: 105, spd: 105, spe: 96},
 		abilities: {0: "Dollkeeper"},
 	},
 	mimikyubusted: {
-		inherut: true,
+		inherit: true,
 		baseStats: {hp: 75, atk: 90, def: 105, spa: 50, spd: 105, spe: 96},
 		abilities: {0: "Dollkeeper"},
 	},
