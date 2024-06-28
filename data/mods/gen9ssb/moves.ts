@@ -72,7 +72,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.directDamage(target.maxhp / 4);
 		},
 		condition: {
-			duration: 1,
+			duration: 2,
 			onStart(target, source, effect) {
 				this.add('-start', target, 'Orb Shield');
 				this.effectState.hp = Math.floor(target.maxhp / 2);
@@ -118,6 +118,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return this.HIT_SUBSTITUTE;
 			},
 			onEnd(target) {
+				const pokemon = target.side.foe.active[target.side.foe.active.length - 1 - target.position];
+				this.damage(this.effectState.hp, pokemon, target);
 				this.add('-end', target, 'Orb Shield');
 			},
 		},
