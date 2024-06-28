@@ -20,8 +20,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortdesc: "1.1x Accuracy. 75% Damage Reduction vs Physical and 30% vs Special. Loses 1/3rd damage reduction when attacked.",
 		onStart(pokemon) {
 			if (!pokemon.abilityState.armor && !pokemon.abilityState.usedArmor) {
+				this.add('-activate', pokemon, 'ability: Scrapworker');
 				pokemon.abilityState.armor = 3;
 				pokemon.abilityState.usedArmor = true;
+				this.add('-message', `${pokemon.name} equipped their armor from Scrapworker!`);
 			}
 		},
 	   onSourceModifyDamage(damage, source, target, move) {
@@ -44,8 +46,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return accuracy * 1.1;
 		},
 		onDamagingHit(damage, source, target, move) {
-			if (target.abilityState.armor && target.abilityState.armor > 0) target.abilityState.armor -= 1;
-			this.add('-message', `${target.name} | ${target.abilityState.armor}`);
+			if (source.abilityState.armor && source.abilityState.armor > 0) {
+				target.abilityState.armor -= 1;
+				if (source.abilityState.armor > 0) this.add('-message', `${source.name}'s armor was chipped!`);
+				if (source.abilityState.armor === 0) this.add('-message', `${source.name}'s armor broke!`);
 		},
 		onBasePower(basePower, pokemon, move) {
 			if (!pokemon.abilityState.enhancement) return;
