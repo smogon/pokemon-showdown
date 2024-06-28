@@ -50,6 +50,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				target.abilityState.armor -= 1;
 				if (source.abilityState.armor > 0) this.add('-message', `${source.name}'s armor was chipped!`);
 				if (source.abilityState.armor === 0) this.add('-message', `${source.name}'s armor broke!`);
+			}
 		},
 		onBasePower(basePower, pokemon, move) {
 			if (!pokemon.abilityState.enhancement) return;
