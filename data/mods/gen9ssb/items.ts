@@ -1,4 +1,15 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Morte
+	malediction: {
+		name: "Malediction",
+		gen: 9,
+		desc: "Whenever this Pokemon is damaged by an attacking move, the attacking Pokemon is inflicted with Torment.",
+		shortDesc: "If holder is damaged by an attack, uses Torment on attacker.",
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			source.addVolatile('torment');
+		},
+	},
 	// Marisa Kirisame
 	minihakkero: {
 		name: "Mini-Hakkero",
