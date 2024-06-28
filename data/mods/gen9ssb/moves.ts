@@ -115,7 +115,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
-				return this.HIT_orbshield;
+				return this.HIT_SUBSTITUTE;
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Orb Shield');
