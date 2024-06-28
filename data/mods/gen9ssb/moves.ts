@@ -40,6 +40,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Kozuchi
+	weaponenhancement: {
+		accuracy: true,
+		basepower: 0,
+		category: "Status",
+		name: "Weapon Enhancement",
+		pp: 3,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {snatch: 1},
+		condition: {
+			onHit(pokemon) {
+				if (!pokemon.abilityState.enhancement) pokemon.abilityState.enhancement = 0;
+				if (pokemon.abilityState.enhancement >= 3) {
+					this.add('-message', `${pokemon.name}'s weapon is already at maximum enhancement!`);
+					return;
+				}
+				if (pokemon.abilityState.enhancement < 3) {
+					pokemon.abilityState.enhancement +=1;
+					this.add('-message', `${pokemon.name} is strengthening their weapon!`);
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Steel",	
+	},
 	// Urabrask
 	terrorizethepeaks: {
 		accuracy: 70,
