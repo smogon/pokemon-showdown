@@ -15,6 +15,61 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Marisa Kirisame
+	ordinarymagician: {
+		desc: "This Pokemon changes its type to the type of the move it uses and moves first in its priority bracket.",
+		shortDesc: "Change type to move; move first.",
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Ordinary Magician');
+			}
+		},
+		onFractionalPriorityPriority: -1,
+		onFractionalPriority(priority, pokemon, target, move) {
+			this.add('-activate', pokemon, 'ability: Ordinary Magician');
+			return 0.1;
+		},
+		flags: {},
+		name: "Ordinary Magician",
+		gen: 9,
+	},
+	// Sanae Kochiya
+	windpriestess: {
+		desc: "This Pokemon summons a random weather upon switching in and gains +1 Defense, Special Attack or Special Defense per turn.",
+		shortDesc: "Switch-in: Random weather. +1 Def, Spd, or Spe per turn.",
+		onStart(pokemon) {
+			let w = this.random(3);
+			if (w === 1) {
+				this.field.setWeather('sunnyday');
+				this.add('-message', `${pokemon.name}'s Wind Priestess summoned harsh sunlight!`);
+			} else if (w === 2) {
+				this.field.setWeather('raindance');
+				this.add('-message', `${pokemon.name}'s Wind Priestess summoned heavy rain!`);
+			} else if (w === 3) {
+				this.field.setWeather('snowscape');
+				this.add('-message', `${pokemon.name}'s Wind Priestess summoned a snowstorm!`);
+			} else {
+				this.field.setWeather('sandstorm');
+				this.add('-message', `${pokemon.name}'s Wind Priestess summoned a sandstorm!`);
+			}
+		},
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			let s = this.random(2);
+			if (pokemon.activeTurns) {
+				if (s === 0) this.boost({spd: 1});
+				if (s === 1) this.boost({def: 1});
+				if (s === 2) this.boost({spa: 1});
+			}
+		},
+		flags: {},
+		name: "Wind Priestess",
+		gen: 9,
+	},
 	// Kozuchi
 	quickcamo: {
       shortDesc: "Changes type to resist move before hit + Protean. First move slot always stab.",
