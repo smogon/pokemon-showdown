@@ -41,6 +41,41 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Kozuchi
+	emergencyupgrades: {
+      name: "Emergency Upgrades",
+      category: "Status",
+      basePower: 0,
+      accuracy: true,
+      pp: 1,
+      priority: 0,
+      flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Rock Polish', source);
+			this.add('-anim', source, 'Swords Dance', source);
+		},
+      volatileStatus: 'emergencyupgrades',
+      condition: {
+         duration: 5,
+         onStart(pokemon) {
+            this.add('-start', pokemon, 'Move: Emergency Upgrades');
+				this.add('-message', `${pokemon.name} made emergency upgrades!`);
+         },
+			onResidual(pokemon) {
+				if (this.effectState.duration === 2) this.add('-message', `${pokemon.name}'s emergency upgrades wore off!`);
+			},
+         onBasePower(basePower, pokemon, target) {
+            if (this.effectState.duration >= 3) return this.chainModify(2);
+            if (this.effectState.duration < 3) return this.chainModify(0.5);
+         },
+      },
+      isZ: "forgedhammer",
+      target: "self",
+      type: "Steel",
+   },
+	// Kozuchi
 	weaponenhancement: {
 		accuracy: true,
 		basepower: 0,
@@ -50,18 +85,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {snatch: 1},
-		condition: {
-			onHit(pokemon) {
-				if (!pokemon.abilityState.enhancement) pokemon.abilityState.enhancement = 0;
-				if (pokemon.abilityState.enhancement >= 3) {
-					this.add('-message', `${pokemon.name}'s weapon is already at maximum enhancement!`);
-					return;
-				}
-				if (pokemon.abilityState.enhancement < 3) {
-					pokemon.abilityState.enhancement +=1;
-					this.add('-message', `${pokemon.name} is strengthening their weapon!`);
-				}
-			},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hone Claws', source);
+			this.add('-anim', source, 'Splash', source);
+		},
+		onHit(pokemon) {
+			if (!pokemon.abilityState.enhancement) pokemon.abilityState.enhancement = 0;
+			if (pokemon.abilityState.enhancement >= 3) {
+				this.add('-message', `${pokemon.name}'s weapon is already at maximum enhancement!`);
+				return;
+			}
+			if (pokemon.abilityState.enhancement < 3) {
+				pokemon.abilityState.enhancement +=1;
+				this.add('-message', `${pokemon.name} is strengthening their weapon!`);
+			}
 		},
 		secondary: null,
 		target: "self",
