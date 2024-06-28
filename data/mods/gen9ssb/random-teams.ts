@@ -97,6 +97,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Weapon Enhancement',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
+	'Prince Smurf': {
+      species: 'Kecleon', ability: 'Quick Camo', item: 'Smurf\'s Crown', gender: 'M',
+      moves: ['Psyshield Bash', 'Drain Punch', 'Comeuppance'],
+      signatureMove: 'You Filthy Peasant',
+      evs: {hp: 252, def: 196, spd: 60}, nature: 'Careful',
+   },
 	/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'N',
