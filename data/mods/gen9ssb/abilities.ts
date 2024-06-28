@@ -19,7 +19,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "1.1x Accuracy. Reduces damage from Physical Attacks by 75% and Special Attacks by 30%. Loses 25% for Physical and 10% for Special with each attack received.",
 		shortdesc: "1.1x Accuracy. 75% Damage Reduction vs Physical and 30% vs Special. Loses 1/3rd damage reduction when attacked.",
 		onStart(pokemon) {
-			pokemon.abilityState.armor = 3;
+			if (!pokemon.abilityState.armor && !pokemon.abilityState.usedArmor) {
+				pokemon.abilityState.armor = 3;
+				pokemon.abilityState.usedArmor = true;
+			}
 		},
 	   onSourceModifyDamage(damage, source, target, move) {
       	if (move.category === 'Physical') {
