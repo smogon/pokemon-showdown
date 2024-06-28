@@ -46,6 +46,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 150,
 		category: "Physical",
 		name: "Omen of Defeat",
+		shortDesc: "Endures, then hits after opponent. User faints.",
 		pp: 16,
 		noPPBoosts: true,
 		priority: -8,
