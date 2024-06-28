@@ -113,44 +113,142 @@ describe('value rule support (slow)', () => {
 	}
 });
 
-describe("New set format", () => {
-	const files = ['../../data/random-battles/gen9/sets.json', '../../data/random-battles/gen9/doubles-sets.json'];
-	for (const filename of files) {
-		it(`${filename} should have valid set data`, () => {
-			const setsJSON = require(filename);
-			let validRoles = [];
-			if (filename === '../../data/random-battles/gen9/sets.json') {
-				validRoles = ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user",
-					"Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"];
-			} else {
-				validRoles = ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Tera Blast user",
-					"Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user"];
-			}
+describe("New set format (slow)", () => {
+	// formatInfo lists filenames and roles for each format
+	const formatInfo = {
+		"gen2randombattle": {
+			filename: "gen2/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Generalist", "Thief user"],
+		},
+		"gen3randombattle": {
+			filename: "gen3/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Generalist", "Berry Sweeper"],
+		},
+		"gen4randombattle": {
+			filename: "gen4/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "Spinner"],
+		},
+		"gen5randombattle": {
+			filename: "gen5/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "Spinner"],
+		},
+		"gen6randombattle": {
+			filename: "gen6/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot"],
+		},
+		"gen7randombattle": {
+			filename: "gen7/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Z-Move user", "Bulky Attacker", "Bulky Setup", "Staller", "Bulky Support", "Fast Support", "AV Pivot"],
+		},
+		"gen9randombattle": {
+			filename: "gen9/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
+		},
+		"gen9randomdoublesbattle": {
+			filename: "gen9/doubles-sets",
+			roles: ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Tera Blast user", "Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user"],
+		},
+		"gen9babyrandombattle": {
+			filename: "gen9baby/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
+		},
+	};
+	for (const format of Object.keys(formatInfo)) {
+		const filename = formatInfo[format].filename;
+		const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
+		const mod = filename.split('/')[0];
+		const genNum = parseInt(mod[3]);
+		const rounds = 100;
+		const dex = Dex.forFormat(format);
+		it(`${filename}.json should have valid set data`, () => {
+			const validRoles = formatInfo[format].roles;
 			for (const [id, sets] of Object.entries(setsJSON)) {
 				const species = Dex.species.get(id);
-				assert(species.exists, `Misspelled species ID: ${id}`);
+				assert(species.exists, `In ${format}, misspelled species ID: ${id}`);
 				assert(Array.isArray(sets.sets));
 				for (const set of sets.sets) {
-					assert(validRoles.includes(set.role), `Set for ${species.name} has invalid role: ${set.role}`);
-					assert.equal(set.role === "Tera Blast user", set.movepool.includes("Tera Blast"),
-						`Set for ${species.name} has inconsistent Tera Blast user status`);
+					assert(validRoles.includes(set.role), `In ${format}, set for ${species.name} has invalid role: ${set.role}`);
 					for (const move of set.movepool) {
 						const dexMove = Dex.moves.get(move);
-						assert(dexMove.exists, `${species.name} has invalid move: ${move}`);
-						assert.equal(move, dexMove.name, `${species.name} has misformatted move: ${move}`);
-						assert(validateLearnset(dexMove, {species}, 'anythinggoes', 'gen9'), `${species.name} can't learn ${move}`);
+						assert(dexMove.exists, `In ${format}, ${species.name} has invalid move: ${move}`);
+						// Old gens have moves in id form, currently.
+						if (genNum === 9) {
+							assert.equal(move, dexMove.name, `In ${format}, ${species.name} has misformatted move: ${move}`);
+						} else {
+							assert(move === dexMove.id || move.startsWith('hiddenpower'), `In ${format}, ${species.name} has misformatted move: ${move}`);
+						}
+						assert(validateLearnset(dexMove, {species}, 'ubers', `gen${genNum}`), `In ${format}, ${species.name} can't learn ${move}`);
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
-						assert(set.movepool[i + 1] > set.movepool[i], `${species} movepool should be sorted alphabetically`);
+						assert(set.movepool[i + 1] > set.movepool[i], `In ${format}, ${species.name} movepool should be sorted alphabetically`);
 					}
-					for (const type of set.teraTypes) {
-						const dexType = Dex.types.get(type);
-						assert(dexType.exists, `${species.name} has invalid Tera Type: ${type}`);
-						assert.equal(type, dexType.name, `${species.name} has misformatted Tera Type: ${type}`);
+					if (set.teraTypes) {
+						for (const type of set.teraTypes) {
+							const dexType = Dex.types.get(type);
+							assert(dexType.exists, `In ${format}, ${species.name} has invalid Tera Type: ${type}`);
+							assert.equal(type, dexType.name, `In ${format}, ${species.name} has misformatted Tera Type: ${type}`);
+						}
+						for (let i = 0; i < set.teraTypes.length - 1; i++) {
+							assert(set.teraTypes[i + 1] > set.teraTypes[i], `In ${format}, ${species.name} teraTypes should be sorted alphabetically`);
+						}
 					}
-					for (let i = 0; i < set.teraTypes.length - 1; i++) {
-						assert(set.teraTypes[i + 1] > set.teraTypes[i], `${species} teraTypes should be sorted alphabetically`);
+					if (set.preferredTypes) {
+						for (const type of set.preferredTypes) {
+							const dexType = Dex.types.get(type);
+							assert(dexType.exists, `In ${format}, ${species.name} has invalid Preferred Type: ${type}`);
+							assert.equal(type, dexType.name, `In ${format}, ${species.name} has misformatted Preferred Type: ${type}`);
+						}
+						for (let i = 0; i < set.preferredTypes.length - 1; i++) {
+							assert(set.preferredTypes[i + 1] > set.preferredTypes[i], `In ${format}, ${species.name} preferredTypes should be sorted alphabetically`);
+						}
 					}
+				}
+			}
+		});
+		it('all Pokemon should have 4 moves, except for Ditto and Unown', function () {
+			testTeam({format, rounds}, team => {
+				for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.length === 4, `In ${format}, ${pokemon.name} can generate with ${pokemon.moves.length} moves`);
+			});
+		});
+		it('all moves on all sets should exist and be obtainable', function () {
+			const generator = Teams.getGenerator(format);
+			for (const pokemon of Object.keys(setsJSON)) {
+				const species = dex.species.get(pokemon);
+				assert(species.exists, `In ${format}, Pokemon ${species} does not exist`);
+				const sets = setsJSON[pokemon]["sets"];
+				const types = species.types;
+				const abilities = new Set(Object.values(species.abilities));
+				if (species.unreleasedHidden) abilities.delete(species.abilities.H);
+				for (const set of sets) {
+					assert(set.movepool.every(m => dex.moves.get(m).exists), `In ${format}, for Pokemon ${species}, one of ${set.movepool} does not exist.`);
+					const role = set.role;
+					const moves = new Set(set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id)));
+					const specialTypes = genNum === 9 ? set.teraTypes : set.preferredTypes;
+					// Go through all possible teamDetails combinations, if necessary
+					for (let j = 0; j < rounds; j++) {
+						// In Gens 2-3, if a set has multiple preferred types, we enforce moves of all the types.
+						const specialType = specialTypes ? (genNum > 3 ? specialTypes[j % specialTypes.length] : specialTypes.join()) : '';
+						// Generate a moveset for each combination of relevant teamDetails. Spikes is relevant for Gen 2.
+						for (let i = 0; i < 16; i++) {
+							const rapidSpin = i % 2;
+							const stealthRock = Math.floor(i / 2) % 2;
+							const stickyWeb = Math.floor(i / 4) % 2;
+							const spikes = Math.floor(i / 8) % 2;
+							const teamDetails = {rapidSpin, stealthRock, stickyWeb, spikes};
+							// randomMoveset() deletes moves from the movepool, so recreate it every time
+							const movePool = set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id));
+							let moveSet;
+							if (genNum === 9) {
+								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, format.includes('doubles'), movePool, specialType, role);
+							} else {
+								moveSet = generator.randomMoveset(types, abilities, teamDetails, species, false, movePool, specialType, role);
+							}
+							for (const move of moveSet) moves.delete(move);
+							if (!moves.size) break;
+						}
+						if (!moves.size) break;
+					}
+					assert.false(moves.size, `In ${format}, the following moves on ${species.name} are unused: ${[...moves].join(', ')}`);
 				}
 			}
 		});
@@ -183,7 +281,7 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 			this.timeout(0);
 			const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
 			const mod = filename.split('/')[0] || 'gen' + Dex.gen;
-			const genNum = isNaN(mod[3]) ? Dex.gen : mod[3];
+			const genNum = isNaN(mod[3]) ? Dex.gen : parseInt(mod[3]);
 
 			for (const type in setsJSON) {
 				const typeTable = filename.includes('bss-factory-sets') ? setsJSON : setsJSON[type];

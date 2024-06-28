@@ -1156,12 +1156,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["encore", "hiddenpowergrass", "hypnosis", "icebeam", "rest", "surf", "toxic"],
+                "movepool": ["hiddenpowergrass", "hypnosis", "icebeam", "rest", "surf", "toxic"],
                 "preferredTypes": ["Ice"]
             },
             {
                 "role": "Staller",
-                "movepool": ["encore", "icebeam", "protect", "surf", "toxic"]
+                "movepool": ["icebeam", "protect", "surf", "toxic"]
             },
             {
                 "role": "Bulky Support",
@@ -2685,11 +2685,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["dragondance", "earthquake", "hiddenpowerflying", "overheat", "rockslide"],
-                "preferredTypes": ["Ground"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["earthquake", "extremespeed", "hiddenpowerflying", "rockslide", "swordsdance"],
                 "preferredTypes": ["Ground"]
             },
             {
