@@ -83,7 +83,7 @@ export const ssbSets: SSBSets = {
 		species: 'Yveltal', ability: 'Angel of Death', item: 'Leftovers', gender: 'N',
 		moves: ['Recover', 'Protect', 'Foul Play'],
 		signatureMove: 'Civilization of Magic',
-		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
+		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Urabrask: {
 		species: 'Smokomodo', ability: 'Praetor\'s Grasp', item: 'Urabrask\'s Forge', gender: 'M',
