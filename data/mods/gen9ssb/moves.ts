@@ -40,6 +40,124 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Marisa Kirisame
+	orbshield: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Creates a substitute equivalent to half of user's max HP at the cost of a quarter of its max HP. At the end of the turn the substitute vanishes and deals damage equal to its current HP.",
+		shortDesc: "Consumes 1/4 HP for 1/2 HP Substitute; Ends/damages end of turn.",
+		name: "Orb Shield",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1},
+		volatileStatus: 'orbshield',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Substitute', source);
+		},
+		onTryHit(source) {
+			if (source.volatiles['orbshield']) {
+				this.add('-fail', source, 'move: Orb Shield');
+				return this.NOT_FAIL;
+			}
+			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) {
+				this.add('-fail', source, 'move: Orb Shield', '[weak]');
+				return this.NOT_FAIL;
+			}
+		},
+		onHit(target, source, move) {
+			this.directDamage(target.maxhp / 4);
+		},
+		condition: {
+			duration: 1,
+			onStart(target, source, effect) {
+				this.add('-start', target, 'Orb Shield');
+				this.effectState.hp = Math.floor(target.maxhp / 2);
+				if (target.volatiles['partiallytrapped']) {
+					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
+					delete target.volatiles['partiallytrapped'];
+				}
+			},
+			onTryPrimaryHitPriority: -1,
+			onTryPrimaryHit(target, source, move) {
+				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
+					return;
+				}
+				let damage = this.actions.getDamage(source, target, move);
+				if (!damage && damage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) {
+					return damage;
+				}
+				if (damage > target.volatiles['orbshield'].hp) {
+					damage = target.volatiles['orbshield'].hp as number;
+				}
+				target.volatiles['orbshield'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['orbshield'].hp <= 0) {
+					if (move.ohko) this.add('-ohko');
+					target.removeVolatile('orbshield');
+				} else {
+					this.add('-activate', target, 'move: Orb Shield', '[damage]');
+				}
+				if (move.recoil || move.id === 'chloroblast') {
+					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return this.HIT_orbshield;
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Orb Shield');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
+	// Marisa Kirisame
+	masterspark: {
+		accuracy: true,
+		basePower: 200,
+		category: "Special",
+		desc: "Breaks screens and Orb Shields, ignores abilities.",
+		shortDesc: "Breaks screens/Orb Shields, ignores abilities.",
+		name: "Master Spark",
+		gen: 9,
+		pp: 1,
+		priority: 0,
+		flags: {bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hyper Beam', target);
+		},
+		onTryHit(pokemon) {
+			pokemon.side.removeSideCondition('reflect');
+			pokemon.side.removeSideCondition('lightscreen');
+			pokemon.side.removeSideCondition('auroraveil');
+			if (pokemon.volatiles['orbshield']) {
+				pokemon.removeVolatile('orbshield');
+				this.add('-end', pokemon, 'Orb Shield');
+			}
+		},
+		isZ: "minihakkero",
+		ignoreAbility: true,
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+	},
 	// Sanae Kochiya
 	miracle: {
 		accuracy: true,
