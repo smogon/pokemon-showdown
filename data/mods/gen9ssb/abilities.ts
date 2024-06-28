@@ -42,6 +42,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamagingHit(damage, source, target, move) {
 			if (target.abilityState.armor && target.abilityState.armor > 0) target.abilityState.armor -= 1;
+			this.add('-message', `${target.name} | ${target.abilityState.armor}`);
 		},
 		onBasePower(basePower, pokemon, move) {
 			if (!pokemon.abilityState.enhancement) return;
