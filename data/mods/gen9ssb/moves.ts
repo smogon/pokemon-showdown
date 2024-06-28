@@ -183,7 +183,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (w === 0) this.field.setWeather('sunnyday');
 			if (w === 1) this.field.setWeather('raindance');
 			if (w === 2) this.field.setWeather('sandstorm');
-			if (w === 3) this.field.setWeather('snowscape");
+			if (w === 3) this.field.setWeather('snowscape');
 			if (w === 4) this.field.setWeather('primordialsea');
 			if (w === 5) this.field.setWeather('desolateland");
 
