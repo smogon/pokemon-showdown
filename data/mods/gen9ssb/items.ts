@@ -1,4 +1,15 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Marisa Kirisame
+	minihakkero: {
+		name: "Mini-Hakkero",
+		spritenum: 249,
+		onTakeItem: false,
+		zMove: "Master Spark",
+		zMoveFrom: "Orb Shield",
+		itemUser: ["Hatterene"],
+		desc: "If held by a Hatterene with Orb Shield, it can use Master Spark.",
+		gen: 9,
+	},
 	// Prince Smurf
 	smurfscrown: {
    	name: "Smurf\'s Crown",
