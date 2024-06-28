@@ -65,7 +65,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Focus Punch');
+				this.add('-singleturn', pokemon, 'move: Omen of Defeat');
 			},
 			onDamage(damage, target, source, effect) {
 				if (effect?.effectType === 'Move' && damage >= target.hp) {
@@ -75,7 +75,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onEnd(pokemon) {
 				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-				this.add('-anim', source, 'Spectral Thief', target);
 				this.damage(pokemon.maxBasehp, pokemon);
 			},
 		},
