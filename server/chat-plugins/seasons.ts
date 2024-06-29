@@ -66,7 +66,9 @@ function getUserHTML(user: User, format: string) {
 	const buf = `<username>${user.name}</username>`;
 	const badgeType = getBadges(user, format).filter(x => x.format === format)[0]?.type;
 	if (badgeType) {
-		return `<img src="https://${Config.routes.client}/sprites/misc/${format}_${badgeType}.png" />` + buf;
+		let formatType = format.split(/gen\d+/)[1];
+		if (!['ou', 'randombattle'].includes(formatType)) formatType = 'rotating';
+		return `<img src="https://${Config.routes.client}/sprites/misc/${formatType}_${badgeType}.png" />` + buf;
 	}
 	return buf;
 }
