@@ -190,7 +190,7 @@ export class RandomTeams {
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
 				movePool.includes('megahorn') || movePool.includes('xscissor') ||
-				(!counter.get('Bug') && types.includes('Electric'))
+				(!counter.get('Bug') && (types.includes('Electric') || types.includes('Psychic')))
 			),
 			Dark: (
 				movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles, teraType, role
@@ -226,7 +226,7 @@ export class RandomTeams {
 				if (counter.get('Psychic')) return false;
 				if (movePool.includes('calmmind') || abilities.has('Strong Jaw')) return true;
 				if (isDoubles && movePool.includes('psychicfangs')) return true;
-				return abilities.has('Psychic Surge') || ['Electric', 'Fighting', 'Fire', 'Grass', 'Poison'].some(m => types.includes(m));
+				return abilities.has('Psychic Surge') || ['Bug', 'Electric', 'Fighting', 'Fire', 'Grass', 'Poison'].some(m => types.includes(m));
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
 			Steel: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => (
@@ -565,6 +565,7 @@ export class RandomTeams {
 			['fireblast', ['fierydance', 'flamethrower']],
 			['lavaplume', 'magmastorm'],
 			['thunderpunch', 'wildcharge'],
+			['thunderbolt', 'discharge'],
 			['gunkshot', ['direclaw', 'poisonjab', 'sludgebomb']],
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
@@ -1538,8 +1539,8 @@ export class RandomTeams {
 		if (moves.has('outrage')) return 'Lum Berry';
 		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
 		if (
-			role === 'Fast Support' && isLead &&
-			!counter.get('recovery') && !counter.get('recoil') &&
+			role === 'Fast Support' && isLead && !counter.get('recovery') && !counter.get('recoil') &&
+			(counter.get('hazards') || counter.get('setup')) &&
 			(species.baseStats.hp + species.baseStats.def + species.baseStats.spd) < 258
 		) return 'Focus Sash';
 		if (
