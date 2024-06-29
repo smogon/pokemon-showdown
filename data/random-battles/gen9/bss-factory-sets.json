@@ -1505,7 +1505,7 @@
                   ["Sucker Punch"],
                   ["Tera Blast"]
               ],
-              "item": ["Choice Band", "Choice Scarf"],
+              "item": ["Choice Band"],
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Fairy", "Fire", "Ghost", "Steel"],
@@ -1569,7 +1569,7 @@
                   ["Thunderbolt"],
                   ["Flamethrower", "U-turn"]
               ],
-              "item": ["Choice Scarf", "Choice Specs"],
+              "item": ["Choice Specs"],
               "nature": "Timid",
               "evs": {"spa": 252, "spd": 4, "spe": 252},
               "teraType": ["Electric", "Fighting", "Fire", "Ghost"],
@@ -3801,10 +3801,10 @@
       "sets": [
           {
               "species": "Chansey",
-              "weight": 100,
+              "weight": 70,
               "moves": [
                   ["Seismic Toss"],
-                  ["Shadow Ball", "Stealth Rock", "Thunder Wave"],
+                  ["Shadow Ball"],
                   ["Calm Mind"],
                   ["Soft-Boiled"]
               ],
@@ -3814,6 +3814,22 @@
               "ivs": {"atk": 0},
               "teraType": ["Dark", "Ghost"],
               "ability": ["Natural Cure"]
+          },
+          {
+            "species": "Chansey",
+            "weight": 30,
+            "moves": [
+                ["Seismic Toss"],
+                ["Stealth Rock"],
+                ["Thunder Wave"],
+                ["Soft-Boiled"]
+            ],
+            "item": ["Eviolite"],
+            "nature": "Bold",
+            "evs": {"hp": 12, "def": 252, "spd": 244},
+            "ivs": {"atk": 0},
+            "teraType": ["Dark", "Ghost"],
+            "ability": ["Natural Cure"]
           }
       ]
   },

@@ -384,7 +384,7 @@
     },
     "omastar": {
         "level": 82,
-        "moves": ["earthpower", "hydropump", "icebeam", "shellsmash", "spikes", "stealthrock"],
+        "moves": ["earthpower", "hydropump", "icebeam", "shellsmash"],
         "doublesLevel": 86,
         "doublesMoves": ["earthpower", "icebeam", "muddywater", "shellsmash"]
     },
@@ -1114,7 +1114,7 @@
     },
     "leafeon": {
         "level": 87,
-        "moves": ["doubleedge", "knockoff", "leafblade", "swordsdance", "synthesis", "xscissor"],
+        "moves": ["doubleedge", "knockoff", "leafblade", "swordsdance", "synthesis"],
         "doublesLevel": 86,
         "doublesMoves": ["doubleedge", "knockoff", "leafblade", "protect", "swordsdance"]
     },
@@ -1389,7 +1389,7 @@
     },
     "crustle": {
         "level": 83,
-        "moves": ["earthquake", "shellsmash", "spikes", "stealthrock", "stoneedge", "xscissor"],
+        "moves": ["earthquake", "shellsmash", "stoneedge", "xscissor"],
         "doublesLevel": 84,
         "doublesMoves": ["knockoff", "protect", "rockslide", "shellsmash", "xscissor"]
     },
@@ -1898,7 +1898,7 @@
     },
     "xerneas": {
         "level": 67,
-        "moves": ["focusblast", "geomancy", "moonblast", "psyshock", "thunderbolt"],
+        "moves": ["focusblast", "geomancy", "moonblast", "psyshock"],
         "doublesLevel": 70,
         "doublesMoves": ["dazzlinggleam", "focusblast", "geomancy", "moonblast", "thunderbolt"]
     },

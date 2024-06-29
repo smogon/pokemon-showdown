@@ -1214,6 +1214,7 @@ export class RandomTeams {
 			if (['dragapult', 'tentacruel'].includes(species.id)) return 'Clear Body';
 			if (species.id === 'altaria') return 'Cloud Nine';
 			if (species.id === 'kilowattrel' || species.id === 'meowsticf') return 'Competitive';
+			if (species.id === 'kingambit') return 'Defiant';
 			if (species.id === 'armarouge' && !moves.has('meteorbeam')) return 'Flash Fire';
 			if (species.id === 'talonflame') return 'Gale Wings';
 			if (
@@ -1232,8 +1233,6 @@ export class RandomTeams {
 			if (species.id === 'clefable' && role === 'Doubles Support') return 'Unaware';
 			if (['drifblim', 'hitmonlee', 'sceptile'].includes(species.id) && !moves.has('shedtail')) return 'Unburden';
 			if (abilities.has('Intimidate')) return 'Intimidate';
-
-			if (this.randomChance(1, 2) && species.id === 'kingambit') return 'Defiant';
 
 			// just doubles and multi
 			if (this.format.gameType !== 'freeforall') {
@@ -1335,7 +1334,7 @@ export class RandomTeams {
 		) return 'Weakness Policy';
 		if (['dragonenergy', 'lastrespects', 'waterspout'].some(m => moves.has(m))) return 'Choice Scarf';
 		if (
-			ability === 'Imposter' || (species.id === 'magnezone' && role === 'Fast Attacker')
+			!isDoubles && (ability === 'Imposter' || (species.id === 'magnezone' && role === 'Fast Attacker'))
 		) return 'Choice Scarf';
 		if (species.id === 'rampardos' && (role === 'Fast Attacker' || isDoubles)) return 'Choice Scarf';
 		if (species.id === 'palkia' && counter.get('Special') < 4) return 'Lustrous Orb';
