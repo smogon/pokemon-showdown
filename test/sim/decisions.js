@@ -1239,7 +1239,7 @@ describe('Choice internals', function () {
 		p1.chooseMove(1);
 		p2.chooseMove(1);
 		p2.chooseMove(1);
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 2);
 		assert.statStage(p2.active[0], 'atk', -1);
@@ -1248,7 +1248,7 @@ describe('Choice internals', function () {
 		p1.chooseMove('synthesis');
 		p2.chooseMove('surf');
 		p2.chooseMove('calmmind');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 3);
 		assert.fullHP(p1.active[1]);
@@ -1257,7 +1257,7 @@ describe('Choice internals', function () {
 		p1.chooseMove('2');
 		p2.chooseMove('1');
 		p2.chooseMove('calmmind');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 4);
 		assert.fullHP(p1.active[1]);
@@ -1282,13 +1282,13 @@ describe('Choice internals', function () {
 		p1.chooseMove('selfdestruct');
 		p2.chooseMove('recover');
 		p2.chooseMove('recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.fainted(p1.active[0]);
 		assert.fainted(p1.active[1]);
 		p1.chooseSwitch(4);
 		p1.chooseSwitch(3);
-		battle.commitDecisions();
+		battle.commitChoices();
 		assert.equal(battle.turn, 2);
 		assert.equal(p1.active[0].name, 'Ekans');
 		assert.equal(p1.active[1].name, 'Koffing');
@@ -1316,7 +1316,7 @@ describe('Choice internals', function () {
 			`Expected switch to fail`
 		);
 		p2.choose('move recover, move recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 2);
 		assert.equal(p1.active[0].name, 'Mew');
@@ -1329,7 +1329,7 @@ describe('Choice internals', function () {
 			`Expected switch to fail`
 		);
 		p2.choose('move recover, move recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 3);
 		assert.equal(p1.active[0].name, 'Bulbasaur');
