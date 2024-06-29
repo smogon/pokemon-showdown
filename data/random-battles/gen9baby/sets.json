@@ -1499,7 +1499,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Fake Out", "Fury Swipes", "Knock Off", "Play Rough", "Thunder Wave", "U-turn"],
+                "movepool": ["Double-Edge", "Fake Out", "Knock Off", "Play Rough", "Thunder Wave", "U-turn"],
                 "teraTypes": ["Normal"]
             }
         ]
@@ -1733,9 +1733,14 @@
         "level": 7,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Encore", "Giga Drain", "Leaf Storm", "Pollen Puff", "Sleep Powder", "Stun Spore", "Synthesis"],
                 "teraTypes": ["Poison", "Steel", "Water"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Giga Drain", "Leaf Storm", "Stun Spore", "Synthesis", "Tera Blast"],
+                "teraTypes": ["Fire", "Rock"]
             }
         ]
     },
@@ -2374,7 +2379,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Gunk Shot", "Lash Out", "Swords Dance", "Toxic Spikes"],
+                "movepool": ["Close Combat", "Gunk Shot", "Swords Dance", "Throat Chop", "Toxic Spikes"],
                 "teraTypes": ["Dark", "Fighting", "Poison"]
             }
         ]
