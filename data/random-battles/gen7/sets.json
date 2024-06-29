@@ -6331,7 +6331,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["aquajet", "crunch", "icefang", "liquidation", "psychicfangs", "swordsdance"]
+                "movepool": ["aquajet", "crunch", "icefang", "liquidation", "psychicfangs", "swordsdance"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },
