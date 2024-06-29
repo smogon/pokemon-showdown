@@ -1,4 +1,4 @@
-export const Natures: {[k: string]: NatureData} = {
+export const Natures: {[k: IDEntry]: NatureData} = {
 	adamant: {
 		name: "Adamant",
 		plus: 'atk',

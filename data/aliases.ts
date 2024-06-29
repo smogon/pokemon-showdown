@@ -1,4 +1,4 @@
-export const Aliases: {[alias: string]: string} = {
+export const Aliases: {[alias: IDEntry]: string} = {
 	// formats
 	randbats: "[Gen 9] Random Battle",
 	uber: "[Gen 9] Ubers",

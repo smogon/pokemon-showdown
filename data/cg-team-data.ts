@@ -1,17 +1,17 @@
 // Data for computer-generated teams
 
-export const MOVE_PAIRINGS: {[moveID: string]: string} = {
+export const MOVE_PAIRINGS: {[moveID: IDEntry]: IDEntry} = {
 	rest: 'sleeptalk',
 	sleeptalk: 'rest',
 };
 
 // Bonuses to move ratings by ability
-export const ABILITY_MOVE_BONUSES: {[abilityID: string]: {[moveID: string]: number}} = {
+export const ABILITY_MOVE_BONUSES: {[abilityID: IDEntry]: {[moveID: IDEntry]: number}} = {
 	drought: {sunnyday: 0.2, solarbeam: 2},
 	contrary: {terablast: 2},
 };
 // Bonuses to move ratings by move type
-export const ABILITY_MOVE_TYPE_BONUSES: {[abilityID: string]: {[typeID: string]: number}} = {
+export const ABILITY_MOVE_TYPE_BONUSES: {[abilityID: IDEntry]: {[typeID: string]: number}} = {
 	darkaura: {Dark: 1.33},
 	dragonsmaw: {Dragon: 1.5},
 	fairyaura: {Fairy: 1.33},
@@ -31,7 +31,7 @@ export const ABILITY_MOVE_TYPE_BONUSES: {[abilityID: string]: {[typeID: string]:
 };
 // For moves whose quality isn't obvious from data
 // USE SPARINGLY!
-export const HARDCODED_MOVE_WEIGHTS: {[moveID: string]: number} = {
+export const HARDCODED_MOVE_WEIGHTS: {[moveID: IDEntry]: number} = {
 	// Fails unless user is asleep
 	snore: 0,
 	// Hard to use

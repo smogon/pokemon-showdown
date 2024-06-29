@@ -171,10 +171,10 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	 * ID of the Z-Crystal that calls the move.
 	 * `true` for Z-Powered status moves like Z-Encore.
 	 */
-	isZ?: boolean | string;
+	isZ?: boolean | IDEntry;
 	zMove?: {
 		basePower?: number,
-		effect?: string,
+		effect?: IDEntry,
 		boost?: SparseBoostsTable,
 	};
 
@@ -182,7 +182,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	// -------------
 	/**
 	 * `true` for Max moves like Max Airstream. If its a G-Max moves, this is
-	 * the species ID of the Gigantamax Pokemon that can use this G-Max move.
+	 * the species name of the Gigantamax Pokemon that can use this G-Max move.
 	 */
 	isMax?: boolean | string;
 	maxMove?: {
@@ -191,7 +191,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 
 	// Hit effects
 	// -----------
-	ohko?: boolean | string;
+	ohko?: boolean | 'Ice';
 	thawsTarget?: boolean;
 	heal?: number[] | null;
 	forceSwitch?: boolean;
@@ -243,17 +243,17 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	ignoreAccuracy?: boolean;
 	ignoreDefensive?: boolean;
 	ignoreEvasion?: boolean;
-	ignoreImmunity?: boolean | {[k: string]: boolean};
+	ignoreImmunity?: boolean | {[typeName: string]: boolean};
 	ignoreNegativeOffensive?: boolean;
 	ignoreOffensive?: boolean;
 	ignorePositiveDefensive?: boolean;
 	ignorePositiveEvasion?: boolean;
 	multiaccuracy?: boolean;
 	multihit?: number | number[];
-	multihitType?: string;
+	multihitType?: 'parentalbond';
 	noDamageVariance?: boolean;
-	nonGhostTarget?: string;
-	pressureTarget?: string;
+	nonGhostTarget?: MoveTarget;
+	pressureTarget?: MoveTarget;
 	spreadModifier?: number;
 	sleepUsable?: boolean;
 	/**
@@ -274,7 +274,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	isConfusionSelfHit?: boolean;
 	noSketch?: boolean;
 	stallingMove?: boolean;
-	baseMove?: string;
+	baseMove?: ID;
 }
 
 export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
@@ -364,7 +364,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Will this move always or never be a critical hit? */
 	declare readonly willCrit?: boolean;
 	/** Can this move OHKO foes? */
-	declare readonly ohko?: boolean | string;
+	declare readonly ohko?: boolean | 'Ice';
 	/**
 	 * Base move type. This is the move type as specified by the games,
 	 * tracked because it often differs from the real move type.
@@ -420,8 +420,11 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/**
 	 * Whether or not this move ignores type immunities. Defaults to
 	 * true for Status moves and false for Physical/Special moves.
+	 *
+	 * If an Object, its keys represent the types whose immunities are
+	 * ignored, and its values should only be true.
 	 */
-	readonly ignoreImmunity: AnyObject | boolean;
+	readonly ignoreImmunity: {[typeName: string]: boolean} | boolean;
 	/** Base move PP. */
 	readonly pp: number;
 	/** Whether or not this move can receive PP boosts. */
@@ -429,11 +432,11 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** How many times does this move hit? */
 	declare readonly multihit?: number | number[];
 	/** Is this move a Z-Move? */
-	readonly isZ: boolean | string;
+	readonly isZ: boolean | IDEntry;
 	/* Z-Move fields */
 	declare readonly zMove?: {
 		basePower?: number,
-		effect?: string,
+		effect?: IDEntry,
 		boost?: SparseBoostsTable,
 	};
 	/** Is this move a Max move? */
@@ -446,9 +449,9 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/** Whether or not the user must switch after using this move. */
 	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
 	/** Move target only used by Pressure. */
-	readonly pressureTarget: string;
+	readonly pressureTarget: MoveTarget;
 	/** Move target used if the user is not a Ghost type (for Curse). */
-	readonly nonGhostTarget: string;
+	readonly nonGhostTarget: MoveTarget;
 	/** Whether or not the move ignores abilities. */
 	readonly ignoreAbility: boolean;
 	/**

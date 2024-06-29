@@ -1,4 +1,4 @@
-export const Learnsets: {[k: string]: ModdedLearnsetData} = {
+export const Learnsets: {[k: IDEntry]: ModdedLearnsetData} = {
 	missingno: {
 		learnset: {
 			blizzard: ["2L1"],
@@ -122,12 +122,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 1, shiny: 1, ivs: {def: 31}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 5, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 5, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 5, level: 1, shiny: 1, ivs: {def: 31}, pokeball: "pokeball"},
+			{generation: 6, level: 5, pokeball: "cherishball"},
+			{generation: 6, level: 5, isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 5},
@@ -317,7 +317,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 100, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 100, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	charmander: {
@@ -434,15 +434,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 40, gender: "M", nature: "Mild", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 40, gender: "M", nature: "Naive", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 40, gender: "M", nature: "Naughty", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 4, level: 40, gender: "M", nature: "Hardy", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 1, shiny: 1, ivs: {spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 5, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 5, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 4, level: 40, gender: "M", nature: "Mild", pokeball: "cherishball"},
+			{generation: 4, level: 40, gender: "M", nature: "Naive", pokeball: "cherishball"},
+			{generation: 4, level: 40, gender: "M", nature: "Naughty", pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 4, level: 40, gender: "M", nature: "Hardy", pokeball: "cherishball"},
+			{generation: 5, level: 1, shiny: 1, ivs: {spe: 31}, pokeball: "pokeball"},
+			{generation: 6, level: 5, pokeball: "cherishball"},
+			{generation: 6, level: 5, isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 5},
@@ -684,18 +684,18 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 36, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 36, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 36, shiny: true, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 36, gender: "M", nature: "Serious", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 40, nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 40, gender: "M", nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 40, gender: "M", nature: "Adamant", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 50, gender: "M", nature: "Adamant", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 9, level: 50, nature: "Adamant", ivs: {hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 6, level: 36, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 36, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 36, shiny: true, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 100, isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 36, gender: "M", nature: "Serious", pokeball: "cherishball"},
+			{generation: 7, level: 40, nature: "Jolly", pokeball: "cherishball"},
+			{generation: 7, level: 40, gender: "M", nature: "Jolly", pokeball: "cherishball"},
+			{generation: 7, level: 40, gender: "M", nature: "Adamant", pokeball: "pokeball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
+			{generation: 8, level: 50, gender: "M", nature: "Adamant", pokeball: "pokeball"},
+			{generation: 9, level: 50, nature: "Adamant", ivs: {hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}, pokeball: "pokeball"},
 		],
 	},
 	squirtle: {
@@ -811,11 +811,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 1, shiny: 1, ivs: {hp: 31}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 5, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 5, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 5, level: 1, shiny: 1, ivs: {hp: 31}, pokeball: "pokeball"},
+			{generation: 6, level: 5, pokeball: "cherishball"},
+			{generation: 6, level: 5, isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 5},
@@ -1034,8 +1034,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 100, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 6, level: 100, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	caterpie: {
@@ -1160,7 +1160,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 30, moves: ["2L1"]},
+			{generation: 3, level: 30},
 		],
 		encounters: [
 			{generation: 2, level: 7},
@@ -1283,7 +1283,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 30, moves: ["2L1"]},
+			{generation: 3, level: 30},
 		],
 		encounters: [
 			{generation: 2, level: 7},
@@ -1428,7 +1428,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 30, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 30},
 		],
 		encounters: [
 			{generation: 1, level: 9},
@@ -1504,7 +1504,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 61, gender: "M", nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 61, gender: "M", nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 7, level: 29},
@@ -1753,7 +1753,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 34, moves: ["2L1"]},
+			{generation: 3, level: 34},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -1902,7 +1902,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 20, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 20, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -1979,7 +1979,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 22, moves: ["2L1"]},
+			{generation: 3, level: 22},
 		],
 		encounters: [
 			{generation: 1, level: 3},
@@ -2163,8 +2163,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 14, gender: "F", nature: "Docile", ivs: {hp: 26, atk: 28, def: 6, spa: 14, spd: 30, spe: 11}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 14, gender: "F", nature: "Docile", ivs: {hp: 26, atk: 28, def: 6, spa: 14, spd: 30, spe: 11}, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 6},
@@ -2275,7 +2275,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 33, moves: ["2L1"]},
+			{generation: 3, level: 33},
 		],
 		encounters: [
 			{generation: 2, level: 10},
@@ -2373,13 +2373,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 4, level: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 30, shiny: true, gender: "M", nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 30, shiny: true, gender: "M", nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 4, level: 1, pokeball: "pokeball"},
+			{generation: 4, level: 30, shiny: true, gender: "M", nature: "Jolly", pokeball: "cherishball"},
+			{generation: 9, level: 30, shiny: true, gender: "M", nature: "Jolly", pokeball: "cherishball"},
 		],
 	},
 	pichuspikyeared: {
@@ -2429,7 +2429,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			volttackle: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 30, gender: "F", nature: "Naughty", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 4, level: 30, gender: "F", nature: "Naughty", pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -2558,62 +2558,62 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 10, gender: "F", nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, gender: "M", nature: "Hardy", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 20, gender: "F", nature: "Bashful", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 20, gender: "M", nature: "Jolly", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 40, gender: "M", nature: "Modest", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 20, gender: "F", nature: "Bashful", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 40, gender: "M", nature: "Mild", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 20, gender: "F", nature: "Bashful", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 30, gender: "M", nature: "Naughty", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, gender: "M", nature: "Relaxed", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 20, gender: "M", nature: "Docile", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, gender: "M", nature: "Naughty", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 20, gender: "M", nature: "Bashful", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 30, gender: "F", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, shiny: 1, gender: "F", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, shiny: 1, gender: "F", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, gender: "F", nature: "Timid", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 100, gender: "M", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, gender: "M", nature: "Brave", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 22, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, gender: "F", moves: ["2L1"], pokeball: "healball"},
-			{generation: 6, level: 36, shiny: true, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, gender: "F", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, gender: "M", nature: "Naughty", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, perfectIVs: 2, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 99, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "healball"},
-			{generation: 7, level: 10, nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 7, level: 5, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 5, gender: "M", nature: "Serious", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 21, gender: "M", nature: "Brave", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 25, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 9, level: 100, gender: "M", nature: "Quiet", perfectIVs: 6, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 9, level: 25, gender: "M", ivs: {hp: 25, atk: 25, def: 25, spa: 25, spd: 25, spe: 25}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 5, pokeball: "pokeball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 4, level: 10, gender: "F", nature: "Hardy", pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Hardy", pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "F", nature: "Bashful", pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "M", nature: "Jolly", pokeball: "pokeball"},
+			{generation: 4, level: 40, gender: "M", nature: "Modest", pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "F", nature: "Bashful", pokeball: "cherishball"},
+			{generation: 4, level: 40, gender: "M", nature: "Mild", pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "F", nature: "Bashful", pokeball: "cherishball"},
+			{generation: 4, level: 30, gender: "M", nature: "Naughty", pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Relaxed", pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "M", nature: "Docile", pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Naughty", pokeball: "cherishball"},
+			{generation: 4, level: 20, gender: "M", nature: "Bashful", pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "F", isHidden: true, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 5, level: 100, shiny: 1, gender: "F", pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, gender: "F", pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "F", nature: "Timid", isHidden: true, pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 5, level: 100, gender: "M", isHidden: true, pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Brave", pokeball: "cherishball"},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 6, level: 22, pokeball: "cherishball"},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 6, level: 10, gender: "F", pokeball: "healball"},
+			{generation: 6, level: 36, shiny: true, isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 10, gender: "F", pokeball: "cherishball"},
+			{generation: 6, level: 50, gender: "M", nature: "Naughty", pokeball: "cherishball"},
+			{generation: 6, level: 10, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 10, perfectIVs: 2, isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 99, pokeball: "cherishball"},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 6, level: 10, pokeball: "healball"},
+			{generation: 7, level: 10, nature: "Jolly", pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
+			{generation: 7, level: 5, pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
+			{generation: 8, level: 5, gender: "M", nature: "Serious", pokeball: "cherishball"},
+			{generation: 8, level: 21, gender: "M", nature: "Brave", pokeball: "cherishball"},
+			{generation: 8, level: 25, isHidden: true, pokeball: "cherishball"},
+			{generation: 9, level: 5, pokeball: "pokeball"},
+			{generation: 9, level: 100, gender: "M", nature: "Quiet", perfectIVs: 6, isHidden: true, pokeball: "pokeball"},
+			{generation: 9, level: 25, gender: "M", ivs: {hp: 25, atk: 25, def: 25, spa: 25, spd: 25, spe: 25}, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 3},
@@ -2679,7 +2679,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 20, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 6, level: 20, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -2803,8 +2803,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 1, nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 25, nature: "Hardy", isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 1, nature: "Hardy", pokeball: "pokeball"},
+			{generation: 8, level: 25, nature: "Hardy", isHidden: true, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -2898,8 +2898,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 6, nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 25, nature: "Hardy", isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 6, nature: "Hardy", pokeball: "pokeball"},
+			{generation: 8, level: 25, nature: "Hardy", isHidden: true, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -2993,8 +2993,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 25, nature: "Hardy", isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 10, nature: "Hardy", pokeball: "pokeball"},
+			{generation: 8, level: 25, nature: "Hardy", isHidden: true, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -3088,8 +3088,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 14, nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 25, nature: "Hardy", isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 14, nature: "Hardy", pokeball: "pokeball"},
+			{generation: 8, level: 25, nature: "Hardy", isHidden: true, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -3183,8 +3183,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 17, nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 25, nature: "Hardy", isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 17, nature: "Hardy", pokeball: "pokeball"},
+			{generation: 8, level: 25, nature: "Hardy", isHidden: true, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -3278,8 +3278,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 20, nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 25, nature: "Hardy", isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 20, nature: "Hardy", pokeball: "pokeball"},
+			{generation: 8, level: 25, nature: "Hardy", isHidden: true, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -3373,8 +3373,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 21, shiny: 1, nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 25, nature: "Hardy", isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 21, shiny: 1, nature: "Hardy", pokeball: "pokeball"},
+			{generation: 8, level: 25, nature: "Hardy", isHidden: true, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -3413,7 +3413,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zippyzap: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 5, perfectIVs: 6, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 5, perfectIVs: 6, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -3490,8 +3490,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 25, nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 80, nature: "Hardy", ivs: {hp: 31, atk: 30, def: 30, spa: 31, spd: 30, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 8, level: 25, nature: "Hardy", pokeball: "pokeball"},
+			{generation: 8, level: 80, nature: "Hardy", ivs: {hp: 31, atk: 30, def: 30, spa: 31, spd: 30, spe: 31}, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -3818,7 +3818,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 12, gender: "M", nature: "Docile", ivs: {hp: 4, atk: 23, def: 8, spa: 31, spd: 1, spe: 25}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 12, gender: "M", nature: "Docile", ivs: {hp: 4, atk: 23, def: 8, spa: 31, spd: 1, spe: 25}, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 6},
@@ -3919,7 +3919,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
 		],
 	},
 	sandslash: {
@@ -4436,7 +4436,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 41, perfectIVs: 2, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 41, perfectIVs: 2, pokeball: "cherishball"},
 		],
 	},
 	nidoranm: {
@@ -4747,7 +4747,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 68, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 68, pokeball: "cherishball"},
 		],
 	},
 	cleffa: {
@@ -5017,8 +5017,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, gender: "F", shiny: true, nature: "Bold", isHidden: true, ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 15, gender: "M", nature: "Modest", abilities: ["2L1"], moves: ["2L1"], pokeball: "moonball"},
+			{generation: 8, level: 50, gender: "F", shiny: true, nature: "Bold", isHidden: true, ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}, pokeball: "cherishball"},
+			{generation: 8, level: 15, gender: "M", nature: "Modest", pokeball: "moonball"},
 		],
 		encounters: [
 			{generation: 1, level: 8},
@@ -5275,8 +5275,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 18, gender: "F", nature: "Quirky", ivs: {hp: 15, atk: 6, def: 3, spa: 25, spd: 13, spe: 22}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 18, moves: ["2L1"]},
+			{generation: 3, level: 18, gender: "F", nature: "Quirky", ivs: {hp: 15, atk: 6, def: 3, spa: 25, spd: 13, spe: 22}, pokeball: "pokeball"},
+			{generation: 3, level: 18},
 		],
 		encounters: [
 			{generation: 1, level: 18},
@@ -5373,8 +5373,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, gender: "F", nature: "Modest", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 10, gender: "F", nature: "Modest", pokeball: "cherishball"},
 		],
 	},
 	ninetales: {
@@ -5473,7 +5473,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, gender: "M", nature: "Bold", ivs: {def: 31}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Bold", ivs: {def: 31}, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	ninetalesalola: {
@@ -5670,7 +5670,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 	},
 	jigglypuff: {
@@ -6255,8 +6255,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 30, gender: "M", nature: "Timid", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 64, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 30, gender: "M", nature: "Timid", pokeball: "cherishball"},
+			{generation: 7, level: 64, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	oddish: {
@@ -6337,8 +6337,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 26, gender: "M", nature: "Quirky", ivs: {hp: 23, atk: 24, def: 20, spa: 21, spd: 9, spe: 16}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 26, gender: "M", nature: "Quirky", ivs: {hp: 23, atk: 24, def: 20, spa: 21, spd: 9, spe: 16}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 12},
@@ -6420,7 +6420,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 2, level: 14},
@@ -6685,7 +6685,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 28, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 28},
 		],
 		encounters: [
 			{generation: 1, level: 8},
@@ -6957,7 +6957,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 32, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 32},
 		],
 		encounters: [
 			{generation: 1, level: 30},
@@ -7138,7 +7138,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
 		],
 	},
 	dugtrio: {
@@ -7230,7 +7230,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 40, moves: ["2L1"]},
+			{generation: 3, level: 40},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -7440,18 +7440,18 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 22, moves: ["2L1"]},
-			{generation: 4, level: 21, gender: "F", nature: "Jolly", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 10, gender: "M", nature: "Jolly", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 15, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 20, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 5, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 22},
+			{generation: 4, level: 21, gender: "F", nature: "Jolly", pokeball: "cherishball"},
+			{generation: 4, level: 10, gender: "M", nature: "Jolly", pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 20, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 10},
-			{generation: 3, level: 3, gender: "M", nature: "Naive", ivs: {hp: 4, atk: 5, def: 4, spa: 5, spd: 4, spe: 4}, abilities: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 3, gender: "M", nature: "Naive", ivs: {hp: 4, atk: 5, def: 4, spa: 5, spd: 4, spe: 4}, pokeball: "pokeball"},
 		],
 	},
 	meowthalola: {
@@ -7632,7 +7632,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 15, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 15, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	persian: {
@@ -8062,8 +8062,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 27, gender: "M", nature: "Lax", ivs: {hp: 31, atk: 16, def: 12, spa: 29, spd: 31, spe: 14}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 27, gender: "M", nature: "Lax", ivs: {hp: 31, atk: 16, def: 12, spa: 29, spd: 31, spe: 14}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -8195,8 +8195,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 33, moves: ["2L1"]},
-			{generation: 7, level: 50, gender: "M", nature: "Timid", ivs: {hp: 31, atk: 30, def: 31, spa: 31, spd: 31, spe: 31}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 33},
+			{generation: 7, level: 50, gender: "M", nature: "Timid", ivs: {hp: 31, atk: 30, def: 31, spa: 31, spd: 31, spe: 31}, isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -8450,7 +8450,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 34, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 34},
 		],
 		encounters: [
 			{generation: 2, level: 15},
@@ -8624,9 +8624,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 32, gender: "F", nature: "Quiet", ivs: {hp: 11, atk: 24, def: 28, spa: 1, spd: 20, spe: 2}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 28, moves: ["2L1"]},
+			{generation: 3, level: 32, gender: "F", nature: "Quiet", ivs: {hp: 11, atk: 24, def: 28, spa: 1, spd: 20, spe: 2}, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 28},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -8690,7 +8690,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 15, isHidden: true, nature: "Jolly", ivs: {hp: 31, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 9, level: 15, isHidden: true, nature: "Jolly", ivs: {hp: 31, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}, pokeball: "pokeball"},
 		],
 	},
 	arcanine: {
@@ -8787,9 +8787,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 50, shiny: true, gender: "F", nature: "Adamant", abilities: ["2L1"], ivs: {hp: 31, atk: 31, def: 31, spa: 8, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
+			{generation: 9, level: 50, shiny: true, gender: "F", nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 8, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 	},
 	arcaninehisui: {
@@ -8941,7 +8941,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 5},
@@ -9046,7 +9046,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			{generation: 3, level: 20},
 			{generation: 4, level: 10},
 			{generation: 7, level: 24},
-			{generation: 7, level: 22, gender: "F", nature: "Naughty", abilities: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 22, gender: "F", nature: "Naughty", pokeball: "pokeball"},
 		],
 	},
 	poliwrath: {
@@ -9168,7 +9168,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 42, moves: ["2L1"]},
+			{generation: 3, level: 42},
 		],
 	},
 	politoed: {
@@ -9265,7 +9265,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, gender: "M", nature: "Calm", ivs: {hp: 31, atk: 13, def: 31, spa: 5, spd: 31, spe: 5}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Calm", ivs: {hp: 31, atk: 13, def: 31, spa: 5, spd: 31, spe: 5}, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	abra: {
@@ -9596,7 +9596,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
 		],
 	},
 	machop: {
@@ -9796,7 +9796,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 30, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 30, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 2, level: 14},
@@ -9908,10 +9908,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 38, gender: "M", nature: "Quiet", ivs: {hp: 9, atk: 23, def: 25, spa: 20, spd: 15, spe: 10}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 50, shiny: true, gender: "M", nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 39, gender: "M", nature: "Hardy", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 34, gender: "F", nature: "Brave", ivs: {atk: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 38, gender: "M", nature: "Quiet", ivs: {hp: 9, atk: 23, def: 25, spa: 20, spd: 15, spe: 10}, pokeball: "pokeball"},
+			{generation: 6, level: 50, shiny: true, gender: "M", nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, pokeball: "cherishball"},
+			{generation: 6, level: 39, gender: "M", nature: "Hardy", pokeball: "cherishball"},
+			{generation: 7, level: 34, gender: "F", nature: "Brave", ivs: {atk: 31}, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 16},
@@ -10003,8 +10003,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 12},
@@ -10094,7 +10094,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 32, moves: ["2L1"]},
+			{generation: 3, level: 32},
 		],
 		encounters: [
 			{generation: 2, level: 12},
@@ -11063,7 +11063,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 15, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 15, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	rapidash: {
@@ -11147,7 +11147,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 40, moves: ["2L1"]},
+			{generation: 3, level: 40},
 		],
 		encounters: [
 			{generation: 2, level: 14, gender: "M"},
@@ -11331,9 +11331,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 31, gender: "F", nature: "Naive", ivs: {hp: 17, atk: 11, def: 19, spa: 20, spd: 5, spe: 10}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 30, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 31, gender: "F", nature: "Naive", ivs: {hp: 17, atk: 11, def: 19, spa: 20, spd: 5, spe: 10}, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 5, level: 30, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -11560,7 +11560,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 100, nature: "Quiet", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 100, nature: "Quiet", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -12100,7 +12100,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 30, moves: ["2L1"]},
+			{generation: 3, level: 30},
 		],
 		encounters: [
 			{generation: 2, level: 5},
@@ -12294,12 +12294,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 36, moves: ["2L1"]},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 36},
 		],
 		encounters: [
 			{generation: 1, level: 3},
-			{generation: 3, level: 3, gender: "M", nature: "Adamant", ivs: {hp: 20, atk: 25, def: 21, spa: 24, spd: 15, spe: 20}, abilities: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 3, gender: "M", nature: "Adamant", ivs: {hp: 20, atk: 25, def: 21, spa: 24, spd: 15, spe: 20}, pokeball: "pokeball"},
 		],
 	},
 	farfetchdgalar: {
@@ -12404,7 +12404,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 80, gender: "M", nature: "Brave", abilities: ["2L1"], ivs: {hp: 30, atk: 31, def: 31, spa: 30, spd: 30, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 8, level: 80, gender: "M", nature: "Brave", ivs: {hp: 30, atk: 31, def: 31, spa: 30, spd: 30, spe: 31}, pokeball: "pokeball"},
 		],
 	},
 	doduo: {
@@ -12577,14 +12577,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 34, moves: ["2L1"]},
+			{generation: 3, level: 34},
 		],
 		encounters: [
 			{generation: 1, level: 29},
 			{generation: 2, level: 10, gender: "F"},
 			{generation: 2, level: 30},
 			{generation: 3, level: 29, pokeball: "safariball"},
-			{generation: 4, level: 15, gender: "F", nature: "Impish", ivs: {hp: 20, atk: 20, def: 20, spa: 15, spd: 15, spe: 15}, abilities: ["2L1"], pokeball: "pokeball"},
+			{generation: 4, level: 15, gender: "F", nature: "Impish", ivs: {hp: 20, atk: 20, def: 20, spa: 15, spd: 15, spe: 15}, pokeball: "pokeball"},
 		],
 	},
 	seel: {
@@ -12678,7 +12678,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 23, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 23},
 		],
 		encounters: [
 			{generation: 1, level: 22},
@@ -12877,7 +12877,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 23, moves: ["2L1"]},
+			{generation: 3, level: 23},
 		],
 		encounters: [
 			{generation: 1, level: 23},
@@ -12985,7 +12985,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
 		],
 	},
 	muk: {
@@ -13284,9 +13284,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 24, gender: "F", nature: "Brave", ivs: {hp: 5, atk: 19, def: 18, spa: 5, spd: 11, spe: 13}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 29, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 24, gender: "F", nature: "Brave", ivs: {hp: 5, atk: 19, def: 18, spa: 5, spd: 11, spe: 13}, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 29},
 		],
 		encounters: [
 			{generation: 1, level: 10},
@@ -13384,7 +13384,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 30, gender: "M", nature: "Naughty", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 30, gender: "M", nature: "Naughty", pokeball: "pokeball"},
 		],
 	},
 	gastly: {
@@ -13592,7 +13592,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 30, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 30, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 20},
@@ -13729,14 +13729,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 23, gender: "F", nature: "Hardy", ivs: {hp: 19, atk: 14, def: 0, spa: 14, spd: 17, spe: 27}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 25, nature: "Timid", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 25, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 25, shiny: true, moves: ["2L1"], pokeball: "duskball"},
-			{generation: 6, level: 50, shiny: true, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 80, gender: "M", nature: "Naughty", abilities: ["2L1"], ivs: {hp: 30, atk: 30, def: 30, spa: 31, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 23, gender: "F", nature: "Hardy", ivs: {hp: 19, atk: 14, def: 0, spa: 14, spd: 17, spe: 27}, pokeball: "pokeball"},
+			{generation: 6, level: 25, nature: "Timid", pokeball: "cherishball"},
+			{generation: 6, level: 25, pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 25, shiny: true, pokeball: "duskball"},
+			{generation: 6, level: 50, shiny: true, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 80, gender: "M", nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 31, spd: 31, spe: 31}, pokeball: "pokeball"},
 		],
 	},
 	onix: {
@@ -14055,7 +14055,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 9},
@@ -14182,7 +14182,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 34, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 34},
 		],
 		encounters: [
 			{generation: 2, level: 16},
@@ -14444,7 +14444,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 19, moves: ["2L1"]},
+			{generation: 3, level: 19},
 		],
 		encounters: [
 			{generation: 1, level: 14},
@@ -14581,7 +14581,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		encounters: [
 			{generation: 1, level: 3},
 			{generation: 2, level: 23},
-			{generation: 3, level: 3, nature: "Hasty", ivs: {hp: 19, atk: 16, def: 18, spa: 25, spd: 25, spe: 19}, abilities: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 3, nature: "Hasty", ivs: {hp: 19, atk: 16, def: 18, spa: 25, spd: 25, spe: 19}, pokeball: "pokeball"},
 			{generation: 4, level: 23},
 		],
 	},
@@ -14733,7 +14733,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 20},
@@ -14856,7 +14856,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 46, moves: ["2L1"]},
+			{generation: 3, level: 46},
 		],
 	},
 	exeggutoralola: {
@@ -14963,7 +14963,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, gender: "M", nature: "Modest", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "M", nature: "Modest", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	cubone: {
@@ -15172,7 +15172,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watergun: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 44, moves: ["2L1"]},
+			{generation: 3, level: 44},
 		],
 		encounters: [
 			{generation: 1, level: 24},
@@ -15364,7 +15364,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 25, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 25, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -15542,7 +15542,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 38, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 38},
 		],
 		encounters: [
 			{generation: 1, level: 30},
@@ -15653,7 +15653,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 38, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 38},
 		],
 		encounters: [
 			{generation: 1, level: 30},
@@ -15749,7 +15749,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 55, gender: "M", nature: "Adamant", abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 5, level: 55, gender: "M", nature: "Adamant"},
 		],
 	},
 	lickitung: {
@@ -15874,8 +15874,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 38, moves: ["2L1"]},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 38},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -16485,7 +16485,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 46, moves: ["2L1"]},
+			{generation: 3, level: 46},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -16846,10 +16846,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 39, moves: ["2L1"]},
-			{generation: 8, level: 7, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 39},
+			{generation: 8, level: 7, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 7},
@@ -16991,7 +16991,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 10, isHidden: true},
 		],
 	},
 	tangela: {
@@ -17078,7 +17078,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 30, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 30},
 		],
 		encounters: [
 			{generation: 1, level: 13},
@@ -17171,7 +17171,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, gender: "M", nature: "Brave", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Brave", pokeball: "cherishball"},
 		],
 	},
 	kangaskhan: {
@@ -17302,10 +17302,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 35, abilities: ["2L1"], moves: ["2L1"]},
-			{generation: 6, level: 50, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 35},
+			{generation: 6, level: 50, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 25},
@@ -17387,7 +17387,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 1, shiny: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 1, shiny: true, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 5},
@@ -17467,7 +17467,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 45, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 45, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 20},
@@ -17553,8 +17553,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 50, gender: "M", nature: "Timid", ivs: {hp: 31, atk: 17, def: 8, spa: 31, spd: 11, spe: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
+			{generation: 5, level: 50, gender: "M", nature: "Timid", ivs: {hp: 31, atk: 17, def: 8, spa: 31, spd: 11, spe: 31}, pokeball: "cherishball"},
 		],
 	},
 	goldeen: {
@@ -17805,8 +17805,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 18, nature: "Timid", ivs: {hp: 10, atk: 3, def: 22, spa: 24, spd: 3, spe: 18}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
+			{generation: 3, level: 18, nature: "Timid", ivs: {hp: 10, atk: 3, def: 22, spa: 24, spd: 3, spe: 18}, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 5},
@@ -17909,7 +17909,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 41, moves: ["2L1"]},
+			{generation: 3, level: 41},
 		],
 	},
 	mimejr: {
@@ -18138,7 +18138,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 42, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 42},
 		],
 		encounters: [
 			{generation: 1, level: 6},
@@ -18237,7 +18237,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 15, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 15, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	mrrime: {
@@ -18426,9 +18426,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 40, abilities: ["2L1"], moves: ["2L1"]},
-			{generation: 5, level: 30, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 40},
+			{generation: 5, level: 30, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -18536,14 +18536,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, gender: "M", nature: "Adamant", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 50, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 25, nature: "Adamant", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 25, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 50, gender: "M", pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Adamant", pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 50, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 25, nature: "Adamant", pokeball: "cherishball"},
+			{generation: 6, level: 25, pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "cherishball"},
 		],
 	},
 	kleavor: {
@@ -18829,7 +18829,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		encounters: [
 			{generation: 1, level: 15},
 			{generation: 2, level: 10},
-			{generation: 3, level: 20, nature: "Mild", ivs: {hp: 18, atk: 17, def: 18, spa: 22, spd: 25, spe: 21}, abilities: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 20, nature: "Mild", ivs: {hp: 18, atk: 17, def: 18, spa: 22, spd: 25, spe: 21}, pokeball: "pokeball"},
 			{generation: 4, level: 22},
 			{generation: 7, level: 9},
 		],
@@ -18924,7 +18924,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 20, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 20, pokeball: "pokeball"},
 		],
 	},
 	electabuzz: {
@@ -19027,11 +19027,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 43, moves: ["2L1"]},
-			{generation: 4, level: 30, gender: "M", nature: "Naughty", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 30, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 30, gender: "M", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 43},
+			{generation: 4, level: 30, gender: "M", nature: "Naughty", pokeball: "pokeball"},
+			{generation: 5, level: 30, pokeball: "cherishball"},
+			{generation: 6, level: 30, gender: "M", isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 33},
@@ -19137,8 +19137,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, gender: "M", nature: "Adamant", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, gender: "M", nature: "Serious", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Adamant", pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Serious", pokeball: "cherishball"},
 		],
 	},
 	magby: {
@@ -19328,11 +19328,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 36, moves: ["2L1"]},
-			{generation: 4, level: 30, gender: "M", nature: "Quiet", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 30, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 30, gender: "M", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 36},
+			{generation: 4, level: 30, gender: "M", nature: "Quiet", pokeball: "pokeball"},
+			{generation: 5, level: 30, pokeball: "cherishball"},
+			{generation: 6, level: 30, gender: "M", isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 34},
@@ -19439,8 +19439,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, gender: "F", nature: "Modest", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, gender: "M", nature: "Hardy", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "F", nature: "Modest", pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Hardy", pokeball: "cherishball"},
 		],
 	},
 	pinsir: {
@@ -19532,9 +19532,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 35, abilities: ["2L1"], moves: ["2L1"]},
-			{generation: 6, level: 50, gender: "F", nature: "Adamant", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, nature: "Jolly", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 35},
+			{generation: 6, level: 50, gender: "F", nature: "Adamant", pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Jolly", isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -19641,9 +19641,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 25, nature: "Docile", ivs: {hp: 14, atk: 19, def: 12, spa: 17, spd: 5, spe: 26}, abilities: ["2L1"], moves: ["2L1"], pokeball: "safariball"},
-			{generation: 3, level: 10, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 46, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 25, nature: "Docile", ivs: {hp: 14, atk: 19, def: 12, spa: 17, spd: 5, spe: 26}, pokeball: "safariball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 46},
 		],
 		encounters: [
 			{generation: 1, level: 21},
@@ -19831,14 +19831,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tackle: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 5, gender: "M", nature: "Relaxed", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 6, gender: "F", nature: "Rash", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 7, gender: "F", nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 5, gender: "F", nature: "Lonely", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 4, gender: "M", nature: "Modest", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 99, shiny: true, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 1, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 19, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 5, gender: "M", nature: "Relaxed", pokeball: "pokeball"},
+			{generation: 4, level: 6, gender: "F", nature: "Rash", pokeball: "pokeball"},
+			{generation: 4, level: 7, gender: "F", nature: "Hardy", pokeball: "pokeball"},
+			{generation: 4, level: 5, gender: "F", nature: "Lonely", pokeball: "pokeball"},
+			{generation: 4, level: 4, gender: "M", nature: "Modest", pokeball: "pokeball"},
+			{generation: 5, level: 99, shiny: true, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 1, shiny: 1, pokeball: "cherishball"},
+			{generation: 7, level: 19, shiny: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 5},
@@ -19949,8 +19949,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 20, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 20, shiny: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -20077,7 +20077,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 44, moves: ["2L1"]},
+			{generation: 3, level: 44},
 		],
 		encounters: [
 			{generation: 1, level: 15},
@@ -20088,7 +20088,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			transform: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 12},
@@ -20180,13 +20180,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 10, gender: "F", nature: "Lonely", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, shiny: true, gender: "M", nature: "Hardy", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, gender: "F", nature: "Hardy", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 15, shiny: true, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 5, gender: "M", nature: "Docile", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 10, gender: "F", nature: "Lonely", pokeball: "cherishball"},
+			{generation: 4, level: 50, shiny: true, gender: "M", nature: "Hardy", pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "F", nature: "Hardy", pokeball: "cherishball"},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 6, level: 15, shiny: true, isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 10, nature: "Jolly", pokeball: "cherishball"},
+			{generation: 8, level: 5, gender: "M", nature: "Docile", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 25},
@@ -20227,7 +20227,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			veeveevolley: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 5, perfectIVs: 6, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 5, perfectIVs: 6, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -20333,9 +20333,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	jolteon: {
@@ -20440,9 +20440,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, gender: "F", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", pokeball: "cherishball"},
 		],
 	},
 	flareon: {
@@ -20544,9 +20544,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	espeon: {
@@ -20655,10 +20655,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	umbreon: {
@@ -20764,10 +20764,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, gender: "F", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", pokeball: "cherishball"},
 		],
 	},
 	leafeon: {
@@ -20863,9 +20863,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	glaceon: {
@@ -20959,9 +20959,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, gender: "F", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", pokeball: "cherishball"},
 		],
 	},
 	porygon: {
@@ -21055,8 +21055,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, isHidden: true, moves: ["2L1"]},
-			{generation: 8, level: 25, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 10, isHidden: true},
+			{generation: 8, level: 25, isHidden: true, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 1, level: 18},
@@ -21144,7 +21144,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, nature: "Sassy", abilities: ["2L1"], ivs: {hp: 31, atk: 0, spe: 0}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 50, nature: "Sassy", ivs: {hp: 31, atk: 0, spe: 0}, pokeball: "cherishball"},
 		],
 	},
 	porygonz: {
@@ -21314,7 +21314,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 30},
@@ -21497,7 +21497,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 30},
@@ -21713,8 +21713,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
+			{generation: 7, level: 50, isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 30},
@@ -21830,10 +21830,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 5, moves: ["2L1"]},
-			{generation: 4, level: 5, gender: "F", nature: "Relaxed", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 5, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 1, shiny: true, gender: "M", isHidden: true, nature: "Impish", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 4, level: 5},
+			{generation: 4, level: 5, gender: "F", nature: "Relaxed", pokeball: "cherishball"},
+			{generation: 7, level: 5, pokeball: "cherishball"},
+			{generation: 9, level: 1, shiny: true, gender: "M", isHidden: true, nature: "Impish", pokeball: "pokeball"},
 		],
 	},
 	snorlax: {
@@ -21978,8 +21978,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 43, moves: ["2L1"]},
-			{generation: 7, level: 30, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 43},
+			{generation: 7, level: 30, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 1, level: 30},
@@ -22079,15 +22079,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 50, moves: ["2L1"]},
-			{generation: 4, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 70, moves: ["2L1"]},
-			{generation: 6, level: 70, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 50, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 3, level: 50},
+			{generation: 4, level: 60, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 6, level: 70},
+			{generation: 6, level: 70, isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		encounters: [
 			{generation: 1, level: 50},
@@ -22156,8 +22156,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 70, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 70},
+			{generation: 8, level: 70, shiny: true, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -22253,15 +22253,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 50, moves: ["2L1"]},
-			{generation: 4, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 70, moves: ["2L1"]},
-			{generation: 6, level: 70, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 50, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 3, level: 50},
+			{generation: 4, level: 60, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 6, level: 70},
+			{generation: 6, level: 70, isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		encounters: [
 			{generation: 1, level: 50},
@@ -22334,8 +22334,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 70, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 70},
+			{generation: 8, level: 70, shiny: true, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -22427,15 +22427,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 50, moves: ["2L1"]},
-			{generation: 4, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 70, moves: ["2L1"]},
-			{generation: 6, level: 70, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 50, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 3, level: 50},
+			{generation: 4, level: 60, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 6, level: 70},
+			{generation: 6, level: 70, isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		encounters: [
 			{generation: 1, level: 50},
@@ -22500,8 +22500,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 70, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 70},
+			{generation: 8, level: 70, shiny: true, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -22836,16 +22836,16 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 55, moves: ["2L1"]},
-			{generation: 4, level: 50, gender: "M", nature: "Mild", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, gender: "M", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 55, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 55, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 50, gender: "M", nature: "Brave", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 55, gender: "M", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 62, gender: "M", ivs: {hp: 31, def: 31, spa: 31, spd: 31}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 80, gender: "F", nature: "Jolly", abilities: ["2L1"], ivs: {hp: 30, atk: 31, def: 30, spa: 30, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 3, level: 55},
+			{generation: 4, level: 50, gender: "M", nature: "Mild", pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", isHidden: true, pokeball: "cherishball"},
+			{generation: 5, level: 55, gender: "M", isHidden: true},
+			{generation: 5, level: 55, gender: "M", isHidden: true},
+			{generation: 5, level: 50, gender: "M", nature: "Brave", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, pokeball: "cherishball"},
+			{generation: 6, level: 55, gender: "M", isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 62, gender: "M", ivs: {hp: 31, def: 31, spa: 31, spd: 31}, pokeball: "cherishball"},
+			{generation: 8, level: 80, gender: "F", nature: "Jolly", ivs: {hp: 30, atk: 31, def: 30, spa: 30, spd: 31, spe: 31}, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 5, level: 50},
@@ -23024,15 +23024,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 70, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, nature: "Timid", ivs: {spa: 31, spe: 31}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 70, moves: ["2L1"]},
-			{generation: 6, level: 100, shiny: true, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 9, level: 100, nature: "Modest", perfectIVs: 6, isHidden: true, moves: ["2L1"]},
+			{generation: 3, level: 70, shiny: 1},
+			{generation: 4, level: 70, shiny: 1},
+			{generation: 5, level: 70, pokeball: "cherishball"},
+			{generation: 5, level: 100, nature: "Timid", ivs: {spa: 31, spe: 31}, isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 70},
+			{generation: 6, level: 100, shiny: true, isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
+			{generation: 9, level: 100, nature: "Modest", perfectIVs: 6, isHidden: true},
 		],
 		encounters: [
 			{generation: 1, level: 70},
@@ -23418,33 +23418,33 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 5, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 5, perfectIVs: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 9, level: 5, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 5, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 5, perfectIVs: 5, pokeball: "pokeball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
+			{generation: 8, level: 1, pokeball: "pokeball"},
+			{generation: 9, level: 5, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -23529,9 +23529,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 5, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 5, pokeball: "pokeball"},
+			{generation: 6, level: 5, pokeball: "cherishball"},
 		],
 	},
 	bayleef: {
@@ -23704,7 +23704,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 6, level: 50, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	cyndaquil: {
@@ -23789,9 +23789,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 5, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 5, pokeball: "pokeball"},
+			{generation: 6, level: 5, pokeball: "cherishball"},
 		],
 	},
 	quilava: {
@@ -23978,8 +23978,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 6, level: 50, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	typhlosionhisui: {
@@ -24158,9 +24158,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 5, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 5, pokeball: "pokeball"},
+			{generation: 6, level: 5, pokeball: "cherishball"},
 		],
 	},
 	croconaw: {
@@ -24384,7 +24384,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 6, level: 50, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	sentret: {
@@ -24697,7 +24697,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 2, level: 2},
@@ -24883,7 +24883,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, moves: ["2L1"]},
+			{generation: 3, level: 10},
 		],
 		encounters: [
 			{generation: 2, level: 3},
@@ -25055,7 +25055,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 14, moves: ["2L1"]},
+			{generation: 3, level: 14},
 		],
 		encounters: [
 			{generation: 2, level: 3},
@@ -25146,7 +25146,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 65, gender: "M", nature: "Hardy", abilities: ["2L1"], ivs: {hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20}, moves: ["2L1"]},
+			{generation: 9, level: 65, gender: "M", nature: "Hardy", ivs: {hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20}},
 		],
 		encounters: [
 			{generation: 2, level: 7},
@@ -25431,8 +25431,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 20, gender: "F", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 25, moves: ["2L1"]},
+			{generation: 3, level: 20, gender: "F", pokeball: "pokeball"},
+			{generation: 3, level: 25},
 		],
 	},
 	togetic: {
@@ -25672,7 +25672,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
 		],
 	},
 	natu: {
@@ -25772,7 +25772,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 22, moves: ["2L1"]},
+			{generation: 3, level: 22},
 		],
 	},
 	xatu: {
@@ -25871,7 +25871,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 		},
 		encounters: [
 			{generation: 2, level: 15},
-			{generation: 4, level: 16, gender: "M", nature: "Modest", ivs: {hp: 15, atk: 20, def: 15, spa: 20, spd: 20, spe: 20}, abilities: ["2L1"], pokeball: "pokeball"},
+			{generation: 4, level: 16, gender: "M", nature: "Modest", ivs: {hp: 15, atk: 20, def: 15, spa: 20, spd: 20, spe: 20}, pokeball: "pokeball"},
 			{generation: 6, level: 24, maxEggMoves: 1},
 			{generation: 7, level: 21},
 		],
@@ -25952,10 +25952,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 37, gender: "F", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 17, moves: ["2L1"]},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 37, gender: "F", pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 17},
+			{generation: 6, level: 10, pokeball: "cherishball"},
 		],
 	},
 	flaaffy: {
@@ -26887,7 +26887,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 27, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 27, gender: "M", isHidden: true},
 		],
 	},
 	aipom: {
@@ -27007,7 +27007,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	ambipom: {
@@ -27178,7 +27178,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	sunflora: {
@@ -27844,7 +27844,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	honchkrow: {
@@ -27937,7 +27937,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 65, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 65, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	misdreavus: {
@@ -28051,7 +28051,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	mismagius: {
@@ -28178,7 +28178,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			tickle: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 	},
 	wobbuffet: {
@@ -28193,10 +28193,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			splash: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 10, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 15, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 5, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 6, level: 10, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 2, level: 5},
@@ -28401,8 +28401,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 20, moves: ["2L1"]},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 20},
 		],
 	},
 	forretress: {
@@ -28834,7 +28834,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	gliscor: {
@@ -29058,7 +29058,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	granbull: {
@@ -29288,7 +29288,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	qwilfishhisui: {
@@ -29516,8 +29516,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 20, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 20, pokeball: "pokeball"},
 		],
 	},
 	heracross: {
@@ -29622,8 +29622,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, gender: "F", nature: "Adamant", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, nature: "Adamant", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, gender: "F", nature: "Adamant", pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Adamant", pokeball: "cherishball"},
 		],
 	},
 	sneasel: {
@@ -29747,7 +29747,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	sneaselhisui: {
@@ -29932,8 +29932,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 30, gender: "M", nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 48, gender: "M", perfectIVs: 2, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 30, gender: "M", nature: "Jolly", pokeball: "cherishball"},
+			{generation: 6, level: 48, gender: "M", perfectIVs: 2, pokeball: "cherishball"},
 		],
 	},
 	sneasler: {
@@ -30111,8 +30111,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 11, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 11},
 		],
 		encounters: [
 			{generation: 2, level: 2},
@@ -30390,7 +30390,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 70, nature: "Hardy", perfectIVs: 3, moves: ["2L1"]},
+			{generation: 9, level: 70, nature: "Hardy", perfectIVs: 3},
 		],
 		eventOnly: false,
 	},
@@ -30567,7 +30567,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 38, moves: ["2L1"]},
+			{generation: 3, level: 38},
 		],
 		encounters: [
 			{generation: 3, level: 25},
@@ -30656,7 +30656,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trailblaze: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 22, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 22},
 		],
 	},
 	piloswine: {
@@ -30839,8 +30839,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trailblaze: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 34, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: true, gender: "M", nature: "Adamant", isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 34, gender: "M", isHidden: true},
+			{generation: 6, level: 50, shiny: true, gender: "M", nature: "Adamant", isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	corsola: {
@@ -30942,8 +30942,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 7, level: 50, gender: "F", nature: "Serious", abilities: ["2L1"], moves: ["2L1"], pokeball: "ultraball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 7, level: 50, gender: "F", nature: "Serious", pokeball: "ultraball"},
 		],
 	},
 	corsolagalar: {
@@ -31017,7 +31017,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 15, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 15, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	cursola: {
@@ -31252,7 +31252,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, gender: "F", nature: "Serious", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "F", nature: "Serious", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 4, level: 19},
@@ -31365,8 +31365,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			weatherball: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 10, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 6, level: 10, pokeball: "cherishball"},
 		],
 	},
 	mantyke: {
@@ -31528,7 +31528,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	skarmory: {
@@ -31724,8 +31724,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 17, moves: ["2L1"]},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 17},
 		],
 	},
 	houndoom: {
@@ -31827,7 +31827,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, nature: "Timid", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Timid", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 4, level: 20},
@@ -32122,7 +32122,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	wyrdeer: {
@@ -32209,9 +32209,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			spore: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 50, gender: "F", nature: "Jolly", ivs: {atk: 31, spe: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 40, gender: "M", nature: "Jolly", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 5, level: 50, gender: "F", nature: "Jolly", ivs: {atk: 31, spe: 31}, pokeball: "cherishball"},
+			{generation: 6, level: 40, gender: "M", nature: "Jolly", pokeball: "cherishball"},
 		],
 	},
 	miltank: {
@@ -32317,7 +32317,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 20, perfectIVs: 3, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 20, perfectIVs: 3, pokeball: "cherishball"},
 		],
 	},
 	raikou: {
@@ -32410,15 +32410,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 30, shiny: true, nature: "Rash", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 50, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 4, level: 40, shiny: 1},
+			{generation: 4, level: 30, shiny: true, nature: "Rash", pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		encounters: [
 			{generation: 2, level: 40},
@@ -32513,15 +32513,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 30, shiny: true, nature: "Adamant", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 50, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 4, level: 40, shiny: 1},
+			{generation: 4, level: 30, shiny: true, nature: "Adamant", pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		encounters: [
 			{generation: 2, level: 40},
@@ -32618,13 +32618,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 30, shiny: true, nature: "Relaxed", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 50, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 4, level: 40, shiny: 1},
+			{generation: 4, level: 30, shiny: true, nature: "Relaxed", pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		encounters: [
 			{generation: 2, level: 40},
@@ -32716,8 +32716,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 20, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 5, shiny: true, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 20, pokeball: "pokeball"},
+			{generation: 5, level: 5, shiny: true, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	pupitar: {
@@ -32943,13 +32943,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 100, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 55, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 55, shiny: true, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 14, spd: 31, spe: 0}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
+			{generation: 5, level: 55, gender: "M", isHidden: true},
+			{generation: 6, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Jolly", pokeball: "cherishball"},
+			{generation: 6, level: 55, shiny: true, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 14, spd: 31, spe: 0}, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 5, level: 50},
@@ -33078,18 +33078,18 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 50, moves: ["2L1"]},
-			{generation: 4, level: 45, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 5, isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, nature: "Timid", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 100, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 70, shiny: 1},
+			{generation: 3, level: 50},
+			{generation: 4, level: 45, shiny: 1},
+			{generation: 4, level: 70, shiny: 1},
+			{generation: 5, level: 5, isHidden: true, pokeball: "dreamball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 6, level: 50, nature: "Timid", pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 100, isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		encounters: [
 			{generation: 2, level: 40},
@@ -33203,17 +33203,17 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 45, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 5, isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 70, shiny: 1},
+			{generation: 4, level: 45, shiny: 1},
+			{generation: 4, level: 70, shiny: 1},
+			{generation: 5, level: 5, isHidden: true, pokeball: "dreamball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 6, level: 50, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		encounters: [
 			{generation: 2, level: 40},
@@ -33329,15 +33329,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "luxuryball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 30, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 60, shiny: true, nature: "Quirky", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 30, pokeball: "pokeball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 10, pokeball: "luxuryball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 30, pokeball: "cherishball"},
+			{generation: 8, level: 60, shiny: true, nature: "Quirky", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 2, level: 30},
@@ -33446,8 +33446,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
 		],
 	},
 	grovyle: {
@@ -33670,7 +33670,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, pokeball: "cherishball"},
 		],
 	},
 	torchic: {
@@ -33759,9 +33759,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 10, gender: "M", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 10, gender: "M", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	combusken: {
@@ -33989,8 +33989,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 50, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 5, level: 50, shiny: 1, pokeball: "cherishball"},
 		],
 	},
 	mudkip: {
@@ -34082,8 +34082,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
 		],
 	},
 	marshtomp: {
@@ -34294,7 +34294,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, pokeball: "cherishball"},
 		],
 	},
 	poochyena: {
@@ -34378,7 +34378,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 10},
 		],
 		encounters: [
 			{generation: 3, level: 2},
@@ -34466,7 +34466,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 64, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 64, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	zigzagoon: {
@@ -34554,8 +34554,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: true, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: true, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 		encounters: [
 			{generation: 3, level: 2},
@@ -34714,7 +34714,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 4, level: 3},
@@ -35118,7 +35118,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 3, level: 3},
@@ -35329,8 +35329,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 30, gender: "M", nature: "Calm", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 50, shiny: 1, pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "M", nature: "Calm", pokeball: "pokeball"},
 		],
 	},
 	seedot: {
@@ -35412,8 +35412,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 17, moves: ["2L1"]},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 17},
 		],
 		encounters: [
 			{generation: 3, level: 3},
@@ -35734,7 +35734,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 		encounters: [
 			{generation: 3, level: 4},
@@ -35801,7 +35801,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 43, moves: ["2L1"]},
+			{generation: 3, level: 43},
 		],
 		encounters: [
 			{generation: 4, level: 20},
@@ -36096,10 +36096,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 20, moves: ["2L1"]},
-			{generation: 6, level: 1, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 20},
+			{generation: 6, level: 1, isHidden: true, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 3, level: 4},
@@ -36328,8 +36328,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: true, gender: "F", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: true, gender: "F", pokeball: "cherishball"},
 		],
 	},
 	gallade: {
@@ -36561,8 +36561,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			watersport: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 3, level: 3},
@@ -36731,7 +36731,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 15, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 15},
 		],
 	},
 	breloom: {
@@ -37183,7 +37183,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, gender: "M", nature: "Adamant", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Adamant", pokeball: "cherishball"},
 		],
 	},
 	nincada: {
@@ -37391,7 +37391,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
 		],
 	},
 	whismur: {
@@ -37471,7 +37471,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 	},
 	loudred: {
@@ -37658,8 +37658,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 100, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 100, pokeball: "pokeball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
 		],
 	},
 	makuhita: {
@@ -37766,7 +37766,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 18, moves: ["2L1"]},
+			{generation: 3, level: 18},
 		],
 	},
 	hariyama: {
@@ -37965,7 +37965,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 26, moves: ["2L1"]},
+			{generation: 3, level: 26},
 		],
 	},
 	probopass: {
@@ -38146,12 +38146,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 		encounters: [
-			{generation: 3, level: 3, gender: "F", ivs: {hp: 5, atk: 4, def: 4, spa: 5, spd: 4, spe: 4}, abilities: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 3, gender: "F", ivs: {hp: 5, atk: 4, def: 4, spa: 5, spd: 4, spe: 4}, pokeball: "pokeball"},
 		],
 	},
 	delcatty: {
@@ -38230,7 +38230,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 18, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 18},
 		],
 	},
 	sableye: {
@@ -38374,11 +38374,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 33, abilities: ["2L1"], moves: ["2L1"]},
-			{generation: 5, level: 50, gender: "M", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, nature: "Relaxed", ivs: {hp: 31, spa: 31}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, nature: "Bold", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 33},
+			{generation: 5, level: 50, gender: "M", isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Relaxed", ivs: {hp: 31, spa: 31}, isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 100, nature: "Bold", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	mawile: {
@@ -38494,10 +38494,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			visegrip: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 22, moves: ["2L1"]},
-			{generation: 6, level: 50, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 22},
+			{generation: 6, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
 		],
 	},
 	aron: {
@@ -38781,9 +38781,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 100, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 50, nature: "Brave", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 100, pokeball: "pokeball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
+			{generation: 6, level: 50, nature: "Brave", pokeball: "cherishball"},
 		],
 	},
 	meditite: {
@@ -38899,8 +38899,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 20, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 20, pokeball: "pokeball"},
 		],
 	},
 	medicham: {
@@ -39162,8 +39162,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 44, moves: ["2L1"]},
-			{generation: 6, level: 50, nature: "Timid", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 44},
+			{generation: 6, level: 50, nature: "Timid", pokeball: "cherishball"},
 		],
 	},
 	plusle: {
@@ -39258,8 +39258,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	minun: {
@@ -39352,8 +39352,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	volbeat: {
@@ -39689,8 +39689,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 22, moves: ["2L1"]},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 22},
 		],
 	},
 	roserade: {
@@ -39856,7 +39856,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 17, moves: ["2L1"]},
+			{generation: 3, level: 17},
 		],
 	},
 	swalot: {
@@ -40027,8 +40027,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 15, moves: ["2L1"]},
-			{generation: 6, level: 1, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 15},
+			{generation: 6, level: 1, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	sharpedo: {
@@ -40118,8 +40118,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, nature: "Adamant", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 43, gender: "M", perfectIVs: 2, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Adamant", isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 43, gender: "M", perfectIVs: 2, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 7, level: 10},
@@ -40269,8 +40269,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 100, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 100, pokeball: "pokeball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 3, level: 25},
@@ -40372,8 +40372,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 14, abilities: ["2L1"], moves: ["2L1"]},
-			{generation: 6, level: 1, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 14},
+			{generation: 6, level: 1, pokeball: "pokeball"},
 		],
 	},
 	camerupt: {
@@ -40470,7 +40470,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 43, gender: "M", perfectIVs: 2, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 43, gender: "M", perfectIVs: 2, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 6, level: 30},
@@ -40568,7 +40568,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, gender: "M", nature: "Bold", abilities: ["2L1"], ivs: {hp: 31, atk: 12, def: 31, spa: 31, spd: 31, spe: 0}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 50, gender: "M", nature: "Bold", ivs: {hp: 31, atk: 12, def: 31, spa: 31, spd: 31, spe: 0}, pokeball: "cherishball"},
 		],
 	},
 	spoink: {
@@ -40667,7 +40667,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 	},
 	grumpig: {
@@ -40903,7 +40903,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 	},
 	trapinch: {
@@ -40973,7 +40973,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 1, shiny: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 1, shiny: true, pokeball: "pokeball"},
 		],
 	},
 	vibrava: {
@@ -41182,8 +41182,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vacuumwave: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 45, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, gender: "M", nature: "Naive", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 45, pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "M", nature: "Naive", pokeball: "cherishball"},
 		],
 	},
 	cacnea: {
@@ -41293,7 +41293,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 	},
 	cacturne: {
@@ -41411,7 +41411,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 45, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 45, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 6, level: 30},
@@ -41504,9 +41504,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
-			{generation: 5, level: 1, shiny: true, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 1, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 5, level: 1, shiny: true, pokeball: "pokeball"},
+			{generation: 6, level: 1, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	altaria: {
@@ -41613,10 +41613,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 45, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 36, moves: ["2L1"]},
-			{generation: 5, level: 35, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 100, nature: "Modest", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 45, pokeball: "pokeball"},
+			{generation: 3, level: 36},
+			{generation: 5, level: 35, gender: "M", isHidden: true},
+			{generation: 6, level: 100, nature: "Modest", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	zangoose: {
@@ -41747,9 +41747,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 18, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 28, moves: ["2L1"]},
+			{generation: 3, level: 18, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
+			{generation: 3, level: 28},
 		],
 	},
 	seviper: {
@@ -41860,9 +41860,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 18, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 18, pokeball: "pokeball"},
+			{generation: 3, level: 30, pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	lunatone: {
@@ -41963,9 +41963,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 25, moves: ["2L1"]},
-			{generation: 7, level: 30, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 25},
+			{generation: 7, level: 30, pokeball: "cherishball"},
 		],
 	},
 	solrock: {
@@ -42070,9 +42070,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 41, moves: ["2L1"]},
-			{generation: 7, level: 30, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 10, pokeball: "pokeball"},
+			{generation: 3, level: 41},
+			{generation: 7, level: 30, pokeball: "cherishball"},
 		],
 	},
 	barboach: {
@@ -42234,7 +42234,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 51, gender: "F", nature: "Gentle", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 51, gender: "F", nature: "Gentle", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 4, level: 10},
@@ -42331,7 +42331,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball", emeraldEventEgg: true},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball", emeraldEventEgg: true},
 		],
 	},
 	crawdaunt: {
@@ -42433,8 +42433,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 100, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 100, pokeball: "pokeball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
 		],
 		encounters: [
 			{generation: 7, level: 10},
@@ -42528,7 +42528,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 17, moves: ["2L1"]},
+			{generation: 3, level: 17},
 		],
 	},
 	claydol: {
@@ -42703,7 +42703,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	cradily: {
@@ -42859,7 +42859,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	armaldo: {
@@ -43002,7 +43002,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 5, gender: "F", nature: "Calm", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 5, gender: "F", nature: "Calm", pokeball: "cherishball"},
 		],
 	},
 	milotic: {
@@ -43095,11 +43095,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 35, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, gender: "F", nature: "Bold", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, shiny: true, gender: "M", nature: "Timid", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 58, gender: "M", nature: "Lax", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 35, pokeball: "pokeball"},
+			{generation: 4, level: 50, gender: "F", nature: "Bold", pokeball: "cherishball"},
+			{generation: 4, level: 50, shiny: true, gender: "M", nature: "Timid", pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, pokeball: "cherishball"},
+			{generation: 5, level: 58, gender: "M", nature: "Lax", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, pokeball: "cherishball"},
 		],
 	},
 	castform: {
@@ -43383,7 +43383,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 45, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 45, pokeball: "pokeball"},
 		],
 	},
 	banette: {
@@ -43484,8 +43484,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 37, abilities: ["2L1"], moves: ["2L1"]},
-			{generation: 5, level: 37, gender: "F", isHidden: true, moves: ["2L1"]},
+			{generation: 3, level: 37},
+			{generation: 5, level: 37, gender: "F", isHidden: true},
 		],
 		encounters: [
 			{generation: 5, level: 32},
@@ -43577,8 +43577,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 45, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 19, moves: ["2L1"]},
+			{generation: 3, level: 45, pokeball: "pokeball"},
+			{generation: 3, level: 19},
 		],
 	},
 	dusclops: {
@@ -43895,7 +43895,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 53, gender: "F", nature: "Jolly", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 53, gender: "F", nature: "Jolly", pokeball: "cherishball"},
 		],
 	},
 	chingling: {
@@ -44085,7 +44085,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 10, gender: "M", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 10, gender: "M", pokeball: "pokeball"},
 		],
 	},
 	absol: {
@@ -44205,10 +44205,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 35, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 70, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 35, pokeball: "pokeball"},
+			{generation: 3, level: 70, pokeball: "pokeball"},
 		],
 	},
 	snorunt: {
@@ -44277,7 +44277,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			weatherball: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 20, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 20},
 		],
 	},
 	glalie: {
@@ -44532,7 +44532,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 17, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 3, level: 17},
 		],
 	},
 	sealeo: {
@@ -44679,7 +44679,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 5, level: 30},
@@ -45080,10 +45080,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 1, shiny: true, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 6, level: 1, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: 1, pokeball: "pokeball"},
+			{generation: 5, level: 1, shiny: true, pokeball: "pokeball"},
+			{generation: 6, level: 1, pokeball: "pokeball"},
 		],
 	},
 	shelgon: {
@@ -45261,10 +45261,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 50, moves: ["2L1"]},
-			{generation: 4, level: 50, gender: "M", nature: "Naughty", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 50, pokeball: "pokeball"},
+			{generation: 3, level: 50},
+			{generation: 4, level: 50, gender: "M", nature: "Naughty", pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 7, level: 9},
@@ -45283,7 +45283,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 5, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 5, shiny: true, pokeball: "cherishball"},
 		],
 	},
 	metang: {
@@ -45384,7 +45384,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 30, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 3, level: 30, pokeball: "pokeball"},
 		],
 	},
 	metagross: {
@@ -45494,14 +45494,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 62, nature: "Brave", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 45, shiny: true, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 45, isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 45, isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 58, nature: "Serious", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, nature: "Jolly", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 62, nature: "Brave", pokeball: "cherishball"},
+			{generation: 5, level: 50, shiny: 1, pokeball: "cherishball"},
+			{generation: 5, level: 100, pokeball: "cherishball"},
+			{generation: 5, level: 45, shiny: true, pokeball: "pokeball"},
+			{generation: 5, level: 45, isHidden: true},
+			{generation: 5, level: 45, isHidden: true},
+			{generation: 5, level: 58, nature: "Serious", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, pokeball: "cherishball"},
+			{generation: 7, level: 50, nature: "Jolly", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 	},
 	regirock: {
@@ -45595,14 +45595,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 40, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 65, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 40, shiny: 1},
+			{generation: 3, level: 40, pokeball: "pokeball"},
+			{generation: 4, level: 30, shiny: 1},
+			{generation: 5, level: 65, shiny: 1},
+			{generation: 6, level: 40, shiny: 1},
+			{generation: 6, level: 50, isHidden: true, pokeball: "pokeball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -45693,14 +45693,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 40, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 65, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 40, shiny: 1},
+			{generation: 3, level: 40, pokeball: "pokeball"},
+			{generation: 4, level: 30, shiny: 1},
+			{generation: 5, level: 65, shiny: 1},
+			{generation: 6, level: 40, shiny: 1},
+			{generation: 6, level: 50, isHidden: true, pokeball: "pokeball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -45797,14 +45797,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 40, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 65, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 40, shiny: 1},
+			{generation: 3, level: 40, pokeball: "pokeball"},
+			{generation: 4, level: 30, shiny: 1},
+			{generation: 5, level: 65, shiny: 1},
+			{generation: 6, level: 40, shiny: 1},
+			{generation: 6, level: 50, isHidden: true, pokeball: "pokeball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -45935,18 +45935,18 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 35, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 68, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, nature: "Bashful", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 40, shiny: 1},
+			{generation: 3, level: 50, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 4, level: 35, shiny: 1},
+			{generation: 4, level: 40, shiny: 1},
+			{generation: 5, level: 68, shiny: 1},
+			{generation: 6, level: 30, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
+			{generation: 8, level: 70, nature: "Bashful", pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -46070,18 +46070,18 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 35, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 68, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, nature: "Modest", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 40, shiny: 1},
+			{generation: 3, level: 50, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 4, level: 35, shiny: 1},
+			{generation: 4, level: 40, shiny: 1},
+			{generation: 5, level: 68, shiny: 1},
+			{generation: 6, level: 30, shiny: 1},
+			{generation: 6, level: 50, nature: "Modest", pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -46162,18 +46162,18 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 45, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 80, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 45, moves: ["2L1"]},
-			{generation: 6, level: 100, nature: "Timid", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 45, shiny: 1},
+			{generation: 3, level: 70, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 5, level: 80, shiny: 1, pokeball: "cherishball"},
+			{generation: 5, level: 100, pokeball: "cherishball"},
+			{generation: 6, level: 45},
+			{generation: 6, level: 100, nature: "Timid", pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -46289,18 +46289,18 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 45, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 80, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 45, moves: ["2L1"]},
-			{generation: 6, level: 100, nature: "Adamant", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 45, shiny: 1},
+			{generation: 3, level: 70, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 5, level: 80, shiny: 1, pokeball: "cherishball"},
+			{generation: 5, level: 100, pokeball: "cherishball"},
+			{generation: 6, level: 45},
+			{generation: 6, level: 100, nature: "Adamant", pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -46415,16 +46415,16 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 70, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 70, moves: ["2L1"]},
-			{generation: 6, level: 70, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 70, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 3, level: 70, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 5, level: 70, shiny: true, pokeball: "cherishball"},
+			{generation: 5, level: 100, pokeball: "cherishball"},
+			{generation: 6, level: 70},
+			{generation: 6, level: 70, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 70, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 100, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -46545,30 +46545,30 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 5, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Bashful", ivs: {hp: 24, atk: 3, def: 30, spa: 12, spd: 16, spe: 11}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Careful", ivs: {hp: 10, atk: 0, def: 10, spa: 10, spd: 26, spe: 12}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Docile", ivs: {hp: 19, atk: 7, def: 10, spa: 19, spd: 10, spe: 16}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Hasty", ivs: {hp: 3, atk: 12, def: 12, spa: 7, spd: 11, spe: 9}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Jolly", ivs: {hp: 11, atk: 8, def: 6, spa: 14, spd: 5, spe: 20}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Lonely", ivs: {hp: 31, atk: 23, def: 26, spa: 29, spd: 18, spe: 5}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Naughty", ivs: {hp: 21, atk: 31, def: 31, spa: 18, spd: 24, spe: 19}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Serious", ivs: {hp: 29, atk: 10, def: 31, spa: 25, spd: 23, spe: 21}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 5, shiny: true, nature: "Timid", ivs: {hp: 15, atk: 28, def: 29, spa: 3, spd: 0, spe: 7}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 3, level: 30, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 5, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 5, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 15, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 25, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, nature: "Timid", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 3, level: 5, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Bashful", ivs: {hp: 24, atk: 3, def: 30, spa: 12, spd: 16, spe: 11}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Careful", ivs: {hp: 10, atk: 0, def: 10, spa: 10, spd: 26, spe: 12}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Docile", ivs: {hp: 19, atk: 7, def: 10, spa: 19, spd: 10, spe: 16}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Hasty", ivs: {hp: 3, atk: 12, def: 12, spa: 7, spd: 11, spe: 9}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Jolly", ivs: {hp: 11, atk: 8, def: 6, spa: 14, spd: 5, spe: 20}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Lonely", ivs: {hp: 31, atk: 23, def: 26, spa: 29, spd: 18, spe: 5}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Naughty", ivs: {hp: 21, atk: 31, def: 31, spa: 18, spd: 24, spe: 19}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Serious", ivs: {hp: 29, atk: 10, def: 31, spa: 25, spd: 23, spe: 21}, pokeball: "pokeball"},
+			{generation: 3, level: 5, shiny: true, nature: "Timid", ivs: {hp: 15, atk: 28, def: 29, spa: 3, spd: 0, spe: 7}, pokeball: "pokeball"},
+			{generation: 3, level: 30, pokeball: "pokeball"},
+			{generation: 4, level: 5, pokeball: "cherishball"},
+			{generation: 4, level: 5, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 10, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 15, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 6, level: 25, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 15, pokeball: "cherishball"},
+			{generation: 8, level: 70, nature: "Timid", pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -46705,17 +46705,17 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 30, shiny: 1, moves: ["2L1"]},
-			{generation: 3, level: 70, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 100, moves: ["2L1"], pokeball: "duskball"},
-			{generation: 6, level: 80, moves: ["2L1"]},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 30, shiny: 1},
+			{generation: 3, level: 70, pokeball: "pokeball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "pokeball"},
+			{generation: 4, level: 50, pokeball: "pokeball"},
+			{generation: 4, level: 50, pokeball: "pokeball"},
+			{generation: 4, level: 50, pokeball: "pokeball"},
+			{generation: 5, level: 100, pokeball: "duskball"},
+			{generation: 6, level: 80},
 		],
 		eventOnly: false,
 	},
@@ -46813,9 +46813,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 9, level: 1, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 9, level: 1, pokeball: "pokeball"},
 		],
 	},
 	grotle: {
@@ -46994,7 +46994,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 100, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	chimchar: {
@@ -47100,11 +47100,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 40, gender: "M", nature: "Mild", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 4, level: 40, gender: "M", nature: "Hardy", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 9, level: 1, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 4, level: 40, gender: "M", nature: "Mild", pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 4, level: 40, gender: "M", nature: "Hardy", pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 9, level: 1, pokeball: "pokeball"},
 		],
 	},
 	monferno: {
@@ -47335,8 +47335,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 100, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 88, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 88, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	piplup: {
@@ -47429,13 +47429,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 15, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 15, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 7, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 30, gender: "M", nature: "Hardy", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 9, level: 1, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 5, level: 15, shiny: 1, pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 6, level: 7, pokeball: "cherishball"},
+			{generation: 7, level: 30, gender: "M", nature: "Hardy", pokeball: "pokeball"},
+			{generation: 9, level: 1, pokeball: "pokeball"},
 		],
 	},
 	prinplup: {
@@ -47642,7 +47642,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 100, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	starly: {
@@ -47714,7 +47714,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 1, gender: "M", nature: "Mild", moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 4, level: 1, gender: "M", nature: "Mild", pokeball: "pokeball"},
 		],
 	},
 	staravia: {
@@ -47924,7 +47924,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 1, gender: "M", nature: "Lonely", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 4, level: 1, gender: "M", nature: "Lonely", pokeball: "pokeball"},
 		],
 	},
 	bibarel: {
@@ -48423,7 +48423,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	rampardos: {
@@ -48610,7 +48610,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	bastiodon: {
@@ -49183,7 +49183,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, nature: "Impish", ivs: {hp: 31, atk: 31, def: 31, spa: 14, spd: 31, spe: 31}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Impish", ivs: {hp: 31, atk: 31, def: 31, spa: 14, spd: 31, spe: 31}, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	buizel: {
@@ -49654,7 +49654,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, gender: "F", nature: "Modest", abilities: ["2L1"], ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", nature: "Modest", ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 4, level: 20},
@@ -49670,10 +49670,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, gender: "F", nature: "Quiet", abilities: ["2L1"], ivs: {hp: 31, atk: 2, def: 31, spa: 31, spd: 31, spe: 0}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 50, gender: "F", nature: "Sassy", abilities: ["2L1"], ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 0}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 50, gender: "M", nature: "Bold", abilities: ["2L1"], ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 8}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 50, gender: "F", nature: "Calm", abilities: ["2L1"], ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 8}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 50, gender: "F", nature: "Quiet", ivs: {hp: 31, atk: 2, def: 31, spa: 31, spd: 31, spe: 0}, pokeball: "cherishball"},
+			{generation: 8, level: 50, gender: "F", nature: "Sassy", ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 0}, pokeball: "cherishball"},
+			{generation: 9, level: 50, gender: "M", nature: "Bold", ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 8}, pokeball: "cherishball"},
+			{generation: 9, level: 50, gender: "F", nature: "Calm", ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 8}, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 4, level: 20},
@@ -50621,8 +50621,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, nature: "Relaxed", ivs: {hp: 31, atk: 31, def: 31, spa: 22, spd: 31, spe: 0}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 50, nature: "Modest", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 50, nature: "Relaxed", ivs: {hp: 31, atk: 31, def: 31, spa: 22, spd: 31, spe: 0}, pokeball: "cherishball"},
+			{generation: 9, level: 50, nature: "Modest", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 6, level: 30},
@@ -50691,7 +50691,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 25, gender: "M", nature: "Jolly", abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 4, level: 25, gender: "M", nature: "Jolly"},
 		],
 	},
 	spiritomb: {
@@ -50783,7 +50783,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 61, gender: "F", nature: "Quiet", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 61, gender: "F", nature: "Quiet", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, pokeball: "cherishball"},
 		],
 	},
 	gible: {
@@ -51049,11 +51049,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 100, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 48, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 48, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 66, gender: "F", perfectIVs: 3, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
+			{generation: 5, level: 48, gender: "M", isHidden: true},
+			{generation: 6, level: 48, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 50, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 66, gender: "F", perfectIVs: 3, pokeball: "cherishball"},
 		],
 	},
 	riolu: {
@@ -51157,7 +51157,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 30, gender: "M", nature: "Serious", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 4, level: 30, gender: "M", nature: "Serious", pokeball: "pokeball"},
 		],
 	},
 	lucario: {
@@ -51278,14 +51278,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, gender: "M", nature: "Modest", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 30, gender: "M", nature: "Adamant", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 50, gender: "M", nature: "Naughty", ivs: {atk: 31}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, nature: "Jolly", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 40, gender: "M", nature: "Serious", abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 80, gender: "M", nature: "Serious", abilities: ["2L1"], ivs: {hp: 31, atk: 30, def: 30, spa: 31, spd: 30, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 9, level: 75, shiny: true, gender: "M", nature: "Naive", abilities: ["2L1"], ivs: {hp: 31, atk: 31, def: 20, spa: 31, spd: 20, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, gender: "M", nature: "Modest", pokeball: "cherishball"},
+			{generation: 4, level: 30, gender: "M", nature: "Adamant", pokeball: "cherishball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 5, level: 50, gender: "M", nature: "Naughty", ivs: {atk: 31}, isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 100, nature: "Jolly", pokeball: "cherishball"},
+			{generation: 7, level: 40, gender: "M", nature: "Serious", pokeball: "pokeball"},
+			{generation: 8, level: 80, gender: "M", nature: "Serious", ivs: {hp: 31, atk: 30, def: 30, spa: 31, spd: 30, spe: 31}, pokeball: "pokeball"},
+			{generation: 9, level: 75, shiny: true, gender: "M", nature: "Naive", ivs: {hp: 31, atk: 31, def: 20, spa: 31, spd: 20, spe: 31}, pokeball: "cherishball"},
 		],
 	},
 	hippopotas: {
@@ -51725,8 +51725,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
 		],
 	},
 	toxicroak: {
@@ -52319,9 +52319,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, nature: "Naughty", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, nature: "Quirky", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 10, nature: "Naughty", pokeball: "cherishball"},
+			{generation: 6, level: 10, nature: "Quirky", pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
 		],
 	},
 	rotomheat: {
@@ -52450,12 +52450,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 65, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 5, level: 65, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -52560,12 +52560,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 5, level: 50, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -52673,12 +52673,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 5, level: 50, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -52778,20 +52778,20 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			twister: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 47, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 1, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 5, isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
-			{generation: 5, level: 100, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 100, nature: "Modest", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, nature: "Bold", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 75, nature: "Quiet", isHidden: true, perfectIVs: 4, moves: ["2L1"]},
+			{generation: 4, level: 47, shiny: 1},
+			{generation: 4, level: 70, shiny: 1},
+			{generation: 4, level: 1, shiny: 1},
+			{generation: 5, level: 5, isHidden: true, pokeball: "dreamball"},
+			{generation: 5, level: 100, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 6, level: 100, nature: "Modest", isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
+			{generation: 8, level: 70, nature: "Bold", isHidden: true, pokeball: "cherishball"},
+			{generation: 9, level: 75, nature: "Quiet", isHidden: true, perfectIVs: 4},
 		],
 		eventOnly: false,
 	},
@@ -52900,20 +52900,20 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 47, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 1, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 5, isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
-			{generation: 5, level: 100, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 100, nature: "Timid", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, nature: "Hasty", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 75, nature: "Modest", isHidden: true, perfectIVs: 4, moves: ["2L1"]},
+			{generation: 4, level: 47, shiny: 1},
+			{generation: 4, level: 70, shiny: 1},
+			{generation: 4, level: 1, shiny: 1},
+			{generation: 5, level: 5, isHidden: true, pokeball: "dreamball"},
+			{generation: 5, level: 100, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 6, level: 100, nature: "Timid", isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
+			{generation: 8, level: 70, nature: "Hasty", isHidden: true, pokeball: "cherishball"},
+			{generation: 9, level: 75, nature: "Modest", isHidden: true, perfectIVs: 4},
 		],
 		eventOnly: false,
 	},
@@ -53010,15 +53010,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, gender: "M", nature: "Quiet", moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 68, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 4, level: 70, shiny: 1},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 4, level: 50, gender: "M", nature: "Quiet", pokeball: "pokeball"},
+			{generation: 5, level: 68, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -53110,15 +53110,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 1, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 68, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 100, shiny: 1, moves: ["2L1"]},
+			{generation: 4, level: 70, shiny: 1},
+			{generation: 4, level: 1, shiny: 1},
+			{generation: 4, level: 100, pokeball: "cherishball"},
+			{generation: 5, level: 68, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 100, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -53223,15 +53223,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 47, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 1, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 5, isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
-			{generation: 5, level: 100, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 100, nature: "Brave", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 4, level: 70, shiny: 1},
+			{generation: 4, level: 47, shiny: 1},
+			{generation: 4, level: 1, shiny: 1},
+			{generation: 5, level: 5, isHidden: true, pokeball: "dreamball"},
+			{generation: 5, level: 100, shiny: true, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 6, level: 100, nature: "Brave", isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -53322,12 +53322,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 68, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 68, nature: "Modest", moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 5, level: 68, shiny: 1},
+			{generation: 5, level: 68, nature: "Modest"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -53401,7 +53401,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
 		],
 	},
 	manaphy: {
@@ -53489,13 +53489,13 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 5, moves: ["2L1"]},
-			{generation: 4, level: 1, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, nature: "Impish", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 15, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 5},
+			{generation: 4, level: 1, shiny: 1, pokeball: "pokeball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, nature: "Impish", pokeball: "cherishball"},
+			{generation: 6, level: 1, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 15, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -53599,15 +53599,15 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 4, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 40, shiny: 1},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "pokeball"},
+			{generation: 4, level: 50, shiny: 1},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
+			{generation: 9, level: 50, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -53687,12 +53687,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 4, level: 30, shiny: 1, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 20, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 50, pokeball: "cherishball"},
+			{generation: 4, level: 30, shiny: 1, pokeball: "pokeball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 15, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 20, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -53878,11 +53878,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 4, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, moves: ["2L1"]},
-			{generation: 6, level: 100, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 4, level: 100, pokeball: "cherishball"},
+			{generation: 5, level: 100},
+			{generation: 6, level: 100, shiny: 1, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -54041,14 +54041,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, moves: ["2L1"]},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 50, nature: "Brave", perfectIVs: 6, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 5, level: 100, pokeball: "cherishball"},
+			{generation: 6, level: 15, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 6, level: 15, pokeball: "cherishball"},
+			{generation: 7, level: 15, pokeball: "cherishball"},
+			{generation: 8, level: 50, nature: "Brave", perfectIVs: 6, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -54134,7 +54134,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 5, gender: "M", nature: "Hardy", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 5, gender: "M", nature: "Hardy", pokeball: "cherishball"},
 		],
 	},
 	servine: {
@@ -54297,8 +54297,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 100, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 50, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	tepig: {
@@ -54573,8 +54573,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 100, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 50, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	oshawott: {
@@ -54822,8 +54822,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 100, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 100, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 50, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	samurotthisui: {
@@ -55397,7 +55397,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 20, gender: "F", nature: "Jolly", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 20, gender: "F", nature: "Jolly", isHidden: true},
 		],
 	},
 	pansage: {
@@ -55476,9 +55476,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 1, shiny: 1, gender: "M", nature: "Brave", ivs: {spa: 31}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 30, gender: "M", nature: "Serious", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 1, shiny: 1, gender: "M", nature: "Brave", ivs: {spa: 31}, pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
+			{generation: 5, level: 30, gender: "M", nature: "Serious", pokeball: "cherishball"},
 		],
 	},
 	simisage: {
@@ -55625,7 +55625,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
 		],
 	},
 	simisear: {
@@ -55698,7 +55698,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 5, perfectIVs: 2, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 5, perfectIVs: 2, pokeball: "cherishball"},
 		],
 	},
 	panpour: {
@@ -55779,7 +55779,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 10, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 10, gender: "M", isHidden: true},
 		],
 	},
 	simipour: {
@@ -55932,7 +55932,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 39, nature: "Mild", isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
+			{generation: 7, level: 39, nature: "Mild", isHidden: true, pokeball: "dreamball"},
 		],
 	},
 	musharna: {
@@ -56010,7 +56010,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 50, isHidden: true},
 		],
 	},
 	pidove: {
@@ -56069,7 +56069,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 1, shiny: 1, gender: "F", nature: "Hardy", ivs: {atk: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 1, shiny: 1, gender: "F", nature: "Hardy", ivs: {atk: 31}, pokeball: "pokeball"},
 		],
 	},
 	tranquill: {
@@ -56939,10 +56939,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 30, gender: "F", nature: "Calm", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 30, gender: "F", nature: "Serious", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 30, gender: "F", nature: "Jolly", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, nature: "Relaxed", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "F", nature: "Calm", pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "F", nature: "Serious", pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "F", nature: "Jolly", pokeball: "cherishball"},
+			{generation: 6, level: 100, nature: "Relaxed", pokeball: "cherishball"},
 		],
 	},
 	timburr: {
@@ -58078,7 +58078,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, gender: "F", nature: "Timid", ivs: {spe: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "F", nature: "Timid", ivs: {spe: 31}, pokeball: "cherishball"},
 		],
 	},
 	petilil: {
@@ -59046,8 +59046,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 35, isHidden: true, moves: ["2L1"]},
-			{generation: 6, level: 35, gender: "M", nature: "Calm", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 35, isHidden: true},
+			{generation: 6, level: 35, gender: "M", nature: "Calm", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 6, level: 32, maxEggMoves: 1},
@@ -59432,7 +59432,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 1, gender: "M", nature: "Adamant", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 1, gender: "M", nature: "Adamant", pokeball: "cherishball"},
 		],
 	},
 	scrafty: {
@@ -59543,7 +59543,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, gender: "M", nature: "Brave", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Brave", pokeball: "cherishball"},
 		],
 	},
 	sigilyph: {
@@ -59842,7 +59842,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 66, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 66, gender: "M", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 6, level: 32, maxEggMoves: 1},
@@ -59992,7 +59992,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	carracosta: {
@@ -60151,7 +60151,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	archeops: {
@@ -60620,9 +60620,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, gender: "M", nature: "Quirky", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "ultraball"},
-			{generation: 6, level: 45, gender: "M", nature: "Naughty", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "M", nature: "Quirky", pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "ultraball"},
+			{generation: 6, level: 45, gender: "M", nature: "Naughty", pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 5, level: 25},
@@ -60701,7 +60701,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, perfectIVs: 3, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 50, perfectIVs: 3, pokeball: "cherishball"},
 		],
 	},
 	minccino: {
@@ -61042,8 +61042,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 32, gender: "M", isHidden: true, moves: ["2L1"]},
-			{generation: 5, level: 32, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 32, gender: "M", isHidden: true},
+			{generation: 5, level: 32, gender: "M", isHidden: true},
 		],
 		encounters: [
 			{generation: 5, level: 31},
@@ -61792,7 +61792,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 30, gender: "F", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 30, gender: "F", isHidden: true},
 		],
 	},
 	sawsbuck: {
@@ -62010,8 +62010,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 30, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 30, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
 		],
 	},
 	escavalier: {
@@ -62207,7 +62207,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, shiny: true, gender: "F", nature: "Sassy", ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 0}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 50, shiny: true, gender: "F", nature: "Sassy", ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 0}, isHidden: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 5, level: 37},
@@ -62363,7 +62363,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 40, isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 40, isHidden: true},
 		],
 		encounters: [
 			{generation: 5, level: 5},
@@ -63500,7 +63500,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, gender: "F", nature: "Modest", ivs: {spa: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, gender: "F", nature: "Modest", ivs: {spa: 31}, pokeball: "cherishball"},
 		],
 	},
 	axew: {
@@ -63587,9 +63587,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 1, shiny: 1, gender: "M", nature: "Naive", ivs: {spe: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 5, level: 10, gender: "F", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 30, gender: "M", nature: "Naive", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 1, shiny: 1, gender: "M", nature: "Naive", ivs: {spe: 31}, pokeball: "pokeball"},
+			{generation: 5, level: 10, gender: "F", pokeball: "cherishball"},
+			{generation: 5, level: 30, gender: "M", nature: "Naive", pokeball: "cherishball"},
 		],
 	},
 	fraxure: {
@@ -63765,7 +63765,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 59, gender: "F", nature: "Naive", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 59, gender: "F", nature: "Naive", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, pokeball: "cherishball"},
 		],
 	},
 	cubchoo: {
@@ -63855,7 +63855,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, pokeball: "cherishball"},
 		],
 	},
 	beartic: {
@@ -64091,8 +64091,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 30, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 30, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
 		],
 	},
 	accelgor: {
@@ -64481,7 +64481,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 65, gender: "M", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 65, gender: "M", pokeball: "cherishball"},
 		],
 	},
 	druddigon: {
@@ -64579,7 +64579,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 1, shiny: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 1, shiny: true, pokeball: "pokeball"},
 		],
 	},
 	golett: {
@@ -64784,7 +64784,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 70, shiny: true, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 70, shiny: true, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 6, level: 30},
@@ -65109,7 +65109,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31}, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	rufflet: {
@@ -65259,7 +65259,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 25, gender: "M", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 25, gender: "M", isHidden: true},
 		],
 		encounters: [
 			{generation: 6, level: 45},
@@ -65497,7 +65497,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 25, gender: "F", isHidden: true, moves: ["2L1"]},
+			{generation: 5, level: 25, gender: "F", isHidden: true},
 		],
 	},
 	heatmor: {
@@ -65724,7 +65724,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 1, shiny: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 5, level: 1, shiny: true, pokeball: "pokeball"},
 		],
 	},
 	zweilous: {
@@ -65910,8 +65910,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 70, shiny: true, gender: "M", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 52, gender: "M", perfectIVs: 2, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 70, shiny: true, gender: "M", pokeball: "cherishball"},
+			{generation: 6, level: 52, gender: "M", perfectIVs: 2, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 6, level: 59},
@@ -66064,8 +66064,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 35, moves: ["2L1"]},
-			{generation: 5, level: 77, gender: "M", nature: "Calm", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 35},
+			{generation: 5, level: 77, gender: "M", nature: "Calm", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 7, level: 41},
@@ -66157,12 +66157,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 42, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 45, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 65, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 42, shiny: 1},
+			{generation: 5, level: 45, shiny: 1},
+			{generation: 5, level: 65, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -66245,12 +66245,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 42, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 45, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 65, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 42, shiny: 1},
+			{generation: 5, level: 45, shiny: 1},
+			{generation: 5, level: 65, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -66339,12 +66339,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 42, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 45, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 65, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 42, shiny: 1},
+			{generation: 5, level: 45, shiny: 1},
+			{generation: 5, level: 65, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -66434,14 +66434,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			weatherball: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 5, isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
-			{generation: 5, level: 70, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 40, shiny: 1},
+			{generation: 5, level: 5, isHidden: true, pokeball: "dreamball"},
+			{generation: 5, level: 70, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -66542,14 +66542,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 40, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 5, isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
-			{generation: 5, level: 70, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 40, shiny: 1},
+			{generation: 5, level: 5, isHidden: true, pokeball: "dreamball"},
+			{generation: 5, level: 70, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -66652,14 +66652,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, moves: ["2L1"]},
-			{generation: 5, level: 70, moves: ["2L1"]},
-			{generation: 5, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 50},
+			{generation: 5, level: 70},
+			{generation: 5, level: 100, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -66765,14 +66765,14 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, moves: ["2L1"]},
-			{generation: 5, level: 70, moves: ["2L1"]},
-			{generation: 5, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 50},
+			{generation: 5, level: 70},
+			{generation: 5, level: 100, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -66859,12 +66859,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			weatherball: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 5, isHidden: true, moves: ["2L1"], pokeball: "dreamball"},
-			{generation: 6, level: 65, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 1, spd: 31, spe: 24}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 70, shiny: 1},
+			{generation: 5, level: 5, isHidden: true, pokeball: "dreamball"},
+			{generation: 6, level: 65, shiny: 1},
+			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 1, spd: 31, spe: 24}, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -66961,12 +66961,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 75, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 75, shiny: 1},
+			{generation: 5, level: 70, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -67061,12 +67061,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 75, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 75, shiny: 1},
+			{generation: 5, level: 70, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -67161,12 +67161,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 75, shiny: 1, moves: ["2L1"]},
-			{generation: 5, level: 70, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 50, shiny: 1, moves: ["2L1"]},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 5, level: 75, shiny: 1},
+			{generation: 5, level: 70, shiny: 1},
+			{generation: 6, level: 50, shiny: 1},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -67255,11 +67255,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 65, moves: ["2L1"]},
+			{generation: 5, level: 15, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 15, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 65},
 		],
 		eventOnly: false,
 	},
@@ -67376,10 +67376,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 15, pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 7, level: 15, pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -67469,11 +67469,11 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 5, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 15, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 5, level: 100, shiny: true, nature: "Hasty", ivs: {atk: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 60, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 5, level: 50, pokeball: "cherishball"},
+			{generation: 5, level: 15, pokeball: "cherishball"},
+			{generation: 5, level: 100, shiny: true, nature: "Hasty", ivs: {atk: 31, spe: 31}, pokeball: "cherishball"},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 60, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -67884,7 +67884,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 15, gender: "F", nature: "Hardy", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 15, gender: "F", nature: "Hardy", pokeball: "cherishball"},
 		],
 	},
 	braixen: {
@@ -68161,7 +68161,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 7, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 7, pokeball: "cherishball"},
 		],
 	},
 	frogadier: {
@@ -68337,8 +68337,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 36, ivs: {spe: 31}, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 100, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 36, ivs: {spe: 31}, isHidden: true, pokeball: "cherishball"},
+			{generation: 6, level: 100, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	greninjabond: {
@@ -68432,7 +68432,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 36, ivs: {hp: 20, atk: 31, def: 20, spa: 31, spd: 20, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 36, ivs: {hp: 20, atk: 31, def: 20, spa: 31, spd: 20, spe: 31}, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -68968,7 +68968,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 12, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 12, pokeball: "cherishball"},
 		],
 	},
 	vivillonpokeball: {
@@ -69040,7 +69040,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 12, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 6, level: 12, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -69189,7 +69189,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 49, gender: "M", perfectIVs: 2, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 49, gender: "M", perfectIVs: 2, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 6, level: 30},
@@ -69722,7 +69722,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 30, gender: "M", nature: "Adamant", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 30, gender: "M", nature: "Adamant", pokeball: "cherishball"},
 		],
 	},
 	pangoro: {
@@ -70360,7 +70360,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, gender: "F", nature: "Quiet", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, gender: "F", nature: "Quiet", pokeball: "cherishball"},
 		],
 	},
 	spritzee: {
@@ -70502,7 +70502,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, nature: "Relaxed", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Relaxed", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	swirlix: {
@@ -70721,7 +70721,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 10, pokeball: "cherishball"},
 		],
 	},
 	malamar: {
@@ -70816,7 +70816,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31}, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, nature: "Adamant", ivs: {hp: 31, atk: 31}, pokeball: "cherishball"},
 		],
 	},
 	binacle: {
@@ -71544,7 +71544,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 10, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 10, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	tyrantrum: {
@@ -71711,7 +71711,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 10, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 10, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	aurorus: {
@@ -71881,9 +71881,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 10, gender: "F", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 10, pokeball: "cherishball"},
+			{generation: 6, level: 10, gender: "F", pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	hawlucha: {
@@ -72214,7 +72214,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 1, shiny: 1, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 1, shiny: 1, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	sliggoo: {
@@ -72826,7 +72826,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			trickortreat: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "cherishball"},
 		],
 	},
 	gourgeist: {
@@ -73348,12 +73348,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, moves: ["2L1"]},
-			{generation: 6, level: 100, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 6, level: 50},
+			{generation: 6, level: 100, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -73427,12 +73427,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, moves: ["2L1"]},
-			{generation: 6, level: 100, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 6, level: 50},
+			{generation: 6, level: 100, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 7, level: 60, pokeball: "cherishball"},
+			{generation: 7, level: 100, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -73510,16 +73510,16 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 70, moves: ["2L1"]},
-			{generation: 6, level: 100, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 30, moves: ["2L1"]},
-			{generation: 7, level: 50, moves: ["2L1"]},
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: true, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, shiny: true, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, isHidden: true, moves: ["2L1"]},
+			{generation: 6, level: 70},
+			{generation: 6, level: 100, pokeball: "cherishball"},
+			{generation: 7, level: 30},
+			{generation: 7, level: 50},
+			{generation: 7, level: 50, isHidden: true},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: true, isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 100, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 100, shiny: true, isHidden: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1, isHidden: true},
 		],
 		eventOnly: false,
 	},
@@ -73540,12 +73540,12 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thousandarrows: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 30, moves: ["2L1"]},
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"]},
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 100, shiny: true, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, isHidden: true, moves: ["2L1"]},
+			{generation: 7, level: 30},
+			{generation: 7, level: 50, isHidden: true},
+			{generation: 7, level: 50, isHidden: true},
+			{generation: 7, level: 60, shiny: true, isHidden: true, pokeball: "cherishball"},
+			{generation: 7, level: 100, shiny: true, isHidden: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1, isHidden: true},
 		],
 		eventOnly: false,
 	},
@@ -73643,8 +73643,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 50, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "cherishball"},
+			{generation: 6, level: 50, shiny: true, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -73749,8 +73749,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 15, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 50, pokeball: "cherishball"},
+			{generation: 7, level: 15, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -73843,9 +73843,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 70, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 6, level: 70, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 60, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 70, pokeball: "cherishball"},
+			{generation: 6, level: 70, pokeball: "cherishball"},
+			{generation: 8, level: 60, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -74107,7 +74107,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			worryseed: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 50, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	decidueyehisui: {
@@ -74427,7 +74427,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 50, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	popplio: {
@@ -74659,7 +74659,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 50, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	pikipek: {
@@ -75080,7 +75080,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 20, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 20, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -75333,7 +75333,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 35, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 35, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -75803,7 +75803,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 50, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -75944,8 +75944,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
 		],
 	},
 	lycanroc: {
@@ -76121,7 +76121,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	lycanrocdusk: {
@@ -76334,7 +76334,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 1, shiny: 1, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 1, shiny: 1, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	toxapex: {
@@ -76735,7 +76735,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 25, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 25, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -76935,7 +76935,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 30, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 30, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -77239,7 +77239,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
 		],
 		encounters: [
 			{generation: 7, level: 16},
@@ -77306,7 +77306,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 30, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 30, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -77450,7 +77450,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, gender: "F", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, gender: "F", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	bounsweet: {
@@ -77583,7 +77583,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 20, nature: "Naive", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 20, nature: "Naive", pokeball: "cherishball"},
 		],
 	},
 	tsareena: {
@@ -77754,7 +77754,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, nature: "Jolly", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 10, nature: "Jolly", pokeball: "cherishball"},
 		],
 	},
 	oranguru: {
@@ -77852,8 +77852,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 1, shiny: 1, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 1, shiny: 1, pokeball: "cherishball"},
+			{generation: 7, level: 50, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	passimian: {
@@ -77951,8 +77951,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 1, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, isHidden: true, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 1, shiny: 1, pokeball: "cherishball"},
+			{generation: 7, level: 50, isHidden: true, pokeball: "pokeball"},
 		],
 	},
 	wimpod: {
@@ -78339,9 +78339,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 7, level: 60, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 50, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
+			{generation: 7, level: 60, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
+			{generation: 8, level: 50, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -78435,7 +78435,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 100, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 100, shiny: true, pokeball: "cherishball"},
 		],
 	},
 	minior: {
@@ -78667,8 +78667,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 1, shiny: 1, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 30, gender: "M", nature: "Brave", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 1, shiny: 1, pokeball: "cherishball"},
+			{generation: 7, level: 30, gender: "M", nature: "Brave", pokeball: "cherishball"},
 		],
 	},
 	togedemaru: {
@@ -78816,7 +78816,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zingzap: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 30, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 30, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -78911,10 +78911,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 10, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 10, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 50, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 9, level: 25, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 10, pokeball: "cherishball"},
+			{generation: 7, level: 10, shiny: true, pokeball: "cherishball"},
+			{generation: 7, level: 50, shiny: true, pokeball: "cherishball"},
+			{generation: 9, level: 25, pokeball: "cherishball"},
 		],
 	},
 	mimikyutotem: {
@@ -78987,7 +78987,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 40, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 40, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -79171,7 +79171,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 1, shiny: 1, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 1, shiny: 1, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	dhelmise: {
@@ -79602,7 +79602,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 50, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -79684,10 +79684,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 60, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, nature: "Timid", moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 60},
+			{generation: 7, level: 60, shiny: true, nature: "Timid", pokeball: "cherishball"},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -79766,9 +79766,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 60, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 60},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -79857,9 +79857,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 60, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 60},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -79938,9 +79938,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 60, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 60},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -79950,8 +79950,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			teleport: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 5, moves: ["2L1"]},
-			{generation: 8, level: 5, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 7, level: 5},
+			{generation: 8, level: 5, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -80052,10 +80052,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 55, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 55},
+			{generation: 7, level: 60},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 	},
 	lunala: {
@@ -80147,10 +80147,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 55, moves: ["2L1"]},
-			{generation: 7, level: 60, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 55},
+			{generation: 7, level: 60},
+			{generation: 7, level: 60, shiny: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 	},
 	nihilego: {
@@ -80229,9 +80229,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 55, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 55},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -80304,9 +80304,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 65, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 65},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -80380,9 +80380,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uturn: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 60, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 60},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -80448,9 +80448,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 65, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 65},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -80523,9 +80523,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 65, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 65},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -80578,9 +80578,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 60, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 60},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -80664,9 +80664,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wringout: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 70, moves: ["2L1"]},
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 70},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -80764,10 +80764,10 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 75, moves: ["2L1"]},
-			{generation: 7, level: 65, moves: ["2L1"]},
-			{generation: 7, level: 75, shiny: true, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 75},
+			{generation: 7, level: 65},
+			{generation: 7, level: 75, shiny: true, pokeball: "cherishball"},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -80897,7 +80897,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -80988,7 +80988,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, nature: "Mild", ivs: {hp: 31, atk: 30, def: 30, spa: 31, spd: 31, spe: 0}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 50, nature: "Mild", ivs: {hp: 31, atk: 30, def: 30, spa: 31, spd: 31, spe: 0}, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -81080,8 +81080,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 60, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
+			{generation: 8, level: 60, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -81126,9 +81126,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 7, level: 40, shiny: true, nature: "Modest", perfectIVs: 3, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 20, moves: ["2L1"], pokeball: "beastball"},
+			{generation: 7, level: 40, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
+			{generation: 7, level: 40, shiny: true, nature: "Modest", perfectIVs: 3, pokeball: "cherishball"},
+			{generation: 8, level: 20, pokeball: "beastball"},
 		],
 		eventOnly: false,
 	},
@@ -81283,8 +81283,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -81358,8 +81358,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 60, shiny: 1, moves: ["2L1"]},
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 7, level: 60, shiny: 1},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -81450,8 +81450,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
-			{generation: 8, level: 100, shiny: true, nature: "Hasty", ivs: {hp: 31, atk: 31, def: 30, spa: 31, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
+			{generation: 8, level: 100, shiny: true, nature: "Hasty", ivs: {hp: 31, atk: 31, def: 30, spa: 31, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -81530,7 +81530,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			toxic: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 100, nature: "Brave", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 0}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 100, nature: "Brave", ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 0}, pokeball: "cherishball"},
 		],
 	},
 	grookey: {
@@ -83558,7 +83558,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			terablast: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 1, isHidden: true, moves: ["2L1"], pokeball: "luxuryball"},
+			{generation: 8, level: 1, isHidden: true, pokeball: "luxuryball"},
 		],
 	},
 	toxtricity: {
@@ -83645,7 +83645,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, shiny: true, nature: "Rash", abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 50, shiny: true, nature: "Rash", pokeball: "cherishball"},
 		],
 	},
 	toxtricitylowkey: {
@@ -84021,7 +84021,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			withdraw: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 50, isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	polteageist: {
@@ -84449,7 +84449,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wonderroom: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, nature: "Calm", shiny: true, abilities: ["2L1"], ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 50, nature: "Calm", shiny: true, ivs: {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 	},
 	milcery: {
@@ -84484,7 +84484,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			terablast: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 5, nature: "Hardy", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 5, nature: "Hardy", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	alcremie: {
@@ -84994,7 +84994,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 75, shiny: 1, perfectIVs: 4, moves: ["2L1"]},
+			{generation: 9, level: 75, shiny: 1, perfectIVs: 4},
 		],
 	},
 	morpeko: {
@@ -85266,7 +85266,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -85328,7 +85328,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -85386,8 +85386,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 8, level: 80, nature: "Naive", abilities: ["2L1"], ivs: {hp: 30, atk: 31, def: 31, spa: 30, spd: 30, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
+			{generation: 8, level: 80, nature: "Naive", ivs: {hp: 30, atk: 31, def: 31, spa: 30, spd: 30, spe: 31}, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -85440,7 +85440,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 8, level: 10, shiny: 1, perfectIVs: 3, pokeball: "pokeball"},
 		],
 		eventOnly: false,
 	},
@@ -85676,7 +85676,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, gender: "M", nature: "Jolly", perfectIVs: 6, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 50, gender: "M", nature: "Jolly", perfectIVs: 6, pokeball: "cherishball"},
 		],
 	},
 	zacian: {
@@ -85746,8 +85746,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 70, perfectIVs: 3, moves: ["2L1"]},
-			{generation: 8, level: 100, shiny: true, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 30, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 70, perfectIVs: 3},
+			{generation: 8, level: 100, shiny: true, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 30, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -85829,8 +85829,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 70, perfectIVs: 3, moves: ["2L1"]},
-			{generation: 8, level: 100, shiny: true, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 30, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 70, perfectIVs: 3},
+			{generation: 8, level: 100, shiny: true, nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 30, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -85897,8 +85897,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 60, perfectIVs: 3, moves: ["2L1"]},
-			{generation: 8, level: 100, shiny: true, nature: "Timid", perfectIVs: 6, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 60, perfectIVs: 3},
+			{generation: 8, level: 100, shiny: true, nature: "Timid", perfectIVs: 6, pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -85954,7 +85954,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 10, perfectIVs: 3, moves: ["2L1"]},
+			{generation: 8, level: 10, perfectIVs: 3},
 		],
 		eventOnly: false,
 	},
@@ -86199,7 +86199,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 60, nature: "Sassy", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 60, nature: "Sassy", pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -86289,7 +86289,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			vinewhip: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 70, nature: "Adamant", moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 70, nature: "Adamant", pokeball: "cherishball"},
 		],
 		eventOnly: false,
 	},
@@ -86344,7 +86344,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -86395,7 +86395,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			visegrip: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 70, shiny: 1, moves: ["2L1"]},
+			{generation: 8, level: 70, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -86458,7 +86458,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 75, moves: ["2L1"]},
+			{generation: 8, level: 75},
 		],
 		eventOnly: false,
 	},
@@ -86516,7 +86516,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 75, moves: ["2L1"]},
+			{generation: 8, level: 75},
 		],
 		eventOnly: false,
 	},
@@ -86593,7 +86593,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 80, moves: ["2L1"]},
+			{generation: 8, level: 80},
 		],
 		eventOnly: false,
 	},
@@ -86709,7 +86709,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 80, moves: ["2L1"]},
+			{generation: 8, level: 80},
 		],
 		eventOnly: false,
 	},
@@ -86815,7 +86815,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 80, moves: ["2L1"]},
+			{generation: 8, level: 80},
 		],
 		eventOnly: false,
 	},
@@ -87475,7 +87475,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 15, gender: "M", isHidden: true, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 15, gender: "M", isHidden: true, pokeball: "cherishball"},
 		],
 	},
 	oinkologne: {
@@ -88492,7 +88492,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, gender: "F", nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 17, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 50, gender: "F", nature: "Adamant", ivs: {hp: 31, atk: 31, def: 31, spa: 17, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 	},
 	smoliv: {
@@ -88920,7 +88920,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, gender: "F", nature: "Naughty", abilities: ["2L1"], ivs: {hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 20}, moves: ["2L1"], pokeball: "healball"},
+			{generation: 9, level: 50, gender: "F", nature: "Naughty", ivs: {hp: 20, atk: 31, def: 20, spa: 20, spd: 20, spe: 20}, pokeball: "healball"},
 		],
 	},
 	orthworm: {
@@ -88972,7 +88972,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wrap: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 29, gender: "M", nature: "Quirky", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"]},
+			{generation: 9, level: 29, gender: "M", nature: "Quirky", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}},
 		],
 	},
 	tandemaus: {
@@ -89184,7 +89184,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			waterpulse: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, moves: ["2L1"]},
+			{generation: 9},
 		],
 	},
 	frigibax: {
@@ -89363,7 +89363,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 57, gender: "M", nature: "Quiet", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"]},
+			{generation: 9, level: 57, gender: "M", nature: "Quiet", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}},
 		],
 	},
 	tatsugiristretchy: {
@@ -89374,7 +89374,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			muddywater: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 50, pokeball: "cherishball"},
 		],
 	},
 	cyclizar: {
@@ -89491,7 +89491,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 5, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 5, pokeball: "cherishball"},
 		],
 	},
 	pawmo: {
@@ -89792,7 +89792,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 20, gender: "F", nature: "Jolly", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, isHidden: true, moves: ["2L1"]},
+			{generation: 9, level: 20, gender: "F", nature: "Jolly", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, isHidden: true},
 		],
 	},
 	squawkabilly: {
@@ -89963,7 +89963,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 16, gender: "F", nature: "Gentle", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, abilities: ["2L1"], moves: ["2L1"]},
+			{generation: 9, level: 16, gender: "F", nature: "Gentle", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}},
 		],
 	},
 	nacli: {
@@ -90116,7 +90116,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, gender: "M", nature: "Careful", ivs: {hp: 31, atk: 31, def: 31, spa: 22, spd: 31, spe: 31}, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 50, gender: "M", nature: "Careful", ivs: {hp: 31, atk: 31, def: 31, spa: 22, spd: 31, spe: 31}, pokeball: "cherishball"},
 		],
 	},
 	glimmet: {
@@ -90384,7 +90384,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 5, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 5, pokeball: "cherishball"},
 		],
 	},
 	dachsbun: {
@@ -90656,9 +90656,9 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			thief: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 5, moves: ["2L1"]},
-			{generation: 9, level: 75, shiny: 1, perfectIVs: 4, moves: ["2L1"]},
-			{generation: 9, level: 5, nature: "Timid", ivs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 31}, moves: ["2L1"]},
+			{generation: 9, level: 5},
+			{generation: 9, level: 75, shiny: 1, perfectIVs: 4},
+			{generation: 9, level: 5, nature: "Timid", ivs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 31}},
 		],
 		eventOnly: false,
 	},
@@ -90773,8 +90773,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 45, nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"]},
-			{generation: 9, level: 57, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 45, nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}},
+			{generation: 9, level: 57, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -90833,7 +90833,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -90895,7 +90895,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -90983,7 +90983,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91040,7 +91040,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wish: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91105,7 +91105,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91181,7 +91181,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91241,8 +91241,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 45, nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}, moves: ["2L1"]},
-			{generation: 9, level: 57, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 45, nature: "Naughty", ivs: {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30}},
+			{generation: 9, level: 57, shiny: 1},
 		],
 	},
 	ironmoth: {
@@ -91301,7 +91301,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlwind: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91365,7 +91365,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91429,7 +91429,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91513,7 +91513,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91562,7 +91562,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91650,7 +91650,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 52, shiny: 1, moves: ["2L1"]},
+			{generation: 9, level: 52, shiny: 1},
 		],
 		eventOnly: false,
 	},
@@ -91704,7 +91704,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 60, moves: ["2L1"]},
+			{generation: 9, level: 60},
 		],
 		eventOnly: false,
 	},
@@ -91757,7 +91757,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			throatchop: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 60, moves: ["2L1"]},
+			{generation: 9, level: 60},
 		],
 		eventOnly: false,
 	},
@@ -91817,7 +91817,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 60, moves: ["2L1"]},
+			{generation: 9, level: 60},
 		],
 		eventOnly: false,
 	},
@@ -91871,7 +91871,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 60, moves: ["2L1"]},
+			{generation: 9, level: 60},
 		],
 		eventOnly: false,
 	},
@@ -91951,8 +91951,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 68, nature: "Quirky", ivs: {hp: 31, atk: 31, def: 28, spa: 31, spd: 28, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 9, level: 72, nature: "Adamant", ivs: {hp: 25, atk: 31, def: 25, spa: 31, spd: 25, spe: 31}, moves: ["2L1"]},
+			{generation: 9, level: 68, nature: "Quirky", ivs: {hp: 31, atk: 31, def: 28, spa: 31, spd: 28, spe: 31}, pokeball: "pokeball"},
+			{generation: 9, level: 72, nature: "Adamant", ivs: {hp: 25, atk: 31, def: 25, spa: 31, spd: 25, spe: 31}},
 		],
 		eventOnly: false,
 	},
@@ -92016,8 +92016,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 68, nature: "Quirky", ivs: {hp: 31, atk: 31, def: 28, spa: 31, spd: 28, spe: 31}, moves: ["2L1"], pokeball: "pokeball"},
-			{generation: 9, level: 72, nature: "Modest", ivs: {hp: 25, atk: 31, def: 25, spa: 31, spd: 25, spe: 31}, moves: ["2L1"]},
+			{generation: 9, level: 68, nature: "Quirky", ivs: {hp: 31, atk: 31, def: 28, spa: 31, spd: 28, spe: 31}, pokeball: "pokeball"},
+			{generation: 9, level: 72, nature: "Modest", ivs: {hp: 25, atk: 31, def: 25, spa: 31, spd: 25, spe: 31}},
 		],
 		eventOnly: false,
 	},
@@ -92206,7 +92206,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			willowisp: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 5, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 9, level: 5, pokeball: "cherishball"},
 		],
 	},
 	armarouge: {
@@ -92512,7 +92512,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			whirlpool: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 75, perfectIVs: 3, moves: ["2L1"]},
+			{generation: 9, level: 75, perfectIVs: 3},
 		],
 		eventOnly: false,
 	},
@@ -92577,7 +92577,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 75, perfectIVs: 3, moves: ["2L1"]},
+			{generation: 9, level: 75, perfectIVs: 3},
 		],
 		eventOnly: false,
 	},
@@ -92866,7 +92866,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			uproar: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 70, moves: ["2L1"]},
+			{generation: 9, level: 70},
 		],
 		eventOnly: false,
 	},
@@ -92930,7 +92930,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			venoshock: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 70, moves: ["2L1"]},
+			{generation: 9, level: 70},
 		],
 		eventOnly: false,
 	},
@@ -93001,7 +93001,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wingattack: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 70, moves: ["2L1"]},
+			{generation: 9, level: 70},
 		],
 		eventOnly: false,
 	},
@@ -93071,8 +93071,8 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zenheadbutt: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 20, nature: "Lonely", ivs: {hp: 31, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}, moves: ["2L1"]},
-			{generation: 9, level: 70, nature: "Lonely", ivs: {hp: 31, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}, moves: ["2L1"]},
+			{generation: 9, level: 20, nature: "Lonely", ivs: {hp: 31, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}},
+			{generation: 9, level: 70, nature: "Lonely", ivs: {hp: 31, atk: 31, def: 20, spa: 20, spd: 20, spe: 31}},
 		],
 		eventOnly: false,
 	},
@@ -95515,7 +95515,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wildcharge: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 9, level: 50, pokeball: "pokeball"},
 		],
 	},
 	voodoll: {
@@ -97470,7 +97470,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			yawn: ["2L1"],
 		},
 		eventData: [
-			{generation: 6, level: 16, abilities: ["2L1"], moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 6, level: 16, pokeball: "cherishball"},
 		],
 	},
 	pajantom: {
@@ -97951,7 +97951,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			zapcannon: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
 		],
 	},
 	smogecko: {
@@ -98195,7 +98195,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
 		],
 	},
 	swirlpool: {
@@ -98462,7 +98462,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			xscissor: ["2L1"],
 		},
 		eventData: [
-			{generation: 7, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 7, level: 50, pokeball: "cherishball"},
 		],
 	},
 	justyke: {
@@ -98600,7 +98600,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			workup: ["2L1"],
 		},
 		eventData: [
-			{generation: 9, level: 50, moves: ["2L1"], pokeball: "pokeball"},
+			{generation: 9, level: 50, pokeball: "pokeball"},
 		],
 	},
 	solotl: {
@@ -98959,7 +98959,7 @@ export const Learnsets: {[k: string]: ModdedLearnsetData} = {
 			wideguard: ["2L1"],
 		},
 		eventData: [
-			{generation: 8, level: 50, moves: ["2L1"], pokeball: "cherishball"},
+			{generation: 8, level: 50, pokeball: "cherishball"},
 		],
 	},
 	venomicon: {

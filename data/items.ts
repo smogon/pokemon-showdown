@@ -1,4 +1,4 @@
-export const Items: {[itemid: string]: ItemData} = {
+export const Items: {[itemid: IDEntry]: ItemData} = {
 	abilityshield: {
 		name: "Ability Shield",
 		spritenum: 746,

@@ -1,6 +1,6 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
-export const Moves: {[moveid: string]: MoveData} = {
+export const Moves: {[moveid: IDEntry]: MoveData} = {
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,

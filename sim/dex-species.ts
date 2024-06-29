@@ -34,7 +34,7 @@ export interface SpeciesFormatsData {
 export type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
 
 export interface LearnsetData {
-	learnset?: {[moveid: string]: MoveSource[]};
+	learnset?: {[moveid: IDEntry]: MoveSource[]};
 	eventData?: EventInfo[];
 	eventOnly?: boolean;
 	encounters?: EventInfo[];

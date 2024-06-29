@@ -2179,7 +2179,7 @@ export class RandomTeams {
 						for (const ruleid of ruleTable.tagRules) {
 							if (ruleid.startsWith('*')) continue;
 							const tagid = ruleid.slice(12);
-							const tag = Tags[tagid];
+							const tag = Tags[tagid as ID];
 							if ((tag.speciesFilter || tag.genericFilter)!(species)) {
 								const existenceTag = EXISTENCE_TAG.includes(tagid);
 								if (ruleid.startsWith('+')) {

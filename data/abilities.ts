@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const Abilities: {[abilityid: string]: AbilityData} = {
+export const Abilities: {[abilityid: IDEntry]: AbilityData} = {
 	noability: {
 		isNonstandard: "Past",
 		flags: {},

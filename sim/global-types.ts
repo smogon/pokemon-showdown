@@ -19,8 +19,10 @@ type TeamValidator = import('./team-validator').TeamValidator;
 type PokemonSources = import('./team-validator').PokemonSources;
 
 /** An ID must be lowercase alphanumeric. */
-type ID = '' | string & {__isID: true};
-type PokemonSlot = '' | string & {__isSlot: true};
+type ID = '' | Lowercase<string> & {__isID: true};
+/** Like ID, but doesn't require you to type `as ID`. For data files */
+type IDEntry = Lowercase<string>;
+type PokemonSlot = '' | IDEntry & {__isSlot: true};
 interface AnyObject {[k: string]: any}
 
 type GenderName = 'M' | 'F' | 'N' | '';
@@ -39,7 +41,7 @@ type PokemonSet = import('./teams').PokemonSet;
 /**
  * Describes a possible way to get a move onto a pokemon.
  *
- * First character is a generation number, 1-7.
+ * First character is a generation number, 1-9.
  * Second character is a source ID, one of:
  *
  * - M = TM/HM
@@ -59,6 +61,11 @@ type PokemonSet = import('./teams').PokemonSet;
  * check prevos for compatibility).
  */
 type MoveSource = string;
+// type MoveSource = `${
+// 	1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+// }${
+// 	'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C'
+// }${string}`;
 
 namespace TierTypes {
 	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
@@ -78,10 +85,10 @@ interface EventInfo {
 	perfectIVs?: number;
 	/** true: has hidden ability, false | undefined: never has hidden ability */
 	isHidden?: boolean;
-	abilities?: string[];
+	abilities?: IDEntry[];
 	maxEggMoves?: number;
-	moves?: string[];
-	pokeball?: string;
+	moves?: IDEntry[];
+	pokeball?: IDEntry;
 	from?: string;
 	/** Japan-only events can't be transferred to international games in Gen 1 */
 	japan?: boolean;

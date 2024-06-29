@@ -69,13 +69,13 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`-basepokemon:${toID(species.baseSpecies)}`)) return true;
 		for (const tagid in Tags) {
-			const tag = Tags[tagid];
+			const tag = Tags[tagid as ID];
 			if (this.has(`-pokemontag:${tagid}`)) {
 				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
-			const tag = Tags[tagid];
+			const tag = Tags[tagid as ID];
 			if (this.has(`+pokemontag:${tagid}`)) {
 				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
@@ -94,13 +94,13 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
 		for (const tagid in Tags) {
-			const tag = Tags[tagid];
+			const tag = Tags[tagid as ID];
 			if (this.has(`*pokemontag:${tagid}`)) {
 				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
-			const tag = Tags[tagid];
+			const tag = Tags[tagid as ID];
 			if (this.has(`+pokemontag:${tagid}`)) {
 				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
