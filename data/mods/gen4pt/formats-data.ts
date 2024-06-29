@@ -1,4 +1,4 @@
-export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: {[id: IDEntry]: ModdedSpeciesFormatsData} = {
 	pichuspikyeared: {
 		isNonstandard: "Future",
 		tier: "Illegal",

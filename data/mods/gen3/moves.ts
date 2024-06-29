@@ -2,7 +2,7 @@
  * Gen 3 moves
  */
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: {[id: IDEntry]: ModdedMoveData} = {
 	absorb: {
 		inherit: true,
 		pp: 20,

@@ -1,4 +1,4 @@
-export const TypeChart: {[k: string]: ModdedTypeData} = {
+export const TypeChart: {[id: IDEntry]: ModdedTypeData} = {
 	fire: {
 		inherit: true,
 		damageTaken: {

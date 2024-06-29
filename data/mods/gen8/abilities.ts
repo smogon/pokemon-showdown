@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[id: IDEntry]: ModdedAbilityData} = {
 	noability: {
 		inherit: true,
 		rating: 0.1,

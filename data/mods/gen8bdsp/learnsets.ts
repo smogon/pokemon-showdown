@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-export const Learnsets: {[k: string]: ModdedLearnsetData} = {
+export const Learnsets: {[id: IDEntry]: ModdedLearnsetData} = {
 	bulbasaur: {
 		learnset: {
 			amnesia: ["8E"],

@@ -1,4 +1,4 @@
-export const TypeChart: {[k: IDEntry]: TypeData} = {
+export const TypeChart: {[id: IDEntry]: TypeData} = {
 	bug: {
 		damageTaken: {
 			Bug: 0,

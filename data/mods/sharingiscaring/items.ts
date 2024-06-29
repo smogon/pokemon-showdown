@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: {[id: IDEntry]: ModdedItemData} = {
 	airballoon: {
 		inherit: true,
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded

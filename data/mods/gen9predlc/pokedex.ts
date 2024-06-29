@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[id: IDEntry]: ModdedSpeciesData} = {
 	shiftry: {
 		inherit: true,
 		abilities: {0: "Chlorophyll", 1: "Early Bird", H: "Pickpocket"},

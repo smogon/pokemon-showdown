@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[id: IDEntry]: ModdedAbilityData} = {
 	disguise: {
 		inherit: true,
 		onDamage(damage, target, source, effect) {

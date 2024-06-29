@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: {[id: IDEntry]: ModdedAbilityData} = {
 	unaware: {
 		inherit: true,
 		onAnyModifyBoost(boosts, pokemon) {

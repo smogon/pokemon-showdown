@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[id: IDEntry]: ModdedSpeciesData} = {
 	pikachu: {
 		inherit: true,
 		formeOrder: ["Pikachu"],

@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: {[id: IDEntry]: ModdedItemData} = {
 	buggem: {
 		inherit: true,
 		onSourceTryPrimaryHit(target, source, move) {

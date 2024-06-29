@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: {[id: IDEntry]: ModdedMoveData} = {
 	acupressure: {
 		inherit: true,
 		flags: {snatch: 1, metronome: 1},

@@ -3,7 +3,7 @@
  * Some moves have had major changes, such as Bite's typing.
  */
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: {[id: IDEntry]: ModdedMoveData} = {
 	acid: {
 		inherit: true,
 		secondary: {

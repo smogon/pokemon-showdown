@@ -1,6 +1,6 @@
 import type {Learnset} from "../../../sim/dex-species";
 
-export const Rulesets: {[k: string]: ModdedFormatData} = {
+export const Rulesets: {[id: IDEntry]: ModdedFormatData} = {
 	obtainablemoves: {
 		inherit: true,
 		banlist: [

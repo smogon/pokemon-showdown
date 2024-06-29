@@ -1,4 +1,4 @@
-export const Conditions: {[k: string]: ModdedConditionData} = {
+export const Conditions: {[id: IDEntry]: ModdedConditionData} = {
 	deltastream: {
 		inherit: true,
 		onEffectiveness(typeMod, target, type, move) {

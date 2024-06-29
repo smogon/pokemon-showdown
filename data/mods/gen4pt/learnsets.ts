@@ -1,4 +1,4 @@
-export const Learnsets: {[k: string]: ModdedLearnsetData} = {
+export const Learnsets: {[id: IDEntry]: ModdedLearnsetData} = {
 	bulbasaur: {
 		inherit: true,
 		learnset: {

@@ -1,4 +1,4 @@
-export const Conditions: {[k: string]: ModdedConditionData} = {
+export const Conditions: {[id: IDEntry]: ModdedConditionData} = {
 	slp: {
 		name: 'slp',
 		effectType: 'Status',

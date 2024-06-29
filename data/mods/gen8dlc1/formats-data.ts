@@ -1,4 +1,4 @@
-export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: {[id: IDEntry]: ModdedSpeciesFormatsData} = {
 	pikachuworld: {
 		isNonstandard: "Unobtainable",
 		tier: "Unreleased",

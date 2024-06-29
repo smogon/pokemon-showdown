@@ -1,5 +1,5 @@
 // Gen 2 Stadium fixes Dragon Fang and Dragon Scale having the wrong effects.
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: {[id: IDEntry]: ModdedItemData} = {
 	dragonfang: {
 		inherit: true,
 		onModifyDamage(damage, source, target, move) {

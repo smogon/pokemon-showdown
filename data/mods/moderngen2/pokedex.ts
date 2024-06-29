@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[id: IDEntry]: ModdedSpeciesData} = {
 	treecko: {
 		inherit: true,
 		gen: 2,

@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: {[id: IDEntry]: ModdedMoveData} = {
 	/******************************************************************
 	Perfect accuracy moves:
 	- base power increased to 90

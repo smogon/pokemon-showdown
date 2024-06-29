@@ -1,4 +1,4 @@
-export const Rulesets: {[k: string]: ModdedFormatData} = {
+export const Rulesets: {[id: IDEntry]: ModdedFormatData} = {
 	teampreview: {
 		inherit: true,
 		onBattleStart() {

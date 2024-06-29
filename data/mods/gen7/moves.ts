@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: {[id: IDEntry]: ModdedMoveData} = {
 	"10000000voltthunderbolt": {
 		inherit: true,
 		isNonstandard: null,

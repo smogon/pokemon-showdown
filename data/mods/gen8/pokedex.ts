@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: {[id: IDEntry]: ModdedSpeciesData} = {
 	growlithehisui: {
 		inherit: true,
 		abilities: {0: "Intimidate", 1: "Flash Fire", H: "Justified"},

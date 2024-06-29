@@ -1,4 +1,4 @@
-export const Conditions: {[k: IDEntry]: ConditionData} = {
+export const Conditions: {[id: IDEntry]: ConditionData} = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',

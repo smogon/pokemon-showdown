@@ -2,7 +2,7 @@
  * Gen 2 moves
  */
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: {[id: IDEntry]: ModdedMoveData} = {
 	aeroblast: {
 		inherit: true,
 		critRatio: 3,
