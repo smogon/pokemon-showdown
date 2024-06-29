@@ -3200,7 +3200,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psychic"]
+                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psychic", "signalbeam"]
             },
             {
                 "role": "Bulky Support",

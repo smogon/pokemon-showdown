@@ -812,9 +812,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return !counter.get('setup');
 		case 'Slush Rush':
 			return !teamDetails.hail;
-		case 'Snow Warning':
-			// Aurorus
-			return moves.has('hypervoice');
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
 		case 'Sturdy':
