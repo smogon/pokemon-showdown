@@ -5690,7 +5690,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Brave Bird", "Double-Edge", "Foul Play", "Parting Shot", "Quick Attack"],
-                "teraTypes": ["Dark", "Flying", "Normal"]
+                "teraTypes": ["Flying", "Normal"]
             }
         ]
     },
@@ -5710,7 +5710,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Brave Bird", "Double-Edge", "Foul Play", "Parting Shot", "Quick Attack"],
-                "teraTypes": ["Dark", "Flying", "Normal"]
+                "teraTypes": ["Flying", "Normal"]
             }
         ]
     },
@@ -6259,12 +6259,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Energy Ball", "Fiery Dance", "Fire Blast", "Sludge Wave", "U-turn"],
-                "teraTypes": ["Fire", "Grass"]
-            },
-            {
-                "role": "Fast Support",
-                "movepool": ["Energy Ball", "Fiery Dance", "Morning Sun", "Sludge Wave", "Toxic Spikes", "U-turn"],
+                "movepool": ["Energy Ball", "Fiery Dance", "Fire Blast", "Morning Sun", "Sludge Wave", "Toxic Spikes", "U-turn"],
                 "teraTypes": ["Fire", "Grass"]
             }
         ]

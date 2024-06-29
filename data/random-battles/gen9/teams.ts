@@ -584,8 +584,6 @@ export class RandomTeams {
 			['nastyplot', ['rockslide', 'knockoff']],
 			// Persian
 			['switcheroo', 'fakeout'],
-			// Beartic
-			['snowscape', 'swordsdance'],
 			// Amoonguss, though this can work well as a general rule later
 			['toxic', 'clearsmog'],
 			// Chansey and Blissey
