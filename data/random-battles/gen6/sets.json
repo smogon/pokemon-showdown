@@ -2526,6 +2526,10 @@
         "level": 87,
         "sets": [
             {
+                "role": "Staller",
+                "movepool": ["icebeam", "protect", "thunderbolt", "toxic"]
+            },
+            {
                 "role": "Bulky Attacker",
                 "movepool": ["focusblast", "icebeam", "rest", "sleeptalk", "thunderbolt", "thunderwave"],
                 "preferredTypes": ["Electric"]
