@@ -493,7 +493,6 @@ export const Aliases: {[alias: string]: string} = {
 	boulder: "Iron Boulder",
 	crown: "Iron Crown",
 	icrown: "Iron Crown",
-	
 
 	// cosmetic formes
 	alcremierubycream: "Alcremie",
