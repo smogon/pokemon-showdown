@@ -1,12 +1,12 @@
 export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
 	venusaur: {
-		tier: "OU"
+		tier: "OU",
 	},
 	dugtrio: {
 		tier: "OU",
 	},
 	cloyster: {
-		tier: "OU"
+		tier: "OU",
 	},
 	chansey: {
 		tier: "OU",
@@ -30,7 +30,7 @@ export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
 		tier: "OU",
 	},
 	deoxysdefense: {
-		tier: "UUBL"
+		tier: "UUBL",
 	},
 	infernape: {
 		tier: "OU",
@@ -48,10 +48,10 @@ export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
 		tier: "UUBL",
 	},
 	garchomp: {
-		tier: "Uber"
+		tier: "Uber",
 	},
 	excadrill: {
-		tier: "Uber"
+		tier: "Uber",
 	},
 	scrafty: {
 		tier: "OU",
@@ -83,7 +83,7 @@ export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
 		tier: "Illegal",
 	},
 	landorus: {
-		tier: "OU"
+		tier: "OU",
 	},
 	landorustherian: {
 		isNonstandard: "Future",
