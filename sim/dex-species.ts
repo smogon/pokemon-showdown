@@ -485,9 +485,10 @@ export class DexSpecies {
 			// Inherit any statuses from the base species (Arceus, Silvally).
 			const baseSpeciesStatuses = this.dex.data.Conditions[toID(species.baseSpecies)];
 			if (baseSpeciesStatuses !== undefined) {
-				let key: keyof EffectData;
-				for (key in baseSpeciesStatuses) {
-					if (!(key in species)) (species as any)[key] = baseSpeciesStatuses[key];
+				for (const key in baseSpeciesStatuses) {
+					if (!(key in species)) {
+						(species as any)[key] = (baseSpeciesStatuses as any)[key];
+					}
 				}
 			}
 			if (!species.tier && !species.doublesTier && !species.natDexTier && species.baseSpecies !== species.name) {

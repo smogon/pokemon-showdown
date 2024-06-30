@@ -1,4 +1,4 @@
-export const Natures: {[id: IDEntry]: NatureData} = {
+export const Natures: import('../sim/dex-data').NatureDataTable = {
 	adamant: {
 		name: "Adamant",
 		plus: 'atk',

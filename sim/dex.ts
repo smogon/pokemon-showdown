@@ -79,13 +79,13 @@ interface DexTableData {
 	Items: DexTable<ItemData>;
 	Learnsets: DexTable<import('./dex-species').LearnsetData>;
 	Moves: DexTable<MoveData>;
-	Natures: DexTable<NatureData>;
+	Natures: DexTable<import('./dex-data').NatureData>;
 	Pokedex: DexTable<import('./dex-species').SpeciesData>;
 	FormatsData: DexTable<import('./dex-species').SpeciesFormatsData>;
 	PokemonGoData: DexTable<import('./dex-species').PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
-	Conditions: DexTable<EffectData>;
-	TypeChart: DexTable<TypeData>;
+	Conditions: DexTable<import('./dex-conditions').ConditionData>;
+	TypeChart: DexTable<import('./dex-data').TypeData>;
 }
 interface TextTableData {
 	Abilities: DexTable<AbilityText>;

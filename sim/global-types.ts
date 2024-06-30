@@ -146,14 +146,6 @@ type FormatList = import('./dex-formats').FormatList;
 type ModdedFormatData = import('./dex-formats').ModdedFormatData;
 type Format = import('./dex-formats').Format;
 
-interface NatureData {
-	name: string;
-	plus?: StatIDExceptHP;
-	minus?: StatIDExceptHP;
-}
-
-type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
-
 type Nature = import('./dex-data').Nature;
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'freeforall';
@@ -378,15 +370,6 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
 }
-
-interface TypeData {
-	damageTaken: {[attackingTypeNameOrEffectid: string]: number};
-	HPdvs?: SparseStatsTable;
-	HPivs?: SparseStatsTable;
-	isNonstandard?: Nonstandard | null;
-}
-
-type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & {inherit: true};
 
 type TypeInfo = import('./dex-data').TypeInfo;
 
