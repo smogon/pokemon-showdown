@@ -2484,7 +2484,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] CAP Random Battle",
-		desc: "[Gen 9] Random Battle with CAP Pok&eacute;mon included.",
+		desc: "[Gen 9] Random Battle with CAP Pok&eacute;mon included. Every team will generate with at least one CAP Pok&eacute;mon.",
 		mod: 'gen9',
 		team: 'random',
 
