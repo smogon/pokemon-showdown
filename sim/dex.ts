@@ -75,10 +75,10 @@ export interface AliasesTable {[id: IDEntry]: string}
 interface DexTableData {
 	Abilities: DexTable<import('./dex-abilities').AbilityData>;
 	Aliases: DexTable<string>;
-	Rulesets: DexTable<FormatData>;
-	Items: DexTable<ItemData>;
+	Rulesets: DexTable<import('./dex-formats').FormatData>;
+	Items: DexTable<import('./dex-items').ItemData>;
 	Learnsets: DexTable<import('./dex-species').LearnsetData>;
-	Moves: DexTable<MoveData>;
+	Moves: DexTable<import('./dex-moves').MoveData>;
 	Natures: DexTable<import('./dex-data').NatureData>;
 	Pokedex: DexTable<import('./dex-species').SpeciesData>;
 	FormatsData: DexTable<import('./dex-species').SpeciesFormatsData>;

@@ -1,4 +1,4 @@
-export const Moves: {[id: IDEntry]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	absorb: {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, metronome: 1},

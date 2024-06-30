@@ -286,6 +286,9 @@ export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
 	gen?: number,
 };
 
+export interface MoveDataTable {[abilityid: IDEntry]: MoveData}
+export interface ModdedMoveDataTable {[abilityid: IDEntry]: ModdedMoveData}
+
 export interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move';
 }
@@ -305,8 +308,7 @@ interface MoveHitData {
 }
 
 type MutableMove = BasicEffect & MoveData;
-type RuinableMove = {[k in `ruined${'Atk' | 'Def' | 'SpA' | 'SpD'}`]?: Pokemon;};
-export interface ActiveMove extends MutableMove, RuinableMove {
+export interface ActiveMove extends MutableMove {
 	readonly name: string;
 	readonly effectType: 'Move';
 	readonly id: ID;
@@ -339,6 +341,10 @@ export interface ActiveMove extends MutableMove, RuinableMove {
 	typeChangerBoosted?: Effect;
 	willChangeForme?: boolean;
 	infiltrates?: boolean;
+	ruinedAtk?: Pokemon;
+	ruinedDef?: Pokemon;
+	ruinedSpA?: Pokemon;
+	ruinedSpD?: Pokemon;
 
 	/**
 	 * Has this move been boosted by a Z-crystal or used by a Dynamax Pokemon? Usually the same as

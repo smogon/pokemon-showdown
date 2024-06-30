@@ -3,7 +3,7 @@
  * Some moves have had major changes, such as Bite's typing.
  */
 
-export const Moves: {[id: IDEntry]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	acid: {
 		inherit: true,
 		secondary: {

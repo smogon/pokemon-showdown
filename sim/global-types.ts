@@ -127,14 +127,10 @@ type ConditionData = import('./dex-conditions').ConditionData;
 type ModdedConditionData = import('./dex-conditions').ModdedConditionData;
 type Condition = import('./dex-conditions').Condition;
 
-type MoveData = import('./dex-moves').MoveData;
-type ModdedMoveData = import('./dex-moves').ModdedMoveData;
 type ActiveMove = import('./dex-moves').ActiveMove;
 type Move = import('./dex-moves').Move;
 type MoveTarget = import('./dex-moves').MoveTarget;
 
-type ItemData = import('./dex-items').ItemData;
-type ModdedItemData = import('./dex-items').ModdedItemData;
 type Item = import('./dex-items').Item;
 
 type Ability = import('./dex-abilities').Ability;

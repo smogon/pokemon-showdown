@@ -2,7 +2,7 @@
  * Gen 2 moves
  */
 
-export const Moves: {[id: IDEntry]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	aeroblast: {
 		inherit: true,
 		critRatio: 3,

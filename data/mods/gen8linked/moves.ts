@@ -1,4 +1,4 @@
-export const Moves: {[id: IDEntry]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon, target) {

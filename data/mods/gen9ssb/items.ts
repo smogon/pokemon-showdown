@@ -1,4 +1,4 @@
-export const Items: {[id: IDEntry]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	// Archas
 	lilligantiumz: {
 		name: "Lilligantium Z",

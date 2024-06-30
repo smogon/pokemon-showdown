@@ -17,6 +17,9 @@ export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
 };
 
+export interface ItemDataTable {[abilityid: IDEntry]: ItemData}
+export interface ModdedItemDataTable {[abilityid: IDEntry]: ModdedItemData}
+
 export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Item';
 

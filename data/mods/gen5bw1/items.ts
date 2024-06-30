@@ -1,4 +1,4 @@
-export const Items: {[id: IDEntry]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	apicotberry: {
 		inherit: true,
 		isNonstandard: "Unobtainable",

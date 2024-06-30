@@ -1,4 +1,4 @@
-export const Moves: {[id: IDEntry]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	"10000000voltthunderbolt": {
 		inherit: true,
 		isNonstandard: null,
