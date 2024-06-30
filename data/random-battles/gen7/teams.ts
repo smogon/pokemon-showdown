@@ -310,7 +310,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (movePool.includes('spikes')) this.fastPop(movePool, movePool.indexOf('spikes'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
-		if (teamDetails.cleric) {
+		if (teamDetails.statusCure) {
 			if (movePool.includes('aromatherapy')) this.fastPop(movePool, movePool.indexOf('aromatherapy'));
 			if (movePool.includes('healbell')) this.fastPop(movePool, movePool.indexOf('healbell'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
@@ -1494,7 +1494,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails.rain = 1;
 				if (set.ability === 'Sand Stream') teamDetails.sand = 1;
 				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !item.onPrimal) teamDetails.sun = 1;
-				if (set.moves.includes('aromatherapy') || set.moves.includes('healbell')) teamDetails.cleric = 1;
+				if (set.moves.includes('aromatherapy') || set.moves.includes('healbell')) teamDetails.statusCure = 1;
 				if (set.moves.includes('spikes')) teamDetails.spikes = (teamDetails.spikes || 0) + 1;
 				if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
 				if (set.moves.includes('stickyweb')) teamDetails.stickyWeb = 1;
