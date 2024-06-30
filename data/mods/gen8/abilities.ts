@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const Abilities: {[id: IDEntry]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	noability: {
 		inherit: true,
 		rating: 0.1,

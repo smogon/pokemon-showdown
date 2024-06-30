@@ -25,6 +25,8 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Poke
 }
 
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
+export type AbilityDataTable = {[abilityid: IDEntry]: AbilityData}
+export type ModdedAbilityDataTable = {[abilityid: IDEntry]: ModdedAbilityData}
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Ability';

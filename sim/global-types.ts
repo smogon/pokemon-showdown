@@ -137,8 +137,6 @@ type ItemData = import('./dex-items').ItemData;
 type ModdedItemData = import('./dex-items').ModdedItemData;
 type Item = import('./dex-items').Item;
 
-type AbilityData = import('./dex-abilities').AbilityData;
-type ModdedAbilityData = import('./dex-abilities').ModdedAbilityData;
 type Ability = import('./dex-abilities').Ability;
 
 type SpeciesData = import('./dex-species').SpeciesData;
