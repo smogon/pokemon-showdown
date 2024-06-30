@@ -5921,7 +5921,7 @@
         "level": 84,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["closecombat", "earthquake", "heavyslam", "rockslide", "stealthrock", "toxic"],
                 "preferredTypes": ["Rock"]
             }
