@@ -373,11 +373,11 @@ interface PlayerOptions {
 	seed?: PRNGSeed;
 }
 
-interface TextObject {
+interface BasicTextData {
 	desc?: string;
 	shortDesc?: string;
 }
-interface Plines {
+interface ConditionTextData extends BasicTextData {
 	activate?: string;
 	addItem?: string;
 	block?: string;
@@ -392,19 +392,7 @@ interface Plines {
 	transform?: string;
 }
 
-interface TextFile extends TextObject {
-	name: string;
-	gen1?: ModdedTextObject;
-	gen2?: ModdedTextObject;
-	gen3?: ModdedTextObject;
-	gen4?: ModdedTextObject;
-	gen5?: ModdedTextObject;
-	gen6?: ModdedTextObject;
-	gen7?: ModdedTextObject;
-	gen8?: ModdedTextObject;
-}
-
-interface MovePlines extends Plines {
+interface MoveTextData extends ConditionTextData {
 	alreadyStarted?: string;
 	blockSelf?: string;
 	clearBoost?: string;
@@ -424,24 +412,28 @@ interface MovePlines extends Plines {
 	upkeep?: string;
 }
 
-interface AbilityText extends TextFile, Plines {
-	activateFromItem?: string;
-	activateNoTarget?: string;
-	copyBoost?: string;
-	transformEnd?: string;
-}
+type TextFile<T> = T & {
+	name: string,
+	gen1?: T,
+	gen2?: T,
+	gen3?: T,
+	gen4?: T,
+	gen5?: T,
+	gen6?: T,
+	gen7?: T,
+	gen8?: T,
+};
 
-/* eslint-disable @typescript-eslint/no-empty-interface */
-interface MoveText extends TextFile, MovePlines {}
-
-interface ItemText extends TextFile, Plines {}
-
-interface PokedexText extends TextFile {}
-
-interface DefaultText extends AnyObject {}
-
-interface ModdedTextObject extends TextObject, Plines {}
-/* eslint-enable @typescript-eslint/no-empty-interface */
+type AbilityText = TextFile<ConditionTextData & {
+	activateFromItem?: string,
+	activateNoTarget?: string,
+	copyBoost?: string,
+	transformEnd?: string,
+}>;
+type MoveText = TextFile<MoveTextData>;
+type ItemText = TextFile<ConditionTextData>;
+type PokedexText = TextFile<BasicTextData>;
+type DefaultText = AnyObject;
 
 namespace RandomTeamsTypes {
 	export interface TeamDetails {
