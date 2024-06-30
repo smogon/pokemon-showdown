@@ -40,6 +40,22 @@ export interface LearnsetData {
 	encounters?: EventInfo[];
 	exists?: boolean;
 }
+
+export type ModdedLearnsetData = LearnsetData & {inherit?: true};
+
+export interface PokemonGoData {
+	encounters?: string[];
+	LGPERestrictiveMoves?: {[moveid: string]: number | null};
+}
+
+export interface SpeciesDataTable {[speciesid: IDEntry]: SpeciesData}
+export interface ModdedSpeciesDataTable {[speciesid: IDEntry]: ModdedSpeciesData}
+export interface SpeciesFormatsDataTable {[speciesid: IDEntry]: SpeciesFormatsData}
+export interface ModdedSpeciesFormatsDataTable {[speciesid: IDEntry]: ModdedSpeciesFormatsData}
+export interface LearnsetDataTable {[speciesid: IDEntry]: LearnsetData}
+export interface ModdedLearnsetDataTable {[speciesid: IDEntry]: ModdedLearnsetData}
+export interface PokemonGoDataTable {[speciesid: IDEntry]: PokemonGoData}
+
 /**
  * Describes a possible way to get a move onto a pokemon.
  *
@@ -67,13 +83,6 @@ export type MoveSource = `${
 }${
 	'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C'
 }${string}`;
-
-export type ModdedLearnsetData = LearnsetData & {inherit?: true};
-
-export interface PokemonGoData {
-	encounters?: string[];
-	LGPERestrictiveMoves?: {[moveid: string]: number | null};
-}
 
 export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
 	declare readonly effectType: 'Pokemon';
@@ -434,7 +443,7 @@ export class DexSpecies {
 
 		if (!this.dex.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
-			const formeNames: {[k: string]: string[]} = {
+			const formeNames: {[k: IDEntry]: IDEntry[]} = {
 				alola: ['a', 'alola', 'alolan'],
 				galar: ['g', 'galar', 'galarian'],
 				hisui: ['h', 'hisui', 'hisuian'],
@@ -444,7 +453,7 @@ export class DexSpecies {
 			};
 			for (const forme in formeNames) {
 				let pokeName = '';
-				for (const i of formeNames[forme]) {
+				for (const i of formeNames[forme as ID]) {
 					if (id.startsWith(i)) {
 						pokeName = id.slice(i.length);
 					} else if (id.endsWith(i)) {

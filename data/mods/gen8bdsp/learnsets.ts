@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-export const Learnsets: {[id: IDEntry]: ModdedLearnsetData} = {
+export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTable = {
 	bulbasaur: {
 		learnset: {
 			amnesia: ["8E"],

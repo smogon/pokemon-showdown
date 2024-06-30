@@ -26,7 +26,7 @@
  * - Shadow Pokemon: most can also be obtained from the wild, and those that can't are from defeating Giovanni, which
  *   is handled as as its own encounter
  */
-export const PokemonGoData: {[source: IDEntry]: PokemonGoData} = {
+export const PokemonGoData: import('../sim/dex-species').PokemonGoDataTable = {
 	bulbasaur: {encounters: ['wild']},
 	ivysaur: {encounters: ['wild']},
 	venusaur: {encounters: ['wild']},

@@ -1,4 +1,4 @@
-export const Pokedex: {[speciesid: IDEntry]: SpeciesData} = {
+export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	bulbasaur: {
 		num: 1,
 		name: "Bulbasaur",

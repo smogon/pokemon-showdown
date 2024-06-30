@@ -2065,7 +2065,7 @@ export class TeamValidator {
 			if (canBottleCap) {
 				// IVs can be overridden but Hidden Power type can't
 				if (Object.keys(eventData.ivs).length >= 6) {
-					const requiredHpType = dex.getHiddenPower(eventData.ivs).type;
+					const requiredHpType = dex.getHiddenPower(eventData.ivs as StatsTable).type;
 					if (set.hpType && set.hpType !== requiredHpType) {
 						if (fastReturn) return true;
 						problems.push(`${name} can only have Hidden Power ${requiredHpType}${etc}.`);

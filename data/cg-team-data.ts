@@ -11,7 +11,7 @@ export const ABILITY_MOVE_BONUSES: {[abilityID: IDEntry]: {[moveID: IDEntry]: nu
 	contrary: {terablast: 2},
 };
 // Bonuses to move ratings by move type
-export const ABILITY_MOVE_TYPE_BONUSES: {[abilityID: IDEntry]: {[typeID: string]: number}} = {
+export const ABILITY_MOVE_TYPE_BONUSES: {[abilityID: IDEntry]: {[typeName: string]: number}} = {
 	darkaura: {Dark: 1.33},
 	dragonsmaw: {Dragon: 1.5},
 	fairyaura: {Fairy: 1.33},

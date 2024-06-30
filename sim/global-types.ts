@@ -20,7 +20,7 @@ type PokemonSources = import('./team-validator').PokemonSources;
 
 /** An ID must be lowercase alphanumeric. */
 type ID = '' | Lowercase<string> & {__isID: true};
-/** Like ID, but doesn't require you to type `as ID`. For data files */
+/** Like ID, but doesn't require you to type `as ID` to define it. For data files and object keys. */
 type IDEntry = Lowercase<string>;
 type PokemonSlot = '' | IDEntry & {__isSlot: true};
 interface AnyObject {[k: string]: any}
@@ -139,14 +139,7 @@ type Item = import('./dex-items').Item;
 
 type Ability = import('./dex-abilities').Ability;
 
-type SpeciesData = import('./dex-species').SpeciesData;
-type ModdedSpeciesData = import('./dex-species').ModdedSpeciesData;
-type SpeciesFormatsData = import('./dex-species').SpeciesFormatsData;
-type ModdedSpeciesFormatsData = import('./dex-species').ModdedSpeciesFormatsData;
-type LearnsetData = import('./dex-species').LearnsetData;
-type ModdedLearnsetData = import('./dex-species').ModdedLearnsetData;
 type Species = import('./dex-species').Species;
-type PokemonGoData = import('./dex-species').PokemonGoData;
 
 type FormatData = import('./dex-formats').FormatData;
 type FormatList = import('./dex-formats').FormatList;

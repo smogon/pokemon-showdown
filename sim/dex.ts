@@ -68,21 +68,21 @@ const DATA_FILES = {
 	TypeChart: 'typechart',
 };
 
-interface DexTable<T> {
-	[key: string]: T;
-}
+/** Unfortunately we do for..in too much to want to deal with the casts */
+export interface DexTable<T> {[id: string]: T}
+export interface AliasesTable {[id: IDEntry]: string}
 
 interface DexTableData {
-	Abilities: DexTable<AbilityData>;
-	Aliases: {[id: string]: string};
+	Abilities: DexTable<import('./dex-abilities').AbilityData>;
+	Aliases: DexTable<string>;
 	Rulesets: DexTable<FormatData>;
-	FormatsData: DexTable<import('./dex-species').ModdedSpeciesFormatsData>;
 	Items: DexTable<ItemData>;
-	Learnsets: DexTable<LearnsetData>;
+	Learnsets: DexTable<import('./dex-species').LearnsetData>;
 	Moves: DexTable<MoveData>;
 	Natures: DexTable<NatureData>;
-	Pokedex: DexTable<SpeciesData>;
-	PokemonGoData: DexTable<PokemonGoData>;
+	Pokedex: DexTable<import('./dex-species').SpeciesData>;
+	FormatsData: DexTable<import('./dex-species').SpeciesFormatsData>;
+	PokemonGoData: DexTable<import('./dex-species').PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
 	Conditions: DexTable<EffectData>;
 	TypeChart: DexTable<TypeData>;
@@ -317,7 +317,7 @@ export class ModdedDex {
 		return moveCopy;
 	}
 
-	getHiddenPower(ivs: AnyObject) {
+	getHiddenPower(ivs: StatsTable) {
 		const hpTypes = [
 			'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel',
 			'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark',
@@ -342,8 +342,8 @@ export class ModdedDex {
 			let hpPowerX = 0;
 			let i = 1;
 			for (const s in stats) {
-				hpTypeX += i * (ivs[s] % 2);
-				hpPowerX += i * (tr(ivs[s] / 2) % 2);
+				hpTypeX += i * (ivs[s as StatID] % 2);
+				hpPowerX += i * (tr(ivs[s as StatID] / 2) % 2);
 				i *= 2;
 			}
 			return {
@@ -378,7 +378,7 @@ export class ModdedDex {
 		} as const;
 		let searchResults: AnyObject[] | null = [];
 		for (const table of searchIn) {
-			const res: AnyObject = this[searchObjects[table]].get(target);
+			const res = this[searchObjects[table]].get(target);
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					isInexact,
@@ -400,14 +400,14 @@ export class ModdedDex {
 			maxLd = 2;
 		}
 		searchResults = null;
-		for (const table of [...searchIn, 'Aliases'] as DataType[]) {
-			const searchObj = this.data[table];
+		for (const table of [...searchIn, 'Aliases'] as const) {
+			const searchObj = this.data[table] as DexTable<any>;
 			if (!searchObj) continue;
 
 			for (const j in searchObj) {
 				const ld = Utils.levenshtein(cmpTarget, j, maxLd);
 				if (ld <= maxLd) {
-					const word = (searchObj[j] as DexTable<any>).name || (searchObj[j] as DexTable<any>).species || j;
+					const word = searchObj[j].name || j;
 					const results = this.dataSearch(word, searchIn, word);
 					if (results) {
 						searchResults = results;

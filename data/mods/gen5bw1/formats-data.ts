@@ -1,4 +1,4 @@
-export const FormatsData: {[id: IDEntry]: ModdedSpeciesFormatsData} = {
+export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 	venusaur: {
 		tier: "OU",
 	},

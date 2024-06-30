@@ -1,4 +1,4 @@
-export const Pokedex: {[id: IDEntry]: ModdedSpeciesData} = {
+export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	pikachuoriginal: {
 		inherit: true,
 		abilities: {0: "Static"},
