@@ -439,7 +439,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		effect?: IDEntry,
 		boost?: SparseBoostsTable,
 	};
-	/** Is this move a Max move? */
+	/** Is this move a Max move? string = Gigantamax species name */
 	readonly isMax: boolean | string;
 	/** Max/G-Max move fields */
 	declare readonly maxMove?: {

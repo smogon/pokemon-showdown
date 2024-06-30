@@ -8,6 +8,7 @@
  */
 
 import {Dex, toID} from './dex';
+import type {MoveSource} from './dex-species';
 import {Utils} from '../lib';
 import {Tags} from '../data/tags';
 import {Teams} from './teams';
@@ -2536,7 +2537,7 @@ export class TeamValidator {
 						// falls through to LMT check below
 					} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
 						// Pomeg Glitch
-						learned = learnedGen + 'Epomeg';
+						learned = learnedGen + 'Epomeg' as MoveSource;
 					} else if (species.gender !== 'N' &&
 						learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
 						// available as egg move
@@ -2545,7 +2546,7 @@ export class TeamValidator {
 							cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
 							continue;
 						}
-						learned = learnedGen + 'Eany';
+						learned = learnedGen + 'Eany' as MoveSource;
 						// falls through to E check below
 					} else {
 						// this move is unavailable, skip it
@@ -2595,7 +2596,7 @@ export class TeamValidator {
 					} else if (learnedGen < 6 || (species.mother && !this.motherCanLearn(toID(species.mother), moveid))) {
 						limitedEggMove = move.id;
 					}
-					learned = learnedGen + 'E' + (species.prevo ? species.id : '');
+					learned = learnedGen + 'E' + (species.prevo ? species.id : '') as MoveSource;
 					if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 						// can tradeback
 						moveSources.add('1ET' + learned.slice(2), limitedEggMove);

@@ -18,6 +18,18 @@ type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 export type ComplexBan = [string, string, number, string[]];
 export type ComplexTeamBan = ComplexBan;
 
+export interface GameTimerSettings {
+	dcTimer: boolean;
+	dcTimerBank: boolean;
+	starting: number;
+	grace: number;
+	addPerTurn: number;
+	maxPerTurn: number;
+	maxFirstTurn: number;
+	timeoutAutoChoose: boolean;
+	accelerate: boolean;
+}
+
 /**
  * A RuleTable keeps track of the rules that a format has. The key can be:
  * - '[ruleid]' the ID of a rule in effect

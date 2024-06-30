@@ -38,35 +38,6 @@ type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom
 
 type PokemonSet = import('./teams').PokemonSet;
 
-/**
- * Describes a possible way to get a move onto a pokemon.
- *
- * First character is a generation number, 1-9.
- * Second character is a source ID, one of:
- *
- * - M = TM/HM
- * - T = tutor
- * - L = start or level-up, 3rd char+ is the level
- * - R = restricted (special moves like Rotom moves)
- * - E = egg
- * - D = Dream World, only 5D is valid
- * - S = event, 3rd char+ is the index in .eventData
- * - V = Virtual Console or Let's Go transfer, only 7V/8V is valid
- * - C = NOT A REAL SOURCE, see note, only 3C/4C is valid
- *
- * C marks certain moves learned by a pokemon's prevo. It's used to
- * work around the chainbreeding checker's shortcuts for performance;
- * it lets the pokemon be a valid father for teaching the move, but
- * is otherwise ignored by the learnset checker (which will actually
- * check prevos for compatibility).
- */
-type MoveSource = string;
-// type MoveSource = `${
-// 	1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
-// }${
-// 	'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C'
-// }${string}`;
-
 namespace TierTypes {
 	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
 	"(NU)" | "PUBL" | "PU" | "(PU)" | "ZUBL" | "ZU" | "NFE" | "LC";
@@ -196,18 +167,6 @@ type Nature = import('./dex-data').Nature;
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'freeforall';
 type SideID = 'p1' | 'p2' | 'p3' | 'p4';
-
-interface GameTimerSettings {
-	dcTimer: boolean;
-	dcTimerBank: boolean;
-	starting: number;
-	grace: number;
-	addPerTurn: number;
-	maxPerTurn: number;
-	maxFirstTurn: number;
-	timeoutAutoChoose: boolean;
-	accelerate: boolean;
-}
 
 type SpreadMoveTargets = (Pokemon | false | null)[];
 type SpreadMoveDamage = (number | boolean | undefined)[];
