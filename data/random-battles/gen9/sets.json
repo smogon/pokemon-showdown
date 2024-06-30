@@ -825,7 +825,7 @@
         ]
     },
     "articunogalar": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -970,7 +970,7 @@
         ]
     },
     "feraligatr": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -1010,7 +1010,7 @@
         ]
     },
     "ariados": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Fast Support",
@@ -1080,7 +1080,7 @@
         ]
     },
     "sudowoodo": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2080,7 +2080,7 @@
         ]
     },
     "regirock": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2850,7 +2850,7 @@
         ]
     },
     "rotomheat": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3195,7 +3195,7 @@
         ]
     },
     "arceusfighting": {
-        "level": 69,
+        "level": 70,
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -3240,7 +3240,7 @@
         ]
     },
     "arceusghost": {
-        "level": 70,
+        "level": 69,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3300,7 +3300,7 @@
         ]
     },
     "arceuspoison": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3365,7 +3365,7 @@
         ]
     },
     "serperior": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -4150,7 +4150,7 @@
         ]
     },
     "vivillon": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Bulky Setup",
@@ -4460,7 +4460,7 @@
         ]
     },
     "incineroar": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -5730,7 +5730,7 @@
         ]
     },
     "armarouge": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -5970,7 +5970,7 @@
         ]
     },
     "glimmora": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Fast Support",
