@@ -11,6 +11,8 @@ export interface FormatData extends Partial<Format>, EventMethods {
 
 export type FormatList = (FormatData | {section: string, column?: number})[];
 export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
+export interface FormatDataTable {[id: IDEntry]: FormatData}
+export interface ModdedFormatDataTable {[id: IDEntry]: ModdedFormatData}
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
