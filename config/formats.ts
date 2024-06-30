@@ -2603,7 +2603,7 @@ export const Formats: FormatList = [
 		},
 
 	},
-		{
+	{
 		name: "[Gen 9] BSS Factory",
 		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
 		threads: [
