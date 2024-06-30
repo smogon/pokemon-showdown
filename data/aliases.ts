@@ -409,6 +409,7 @@ export const Aliases: {[alias: string]: string} = {
 	enamorusi: "Enamorus",
 	enamorusincarnate: "Enamorus",
 	enamorusincarnation: "Enamorus",
+	tealpon: "Ogerpon",
 	ogerpont: "Ogerpon",
 	ogerponteal: "Ogerpon",
 	ogerpontealmask: "Ogerpon",
