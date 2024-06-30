@@ -153,7 +153,7 @@ export interface NatureData {
 
 export type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
 
-export interface NatureDataTable {[abilityid: IDEntry]: NatureData}
+export interface NatureDataTable {[natureid: IDEntry]: NatureData}
 
 
 export class DexNatures {

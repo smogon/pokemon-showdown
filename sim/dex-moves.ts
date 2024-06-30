@@ -1,4 +1,5 @@
 import {Utils} from '../lib';
+import type {ConditionData} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
 /**
@@ -286,8 +287,8 @@ export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
 	gen?: number,
 };
 
-export interface MoveDataTable {[abilityid: IDEntry]: MoveData}
-export interface ModdedMoveDataTable {[abilityid: IDEntry]: ModdedMoveData}
+export interface MoveDataTable {[moveid: IDEntry]: MoveData}
+export interface ModdedMoveDataTable {[moveid: IDEntry]: ModdedMoveData}
 
 export interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move';

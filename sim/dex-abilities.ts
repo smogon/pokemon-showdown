@@ -1,4 +1,4 @@
-import {PokemonEventMethods} from './dex-conditions';
+import type {PokemonEventMethods, ConditionData} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
 interface AbilityEventMethods {

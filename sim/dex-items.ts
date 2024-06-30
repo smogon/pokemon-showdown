@@ -1,4 +1,4 @@
-import {PokemonEventMethods} from './dex-conditions';
+import type {PokemonEventMethods, ConditionData} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
 interface FlingData {
@@ -17,8 +17,8 @@ export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
 };
 
-export interface ItemDataTable {[abilityid: IDEntry]: ItemData}
-export interface ModdedItemDataTable {[abilityid: IDEntry]: ModdedItemData}
+export interface ItemDataTable {[itemid: IDEntry]: ItemData}
+export interface ModdedItemDataTable {[itemid: IDEntry]: ModdedItemData}
 
 export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Item';

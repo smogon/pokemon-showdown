@@ -1,4 +1,4 @@
-export const Conditions: {[id: IDEntry]: ModdedConditionData} = {
+export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	choicelock: {
 		inherit: true,
 		onBeforeMove(pokemon, target, move) {
