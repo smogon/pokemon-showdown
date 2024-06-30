@@ -1756,8 +1756,13 @@
         "level": 95,
         "sets": [
             {
+                "role": "Bulky Setup",
+                "movepool": ["firefang", "ironhead", "suckerpunch", "swordsdance", "thunderpunch"],
+                "preferredTypes": ["Fire"]
+            },
+            {
                 "role": "Bulky Attacker",
-                "movepool": ["firefang", "ironhead", "stealthrock", "suckerpunch", "swordsdance", "thunderpunch"],
+                "movepool": ["fireblast", "ironhead", "stealthrock", "suckerpunch", "thunderpunch"],
                 "preferredTypes": ["Fire"]
             }
         ]
