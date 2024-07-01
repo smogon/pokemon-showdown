@@ -1,7 +1,6 @@
 // Note: These are the rules that formats use
 
 import type {Learnset} from "../sim/dex-species";
-import {Pokemon} from "../sim/pokemon";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: {[k: string]: FormatData} = {
@@ -2069,47 +2068,31 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 		onFaint(target, source, effect) {
-			if (!target.m.numSwaps) {
-				target.m.numSwaps = 0;
-			}
+			target.m.numSwaps ||= 0;
 			target.m.numSwaps++;
-			if (effect && effect.effectType === 'Move' && source.side.pokemon.length < 24 &&
-				source.side !== target.side && target.m.numSwaps < 4) {
-				const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
-				// Just in case(tm) and for Shedinja
-				if (hpCost === target.baseMaxhp) {
-					target.m.outofplay = true;
-					return;
-				}
-				source.side.pokemonLeft++;
-				source.side.pokemon.length++;
-
-				// A new Pokemon is created and stuff gets aside akin to a deep clone.
-				// This is because deepClone crashes when side is called recursively.
-				// Until a refactor is made to prevent it, this is the best option to prevent crashes.
-				const newPoke = new Pokemon(target.set, source.side);
-				const newPos = source.side.pokemon.length - 1;
-
-				const doNotCarryOver = [
-					'fullname', 'side', 'fainted', 'status', 'hp', 'illusion',
-					'transformed', 'position', 'isActive', 'faintQueued',
-					'subFainted', 'getHealth', 'getDetails', 'moveSlots', 'ability',
-				];
-				for (const [key, value] of Object.entries(target)) {
-					if (doNotCarryOver.includes(key)) continue;
-					// @ts-ignore
-					newPoke[key] = value;
-				}
-				newPoke.maxhp = newPoke.baseMaxhp; // for dynamax
-				newPoke.hp = newPoke.baseMaxhp - hpCost;
-				newPoke.clearVolatile();
-				newPoke.position = newPos;
-				source.side.pokemon[newPos] = newPoke;
-				this.add('poke', source.side.pokemon[newPos].side.id, source.side.pokemon[newPos].details, '');
-				this.add('-message', `${target.name} was captured by ${newPoke.side.name}!`);
-			} else {
+			if (effect?.effectType !== 'Move' || source.side.pokemon.length >= 24 ||
+				source.side === target.side || target.m.numSwaps >= 4) {
 				target.m.outofplay = true;
+				return;
 			}
+
+			const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
+			// Just in case(tm) and for Shedinja
+			if (hpCost >= target.baseMaxhp) {
+				target.m.outofplay = true;
+				return;
+			}
+
+			const newPoke = source.side.addPokemon({...target.set, item: target.item})!;
+
+			// copy PP over
+			(newPoke as any).baseMoveSlots = target.baseMoveSlots;
+
+			newPoke.hp = this.clampIntRange(newPoke.maxhp - hpCost, 1);
+			newPoke.clearVolatile();
+
+			this.add('poke', newPoke.side.id, newPoke.details, '');
+			this.add('-message', `${target.name} was captured by ${newPoke.side.name}!`);
 		},
 	},
 	chimera1v1rule: {

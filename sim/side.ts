@@ -117,10 +117,9 @@ export class Side {
 
 		this.team = team;
 		this.pokemon = [];
-		for (let i = 0; i < this.team.length && i < 24; i++) {
+		for (const set of this.team) {
 			// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
-			this.pokemon.push(new Pokemon(this.team[i], this));
-			this.pokemon[i].position = i;
+			this.addPokemon(set);
 		}
 
 		switch (this.battle.gameType) {
@@ -174,6 +173,15 @@ export class Side {
 		if (this.activeRequest.teamPreview) return 'teampreview';
 		if (this.activeRequest.forceSwitch) return 'switch';
 		return 'move';
+	}
+
+	addPokemon(set: PokemonSet) {
+		if (this.pokemon.length >= 24) return null;
+		const newPokemon = new Pokemon(set, this);
+		newPokemon.position = this.pokemon.length;
+		this.pokemon.push(newPokemon);
+		this.pokemonLeft++;
+		return newPokemon;
 	}
 
 	canDynamaxNow(): boolean {
