@@ -1,7 +1,8 @@
 /**
  * Wi-Fi chat-plugin. Only works in a room with id 'wifi'
  * Handles giveaways in the formats: question, lottery, gts
- * Written by dhelmise and bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
+ * Written by dhelmise and bumbadadabum, based on the original
+ * plugin as written by Codelegend, SilverTactic, DanielCranham
  */
 
 import {FS, Utils} from '../../lib';
