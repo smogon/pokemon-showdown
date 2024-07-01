@@ -987,7 +987,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["aquajet", "doubleedge", "icepunch", "superpower", "waterfall"]
+                "movepool": ["aquajet", "doubleedge", "icepunch", "superpower", "waterfall"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Bulky Setup",
@@ -1480,7 +1481,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthpower", "gigadrain", "hiddenpowerfire", "leafstorm", "nastyplot", "psychic", "uturn"],
+                "movepool": ["earthpower", "gigadrain", "leafstorm", "nastyplot", "psychic", "uturn"],
                 "preferredTypes": ["Psychic"]
             },
             {
@@ -1755,8 +1756,13 @@
         "level": 95,
         "sets": [
             {
+                "role": "Bulky Setup",
+                "movepool": ["firefang", "ironhead", "suckerpunch", "swordsdance", "thunderpunch"],
+                "preferredTypes": ["Fire"]
+            },
+            {
                 "role": "Bulky Attacker",
-                "movepool": ["firefang", "ironhead", "stealthrock", "suckerpunch", "swordsdance", "thunderpunch"],
+                "movepool": ["fireblast", "ironhead", "stealthrock", "suckerpunch", "thunderpunch"],
                 "preferredTypes": ["Fire"]
             }
         ]
@@ -2346,8 +2352,11 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "extremespeed", "icebeam", "psychoboost", "stealthrock", "superpower"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["darkpulse", "extremespeed", "psychoboost", "superpower"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["darkpulse", "icebeam", "psychoboost", "superpower"]
             }
         ]
     },
@@ -2356,8 +2365,11 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "extremespeed", "icebeam", "psychoboost", "superpower"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["darkpulse", "extremespeed", "psychoboost", "superpower"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["darkpulse", "icebeam", "psychoboost", "superpower"]
             }
         ]
     },
@@ -2704,7 +2716,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["foulplay", "painsplit", "pursuit", "suckerpunch", "willowisp"]
+                "movepool": ["darkpulse", "painsplit", "pursuit", "suckerpunch", "willowisp"]
             }
         ]
     },
@@ -3164,7 +3176,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["dracometeor", "earthquake", "hiddenpowerfire", "outrage", "shadowball", "shadowsneak", "willowisp"]
+                "movepool": ["dracometeor", "earthquake", "outrage", "shadowball", "shadowsneak", "willowisp"]
             }
         ]
     },
@@ -3173,7 +3185,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psyshock", "signalbeam", "substitute"]
+                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psyshock", "signalbeam"]
             },
             {
                 "role": "Bulky Support",
