@@ -160,9 +160,11 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 	format = Dex.formats.get(format);
 	species = dex.species.get(species);
 	const isDoubles = format.gameType === 'doubles';
-	const isBaby = format.team === 'randomBaby';
+	let folderName = format.mod;
+	if (format.team === 'randomBaby') folderName += 'baby';
+	if (species.isNonstandard === 'CAP') folderName += 'cap';
 	const setsFile = JSON.parse(
-		FS(`data/random-battles/${format.mod}${isBaby ? 'baby' : ''}/${isDoubles ? 'doubles-' : ''}sets.json`)
+		FS(`data/random-battles/${folderName}/${isDoubles ? 'doubles-' : ''}sets.json`)
 			.readIfExistsSync() || '{}'
 	);
 	const data = setsFile[species.id];
