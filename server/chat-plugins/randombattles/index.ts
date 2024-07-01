@@ -161,8 +161,9 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 	species = dex.species.get(species);
 	const isDoubles = format.gameType === 'doubles';
 	const isBaby = format.team === 'randomBaby';
+	const isCAP = format.team === 'randomCAP';
 	const setsFile = JSON.parse(
-		FS(`data/random-battles/${format.mod}${isBaby ? 'baby' : ''}/${isDoubles ? 'doubles-' : ''}sets.json`)
+		FS(`data/random-battles/${format.mod}${isBaby ? 'baby' : ''}${isCAP ? 'cap' : ''}/${isDoubles ? 'doubles-' : ''}sets.json`)
 			.readIfExistsSync() || '{}'
 	);
 	const data = setsFile[species.id];
@@ -460,6 +461,7 @@ export const commands: Chat.ChatCommands = {
 	randdubs: 'randombattles',
 	babyrandombattle: 'randombattles',
 	babyrands: 'randombattles',
+	randcap: 'randombattles',
 	// randombattlenodmax: 'randombattles',
 	// randsnodmax: 'randombattles',
 	randombattles(target, room, user, connection, cmd) {
@@ -468,10 +470,12 @@ export const commands: Chat.ChatCommands = {
 		let isDoubles = cmd === 'randomdoublesbattle' || cmd === 'randdubs';
 		let isBaby = cmd === 'babyrandombattle' || cmd === 'babyrands';
 		let isNoDMax = cmd.includes('nodmax');
+		let isCAP = cmd.includes('randcap');
 		if (battle) {
 			if (battle.format.includes('nodmax')) isNoDMax = true;
 			if (battle.format.includes('doubles') || battle.gameType === 'freeforall') isDoubles = true;
 			if (battle.format.includes('baby')) isBaby = true;
+			if (battle.format.includes('cap')) isCAP = true;
 		}
 
 		const args = target.split(',');
@@ -496,7 +500,8 @@ export const commands: Chat.ChatCommands = {
 		const babyModifier = isBaby ? 'baby' : '';
 		const doublesModifier = isDoubles ? 'doubles' : '';
 		const noDMaxModifier = isNoDMax ? 'nodmax' : '';
-		const formatName = `gen${dex.gen}${extraFormatModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
+		const capModifier = isCAP ? 'cap' : '';
+		const formatName = `gen${dex.gen}${extraFormatModifier}${babyModifier}${capModifier}random${doublesModifier}battle${noDMaxModifier}`;
 		const format = dex.formats.get(formatName);
 
 		const movesets = [];
