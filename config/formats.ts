@@ -2499,40 +2499,12 @@ export const Formats: FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 9] Chimera 1v1 Random Battle",
-		desc: "Merges a team of six into a single Pok\u00e9mon depending on the order chosen at team preview: It gains the typing of the first, item of the second, ability of the third, stats of the fourth, the first two moves of the fifth, and the last two moves of the sixth.",
-
-		team: 'random',
-		ruleset: ['[Gen 9] Random Battle', 'Chimera 1v1 Rule', 'Terastal Clause', 'Adjust Level = 100'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue"><b>Chimera Rands is a 1v1 format where you combine your 6 Pokemon into one "Chimera." The order you select during team preview is important! In sequence, your picks determine your Chimera's Type, Item, Ability, Stats, Moves 1 &amp; 2, then finally Moves 3 &amp; 4.</b></div>`);
-		},
-	},
-	{
-		name: "[Gen 9] BSS Factory",
-		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3737058/">Information and Suggestions Thread</a>`,
-		],
-
+		name: "[Gen 9] CAP Random Battle",
+		desc: "[Gen 9] Random Battle with CAP Pok&eacute;mon included. Every team will generate with at least one CAP Pok&eacute;mon.",
 		mod: 'gen9',
-		team: 'randomBSSFactory',
-		ruleset: ['Flat Rules', 'VGC Timer'],
-	},
-	{
-		name: "[Gen 9] Baby Random Battle",
-
-		mod: 'gen9',
-		team: 'randomBaby',
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
-	},
-	{
-		name: "[Gen 9] Random Roulette",
-		desc: `Random Battles in a random generation! [Gen 1] Random Battle - [Gen 9] Random Battle.`,
-
-		mod: 'randomroulette',
 		team: 'random',
-		searchShow: false,
+
+		ruleset: ['[Gen 9] Random Battle'],
 	},
 
 	// Randomized Metas
@@ -2541,6 +2513,14 @@ export const Formats: FormatList = [
 	{
 		section: "Randomized Metas",
 		column: 3,
+	},
+	{
+		name: "[Gen 9] Random Roulette",
+		desc: `Random Battles in a random generation! [Gen 1] Random Battle - [Gen 9] Random Battle.`,
+
+		mod: 'randomroulette',
+		team: 'random',
+		searchShow: false,
 	},
 	{
 		name: "[Gen 9] Super Staff Bros Ultimate",
@@ -2638,6 +2618,24 @@ export const Formats: FormatList = [
 			}
 		},
 
+	},
+	{
+		name: "[Gen 9] BSS Factory",
+		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3737058/">Information and Suggestions Thread</a>`,
+		],
+
+		mod: 'gen9',
+		team: 'randomBSSFactory',
+		ruleset: ['Flat Rules', 'VGC Timer'],
+	},
+	{
+		name: "[Gen 9] Baby Random Battle",
+
+		mod: 'gen9',
+		team: 'randomBaby',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
 	{
 		name: "[Gen 9] Computer-Generated Teams",

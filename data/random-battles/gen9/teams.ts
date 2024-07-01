@@ -1528,7 +1528,7 @@ export class RandomTeams {
 
 		// Low Priority
 		if (
-			(species.id === 'garchomp' && role === 'Fast Support') || (
+			ability === 'Rough Skin' || (
 				ability === 'Regenerator' && (role === 'Bulky Support' || role === 'Bulky Attacker') &&
 				(species.baseStats.hp + species.baseStats.def) >= 180 && this.randomChance(1, 2)
 			) || (
@@ -1537,7 +1537,7 @@ export class RandomTeams {
 				(species.baseStats.hp + species.baseStats.def) > 200 && this.randomChance(1, 2)
 			)
 		) return 'Rocky Helmet';
-		if (moves.has('outrage')) return 'Lum Berry';
+		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (moves.has('protect') && ability !== 'Speed Boost') return 'Leftovers';
 		if (
 			role === 'Fast Support' && isLead && !counter.get('recovery') && !counter.get('recoil') &&
