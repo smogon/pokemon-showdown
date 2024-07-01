@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	airballoon: {
 		inherit: true,
 		// airborneness implemented in sim/pokemon.js:Pokemon#isGrounded

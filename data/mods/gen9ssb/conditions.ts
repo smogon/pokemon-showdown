@@ -1,7 +1,8 @@
 import {ssbSets} from "./random-teams";
 import {changeSet, getName, enemyStaff} from './scripts';
+import {ModdedConditionData} from "../../../sim/dex-conditions";
 
-export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {
+export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: string}} = {
 	/*
 	// Example:
 	userid: {

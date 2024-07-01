@@ -1,4 +1,4 @@
-export const TypeChart: {[k: string]: TypeData} = {
+export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 	bug: {
 		damageTaken: {
 			Bug: 0,

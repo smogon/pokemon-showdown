@@ -1,6 +1,6 @@
 import type {Learnset} from "../../../sim/dex-species";
 
-export const Rulesets: {[k: string]: ModdedFormatData} = {
+export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable = {
 	obtainablemoves: {
 		inherit: true,
 		banlist: [

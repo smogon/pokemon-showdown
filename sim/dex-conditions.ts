@@ -607,6 +607,8 @@ export interface FieldConditionData extends
 export type ConditionData = PokemonConditionData | SideConditionData | FieldConditionData;
 
 export type ModdedConditionData = ConditionData & {inherit?: true};
+export interface ConditionDataTable {[id: IDEntry]: ConditionData}
+export interface ModdedConditionDataTable {[id: IDEntry]: ModdedConditionData}
 
 export class Condition extends BasicEffect implements
 	Readonly<BasicEffect & SideConditionData & FieldConditionData & PokemonConditionData> {
