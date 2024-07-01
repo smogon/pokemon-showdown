@@ -1526,7 +1526,7 @@ export class RandomTeams {
 
 		// Low Priority
 		if (
-			(ability === 'Rough Skin') || (
+		(ability === 'Rough Skin' || (
 				ability === 'Regenerator' && (role === 'Bulky Support' || role === 'Bulky Attacker') &&
 				(species.baseStats.hp + species.baseStats.def) >= 180 && this.randomChance(1, 2)
 			) || (
