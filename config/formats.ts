@@ -4821,6 +4821,15 @@ export const Formats: FormatList = [
 		unbanlist: ['Swagger'],
 	},
 	{
+		name: "[Gen 2] ZU",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/posts/8036443">GSC ZU</a>`],
+
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['[Gen 2] PU'],
+		banlist: ['PU', 'ZUBL'],
+	},
+	{
 		name: "[Gen 2] 1v1",
 		threads: [`&bullet; <a href="https://www.smogon.com/forums/posts/8031464/">GSC 1v1</a>`],
 
