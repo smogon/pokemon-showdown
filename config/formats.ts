@@ -4281,6 +4281,17 @@ export const Formats: FormatList = [
 		banlist: ['RU', 'NUBL', 'Assist', 'Copycat'],
 	},
 	{
+		name: "[Gen 5] BW1 OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3744853/">BW1 OU</a>`,
+		],
+
+		mod: 'gen5bw1',
+		searchShow: false,
+		ruleset: ['Standard', 'Sleep Clause Mod', 'Swagger Clause'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'King\'s Rock', 'Razor Fang', 'Soul Dew', 'Acupressure', 'Assist'],
+	},
+	{
 		name: "[Gen 5] PU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3730796/">BW2 PU Resources</a>`,
