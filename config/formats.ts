@@ -3181,7 +3181,7 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen1',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 1] PU'],
 		banlist: ['PU', 'ZUBL'],
 	},
