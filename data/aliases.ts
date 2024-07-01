@@ -2113,6 +2113,7 @@ export const Aliases: {[alias: string]: string} = {
 	smoko: "Smokomodo",
 	snael: "Snaelstrom",
 	strata: "Stratagem",
+	train: "Chuggalong",
 	venomicone: "Venomicon-Epilogue",
 	venomiconp: "Venomicon",
 	venomiconprologue: "Venomicon",
