@@ -1,7 +1,7 @@
 /**
  * Wi-Fi chat-plugin. Only works in a room with id 'wifi'
  * Handles giveaways in the formats: question, lottery, gts
- * Written by Kris and bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
+ * Written by dhelmise and bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
  */
 
 import {FS, Utils} from '../../lib';
@@ -1024,7 +1024,7 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 	gtshelp: [
-		`GTS giveaways are currently disabled. If you are a Room Owner and would like them to be re-enabled, contact Kris.`,
+		`GTS giveaways are currently disabled. If you are a Room Owner and would like them to be re-enabled, contact dhelmise.`,
 	],
 	ga: 'giveaway',
 	giveaway: {
