@@ -957,7 +957,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["aquajet", "doubleedge", "icepunch", "superpower", "waterfall"]
+                "movepool": ["aquajet", "doubleedge", "icepunch", "superpower", "waterfall"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Bulky Setup",
@@ -1431,7 +1432,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthpower", "energyball", "hiddenpowerfire", "leafstorm", "nastyplot", "psychic", "uturn"],
+                "movepool": ["earthpower", "energyball", "leafstorm", "nastyplot", "psychic", "uturn"],
                 "preferredTypes": ["Psychic"]
             },
             {
@@ -2339,8 +2340,11 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["extremespeed", "icebeam", "psychoboost", "shadowball", "stealthrock", "superpower"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["extremespeed", "psychoboost", "shadowball", "superpower"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["icebeam", "psychoboost", "shadowball", "superpower"]
             }
         ]
     },
@@ -2349,8 +2353,11 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["extremespeed", "icebeam", "psychoboost", "shadowball", "superpower"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["extremespeed", "psychoboost", "shadowball", "superpower"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["icebeam", "psychoboost", "shadowball", "superpower"]
             }
         ]
     },
@@ -3175,7 +3182,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["dracometeor", "earthquake", "hiddenpowerfire", "outrage", "shadowball", "shadowsneak", "willowisp"]
+                "movepool": ["dracometeor", "earthquake", "outrage", "shadowball", "shadowsneak", "willowisp"]
             }
         ]
     },
@@ -3192,12 +3199,8 @@
         "level": 79,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["calmmind", "hiddenpowerfighting", "psychic", "substitute"]
-            },
-            {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psychic"]
+                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psychic", "signalbeam"]
             },
             {
                 "role": "Bulky Support",

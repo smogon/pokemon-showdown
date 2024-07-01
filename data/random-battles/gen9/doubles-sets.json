@@ -671,6 +671,11 @@
                 "role": "Choice Item user",
                 "movepool": ["Transform"],
                 "teraTypes": ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Transform"],
+                "teraTypes": ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
             }
         ]
     },
@@ -2658,9 +2663,9 @@
         "level": 76,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Aura Sphere", "Draco Meteor", "Poltergeist", "Shadow Force", "Will-O-Wisp"],
-                "teraTypes": ["Dragon", "Fairy", "Ghost", "Poison"]
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Draco Meteor", "Poltergeist", "Shadow Force", "Shadow Sneak", "Will-O-Wisp"],
+                "teraTypes": ["Dragon", "Fairy", "Ghost", "Poison", "Steel"]
             }
         ]
     },

@@ -439,6 +439,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (species.id === 'blitzle') return 'Sap Sipper';
 		if (species.id === 'chinchou') return 'Volt Absorb';
 		if (species.id === 'deerling') return 'Serene Grace';
+		if (species.id === 'doduo') return 'Early Bird';
 		if (species.id === 'geodudealola') return 'Galvanize';
 		if (species.id === 'growlithehisui') return 'Rock Head';
 		if (species.id === 'gligar') return 'Immunity';
@@ -541,12 +542,13 @@ export class RandomBabyTeams extends RandomTeams {
 
 		if (moves.has('acrobatics')) return ability === 'Unburden' ? 'Oran Berry' : '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
-		if (moves.has('rest') && moves.has('sleeptalk')) return 'Eviolite';
 
 		if (ability === 'Guts' && moves.has('facade')) return 'Flame Orb';
 		if (ability === 'Quick Feet') return 'Toxic Orb';
 
-		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
+		if (
+			this.dex.getEffectiveness('Rock', species) >= 2 && this.dex.getEffectiveness('Ground', species) >= 0
+		) return 'Heavy-Duty Boots';
 		if (['Harvest', 'Ripen', 'Unburden'].includes(ability) || moves.has('bellydrum')) return 'Oran Berry';
 	}
 

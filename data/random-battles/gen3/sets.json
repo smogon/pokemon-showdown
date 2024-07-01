@@ -513,7 +513,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "calmmind", "firepunch", "protect", "psychic", "wish"]
+                "movepool": ["batonpass", "calmmind", "firepunch", "psychic"]
             },
             {
                 "role": "Bulky Support",
