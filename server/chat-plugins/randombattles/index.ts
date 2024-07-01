@@ -1,6 +1,6 @@
 /**
  * Random Battles chat-plugin
- * Written by Kris with inspiration from sirDonovan and The Immortal
+ * Written by dhelmise with inspiration from sirDonovan and The Immortal
  *
  * Set probability code written by Annika
  */

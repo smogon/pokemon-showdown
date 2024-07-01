@@ -2,7 +2,7 @@
  * Other Metagames chat plugin
  * Lets users see elements of Pokemon in various Other Metagames.
  * Originally by Spandan.
- * @author Kris
+ * @author dhelmise
 */
 
 import {Utils} from '../../lib';
