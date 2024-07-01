@@ -3171,8 +3171,8 @@ export const Formats: FormatList = [
 		],
 
 		mod: 'gen5bw1',
-		ruleset: ['Standard', 'Sleep Clause Mod', 'Swagger Clause'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'King\'s Rock', 'Razor Fang', 'Soul Dew', 'Acupressure', 'Assist'],
+		ruleset: ['Standard', 'Sleep Clause Mod', 'Swagger Clause', 'Baton Pass Stat Clause'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Acupressure', 'Assist'],
 	},
 	{
 		name: "[Gen 1] ZU",
