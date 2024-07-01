@@ -135,7 +135,6 @@ type Ability = import('./dex-abilities').Ability;
 
 type Species = import('./dex-species').Species;
 
-type FormatList = import('./dex-formats').FormatList;
 type Format = import('./dex-formats').Format;
 
 type Nature = import('./dex-data').Nature;
