@@ -378,8 +378,8 @@
         "level": 84,
         "sets": [
             {
-                "role": "AV Pivot",
-                "movepool": ["Doom Desire", "Earth Power", "Flash Cannon", "Rapid Spin"],
+                "role": "Bulky Support",
+                "movepool": ["Doom Desire", "Earth Power", "Flash Cannon", "Pain Split", "Rapid Spin"],
                 "teraTypes": ["Electric", "Steel", "Water"]
             }
         ]
@@ -436,6 +436,11 @@
                 "role": "Bulky Attacker",
                 "movepool": ["Air Slash", "Body Press", "Hurricane", "Roost", "Sludge Bomb"],
                 "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Air Slash", "Body Press", "Hurricane", "Knock Off", "Roost"],
+                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -444,7 +449,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Brave Bird", "Coil", "Gunk Shot", "Roost", "Stealth Rock", "Thunder Wave", "Toxic Spikes"],
+                "movepool": ["Brave Bird", "Coil", "Gunk Shot", "Roost", "Stealth Rock", "Toxic Spikes"],
                 "teraTypes": ["Dark", "Flying", "Poison"]
             }
         ]
