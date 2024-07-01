@@ -2,7 +2,7 @@ import {ssbSets} from "./random-teams";
 import {PSEUDO_WEATHERS, changeSet, getName} from "./scripts";
 import {Teams} from '../../../sim/teams';
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	/*
 	// Example
 	moveid: {

@@ -1,4 +1,4 @@
-export const ItemsText: {[k: string]: ItemText} = {
+export const ItemsText: {[id: IDEntry]: ItemText} = {
 	abilityshield: {
 		name: "Ability Shield",
 		desc: "Holder's Ability cannot be changed by any effect.",

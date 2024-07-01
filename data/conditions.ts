@@ -1,4 +1,4 @@
-export const Conditions: {[k: string]: ConditionData} = {
+export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
