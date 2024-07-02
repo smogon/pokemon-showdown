@@ -1815,6 +1815,18 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.dead[i].destroy();
 		}
 	}
+
+	hostPregame() {
+
+	}
+
+	hostDay() {
+
+	}
+
+	hostNight() {
+		
+	}
 }
 
 export const pages: Chat.PageTable = {
@@ -2132,6 +2144,13 @@ export const commands: Chat.ChatCommands = {
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 
 			room.game = new Mafia(room, null);
+			const game = this.requireGame(Mafia);
+
+			// deadline for signups
+			game.phase = 'locked';
+			game.sendHTML(game.roomWindow());
+			game.updatePlayers();
+			game.logAction(user, `closed signups`);
 		},
 		forcehost: 'host',
 		nexthost: 'host',
