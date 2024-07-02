@@ -223,7 +223,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
 		const pokemonPool: string[] = [];
-		for (const id in this.dex.data.FormatsData) {
+		for (const id in this.dex.data.PokedexTiers) {
 			const species = this.dex.species.get(id);
 			if (
 				species.num < 1 ||

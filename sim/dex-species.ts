@@ -23,7 +23,7 @@ export interface SpeciesData extends Partial<Species> {
 
 export type ModdedSpeciesData = SpeciesData | Partial<Omit<SpeciesData, 'name'>> & {inherit: true};
 
-export interface SpeciesFormatsData {
+export interface TiersData {
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
 	gmaxUnreleased?: boolean;
 	isNonstandard?: Nonstandard | null;
@@ -31,7 +31,7 @@ export interface SpeciesFormatsData {
 	tier?: TierTypes.Singles | TierTypes.Other;
 }
 
-export type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
+export type ModdedTiersData = TiersData & {inherit?: true};
 
 export interface LearnsetData {
 	learnset?: {[moveid: IDEntry]: MoveSource[]};
@@ -50,8 +50,8 @@ export interface PokemonGoData {
 
 export interface SpeciesDataTable {[speciesid: IDEntry]: SpeciesData}
 export interface ModdedSpeciesDataTable {[speciesid: IDEntry]: ModdedSpeciesData}
-export interface SpeciesFormatsDataTable {[speciesid: IDEntry]: SpeciesFormatsData}
-export interface ModdedSpeciesFormatsDataTable {[speciesid: IDEntry]: ModdedSpeciesFormatsData}
+export interface TiersDataTable {[speciesid: IDEntry]: TiersData}
+export interface ModdedTiersDataTable {[speciesid: IDEntry]: ModdedTiersData}
 export interface LearnsetDataTable {[speciesid: IDEntry]: LearnsetData}
 export interface ModdedLearnsetDataTable {[speciesid: IDEntry]: ModdedLearnsetData}
 export interface PokemonGoDataTable {[speciesid: IDEntry]: PokemonGoData}
@@ -84,7 +84,7 @@ export type MoveSource = `${
 	'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C'
 }${string}`;
 
-export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
+export class Species extends BasicEffect implements Readonly<BasicEffect & TiersData> {
 	declare readonly effectType: 'Pokemon';
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
@@ -409,12 +409,12 @@ export class DexSpecies {
 		if (species) return species;
 
 		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			if (this.dex.data.FormatsData.hasOwnProperty(id)) {
+			if (this.dex.data.PokedexTiers.hasOwnProperty(id)) {
 				// special event ID, like Rockruff-Dusk
 				const baseId = toID(this.dex.data.Aliases[id]);
 				species = new Species({
 					...this.dex.data.Pokedex[baseId],
-					...this.dex.data.FormatsData[id],
+					...this.dex.data.PokedexTiers[id],
 					name: id,
 				});
 				species.abilities = {0: species.abilities['S']!};
@@ -480,7 +480,7 @@ export class DexSpecies {
 			species = new Species({
 				tags: baseSpeciesTags,
 				...pokedexData,
-				...this.dex.data.FormatsData[id],
+				...this.dex.data.PokedexTiers[id],
 			});
 			// Inherit any statuses from the base species (Arceus, Silvally).
 			const baseSpeciesStatuses = this.dex.data.Conditions[toID(species.baseSpecies)];
@@ -493,21 +493,21 @@ export class DexSpecies {
 			}
 			if (!species.tier && !species.doublesTier && !species.natDexTier && species.baseSpecies !== species.name) {
 				if (species.baseSpecies === 'Mimikyu') {
-					species.tier = this.dex.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
-					species.natDexTier = this.dex.data.FormatsData[toID(species.baseSpecies)].natDexTier || 'Illegal';
+					species.tier = this.dex.data.PokedexTiers[toID(species.baseSpecies)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.PokedexTiers[toID(species.baseSpecies)].doublesTier || 'Illegal';
+					species.natDexTier = this.dex.data.PokedexTiers[toID(species.baseSpecies)].natDexTier || 'Illegal';
 				} else if (species.id.endsWith('totem')) {
-					species.tier = this.dex.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || 'Illegal';
-					species.natDexTier = this.dex.data.FormatsData[species.id.slice(0, -5)].natDexTier || 'Illegal';
+					species.tier = this.dex.data.PokedexTiers[species.id.slice(0, -5)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.PokedexTiers[species.id.slice(0, -5)].doublesTier || 'Illegal';
+					species.natDexTier = this.dex.data.PokedexTiers[species.id.slice(0, -5)].natDexTier || 'Illegal';
 				} else if (species.battleOnly) {
-					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)].doublesTier || 'Illegal';
-					species.natDexTier = this.dex.data.FormatsData[toID(species.battleOnly)].natDexTier || 'Illegal';
+					species.tier = this.dex.data.PokedexTiers[toID(species.battleOnly)].tier || 'Illegal';
+					species.doublesTier = this.dex.data.PokedexTiers[toID(species.battleOnly)].doublesTier || 'Illegal';
+					species.natDexTier = this.dex.data.PokedexTiers[toID(species.battleOnly)].natDexTier || 'Illegal';
 				} else {
-					const baseFormatsData = this.dex.data.FormatsData[toID(species.baseSpecies)];
+					const baseFormatsData = this.dex.data.PokedexTiers[toID(species.baseSpecies)];
 					if (!baseFormatsData) {
-						throw new Error(`${species.baseSpecies} has no formats-data entry`);
+						throw new Error(`${species.baseSpecies} has no pokedex-tiers entry`);
 					}
 					species.tier = baseFormatsData.tier || 'Illegal';
 					species.doublesTier = baseFormatsData.doublesTier || 'Illegal';

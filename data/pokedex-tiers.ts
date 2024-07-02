@@ -1,4 +1,4 @@
-export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable = {
+export const PokedexTiers: import('../sim/dex-species').TiersDataTable = {
 	bulbasaur: {
 		tier: "LC",
 	},

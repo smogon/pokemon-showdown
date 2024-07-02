@@ -1,4 +1,4 @@
-export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
+export const PokedexTiers: import('../../../sim/dex-species').ModdedTiersDataTable = {
 	pikachupartner: {
 		isNonstandard: "Future",
 		tier: "Illegal",

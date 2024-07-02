@@ -3164,7 +3164,7 @@ export const pages: Chat.PageTable = {
 			`<ul><li><code>+ Blaziken</code>: Unban/unrestrict a Pok&eacute;mon.</li></ul>`,
 			`<p><a class="button" href="https://github.com/smogon/pokemon-showdown/blob/master/config/CUSTOM-RULES.md">More details</a></p>`,
 		];
-		const rulesets = [
+		const formatRules = [
 			`<h2><u>Rules, mods, and clauses</u></h2>`,
 			`<p>The following rules can be added to challenges/tournaments to modify the style of play. Alternatively, already present rules can be removed from formats by preceding the rule name with <code>!</code></p>`,
 			`<p>However, some rules, like <code>Obtainable</code>, are made of subrules, that can be individually turned on and off.</p>`,
@@ -3173,9 +3173,9 @@ export const pages: Chat.PageTable = {
 		for (const rule of rules) {
 			if (rule.hasValue) continue;
 			const desc = rule.desc ? rule.desc : "No description.";
-			rulesets.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
+			formatRules.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
 		}
-		rulesets.push(
+		formatRules.push(
 			`</table></div>`,
 			`<h3>Value rules</h3>`,
 			`<ul><li>Value rules are formatted like [Name] = [value], e.g. "Force Monotype = Water" or "Min Team Size = 4"</li>`,
@@ -3186,10 +3186,10 @@ export const pages: Chat.PageTable = {
 		for (const rule of rules) {
 			if (!rule.hasValue) continue;
 			const desc = rule.desc ? rule.desc : "No description.";
-			rulesets.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
+			formatRules.push(`<tr><td>${rule.name}</td><td>${desc}</td></tr>`);
 		}
-		rulesets.push(`</table></div>`);
-		rulesHTML += `${basics.concat(rulesets).join('')}</div>`;
+		formatRules.push(`</table></div>`);
+		rulesHTML += `${basics.concat(formatRules).join('')}</div>`;
 		return rulesHTML;
 	},
 	buildformat(query, user) {

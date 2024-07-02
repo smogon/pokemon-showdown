@@ -5,7 +5,7 @@ import type {Learnset} from "../sim/dex-species";
 // The list of formats is stored in config/formats.js
 export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
-	// Rulesets
+	// Rules
 	///////////////////////////////////////////////////////////////////
 
 	standard: {
@@ -2018,7 +2018,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "NC 2000 Move Legality",
 		desc: "Prevents Pok\u00e9mon from having moves that would only be obtainable in Pok\u00e9mon Crystal.",
-		// Implemented in mods/gen2/rulesets.ts
+		// Implemented in mods/gen2/format-rules.ts
 	},
 	aptclause: {
 		effectType: 'ValidatorRule',
@@ -2030,7 +2030,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "NC 1997 Move Legality",
 		desc: "Bans move combinations on Pok\u00e9mon that weren't legal in NC 1997.",
-		// Implemented in mods/gen1jpn/rulesets.ts
+		// Implemented in mods/gen1jpn/format-rules.ts
 	},
 	noswitching: {
 		effectType: 'Rule',
@@ -2768,12 +2768,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	uselessmovesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Useless Moves Clause',
-		// implemented in /mods/moderngen2/rulesets.ts
+		// implemented in /mods/moderngen2/format-rules.ts
 	},
 	uselessitemsclause: {
 		effectType: 'ValidatorRule',
 		name: 'Useless Items Clause',
-		// implemented in /mods/moderngen2/rulesets.ts
+		// implemented in /mods/moderngen2/format-rules.ts
 	},
 	ferventimpersonationmod: {
 		effectType: 'Rule',

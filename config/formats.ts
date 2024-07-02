@@ -1,12 +1,12 @@
 // Note: This is the list of formats
-// The rules that formats use are stored in data/rulesets.ts
+// The rules that formats use are stored in data/format-rules.ts
 /*
 If you want to add custom formats, create a file in this folder named: "custom-formats.ts"
 
 Paste the following code into the file and add your desired formats and their sections between the brackets:
 --------------------------------------------------------------------------------
 // Note: This is the list of formats
-// The rules that formats use are stored in data/rulesets.ts
+// The rules that formats use are stored in data/format-rules.ts
 
 export const Formats: FormatList = [
 ];

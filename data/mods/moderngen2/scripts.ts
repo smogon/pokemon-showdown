@@ -22,9 +22,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		for (const i in this.data.Pokedex) {
 			if (this.species.get(i).gen > 2) this.modData('Pokedex', i).gen = 2;
 		}
-		for (const i in this.data.FormatsData) {
+		for (const i in this.data.PokedexTiers) {
 			if (this.forGen(9).species.get(i).isNonstandard === 'Past') {
-				this.modData('FormatsData', i).isNonstandard = null;
+				this.modData('PokedexTiers', i).isNonstandard = null;
 			}
 		}
 	},

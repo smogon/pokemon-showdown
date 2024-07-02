@@ -1,5 +1,4 @@
-// TODO: alphabetize move names. I'm trying to implement this on a low-quality laptop under time pressure, so I haven't bothered doing so.
-export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
+export const PokedexTiers: import('../../../sim/dex-species').ModdedTiersDataTable = {
 	bulbasaur: {
 		tier: "LC",
 	},
@@ -7,8 +6,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	venusaur: {
-		tier: "RU",
-		doublesTier: "DUU",
+		tier: "(OU)",
+		doublesTier: "DOU",
 	},
 	charmander: {
 		tier: "LC",
@@ -17,14 +16,15 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	charizard: {
-		tier: "PUBL",
-		doublesTier: "DUU",
+		tier: "NU",
+		doublesTier: "DOU",
 	},
 	squirtle: {
 		tier: "LC",
 	},
 	wartortle: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	blastoise: {
 		tier: "UU",
@@ -50,10 +50,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 		doublesTier: "DUU",
 	},
-	beedrillmega: {
-		isNonstandard: "Past",
-		tier: "Illegal",
-	},
 	pidgey: {
 		tier: "LC",
 	},
@@ -63,10 +59,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	pidgeot: {
 		tier: "PU",
 		doublesTier: "DUU",
-	},
-	pidgeotmega: {
-		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	rattata: {
 		tier: "LC",
@@ -96,14 +88,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	raichu: {
-		tier: "PUBL",
-		doublesTier: "DOU",
+		tier: "PU",
+		doublesTier: "DUU",
 	},
 	sandshrew: {
 		tier: "LC",
 	},
 	sandslash: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	nidoranf: {
@@ -113,7 +105,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	nidoqueen: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	nidoranm: {
@@ -123,7 +115,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	nidoking: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	cleffa: {
@@ -133,15 +125,15 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	clefable: {
-		tier: "OU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	vulpix: {
 		tier: "NFE",
 	},
 	ninetales: {
-		tier: "PU",
-		doublesTier: "DUU",
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	igglybuff: {
 		tier: "LC",
@@ -157,7 +149,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	golbat: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	crobat: {
 		tier: "UU",
@@ -170,12 +163,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	vileplume: {
-		tier: "RU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	bellossom: {
 		tier: "PU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	paras: {
 		tier: "LC",
@@ -195,7 +188,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	dugtrio: {
-		tier: "PU",
+		tier: "(OU)",
 		doublesTier: "DUU",
 	},
 	meowth: {
@@ -216,7 +209,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	primeape: {
-		tier: "RU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	growlithe: {
@@ -233,18 +226,19 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	poliwrath: {
-		tier: "PU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	politoed: {
-		tier: "PU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	abra: {
 		tier: "LC",
 	},
 	kadabra: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	alakazam: {
 		tier: "OU",
@@ -257,7 +251,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	machamp: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	bellsprout: {
@@ -274,7 +268,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	tentacruel: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	geodude: {
@@ -284,7 +278,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	golem: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	ponyta: {
@@ -298,7 +292,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	slowbro: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	slowking: {
@@ -309,7 +303,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	magneton: {
-		tier: "PUBL",
+		tier: "RU",
 		doublesTier: "NFE",
 	},
 	magnezone: {
@@ -345,19 +339,19 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	cloyster: {
-		tier: "UU",
-		doublesTier: "DUU",
+		tier: "Uber",
+		doublesTier: "DOU",
 	},
 	gastly: {
 		tier: "LC",
 	},
 	haunter: {
-		tier: "NUBL",
+		tier: "NU",
 		doublesTier: "NFE",
 	},
 	gengar: {
-		tier: "Uber",
-		doublesTier: "DUU",
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	onix: {
 		tier: "LC",
@@ -377,21 +371,21 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	kingler: {
-		tier: "PUBL",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	voltorb: {
 		tier: "LC",
 	},
 	electrode: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	exeggcute: {
 		tier: "LC",
 	},
 	exeggutor: {
-		tier: "NUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	cubone: {
@@ -405,7 +399,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	hitmonlee: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	hitmonchan: {
@@ -413,53 +407,55 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	hitmontop: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	lickitung: {
 		tier: "LC",
 	},
 	lickilicky: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	koffing: {
 		tier: "LC",
 	},
 	weezing: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	rhyhorn: {
 		tier: "LC",
 	},
 	rhydon: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "NFE",
 	},
 	rhyperior: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	happiny: {
 		tier: "LC",
 	},
 	chansey: {
-		tier: "RU",
+		tier: "UUBL",
+		doublesTier: "NFE",
 	},
 	blissey: {
 		tier: "OU",
 		doublesTier: "DUU",
 	},
 	tangela: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	tangrowth: {
-		tier: "OU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	kangaskhan: {
-		tier: "PUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	horsea: {
@@ -469,7 +465,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	kingdra: {
-		tier: "RUBL",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	goldeen: {
@@ -490,11 +486,11 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	mrmime: {
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	scyther: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "NFE",
 	},
 	scizor: {
@@ -512,11 +508,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	electabuzz: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	electivire: {
-		tier: "NU",
-		doublesTier: "DUU",
+		tier: "RU",
+		doublesTier: "DOU",
 	},
 	magby: {
 		tier: "LC",
@@ -529,22 +526,22 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	pinsir: {
-		tier: "PUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	tauros: {
-		tier: "NUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	magikarp: {
 		tier: "LC",
 	},
 	gyarados: {
-		tier: "RUBL",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	lapras: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	ditto: {
@@ -555,20 +552,20 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	vaporeon: {
-		tier: "RU",
-		doublesTier: "DUU",
+		tier: "(OU)",
+		doublesTier: "DOU",
 	},
 	jolteon: {
-		tier: "RU",
-		doublesTier: "DUU",
+		tier: "(OU)",
+		doublesTier: "DOU",
 	},
 	flareon: {
 		tier: "PU",
 		doublesTier: "DUU",
 	},
 	espeon: {
-		tier: "UU",
-		doublesTier: "DUU",
+		tier: "(OU)",
+		doublesTier: "DOU",
 	},
 	umbreon: {
 		tier: "UU",
@@ -586,7 +583,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	porygon2: {
-		tier: "NFE",
+		tier: "UU",
+		doublesTier: "NFE",
 	},
 	porygonz: {
 		tier: "UU",
@@ -607,7 +605,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	aerodactyl: {
-		tier: "NUBL",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	munchlax: {
@@ -637,14 +635,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	dragonite: {
 		tier: "OU",
-		doublesTier: "DUU",
+		doublesTier: "DOU",
 	},
 	mewtwo: {
 		tier: "Uber",
 		doublesTier: "DUber",
 	},
 	mew: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	chikorita: {
@@ -664,7 +662,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	typhlosion: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	totodile: {
@@ -674,7 +672,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	feraligatr: {
-		tier: "OU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	sentret: {
@@ -709,7 +707,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	lanturn: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	togepi: {
@@ -719,14 +717,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	togekiss: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	natu: {
 		tier: "LC",
 	},
 	xatu: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	mareep: {
@@ -736,7 +734,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	ampharos: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	azurill: {
@@ -746,8 +744,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	azumarill: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tier: "UU",
+		doublesTier: "DUU",
 	},
 	bonsly: {
 		tier: "LC",
@@ -798,11 +796,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	honchkrow: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	misdreavus: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	mismagius: {
 		tier: "UU",
@@ -816,7 +815,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	wobbuffet: {
-		tier: "PU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	girafarig: {
@@ -827,7 +826,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	forretress: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	dunsparce: {
@@ -835,22 +834,22 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	gligar: {
-		tier: "NU",
+		tier: "UU",
 		doublesTier: "NFE",
 	},
 	gliscor: {
 		tier: "OU",
-		doublesTier: "DUU",
+		doublesTier: "DOU",
 	},
 	snubbull: {
 		tier: "LC",
 	},
 	granbull: {
-		tier: "RU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	qwilfish: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	shuckle: {
@@ -858,22 +857,21 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	heracross: {
-		tier: "UUBL",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	sneasel: {
-		tier: "PUBL",
-		doublesTier: "NFE",
+		tier: "NFE",
 	},
 	weavile: {
-		tier: "OU",
-		doublesTier: "DUU",
+		tier: "UU",
+		doublesTier: "DOU",
 	},
 	teddiursa: {
 		tier: "LC",
 	},
 	ursaring: {
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	slugma: {
@@ -887,7 +885,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	piloswine: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	mamoswine: {
 		tier: "OU",
@@ -912,7 +911,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	mantine: {
-		tier: "RU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	skarmory: {
@@ -923,14 +922,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	houndoom: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	phanpy: {
 		tier: "LC",
 	},
 	donphan: {
-		tier: "UU",
+		tier: "(OU)",
 		doublesTier: "DUU",
 	},
 	stantler: {
@@ -938,8 +937,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	smeargle: {
-		tier: "PUBL",
-		doublesTier: "DUber",
+		tier: "RU",
+		doublesTier: "DUU",
 	},
 	miltank: {
 		tier: "NU",
@@ -947,15 +946,15 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	raikou: {
 		tier: "UU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	entei: {
-		tier: "UU",
-		doublesTier: "DOU",
+		tier: "RU",
+		doublesTier: "DUU",
 	},
 	suicune: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tier: "UU",
+		doublesTier: "DUU",
 	},
 	larvitar: {
 		tier: "LC",
@@ -964,7 +963,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	tyranitar: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	lugia: {
@@ -977,7 +976,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	celebi: {
 		tier: "OU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	treecko: {
 		tier: "LC",
@@ -986,18 +985,19 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	sceptile: {
-		tier: "NUBL",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	torchic: {
 		tier: "LC",
 	},
 	combusken: {
-		tier: "NFE",
+		tier: "PUBL",
+		doublesTier: "DUU",
 	},
 	blaziken: {
 		tier: "Uber",
-		doublesTier: "DUU",
+		doublesTier: "DOU",
 	},
 	mudkip: {
 		tier: "LC",
@@ -1020,7 +1020,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	linoone: {
-		tier: "NUBL",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	wurmple: {
@@ -1047,7 +1047,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	ludicolo: {
-		tier: "PUBL",
+		tier: "NU",
 		doublesTier: "DOU",
 	},
 	seedot: {
@@ -1057,14 +1057,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	shiftry: {
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	taillow: {
 		tier: "LC",
 	},
 	swellow: {
-		tier: "RU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	wingull: {
@@ -1072,7 +1072,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	pelipper: {
 		tier: "PU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	ralts: {
 		tier: "LC",
@@ -1081,8 +1081,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	gardevoir: {
-		tier: "UU",
-		doublesTier: "DOU",
+		tier: "NU",
+		doublesTier: "DUU",
 	},
 	gallade: {
 		tier: "RU",
@@ -1106,7 +1106,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	vigoroth: {
-		tier: "NFE",
+		tier: "PUBL",
+		doublesTier: "NFE",
 	},
 	slaking: {
 		tier: "PU",
@@ -1116,7 +1117,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	ninjask: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	shedinja: {
@@ -1130,7 +1131,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	exploud: {
-		tier: "RU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	makuhita: {
@@ -1138,13 +1139,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	hariyama: {
 		tier: "RU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	nosepass: {
 		tier: "LC",
 	},
 	probopass: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	skitty: {
@@ -1155,7 +1156,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	sableye: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	mawile: {
@@ -1183,7 +1184,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	manectric: {
-		tier: "PU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	plusle: {
@@ -1206,10 +1207,11 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	roselia: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	roserade: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	gulpin: {
@@ -1237,18 +1239,18 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	camerupt: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	torkoal: {
-		tier: "UU",
-		doublesTier: "DOU",
+		tier: "NU",
+		doublesTier: "DUU",
 	},
 	spoink: {
 		tier: "LC",
 	},
 	grumpig: {
-		tier: "PUBL",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	spinda: {
@@ -1269,18 +1271,18 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	cacturne: {
-		tier: "RU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	swablu: {
 		tier: "LC",
 	},
 	altaria: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	zangoose: {
-		tier: "NUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	seviper: {
@@ -1306,14 +1308,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	crawdaunt: {
-		tier: "OU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	baltoy: {
 		tier: "LC",
 	},
 	claydol: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	lileep: {
@@ -1321,26 +1323,31 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	cradily: {
 		tier: "NU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	anorith: {
 		tier: "LC",
 	},
 	armaldo: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	feebas: {
 		tier: "LC",
 	},
 	milotic: {
-		tier: "OU",
-		doublesTier: "DOU",
+		tier: "UU",
+		doublesTier: "DUU",
 	},
 	castform: {
 		tier: "PU",
 		doublesTier: "DUU",
 	},
+	castformsunny: {
+	},
+	castformrainy: {
+	},
+	castformsnowy: {},
 	kecleon: {
 		tier: "PU",
 		doublesTier: "DUU",
@@ -1356,10 +1363,11 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	dusclops: {
-		tier: "NFE",
+		tier: "UU",
+		doublesTier: "NFE",
 	},
 	dusknoir: {
-		tier: "NU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	tropius: {
@@ -1370,11 +1378,11 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	chimecho: {
-		tier: "PUBL",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	absol: {
-		tier: "NUBL",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	snorunt: {
@@ -1385,7 +1393,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	froslass: {
-		tier: "RU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	spheal: {
@@ -1402,11 +1410,11 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	huntail: {
-		tier: "PUBL",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	gorebyss: {
-		tier: "PUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	relicanth: {
@@ -1424,29 +1432,30 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	salamence: {
-		tier: "UUBL",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	beldum: {
 		tier: "LC",
 	},
 	metang: {
-		tier: "NFE",
+		tier: "NU",
+		doublesTier: "NFE",
 	},
 	metagross: {
-		tier: "UU",
-		doublesTier: "DUU",
+		tier: "(OU)",
+		doublesTier: "DOU",
 	},
 	regirock: {
 		tier: "NU",
 		doublesTier: "DUU",
 	},
 	regice: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	registeel: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	latias: {
@@ -1454,7 +1463,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	latios: {
-		tier: "Uber",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	kyogre: {
@@ -1470,24 +1479,24 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUber",
 	},
 	jirachi: {
-		tier: "UU",
-		doublesTier: "DUU",
+		tier: "OU",
+		doublesTier: "DUber",
 	},
 	deoxys: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	deoxysattack: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	deoxysdefense: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	deoxysspeed: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	turtwig: {
 		tier: "LC",
@@ -1496,7 +1505,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	torterra: {
-		tier: "RU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	chimchar: {
@@ -1506,7 +1515,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	infernape: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DOU",
 	},
 	piplup: {
@@ -1526,14 +1535,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	staraptor: {
-		tier: "OU",
+		tier: "UUBL",
 		doublesTier: "DUU",
 	},
 	bidoof: {
 		tier: "LC",
 	},
 	bibarel: {
-		tier: "NUBL",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	kricketot: {
@@ -1564,7 +1573,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	bastiodon: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	burmy: {
@@ -1601,7 +1610,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	floatzel: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	cherubi: {
@@ -1611,11 +1620,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 		doublesTier: "DUU",
 	},
+	cherrimsunshine: {},
 	shellos: {
 		tier: "LC",
 	},
 	gastrodon: {
-		tier: "RU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	drifloon: {
@@ -1650,7 +1660,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	bronzong: {
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	chatot: {
@@ -1672,32 +1682,33 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DOU",
 	},
 	riolu: {
-		tier: "LC",
+		tier: "PUBL",
+		doublesTier: "LC",
 	},
 	lucario: {
-		tier: "OU",
-		doublesTier: "DUU",
+		tier: "(OU)",
+		doublesTier: "DOU",
 	},
 	hippopotas: {
 		tier: "LC",
 	},
 	hippowdon: {
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DUU",
 	},
 	skorupi: {
 		tier: "LC",
 	},
 	drapion: {
-		tier: "UU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	croagunk: {
 		tier: "LC",
 	},
 	toxicroak: {
-		tier: "NU",
-		doublesTier: "DUU",
+		tier: "OU",
+		doublesTier: "DOU",
 	},
 	carnivine: {
 		tier: "PU",
@@ -1714,7 +1725,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	abomasnow: {
-		tier: "PUBL",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	rotom: {
@@ -1734,23 +1745,23 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	rotomfan: {
-		tier: "PU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	rotommow: {
-		tier: "UU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	uxie: {
-		tier: "UU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	mesprit: {
-		tier: "NUBL",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	azelf: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	dialga: {
@@ -1791,11 +1802,11 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	darkrai: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	shaymin: {
 		tier: "UU",
-		doublesTier: "DOU",
+		doublesTier: "DUU",
 	},
 	shayminsky: {
 		tier: "Uber",
@@ -1812,8 +1823,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	arceusdragon: {
 	},
 	arceuselectric: {
-	},
-	arceusfairy: {
 	},
 	arceusfighting: {
 	},
@@ -1839,9 +1848,679 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	arceuswater: {
 	},
-	// Because it's marked as Unobtainable in the main file for some reason
-	eternatuseternamax: {
-		inherit: true,
-		isNonstandard: "Past",
+	victini: {
+		tier: "UU",
+		doublesTier: "DOU",
+	},
+	snivy: {
+		tier: "LC",
+	},
+	servine: {
+		tier: "NFE",
+	},
+	serperior: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	tepig: {
+		tier: "LC",
+	},
+	pignite: {
+		tier: "NFE",
+	},
+	emboar: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	oshawott: {
+		tier: "LC",
+	},
+	dewott: {
+		tier: "NFE",
+	},
+	samurott: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	patrat: {
+		tier: "LC",
+	},
+	watchog: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	lillipup: {
+		tier: "LC",
+	},
+	herdier: {
+		tier: "NFE",
+	},
+	stoutland: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	purrloin: {
+		tier: "LC",
+	},
+	liepard: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	pansage: {
+		tier: "LC",
+	},
+	simisage: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	pansear: {
+		tier: "LC",
+	},
+	simisear: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	panpour: {
+		tier: "LC",
+	},
+	simipour: {
+		tier: "PUBL",
+		doublesTier: "DUU",
+	},
+	munna: {
+		tier: "LC",
+	},
+	musharna: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	pidove: {
+		tier: "LC",
+	},
+	tranquill: {
+		tier: "NFE",
+	},
+	unfezant: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	blitzle: {
+		tier: "LC",
+	},
+	zebstrika: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	roggenrola: {
+		tier: "LC",
+	},
+	boldore: {
+		tier: "NFE",
+	},
+	gigalith: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	woobat: {
+		tier: "LC",
+	},
+	swoobat: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	drilbur: {
+		tier: "LC",
+	},
+	excadrill: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	audino: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	timburr: {
+		tier: "LC",
+	},
+	gurdurr: {
+		tier: "NU",
+		doublesTier: "NFE",
+	},
+	conkeldurr: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	tympole: {
+		tier: "LC",
+	},
+	palpitoad: {
+		tier: "NFE",
+	},
+	seismitoad: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	throh: {
+		tier: "PUBL",
+		doublesTier: "DUU",
+	},
+	sawk: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	sewaddle: {
+		tier: "LC",
+	},
+	swadloon: {
+		tier: "NFE",
+	},
+	leavanny: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	venipede: {
+		tier: "LC",
+	},
+	whirlipede: {
+		tier: "NFE",
+	},
+	scolipede: {
+		tier: "NUBL",
+		doublesTier: "DUU",
+	},
+	cottonee: {
+		tier: "LC",
+	},
+	whimsicott: {
+		tier: "RU",
+		doublesTier: "DOU",
+	},
+	petilil: {
+		tier: "LC",
+	},
+	lilligant: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	basculin: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	basculinbluestriped: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	sandile: {
+		tier: "LC",
+	},
+	krokorok: {
+		tier: "NFE",
+	},
+	krookodile: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	darumaka: {
+		tier: "LC",
+	},
+	darmanitan: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	maractus: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	dwebble: {
+		tier: "LC",
+	},
+	crustle: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	scraggy: {
+		tier: "NFE",
+	},
+	scrafty: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	sigilyph: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	yamask: {
+		tier: "LC",
+	},
+	cofagrigus: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	tirtouga: {
+		tier: "LC",
+	},
+	carracosta: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	archen: {
+		tier: "LC",
+	},
+	archeops: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	trubbish: {
+		tier: "LC",
+	},
+	garbodor: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	zorua: {
+		tier: "LC",
+	},
+	zoroark: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	minccino: {
+		tier: "LC",
+	},
+	cinccino: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	gothita: {
+		tier: "LC",
+	},
+	gothorita: {
+		tier: "PUBL",
+		doublesTier: "NFE",
+	},
+	gothitelle: {
+		tier: "UUBL",
+		doublesTier: "DUU",
+	},
+	solosis: {
+		tier: "LC",
+	},
+	duosion: {
+		tier: "NFE",
+	},
+	reuniclus: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	ducklett: {
+		tier: "LC",
+	},
+	swanna: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	vanillite: {
+		tier: "LC",
+	},
+	vanillish: {
+		tier: "NFE",
+	},
+	vanilluxe: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	deerling: {
+		tier: "LC",
+	},
+	sawsbuck: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	emolga: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	karrablast: {
+		tier: "LC",
+	},
+	escavalier: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	foongus: {
+		tier: "LC",
+	},
+	amoonguss: {
+		tier: "RU",
+		doublesTier: "DOU",
+	},
+	frillish: {
+		tier: "LC",
+	},
+	jellicent: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	alomomola: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	joltik: {
+		tier: "LC",
+	},
+	galvantula: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	ferroseed: {
+		tier: "RU",
+		doublesTier: "LC",
+	},
+	ferrothorn: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	klink: {
+		tier: "LC",
+	},
+	klang: {
+		tier: "NFE",
+	},
+	klinklang: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	tynamo: {
+		tier: "LC",
+	},
+	eelektrik: {
+		tier: "NFE",
+	},
+	eelektross: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	elgyem: {
+		tier: "LC",
+	},
+	beheeyem: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	litwick: {
+		tier: "LC",
+	},
+	lampent: {
+		tier: "NFE",
+	},
+	chandelure: {
+		tier: "UUBL",
+		doublesTier: "DOU",
+	},
+	axew: {
+		tier: "LC",
+	},
+	fraxure: {
+		tier: "NFE",
+	},
+	haxorus: {
+		tier: "(OU)",
+		doublesTier: "DUU",
+	},
+	cubchoo: {
+		tier: "LC",
+	},
+	beartic: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	cryogonal: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	shelmet: {
+		tier: "LC",
+	},
+	accelgor: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	stunfisk: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	mienfoo: {
+		tier: "LC",
+	},
+	mienshao: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	druddigon: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	golett: {
+		tier: "LC",
+	},
+	golurk: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	pawniard: {
+		tier: "LC",
+	},
+	bisharp: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	bouffalant: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	rufflet: {
+		tier: "LC",
+	},
+	braviary: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	vullaby: {
+		tier: "LC",
+	},
+	mandibuzz: {
+		tier: "NU",
+		doublesTier: "DUU",
+	},
+	heatmor: {
+		tier: "PU",
+		doublesTier: "DUU",
+	},
+	durant: {
+		tier: "RU",
+		doublesTier: "DUU",
+	},
+	deino: {
+		tier: "LC",
+	},
+	zweilous: {
+		tier: "NFE",
+	},
+	hydreigon: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	larvesta: {
+		tier: "LC",
+	},
+	volcarona: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	cobalion: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	terrakion: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	virizion: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	tornadus: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	tornadustherian: {
+		tier: "Uber",
+		doublesTier: "DUU",
+	},
+	thundurus: {
+		tier: "Uber",
+		doublesTier: "DOU",
+	},
+	thundurustherian: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	reshiram: {
+		tier: "Uber",
+		doublesTier: "DUber",
+	},
+	zekrom: {
+		tier: "Uber",
+		doublesTier: "DUber",
+	},
+	landorus: {
+		tier: "Uber",
+		doublesTier: "DUU",
+	},
+	landorustherian: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	kyurem: {
+		tier: "UUBL",
+		doublesTier: "DUU",
+	},
+	kyuremblack: {
+		tier: "OU",
+		doublesTier: "DOU",
+	},
+	kyuremwhite: {
+		tier: "Uber",
+		doublesTier: "DUber",
+	},
+	keldeo: {
+		tier: "OU",
+		doublesTier: "DUU",
+	},
+	keldeoresolute: {
+		tier: "OU",
+		doublesTier: "DUU",
+	},
+	meloetta: {
+		tier: "UU",
+		doublesTier: "DUU",
+	},
+	meloettapirouette: {
+	},
+	genesect: {
+		tier: "Uber",
+		doublesTier: "DOU",
+	},
+	genesectburn: {
+		tier: "Uber",
+		doublesTier: "(DOU)",
+	},
+	genesectchill: {
+		tier: "Uber",
+		doublesTier: "(DOU)",
+	},
+	genesectdouse: {
+		tier: "Uber",
+		doublesTier: "(DOU)",
+	},
+	genesectshock: {
+		tier: "Uber",
+		doublesTier: "(DOU)",
+	},
+	pokestarsmeargle: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarufo: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarufo2: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarbrycenman: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarmt: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarmt2: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestartransport: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestargiant: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestargiant2: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarhumanoid: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarmonster: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarf00: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarf002: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarspirit: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarblackdoor: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarwhitedoor: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarblackbelt: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestargiantpropo2: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
+	},
+	pokestarufopropu2: {
+		isNonstandard: "Unobtainable",
+		tier: "Illegal",
 	},
 };

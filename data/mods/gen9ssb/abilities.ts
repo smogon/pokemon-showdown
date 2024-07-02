@@ -1906,7 +1906,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
 		name: "I Did It Again",
 		flags: {},
-		// implemented in rulesets.ts
+		// implemented in format-rules.ts
 	},
 
 	// Pulse_kS

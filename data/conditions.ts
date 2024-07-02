@@ -1,4 +1,8 @@
 export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
+
+	// #region     Statuses
+	///////////////////////////////////////////////////////////////////
+
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
@@ -159,6 +163,15 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
 		},
 	},
+
+	// #endregion
+	// #region     Generic conditions
+	///////////////////////////////////////////////////////////////////
+
+	// Most conditions are attached to the move or other effect that
+	// gives them, but some are shared between multiple moves and not
+	// specific to any of them. Those are defined here.
+
 	confusion: {
 		name: 'confusion',
 		// this is a volatile status
@@ -457,10 +470,71 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 
-	// weather is implemented here since it's so important to the game
+	// #endregion
+	// #region     Extra conditions
+	///////////////////////////////////////////////////////////////////
+
+	// Rollout and Commander need multiple conditions to function, so
+	// those are defined here.
+
+	rolloutstorage: {
+		name: 'Rollout storage',
+		duration: 2,
+		onBasePower(relayVar, source, target, move) {
+			let bp = Math.max(1, move.basePower);
+			bp *= Math.pow(2, source.volatiles['rolloutstorage'].contactHitCount);
+			if (source.volatiles['defensecurl']) {
+				bp *= 2;
+			}
+			source.removeVolatile('rolloutstorage');
+			return bp;
+		},
+	},
+	// Commander needs two conditions so they are implemented here
+	// Dondozo
+	commanded: {
+		name: "Commanded",
+		noCopy: true,
+		onStart(pokemon) {
+			this.boost({atk: 2, spa: 2, spe: 2, def: 2, spd: 2}, pokemon);
+		},
+		onDragOutPriority: 2,
+		onDragOut() {
+			return false;
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+		},
+	},
+	// Tatsugiri
+	commanding: {
+		name: "Commanding",
+		noCopy: true,
+		onDragOutPriority: 2,
+		onDragOut() {
+			return false;
+		},
+		// Prevents Shed Shell allowing a swap
+		onTrapPokemonPriority: -11,
+		onTrapPokemon(pokemon) {
+			pokemon.trapped = true;
+		},
+		// Dodging moves is handled in BattleActions#hitStepInvulnerabilityEvent
+		// This is here for moves that manually call this event like Perish Song
+		onInvulnerability: false,
+		onBeforeTurn(pokemon) {
+			this.queue.cancelAction(pokemon);
+		},
+	},
+
+	// #endregion
+	// #region     Weather
+	///////////////////////////////////////////////////////////////////
 
 	raindance: {
-		name: 'RainDance',
+		name: 'Rain Dance',
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -498,7 +572,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 	primordialsea: {
-		name: 'PrimordialSea',
+		name: 'Primordial Sea',
 		effectType: 'Weather',
 		duration: 0,
 		onTryMovePriority: 1,
@@ -530,7 +604,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 	sunnyday: {
-		name: 'SunnyDay',
+		name: 'Sunny Day',
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -576,7 +650,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 	desolateland: {
-		name: 'DesolateLand',
+		name: 'Desolate Land',
 		effectType: 'Weather',
 		duration: 0,
 		onTryMovePriority: 1,
@@ -713,7 +787,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 	deltastream: {
-		name: 'DeltaStream',
+		name: 'Delta Stream',
 		effectType: 'Weather',
 		duration: 0,
 		onEffectivenessPriority: -1,
@@ -790,44 +864,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 	},
 
-	// Commander needs two conditions so they are implemented here
-	// Dondozo
-	commanded: {
-		name: "Commanded",
-		noCopy: true,
-		onStart(pokemon) {
-			this.boost({atk: 2, spa: 2, spe: 2, def: 2, spd: 2}, pokemon);
-		},
-		onDragOutPriority: 2,
-		onDragOut() {
-			return false;
-		},
-		// Prevents Shed Shell allowing a swap
-		onTrapPokemonPriority: -11,
-		onTrapPokemon(pokemon) {
-			pokemon.trapped = true;
-		},
-	},
-	// Tatsugiri
-	commanding: {
-		name: "Commanding",
-		noCopy: true,
-		onDragOutPriority: 2,
-		onDragOut() {
-			return false;
-		},
-		// Prevents Shed Shell allowing a swap
-		onTrapPokemonPriority: -11,
-		onTrapPokemon(pokemon) {
-			pokemon.trapped = true;
-		},
-		// Dodging moves is handled in BattleActions#hitStepInvulnerabilityEvent
-		// This is here for moves that manually call this event like Perish Song
-		onInvulnerability: false,
-		onBeforeTurn(pokemon) {
-			this.queue.cancelAction(pokemon);
-		},
-	},
+	// #endregion
+	// #region     Species
+	///////////////////////////////////////////////////////////////////
 
 	// Arceus and Silvally's actual typing is implemented here.
 	// Their true typing for all their formes is Normal, and it's only
@@ -865,17 +904,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return [type];
 		},
 	},
-	rolloutstorage: {
-		name: 'rolloutstorage',
-		duration: 2,
-		onBasePower(relayVar, source, target, move) {
-			let bp = Math.max(1, move.basePower);
-			bp *= Math.pow(2, source.volatiles['rolloutstorage'].contactHitCount);
-			if (source.volatiles['defensecurl']) {
-				bp *= 2;
-			}
-			source.removeVolatile('rolloutstorage');
-			return bp;
-		},
-	},
+
+	// #endregion
 };

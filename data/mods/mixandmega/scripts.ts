@@ -5,7 +5,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!this.data.Items[i].megaStone) continue;
 			this.modData('Items', i).onTakeItem = false;
 			const id = this.toID(this.data.Items[i].megaStone);
-			this.modData('FormatsData', id).isNonstandard = null;
+			this.modData('PokedexTiers', id).isNonstandard = null;
 		}
 	},
 	start() {

@@ -14,7 +14,14 @@ export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit:
 export interface FormatDataTable {[id: IDEntry]: FormatData}
 export interface ModdedFormatDataTable {[id: IDEntry]: ModdedFormatData}
 
-type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
+/**
+ * All three of these are considered "formats", but `Format` is a list
+ * of rules you can play, while `Rule` | `ValidatorRule` is a list of
+ * rules that can only be used in other lists of rules. A
+ * `ValidatorRule` is explicitly a rule that only affects validation
+ * and has no effect after battle start.
+ */
+type FormatEffectType = ('Format' | 'Rule' | 'ValidatorRule') & EffectType;
 
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];

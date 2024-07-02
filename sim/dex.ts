@@ -45,18 +45,18 @@ const MODS_DIR = path.resolve(DATA_DIR, './mods');
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
 type DataType =
-	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
+	'Abilities' | 'Rulesets' | 'PokedexTiers' | 'Items' | 'Learnsets' | 'Moves' |
 	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart' | 'PokemonGoData';
 const DATA_TYPES: (DataType | 'Aliases')[] = [
-	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
+	'Abilities', 'Rulesets', 'PokedexTiers', 'Items', 'Learnsets', 'Moves',
 	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData',
 ];
 
 const DATA_FILES = {
 	Abilities: 'abilities',
 	Aliases: 'aliases',
-	Rulesets: 'rulesets',
-	FormatsData: 'formats-data',
+	Rulesets: 'format-rules',
+	PokedexTiers: 'pokedex-tiers',
 	Items: 'items',
 	Learnsets: 'learnsets',
 	Moves: 'moves',
@@ -81,7 +81,7 @@ interface DexTableData {
 	Moves: DexTable<import('./dex-moves').MoveData>;
 	Natures: DexTable<import('./dex-data').NatureData>;
 	Pokedex: DexTable<import('./dex-species').SpeciesData>;
-	FormatsData: DexTable<import('./dex-species').SpeciesFormatsData>;
+	PokedexTiers: DexTable<import('./dex-species').TiersData>;
 	PokemonGoData: DexTable<import('./dex-species').PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
 	Conditions: DexTable<import('./dex-conditions').ConditionData>;
@@ -526,7 +526,7 @@ export class ModdedDex {
 						// If it doesn't exist it's inherited from the parent data
 						if (dataType === 'Pokedex') {
 							// Pokedex entries can be modified too many different ways
-							// e.g. inheriting different formats-data/learnsets
+							// e.g. inheriting different pokedex-tiers/learnsets
 							childTypedData[entryId] = this.deepClone(parentTypedData[entryId]);
 						} else {
 							childTypedData[entryId] = parentTypedData[entryId];
