@@ -1073,9 +1073,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(target) {
-				const user = target.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
-				const damage = this.actions.getDamage(user, target, 'blissfulbreeze');
-				this.damage(damage, target);
+				const source = target.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
+				const move = this.dex.moves.get('blissfulbreeze');
+				this.add('-message', `${source} | ${source.name} | ${source.getStat('spa')}`);
+				//const damage = this.actions.getDamage(source, target, move);
+				//this.damage(damage, target);
 				this.add('-message', `${target.name} was buffeted by Blissful Breeze!`);
 			},
 			onSideResidualOrder: 26,
