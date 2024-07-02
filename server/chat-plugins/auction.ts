@@ -33,8 +33,8 @@ class Team {
 		this.auction = auction;
 	}
 
-	maxBid(credits?: number) {
-		return (credits || this.credits) + this.auction.minBid * Math.min(0, this.players.length - this.auction.minPlayers + 1);
+	maxBid(credits = this.credits) {
+		return credits + this.auction.minBid * Math.min(0, this.players.length - this.auction.minPlayers + 1);
 	}
 }
 
@@ -249,7 +249,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	addPlayerToAuction(name: string, tiers?: string[]) {
 		if (this.state === 'end') throw new Chat.ErrorMessage(`The auction has ended.`);
-		if (this.state === 'bid') throw new Chat.ErrorMessage(`You cannot add players to the auction right now.`);
+		if (this.state !== 'setup' && this.state !== 'nom') {
+			throw new Chat.ErrorMessage(`You cannot add players to the auction right now.`);
+		}
 		const player: Player = {
 			id: toID(name),
 			name,
@@ -262,16 +264,23 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	removePlayerFromAuction(name: string) {
 		if (this.state === 'end') throw new Chat.ErrorMessage(`The auction has ended.`);
-		if (this.state === 'bid') throw new Chat.ErrorMessage(`You cannot remove players from the auction right now.`);
+		if (this.state !== 'setup' && this.state !== 'nom') {
+			throw new Chat.ErrorMessage(`You cannot remove players from the auction right now.`);
+		}
 		const player = this.playerList[toID(name)];
 		if (!player) throw new Chat.ErrorMessage(`Player "${name}" not found.`);
 		delete this.playerList[player.id];
+		if (!Object.values(this.playerList).filter(p => !p.team).length) {
+			this.end('There are no players remaining in the draft pool, so the auction has ended.');
+		}
 		return player;
 	}
 
 	assignPlayer(name: string, teamName?: string) {
 		if (this.state === 'end') throw new Chat.ErrorMessage(`The auction has ended.`);
-		if (this.state === 'bid') throw new Chat.ErrorMessage(`You cannot assign players to a team right now.`);
+		if (this.state !== 'setup' && this.state !== 'nom') {
+			throw new Chat.ErrorMessage(`You cannot assign players to a team right now.`);
+		}
 		const player = this.playerList[toID(name)];
 		if (!player) throw new Chat.ErrorMessage(`Player "${name}" not found.`);
 		if (teamName) {
@@ -284,6 +293,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 			player.team = team;
 		} else {
 			delete player.team;
+		}
+		if (!Object.values(this.playerList).filter(p => !p.team).length) {
+			return this.end('There are no players remaining in the draft pool, so the auction has ended.');
 		}
 		this.display();
 	}
@@ -310,7 +322,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	suspendTeam(name: string) {
 		if (this.state === 'end') throw new Chat.ErrorMessage(`The auction has ended.`);
-		if (this.state === 'bid') throw new Chat.ErrorMessage(`You cannot suspend teams right now.`);
+		if (this.state !== 'setup' && this.state !== 'nom') {
+			throw new Chat.ErrorMessage(`You cannot suspend teams right now.`);
+		}
 		const team = this.teams[toID(name)];
 		if (!team) throw new Chat.ErrorMessage(`Team "${name}" not found.`);
 		if (team.suspended) throw new Chat.ErrorMessage(`Team ${name} is already suspended.`);
@@ -320,7 +334,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	unsuspendTeam(name: string) {
 		if (this.state === 'end') throw new Chat.ErrorMessage(`The auction has ended.`);
-		if (this.state === 'bid') throw new Chat.ErrorMessage(`You cannot unsuspend teams right now.`);
+		if (this.state !== 'setup' && this.state !== 'nom') {
+			throw new Chat.ErrorMessage(`You cannot unsuspend teams right now.`);
+		}
 		const team = this.teams[toID(name)];
 		if (!team) throw new Chat.ErrorMessage(`Team "${name}" not found.`);
 		if (!team.suspended) throw new Chat.ErrorMessage(`Team ${name} is not suspended.`);
@@ -353,6 +369,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	addCreditsToTeam(teamName: string, amount: number) {
 		if (this.state === 'end') throw new Chat.ErrorMessage(`The auction has ended.`);
+		if (this.state !== 'setup' && this.state !== 'nom') {
+			throw new Chat.ErrorMessage(`You cannot add credits to a team right now.`);
+		}
 		const team = this.teams[toID(teamName)];
 		if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
 		if (amount < 500) amount *= 1000;
@@ -403,7 +422,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (!this.queue.filter(id => this.teams[id].credits >= this.minBid && !this.teams[id].suspended).length) {
 			return this.end('There are no teams remaining that can draft players, so the auction has ended.');
 		}
-		if (!Object.keys(this.playerList).length) {
+		if (!Object.values(this.playerList).filter(p => !p.team).length) {
 			return this.end('There are no players remaining in the draft pool, so the auction has ended.');
 		}
 		do {
@@ -850,7 +869,7 @@ export const commands: Chat.ChatCommands = {
 			`- nom [player]: Nominates a player for auction.<br/>` +
 			`- bid [amount]: Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.<br/>` +
 			`You may use /bid and /nom directly without the /auction prefix.<br/><br/>` +
-			`<details class="readmore"><summary>Configuration Commands</summary><br/>` +
+			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- minbid [amount]: Sets the minimum bid.<br/>` +
 			`- minplayers [amount]: Sets the minimum number of players.<br/>` +
 			`- blindmode [on/off]: Toggles blind mode.<br/>` +
