@@ -60,6 +60,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 	currentNom: Player;
 	currentBid: number;
 	currentBidder: Team;
+	/** Used for blind mode */
+	bidsPlaced: {[k: string]: number};
 	state: 'setup' | 'nom' | 'bid' | 'end' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
@@ -80,6 +82,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.currentNom = null!;
 		this.currentBid = 0;
 		this.currentBidder = null!;
+		this.bidsPlaced = {};
 	}
 
 	sendMessage(message: string) {
@@ -390,7 +393,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 		this.lastQueue = null;
 		this.queue = Object.values(this.teams).map(toID).concat(Object.values(this.teams).map(toID).reverse());
-		this.resetTimer();
+		this.clearTimer();
 		this.state = 'setup';
 		this.display();
 	}
@@ -431,7 +434,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	bid(user: User, amount: number) {
-		if (this.state !== 'bid') throw new Chat.ErrorMessage(`There is no one to bid on right now.`);
+		if (this.state !== 'bid') throw new Chat.ErrorMessage(`There are no players up for auction right now.`);
 		const team = Object.values(this.teams).find(t => t.managers.includes(user.id));
 		if (!team) throw new Chat.ErrorMessage(`Only managers can bid on players.`);
 
@@ -440,17 +443,25 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (amount > team.maxBid()) throw new Chat.ErrorMessage(`You cannot afford to bid that much.`);
 
 		if (this.blindMode) {
-			user.sendTo(this.room, `Your team placed a ${amount} bid on ${this.currentNom}.`);
+			if (this.bidsPlaced[team.id]) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
+			if (amount <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
+			this.bidsPlaced[team.id] = amount;
+			for (const manager of team.managers) {
+				Users.get(manager)?.sendTo(this.room, `Your team placed a bid of **${amount}** on **${this.currentNom}**.`);
+			}
 			if (amount > this.currentBid) {
 				this.currentBid = amount;
 				this.currentBidder = team;
+			}
+			if (Object.keys(this.bidsPlaced).length === Object.keys(this.teams).length) {
+				this.finishCurrentNom();
 			}
 		} else {
 			if (amount <= this.currentBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
 			this.currentBid = amount;
 			this.currentBidder = team;
 			this.sendMessage(`${user.name}[${team.name}]: **${amount}**`);
-			this.resetTimer();
+			this.clearTimer();
 			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 		}
 	}
@@ -461,7 +472,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.currentBidder.players.push(this.currentNom);
 		this.currentNom.team = this.currentTeam;
 		this.currentNom.price = this.currentBid;
-		this.resetTimer();
+		this.clearTimer();
 		this.next();
 	}
 
@@ -476,7 +487,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.next();
 	}
 
-	resetTimer() {
+	clearTimer() {
 		clearInterval(this.bidTimer);
 		this.bidTimeElapsed = 0;
 	}
@@ -493,7 +504,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	end(message?: string) {
 		this.state = 'end';
-		this.resetTimer();
+		this.clearTimer();
 		this.display();
 		if (message) this.sendMessage(message);
 	}
