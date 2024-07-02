@@ -932,6 +932,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Heal Pulse', target);
 		},
 		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 2,
 				move: 'granddelta',
@@ -1072,11 +1073,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
 			onResidual(target) {
-				const rand = this.random(85, 100) / 100;
-				const def = target.getStat('spd', false, true);
-				const damage = (1.5)*(72576/(5*def)+2)*rand;
+				const source = target.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
+				const damage = this.actions.getDamage(source, target, 'blissfulbreeze');
 				this.damage(damage, target);
-				this.add('-message', `${target.name} was damaged by Blissful Breeze!`);
+				this.add('-message', `${target.name} was buffeted by Blissful Breeze!`);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
