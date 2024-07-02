@@ -692,12 +692,14 @@ export const Aliases: {[alias: string]: string} = {
 	// abilities
 	emorph: "Electromorphosis",
 	hadron: "Hadron Engine",
+	intim: "Intimidate",
 	mg: "Magic Guard",
 	ngas: "Neutralizing Gas",
 	pheal: "Poison Heal",
 	proto: "Protosynthesis",
 	regen: "Regenerator",
 	sf: "Sheer Force",
+	so: "Supreme Overlord",
 	stag: "Shadow Tag",
 
 	// items
