@@ -432,6 +432,7 @@ export const Aliases: {[alias: string]: string} = {
 	squawkabillygreen: "Squawkabilly",
 	squawkabillyg: "Squawkabilly",
 	tealpon: "Ogerpon",
+	grasspon: "Ogerpon",
 	ogerpont: "Ogerpon",
 	ogerponteal: "Ogerpon",
 	ogerpontealmask: "Ogerpon",
