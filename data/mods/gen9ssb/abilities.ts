@@ -84,11 +84,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onFoeTryMove(target, source, move) {
-			if (source.hp && target.species.id !== 'mimikyu' && target.abilityState.duration > 0) {
-				this.add('-activate', target, 'ability: Dollkeeper');
-				this.damage(source.baseMaxhp / 6, source);
-				source.addVolatile('yawn');
-				source.addVolatile('lag');
+			if (target.hp && source.species.id !== 'mimikyu' && source.abilityState.duration > 0) {
+				this.add('-activate', source, 'ability: Dollkeeper');
+				this.damage(target.baseMaxhp / 6, target);
+				target.addVolatile('yawn');
+				target.addVolatile('lag');
 				return;
 			}
 		},
