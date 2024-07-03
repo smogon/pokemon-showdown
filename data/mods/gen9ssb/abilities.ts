@@ -82,11 +82,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.abilityState.transform = true;
 				return;
 			}
-			if (target.hp && pokemon.species.id !== 'mimikyu' && pokemon.abilityState.duration > 0) {
-				this.add('-activate', pokemon, 'ability: Dollkeeper');
-				this.damage(target.baseMaxhp / 6, target);
-				target.addVolatile('yawn');
-				target.addVolatile('lag');
+		},
+		onFoeTryMove(target, source, move) {
+			if (source.hp && target.species.id !== 'mimikyu' && target.abilityState.duration > 0) {
+				this.add('-activate', target, 'ability: Dollkeeper');
+				this.damage(source.baseMaxhp / 6, source);
+				source.addVolatile('yawn');
+				source.addVolatile('lag');
+				return;
 			}
 		},
 	},
