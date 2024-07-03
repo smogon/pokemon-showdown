@@ -50,11 +50,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.heal(pokemon.baseMaxhp, pokemon);
 				pokemon.abilityState.duration = 4;
 				target.side.addSideCondition('curseddoll');
+				pokemon.abilityState.transform = false;
 			} else if (pokemon.name === 'Morte' && pokemon.species.id !== 'mimikyu' && pokemon.abilityState.transform) {
 				this.add('-ability', pokemon, 'Dollkeeper');
 				pokemon.formeChange('Mimikyu');
 				pokemon.abilityState.duration = 0;
 				target.side.removeSideCondition('curseddoll');
+				pokemon.abilityState.transform = false;
 			}
 		},
 		onDamagePriority: -30,
