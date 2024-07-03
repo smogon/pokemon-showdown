@@ -46,7 +46,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 150,
 		category: "Physical",
 		name: "Omen of Defeat",
-		shortDesc: "Endures, then hits after opponent. User faints.",
+		shortDesc: "Endures, then hits after opponent. Mimikyu: Transforms.",
 		pp: 16,
 		noPPBoosts: true,
 		priority: -8,
@@ -55,8 +55,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Confuse Ray', source);
-			this.add('-anim', source, 'Moongeist Beam', target);
+			this.add('-anim', source, 'Hex', source);
+			this.add('-anim', source, 'Spectral Thief', target);
 		},
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('omenofdefeat');
@@ -65,7 +65,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Omen of Defeat');
-				this.add('-message', `${pokemon.name} prepared to endure!`);
+				this.add('-message', `${pokemon.name} prepared for defeat!`);
 			},
 			onDamage(damage, target, source, effect) {
 				if (effect?.effectType === 'Move' && damage >= target.hp) {
@@ -74,7 +74,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onEnd(pokemon) {
-				this.damage(pokemon.baseMaxhp, pokemon, pokemon, this.effect);
+				if (pokemon.species.id === 'mimikyu') pokemon.abilityState.transform = true;
 			},
 		},
 		secondary: null,
