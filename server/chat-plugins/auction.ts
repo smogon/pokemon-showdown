@@ -20,7 +20,6 @@ class Team {
 	name: string;
 	credits: number;
 	managers: string[];
-	players: Player[];
 	suspended: boolean;
 	private auction: Auction;
 	constructor(name: string, auction: Auction) {
@@ -28,13 +27,21 @@ class Team {
 		this.name = name;
 		this.credits = auction.startingCredits;
 		this.managers = [];
-		this.players = [];
 		this.suspended = false;
 		this.auction = auction;
 	}
 
+	getPlayers() {
+		const players = [];
+		for (const id in this.auction.playerList) {
+			const player = this.auction.playerList[id];
+			if (player.team === this) players.push(player);
+		}
+		return players;
+	}
+
 	maxBid(credits = this.credits) {
-		return credits + this.auction.minBid * Math.min(0, this.players.length - this.auction.minPlayers + 1);
+		return credits + this.auction.minBid * Math.min(0, this.getPlayers().length - this.auction.minPlayers + 1);
 	}
 }
 
@@ -125,7 +132,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		for (const id in this.teams) {
 			const team = this.teams[id];
 			buf += `<details><summary>${team.name}</summary><table>`;
-			for (const player of team.players.sort((a, b) => b.price - a.price)) {
+			for (const player of team.getPlayers().sort((a, b) => b.price - a.price)) {
 				buf += `<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 			}
 			buf += `</table></details><br>`;
@@ -143,6 +150,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<div class="infobox"><div class="ladder pad"><table style="width: 100%"><tr><th colspan=2>Order</th><th>Teams</th><th>Credits</th><th>Players</th></tr>`;
 		const queue = this.queue.filter(id => this.teams[id].credits >= this.minBid && !this.teams[id].suspended);
 		buf += Object.values(this.teams).map(team => {
+			const players = team.getPlayers();
 			let i1 = queue.indexOf(team.id) + 1;
 			let i2 = queue.lastIndexOf(team.id) + 1;
 			if (i1 > queue.length / 2) {
@@ -152,7 +160,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			row += `<td align="center" style="width: 15px">${i1 > 0 ? i1 : '-'}</td><td align="center" style="width: 15px">${i2 > 0 ? i2 : '-'}</td>`;
 			row += `<td style="white-space: nowrap"><strong>${team.name}</strong><br>${this.generateUsernameList(team.managers.map(id => Users.get(id)?.name || id), 2, true)}</td>`;
 			row += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
-			row += `<td><div style="min-height: 32px; height: 32px; overflow: hidden; resize: vertical"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			row += `<td><div style="min-height: 32px; height: 32px; overflow: hidden; resize: vertical"><span style="float: right">${players.length}</span>${this.generateUsernameList(players)}</div></td>`;
 			row += `</tr>`;
 			return row;
 		}).join('');
@@ -286,16 +294,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (teamName) {
 			const team = this.teams[toID(teamName)];
 			if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
-			if (player.team) {
-				player.team.players.splice(player.team.players.indexOf(player), 1);
-			}
-			team.players.push(player);
 			player.team = team;
+			if (!Object.values(this.playerList).filter(p => !p.team).length) {
+				return this.end('There are no players remaining in the draft pool, so the auction has ended.');
+			}
 		} else {
 			delete player.team;
-		}
-		if (!Object.values(this.playerList).filter(p => !p.team).length) {
-			return this.end('There are no players remaining in the draft pool, so the auction has ended.');
 		}
 		this.display();
 	}
@@ -404,11 +408,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 			const team = this.teams[id];
 			team.credits = this.startingCredits;
 			team.suspended = false;
-			for (const player of team.players) {
+			for (const player of team.getPlayers()) {
 				delete player.team;
 				player.price = 0;
 			}
-			team.players = [];
 		}
 		this.lastQueue = null;
 		this.queue = Object.values(this.teams).map(toID).concat(Object.values(this.teams).map(toID).reverse());
@@ -488,7 +491,6 @@ export class Auction extends Rooms.SimpleRoomGame {
 	finishCurrentNom() {
 		this.sendMessage(`**${this.currentTeam.name}** has bought **${this.currentNom.name}** for **${this.currentBid}** credits!`);
 		this.currentBidder.credits -= this.currentBid;
-		this.currentBidder.players.push(this.currentNom);
 		this.currentNom.team = this.currentTeam;
 		this.currentNom.price = this.currentBid;
 		this.clearTimer();
@@ -497,10 +499,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	undoLastNom() {
 		if (this.state !== 'nom') throw new Chat.ErrorMessage(`You cannot undo a nomination right now.`);
-		if (!this.lastQueue) throw new Chat.ErrorMessage(`There is no nomination to undo.`);
+		if (!this.lastQueue) throw new Chat.ErrorMessage(`You cannot undo more than one nomination at a time.`);
 		this.queue = this.lastQueue;
 		this.lastQueue = null;
-		this.currentBidder.players.slice(this.currentBidder.players.indexOf(this.currentNom), 1);
 		this.currentBidder.credits += this.currentBid;
 		delete this.currentNom.team;
 		this.next();
