@@ -27,11 +27,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-sidestart', side, 'ability: Cursed Doll');
 			},
 			onModifyDef(def, pokemon) {
-				this.add('-message', `${pokemon.name}'s Defense before Cursed Doll: ${def}`);
 				return this.chainModify(0.7);
 			},
 			onModifySpd(spd, pokemon) {
-				this.add('-message', `${pokemon.name}'s SpDefense before Cursed Doll: ${spd}`);
 				return this.chainModify(0.7);
 			},
 			onSideEnd(side) {
@@ -43,6 +41,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	dollkeeper: {
 		name: "Dollkeeper",
 		gen: 9,
+		onStart(pokemon) {
+			if (!pokemon.abilityState.duration) return;
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			if (pokemon.species.id === 'mimikyu' && pokemon.abilityState.duration > 0) {
+				pokemon.abilityState.transform = true;
+			}
+		},
 		onUpdate(pokemon) {
 			// Function for transforming between doll and regular forme. Just use `pokemon.abilityState.transform = true` to trigger transformation.
 			// Automatically transforms once abilityState is set; transform is set back to false after transforming automatically.
