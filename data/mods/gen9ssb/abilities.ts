@@ -69,7 +69,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp && effect?.effectType === 'Move') {
+			if (damage >= target.hp && target.species.id === 'mimikyu') {
 				target.abilityState.transform = true;
 				return target.hp - 1;
 			}
