@@ -39,29 +39,33 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	dollkeeper: {
 		name: "Dollkeeper",
 		gen: 9,
-		onStart(pokemon) {
-			if (pokemon.abilityState.dollForm && pokemon.abilityState.duration <= 0) {
-				pokemon.formeChange('Mimikyu');
-				this.add('-message', `${pokemon.name} transformed back to Mimikyu!`);
-				pokemon.abilityState.dollForm = false;
+		onUpdate(pokemon) {
+			// Function for transforming between doll and regular forme. Just use `pokemon.abilityState.transform = true` to trigger transformation.
+			// Automatically transforms once abilityState is set; transform is set back to false after transforming automatically.
+			// No need to manually set it back to false each time we set abilityState.transform to true.
+			const target = pokemon.side.foe;
+			if (pokemon.name === 'Morte' && pokemon.species.id === 'mimikyu' && pokemon.abilityState.transform) {
+				this.add('-ability', pokemon, 'Dollkeeper');
+				target.formeChange('Mimikyu-Busted');
+				this.heal(pokemon.baseMaxhp, pokemon);
+				pokemon.abilityState.duration = 4;
+				target.side.addSideCondition('curseddoll');
+			} else if (pokemon.name === 'Morte' && pokemon.species.id !== 'mimikyu' && pokemon.abilityState.transform) {
+				this.add('-ability', pokemon, 'Dollkeeper');
+				target.formeChange('Mimikyu');
 				pokemon.abilityState.duration = 0;
+				target.side.removeSideCondition('curseddoll');
 			}
 		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp && effect?.effectType === 'Move' && !target.abilityState.dollForm) {
-				this.add('-ability', target, 'Dollkeeper');
+			if (damage >= target.hp && effect?.effectType === 'Move') {
+				target.abilityState.transform = true;
 				return target.hp - 1;
-				target.formeChange('Mimikyu-Busted');
-				this.add('-message', `${target.name} changed into Doll form!`);
-				this.heal(target.baseMaxhp, target);
-				target.abilityState.dollForm = true;
-				target.abilityState.duration = 4;
-				source.side.addSideCondition('curseddoll');
 			}
 		},
 		onBeforeMove(pokemon, target, move) {
-			if (pokemon.abilityState.dollForm) {
+			if (pokemon.species.id !== 'mimikyu') {
 				this.debug("Disabled by Dollkeeper");
 				this.add('-fail', pokemon);
 				return false;
@@ -69,19 +73,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onResidual(pokemon) {
 			const target = pokemon.side.foe;
-			if (!pokemon.abilityState.dollForm) {
-				pokemon.abilityState.dollForm = false;
-				return false;
-			}
 			if (pokemon.abilityState.duration > 0) pokemon.abilityState.duration -= 1;
-			if (pokemon.abilityState.duration <= 0) {
-				pokemon.formeChange('Mimikyu');
-				this.add('-message', `${pokemon.name} transformed back to Mimikyu!`);
-				pokemon.abilityState.dollForm = false;
-				pokemon.abilityState.duration = 0;
+			if (pokemon.abilityState.duration <= 0 && pokemon.species.id !== 'mimikyu') {
+				pokemon.abilityState.transform = true;
 				return;
 			}
-			if (target.hp && pokemon.abilityState.dollForm && pokemon.abilityState.duration > 0) {
+			if (target.hp && pokemon.species.id !== 'mimikyu' && pokemon.abilityState.duration > 0) {
 				this.add('-activate', target, 'ability: Dollkeeper');
 				this.damage(target.baseMaxhp / 6, target);
 				target.addVolatile('yawn');
