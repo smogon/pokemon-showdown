@@ -20,18 +20,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Cursed Doll",
 		gen: 9,
 		desc: "Field condition for Morte. Not an obtainable ability.",
+		sideCondition: 'curseddoll',
 		condition: {
 			duration: 4,
-			onStart(pokemon) {
-				this.add('-message', `Cursed Doll started on ${pokemon.name}!`);
-				this.add('-message', `${pokemon.name}'s defense dropped!`);
-				this.add('-message', `${pokemon.name}'s special defense dropped!`);
+			onSideStart(side) {
+				this.add('-sidestart', side, 'ability: Cursed Doll');
 			},
 			onModifyDef(def, pokemon) {
 				return this.chainModify(0.7);
 			},
 			onModifySpd(spd, pokemon) {
 				return this.chainModify(0.7);
+			},
+			onSideEnd(side) {
+				this.add('-sideend', side, 'ability: Cursed Doll');
 			},
 		},
 	},
