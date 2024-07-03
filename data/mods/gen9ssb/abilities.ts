@@ -22,7 +22,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Field condition for Morte. Not an obtainable ability.",
 		sideCondition: 'curseddoll',
 		condition: {
-			duration: 4,
+			duration: 5,
 			onSideStart(side) {
 				this.add('-sidestart', side, 'ability: Cursed Doll');
 			},
@@ -50,7 +50,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-ability', pokemon, 'Dollkeeper');
 				pokemon.formeChange('Mimikyu-Busted');
 				this.heal(pokemon.baseMaxhp, pokemon);
-				pokemon.abilityState.duration = 4;
+				pokemon.abilityState.duration = 5;
 				target.side.addSideCondition('curseddoll');
 				pokemon.abilityState.transform = false;
 			} else if (pokemon.name === 'Morte' && pokemon.species.id !== 'mimikyu' && pokemon.abilityState.transform) {
@@ -71,7 +71,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBeforeMove(pokemon, target, move) {
 			if (pokemon.species.id !== 'mimikyu') {
 				this.debug("Disabled by Dollkeeper");
-				this.add('-fail', pokemon);
+				this.add('-message', `${pokemon.name} can't move!`);
 				return false;
 			}
 		},
@@ -83,7 +83,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			}
 			if (target.hp && pokemon.species.id !== 'mimikyu' && pokemon.abilityState.duration > 0) {
-				this.add('-activate', target, 'ability: Dollkeeper');
+				this.add('-activate', pokemon, 'ability: Dollkeeper');
 				this.damage(target.baseMaxhp / 6, target);
 				target.addVolatile('yawn');
 				target.addVolatile('lag');
