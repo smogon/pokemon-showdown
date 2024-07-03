@@ -3172,7 +3172,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 		mod: 'gen5bw1',
 		ruleset: ['Standard', 'Sleep Clause Mod', 'Swagger Clause', 'Baton Pass Stat Clause'],
-		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew', 'Acupressure', 'Assist'],
+		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Soul Dew'],
 	},
 	{
 		name: "[Gen 1] ZU",
