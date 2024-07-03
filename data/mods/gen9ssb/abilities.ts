@@ -2866,9 +2866,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					pokemon.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
 				}
 			},
-			onEnd(target) {
-				delete target.volatiles['treasurebag'];
-			},
 			onResidual(pokemon, source, effect) {
 				if (!pokemon.m.bag) {
 					pokemon.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
