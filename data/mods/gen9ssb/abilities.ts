@@ -27,9 +27,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-sidestart', side, 'ability: Cursed Doll');
 			},
 			onModifyDef(def, pokemon) {
+				this.add('-message', `${pokemon.name}'s Defense before Cursed Doll: ${def}`);
 				return this.chainModify(0.7);
 			},
 			onModifySpd(spd, pokemon) {
+				this.add('-message', `${pokemon.name}'s SpDefense before Cursed Doll: ${spd}`);
 				return this.chainModify(0.7);
 			},
 			onSideEnd(side) {
