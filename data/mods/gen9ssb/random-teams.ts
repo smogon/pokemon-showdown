@@ -116,10 +116,16 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Morte: {
-		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'N',
+		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
 		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
 		signatureMove: 'Omen of Defeat',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
+	},
+	'Cyclommatic Cell': {
+		species: 'Vikavolt-Totem', ability: 'Battery Life', item: 'Apparatus', gender: 'N',
+		moves: ['Parabolic Charge', 'Bug Buzz', 'Techno Blast'],
+		signatureMove: 'Galvanic Web',
+		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
 	},
 	/*
 	Nibirus: {
