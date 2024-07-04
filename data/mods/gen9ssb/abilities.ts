@@ -65,6 +65,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.formeChange('Mimikyu');
 				target.side.removeSideCondition('curseddoll');
 				pokemon.abilityState.transform = false;
+				
 			}
 		},
 		onDamagePriority: -30,
@@ -86,7 +87,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.abilityState.duration > 0) pokemon.abilityState.duration -= 1;
 			if (pokemon.abilityState.duration <= 0 && pokemon.species.id !== 'mimikyu') {
 				pokemon.abilityState.transform = true;
-				return;
 			}
 		},
 		onFoeTryMove(target, source, move) {
@@ -95,7 +95,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.damage(target.baseMaxhp / 6, target);
 				target.addVolatile('yawn');
 				target.addVolatile('lag');
-				return;
 			}
 		},
 	},
