@@ -1,4 +1,25 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Cyclommatic Cell
+	apparatus: {
+		name: "Apparatus",
+		gen: 9,
+		shortDesc: "See '/ssb Cyclommatic Cell' for more!",
+		desc: "On switch-in, starts Ion Deluge and Magnet Rise for holder. Restores one gauge of battery life at end of each turn. Techno Blast: Steel-type, 1.3x power.",
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'Item: Apparatus');
+			pokemon.addVolatile('magnetrise');
+			this.field.addPseudoWeather('iondeluge');
+		},
+		onModifyType(move, pokemon) {
+			if (move.id === 'technoblast') {
+				move.type = 'Steel';
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.id === 'technoblast') return this.chainModify([5325, 4096]);
+		},
+	},
 	// Morte
 	malediction: {
 		name: "Malediction",
