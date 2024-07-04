@@ -115,12 +115,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Miracle',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	Morte: {
+	/*Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
 		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
 		signatureMove: 'Omen of Defeat',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
-	},
+	},*/
 	'Cyclommatic Cell': {
 		species: 'Vikavolt-Totem', ability: 'Battery Life', item: 'Apparatus', gender: 'N',
 		moves: ['Parabolic Charge', 'Bug Buzz', 'Techno Blast'],
