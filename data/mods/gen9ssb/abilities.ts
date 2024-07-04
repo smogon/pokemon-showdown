@@ -87,7 +87,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidual(pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (pokemon.abilityState.duration > 0) pokemon.abilityState.duration -= 1;
-			if (pokemon.abilityState.duration <= 0 && pokemon.species.id !== 'mimikyu') {
+			if (pokemon.abilityState.duration <= 0) {
 				this.add('-message', `onResidual detected Mimikyu has 0 or less duration remaining (${pokemon.abilityState.duration})`);
 				pokemon.abilityState.transform = true;
 			}
