@@ -60,6 +60,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (!pokemon.abilityState.duration) pokemon.abilityState.duration = 5;
 				target.side.addSideCondition('curseddoll');
 				pokemon.abilityState.transform = false;
+				this.add('-message', `${pokemon.abilityState.duration}`);
 				return;
 			}
 			if (pokemon.name === 'Morte' && pokemon.species.id !== 'mimikyu' && pokemon.abilityState.transform) {
@@ -86,6 +87,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onResidual(pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			this.add('-message', `${pokemon.abilityState.duration}`);
 			if (pokemon.abilityState.duration > 0) pokemon.abilityState.duration -= 1;
 			if (pokemon.abilityState.duration <= 0) {
 				this.add('-message', `onResidual detected Mimikyu has 0 or less duration remaining (${pokemon.abilityState.duration})`);
