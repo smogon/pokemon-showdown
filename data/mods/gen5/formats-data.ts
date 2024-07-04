@@ -648,6 +648,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	},
 	dragonair: {
 		tier: "ZUBL",
+		doublesTier: "NFE",
 	},
 	dragonite: {
 		tier: "OU",
