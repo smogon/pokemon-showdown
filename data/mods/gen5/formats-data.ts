@@ -1707,7 +1707,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	toxicroak: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DOU",
 	},
 	carnivine: {
@@ -2347,7 +2347,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	hydreigon: {
-		tier: "OU",
+		tier: "(OU)",
 		doublesTier: "DOU",
 	},
 	larvesta: {
