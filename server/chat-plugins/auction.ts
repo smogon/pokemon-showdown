@@ -651,7 +651,8 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		blindmodehelp: [
-			`/auction blindmode [on/off] - Toggles blind mode. Requires: # & auction owner`,
+			`/auction blindmode [on/off] - Enables or disables blind mode. Requires: # & auction owner`,
+			`When blind mode is enabled, teams may only place one bid per nomination and only the highest bid is revealed once the timer runs out or after all teams have placed a bid.`,
 		],
 		async importplayers(target, room, user) {
 			room = this.requireRoom();
@@ -890,7 +891,7 @@ export const commands: Chat.ChatCommands = {
 			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- minbid [amount]: Sets the minimum bid.<br/>` +
 			`- minplayers [amount]: Sets the minimum number of players.<br/>` +
-			`- blindmode [on/off]: Toggles blind mode.<br/>` +
+			`- blindmode [on/off]: Enables or disables blind mode.<br/>` +
 			`- importplayers [pastebin url]: Imports a list of players from a pastebin.<br/>` +
 			`- addplayer [name], [tier1], [tier2], ...: Adds a player to the auction.<br/>` +
 			`- removeplayer [name]: Removes a player from the auction.<br/>` +
