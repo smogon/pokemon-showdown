@@ -673,6 +673,8 @@ export const commands: Chat.ChatCommands = {
 		},
 		importplayershelp: [
 			`/auction importplayers [pastebin url] - Imports a list of players from a pastebin. Requires: # & auction owner`,
+			`The pastebin should be a list of tab-separated values with the first row containing tier names and subsequent rows containing the player names and a Y in the column corresponding to the tier.`,
+			`See https://pastebin.com/jPTbJBva for an example.`,
 		],
 		addplayer(target, room, user) {
 			room = this.requireRoom();
