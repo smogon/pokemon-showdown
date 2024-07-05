@@ -861,10 +861,10 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			if (!this.runBroadcast()) return;
 			const runningAuctions = [];
-			for (const room of Rooms.rooms.values()) {
-				const auction = room.getGame(Auction);
+			for (const auctionRoom of Rooms.rooms.values()) {
+				const auction = auctionRoom.getGame(Auction);
 				if (!auction) continue;
-				if (auction.state !== 'end') runningAuctions.push(room.title);
+				if (auction.state !== 'end') runningAuctions.push(auctionRoom.title);
 			}
 			this.sendReply(`Running auctions: ${runningAuctions.join(', ') || 'None'}`);
 		},
