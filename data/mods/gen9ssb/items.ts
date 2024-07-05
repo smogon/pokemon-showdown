@@ -6,7 +6,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		shortDesc: "See '/ssb Cyclommatic Cell' for more!",
 		desc: "On switch-in, starts Ion Deluge and Magnet Rise for holder. Restores one gauge of battery life at end of each turn. Techno Blast: Steel-type, 1.3x power.",
 		onStart(pokemon) {
-			this.add('-activate', pokemon, 'Item: Apparatus');
+			this.add('-activate', pokemon, 'item: Apparatus');
 			pokemon.addVolatile('magnetrise');
 			this.field.addPseudoWeather('iondeluge');
 		},
@@ -18,6 +18,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.id === 'technoblast') return this.chainModify([5325, 4096]);
+		},
+		onResidual(pokemon) {
+			if (pokemon.species.id !== 'vikavolttotem') return;
+			if (pokemon.abilityState.gauges < 5) {
+				this.add('-activate', pokemon, 'item: Apparatus');
+				this.add('-message', `${pokemon.name} gained charge!`);
+				pokemon.abilityState.gauges += 1;
+			}
 		},
 	},
 	// Morte
