@@ -26,6 +26,43 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.abilityState.gauges = 5;
 			}
 		},
+		onBeforeMove(pokemon, target, move) {
+			if (move.type === 'Electric') {
+				if (pokemon.abilityState.gauges < 2) {
+					this.debug("Not enough battery");
+					this.add('-message', `${pokemon.name} doesn't have enough battery!`);
+					return false;
+				} else if (pokemon.abilityState.gauges >= 2) {
+					pokemon.abilityState.gauges -= 2;
+				}
+			}
+			if (move.id === 'technoblast') {
+				if (pokemon.abilityState.gauges < 3) {
+					this.debug("Not enough battery");
+					this.add('-message', `${pokemon.name} doesn't have enough battery!`);
+					return false;
+				} else if (pokemon.abilityState.gauges >= 3) {
+					pokemon.abilityState.gauges -= 3;
+				}
+			}	
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!pokemon.abilityState.gauges) return;
+			if (pokemon.abilityState.gauges >= 5) {
+				pokemon.addVolatile('charge');
+				this.add('-message', '${pokemon.name} is at maximum charge!`);
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.abilityState.gauges <= 0) {
+				this.add('-activate', pokemon, 'ability: Battery Life');
+				this.add('-message', `${pokemon.name} is out of battery!`);
+				this.field.setTerrain('electricterrain');
+				pokemon.addVolatile('mustrecharge');
+			}
+		},
 	},
 	// Morte
 	curseddoll: {
