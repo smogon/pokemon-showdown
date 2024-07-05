@@ -855,6 +855,18 @@ export const commands: Chat.ChatCommands = {
 			room.saveSettings();
 			this.sendReply('Auctions have been enabled for this room.');
 		},
+		ongoing: 'running',
+		running(target, room, user) {
+			room = this.requireRoom();
+			if (!this.runBroadcast()) return;
+			const runningAuctions = [];
+			for (const room of Rooms.rooms.values()) {
+				const auction = room.getGame(Auction);
+				if (!auction) continue;
+				if (auction.state !== 'end') runningAuctions.push(room.title);
+			}
+			this.sendReply(`Running auctions: ${runningAuctions.join(', ') || 'None'}`);
+		},
 		'': 'help',
 		help(target, room, user) {
 			this.parse('/help auction');
@@ -869,6 +881,7 @@ export const commands: Chat.ChatCommands = {
 			`- reset: Resets the auction.<br/>` +
 			`- end: Ends the auction.<br/>` +
 			`- delete: Deletes the auction.<br/>` +
+			`- running: Shows a list of rooms with running auctions.<br/>` +
 			`- display: Displays the current state of the auction.<br/>` +
 			`- pricelist: Displays the current prices of players by team.<br/>` +
 			`- nom [player]: Nominates a player for auction.<br/>` +
