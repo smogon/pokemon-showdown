@@ -24,6 +24,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			if (!pokemon.abilityState.gauges) {
 				pokemon.abilityState.gauges = 5;
+				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 			}
 		},
 		onBeforeMove(pokemon, target, move) {
@@ -31,18 +32,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (pokemon.abilityState.gauges < 2) {
 					this.debug("Not enough battery");
 					this.add('-message', `${pokemon.name} doesn't have enough battery!`);
+					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 					return false;
 				} else if (pokemon.abilityState.gauges >= 2) {
 					pokemon.abilityState.gauges -= 2;
+					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 				}
 			}
 			if (move.id === 'technoblast') {
 				if (pokemon.abilityState.gauges < 3) {
 					this.debug("Not enough battery");
 					this.add('-message', `${pokemon.name} doesn't have enough battery!`);
+					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 					return false;
 				} else if (pokemon.abilityState.gauges >= 3) {
 					pokemon.abilityState.gauges -= 3;
+					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 				}
 			}	
 		},
@@ -52,11 +57,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!pokemon.abilityState.gauges) return;
 			if (pokemon.abilityState.gauges >= 5) {
 				pokemon.addVolatile('charge');
+				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 				this.add('-message', '${pokemon.name} is at maximum charge!`);
 			}
 		},
 		onUpdate(pokemon) {
 			if (pokemon.abilityState.gauges <= 0) {
+				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 				this.add('-activate', pokemon, 'ability: Battery Life');
 				this.add('-message', `${pokemon.name} is out of battery!`);
 				this.field.setTerrain('electricterrain');
