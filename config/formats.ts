@@ -2350,6 +2350,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 
 		mod: 'gen9',
+		searchShow: false,
 		ruleset: ['Standard NatDex', 'Little Cup', 'Species Clause', 'OHKO Clause', 'Evasion Clause', 'Sleep Clause Mod'],
 		banlist: [
 			'Aipom', 'Basculin-White-Striped', 'Clamperl', 'Corsola-Galar', 'Cutiefly', 'Drifloon', 'Dunsparce', 'Duraludon', 'Flittle', 'Girafarig',
