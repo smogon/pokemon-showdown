@@ -40,6 +40,10 @@ class Team {
 		return players;
 	}
 
+	isSuspended() {
+		return this.credits < this.auction.minBid || this.suspended;
+	}
+
 	maxBid(credits = this.credits) {
 		return credits + this.auction.minBid * Math.min(0, this.getPlayers().length - this.auction.minPlayers + 1);
 	}
@@ -128,17 +132,17 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	generatePriceList() {
+		const draftedPlayers = Object.values(this.playerList).filter(p => p.team).sort((a, b) => b.price - a.price);
 		let buf = `<div class="infobox">`;
 		for (const id in this.teams) {
 			const team = this.teams[id];
 			buf += `<details><summary>${team.name}</summary><table>`;
-			for (const player of team.getPlayers().sort((a, b) => b.price - a.price)) {
+			for (const player of draftedPlayers.filter(p => p.team === team)) {
 				buf += `<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 			}
 			buf += `</table></details><br>`;
 		}
 		buf += `<details><summary>All</summary><table>`;
-		const draftedPlayers = Object.values(this.playerList).filter(p => p.team).sort((a, b) => b.price - a.price);
 		for (const player of draftedPlayers) {
 			buf += `<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 		}
@@ -148,7 +152,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	generateAuctionTable() {
 		let buf = `<div class="infobox"><div class="ladder pad"><table style="width: 100%"><tr><th colspan=2>Order</th><th>Teams</th><th>Credits</th><th>Players</th></tr>`;
-		const queue = this.queue.filter(id => this.teams[id].credits >= this.minBid && !this.teams[id].suspended);
+		const queue = this.queue.filter(id => !this.teams[id].isSuspended());
 		buf += Object.values(this.teams).map(team => {
 			const players = team.getPlayers();
 			let i1 = queue.indexOf(team.id) + 1;
@@ -278,8 +282,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 		const player = this.playerList[toID(name)];
 		if (!player) throw new Chat.ErrorMessage(`Player "${name}" not found.`);
 		delete this.playerList[player.id];
-		if (!Object.values(this.playerList).filter(p => !p.team).length) {
-			this.end('There are no players remaining in the draft pool, so the auction has ended.');
+		if (this.state !== 'setup' && !Object.values(this.playerList).filter(p => !p.team).length) {
+			this.end('The auction has ended because there are no players remaining in the draft pool.');
 		}
 		return player;
 	}
@@ -422,16 +426,16 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	next() {
 		this.state = 'nom';
-		if (!this.queue.filter(id => this.teams[id].credits >= this.minBid && !this.teams[id].suspended).length) {
-			return this.end('There are no teams remaining that can draft players, so the auction has ended.');
+		if (!this.queue.filter(id => !this.teams[id].isSuspended()).length) {
+			return this.end('The auction has ended because there are no teams remaining that can draft players.');
 		}
 		if (!Object.values(this.playerList).filter(p => !p.team).length) {
-			return this.end('There are no players remaining in the draft pool, so the auction has ended.');
+			return this.end('The auction has ended because there are no players remaining in the draft pool.');
 		}
 		do {
 			this.currentTeam = this.teams[this.queue.shift()!];
 			this.queue.push(this.currentTeam.id);
-		} while (this.currentTeam.credits < this.minBid || this.currentTeam.suspended);
+		} while (this.currentTeam.isSuspended());
 		this.display();
 		this.sendMessage(`It is now **${this.currentTeam.name}**'s turn to nominate a player. Managers: ${this.currentTeam.managers.map(id => Users.get(id)?.name || id).join(', ')}`);
 	}
@@ -489,9 +493,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	finishCurrentNom() {
-		this.sendMessage(`**${this.currentTeam.name}** has bought **${this.currentNom.name}** for **${this.currentBid}** credits!`);
+		this.sendMessage(`**${this.currentBidder.name}** has bought **${this.currentNom.name}** for **${this.currentBid}** credits!`);
 		this.currentBidder.credits -= this.currentBid;
-		this.currentNom.team = this.currentTeam;
+		this.currentNom.team = this.currentBidder;
 		this.currentNom.price = this.currentBid;
 		this.clearTimer();
 		this.next();
@@ -773,7 +777,7 @@ export const commands: Chat.ChatCommands = {
 			if (!teamName || !managers.length) return this.parse('/help auction addmanagers');
 			auction.addManagers(teamName, managers);
 			const team = auction.teams[toID(teamName)];
-			this.addModAction(`${user.name} added ${managers.map(id => Users.get(id)?.name || id)} as managers to team ${team.name}.`);
+			this.addModAction(`${user.name} added ${managers.map(id => Users.get(id)?.name || id).join(', ')} as managers to team ${team.name}.`);
 		},
 		addmanagershelp: [
 			`/auction addmanagers [team], [manager1], [manager2], ... - Adds managers to a team. Requires: # & auction owner`,
