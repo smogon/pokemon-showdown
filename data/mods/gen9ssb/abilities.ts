@@ -15,6 +15,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Cylcommatic Cell
+	batterylife: {
+		name: "Battery Life",
+		gen: 9,
+		shortDesc: "See '/ssb Cyclommatic Cell' for more!",
+		desc: "Look at discord pins man idk im not typing this shit",
+		onStart(pokemon) {
+			if (!pokemon.abilityState.gauges) {
+				pokemon.abilityState.gauges = 5;
+			}
+		},
+	},
 	// Morte
 	curseddoll: {
 		name: "Cursed Doll",
