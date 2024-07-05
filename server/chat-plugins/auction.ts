@@ -901,3 +901,12 @@ export const commands: Chat.ChatCommands = {
 		this.parse(`/auction bid ${target}`);
 	},
 };
+
+export const roomSettings: Chat.SettingsHandler = room => ({
+	label: "Auction",
+	permission: 'editroom',
+	options: [
+		[`disabled`, room.settings.auctionDisabled || 'auction disable'],
+		[`enabled`, !room.settings.auctionDisabled || 'auction enable'],
+	],
+});
