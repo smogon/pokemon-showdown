@@ -367,7 +367,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		const team = this.teams[toID(teamName)];
 		if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
 		for (const manager of managers) {
-			const managerIndex = team.managers.indexOf(manager);
+			const managerIndex = team.managers.indexOf(toID(manager));
 			if (managerIndex < 0) {
 				throw new Chat.ErrorMessage(`"${manager}" is not a manager of team ${team.name}.`);
 			}
@@ -771,6 +771,7 @@ export const commands: Chat.ChatCommands = {
 		unsuspendteamhelp: [
 			`/auction unsuspendteam [team] - Unsuspends a team from the auction. Requires: # & auction owner`,
 		],
+		addmanager: 'addmanagers',
 		addmanagers(target, room, user) {
 			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
@@ -785,6 +786,7 @@ export const commands: Chat.ChatCommands = {
 		addmanagershelp: [
 			`/auction addmanagers [team], [manager1], [manager2], ... - Adds managers to a team. Requires: # & auction owner`,
 		],
+		removemanager: 'removemanagers',
 		removemanagers(target, room, user) {
 			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
