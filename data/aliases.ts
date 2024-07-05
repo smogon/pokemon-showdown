@@ -1134,7 +1134,6 @@ export const Aliases: {[alias: string]: string} = {
 	tarrows: "Thousand Arrows",
 	taxel: "Triple Axel",
 	tr: "Trick Room",
-	tripleaxle: "Triple Axel",
 	troom: "Trick Room",
 	tbolt: "Thunderbolt",
 	tspikes: "Toxic Spikes",
