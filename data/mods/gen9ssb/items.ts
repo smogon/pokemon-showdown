@@ -25,6 +25,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				this.add('-activate', pokemon, 'item: Apparatus');
 				this.add('-message', `${pokemon.name} gained charge!`);
 				pokemon.abilityState.gauges += 1;
+				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 			}
 		},
 	},
