@@ -238,7 +238,6 @@ export class Auction extends Rooms.SimpleRoomGame {
 			throw new Chat.ErrorMessage(`You cannot import a player list after the auction has started.`);
 		}
 		const rows = data.replace('\r', '').split('\n');
-		if (!rows.length) throw new Chat.ErrorMessage(`No data found in the pastebin.`);
 		const tierNames = rows.shift()!.split('\t').slice(1);
 		const playerList: {[k: string]: Player} = {};
 		for (const row of rows) {
@@ -247,7 +246,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			for (let i = 0; i < tierData.length; i++) {
 				if (['y', 'Y', '\u2713', '\u2714'].includes(tierData[i].trim())) {
 					if (!tierNames[i]) throw new Chat.ErrorMessage(`Invalid tier data found in the pastebin.`);
-					if (tierNames[i].length > 10) throw new Chat.ErrorMessage(`Tier names must be 10 characters or less.`);
+					if (tierNames[i].length > 30) throw new Chat.ErrorMessage(`Tier names must be 30 characters or less.`);
 					tiers.push(tierNames[i]);
 				}
 			}
@@ -274,8 +273,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 			price: 0,
 		};
 		if (tiers?.length) {
-			if (tiers.some(tier => tier.length > 10)) {
-				throw new Chat.ErrorMessage(`Tier names must be 10 characters or less.`);
+			if (tiers.some(tier => tier.length > 30)) {
+				throw new Chat.ErrorMessage(`Tier names must be 30 characters or less.`);
 			}
 			player.tiers = tiers;
 		}
@@ -663,13 +662,14 @@ export const commands: Chat.ChatCommands = {
 			if (!/^https?:\/\/pastebin\.com\/[a-zA-Z0-9]+$/.test(target)) {
 				return this.errorReply('Invalid pastebin URL.');
 			}
+			let data = '';
 			try {
-				const data = await Net(`https://pastebin.com/raw/${target.split('/').pop()}`).get();
-				auction.importPlayers(data);
-				this.addModAction(`${user.name} imported the player list from ${target}.`);
-			} catch {
-				this.errorReply('Error fetching data from pastebin.');
-			}
+				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()}`).get();
+			} catch {}
+			if (!data) return this.errorReply('Error fetching data from pastebin.');
+
+			auction.importPlayers(data);
+			this.addModAction(`${user.name} imported the player list from ${target}.`);
 		},
 		importplayershelp: [
 			`/auction importplayers [pastebin url] - Imports a list of players from a pastebin. Requires: # & auction owner`,
