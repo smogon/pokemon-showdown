@@ -92,7 +92,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				side.active[0].trySetStatus('par');
 			},
 		},
-		secon
 		secondary: null,
 		target: "foeSide",
 		type: "Electric",
