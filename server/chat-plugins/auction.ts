@@ -205,8 +205,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 			throw new Chat.ErrorMessage(`You cannot change the minimum bid after the auction has started.`);
 		}
 		if (amount < 500) amount *= 1000;
-		if (isNaN(amount) || amount <= 0 || amount % 500 !== 0) {
-			throw new Chat.ErrorMessage(`The minimum bid must be a positive multiple of 500.`);
+		if (isNaN(amount) || amount < 500 || amount > 500000 || amount % 500 !== 0) {
+			throw new Chat.ErrorMessage(`The minimum bid must be a multiple of 500 between 500 and 500,000.`);
 		}
 		this.minBid = amount;
 	}
