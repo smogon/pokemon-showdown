@@ -140,7 +140,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<div class="infobox">`;
 		for (const id in this.teams) {
 			const team = this.teams[id];
-			buf += `<details><summary>${team.name}</summary><table>`;
+			buf += `<details><summary>${Utils.escapeHTML(team.name)}</summary><table>`;
 			for (const player of draftedPlayers.filter(p => p.team === team)) {
 				buf += `<tr><td>${Utils.escapeHTML(player.name)}</td><td>${player.price}</td></tr>`;
 			}
@@ -189,7 +189,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			buf += `<details><summary>All</summary>${this.generateUsernameList(remainingPlayers)}</details>`;
 			buf += `<details><summary>Tiers</summary><ul style="list-style-type: none">`;
 			for (const tier of sortedTiers) {
-				buf += `<li><details><summary>${tier} (${tierArrays[tier].length})</summary>${this.generateUsernameList(tierArrays[tier])}</details></li>`;
+				buf += `<li><details><summary>${Utils.escapeHTML(tier)} (${tierArrays[tier].length})</summary>${this.generateUsernameList(tierArrays[tier])}</details></li>`;
 			}
 			buf += `</ul></details>`;
 		} else {
