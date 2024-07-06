@@ -9,7 +9,7 @@ export class RandomCAPTeams extends RandomTeams {
 	getCAPAbility(
 		types: string[],
 		moves: Set<string>,
-		abilities: Set<string>,
+		abilities: string[],
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
@@ -18,16 +18,8 @@ export class RandomCAPTeams extends RandomTeams {
 		role: RandomTeamsTypes.Role,
 	): string {
 		// Hard-code abilities here
-		if (species.id === 'volkraken') return 'Analytic';
-		if (species.id === 'syclant') return 'Compound Eyes';
-		if (species.id === 'caribolt') return 'Galvanize';
-		if (species.id === 'equilibra') return 'Levitate';
-		if (species.id === 'kerfluffle') return 'Natural Cure';
 		if (species.id === 'fidgit') return moves.has('tailwind') ? 'Persistent' : 'Frisk';
-		if (species.id === 'hemogoblin') return 'Pixilate';
-		if (species.id === 'tomohawk') return 'Prankster';
-		if (species.id === 'saharaja' && moves.has('bodypress')) return 'Serene Grace';
-		if (species.id === 'cawmodore') return 'Volt Absorb';
+		if (species.id === 'tomohawk') return moves.has('haze') ? 'Prankster' : 'Intimidate';
 		// Default to regular ability selection
 		return this.getAbility(types, moves, abilities, counter, teamDetails, species, isLead, false, teraType, role);
 	}
@@ -97,8 +89,7 @@ export class RandomCAPTeams extends RandomTeams {
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = species.types;
-		const abilities = new Set(Object.values(species.abilities));
-		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
+		const abilities = set.abilities!;
 
 		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType!, role);

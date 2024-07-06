@@ -1,8 +1,7 @@
 import RandomGen6Teams from '../gen6/teams';
-import {Utils} from '../../../lib';
-import {toID} from '../../../sim/dex';
 import {PRNG} from '../../../sim';
 import {MoveCounter} from '../gen8/teams';
+import {toID} from '../../../sim/dex';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -61,7 +60,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
-				!counter.get('Bug') && (movePool.includes('megahorn') || abilities.has('Tinted Lens'))
+				!counter.get('Bug') && (movePool.includes('megahorn') || abilities.includes('Tinted Lens'))
 			),
 			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
 			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
@@ -69,7 +68,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
 			Fire: (movePool, moves, abilities, types, counter) => !counter.get('Fire'),
 			Flying: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Flying') && !['mantine', 'murkrow'].includes(species.id) &&
+				!counter.get('Flying') && !['aerodactyl', 'mantine', 'murkrow'].includes(species.id) &&
 				!movePool.includes('hiddenpowerflying')
 			),
 			Ghost: (movePool, moves, abilities, types, counter) => !counter.get('Ghost'),
@@ -85,7 +84,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
 			),
 			Rock: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Rock') && (species.baseStats.atk >= 95 || abilities.has('Rock Head'))
+				!counter.get('Rock') && (species.baseStats.atk >= 95 || abilities.includes('Rock Head'))
 			),
 			Steel: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Steel') && ['aggron', 'metagross'].includes(species.id)
@@ -97,7 +96,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	cullMovePool(
 		types: string[],
 		moves: Set<string>,
-		abilities: Set<string>,
+		abilities: string[],
 		counter: MoveCounter,
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -233,11 +232,11 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (species.id === 'dugtrio') this.incompatibleMoves(moves, movePool, statusMoves, 'memento');
 
 		const statusInflictingMoves = ['stunspore', 'thunderwave', 'toxic', 'willowisp', 'yawn'];
-		if (!abilities.has('Prankster') && role !== 'Staller') {
+		if (!abilities.includes('Prankster') && role !== 'Staller') {
 			this.incompatibleMoves(moves, movePool, statusInflictingMoves, statusInflictingMoves);
 		}
 
-		if (abilities.has('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
+		if (abilities.includes('Guts')) this.incompatibleMoves(moves, movePool, 'protect', 'swordsdance');
 
 		// Cull filler moves for otherwise fixed set Stealth Rock users
 		if (!teamDetails.stealthRock) {
@@ -255,7 +254,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	// Generate random moveset for a given species, role, preferred type.
 	randomMoveset(
 		types: string[],
-		abilities: Set<string>,
+		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
 		isLead: boolean,
@@ -296,7 +295,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// Add other moves you really want to have, e.g. STAB, recovery, setup.
 
 		// Enforce Facade if Guts is a possible ability
-		if (movePool.includes('facade') && abilities.has('Guts')) {
+		if (movePool.includes('facade') && abilities.includes('Guts')) {
 			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead,
 				movePool, preferredType, role);
 		}
@@ -310,7 +309,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		// Enforce Thunder Wave on Prankster users
-		if (movePool.includes('thunderwave') && abilities.has('Prankster')) {
+		if (movePool.includes('thunderwave') && abilities.includes('Prankster')) {
 			counter = this.addMove('thunderwave', moves, types, abilities, teamDetails, species, isLead,
 				movePool, preferredType, role);
 		}
@@ -499,7 +498,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
-		abilities: Set<string>,
+		abilities: string[],
 		counter: MoveCounter,
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -508,87 +507,18 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		role: RandomTeamsTypes.Role
 	): boolean {
 		switch (ability) {
-		case 'Flare Boost': case 'Gluttony': case 'Ice Body': case 'Infiltrator': case 'Moody': case 'Pickpocket':
-		case 'Pressure': case 'Sand Veil': case 'Sniper': case 'Snow Cloak': case 'Steadfast': case 'Unburden':
-			return true;
-		case 'Chlorophyll':
-			// Petal Dance is for Lilligant
-			return (
-				species.baseStats.spe > 100 || moves.has('petaldance') ||
-				(!moves.has('sunnyday') && !teamDetails.sun)
-			);
-		case 'Compound Eyes': case 'No Guard':
-			return !counter.get('inaccurate');
-		case 'Contrary': case 'Skill Link':
+		case 'Chlorophyll': case 'Solar Power':
+			return !teamDetails.sun;
+		case 'Hydration': case 'Swift Swim':
+			return !teamDetails.rain;
+		case 'Iron Fist': case 'Sheer Force':
 			return !counter.get(toID(ability));
-		case 'Defiant': case 'Justified':
-			return !counter.get('Physical');
-		case 'Guts': case 'Quick Feet':
-			return (!moves.has('facade') && !moves.has('sleeptalk'));
-		case 'Hustle':
-			return (counter.get('Physical') < 2 || species.id === 'delibird');
-		case 'Hydration': case 'Rain Dish': case 'Swift Swim':
-			return (
-				species.baseStats.spe > 100 || !moves.has('raindance') && !teamDetails.rain ||
-				!moves.has('raindance') && ['Rock Head', 'Water Absorb'].some(abil => abilities.has(abil))
-			);
-		case 'Intimidate':
-			// Slam part is for Tauros
-			return (moves.has('bodyslam') || species.id === 'staraptor');
-		case 'Iron Fist':
-			return (!counter.get(toID(ability)) || species.id === 'golurk');
-		case 'Lightning Rod':
-			return (types.has('Ground') || ((!!teamDetails.rain || moves.has('raindance')) && species.id === 'seaking'));
-		case 'Magic Guard': case 'Speed Boost':
-			return (abilities.has('Tinted Lens') && role === 'Wallbreaker');
-		case 'Mold Breaker':
-			return (species.baseSpecies === 'Basculin' || species.id === 'rampardos');
-		case 'Moxie':
-			return (!counter.get('Physical') || moves.has('stealthrock'));
 		case 'Overgrow':
 			return !counter.get('Grass');
-		case 'Prankster':
-			return (!counter.get('Status') || (species.id === 'tornadus' && moves.has('bulkup')));
-		case 'Poison Heal':
-			return (species.id === 'breloom' && role === 'Fast Attacker');
-		case 'Shed Skin':
-			return !moves.has('rest');
-		case 'Synchronize':
-			return (counter.get('Status') < 2 || !!counter.get('recoil'));
-		case 'Regenerator':
-			return ((species.id === 'mienshao' && role !== 'Fast Attacker') || species.id === 'reuniclus');
-		case 'Reckless': case 'Rock Head':
+		case 'Rock Head':
 			return !counter.get('recoil');
 		case 'Sand Force': case 'Sand Rush':
 			return !teamDetails.sand;
-		case 'Serene Grace':
-			return !counter.get('serenegrace');
-		case 'Sheer Force':
-			return (!counter.get('sheerforce') || moves.has('doubleedge') || abilities.has('Guts'));
-		case 'Simple':
-			return !counter.get('setup');
-		case 'Solar Power':
-			return (!counter.get('Special') || !teamDetails.sun);
-		case 'Sticky Hold':
-			return species.id !== 'accelgor';
-		case 'Sturdy':
-			return (!!counter.get('recoil') && !counter.get('recovery') || species.id === 'steelix' && !!counter.get('sheerforce'));
-		case 'Swarm':
-			return !counter.get('Bug') && !moves.has('uturn');
-		case 'Technician':
-			return (!counter.get('technician') || moves.has('tailslap'));
-		case 'Tinted Lens':
-			// Night Shade part is for Noctowl
-			return (
-				moves.has('nightshade') ||
-				['illumise', 'sigilyph', 'yanmega'].some(m => species.id === (m)) && role !== 'Wallbreaker'
-			);
-		case 'Torrent':
-			return !counter.get('Water');
-		case 'Unaware':
-			return ((role !== 'Bulky Attacker' && role !== 'Bulky Setup') || species.id === 'swoobat');
-		case 'Water Absorb':
-			return moves.has('raindance') || ['Drizzle', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil));
 		}
 
 		return false;
@@ -598,7 +528,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 	getAbility(
 		types: Set<string>,
 		moves: Set<string>,
-		abilities: Set<string>,
+		abilities: string[],
 		counter: MoveCounter,
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -606,81 +536,35 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		preferredType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
-		const abilityData = Array.from(abilities).map(a => this.dex.abilities.get(a));
-		Utils.sortBy(abilityData, abil => -abil.rating);
-
-		if (abilityData.length <= 1) return abilityData[0].name;
+		if (abilities.length <= 1) return abilities[0];
 
 		// Hard-code abilities here
-		if (
-			abilities.has('Guts') &&
-			!abilities.has('Quick Feet') &&
-			(moves.has('facade') || (moves.has('sleeptalk') && moves.has('rest')))
-		) return 'Guts';
-		if (species.id === 'starmie') return role === 'Wallbreaker' ? 'Analytic' : 'Natural Cure';
-		if (species.id === 'beheeyem') return 'Analytic';
-		if (species.id === 'ninetales') return 'Drought';
-		if (species.id === 'gligar') return 'Immunity';
-		if (species.id === 'arcanine' || species.id === 'stantler') return 'Intimidate';
-		if (species.id === 'altaria') return 'Natural Cure';
-		if (species.id === 'mandibuzz') return 'Overcoat';
-		// If Ambipom doesn't qualify for Technician, Skill Link is useless on it
-		if (species.id === 'ambipom' && !counter.get('technician')) return 'Pickup';
-		if (['spiritomb', 'vespiquen', 'weavile'].includes(species.id)) return 'Pressure';
-		if (species.id === 'druddigon') return 'Rough Skin';
-		if (species.id === 'zebstrika') return moves.has('wildcharge') ? 'Sap Sipper' : 'Lightning Rod';
-		if (species.id === 'stoutland') return 'Scrappy';
-		if (species.id === 'octillery') return 'Sniper';
-		if (species.id === 'stunfisk') return 'Static';
-		if (species.id === 'zangoose') return 'Toxic Boost';
+		if (species.id === 'marowak' && counter.get('recoil')) return 'Rock Head';
+		if (species.id === 'kingler' && counter.get('sheerforce')) return 'Sheer Force';
 
-		if (abilities.has('Harvest')) return 'Harvest';
-		if (abilities.has('Shed Skin') && moves.has('rest') && !moves.has('sleeptalk')) return 'Shed Skin';
-		if (abilities.has('Unburden') && ['acrobatics', 'closecombat'].some(m => moves.has(m))) return 'Unburden';
-
-		let abilityAllowed: Ability[] = [];
+		const abilityAllowed: string[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
-		for (const ability of abilityData) {
-			if (ability.rating >= 1 && !this.shouldCullAbility(
-				ability.name, types, moves, abilities, counter, movePool, teamDetails, species, preferredType, role
+		for (const ability of abilities) {
+			if (!this.shouldCullAbility(
+				ability, types, moves, abilities, counter, movePool, teamDetails, species, preferredType, role
 			)) {
 				abilityAllowed.push(ability);
 			}
 		}
 
-		// If all abilities are rejected, re-allow all abilities
+		// Pick a random allowed ability
+		if (abilityAllowed.length >= 1) return this.sample(abilityAllowed);
+
+		// If all abilities are rejected, prioritize weather abilities over non-weather abilities
 		if (!abilityAllowed.length) {
-			for (const ability of abilityData) {
-				if (ability.rating > 0) abilityAllowed.push(ability);
-			}
-			if (!abilityAllowed.length) abilityAllowed = abilityData;
+			const weatherAbilities = abilities.filter(
+				a => ['Chlorophyll', 'Hydration', 'Sand Force', 'Sand Rush', 'Solar Power', 'Swift Swim'].includes(a)
+			);
+			if (weatherAbilities.length) return this.sample(weatherAbilities);
 		}
 
-		if (abilityAllowed.length === 1) return abilityAllowed[0].name;
-		// Sort abilities by rating with an element of randomness
-		// All three abilities can be chosen
-		if (abilityAllowed[2] && abilityAllowed[0].rating - 0.5 <= abilityAllowed[2].rating) {
-			if (abilityAllowed[1].rating <= abilityAllowed[2].rating) {
-				if (this.randomChance(1, 2)) [abilityAllowed[1], abilityAllowed[2]] = [abilityAllowed[2], abilityAllowed[1]];
-			} else {
-				if (this.randomChance(1, 3)) [abilityAllowed[1], abilityAllowed[2]] = [abilityAllowed[2], abilityAllowed[1]];
-			}
-			if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
-				if (this.randomChance(2, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-			} else {
-				if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-			}
-		} else {
-			// Third ability cannot be chosen
-			if (abilityAllowed[0].rating <= abilityAllowed[1].rating) {
-				if (this.randomChance(1, 2)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-			} else if (abilityAllowed[0].rating - 0.5 <= abilityAllowed[1].rating) {
-				if (this.randomChance(1, 3)) [abilityAllowed[0], abilityAllowed[1]] = [abilityAllowed[1], abilityAllowed[0]];
-			}
-		}
-
-		// After sorting, choose the first ability
-		return abilityAllowed[0].name;
+		// Pick a random ability
+		return this.sample(abilities);
 	}
 
 	getPriorityItem(
@@ -852,8 +736,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = species.types;
-		const abilities = new Set(Object.values(species.abilities));
-		if (species.unreleasedHidden) abilities.delete(species.abilities.H);
+		const abilities = set.abilities!;
 
 		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, movePool,
