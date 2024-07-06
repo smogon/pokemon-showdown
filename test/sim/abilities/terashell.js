@@ -87,4 +87,18 @@ describe('Tera Shell', function () {
 		damage = espeon.maxhp - espeon.hp;
 		assert.bounded(damage, [33, 39], `Tera Shell should have activated because current species is Terapagos`);
 	});
+
+	it(`should not weaken the damage from Struggle`, function () {
+		battle = common.createBattle([[
+			{species: 'Terapagos', ability: 'terashift', moves: ['luckychant']},
+		], [
+			{species: 'Slowking', item: 'assaultvest', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+
+		const terapagos = battle.p1.active[0];
+		const damage = terapagos.maxhp - terapagos.hp;
+		assert.bounded(damage, [27, 32], `Tera Shell should not have reduced the damage Struggle dealt`);
+	});
 });

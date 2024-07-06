@@ -4868,7 +4868,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target || target.species.name !== 'Terapagos-Terastal') return;
 			if (this.effectState.resisted) return -1; // all hits of multi-hit move should be not very effective
-			if (move.category === 'Status') return;
+			if (move.category === 'Status' || move.id === 'struggle') return;
 			if (!target.runImmunity(move.type)) return; // immunity has priority
 			if (target.hp < target.maxhp) return;
 
