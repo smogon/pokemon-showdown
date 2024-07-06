@@ -587,6 +587,7 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(`The auction was reset by ${user.name}.`);
 			this.modlog(`AUCTION RESET`);
 		},
+		delete: 'end',
 		stop: 'end',
 		end(target, room, user) {
 			room = this.requireRoom();
@@ -885,7 +886,6 @@ export const commands: Chat.ChatCommands = {
 			`- start: Starts the auction.<br/>` +
 			`- reset: Resets the auction.<br/>` +
 			`- end: Ends the auction.<br/>` +
-			`- delete: Deletes the auction.<br/>` +
 			`- running: Shows a list of rooms with running auctions.<br/>` +
 			`- display: Displays the current state of the auction.<br/>` +
 			`- pricelist: Displays the current prices of players by team.<br/>` +
