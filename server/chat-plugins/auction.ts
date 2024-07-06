@@ -317,6 +317,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	addTeam(name: string) {
 		if (this.state !== 'setup') throw new Chat.ErrorMessage(`You cannot add teams after the auction has started.`);
+		if (name.length > 40) throw new Chat.ErrorMessage(`Team names must be 40 characters or less.`);
 		const team = new Team(name, this);
 		this.teams[team.id] = team;
 		this.queue = Object.values(this.teams).map(toID).concat(Object.values(this.teams).map(toID).reverse());
