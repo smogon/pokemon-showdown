@@ -514,8 +514,8 @@ export default class TeamGenerator {
 		if (move.category === 'Special' && hasPhysicalSetup) powerEstimate *= 0.7;
 
 		const abilityBonus = (
-			((ABILITY_MOVE_BONUSES[toID(ability)] || {})[move.id] || 1) *
-			((ABILITY_MOVE_TYPE_BONUSES[toID(ability)] || {})[moveType] || 1)
+			((ABILITY_MOVE_BONUSES[this.dex.toID(ability)] || {})[move.id] || 1) *
+			((ABILITY_MOVE_TYPE_BONUSES[this.dex.toID(ability)] || {})[moveType] || 1)
 		);
 
 		let weight = powerEstimate * abilityBonus;
