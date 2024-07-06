@@ -40,6 +40,63 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Cyclommatic Cell
+	galvanicweb: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Galvanic Web",
+		desc: "Sets Galvanic Web on the opposing side of the field. On switch-in, Pokemon get -1 Speed and are damaged based on their weakness/resistance vs Electric. Lasts 3 turns, then paralyzes the opposing active Pokemon upon ending.",
+		shortDesc: "Damages/Lowers Speed; Lasts 3 turns, then paralyzes.",
+		pp: 16,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Ion Deluge', source);
+			this.add('-anim', source, 'Electroweb', target);
+		},
+		sideCondition: 'stickyweb',
+		condition: {
+			duration: 3,
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Galvanic Web');
+			},
+			onEntryHazard(pokemon) {
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				this.add('-activate', pokemon, 'move: Galvanic Web');
+				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
+				switch (pokemon.getMoveHitData('thunderbolt').typeMod) {
+					case 2:
+						this.damage(pokemon.baseMaxhp / 2, pokemon);
+						break;
+					case 1:
+						this.damage(pokemon.baseMaxhp / 4, pokemon);
+						break;
+					case 0:
+						this.damage(pokemon.baseMaxhp / 8, pokemon);
+						break;
+					case -1:
+						this.damage(pokemon.baseMaxhp / 16, pokemon);
+						break;
+					case -2:
+						this.damage(pokemon.baseMaxhp / 32, pokemon);
+						break;
+				}
+			},
+			onSideEnd(side) {
+				this.add('-sideend', side, 'move: Galvanic Web');
+				side.active[0].trySetStatus('par');
+			},
+		},
+		secon
+		secondary: null,
+		target: "foeSide",
+		type: "Electric",
+	},
 	// Morte
 	omenofdefeat: {
 		accuracy: 100,
