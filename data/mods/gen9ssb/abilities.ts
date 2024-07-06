@@ -58,7 +58,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.abilityState.gauges >= 5) {
 				pokemon.addVolatile('charge');
 				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
-				this.add('-message', '${pokemon.name} is at maximum charge!`);
+				this.add('-message', `${pokemon.name} is at maximum charge!`);
 			}
 		},
 		onUpdate(pokemon) {
