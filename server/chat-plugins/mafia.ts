@@ -1825,7 +1825,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	hostNight() {
-		
+
 	}
 }
 
