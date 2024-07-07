@@ -41,6 +41,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	hippowdon: {
 		tier: "UUBL",
 	},
+	toxicroak: {
+		tier: "OU",
+	},
 	snover: {
 		tier: "UUBL",
 	},
@@ -66,6 +69,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	mienshao: {
+		tier: "OU",
+	},
+	hydreigon: {
 		tier: "OU",
 	},
 	virizion: {
