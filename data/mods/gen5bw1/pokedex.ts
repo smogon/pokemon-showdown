@@ -63,6 +63,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		unreleasedHidden: true,
 	},
+	lugia: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	hooh: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 	wurmple: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -184,6 +192,18 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		unreleasedHidden: true,
 	},
 	ambipom: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	dialga: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	palkia: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	giratina: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
