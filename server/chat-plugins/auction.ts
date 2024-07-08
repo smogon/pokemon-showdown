@@ -49,6 +49,11 @@ class Team {
 	}
 }
 
+function getUsername(id: string) {
+	const user = Users.get(id);
+	return user?.connected ? user.name : id;
+}
+
 export class Auction extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'auction' as ID;
 	teams: {[k: string]: Team};
@@ -97,11 +102,11 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	sendMessage(message: string) {
-		this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|${message}`).update();
+		this.room.add(`|c|&|${message}`).update();
 	}
 
-	sendHTML(message: string) {
-		this.room.add(`|html|${message}`).update();
+	sendHTMLBox(htmlContent: string, uhtml?: string) {
+		this.room.add(`|${uhtml ? `uhtml|${uhtml}` : 'html'}|<div class="infobox">${htmlContent}</div>`).update();
 	}
 
 	checkOwner(user: User) {
@@ -137,25 +142,25 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	generatePriceList() {
 		const draftedPlayers = Object.values(this.playerList).filter(p => p.team).sort((a, b) => b.price - a.price);
-		let buf = `<div class="infobox">`;
+		let buf = '';
 		for (const id in this.teams) {
 			const team = this.teams[id];
 			buf += `<details><summary>${Utils.escapeHTML(team.name)}</summary><table>`;
 			for (const player of draftedPlayers.filter(p => p.team === team)) {
 				buf += `<tr><td>${Utils.escapeHTML(player.name)}</td><td>${player.price}</td></tr>`;
 			}
-			buf += `</table></details><br>`;
+			buf += `</table></details><br/>`;
 		}
 		buf += `<details><summary>All</summary><table>`;
 		for (const player of draftedPlayers) {
 			buf += `<tr><td>${Utils.escapeHTML(player.name)}</td><td>${player.price}</td></tr>`;
 		}
-		buf += `</table></details></div>`;
+		buf += `</table></details>`;
 		return buf;
 	}
 
 	generateAuctionTable() {
-		let buf = `<div class="infobox"><div class="ladder pad"><table style="width: 100%"><tr><th colspan=2>Order</th><th>Teams</th><th>Credits</th><th>Players</th></tr>`;
+		let buf = `<div class="ladder pad"><table style="width: 100%"><tr><th colspan=2>Order</th><th>Teams</th><th>Credits</th><th>Players</th></tr>`;
 		const queue = this.queue.filter(id => !this.teams[id].isSuspended());
 		buf += Object.values(this.teams).map(team => {
 			const players = team.getPlayers();
@@ -166,15 +171,15 @@ export class Auction extends Rooms.SimpleRoomGame {
 			}
 			let row = `<tr>`;
 			row += `<td align="center" style="width: 15px">${i1 > 0 ? i1 : '-'}</td><td align="center" style="width: 15px">${i2 > 0 ? i2 : '-'}</td>`;
-			row += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br>${this.generateUsernameList(team.managers.map(id => Users.get(id)?.name || id), 2, true)}</td>`;
-			row += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
+			row += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br/>${this.generateUsernameList(team.managers.map(getUsername), 2, true)}</td>`;
+			row += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
 			row += `<td><div style="min-height: 32px; height: 32px; overflow: hidden; resize: vertical"><span style="float: right">${players.length}</span>${this.generateUsernameList(players)}</div></td>`;
 			row += `</tr>`;
 			return row;
 		}).join('');
 		buf += `</table></div>`;
 
-		const remainingPlayers = Object.values(this.playerList).filter(p => !p.team);
+		const remainingPlayers = Object.values(this.playerList).filter(p => !p.team).sort((a, b) => a.name.localeCompare(b.name));
 		const tierArrays: {[k: string]: Player[]} = {};
 		for (const player of remainingPlayers) {
 			if (!player.tiers?.length) continue;
@@ -191,12 +196,23 @@ export class Auction extends Rooms.SimpleRoomGame {
 			for (const tier of sortedTiers) {
 				buf += `<li><details><summary>${Utils.escapeHTML(tier)} (${tierArrays[tier].length})</summary>${this.generateUsernameList(tierArrays[tier])}</details></li>`;
 			}
-			buf += `</ul></details>`;
+			buf += `</ul></details></details>`;
 		} else {
 			buf += `<details><summary>Remaining Players (${remainingPlayers.length})</summary>${this.generateUsernameList(remainingPlayers)}</details>`;
 		}
-		buf += `</div>`;
+		buf += `<details><summary>Auction Settings</summary>`;
+		buf += `- Minimum bid: <b>${this.minBid.toLocaleString()}</b><br/>`;
+		buf += `- Minimum players per team: <b>${this.minPlayers}</b><br/>`;
+		buf += `- Blind mode: <b>${this.blindMode ? 'On' : 'Off'}</b><br/>`;
+		buf += `</details>`;
+		return buf;
+	}
 
+	generateBidInfo() {
+		let buf = `Player: <b>${Utils.escapeHTML(this.currentNom.name)}</b> `;
+		buf += `Top bid: <b>${this.currentBid}</b> `;
+		buf += `Top bidder: <b>${Utils.escapeHTML(this.currentBidder.name)}</b> `;
+		buf += `Tiers: <b>${this.currentNom.tiers?.length ? `${Utils.escapeHTML(this.currentNom.tiers.join(', '))}` : 'N/A'}</b>`;
 		return buf;
 	}
 
@@ -311,7 +327,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		} else {
 			delete player.team;
 		}
-		this.sendHTML(this.generateAuctionTable());
+		this.sendHTMLBox(this.generateAuctionTable());
 	}
 
 	addTeam(name: string) {
@@ -422,7 +438,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.queue = Object.values(this.teams).map(toID).concat(Object.values(this.teams).map(toID).reverse());
 		this.clearTimer();
 		this.state = 'setup';
-		this.sendHTML(this.generateAuctionTable());
+		this.sendHTMLBox(this.generateAuctionTable());
 	}
 
 	next() {
@@ -437,8 +453,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.currentTeam = this.teams[this.queue.shift()!];
 			this.queue.push(this.currentTeam.id);
 		} while (this.currentTeam.isSuspended());
-		this.sendHTML(this.generateAuctionTable());
-		this.sendMessage(`It is now **${this.currentTeam.name}**'s turn to nominate a player. Managers: ${this.currentTeam.managers.map(id => Users.get(id)?.name || id).join(', ')}`);
+		this.sendHTMLBox(this.generateAuctionTable());
+		this.sendMessage(`It is now **${this.currentTeam.name}**'s turn to nominate a player. Managers: ${Chat.toListString(this.currentTeam.managers.map(getUsername))}`);
 	}
 
 	nominate(user: User, target: string) {
@@ -457,6 +473,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.currentBid = this.minBid;
 		this.currentBidder = this.currentTeam;
 		this.sendMessage(`${user.name} from **${this.currentTeam.name}** has nominated **${player.name}** for auction. Use /bid to place a bid!`);
+		this.sendHTMLBox(this.generateBidInfo(), 'bid');
 		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
 
@@ -488,6 +505,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.currentBid = amount;
 			this.currentBidder = team;
 			this.sendMessage(`${user.name}[${team.name}]: **${amount}**`);
+			this.sendHTMLBox(this.generateBidInfo(), 'bid');
 			this.clearTimer();
 			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 		}
@@ -509,6 +527,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.lastQueue = null;
 		this.currentBidder.credits += this.currentBid;
 		delete this.currentNom.team;
+		this.currentNom.price = 0;
 		this.next();
 	}
 
@@ -528,9 +547,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	end(message?: string) {
+		this.sendHTMLBox(this.generateAuctionTable());
+		this.sendHTMLBox(this.generatePriceList());
 		if (message) this.sendMessage(message);
-		this.sendHTML(this.generateAuctionTable());
-		this.sendHTML(this.generatePriceList());
 		this.destroy();
 	}
 
@@ -594,7 +613,7 @@ export const commands: Chat.ChatCommands = {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			auction.end('The auction was forcibly ended.');
+			auction.end();
 			this.addModAction(`The auction was ended by ${user.name}.`);
 			this.modlog('AUCTION END');
 		},
@@ -602,12 +621,12 @@ export const commands: Chat.ChatCommands = {
 		display(target, room, user) {
 			this.runBroadcast();
 			const auction = this.requireGame(Auction);
-			this.sendReply(`|html|${auction.generateAuctionTable()}`);
+			this.sendReplyBox(auction.generateAuctionTable());
 		},
 		pricelist(target, room, user) {
 			this.runBroadcast();
 			const auction = this.requireGame(Auction);
-			this.sendReply(`|html|${auction.generatePriceList()}`);
+			this.sendReplyBox(auction.generatePriceList());
 		},
 		minbid(target, room, user) {
 			room = this.requireRoom();
@@ -782,7 +801,7 @@ export const commands: Chat.ChatCommands = {
 			if (!teamName || !managers.length) return this.parse('/help auction addmanagers');
 			auction.addManagers(teamName, managers);
 			const team = auction.teams[toID(teamName)];
-			this.addModAction(`${user.name} added ${managers.map(id => Users.get(id)?.name || id).join(', ')} as managers to team ${team.name}.`);
+			this.addModAction(`${user.name} added ${Chat.toListString(managers.map(getUsername))} as manager${Chat.plural(managers.length)} for team ${team.name}.`);
 		},
 		addmanagershelp: [
 			`/auction addmanagers [team], [manager1], [manager2], ... - Adds managers to a team. Requires: # & auction owner`,
@@ -797,7 +816,7 @@ export const commands: Chat.ChatCommands = {
 			if (!teamName || !managers.length) return this.parse('/help auction removemanagers');
 			auction.removeManagers(teamName, managers);
 			const team = auction.teams[toID(teamName)];
-			this.addModAction(`${user.name} removed ${managers.map(id => Users.get(id)?.name || id)} as managers from team ${team.name}.`);
+			this.addModAction(`${user.name} removed ${Chat.toListString(managers.map(getUsername))} as manager${Chat.plural(managers.length)} for team ${team.name}.`);
 		},
 		removemanagershelp: [
 			`/auction removemanagers [team], [manager1], [manager2], ... - Removes managers from a team. Requires: # & auction owner`,
@@ -917,6 +936,10 @@ export const commands: Chat.ChatCommands = {
 	},
 	bid(target) {
 		this.parse(`/auction bid ${target}`);
+	},
+	overpay() {
+		this.requireGame(Auction);
+		return '/announce OVERPAY!';
 	},
 };
 
