@@ -141,7 +141,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	generatePriceList() {
-		const draftedPlayers = Object.values(this.playerList).filter(p => p.team).sort((a, b) => b.price - a.price);
+		const draftedPlayers = Utils.sortBy(Object.values(this.playerList).filter(p => p.team), p => -p.price);
 		let buf = '';
 		for (const id in this.teams) {
 			const team = this.teams[id];
@@ -179,7 +179,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}).join('');
 		buf += `</table></div>`;
 
-		const remainingPlayers = Object.values(this.playerList).filter(p => !p.team).sort((a, b) => a.name.localeCompare(b.name));
+		const remainingPlayers = Utils.sortBy(Object.values(this.playerList).filter(p => !p.team), p => p.name);
 		const tierArrays: {[k: string]: Player[]} = {};
 		for (const player of remainingPlayers) {
 			if (!player.tiers?.length) continue;
