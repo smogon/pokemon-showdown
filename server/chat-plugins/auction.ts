@@ -15,20 +15,37 @@ interface Player {
 	tiers?: string[];
 }
 
+interface Manager {
+	id: ID;
+	team: Team;
+}
+
 class Team {
 	id: ID;
 	name: string;
 	credits: number;
-	managers: string[];
 	suspended: boolean;
 	private auction: Auction;
 	constructor(name: string, auction: Auction) {
 		this.id = toID(name);
 		this.name = name;
 		this.credits = auction.startingCredits;
-		this.managers = [];
 		this.suspended = false;
 		this.auction = auction;
+	}
+
+	getManagerNames() {
+		const managers = [];
+		for (const id in this.auction.managers) {
+			if (this.auction.managers[id].team !== this) continue;
+			const user = Users.getExact(id);
+			if (user) {
+				managers.push(user.name);
+			} else {
+				managers.push(id);
+			}
+		}
+		return managers;
 	}
 
 	getPlayers() {
@@ -49,16 +66,12 @@ class Team {
 	}
 }
 
-function getUsername(id: string) {
-	const user = Users.get(id);
-	return user?.connected ? user.name : id;
-}
-
 export class Auction extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'auction' as ID;
-	teams: {[k: string]: Team};
-	playerList: {[k: string]: Player};
 	owners: {[k: string]: string};
+	teams: {[k: string]: Team};
+	managers: {[k: string]: Manager};
+	playerList: {[k: string]: Player};
 
 	startingCredits: number;
 	minBid: number;
@@ -82,9 +95,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
 		this.title = `Auction (${room.title})`;
-		this.teams = {};
-		this.playerList = {};
 		this.owners = {};
+		this.teams = {};
+		this.managers = {};
+		this.playerList = {};
 
 		this.startingCredits = startingCredits;
 		this.minBid = 3000;
@@ -171,7 +185,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			}
 			let row = `<tr>`;
 			row += `<td align="center" style="width: 15px">${i1 > 0 ? i1 : '-'}</td><td align="center" style="width: 15px">${i2 > 0 ? i2 : '-'}</td>`;
-			row += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br/>${this.generateUsernameList(team.managers.map(getUsername), 2, true)}</td>`;
+			row += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br/>${this.generateUsernameList(team.getManagerNames(), 2, true)}</td>`;
 			row += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
 			row += `<td><div style="min-height: 32px; height: 32px; overflow: hidden; resize: vertical"><span style="float: right">${players.length}</span>${this.generateUsernameList(players)}</div></td>`;
 			row += `</tr>`;
@@ -373,21 +387,20 @@ export class Auction extends Rooms.SimpleRoomGame {
 		const team = this.teams[toID(teamName)];
 		if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
 		for (const manager of managers) {
-			const user = Users.get(manager);
+			const user = Users.getExact(manager);
 			if (!user) throw new Chat.ErrorMessage(`User "${manager}" not found.`);
-			team.managers.push(user.id);
+			if (!this.managers[user.id]) {
+				this.managers[user.id] = {id: user.id, team};
+			} else {
+				this.managers[user.id].team = team;
+			}
 		}
 	}
 
-	removeManagers(teamName: string, managers: string[]) {
-		const team = this.teams[toID(teamName)];
-		if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
+	removeManagers(managers: string[]) {
 		for (const manager of managers) {
-			const managerIndex = team.managers.indexOf(toID(manager));
-			if (managerIndex < 0) {
-				throw new Chat.ErrorMessage(`"${manager}" is not a manager of team ${team.name}.`);
-			}
-			team.managers.splice(managerIndex, 1);
+			if (!this.managers[toID(manager)]) throw new Chat.ErrorMessage(`Manager "${manager}" not found`);
+			delete this.managers[toID(manager)];
 		}
 	}
 
@@ -454,12 +467,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.queue.push(this.currentTeam.id);
 		} while (this.currentTeam.isSuspended());
 		this.sendHTMLBox(this.generateAuctionTable());
-		this.sendMessage(`It is now **${this.currentTeam.name}**'s turn to nominate a player. Managers: ${Chat.toListString(this.currentTeam.managers.map(getUsername))}`);
+		this.sendMessage(`It is now **${this.currentTeam.name}**'s turn to nominate a player. Managers: ${Chat.toListString(this.currentTeam.getManagerNames())}`);
 	}
 
 	nominate(user: User, target: string) {
 		if (this.state !== 'nom') throw new Chat.ErrorMessage(`You cannot nominate players right now.`);
-		if (!this.currentTeam.managers.includes(user.id)) this.checkOwner(user);
+		if (!this.managers[user.id]) this.checkOwner(user);
 
 		// For undo
 		this.lastQueue = this.queue.slice();
@@ -472,14 +485,14 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.state = 'bid';
 		this.currentBid = this.minBid;
 		this.currentBidder = this.currentTeam;
-		this.sendMessage(`${user.name} from **${this.currentTeam.name}** has nominated **${player.name}** for auction. Use /bid to place a bid!`);
-		this.sendHTMLBox(this.generateBidInfo(), 'bid');
+		this.sendMessage(`${user.name}${this.managers[user.id]?.team === this.currentTeam ? ` from **${this.currentTeam.name}**` : ''} has nominated **${player.name}** for auction. Use /bid to place a bid!`);
+		if (!this.blindMode) this.sendHTMLBox(this.generateBidInfo(), 'bid');
 		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
 
 	bid(user: User, amount: number) {
 		if (this.state !== 'bid') throw new Chat.ErrorMessage(`There are no players up for auction right now.`);
-		const team = Object.values(this.teams).find(t => t.managers.includes(user.id));
+		const team = this.managers[user.id]?.team;
 		if (!team) throw new Chat.ErrorMessage(`Only managers can bid on players.`);
 
 		if (amount < 500) amount *= 1000;
@@ -490,8 +503,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (this.bidsPlaced[team.id]) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
 			if (amount <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
 			this.bidsPlaced[team.id] = amount;
-			for (const manager of team.managers) {
-				Users.get(manager)?.sendTo(this.room, `Your team placed a bid of **${amount}** on **${this.currentNom}**.`);
+			for (const id in this.managers) {
+				if (this.managers[id].team === team) {
+					Users.getExact(id)?.sendTo(this.room, `Your team placed a bid of **${amount}** on **${this.currentNom}**.`);
+				}
 			}
 			if (amount > this.currentBid) {
 				this.currentBid = amount;
@@ -801,7 +816,7 @@ export const commands: Chat.ChatCommands = {
 			if (!teamName || !managers.length) return this.parse('/help auction addmanagers');
 			auction.addManagers(teamName, managers);
 			const team = auction.teams[toID(teamName)];
-			this.addModAction(`${user.name} added ${Chat.toListString(managers.map(getUsername))} as manager${Chat.plural(managers.length)} for team ${team.name}.`);
+			this.addModAction(`${user.name} added ${Chat.toListString(managers.map(m => Users.getExact(m)!.name))} as manager${Chat.plural(managers.length)} for team ${team.name}.`);
 		},
 		addmanagershelp: [
 			`/auction addmanagers [team], [manager1], [manager2], ... - Adds managers to a team. Requires: # & auction owner`,
@@ -812,14 +827,13 @@ export const commands: Chat.ChatCommands = {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			const [teamName, ...managers] = target.split(',').map(x => x.trim());
-			if (!teamName || !managers.length) return this.parse('/help auction removemanagers');
-			auction.removeManagers(teamName, managers);
-			const team = auction.teams[toID(teamName)];
-			this.addModAction(`${user.name} removed ${Chat.toListString(managers.map(getUsername))} as manager${Chat.plural(managers.length)} for team ${team.name}.`);
+			const [...managers] = target.split(',').map(x => x.trim());
+			if (!managers.length) return this.parse('/help auction removemanagers');
+			auction.removeManagers(managers);
+			this.addModAction(`${user.name} removed ${Chat.toListString(managers.map(m => Users.getExact(m)!.name))} as manager${Chat.plural(managers.length)}.`);
 		},
 		removemanagershelp: [
-			`/auction removemanagers [team], [manager1], [manager2], ... - Removes managers from a team. Requires: # & auction owner`,
+			`/auction removemanagers [manager1], [manager2], ... - Removes managers. Requires: # & auction owner`,
 		],
 		addcredits(target, room, user) {
 			room = this.requireRoom();
@@ -924,7 +938,7 @@ export const commands: Chat.ChatCommands = {
 			`- suspendteam [name]: Suspends the given team from the auction.<br/>` +
 			`- unsuspendteam [name]: Unsuspends the given team from the auction.<br/>` +
 			`- addmanagers [team], [manager1], [manager2], ...: Adds managers to a team.<br/>` +
-			`- removemanagers [team], [manager1], [manager2], ...: Removes managers from a team.<br/>` +
+			`- removemanagers [manager1], [manager2], ...: Removes managers.<br/>` +
 			`- addcredits [team], [amount]: Adds credits to a team.<br/>` +
 			`- undo: Undoes the last nomination.<br/>` +
 			`- [enable/disable]: Enables or disables auctions from being started in a room.<br/>` +
