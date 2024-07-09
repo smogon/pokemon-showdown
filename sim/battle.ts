@@ -1613,7 +1613,7 @@ export class Battle {
 		// Please remove me once there is client support.
 		if (this.ruleTable.has('crazyhouserule')) {
 			for (const side of this.sides) {
-				let buf = `raw|${side.name}'s team:<br />`;
+				let buf = `raw|${Utils.escapeHTML(side.name)}'s team:<br />`;
 				for (const pokemon of side.pokemon) {
 					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
 					if (pokemon.fainted) {
