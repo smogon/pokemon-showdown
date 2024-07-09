@@ -1316,8 +1316,11 @@ export const commands: Chat.ChatCommands = {
 				} else if (lowercase.startsWith('lv') || lowercase.startsWith('level')) {
 					level = parseInt(arg.replace(/\D/g, ''));
 					lvlSet = true;
+					if (isNaN(level)) {
+						return this.sendReplyBox('Invalid value for level: ' + Utils.escapeHTML(arg));
+					}
 					if (level < 1 || level > 9999) {
-						return this.sendReplyBox('Invalid value for level: ' + level);
+						return this.sendReplyBox('Level should be between 1 and 9999.');
 					}
 					continue;
 				}
