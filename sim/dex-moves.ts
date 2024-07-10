@@ -50,6 +50,7 @@ interface MoveFlags {
 	noassist?: 1; // Cannot be selected by Assist.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
 	noparentalbond?: 1; // Cannot be made to hit twice via Parental Bond.
+	nosketch?: 1; // Cannot be copied by Sketch
 	nosleeptalk?: 1; // Cannot be selected by Sleep Talk.
 	pledgecombo?: 1; // Gems will not activate. Cannot be redirected by Storm Drain / Lightning Rod.
 	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
@@ -273,7 +274,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	// ---------------
 	hasCrashDamage?: boolean;
 	isConfusionSelfHit?: boolean;
-	noSketch?: boolean;
 	stallingMove?: boolean;
 	baseMove?: ID;
 }
@@ -476,8 +476,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	declare readonly critModifier?: number;
 	/** Forces the move to get STAB even if the type doesn't match. */
 	readonly forceSTAB: boolean;
-	/** True if it can't be copied with Sketch. */
-	readonly noSketch: boolean;
 
 	readonly volatileStatus?: ID;
 
@@ -520,7 +518,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.damage = data.damage!;
 		this.spreadHit = data.spreadHit || false;
 		this.forceSTAB = !!data.forceSTAB;
-		this.noSketch = !!data.noSketch;
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (this.category !== 'Status' && !this.maxMove && this.id !== 'struggle') {

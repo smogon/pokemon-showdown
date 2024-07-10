@@ -126,7 +126,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	darkvoid: {
 		inherit: true,
 		isNonstandard: "Past",
-		noSketch: false,
+		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 	},
 	doubleironbash: {
 		inherit: true,
@@ -234,7 +234,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	hyperspacefury: {
 		inherit: true,
 		isNonstandard: "Past",
-		noSketch: false,
+		flags: {mirror: 1, bypasssub: 1},
 	},
 	hyperspacehole: {
 		inherit: true,
