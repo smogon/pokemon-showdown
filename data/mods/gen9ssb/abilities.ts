@@ -27,7 +27,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 			}
 		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				this.heal(target.baseMaxhp / 4);
+				target.addVolatile('charge');
+				if (!target.abilityState.gauges) target.abilityState.gauges = 0;
+				target.abilityState.gauges++;
+				this.add('-message', `${target.name} was charged up by ${move.name}!`);
+				return null;
+			}
+		},
 		onBeforeMove(pokemon, target, move) {
+			// Use gauges for electric moves
 			if (move.type === 'Electric') {
 				if (pokemon.abilityState.gauges < 2) {
 					this.debug("Not enough battery");
@@ -39,6 +50,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 				}
 			}
+			// Use gauges for techno blast
 			if (move.id === 'technoblast') {
 				if (pokemon.abilityState.gauges < 3) {
 					this.debug("Not enough battery");
@@ -54,20 +66,35 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (!pokemon.abilityState.gauges) return;
-			if (pokemon.abilityState.gauges >= 5) {
-				pokemon.addVolatile('charge');
-				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
-				this.add('-message', `${pokemon.name} is at maximum charge!`);
+			let totalCharge = 0;
+			if (pokemon.status === 'slp') totalCharge++;
+			if (this.field.isTerrain('electricterrain')) totalCharge++;
+			if (totalCharge > 0) {
+				this.add('-activate', pokemon, 'ability: Battery Life');
+				pokemon.abilityState.gauges += totalCharge;
+				if (pokemon.abilityState.gauges > 5) pokemon.abilityState.gauges = 5;
+				if (totalCharge === 1) {
+					this.add('-message', `${pokemon.name} is charging up!`);
+				}
+				if (totalCharge > 1) {
+					this.add('-message', `${pokemon.name} is charging rapidly!`);
+				}
 			}
 		},
 		onUpdate(pokemon) {
+			// Recharge if out of battery
 			if (pokemon.abilityState.gauges <= 0) {
 				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 				this.add('-activate', pokemon, 'ability: Battery Life');
 				this.add('-message', `${pokemon.name} is out of battery!`);
 				this.field.setTerrain('electricterrain');
 				pokemon.addVolatile('mustrecharge');
+			}
+			// Add charge effect if at maximum battery
+			if (pokemon.abilityState.gauges >= 5) {
+				pokemon.addVolatile('charge');
+				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
+				this.add('-message', `${pokemon.name} is at maximum charge!`);
 			}
 		},
 	},
