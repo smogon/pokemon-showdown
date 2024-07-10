@@ -27,6 +27,30 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			return priority - 8;
 		},
 	},
+
+	// Cyclommatic Cell Battery Display
+	// Uses empty volatile statuses as a visual effect
+	// pokemon.addVolatile('0%');
+	// pokemon.removeVolatile('0%');
+	
+	'0%': {
+		name: "0%",
+	},
+	'20%': {
+		name: "20%",
+	},
+	'40%': {
+		name: "40%",
+	},
+	'60%': {
+		name: "60%",
+	},
+	'80%': {
+		name: "80%",
+	},
+	'100%': {
+		name: "100%",
+	},
 	
 	aegii: {
 		noCopy: true,
