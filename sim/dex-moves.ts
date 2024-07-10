@@ -50,7 +50,7 @@ interface MoveFlags {
 	noassist?: 1; // Cannot be selected by Assist.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
 	noparentalbond?: 1; // Cannot be made to hit twice via Parental Bond.
-	nosketch?: 1; // Cannot be copied by Sketch
+	nosketch?: 1; // Cannot be copied by Sketch.
 	nosleeptalk?: 1; // Cannot be selected by Sleep Talk.
 	pledgecombo?: 1; // Gems will not activate. Cannot be redirected by Storm Drain / Lightning Rod.
 	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
