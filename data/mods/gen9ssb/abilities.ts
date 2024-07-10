@@ -22,10 +22,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "See '/ssb Cyclommatic Cell' for more!",
 		desc: "Look at discord pins man idk im not typing this shit",
 		onStart(pokemon) {
-			if (!pokemon.abilityState.gauges) {
-				pokemon.abilityState.gauges = 5;
-				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
-			}
+			if (pokemon.abilityState.gauges === undefined) pokemon.abilityState.gauges = 5;
+		},
+		onBasePower(basePower, attacker, defender, move) {
+			if (!attacker.abilityState.gauges || attacker.abilityState.gauges === undefined) attacker.abilityState.gauges = 0;
+			return basePower - (10 * (5 - attacker.abilityState.gauges));
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
@@ -43,11 +44,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (pokemon.abilityState.gauges < 2) {
 					this.debug("Not enough battery");
 					this.add('-message', `${pokemon.name} doesn't have enough battery!`);
-					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 					return false;
 				} else if (pokemon.abilityState.gauges >= 2) {
 					pokemon.abilityState.gauges -= 2;
-					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
+					this.add('-message', `${pokemon.name} used its battery to power up ${move.name}!`);
 				}
 			}
 			// Use gauges for techno blast
@@ -55,21 +55,36 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (pokemon.abilityState.gauges < 3) {
 					this.debug("Not enough battery");
 					this.add('-message', `${pokemon.name} doesn't have enough battery!`);
-					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
 					return false;
 				} else if (pokemon.abilityState.gauges >= 3) {
 					pokemon.abilityState.gauges -= 3;
-					this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
+					this.add('-message', `${pokemon.name} used its battery to power up ${move.name}!`);
 				}
 			}	
 		},
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
 		onResidual(pokemon) {
+			// Recharge if out of battery
+			if (pokemon.abilityState.gauges <= 0) {
+				this.add(`-anim`, pokemon, "Splash");
+				this.add('-activate', pokemon, 'ability: Battery Life');
+				this.add('-message', `${pokemon.name} is out of battery!`);
+				this.field.setTerrain('electricterrain');
+				pokemon.addVolatile('mustrecharge');
+			// Charge if at maximum battery
+			} else if (pokemon.abilityState.gauges >= 5) {
+				this.add(`-anim`, pokemon, "Charge");
+				pokemon.addVolatile('charge');
+				this.add('-message', `${pokemon.name} is at maximum charge!`);
+			// Otherwise state charge amount
+			} else {
+				this.add(`-anim`, pokemon, "Charge");
+				this.add('-message', `${pokemon.name} is at ${(pokemon.abilityState.gauges / 5) * 100}% battery!`);
+			}
+			// Add charge from sleep or terrain
 			let totalCharge = 0;
 			if (pokemon.status === 'slp') totalCharge++;
 			if (this.field.isTerrain('electricterrain')) totalCharge++;
-			if (totalCharge > 0) {
+			if (totalCharge > 0 && pokemon.abilityState.gauges < 5) {
 				this.add('-activate', pokemon, 'ability: Battery Life');
 				pokemon.abilityState.gauges += totalCharge;
 				if (pokemon.abilityState.gauges > 5) pokemon.abilityState.gauges = 5;
@@ -79,22 +94,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (totalCharge > 1) {
 					this.add('-message', `${pokemon.name} is charging rapidly!`);
 				}
-			}
-		},
-		onUpdate(pokemon) {
-			// Recharge if out of battery
-			if (pokemon.abilityState.gauges <= 0) {
-				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
-				this.add('-activate', pokemon, 'ability: Battery Life');
-				this.add('-message', `${pokemon.name} is out of battery!`);
-				this.field.setTerrain('electricterrain');
-				pokemon.addVolatile('mustrecharge');
-			}
-			// Add charge effect if at maximum battery
-			if (pokemon.abilityState.gauges >= 5) {
-				pokemon.addVolatile('charge');
-				this.add('-message', `Battery Remaining: ${(pokemon.abilityState.gauges / 5) * 100}%`);
-				this.add('-message', `${pokemon.name} is at maximum charge!`);
 			}
 		},
 	},
