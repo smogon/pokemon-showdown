@@ -728,7 +728,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sketch: {
 		inherit: true,
-		flags: {bypasssub: 1, failencore: 1, noassist: 1},
+		flags: {bypasssub: 1, failencore: 1, noassist: 1, nosketch: 1},
 		onHit() {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');
