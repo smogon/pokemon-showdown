@@ -611,7 +611,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction create [startingcredits] - Creates an auction. Requires: % @ # &`,
 		],
 		start(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -620,7 +619,6 @@ export const commands: Chat.ChatCommands = {
 			this.modlog(`AUCTION START`);
 		},
 		reset(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -631,7 +629,6 @@ export const commands: Chat.ChatCommands = {
 		delete: 'end',
 		stop: 'end',
 		end(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -651,7 +648,6 @@ export const commands: Chat.ChatCommands = {
 			this.sendReplyBox(auction.generatePriceList());
 		},
 		minbid(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -665,7 +661,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction minbid [amount] - Sets the minimum bid. Requires: # & auction owner`,
 		],
 		minplayers(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -678,17 +673,17 @@ export const commands: Chat.ChatCommands = {
 			`/auction minplayers [amount] - Sets the minimum number of players. Requires: # & auction owner`,
 		],
 		blindmode(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			if (!target) return this.parse('/help auction blindmode');
 			if (this.meansYes(target)) {
 				auction.setBlindMode(true);
 				this.addModAction(`${user.name} turned on blind mode.`);
 			} else if (this.meansNo(target)) {
 				auction.setBlindMode(false);
 				this.addModAction(`${user.name} turned off blind mode.`);
+			} else {
+				return this.parse('/help auction blindmode');
 			}
 		},
 		blindmodehelp: [
@@ -697,12 +692,11 @@ export const commands: Chat.ChatCommands = {
 		],
 		addowner: 'addowners',
 		addowners(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			if (!target) return this.parse('/help auction addowners');
 			const owners = target.split(',').map(x => x.trim());
+			if (!owners.length) return this.parse('/help auction addowners');
 			auction.addOwners(owners);
 			this.addModAction(`${user.name} added ${Chat.toListString(owners.map(o => Users.getExact(o)!.name))} as auction owner${Chat.plural(owners.length)}.`);
 		},
@@ -711,12 +705,11 @@ export const commands: Chat.ChatCommands = {
 		],
 		removeowner: 'removeowners',
 		removeowners(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			if (!target) return this.parse('/help auction removeowners');
 			const owners = target.split(',').map(x => x.trim());
+			if (!owners.length) return this.parse('/help auction removeowners');
 			auction.removeOwners(owners);
 			this.addModAction(`${user.name} removed ${Chat.toListString(owners.map(o => Users.getExact(o)?.name || o))} as auction owner${Chat.plural(owners.length)}.`);
 		},
@@ -724,7 +717,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction removeowners [user1], [user2], ... - Removes users as auction owners. Requires: # & auction owner`,
 		],
 		async importplayers(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -747,12 +739,11 @@ export const commands: Chat.ChatCommands = {
 			`See https://pastebin.com/jPTbJBva for an example.`,
 		],
 		addplayer(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			if (!target) return this.parse('/help auction addplayer');
 			const [name, ...tiers] = target.split(',').map(x => x.trim());
+			if (!name) return this.parse('/help auction addplayer');
 			const player = auction.addPlayerToAuction(name, tiers);
 			this.addModAction(`${user.name} added player ${player.name} to the auction.`);
 		},
@@ -760,7 +751,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction addplayer [name], [tier1], [tier2], ... - Adds a player to the auction. Requires: # & auction owner`,
 		],
 		removeplayer(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -772,12 +762,11 @@ export const commands: Chat.ChatCommands = {
 			`/auction removeplayer [name] - Removes a player from the auction. Requires: # & auction owner`,
 		],
 		assignplayer(target, room, user) {
-			if (!target) return this.parse('/help auction assignplayer');
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
 			const [player, team] = target.split(',').map(x => x.trim());
+			if (!player) return this.parse('/help auction assignplayer');
 			if (team) {
 				auction.assignPlayer(player, team);
 				this.addModAction(`${user.name} assigned player ${player} to team ${team}.`);
@@ -790,7 +779,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction assignplayer [player], [team] - Assigns a player to a team. If team is blank, returns player to draft pool. Requires: # & auction owner`,
 		],
 		addteam(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -804,7 +792,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction addteam [name], [manager1], [manager2], ... - Adds a team to the auction. Requires: # & auction owner`,
 		],
 		removeteam(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -816,7 +803,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction removeteam [team] - Removes a team from the auction. Requires: # & auction owner`,
 		],
 		suspendteam(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -829,7 +815,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction suspendteam [team] - Suspends a team from the auction. Requires: # & auction owner`,
 		],
 		unsuspendteam(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -843,7 +828,6 @@ export const commands: Chat.ChatCommands = {
 		],
 		addmanager: 'addmanagers',
 		addmanagers(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -858,7 +842,6 @@ export const commands: Chat.ChatCommands = {
 		],
 		removemanager: 'removemanagers',
 		removemanagers(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -871,7 +854,6 @@ export const commands: Chat.ChatCommands = {
 			`/auction removemanagers [user1], [user2], ... - Removes users as managers. Requires: # & auction owner`,
 		],
 		addcredits(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
@@ -902,14 +884,13 @@ export const commands: Chat.ChatCommands = {
 			`/auction bid OR /bid [amount] - Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.`,
 		],
 		undo(target, room, user) {
-			room = this.requireRoom();
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
 			auction.undoLastNom();
 			this.addModAction(`${user.name} undid the last nomination.`);
 		},
-		disable(target, room, user) {
+		disable(target, room) {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (room.settings.auctionDisabled) {
@@ -919,7 +900,7 @@ export const commands: Chat.ChatCommands = {
 			room.saveSettings();
 			this.sendReply('Auctions have been disabled for this room.');
 		},
-		enable(target, room, user) {
+		enable(target, room) {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (!room.settings.auctionDisabled) {
@@ -930,8 +911,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply('Auctions have been enabled for this room.');
 		},
 		ongoing: 'running',
-		running(target, room, user) {
-			room = this.requireRoom();
+		running() {
 			if (!this.runBroadcast()) return;
 			const runningAuctions = [];
 			for (const auctionRoom of Rooms.rooms.values()) {
@@ -942,11 +922,11 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`Running auctions: ${runningAuctions.join(', ') || 'None'}`);
 		},
 		'': 'help',
-		help(target, room, user) {
+		help() {
 			this.parse('/help auction');
 		},
 	},
-	auctionhelp(target, room, user) {
+	auctionhelp() {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`Auction commands<br/>` +
