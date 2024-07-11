@@ -346,7 +346,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		hosts: FakeUser[],
 		gameType: GameTypes,
 		questions: (string | string[])[],
-		isHTML? : boolean,
+		isHTML?: boolean,
 		mod?: string | string[]
 	) {
 		super(room);
@@ -1378,7 +1378,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			gameType = 'recycled';
 		}
 
-		let isHTML = cmd.includes('html');
+		const isHTML = cmd.includes('html');
 
 		let mod;
 		let questions = target;
@@ -1740,7 +1740,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			return this.parse('/scavhelp staff');
 		}
 
-		let isHTML = this.cmd.includes('html');
+		const isHTML = this.cmd.includes('html');
 
 		this.checkCan('mute', null, room);
 
