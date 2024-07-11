@@ -90,7 +90,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	currentBid: number;
 	currentBidder: Team;
 	/** Used for blind mode */
-	bidsPlaced: {[k: string]: number};
+	bidsPlaced: Set<Team>;
 	state: 'setup' | 'nom' | 'bid' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
@@ -112,7 +112,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.currentNom = null!;
 		this.currentBid = 0;
 		this.currentBidder = null!;
-		this.bidsPlaced = {};
+		this.bidsPlaced = new Set();
 	}
 
 	sendMessage(message: string) {
@@ -500,9 +500,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (amount > team.maxBid()) throw new Chat.ErrorMessage(`You cannot afford to bid that much.`);
 
 		if (this.blindMode) {
-			if (this.bidsPlaced[team.id]) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
+			if (this.bidsPlaced.has(team)) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
 			if (amount <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
-			this.bidsPlaced[team.id] = amount;
+			this.bidsPlaced.add(team);
 			for (const id in this.managers) {
 				if (this.managers[id].team === team) {
 					Users.getExact(id)?.sendTo(this.room, `Your team placed a bid of **${amount}** on **${this.currentNom}**.`);
@@ -512,7 +512,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 				this.currentBid = amount;
 				this.currentBidder = team;
 			}
-			if (Object.keys(this.bidsPlaced).length === Object.keys(this.teams).length) {
+			if (this.bidsPlaced.size === Object.keys(this.teams).length) {
 				this.finishCurrentNom();
 			}
 		} else {
@@ -531,6 +531,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.currentBidder.credits -= this.currentBid;
 		this.currentNom.team = this.currentBidder;
 		this.currentNom.price = this.currentBid;
+		this.bidsPlaced.clear();
 		this.clearTimer();
 		this.next();
 	}
