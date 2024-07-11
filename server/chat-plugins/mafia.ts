@@ -4000,6 +4000,13 @@ export const commands: Chat.ChatCommands = {
 		async listdata(target, room, user, connection, cmd, message) {
 			if (!this.runBroadcast()) return false;
 
+			// Fix errors
+			// Fix searching on roles
+			// Fix random (do not pick empty)
+
+			// Future: tags
+			// Future: or
+
 			// Determine non-search targets first, afterwards searching is done with the remainder
 			let targets = target.split(',').map(x => x.trim());
 
@@ -4055,6 +4062,8 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			let search = function (entries: any[], searchTarget) {
+				if(typeof(entries) == 'undefined') return entries; //Hotpatch
+
 				if (searchTarget.length == 0) return entries;
 				const negation = searchTarget[0] == '!';
 
@@ -4064,7 +4073,7 @@ export const commands: Chat.ChatCommands = {
 				if (searchType == `themes` && searchTarget.includes(`players`)) {
 					const inequalities = ['<=', '>=', '=', '<', '>'];
 					const inequality = inequalities.find(x => searchTarget.includes(x));
-					if (!inequality) return this.errorReply(`Please provide a valid inequality for the players.`);
+					if (!inequality) return entries; // this.errorReply(`Please provide a valid inequality for the players.`);
 
 					const players = searchTarget.split(inequality)[1].trim();
 					if (((players != null) &&
@@ -4074,7 +4083,7 @@ export const commands: Chat.ChatCommands = {
 						else if (inequality == '<' || inequality == '<=') entries = entries.filter(([key, data]) => ([...Array(+players + (inequality == '<=' ? +1 : +0)).keys()]).some(playerCount => playerCount in (MafiaData[searchType][key])));
 						else if (inequality == '>' || inequality == '>=') entries = entries.filter(([key, data]) => ([...Array(30 - players).keys()].map(num => +num + +players + (inequality == '>=' ? +0 : +1))).some(playerCount => playerCount in (MafiaData[searchType][key])));
 					} else {
-						return this.errorReply(`Please ensure the amount of players is numeric.`);
+						return entries; // this.errorReply(`Please ensure the amount of players is numeric.`);
 					}
 				}
 				else if ((searchType == `roles`) && toID(searchTarget) in MafiaData[`themes`]) {
@@ -4136,8 +4145,11 @@ export const commands: Chat.ChatCommands = {
 				if (!hidden) entries = entries.filter(([key, data]) => !MafiaData[searchType][key][`tags`].includes(`hidden`));
 
 				for (let i = 0; i < targets.length; i++) {
-					entries = targets[i].split('|').map(x => x.trim()).map(searchTerm => search(entries.slice(), searchTerm)).reduce((aggregate, result) => [...new Set([...aggregate, ...result])]);
+					entries = targets[i].split('|').map(x => x.trim()).map(searchTerm => search.call(this, entries.slice(), searchTerm)).reduce((aggregate, result) => [...new Set([...aggregate, ...result])]);
 				}
+
+				console.log(typeof(entries));
+				if(typeof(entries) == 'undefined') return; //Hotpatch
 
 				if (random) entries = shuffle(entries);
 				if (number > 0) entries = entries.slice(0, number)
