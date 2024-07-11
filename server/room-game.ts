@@ -62,6 +62,7 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	 * `this.getUser().games`.
 	 */
 	readonly id: ID;
+	completed?: boolean;
 	constructor(user: User | string | null, game: GameClass, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;

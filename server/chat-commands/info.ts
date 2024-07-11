@@ -1316,8 +1316,11 @@ export const commands: Chat.ChatCommands = {
 				} else if (lowercase.startsWith('lv') || lowercase.startsWith('level')) {
 					level = parseInt(arg.replace(/\D/g, ''));
 					lvlSet = true;
+					if (isNaN(level)) {
+						return this.sendReplyBox('Invalid value for level: ' + Utils.escapeHTML(arg));
+					}
 					if (level < 1 || level > 9999) {
-						return this.sendReplyBox('Invalid value for level: ' + level);
+						return this.sendReplyBox('Level should be between 1 and 9999.');
 					}
 					continue;
 				}
@@ -1790,7 +1793,7 @@ export const commands: Chat.ChatCommands = {
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
 			(isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
-				`Random Battles damage calculator. (Courtesy of Austin)<br />` +
+				`Random Battles damage calculator. (Courtesy of dhelmise &amp; jetou)<br />` +
 				`- <a href="https://calc.pokemonshowdown.com/randoms.html?gen=${dex.gen}">Random Battles Damage Calculator</a>`
 			);
 		}
@@ -1801,7 +1804,7 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 		this.sendReplyBox(
-			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, &amp; Kris)<br />` +
+			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko, Austin, dhelmise, &amp; jetou)<br />` +
 			`- <a href="https://calc.pokemonshowdown.com/index.html?gen=${dex.gen}">Damage Calculator</a>`
 		);
 	},

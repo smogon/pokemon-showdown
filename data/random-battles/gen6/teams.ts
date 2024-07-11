@@ -29,8 +29,8 @@ const SETUP = [
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
 	'aquajet', 'bulletpunch', 'clearsmog', 'dragontail', 'eruption', 'explosion', 'fakeout', 'flamecharge',
-	'futuresight', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'nuzzle', 'pluck', 'poweruppunch', 'pursuit',
-	'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack', 'skydrop', 'snarl',
+	'futuresight', 'iceshard', 'icywind', 'incinerate', 'infestation', 'machpunch', 'nuzzle', 'pluck', 'poweruppunch',
+	'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack', 'skydrop', 'snarl',
 	'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
@@ -193,6 +193,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			if (movePool.includes('spikes')) this.fastPop(movePool, movePool.indexOf('spikes'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
+		if (teamDetails.statusCure) {
+			if (movePool.includes('aromatherapy')) this.fastPop(movePool, movePool.indexOf('aromatherapy'));
+			if (movePool.includes('healbell')) this.fastPop(movePool, movePool.indexOf('healbell'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
 
 		// Develop additional move lists
 		const badWithSetup = ['defog', 'dragontail', 'haze', 'healbell', 'nuzzle', 'pursuit', 'rapidspin', 'toxic'];
@@ -276,7 +281,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 			if (species.baseSpecies === 'Wormadam' && role === 'Staller') {
-				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
+				if (movePool.includes('infestation')) this.fastPop(movePool, movePool.indexOf('infestation'));
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 		}
@@ -620,7 +625,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		case 'Torrent':
 			return (!counter.get('Water') || !!species.isMega);
 		case 'Unaware':
-			return (role !== 'Bulky Support' && role !== 'Staller');
+			return (!['Bulky Setup', 'Bulky Support', 'Staller'].includes(role));
 		case 'Unburden':
 			return (!!species.isMega || !counter.get('setup') && !moves.has('acrobatics'));
 		case 'Water Absorb':
@@ -776,9 +781,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return species.name === 'Conkeldurr' ? 'Flame Orb' : 'Toxic Orb';
 		}
-		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
-			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
-		}
+		if (ability === 'Magic Guard') return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (ability === 'Unburden') return (species.id === 'hitmonlee') ? 'White Herb' : 'Sitrus Berry';

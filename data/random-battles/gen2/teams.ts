@@ -26,7 +26,7 @@ const MOVE_PAIRS = [
 ];
 
 export class RandomGen2Teams extends RandomGen3Teams {
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
+	randomSets: {[species: IDEntry]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -110,6 +110,10 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		}
 		if (teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
+		if (teamDetails.statusCure) {
+			if (movePool.includes('healbell')) this.fastPop(movePool, movePool.indexOf('healbell'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
 

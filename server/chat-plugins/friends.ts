@@ -145,9 +145,7 @@ export const Friends = new class {
 			buf += `<small>On an alternate account</small><br />`;
 		}
 		if (login && typeof login === 'number' && !user?.connected) {
-			// THIS IS A TERRIBLE HACK BUT IT WORKS OKAY
-			const time = Chat.toTimestamp(new Date(Number(login)), {human: true});
-			buf += `Last seen: ${time.split(' ').reverse().join(', on ')}`;
+			buf += `Last seen: <time>${new Date(Number(login)).toISOString()}</time>`;
 			buf += ` (${Chat.toDurationString(Date.now() - login, {precision: 1})} ago)`;
 		} else if (typeof login === 'string') {
 			buf += `${login}`;

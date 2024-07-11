@@ -62,9 +62,9 @@ const SETUP = [
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
 	'accelerock', 'aquajet', 'bulletpunch', 'clearsmog', 'dragontail', 'eruption', 'explosion',
-	'fakeout', 'firstimpression', 'flamecharge', 'futuresight', 'iceshard', 'icywind', 'incinerate', 'machpunch', 'nuzzle',
-	'pluck', 'poweruppunch', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skyattack',
-	'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
+	'fakeout', 'firstimpression', 'flamecharge', 'futuresight', 'iceshard', 'icywind', 'incinerate', 'infestation', 'machpunch',
+	'nuzzle', 'pluck', 'poweruppunch', 'pursuit', 'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak',
+	'skyattack', 'skydrop', 'snarl', 'suckerpunch', 'uturn', 'watershuriken', 'vacuumwave', 'voltswitch', 'waterspout',
 ];
 // Hazard-setting moves
 const HAZARDS = [
@@ -131,7 +131,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!counter.get('Ice') || (!moves.has('blizzard') && movePool.includes('freezedry')) ||
 				abilities.has('Refrigerate') && (movePool.includes('return') || movePool.includes('hypervoice'))
 			),
-			Normal: movePool => movePool.includes('boomburst'),
+			Normal: movePool => (movePool.includes('boomburst') || movePool.includes('hypervoice')),
 			Poison: (movePool, moves, abilities, types, counter) => !counter.get('Poison'),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (
@@ -310,6 +310,11 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (movePool.includes('spikes')) this.fastPop(movePool, movePool.indexOf('spikes'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
+		if (teamDetails.statusCure) {
+			if (movePool.includes('aromatherapy')) this.fastPop(movePool, movePool.indexOf('aromatherapy'));
+			if (movePool.includes('healbell')) this.fastPop(movePool, movePool.indexOf('healbell'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
 
 		// Develop additional move lists
 		const badWithSetup = ['defog', 'dragontail', 'haze', 'healbell', 'nuzzle', 'pursuit', 'rapidspin', 'toxic'];
@@ -343,7 +348,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			[['fierydance', 'firelash', 'lavaplume'], ['fireblast', 'magmastorm']],
 			[['flamethrower', 'flareblitz'], ['fireblast', 'overheat']],
 			['hornleech', 'woodhammer'],
-			[['gigadrain', 'leafstorm'], ['leafstorm', 'petaldance', 'powerwhip']],
+			[['gigadrain', 'leafstorm'], ['energyball', 'leafstorm', 'petaldance', 'powerwhip']],
 			['wildcharge', 'thunderbolt'],
 			['gunkshot', 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
@@ -395,7 +400,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 			if (species.baseSpecies === 'Wormadam' && role === 'Staller') {
-				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
+				if (movePool.includes('infestation')) this.fastPop(movePool, movePool.indexOf('infestation'));
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 		}
@@ -516,8 +521,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				movePool, preferredType, role);
 		}
 
-		// Enforce Blizzard, Seismic Toss, Spore, and Sticky Web
-		for (const moveid of ['blizzard', 'seismictoss', 'spore', 'stickyweb']) {
+		// Enforce Aurora Veil, Blizzard, Seismic Toss, Spore, and Sticky Web
+		for (const moveid of ['auroraveil', 'blizzard', 'seismictoss', 'spore', 'stickyweb']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);
@@ -812,9 +817,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			return !counter.get('setup');
 		case 'Slush Rush':
 			return !teamDetails.hail;
-		case 'Snow Warning':
-			// Aurorus
-			return moves.has('hypervoice');
 		case 'Solar Power':
 			return (!counter.get('Special') || !teamDetails.sun || !!species.isMega);
 		case 'Sturdy':
@@ -829,7 +831,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		case 'Torrent':
 			return (!counter.get('Water') || !!species.isMega);
 		case 'Unaware':
-			return (role !== 'Bulky Support' && role !== 'Staller');
+			return (!['Bulky Setup', 'Bulky Support', 'Staller'].includes(role));
 		case 'Unburden':
 			return (!!species.isMega || !counter.get('setup') && !moves.has('acrobatics'));
 		case 'Water Absorb':
@@ -1023,9 +1025,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (ability === 'Magic Guard' && role !== 'Bulky Support') {
-			return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
-		}
+		if (ability === 'Magic Guard') return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
 		if (species.id === 'rampardos' && role === 'Fast Attacker') return 'Choice Scarf';
 		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (ability === 'Unburden') return moves.has('closecombat') ? 'White Herb' : 'Sitrus Berry';
@@ -1494,6 +1494,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails.rain = 1;
 				if (set.ability === 'Sand Stream') teamDetails.sand = 1;
 				if (set.moves.includes('sunnyday') || set.ability === 'Drought' && !item.onPrimal) teamDetails.sun = 1;
+				if (set.moves.includes('aromatherapy') || set.moves.includes('healbell')) teamDetails.statusCure = 1;
 				if (set.moves.includes('spikes')) teamDetails.spikes = (teamDetails.spikes || 0) + 1;
 				if (set.moves.includes('stealthrock')) teamDetails.stealthRock = 1;
 				if (set.moves.includes('stickyweb')) teamDetails.stickyWeb = 1;

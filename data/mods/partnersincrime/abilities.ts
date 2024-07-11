@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	neutralizinggas: {
 		inherit: true,
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility

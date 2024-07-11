@@ -8,6 +8,7 @@
  */
 
 import {Dex, toID} from './dex';
+import type {MoveSource} from './dex-species';
 import {Utils} from '../lib';
 import {Tags} from '../data/tags';
 import {Teams} from './teams';
@@ -102,6 +103,10 @@ export class PokemonSources {
 	 */
 	pomegEventEgg?: string | null;
 	/**
+	 * For event-only Pokemon that do not have a minimum source gen identified by its moves
+	 */
+	eventOnlyMinSourceGen?: number;
+	/**
 	 * Some Pokemon evolve by having a move in their learnset (like Piloswine
 	 * with Ancient Power). These can only carry three other moves from their
 	 * prevo, because the fourth move must be the evo move. This restriction
@@ -151,6 +156,7 @@ export class PokemonSources {
 		this.limitedEggMoves = null;
 	}
 	minSourceGen() {
+		if (this.eventOnlyMinSourceGen) return this.eventOnlyMinSourceGen;
 		if (this.sourcesBefore) return this.sourcesAfter || 1;
 		let min = 10;
 		for (const source of this.sources) {
@@ -877,6 +883,7 @@ export class TeamValidator {
 			let legal = false;
 			for (const event of eventData) {
 				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
+				setSources.eventOnlyMinSourceGen = event.generation;
 				legal = true;
 				break;
 			}
@@ -1348,7 +1355,7 @@ export class TeamValidator {
 		const fathers: ID[] = [];
 		// Gen 6+ don't have egg move incompatibilities
 		// (except for certain cases with baby Pokemon not handled here)
-		if (!getAll && eggGen >= 6 && !setSources.levelUpEggMoves) return true;
+		if (!getAll && eggGen >= 6 && !setSources.levelUpEggMoves && !species.mother) return true;
 
 		let eggMoves = setSources.limitedEggMoves;
 		if (eggGen === 3) eggMoves = eggMoves?.filter(eggMove => !setSources.pomegEggMoves?.includes(eggMove));
@@ -1485,6 +1492,15 @@ export class TeamValidator {
 			return this.findEggMoveFathers(allEggSources.sources[0], species, setSources, false, pokemonBlacklist, true);
 		}
 		return true;
+	}
+
+	motherCanLearn(species: ID, move: ID) {
+		if (!species) return false;
+		const fullLearnset = this.dex.species.getFullLearnset(species);
+		for (const {learnset} of fullLearnset) {
+			if (learnset[move]) return true;
+		}
+		return false;
 	}
 
 	validateForme(set: PokemonSet) {
@@ -1731,7 +1747,7 @@ export class TeamValidator {
 
 		for (const ruleid of ruleTable.tagRules) {
 			if (ruleid.startsWith('*')) continue;
-			const tagid = ruleid.slice(12);
+			const tagid = ruleid.slice(12) as ID;
 			const tag = Tags[tagid];
 			if ((tag.speciesFilter || tag.genericFilter)!(tierSpecies)) {
 				const existenceTag = EXISTENCE_TAG.includes(tagid);
@@ -2049,7 +2065,7 @@ export class TeamValidator {
 			if (canBottleCap) {
 				// IVs can be overridden but Hidden Power type can't
 				if (Object.keys(eventData.ivs).length >= 6) {
-					const requiredHpType = dex.getHiddenPower(eventData.ivs).type;
+					const requiredHpType = dex.getHiddenPower(eventData.ivs as StatsTable).type;
 					if (set.hpType && set.hpType !== requiredHpType) {
 						if (fastReturn) return true;
 						problems.push(`${name} can only have Hidden Power ${requiredHpType}${etc}.`);
@@ -2415,6 +2431,15 @@ export class TeamValidator {
 				}
 			}
 
+			let formeCantInherit = false;
+			let nextSpecies = dex.species.learnsetParent(baseSpecies);
+			while (nextSpecies) {
+				if (nextSpecies.name === species.name) break;
+				nextSpecies = dex.species.learnsetParent(nextSpecies);
+			}
+			if (checkingPrevo && !nextSpecies) formeCantInherit = true;
+			if (formeCantInherit && dex.gen < 9) break;
+
 			let sources = learnset[moveid] || [];
 			if (moveid === 'sketch') {
 				sketch = true;
@@ -2461,6 +2486,8 @@ export class TeamValidator {
 					}
 					continue;
 				}
+
+				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
 
 				// redundant
 				if (learnedGen <= moveSources.sourcesBefore) continue;
@@ -2515,11 +2542,16 @@ export class TeamValidator {
 						// falls through to LMT check below
 					} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
 						// Pomeg Glitch
-						learned = learnedGen + 'Epomeg';
-					} else if ((!species.gender || species.gender === 'F') &&
+						learned = learnedGen + 'Epomeg' as MoveSource;
+					} else if (species.gender !== 'N' &&
 						learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
 						// available as egg move
-						learned = learnedGen + 'Eany';
+						if (species.gender === 'M' && !this.motherCanLearn(toID(species.mother), moveid)) {
+							// male-only Pokemon can have level-up egg moves if it can have a mother that learns the move
+							cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
+							continue;
+						}
+						learned = learnedGen + 'Eany' as MoveSource;
 						// falls through to E check below
 					} else {
 						// this move is unavailable, skip it
@@ -2566,10 +2598,10 @@ export class TeamValidator {
 						// Pomeg glitched moves have to be from an egg but since they aren't true egg moves,
 						// there should be no breeding restrictions
 						moveSources.pomegEggMoves = [move.id];
-					} else if (learnedGen < 6) {
+					} else if (learnedGen < 6 || (species.mother && !this.motherCanLearn(toID(species.mother), moveid))) {
 						limitedEggMove = move.id;
 					}
-					learned = learnedGen + 'E' + (species.prevo ? species.id : '');
+					learned = learnedGen + 'E' + (species.prevo ? species.id : '') as MoveSource;
 					if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 						// can tradeback
 						moveSources.add('1ET' + learned.slice(2), limitedEggMove);

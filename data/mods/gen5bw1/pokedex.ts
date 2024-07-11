@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	weedle: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -60,6 +60,14 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		unreleasedHidden: true,
 	},
 	heracross: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	lugia: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	hooh: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
@@ -184,6 +192,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		unreleasedHidden: true,
 	},
 	ambipom: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	dialga: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	palkia: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	giratina: {
 		inherit: true,
 		unreleasedHidden: true,
 	},

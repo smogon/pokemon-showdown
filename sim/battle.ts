@@ -1377,7 +1377,7 @@ export class Battle {
 		if (!this.ended && side.requestState) {
 			side.emitRequest({wait: true, side: side.getRequestData()});
 			side.clearChoice();
-			if (this.allChoicesDone()) this.commitDecisions();
+			if (this.allChoicesDone()) this.commitChoices();
 		}
 		return true;
 	}
@@ -1439,7 +1439,7 @@ export class Battle {
 		pokemon.faint(source, effect);
 	}
 
-	nextTurn() {
+	endTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
 
@@ -1613,7 +1613,7 @@ export class Battle {
 		// Please remove me once there is client support.
 		if (this.ruleTable.has('crazyhouserule')) {
 			for (const side of this.sides) {
-				let buf = `raw|${side.name}'s team:<br />`;
+				let buf = `raw|${Utils.escapeHTML(side.name)}'s team:<br />`;
 				for (const pokemon of side.pokemon) {
 					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
 					if (pokemon.fainted) {
@@ -1774,11 +1774,11 @@ export class Battle {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
-		if (format.onBegin) format.onBegin.call(this);
+		format.onBegin?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.onBegin) subFormat.onBegin.call(this);
+			subFormat.onBegin?.call(this);
 		}
 
 		if (this.sides.some(side => !side.pokemon[0])) {
@@ -1789,16 +1789,16 @@ export class Battle {
 			this.checkEVBalance();
 		}
 
-		if (format.onTeamPreview) format.onTeamPreview.call(this);
+		format.onTeamPreview?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
+			subFormat.onTeamPreview?.call(this);
 		}
 
 		this.queue.addChoice({choice: 'start'});
 		this.midTurn = true;
-		if (!this.requestState) this.go();
+		if (!this.requestState) this.turnLoop();
 	}
 
 	restart(send?: (type: string, data: string | string[]) => void) {
@@ -1826,9 +1826,9 @@ export class Battle {
 		effect: Effect | null = null, isSecondary = false, isSelf = false
 	) {
 		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
+			target ||= this.event.target;
+			source ||= this.event.source;
+			effect ||= this.effect;
 		}
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
@@ -2017,18 +2017,18 @@ export class Battle {
 		effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false
 	) {
 		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
+			target ||= this.event.target;
+			source ||= this.event.source;
+			effect ||= this.effect;
 		}
 		return this.spreadDamage([damage], [target], source, effect, instafaint)[0];
 	}
 
 	directDamage(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: Effect | null = null) {
 		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
+			target ||= this.event.target;
+			source ||= this.event.source;
+			effect ||= this.effect;
 		}
 		if (!target?.hp) return 0;
 		if (!damage) return 0;
@@ -2078,9 +2078,9 @@ export class Battle {
 
 	heal(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: 'drain' | Effect | null = null) {
 		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
+			target ||= this.event.target;
+			source ||= this.event.source;
+			effect ||= this.effect;
 		}
 		if (effect === 'drain') effect = this.dex.conditions.getByID(effect as ID);
 		if (damage && damage <= 1) damage = 1;
@@ -2136,22 +2136,21 @@ export class Battle {
 		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
 	}
 
-	chainModify(numerator: number | number[], denominator?: number) {
+	chainModify(numerator: number | number[], denominator = 1) {
 		const previousMod = this.trunc(this.event.modifier * 4096);
 
 		if (Array.isArray(numerator)) {
 			denominator = numerator[1];
 			numerator = numerator[0];
 		}
-		const nextMod = this.trunc(numerator * 4096 / (denominator || 1));
+		const nextMod = this.trunc(numerator * 4096 / denominator);
 		this.event.modifier = ((previousMod * nextMod + 2048) >> 12) / 4096;
 	}
 
-	modify(value: number, numerator: number | number[], denominator?: number) {
+	modify(value: number, numerator: number | number[], denominator = 1) {
 		// You can also use:
 		// modify(value, [numerator, denominator])
 		// modify(value, fraction) - assuming you trust JavaScript's floating-point handler
-		if (!denominator) denominator = 1;
 		if (Array.isArray(numerator)) {
 			denominator = numerator[1];
 			numerator = numerator[0];
@@ -2413,14 +2412,10 @@ export class Battle {
 	}
 
 	checkWin(faintData?: Battle['faintQueue'][0]) {
-		let team1PokemonLeft = this.sides[0].pokemonLeft;
-		let team2PokemonLeft = this.sides[1].pokemonLeft;
+		const team1PokemonLeft = this.sides[0].pokemonLeft + (this.sides[0].allySide?.pokemonLeft || 0);
+		const team2PokemonLeft = this.sides[1].pokemonLeft + (this.sides[1].allySide?.pokemonLeft || 0);
 		const team3PokemonLeft = this.gameType === 'freeforall' && this.sides[2]!.pokemonLeft;
 		const team4PokemonLeft = this.gameType === 'freeforall' && this.sides[3]!.pokemonLeft;
-		if (this.gameType === 'multi') {
-			team1PokemonLeft += this.sides[2]!.pokemonLeft;
-			team2PokemonLeft += this.sides[3]!.pokemonLeft;
-		}
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
@@ -2777,7 +2772,14 @@ export class Battle {
 		return false;
 	}
 
-	go() {
+	/**
+	 * Generally called at the beginning of a turn, to go through the
+	 * turn one action at a time.
+	 *
+	 * If there is a mid-turn decision (like U-Turn), this will return
+	 * and be called again later to resume the turn.
+	 */
+	turnLoop() {
 		this.add('');
 		this.add('t:', Math.floor(Date.now() / 1000));
 		if (this.requestState) this.requestState = '';
@@ -2794,7 +2796,7 @@ export class Battle {
 			if (this.requestState || this.ended) return;
 		}
 
-		this.nextTurn();
+		this.endTurn();
 		this.midTurn = false;
 		this.queue.clear();
 	}
@@ -2812,7 +2814,7 @@ export class Battle {
 			side.emitChoiceError(`Incomplete choice: ${input} - missing other pokemon`);
 			return false;
 		}
-		if (this.allChoicesDone()) this.commitDecisions();
+		if (this.allChoicesDone()) this.commitChoices();
 		return true;
 	}
 
@@ -2829,12 +2831,16 @@ export class Battle {
 				side.autoChoose();
 			}
 		}
-		this.commitDecisions();
+		this.commitChoices();
 	}
 
-	commitDecisions() {
+	commitChoices() {
 		this.updateSpeed();
 
+		// Sometimes you need to make switch choices mid-turn (e.g. U-turn,
+		// fainting). When this happens, the rest of the turn is saved (and not
+		// re-sorted), but the new switch choices are sorted and inserted before
+		// the rest of the turn.
 		const oldQueue = this.queue.list;
 		this.queue.clear();
 		if (!this.allChoicesDone()) throw new Error("Not all choices done");
@@ -2856,7 +2862,9 @@ export class Battle {
 			side.activeRequest = null;
 		}
 
-		this.go();
+		this.turnLoop();
+
+		// workaround for tests
 		if (this.log.length - this.sentLogPos > 500) this.sendUpdates();
 	}
 

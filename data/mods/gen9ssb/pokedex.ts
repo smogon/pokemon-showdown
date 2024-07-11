@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	/*
 	// Example
 	id: {
@@ -21,7 +21,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	// Aethernum
 	giratinaorigin: {
 		inherit: true,
-		abilities: {0: "The Eminince in the Shadow"},
+		abilities: {0: "The Eminence in the Shadow"},
 	},
 
 	// Akir
@@ -109,6 +109,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Tinted Lens"},
 	},
 
+	// Audiino
+	audino: {
+		inherit: true,
+		abilities: {0: "Mitosis"},
+	},
+
 	// ausma
 	hatterene: {
 		inherit: true,
@@ -137,6 +143,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	regirock: {
 		inherit: true,
 		abilities: {0: "Sturdy"},
+	},
+
+	// Bert122
+	sableye: {
+		inherit: true,
+		abilities: {0: "Prankster"},
+	},
+	sableyemega: {
+		inherit: true,
+		abilities: {0: "Pestering Assault"},
 	},
 
 	// Billo
@@ -237,6 +253,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	thwackey: {
 		inherit: true,
 		abilities: {0: "Grassy Emperor"},
+	},
+
+	// Daki
+	ragingbolt: {
+		inherit: true,
+		abilities: {0: "Astrothunder"},
 	},
 
 	// Dawn of Artemis
@@ -406,6 +428,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	gligar: {
 		inherit: true,
 		abilities: {0: "Illterit"},
+	},
+
+	// Irly
+	spheal: {
+		inherit: true,
+		baseStats: {hp: 110, atk: 95, def: 90, spa: 80, spd: 90, spe: 65},
+		abilities: {0: "The Rolling Spheal"},
 	},
 
 	// ironwater
@@ -603,10 +632,17 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Dynamic Typing"},
 	},
 
+	// Merritty
+	torchic: {
+		inherit: true,
+		baseStats: {hp: 65, atk: 60, def: 60, spa: 80, spd: 70, spe: 85},
+		abilities: {0: "End Round"},
+	},
+
 	// Meteordash
 	tatsugiri: {
 		inherit: true,
-		abilities: {0: "Shadow Shield"},
+		abilities: {0: "TatsuGlare"},
 	},
 
 	// Mex
@@ -629,6 +665,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	latias: {
 		inherit: true,
 		abilities: {0: "Eon Call"},
+	},
+
+	// Neko
+	chienpao: {
+		inherit: true,
+		abilities: {0: "Weatherproof"},
 	},
 
 	// Ney
@@ -675,6 +717,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	chandelure: {
 		inherit: true,
 		abilities: {0: "C- Tier Shitposter"},
+	},
+
+	// Pastor Gigas
+	regigigas: {
+		inherit: true,
+		abilities: {0: "God's Mercy"},
 	},
 
 	// Peary
@@ -852,6 +900,13 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Ride the Sun!"},
 	},
 
+	// Spiderz
+	ironthorns: {
+		inherit: true,
+		types: ['Dark', 'Ground'],
+		abilities: {0: "Poison Heal"},
+	},
+
 	// spoo
 	hemogoblin: {
 		inherit: true,
@@ -988,6 +1043,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Eyes of Eternity"},
 	},
 
+	// Tuthur
+	screamtail: {
+		inherit: true,
+		abilities: {0: "Poison Heal"},
+	},
+
 	// Two of Roses
 	luxray: {
 		inherit: true,
@@ -1082,10 +1143,21 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Panic"},
 	},
 
+	// yeet dab xd
+	kecleon: {
+		inherit: true,
+		abilities: {0: "Treasure Bag"},
+	},
+
 	// Yellow Paint
 	rotomfrost: {
 		inherit: true,
 		abilities: {0: "Yellow Magic"},
+	},
+
+	ninetaleslola: {
+		inherit: true,
+		abilities: {0: "Party Up"},
 	},
 
 	// YveltalNL

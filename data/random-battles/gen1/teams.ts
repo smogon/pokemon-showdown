@@ -15,7 +15,7 @@ interface Gen1RandomBattleSpecies {
 }
 
 export class RandomGen1Teams extends RandomGen2Teams {
-	randomData: {[species: string]: Gen1RandomBattleSpecies} = require('./data.json');
+	randomData: {[species: IDEntry]: Gen1RandomBattleSpecies} = require('./data.json');
 
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam() {

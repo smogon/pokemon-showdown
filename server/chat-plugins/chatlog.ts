@@ -87,9 +87,10 @@ export class LogReaderRoom {
 
 	async getLog(day: string) {
 		if (roomlogTable) {
+			const [dayStart, dayEnd] = LogReader.dayToRange(day);
 			const logs = await roomlogTable.selectAll(
 				['log', 'time']
-			)`WHERE roomid = ${this.roomid} AND time::DATE = ${day}`;
+			)`WHERE roomid = ${this.roomid} AND time BETWEEN ${dayStart}::int::timestamp AND ${dayEnd}::int::timestamp`;
 			return new Streams.ObjectReadStream<string>({
 				read(this: Streams.ObjectReadStream<string>) {
 					for (const {log, time} of logs) {
@@ -175,6 +176,23 @@ export const LogReader = new class {
 
 		if (!atLeastOne) return null;
 		return {official, normal, hidden, secret, deleted, personal, deletedPersonal};
+	}
+
+	/** @returns [dayStart, dayEnd] as seconds (NOT milliseconds) since Unix epoch */
+	dayToRange(day: string): [number, number] {
+		const nextDay = LogReader.nextDay(day);
+		return [
+			Math.trunc(new Date(day).getTime() / 1000),
+			Math.trunc(new Date(nextDay).getTime() / 1000),
+		];
+	}
+	/** @returns [monthStart, monthEnd] as seconds (NOT milliseconds) since Unix epoch */
+	monthToRange(month: string): [number, number] {
+		const nextMonth = LogReader.nextMonth(month);
+		return [
+			Math.trunc(new Date(`${month}-01`).getTime() / 1000),
+			Math.trunc(new Date(`${nextMonth}-01`).getTime() / 1000),
+		];
 	}
 
 	getMonth(day?: string) {
@@ -803,14 +821,15 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 }
 
 export class DatabaseLogSearcher extends Searcher {
-	async searchLinecounts(roomid: RoomID, monthString: string, user?: ID) {
+	async searchLinecounts(roomid: RoomID, month: string, user?: ID) {
 		user = toID(user);
 		if (!Rooms.Roomlogs.table) throw new Error(`Database search made while database is disabled.`);
 		const results: {[date: string]: {[user: string]: number}} = {};
-		const [year, month] = monthString.split('-').map(Number);
+		const [monthStart, monthEnd] = LogReader.monthToRange(month);
 		const rows = await Rooms.Roomlogs.table.selectAll()`
-			WHERE EXTRACT("year" FROM time::DATE) = ${year} AND EXTRACT("month" FROM time::DATE) = ${month} AND
-			roomid = ${roomid} AND type = ${'c'}${user ? SQL` AND userid = ${user}` : SQL``}
+			WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}roomid = ${roomid} AND
+			time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
+			type = ${'c'}
 		`;
 
 		for (const row of rows) {
@@ -823,7 +842,7 @@ export class DatabaseLogSearcher extends Searcher {
 			results[day][row.userid]++;
 		}
 
-		return this.renderLinecountResults(results, roomid, monthString, user);
+		return this.renderLinecountResults(results, roomid, month, user);
 	}
 	activityStats(room: RoomID, month: string): Promise<{average: RoomStats, days: RoomStats[]}> {
 		throw new Chat.ErrorMessage('This is not yet implemented for the new logs database.');

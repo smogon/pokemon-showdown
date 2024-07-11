@@ -79,7 +79,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "sleeptalk", "substitute"]
+                "movepool": ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "sleeptalk"]
             }
         ]
     },
@@ -428,7 +428,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "sleeptalk", "substitute"]
+                "movepool": ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "sleeptalk"]
             }
         ]
     },

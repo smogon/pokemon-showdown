@@ -19,8 +19,10 @@ type TeamValidator = import('./team-validator').TeamValidator;
 type PokemonSources = import('./team-validator').PokemonSources;
 
 /** An ID must be lowercase alphanumeric. */
-type ID = '' | string & {__isID: true};
-type PokemonSlot = '' | string & {__isSlot: true};
+type ID = '' | Lowercase<string> & {__isID: true};
+/** Like ID, but doesn't require you to type `as ID` to define it. For data files and object keys. */
+type IDEntry = Lowercase<string>;
+type PokemonSlot = '' | IDEntry & {__isSlot: true};
 interface AnyObject {[k: string]: any}
 
 type GenderName = 'M' | 'F' | 'N' | '';
@@ -35,30 +37,6 @@ type SparseBoostsTable = Partial<BoostsTable>;
 type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax';
 
 type PokemonSet = import('./teams').PokemonSet;
-
-/**
- * Describes a possible way to get a move onto a pokemon.
- *
- * First character is a generation number, 1-7.
- * Second character is a source ID, one of:
- *
- * - M = TM/HM
- * - T = tutor
- * - L = start or level-up, 3rd char+ is the level
- * - R = restricted (special moves like Rotom moves)
- * - E = egg
- * - D = Dream World, only 5D is valid
- * - S = event, 3rd char+ is the index in .eventData
- * - V = Virtual Console or Let's Go transfer, only 7V/8V is valid
- * - C = NOT A REAL SOURCE, see note, only 3C/4C is valid
- *
- * C marks certain moves learned by a pokemon's prevo. It's used to
- * work around the chainbreeding checker's shortcuts for performance;
- * it lets the pokemon be a valid father for teaching the move, but
- * is otherwise ignored by the learnset checker (which will actually
- * check prevos for compatibility).
- */
-type MoveSource = string;
 
 namespace TierTypes {
 	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
@@ -78,10 +56,10 @@ interface EventInfo {
 	perfectIVs?: number;
 	/** true: has hidden ability, false | undefined: never has hidden ability */
 	isHidden?: boolean;
-	abilities?: string[];
+	abilities?: IDEntry[];
 	maxEggMoves?: number;
-	moves?: string[];
-	pokeball?: string;
+	moves?: IDEntry[];
+	pokeball?: IDEntry;
 	from?: string;
 	/** Japan-only events can't be transferred to international games in Gen 1 */
 	japan?: boolean;
@@ -145,62 +123,24 @@ interface BasicEffect extends EffectData {
 	toString: () => string;
 }
 
-type ConditionData = import('./dex-conditions').ConditionData;
-type ModdedConditionData = import('./dex-conditions').ModdedConditionData;
 type Condition = import('./dex-conditions').Condition;
 
-type MoveData = import('./dex-moves').MoveData;
-type ModdedMoveData = import('./dex-moves').ModdedMoveData;
 type ActiveMove = import('./dex-moves').ActiveMove;
 type Move = import('./dex-moves').Move;
 type MoveTarget = import('./dex-moves').MoveTarget;
 
-type ItemData = import('./dex-items').ItemData;
-type ModdedItemData = import('./dex-items').ModdedItemData;
 type Item = import('./dex-items').Item;
 
-type AbilityData = import('./dex-abilities').AbilityData;
-type ModdedAbilityData = import('./dex-abilities').ModdedAbilityData;
 type Ability = import('./dex-abilities').Ability;
 
-type SpeciesData = import('./dex-species').SpeciesData;
-type ModdedSpeciesData = import('./dex-species').ModdedSpeciesData;
-type SpeciesFormatsData = import('./dex-species').SpeciesFormatsData;
-type ModdedSpeciesFormatsData = import('./dex-species').ModdedSpeciesFormatsData;
-type LearnsetData = import('./dex-species').LearnsetData;
-type ModdedLearnsetData = import('./dex-species').ModdedLearnsetData;
 type Species = import('./dex-species').Species;
-type PokemonGoData = import('./dex-species').PokemonGoData;
 
-type FormatData = import('./dex-formats').FormatData;
-type FormatList = import('./dex-formats').FormatList;
-type ModdedFormatData = import('./dex-formats').ModdedFormatData;
 type Format = import('./dex-formats').Format;
-
-interface NatureData {
-	name: string;
-	plus?: StatIDExceptHP;
-	minus?: StatIDExceptHP;
-}
-
-type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
 
 type Nature = import('./dex-data').Nature;
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'freeforall';
 type SideID = 'p1' | 'p2' | 'p3' | 'p4';
-
-interface GameTimerSettings {
-	dcTimer: boolean;
-	dcTimerBank: boolean;
-	starting: number;
-	grace: number;
-	addPerTurn: number;
-	maxPerTurn: number;
-	maxFirstTurn: number;
-	timeoutAutoChoose: boolean;
-	accelerate: boolean;
-}
 
 type SpreadMoveTargets = (Pokemon | false | null)[];
 type SpreadMoveDamage = (number | boolean | undefined)[];
@@ -407,7 +347,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 		this: Battle, trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) => boolean | undefined;
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable;
-	nextTurn?: (this: Battle) => void;
+	endTurn?: (this: Battle) => void;
 	runAction?: (this: Battle, action: Action) => void;
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
 	start?: (this: Battle) => void;
@@ -422,15 +362,6 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
 }
 
-interface TypeData {
-	damageTaken: {[attackingTypeNameOrEffectid: string]: number};
-	HPdvs?: SparseStatsTable;
-	HPivs?: SparseStatsTable;
-	isNonstandard?: Nonstandard | null;
-}
-
-type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & {inherit: true};
-
 type TypeInfo = import('./dex-data').TypeInfo;
 
 interface PlayerOptions {
@@ -441,11 +372,11 @@ interface PlayerOptions {
 	seed?: PRNGSeed;
 }
 
-interface TextObject {
+interface BasicTextData {
 	desc?: string;
 	shortDesc?: string;
 }
-interface Plines {
+interface ConditionTextData extends BasicTextData {
 	activate?: string;
 	addItem?: string;
 	block?: string;
@@ -460,19 +391,7 @@ interface Plines {
 	transform?: string;
 }
 
-interface TextFile extends TextObject {
-	name: string;
-	gen1?: ModdedTextObject;
-	gen2?: ModdedTextObject;
-	gen3?: ModdedTextObject;
-	gen4?: ModdedTextObject;
-	gen5?: ModdedTextObject;
-	gen6?: ModdedTextObject;
-	gen7?: ModdedTextObject;
-	gen8?: ModdedTextObject;
-}
-
-interface MovePlines extends Plines {
+interface MoveTextData extends ConditionTextData {
 	alreadyStarted?: string;
 	blockSelf?: string;
 	clearBoost?: string;
@@ -492,24 +411,28 @@ interface MovePlines extends Plines {
 	upkeep?: string;
 }
 
-interface AbilityText extends TextFile, Plines {
-	activateFromItem?: string;
-	activateNoTarget?: string;
-	copyBoost?: string;
-	transformEnd?: string;
-}
+type TextFile<T> = T & {
+	name: string,
+	gen1?: T,
+	gen2?: T,
+	gen3?: T,
+	gen4?: T,
+	gen5?: T,
+	gen6?: T,
+	gen7?: T,
+	gen8?: T,
+};
 
-/* eslint-disable @typescript-eslint/no-empty-interface */
-interface MoveText extends TextFile, MovePlines {}
-
-interface ItemText extends TextFile, Plines {}
-
-interface PokedexText extends TextFile {}
-
-interface DefaultText extends AnyObject {}
-
-interface ModdedTextObject extends TextObject, Plines {}
-/* eslint-enable @typescript-eslint/no-empty-interface */
+type AbilityText = TextFile<ConditionTextData & {
+	activateFromItem?: string,
+	activateNoTarget?: string,
+	copyBoost?: string,
+	transformEnd?: string,
+}>;
+type MoveText = TextFile<MoveTextData>;
+type ItemText = TextFile<ConditionTextData>;
+type PokedexText = TextFile<BasicTextData>;
+type DefaultText = AnyObject;
 
 namespace RandomTeamsTypes {
 	export interface TeamDetails {
@@ -534,8 +457,10 @@ namespace RandomTeamsTypes {
 	export interface FactoryTeamDetails {
 		megaCount?: number;
 		zCount?: number;
+		wantsTeraCount?: number;
 		forceResult: boolean;
 		weather?: string;
+		terrain?: string[];
 		typeCount: {[k: string]: number};
 		typeComboCount: {[k: string]: number};
 		baseFormes: {[k: string]: number};
@@ -577,6 +502,8 @@ namespace RandomTeamsTypes {
 		moves: string[];
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
+		wantsTera?: boolean;
+		teraType?: string;
 	}
 	export interface RandomSetData {
 		role: Role;

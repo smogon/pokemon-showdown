@@ -62,6 +62,17 @@ export function getBadges(user: User, curFormat: string) {
 	return userBadges;
 }
 
+function getUserHTML(user: User, format: string) {
+	const buf = `<username>${user.name}</username>`;
+	const badgeType = getBadges(user, format).filter(x => x.format === format)[0]?.type;
+	if (badgeType) {
+		let formatType = format.split(/gen\d+/)[1];
+		if (!['ou', 'randombattle'].includes(formatType)) formatType = 'rotating';
+		return `<img src="https://${Config.routes.client}/sprites/misc/${formatType}_${badgeType}.png" />` + buf;
+	}
+	return buf;
+}
+
 export function setFormatSchedule() {
 	// guard heavily against this being overwritten
 	if (data.current.formatsGeneratedAt === getYear()) return;
@@ -346,10 +357,14 @@ export const handlers: Chat.Handlers = {
 			room.setPrivate(false);
 			const seasonRoom = Rooms.search('seasondiscussion');
 			if (seasonRoom) {
-				const players = Object.keys(room.battle.playerTable).map(toID);
+				const p1html = getUserHTML(user, room.battle.format);
+				const otherPlayer = user.id === room.battle.p1.id ? room.battle.p2 : room.battle.p1;
+				const otherUser = otherPlayer.getUser();
+				const p2html = otherUser ? getUserHTML(otherUser, room.battle.format) : `<username>${otherPlayer.name}</username>`;
+				const formatName = Dex.formats.get(room.battle.format).name;
 				seasonRoom.add(
-					`|raw|<a href="/${room.roomid}" class="ilink">Battle started between ` +
-					`<username>${players[0]}</username> and <username>${players[1]}</username>. (rating: ${room.battle.rated})</a>`
+					`|raw|<a href="/${room.roomid}" class="ilink">${formatName} battle started between ` +
+					`${p1html} and ${p2html}. (rating: ${Math.floor(room.battle.rated)})</a>`
 				).update();
 			}
 		}

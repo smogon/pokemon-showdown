@@ -414,12 +414,15 @@ export function formatSQLArray(arr: unknown[], args?: unknown[]) {
 }
 
 export class Multiset<T> extends Map<T, number> {
+	get(key: T) {
+		return super.get(key) ?? 0;
+	}
 	add(key: T) {
-		this.set(key, (this.get(key) ?? 0) + 1);
+		this.set(key, this.get(key) + 1);
 		return this;
 	}
 	remove(key: T) {
-		const newValue = (this.get(key) ?? 0) - 1;
+		const newValue = this.get(key) - 1;
 		if (newValue <= 0) return this.delete(key);
 		this.set(key, newValue);
 		return true;

@@ -1,4 +1,4 @@
-export const DefaultText: {[k: string]: DefaultText} = {
+export const DefaultText: {[id: IDEntry]: DefaultText} = {
 	default: {
 		startBattle: "Battle started between [TRAINER] and [TRAINER]!",
 		winBattle: "**[TRAINER]** won the battle!",
