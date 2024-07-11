@@ -736,6 +736,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				hosts: next.hosts,
 				questions: correctlyFormattedQuestions,
 				staffHostId: 'scavengermanager',
+				isHTML: next.isHTML,
 				staffHostName: 'Scavenger Manager',
 				gameType: 'unrated',
 			});
