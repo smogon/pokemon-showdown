@@ -68,7 +68,7 @@ class Team {
 
 export class Auction extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'auction' as ID;
-	owners: {[k: string]: string};
+	owners: Set<ID>;
 	teams: {[k: string]: Team};
 	managers: {[k: string]: Manager};
 	playerList: {[k: string]: Player};
@@ -95,7 +95,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
 		this.title = `Auction (${room.title})`;
-		this.owners = {};
+		this.owners = new Set();
 		this.teams = {};
 		this.managers = {};
 		this.playerList = {};
@@ -124,7 +124,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	checkOwner(user: User) {
-		if (!this.owners[user.id] && !Users.Auth.hasPermission(user, 'declare', null, this.room)) {
+		if (!this.owners.has(user.id) && !Users.Auth.hasPermission(user, 'declare', null, this.room)) {
 			throw new Chat.ErrorMessage(`You must be an auction owner to use this command.`);
 		}
 	}
@@ -133,15 +133,16 @@ export class Auction extends Rooms.SimpleRoomGame {
 		for (const name of users) {
 			const user = Users.getExact(name);
 			if (!user) throw new Chat.ErrorMessage(`User "${name}" not found.`);
-			if (this.owners[user.id]) throw new Chat.ErrorMessage(`${user.name} is already an auction owner.`);
-			this.owners[user.id] = user.id;
+			if (this.owners.has(user.id)) throw new Chat.ErrorMessage(`${user.name} is already an auction owner.`);
+			this.owners.add(user.id)
 		}
 	}
 
 	removeOwners(users: string[]) {
 		for (const name of users) {
-			if (!this.owners[toID(name)]) throw new Chat.ErrorMessage(`User "${name}" is not an auction owner.`);
-			delete this.owners[toID(name)];
+			const id = toID(name);
+			if (!this.owners.has(id)) throw new Chat.ErrorMessage(`User "${name}" is not an auction owner.`);
+			this.owners.delete(id);
 		}
 	}
 
@@ -405,8 +406,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	removeManagers(users: string[]) {
 		for (const name of users) {
-			if (!this.managers[toID(name)]) throw new Chat.ErrorMessage(`User "${name}" is not a manager.`);
-			delete this.managers[toID(name)];
+			const id = toID(name);
+			if (!this.managers[id]) throw new Chat.ErrorMessage(`User "${name}" is not a manager.`);
+			delete this.managers[id];
 		}
 	}
 
@@ -592,7 +594,6 @@ export const commands: Chat.ChatCommands = {
 			let startingCredits;
 			if (target) {
 				startingCredits = parseInt(target);
-				if (startingCredits < 500) startingCredits *= 1000;
 				if (
 					isNaN(startingCredits) ||
 					startingCredits < 10000 || startingCredits > 10000000 ||
@@ -601,11 +602,11 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply(`Starting credits must be a multiple of 500 between 10,000 and 10,000,000.`);
 				}
 			}
+			const auction = new Auction(room, startingCredits);
+			auction.addOwners([user.id]);
+			room.game = auction;
 			this.addModAction(`An auction was created by ${user.name}.`);
 			this.modlog(`AUCTION CREATE`);
-			const auction = new Auction(room, startingCredits);
-			room.game = auction;
-			auction.addOwners([user.id]);
 		},
 		createhelp: [
 			`/auction create [startingcredits] - Creates an auction. Requires: % @ # &`,
