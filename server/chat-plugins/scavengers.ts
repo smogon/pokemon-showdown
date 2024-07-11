@@ -239,7 +239,7 @@ function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, 
 	} else {
 		buffer = `<tr><td colspan=3>The scavenger queue is currently empty.</td></tr>`;
 	}
-	let template = `<div class="ladder"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${showStaff ? buffer : buffer.replace(/<button.*?>.+?<\/button>/gi, '')}</table></div>`;
+	let template = `<div class="ladder" style="overflow:scroll; max-height: 50vh"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${showStaff ? buffer : buffer.replace(/<button.*?>.+?<\/button>/gi, '')}</table></div>`;
 	if (showStaff) {
 		template += `<table style="width: 100%"><tr><td style="text-align: left;">Auto Timer Duration: ${timerDuration} minutes</td><td>Auto Dequeue: <button class="button${!queueDisabled ?
 			'" name="send" value="/scav disablequeue"' :
@@ -448,7 +448,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		const huntType = `${article} ${newHunt ? 'new ' : ''}${this.gameType}`;
 
 		return `|raw|<div class="broadcast-blue"><strong>${huntType} scavenger hunt by <em>${hosts}</em> has been started${staffHost}.</strong>` +
-			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:scroll; max-height: 500px">` +
+			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:scroll; max-height: 50vh">` +
 			`<strong><em>Hint #1:</em> ${this.isHTML ? this.questions[0].hint : Chat.formatText(this.questions[0].hint)}</strong>` +
 			`</div>` +
 			`(To answer, use <kbd>/scavenge <em>ANSWER</em></kbd>)</div>`;
@@ -619,7 +619,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		};
 		const finalHint = current.number === this.questions.length ? "Final " : "";
 
-		return `|raw|<div class="ladder"><table><tr>` +
+		return `|raw|<div class="ladder" style="overflow:scroll; max-height: 50vh"><table><tr>` +
 			`<td><strong style="white-space: nowrap">${finalHint}Hint #${current.number}:</strong></td>` +
 			`<td>${
 				this.isHTML ? current.question.hint : Chat.formatText(current.question.hint) +
@@ -659,7 +659,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 
 		user.sendTo(
 			this.room,
-			`|raw|<div class="ladder"><table style="width: 100%">` +
+			`|raw|<div class="ladder" style="overflow:scroll; max-height: 50vh"><table style="width: 100%">` +
 			`<tr><th style="width: 10%;">#</th><th>Hint</th><th>Answer</th></tr>` +
 			this.questions.slice(0, qLimit).map((q, i) => (
 				`<tr><td>${
@@ -715,7 +715,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
 			`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}` +
 			`${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
-			`<details style="cursor: pointer;"><summary>Solution: </summary><br />` +
+			`<details style="cursor: pointer; overflow:scroll; max-height: 50vh"><summary>Solution: </summary><br />` +
 			`${this.questions.map((q, i) => `${i + 1}) ${this.isHTML ? q.hint : Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}` +
 			`</details>`
 		);
@@ -1021,7 +1021,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	onNotifyChange(num: number) {
 		this.game.runEvent('NotifyChange', this, num);
 		if (num === this.currentQuestion) {
-			this.sendRoom(`|raw|<strong>The hint has been changed to:</strong> ${this.game.isHTML ? this.game.questions[num].hint : Chat.formatText(this.game.questions[num].hint)}`);
+			this.sendRoom(`|raw|<div style="overflow:scroll; max-height: 50vh"><strong>The hint has been changed to:</strong> ${this.game.isHTML ? this.game.questions[num].hint : Chat.formatText(this.game.questions[num].hint)}</div>`);
 		}
 	}
 
@@ -2628,7 +2628,9 @@ export const commands: Chat.ChatCommands = {
 			"- /teamscavshelp: Explains the team scavs plugin.",
 			"<br />As a <strong>room driver (%)</strong>, you can also use the following Scavengers commands:",
 			"- /scav queue (unrated) <em>[host(s)]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | ...: Queue a scavenger hunt to be started after the current hunt is finished.",
+			"- /scav queuehtml (unrated) <em>[host(s)]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | ...: Queue a scavenger hunt that uses HTML to be started after the current hunt is finished.",
 			"- /start(official/practice/mini/unrated)hunt <em>[host]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | </em>[answer]</em> | ...: Create a new (official/practice/mini/unrated) scavenger hunt and start it immediately.",
+			"- /starthtml(official/practice/mini/unrated)hunt <em>[host]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | <em>[answer]</em> | <em>[hint]</em> | </em>[answer]</em> | ...: Create a new (official/practice/mini/unrated) scavenger hunt that uses HTML and start it immediately.",
 			"- /scav viewqueue (or /scav queue): Look at the list of queued scavenger hunts. Now also includes the option to remove hunts from the queue.",
 			"- /resethunt: Reset the current scavenger hunt without revealing the hints and answers, nor giving out points.",
 			"- /resethunttoqueue: Reset the ongoing scavenger hunt without revealing the hints and answers, nor giving out points. Then, add it directly to the queue.",
