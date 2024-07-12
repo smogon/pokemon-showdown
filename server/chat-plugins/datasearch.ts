@@ -1085,11 +1085,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (
 			species.gen <= mod.gen &&
 			(
-				(
-					nationalSearch &&
-					species.isNonstandard &&
-					!["Custom", "Glitch", "Pokestar", "Future"].includes(species.isNonstandard)
-				) ||
+				(nationalSearch && species.natDexTier !== 'Illegal') ||
 				((species.tier !== 'Unreleased' || unreleasedSearch) && species.tier !== 'Illegal')
 			) &&
 			(!species.tier.startsWith("CAP") || capSearch) &&
