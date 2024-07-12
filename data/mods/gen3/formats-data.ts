@@ -609,7 +609,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	aipom: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	sunkern: {
 		tier: "LC",
