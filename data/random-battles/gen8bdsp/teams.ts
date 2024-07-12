@@ -133,7 +133,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
-		abilities: Set<string>,
+		abilities: string[],
 		counter: MoveCounter,
 		teamDetails: RandomTeamsTypes.TeamDetails,
 		species: Species,
@@ -181,7 +181,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		move: Move,
 		types: Set<string>,
 		moves: Set<string>,
-		abilities: Set<string>,
+		abilities: string[],
 		counter: MoveCounter,
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -213,7 +213,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return {cull: movePool.includes('protect') || movePool.includes('wish')};
 		case 'fireblast':
 			// Special case for Togekiss, which always wants Aura Sphere
-			return {cull: abilities.has('Serene Grace') && (!moves.has('trick') || counter.get('Status') > 1)};
+			return {cull: abilities.includes('Serene Grace') && (!moves.has('trick') || counter.get('Status') > 1)};
 		case 'firepunch':
 			// Special case for Darmanitan-Zen-Galar, which doesn't always want Fire Punch
 			return {cull: moves.has('earthquake') && movePool.includes('substitute')};
@@ -229,7 +229,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			// Milotic always wants RestTalk
 			if (species.id === 'milotic') return {cull: false};
 			if (moves.has('stealthrock') || !moves.has('rest')) return {cull: true};
-			if (movePool.length > 1 && !abilities.has('Contrary')) {
+			if (movePool.length > 1 && !abilities.includes('Contrary')) {
 				const rest = movePool.indexOf('rest');
 				if (rest >= 0) this.fastPop(movePool, rest);
 			}
@@ -313,7 +313,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			if (
 				!isDoubles &&
 				counter.get('Status') < 2 &&
-				['Guts', 'Quick Feet', 'Speed Boost', 'Moody'].every(m => !abilities.has(m))
+				['Guts', 'Quick Feet', 'Speed Boost', 'Moody'].every(m => !abilities.includes(m))
 			) return {cull: true};
 			if (movePool.includes('leechseed') || (movePool.includes('toxic') && !moves.has('wish'))) return {cull: true};
 			if (isDoubles && (
@@ -361,7 +361,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return {cull: (
 				!!counter.get('speedsetup') ||
 				(counter.setupType && !bugSwordsDanceCase) ||
-				(abilities.has('Speed Boost') && moves.has('protect')) ||
+				(abilities.includes('Speed Boost') && moves.has('protect')) ||
 				(isDoubles && moves.has('leechlife'))
 			)};
 
@@ -416,7 +416,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return {cull: moves.has('closecombat') || (!types.has('Fighting') && movePool.includes('swordsdance'))};
 		case 'facade':
 			// Prefer Dynamic Punch when it can be a guaranteed-hit STAB move (mostly for Machamp)
-			return {cull: moves.has('dynamicpunch') && species.types.includes('Fighting') && abilities.has('No Guard')};
+			return {cull: moves.has('dynamicpunch') && species.types.includes('Fighting') && abilities.includes('No Guard')};
 		case 'focusblast':
 			// Special cases for Blastoise and Regice; Blastoise wants Shell Smash, and Regice wants Thunderbolt
 			return {cull: movePool.includes('shellsmash') || hasRestTalk};
@@ -424,8 +424,8 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return {
 				cull: moves.has('hydropump') ||
 					(counter.get('Physical') >= 4 && movePool.includes('uturn')) ||
-					(moves.has('substitute') && !abilities.has('Contrary')),
-				isSetup: abilities.has('Contrary'),
+					(moves.has('substitute') && !abilities.includes('Contrary')),
+				isSetup: abilities.includes('Contrary'),
 			};
 		case 'poisonjab':
 			return {cull: !types.has('Poison') && counter.get('Status') >= 2};
@@ -444,7 +444,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		case 'psyshock':
 			return {cull: moves.has('psychic')};
 		case 'bugbuzz':
-			return {cull: moves.has('uturn') && !counter.setupType && !abilities.has('Tinted Lens')};
+			return {cull: moves.has('uturn') && !counter.setupType && !abilities.includes('Tinted Lens')};
 		case 'leechlife':
 			return {cull:
 				(isDoubles && moves.has('lunge')) ||
@@ -509,7 +509,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 				species.id !== 'breloom' &&
 				['bulkup', 'nastyplot', 'painsplit', 'roost', 'swordsdance'].some(m => movePool.includes(m))
 			);
-			const shayminCase = abilities.has('Serene Grace') && movePool.includes('airslash') && !moves.has('airslash');
+			const shayminCase = abilities.includes('Serene Grace') && movePool.includes('airslash') && !moves.has('airslash');
 			return {cull: moves.has('rest') || moveBasedCull || shayminCase};
 		case 'helpinghand':
 			// Special case for Shuckle in Doubles, which doesn't want sets with no method to harm foes
@@ -528,7 +528,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
-		abilities: Set<string>,
+		abilities: string[],
 		counter: MoveCounter,
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -549,7 +549,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		case 'Analytic':
 			return (moves.has('rapidspin') || species.nfe || isDoubles);
 		case 'Blaze':
-			return (isDoubles && abilities.has('Solar Power')) || (!isDoubles && species.id === 'charizard');
+			return (isDoubles && abilities.includes('Solar Power')) || (!isDoubles && species.id === 'charizard');
 		case 'Chlorophyll':
 			return (species.baseStats.spe > 100 || !counter.get('Fire') && !moves.has('sunnyday') && !teamDetails.sun);
 		case 'Cloud Nine':
@@ -559,7 +559,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		case 'Compound Eyes': case 'No Guard':
 			return !counter.get('inaccurate');
 		case 'Cursed Body':
-			return abilities.has('Infiltrator');
+			return abilities.includes('Infiltrator');
 		case 'Defiant':
 			return !counter.get('Physical');
 		case 'Download':
@@ -567,36 +567,36 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		case 'Early Bird':
 			return (types.has('Grass') && isDoubles);
 		case 'Flash Fire':
-			return (this.dex.getEffectiveness('Fire', species) < -1 || abilities.has('Drought'));
+			return (this.dex.getEffectiveness('Fire', species) < -1 || abilities.includes('Drought'));
 		case 'Gluttony':
 			return !moves.has('bellydrum');
 		case 'Guts':
 			return (!moves.has('facade') && !moves.has('sleeptalk') && !species.nfe ||
-				abilities.has('Quick Feet') && !!counter.setupType);
+				abilities.includes('Quick Feet') && !!counter.setupType);
 		case 'Harvest':
-			return (abilities.has('Frisk') && !isDoubles);
+			return (abilities.includes('Frisk') && !isDoubles);
 		case 'Hustle': case 'Inner Focus':
-			return (counter.get('Physical') < 2 || abilities.has('Iron Fist'));
+			return (counter.get('Physical') < 2 || abilities.includes('Iron Fist'));
 		case 'Infiltrator':
-			return (moves.has('rest') && moves.has('sleeptalk')) || (isDoubles && abilities.has('Clear Body'));
+			return (moves.has('rest') && moves.has('sleeptalk')) || (isDoubles && abilities.includes('Clear Body'));
 		case 'Intimidate':
 			if (species.id === 'salamence' && moves.has('dragondance')) return true;
 			return ['bodyslam', 'bounce', 'rockclimb', 'tripleaxel'].some(m => moves.has(m));
 		case 'Iron Fist':
 			return (counter.get('ironfist') < 2 || moves.has('dynamicpunch'));
 		case 'Justified':
-			return (isDoubles && abilities.has('Inner Focus'));
+			return (isDoubles && abilities.includes('Inner Focus'));
 		case 'Lightning Rod':
 			return (species.types.includes('Ground') || counter.setupType === 'Physical');
 		case 'Limber':
 			return species.types.includes('Electric') || moves.has('facade');
 		case 'Mold Breaker':
 			return (
-				abilities.has('Adaptability') || abilities.has('Scrappy') || (abilities.has('Unburden') && !!counter.setupType) ||
-				(abilities.has('Sheer Force') && !!counter.get('sheerforce'))
+				abilities.includes('Adaptability') || abilities.includes('Scrappy') || (abilities.includes('Unburden') && !!counter.setupType) ||
+				(abilities.includes('Sheer Force') && !!counter.get('sheerforce'))
 			);
 		case 'Moody':
-			return !!counter.setupType && abilities.has('Simple');
+			return !!counter.setupType && abilities.includes('Simple');
 		case 'Moxie':
 			return (counter.get('Physical') < 2 || moves.has('stealthrock') || moves.has('defog'));
 		case 'Overgrow':
@@ -620,26 +620,26 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		case 'Scrappy':
 			return (moves.has('earthquake') && species.id === 'miltank');
 		case 'Sheer Force':
-			return (!counter.get('sheerforce') || abilities.has('Guts'));
+			return (!counter.get('sheerforce') || abilities.includes('Guts'));
 		case 'Shell Armor':
 			return (species.id === 'omastar' && (moves.has('spikes') || moves.has('stealthrock')));
 		case 'Sniper':
 			return counter.get('Water') > 1 && !moves.has('focusenergy');
 		case 'Solar Power':
-			return (!teamDetails.sun || abilities.has('Harvest'));
+			return (!teamDetails.sun || abilities.includes('Harvest'));
 		case 'Speed Boost':
 			return moves.has('uturn');
 		case 'Sturdy':
-			return (moves.has('bulkup') || !!counter.get('recoil') || abilities.has('Solid Rock'));
+			return (moves.has('bulkup') || !!counter.get('recoil') || abilities.includes('Solid Rock'));
 		case 'Swarm':
 			return (!counter.get('Bug') || !!counter.get('recovery'));
 		case 'Swift Swim':
 			const neverWantsSwim = !moves.has('raindance') && [
 				'Intimidate', 'Rock Head', 'Water Absorb',
-			].some(m => abilities.has(m));
+			].some(m => abilities.includes(m));
 			const noSwimIfNoRain = !moves.has('raindance') && [
 				'Cloud Nine', 'Lightning Rod', 'Intimidate', 'Rock Head', 'Sturdy', 'Water Absorb', 'Water Veil', 'Weak Armor',
-			].some(m => abilities.has(m));
+			].some(m => abilities.includes(m));
 			return teamDetails.rain ? neverWantsSwim : noSwimIfNoRain;
 		case 'Synchronize':
 			return counter.get('Status') < 3;
@@ -647,12 +647,12 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return (
 				!counter.get('technician') ||
 				moves.has('tailslap') ||
-				abilities.has('Punk Rock')
+				abilities.includes('Punk Rock')
 			);
 		case 'Tinted Lens':
 			return (
 				// For Butterfree
-				(moves.has('hurricane') && abilities.has('Compound Eyes')) ||
+				(moves.has('hurricane') && abilities.includes('Compound Eyes')) ||
 				(counter.get('Status') > 2 && !counter.setupType) ||
 				// For Yanmega
 				moves.has('protect')
@@ -661,9 +661,9 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			return species.id === 'bibarel';
 		case 'Unburden':
 			return (
-				abilities.has('Prankster') ||
+				abilities.includes('Prankster') ||
 				// intended for Hitmonlee
-				abilities.has('Reckless') ||
+				abilities.includes('Reckless') ||
 				!counter.setupType && !isDoubles
 			);
 		case 'Volt Absorb':
@@ -671,7 +671,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		case 'Water Absorb':
 			return (
 				moves.has('raindance') ||
-				['Drizzle', 'Strong Jaw', 'Unaware', 'Volt Absorb'].some(abil => abilities.has(abil))
+				['Drizzle', 'Strong Jaw', 'Unaware', 'Volt Absorb'].some(abil => abilities.includes(abil))
 			);
 		case 'Weak Armor':
 			return (
