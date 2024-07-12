@@ -2204,7 +2204,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
 				if (targetUser && Mafia.isHostBanned(room, targetUser)) {
-				    return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
+					 return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
 				}
 				hostQueue.push(targetUserID);
 				room.add(`User ${targetUserID} has been added to the host queue by ${user.name}.`).update();
