@@ -3191,7 +3191,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 1] ZU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3700527/">RBY ZU Metagame Discussion &amp; Resources</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3732499/">RBY ZU Metagame Discussion &amp; Resources</a>`,
 		],
 
 		mod: 'gen1',
