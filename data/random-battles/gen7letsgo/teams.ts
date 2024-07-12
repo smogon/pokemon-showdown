@@ -24,7 +24,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 		move: Move,
 		types: Set<string>,
 		moves: Set<string>,
-		abilities: Set<string>,
+		abilities: string[],
 		counter: MoveCounter,
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -140,13 +140,13 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 				moves.add(moveid);
 			}
 
-			counter = this.queryMoves(moves, species.types, new Set(), movePool);
+			counter = this.queryMoves(moves, species.types, [], movePool);
 
 			// Iterate through the moves again, this time to cull them:
 			for (const moveid of moves) {
 				const move = this.dex.moves.get(moveid);
 
-				let {cull, isSetup} = this.shouldCullMove(move, types, moves, new Set(), counter, movePool, teamDetails);
+				let {cull, isSetup} = this.shouldCullMove(move, types, moves, [], counter, movePool, teamDetails);
 
 				if (
 					!isSetup &&
@@ -184,7 +184,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 						cull = true;
 					} else {
 						for (const type of types) {
-							if (this.moveEnforcementCheckers[type]?.(movePool, moves, new Set(), types, counter, species, teamDetails)) cull = true;
+							if (this.moveEnforcementCheckers[type]?.(movePool, moves, [], types, counter, species, teamDetails)) cull = true;
 						}
 					}
 				}

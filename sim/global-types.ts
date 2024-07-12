@@ -508,6 +508,7 @@ namespace RandomTeamsTypes {
 	export interface RandomSetData {
 		role: Role;
 		movepool: string[];
+		abilities?: string[];
 		teraTypes?: string[];
 		preferredTypes?: string[];
 	}
