@@ -134,7 +134,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			const user = Users.getExact(name);
 			if (!user) throw new Chat.ErrorMessage(`User "${name}" not found.`);
 			if (this.owners.has(user.id)) throw new Chat.ErrorMessage(`${user.name} is already an auction owner.`);
-			this.owners.add(user.id)
+			this.owners.add(user.id);
 		}
 	}
 
