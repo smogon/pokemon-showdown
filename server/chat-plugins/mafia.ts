@@ -1095,10 +1095,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	revealRole(user: User, toReveal: MafiaPlayer, revealAs: string) {
 		if (!this.started) {
-			return user.sendTo(this.room, `|error|You may only reveal roles once the game has started.`);
+		    return user.sendTo(this.room, `|error|You may only reveal roles once the game has started.`);
 		}
 		if (!toReveal.role) {
-			return user.sendTo(this.room, `|error|The user ${toReveal.id} is not assigned a role.`);
+		    return user.sendTo(this.room, `|error|The user ${toReveal.id} is not assigned a role.`);
 		}
 		toReveal.revealed = revealAs;
 		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.id in this.playerTable ? `is` : `was`} ${revealAs}.`);
@@ -2204,7 +2204,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
 				if (targetUser && Mafia.isHostBanned(room, targetUser)) {
-					return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
+				    return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
 				}
 				hostQueue.push(targetUserID);
 				room.add(`User ${targetUserID} has been added to the host queue by ${user.name}.`).update();
