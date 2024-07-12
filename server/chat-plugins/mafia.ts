@@ -873,7 +873,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			const isPlayer = (this.playerTable[userid]);
 			const isSpirit = (this.dead[userid] && this.dead[userid].restless);
 			if (this.votingAll && !(this.voteLock && (isPlayer?.voting || (isSpirit && this.dead[userid].voting))) &&
-				(isPlayer || isSpirit)) {
+			(isPlayer || isSpirit)) {
 				if (isPlayer && this.playerTable[userid].voting === key || isSpirit && this.dead[userid].voting === key) {
 					buf += `<button class="button" name="send" value="/msgroom ${this.roomid},/mafia unvote">Unvote ${this.playerTable[key] ? this.playerTable[key].safeName : 'No Vote'}</button>`;
 				} else if ((this.selfEnabled && !isSpirit) || userid !== key) {
