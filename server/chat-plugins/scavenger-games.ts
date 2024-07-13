@@ -537,7 +537,7 @@ const TWISTS: {[k: string]: Twist} = {
 				`${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
 				`<details style="cursor: pointer;"><summary>Solution: </summary><br />` +
 				`${this.questions.map((q, i) => (
-					`${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/>` +
+					`${i + 1}) ${this.isHTML ? q.hint : Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/>` +
 					`<details style="cursor: pointer;"><summary>Mines: </summary>${mines[i].map(({mine, users}) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`
 				)).join("<br />")}` +
 				`</details>`
@@ -781,11 +781,11 @@ const MODES: {[k: string]: GameMode | string} = {
 							if (staffHost) staffHost.sendTo(this.room, `${targetUser.name} has received their first hint early.`);
 							targetUser.sendTo(
 								this.room,
-								`|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.formatText(this.questions[0].hint)}`
+								`|raw|<strong>The first hint to the next hunt is:</strong> ${this.isHTML ? this.questions[0].hint : Chat.formatText(this.questions[0].hint)}`
 							);
 							targetUser.sendTo(
 								this.room,
-								`|notify|Early Hint|The first hint to the next hunt is: ${Chat.formatText(this.questions[0].hint)}`
+								`|notify|Early Hint|The first hint to the next hunt is: ${this.isHTML ? this.questions[0].hint : Chat.formatText(this.questions[0].hint)}`
 							);
 						}
 					}, (maxTime - time) * 1000 + 5000);
