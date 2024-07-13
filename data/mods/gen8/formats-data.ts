@@ -3570,7 +3570,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 	},
 	vullaby: {
-		tier: "NFE",
+		tier: "LC",
 		natDexTier: "LC",
 	},
 	mandibuzz: {
