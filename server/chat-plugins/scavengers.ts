@@ -2549,6 +2549,7 @@ export const commands: Chat.ChatCommands = {
 	// old game aliases
 	scavenge: ScavengerCommands.guess,
 	startpracticehunt: 'starthunt',
+	startofficial: 'starthunt',
 	startofficialhunt: 'starthunt',
 	startminihunt: 'starthunt',
 	startunratedhunt: 'starthunt',
@@ -2564,6 +2565,7 @@ export const commands: Chat.ChatCommands = {
 	forcestartpractice: 'starthunt',
 
 	starthtmlpracticehunt: 'starthunt',
+	starthtmlofficial: 'starthunt',
 	starthtmlofficialhunt: 'starthunt',
 	starthtmlminihunt: 'starthunt',
 	starthtmlunratedhunt: 'starthunt',
