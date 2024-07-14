@@ -1232,7 +1232,7 @@
                 "teraTypes": ["Steel", "Water"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Fast Attacker",
                 "movepool": ["Focus Blast", "Hydro Pump", "Ice Beam", "Weather Ball"],
                 "abilities": ["Drizzle"],
                 "teraTypes": ["Water"]
