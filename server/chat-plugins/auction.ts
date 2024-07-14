@@ -23,12 +23,14 @@ interface Manager {
 class Team {
 	id: ID;
 	name: string;
+	players: Player[];
 	credits: number;
 	suspended: boolean;
 	private auction: Auction;
 	constructor(name: string, auction: Auction) {
 		this.id = toID(name);
 		this.name = name;
+		this.players = [];
 		this.credits = auction.startingCredits;
 		this.suspended = false;
 		this.auction = auction;
@@ -48,21 +50,12 @@ class Team {
 		return managers;
 	}
 
-	getPlayers() {
-		const players = [];
-		for (const id in this.auction.playerList) {
-			const player = this.auction.playerList[id];
-			if (player.team === this) players.push(player);
-		}
-		return players;
-	}
-
 	isSuspended() {
 		return this.credits < this.auction.minBid || this.suspended;
 	}
 
 	maxBid(credits = this.credits) {
-		return credits + this.auction.minBid * Math.min(0, this.getPlayers().length - this.auction.minPlayers + 1);
+		return credits + this.auction.minBid * Math.min(0, this.players.length - this.auction.minPlayers + 1);
 	}
 }
 
@@ -184,7 +177,6 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<div class="ladder pad"><table style="width: 100%"><tr><th colspan=2>Order</th><th>Teams</th><th>Credits</th><th>Players</th></tr>`;
 		const queue = this.queue.filter(id => !this.teams[id].isSuspended());
 		buf += Object.values(this.teams).map(team => {
-			const players = team.getPlayers();
 			let i1 = queue.indexOf(team.id) + 1;
 			let i2 = queue.lastIndexOf(team.id) + 1;
 			if (i1 > queue.length / 2) {
@@ -194,7 +186,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			row += `<td align="center" style="width: 15px">${i1 > 0 ? i1 : '-'}</td><td align="center" style="width: 15px">${i2 > 0 ? i2 : '-'}</td>`;
 			row += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br/>${this.generateUsernameList(team.getManagerNames(), 2, true)}</td>`;
 			row += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
-			row += `<td><div style="min-height: 32px; height: 32px; overflow: hidden; resize: vertical"><span style="float: right">${players.length}</span>${this.generateUsernameList(players)}</div></td>`;
+			row += `<td><div style="min-height: 32px; height: 32px; overflow: hidden; resize: vertical"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
 			row += `</tr>`;
 			return row;
 		}).join('');
@@ -230,7 +222,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	generateBidInfo() {
-		let buf = `Player: <b>${Utils.escapeHTML(this.currentNom.name)}</b> `;
+		let buf = `Player: <username>${Utils.escapeHTML(this.currentNom.name)}</username> `;
 		buf += `Top bid: <b>${this.currentBid}</b> `;
 		buf += `Top bidder: <b>${Utils.escapeHTML(this.currentBidder.name)}</b> `;
 		buf += `Tiers: <b>${this.currentNom.tiers?.length ? `${Utils.escapeHTML(this.currentNom.tiers.join(', '))}` : 'N/A'}</b>`;
@@ -325,6 +317,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 		const player = this.playerList[toID(name)];
 		if (!player) throw new Chat.ErrorMessage(`Player "${name}" not found.`);
+		player.team?.players.splice(player.team.players.indexOf(player), 1);
 		delete this.playerList[player.id];
 		if (this.state !== 'setup' && !Object.values(this.playerList).filter(p => !p.team).length) {
 			this.end('The auction has ended because there are no players remaining in the draft pool.');
@@ -341,11 +334,13 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (teamName) {
 			const team = this.teams[toID(teamName)];
 			if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
+			team.players.push(player);
 			player.team = team;
 			if (!Object.values(this.playerList).filter(p => !p.team).length) {
 				return this.end('There are no players remaining in the draft pool, so the auction has ended.');
 			}
 		} else {
+			player.team?.players.splice(player.team.players.indexOf(player), 1);
 			delete player.team;
 		}
 		this.sendHTMLBox(this.generateAuctionTable());
@@ -450,10 +445,11 @@ export class Auction extends Rooms.SimpleRoomGame {
 			const team = this.teams[id];
 			team.credits = this.startingCredits;
 			team.suspended = false;
-			for (const player of team.getPlayers()) {
+			for (const player of team.players) {
 				delete player.team;
 				player.price = 0;
 			}
+			team.players = [];
 		}
 		this.lastQueue = null;
 		this.queue = Object.values(this.teams).map(toID).concat(Object.values(this.teams).map(toID).reverse());
@@ -475,7 +471,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.queue.push(this.currentTeam.id);
 		} while (this.currentTeam.isSuspended());
 		this.sendHTMLBox(this.generateAuctionTable());
-		this.sendMessage(`It is now **${this.currentTeam.name}**'s turn to nominate a player. Managers: ${Chat.toListString(this.currentTeam.getManagerNames())}`);
+		this.sendMessage(`/html It is now **${this.currentTeam.name}**'s turn to nominate a player. Managers: ${this.currentTeam.getManagerNames().map(m => `<username class="username">${Utils.escapeHTML(m)}</username>`).join(' ')}`);
 	}
 
 	nominate(user: User, target: string) {
@@ -527,7 +523,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (amount <= this.currentBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
 			this.currentBid = amount;
 			this.currentBidder = team;
-			this.sendMessage(`${user.name}[${team.name}]: **${amount}**`);
+			this.sendMessage(`/html <username class="username>${user.name}</username>[${team.name}]: **${amount}**`);
 			this.sendHTMLBox(this.generateBidInfo(), 'bid');
 			this.clearTimer();
 			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
@@ -537,6 +533,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	finishCurrentNom() {
 		this.sendMessage(`**${this.currentBidder.name}** has bought **${this.currentNom.name}** for **${this.currentBid}** credits!`);
 		this.currentBidder.credits -= this.currentBid;
+		this.currentBidder.players.push(this.currentNom);
 		this.currentNom.team = this.currentBidder;
 		this.currentNom.price = this.currentBid;
 		this.bidsPlaced.clear();
@@ -550,6 +547,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.queue = this.lastQueue;
 		this.lastQueue = null;
 		this.currentBidder.credits += this.currentBid;
+		this.currentBidder.players.splice(this.currentBidder.players.indexOf(this.currentNom), 1);
 		delete this.currentNom.team;
 		this.currentNom.price = 0;
 		this.next();
