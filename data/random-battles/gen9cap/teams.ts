@@ -35,7 +35,7 @@ export class RandomCAPTeams extends RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	) {
-		// Placeholder in case we need to hardcode items for CAP mons.
+		if (ability === 'Mountaineer') return 'Life Orb';
 	}
 
 	getLevel(

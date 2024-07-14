@@ -423,13 +423,15 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["heatwave", "leafblade", "nightslash", "return", "uturn"],
-                "abilities": ["Inner Focus"]
+                "movepool": ["doubleedge", "heatwave", "leafblade", "nightslash", "quickattack", "uturn"],
+                "abilities": ["Inner Focus"],
+                "preferredTypes": ["Grass"]
             },
             {
                 "role": "Setup Sweeper",
                 "movepool": ["batonpass", "leafblade", "nightslash", "return", "swordsdance"],
-                "abilities": ["Inner Focus"]
+                "abilities": ["Inner Focus"],
+                "preferredTypes": ["Grass"]
             }
         ]
     },
