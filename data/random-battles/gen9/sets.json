@@ -60,10 +60,10 @@
                 "teraTypes": ["Dark", "Ground"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Coil", "Earthquake", "Gunk Shot", "Trailblaze"],
                 "abilities": ["Intimidate"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Grass", "Ground"]
             },
             {
                 "role": "Setup Sweeper",
@@ -1230,6 +1230,12 @@
                 "movepool": ["Encore", "Haze", "Hydro Pump", "Hypnosis", "Ice Beam", "Rest", "Surf"],
                 "abilities": ["Drizzle"],
                 "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Focus Blast", "Hydro Pump", "Ice Beam", "Weather Ball"],
+                "abilities": ["Drizzle"],
+                "teraTypes": ["Water"]
             }
         ]
     },
@@ -3493,7 +3499,7 @@
         "level": 73,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Fast Attacker",
                 "movepool": ["Air Slash", "Dazzling Gleam", "Earth Power", "Seed Flare"],
                 "abilities": ["Serene Grace"],
                 "teraTypes": ["Flying", "Grass"]
