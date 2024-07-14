@@ -1904,7 +1904,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Hurricane", "Hydro Pump", "Surf", "U-turn"],
+                "movepool": ["Hurricane", "Hydro Pump", "U-turn", "Weather Ball"],
                 "abilities": ["Drizzle"],
                 "teraTypes": ["Flying", "Water"]
             }
