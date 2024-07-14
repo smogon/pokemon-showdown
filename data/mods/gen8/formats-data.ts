@@ -3571,7 +3571,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	vullaby: {
 		tier: "LC",
-		natDexTier: "LC",
 	},
 	mandibuzz: {
 		tier: "UU",
