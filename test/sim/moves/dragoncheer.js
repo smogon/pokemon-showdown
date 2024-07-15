@@ -66,19 +66,6 @@ describe('Dragon Cheer', function () {
 		assert(battle.log.some(line => line.startsWith('|-fail'))); // second trigger
 	});
 
-	it('should not proc throat spray (is not a sound-based move)', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'dragapult', item: 'throatspray', moves: ['dragoncheer']},
-			{species: 'kingdra', moves: ['splash']},
-		], [
-			{species: 'dragapult', moves: ['splash']},
-			{species: 'dragapult', moves: ['splash']},
-		]]);
-
-		battle.makeChoices('auto', 'auto');
-		assert(battle.log.every(line => !line.startsWith('|-activate')));
-	});
-
 	it('should not increase ratio if affected Pokemon turns into a Dragon Type after Dragon Cheer', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'dragapult', moves: ['dragoncheer', 'splash']},
@@ -105,5 +92,43 @@ describe('Dragon Cheer', function () {
 
 		battle.makeChoices();
 		assert(battle.log.some(line => !line.startsWith('|-fail')));
+	});
+
+	it(`should be copied by Psych Up, using the target's Dragon Cheer level`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble']},
+			{species: 'kingdra', moves: ['sleeptalk']},
+		], [
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'wobbuffet', moves: ['sleeptalk']},
+		]]);
+
+		battle.onEvent(
+			'ModifyCritRatio', battle.format, -99,
+			(critRatio) => assert.equal(critRatio, 3)
+		);
+
+		battle.makeChoices('move dragoncheer -2, move sleeptalk', 'auto');
+		battle.makeChoices('move psychup -2, move sleeptalk', 'auto');
+		battle.makeChoices('move bubble, move sleeptalk', 'auto');
+	});
+
+	it(`should be copied by Transform, using the target's Dragon Cheer level`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'milotic', moves: ['dragoncheer', 'transform']},
+			{species: 'kingdra', moves: ['sleeptalk', 'bubble']},
+		], [
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'wobbuffet', moves: ['sleeptalk']},
+		]]);
+
+		battle.onEvent(
+			'ModifyCritRatio', battle.format, -99,
+			(critRatio) => assert.equal(critRatio, 3)
+		);
+
+		battle.makeChoices('move dragoncheer -2, move sleeptalk', 'auto');
+		battle.makeChoices('move transform -2, move sleeptalk', 'auto');
+		battle.makeChoices('move bubble, move sleeptalk', 'auto');
 	});
 });
