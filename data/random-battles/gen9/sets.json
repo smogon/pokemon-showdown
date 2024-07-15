@@ -60,13 +60,13 @@
                 "teraTypes": ["Dark", "Ground"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Setup Sweeper",
                 "movepool": ["Coil", "Earthquake", "Gunk Shot", "Trailblaze"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Grass", "Ground"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Fast Bulky Setup",
                 "movepool": ["Coil", "Earthquake", "Gunk Shot", "Sucker Punch"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Dark", "Ground"]
