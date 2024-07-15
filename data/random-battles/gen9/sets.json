@@ -2871,7 +2871,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Aura Sphere", "Flash Cannon", "Focus Blast", "Nasty Plot", "Shadow Ball", "Vacuum Wave"],
+                "movepool": ["Aura Sphere", "Flash Cannon", "Focus Blast", "Nasty Plot", "Vacuum Wave"],
                 "abilities": ["Inner Focus"],
                 "teraTypes": ["Fighting"]
             }
