@@ -128,7 +128,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.room.add(`|c|&|${message}`).update();
 	}
 
-	sendHTMLBox(htmlContent: string, uhtml?: string) {
+	sendHTMLBox(htmlContent: string) {
 		this.room.add(`|html|<div class="infobox">${htmlContent}</div>`).update();
 	}
 
