@@ -505,7 +505,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	nominate(user: User, target: string) {
 		if (this.state !== 'nom') throw new Chat.ErrorMessage(`You cannot nominate players right now.`);
 		const manager = this.managers.get(user.id);
-		if (!manager) this.checkOwner(user);
+		if (!manager || manager.team !== this.currentTeam) this.checkOwner(user);
 
 		// For undo
 		this.lastQueue = this.queue.slice();
