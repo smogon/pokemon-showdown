@@ -129,7 +129,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	sendHTMLBox(htmlContent: string, uhtml?: string) {
-		this.room.add(`|${uhtml ? `uhtml|${uhtml}` : 'html'}|<div class="infobox">${htmlContent}</div>`).update();
+		this.room.add(`|html|<div class="infobox">${htmlContent}</div>`).update();
 	}
 
 	checkOwner(user: User) {
@@ -236,12 +236,14 @@ export class Auction extends Rooms.SimpleRoomGame {
 		return buf;
 	}
 
-	generateBidInfo() {
-		let buf = Utils.html`Player: <username>${this.currentNom.name}</username> `;
+	sendBidInfo() {
+		let buf = `<div class="infobox">`;
+		buf += Utils.html`Player: <username>${this.currentNom.name}</username> `;
 		buf += `Top bid: <b>${this.currentBid}</b> `;
 		buf += Utils.html`Top bidder: <b>${this.currentBidder.name}</b> `;
 		buf += Utils.html`Tiers: <b>${this.currentNom.tiers?.length ? `${this.currentNom.tiers.join(', ')}` : 'N/A'}</b>`;
-		return buf;
+		buf += `</div>`;
+		this.room.add(`|uhtml|bid|${buf}`).update();
 	}
 
 	setMinBid(amount: number) {
@@ -519,7 +521,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.currentBid = this.minBid;
 		this.currentBidder = this.currentTeam;
 		this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.currentTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid to place a bid!`);
-		if (!this.blindMode) this.sendHTMLBox(this.generateBidInfo(), 'bid');
+		if (!this.blindMode) this.sendBidInfo();
 		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
 
@@ -553,7 +555,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.currentBid = amount;
 			this.currentBidder = team;
 			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${amount}</b>`);
-			this.sendHTMLBox(this.generateBidInfo(), 'bid');
+			this.sendBidInfo();
 			this.clearTimer();
 			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 		}
