@@ -518,7 +518,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.state = 'bid';
 		this.currentBid = this.minBid;
 		this.currentBidder = this.currentTeam;
-		this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from the <b>${this.currentTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid to place a bid!`);
+		this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.currentTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid to place a bid!`);
 		if (!this.blindMode) this.sendHTMLBox(this.generateBidInfo(), 'bid');
 		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
