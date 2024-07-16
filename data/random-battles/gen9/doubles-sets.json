@@ -6086,7 +6086,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Body Press", "Iron Defense", "Iron Head", "Protect"],
+                "movepool": ["Body Press", "Heavy Slam", "Iron Defense", "Protect"],
                 "abilities": ["Earth Eater"],
                 "teraTypes": ["Electric", "Fighting"]
             },

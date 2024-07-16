@@ -540,8 +540,9 @@ export const commands: Chat.ChatCommands = {
 						}
 						buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}<br/>`;
 						if (set.abilities) {
-							buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().join(', ')}</details>`;
+							buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().join(', ')}`;
 						}
+						buf += '</details>';
 						setCount++;
 					}
 					movesets.push(buf);

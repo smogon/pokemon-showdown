@@ -622,7 +622,9 @@ export class RandomBabyTeams extends RandomTeams {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm') return false;
-			if (move.id === 'terablast' && species.baseStats.atk > species.baseStats.spa) return false;
+			if (move.id === 'terablast' && (
+				species.id === 'porygon' || species.baseStats.atk > species.baseStats.spa)
+			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 
@@ -733,6 +735,13 @@ export class RandomBabyTeams extends RandomTeams {
 				}
 				if (skip) continue;
 
+				// Count Dry Skin/Fluffy as Fire weaknesses
+				if (
+					this.dex.getEffectiveness('Fire', species) === 0 &&
+					Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a)) &&
+					typeWeaknesses.get('Fire') >= 3 * limitFactor
+				) continue;
+
 				// Limit four weak to Freeze-Dry
 				if (weakToFreezeDry) {
 					if (typeWeaknesses.get('Freeze-Dry') >= 4 * limitFactor) continue;
@@ -767,6 +776,10 @@ export class RandomBabyTeams extends RandomTeams {
 				if (this.dex.getEffectiveness(typeName, species) > 1) {
 					typeDoubleWeaknesses.add(typeName);
 				}
+			}
+			// Count Dry Skin/Fluffy as Fire weaknesses
+			if (['Dry Skin', 'Fluffy'].includes(set.ability) && this.dex.getEffectiveness('Fire', species) === 0) {
+				typeWeaknesses.add('Fire');
 			}
 			if (weakToFreezeDry) typeWeaknesses.add('Freeze-Dry');
 

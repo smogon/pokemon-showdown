@@ -59,22 +59,22 @@
     },
     "pidgey": {
         "level": 90,
-        "moves": ["mimic", "mirrormove", "sandattack", "substitute"],
-        "essentialMoves": ["agility", "doubleedge"],
-        "exclusiveMoves": ["quickattack", "skyattack"],
+        "moves": ["agility", "agility", "quickattack", "quickattack", "skyattack"],
+        "essentialMoves": ["doubleedge"],
+        "exclusiveMoves": ["mirrormove", "sandattack", "substitute"],
         "comboMoves": ["agility", "doubleedge", "quickattack", "skyattack"]
     },
     "pidgeotto": {
         "level": 82,
-        "moves": ["mimic", "mirrormove", "sandattack", "substitute"],
-        "essentialMoves": ["agility", "doubleedge"],
-        "exclusiveMoves": ["quickattack", "skyattack"],
+        "moves": ["agility", "agility", "quickattack", "quickattack", "skyattack"],
+        "essentialMoves": ["doubleedge"],
+        "exclusiveMoves": ["mirrormove", "sandattack", "substitute"],
         "comboMoves": ["agility", "doubleedge", "quickattack", "skyattack"]
     },
     "pidgeot": {
         "level": 76,
         "moves": ["agility", "doubleedge", "hyperbeam"],
-        "exclusiveMoves": ["mimic", "mirrormove", "reflect", "sandattack", "skyattack", "skyattack", "substitute", "quickattack", "quickattack", "quickattack"]
+        "exclusiveMoves": ["mirrormove", "reflect", "sandattack", "skyattack", "skyattack", "substitute", "quickattack", "quickattack", "quickattack"]
     },
     "rattata": {
         "level": 89,

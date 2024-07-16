@@ -909,6 +909,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				}
 				if (skip) continue;
 
+				// Count Dry Skin as a Fire weakness
+				if (this.dex.getEffectiveness('Fire', species) === 0 && Object.values(species.abilities).includes('Dry Skin')) {
+					if (!typeWeaknesses['Fire']) typeWeaknesses['Fire'] = 0;
+					if (typeWeaknesses['Fire'] >= 3 * limitFactor) continue;
+				}
+
 				// Limit one level 100 Pokemon
 				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
 					continue;
@@ -945,6 +951,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					typeDoubleWeaknesses[typeName]++;
 				}
 			}
+			// Count Dry Skin as a Fire weakness
+			if (set.ability === 'Dry Skin' && this.dex.getEffectiveness('Fire', species) === 0) typeWeaknesses['Fire']++;
 
 			// Increment level 100 counter
 			if (set.level === 100) numMaxLevelPokemon++;
