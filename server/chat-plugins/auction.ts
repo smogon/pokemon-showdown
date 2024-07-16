@@ -97,7 +97,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	currentBid: number;
 	currentBidder: Team;
 	/** Used for blind mode */
-	bidsPlaced: Set<Team>;
+	bidsPlaced: Map<Team, number>;
 	state: 'setup' | 'nom' | 'bid' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
@@ -121,7 +121,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.currentNom = null!;
 		this.currentBid = 0;
 		this.currentBidder = null!;
-		this.bidsPlaced = new Set();
+		this.bidsPlaced = new Map();
 	}
 
 	sendMessage(message: string) {
@@ -537,16 +537,16 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.blindMode) {
 			if (this.bidsPlaced.has(team)) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
 			if (amount <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
-			this.bidsPlaced.add(team);
 			for (const manager of this.managers.values()) {
 				if (manager.team === team) {
-					Users.getExact(manager.id)?.sendTo(this.room, `Your team placed a bid of **${amount}** on **${this.currentNom}**.`);
+					Users.getExact(manager.id)?.sendTo(this.room, `|c:|${Math.floor(Date.now() / 1000)}|&|/html Your team placed a bid of <b>${amount}</b> on <username>${Utils.escapeHTML(this.currentNom.name)}</username>.`);
 				}
 			}
 			if (amount > this.currentBid) {
 				this.currentBid = amount;
 				this.currentBidder = team;
 			}
+			this.bidsPlaced.set(team, amount);
 			if (this.bidsPlaced.size === this.teams.size) {
 				this.finishCurrentNom();
 			}
@@ -562,9 +562,20 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	finishCurrentNom() {
-		this.sendMessage(Utils.html`/html <b>${this.currentBidder.name}</b> has bought <username>${this.currentNom.name}<username> for <b>${this.currentBid}</b> credits!`);
+		if (this.blindMode) {
+			let buf = `<div class="ladder pad"><table><tr><th>Team</th><th>Bid</th></tr>`;
+			if (!this.bidsPlaced.has(this.currentTeam)) {
+				buf += Utils.html`<tr><td>${this.currentTeam.name}</td><td>${this.minBid}</td></tr>`;
+			}
+			for (const [team, bid] of this.bidsPlaced) {
+				buf += Utils.html`<tr><td>${team.name}</td><td>${bid}</td></tr>`;
+			}
+			buf += `</table></div>`;
+			this.sendHTMLBox(buf);
+			this.bidsPlaced.clear();
+		}
+		this.sendMessage(Utils.html`/html <b>${this.currentBidder.name}</b> bought <username>${this.currentNom.name}</username> for <b>${this.currentBid}</b> credits!`);
 		this.currentBidder.addPlayer(this.currentNom, this.currentBid);
-		this.bidsPlaced.clear();
 		this.clearTimer();
 		this.next();
 	}
