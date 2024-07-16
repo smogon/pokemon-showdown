@@ -2405,7 +2405,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "hiddenpowerfighting", "psychic", "recover", "signalbeam"],
+                "movepool": ["calmmind", "hiddenpowerfighting", "psychic", "psyshock", "recover", "signalbeam"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -4292,7 +4292,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["crunch", "dragondance", "highjumpkick", "icepunch", "zenheadbutt"],
+                "movepool": ["crunch", "dragondance", "highjumpkick", "stoneedge", "zenheadbutt"],
                 "abilities": ["Intimidate", "Moxie"]
             },
             {

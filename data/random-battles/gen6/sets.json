@@ -1978,7 +1978,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["bugbuzz", "defog", "roost", "sludgebomb", "toxic", "uturn"],
+                "movepool": ["bugbuzz", "defog", "roost", "toxic", "uturn"],
                 "abilities": ["Shield Dust"]
             }
         ]
@@ -2678,7 +2678,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "psychic", "recover", "signalbeam"],
+                "movepool": ["calmmind", "psychic", "psyshock", "recover", "signalbeam"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -2837,6 +2837,12 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["agility", "earthquake", "hammerarm", "meteormash", "zenheadbutt"],
+                "abilities": ["Clear Body"],
+                "preferredTypes": ["Psychic"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "hammerarm", "honeclaws", "meteormash", "zenheadbutt"],
                 "abilities": ["Clear Body"],
                 "preferredTypes": ["Psychic"]
             }
@@ -5510,8 +5516,9 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["gunkshot", "hydropump", "icebeam", "spikes", "taunt", "toxicspikes", "uturn"],
-                "abilities": ["Protean"]
+                "movepool": ["grassknot", "gunkshot", "hydropump", "icebeam", "spikes", "taunt", "toxicspikes", "uturn"],
+                "abilities": ["Protean"],
+                "preferredTypes": ["Poison"]
             }
         ]
     },
@@ -5853,8 +5860,8 @@
         "level": 84,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["dracometeor", "dragontail", "earthquake", "fireblast", "powerwhip", "sludgebomb", "thunderbolt"],
+                "role": "AV Pivot",
+                "movepool": ["dracometeor", "dragontail", "earthquake", "fireblast", "powerwhip", "sludgebomb"],
                 "abilities": ["Sap Sipper"]
             }
         ]

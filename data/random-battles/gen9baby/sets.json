@@ -1067,7 +1067,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Dazzling Gleam", "Nasty Plot", "Psychic", "Psyshock", "Shadow Ball", "Thunderbolt"],
+                "movepool": ["Dazzling Gleam", "Nasty Plot", "Psychic", "Shadow Ball", "Thunderbolt"],
                 "abilities": ["Sap Sipper"],
                 "teraTypes": ["Electric", "Fairy", "Ghost"]
             },
@@ -1101,7 +1101,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Dazzling Gleam", "Power Gem", "Sludge Wave", "Spikes", "Stealth Rock"],
+                "movepool": ["Mud Shot", "Power Gem", "Sludge Wave", "Spikes", "Stealth Rock"],
                 "abilities": ["Toxic Debris"],
                 "teraTypes": ["Ghost", "Grass"]
             }
@@ -1279,13 +1279,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Earthquake", "Slack Off", "Stealth Rock", "Stone Edge", "Whirlwind", "Yawn"],
-                "abilities": ["Sand Stream"],
-                "teraTypes": ["Dragon", "Rock", "Steel"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Curse", "Earthquake", "Slack Off", "Stone Edge"],
+                "movepool": ["Curse", "Earthquake", "Slack Off", "Stealth Rock", "Stone Edge", "Whirlwind", "Yawn"],
                 "abilities": ["Sand Stream"],
                 "teraTypes": ["Dragon", "Rock", "Steel"]
             }
@@ -1752,7 +1746,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Acid Armor", "Draining Kiss", "Recover", "Stored Power"],
+                "movepool": ["Acid Armor", "Dazzling Gleam", "Draining Kiss", "Recover", "Stored Power"],
                 "abilities": ["Aroma Veil"],
                 "teraTypes": ["Fairy", "Steel"]
             }
@@ -2198,7 +2192,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Close Combat", "Crunch", "Earthquake", "Ice Punch", "Swords Dance"],
+                "movepool": ["Close Combat", "Copycat", "Crunch", "Earthquake", "Ice Punch", "Swords Dance"],
                 "abilities": ["Inner Focus"],
                 "teraTypes": ["Dark", "Fighting", "Ground"]
             }
@@ -2259,7 +2253,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Brave Bird", "Close Combat", "Hone Claws", "Roost"],
+                "movepool": ["Aerial Ace", "Bulk Up", "Close Combat", "Roost"],
                 "abilities": ["Hustle"],
                 "teraTypes": ["Fighting"]
             }
@@ -3001,7 +2995,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Encore", "Knock Off", "Play Rough", "Stealth Rock", "Thunder Wave"],
-                "abilities": ["Mold Breaker", "Pickpocket"],
+                "abilities": ["Pickpocket"],
                 "teraTypes": ["Fairy", "Water"]
             }
         ]
@@ -3310,7 +3304,7 @@
                 "role": "Fast Attacker",
                 "movepool": ["Crunch", "Double-Edge", "Stomping Tantrum", "U-turn", "Yawn"],
                 "abilities": ["Adaptability", "Stakeout"],
-                "teraTypes": ["Ground", "Normal"]
+                "teraTypes": ["Normal"]
             }
         ]
     },
