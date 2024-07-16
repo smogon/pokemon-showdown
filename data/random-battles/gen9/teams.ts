@@ -1681,7 +1681,7 @@ export class RandomTeams {
 				// Count Dry Skin/Fluffy as Fire weaknesses
 				if (
 					this.dex.getEffectiveness('Fire', species) === 0 &&
-					Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a))
+					Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a)).length
 				) {
 					if (!typeWeaknesses['Fire']) typeWeaknesses['Fire'] = 0;
 					if (typeWeaknesses['Fire'] >= 3 * limitFactor) continue;
