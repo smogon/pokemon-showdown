@@ -539,7 +539,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (amount <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
 			for (const manager of this.managers.values()) {
 				if (manager.team === team) {
-					Users.getExact(manager.id)?.sendTo(this.room, `|c:|${Math.floor(Date.now() / 1000)}|&|/html Your team placed a bid of <b>${amount}</b> on <username>${Utils.escapeHTML(this.nominatedPlayer.name)}</username>.`);
+					const msg = `|c:|${Math.floor(Date.now() / 1000)}|&|/html Your team placed a bid of <b>${amount}</b> on <username>${Utils.escapeHTML(this.nominatedPlayer.name)}</username>.`;
+					Users.getExact(manager.id)?.sendTo(this.room, msg);
 				}
 			}
 			if (amount > this.highestBid) {
