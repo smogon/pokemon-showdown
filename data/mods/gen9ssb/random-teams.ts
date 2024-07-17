@@ -121,11 +121,11 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Galvanic Web',
 		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
 	},
-	'Sakuya Izayoi': {
-		species: 'Magearna', ability: 'The World', item: 'Stopwatch', gender: 'F',
-		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
-		signatureMove: 'Killing Doll',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
+	Quetzalcoatl: {
+		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Expert Belt', gender: 'N',
+		moves: ['Secret Sword', 'Earth Power', 'Oblivion Wing'],
+		signatureMove: 'Big Thunder',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
