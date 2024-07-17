@@ -56,10 +56,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: "Adamant",
 	},
 	'Yukari Yakumo': {
-		species: 'Lunala', ability: 'Regenerator', item: 'Leftovers', gender: 'F',
-		moves: ['Stealth Rock', 'Spikes', 'Toxic Spikes'],
-		signatureMove: 'Gap',
-		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
+		species: 'Lunala', ability: 'Spiriting Away', item: 'Choice Scarf', gender: 'F',
+		moves: ['Rest', 'Future Sight', 'Fiery Wrath'],
+		signatureMove: 'Shikigami Ran',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Aeri: {
 		species: 'Butterfree-Gmax', ability: 'Woven Together, Cohere Forever', item: 'Fleeting Winds', gender: 'F',
