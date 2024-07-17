@@ -1074,30 +1074,41 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 	// Yukari Yakumo
-	gap: {
+	shikigamiran: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "User and target switch to a random ally.",
-		name: "Gap",
-		gen: 9,
-		pp: 5,
-		noPPBoosts: true,
-		priority: -6,
-		flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
-		forceSwitch: true,
+		desc: "At end of each turn, opposing Pokemon is damaged. (40 BP, Uses Defense stat in damage calculation) If used again on a different foe, the condition will be transferred over.",
+		shortDesc: "Foe constantly takes damage per turn until it faints.",
+		name: "Shikigami Ran",
+		pp: 40,
+		priority: 0,
+		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Dark Void', target);
+			this.add('-anim', source, 'Glare', target);
 		},
-		onHit(target, source, move) {
-			if (source.forceSwitchFlag) return;
-			source.forceSwitchFlag = true;
+		onHit(target) {
+			target.abilityState.ran = true;
 		},
+		condition: {
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
+			onResidual(target) {
+				const rand = this.random(85, 100) / 100;
+				const def = target.getStat('def', false, true);
+				const damage = (12533/(def)+2)*rand;
+				if (target.abilityState.ran) {
+					this.damage(damage, target);
+					this.add('-message', `${target.name} was hurt by Ran Yakumo!`);
+				}
+			},
+		},
+		secondary: null,
 		target: "normal",
-		type: "Psychic",
+		type: "Fairy",
 	},
 	// Aeri
 	blissfulbreeze: {
