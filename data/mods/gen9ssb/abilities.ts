@@ -15,6 +15,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Quetzalcoatl
+	pealofthunder: {
+		desc: "This Pokemon heals 1/3 of its max HP and gets +1 SpAtk/Spe if hit by an Electric-type move; Electric-type immunity. Upon switching in, a random active or inactive Pokemon is damaged (40 BP, Electric-type, Special)",
+		shortDesc: "+1/3 HP/+1 SpA/Spe if hit by Electric; Thunderstorm.",
+		onStart(source) {
+		},
+		onTryHit(target, source, move) {
+			if (move.type === 'Electric') {
+				if (!this.heal(target.baseMaxhp / 3) || !this.boost({spa: 1, spe: 1}) {
+					this.add('-immune', target, '[from] ability: Peal of Thunder');
+				}
+				return null;
+			}
+		},
+		flags: {breakable: 1},
+		name: "Peal of Thunder",
+		gen: 9,
+	},
 	// Yukari Yakumo
 	spiritingaway: {
 		desc: "After using a move, this Pokemon switches to an ally of the user's choice. Sleep turns still burn while inactive.",
