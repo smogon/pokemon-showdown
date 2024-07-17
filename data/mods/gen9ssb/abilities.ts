@@ -22,10 +22,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyMove(move) {
 			move.selfSwitch = true;
 		},
+		onSwitchOut(pokemon) {
+			if (pokemon.status === 'slp') {
+				pokemon.abilityState.sleepBurn = true;
+				pokemon.abilityState.ts = this.turn;
+			}
+		},
+		onSwitchIn(pokemon) {
+			if (pokemon.abilityState.sleepBurn && pokemon.status === 'slp') {
+				const turnsBurned = this.turn - pokemon.abilityState.ts;
+				pokemon.statusState.time -= turnsBurned;
+				if (!pokemon.statusState.time || pokemon.statusState.time <= 0) pokemon.cureStatus();
+				pokemon.abilityState.sleepBurn = false;
+				pokemon.abilityState.ts = 0;
+			}
+		},
 		flags: {},
 		name: "Spiriting Away",
 		gen: 9,
-}	,
+	},
 	// Cylcommatic Cell
 	batterylife: {
 		name: "Battery Life",
