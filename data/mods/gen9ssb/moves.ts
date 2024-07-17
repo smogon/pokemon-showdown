@@ -59,7 +59,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Ion Deluge', source);
 			this.add('-anim', source, 'Electroweb', target);
 		},
-		sideCondition: 'stickyweb',
+		sideCondition: 'galvanicweb',
 		condition: {
 			duration: 3,
 			onSideStart(side) {
@@ -86,6 +86,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.damage(pokemon.baseMaxhp / 32, pokemon);
 						break;
 				}
+			},
+			onResidual(side) {
+				this.add('-anim', side.active[0], 'Eerie Impulse', side.active[0]);
+				this.add('-message', `Galvanic Web electrifies the battlefield!`);
 			},
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Galvanic Web');
