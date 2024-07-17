@@ -18,8 +18,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Quetzalcoatl
 	pealofthunder: {
 		desc: "This Pokemon heals 1/3 of its max HP and gets +1 SpAtk/Spe if hit by an Electric-type move; Electric-type immunity. Upon switching in, a random active or inactive Pokemon is damaged (40 BP, Electric-type, Special)",
-		shortDesc: "+1/3 HP/+1 SpA/Spe if hit by Electric; Thunderstorm.",
-		onStart(source) {
+		shortDesc: "+1/3 HP/+1 SpA/Spe if hit by Electric; Hits random Pokemon on switch-in.",
+		onStart(pokemon) {
+			let possibleTargets = [];
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			for (const e of pokemon.side.pokemon) {
+				if (e.hp) possibleTargets.push(e);
+			}
+			for (const e of target.side.pokemon) {
+				if (e.hp) possibleTargets.push(e);
+			}
+			if (!possibleTargets) return null;
+			this.add('-anim', pokemon, 'Thundershock', target);
+			const newTarget = this.sample(possibleTargets);
+			const move = this.dex.moves.get('thundershock');
+			const dmg = this.actions.getDamage(pokemon, newTarget, move);
+			newTarget.hp -= dmg;
+			this.add('-message', `${newTarget.name} was struck by Peal of Thunder!`);
+			this.add('-message', `${newTarget.name} lost ${Math.round(dmg/newTarget.baseMaxhp * 100)}% of its health!`);
+			return null;
 		},
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
