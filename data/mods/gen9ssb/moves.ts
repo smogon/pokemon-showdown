@@ -68,9 +68,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Galvanic Web');
-				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
-				const electricMove = this.dex.moves.get('thunderbolt');
-				switch (pokemon.getMoveHitData(electricMove).typeMod) {
+				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('galvanicweb'));
+				switch (this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('galvanicweb')), -6, 6)) {
 					case 2:
 						this.damage(pokemon.baseMaxhp / 2, pokemon);
 						break;
@@ -89,7 +88,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onResidual(pokemon) {
-				this.add('-anim', pokemon, 'Charge', pokemon);
+				this.add('-anim', pokemon, 'Thunder Cage', pokemon);
 				this.add('-message', `Galvanic Web electrifies the battlefield!`);
 			},
 			onSideEnd(side) {
