@@ -15,6 +15,28 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// flufi
+	forceofwill: {
+		name: "Force of Will",
+		gen: 9,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) this.add('-message', `${pokemon.name}'s determination is building!`);
+		},
+		onModifyAtk(atk, pokemon) {
+			if (!pokemon.activeTurns) return;
+			this.debug('Force of Will Atk Boost');
+			return this.chainModify(1 + (0.33 * pokemon.activeTurns);
+		},
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp && effect && effect.effectType === 'Move') {
+				if (this.randomChance(target.side.totalFainted + 1, 10)) {
+					this.add('-ability', target, 'Force of Will');
+					return target.hp - this.random(1, 30);
+				}
+			}
+		},
+	},
 	// Quetzalcoatl
 	pealofthunder: {
 		desc: "This Pokemon heals 1/3 of its max HP and gets +1 SpAtk/Spe if hit by an Electric-type move; Electric-type immunity. Upon switching in, a random active or inactive Pokemon is damaged (40 BP, Electric-type, Special)",
