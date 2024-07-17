@@ -87,8 +87,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						break;
 				}
 			},
-			onResidual(side) {
-				this.add('-anim', side.active[0], 'Eerie Impulse', side.active[0]);
+			onResidual(pokemon) {
+				this.add('-anim', pokemon, 'Eerie Impulse', pokemon);
 				this.add('-message', `Galvanic Web electrifies the battlefield!`);
 			},
 			onSideEnd(side) {
