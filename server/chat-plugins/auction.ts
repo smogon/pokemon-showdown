@@ -87,17 +87,17 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	lastQueue: Team[] | null;
 	queue: Team[];
-	currentTeam: Team;
 	bidTimer: NodeJS.Timer;
 	/** How many seconds have passed since the start of the timer */
 	bidTimeElapsed: number;
 	/** Measured in seconds */
 	bidTimeLimit: number;
-	currentNom: Player;
-	currentBid: number;
-	currentBidder: Team;
+	nominatingTeam: Team;
+	nominatedPlayer: Player;
+	highestBidder: Team;
+	highestBid: number;
 	/** Used for blind mode */
-	bidsPlaced: Set<Team>;
+	bidsPlaced: Map<Team, number>;
 	state: 'setup' | 'nom' | 'bid' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
@@ -114,14 +114,14 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 		this.lastQueue = null;
 		this.queue = [];
-		this.currentTeam = null!;
 		this.bidTimer = null!;
 		this.bidTimeElapsed = 0;
 		this.bidTimeLimit = 10;
-		this.currentNom = null!;
-		this.currentBid = 0;
-		this.currentBidder = null!;
-		this.bidsPlaced = new Set();
+		this.nominatingTeam = null!;
+		this.nominatedPlayer = null!;
+		this.highestBidder = null!;
+		this.highestBid = 0;
+		this.bidsPlaced = new Map();
 	}
 
 	sendMessage(message: string) {
@@ -238,10 +238,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	sendBidInfo() {
 		let buf = `<div class="infobox">`;
-		buf += Utils.html`Player: <username>${this.currentNom.name}</username> `;
-		buf += `Top bid: <b>${this.currentBid}</b> `;
-		buf += Utils.html`Top bidder: <b>${this.currentBidder.name}</b> `;
-		buf += Utils.html`Tiers: <b>${this.currentNom.tiers?.length ? `${this.currentNom.tiers.join(', ')}` : 'N/A'}</b>`;
+		buf += Utils.html`Player: <username>${this.nominatedPlayer.name}</username> `;
+		buf += `Top bid: <b>${this.highestBid}</b> `;
+		buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b> `;
+		buf += Utils.html`Tiers: <b>${this.nominatedPlayer.tiers?.length ? `${this.nominatedPlayer.tiers.join(', ')}` : 'N/A'}</b>`;
 		buf += `</div>`;
 		this.room.add(`|uhtml|bid|${buf}`).update();
 	}
@@ -403,7 +403,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		const team = this.teams.get(toID(name));
 		if (!team) throw new Chat.ErrorMessage(`Team "${name}" not found.`);
 		if (team.suspended) throw new Chat.ErrorMessage(`Team ${name} is already suspended.`);
-		if (this.currentTeam === team) throw new Chat.ErrorMessage(`You cannot suspend the current nominating team.`);
+		if (this.nominatingTeam === team) throw new Chat.ErrorMessage(`You cannot suspend the current nominating team.`);
 		team.suspended = true;
 	}
 
@@ -497,17 +497,17 @@ export class Auction extends Rooms.SimpleRoomGame {
 			return this.end('The auction has ended because there are no players remaining in the draft pool.');
 		}
 		do {
-			this.currentTeam = this.queue.shift()!;
-			this.queue.push(this.currentTeam);
-		} while (this.currentTeam.isSuspended());
+			this.nominatingTeam = this.queue.shift()!;
+			this.queue.push(this.nominatingTeam);
+		} while (this.nominatingTeam.isSuspended());
 		this.sendHTMLBox(this.generateAuctionTable());
-		this.sendMessage(`/html It is now <b>${Utils.escapeHTML(this.currentTeam.name)}</b>'s turn to nominate a player. Managers: ${this.currentTeam.getManagers().map(m => `<username class="username">${Utils.escapeHTML(m)}</username>`).join(' ')}`);
+		this.sendMessage(`/html It is now <b>${Utils.escapeHTML(this.nominatingTeam.name)}</b>'s turn to nominate a player. Managers: ${this.nominatingTeam.getManagers().map(m => `<username class="username">${Utils.escapeHTML(m)}</username>`).join(' ')}`);
 	}
 
 	nominate(user: User, target: string) {
 		if (this.state !== 'nom') throw new Chat.ErrorMessage(`You cannot nominate players right now.`);
 		const manager = this.managers.get(user.id);
-		if (!manager || manager.team !== this.currentTeam) this.checkOwner(user);
+		if (!manager || manager.team !== this.nominatingTeam) this.checkOwner(user);
 
 		// For undo
 		this.lastQueue = this.queue.slice();
@@ -516,11 +516,11 @@ export class Auction extends Rooms.SimpleRoomGame {
 		const player = this.auctionPlayers.get(toID(target));
 		if (!player) throw new Chat.ErrorMessage(`${target} is not a valid player.`);
 		if (player.team) throw new Chat.ErrorMessage(`${player.name} has already been drafted.`);
-		this.currentNom = player;
+		this.nominatedPlayer = player;
 		this.state = 'bid';
-		this.currentBid = this.minBid;
-		this.currentBidder = this.currentTeam;
-		this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.currentTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid to place a bid!`);
+		this.highestBid = this.minBid;
+		this.highestBidder = this.nominatingTeam;
+		this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid to place a bid!`);
 		if (!this.blindMode) this.sendBidInfo();
 		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
@@ -537,23 +537,24 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.blindMode) {
 			if (this.bidsPlaced.has(team)) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
 			if (amount <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
-			this.bidsPlaced.add(team);
 			for (const manager of this.managers.values()) {
 				if (manager.team === team) {
-					Users.getExact(manager.id)?.sendTo(this.room, `Your team placed a bid of **${amount}** on **${this.currentNom}**.`);
+					const msg = `|c:|${Math.floor(Date.now() / 1000)}|&|/html Your team placed a bid of <b>${amount}</b> on <username>${Utils.escapeHTML(this.nominatedPlayer.name)}</username>.`;
+					Users.getExact(manager.id)?.sendTo(this.room, msg);
 				}
 			}
-			if (amount > this.currentBid) {
-				this.currentBid = amount;
-				this.currentBidder = team;
+			if (amount > this.highestBid) {
+				this.highestBid = amount;
+				this.highestBidder = team;
 			}
+			this.bidsPlaced.set(team, amount);
 			if (this.bidsPlaced.size === this.teams.size) {
 				this.finishCurrentNom();
 			}
 		} else {
-			if (amount <= this.currentBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
-			this.currentBid = amount;
-			this.currentBidder = team;
+			if (amount <= this.highestBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
+			this.highestBid = amount;
+			this.highestBidder = team;
 			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${amount}</b>`);
 			this.sendBidInfo();
 			this.clearTimer();
@@ -562,9 +563,20 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	finishCurrentNom() {
-		this.sendMessage(Utils.html`/html <b>${this.currentBidder.name}</b> has bought <username>${this.currentNom.name}<username> for <b>${this.currentBid}</b> credits!`);
-		this.currentBidder.addPlayer(this.currentNom, this.currentBid);
-		this.bidsPlaced.clear();
+		if (this.blindMode) {
+			let buf = `<div class="ladder pad"><table><tr><th>Team</th><th>Bid</th></tr>`;
+			if (!this.bidsPlaced.has(this.nominatingTeam)) {
+				buf += Utils.html`<tr><td>${this.nominatingTeam.name}</td><td>${this.minBid}</td></tr>`;
+			}
+			for (const [team, bid] of this.bidsPlaced) {
+				buf += Utils.html`<tr><td>${team.name}</td><td>${bid}</td></tr>`;
+			}
+			buf += `</table></div>`;
+			this.sendHTMLBox(buf);
+			this.bidsPlaced.clear();
+		}
+		this.sendMessage(Utils.html`/html <b>${this.highestBidder.name}</b> bought <username>${this.nominatedPlayer.name}</username> for <b>${this.highestBid}</b> credits!`);
+		this.highestBidder.addPlayer(this.nominatedPlayer, this.highestBid);
 		this.clearTimer();
 		this.next();
 	}
@@ -574,8 +586,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (!this.lastQueue) throw new Chat.ErrorMessage(`You cannot undo more than one nomination at a time.`);
 		this.queue = this.lastQueue;
 		this.lastQueue = null;
-		this.currentBidder.removePlayer(this.currentNom);
-		this.currentBidder.credits += this.currentBid;
+		this.highestBidder.removePlayer(this.nominatedPlayer);
+		this.highestBidder.credits += this.highestBid;
 		this.next();
 	}
 
