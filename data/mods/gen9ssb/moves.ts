@@ -40,6 +40,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Quetzalcoatl
+	bigthunder: {
+		accuracy: true,
+		basePower: 25,
+		category: "Special",
+		desc: "Hits once for each healthy Pokemon in the battle, both allies and foes. Each hit hits a random active or inactive Pokemon on either side.",
+		shortDesc: "For each healthy Pokemon in battle, hits random active/inactive Pokemon.",
+		name: "Big Thunder",
+		pp: 8,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onModifyMove(move, source, target) {
+			let allPokemon = [];
+			for (const pokemon of target.side.pokemon) {
+				if (pokemon.hp) allPokemon.push(pokemon);
+			}
+			for (const pokemon of source.side.pokemon) {
+				if (pokemon.hp) allPokemon.push(pokemon);
+			}
+			if (!allPokemon.length) return;
+			move.multihit = allPokemon.length;
+		},
+		onTryHit(target, source, move) {
+			let possibleTargets = [];
+			for (const pokemon of target.side.pokemon) {
+				if (pokemon.hp) possibleTargets.push(pokemon);
+			}
+			for (const pokemon of source.side.pokemon) {
+				if (pokemon.hp) possibleTargets.push(pokemon);
+			}
+			if (!possibleTargets) return null;
+			this.add('-anim', source, 'Thunder', target);
+			const newTarget = this.sample(possibleTargets);
+			const dmg = this.actions.getDamage(source, newTarget, move);
+			newTarget.hp -= dmg;
+			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from ${move.name}!`);
+			return null;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+	},
 	// Cyclommatic Cell
 	galvanicweb: {
 		accuracy: true,
