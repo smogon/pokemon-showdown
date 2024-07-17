@@ -40,6 +40,40 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// flufi
+	cranberrycutter: {
+      name: "Cranberry Cutter",
+      category: "Physical",
+		desc: "Combines Psychic in its type effectiveness. 30% chance to flinch. 30% chance to confuse the target.",
+		shortDesc: "+Psychic-type. 30% chance to flinch/confuse.",
+      basePower: 80,
+      accuracy: 95,
+      pp: 8,
+		noPPBoosts: true,
+      priority: 0,
+      flags: {contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Topsy Turvy', target);
+			this.add('-anim', source, 'Sky Drop', target);
+      },
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Psychic', type);
+		},
+		secondaries: [
+			{
+				chance: 30,
+				volatileStatus: 'flinch',
+			}, {
+				chance: 30,
+				volatileStatus: 'confusion',
+			},
+		],
+      target: "normal",
+      type: "Fighting",
+   },
 	// Quetzalcoatl
 	bigthunder: {
 		accuracy: true,
