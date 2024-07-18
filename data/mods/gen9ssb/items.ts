@@ -1,4 +1,34 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Croupier
+	staufensdie: {
+		name: 'Staufen\'s Die',
+		gen: 9,
+		onStart(pokemon) {
+			if (!pokemon.abilityState.wagerStacks) pokemon.abilityState.wagerStacks = 0;
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).crit) {
+				this.add("-activate", source, "item: Staufen's Die");
+				this.addMove('-anim', source, 'Pay Day', source);
+				this.add('-message', `Critical hit! ${source.name} scored six wager stacks!`);
+				if (!source.abilityState.wagerStacks) source.abilityState.wagerStacks = 0;
+				source.abilityState.wagerStacks += 6;
+				return;
+			}
+		},
+		onResidual(pokemon) {
+			if (pokemon.abilityState.wagerStacks >= 6) {
+				pokemon.abilityState.wagerStacks -= 6;
+				this.add("-activate", pokemon, "item: Staufen's Die");
+				this.add('-message', `${pokemon.name} wagered six stacks to Roll the Dice!`);
+				this.actions.useMove('Roll the Dice', pokemon);
+			}
+		},
+		onTakeItem: false,
+		zMove: "All In",
+		zMoveFrom: "Roll the Dice",
+		itemUser: ["Hoopa"],
+	},
 	// flufi
 	sillycostume: {
 		name: "Silly Costume",
