@@ -53,6 +53,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ghost",
 		selfSwitch: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Belly Drum', source);
+      },
 		onHit(target, source, move) {
 			source.abilityState.wagerStacks++;
 			this.add('-message', `${source.name} saved a wager stack!`);
