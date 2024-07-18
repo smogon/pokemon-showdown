@@ -2115,7 +2115,7 @@ export class GameRoom extends BasicRoom {
 	}
 
 	getReplayData() {
-		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
+		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7), password: null};
 		const end = this.roomid.length - 2;
 		const lastHyphen = this.roomid.lastIndexOf('-', end);
 		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
