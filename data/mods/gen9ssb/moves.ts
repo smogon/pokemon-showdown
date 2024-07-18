@@ -41,6 +41,64 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Croupier
+	rollthedice: {
+		name: "Roll the Dice",
+		category: "Special",
+		accuracy: 100,
+		basePower: 1,
+		pp: 64,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {},
+		target: "normal",
+		type: "Ghost",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Wish', source);
+			this.add('-anim', source, 'Celebrate', source);
+      },
+		basePowerCallback(pokemon, target, move) {
+			const roll = this.random(1, 6);
+			this.add('-message', `${pokemon.name} rolled a ${roll}!`);
+			this.add('-message', `${pokemon.name} scored ${roll} wager stacks!`);
+			pokemon.abilityState.wagerStacks += roll;
+			switch (roll) {
+				case 1:
+					const stats: BoostID[] = [];
+					let stat: BoostID;
+					for (stat in target.boosts) {
+						if (target.boosts[stat] < 6) {
+							stats.push(stat);
+						}
+					}
+					if (stats.length) {
+						const randomStat = this.sample(stats);
+						const boost: SparseBoostsTable = {};
+						boost[randomStat] = 1;
+						this.boost(boost, target);
+					}
+					return 1;
+				case 2:
+					return 40;
+				case 3:
+					return 60;
+				case 4:
+					return 80;
+				case 5:
+					return 100;
+				case 6:
+					pokemon.abilityState.wagerStacks = 0;
+					this.heal(pokemon.baseMaxhp, pokemon);
+					this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, pokemon);
+					pokemon.abilityState.luckySix = true;
+					changeSet(this, pokemon, ssbSets['Faust'], true);
+					return 80;
+			}
+		},
+	},
+	// Croupier
 	tapout: {
 		name: "Tap Out",
 		category: "Status",
