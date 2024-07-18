@@ -132,7 +132,20 @@ export const ssbSets: SSBSets = {
 		moves: ['Volt Tackle', 'Thunderous Kick', 'No Retreat'],
 		signatureMove: 'Cranberry Cutter',
 		evs: {atk: 252, spe: 252, spd: 4}, nature: 'Adamant',
-	},/*
+	},
+	Croupier: {
+		species: 'Hoopa', ability: 'Fair Play', item: 'Staufen\'s Die', gender: 'M',
+		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
+		signatureMove: 'Roll the Dice',
+		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty',
+	},
+	Faust: {
+		species: 'Hoopa-Unbound', ability: 'The Devil Is In The Details', item: 'Crossroads Blues', gender: 'M',
+		moves: ['Eerie Spell', 'Topsy Turvy', 'Kniffel'],
+		signatureMove: 'Faustian Bargain',
+		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty',
+	},
+	/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
 		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
