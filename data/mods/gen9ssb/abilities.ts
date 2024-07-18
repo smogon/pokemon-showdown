@@ -25,7 +25,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyAtk(atk, pokemon) {
 			if (!pokemon.activeTurns) return;
 			this.debug('Force of Will Atk Boost');
-			return this.chainModify(1 + (0.33 * pokemon.activeTurns);
+			return this.chainModify(1 + (0.33 * pokemon.activeTurns));
 		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
