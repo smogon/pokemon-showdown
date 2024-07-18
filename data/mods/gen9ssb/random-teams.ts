@@ -143,7 +143,7 @@ export const ssbSets: SSBSets = {
 		species: 'Hoopa-Unbound', ability: 'The Devil Is In The Details', item: 'Crossroads Blues', gender: 'M',
 		moves: ['Eerie Spell', 'Topsy Turvy', 'Kniffel'],
 		signatureMove: 'Faustian Bargain',
-		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty',
+		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty', skip: 'Croupier',
 	},
 	/*
 	Morte: {
