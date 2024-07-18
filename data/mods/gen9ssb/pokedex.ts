@@ -6,6 +6,19 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	pikachu: {
+		inherit: true,
+		abilities: {0: "Force of Will"},
+	},
+	pikachulibre: {
+		inherit: true,
+		types: ['Electric', 'Fighting'],
+		abilities: {0: "Force of Will"},
+	},
+	zapdos: {
+		inherit: true,
+		abilities: {0: "Peal of Thunder"},
+	},
 	mimikyu: {
 		inherit: true,
 		baseStats: {hp: 75, atk: 90, def: 80, spa: 105, spd: 105, spe: 96},
