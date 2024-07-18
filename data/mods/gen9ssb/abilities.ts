@@ -15,6 +15,34 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Croupier
+	fairplay: {
+		name: "Fair Play",
+		gen: 9,
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				this.debug(`Fair Play priority boost`);
+				return priority + 1;
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			const abilityHolder = this.effectState.target;
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			} else if ((source.isAlly(abilityHolder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', abilityHolder, 'ability: Fair Play', move, '[of] ' + target);
+				return false;
+			}
+		},
+	},
 	// flufi
 	forceofwill: {
 		name: "Force of Will",
