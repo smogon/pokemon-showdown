@@ -6,15 +6,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onModifyAtk(atk, pokemon) {
 			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify(1.25);
 		},
+		onModifyDef(def, pokemon) {
+			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify(1.25);
+		},
 		onModifySpe(spe, pokemon) {
 			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify(1.25);
 		},
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify([3277, 4096]);
-		},
-		onModifyCritRatio(critRatio) {
-			return critRatio + 1;
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (target.species.name === 'Pikachu-Libre' && target.abilityState.itemhp > 0) target.abilityState.itemhp--;
