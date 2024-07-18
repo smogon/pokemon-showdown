@@ -19,7 +19,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onDamagingHit(damage, target, source, move) {
 			if (target.species.name === 'Pikachu-Libre' && target.abilityState.itemhp > 0) target.abilityState.itemhp--;
 		},
-		onResidual(pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.activeTurns && pokemon.activeTurns > 1 && pokemon.species.name === 'Pikachu') {
 				this.add('-activate', pokemon, 'item: Silly Costume');
 				pokemon.formeChange('Pikachu-Libre');
@@ -27,8 +27,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 				this.add('-message', `${pokemon.name} put on their Silly Costume!`);
 				pokemon.abilityState.itemhp = 3;
 			}
-		},
-		onUpdate(pokemon) {
 			if (pokemon.species.name === 'Pikachu-Libre' && pokemon.abilityState.itemhp <= 0) {
 				this.add('-message', `Oh no! ${pokemon.name}'s costume ripped!`);
 				pokemon.formeChange('Pikachu');
