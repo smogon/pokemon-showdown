@@ -54,10 +54,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-anim', pokemon, 'Thundershock', target);
 			const newTarget = this.sample(possibleTargets);
 			const move = this.dex.moves.get('thundershock');
-			const dmg = this.actions.getDamage(pokemon, newTarget, move);
-			newTarget.hp -= dmg;
+			this.add('-message', `${move.name}, ${move.basePower}, ${move.type}, ${move.accuracy}`);
+			//const dmg = this.actions.getDamage(pokemon, newTarget, move);
+			//newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} was struck by Peal of Thunder!`);
-			this.add('-message', `${newTarget.name} lost ${Math.round(dmg/newTarget.baseMaxhp * 100)}% of its health!`);
+			//this.add('-message', `${newTarget.name} lost ${Math.round(dmg/newTarget.baseMaxhp * 100)}% of its health!`);
 			return null;
 		},
 		onTryHit(target, source, move) {
