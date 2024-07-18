@@ -83,8 +83,10 @@ export const Replays = new class {
 		if (replayData.private === 1 && !replayData.password) {
 			replayData.password = Replays.generatePassword();
 		} else {
-			if (replayData.private === 2) replayData.private = 1;
-			replayData.password = null;
+			if (replayData.private === 2) {
+				replayData.private = 1;
+				replayData.password = null;
+			}
 		}
 		return replayData;
 	}
