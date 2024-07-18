@@ -40,6 +40,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Croupier
+	tapout: {
+		name: "Tap Out",
+		category: "Status",
+		accuracy: 100,
+		basePower: 0,
+		pp: 16,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {reflectable: 1, protect: 1},
+		target: "normal",
+		type: "Ghost",
+		selfSwitch: true,
+		onHit(target, source, move) {
+			source.abilityState.wagerStacks++;
+			this.add('-message', `${source.name} saved a wager stack!`);
+			target.addVolatile('taunt');
+			target.addVolatile('torment');
+		},
+	},
 	// flufi
 	cranberrycutter: {
       name: "Cranberry Cutter",
