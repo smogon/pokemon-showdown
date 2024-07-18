@@ -51,19 +51,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (e.hp) possibleTargets.push(e);
 			}
 			if (!possibleTargets) return null;
+			this.add('-anim', pokemon, 'Thunderbolt', pokemon);
 			this.add('-anim', pokemon, 'Thunderbolt', target);
 			const newTarget = this.sample(possibleTargets);
 			const move = this.dex.getActiveMove('thundershock');
-			this.debug(`Peal of Thunder: Target selected (${newTarget})`);
 			const dmg = this.actions.getDamage(pokemon, newTarget, move);
-			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} was struck by Peal of Thunder!`);
+			if (newTarget === target) {
+				this.damage(dmg, target, pokemon);
+				return;
+			}
+			if (newTarget === pokemon) {
+				if (!this.heal(pokemon.baseMaxhp / 3, pokemon) || !this.boost({spa: 1, spe: 1})) {
+					this.add('-immune', pokemon, '[from] ability: Peal of Thunder');
+				}
+				return;
+			}
+			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} lost ${Math.round(dmg/newTarget.baseMaxhp * 100)}% of its health!`);
-			return null;
+			return;
 		},
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
-				if (!this.heal() || !this.boost({spa: 1, spe: 1})) {
+				if (!this.heal(target.baseMaxhp / 3, target) || !this.boost({spa: 1, spe: 1})) {
 					this.add('-immune', target, '[from] ability: Peal of Thunder');
 				}
 				return null;
