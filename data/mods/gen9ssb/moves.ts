@@ -68,8 +68,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 			if (myRoll >= yourRoll) {
 				this.add('-message', `Better luck next time!`);
+				pokemon.abilityState.wagerStacks *= 3;
+				if (pokemon.abilityState.wagerStacks > 18) pokemon.abilityState.wagerStacks = 18;
 				this.add('-anim', pokemon, 'Celebrate', pokemon);
 				this.add('-anim', pokemon, 'Shadow Ball', target);
+				this.effectState.forcingSwitch = true;
 				return 120;
 			} else {
 				this.add('-message', `Can't win 'em all!`);
@@ -89,9 +92,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.boost(boost, target);
 					}
 				}
+				this.add('-message', `${target.name} received ${pokemon.abilityState.wagerStacks} boosts for each of ${pokemon.name}'s ${pokemon.abilityState.wagerStacks} wager stacks!`);
+				this.add('-message', `${pokemon.name} lost their wager!`);
 				pokemon.abilityState.wagerStacks = 0;
 				return 0;
 			}
+		},
+		onHit(target, source, move) {
+			if (this.effectState.forcingSwitch) target.forceSwitchFlag = true;
 		},
 	},
 	// Croupier
