@@ -24,6 +24,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 				this.actions.useMove('Roll the Dice', pokemon);
 			}
 		},
+		onModifyCritRatio(critRatio, user) {
+			if (user.abilityState.luckySix) return critRatio + 5;
+		},
 		onTakeItem: false,
 		zMove: "All In",
 		zMoveFrom: "Roll the Dice",
