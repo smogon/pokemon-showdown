@@ -41,6 +41,60 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Croupier
+	allin: {
+		name: "All In",
+		category: "Special",
+		accuracy: 100,
+		basePower: 1,
+		pp: 1,
+		priority: 0,
+		flags: {},
+		target: "normal",
+		type: "Ghost",
+		isZ: "staufensdie",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		basePowerCallback(pokemon, target, move) {
+			this.add('-anim', pokemon, 'Celebrate', pokemon);
+			this.add('-anim', pokemon, 'Pay Day', pokemon);
+			this.add('-anim', target, 'Pay Day', target);
+
+			const myRoll = this.random(3, 18);
+			const yourRoll = this.random(3, 18);
+
+			this.add('-message', `${pokemon.name} rolled a ${myRoll}!`);
+			this.add('-message', `${target.name} rolled a ${yourRoll}!`);
+
+			if (myRoll >= yourRoll) {
+				this.add('-message', `Better luck next time!`);
+				this.add('-anim', pokemon, 'Celebrate', pokemon);
+				this.add('-anim', pokemon, 'Shadow Ball', target);
+				return 120;
+			} else {
+				this.add('-message', `Can't win 'em all!`);
+				this.add('-anim', pokemon, 'Splash', pokemon);
+				for (let i = 0; i < pokemon.abilityState.wagerStacks; i++) {
+					const stats: BoostID[] = [];
+					let stat: BoostID;
+					for (stat in target.boosts) {
+						if (target.boosts[stat] < 6) {
+							stats.push(stat);
+						}
+					}
+					if (stats.length) {
+						const randomStat = this.sample(stats);
+						const boost: SparseBoostsTable = {};
+						boost[randomStat] = 2;
+						this.boost(boost, target);
+					}
+				}
+				pokemon.abilityState.wagerStacks = 0;
+				return 0;
+			}
+		},
+	},
+	// Croupier
 	rollthedice: {
 		name: "Roll the Dice",
 		category: "Special",
