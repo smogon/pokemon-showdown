@@ -6799,7 +6799,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	terastarstorm: {
 		name: "Tera Starstorm",
-		desc: "If the user is a Terapagos in Stellar Form, this move's type becomes Stellar and hits all opposing Pokemon.",
+		desc: "If the user is a Terapagos in Stellar Form, this move's type becomes Stellar, hits all opposing Pokemon, and becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes.",
 		shortDesc: "Terapagos-Stellar: Stellar type, hits both foes.",
 	},
 	terrainpulse: {
