@@ -15,6 +15,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Faust
+	thedevilisinthedetails: {
+		name: "The Devil is in the Details",
+		gen: 9,
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.category === 'Status') {
+				this.debug(`tdiitd priority boost`);
+				return priority + 6;
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.queue.willMove(target)) {
+				this.debug('tdiitd halving damage');
+				return this.chainModify(0.5);
+			}
+		},
+	},
 	// Croupier
 	fairplay: {
 		name: "Fair Play",
