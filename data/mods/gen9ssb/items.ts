@@ -64,7 +64,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onModifySpe(spe, pokemon) {
 			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify(1.25);
 		},
-		onModifyAccuracy(accuracy) {
+		onModifyAccuracy(accuracy, pokemon) {
 			if (typeof accuracy !== 'number') return;
 			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify([3277, 4096]);
 		},
