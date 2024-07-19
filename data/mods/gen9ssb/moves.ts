@@ -111,6 +111,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1},
 		target: "normal",
 		type: "Dark",
+		ignoreImmunity: true,
+		ignoreDefensive: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -128,6 +130,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				rollCount++;
 			}
 			move.multihit = rollCount;
+		},
+		onEffectiveness() {
+			return 0;
 		},
 	},
 	// Croupier
@@ -204,6 +209,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		target: "normal",
 		type: "Ghost",
+		ignoreImmunity: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -249,6 +255,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return 80;
 			}
 		},
+		onEffectiveness() {
+			return 0;
+		},
 	},
 	// Croupier
 	tapout: {
@@ -263,6 +272,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ghost",
 		selfSwitch: true,
+		ignoreImmunity: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
