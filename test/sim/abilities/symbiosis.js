@@ -63,6 +63,21 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, 'leftovers');
 	});
 
+	it.skip(`should not trigger on an ally using their Eject Pack`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
+			{species: 'wynaut', item: 'ejectpack', moves: ['superpower']},
+			{species: 'corphish', moves: ['sleeptalk']},
+		], [
+			{species: 'wynaut', moves: ['tackle']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+
+		assert.equal(battle.p1.active[0].item, 'leftovers');
+		assert.equal(battle.p1.active[1].item, '');
+	});
+
 	// See Marty's research for many more examples: https://www.smogon.com/forums/threads/battle-mechanics-research.3489239/post-6401506
 	describe.skip('Symbiosis Eject Button Glitch (Gen 6 only)', function () {
 		it('should cause Leftovers to restore HP 4 times', function () {
