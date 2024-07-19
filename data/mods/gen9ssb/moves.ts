@@ -40,6 +40,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Faust
+	Kniffel: {
+		name: "Kniffel",
+		category: "Physical",
+		accuracy: 100,
+		basePower: 40,
+		pp: 64,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1},
+		target: "normal",
+		type: "Dark",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Coaching', source);
+      },
+		onModifyMove(move, pokemon) {
+			let rollCount = 0;
+			for (let total = 0; total < 6; total++) {
+				total--;
+				let roll = this.random(1, 6);
+				this.add('-anim', pokemon, 'Wish', pokemon);
+				this.add('-message', `${source.name} rolled a ${roll}!`);
+				total += roll;
+				rollCount++;
+			}
+			move.multihit = rollCount;
+		},
+	},
 	// Croupier
 	allin: {
 		name: "All In",
