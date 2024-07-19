@@ -1,4 +1,23 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Faust
+	crossroadsblues: {
+		name: 'Crossroads Blues',
+		gen: 9,
+		onTakeItem: false,
+		zMove: "The House Always Wins",
+		zMoveFrom: "Faustian Bargain",
+		itemUser: ["Hoopa-Unbound"],
+		onAnyFaint() {
+			let totalFaintedFoes = 0;
+			const pokemon = this.effectState.target;
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			const faintedFoes = target.side.pokemon.filter(foe => foe.fainted);
+			if (faintedFoes.length) totalFaintedFoes = faintedFoes.length;
+			const totalHeal = ((pokemon.baseMaxhp / 8) + ((pokemon.baseMaxhp / 8) * totalFaintedFoes));
+			this.add('-activate', pokemon, 'item: Crossroads Blues');
+			this.heal(totalHeal, pokemon);
+		},
+	},
 	// Croupier
 	staufensdie: {
 		name: 'Staufen\'s Die',
