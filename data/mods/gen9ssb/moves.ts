@@ -41,7 +41,66 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Faust
-	Kniffel: {
+	faustianbargain: {
+		name: "Faustian Bargain",
+		category: "Status",
+		accuracy: 100,
+		basePower: 0,
+		pp: 8,
+		noPPBoosts: true,
+		priority: 1,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		target: "normal",
+		type: "Dark",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Hex', source);
+			this.add('-anim', source, 'Coaching', source);
+      },
+		onHit(target, source, move) {
+
+			let stat: BoostID;
+			const myRoll = this.random(3, 18);
+			const yourRoll = this.random(2, 12);
+			this.add('-message', `${source.name} rolled a ${myRoll}!`);
+			this.add('-message', `${target.name} rolled a ${yourRoll}!`);
+
+			for (stat in source.boosts) {
+				if (stat === 'accuracy' || stat === 'evasion') continue;
+				if (source.boosts[stat] <= 0) {
+					let boost: SparseBoostsTable = {};
+					boost[stat] = 1 - source.boosts[stat];
+					this.boost(boost, source);
+				}
+			}
+
+			if (myRoll > yourRoll) {
+				for (stat in source.boosts) {
+					if (source.boosts[stat] > 0) {
+						let boost: SparseBoostsTable = {};
+						boost[stat] = source.boosts[stat];
+						this.boost(boost, source);
+					}
+				}
+				this.damage(target.hp / 2, target);
+
+			} else {
+				for (stat in source.boosts) {
+					if (source.boosts[stat] > 0) {
+						let boost: SparseBoostsTable = {};
+						boost[stat] = source.boosts[stat];
+						this.boost(boost, target);
+					}
+				}
+				source.clearBoosts();
+				this.add('-copyboost', target, source, '[from] move: Faustian Bargain');
+			}
+		},
+	},
+	// Faust
+	kniffel: {
 		name: "Kniffel",
 		category: "Physical",
 		accuracy: 100,
