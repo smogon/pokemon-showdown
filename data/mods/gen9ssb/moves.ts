@@ -41,6 +41,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Faust
+	thehousealwayswins: {
+		name: "The House Always Wins",
+		category: "Physical",
+		basePower: 60,
+		accuracy: 100,
+		pp: 1,
+		priority: 1,
+		flags: {bypasssub: 1},
+		target: "normal",
+		type: "Dark",
+		isZ: "crossroadsblues",
+		stealsBoosts: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Spectral Thief', source);
+      },
+		basePowerCallback(pokemon, target, move) {
+			const bp = move.basePower + (20 * pokemon.positiveBoosts());
+			this.debug('BP: ' + bp);
+			return bp;
+		},
+		onHit(target, source, move) {
+			source.clearBoosts();
+			source.abilityState.wagerStacks = 0;
+			this.heal(source.baseMaxhp, source);
+			changeSet(this, source, ssbSets['Croupier'], true);
+		},
+	},
+	// Faust
 	faustianbargain: {
 		name: "Faustian Bargain",
 		category: "Status",
