@@ -1915,8 +1915,8 @@ export const commands: Chat.ChatCommands = {
 					descHtml.push(`&bullet; <a href="${url}">${rn}</a>`);
 				}
 			} else {
-				const genID = ['', 'rb', 'gs', 'rs', 'dp', 'bw', 'xy', 'sm', 'ss', 'sv'];
-				descHtml.push(`This format has no resources linked on its <a href="https://www.smogon.com/dex/${genID[format.gen] || 'sv'}/formats/">Smogon Dex page</a>.` +
+				const genID = ['rb', 'gs', 'rs', 'dp', 'bw', 'xy', 'sm', 'ss', 'sv'];
+				descHtml.push(`This format has no resources linked on its <a href="https://www.smogon.com/dex/${genID[format.gen - 1] || 'sv'}/formats/">Smogon Dex page</a>.` +
 					`Please contact a <a href="https://www.smogon.com/forums/forums/757/">C&amp;C Leader</a> to resolve this.<br />`);
 			}
 			return this.sendReplyBox(`<h1>${format.name}</h1><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
