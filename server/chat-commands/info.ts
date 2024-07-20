@@ -1903,17 +1903,8 @@ export const commands: Chat.ChatCommands = {
 					rulesetHtml = `No ruleset found for ${format.name}`;
 				}
 			}
-			let formatType: string = (format.gameType || "singles");
-			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!format.desc && !format.threads) {
-				if (format.effectType === 'Format') {
-					return this.sendReplyBox(`No description found for this ${formatType} ${format.section} format.<br />${rulesetHtml}`);
-				} else {
-					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
-				}
-			}
 			const formatDesc = format.desc || '';
-			let descHtml = [];
+			const descHtml = [];
 			const data = await getFormatResources(format.id);
 			if (data) {
 				for (const {resource_name, url} of data.resources) {
@@ -1923,9 +1914,10 @@ export const commands: Chat.ChatCommands = {
 					rn = rn.split(' ').map((x: string) => x[0].toUpperCase() + x.substr(1)).join(' ');
 					descHtml.push(`&bullet; <a href="${url}">${rn}</a>`);
 				}
-			}
-			if (!descHtml.length && format.threads) {
-				descHtml = format.threads;
+			} else {
+				const genID = ['rb', 'gs', 'rs', 'dp', 'bw', 'xy', 'sm', 'ss', 'sv'];
+				descHtml.push(`This format has no resources linked on its <a href="https://www.smogon.com/dex/${genID[format.gen - 1] || 'sv'}/formats/">Smogon Dex page</a>.` +
+					`Please contact a <a href="https://www.smogon.com/forums/forums/757/">C&amp;C Leader</a> to resolve this.<br />`);
 			}
 			return this.sendReplyBox(`<h1>${format.name}</h1><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
 		}
