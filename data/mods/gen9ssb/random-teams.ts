@@ -145,11 +145,11 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Faustian Bargain',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty', skip: 'Croupier',
 	},
-	Journeyman: {
-		species: 'Stonjourner', ability: 'Primeval Guidance', item: 'Mom\'s Letter', gender: 'M',
-		moves: ['Mighty Cleave', 'Court Change' 'Rest'],
-		signatureMove: 'Rally the Ancients',
-		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
+	Fblthp: {
+		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
+		moves: ['Jet Punch', 'Dizzy Punch' 'Belly Drum'],
+		signatureMove: '',
+		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
 	},
 	/*
 	Morte: {
