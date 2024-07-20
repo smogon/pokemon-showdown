@@ -15,6 +15,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Fblthp
+	lostandfound: {
+		name: "Lost and Found",
+		gen: 9,
+		onTryHit(target, source, move) {
+			if (!target.abilityState.switches) target.abilityState.switches = 0;
+			if (target === source || move.category === 'Status') return;
+			if (target.abilityState.switches >= 3) return;
+			target.abilityState.switches++;
+			this.add('-activate', target, 'ability: Lost and Found');
+			this.add('-message', `${target.name} scrambled away from danger!`);
+			this.add('-anim', target, 'Dive', target);
+			target.forceSwitchFlag = true;
+		},
+	},
 	// Faust
 	thedevilisinthedetails: {
 		name: "The Devil is in the Details",
