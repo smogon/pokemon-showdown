@@ -975,48 +975,62 @@ export async function getBattleLog(battle: string, noReplay = false): Promise<Ba
 	}
 	if (noReplay) return null;
 	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
-	try {
-		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
-		const data = JSON.parse(raw);
-		if (data.log?.length) {
-			const log = data.log.split('\n');
-			const players: BattleInfo['players'] = {} as any;
-			for (const [i, id] of data.players.entries()) {
-				players[`p${i + 1}` as SideID] = toID(id);
-			}
-			const chat = [];
-			const mons: BattleInfo['pokemon'] = {};
-			for (const line of log) {
-				if (line.startsWith('|c|')) {
-					chat.push(line);
-				} else if (line.startsWith('|switch|')) {
-					const [, , playerWithNick, speciesWithGender] = line.split('|');
-					const species = speciesWithGender.split(',')[0].trim(); // should always exist
-					let [slot, name] = playerWithNick.split(':');
-					slot = slot.slice(0, -1); // p2a -> p2
-					// safe to not check here bc this should always exist in the players table.
-					// if it doesn't, there's a problem
-					const id = players[slot as SideID] as string;
-					if (!mons[id]) mons[id] = [];
-					name = name?.trim() || "";
-					const setId = `${name || ""}-${species}`;
-					if (seenPokemon.has(setId)) continue;
-					seenPokemon.add(setId);
-					mons[id].push({
-						species, // don't want to see a name if it's the same as the species
-						name: name === species ? undefined : name,
-					});
-				}
-			}
-			return {
-				log: chat,
-				title: `${players.p1} vs ${players.p2}`,
-				url: `https://${Config.routes.replays}/${battle}`,
-				players,
-				pokemon: mons,
-			};
+
+	// let's get the replay info
+	let data;
+	if (Rooms.Replays.db) { // direct conn exists, use it
+		if (battle.endsWith('pw')) {
+			battle = battle.slice(0, battle.lastIndexOf("-", battle.length - 2));
 		}
-	} catch {}
+		data = await Rooms.Replays.get(battle);
+
+	} else {
+		// call out to replays db
+		try {
+			const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
+			data = JSON.parse(raw);
+		} catch {}
+	}
+
+	// parse
+	if (data?.log?.length) {
+		const log = data.log.split('\n');
+		const players: BattleInfo['players'] = {} as any;
+		for (const [i, id] of data.players.entries()) {
+			players[`p${i + 1}` as SideID] = toID(id);
+		}
+		const chat = [];
+		const mons: BattleInfo['pokemon'] = {};
+		for (const line of log) {
+			if (line.startsWith('|c|')) {
+				chat.push(line);
+			} else if (line.startsWith('|switch|')) {
+				const [, , playerWithNick, speciesWithGender] = line.split('|');
+				const species = speciesWithGender.split(',')[0].trim(); // should always exist
+				let [slot, name] = playerWithNick.split(':');
+				slot = slot.slice(0, -1); // p2a -> p2
+				// safe to not check here bc this should always exist in the players table.
+				// if it doesn't, there's a problem
+				const id = players[slot as SideID] as string;
+				if (!mons[id]) mons[id] = [];
+				name = name?.trim() || "";
+				const setId = `${name || ""}-${species}`;
+				if (seenPokemon.has(setId)) continue;
+				seenPokemon.add(setId);
+				mons[id].push({
+					species, // don't want to see a name if it's the same as the species
+					name: name === species ? undefined : name,
+				});
+			}
+		}
+		return {
+			log: chat,
+			title: `${players.p1} vs ${players.p2}`,
+			url: `https://${Config.routes.replays}/${battle}`,
+			players,
+			pokemon: mons,
+		};
+	}
 	return null;
 }
 
