@@ -1192,6 +1192,16 @@ export const commands: Chat.ChatCommands = {
 		let log: string[];
 		if (tarRoom) {
 			log = tarRoom.log.log;
+		} else if (Rooms.Replays.db) {
+			let battleId = roomid.replace('battle-', '');
+			if (battleId.endsWith('pw')) {
+				battleId = battleId.slice(0, battleId.lastIndexOf("-", battleId.length - 2));
+			}
+			const replayData = await Rooms.Replays.get(battleId);
+			if (!replayData) {
+				return this.errorReply(`No room or replay found for that battle.`);
+			}
+			log = replayData.log.split('\n');
 		} else {
 			try {
 				const raw = await Net(`https://${Config.routes.replays}/${roomid.slice('battle-'.length)}.json`).get();
