@@ -1172,7 +1172,8 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 		}
 		this.room.send(`|title|${this.room.title}`);
-		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format];
+		const suspectTest = Chat.plugins['suspect-tests']?.suspectTests[this.format] ||
+			Chat.plugins['suspect-tests']?.suspectTests.suspects[this.format];
 		if (suspectTest) {
 			const format = Dex.formats.get(this.format);
 			this.room.add(
