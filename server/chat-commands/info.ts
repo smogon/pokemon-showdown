@@ -1904,7 +1904,7 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 			const formatDesc = format.desc || '';
-			const descHtml = [];
+			const descHtml: string[] = [];
 			const data = await getFormatResources(format.id);
 			if (data) {
 				for (const {resource_name, url} of data.resources) {
@@ -1914,12 +1914,14 @@ export const commands: Chat.ChatCommands = {
 					rn = rn.split(' ').map((x: string) => x[0].toUpperCase() + x.substr(1)).join(' ');
 					descHtml.push(`&bullet; <a href="${url}">${rn}</a>`);
 				}
+			} else if (format.threads?.length) {
+				descHtml.push(...format.threads);
 			} else {
 				const genID = ['rb', 'gs', 'rs', 'dp', 'bw', 'xy', 'sm', 'ss', 'sv'];
 				descHtml.push(`This format has no resources linked on its <a href="https://www.smogon.com/dex/${genID[format.gen - 1] || 'sv'}/formats/">Smogon Dex page</a>.` +
 					`Please contact a <a href="https://www.smogon.com/forums/forums/757/">C&amp;C Leader</a> to resolve this.<br />`);
 			}
-			return this.sendReplyBox(`<h1>${format.name}</h1><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
+			return this.sendReplyBox(`<h2>${format.name}</h2><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
