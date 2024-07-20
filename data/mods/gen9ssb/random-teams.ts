@@ -147,7 +147,7 @@ export const ssbSets: SSBSets = {
 	},
 	Fblthp: {
 		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
-		moves: ['Jet Punch', 'Dizzy Punch' 'Belly Drum'],
+		moves: ['Jet Punch', 'Dizzy Punch', 'Belly Drum'],
 		signatureMove: 'Bubble Guppy Uppercut',
 		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
 	},
