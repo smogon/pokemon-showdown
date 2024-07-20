@@ -1,4 +1,39 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Fblthp
+	bubblewand: {
+		name: 'Bubble Wand',
+		gen: 9,
+		onStart(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			this.add('-anim', pokemon, 'Bubble', target);
+			this.add('-anim', target, 'Aqua Ring', target);
+			target.addVolatile('bubblewand');
+			this.add('-message', `${target.name} was caught in a bubble by ${pokemon.name}'s Bubble Wand!`);
+			if (this.randomChance(1, 3)) {
+				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
+				this.add('-message', `Oh no! ${pokemon.name} trapped themselves in a bubble!`);
+				pokemon.addVolatile('bubblewand');
+			}
+		},
+		condition: {
+			duration: 4,
+			onModifyDamage(damage, source, target, move) {
+				if (!move) return;
+				if (move.type === 'Water') return this.chainModify(1.25);
+				return this.chainModify(0.75);
+			},
+			onModifySpe(spe) {
+				return this.chainModify(0.75);
+			},
+			onSourceModifyDamage(damage, source, target, move) {
+				return this.chainModify(0.75);
+			},
+			onResidual(pokemon) {
+				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
+				this.add('-message', `${pokemon.name} is encased in the bubble!`);
+			},
+		},
+	},
 	// Faust
 	crossroadsblues: {
 		name: 'Crossroads Blues',
