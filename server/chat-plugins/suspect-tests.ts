@@ -163,7 +163,7 @@ export const commands: Chat.ChatCommands = {
 		sc: 'setcoil',
 		dc: 'setcoil',
 		async setcoil(target, room, user, connection, cmd) {
-			if (!suspectTests.whitelist.includes(user.id)) this.checkCan('rangeban');
+			checkPermissions(this);
 			if (!toID(target)) {
 				return this.parse(`/help ${cmd}`);
 			}
@@ -187,7 +187,10 @@ export const commands: Chat.ChatCommands = {
 			if (!res || res.actionerror) {
 				return this.errorReply(res?.actionerror || "The loginserver is currently disabled.");
 			}
-			this.globalModlog(`${source ? 'SET' : 'REMOVE'}COIL`, null, bVal ? `${bVal}` : undefined);
+			this.globalModlog(`${source ? 'SET' : 'REMOVE'}COIL`, null, `${formatid}${bVal ? ` to ${bVal}` : ""}`);
+			this.addGlobalModAction(
+				`${user.name} ${bVal ? `set COIL for ${formatid} to ${bVal}` : `removed COIL values for ${formatid}`}`
+			);
 			if (source) {
 				return this.sendReply(`COIL B value for ${formatid} set to ${bVal}`);
 			} else {
