@@ -60,7 +60,7 @@ export const commands: Chat.ChatCommands = {
 		add(target, room, user) {
 			checkPermissions(this);
 
-			const [tier, suspect, date, url] = target.split(',');
+			const [tier, suspect, date, url, coil] = target.split(',');
 			if (!(tier && suspect && date && url)) {
 				return this.parse('/help suspects');
 			}
@@ -91,6 +91,9 @@ export const commands: Chat.ChatCommands = {
 			};
 			saveSuspectTests();
 			this.sendReply(`Added a suspect test notice for ${suspectString} in ${format.name}.`);
+			if (coil) {
+				this.parse(`/suspects setcoil ${format.id},${coil}`);
+			}
 		},
 
 		end: 'remove',
@@ -108,6 +111,7 @@ export const commands: Chat.ChatCommands = {
 			delete suspectTests.suspects[format];
 			saveSuspectTests();
 			this.sendReply(`Removed a suspect test notice for ${test.suspect} in ${test.tier}.`);
+			this.sendReply(`Remember to remove COIL settings with /suspects deletecoil if you had them enabled.`);
 		},
 
 		whitelist(target, room, user) {
@@ -177,6 +181,7 @@ export const commands: Chat.ChatCommands = {
 			if (!formatid || !Dex.formats.get(formatid).exists) {
 				return this.errorReply(`Specify a valid format to set COIL for.`);
 			}
+			this.sendReply(`Updating...`);
 			const [res, error] = await LoginServer.request('updatecoil', {
 				format: formatid,
 				coil_b: bVal,
