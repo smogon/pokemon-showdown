@@ -40,6 +40,49 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Fblthp
+	bubbleguppyuppercut: {
+		accuracy: 85,
+		basePower: 65,
+		category: "Physical",
+		name: "Bubble Guppy Uppercut",
+		pp: 8,
+		noPPBoosts: true,
+		priority: -8,
+		flags: {contact: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Water Sport', source);
+		},
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('bubbleguppyuppercut');
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Fighting', type);
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Bubble Guppy Uppercut');
+				this.add('-message', `${pokemon.name} smells something fierce!`);
+			},
+			onTryHit(target, source, move) {
+				if (move.flags['contact']) {
+					this.add('-immune', target, '[from] move: Bubble Guppy Uppercut');
+					return null;
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-anim', pokemon, 'Sky Uppercut', this.effectState.target);
+			},
+		},
+		secondary: null,
+		multihit: 2,
+		target: "normal",
+		type: "Water",
+	},
 	// Faust
 	thehousealwayswins: {
 		name: "The House Always Wins",
