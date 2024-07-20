@@ -334,7 +334,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Topsy Turvy', target);
-			this.add('-anim', source, 'Sky Drop', target);
+			this.add('-anim', source, 'Seismic Toss', target);
       },
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Psychic', type);
@@ -357,7 +357,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 25,
 		category: "Special",
 		desc: "Hits once for each healthy Pokemon in the battle, both allies and foes. Each hit hits a random active or inactive Pokemon on either side.",
-		shortDesc: "For each healthy Pokemon in battle, hits random active/inactive Pokemon.",
+		shortDesc: "Hits a random active/inactive Pokemon with each hit.",
 		name: "Big Thunder",
 		pp: 8,
 		noPPBoosts: true,
@@ -366,19 +366,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onModifyMove(move, source, target) {
+		onTryHit(target, source, move) {
+			this.add('-anim', source, 'Hurricane', source);
+			this.add('-anim', source, 'Thunder', target);
+
 			let allPokemon = [];
+			let possibleTargets = [];
+
 			for (const pokemon of target.side.pokemon) {
 				if (pokemon.hp) allPokemon.push(pokemon);
 			}
 			for (const pokemon of source.side.pokemon) {
 				if (pokemon.hp) allPokemon.push(pokemon);
 			}
-			if (!allPokemon.length) return;
-			move.multihit = allPokemon.length;
-		},
-		onTryHit(target, source, move) {
-			let possibleTargets = [];
+
 			for (const pokemon of target.side.pokemon) {
 				if (pokemon.hp) possibleTargets.push(pokemon);
 			}
@@ -386,12 +387,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon.hp) possibleTargets.push(pokemon);
 			}
 			if (!possibleTargets) return null;
-			this.add('-anim', source, 'Thunder', target);
-			const newTarget = this.sample(possibleTargets);
-			const dmg = this.actions.getDamage(source, newTarget, move);
-			newTarget.hp -= dmg;
-			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from ${move.name}!`);
-			return null;
+
+			for (let i = 0; i < allPokemon.length; i++) {
+				const newTarget = this.sample(possibleTargets);
+				const dmg = this.actions.getDamage(source, newTarget, move);
+				if (newTarget === target) {
+					this.damage(dmg, target);
+					continue;
+				} else if (newTarget === source) {
+					this.damage(dmg, source);
+					continue;
+				}
+				newTarget.hp -= dmg;
+				this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from ${move.name}!`);
+			}
 		},
 		secondary: null,
 		target: "normal",
