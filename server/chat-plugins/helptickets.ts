@@ -983,7 +983,6 @@ export async function getBattleLog(battle: string, noReplay = false): Promise<Ba
 			battle = battle.slice(0, battle.lastIndexOf("-", battle.length - 2));
 		}
 		data = await Rooms.Replays.get(battle);
-
 	} else {
 		// call out to replays db
 		try {
