@@ -27,18 +27,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-activate', target, 'ability: Lost and Found');
 			this.add('-message', `${target.name} scrambled away from danger!`);
 			this.add('-anim', target, 'Dive', target);
-			this.effectState.foe = source;
-			this.effectState.move = move;
-			this.effectState.moveName = move.name;
 			target.side.addSideCondition('lostandfound');
 			target.forceSwitchFlag = true;
 			return null;
 		},
 		condition: {
 			onSwitchIn(pokemon) {
-				const dmg = this.actions.getDamage(this.effectState.foe, pokemon, this.effectState.move);
-				this.add('-anim', this.effectState.foe, this.effectState.moveName, pokemon);
-				this.damage(dmg, pokemon, this.effectState.foe);
+				const target = pokemon.side.foe.active[0];
+				const dmg = this.actions.getDamage(target, pokemon, this.activeMove);
+				this.add('-anim', target, this.activeMove.name, pokemon);
+				this.damage(dmg, pokemon, target);
 				pokemon.side.removeSideCondition('lostandfound');
 			},
 		},
