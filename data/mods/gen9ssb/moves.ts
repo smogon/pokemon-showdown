@@ -1565,6 +1565,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidual(target) {
 				const source = target.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
 				const move = this.dex.getActiveMove('blissfulbreeze');
+				this.debug(source.name);
 				const damage = this.actions.getDamage(source, target, move);
 				this.damage(damage, target);
 				this.add('-message', `${target.name} was buffeted by Blissful Breeze!`);
