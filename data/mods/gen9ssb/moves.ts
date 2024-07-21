@@ -1483,14 +1483,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fire",
 	},
 	// Yukari Yakumo
+	ranyakumo: {
+		accuracy: true,
+		basePower: 40,
+		category: "Special",
+		name: "Ran Yakumo",
+		pp: 64,
+		priority: 0,
+		flags: {},
+		overrideDefensiveStat: 'def',
+		target: "normal",
+		type: "Fairy",
+	},
+	// Yukari Yakumo
 	shikigamiran: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "At end of each turn, opposing Pokemon is damaged. (40 BP, Uses Defense stat in damage calculation) If used again on a different foe, the condition will be transferred over.",
-		shortDesc: "Foe constantly takes damage per turn until it faints.",
+		desc: "Damages foe every turn until switch/faint.",
+		shortDesc: "Damages the foe using Defense stat in calculation at the end of every turn until that Pokemon faints or switches out.",
 		name: "Shikigami Ran",
 		pp: 40,
+		noPPBoosts: true,
 		priority: 0,
 		flags: {bypasssub: 1},
 		onTryMove() {
@@ -1499,20 +1513,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Glare', target);
 		},
-		onHit(target) {
-			target.abilityState.ran = true;
+		onHit(target, source, move) {
+			target.addVolatile('shikigamiran');
 		},
 		condition: {
-			onResidualOrder: 5,
-			onResidualSubOrder: 1,
 			onResidual(target) {
-				const rand = this.random(85, 100) / 100;
-				const def = target.getStat('def', false, true);
-				const damage = (12533/(def)+2)*rand;
-				if (target.abilityState.ran) {
-					this.damage(damage, target);
-					this.add('-message', `${target.name} was hurt by Ran Yakumo!`);
-				}
+				const source = target.side.foe.pokemon.filter(ally => ally.name === 'Yukari Yakumo');
+				const move = this.dex.getActiveMove('ranyakumo');
+				const dmg = this.actions.getDamage(source, target, move);
+				this.damage(dmg, target);
 			},
 		},
 		secondary: null,
@@ -1556,9 +1565,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidual(target) {
 				const source = target.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
 				const move = this.dex.moves.get('blissfulbreeze');
-				this.add('-message', `${source}`);
-				//const damage = this.actions.getDamage(source, target, move);
-				//this.damage(damage, target);
+				const damage = this.actions.getDamage(source, target, move);
+				this.damage(damage, target);
 				this.add('-message', `${target.name} was buffeted by Blissful Breeze!`);
 			},
 			onSideResidualOrder: 26,
