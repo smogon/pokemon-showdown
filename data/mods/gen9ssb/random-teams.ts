@@ -151,6 +151,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Bubble Guppy Uppercut',
 		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
 	},
+	Luminous: {
+		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
+		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
+		signatureMove: 'Rainbow Maxifier',
+		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true,
+	},
+	PokeKart: {
+		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
+		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
+		signatureMove: 'Item Box',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
 	/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
