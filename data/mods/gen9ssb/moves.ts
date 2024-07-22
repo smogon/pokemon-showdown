@@ -417,16 +417,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let possibleTargets = [];
 
 			for (const pokemon of target.side.pokemon) {
+				if (pokemon.name === 'Quetzalcoatl') continue;
 				if (pokemon.hp) allPokemon.push(pokemon);
 			}
 			for (const pokemon of source.side.pokemon) {
+				if (pokemon.name === 'Quetzalcoatl') continue;
 				if (pokemon.hp) allPokemon.push(pokemon);
 			}
 
 			for (const pokemon of target.side.pokemon) {
+				if (pokemon.name === 'Quetzalcoatl') continue;
 				if (pokemon.hp) possibleTargets.push(pokemon);
 			}
 			for (const pokemon of source.side.pokemon) {
+				if (pokemon.name === 'Quetzalcoatl') continue;
 				if (pokemon.hp) possibleTargets.push(pokemon);
 			}
 			if (!possibleTargets) return null;
