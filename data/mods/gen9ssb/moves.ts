@@ -1565,13 +1565,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidual(pokemon) {
 				const target = pokemon.side.foe.active[0];
 				const source = target.side.pokemon['Aeri'];
-				const move = this.dex.getActiveMove('blissfulbreeze');
-				const damage = this.actions.getDamage(source, pokemon, move);
-				this.damage(damage, pokemon);
+				const moveData = this.dex.getActiveMove('blissfulbreeze');
+				const hitMove = new this.dex.Move(moveData) as ActiveMove;
+				this.actions.trySpreadMoveHit([pokemon], source, hitMove, true);
 				this.add('-message', `${pokemon.name} was buffeted by Blissful Breeze!`);
+				this.activeMove = null;
 			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 11,
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Blissful Breeze');
 			},
