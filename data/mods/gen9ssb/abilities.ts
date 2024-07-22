@@ -678,7 +678,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (move.type === 'Flying' && source.lastMoveUsed) {
-				target.addSideCondition('woventogethercohereforever');
+				target.side.addSideCondition('woventogethercohereforever');
 				this.effectState.imprintedMove = move;
 				this.effectState.imprintedMove.type = source.lastMoveUsed.type;
 			}
