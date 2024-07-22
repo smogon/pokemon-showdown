@@ -678,11 +678,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		onModifyMove(move, pokemon) {
 			const target = pokemon.side.foe.active[0];
-			if (move.type === 'Flying' && pokemon.lastMoveUsed) {
+			if (move.type === 'Flying' && pokemon.abilityState.lastMoveUsedResidual) {
 				target.side.addSideCondition('woventogethercohereforever');
 				pokemon.abilityState.imprintedMove = move.id;
-				pokemon.abilityState.imprintedType = pokemon.lastMoveUsed.type;
+				pokemon.abilityState.imprintedType = pokemon.abilityState.lastMoveUsedResidual.type;
 			}
+		},
+		onResidual(pokemon) {
+			// 'lastMoveUsed' immediately updates when a move is used; In other words, clicking
+			// Blissful Breeze will instantly change lastMoveUsed to Blissful Breeze
+			// This function provides lastMoveUsed tracking that only updates once at the end of every turn
+			// in order for Blissful Breeze to read the move used before it
+			pokemon.abilityState.lastMoveUsedResidual = pokemon.lastMoveUsed;
 		},
 		condition: {
 			duration: 3,
