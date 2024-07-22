@@ -1522,7 +1522,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const source = sources[0];
 				const move = this.dex.getActiveMove('ranyakumo');
 				const dmg = this.actions.getDamage(source, pokemon, move);
+				this.add('-anim', pokemon, 'Hex', pokemon);
 				this.damage(dmg, pokemon, source, this.dex.conditions.get('Ran Yakumo'));
+				this.add('-message', `${pokemon.name} was buffeted by Ran Yakumo!`);
 			},
 		},
 		secondary: null,
@@ -1566,6 +1568,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const source = sources[0];
 				const move = this.dex.getActiveMove('blissfulbreeze');
 				const dmg = this.actions.getDamage(source, pokemon, move);
+				this.add('-anim', pokemon, 'Gust', pokemon);
 				this.damage(dmg, pokemon, source, this.dex.conditions.get('Blissful Breeze'));
 				this.add('-message', `${pokemon.name} was buffeted by Blissful Breeze!`);
 			},
