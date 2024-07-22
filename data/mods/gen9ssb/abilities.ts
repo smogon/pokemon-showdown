@@ -677,6 +677,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Woven Together, Cohere Forever",
 		gen: 9,
 		onAfterMoveSecondarySelf(source, target, move) {
+			this.add('-message', `${source.lastMoveUsed.name}`);
 			if (move.type === 'Flying' && source.lastMoveUsed) {
 				this.add('-message', `onAfterMoveSecondarySelf triggered!`);
 				target.side.addSideCondition('woventogethercohereforever');
