@@ -15,6 +15,59 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Luminous
+	blindinglight: {
+		name: "Blinding Light",
+		gen: 9,
+		onStart(pokemon) {
+			const target = pokemon.side.foe.active[0];
+			target.addVolatile('blindinglight');
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.boost({acc: -6}, pokemon);
+				this.add('-message', `${pokemon.name} was struck by a blinding light!`);
+			},
+			onEnd(pokemon) {
+				this.boost({acc: 6}, pokemon);
+				this.add('-message', `The blinding light faded!`);
+			},
+		},
+	},
+	// PokeKart
+	chaindrift: {
+		name: "Chain Drift",
+		gen: 9,
+		onDamagingHit(damage, target, source, move) {
+			if (move && source !== target) target.abilityState.damagedThisTurn = true;
+		},
+		onResidual(pokemon) {
+			if (!pokemon.abilityState.damagedThisTurn && pokemon.activeTurns) {
+				this.add('-activate', pokemon, 'ability: Chain Drift');
+				this.boost({spe: 1});
+			}
+			pokemon.abilityState.damagedThisTurn = false;
+		},
+		onAfterBoost(boost, target, source, effect) {
+			if (boost.spe >= 0 && !source.activeTurns) {
+				this.add('-activate', target, 'ability: Chain Drift');
+				this.add('-message', `${target.name} is preparing to shift gears!`);
+				this.boost({spe: -1}, target);
+				target.addVolatile('chaindrift');
+			}
+		},
+		condition: {
+			duration: 2,
+			onRestart(pokemon) {
+				this.effectState.duration = 2;
+				this.add('-start', pokemon, 'ability: Chain Drift', '[silent]');
+			},
+			onModifyCritRatio(critRatio) {
+				return 5;
+			},
+		},
+	},
 	// Fblthp
 	lostandfound: {
 		name: "Lost and Found",
