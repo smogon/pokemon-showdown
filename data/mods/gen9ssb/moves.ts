@@ -1522,7 +1522,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const source = sources[0];
 				const move = this.dex.getActiveMove('ranyakumo');
 				const dmg = this.actions.getDamage(source, pokemon, move);
-				this.damage(dmg, pokemon);
+				this.damage(dmg, pokemon, source, this.dex.conditions.get('Ran Yakumo'));
 			},
 		},
 		secondary: null,
@@ -1561,16 +1561,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Blissful Breeze');
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 1,
 			onResidual(pokemon) {
-				const target = pokemon.side.foe.active[0];
-				const source = target.side.pokemon['Aeri'];
-				const moveData = this.dex.getActiveMove('blissfulbreeze');
-				const hitMove = new this.dex.Move(moveData) as ActiveMove;
-				this.actions.trySpreadMoveHit([pokemon], source, hitMove, true);
-				this.add('-message', `${pokemon.name} was buffeted by Blissful Breeze!`);
-				this.activeMove = null;
+				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
+				const source = sources[0];
+				const move = this.dex.getActiveMove('blissfulbreeze');
+				const dmg = this.actions.getDamage(source, pokemon, move);
+				this.damage(dmg, pokemon, source, this.dex.conditions.get('Blissful Breeze'));
 			},
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Blissful Breeze');
