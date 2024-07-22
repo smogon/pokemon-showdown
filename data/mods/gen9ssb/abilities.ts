@@ -677,7 +677,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Woven Together, Cohere Forever",
 		gen: 9,
 		onModifyMove(move, pokemon) {
-			target = pokemon.side.foe.active[0];
+			const target = pokemon.side.foe.active[0];
 			if (move.type === 'Flying' && pokemon.lastMoveUsed) {
 				target.side.addSideCondition('woventogethercohereforever');
 				this.effectState.imprintedMove = move;
