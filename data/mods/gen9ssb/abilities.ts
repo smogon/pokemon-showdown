@@ -681,7 +681,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.type === 'Flying' && pokemon.lastMoveUsed) {
 				target.side.addSideCondition('woventogethercohereforever');
 				this.effectState.imprintedMove = move;
-				this.effectState.imprintedMove.type = source.lastMoveUsed.type;
+				this.effectState.imprintedMove.type = pokemon.lastMoveUsed.type;
 			}
 		},
 		condition: {
