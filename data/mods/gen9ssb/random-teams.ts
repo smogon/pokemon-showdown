@@ -61,12 +61,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Shikigami Ran',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	Aeri: {
+	/*Aeri: {
 		species: 'Butterfree-Gmax', ability: 'Woven Together, Cohere Forever', item: 'Fleeting Winds', gender: 'F',
 		moves: ['U-turn', 'Alluring Voice', 'Mystical Fire'],
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
-	},
+	},*/
 	Gizmo: {
 		species: 'Gimmighoul-Roaming', ability: 'Head-On Battery', item: 'Inconspicuous Coin', gender: 'M',
 		moves: ['Astonish', 'Nuzzle', 'Charge'],
@@ -103,12 +103,12 @@ export const ssbSets: SSBSets = {
       signatureMove: 'You Filthy Peasant',
       evs: {hp: 252, def: 196, spd: 60}, nature: 'Careful',
    },
-	'Marisa Kirisame': {
+	/*'Marisa Kirisame': {
 		species: 'Hatterene', ability: 'Ordinary Magician', item: 'Mini-Hakkero', gender: 'F',
 		moves: ['Flamethrower', 'Ice Beam', 'Thunderbolt'],
 		signatureMove: 'Orb Shield',
 		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
-	},
+	},*/
 	'Sanae Kochiya': {
 		species: 'Togekiss', ability: 'Wind Priestess', item: 'Leftovers', gender: 'F',
 		moves: ['Protect', 'Sparkly Swirl', 'Oblivion Wing'],
@@ -133,7 +133,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cranberry Cutter',
 		evs: {atk: 252, spe: 252, spd: 4}, nature: 'Adamant',
 	},
-	Croupier: {
+	/*Croupier: {
 		species: 'Hoopa', ability: 'Fair Play', item: 'Staufen\'s Die', gender: 'M',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
 		signatureMove: 'Roll the Dice',
@@ -144,7 +144,7 @@ export const ssbSets: SSBSets = {
 		moves: ['Eerie Spell', 'Topsy Turvy', 'Kniffel'],
 		signatureMove: 'Faustian Bargain',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty', skip: 'Croupier',
-	},
+	},*/
 	Fblthp: {
 		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
 		moves: ['Jet Punch', 'Dizzy Punch', 'Belly Drum'],
