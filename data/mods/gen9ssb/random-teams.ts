@@ -163,6 +163,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Item Box',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
+	Neptune: {
+		species: 'Pidgeot-Mega', ability: 'Blessing of Veridicus', item: 'Crimson Vows', gender: 'M',
+		moves: ['Bleakwind Storm', 'Inferno', 'Golden Order'],
+		signatureMove: 'Olympic Order',
+		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
+	},
 	/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
