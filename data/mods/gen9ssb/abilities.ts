@@ -680,17 +680,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const target = pokemon.side.foe.active[0];
 			if (move.type === 'Flying' && pokemon.lastMoveUsed) {
 				target.side.addSideCondition('woventogethercohereforever');
-				this.effectState.imprintedMove = move.id;
-				this.effectState.imprintedType = pokemon.lastMoveUsed.type;
+				pokemon.abilityState.imprintedMove = move.id;
+				pokemon.abilityState.imprintedType = pokemon.lastMoveUsed.type;
 			}
 		},
 		condition: {
 			duration: 3,
 			onResidual(pokemon) {
-				let move = this.dex.getActiveMove(this.effectState.imprintedMove);
-				move.type = this.effectState.imprintedType;
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
 				const source = sources[0];
+				
+				let move = this.dex.getActiveMove(source.abilityState.imprintedMove);
+				move.type = source.abilityState.imprintedType;
 				this.add('-message', `Source: ${source.name}`);
 				this.add('-message', `Move: ${move.name}`);
 				this.add('-message', `New Type: ${move.type}`);
