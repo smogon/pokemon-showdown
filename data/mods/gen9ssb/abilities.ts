@@ -676,65 +676,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	woventogethercohereforever: {
 		name: "Woven Together, Cohere Forever",
 		gen: 9,
-		onBeforeMove(pokemon, target, move) {
-			if (move.type !== 'Flying' || !pokemon.lastMoveUsed) return;
-			if (!target.side.addSlotCondition(target, 'futuremove')) return;
-			target.side.addSideCondition('woventogethercohereforever');
-			//pokemon.addVolatile('woventogethercohereforever');
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 1,
-				move: move.name,
-				source: pokemon,
-				moveData: {
-					id: move.id,
-					name: move.name,
-					accuracy: true,
-					basePower: move.basePower,
-					category: move.category,
-					priority: 0,
-					flags: {futuremove: 1},
-					ignoreImmunity: false,
-					effectType: 'Move',
-					type: pokemon.lastMoveUsed.type,
-				},
-			});
-			pokemon.abilityState.imprintedMove = move;
-			pokemon.abilityState.imprintedType = pokemon.lastMoveUsed.type;
-			this.add('-start', pokemon, 'move: ' + move.name);
-			return;
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (move.type === 'Flying' && source.lastMoveUsed) {
+				target.addSideCondition('woventogethercohereforever');
+				this.effectState.imprintedMove = move;
+				this.effectState.imprintedMove.type = source.lastMoveUsed.type;
+			}
 		},
 		condition: {
-			duration: 2,
-			onSideStart(targetSide) {
-				this.add('-sidestart', targetSide, 'ability: Woven Together, Cohere Forever');
-			},
+			duration: 3,
 			onResidual(pokemon) {
-				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-				const move = target.abilityState.imprintedMove;
-				if (!move.flags['futuremove']) return false;
-				if (!pokemon.side.addSlotCondition(pokemon, 'futuremove')) return false;
-				Object.assign(pokemon.side.slotConditions[pokemon.position]['futuremove'], {
-					duration: 1,
-					move: move.name,
-					source: target,
-					moveData: {
-						id: move.id,
-						name: move.name,
-						accuracy: true,
-						basePower: move.basePower,
-						category: move.category,
-						priority: 0,
-						flags: {futuremove: 1},
-						ignoreImmunity: false,
-						effectType: 'Move',
-						type: target.abilityState.imprintedType,
-					},
-				});
-				this.add('-start', pokemon, 'move: ' + move.name);
-				return;
-			},
-			onSideEnd(targetSide) {
-				this.add('-sideend', targetSide, 'ability: Woven Together, Cohere Forever');
+				let move = this.effectState.imprintedMove;
+				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
+				const source = sources[0];
+				const dmg = this.actions.getDamage(source, pokemon, move);
+				this.damage(dmg, pokemon, source, this.dex.conditions.get('Blissful Breeze'));
+				this.add('-message', `${pokemon.name} was buffeted by Woven Together, Cohere Forever!`);
 			},
 		},
 	},
