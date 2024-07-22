@@ -1567,6 +1567,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const move = this.dex.getActiveMove('blissfulbreeze');
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.damage(dmg, pokemon, source, this.dex.conditions.get('Blissful Breeze'));
+				this.add('-message', `${pokemon.name} was buffeted by Blissful Breeze!`);
 			},
 			onSideEnd(targetSide) {
 				this.add('-sideend', targetSide, 'Blissful Breeze');
