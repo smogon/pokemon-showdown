@@ -690,6 +690,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
 				const source = sources[0];
 				const dmg = this.actions.getDamage(source, pokemon, move);
+				this.add('-anim', pokemon, 'Geomancy', pokemon);
 				this.damage(dmg, pokemon, source, this.dex.conditions.get('Blissful Breeze'));
 				this.add('-message', `${pokemon.name} was buffeted by Woven Together, Cohere Forever!`);
 			},
