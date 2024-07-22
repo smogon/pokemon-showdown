@@ -1576,6 +1576,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-sideend', targetSide, 'Blissful Breeze');
 			},
 		},
+		secondary: null,
 		target: "normal",
 		type: "Flying",
 	},
