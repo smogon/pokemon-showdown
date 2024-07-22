@@ -678,6 +678,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (move.type === 'Flying' && source.lastMoveUsed) {
+				this.add('-message', `onAfterMoveSecondarySelf triggered!`);
 				target.side.addSideCondition('woventogethercohereforever');
 				this.effectState.imprintedMove = move;
 				this.effectState.imprintedMove.type = source.lastMoveUsed.type;
@@ -686,6 +687,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		condition: {
 			duration: 3,
 			onResidual(pokemon) {
+				this.add('-message', `conditional onResidual triggered!`);
 				let move = this.effectState.imprintedMove;
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
 				const source = sources[0];
