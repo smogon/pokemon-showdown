@@ -684,24 +684,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.abilityState.imprintedType = pokemon.abilityState.lastMoveUsedResidual.type;
 			}
 		},
+		// 'lastMoveUsed' immediately updates when a move is used; In other words, clicking
+		// Blissful Breeze will instantly change lastMoveUsed to Blissful Breeze
+		// This function provides lastMoveUsed tracking that only updates once at the end of every turn
+		// in order for Blissful Breeze to read the move used before it
 		onResidual(pokemon) {
-			// 'lastMoveUsed' immediately updates when a move is used; In other words, clicking
-			// Blissful Breeze will instantly change lastMoveUsed to Blissful Breeze
-			// This function provides lastMoveUsed tracking that only updates once at the end of every turn
-			// in order for Blissful Breeze to read the move used before it
 			pokemon.abilityState.lastMoveUsedResidual = pokemon.lastMoveUsed;
 		},
 		condition: {
 			duration: 3,
 			onResidual(pokemon) {
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
-				const source = sources[0];
-				
+				const source = sources[0];	
 				let move = this.dex.getActiveMove(source.abilityState.imprintedMove);
 				move.type = source.abilityState.imprintedType;
-				this.add('-message', `Source: ${source.name}`);
-				this.add('-message', `Move: ${move.name}`);
-				this.add('-message', `New Type: ${move.type}`);
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.add('-anim', pokemon, 'Geomancy', pokemon);
 				this.damage(dmg, pokemon, source);
