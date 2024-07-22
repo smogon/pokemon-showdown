@@ -1564,15 +1564,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidualSubOrder: 1,
 			onResidual(target) {
 				const pokemon = target.side.foe.active[0];
-				for (const slot of pokemon.side.pokemon) {
-					this.add('-message', `${slot.name}`);
-					this.debug(slot.name);
-					if (slot.name === 'Aeri') {
-						const source = pokemon.side.pokemon[slot];
-						break;
-					}
-				}
-				this.debug(source.name);
+				const source = pokemon.side.pokemon['Aeri'];
 				const move = this.dex.getActiveMove('blissfulbreeze');
 				const damage = this.actions.getDamage(source, target, move);
 				this.damage(damage, target);
