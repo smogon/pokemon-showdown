@@ -61,12 +61,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Shikigami Ran',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	/*Aeri: {
+	Aeri: {
 		species: 'Butterfree-Gmax', ability: 'Woven Together, Cohere Forever', item: 'Fleeting Winds', gender: 'F',
 		moves: ['U-turn', 'Alluring Voice', 'Mystical Fire'],
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
-	},*/
+	},
 	Gizmo: {
 		species: 'Gimmighoul-Roaming', ability: 'Head-On Battery', item: 'Inconspicuous Coin', gender: 'M',
 		moves: ['Astonish', 'Nuzzle', 'Charge'],
