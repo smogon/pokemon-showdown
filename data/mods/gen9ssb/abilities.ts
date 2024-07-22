@@ -680,20 +680,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const target = pokemon.side.foe.active[0];
 			if (move.type === 'Flying' && pokemon.lastMoveUsed) {
 				target.side.addSideCondition('woventogethercohereforever');
-				this.effectState.imprintedMove = move;
-				this.effectState.imprintedMove.type = pokemon.lastMoveUsed.type;
+				this.effectState.imprintedMove = move.id;
+				this.effectState.imprintedType = pokemon.lastMoveUsed.type;
 			}
 		},
 		condition: {
 			duration: 3,
 			onResidual(pokemon) {
-				this.add('-message', `conditional onResidual triggered!`);
-				let move = this.effectState.imprintedMove;
+				let move = this.dex.getActiveMove(this.effectState.imprintedMove);
+				move.type = this.effectState.imprintedType;
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
 				const source = sources[0];
+				this.add('-message', `Source: ${source.name}`);
+				this.add('-message', `Move: ${move.name}`);
+				this.add('-message', `New Type: ${move.type}`);
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.add('-anim', pokemon, 'Geomancy', pokemon);
-				this.damage(dmg, pokemon, source, this.dex.conditions.get('Blissful Breeze'));
+				this.damage(dmg, pokemon, source);
 				this.add('-message', `${pokemon.name} was buffeted by Woven Together, Cohere Forever!`);
 			},
 		},
