@@ -1517,11 +1517,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.addVolatile('shikigamiran');
 		},
 		condition: {
-			onResidual(target) {
-				const source = target.side.foe.pokemon.filter(ally => ally.name === 'Yukari Yakumo');
+			onResidual(pokemon) {
+				const source = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Yukari Yakumo');
 				const move = this.dex.getActiveMove('ranyakumo');
-				const dmg = this.actions.getDamage(source, target, move);
-				this.damage(dmg, target);
+				const dmg = this.actions.getDamage(source, pokemon, move);
+				this.damage(dmg, pokemon);
 			},
 		},
 		secondary: null,
@@ -1562,13 +1562,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 1,
-			onResidual(target) {
-				const pokemon = target.side.foe.active[0];
-				const source = pokemon.side.pokemon['Aeri'];
+			onResidual(pokemon) {
+				const target = pokemon.side.foe.active[0];
+				const source = target.side.pokemon['Aeri'];
 				const move = this.dex.getActiveMove('blissfulbreeze');
-				const damage = this.actions.getDamage(source, target, move);
-				this.damage(damage, target);
-				this.add('-message', `${target.name} was buffeted by Blissful Breeze!`);
+				const damage = this.actions.getDamage(source, pokemon, move);
+				this.damage(damage, pokemon);
+				this.add('-message', `${pokemon.name} was buffeted by Blissful Breeze!`);
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 11,
