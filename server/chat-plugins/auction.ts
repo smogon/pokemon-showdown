@@ -59,7 +59,9 @@ class Team {
 	}
 
 	removePlayer(player: Player) {
-		this.players.splice(this.players.indexOf(player), 1);
+		const pIndex = this.players.indexOf(player);
+		if (pIndex === -1) return;
+		this.players.splice(pIndex, 1);
 		delete player.team;
 		player.price = 0;
 	}
