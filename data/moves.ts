@@ -15586,9 +15586,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1, metronome: 1},
 		onModifyType(move, pokemon) {
-			let type = pokemon.getTypes()[0];
-			if (type === "Bird") type = "???";
-			if (type === "Stellar") type = pokemon.getTypes(false, true)[0];
+			const types = pokemon.getTypes();
+			let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
 			move.type = type;
 		},
 		secondary: null,
