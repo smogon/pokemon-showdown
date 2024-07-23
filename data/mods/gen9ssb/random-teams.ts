@@ -127,13 +127,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Big Thunder',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
-	Atsushi: {
+	/*Atsushi: {
 		species: 'Centiskorch-Gmax', ability: 'Blazing Sky', item: 'Spirit of Ryusei', gender: 'M',
 		moves: ['Fire Lash', 'Dragon\'s Ascent', 'Memento'],
 		signatureMove: 'Draconic Intervention',
 		evs: {atk: 252, spe: 252, spd: 4}, nature: 'Jolly',
 	},
-	/*Croupier: {
+	Croupier: {
 		species: 'Hoopa', ability: 'Fair Play', item: 'Staufen\'s Die', gender: 'M',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
 		signatureMove: 'Roll the Dice',
@@ -157,19 +157,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rainbow Maxifier',
 		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true,
 	},
-	PokeKart: {
+	PokéKart: {
 		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
 		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
 		signatureMove: 'Item Box',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	Neptune: {
+	/*Neptune: {
 		species: 'Pidgeot-Mega', ability: 'Blessing of Veridicus', item: 'Crimson Vows', gender: 'M',
 		moves: ['Bleakwind Storm', 'Inferno', 'Golden Order'],
 		signatureMove: 'Olympic Order',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
 	},
-	/*
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
 		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
