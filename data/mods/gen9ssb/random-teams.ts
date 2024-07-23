@@ -129,9 +129,9 @@ export const ssbSets: SSBSets = {
 	},
 	Atsushi: {
 		species: 'Centiskorch-Gmax', ability: 'Blazing Sky', item: 'Spirit of Ryusei', gender: 'M',
-		moves: ['Fire Lash', 'Drill Run', 'Memento'],
+		moves: ['Fire Lash', 'Dragon\'s Ascent', 'Memento'],
 		signatureMove: 'Draconic Intervention',
-		evs: {atk: 252, spe: 252, spd: 4}, nature: 'Adamant',
+		evs: {atk: 252, spe: 252, spd: 4}, nature: 'Jolly',
 	},
 	/*Croupier: {
 		species: 'Hoopa', ability: 'Fair Play', item: 'Staufen\'s Die', gender: 'M',
