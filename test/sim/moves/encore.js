@@ -41,7 +41,7 @@ describe('Encore', function () {
 		assert.fainted(eleki, `Encore + Quick Attack being selected gives Headlong Rush priority.`);
 	});
 
-	it.skip(`should cause the target to move with its Encored attack at the priority of the originally selected move once and get blocked when appropriate`, function () {
+	it(`should cause the target to move with its Encored attack at the priority of the originally selected move once and get blocked when appropriate`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'regieleki', moves: ['psychicterrain']},
 			{species: 'pichu', moves: ['sleeptalk']},

@@ -226,11 +226,13 @@ export class BattleActions {
 		pokemon.activeMoveActions++;
 		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
+		const priority = baseMove.priority;
 		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
 			const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, baseMove);
 			if (changedMove && changedMove !== true) {
 				baseMove = this.dex.getActiveMove(changedMove);
+				baseMove.priority = priority;
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
 				target = this.battle.getRandomTarget(pokemon, baseMove);
 			}
