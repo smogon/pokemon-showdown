@@ -9,6 +9,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	centiskorchgmax: {
 		inherit: true,
 		abilities: {0: "Blazing Sky"},
+		baseStats: {hp: 100, atk: 115, def: 90, spa: 65, spd: 90, spe: 90},
 		types: ['Fire', 'Flying'],
 	},
 	poliwhirl: {
