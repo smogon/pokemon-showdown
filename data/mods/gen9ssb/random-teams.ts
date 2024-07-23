@@ -151,7 +151,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Bubble Guppy Uppercut',
 		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
 	},
-	Luminous: {
+	/*Luminous: {
 		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
 		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
 		signatureMove: 'Rainbow Maxifier',
@@ -163,7 +163,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Item Box',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	/*Neptune: {
+	Neptune: {
 		species: 'Pidgeot-Mega', ability: 'Blessing of Veridicus', item: 'Crimson Vows', gender: 'M',
 		moves: ['Bleakwind Storm', 'Inferno', 'Golden Order'],
 		signatureMove: 'Olympic Order',
