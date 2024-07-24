@@ -767,7 +767,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (this.dayNum === 0 && extension !== null) return this.sendUser(this.hostid, `|error|You cannot extend on day 0.`);
 		if (this.timer) this.setDeadline(0);
 		if (extension === null) {
-			if (!isNaN(this.hammerCount)) this.hammerCount = Math.floor(this.players.length / 2) + 1;
+			if (!isNaN(this.hammerCount)) this.hammerCount = Math.floor(this.getRemainingPlayers().length / 2) + 1;
 			this.clearVotes();
 		}
 		this.phase = 'day';
@@ -817,7 +817,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.sendRoom(`Plurality is on ${this.getPlayer(hasPlurality)?.name || 'No Vote'}`);
 		}
 		if (!early && !initial) this.sendRoom(`|raw|<div class="infobox">${this.voteBox()}</div>`);
-		if (initial && !isNaN(this.hammerCount)) this.hammerCount = Math.floor(this.players.length / 2) + 1;
+		if (initial && !isNaN(this.hammerCount)) this.hammerCount = Math.floor(this.getRemainingPlayers().length / 2) + 1;
 		this.updatePlayers();
 	}
 
@@ -827,7 +827,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (!voter || (voter.isEliminated() && !voter.isSpirit())) return;
 
 		const target = this.getPlayer(targetId);
-		if (!target && targetId !== 'novote') {
+		if ((!target || target.isEliminated()) && targetId !== 'novote') {
 			return this.sendUser(voter, `|error|${targetId} is not a valid player.`);
 		}
 
@@ -943,13 +943,15 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		const target = this.getPlayer(voter.voting);
-		if (!target) throw new Error(`Unable to find target when unvoting. Voter: ${voter.id}, Target: ${voter.voting}`);
+		if (!target && voter.voting !== 'novote') {
+			throw new Error(`Unable to find target when unvoting. Voter: ${voter.id}, Target: ${voter.voting}`);
+		}
 
 		if (!force) {
 			this.sendTimestamp(
 				voter.voting === 'novote' ?
 					`${voter.name} is no longer abstaining from voting.` :
-					`${voter.name} has unvoted ${target.name}.`
+					`${voter.name} has unvoted ${target?.name}.`
 			);
 		}
 		voter.voting = '';
@@ -1573,7 +1575,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	sendPlayerList() {
-		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.getRemainingPlayers().length})**: ${this.players.map(p => p.name).sort().join(', ')}`).update();
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.getRemainingPlayers().length})**: ${this.getRemainingPlayers().map(p => p.name).sort().join(', ')}`).update();
 	}
 
 	updatePlayers() {
@@ -1997,7 +1999,7 @@ export const pages: Chat.PageTable = {
 			buf += `<span id="mafia-votes">`;
 			buf += game.voteBoxFor(user.id);
 			buf += `</span>`;
-		} else if (game.phase === "night" && isPlayer) {
+		} else if (game.phase === "night" && isPlayer && !isPlayer.isEliminated()) {
 			if (!game.takeIdles) {
 				buf += `<p style="font-weight:bold;">PM the host (${game.host}) the action you want to use tonight, and who you want to use it on. Or PM the host "idle".</p>`;
 			} else {
@@ -2128,12 +2130,14 @@ export const pages: Chat.PageTable = {
 				} else {
 					buf += `<p><button class="button" name="send" value="/msgroom ${room.roomid},/mafia join">Join game</button></p>`;
 				}
-			} else if ((!isPlayer && game.subs.includes(user.id)) || (isPlayer && !game.requestedSub.includes(user.id))) {
-				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${isPlayer ? 'Request to be subbed out' : 'Cancel sub request'}</summary>`;
-				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub out">${isPlayer ? 'Confirm request to be subbed out' : 'Confirm cancelation of sub request'}</button></details></p>`;
-			} else {
-				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${isPlayer ? 'Cancel sub request' : 'Join the game as a sub'}</summary>`;
-				buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub in">${isPlayer ? 'Confirm cancelation of sub request' : 'Confirm that you want to join the game'}</button></details></p>`;
+			} else if (!isPlayer || !isPlayer.isEliminated()) {
+				if ((!isPlayer && game.subs.includes(user.id)) || (isPlayer && !game.requestedSub.includes(user.id))) {
+					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${isPlayer ? 'Request to be subbed out' : 'Cancel sub request'}</summary>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub out">${isPlayer ? 'Confirm request to be subbed out' : 'Confirm cancelation of sub request'}</button></details></p>`;
+				} else {
+					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${isPlayer ? 'Cancel sub request' : 'Join the game as a sub'}</summary>`;
+					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub in">${isPlayer ? 'Confirm cancelation of sub request' : 'Confirm that you want to join the game'}</button></details></p>`;
+				}
 			}
 		}
 		buf += `</div>`;
@@ -2792,10 +2796,17 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			const player = game.getPlayer(user.id);
 			if (!player) return this.errorReply(`You are not in the game of ${game.title}.`);
-			if (game.phase !== 'night') return this.errorReply(`You can only submit an action or idle during the night phase.`);
+
+			if (player.isEliminated()) {
+				return this.errorReply(`You have been eliminated from the game and cannot take any actions.`);
+			}
+			if (game.phase !== 'night') {
+				return this.errorReply(`You can only submit an action or idle during the night phase.`);
+			}
 			if (!game.takeIdles) {
 				return this.errorReply(`The host is not accepting idles through the script. Send your action or idle to the host.`);
 			}
+
 			switch (cmd) {
 			case 'idle':
 				player.action = false;
@@ -3287,6 +3298,9 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'out':
 				if (player) {
+					if (player.isEliminated()) {
+						return this.errorReply(`You cannot request to be subbed out once eliminated.`);
+					}
 					if (game.requestedSub.includes(user.id)) {
 						return this.errorReply(`You have already requested to be subbed out.`);
 					}
