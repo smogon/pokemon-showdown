@@ -709,7 +709,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (this.playerCount < 2) return this.sendUser(user, `You need at least 2 players to start.`);
 		if (this.phase === 'IDEAlocked') {
 			for (const p of this.players) {
-				if (p.role) return this.sendUser(user, `|error|Not all players have a role.`);
+				if (!p.role) return this.sendUser(user, `|error|Not all players have a role.`);
 			}
 		} else {
 			if (!Object.keys(this.roles).length) return this.sendUser(user, `You need to set the roles before starting.`);
@@ -1191,10 +1191,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (subIndex !== -1) this.hostRequestedSub.splice(subIndex, 1);
 
 		this.updateRoleString();
-		this.updatePlayers();
 		if (ability === MafiaEliminateType.KICK) {
+			toEliminate.closeHtmlRoom();
 			this.removePlayer(toEliminate);
 		}
+		this.updatePlayers();
 	}
 
 	revealRole(user: User, toReveal: MafiaPlayer, revealAs: string) {
@@ -1646,9 +1647,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	canJoin(user: User, self = false, force = false) {
-		if (!user?.connected) return `User not found.`;
+		if (!user?.connected) throw new Chat.ErrorMessage(`User not found.`);
 		const targetString = self ? `You are` : `${user.id} is`;
-		if (!this.room.users[user.id]) return `${targetString} not in the room.`;
+		if (!this.room.users[user.id]) throw new Chat.ErrorMessage(`${targetString} not in the room.`);
 		for (const id of [user.id, ...user.previousIDs]) {
 			if (this.getPlayer(id)) throw new Chat.ErrorMessage(`${targetString} already in the game.`);
 			if (!force && this.played.includes(id)) {
@@ -1662,7 +1663,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		for (const alt of user.getAltUsers(true)) {
-			if (!force && this.getPlayer(alt.id) || this.played.includes(alt.id)) {
+			if (!force && (this.getPlayer(alt.id) || this.played.includes(alt.id))) {
 				throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
 			}
 			if (this.hostid === alt.id || this.cohostids.includes(alt.id)) {
