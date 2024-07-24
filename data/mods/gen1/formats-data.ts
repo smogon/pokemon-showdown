@@ -429,7 +429,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	articuno: {
-		tier: "UU",
+		tier: "UUBL",
 	},
 	zapdos: {
 		tier: "OU",
