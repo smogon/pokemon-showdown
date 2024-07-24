@@ -411,7 +411,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		player.updateHtmlRoom();
 		if (staffAdd) {
 			this.sendDeclare(`${player.name} has been added to the game by ${staffAdd.name}.`);
-			this.logAction(staffAdd, 'added player'); // TODO check if this message suffices
+			this.logAction(staffAdd, 'added player');
 		} else {
 			this.sendRoom(`${player.name} has joined the game.`);
 		}
@@ -476,7 +476,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		const matches = this.players.filter(p => p.id === userid);
 		if (matches.length > 1) {
 			// Should never happen
-			// FIXME except it can when an eliminated player is made into a co-host (duplicate blank IDs)
 			throw new Error(`Duplicate player IDs in Mafia game! Matches: ${matches.map(p => p.id).join(', ')}`);
 		}
 
@@ -1766,11 +1765,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	 * Only intended to be used during pre-game setup.
 	 */
 	clearEliminations() {
-		// TODO handle this being used after game is started
-		/* if (this.started) {
-			throw new Error(`Can't clear eliminations after the game of mafia has started.`);
-		} */
-
 		for (const player of this.players) {
 			player.eliminated = null;
 		}
