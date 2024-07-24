@@ -37,21 +37,13 @@ class Team {
 	}
 
 	getManagers() {
-		const managers = [];
-		for (const manager of this.auction.managers.values()) {
-			if (manager.team !== this) continue;
-			const user = Users.getExact(manager.id);
-			if (user) {
-				managers.push(user.name);
-			} else {
-				managers.push(manager.id);
-			}
-		}
-		return managers;
+		return [...this.auction.managers.values()]
+			.filter(m => m.team === this)
+			.map(m => Users.getExact(m.id)?.name || m.id);
 	}
 
 	addPlayer(player: Player, price = 0) {
-		if (player.team) player.team.removePlayer(player);
+		player.team?.removePlayer(player);
 		this.players.push(player);
 		this.credits -= price;
 		player.team = this;
@@ -59,7 +51,9 @@ class Team {
 	}
 
 	removePlayer(player: Player) {
-		this.players.splice(this.players.indexOf(player), 1);
+		const pIndex = this.players.indexOf(player);
+		if (pIndex === -1) return;
+		this.players.splice(pIndex, 1);
 		delete player.team;
 		player.price = 0;
 	}
