@@ -955,7 +955,9 @@ export const commands: Chat.ChatCommands = {
 
 		const types = [];
 		if (species.exists) {
-			types.push(species.types);
+			for (const type of species.types) {
+				types.push(type);
+			}
 			target = species.name;
 			isMatch = true;
 		} else if (type1.exists) {
