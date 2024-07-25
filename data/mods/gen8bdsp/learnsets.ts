@@ -24396,27 +24396,27 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 	},
 	rotomheat: {
 		learnset: {
-			overheat: ["8T"],
+			overheat: ["8R"],
 		},
 	},
 	rotomwash: {
 		learnset: {
-			hydropump: ["8T"],
+			hydropump: ["8R"],
 		},
 	},
 	rotomfrost: {
 		learnset: {
-			blizzard: ["8T"],
+			blizzard: ["8R"],
 		},
 	},
 	rotomfan: {
 		learnset: {
-			airslash: ["8T"],
+			airslash: ["8R"],
 		},
 	},
 	rotommow: {
 		learnset: {
-			leafstorm: ["8T"],
+			leafstorm: ["8R"],
 		},
 	},
 	uxie: {
