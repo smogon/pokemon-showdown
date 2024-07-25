@@ -251,4 +251,11 @@ describe('Team Validator', function () {
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
+
+	it('should not allow egg Pokemon below level 5 in Gens 2-3', function () {
+		team = [
+			{species: 'totodile', level: 1, ability: 'torrent', moves: ['ancientpower']},
+		];
+		assert.false.legalTeam(team, 'gen3ou');
+	});
 });

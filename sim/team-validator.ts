@@ -838,8 +838,11 @@ export class TeamValidator {
 		let eventOnlyData;
 
 		if (!setSources.sourcesBefore && setSources.sources.length) {
+			let skippedEggSource = true;
 			const legalSources = [];
 			for (const source of setSources.sources) {
+				if (['2E', '3E'].includes(source) && set.level < 5) continue;
+				skippedEggSource = false;
 				if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
 				legalSources.push(source);
 			}
@@ -855,8 +858,12 @@ export class TeamValidator {
 				}
 				if (!nonEggSource) {
 					// all egg moves
-					problems.push(`${name} can't get its egg move combination (${setSources.limitedEggMoves!.join(', ')}) from any possible father.`);
-					problems.push(`(Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)`);
+					if (skippedEggSource) {
+						problems.push(`${name} is from a Gen 2 or 3 egg, which cannot be obtained at levels below 5.`);
+					} else {
+						problems.push(`${name} can't get its egg move combination (${setSources.limitedEggMoves!.join(', ')}) from any possible father.`);
+						problems.push(`(Is this incorrect? If so, post the chainbreeding instructions in Bug Reports)`);
+					}
 				} else {
 					if (species.id === 'mew' && pokemonGoProblems && !pokemonGoProblems.length) {
 						// Whitelist Pokemon GO Mew, which cannot be sent to Let's Go
