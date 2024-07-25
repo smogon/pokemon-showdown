@@ -885,10 +885,10 @@ export const commands: Chat.ChatCommands = {
 		const originalSearch = target;
 		let imperfectMatch = false;
 		let isMatch = false;
-		let species: {types: string[], [k: string]: any} = dex.species.get(targets[0]);
-		let type1: any = dex.types.get(targets[0]);
-		let type2: any = dex.types.get(targets[1]);
-		let type3: any = dex.types.get(targets[2]);
+		let species = dex.species.get(targets[0]);
+		let type1 = dex.types.get(targets[0]);
+		let type2 = dex.types.get(targets[1]);
+		let type3 = dex.types.get(targets[2]);
 		if (species.name !== "" && !species.exists && type1.name !== "" && !type1.exists) {
 			const typeSearchResults = dex.dataSearch(targets[0], ['TypeChart']);
 			const speciesSearchResults = dex.dataSearch(targets[0], ['Pokedex']);
