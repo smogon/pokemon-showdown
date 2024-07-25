@@ -16,6 +16,11 @@ import {RoomSections} from './room-settings';
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
+interface DexResources {
+	url: string;
+	resources: {resource_name: string, url: string}[];
+}
+
 export function getCommonBattles(
 	userID1: ID, user1: User | null, userID2: ID, user2: User | null, connection: Connection
 ) {
@@ -65,6 +70,30 @@ export function findFormats(targetId: string, isOMSearch = false) {
 		}
 	}
 	return {totalMatches, sections};
+}
+
+export const formatsDataCache = new Map<string, DexResources | null>();
+export async function getFormatResources(format: string) {
+	const cached = formatsDataCache.get(format);
+	if (cached !== undefined) return cached;
+	try {
+		const raw = await Net(`https://www.smogon.com/dex/api/formats/by-ps-name/${format}`).get();
+		const data = JSON.parse(raw);
+		formatsDataCache.set(format, data);
+		return data;
+	} catch {
+		// some sort of json error or request can't be made
+		// so something on smogon's end. freeze the request, punt
+		formatsDataCache.set(format, null);
+		return null;
+	}
+}
+
+// clear every 15 minutes to ensure it's only minimally stale
+const resourceRefreshInterval = setInterval(() => formatsDataCache.clear(), 15 * 60 * 1000);
+
+export function destroy() {
+	clearInterval(resourceRefreshInterval);
 }
 
 export const commands: Chat.ChatCommands = {
@@ -552,6 +581,7 @@ export const commands: Chat.ChatCommands = {
 	pokedex: 'data',
 	data(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
+		target = target.trim();
 		const gen = parseInt(cmd.substr(-1));
 		if (gen) target += `, gen${gen}`;
 
@@ -1812,6 +1842,8 @@ export const commands: Chat.ChatCommands = {
 		const isRandomBattle = room?.battle?.format.endsWith('randombattle');
 		const isBattleSpotBattle = (room?.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) ||
 			room.battle.format.includes("battlespotspecial")));
+		const {dex} = this.extractFormat(room?.battle?.format);
+
 		if (RANDOMS_CALC_COMMANDS.includes(cmd) ||
 			(isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
@@ -1880,7 +1912,7 @@ export const commands: Chat.ChatCommands = {
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
 	viewbanlist: 'formathelp',
-	formathelp(target, room, user, connection, cmd) {
+	async formathelp(target, room, user, connection, cmd) {
 		if (!target && this.runBroadcast()) {
 			return this.sendReplyBox(
 				`- <a href="https://www.smogon.com/tiers/">Smogon Tiers</a><br />` +
@@ -1925,17 +1957,25 @@ export const commands: Chat.ChatCommands = {
 					rulesetHtml = `No ruleset found for ${format.name}`;
 				}
 			}
-			let formatType: string = (format.gameType || "singles");
-			formatType = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase();
-			if (!format.desc && !format.threads) {
-				if (format.effectType === 'Format') {
-					return this.sendReplyBox(`No description found for this ${formatType} ${format.section} format.<br />${rulesetHtml}`);
-				} else {
-					return this.sendReplyBox(`No description found for this rule.<br />${rulesetHtml}`);
+			const formatDesc = format.desc || '';
+			const descHtml: string[] = [];
+			const data = await getFormatResources(format.id);
+			if (data) {
+				for (const {resource_name, url} of data.resources) {
+					let rn = resource_name;
+					rn = rn.replace(/ thread$/gi, '');
+					rn = rn.replace(/Pokemon Showdown/gi, 'PS');
+					rn = rn.split(' ').map((x: string) => x[0].toUpperCase() + x.substr(1)).join(' ');
+					descHtml.push(`&bullet; <a href="${url}">${rn}</a>`);
 				}
+			} else if (format.threads?.length) {
+				descHtml.push(...format.threads);
+			} else {
+				const genID = ['rb', 'gs', 'rs', 'dp', 'bw', 'xy', 'sm', 'ss', 'sv'];
+				descHtml.push(`This format has no resources linked on its <a href="https://www.smogon.com/dex/${genID[format.gen - 1] || 'sv'}/formats/">Smogon Dex page</a>.` +
+					`Please contact a <a href="https://www.smogon.com/forums/forums/757/">C&amp;C Leader</a> to resolve this.<br />`);
 			}
-			const descHtml = [...(format.desc ? [format.desc] : []), ...(format.threads || [])];
-			return this.sendReplyBox(`${descHtml.join("<br />")}<br />${rulesetHtml}`);
+			return this.sendReplyBox(`<h2>${format.name}</h2><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
 		}
 
 		let tableStyle = `border:1px solid gray; border-collapse:collapse`;
@@ -1951,7 +1991,13 @@ export const commands: Chat.ChatCommands = {
 			for (const section of sections[sectionId].formats) {
 				const subformat = Dex.formats.get(section);
 				const nameHTML = Utils.escapeHTML(subformat.name);
-				const desc = [...(subformat.desc ? [subformat.desc] : []), ...(subformat.threads || [])];
+				const desc = subformat.desc ? [subformat.desc] : [];
+				const data = await getFormatResources(subformat.id);
+				if (data) {
+					for (const {resource_name, url} of data.resources) {
+						desc.push(`&bullet; <a href="${url}">${resource_name}</a>`);
+					}
+				}
 				const descHTML = desc.length ? desc.join("<br />") : "&mdash;";
 				buf.push(`<tr><td style="border:1px solid gray">${nameHTML}</td><td style="border: 1px solid gray; margin-left:10px">${descHTML}</td></tr>`);
 			}
@@ -2140,7 +2186,7 @@ export const commands: Chat.ChatCommands = {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/privacy`}">${this.tr`Pokémon Showdown privacy policy`}</a>`);
 		}
 		if (showAll || ['lostpassword', 'password', 'lostpass'].includes(target)) {
-			buffer.push(`If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">${this.tr`Password Reset Form`}</a>. You will need to make a Smogon account to be able to fill out the form, as password resets are processed through the Smogon forums.`);
+			buffer.push(`If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">${this.tr`Password Reset Form`}</a>. <b>You will need to make a Smogon account to be able to fill out a form</b>; that's what the email address you sign in to Smogon with is for (PS accounts for regular users don't have emails associated with them).`);
 		}
 		if (!buffer.length && target) {
 			this.errorReply(`'${target}' is an invalid FAQ.`);
@@ -2718,9 +2764,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
 			if (!channelId) return this.errorReply(`Specify a Twitch channel.`);
-			const info = await Twitch.getChannel(channelId);
-			if (!info) return this.errorReply(`Channel ${channelId} not found.`);
-			buf = `Watching <b><a class="subtle" href="https://twitch.tv/${info.url}">${info.display_name}</a></b>...<br />`;
+			buf = Utils.html`Watching <b><a class="subtle" href="https://twitch.tv/${toID(channelId)}">${channelId}</a></b>...<br />`;
 			buf += `<twitch src="${link}" />`;
 		} else {
 			if (Chat.linkRegex.test(link)) {
@@ -2996,6 +3040,63 @@ export const commands: Chat.ChatCommands = {
 	altsloghelp: [
 		`/altslog [userid] - View the alternate account history for the given [userid]. Requires: % @ &`,
 	],
+
+	randtopic(target, room, user) {
+		room = this.requireRoom();
+		if (!room.settings.topics?.length) {
+			return this.errorReply(`This room has no random topics to select from.`);
+		}
+		this.runBroadcast();
+		this.sendReply(Utils.html`|html|<div class="broadcast-blue">${Utils.randomElement(room.settings.topics)}</div>`);
+	},
+	randtopichelp: [
+		`/randtopic - Randomly selects a topic from the room's discussion topic pool and displays it.`,
+		`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`,
+		`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`,
+		`/randomtopics - View the discussion topic pool for the current room.`,
+	],
+
+	addtopic(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
+		target = target.trim();
+		if (!toID(target).length) {
+			return this.parse(`/help randtopic`);
+		}
+		if (!room.settings.topics) room.settings.topics = [];
+		room.settings.topics.push(target);
+		this.privateModAction(`${user.name} added the topic "${target}" to the random topic pool.`);
+		this.modlog('ADDTOPIC', null, target);
+		room.saveSettings();
+	},
+	addtopichelp: [`/addtopic [target] - Adds the [target] to the pool of random discussion topics. Requires: % @ # &`],
+
+	removetopic(target, room, user) {
+		room = this.requireRoom();
+		this.checkCan('mute', null, room);
+		if (!toID(target)) {
+			return this.parse(`/help randtopic`);
+		}
+		const index = Number(toID(target)) - 1;
+		if (isNaN(index)) {
+			return this.errorReply(`Invalid topic index: ${target}. Must be a number.`);
+		}
+		if (!room.settings.topics?.[index]) {
+			return this.errorReply(`Topic ${index + 1} not found.`);
+		}
+		const topic = room.settings.topics.splice(index, 1)[0];
+		room.saveSettings();
+		this.privateModAction(`${user.name} removed topic ${index + 1} from the random topic pool.`);
+		this.modlog('REMOVETOPIC', null, topic);
+	},
+	removetopichelp: [`/removetopic [index] - Removes the topic from the room's topic pool. Requires: % @ # &`],
+
+	listtopics: 'randomtopics',
+	randtopics: 'randomtopics',
+	randomtopics(target, room, user) {
+		room = this.requireRoom();
+		return this.parse(`/join view-topics-${room}`);
+	},
 };
 
 export const handlers: Chat.Handlers = {
@@ -3069,6 +3170,22 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `</table></div>`;
 		}
+		return buf;
+	},
+	topics(query, user) {
+		const room = this.requireRoom();
+		this.title = `[Topics] ${room.title}`;
+		const topics = room.settings.topics || [];
+		let buf;
+		if (!topics.length) {
+			buf = `<div class="pad"><h2>This room has no discussion topics saved.</h2></div>`;
+			return buf;
+		}
+		buf = `<div class="pad"><h2>Random topics for ${room.title} (${topics.length}):</h2><ul>`;
+		for (const [i, topic] of topics.entries()) {
+			buf += Utils.html`<li>${i + 1}: "${topic}"</li>`;
+		}
+		buf += `</ul></div>`;
 		return buf;
 	},
 	battlerules(query, user) {
@@ -3258,6 +3375,12 @@ export const pages: Chat.PageTable = {
 			buf += `<strong>Requester ID:</strong> ${userid}<br />`;
 			buf += `<strong>Link:</strong> <a href="${entry.link}">${entry.link}</a><br />`;
 			buf += `<strong>Comment:</strong> ${entry.comment}`;
+			buf += `<form data-submitsend="/msgroom ${args[0]}, /approveshow ${userid}">`;
+			buf += `<button class="button" type="submit">Approve</button>`;
+			buf += `</form>`;
+			buf += `<form data-submitsend="/msgroom ${args[0]}, /denyshow ${userid}">`;
+			buf += `<button class="button" type="submit">Reject</button>`;
+			buf += `</form>`;
 			buf += `</div><hr />`;
 		}
 		return buf;
