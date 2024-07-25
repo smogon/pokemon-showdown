@@ -132,6 +132,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Anyone can be killed',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
+	Audiino: {
+		species: 'Audino', ability: 'Mitosis', item: 'Leftovers', gender: 'N',
+		moves: ['Recover', 'Moongeist Beam', 'Hyper Voice'],
+		signatureMove: 'Thinking In Progress',
+		evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest', teraType: 'Ghost',
+	},
 	autumn: {
 		species: 'Flutter Mane', ability: 'Protosynthesis', item: 'Booster Energy', gender: 'N',
 		moves: ['Moonblast', 'Taunt', 'Strength Sap'],
@@ -179,6 +185,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Curse', 'Salt Cure', 'Stone Axe'],
 		signatureMove: 'what kind',
 		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Rock',
+	},
+	Bert122: {
+		species: 'Sableye', ability: 'Prankster', item: 'Sablenite', gender: '',
+		moves: ['Metal Burst', 'Recover', 'Will-O-Wisp'],
+		signatureMove: 'Shatter and Scatter',
+		evs: {hp: 252, def: 28, spd: 224}, ivs: {atk: 0, spe: 0}, nature: 'Relaxed',
 	},
 	Billo: {
 		species: 'Cosmog', ability: 'Wonder Guard', item: 'Eviolite', gender: 'N',
@@ -287,6 +299,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Swords Dance', 'U-turn', 'Close Combat'],
 		signatureMove: 'Monkey Beat Up',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', shiny: 69,
+	},
+	Daki: {
+		species: 'Raging Bolt', ability: 'Astrothunder', item: 'Leftovers', gender: 'N',
+		moves: ['Thunder', 'Dragon Pulse', 'Calm Mind'],
+		signatureMove: 'Antidote',
+		evs: {hp: 148, def: 156, spa: 204}, nature: 'Quiet', teraType: 'Steel',
 	},
 	'Dawn of Artemis': {
 		species: 'Necrozma', ability: 'Form Change', item: 'Expert Belt', gender: 'F',
@@ -444,6 +462,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Roost', 'Knock Off', 'Tidy Up'],
 		signatureMove: '10-20-40',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
+	},
+	Irly: {
+		species: 'Spheal', ability: 'The Rolling Spheal', item: 'Choice Band', gender: '',
+		moves: ['Liquidation', 'Collision Course', 'Flip Turn'],
+		signatureMove: 'vruuuuuum',
+		evs: {hp: 8, atk: 252, spd: 4, spe: 244}, nature: 'Jolly', teraType: 'Fighting', shiny: 363,
 	},
 	ironwater: {
 		species: 'Jirachi', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
@@ -607,9 +631,15 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Breaking Change',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Ghost',
 	},
+	Merritty: {
+		species: 'Torchic', ability: 'End Round', item: 'Eviolite', gender: 'M',
+		moves: ['Quiver Dance', 'Fiery Dance', 'Strength Sap'],
+		signatureMove: 'New Bracket',
+		evs: {hp: 4, def: 36, spa: 196, spd: 36, spe: 236}, nature: 'Timid', teraType: 'Flying', shiny: true,
+	},
 	Meteordash: {
-		species: 'Tatsugiri', ability: 'Shadow Shield', item: 'Heavy-Duty Boots', gender: 'M',
-		moves: ['Fickle Beam', 'Scald', 'Glare'],
+		species: 'Tatsugiri', ability: 'TatsuGlare', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Spacial Rend', 'Steam Eruption', 'Glare'],
 		signatureMove: 'Plagiarism',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', teraType: 'Steel',
 	},
@@ -636,6 +666,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Calm Mind', 'Recover', 'Thunder Wave'],
 		signatureMove: 'Eon Assault',
 		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', teraType: 'Steel', shiny: 50, skip: 'MyPearl',
+	},
+	Neko: {
+		species: 'Chien-Pao', ability: 'Weatherproof', item: 'Heavy-Duty Boots', gender: 'N',
+		moves: ['Swords Dance', 'Bitter Blade', ['Crunch', 'Sucker Punch']],
+		signatureMove: 'Quality Control Zoomies',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fire',
 	},
 	Ney: {
 		species: 'Banette', ability: 'Insomnia', item: 'Banettite', gender: 'M',
@@ -672,6 +708,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Searing Shot', 'Hex', 'Morning Sun'],
 		signatureMove: 'Alting',
 		evs: {hp: 252, spa: 69, spe: 188}, nature: 'Timid',
+	},
+	'Pastor Gigas': {
+		species: 'Regigigas', ability: 'God\'s Mercy', item: 'Clear Amulet', gender: 'N',
+		moves: ['Sacred Fire', 'Knock Off', 'Healing Wish'],
+		signatureMove: 'Call to Repentance',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', teraType: 'Fairy',
 	},
 	Peary: {
 		species: 'Klinklang', ability: 'Levitate', item: 'Pearyum Z', gender: '',
@@ -836,6 +878,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Mind Melt',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Fire',
 	},
+	Spiderz: {
+		species: 'Iron Thorns', ability: 'Poison Heal', item: 'Toxic Orb', gender: 'M',
+		moves: ['Spiky Shield', 'Stone Axe', 'Thousand Arrows'],
+		signatureMove: 'Shepherd of the Mafia Room',
+		evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant', teraType: 'Steel', shiny: true,
+	},
 	spoo: {
 		species: 'Hemogoblin', ability: 'I Can Hear The Heart Beating As One', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Extreme Speed', 'Bitter Blade', 'Moonlight'],
@@ -905,6 +953,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Calm Mind', 'Inferno', 'Recover'],
 		signatureMove: 'Chronostasis',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Psychic',
+	},
+	Tuthur: {
+		species: 'Scream Tail', ability: 'Poison Heal', item: 'Toxic Orb', gender: 'M',
+		moves: ['Spikes', 'Burning Bulwark', 'Encore'],
+		signatureMove: 'Symphonie du Ze\u0301ro',
+		evs: {hp: 244, def: 12, spe: 252}, nature: 'Timid', teraType: 'Water',
 	},
 	'Two of Roses': {
 		species: 'Luxray', ability: 'As We See', item: 'Mirror Herb', gender: 'M',
@@ -985,11 +1039,23 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Poisonous Wind',
 		evs: {hp: 248, def: 252, spd: 8}, nature: 'Bold', teraType: 'Fairy', shiny: true,
 	},
+	'yeet dab xd': {
+		species: 'Kecleon', ability: 'Treasure Bag', item: 'Silk Scarf', gender: 'M', happiness: 0,
+		moves: ['Frustration', 'Shadow Sneak', 'Fake Out'],
+		signatureMove: 'top kek',
+		evs: {hp: 252, atk: 4, spd: 252}, nature: 'Careful', teraType: 'Ghost',
+	},
 	'Yellow Paint': {
 		species: 'Rotom-Frost', ability: 'Yellow Magic', item: 'Chilan Berry', gender: 'N',
 		moves: ['Thunderbolt', 'Blizzard', 'Ion Deluge'],
 		signatureMove: 'Whiteout',
 		evs: {hp: 252, spa: 252, spe: 4}, nature: 'Modest', teraType: 'Steel', shiny: 2,
+	},
+	'yuki ♪': {
+		species: 'Ninetales-Alola', ability: 'Party Up', item: 'Light Clay', gender: '',
+		moves: ['Blizzard', 'Aurora Veil', ['Encore', 'Lovely Kiss']],
+		signatureMove: 'Tag, You\'re It!',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ghost',
 	},
 	YveltalNL: {
 		species: 'Farigiraf', ability: 'Height Advantage', item: 'Leftovers', gender: 'M',

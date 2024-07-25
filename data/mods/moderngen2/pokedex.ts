@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	treecko: {
 		inherit: true,
 		gen: 2,
@@ -3811,6 +3811,26 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		gen: 2,
 	},
 	electrodehisui: {
+		inherit: true,
+		gen: 2,
+	},
+	sneaselhisui: {
+		inherit: true,
+		gen: 2,
+	},
+	growlithehisui: {
+		inherit: true,
+		gen: 2,
+	},
+	arcaninehisui: {
+		inherit: true,
+		gen: 2,
+	},
+	typhlosionhisui: {
+		inherit: true,
+		gen: 2,
+	},
+	qwilfishhisui: {
 		inherit: true,
 		gen: 2,
 	},

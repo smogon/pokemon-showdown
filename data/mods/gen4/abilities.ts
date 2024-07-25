@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
 		onSwitchIn() {},
@@ -69,6 +69,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('attract', this.effectState.target);
 				}
+			}
+		},
+	},
+	download: {
+		inherit: true,
+		onStart(pokemon) {
+			let totaldef = 0;
+			let totalspd = 0;
+			for (const target of pokemon.foes()) {
+				if (target.volatiles.substitute) continue;
+				totaldef += target.getStat('def', false, true);
+				totalspd += target.getStat('spd', false, true);
+			}
+			if (totaldef && totaldef >= totalspd) {
+				this.boost({spa: 1});
+			} else if (totalspd) {
+				this.boost({atk: 1});
 			}
 		},
 	},

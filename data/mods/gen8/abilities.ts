@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	noability: {
 		inherit: true,
 		rating: 0.1,
@@ -552,7 +552,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	libero: {
 		inherit: true,
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
@@ -773,7 +773,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	protean: {
 		inherit: true,
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;

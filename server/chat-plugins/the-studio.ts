@@ -2,8 +2,8 @@
  * The Studio room chat-plugin.
  * Supports scrobbling and searching for music from last.fm.
  * Also supports storing and suggesting recommendations.
- * Written by Kris, loosely based on the concept from bumbadadabum.
- * @author Kris
+ * Written by dhelmise, loosely based on the concept from bumbadadabum.
+ * @author dhelmise
  */
 
 import {FS, Net, Utils} from '../../lib';

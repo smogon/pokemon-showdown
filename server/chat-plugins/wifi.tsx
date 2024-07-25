@@ -1,7 +1,8 @@
 /**
  * Wi-Fi chat-plugin. Only works in a room with id 'wifi'
  * Handles giveaways in the formats: question, lottery, gts
- * Written by Kris and bumbadadabum, based on the original plugin as written by Codelegend, SilverTactic, DanielCranham
+ * Written by dhelmise and bumbadadabum, based on the original
+ * plugin as written by Codelegend, SilverTactic, DanielCranham
  */
 
 import {FS, Utils} from '../../lib';
@@ -449,7 +450,7 @@ export class QuestionGiveaway extends Giveaway {
 		if (Giveaway.checkBanned(this.room, user)) return user.sendTo(this.room, "You are banned from entering giveaways.");
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
-		if ((this.answered.get(user.id) ?? 0) >= 3) {
+		if (this.answered.get(user.id) >= 3) {
 			return user.sendTo(
 				this.room,
 				"You have already guessed three times. You cannot guess anymore in this.giveaway."
@@ -468,7 +469,7 @@ export class QuestionGiveaway extends Giveaway {
 
 		this.joined.set(user.latestIp, user.id);
 		this.answered.add(user.id);
-		if ((this.answered.get(user.id) ?? 0) >= 3) {
+		if (this.answered.get(user.id) >= 3) {
 			user.sendTo(
 				this.room,
 				`Your guess '${guess}' is wrong. You have used up all of your guesses. Better luck next time!`
@@ -1024,7 +1025,7 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 	gtshelp: [
-		`GTS giveaways are currently disabled. If you are a Room Owner and would like them to be re-enabled, contact Kris.`,
+		`GTS giveaways are currently disabled. If you are a Room Owner and would like them to be re-enabled, contact dhelmise.`,
 	],
 	ga: 'giveaway',
 	giveaway: {

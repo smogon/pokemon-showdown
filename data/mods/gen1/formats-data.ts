@@ -1,4 +1,4 @@
-export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 	bulbasaur: {
 		tier: "LC",
 	},
@@ -21,7 +21,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "LC",
 	},
 	wartortle: {
-		tier: "NFE",
+		tier: "ZU",
 	},
 	blastoise: {
 		tier: "NU",
@@ -213,7 +213,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	tentacool: {
-		tier: "LC",
+		tier: "ZU",
 	},
 	tentacruel: {
 		tier: "UU",
@@ -228,7 +228,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "UU",
 	},
 	ponyta: {
-		tier: "LC",
+		tier: "ZU",
 	},
 	rapidash: {
 		tier: "PU",
@@ -330,7 +330,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "ZU",
 	},
 	rhyhorn: {
-		tier: "LC",
+		tier: "ZU",
 	},
 	rhydon: {
 		tier: "OU",

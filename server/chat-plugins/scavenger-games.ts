@@ -92,10 +92,9 @@ class Leaderboard {
 
 	async htmlLadder(): Promise<string> {
 		const data = await this.visualize('points');
-		const display = `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data.map(line =>
+		return `<div class="ladder" style="overflow-y: scroll; max-height: 170px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${data.map(line =>
 			`<tr><td>${line.rank}</td><td>${line.name}</td><td>${line.points}</td></tr>`).join('')
 		}</table></div>`;
-		return display;
 	}
 }
 
@@ -517,11 +516,8 @@ const TWISTS: {[k: string]: Twist} = {
 
 			const mines: {mine: string, users: string[]}[][] = [];
 
-			for (let index = 0; index < this.mines.length; index++) {
-				mines[index] = [];
-				for (const mine of this.mines[index]) {
-					mines[index].push({mine: mine.substr(1), users: []});
-				}
+			for (const mineSet of this.mines as string[][]) {
+				mines.push(mineSet.map(mine => ({mine: mine.substr(1), users: [] as string[]})));
 			}
 
 			for (const player of Object.values(this.playerTable)) {
@@ -555,6 +551,7 @@ const TWISTS: {[k: string]: Twist} = {
 				const mines: string[] = this.mines[q];
 				for (const [playerId, guesses] of Object.entries(guessObj)) {
 					const player = this.playerTable[playerId];
+					if (!player) continue;
 					if (!player.mines) player.mines = [];
 					(player.mines as {index: number, mine: string}[]).push(...mines
 						.filter(mine => (guesses as Set<string>).has(toID(mine)))

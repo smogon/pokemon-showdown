@@ -1,11 +1,9 @@
 // Note: These are the rules that formats use
 
-import {Utils} from "../lib";
 import type {Learnset} from "../sim/dex-species";
-import {Pokemon} from "../sim/pokemon";
 
 // The list of formats is stored in config/formats.js
-export const Rulesets: {[k: string]: FormatData} = {
+export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 	// Rulesets
 	///////////////////////////////////////////////////////////////////
@@ -812,7 +810,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 		},
 		onValidateTeam(team) {
 			if (this.format.id === 'gen8multibility') return;
-			const abilityTable = new Map<string, number>();
+			const abilityTable = new this.dex.Multiset<string>();
 			const base: {[k: string]: string} = {
 				airlock: 'cloudnine',
 				armortail: 'queenlymajesty',
@@ -838,13 +836,13 @@ export const Rulesets: {[k: string]: FormatData} = {
 				let ability = this.toID(set.ability);
 				if (!ability) continue;
 				if (ability in base) ability = base[ability] as ID;
-				if ((abilityTable.get(ability) || 0) >= num) {
+				if (abilityTable.get(ability) >= num) {
 					return [
 						`You are limited to ${num} of each ability by Ability Clause.`,
 						`(You have more than ${num} ${this.dex.abilities.get(ability).name} variant${num === 1 ? '' : 's'})`,
 					];
 				}
-				abilityTable.set(ability, (abilityTable.get(ability) || 0) + 1);
+				abilityTable.add(ability);
 			}
 		},
 	},
@@ -1590,7 +1588,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			return null;
 		},
 		onValidateTeam(team) {
-			const sketches = new Utils.Multiset<string>();
+			const sketches = new this.dex.Multiset<string>();
 			for (const set of team) {
 				if ((set as any).sketchMove) {
 					sketches.add((set as any).sketchMove);
@@ -2070,47 +2068,31 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 		onFaint(target, source, effect) {
-			if (!target.m.numSwaps) {
-				target.m.numSwaps = 0;
-			}
+			target.m.numSwaps ||= 0;
 			target.m.numSwaps++;
-			if (effect && effect.effectType === 'Move' && source.side.pokemon.length < 24 &&
-				source.side !== target.side && target.m.numSwaps < 4) {
-				const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
-				// Just in case(tm) and for Shedinja
-				if (hpCost === target.baseMaxhp) {
-					target.m.outofplay = true;
-					return;
-				}
-				source.side.pokemonLeft++;
-				source.side.pokemon.length++;
-
-				// A new Pokemon is created and stuff gets aside akin to a deep clone.
-				// This is because deepClone crashes when side is called recursively.
-				// Until a refactor is made to prevent it, this is the best option to prevent crashes.
-				const newPoke = new Pokemon(target.set, source.side);
-				const newPos = source.side.pokemon.length - 1;
-
-				const doNotCarryOver = [
-					'fullname', 'side', 'fainted', 'status', 'hp', 'illusion',
-					'transformed', 'position', 'isActive', 'faintQueued',
-					'subFainted', 'getHealth', 'getDetails', 'moveSlots', 'ability',
-				];
-				for (const [key, value] of Object.entries(target)) {
-					if (doNotCarryOver.includes(key)) continue;
-					// @ts-ignore
-					newPoke[key] = value;
-				}
-				newPoke.maxhp = newPoke.baseMaxhp; // for dynamax
-				newPoke.hp = newPoke.baseMaxhp - hpCost;
-				newPoke.clearVolatile();
-				newPoke.position = newPos;
-				source.side.pokemon[newPos] = newPoke;
-				this.add('poke', source.side.pokemon[newPos].side.id, source.side.pokemon[newPos].details, '');
-				this.add('-message', `${target.name} was captured by ${newPoke.side.name}!`);
-			} else {
+			if (effect?.effectType !== 'Move' || source.side.pokemon.length >= 24 ||
+				source.side === target.side || target.m.numSwaps >= 4) {
 				target.m.outofplay = true;
+				return;
 			}
+
+			const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
+			// Just in case(tm) and for Shedinja
+			if (hpCost >= target.baseMaxhp) {
+				target.m.outofplay = true;
+				return;
+			}
+
+			const newPoke = source.side.addPokemon({...target.set, item: target.item})!;
+
+			// copy PP over
+			(newPoke as any).baseMoveSlots = target.baseMoveSlots;
+
+			newPoke.hp = this.clampIntRange(newPoke.maxhp - hpCost, 1);
+			newPoke.clearVolatile();
+
+			this.add('poke', newPoke.side.id, newPoke.details, '');
+			this.add('-message', `${target.name} was captured by ${newPoke.side.name}!`);
 		},
 	},
 	chimera1v1rule: {
@@ -2697,7 +2679,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			}
 		},
 		onValidateTeam(team, format) {
-			const donors = new Utils.Multiset<string>();
+			const donors = new this.dex.Multiset<string>();
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				const fusion = this.dex.species.get(set.name);
@@ -2839,7 +2821,7 @@ export const Rulesets: {[k: string]: FormatData} = {
 			const oldAbilityName = pokemon.getAbility().name;
 			const oldPokemon = pokemon.species;
 			const impersonation = this.dex.species.get(pokemon.set.name);
-			if (pokemon.species.id === impersonation.id || pokemon.hp > pokemon.maxhp / 2) return;
+			if (pokemon.species.baseSpecies === impersonation.baseSpecies || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange(impersonation.name, this.effect, true);
 			pokemon.baseMaxhp = Math.floor(Math.floor(
@@ -2854,6 +2836,8 @@ export const Rulesets: {[k: string]: FormatData} = {
 			)) || "0";
 			const newAbility: string = (impersonation.abilities as any)[oldAbilityKey] || impersonation.abilities["0"];
 			pokemon.setAbility(newAbility, null, true);
+			// Ability persists through switching
+			pokemon.baseAbility = pokemon.ability;
 		},
 	},
 };

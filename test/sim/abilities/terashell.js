@@ -87,4 +87,81 @@ describe('Tera Shell', function () {
 		damage = espeon.maxhp - espeon.hp;
 		assert.bounded(damage, [33, 39], `Tera Shell should have activated because current species is Terapagos`);
 	});
+
+	it(`should not weaken the damage from Struggle`, function () {
+		battle = common.createBattle([[
+			{species: 'Terapagos', ability: 'terashift', moves: ['luckychant']},
+		], [
+			{species: 'Slowking', item: 'assaultvest', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+
+		const terapagos = battle.p1.active[0];
+		const damage = terapagos.maxhp - terapagos.hp;
+		assert.bounded(damage, [27, 32], `Tera Shell should not have reduced the damage Struggle dealt`);
+	});
+
+	it.skip(`should not continue to weaken attacks after taking damage from a Future attack`, function () {
+		battle = common.createBattle([[
+			{species: 'Terapagos', ability: 'terashift', moves: ['sleeptalk']},
+			{species: 'Espeon', moves: ['sleeptalk']},
+		], [
+			{species: 'Slowking', moves: ['sleeptalk', 'wickedblow', 'futuresight']},
+		]]);
+
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices();
+		battle.makeChoices();
+
+		const terapagos = battle.p1.active[0];
+		let damage = terapagos.maxhp - terapagos.hp;
+		assert.bounded(damage, [59, 70], `Tera Shell should have reduced the damage Future Sight dealt`);
+
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('switch 2', 'move wickedblow');
+		damage = terapagos.maxhp - terapagos.hp - damage;
+		assert.bounded(damage, [59, 70], `Tera Shell should not have reduced the damage Wicked Blow dealt`);
+	});
+
+	it.skip(`should activate, but not weaken, moves with fixed damage`, function () {
+		battle = common.createBattle([[
+			{species: 'Terapagos', ability: 'terashift', evs: {hp: 252}, moves: ['recover', 'seismictoss']},
+			{species: 'Magikarp', moves: ['sleeptalk']},
+		], [
+			{species: 'Slowpoke', ability: 'noguard', moves: ['seismictoss', 'superfang', 'counter']},
+			{species: 'Shuckle', moves: ['finalgambit']},
+			{species: 'Wynaut', ability: 'noguard', moves: ['sheercold']},
+		]]);
+
+		const terapagos = battle.p1.active[0];
+
+		battle.makeChoices('auto', 'move seismictoss');
+		let damage = terapagos.maxhp - terapagos.hp;
+		assert.equal(damage, 100, `Tera Shell should not have reduced the damage Seismic Toss dealt`);
+		assert(battle.log[battle.lastMoveLine + 1].endsWith('Tera Shell'), `Tera Shell should have activated on Seismic Toss`);
+
+		battle.makeChoices('auto', 'move superfang');
+		damage = terapagos.maxhp - terapagos.hp;
+		assert.equal(damage, Math.floor(terapagos.maxhp / 2), `Tera Shell should not have reduced the damage Super Fang dealt`);
+		assert(battle.log[battle.lastMoveLine + 1].endsWith('Tera Shell'), `Tera Shell should have activated on Super Fang`);
+
+		battle.makeChoices('auto', 'move counter');
+		battle.makeChoices('move seismictoss', 'move counter');
+		damage = terapagos.maxhp - terapagos.hp;
+		assert.equal(damage, 200, `Tera Shell should not have reduced the damage Counter dealt`);
+		assert(battle.log[battle.lastMoveLine + 1].endsWith('Tera Shell'), `Tera Shell should have activated on Counter`);
+
+		battle.makeChoices('auto', 'switch 2');
+		const shuckle = battle.p2.active[0];
+		battle.makeChoices('auto', 'move finalgambit');
+		damage = terapagos.maxhp - terapagos.hp;
+		assert.equal(damage, shuckle.maxhp, `Tera Shell should not have reduced the damage Final Gambit dealt`);
+		assert(battle.log[battle.lastMoveLine + 1].endsWith('Tera Shell'), `Tera Shell should have activated on Final Gambit`);
+
+		battle.choose('p2', 'switch 3');
+		battle.makeChoices('auto', 'move sheercold');
+		assert.fainted(terapagos);
+		assert(battle.log[battle.lastMoveLine + 1].endsWith('Tera Shell'), `Tera Shell should have activated on Sheer Cold`);
+	});
 });

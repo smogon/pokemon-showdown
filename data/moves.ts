@@ -1,6 +1,6 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
-export const Moves: {[moveid: string]: MoveData} = {
+export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,
@@ -650,6 +650,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 			this.actions.useMove(randomMove, target);
 		},
+		callsMove: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -2948,6 +2949,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 			this.actions.useMove(move.id, pokemon);
 		},
+		callsMove: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -5723,7 +5725,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		num: 175,
 		accuracy: 100,
 		basePower: 0,
-		basePowerCallback(pokemon, target) {
+		basePowerCallback(pokemon) {
 			const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
 			let bp;
 			if (ratio < 2) {
@@ -11923,7 +11925,8 @@ export const Moves: {[moveid: string]: MoveData} = {
 		priority: 0,
 		flags: {
 			protect: 1, bypasssub: 1,
-			failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1,
+			failencore: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1,
+			failcopycat: 1, failmimic: 1, failinstruct: 1,
 		},
 		onTryHit(target, pokemon) {
 			const action = this.queue.willMove(target);
@@ -11944,6 +11947,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return this.chainModify(1.5);
 			},
 		},
+		callsMove: true,
 		secondary: null,
 		target: "adjacentFoe",
 		type: "Normal",
@@ -12202,6 +12206,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			source.side.lastSelectedMove = this.toID(randomMove);
 			this.actions.useMove(randomMove, target);
 		},
+		callsMove: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -12460,6 +12465,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.actions.useMove(move.id, pokemon, target);
 			return null;
 		},
+		callsMove: true,
 		secondary: null,
 		target: "normal",
 		type: "Flying",
@@ -13046,6 +13052,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			this.actions.useMove(move, pokemon, target);
 			return null;
 		},
+		callsMove: true,
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -15620,7 +15627,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		num: 179,
 		accuracy: 100,
 		basePower: 0,
-		basePowerCallback(pokemon, target) {
+		basePowerCallback(pokemon) {
 			const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
 			let bp;
 			if (ratio < 2) {
@@ -17554,6 +17561,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 			}
 			this.actions.useMove(randomMove, pokemon);
 		},
+		callsMove: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -19504,9 +19512,14 @@ export const Moves: {[moveid: string]: MoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Syrup Bomb');
 			},
+			onUpdate(pokemon) {
+				if (this.effectState.source && !this.effectState.source.isActive) {
+					pokemon.removeVolatile('syrupbomb');
+				}
+			},
 			onResidualOrder: 14,
-			onResidual() {
-				this.boost({spe: -1});
+			onResidual(pokemon) {
+				this.boost({spe: -1}, pokemon, this.effectState.source);
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Syrup Bomb', '[silent]');

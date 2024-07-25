@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const Abilities: {[abilityid: string]: AbilityData} = {
+export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	noability: {
 		isNonstandard: "Past",
 		flags: {},
@@ -260,6 +260,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
+		onStart(pokemon) {
+			if (this.effectState.unnerved) return;
+			this.add('-ability', pokemon, 'As One');
+			this.add('-ability', pokemon, 'Unnerve');
+			this.effectState.unnerved = true;
+		},
 		onEnd() {
 			this.effectState.unnerved = false;
 		},
@@ -278,6 +284,12 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	},
 	asonespectrier: {
 		onPreStart(pokemon) {
+			this.add('-ability', pokemon, 'As One');
+			this.add('-ability', pokemon, 'Unnerve');
+			this.effectState.unnerved = true;
+		},
+		onStart(pokemon) {
+			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
@@ -2259,7 +2271,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	libero: {
 		onPrepareHit(source, target, move) {
 			if (this.effectState.libero) return;
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
@@ -3403,7 +3415,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 	protean: {
 		onPrepareHit(source, target, move) {
 			if (this.effectState.protean) return;
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
@@ -4231,6 +4243,11 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			onStart(target) {
 				this.add('-start', target, 'ability: Slow Start');
 			},
+			onResidual(pokemon) {
+				if (!pokemon.activeTurns) {
+					this.effectState.duration += 1;
+				}
+			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
 				return this.chainModify(0.5);
@@ -4851,7 +4868,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target || target.species.name !== 'Terapagos-Terastal') return;
 			if (this.effectState.resisted) return -1; // all hits of multi-hit move should be not very effective
-			if (move.category === 'Status') return;
+			if (move.category === 'Status' || move.id === 'struggle') return;
 			if (!target.runImmunity(move.type)) return; // immunity has priority
 			if (target.hp < target.maxhp) return;
 

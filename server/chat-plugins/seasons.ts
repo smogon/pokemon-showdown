@@ -62,6 +62,17 @@ export function getBadges(user: User, curFormat: string) {
 	return userBadges;
 }
 
+function getUserHTML(user: User, format: string) {
+	const buf = `<username>${user.name}</username>`;
+	const badgeType = getBadges(user, format).filter(x => x.format === format)[0]?.type;
+	if (badgeType) {
+		let formatType = format.split(/gen\d+/)[1];
+		if (!['ou', 'randombattle'].includes(formatType)) formatType = 'rotating';
+		return `<img src="https://${Config.routes.client}/sprites/misc/${formatType}_${badgeType}.png" />` + buf;
+	}
+	return buf;
+}
+
 export function setFormatSchedule() {
 	// guard heavily against this being overwritten
 	if (data.current.formatsGeneratedAt === getYear()) return;
@@ -174,15 +185,15 @@ function getYear() {
 	return new Date().getFullYear();
 }
 
-function findPeriod() {
-	return Math.floor(new Date().getMonth() / (SEASONS_PER_YEAR - 1)) + 1;
+function findPeriod(modifier = 0) {
+	return Math.floor((new Date().getMonth() + modifier) / (SEASONS_PER_YEAR - 1)) + 1;
 }
 
 /** Are we in the last three days of the month (the public phase, where badged battles are public and the room is active?) */
 function checkPublicPhase() {
 	const daysInCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
-	// last 3 days of the month
-	return new Date().getDate() >= (daysInCurrentMonth - PUBLIC_PHASE_LENGTH);
+	// last 3 days of the month, and next month is a new season
+	return new Date().getDate() >= (daysInCurrentMonth - PUBLIC_PHASE_LENGTH) && findPeriod() !== findPeriod(1);
 }
 
 export function saveData() {
@@ -231,8 +242,7 @@ export function rollTimer() {
 				`<br /> Badged battles are now forced public, and this room is open for use.</div>`
 			).update();
 		} else if (!checkPublicPhase() && !discussionRoom.settings.isPrivate) {
-			discussionRoom.setPrivate(true);
-			discussionRoom.settings.modchat = '#';
+			discussionRoom.setPrivate('unlisted');
 			discussionRoom.add(
 				`|html|<div class="broadcast-blue">The public phase of the month has ended.</div>`
 			).update();
@@ -345,6 +355,18 @@ export const handlers: Chat.Handlers = {
 				`During the public phase, you can discuss the state of the ladder <a href="/seasondiscussion">in a special chatroom.</a></div>`
 			);
 			room.setPrivate(false);
+			const seasonRoom = Rooms.search('seasondiscussion');
+			if (seasonRoom) {
+				const p1html = getUserHTML(user, room.battle.format);
+				const otherPlayer = user.id === room.battle.p1.id ? room.battle.p2 : room.battle.p1;
+				const otherUser = otherPlayer.getUser();
+				const p2html = otherUser ? getUserHTML(otherUser, room.battle.format) : `<username>${otherPlayer.name}</username>`;
+				const formatName = Dex.formats.get(room.battle.format).name;
+				seasonRoom.add(
+					`|raw|<a href="/${room.roomid}" class="ilink">${formatName} battle started between ` +
+					`${p1html} and ${p2html}. (rating: ${Math.floor(room.battle.rated)})</a>`
+				).update();
+			}
 		}
 
 		room.add(

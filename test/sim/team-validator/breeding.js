@@ -222,17 +222,25 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen4ou');
 	});
 
-	it.skip('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
+	it('should reject Volbeat with both Lunge and Dizzy Punch in Gen 7', function () {
 		team = [
 			{species: 'volbeat', ability: 'swarm', moves: ['lunge', 'dizzypunch'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
 
+	it('should allow level 5 Indeedee-M with Disarming Voice', function () {
+		team = [
+			{species: 'indeedee', level: 5, ability: 'innerfocus', moves: ['disarmingvoice'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen8ou');
+	});
+
 	it('should allow egg moves on event formes in Gen 9', function () {
 		team = [
 			{species: 'ursalunabloodmoon', ability: 'mindseye', moves: ['yawn', 'bellydrum'], evs: {hp: 1}},
 			{species: 'greninjabond', ability: 'battlebond', moves: ['counter', 'switcheroo'], evs: {hp: 1}},
+			{species: 'pikachualola', ability: 'static', moves: ['wish', 'fakeout'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen9anythinggoes');
 	});
