@@ -2724,13 +2724,12 @@ export const commands: Chat.ChatCommands = {
 				elimType = MafiaEliminateType.SPIRITSTUMP;
 				repeat = player.isTreestump() && player.isSpirit();
 				break;
+			case 'kick':
+				elimType = MafiaEliminateType.KICK;
+				break;
 			default:
-				if (cmd === 'kick') {
-					elimType = MafiaEliminateType.KICK;
-				} else {
-					elimType = MafiaEliminateType.ELIMINATE;
-					repeat = player.eliminated === MafiaEliminateType.ELIMINATE;
-				}
+				elimType = MafiaEliminateType.ELIMINATE;
+				repeat = player.eliminated === MafiaEliminateType.ELIMINATE;
 				break;
 			}
 
@@ -2870,7 +2869,7 @@ export const commands: Chat.ChatCommands = {
 			game.revive(user, player);
 		},
 		revivehelp: [
-			`/mafia revive [player] - Revive a player who was eliminated. Requires host % @ # &`,
+			`/mafia revive [player] - Revives a player who was eliminated. Requires host % @ # &`,
 		],
 
 		dl: 'deadline',
@@ -4144,8 +4143,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia spirit [player] - Kills a player, but allows them to vote still. Requires host % @ # &`,
 			`/mafia spiritstump [player] - Kills a player, but allows them to talk and vote during the day. Requires host % @ # &`,
 			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ # &`,
-			`/mafia revive [player] - Revive a player who was eliminated. Requires host % @ # &`,
-			`/mafia add [player] - Add a new player to the game. Requires host % @ # &`,
+			`/mafia revive [player] - Revives a player who was eliminated. Requires host % @ # &`,
+			`/mafia add [player] - Adds a new player to the game. Requires host % @ # &`,
 			`/mafia revealrole [player] - Reveals the role of a player. Requires host % @ # &`,
 			`/mafia revealas [player], [role] - Fakereveals the role of a player as a certain role. Requires host % @ # &`,
 			`/mafia (un)silence [player] - Silences [player], preventing them from talking at all. Requires host % @ # &`,
