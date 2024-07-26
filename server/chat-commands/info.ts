@@ -1918,8 +1918,9 @@ export const commands: Chat.ChatCommands = {
 				descHtml.push(...format.threads);
 			} else {
 				const genID = ['rb', 'gs', 'rs', 'dp', 'bw', 'xy', 'sm', 'ss', 'sv'];
-				descHtml.push(`This format has no resources linked on its <a href="https://www.smogon.com/dex/${genID[format.gen - 1] || 'sv'}/formats/">Smogon Dex page</a>.` +
-					`Please contact a <a href="https://www.smogon.com/forums/forums/757/">C&amp;C Leader</a> to resolve this.<br />`);
+				descHtml.push(`This format has no resources linked on its <a href="https://www.smogon.com/dex/${genID[format.gen - 1] || 'sv'}/formats/">Smogon Dex page</a>. ` +
+					`Please contact a <a href="https://www.smogon.com/forums/forums/757/">C&amp;C Leader</a> to resolve this. ` +
+					`Alternatively, if this format can't have a page on the Smogon Dex, message <username>dhelmise</username>.<br />`);
 			}
 			return this.sendReplyBox(`<h2>${format.name}</h2><hr />${formatDesc ? formatDesc + '<hr />' : ''}${descHtml.join("<br />")}${rulesetHtml ? `<br />${rulesetHtml}` : ''}`);
 		}
