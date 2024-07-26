@@ -1,3 +1,4 @@
+import {Utils} from '../../lib';
 import {FS} from '../../lib/fs';
 
 const SUSPECTS_FILE = 'config/suspects.json';
@@ -51,7 +52,7 @@ export const commands: Chat.ChatCommands = {
 			for (const i of Object.keys(suspects)) {
 				const test = suspects[i];
 				buffer += '<br />';
-				buffer += `${test.tier}: <a href="${test.url}">${test.suspect}</a> (${test.date})`;
+				buffer += `${Utils.escapeHTML(test.tier)}: <a href="${test.url}">${Utils.escapeHTML(test.suspect)}</a> (${test.date})`;
 			}
 			return this.sendReplyBox(buffer);
 		},
