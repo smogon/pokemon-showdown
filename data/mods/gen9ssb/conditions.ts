@@ -882,16 +882,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint(pokemon) {
 			this.add(`c:|${getName('Froggeh')}|URG! I've croaked...`);
 		},
-		onFoeMoveAborted(target, source, move) {
-			if (source.getVolatile('confusion')) {
-				if (source.foes()) {
-					for (const foe of source.foes()) {
-						if (foe.illusion || foe.name !== 'Froggeh') continue;
-						this.boost({atk: 1, def: 1}, foe);
-					}
-				}
-			}
-		},
 	},
 	frostyicelad: {
 		noCopy: true,
@@ -3345,6 +3335,34 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 				this.add('-fail', attacker, move, '[from] Primordial Sea');
 				return this.chainModify(0.5);
 			}
+		},
+	},
+	confusion: {
+		inherit: true,
+		onBeforeMove(pokemon) {
+			pokemon.volatiles['confusion'].time--;
+			if (!pokemon.volatiles['confusion'].time) {
+				pokemon.removeVolatile('confusion');
+				return;
+			}
+			this.add('-activate', pokemon, 'confusion');
+			if (!this.randomChance(33, 100)) {
+				return;
+			}
+			this.activeTarget = pokemon;
+			const damage = this.actions.getConfusionDamage(pokemon, 40);
+			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
+			const activeMove = {id: this.toID('confused'), effectType: 'Move', type: '???'};
+			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
+			if (this.effectState.sourceEffect?.id === 'cringedadjoke') {
+				for (const target of this.getAllActive()) {
+					if (target === pokemon) continue;
+					if (target.volatiles['cringedadjoke']) {
+						this.boost({atk: 1, def: 1}, target);
+					}
+				}
+			}
+			return false;
 		},
 	},
 };

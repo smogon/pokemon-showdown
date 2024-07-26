@@ -1216,10 +1216,10 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				}
 			}
 			if (set.name === "Frostyicelad" && set.shiny) {
-				const moveIndex = Math.max(set.moves.indexOf('direclaw'),
-				set.moves.indexOf('meteormash'), set.moves.indexOf('bittermalice'));
+				const moveIndex = Math.max(set.moves.indexOf('Dire Claw'),
+				set.moves.indexOf('Meteor Mash'), set.moves.indexOf('Bitter Malice'));
 				if (moveIndex >= 0) {
-					set.moves[moveIndex] = 'fishiousrend';
+					set.moves[moveIndex] = 'Fishious Rend';
 					teraType = 'Water';
 				}
 			}
