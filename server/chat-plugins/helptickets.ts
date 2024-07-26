@@ -1351,7 +1351,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				const names = [];
 				const roomData = await getBattleLog(link);
 				if (!roomData) continue;
-				for (const id in roomData.players) {
+				for (const id of Object.values(roomData.players)) {
 					const user = Users.get(id)?.name || id;
 					const team = roomData.pokemon[id];
 					if (team) {
