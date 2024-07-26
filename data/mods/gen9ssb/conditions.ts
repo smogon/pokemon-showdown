@@ -895,27 +895,8 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 	},
 	frostyicelad: {
 		noCopy: true,
-		onStart(pokemon) {
+		onStart() {
 			this.add(`c:|${getName('Frostyicelad')}|why am I a Qwilfish`);
-			if (pokemon.set.shiny) {
-				const moveIndex = Math.max(pokemon.moves.indexOf('direclaw'),
-					pokemon.moves.indexOf('meteormash'), pokemon.moves.indexOf('bittermalice'));
-				if (moveIndex < 0) {
-					return;
-				}
-				const replacement = this.dex.moves.get("fishiousrend");
-				const newMoveSlot = {
-					move: replacement.name,
-					id: replacement.id,
-					pp: replacement.pp,
-					maxpp: replacement.pp,
-					target: replacement.target,
-					disabled: false,
-					used: false,
-				};
-				pokemon.moveSlots[moveIndex] = newMoveSlot;
-				pokemon.teraType = "Water";
-			}
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('Frostyicelad')}|time to bring in the Ice types`);

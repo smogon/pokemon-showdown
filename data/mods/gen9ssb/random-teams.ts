@@ -1215,6 +1215,14 @@ export class RandomStaffBrosTeams extends RandomTeams {
 					teraType = 'Ice';
 				}
 			}
+			if (set.name === "Frostyicelad" && set.shiny) {
+				const moveIndex = Math.max(set.moves.indexOf('direclaw'),
+				set.moves.indexOf('meteormash'), set.moves.indexOf('bittermalice'));
+				if (moveIndex >= 0) {
+					set.moves[moveIndex] = 'fishiousrend';
+					teraType = 'Water';
+				}
+			}
 
 			if (teraType) set.teraType = teraType;
 
