@@ -909,13 +909,9 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 		}
 	}
 	if (!room) {
-		const replayUrl = Net(`https://${Config.routes.replays}/${link.slice(link.indexOf('-') + 1)}.json`);
-		try {
-			const body = await replayUrl.get();
-			const data = JSON.parse(body);
-			return data.p1id === submitter ? data.p2id : data.p1id;
-		} catch {
-			return null;
+		const battleData = await getBattleLog(link);
+		if (battleData) {
+			return battleData.players.p1 === submitter ? battleData.players.p2 : battleData.players.p1;
 		}
 	}
 	return null;
