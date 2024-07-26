@@ -273,20 +273,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	getPlayers(drafted: boolean) {
-		const players = [];
-		for (const player of this.auctionPlayers.values()) {
-			if (drafted === !!player.team) players.push(player);
-		}
-		return players;
-	}
-
 	getUndraftedPlayers() {
-		return this.getPlayers(false);
+		return [...this.auctionPlayers.values()].filter(p => !p.team);
 	}
 
 	getDraftedPlayers() {
-		return this.getPlayers(true);
+		return [...this.auctionPlayers.values()].filter(p => p.team);
 	}
 
 	importPlayers(data: string) {
@@ -452,12 +444,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	start() {
-		if (this.state !== 'setup') throw new Chat.ErrorMessage(`The auction has already been started.`);
+		if (this.state !== 'setup') throw new Chat.ErrorMessage(`The auction has already started.`);
 		if (this.teams.size < 2) throw new Chat.ErrorMessage(`The auction needs at least 2 teams to start.`);
-		const problemTeams = [];
-		for (const team of this.teams.values()) {
-			if (team.maxBid() < this.minBid) problemTeams.push(team.name);
-		}
+		const problemTeams = [...this.teams.values()].filter(t => t.maxBid() < this.minBid).map(t => t.name);
 		if (problemTeams.length) {
 			throw new Chat.ErrorMessage(`The following teams do not have enough credits to draft the minimum amount of players: ${problemTeams.join(', ')}`);
 		}
@@ -523,19 +512,19 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.state !== 'bid') throw new Chat.ErrorMessage(`There are no players up for auction right now.`);
 		const team = this.managers.get(user.id)?.team;
 		if (!team) throw new Chat.ErrorMessage(`Only managers can bid on players.`);
+		if (team.isSuspended()) throw new Chat.ErrorMessage(`Your team is suspended and cannot place bids.`);
 
 		if (amount < 500) amount *= 1000;
 		if (isNaN(amount) || amount % 500 !== 0) throw new Chat.ErrorMessage(`Your bid must be a multiple of 500.`);
-		if (amount > team.maxBid()) throw new Chat.ErrorMessage(`You cannot afford to bid that much.`);
+		if (amount > team.maxBid()) throw new Chat.ErrorMessage(`Your team cannot afford to bid that much.`);
 
 		if (this.blindMode) {
 			if (this.bidsPlaced.has(team)) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
 			if (amount <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
 			for (const manager of this.managers.values()) {
-				if (manager.team === team) {
-					const msg = `|c:|${Math.floor(Date.now() / 1000)}|&|/html Your team placed a bid of <b>${amount}</b> on <username>${Utils.escapeHTML(this.nominatedPlayer.name)}</username>.`;
-					Users.getExact(manager.id)?.sendTo(this.room, msg);
-				}
+				if (manager.team !== team) continue;
+				const msg = `|c:|${Math.floor(Date.now() / 1000)}|&|/html Your team placed a bid of <b>${amount}</b> on <username>${Utils.escapeHTML(this.nominatedPlayer.name)}</username>.`;
+				Users.getExact(manager.id)?.sendTo(this.room, msg);
 			}
 			if (amount > this.highestBid) {
 				this.highestBid = amount;
@@ -844,6 +833,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		suspendteamhelp: [
 			`/auction suspendteam [team] - Suspends a team from the auction. Requires: # & auction owner`,
+			`Suspended teams have their nomination turns skipped and are not allowed to place bids.`,
 		],
 		unsuspendteam(target, room, user) {
 			const auction = this.requireGame(Auction);
@@ -944,12 +934,7 @@ export const commands: Chat.ChatCommands = {
 		ongoing: 'running',
 		running() {
 			if (!this.runBroadcast()) return;
-			const runningAuctions = [];
-			for (const auctionRoom of Rooms.rooms.values()) {
-				const auction = auctionRoom.getGame(Auction);
-				if (!auction) continue;
-				runningAuctions.push(auctionRoom.title);
-			}
+			const runningAuctions = [...Rooms.rooms.values()].filter(r => r.getGame(Auction)).map(r => r.title);
 			this.sendReply(`Running auctions: ${runningAuctions.join(', ') || 'None'}`);
 		},
 		'': 'help',
