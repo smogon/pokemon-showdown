@@ -2246,11 +2246,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			for (i in source.boosts) {
 				if (source.boosts[i] < 0) {
 					target.boosts[i] += source.boosts[i];
+					this.add('-setboost', target, i as string, target.boosts[i], '[silent]');
 					source.boosts[i] = -source.boosts[i];
+					this.add('-setboost', source, i as string, source.boosts[i], '[silent]');
 				}
 			}
-			this.add('-copyboost', target, source, '[from] move: Hasty Revolution');
-			this.add('-invertboost', source, '[from] move: Hasty Revolution');
+			this.add('-message', `${target.name} received ${source.name}'s negative stat boosts!'`);
+			this.add('-message', `${source.name} inverted their negative stat boosts!`);
 		},
 		stallingMove: true,
 		self: {
