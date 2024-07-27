@@ -2103,8 +2103,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Dizzy Punch', target);
 			this.add('-anim', source, 'Bulk Up', source);
 		},
-		onHit(pokemon, source) {
-			source.addVolatile('cringedadjoke');
+		self: {
+			volatileStatus: 'cringedadjoke';
 		},
 		secondary: {
 			chance: 100,
