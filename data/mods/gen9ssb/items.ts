@@ -1,4 +1,46 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// PokeKart
+	flameflyer: {
+		name: "Flame Flyer",
+		gen: 9,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'typechange', 'Steel/Fire', '[from] item: Flame Flyer');
+		},
+		onModifySpePriority: 1,
+		onModifySpe(spe, pokemon) {
+			return this.chainModify(1.1);
+		},
+		onModifyMove(move, pokemon) {
+			move.overrideOffensiveStat = 'spe';
+		},
+	},
+	// Luminous
+	spectralprism: {
+		name: "Spectral Prism",
+		gen: 9,
+		onTakeItem: false,
+		zMove: "Polaris",
+		zMoveFrom: "Rainbow Maxifier",
+		itemUser: ["Necrozma"],
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			if (pokemon.status) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpdPriority: 6,
+		onModifySpd(spd, pokemon) {
+			if (pokemon.status) {
+				return this.chainModify(1.5);
+			}
+		},
+	},
 	// Fblthp
 	bubblewand: {
 		name: 'Bubble Wand',
