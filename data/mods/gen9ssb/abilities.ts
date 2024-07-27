@@ -772,6 +772,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'recoil') {
 				let trueSource = source;
+				// For some reason, the source of the damage is the subsitute user when
+				// hitting a sub.
 				if (source !== target) trueSource = target;
 				if (!this.activeMove) throw new Error("Battle.activeMove is null");
 				if (this.activeMove.id !== 'struggle') {
