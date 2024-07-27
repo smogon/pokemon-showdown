@@ -3348,11 +3348,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 
 	// Lily
-	recharge: {
+	powerup: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		name: "Recharge",
+		name: "Power Up",
 		shortDesc: "Heals 50% HP. Heals 3% more per fainted ally.",
 		desc: "Heals the user for 50% of their maximum HP. Heals an additional 3% of the user's maximum HP for each team member on the user's side that has fainted.",
 		pp: 5,

@@ -568,7 +568,7 @@ export const ssbSets: SSBSets = {
 	Lily: {
 		species: 'Togedemaru', ability: 'Unaware', item: 'Leftovers', gender: 'F',
 		moves: ['Victory Dance', 'Plasma Fists', 'Meteor Mash'],
-		signatureMove: 'Recharge',
+		signatureMove: 'Power Up',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Fairy', shiny: 1734,
 	},
 	Lionyx: {
@@ -1100,7 +1100,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team: PokemonSet[] = [];
-		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
+		const debug: string[] = ['Lily']; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
 			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
