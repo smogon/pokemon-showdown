@@ -73,6 +73,12 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.set.evs = evs;
 	pokemon.set.ivs = ivs;
 	if (newSet.nature) pokemon.set.nature = Array.isArray(newSet.nature) ? context.sample(newSet.nature) : newSet.nature;
+	const oldGender = pokemon.set.gender;
+	if ((pokemon.set.gender !== newSet.gender) && !Array.isArray(newSet.gender)) {
+		pokemon.set.gender = newSet.gender;
+		// @ts-ignore Shut up sharp_claw wanted this
+		pokemon.gender = newSet.gender;
+	}
 	const oldShiny = pokemon.set.shiny;
 	pokemon.set.shiny = (typeof newSet.shiny === 'number') ? context.randomChance(1, newSet.shiny) : !!newSet.shiny;
 	let percent = (pokemon.hp / pokemon.baseMaxhp);
@@ -88,7 +94,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	}
 	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-	if (oldShiny !== pokemon.set.shiny) context.add('replace', pokemon, details);
+	if (oldShiny !== pokemon.set.shiny || oldGender !== pokemon.gender) context.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string, undefined, true);
 
 	pokemon.baseMaxhp = pokemon.species.name === 'Shedinja' ? 1 : Math.floor(Math.floor(
