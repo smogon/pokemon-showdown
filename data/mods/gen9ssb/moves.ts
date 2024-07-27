@@ -2104,7 +2104,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Bulk Up', source);
 		},
 		self: {
-			volatileStatus: 'cringedadjoke';
+			volatileStatus: 'cringedadjoke',
 		},
 		secondary: {
 			chance: 100,
