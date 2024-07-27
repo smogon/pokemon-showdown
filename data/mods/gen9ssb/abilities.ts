@@ -249,8 +249,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (move.id === 'snipeshot') {
-				const ratio = source.getMoveHitData(move).crit ? 6 : 8;
-				this.heal(source.maxhp / ratio, source);
+				const ratio = target.getMoveHitData(move).crit ? 6 : 8;
+				this.heal(source.maxhp / ratio, source, source);
 			}
 		},
 		flags: {},
