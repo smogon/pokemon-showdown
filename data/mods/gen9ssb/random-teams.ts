@@ -409,12 +409,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wiggling Strike',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Grass', shiny: 2,
 	},
-	'Goro Yagami': {
-		species: 'Cyndaquil', ability: 'Illusion Master', item: '', gender: 'M',
-		moves: ['Victory Dance', 'Bitter Blade', 'Thief'],
-		signatureMove: 'Shadow Ambush',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Water',
-	},
 	'Haste Inky': {
 		species: 'Falinks', ability: 'Simple', item: 'Sitrus Berry', gender: 'N',
 		moves: ['Superpower', 'Ice Hammer', 'Throat Chop'],
@@ -1217,7 +1211,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			}
 			if (set.name === "Frostyicelad" && set.shiny) {
 				const moveIndex = Math.max(set.moves.indexOf('Dire Claw'),
-				set.moves.indexOf('Meteor Mash'), set.moves.indexOf('Bitter Malice'));
+					set.moves.indexOf('Meteor Mash'), set.moves.indexOf('Bitter Malice'));
 				if (moveIndex >= 0) {
 					set.moves[moveIndex] = 'Fishious Rend';
 					teraType = 'Water';

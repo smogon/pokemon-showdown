@@ -2220,37 +2220,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Water",
 	},
 
-	// Goro Yagami
-	shadowambush: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Physical",
-		shortDesc: "-1 Def/SpD, gives Slow Start, user switches.",
-		desc: "Lowers the target's Defense and Special Defense by 1 stage and replaces the target's ability with Slow Start. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		name: "Shadow Ambush",
-		gen: 9,
-		pp: 15,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Spectral Thief', target);
-		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'slowstart',
-			boosts: {
-				def: -1,
-				spd: -1,
-			},
-		},
-		selfSwitch: true,
-		target: "normal",
-		type: "Ghost",
-	},
-
 	// Haste Inky
 	hastyrevolution: {
 		accuracy: 100,
@@ -3614,7 +3583,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.boost({[boost]: 1}, pokemon);
 			}
 			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
-			const unloweredStat = this.sample(Object.keys(pokemon.boosts).filter(x => x !== ('evasion' as BoostID || 'accuracy' as BoostID)));
+			const unloweredStat = this.sample(
+				Object.keys(pokemon.boosts).filter(x => x !== ('evasion' as BoostID || 'accuracy' as BoostID))
+			);
 			for (const boost in boosts) {
 				if ((boosts[boost as BoostID] >= 6 && maxBoostIDs.includes(boost as BoostID)) || boost === unloweredStat) continue;
 				this.boost({[boost]: -1}, pokemon);
@@ -3744,7 +3715,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove(`[anim] Trick Room`);
 		},
 		onHitField(target, source, move) {
-
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.hp <= 0 || pokemon.fainted || pokemon.isSemiInvulnerable()) {
 					continue;
