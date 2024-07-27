@@ -158,12 +158,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Bubble Guppy Uppercut',
 		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
 	},
-	/*Luminous: {
+	Luminous: {
 		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
 		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
 		signatureMove: 'Rainbow Maxifier',
 		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true,
 	},
+ 	/*
 	PokéKart: {
 		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
 		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
