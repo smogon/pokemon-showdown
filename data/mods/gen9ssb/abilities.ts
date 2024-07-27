@@ -477,7 +477,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	      for (const type of this.dex.types.names()) {
 	            if (target.hasType(type)) continue;
 	            const typeCheck = this.dex.types.get(type).damageTaken[attackType];
-	            if (typeCheck > 1) {
+	            if (typeCheck === 2) {
 	            	possibleTypes.push(type);
 	           }	
 	      }
