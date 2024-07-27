@@ -21,6 +21,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
 
+	willmiss: {
+		duration: 1,
+		onModifyMove(move, pokemon) {
+			move.accuracy = 0;
+		},
+	},
 	lag: {
 		name: "Lag",
 		onModifyPriority(priority, pokemon, target, move) {
