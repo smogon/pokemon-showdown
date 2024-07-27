@@ -3586,7 +3586,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
 			const unloweredStat = this.sample(
-				Object.keys(pokemon.boosts).filter(x => x !== ('evasion' as BoostID || 'accuracy' as BoostID))
+				Object.keys(pokemon.boosts).filter(x => !['evasion', 'accuracy'].includes(x as BoostID))
 			);
 			for (const boost in boosts) {
 				if ((boosts[boost as BoostID] >= 6 && maxBoostIDs.includes(boost as BoostID)) || boost === unloweredStat) continue;
