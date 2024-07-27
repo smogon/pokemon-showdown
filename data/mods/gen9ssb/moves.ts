@@ -3091,7 +3091,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onModifyPriority(priority, source, target, move) {
-			if (target && Object.values(target.boosts).some(x => x !== 0)) {
+			const foe = source.foes()[0];
+			if (foe && Object.values(foe.boosts).some(x => x !== 0)) {
 				return priority + 1;
 			}
 		},
@@ -3613,7 +3614,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.boost({[boost]: 1}, pokemon);
 			}
 			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
-			const unloweredStat = this.sample(Object.keys(pokemon.boosts).filter(x => x !== ('evasion' as BoostID)));
+			const unloweredStat = this.sample(Object.keys(pokemon.boosts).filter(x => x !== ('evasion' as BoostID || 'accuracy' as BoostID)));
 			for (const boost in boosts) {
 				if ((boosts[boost as BoostID] >= 6 && maxBoostIDs.includes(boost as BoostID)) || boost === unloweredStat) continue;
 				this.boost({[boost]: -1}, pokemon);
@@ -3729,7 +3730,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTry(source) {
+		onTryHit(source) {
 			if (source.side.pokemonLeft === 1) return false;
 			if (!source.hasAbility('endround')) {
 				this.hint(`The user's ability needs to be End Round for New Bracket to work.`);
