@@ -802,8 +802,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
             return;
          }
          this.add('-start', target, 'typechange', 'Normal');
+			pokemon.addVolatile('youfilthypeasant');
          return oldAbility as false | null;
       },
+		condition: {
+			// Handling YFP's cooldown with a volatile
+			duration: 5,
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id === 'youfilthypeasant') {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-message', `You Filthy Peasant\'s cooldown ended for ${pokemon.name}!`);
+			},
+		}
 		secondary: null,
    	target: "normal",
       type: "Normal",
