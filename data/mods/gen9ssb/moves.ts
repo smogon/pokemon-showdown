@@ -3730,20 +3730,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTryHit(source) {
-			if (source.side.pokemonLeft === 1) return false;
+		onTryMove(source, target, move) {
+			this.attrLastMove('[still]');
+			if (source.side.pokemonLeft === 1) {
+				this.add('-fail', source);
+				return false;
+			}
 			if (!source.hasAbility('endround')) {
+				this.add('-fail', source);
 				this.hint(`The user's ability needs to be End Round for New Bracket to work.`);
 				return false;
 			}
-		},
-		onTryMove(source, target, move) {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source, move) {
 			this.attrLastMove(`[anim] Trick Room`);
 		},
 		onHitField(target, source, move) {
+
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.hp <= 0 || pokemon.fainted || pokemon.isSemiInvulnerable()) {
 					continue;

@@ -1855,7 +1855,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
 						(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
 					target.details = details;
-					this.add('detailschange', target, details);
+					this.add('replace', target, details);
 				}
 			}
 		},

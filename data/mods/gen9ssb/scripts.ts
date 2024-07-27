@@ -88,7 +88,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	}
 	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-	if (oldShiny !== pokemon.set.shiny) context.add('detailschange', pokemon, details);
+	if (oldShiny !== pokemon.set.shiny) context.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string, undefined, true);
 
 	pokemon.baseMaxhp = pokemon.species.name === 'Shedinja' ? 1 : Math.floor(Math.floor(
