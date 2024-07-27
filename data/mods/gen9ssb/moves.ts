@@ -4640,7 +4640,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Removes any terrain, weather, entry hazard, or other removable field condition, and then causes the user to switch out out even if it is trapped and be replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, and the user will still attempt to switch out if there are no active field conditions.",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},

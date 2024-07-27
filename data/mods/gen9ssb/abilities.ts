@@ -771,9 +771,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'recoil') {
+				let trueSource = source;
+				if (source !== target) trueSource = target;
 				if (!this.activeMove) throw new Error("Battle.activeMove is null");
 				if (this.activeMove.id !== 'struggle') {
-					if (!source.hasType(this.activeMove.type)) this.heal(damage);
+					if (!trueSource.hasType(this.activeMove.type)) this.heal(damage);
 					return null;
 				}
 			}
