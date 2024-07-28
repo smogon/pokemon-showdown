@@ -920,71 +920,29 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 export async function getBattleLog(battle: string, noReplay = false): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	const seenPokemon = new Set<string>();
-	if (battleRoom && battleRoom.type !== 'chat') {
-		const playerTable: Partial<BattleInfo['players']> = {};
-		const monTable: BattleInfo['pokemon'] = {};
-		// i kinda hate this, but this will always be accurate to the battle players.
-		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
-		for (const line of battleRoom.log.log) {
-			// |switch|p2a: badnite|Dragonite, M|323/323
-			if (line.startsWith('|switch|')) { // name cannot have been seen until it switches in
-				const [, , playerWithNick, speciesWithGender] = line.split('|');
-				let [slot, name] = playerWithNick.split(':');
-				const species = speciesWithGender.split(',')[0].trim(); // should always exist
-				slot = slot.slice(0, -1); // p2a -> p2
-				if (!monTable[slot]) monTable[slot] = [];
-				const identifier = `${name || ""}-${species}`;
-				if (seenPokemon.has(identifier)) continue;
-				// technically, if several mons have the same name and species, this will ignore them.
-				// BUT if they have the same name and species we only need to see it once
-				// so it doesn't matter
-				seenPokemon.add(identifier);
-				name = name?.trim() || "";
-				monTable[slot].push({
-					species,
-					name: species === name ? undefined : name,
-				});
-			}
-			if (line.startsWith('|player|')) {
-				// |player|p1|Mia|miapi.png|1000
-				const [, , playerSlot, name] = line.split('|');
-				playerTable[playerSlot as SideID] = toID(name);
-			}
-			for (const k in monTable) {
-				// SideID => userID, cannot do conversion at time of collection
-				// because the playerID => userid mapping might not be there.
-				// strictly, yes it will, but this is for maximum safety.
-				const userid = playerTable[k as SideID];
-				if (userid) {
-					monTable[userid] = monTable[k];
-					delete monTable[k];
-				}
-			}
-		}
-		return {
-			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
-			title: battleRoom.title,
-			url: `/${battle}`,
-			players: playerTable as BattleInfo['players'],
-			pokemon: monTable,
+	let data: {log: string, players: string[]} | null = null;
+	// try battle room first
+	if (battleRoom && battleRoom.type !== 'chat' && battleRoom.battle) {
+		data = {
+			log: battleRoom.log.log.join('\n'),
+			players: battleRoom.battle.players.map(x => x.id),
 		};
-	}
-	if (noReplay) return null;
-	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
+	} else { // fall back to replay
+		if (noReplay) return null;
+		battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
 
-	// let's get the replay info
-	let data;
-	if (Rooms.Replays.db) { // direct conn exists, use it
-		if (battle.endsWith('pw')) {
-			battle = battle.slice(0, battle.lastIndexOf("-", battle.length - 2));
+		if (Rooms.Replays.db) { // direct conn exists, use it
+			if (battle.endsWith('pw')) {
+				battle = battle.slice(0, battle.lastIndexOf("-", battle.length - 2));
+			}
+			data = await Rooms.Replays.get(battle);
+		} else {
+			// call out to API
+			try {
+				const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
+				data = JSON.parse(raw);
+			} catch {}
 		}
-		data = await Rooms.Replays.get(battle);
-	} else {
-		// call out to replays db
-		try {
-			const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
-			data = JSON.parse(raw);
-		} catch {}
 	}
 
 	// parse
