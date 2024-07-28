@@ -694,7 +694,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Core Enforcer', target);
 		},
-		onHit(source) {
+		onHit(target, source, move) {
 			// Random Weather
 			let w = this.random(5);
 			if (w === 0) this.field.setWeather('sunnyday');
