@@ -818,7 +818,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEnd(pokemon) {
 				this.add('-message', `You Filthy Peasant\'s cooldown ended for ${pokemon.name}!`);
 			},
-		}
+		},
 		secondary: null,
    	target: "normal",
       type: "Normal",
