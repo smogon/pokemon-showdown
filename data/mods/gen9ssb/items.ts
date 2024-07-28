@@ -149,7 +149,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (target.species.name === 'Pikachu-Libre' && target.abilityState.itemhp > 0) target.abilityState.itemhp--;
 		},
 		onUpdate(pokemon) {
-			if (pokemon.activeTurns && pokemon.activeTurns > 1 && pokemon.species.name === 'Pikachu') {
+			if (pokemon.species.name === 'Pikachu') {
 				this.add('-activate', pokemon, 'item: Silly Costume');
 				pokemon.formeChange('Pikachu-Libre');
 				pokemon.useItem();
