@@ -4936,7 +4936,22 @@
       "sets": [
           {
               "species": "Gyarados",
-              "weight": 100,
+              "weight": 50,
+              "moves": [
+                  ["Taunt"],
+                  ["Iron Head", "Waterfall"],
+                  ["Earthquake"],
+                  ["Thunder Wave"]
+              ],
+              "item": ["Rocky Helmet"],
+              "nature": "Impish",
+              "evs": {"hp": 228, "atk": 4, "def": 220, "spd": 4, "spe": 52},
+              "teraType": ["Ground"],
+              "ability": ["Intimidate"]
+          },
+          {
+              "species": "Gyarados",
+              "weight": 50,
               "moves": [
                   ["Taunt"],
                   ["Iron Head", "Waterfall"],
@@ -4946,9 +4961,9 @@
               "item": ["Rocky Helmet"],
               "nature": "Impish",
               "evs": {"hp": 228, "atk": 4, "def": 220, "spd": 4, "spe": 52},
-              "teraType": ["Ground", "Steel"],
+              "teraType": ["Steel"],
               "ability": ["Intimidate"]
-          }
+          },
       ]
   },
   "pawmot": {
@@ -6077,7 +6092,24 @@
       "sets": [
           {
               "species": "Polteageist",
-              "weight": 100,
+              "weight": 50,
+              "moves": [
+                  ["Shell Smash"],
+                  ["Strength Sap"],
+                  ["Stored Power"],
+                  ["Tera Blast"]
+              ],
+              "item": ["Focus Sash"],
+              "nature": "Bold",
+              "evs": {"hp": 108, "def": 196, "spe": 204},
+              "ivs": {"atk": 0},
+              "teraType": ["Fighting", "Water"],
+              "wantsTera": true,
+              "ability": ["Weak Armor"]
+          },
+          {
+              "species": "Polteageist",
+              "weight": 50,
               "moves": [
                   ["Shell Smash"],
                   ["Strength Sap"],
