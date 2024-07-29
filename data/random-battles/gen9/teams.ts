@@ -133,7 +133,7 @@ const NO_LEAD_POKEMON = [
 	'Zacian', 'Zamazenta',
 ];
 const DOUBLES_NO_LEAD_POKEMON = [
-	'Basculegion', 'Houndstone', 'Roaring Moon', 'Zacian', 'Zamazenta',
+	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
 
 const DEFENSIVE_TERA_BLAST_USERS = [
@@ -1030,7 +1030,7 @@ export class RandomTeams {
 			return (species.id === 'thundurus' && !!counter.get('Status'));
 		case 'Hydration': case 'Swift Swim':
 			return !teamDetails.rain;
-		case 'Iron Fist': case 'Skill Link': case 'Strong Jaw':
+		case 'Iron Fist': case 'Skill Link':
 			return !counter.get(toID(ability));
 		case 'Overgrow':
 			return !counter.get('Grass');
@@ -1071,7 +1071,7 @@ export class RandomTeams {
 		if (species.id === 'swampert' && (counter.get('Water') || moves.has('flipturn'))) return 'Torrent';
 		if (species.id === 'toucannon' && counter.get('skilllink')) return 'Skill Link';
 		if (abilities.includes('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
-		if (abilities.includes('Strong Jaw') && counter.get('strongjaw')) return 'Strong Jaw';
+		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
 
 		// ffa abilities that differ from doubles
 		if (this.format.gameType === 'freeforall') {
@@ -1265,11 +1265,11 @@ export class RandomTeams {
 		if (
 			(offensiveRole || (role === 'Tera Blast user' && (species.baseStats.spe >= 80 || moves.has('trickroom')))) &&
 			(!moves.has('fakeout') || species.id === 'ambipom') && !moves.has('incinerate') &&
-			(!moves.has('uturn') || types.includes('Bug') || species.baseStats.atk >= 120 || ability === 'Libero') &&
+			(!moves.has('uturn') || types.includes('Bug') || ability === 'Libero') &&
 			((!moves.has('icywind') && !moves.has('electroweb')) || species.id === 'ironbundle')
 		) {
 			return (
-				(ability === 'Quark Drive' || ability === 'Protosynthesis') &&
+				(ability === 'Quark Drive' || ability === 'Protosynthesis') && !isLead &&
 				['firstimpression', 'uturn', 'voltswitch'].every(m => !moves.has(m)) && species.id !== 'ironvaliant'
 			) ? 'Booster Energy' : 'Life Orb';
 		}

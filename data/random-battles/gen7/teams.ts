@@ -349,7 +349,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['wildcharge', 'thunderbolt'],
 			['gunkshot', 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
-			['stoneedge', 'headsmash'],
 			['dracometeor', 'dragonpulse'],
 			['dragonclaw', 'outrage'],
 			['knockoff', ['darkestlariat', 'darkpulse', 'foulplay']],
@@ -775,6 +774,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'marowak' && counter.get('recoil')) return 'Rock Head';
 		if (species.id === 'sawsbuck') return moves.has('headbutt') ? 'Serene Grace' : 'Sap Sipper';
 		if (species.id === 'toucannon' && counter.get('skilllink')) return 'Skill Link';
+		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
 		if (species.id === 'roserade' && counter.get('technician')) return 'Technician';
 
 		const abilityAllowed: string[] = [];
@@ -819,6 +819,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (species.baseSpecies === 'Arceus' && species.requiredItems) return species.requiredItems[1];
 			if (species.name === 'Raichu-Alola') return 'Aloraichium Z';
 			if (species.name === 'Decidueye') return 'Decidium Z';
+			if (species.name === 'Incineroar') return 'Incinium Z';
 			if (species.name === 'Kommo-o') return 'Kommonium Z';
 			if (species.name === 'Lunala') return 'Lunalium Z';
 			if (species.baseSpecies === 'Lycanroc') return 'Lycanium Z';

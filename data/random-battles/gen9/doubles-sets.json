@@ -3449,7 +3449,7 @@
             {
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Close Combat", "Leaf Blade", "Protect", "Sleep Powder", "Victory Dance"],
-                "abilities": ["Chlorophyll", "Hustle"],
+                "abilities": ["Hustle"],
                 "teraTypes": ["Fighting", "Steel"]
             }
         ]
@@ -3900,12 +3900,6 @@
         "level": 79,
         "sets": [
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Grass Knot", "Nasty Plot", "Protect", "Wildbolt Storm"],
-                "abilities": ["Prankster"],
-                "teraTypes": ["Electric", "Grass"]
-            },
-            {
                 "role": "Bulky Protect",
                 "movepool": ["Grass Knot", "Knock Off", "Protect", "Snarl", "Taunt", "Thunder Wave", "Thunderbolt"],
                 "abilities": ["Prankster"],
@@ -3916,6 +3910,12 @@
                 "movepool": ["Acrobatics", "Grass Knot", "Knock Off", "Protect", "Snarl", "Wildbolt Storm"],
                 "abilities": ["Defiant"],
                 "teraTypes": ["Electric", "Flying", "Steel"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Nasty Plot", "Protect", "Tera Blast", "Wildbolt Storm"],
+                "abilities": ["Defiant"],
+                "teraTypes": ["Flying", "Ice"]
             }
         ]
     },
@@ -3974,13 +3974,13 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Rock Slide", "Stealth Rock", "Stomping Tantrum", "Taunt", "U-turn"],
+                "movepool": ["Protect", "Rock Slide", "Stomping Tantrum", "Stone Edge", "Taunt", "U-turn"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Steel", "Water"]
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Earthquake", "Protect", "Stone Edge", "Tera Blast"],
+                "movepool": ["Rock Slide", "Stomping Tantrum", "Stone Edge", "Tera Blast", "U-turn"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Flying"]
             }
@@ -4978,9 +4978,15 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Crunch", "Liquidation", "Protect", "Rock Slide", "Shell Smash"],
-                "abilities": ["Shell Armor", "Strong Jaw", "Swift Swim"],
-                "teraTypes": ["Dark", "Water"]
+                "movepool": ["Crunch", "Liquidation", "Rock Slide", "Shell Smash"],
+                "abilities": ["Strong Jaw"],
+                "teraTypes": ["Dark"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Liquidation", "Protect", "Rock Slide", "Shell Smash"],
+                "abilities": ["Shell Armor", "Swift Swim"],
+                "teraTypes": ["Water"]
             }
         ]
     },
@@ -5199,6 +5205,12 @@
                 "movepool": ["Bug Buzz", "Ice Beam", "Protect", "Quiver Dance"],
                 "abilities": ["Ice Scales"],
                 "teraTypes": ["Ground", "Water"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Ice Beam", "Protect", "Quiver Dance", "Tera Blast"],
+                "abilities": ["Ice Scales"],
+                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -6571,6 +6583,12 @@
                 "movepool": ["Close Combat", "Leaf Blade", "Protect", "Swords Dance"],
                 "abilities": ["Quark Drive"],
                 "teraTypes": ["Fighting", "Fire", "Poison"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Close Combat", "Leaf Blade", "Protect", "Psyblade"],
+                "abilities": ["Quark Drive"],
+                "teraTypes": ["Fighting", "Fire", "Psychic"]
             },
             {
                 "role": "Doubles Wallbreaker",

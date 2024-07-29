@@ -583,6 +583,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.id === 'tornadus' && counter.get('Status')) return 'Prankster';
 		if (species.id === 'marowak' && counter.get('recoil')) return 'Rock Head';
 		if (species.id === 'kingler' && counter.get('sheerforce')) return 'Sheer Force';
+		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
 		if (species.id === 'roserade' && counter.get('technician')) return 'Technician';
 
 		const abilityAllowed: string[] = [];

@@ -54,7 +54,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Aqua Jet", "Belly Drum", "Facade", "Substitute"],
+                "movepool": ["Aqua Jet", "Belly Drum", "Body Slam", "Facade"],
                 "abilities": ["Huge Power"],
                 "teraTypes": ["Water"]
             }
@@ -552,7 +552,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Crunch", "Outrage", "Roar", "Thunder Wave", "Work Up"],
+                "movepool": ["Crunch", "Outrage", "Thunder Wave", "Work Up"],
+                "abilities": ["Hustle"],
+                "teraTypes": ["Poison"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Crunch", "Outrage", "Roar", "Thunder Wave"],
                 "abilities": ["Hustle"],
                 "teraTypes": ["Poison"]
             }
@@ -1018,7 +1024,7 @@
                 "role": "Bulky Setup",
                 "movepool": ["Earthquake", "Iron Head", "Scale Shot", "Swords Dance"],
                 "abilities": ["Rough Skin"],
-                "teraTypes": ["Dragon", "Ground", "Steel"]
+                "teraTypes": ["Ground", "Steel"]
             },
             {
                 "role": "Fast Attacker",
@@ -1357,19 +1363,19 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Burning Jealousy", "Dark Pulse", "Draining Kiss", "Nasty Plot", "Thunder Wave"],
+                "movepool": ["Burning Jealousy", "Dark Pulse", "Dazzling Gleam", "Nasty Plot", "Thunder Wave"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Dark", "Fairy", "Fire"]
             },
             {
                 "role": "Fast Support",
-                "movepool": ["Dazzling Gleam", "Light Screen", "Parting Shot", "Reflect", "Taunt", "Thunder Wave"],
+                "movepool": ["Dazzling Gleam", "Draining Kiss", "Light Screen", "Parting Shot", "Reflect", "Taunt", "Thunder Wave"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Poison", "Steel"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Dark Pulse", "Dazzling Gleam", "Parting Shot", "Sucker Punch", "Taunt", "Thunder Wave"],
+                "movepool": ["Dark Pulse", "Dazzling Gleam", "Draining Kiss", "Parting Shot", "Sucker Punch", "Taunt", "Thunder Wave"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Poison", "Steel"]
             }
@@ -1503,9 +1509,9 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bulk Up", "Flare Blitz", "Leech Life", "Trailblaze"],
+                "movepool": ["Flare Blitz", "Leech Life", "Swords Dance", "Trailblaze"],
                 "abilities": ["Intimidate"],
-                "teraTypes": ["Bug", "Dragon", "Fire"]
+                "teraTypes": ["Bug", "Fire", "Grass"]
             },
             {
                 "role": "Bulky Attacker",
@@ -1748,7 +1754,7 @@
                 "role": "Bulky Setup",
                 "movepool": ["Acid Armor", "Dazzling Gleam", "Draining Kiss", "Recover", "Stored Power"],
                 "abilities": ["Aroma Veil"],
-                "teraTypes": ["Fairy", "Steel"]
+                "teraTypes": ["Poison", "Steel"]
             }
         ]
     },
@@ -2193,7 +2199,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Close Combat", "Copycat", "Crunch", "Earthquake", "Ice Punch", "Swords Dance"],
-                "abilities": ["Inner Focus"],
+                "abilities": ["Inner Focus", "Prankster"],
                 "teraTypes": ["Dark", "Fighting", "Ground"]
             }
         ]

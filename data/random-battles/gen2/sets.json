@@ -128,7 +128,7 @@
             },
             {
                 "role": "Generalist",
-                "movepool": ["earthquake", "rest", "rockslide", "sleeptalk", "swordsdance"]
+                "movepool": ["earthquake", "rest", "rockslide", "sleeptalk"]
             }
         ]
     },
@@ -186,7 +186,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["bodyslam", "charm", "doubleedge", "fireblast", "rest", "sleeptalk"]
+                "movepool": ["bodyslam", "doubleedge", "fireblast", "rest", "sleeptalk"]
             },
             {
                 "role": "Bulky Setup",
@@ -624,10 +624,6 @@
                 "movepool": ["curse", "earthquake", "rest", "roar", "rockslide", "sleeptalk"]
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["curse", "earthquake", "rest", "sleeptalk"]
-            },
-            {
                 "role": "Bulky Setup",
                 "movepool": ["curse", "rest", "rockslide", "sleeptalk"]
             }
@@ -961,10 +957,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["earthquake", "hiddenpowerrock", "swordsdance", "synthesis"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["earthquake", "hiddenpowerfire", "leechseed", "lightscreen", "razorleaf", "synthesis"]
             }
         ]
     },
@@ -1101,8 +1093,8 @@
     "bellossom": {
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["hiddenpowerfire", "leechseed", "moonlight", "razorleaf", "sleeppowder", "stunspore"]
+                "role": "Bulky Attacker",
+                "movepool": ["hiddenpowerfire", "hiddenpowerice", "leechseed", "moonlight", "razorleaf", "sleeppowder", "stunspore"]
             },
             {
                 "role": "Bulky Setup",
@@ -1403,7 +1395,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["curse", "doubleedge", "rest", "sleeptalk", "swordsdance"]
+                "movepool": ["curse", "hiddenpowerbug", "hiddenpowersteel", "rest", "sleeptalk", "swordsdance"]
             }
         ]
     },

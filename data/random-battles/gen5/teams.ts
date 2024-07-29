@@ -541,6 +541,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// Hard-code abilities here
 		if (species.id === 'marowak' && counter.get('recoil')) return 'Rock Head';
 		if (species.id === 'kingler' && counter.get('sheerforce')) return 'Sheer Force';
+		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
 
 		const abilityAllowed: string[] = [];
 		// Obtain a list of abilities that are allowed (not culled)

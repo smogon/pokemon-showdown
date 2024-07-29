@@ -431,7 +431,9 @@ export class RandomBabyTeams extends RandomTeams {
 
 		// Hard-code abilities here
 		if (species.id === 'rowlet' && counter.get('Grass')) return 'Overgrow';
+		if (species.id === 'riolu') return moves.has('copycat') ? 'Prankster' : 'Inner Focus';
 		if (species.id === 'pikipek' && counter.get('skilllink')) return 'Skill Link';
+		if (species.id === 'psyduck' && teamDetails.rain) return 'Swift Swim';
 
 		const abilityAllowed: string[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
