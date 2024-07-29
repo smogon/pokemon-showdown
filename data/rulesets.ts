@@ -2765,16 +2765,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		// Implemented in Pokemon#getDetails
 	},
-	uselessmovesclause: {
-		effectType: 'ValidatorRule',
-		name: 'Useless Moves Clause',
-		// implemented in /mods/moderngen2/rulesets.ts
-	},
-	uselessitemsclause: {
-		effectType: 'ValidatorRule',
-		name: 'Useless Items Clause',
-		// implemented in /mods/moderngen2/rulesets.ts
-	},
 	ferventimpersonationmod: {
 		effectType: 'Rule',
 		name: "Fervent Impersonation Mod",
