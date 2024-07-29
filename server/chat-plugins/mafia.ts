@@ -4004,9 +4004,6 @@ export const commands: Chat.ChatCommands = {
 			// Fix searching on roles
 			// Fix random (do not pick empty)
 
-			// Future: tags
-			// Future: or
-
 			// Determine non-search targets first, afterwards searching is done with the remainder
 			let targets = target.split(',').map(x => x.trim());
 
@@ -4034,9 +4031,6 @@ export const commands: Chat.ChatCommands = {
 			}
 			else if (targets.includes(`aliases`)) {
 				searchType = `aliases`;
-			}
-			else if (targets.includes(`tags`)) {
-				searchType = `tags`;
 			}
 			else if (cmd === 'random' || cmd === 'randomdata' || cmd === 'randdata') {
 				searchType = [`themes`, `roles`, `alignments`, `IDEAs`, `terms`][Math.floor(Math.random() * 5)];
@@ -4127,28 +4121,14 @@ export const commands: Chat.ChatCommands = {
 					.map(([from, to]) => `${from}: ${to}`)
 					.join('<br/>');
 				return this.sendReplyBox(`Mafia aliases:<br/>${aliases}`);
-			} else if (dataSource === MafiaData.tags) {
-				this.checkCan('mute', null, room);
-				const tags = Object.entries(MafiaData.tags)
-					.map(([key, data]) => `${key}: Alignments ${data.alignments}; Roles: ${data.roles}; Themes: ${data.themes}; IDEAs: ${data.ideas}; Terms: ${data.terms}`)
-					.join('<br/>');
-				return this.sendReplyBox(`Mafia tags:<br/>${tags}`);
 			} else {
 				let table = `<div style="max-height:300px;overflow:auto;"><table border="1" style="border: 1px solid black;width: 100%">`;
 				let entries = Object.entries(dataSource).sort();
-
-				// Remove probably
-				entries.forEach(([key, data]) => {
-					if (!(MafiaData[searchType][key][`tags`])) MafiaData[searchType][key][`tags`] = [];
-				});
-
-				if (!hidden) entries = entries.filter(([key, data]) => !MafiaData[searchType][key][`tags`].includes(`hidden`));
 
 				for (let i = 0; i < targets.length; i++) {
 					entries = targets[i].split('|').map(x => x.trim()).map(searchTerm => search.call(this, entries.slice(), searchTerm)).reduce((aggregate, result) => [...new Set([...aggregate, ...result])]);
 				}
 
-				console.log(typeof(entries));
 				if(typeof(entries) == 'undefined') return; //Hotpatch
 
 				if (random) entries = shuffle(entries);
