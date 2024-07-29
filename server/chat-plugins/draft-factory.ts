@@ -158,5 +158,5 @@ export const commands: Chat.ChatCommands = {
 		`/draftfactory import url, label - Imports a CSV of Draft Factory teams from the given URL.`,
 		`/draftfactory delete label - Deletes all teams under the name "label"`,
 		`Requires: &`,
-	]
+	],
 };
