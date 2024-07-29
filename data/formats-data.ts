@@ -4641,7 +4641,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	thwackey: {
-		tier: "ZUBL",
+		tier: "ZU",
 		doublesTier: "NFE",
 		natDexTier: "NFE",
 	},
