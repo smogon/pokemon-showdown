@@ -1269,8 +1269,8 @@ export class RandomTeams {
 			((!moves.has('icywind') && !moves.has('electroweb')) || species.id === 'ironbundle')
 		) {
 			return (
-				(ability === 'Quark Drive' || ability === 'Protosynthesis') && !isLead &&
-				['firstimpression', 'uturn', 'voltswitch'].every(m => !moves.has(m)) && species.id !== 'ironvaliant'
+				(ability === 'Quark Drive' || ability === 'Protosynthesis') && !isLead && species.id !== 'ironvaliant' &&
+				['dracometeor', 'firstimpression', 'uturn', 'voltswitch'].every(m => !moves.has(m)) &&
 			) ? 'Booster Energy' : 'Life Orb';
 		}
 		if (isLead && (species.id === 'glimmora' ||
