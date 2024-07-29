@@ -2534,7 +2534,7 @@ export const Formats: FormatList = [
 		mod: 'gen9ssb',
 		debug: true,
 		team: 'randomStaffBros',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Team Preview'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Team Preview', 'Terastal Clause'],
 		onBegin() {
 			// TODO look into making an event to put this right after turn|1
 			// https://discordapp.com/channels/630837856075513856/630845310033330206/716126469528485909
