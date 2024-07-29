@@ -20,12 +20,12 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["airslash", "dragonpulse", "fireblast", "focusblast", "hiddenpowergrass", "roost"],
-                "abilities": ["Blaze",  "Solar Power"]
+                "abilities": ["Blaze", "Solar Power"]
             },
             {
                 "role": "Bulky Attacker",
                 "movepool": ["airslash", "earthquake", "fireblast", "roost", "willowisp"],
-                "abilities": ["Blaze",  "Solar Power"]
+                "abilities": ["Blaze", "Solar Power"]
             },
             {
                 "role": "Setup Sweeper",
@@ -346,7 +346,7 @@
         ]
     },
     "poliwrath": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -556,7 +556,7 @@
         ]
     },
     "electrode": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1101,7 +1101,7 @@
         ]
     },
     "ampharos": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1169,7 +1169,7 @@
         ]
     },
     "jumpluff": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Support",
@@ -1184,7 +1184,7 @@
         ]
     },
     "sunflora": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1427,7 +1427,7 @@
         ]
     },
     "corsola": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1595,7 +1595,7 @@
         ]
     },
     "raikou": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1752,7 +1752,7 @@
         ]
     },
     "mightyena": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1763,7 +1763,7 @@
         ]
     },
     "linoone": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1925,7 +1925,7 @@
         ]
     },
     "shedinja": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2096,7 +2096,7 @@
         ]
     },
     "swalot": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2511,7 +2511,7 @@
         ]
     },
     "metagross": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2710,7 +2710,7 @@
         ]
     },
     "deoxysspeed": {
-        "level": 76,
+        "level": 77,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3345,7 +3345,7 @@
         ]
     },
     "gliscor": {
-        "level": 77,
+        "level": 78,
         "sets": [
             {
                 "role": "Staller",
@@ -3670,7 +3670,7 @@
         ]
     },
     "shaymin": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3968,7 +3968,7 @@
         ]
     },
     "watchog": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4081,7 +4081,7 @@
         ]
     },
     "gigalith": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4122,7 +4122,7 @@
         ]
     },
     "audino": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4415,7 +4415,7 @@
         ]
     },
     "swanna": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4452,7 +4452,7 @@
         ]
     },
     "emolga": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4626,7 +4626,7 @@
         ]
     },
     "stunfisk": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Attacker",
