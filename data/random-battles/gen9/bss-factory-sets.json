@@ -4963,7 +4963,7 @@
               "evs": {"hp": 228, "atk": 4, "def": 220, "spd": 4, "spe": 52},
               "teraType": ["Steel"],
               "ability": ["Intimidate"]
-          },
+          }
       ]
   },
   "pawmot": {
