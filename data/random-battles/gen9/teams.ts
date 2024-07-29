@@ -1270,7 +1270,7 @@ export class RandomTeams {
 		) {
 			return (
 				(ability === 'Quark Drive' || ability === 'Protosynthesis') && !isLead && species.id !== 'ironvaliant' &&
-				['dracometeor', 'firstimpression', 'uturn', 'voltswitch'].every(m => !moves.has(m)) &&
+				['dracometeor', 'firstimpression', 'uturn', 'voltswitch'].every(m => !moves.has(m))
 			) ? 'Booster Energy' : 'Life Orb';
 		}
 		if (isLead && (species.id === 'glimmora' ||
