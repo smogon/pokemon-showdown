@@ -2544,6 +2544,7 @@ export const Formats: FormatList = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
+			if (pokemon.abilityState.ran) pokemon.addVolatile('shikigamiran');
 			let name: string = this.toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.dex.species.get(name).exists || this.dex.moves.get(name).exists ||
 				this.dex.abilities.get(name).exists || name === 'blitz') {
