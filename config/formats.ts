@@ -518,7 +518,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Oricorio-Sensu', 'Palkia', 'Palkia-Origin', 'Pecharunt', 'Rayquaza', 'Regieleki', 'Regigigas', 'Reshiram', 'Sableye', 'Scream Tail', 'Shaymin-Sky', 'Slaking',
 			'Smeargle', 'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Ursaluna-Base', 'Weavile', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom',
 			'Arena Trap', 'Drizzle', 'Drought', 'Good as Gold', 'Huge Power', 'Imposter', 'Magic Bounce', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Poison Heal', 'Pure Power',
-			'Shadow Tag', 'Speed Boost', 'Stakeout', 'Water Bubble', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Ceaseless Edge', 'Fillet Away', 'Last Respects', 'Rage Fist',
+			'Shadow Tag', 'Speed Boost', 'Stakeout', 'Water Bubble', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Ceaseless Edge', 'Fillet Away', 'Last Respects', 'Quiver Dance', 'Rage Fist',
 			'Shed Tail', 'Shell Smash',
 		],
 		getEvoFamily(speciesid) {
