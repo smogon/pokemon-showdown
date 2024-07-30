@@ -437,14 +437,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon summons a random weather upon switching in and gains +1 Defense, Special Attack or Special Defense per turn.",
 		shortDesc: "Switch-in: Random weather. +1 Def, Spd, or Spe per turn.",
 		onStart(pokemon) {
-			let w = this.random(3);
-			if (w === 1) {
+			const w = this.random(4);
+			if (w === 0) {
 				this.field.setWeather('sunnyday');
 				this.add('-message', `${pokemon.name}'s Wind Priestess summoned harsh sunlight!`);
-			} else if (w === 2) {
+			} else if (w === 1) {
 				this.field.setWeather('raindance');
 				this.add('-message', `${pokemon.name}'s Wind Priestess summoned heavy rain!`);
-			} else if (w === 3) {
+			} else if (w === 2) {
 				this.field.setWeather('snowscape');
 				this.add('-message', `${pokemon.name}'s Wind Priestess summoned a snowstorm!`);
 			} else {
@@ -452,14 +452,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${pokemon.name}'s Wind Priestess summoned a sandstorm!`);
 			}
 		},
-		onResidualOrder: 26,
-		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			let s = this.random(2);
 			if (pokemon.activeTurns) {
-				if (s === 0) this.boost({spd: 1});
-				if (s === 1) this.boost({def: 1});
-				if (s === 2) this.boost({spa: 1});
+				const s = this.random(3);
+				if (s === 0) {
+					this.boost({spd: 1});
+				} else if (s === 1) {
+					this.boost({def: 1});
+				} else {
+					this.boost({spa: 1});
+				}
 			}
 		},
 		flags: {},
