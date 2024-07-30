@@ -202,7 +202,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	    	}
 			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} lost ${Math.round(dmg/newTarget.baseMaxhp * 100)}% of its health!`);
-			return;
+			if (newTarget.hp <= 0) newTarget.faint();
 		},
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
