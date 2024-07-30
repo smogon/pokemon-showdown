@@ -596,7 +596,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["doubleedge", "earthquake", "rest", "sleeptalk", "thunder"]
+                "movepool": ["doubleedge", "earthquake", "rest", "sleeptalk", "surf", "thunder"]
             }
         ]
     },
