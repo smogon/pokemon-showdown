@@ -206,11 +206,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
-				if (!this.heal(pokemon.baseMaxhp / 3)) {
-	            this.add('-immune', pokemon, '[from] ability: Peal of Thunder');
+				if (!this.heal(target.baseMaxhp / 3)) {
+	            this.add('-immune', target, '[from] ability: Peal of Thunder');
 	        	}
 	        	if (!this.boost({spa: 1, spe: 1})) {
-	            this.add('-immune', pokemon, '[from] ability: Peal of Thunder');
+	            this.add('-immune', target, '[from] ability: Peal of Thunder');
 	        	}
 				return null;
 			}
