@@ -1520,8 +1520,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Damages foe every turn until switch/faint.",
-		shortDesc: "Damages the foe using Defense stat in calculation at the end of every turn until that Pokemon faints or switches out.",
+		shortDdesc: "Damages foe every turn until switch/faint.",
+		desc: "Damages the foe using Defense stat in calculation at the end of every turn until that Pokemon faints or another Pokemon is affected by this move.",
 		name: "Shikigami Ran",
 		pp: 40,
 		noPPBoosts: true,
@@ -1534,7 +1534,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Glare', target);
 		},
 		onHit(target, source, move) {
+			for (const foe of target.side.pokemon) {
+				if (foe.abilityState.ran) foe.abilityState.ran = false;
+			}
 			target.addVolatile('shikigamiran');
+			target.abilityState.ran = true;
 		},
 		condition: {
 			onResidual(pokemon) {
@@ -1545,6 +1549,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-anim', pokemon, 'Hex', pokemon);
 				this.damage(dmg, pokemon, source, this.dex.conditions.get('Ran Yakumo'));
 				this.add('-message', `${pokemon.name} was buffeted by Ran Yakumo!`);
+			},
+			onSwitchOut(pokemon) {
+				pokemon.abilityState.ran
 			},
 		},
 		secondary: null,
