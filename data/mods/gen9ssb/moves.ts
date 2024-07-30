@@ -1550,9 +1550,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.damage(dmg, pokemon, source, this.dex.conditions.get('Ran Yakumo'));
 				this.add('-message', `${pokemon.name} was buffeted by Ran Yakumo!`);
 			},
-			onSwitchOut(pokemon) {
-				pokemon.abilityState.ran
-			},
 		},
 		secondary: null,
 		target: "normal",
