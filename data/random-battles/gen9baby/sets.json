@@ -894,7 +894,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Air Slash", "Defog", "Double-Edge", "Heat Wave", "Roost", "Taunt", "U-turn"],
+                "movepool": ["Brave Bird", "Defog", "Double-Edge", "Heat Wave", "Roost", "Taunt", "U-turn"],
                 "abilities": ["Gale Wings"],
                 "teraTypes": ["Steel"]
             }
@@ -3200,20 +3200,14 @@
         "level": 6,
         "sets": [
             {
-                "role": "Fast Support",
-                "movepool": ["Aurora Veil", "Blizzard", "Freeze-Dry", "Moonblast"],
-                "abilities": ["Snow Warning"],
-                "teraTypes": ["Steel", "Water"]
-            },
-            {
                 "role": "Setup Sweeper",
-                "movepool": ["Aurora Veil", "Blizzard", "Moonblast", "Nasty Plot"],
+                "movepool": ["Aurora Veil", "Blizzard", "Freeze-Dry", "Nasty Plot"],
                 "abilities": ["Snow Warning"],
                 "teraTypes": ["Steel", "Water"]
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Blizzard", "Moonblast", "Nasty Plot", "Tera Blast"],
+                "movepool": ["Aurora Veil", "Blizzard", "Nasty Plot", "Tera Blast"],
                 "abilities": ["Snow Warning"],
                 "teraTypes": ["Ground"]
             }

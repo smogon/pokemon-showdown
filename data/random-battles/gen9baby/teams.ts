@@ -488,9 +488,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (ability === 'Guts' && moves.has('facade')) return 'Flame Orb';
 		if (ability === 'Quick Feet') return 'Toxic Orb';
 
-		if (
-			this.dex.getEffectiveness('Rock', species) >= 2 && this.dex.getEffectiveness('Ground', species) >= 0
-		) return 'Heavy-Duty Boots';
+		if (types.includes('Bug') && types.includes('Flying')) return 'Heavy-Duty Boots';
 		if (['Harvest', 'Ripen', 'Unburden'].includes(ability) || moves.has('bellydrum')) return 'Oran Berry';
 	}
 
