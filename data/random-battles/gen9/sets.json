@@ -1447,7 +1447,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Destiny Bond", "Gunk Shot", "Spikes", "Taunt", "Thunder Wave", "Toxic Spikes", "Waterfall"],
+                "movepool": ["Gunk Shot", "Spikes", "Taunt", "Thunder Wave", "Toxic Spikes", "Waterfall"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Dark", "Grass"]
             },
