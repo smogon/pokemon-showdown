@@ -223,8 +223,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	spiritingaway: {
 		desc: "After using a move, this Pokemon switches to an ally of the user's choice. Sleep turns still burn while inactive.",
 		shortDesc: "User switches after move; sleep turns burn while inactive.",
-		onModifyMove(move) {
-			move.selfSwitch = true;
+		onAfterMoveSecondarySelf(source, target, move) {
+			source.switchFlag = true;
 		},
 		onSwitchOut(pokemon) {
 			if (pokemon.status === 'slp') {
