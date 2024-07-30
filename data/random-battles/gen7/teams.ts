@@ -362,7 +362,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			// Lunatone
 			['moonlight', 'rockpolish'],
 			// Smeargle
-			['destinybond', 'whirlwind'],
+			['nuzzle', 'whirlwind'],
 			// Liepard
 			['copycat', 'uturn'],
 			// Seviper

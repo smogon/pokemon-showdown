@@ -1700,7 +1700,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["destinybond", "nuzzle", "spore", "stealthrock", "stickyweb", "whirlwind"],
+                "movepool": ["nuzzle", "spikes", "spore", "stealthrock", "stickyweb", "whirlwind"],
                 "abilities": ["Own Tempo"]
             }
         ]

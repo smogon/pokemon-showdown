@@ -1926,7 +1926,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["destinybond", "nuzzle", "spore", "stealthrock", "stickyweb", "whirlwind"],
+                "movepool": ["nuzzle", "spikes", "spore", "stealthrock", "stickyweb", "whirlwind"],
                 "abilities": ["Own Tempo"]
             }
         ]
@@ -7340,7 +7340,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["calmmind", "moonblast", "moongeistbeam", "psyshock", "roost"],
+                "movepool": ["calmmind", "moonblast", "moongeistbeam", "roost"],
                 "abilities": ["Shadow Shield"]
             },
             {
