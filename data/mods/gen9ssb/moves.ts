@@ -447,6 +447,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				newTarget.hp -= dmg;
 				this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from ${move.name}!`);
+				if (newTarget.hp <= 0) newTarget.faint();
 			}
 		},
 		secondary: null,
