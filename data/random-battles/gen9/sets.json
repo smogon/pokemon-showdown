@@ -1180,6 +1180,12 @@
                 "movepool": ["Agility", "Dazzling Gleam", "Focus Blast", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Static"],
                 "teraTypes": ["Electric", "Fairy"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Dazzling Gleam", "Discharge", "Focus Blast", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Static"],
+                "teraTypes": ["Fairy"]
             }
         ]
     },
