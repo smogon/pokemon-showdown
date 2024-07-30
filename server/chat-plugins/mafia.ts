@@ -4075,15 +4075,18 @@ export const commands: Chat.ChatCommands = {
 						!isNaN(Number(players.toString())))) {
 						if (inequality == '=') entries = entries.filter(([key, data]) => players in (MafiaData[searchType][key]));
 						else if (inequality == '<' || inequality == '<=') entries = entries.filter(([key, data]) => ([...Array(+players + (inequality == '<=' ? +1 : +0)).keys()]).some(playerCount => playerCount in (MafiaData[searchType][key])));
-						else if (inequality == '>' || inequality == '>=') entries = entries.filter(([key, data]) => ([...Array(30 - players).keys()].map(num => +num + +players + (inequality == '>=' ? +0 : +1))).some(playerCount => playerCount in (MafiaData[searchType][key])));
+						else if (inequality == '>' || inequality == '>=') entries = entries.filter(([key, data]) => ([...Array(50 - players).keys()].map(num => +num + +players + (inequality == '>=' ? +0 : +1))).some(playerCount => playerCount in (MafiaData[searchType][key])));
 					} else {
-						return entries; // this.errorReply(`Please ensure the amount of players is numeric.`);
+						return entries;
 					}
 				}
-				else if ((searchType == `roles`) && toID(searchTarget) in MafiaData[`themes`]) {
+				else if (searchType == `themes` && toID(searchTarget) in MafiaData[`roles`]) {
+					entries = entries.filter(([key, data]) => ([...Array(50).keys()]).some(playerCount => playerCount in (MafiaData[searchType][key]) && (MafiaData[searchType][key])[playerCount].toString().toLowerCase().includes(searchTarget)));
+				}
+				else if (searchType == `roles` && toID(searchTarget) in MafiaData[`themes`]) {
 					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`themes`][toID(searchTarget)]).filter(newKey => toID((MafiaData[`themes`][toID(searchTarget)])[newKey].toString()).includes(key)).length > 0);
 				}
-				else if ((searchType == `roles`) && toID(searchTarget) in MafiaData[`IDEAs`]) {
+				else if (searchType == `roles` && toID(searchTarget) in MafiaData[`IDEAs`]) {
 					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`IDEAs`][toID(searchTarget)]).filter(newKey => toID((MafiaData[`IDEAs`][toID(searchTarget)])[newKey].toString()).includes(key)).length > 0);
 				}
 				else {
