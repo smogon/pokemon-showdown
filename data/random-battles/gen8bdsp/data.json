@@ -123,7 +123,7 @@
         "moves": ["agility", "razorshell", "rockslide", "swordsdance", "xscissor"]
     },
     "electrode": {
-        "moves": ["explosion", "lightscreen", "taunt", "thunderbolt", "voltswitch"]
+        "moves": ["explosion", "taunt", "thunderbolt", "voltswitch"]
     },
     "exeggutor": {
         "moves": ["gigadrain", "leechseed", "psychic", "sleeppowder", "substitute"]
@@ -261,7 +261,7 @@
         "moves": ["acrobatics", "leechseed", "sleeppowder", "strengthsap", "substitute"]
     },
     "sunflora": {
-        "moves": ["energyball", "lightscreen", "sludgebomb", "synthesis"]
+        "moves": ["energyball", "leechseed", "sludgebomb", "synthesis"]
     },
     "quagsire": {
         "moves": ["earthquake", "recover", "scald", "toxic"]

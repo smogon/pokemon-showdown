@@ -1957,7 +1957,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "substitute"],
+                "movepool": ["calmmind", "flamethrower", "hiddenpowergrass", "substitute"],
                 "abilities": ["Pressure"]
             }
         ]
