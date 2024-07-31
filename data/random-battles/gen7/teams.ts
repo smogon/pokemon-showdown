@@ -137,12 +137,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
 				)
 			),
-			Rock: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Rock') && (species.baseStats.atk >= 100 || abilities.includes('Rock Head'))
-			),
-			Steel: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Steel') && species.baseStats.atk >= 100
-			),
+			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
+			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.baseStats.atk >= 100),
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
 	}
