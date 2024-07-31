@@ -137,12 +137,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
 				)
 			),
-			Rock: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Rock') && (species.baseStats.atk >= 100 || abilities.includes('Rock Head'))
-			),
-			Steel: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Steel') && species.baseStats.atk >= 100
-			),
+			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
+			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.baseStats.atk >= 100),
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
 	}
@@ -349,7 +345,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['wildcharge', 'thunderbolt'],
 			['gunkshot', 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
-			['stoneedge', 'headsmash'],
 			['dracometeor', 'dragonpulse'],
 			['dragonclaw', 'outrage'],
 			['knockoff', ['darkestlariat', 'darkpulse', 'foulplay']],
@@ -363,7 +358,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			// Lunatone
 			['moonlight', 'rockpolish'],
 			// Smeargle
-			['destinybond', 'whirlwind'],
+			['nuzzle', 'whirlwind'],
 			// Liepard
 			['copycat', 'uturn'],
 			// Seviper
@@ -775,6 +770,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'marowak' && counter.get('recoil')) return 'Rock Head';
 		if (species.id === 'sawsbuck') return moves.has('headbutt') ? 'Serene Grace' : 'Sap Sipper';
 		if (species.id === 'toucannon' && counter.get('skilllink')) return 'Skill Link';
+		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
 		if (species.id === 'roserade' && counter.get('technician')) return 'Technician';
 
 		const abilityAllowed: string[] = [];
@@ -819,6 +815,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (species.baseSpecies === 'Arceus' && species.requiredItems) return species.requiredItems[1];
 			if (species.name === 'Raichu-Alola') return 'Aloraichium Z';
 			if (species.name === 'Decidueye') return 'Decidium Z';
+			if (species.name === 'Incineroar') return 'Incinium Z';
 			if (species.name === 'Kommo-o') return 'Kommonium Z';
 			if (species.name === 'Lunala') return 'Lunalium Z';
 			if (species.baseSpecies === 'Lycanroc') return 'Lycanium Z';

@@ -1700,7 +1700,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["destinybond", "nuzzle", "spore", "stealthrock", "stickyweb", "whirlwind"],
+                "movepool": ["nuzzle", "spikes", "spore", "stealthrock", "stickyweb", "whirlwind"],
                 "abilities": ["Own Tempo"]
             }
         ]
@@ -2423,7 +2423,7 @@
         "sets": [
             {
                 "role": "Staller",
-                "movepool": ["feintattack", "rest", "return", "sleeptalk", "suckerpunch", "superpower"],
+                "movepool": ["rest", "return", "sleeptalk", "suckerpunch", "superpower", "thief"],
                 "abilities": ["Contrary"],
                 "preferredTypes": ["Fighting"]
             }
@@ -3771,13 +3771,13 @@
         "level": 77,
         "sets": [
             {
-                "role": "Staller",
+                "role": "Bulky Support",
                 "movepool": ["earthquake", "protect", "substitute", "toxic"],
                 "abilities": ["Poison Heal"]
             },
             {
-                "role": "Bulky Support",
-                "movepool": ["earthquake", "knockoff", "roost", "stealthrock", "taunt", "toxic", "uturn"],
+                "role": "Staller",
+                "movepool": ["defog", "earthquake", "knockoff", "roost", "stealthrock", "taunt", "toxic", "uturn"],
                 "abilities": ["Poison Heal"]
             },
             {
@@ -4550,7 +4550,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["earthquake", "ironhead", "rapidspin", "rockslide", "swordsdance"],
-                "abilities": ["Mold Breaker"]
+                "abilities": ["Mold Breaker", "Sand Rush"]
             }
         ]
     },
@@ -4811,13 +4811,8 @@
         "level": 83,
         "sets": [
             {
-                "role": "Fast Support",
-                "movepool": ["acrobatics", "defog", "earthquake", "roost", "stoneedge", "uturn"],
-                "abilities": ["Defeatist"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["aquatail", "earthquake", "headsmash", "knockoff", "stealthrock", "stoneedge", "uturn"],
+                "role": "Fast Attacker",
+                "movepool": ["acrobatics", "defog", "earthquake", "knockoff", "roost", "stealthrock", "stoneedge", "uturn"],
                 "abilities": ["Defeatist"],
                 "preferredTypes": ["Ground"]
             }
