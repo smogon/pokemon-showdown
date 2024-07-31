@@ -101,7 +101,7 @@
         ]
     },
     "raticate": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -131,7 +131,7 @@
         ]
     },
     "arbok": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -342,7 +342,7 @@
         ]
     },
     "arcanine": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -571,7 +571,7 @@
         ]
     },
     "gengar": {
-        "level": 74,
+        "level": 75,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1112,7 +1112,7 @@
         ]
     },
     "meganium": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Staller",
@@ -1155,7 +1155,7 @@
         ]
     },
     "furret": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1221,7 +1221,7 @@
         ]
     },
     "crobat": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2279,7 +2279,7 @@
         ]
     },
     "shedinja": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2289,7 +2289,7 @@
         ]
     },
     "exploud": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2575,7 +2575,7 @@
         ]
     },
     "spinda": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Staller",
