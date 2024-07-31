@@ -52310,27 +52310,27 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	rotomheat: {
 		learnset: {
-			overheat: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
+			overheat: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	rotomwash: {
 		learnset: {
-			hydropump: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
+			hydropump: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	rotomfrost: {
 		learnset: {
-			blizzard: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
+			blizzard: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	rotomfan: {
 		learnset: {
-			airslash: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
+			airslash: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	rotommow: {
 		learnset: {
-			leafstorm: ["9L1", "8L1", "7R", "6R", "5R", "4R"],
+			leafstorm: ["9R", "8R", "7R", "6R", "5R", "4R"],
 		},
 	},
 	uxie: {
@@ -69983,7 +69983,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			attract: ["8M", "7M", "6M"],
 			batonpass: ["9M"],
 			calmmind: ["9M", "8M", "7M", "6M"],
-			chargebeam: ["9M", "9L15", "7M", "6M"],
+			chargebeam: ["9M", "7M", "6M"],
 			charm: ["9M", "9L15", "8M", "8L15", "7L28", "6L28"],
 			confide: ["7M", "6M"],
 			confusion: ["9L9", "8L9", "7L1", "6L9"],
@@ -69998,13 +69998,11 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			endure: ["9M", "8M"],
 			energyball: ["9M", "8M", "7M", "6M"],
 			expandingforce: ["9M", "8T"],
-			extrasensory: ["9L44"],
 			facade: ["9M", "8M", "7M", "6M"],
 			fakeout: ["9L1", "8L1", "7L19", "6L19"],
 			faketears: ["9M", "8M"],
 			flash: ["6M"],
 			frustration: ["7M", "6M"],
-			futuresight: ["9M", "9L59"],
 			gigaimpact: ["9M", "8M", "7M", "6M"],
 			gravity: ["9M", "7T", "6T"],
 			healbell: ["7T", "6T"],
@@ -70015,7 +70013,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			irontail: ["8M", "7T", "6T"],
 			leer: ["9L1", "8L1", "7L1", "6L1"],
 			lightscreen: ["9M", "9L34", "8M", "8L34", "7M", "7L13", "6M", "6L13"],
-			magicalleaf: ["9M", "9L1"],
 			magiccoat: ["7T", "6T"],
 			magicroom: ["8M", "7T", "6T"],
 			meanlook: ["9L1", "8L1", "7L1", "6L1"],
@@ -70044,14 +70041,14 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			safeguard: ["8M", "7M", "6M"],
 			scratch: ["9L1", "8L1", "7L1", "6L1"],
 			secretpower: ["6M"],
-			shadowball: ["9M", "9L49", "8M", "7M", "6M"],
+			shadowball: ["9M", "8M", "7M", "6M"],
 			shockwave: ["7T", "6T"],
 			signalbeam: ["7T", "6T"],
 			skillswap: ["9M", "8M", "7T"],
 			sleeptalk: ["9M", "8M", "7M", "6M"],
 			snatch: ["7T", "6T"],
 			snore: ["8M", "7T", "6T"],
-			storedpower: ["9M", "9L12"],
+			storedpower: ["9M"],
 			substitute: ["9M", "8M", "7M", "6M"],
 			suckerpunch: ["9L24", "8L24", "7L48", "6L48"],
 			sunnyday: ["9M", "8M", "7M", "6M"],
