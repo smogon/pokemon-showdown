@@ -21,7 +21,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
 			if (target?.item) {
-				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
+				this.add('-item', pokemon, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
 			}
 		},
 	},

@@ -1501,7 +1501,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				if (target.item) {
-					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
+					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
 				}
 			}
 		},
