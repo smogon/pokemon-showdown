@@ -588,7 +588,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["earthquake", "protect", "rest", "return", "swordsdance"]
+                "movepool": ["bodyslam", "earthquake", "protect", "return", "swordsdance"]
             },
             {
                 "role": "Bulky Setup",
