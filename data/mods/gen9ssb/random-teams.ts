@@ -134,6 +134,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cranberry Cutter',
 		evs: {atk: 252, spe: 252, spd: 4}, nature: 'Jolly',
 	},
+	Fblthp: {
+		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
+		moves: ['Jet Punch', 'Dizzy Punch', 'Belly Drum'],
+		signatureMove: 'Bubble Guppy Uppercut',
+		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
+	},
+	Shorikai: {
+		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
+		moves: ['Metal Burst', 'King\'s Shield', 'Spikes'],
+		signatureMove: 'Sanguine Shuriken',
+		evs: {hp: 248, spd: 8, spe: 252}, nature: 'Jolly', shiny: true,
+	},
 	/*Croupier: {
 		species: 'Hoopa', ability: 'Fair Play', item: 'Staufen\'s Die', gender: 'M',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
@@ -145,14 +157,7 @@ export const ssbSets: SSBSets = {
 		moves: ['Eerie Spell', 'Topsy Turvy', 'Kniffel'],
 		signatureMove: 'Faustian Bargain',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty', skip: 'Croupier',
-	},*/
-	Fblthp: {
-		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
-		moves: ['Jet Punch', 'Dizzy Punch', 'Belly Drum'],
-		signatureMove: 'Bubble Guppy Uppercut',
-		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
 	},
-	/*
 	Luminous: {
 		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
 		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
