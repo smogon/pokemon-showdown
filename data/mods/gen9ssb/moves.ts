@@ -44,10 +44,63 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	rainbowmaxifier: {
 		accuracy: 85,
 		basePower: 80,
+		category: "Special",
+		name: "Rainbow Maxifier",
+		pp: 16,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1},
+		drain: [1, 2],
+		secondaries: [
+			{
+				chance: 30,
+				status: 'brn',
+			}, {
+				chance: 30,
+				boosts: {
+					atk: -1,
+					spa: -1,
+				},
+			},
+		],
+		target: "normal",
+		type: "Fire",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Tri Attack', target);
+			this.add('-anim', source, 'Aurora Beam', target);
+		},
+		onHit(target, source, move) {
+			target.side.addSideCondition('waterpledge');
+		},
 	},
 	// Luminous
 	polaris: {
+		accuracy: 100,
+		basePower: 170,
+		category: "Special",
+		name: "Polaris",
+		pp: 1,
 		isZ: "spectralprism",
+		priority: 0,
+		flags: {protect: 1},
+		status: 'brn',
+		secondary: null,
+		target: "normal",
+		type: "Light",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Light That Burns the Sky', target);
+			this.add('-anim', source, 'Flash', target);
+		},
+		onHit(target, source, move) {
+			source.formeChange('Necrozma-Ultra');
+			source.abilityState.polaris = true;
+		},
 	},
 	// Fblthp
 	bubbleguppyuppercut: {
