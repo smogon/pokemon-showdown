@@ -602,7 +602,7 @@ export class DexSpecies {
 					// Smeargle time
 					// A few moves like Dark Void were made unSketchable in a generation later than when they were introduced
 					// However, this has only happened in a gen where transfer moves are unavailable
-					const sketchables = this.dex.moves.all().filter(m => !m.noSketch && !m.isNonstandard);
+					const sketchables = this.dex.moves.all().filter(m => !m.flags['nosketch'] && !m.isNonstandard);
 					for (const move of sketchables) {
 						movePool.add(move.id);
 					}

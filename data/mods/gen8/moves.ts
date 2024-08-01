@@ -91,7 +91,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: {
 			protect: 1, mirror: 1, sound: 1, distance: 1, bypasssub: 1,
-			noassist: 1, failcopycat: 1, failinstruct: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1,
+			noassist: 1, failcopycat: 1, failinstruct: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1, nosketch: 1,
 		},
 	},
 	copycat: {
@@ -126,7 +126,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	darkvoid: {
 		inherit: true,
 		isNonstandard: "Past",
-		noSketch: false,
+		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 	},
 	doubleironbash: {
 		inherit: true,
@@ -234,7 +234,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	hyperspacefury: {
 		inherit: true,
 		isNonstandard: "Past",
-		noSketch: false,
+		flags: {mirror: 1, bypasssub: 1},
 	},
 	hyperspacehole: {
 		inherit: true,
