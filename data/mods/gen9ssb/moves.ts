@@ -852,6 +852,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
          this.add('-anim', source, "Hyper Voice", target);
+			this.add('-anim', source, "Taunt", target);
       },
       onTryHit(target) {
          if (target.getAbility().flags['cantsuppress'] || target.ability === 'normalize' || target.ability === 'truant') return false;
@@ -864,25 +865,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
          const oldAbility = target.setAbility('normalize');
          if (oldAbility) {
             this.add('-ability', target, 'Normalize', '[from] move: You Filthy Peasant');
-            return;
          }
          this.add('-start', target, 'typechange', 'Normal');
-			pokemon.addVolatile('youfilthypeasant');
+			pokemon.abilityState.turnLastUsed = this.turn;
          return oldAbility as false | null;
       },
-		condition: {
-			// Handling YFP's cooldown with a volatile
-			duration: 5,
-			onDisableMove(pokemon) {
-				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === 'youfilthypeasant') {
-						pokemon.disableMove(moveSlot.id);
-					}
-				}
-			},
-			onEnd(pokemon) {
-				this.add('-message', `You Filthy Peasant\'s cooldown ended for ${pokemon.name}!`);
-			},
+		onDisableMove(pokemon) {
+			if (this.turn - pokemon.abilityState.turnLastUsed < 5) pokemon.disableMove('youfilthypeasant');
 		},
 		secondary: null,
    	target: "normal",
