@@ -874,6 +874,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move.id === 'sketch') return priority + 1;
+		},
 	},
 
 	// Trey
