@@ -1970,6 +1970,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Triples",
 		mod: 'gen9',
 		gameType: 'triples',
+		searchShow: false,
 		ruleset: ['Standard Doubles'],
 		banlist: [
 			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Darkrai', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane',
