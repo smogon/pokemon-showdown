@@ -140,19 +140,20 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Bubble Guppy Uppercut',
 		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
 	},
-	Shorikai: {
-		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
-		moves: ['Metal Burst', 'King\'s Shield', 'Spikes'],
-		signatureMove: 'Sanguine Shuriken',
-		evs: {hp: 248, spd: 8, spe: 252}, nature: 'Jolly', shiny: true,
-	},
 	Luminous: {
 		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
 		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
 		signatureMove: 'Rainbow Maxifier',
 		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true,
 	},
-	/*Croupier: {
+	/*
+ 	Shorikai: {
+		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
+		moves: ['Metal Burst', 'King\'s Shield', 'Spikes'],
+		signatureMove: 'Sanguine Shuriken',
+		evs: {hp: 248, spd: 8, spe: 252}, nature: 'Jolly', shiny: true,
+	},
+ 	Croupier: {
 		species: 'Hoopa', ability: 'Fair Play', item: 'Staufen\'s Die', gender: 'M',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
 		signatureMove: 'Roll the Dice',
