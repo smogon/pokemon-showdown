@@ -608,7 +608,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				move.flags = {};
 				move.flags['protect'] = 1;
 				move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
-				move.onAfterHit = function (s, t, m) {
+				move.onAfterHit = function (t, s, m) {
 					if (s.getAbility().name === species.abilities['0']) return;
 					if (s.volatiles['ability:' + this.toID(species.abilities['0'])]) return;
 					const effect = 'ability:' + this.toID(species.abilities['0']);
