@@ -530,7 +530,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					const pokemove = this.dex.species.get(moveid);
 					if (!pokemove.exists) continue;
 					if (pokemove.isNonstandard &&
-						 !(this.ruleTable.has(`+pokemontag:${this.toID(pokemove.isNonstandard)}`) || this.ruleTable.has(`+pokemon:${pokemove.id}`) ||
+						!(this.ruleTable.has(`+pokemontag:${this.toID(pokemove.isNonstandard)}`) ||
+							this.ruleTable.has(`+pokemon:${pokemove.id}`) ||
 							this.ruleTable.has(`+basepokemon:${this.toID(pokemove.baseSpecies)}`))) {
 						problems.push(`${pokemove.isNonstandard} Pok\u00e9mon are not allowed to be used as Pokemoves.`);
 					}
