@@ -26,11 +26,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.boost({acc: -6}, pokemon);
+				this.boost({accuracy: -6}, pokemon);
 				this.add('-message', `${pokemon.name} was struck by a blinding light!`);
 			},
 			onEnd(pokemon) {
-				this.boost({acc: 6}, pokemon);
+				this.boost({accuracy: 6}, pokemon);
 				this.add('-message', `The blinding light faded!`);
 			},
 		},
