@@ -345,6 +345,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "On switch-in, this Pokemon copies the positive stat changes of the opposing Pokemon.",
 		gen: 9,
 		onStart(pokemon) {
+			this.add("-activate", pokemon, "item: Sketchbook");
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
@@ -352,9 +353,26 @@ export const Items: {[k: string]: ModdedItemData} = {
 			for (i in target.boosts) {
 				if (target.boosts[i] > 0) boosts[i] = target.boosts[i];
 			}
-			this.add("-activate", pokemon, "item: Sketchbook");
-			this.add('-message', `${pokemon.name} sketched ${target.name}'s stat changes!`);
 			this.boost(boosts, pokemon);
+			pokemon.addVolatile("ability:" + target.ability.id, pokemon);
+			this.add('-message', `${pokemon.name} sketched ${target.name}'s ability and stat changes!`);
+		},
+		onResidual(pokemon) {
+			let effectPool = ['aquaring', 'focusenergy', 'helpinghand', 'ingrain', 'laserfocus', 'magnetrise', 'substitute', 'stockpile', 'charge', 'curse', 'destinybond', 'dragoncheer', 'lockon'];
+			let randomEffect = this.sample(effectPool);
+			if (!pokemon.volatiles[randomEffect]) pokemon.addVolatile(randomEffect);
+			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, pokemon);
+		},
+		onSwitchOut(pokemon) {
+			for (const sketchedAbility of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(sketchedAbility);
+			}
+		},
+		onFaint(pokemon) {
+			for (const sketchedAbility of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				const innateEffect = this.dex.conditions.get(sketchedAbility) as Effect;
+				this.singleEvent('End', innateEffect, null, pokemon);
+			}
 		},
 	},
 	// Trey
