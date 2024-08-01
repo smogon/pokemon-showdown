@@ -146,6 +146,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rainbow Maxifier',
 		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true,
 	},
+	'Luminous-N': {
+		species: 'Necrozma-Ultra', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
+		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
+		signatureMove: 'Rainbow Maxifier',
+		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true, skip: 'Luminous',
+	},
 	/*
  	Shorikai: {
 		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
