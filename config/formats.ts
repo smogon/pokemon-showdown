@@ -600,11 +600,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			// Place volatiles on the Pokémon to show the pokemove.
 			this.add('-start', pokemon, pokemove.name, '[silent]');
 		},
+		onModifyMovePriority: 999,
 		onModifyMove(move, pokemon, target) {
 			const species = this.dex.species.get(move.id);
 			if (species.exists) {
 				move.type = species.types[0];
 				move.basePower = Math.max(species.baseStats['atk'], species.baseStats['spa']);
+				move.accuracy = 100;
 				move.flags = {};
 				move.flags['protect'] = 1;
 				move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
