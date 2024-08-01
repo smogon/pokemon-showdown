@@ -23,7 +23,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		zMoveFrom: "Rainbow Maxifier",
 		itemUser: ["Necrozma"],
 		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
+			if (effect.effectType !== 'Move' && effect.id !== 'recoil') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
 			}
