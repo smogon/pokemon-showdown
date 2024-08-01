@@ -529,6 +529,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				for (const [i, moveid] of set.moves.entries()) {
 					const pokemove = this.dex.species.get(moveid);
 					if (!pokemove.exists) continue;
+					if (pokemove.isNonstandard && !this.ruleTable.has(`+pokemontag:${this.toID(pokemove.isNonstandard)}`)) {
+						problems.push(`${pokemove.isNonstandard} Pok\u00e9mon are not allowed to be used as Pokemoves.`);
+					}
 					if (this.ruleTable.isRestrictedSpecies(pokemove) || this.ruleTable.isBannedSpecies(pokemove)) {
 						problems.push(`${pokemove.name} is unable to be used as a Pokemove.`);
 					}
@@ -610,8 +613,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					if (s.volatiles['ability:' + this.toID(species.abilities['0'])]) return;
 					const effect = 'ability:' + this.toID(species.abilities['0']);
 					s.addVolatile(effect);
-					s.volatiles[effect].id = this.toID(effect);
-					s.volatiles[effect].target = s;
+					if (s.volatiles[effect]) {
+						s.volatiles[effect].id = this.toID(effect);
+						s.volatiles[effect].target = s;
+					}
 				};
 			}
 		},
