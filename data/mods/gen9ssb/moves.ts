@@ -1381,17 +1381,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 16,
 		noPPBoosts: true,
 		priority: 0,
-		// Sketch
+		// Plagiarize
 		onHit(target, source) {
-			const targetFoe = target.side.pokemon[this.random(1, 6)];
-			targetFoe.hp -= 100;
-			this.add('-message', `${targetFoe.name} was hurt!`);
 			const move = target.lastMove;
-			if (source.transformed || !move || source.moves.includes(move.id)) return false;
+			if (!move || source.moves.includes(move.id)) return false;
 			if (move.isZ || move.isMax) return false;
-			const index = source.moves.indexOf('plagiarize');
-			if (index < 0) return false;
-			const sketchedMove = {
+			const plgIndex = source.moves.indexOf('plagiarize');
+			if (plgIndex < 0) return false;
+
+			source.moveSlots[plgIndex] = {
 				move: move.name,
 				id: move.id,
 				pp: move.pp,
@@ -1399,10 +1397,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target: move.target,
 				disabled: false,
 				used: false,
+				virtual: true,
 			};
-			source.moveSlots[index] = sketchedMove;
-			source.baseMoveSlots[index] = sketchedMove;
-			this.add('-activate', source, 'move: Plagiarize', move.name);
+			this.add('-start', source, 'Plagiarize', move.name);
 		},
 		// PP Nullification
 		onTryHit(target) {
@@ -1415,28 +1412,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		flags: {},
 		target: "normal",
-		type: "Normal",
-	},
-	// Pablo
-	sketchbook: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Sketchbook",
-		gen: 9,
-		pp: 10,
-		noPPBoosts: true,
-		priority: 0,
-		flags: {},
-		onHit(target, source) {
-			let i: BoostID;
-			for (i in target.boosts) {
-				source.boosts[i] = target.boosts[i];
-			}
-			this.add('-copyboost', source, target, '[from] move: Sketchbook');
-		},
-		secondary: null,
-		target: "self",
 		type: "Normal",
 	},
 	// Trey
