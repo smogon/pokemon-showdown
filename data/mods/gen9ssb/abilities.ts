@@ -21,17 +21,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[0];
+			this.add('-anim', pokemon, 'Flash', pokemon);
 			target.addVolatile('blindinglight');
 		},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.boost({accuracy: -6}, pokemon);
 				this.add('-message', `${pokemon.name} was struck by a blinding light!`);
+				this.boost({accuracy: -6}, pokemon);
 			},
 			onEnd(pokemon) {
-				this.boost({accuracy: 6}, pokemon);
 				this.add('-message', `The blinding light faded!`);
+				this.boost({accuracy: 6}, pokemon);
 			},
 		},
 	},
