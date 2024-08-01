@@ -72,6 +72,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Tri Attack', target);
 			this.add('-anim', source, 'Aurora Beam', target);
 		},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Water', type);
+		},
 		onHit(target, source, move) {
 			target.side.addSideCondition('waterpledge');
 		},
