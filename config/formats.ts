@@ -2566,6 +2566,12 @@ export const Formats: FormatList = [
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 			}
 		},
+		onUpdate(pokemon) {
+			if (pokemon.abilityState.polaris && !pokemon.hasType('Light')) pokemon.setType('Light');
+		},
+		onModifyType(move, pokemon) {
+			if (pokemon.abilityState.polaris && move.id === 'lightofruin') move.type = 'Light';
+		},
 	},
 	{
 		name: "[Gen 9] Monotype Random Battle",
