@@ -24,6 +24,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-anim', pokemon, 'Flash', pokemon);
 			target.addVolatile('blindinglight');
 		},
+		onModifyType(move, pokemon) {
+			this.debug(`LOR typechange to Light-type`);
+			if (move.id === 'lightofruin' && pokemon.species.id === 'necrozmaultra') move.type = 'Light';
+		},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
