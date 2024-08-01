@@ -2566,19 +2566,6 @@ export const Formats: FormatList = [
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 			}
 		},
-		onHit(target, source, move) {
-			if (move.id === 'youfilthypeasant') source.abilityState.cooldown = 5;
-		},
-		onResidual(pokemon) {
-			if (pokemon.abilityState.cooldown) pokemon.abilityState.cooldown--;
-		},
-		onDisableMove(pokemon) {
-			for (const moveSlot of pokemon.moveSlots) {
-				if (moveSlot.id === 'youfilthypeasant' && pokemon.abilityState.cooldown > 0) {
-					pokemon.disableMove(moveSlot.id);
-				}
-			}
-		},
 	},
 	{
 		name: "[Gen 9] Monotype Random Battle",
