@@ -40,6 +40,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Luminous
+	rainbowmaxifier: {
+		accuracy: 85,
+		basePower: 80,
+	},
+	// Luminous
+	polaris: {
+		isZ: "spectralprism",
+	},
 	// Fblthp
 	bubbleguppyuppercut: {
 		accuracy: 85,
