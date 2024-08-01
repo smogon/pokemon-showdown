@@ -630,8 +630,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	// Mima
 	vengefulspirit: {
-		desc: "This Pokemon's attacks hit before the target switches.",
-		shortDesc: "This Pokemon's attacks hit before target switches.",
+		desc: "This Pokemon's attacks hit before the target switches. This Pokemon's attacks knock off the target's held item.",
+		shortDesc: "Hits before target switches; Attacks knock off item.",
 		onBeforeTurn(pokemon) {
 			for (const side of this.sides) {
 				if (side.hasAlly(pokemon)) continue;
@@ -645,6 +645,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onTryHit(source, target) {
 			target.side.removeSideCondition('vengefulspirit');
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (!move || !target || source.switchFlag === true) return;
+			if (target !== source && move.category !== 'Status') {
+				const item = target.takeItem(source);
+				if (item) this.add('-enditem', target, item.name, '[from] ability: Vengeful Spirit', '[of] ' + source);
+			}
 		},
 		condition: {
 			duration: 1,
