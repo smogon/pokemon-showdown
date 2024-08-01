@@ -2544,7 +2544,14 @@ export const Formats: FormatList = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			const ability = target.getAbility();
 			if (pokemon.abilityState.ran) pokemon.addVolatile('shikigamiran');
+			if (ability && pokemon.item.id === 'sketchbook') {
+				const effect = 'ability:' + ability.id;
+				pokemon.addVolatile(effect);
+				this.add('-message', `${pokemon.name} sketched ${target.name}'s ${ability.name}!`);
+			}
 			let name: string = this.toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.dex.species.get(name).exists || this.dex.moves.get(name).exists ||
 				this.dex.abilities.get(name).exists || name === 'blitz') {
