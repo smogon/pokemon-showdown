@@ -815,7 +815,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	reevo: 'showevo',
-	showevo(target, user, room, connection, cmd) {
+	showevo(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		const targetid = toID(target);
 		const isReEvo = cmd === 'reevo';
@@ -921,5 +921,25 @@ export const commands: Chat.ChatCommands = {
 	],
 	showevohelp: [
 		`/showevo <Pok\u00e9mon> - Shows the changes that a Pok\u00e9mon applies in Cross Evolution`,
+	],
+
+	pokemove(target, room, user) {
+		if (!this.runBroadcast()) return;
+		const species = Dex.species.get(target);
+		if (!species.exists) return this.parse('/help pokemove');
+		const move = Utils.deepClone(Dex.moves.get('tackle'));
+		move.name = species.name;
+		move.type = species.types[0];
+		move.flags = {protect: 1};
+		move.basePower = Math.max(species.baseStats['atk'], species.baseStats['spa']);
+		move.pp = 5;
+		move.gen = species.gen;
+		move.num = species.num;
+		move.desc = move.shortDesc = `Gives ${species.abilities['0']} as a second ability after use.`;
+		move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
+		this.sendReply(`|raw|${Chat.getDataMoveHTML(move)}`);
+	},
+	pokemovehelp: [
+		`/pokemove <Pok\u00e9mon> - Shows the Pokemove data for <Pok\u00e9mon>.`,
 	],
 };
