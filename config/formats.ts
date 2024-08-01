@@ -1760,13 +1760,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					return [this.terastallized];
 				}
 				const types = this.battle.runEvent('Type', this, null, null, this.types);
+				if (!types.length) types.push(this.battle.gen >= 5 ? 'Normal' : '???');
 				if (!excludeAdded && this.addedType) return types.concat(this.addedType);
 				const addTeraType = this.m.thirdType;
-				if (types.length) {
-					if (addTeraType) return Array.from(new Set([...types, addTeraType]));
-					return types;
-				}
-				return [this.battle.gen >= 5 ? 'Normal' : '???'];
+				if (addTeraType) return Array.from(new Set([...types, addTeraType]));
+				return types;
 			},
 			runEffectiveness(move) {
 				if ((this.terastallized || this.m.thirdType) && move.type === 'Stellar') return 1;
