@@ -145,21 +145,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (typeof accuracy !== 'number') return;
 			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify([3277, 4096]);
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (target.species.name === 'Pikachu-Libre' && target.abilityState.itemhp > 0) target.abilityState.itemhp--;
-		},
 		onUpdate(pokemon) {
 			if (pokemon.species.name === 'Pikachu') {
 				this.add('-activate', pokemon, 'item: Silly Costume');
 				pokemon.formeChange('Pikachu-Libre');
-				pokemon.useItem();
 				this.add('-message', `${pokemon.name} put on their Silly Costume!`);
-				pokemon.abilityState.itemhp = 3;
-			}
-			if (pokemon.species.name === 'Pikachu-Libre' && pokemon.abilityState.itemhp <= 0) {
-				this.add('-message', `Oh no! ${pokemon.name}'s costume ripped!`);
-				pokemon.formeChange('Pikachu');
-				pokemon.abilityState.itemhp = 0;
 			}
 		},
 	},
