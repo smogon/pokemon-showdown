@@ -98,8 +98,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Flash', target);
 		},
 		onHit(target, source, move) {
-			source.formeChange('Necrozma-Ultra');
-			source.abilityState.polaris = true;
+			changeSet(this, source, ssbSets['Luminous-N'], true);
 		},
 	},
 	// Fblthp
