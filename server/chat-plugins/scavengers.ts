@@ -234,12 +234,12 @@ function formatQueue(queue: QueuedHunt[] | undefined, viewer: User, room: Room, 
 			} else {
 				questions = `[${item.questions.length / 2} hidden questions]`;
 			}
-			return `<tr><td>${removeButton}${startButton}&nbsp;${unratedText}${hosts}${queuedBy}</td><td>${questions}</td></tr>`;
+			return `<tr><td>${removeButton}${startButton}&nbsp;${unratedText}${hosts}${queuedBy}</td><td><div style="overflow:auto; max-width: 100vw; max-height: 30vh">${questions}</div></td></tr>`;
 		}).join("");
 	} else {
 		buffer = `<tr><td colspan=3>The scavenger queue is currently empty.</td></tr>`;
 	}
-	let template = `<div class="ladder" style="overflow:scroll; max-height: 50vh"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${showStaff ? buffer : buffer.replace(/<button.*?>.+?<\/button>/gi, '')}</table></div>`;
+	let template = `<div class="ladder"><table style="width: 100%;table-layout:fixed;"><tr><th>By</th><th>Questions</th></tr>${showStaff ? buffer : buffer.replace(/<button.*?>.+?<\/button>/gi, '')}</table></div>`;
 	if (showStaff) {
 		template += `<table style="width: 100%"><tr><td style="text-align: left;">Auto Timer Duration: ${timerDuration} minutes</td><td>Auto Dequeue: <button class="button${!queueDisabled ?
 			'" name="send" value="/scav disablequeue"' :
@@ -620,16 +620,16 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		};
 		const finalHint = current.number === this.questions.length ? "Final " : "";
 
-		return `|raw|<div class="ladder" style="overflow:scroll; max-height: 50vh"><table><tr>` +
-			`<td><strong style="white-space: nowrap">${finalHint}Hint #${current.number}:</strong></td>` +
-			`<td>${
+		return `|raw|<div class="ladder"><table style="width:100%;table-layout:fixed;"><tr>` +
+			`<td style="width: 20%;"><strong style="white-space: nowrap">${finalHint}Hint #${current.number}:</strong></td>` +
+			`<td><div style="overflow:auto; max-width: 100vw; max-height: 50vh">${
 				this.isHTML ? current.question.hint : Chat.formatText(current.question.hint) +
 				(showHints && current.question.spoilers.length ?
 					`<details><summary>Extra Hints:</summary>${
 						current.question.spoilers.map(p => `- ${p}`).join('<br />')
 					}</details>` :
 					``)
-			}</td>` +
+			}</div></td>` +
 			`</tr></table></div>`;
 	}
 
@@ -660,19 +660,19 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 
 		user.sendTo(
 			this.room,
-			`|raw|<div class="ladder" style="overflow:scroll; max-height: 50vh"><table style="width: 100%">` +
-			`<tr><th style="width: 10%;">#</th><th>Hint</th><th>Answer</th></tr>` +
+			`|raw|<div class="ladder"><table style="width: 100%;table-layout:fixed;">` +
+			`<tr><th style="width: 10%;">#</th><th style="width: 70%;">Hint</th><th style="width: 20%;">Answer</th></tr>` +
 			this.questions.slice(0, qLimit).map((q, i) => (
 				`<tr><td>${
 					i + 1
-				}</td><td>${
+				}</td><td><div style="overflow:auto; max-width: 100vw; max-height: 30vh">${
 					this.isHTML ? q.hint : Chat.formatText(q.hint) +
 					(q.spoilers.length ?
 						`<details><summary>Extra Hints:</summary>${
 							q.spoilers.map(s => `- ${s}`).join('<br />')
 						}</details>` :
 						``)
-				}</td><td>${
+				}</div></td><td>${
 					i + 1 >= qLimit ?
 						`` :
 						Utils.escapeHTMLForceWrap(q.answer.join(' ; '))

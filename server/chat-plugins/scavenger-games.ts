@@ -781,11 +781,11 @@ const MODES: {[k: string]: GameMode | string} = {
 							if (staffHost) staffHost.sendTo(this.room, `${targetUser.name} has received their first hint early.`);
 							targetUser.sendTo(
 								this.room,
-								`|raw|<strong>The first hint to the next hunt is:</strong> ${this.isHTML ? this.questions[0].hint : Chat.formatText(this.questions[0].hint)}`
+								`|raw|<strong>The first hint to the next hunt is:</strong> <div style="overflow:auto; max-height: 50vh"> ${this.isHTML ? this.questions[0].hint : Chat.formatText(this.questions[0].hint)}</div>`
 							);
 							targetUser.sendTo(
 								this.room,
-								`|notify|Early Hint|The first hint to the next hunt is: ${this.isHTML ? this.questions[0].hint : Chat.formatText(this.questions[0].hint)}`
+								`|notify|Early Hint|The first hint to the next hunt is: <div style="overflow:auto; max-height: 50vh">  ${this.isHTML ? this.questions[0].hint : Chat.formatText(this.questions[0].hint)}</div>`
 							);
 						}
 					}, (maxTime - time) * 1000 + 5000);
