@@ -146,6 +146,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Sanguine Shuriken',
 		evs: {hp: 248, spd: 8, spe: 252}, nature: 'Jolly', shiny: true,
 	},
+	Luminous: {
+		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
+		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
+		signatureMove: 'Rainbow Maxifier',
+		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true,
+	},
 	/*Croupier: {
 		species: 'Hoopa', ability: 'Fair Play', item: 'Staufen\'s Die', gender: 'M',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
@@ -157,12 +163,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Eerie Spell', 'Topsy Turvy', 'Kniffel'],
 		signatureMove: 'Faustian Bargain',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty', skip: 'Croupier',
-	},
-	Luminous: {
-		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
-		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
-		signatureMove: 'Rainbow Maxifier',
-		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true,
 	},
 	PokéKart: {
 		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
