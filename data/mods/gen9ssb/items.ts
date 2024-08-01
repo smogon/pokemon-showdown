@@ -345,17 +345,22 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "On switch-in, this Pokemon copies the positive stat changes of the opposing Pokemon.",
 		gen: 9,
 		onStart(pokemon) {
-			this.add("-activate", pokemon, "item: Sketchbook");
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
+			let boosted = false;
 			if (!target.boosts) return;
 			for (i in target.boosts) {
-				if (target.boosts[i] > 0) boosts[i] = target.boosts[i];
+				if (target.boosts[i] > 0) {
+					boosts[i] = target.boosts[i];
+					boosted = true;
+				}
 			}
-			this.boost(boosts, pokemon);
-			pokemon.addVolatile("ability:" + target.ability.id, pokemon);
-			this.add('-message', `${pokemon.name} sketched ${target.name}'s ability and stat changes!`);
+			if (boosted) {
+				this.add("-activate", pokemon, "item: Sketchbook");
+				this.boost(boosts, pokemon);
+				this.add('-message', `${pokemon.name} copied ${target.name}'s stat changes!`);
+			}
 		},
 		onResidual(pokemon) {
 			let effectPool = ['aquaring', 'focusenergy', 'helpinghand', 'ingrain', 'laserfocus', 'magnetrise', 'substitute', 'stockpile', 'charge', 'curse', 'destinybond', 'dragoncheer', 'lockon'];
