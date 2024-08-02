@@ -21,6 +21,34 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
 
+	// Urabrask
+	rainoffire: {
+		name: 'Rain of Fire',
+		effectType: 'Weather',
+		duration: 5,
+		onWeather(target) {
+			if (!target.hasType('Fire')) {
+				this.add('-anim', target, 'Incinerate', target);
+				this.damage(target.baseMaxhp / 10, target, target, this.effect);
+				if (this.randomChance(1, 10)) {
+					const item = target.getItem();
+					this.add('-message', `${target.name}'s ${item.name} was incinerated by Rain of Fire!`);
+					this.add('-enditem', target, item);
+					target.setItem('');
+				}
+			}
+		},
+		onAnySetWeather(target, source, weather) {
+			const willFail = ['sunnyday', 'hail', 'snow', 'sandstorm'];
+			if (this.field.getWeather().id === 'rainoffire' && willFail.includes(weather.id)) return false;
+		},
+		onFieldStart(battle, source, effect) {
+			this.add('-weather', 'Rain of Fire');
+		},
+		onFieldEnd() {
+			this.add('-weather', 'none');
+		},
+	},
 	willmiss: {
 		duration: 1,
 		onModifyMove(move, pokemon) {
