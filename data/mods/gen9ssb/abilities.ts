@@ -782,7 +782,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.type = source.abilityState.imprintedType;
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.add('-anim', pokemon, 'Geomancy', pokemon);
-				this.damage(dmg, pokemon, source);
+				this.damage(dmg*1.4, pokemon, source);
 				this.add('-message', `${pokemon.name} was buffeted by Woven Together, Cohere Forever!`);
 			},
 		},
