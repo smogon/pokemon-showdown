@@ -5746,8 +5746,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sketch: {
 		name: "Sketch",
-		desc: "This move is permanently replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, or if the move is Chatter, Sketch, Struggle, or any move the user knows.",
+		desc: "This move is permanently replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, or if the move is Blazing Torque, Combat Torque, Dark Void, Hyperspace Fury, Magical Torque, Noxious Torque, Revival Blessing, Sketch, Struggle, Tera Starstorm, Wicked Torque, or any move the user knows.",
 		shortDesc: "Permanently copies the last move target used.",
+		gen8: {
+			desc: "This move is permanently replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, or if the move is Chatter, Sketch, Struggle, or any move the user knows.",
+		},
 		gen3: {
 			desc: "This move is permanently replaced by the last move used by the target. The copied move has the maximum PP for that move. Fails if the target has not made a move, if the user has Transformed, or if the move is Sketch, Struggle, or any move the user knows.",
 		},
@@ -6796,7 +6799,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	terastarstorm: {
 		name: "Tera Starstorm",
-		desc: "If the user is a Terapagos in Stellar Form, this move's type becomes Stellar and hits all opposing Pokemon.",
+		desc: "If the user is a Terapagos in Stellar Form, this move's type becomes Stellar, hits all opposing Pokemon, and becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes.",
 		shortDesc: "Terapagos-Stellar: Stellar type, hits both foes.",
 	},
 	terrainpulse: {
