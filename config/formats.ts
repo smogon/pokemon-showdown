@@ -664,7 +664,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					(this.battle.gen >= 5 && !this.isActive) ||
 					((this.volatiles['gastroacid'] ||
 						(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
-							this.m.volatiles['ability:neutralizinggas'])
+							this.volatiles['ability:neutralizinggas'])
 						)) && !this.getAbility().flags['cantsuppress']
 					)
 				);
