@@ -228,6 +228,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	spiritingaway: {
 		desc: "After using a move, this Pokemon switches to an ally of the user's choice. Sleep turns still burn while inactive.",
 		shortDesc: "User switches after move; sleep turns burn while inactive.",
+		onTryMove(pokemon, target, move) {
+			if (move.id === 'futuresight') pokemon.abilityState.fsSwitch = true;
+		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			source.switchFlag = true;
 		},
@@ -235,6 +238,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.status === 'slp') {
 				pokemon.abilityState.sleepBurn = true;
 				pokemon.abilityState.ts = this.turn;
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.abilityState.fsSwitch) {
+				pokemon.abilityState.fsSwitch = false;
+				pokemon.switchFlag = true;
 			}
 		},
 		onSwitchIn(pokemon) {
