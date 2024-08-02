@@ -1541,7 +1541,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		overrideDefensiveStat: 'def',
 		target: "normal",
-		type: "Fairy",
+		type: "???",
 	},
 	// Yukari Yakumo
 	shikigamiran: {
