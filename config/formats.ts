@@ -2991,11 +2991,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['PU', 'ZUBL'],
 	},
 	{
-		name: "[Gen 1] ZU",
-		mod: 'gen1',
+		name: "[Gen 3] ZU",
+		mod: 'gen3',
 		// searchShow: false,
-		ruleset: ['[Gen 1] PU'],
-		banlist: ['PU', 'ZUBL'],
+		ruleset: ['Standard', 'Baton Pass Stat Trap Clause', 'Swagger Clause'],
+		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'Baton Pass + Substitute'],
 	},
 
 	// Past Gens OU
@@ -4120,13 +4120,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 3] ZU",
-		mod: 'gen3',
-		searchShow: false,
-		ruleset: ['Standard', 'Baton Pass Stat Trap Clause', 'Swagger Clause'],
-		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'Baton Pass + Substitute'],
-	},
-	{
 		name: "[Gen 3] Custom Game",
 		mod: 'gen3',
 		searchShow: false,
@@ -4234,6 +4227,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Standard', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
 		banlist: ['Mew', 'Mewtwo', 'Bind', 'Clamp', 'Explosion', 'Fire Spin', 'Self-Destruct', 'Wrap'],
+	},
+	{
+		name: "[Gen 1] ZU",
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['[Gen 1] PU'],
+		banlist: ['PU', 'ZUBL'],
 	},
 	{
 		name: "[Gen 1] Japanese OU",
