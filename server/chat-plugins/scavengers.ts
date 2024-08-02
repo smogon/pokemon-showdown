@@ -2628,7 +2628,7 @@ export const commands: Chat.ChatCommands = {
 			`${userCommands}<br /><br />${staffCommands}<br /><br />${gamesCommands}` :
 			(
 				target === 'staff' || target === 'auth' ? staffCommands :
-					target === 'games' || target === 'game' ? gamesCommands : userCommands
+				target === 'games' || target === 'game' ? gamesCommands : userCommands
 			);
 
 		this.sendReplyBox(display);
