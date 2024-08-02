@@ -518,8 +518,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Hoopa-Base', 'Iron Hands', 'Iron Leaves', 'Iron Moth', 'Iron Thorns', 'Iron Valiant', 'Keldeo', 'Kingambit', 'Kleavor', 'Kyurem', 'Landorus-Therian', 'Latios',
 			'Magnezone', 'Mamoswine', 'Medicham', 'Meditite', 'Meloetta', 'Metagross', 'Muk', 'Munkidori', 'Necrozma', 'Ninetales-Alola', 'Okidogi', 'Polteageist', 'Porygon-Z',
 			'Primarina', 'Raging Bolt', 'Rampardos', 'Regigigas', 'Rhydon', 'Rhyperior', 'Roaring Moon', 'Salamence', 'Sandshrew', 'Sandshrew-Alola', 'Sandslash', 'Sandslash-Alola',
-			'Scizor', 'Skuntank', 'Slaking', 'Slither Wing', 'Sneasler', 'Stunky', 'Terapagos-Stellar', 'Terrakion', 'Thundurus-Therian', 'Tyranitar','Ursaluna-Base', 'Ursaluna-Bloodmoon',
-			'Ursaring', 'Vikavolt', 'Volcanion', 'Volcarona', 'Vulpix-Alola', 'Yanma', 'Yanmega',
+			'Scizor', 'Skuntank', 'Slaking', 'Slither Wing', 'Sneasler', 'Stunky', 'Terapagos-Stellar', 'Terrakion', 'Thundurus-Therian', 'Tyranitar', 'Ursaluna-Base',
+			'Ursaluna-Bloodmoon', 'Ursaring', 'Vikavolt', 'Volcanion', 'Volcarona', 'Vulpix-Alola', 'Yanma', 'Yanmega',
 		],
 		validateSet(set, teamHas) {
 			let pokemoves = 0;
