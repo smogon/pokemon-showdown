@@ -946,7 +946,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	// Urabrask
 	terrorizethepeaks: {
-		accuracy: 70,
+		accuracy: 80,
 		basePower: 100,
 		category: "Special",
 		desc: "Hits the opposing Pokemon and one random inactive Pokemon on the opposing side.",
