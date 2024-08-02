@@ -269,13 +269,25 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "Protects from contact effects. If held by a Tinkaton with 'Weapon Enhancement', allows the usage of the Z-Move 'Emergency Upgrades'.",
 	},
 	// Urabrask
-	urabrasksforge: {
-		name: "Urabrask's Forge",
+	napalmresonator: {
+		name: "Napalm Resonator",
 		onTakeItem: false,
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target) && move.basePower >= 100) {
+				this.add('-anim', target, 'Self-Destruct', target);
+				this.damage(target.baseMaxhp / 3, target, target);
+				this.damage(source.baseMaxhp / 3, source, source);
+				this.add('-message', `${target.name}'s Napalm Resonator exploded!`);
+				this.field.setWeather('rainoffire');
+				this.add('-enditem', target, target.getItem(), '[from] item: Napalm Resonator');
+				target.setItem('');
+			}
+		},
 		zMove: "Blasphemous Act",
 		zMoveFrom: "Terrorize the Peaks",
 		itemUser: ["Smokomodo"],
-		desc: "If held by a Smokomodo with Terorrize the Peaks, it can use Blasphemous Act.",
+		shortDesc: "If held by a Smokomodo with Terorrize the Peaks, it can use Blasphemous Act.",
 		gen: 9,
 	},
 	// Mima
