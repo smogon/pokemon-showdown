@@ -461,7 +461,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Quetzalcoatl
 	bigthunder: {
 		accuracy: true,
-		basePower: 25,
+		basePower: 20,
 		category: "Special",
 		desc: "Hits once for each healthy Pokemon in the battle, both allies and foes. Each hit hits a random active or inactive Pokemon on either side.",
 		shortDesc: "Hits a random active/inactive Pokemon with each hit.",
