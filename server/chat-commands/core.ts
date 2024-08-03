@@ -160,18 +160,11 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 			) {
 				continue;
 			}
-			let placed = false;
-			if (toID(command.fullCmd).startsWith(target)) {
-				placed = true;
-				results.push(cmdPrefix + command.fullCmd);
-			}
-			// don't dupe up
-			if (command.aliases.length && !placed) {
-				for (const alias of command.aliases) {
-					if (toID(alias).startsWith(target)) {
-						results.push(cmdPrefix + alias);
-						break;
-					}
+			const cmds = [command.fullCmd, ...command.aliases];
+			for (const cmd of cmds) {
+				if (toID(cmd).startsWith(target)) {
+					results.push(cmdPrefix + cmd);
+					break;
 				}
 			}
 			// limit number of results to prevent spam
