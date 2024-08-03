@@ -247,11 +247,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 				let dmg = this.actions.getDamage(pokemon, target, 'Explosion');
 				this.add('-message', `${pokemon.name}'s crown exploded!`);
 				this.addMove('-anim', pokemon, 'Explosion', pokemon);
-				this.damage(dmg, target, pokemon);
+				if (target.hp) this.damage(dmg, target, pokemon);
 				pokemon.faint(pokemon);
 			}
 		},
-		shortDesc: "Use '/ssb Prince Smurf' to see this entry!",
+		shortDesc: "See '/ssb Prince Smurf' for more!",
    	desc: "Prevents other Pokemon from lowering the holder's stats; after an attack, holder recovers 1/4 of the damage dealt to the Target. When the holder is at 1/4 HP or less it will trigger 1 of 3 reactions: Applies Grudge to the holder for a turn, item is then disposed; Heals the holder for 50% HP and cures party of status, item is then disposed; Forces the holder to explode.",
    },
 	// Kozuchi
