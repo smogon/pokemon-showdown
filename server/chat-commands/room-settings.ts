@@ -761,7 +761,7 @@ export const commands: Chat.ChatCommands = {
 	hightraffic(target, room, user) {
 		room = this.requireRoom();
 		if (!target) {
-			return this.sendReply(`This room is: ${room.settings.highTraffic ? 'high traffic' : 'low traffic'}`);
+			return this.sendReply(`This room is: ${room.settings.highTraffic ? 'high' : 'low'} traffic`);
 		}
 		this.checkCan('makeroom');
 
@@ -774,7 +774,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		room.saveSettings();
 		this.modlog(`HIGHTRAFFIC`, null, `${!!room.settings.highTraffic}`);
-		this.addModAction(`This room was marked as high traffic by ${user.name}.`);
+		this.addModAction(`This room was marked as ${room.settings.highTraffic ? 'high' : 'low'} traffic by ${user.name}.`);
 	},
 	hightraffichelp: [
 		`/hightraffic [on|off] - (Un)marks a room as a high traffic room. Requires &`,
