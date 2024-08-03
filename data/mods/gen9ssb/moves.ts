@@ -1616,7 +1616,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-sidestart', targetSide, 'Blissful Breeze');
 			},
 			onResidual(pokemon) {
-				if (pokemon.lastMoveUsed.id === 'blissfulbreeze') return;
+				if (pokemon.lastMoveUsed) {
+					if (pokemon.lastMoveUsed.id === 'blissfulbreeze') return;
+				}
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
 				const source = sources[0];
 				const move = this.dex.getActiveMove('blissfulbreeze');
