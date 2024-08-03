@@ -191,6 +191,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	hammerRestriction: null | boolean;
 	lastVote: number;
 	eliminated: MafiaEliminateType | null;
+	eliminationOrder: number;
 	silenced: boolean;
 	nighttalk: boolean;
 	revealed: string;
@@ -206,6 +207,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 		this.hammerRestriction = null;
 		this.lastVote = 0;
 		this.eliminated = null;
+		this.eliminationOrder = 0;
 		this.silenced = false;
 		this.nighttalk = false;
 		this.revealed = '';
@@ -1166,6 +1168,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			return;
 		}
 
+		toEliminate.eliminationOrder = this.getEliminatedPlayers() // Before eliminating, get other eliminated players
+			.map(p => p.eliminationOrder) // convert to an array of elimination order numbers
+			.reduce((a, b) => Math.max(a, b), 0) + 1; // get the largest of the existing elim order numbers and add 1
 		toEliminate.eliminated = ability;
 
 		if (toEliminate.voting) this.unvote(toEliminate, true);
@@ -1249,7 +1254,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	getEliminatedPlayers() {
-		return this.players.filter(player => player.isEliminated());
+		return this.players.filter(player => player.isEliminated()).sort((a, b) => a.eliminationOrder - b.eliminationOrder);
 	}
 
 	setDeadline(minutes: number, silent = false) {
