@@ -148,11 +148,8 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 		// in no world should ths be a thing. our longest command name is 37 chars
 		if (target.length > 40) return null;
 		const cmdPrefix = target.charAt(0);
-		if (['/', '!'].includes(cmdPrefix)) {
-			target = toID(target.slice(1));
-		} else {
-			return null;
-		}
+		if (!['/', '!'].includes(cmdPrefix)) return null;
+		target = toID(target.slice(1));
 
 		const results = [];
 		for (const command of Chat.allCommands()) {
