@@ -16,7 +16,7 @@
 /* eslint no-else-return: "error" */
 import {Utils} from '../../lib';
 import type {UserSettings} from '../users';
-import type {GlobalPermission} from '../user-groups';
+import type {GlobalPermission, RoomPermission} from '../user-groups';
 
 export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 	userdetails(target, user, trustable) {
@@ -143,6 +143,44 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 		}
 
 		return targetRoom.battle.format;
+	},
+	cmdsearch(target, user, trustable) {
+		// in no world should ths be a thing. our longest command name is 37 chars
+		if (target.length > 40) return null;
+		const cmdPrefix = target.charAt(0);
+		if (['/', '!'].includes(cmdPrefix)) {
+			target = toID(target.slice(1));
+		} else {
+			return null;
+		}
+
+		const results = [];
+		for (const command of Chat.allCommands()) {
+			if (cmdPrefix === '!' && !command.broadcastable) continue;
+			const req = command.requiredPermission as GlobalPermission;
+			if (req &&
+				!(command.hasRoomPermissions ? this.room && user.can(req as RoomPermission, null, this.room) : user.can(req))
+			) {
+				continue;
+			}
+			let placed = false;
+			if (toID(command.fullCmd).startsWith(target)) {
+				placed = true;
+				results.push(cmdPrefix + command.fullCmd);
+			}
+			// don't dupe up
+			if (command.aliases.length && !placed) {
+				for (const alias of command.aliases) {
+					if (toID(alias).startsWith(target)) {
+						results.push(cmdPrefix + alias);
+						break;
+					}
+				}
+			}
+			// limit number of results to prevent spam
+			if (results.length >= 20) break;
+		}
+		return results;
 	},
 };
 
