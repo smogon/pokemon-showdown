@@ -160,7 +160,10 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 			) {
 				continue;
 			}
-			const cmds = [command.fullCmd, ...command.aliases];
+			const cmds = [
+				command.fullCmd, 
+				...command.aliases.map(x => command.fullCmd.replace(command.cmd, x)),
+			];
 			for (const cmd of cmds) {
 				if (toID(cmd).startsWith(target)) {
 					results.push(cmdPrefix + cmd);
