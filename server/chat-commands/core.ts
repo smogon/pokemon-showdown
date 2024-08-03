@@ -154,15 +154,21 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 		const results = [];
 		for (const command of Chat.allCommands()) {
 			if (cmdPrefix === '!' && !command.broadcastable) continue;
-			const req = command.requiredPermission as GlobalPermission;
+			let req = command.requiredPermission as GlobalPermission;
+			if (command.fullCmd.endsWith('help')) {
+				const handler = Chat.parseCommand(`/${command.fullCmd}`)?.handler;
+				if (handler) {
+					req = (handler.requiredPermission || req) as any as GlobalPermission;
+				}
+			}
 			if (req &&
 				!(command.hasRoomPermissions ? this.room && user.can(req as RoomPermission, null, this.room) : user.can(req))
 			) {
 				continue;
 			}
 			const cmds = [
-				command.fullCmd, 
-				...command.aliases.map(x => command.fullCmd.replace(command.cmd, x)),
+				command.fullCmd,
+				...command.aliases.map(x => command.fullCmd.replace(command.cmd, `${x}`)),
 			];
 			for (const cmd of cmds) {
 				if (toID(cmd).startsWith(target)) {
