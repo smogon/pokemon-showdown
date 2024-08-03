@@ -598,7 +598,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 		onSwitchIn(pokemon) {
 			if (!pokemon.m.pokemove) return;
-			const pokemove = this.dex.species.get(pokemon.m.pokemove);
+			const pokemove = pokemon.m.pokemove;
 			if (!pokemove.exists) return;
 			// Place volatiles on the Pokémon to show the pokemove.
 			this.add('-start', pokemon, pokemove.name, '[silent]');
@@ -624,51 +624,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					}
 				};
 			}
-		},
-		field: {
-			suppressingWeather() {
-				for (const pokemon of this.battle.getAllActive()) {
-					const pokemove = pokemon.m.pokemove;
-					if (pokemon && !pokemon.ignoringAbility() &&
-						(pokemon.getAbility().suppressWeather ||
-							(pokemove && pokemon.volatiles['ability:' + pokemove] &&
-								this.battle.dex.abilities.get(pokemove).suppressWeather))) {
-						return true;
-					}
-				}
-				return false;
-			},
-		},
-		pokemon: {
-			hasAbility(ability) {
-				if (this.ignoringAbility()) return false;
-				if (Array.isArray(ability)) return ability.some(abil => this.hasAbility(abil));
-				const abilityid = this.battle.toID(ability);
-				return this.ability === abilityid || !!this.volatiles['ability:' + abilityid];
-			},
-			ignoringAbility() {
-				// Check if any active pokemon have the ability Neutralizing Gas
-				let neutralizinggas = false;
-				for (const pokemon of this.battle.getAllActive()) {
-					// can't use hasAbility because it would lead to infinite recursion
-					if (
-						(pokemon.ability === ('neutralizinggas' as ID) || pokemon.volatiles['ability:neutralizinggas']) &&
-						!pokemon.volatiles['gastroacid'] && !pokemon.abilityState.ending
-					) {
-						neutralizinggas = true;
-						break;
-					}
-				}
-
-				return !!(
-					(this.battle.gen >= 5 && !this.isActive) ||
-					((this.volatiles['gastroacid'] ||
-						(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
-							this.volatiles['ability:neutralizinggas'])
-						)) && !this.getAbility().flags['cantsuppress']
-					)
-				);
-			},
 		},
 	},
 	{
@@ -2992,11 +2947,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['PU', 'ZUBL'],
 	},
 	{
-		name: "[Gen 1] ZU",
-		mod: 'gen1',
+		name: "[Gen 3] ZU",
+		mod: 'gen3',
 		// searchShow: false,
-		ruleset: ['[Gen 1] PU'],
-		banlist: ['PU', 'ZUBL'],
+		ruleset: ['Standard', 'Baton Pass Stat Trap Clause', 'Swagger Clause'],
+		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'Baton Pass + Substitute'],
 	},
 
 	// Past Gens OU
@@ -4121,13 +4076,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 3] ZU",
-		mod: 'gen3',
-		searchShow: false,
-		ruleset: ['Standard', 'Baton Pass Stat Trap Clause', 'Swagger Clause'],
-		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'Baton Pass + Substitute'],
-	},
-	{
 		name: "[Gen 3] Custom Game",
 		mod: 'gen3',
 		searchShow: false,
@@ -4235,6 +4183,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Standard', 'Accuracy Moves Clause', 'Sleep Moves Clause', 'Team Preview',
 		],
 		banlist: ['Mew', 'Mewtwo', 'Bind', 'Clamp', 'Explosion', 'Fire Spin', 'Self-Destruct', 'Wrap'],
+	},
+	{
+		name: "[Gen 1] ZU",
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['[Gen 1] PU'],
+		banlist: ['PU', 'ZUBL'],
 	},
 	{
 		name: "[Gen 1] Japanese OU",
