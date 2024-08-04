@@ -686,6 +686,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	delcatty: {
 		inherit: true,
 		types: ["Fairy"],
+		baseStats: {hp: 80, atk: 65, def: 80, spa: 70, spd: 80, spe: 90},
 		abilities: {0: "Adorable Grace"},
 	},
 
