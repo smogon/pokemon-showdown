@@ -1475,12 +1475,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 0;
 		},
 		condition: {
-			duration: 2,
+			duration: 1,
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Dynamite Arrow');
 			},
 			onSideEnd(targetSide) {
-				const pokemon = this.effectState.target;
+				const pokemon = this.effectState.source;
 				this.add('-anim', pokemon, 'Thousand Arrows', pokemon);
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Trey');
 				const source = sources[0];
