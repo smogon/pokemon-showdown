@@ -1180,12 +1180,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {contact: 1},
 		ignoreImmunity: true,
 		onHit(target, source, move) {
-			this.add('-message', `${target.name}'s current Base Defense: ${target.baseStats.def}`);
-			target.baseStats.def -= 30;
-			this.add('-message', `${target.name}'s new Base Defense: ${target.baseStats.def}`);
+			this.add('-message', `${target.name}'s current Base Defense: ${target.species.baseStats.def}`);
+			target.species.baseStats.def -= 30;
+			this.add('-message', `${target.name}'s new Base Defense: ${target.species.baseStats.def}`);
 		},
 		secondary: null,
-		target: "self",
+		target: "normal",
 		type: "Steel",
 	},
 	megametronome: {
