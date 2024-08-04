@@ -1172,70 +1172,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Glint
 	gigameld: {
 		accuracy: true,
-		basePower: 0,
+		basePower: 10,
 		category: "Physical",
 		name: "GigaMeld",
 		pp: 5,
 		noPPBoosts: true,
 		flags: {contact: 1},
-		volatileStatus: 'meld',
 		ignoreImmunity: true,
-		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['bide']) return true;
-		},
-		condition: {
-			duration: 1,
-			onStart(pokemon) {
-				this.effectState.totalDamage = 0;
-				this.add('-start', pokemon, 'move: GigaMeld');
-				this.add('-message', `${pokemon.name} is preparing to meld with ${pokemon.side.foe.active[0].name}!`);
-			},
-			onDamagePriority: -101,
-			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move' || !source) return;
-				this.effectState.totalDamage += damage;
-				this.effectState.lastDamageSource = source;
-			},
-			onBeforeMove(pokemon, target, move) {
-				if (this.effectState.duration === 1) {
-					this.add('-end', pokemon, 'move: GigaMeld');
-					target = this.effectState.lastDamageSource;
-					if (!target || !this.effectState.totalDamage) {
-						this.attrLastMove('[still]');
-						this.add('-fail', pokemon);
-						return false;
-					}
-					if (!target.isActive) {
-						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
-						if (!possibleTarget) {
-							this.add('-miss', pokemon);
-							return false;
-						}
-						target = possibleTarget;
-					}
-					const moveData: Partial<ActiveMove> = {
-						id: 'bide' as ID,
-						name: "Bide",
-						accuracy: true,
-						damage: this.effectState.totalDamage * 2,
-						category: "Physical",
-						priority: 1,
-						flags: {contact: 1, protect: 1},
-						effectType: 'Move',
-						type: 'Normal',
-					};
-					this.actions.tryMoveHit(target, pokemon, moveData as ActiveMove);
-					pokemon.removeVolatile('bide');
-					return false;
-				}
-				this.add('-activate', pokemon, 'move: Bide');
-			},
-			onMoveAborted(pokemon) {
-				pokemon.removeVolatile('bide');
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'move: Bide', '[silent]');
-			},
+		onHit(target, source, move) {
+			this.add('-message', `${target.name}'s current Base Defense: ${target.baseStats.def}`);
+			target.baseStats.def -= 30;
+			this.add('-message', `${target.name}'s new Base Defense: ${target.baseStats.def}`);
 		},
 		secondary: null,
 		target: "self",
