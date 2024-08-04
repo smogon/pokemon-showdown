@@ -1,14 +1,6 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	stealthrock: {
-		num: 446,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Stealth Rock",
-		pp: 20,
-		priority: 0,
-		flags: {reflectable: 1, metronome: 1, mustpressure: 1},
-		sideCondition: 'stealthrock',
+		inherit: true,
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
@@ -20,22 +12,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},
 		},
-		secondary: null,
-		target: "foeSide",
-		type: "Rock",
-		zMove: {boost: {def: 1}},
-		contestType: "Cool",
 	},
 	toxicspikes: {
-		num: 390,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Toxic Spikes",
-		pp: 20,
-		priority: 0,
-		flags: {reflectable: 1, nonsky: 1, metronome: 1, mustpressure: 1},
-		sideCondition: 'toxicspikes',
+		inherit: true,
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
@@ -61,22 +40,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-		secondary: null,
-		target: "foeSide",
-		type: "Poison",
-		zMove: {boost: {def: 1}},
-		contestType: "Clever",
 	},
 	spikes: {
-		num: 191,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Spikes",
-		pp: 20,
-		priority: 0,
-		flags: {reflectable: 1, nonsky: 1, metronome: 1, mustpressure: 1},
-		sideCondition: 'spikes',
+		inherit: true,
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
@@ -94,22 +60,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
 		},
-		secondary: null,
-		target: "foeSide",
-		type: "Ground",
-		zMove: {boost: {def: 1}},
-		contestType: "Clever",
 	},
 	stickyweb: {
-		num: 564,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Sticky Web",
-		pp: 20,
-		priority: 0,
-		flags: {reflectable: 1, metronome: 1},
-		sideCondition: 'stickyweb',
+		inherit: true,
 		condition: {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
@@ -120,10 +73,5 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.boost({spe: -1}, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
 			},
 		},
-		secondary: null,
-		target: "foeSide",
-		type: "Bug",
-		zMove: {boost: {spe: 1}},
-		contestType: "Tough",
 	},
 };
