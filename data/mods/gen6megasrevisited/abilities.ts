@@ -112,7 +112,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		name: "Bug Zapper",
-		shortDesc: "This Pokemon is immune to Bug-type moves and traps the foe it hit by one.",
+		shortDesc: "This Pokemon is immune to Bug-type moves and traps the foe if hit by one.",
 		rating: 5,
 	},
 	exoskeleton: {
