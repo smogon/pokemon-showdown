@@ -5101,7 +5101,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
 				pokemon.removeVolatile('partiallytrapped');
 			}
-			for (let i = 0; i < 3; i++) {
+			for (let i = 0; i < 2; i++) {
 				const usableSideConditions = sideConditions.filter(condition => {
 					if (condition === 'spikes') {
 						return !target.side.sideConditions[condition] || target.side.sideConditions[condition].layers < 3;
@@ -5129,7 +5129,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
 				pokemon.removeVolatile('partiallytrapped');
 			}
-			for (let i = 0; i < 3; i++) {
+			for (let i = 0; i < 2; i++) {
 				const usableSideConditions = sideConditions.filter(condition => {
 					if (condition === 'spikes') {
 						return !target.side.sideConditions[condition] || target.side.sideConditions[condition].layers < 3;
