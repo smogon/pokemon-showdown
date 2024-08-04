@@ -76,7 +76,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return typeMod + this.dex.getEffectiveness('Water', type);
 		},
 		onHit(target, source, move) {
-			target.side.addSideCondition('waterpledge');
+			source.side.addSideCondition('waterpledge');
 		},
 	},
 	// Luminous
