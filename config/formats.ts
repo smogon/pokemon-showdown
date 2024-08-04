@@ -362,32 +362,34 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] Do Not Use",
-		desc: `A National Dex solomod where only Pok&eacute;mon with 280 BST or less are allowed.`,
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause', 'Z-Move Clause'],
-		banlist: ['Dewpider', 'Diglett-Alola', 'Flittle', 'Nidoran-M', 'Smeargle', 'Wattrel', 'Wingull', 'Wishiwashi', 'Zigzagoon-Base', 'Arena Trap', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
+		name: "[Gen 6] Megas Revisited",
+		desc: `A Gen 6 metagame where every Mega Evolution was reevaluated and redesigned.`,
+		mod: 'gen6megasrevisited',
+		ruleset: ['Standard', 'Swagger Clause', 'Mega Data Mod'],
+		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass', 'Blaziken + Speed Boost'],
 		onBegin() {
-			this.add('-message', `Welcome to Do Not Use!`);
-			this.add('-message', `This is a National Dex metagame where only Pokemon with less than 280 BST are allowed, plus a select few others!`);
+			this.add('-message', `Welcome to Megas Revisited!`);
+			this.add('-message', `This is a Generation 6 OU-based Pet Mod where every existing Mega Evolution has been redesigned.`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3734326/`);
-		},
-		onValidateSet(set) {
-			const species = this.dex.species.get(set.species);
-			if (species.bst > 280 && !['Luvdisc', 'Unown', 'Capsakid', 'Snorunt'].includes(species.baseSpecies)) {
-				return [`Only Pok\u00e9mon with a BST of 280 or lower are allowed.`, `(${species.name}'s BST is ${species.bst}.)`];
-			}
+			this.add('-message', `https://www.smogon.com/forums/threads/3713949/`);
 		},
 	},
 	{
-		name: "[Gen 2] Modern Gen 2",
-		desc: `A Gen 2 solomod where all Pok&eacute;mon and moves from future generations are legal.`,
-		mod: 'moderngen2',
-		searchShow: false,
-		ruleset: ['Standard', 'Useless Items Clause', 'Useless Moves Clause', 'MG2 Mod', 'Sleep Moves Clause', '+No Ability', '-All Abilities'],
-		banlist: ['AG', 'Uber', 'Fake Out', 'Shell Smash', 'Last Respects', 'Baton Pass', 'Alakazite', 'Soul Dew'],
+		name: "[Gen 1] RBY CAP",
+		desc: `A Gen 1 metagame where Fakemon are added in a similar fashion to Smogon's official Create-A-Pokemon Project.`,
+		mod: 'gen1rbycap',
+		ruleset: ['Standard'],
+		banlist: ['Uber'],
+		onBegin() {
+			this.add('-message', `Welcome to RBY CAP!`);
+			this.add('-message', `This is a Generation 1 OU-based Pet Mod where Fakemon are added in a similar way to the official CAP project.`);
+			this.add('-message', `You can find our thread and participate here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3737699/`);
+		},
+		onSwitchIn(pokemon) {
+			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			pokemon.apparentType = pokemon.getTypes(true).join('/');
+		},
 	},
 	{
 		name: "[Gen 6] NEXT OU",
