@@ -1172,17 +1172,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Glint
 	gigameld: {
 		accuracy: true,
-		basePower: 10,
+		basePower: 65,
 		category: "Physical",
 		name: "GigaMeld",
 		pp: 5,
 		noPPBoosts: true,
-		flags: {contact: 1},
+		flags: {contact: 1, protect: 1},
 		ignoreImmunity: true,
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('gigameld');
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Fire', type);
+		},
 		onHit(target, source, move) {
-			this.add('-message', `${target.name}'s current Base Defense: ${target.species.baseStats.def}`);
-			target.species.baseStats.def -= 30;
-			this.add('-message', `${target.name}'s new Base Defense: ${target.species.baseStats.def}`);
+			const lstats = ['atk', 'def', 'spa', 'spd', 'spe'];
+			const rstats = ['atk', 'def', 'spd', 'spe'];
+			const loweredStat = this.sample(lstats);
+			const raisedStat = this.sample(rstats);
+			
+			if (!source.addType(target.getTypes()[0])) return false;
+			if (!target.addType('Steel')) return false;
+			this.add('-start', target, 'typeadd', 'Steel', '[from] move: GigaMeld');
+			this.add('-start', source, 'typeadd', target.getTypes()[0], '[from] move: GigaMeld');
+			target.storedStats[loweredStat] -= 50;
+			source.storedStats[raisedStat] += 50;
+			this.add('-message', `${target.name}'s ${loweredStat.toUpperCase()} was decreased to ${target.storedStats[loweredStat]} by ${move.name}!`);
+			this.add('-message', `${source.name}'s ${raisedStat.toUpperCase()} was increased to ${source.storedStats[raisedStat]} by ${move.name}!`);
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: GigaMeld');
+				this.add('-anim', pokemon, 'Work Up', pokemon);
+				this.add('-message', `${pokemon.name} is preparing to meld!`);
+			},
+			onEnd(pokemon) {
+				const target = pokemon.side.foe.active[0];
+				this.add('-anim', pokemon, 'Swagger', target);
+				this.add('-anim', pokemon, 'Dynamic Punch', target);
+			},
 		},
 		secondary: null,
 		target: "normal",
