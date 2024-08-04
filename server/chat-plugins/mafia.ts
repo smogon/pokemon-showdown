@@ -4178,7 +4178,7 @@ export const commands: Chat.ChatCommands = {
 				if (typeof (entries) === 'undefined') return entries;
 
 				if (searchTarget.length === 0) return entries;
-				const negation = searchTarget[0] === '!';
+				const negation = searchTarget.startsWith('!');
 
 				if (negation) searchTarget = searchTarget.substring(1).trim();
 				const entriesCopy = entries.slice();
@@ -4217,10 +4217,11 @@ export const commands: Chat.ChatCommands = {
 						.filter((newKey: any) => toID((MafiaData[`themes`][alias])[newKey].toString()).includes(key)).length > 0);
 				} else if (searchType === `roles` && alias in MafiaData[`IDEAs`]) {
 					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`IDEAs`][alias])
-						.filter((newKey: any) => toID((MafiaData[`IDEAs`][alias])[newKey].toString()).includes(key)).length > 0); // Test this one
+						.filter((newKey: any) => toID((MafiaData[`IDEAs`][alias])[newKey].toString()).includes(key)).length > 0);
 				} else {
 					entries = entries.filter(([key, data]) => Object.keys((MafiaData[searchType][key]))
-						.filter((newKey: any) => (MafiaData[searchType][key])[newKey].toString().toLowerCase().includes(searchTarget)).length > 0);
+						.filter((newKey: any) => (MafiaData[searchType][key])[newKey]
+							.toString().toLowerCase().includes(searchTarget)).length > 0);
 				}
 				return negation ? entriesCopy.filter(element => !entries.includes(element)) : entries;
 			};
