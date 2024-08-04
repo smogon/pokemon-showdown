@@ -1471,6 +1471,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, futuremove: 1},
+		basePowerCallback(pokemon, target, move) {
+			return 0;
+		},
+		condition: {
+			duration: 2,
+			onEnd(pokemon) {
+				this.add('-anim', pokemon, 'Thousand Arrows', pokemon);
+				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Trey');
+				const source = sources[0];
+				const move = this.dex.getActiveMove('dynamitearrow');
+				const dmg = this.actions.getDamage(source, pokemon, move);
+				this.damage(dmg, pokemon);
+			},
+		},
 		secondary: null,
 		target: "normal",
 		type: "Fire",
