@@ -11,12 +11,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	pocketdimension: {
 	  shortDesc: "This Pokemon switches out after using a status move.",
-	  onModifyMove(move, pokemon) {
+		onModifyMove(move, pokemon) {
 			if (move.category === 'Status') {
-			  move.selfSwitch = true;
-			  this.add('-ability', pokemon, 'Pocket Dimension');
+				move.selfSwitch = true;
+				this.add('-ability', pokemon, 'Pocket Dimension');
 			}
-	  },
+		},
 		name: "Pocket Dimension",
 		rating: 4.5,
 	},
