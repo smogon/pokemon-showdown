@@ -89,7 +89,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isZ: "spectralprism",
 		priority: 0,
 		flags: {protect: 1},
-		status: 'brn',
 		secondary: null,
 		target: "normal",
 		type: "Light",
@@ -102,6 +101,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			changeSet(this, source, ssbSets['Luminous-N'], true);
+			target.trySetStatus('brn', source);
 		},
 	},
 	// Fblthp
