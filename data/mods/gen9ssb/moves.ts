@@ -528,12 +528,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Artemis
 	automatedresponse: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 80,
 		category: "Special",
 		shortDesc: "Change move/user's type to SE. 25% NVE instead.",
 		desc: "Randomly changes the move's and user's type to deal super effective damage. There is a 25% chance that this move has a false positive and changes the move's and user's type to deal not very effective damage instead.",
 		name: "Automated Response",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
 		onTryMove() {
@@ -5660,10 +5660,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 	// Tuthur
 	symphonieduzero: {
-		accuracy: 100,
-		basePower: 80,
+		accuracy: 85,
+		basePower: 35,
 		category: "Special",
-		shortDesc: "Salt cures target. Ignores abilities.",
+		shortDesc: "Fire Spin with no duration. Ignores abilities.",
 		name: "Symphonie du Ze\u0301ro",
 		pp: 10,
 		priority: 0,
@@ -5674,11 +5674,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Alluring Voice', target);
 		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'saltcure',
-		},
+		volatileStatus: 'partiallytrapped',
 		ignoreAbility: true,
+		secondary: null,
 		target: "normal",
 		type: "Fairy",
 	},
