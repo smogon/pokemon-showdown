@@ -1476,7 +1476,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 2,
-			onEnd(pokemon) {
+			onSideStart(targetSide) {
+				this.add('-sidestart', targetSide, 'G-Max Cannonade');
+			},
+			onSideEnd(targetSide) {
+				const pokemon = this.effectState.target;
 				this.add('-anim', pokemon, 'Thousand Arrows', pokemon);
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Trey');
 				const source = sources[0];
