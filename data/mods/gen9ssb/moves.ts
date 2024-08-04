@@ -1182,6 +1182,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('gigameld');
 		},
+		onPrepareHit(target, source) {
+			this.add('-anim', pokemon, 'Swagger', target);
+			this.add('-anim', pokemon, 'Flame Charge', target);
+		},
 		onHit(target, source, move) {
 			const lstats = ['atk', 'def', 'spa', 'spd', 'spe'];
 			const rstats = ['atk', 'def', 'spd', 'spe'];
@@ -1203,11 +1207,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-singleturn', pokemon, 'move: GigaMeld');
 				this.add('-anim', pokemon, 'Work Up', pokemon);
 				this.add('-message', `${pokemon.name} is preparing to meld!`);
-			},
-			onEnd(pokemon) {
-				const target = pokemon.side.foe.active[0];
-				this.add('-anim', pokemon, 'Swagger', target);
-				this.add('-anim', pokemon, 'Dynamic Punch', target);
 			},
 		},
 		secondary: null,
