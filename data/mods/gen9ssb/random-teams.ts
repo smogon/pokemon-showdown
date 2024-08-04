@@ -152,6 +152,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rainbow Maxifier',
 		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true, skip: 'Luminous',
 	},
+	/*
 	Glint: {
 		species: 'Meltan', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
 		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
@@ -164,7 +165,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'GigaMeld',
 		evs: {hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252}, nature: 'Adamant', shiny: true, skip: 'Glint',
 	},
-	/*
  	Shorikai: {
 		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
 		moves: ['Metal Burst', 'King\'s Shield', 'Spikes'],
