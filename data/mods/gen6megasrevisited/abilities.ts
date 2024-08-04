@@ -2,7 +2,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	merciless: {
 		shortDesc: "This Pokemon's attacks are critical hits if the target is statused.",
 		onModifyCritRatio(critRatio, source, target) {
-			if (target && ['psn', 'tox', 'brn', 'frz', 'slp', 'par'].includes(target.status)) return 5;
+			if (target?.status) return 5;
 		},
 		name: "Merciless",
 		rating: 1.5,
