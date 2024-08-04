@@ -17,8 +17,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			  this.add('-ability', pokemon, 'Pocket Dimension');
 			}
 	  },
-	  name: "Pocket Dimension",
-	  rating: 4.5,
+		name: "Pocket Dimension",
+		rating: 4.5,
 	},
 	grassysurge: {
 		inherit: true,
