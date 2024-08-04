@@ -1471,33 +1471,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, futuremove: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Searing Shot', target);
-		},
-		onTry(source, target) {
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 2,
-				move: 'dynamitearrow',
-				source: source,
-				moveData: {
-					id: 'dynamitearrow',
-					name: "Dynamite Arrow",
-					accuracy: true,
-					basePower: 50,
-					category: "Physical",
-					priority: 0,
-					flags: {futuremove: 1},
-					effectType: 'Move',
-					type: 'Fire',
-				},
-			});
-			this.add('-start', source, 'move: Dynamite Arrow');
-			return this.NOT_FAIL;
-		},
 		secondary: null,
 		target: "normal",
 		type: "Fire",
