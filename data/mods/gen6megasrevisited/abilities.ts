@@ -60,16 +60,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onModifyMovePriority: 8,
 		onModifyMove(move, pokemon) {
-			if ((
-				move.type === 'Fire' || move.type === 'Water' || move.type === 'Grass' ||
-				move.type === 'Electric' || move.type === 'Dark' || move.type === 'Psychic' ||
-				move.type === 'Dragon' || move.type === 'Fairy') && move.category === 'Physical') {
-				move.category = 'Special';
-			} else if ((
-				move.type === 'Normal' || move.type === 'Fighting' || move.type === 'Flying' ||
-				move.type === 'Ground' || move.type === 'Rock' || move.type === 'Bug' ||
-				move.type === 'Ghost' || move.type === 'Poison' || move.type === 'Steel') && move.category === 'Special') {
-				move.category = 'Physical';
+			if (move.category === "Status") return;
+			if (['Fire', 'Water', 'Grass', 'Electric', 'Dark', 'Psychic', 'Dragon', 'Fairy'].includes(move.type)) {
+				move.category = "Special";
+			} else {
+				move.category = "Physical";
 			}
 		},
 		name: "Nostalgia Trip",
