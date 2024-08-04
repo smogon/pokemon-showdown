@@ -10,7 +10,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		gen: 6,
 	},
 	pocketdimension: {
-	  shortDesc: "This Pokemon switches out after using a status move.",
+		shortDesc: "This Pokemon switches out after using a status move.",
 		onModifyMove(move, pokemon) {
 			if (move.category === 'Status') {
 				move.selfSwitch = true;
