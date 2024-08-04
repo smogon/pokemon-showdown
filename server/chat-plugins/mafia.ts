@@ -1,6 +1,8 @@
 import {Utils, FS} from '../../lib';
 
 interface MafiaData {
+	[k: string]: any;
+
 	// keys for all of these are IDs
 	alignments: {[k: string]: MafiaDataAlignment};
 	roles: {[k: string]: MafiaDataRole};
@@ -10,6 +12,8 @@ interface MafiaData {
 	aliases: {[k: string]: ID};
 }
 interface MafiaDataAlignment {
+	[k: string]: any;
+
 	name: string;
 	plural: string;
 	color?: string;
@@ -18,24 +22,32 @@ interface MafiaDataAlignment {
 	image?: string;
 }
 interface MafiaDataRole {
+	[k: string]: any;
+
 	name: string;
 	memo: string[];
 	alignment?: string;
 	image?: string;
 }
 interface MafiaDataTheme {
+	[k: string]: any;
+
 	name: string;
 	desc: string;
 	// roles
 	[players: number]: string;
 }
 interface MafiaDataIDEA {
+	[k: string]: any;
+
 	name: string;
 	roles: string[];
 	picks: string[];
 	choices: number;
 }
 interface MafiaDataTerm {
+	[k: string]: any;
+
 	name: string;
 	memo: string[];
 }
@@ -336,7 +348,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	IDEA: MafiaIDEAModule;
 
-	constructor(room: ChatRoom, host?: User) {
+	constructor(room: ChatRoom, host: User) {
 		super(room);
 
 		this.title = 'Mafia';
@@ -345,10 +357,12 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.started = false;
 
 		this.theme = null;
-		if (host !== undefined) {
-			this.hostid = host?.id;
-			this.host = Utils.escapeHTML(host?.name);
-		}
+		this.hostid = toID("");
+		this.host = "";
+
+		this.hostid = host.id;
+		this.host = Utils.escapeHTML(host.name) && '';
+
 		this.cohostids = [];
 		this.cohosts = [];
 
@@ -2214,22 +2228,6 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReply(`|html|${game.roomWindow()}`);
 			}
 			return this.parse('/help mafia');
-		},
-		autohost(target, room, user, cmd) {
-			room = this.requireRoom();
-			if (room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
-			this.checkChat();
-			if (room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
-			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
-
-			room.game = new Mafia(room, null);
-			const game = this.requireGame(Mafia);
-
-			// deadline for signups
-			game.phase = 'locked';
-			game.sendHTML(game.roomWindow());
-			game.updatePlayers();
-			game.logAction(user, `closed signups`);
 		},
 		forcehost: 'host',
 		nexthost: 'host',
@@ -4135,7 +4133,7 @@ export const commands: Chat.ChatCommands = {
 			const targets = target.split(',').map(x => x.trim());
 
 			// Determine search type
-			let searchType = null;
+			let searchType = '';
 			if (cmd.includes('theme') || targets.includes(`themes`)) {
 				searchType = `themes`;
 				if (targets.includes(`themes`)) targets.splice(targets.indexOf(`themes`), 1);
@@ -4176,7 +4174,7 @@ export const commands: Chat.ChatCommands = {
 				return array;
 			};
 
-			const search = function (entries: any[], searchTarget) {
+			const search = function (entries: any[], searchTarget: string) {
 				if (typeof (entries) === 'undefined') return entries;
 
 				if (searchTarget.length === 0) return entries;
@@ -4196,14 +4194,14 @@ export const commands: Chat.ChatCommands = {
 					const players = searchTarget.split(inequality)[1].trim();
 					if (((players !== null) &&
 						(players !== '') &&
-						!isNaN(Number(players.toString())))) {
+						!isNaN(Number(players)))) {
 						if (inequality === '=') {
 							entries = entries.filter(([key, data]) => players in (MafiaData[searchType][key]));
 						} else if (inequality === '<' || inequality === '<=') {
 							entries = entries.filter(([key, data]) => ([...Array(+players + (inequality === '<=' ? +1 : +0)).keys()])
 								.some(playerCount => playerCount in (MafiaData[searchType][key])));
 						} else if (inequality === '>' || inequality === '>=') {
-							entries = entries.filter(([key, data]) => ([...Array(50 - players).keys()]
+							entries = entries.filter(([key, data]) => ([...Array(50 - Number(players)).keys()]
 								.map(num => +num + +players + (inequality === '>=' ? +0 : +1)))
 								.some(playerCount => playerCount in (MafiaData[searchType][key])));
 						}
@@ -4216,13 +4214,13 @@ export const commands: Chat.ChatCommands = {
 							(MafiaData[searchType][key])[playerCount].toString().toLowerCase().includes(alias)));
 				} else if (searchType === `roles` && alias in MafiaData[`themes`]) {
 					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`themes`][alias])
-						.filter(newKey => toID((MafiaData[`themes`][alias])[newKey].toString()).includes(key)).length > 0);
+						.filter((newKey: any) => toID((MafiaData[`themes`][alias])[newKey].toString()).includes(key)).length > 0);
 				} else if (searchType === `roles` && alias in MafiaData[`IDEAs`]) {
 					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`IDEAs`][alias])
-						.filter(newKey => toID((MafiaData[`IDEAs`][alias])[newKey].toString()).includes(key)).length > 0);
+						.filter((newKey: any) => toID((MafiaData[`IDEAs`][alias])[newKey].toString()).includes(key)).length > 0); // Test this one
 				} else {
 					entries = entries.filter(([key, data]) => Object.keys((MafiaData[searchType][key]))
-						.filter(newKey => (MafiaData[searchType][key])[newKey].toString().toLowerCase().includes(searchTarget)).length > 0);
+						.filter((newKey: any) => (MafiaData[searchType][key])[newKey].toString().toLowerCase().includes(searchTarget)).length > 0);
 				}
 				return negation ? entriesCopy.filter(element => !entries.includes(element)) : entries;
 			};
@@ -4240,17 +4238,18 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			// Convert to rows
-			const themeRow = function (theme, players = 0) {
+			const themeRow = function (theme: MafiaDataTheme, players = 0) {
 				return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia theme ${theme.name}" > ${theme.name} </button> </td><td style="text-align:left;width:70%">${players > 0 ? theme[players] : theme.desc} </td></tr >`;
 			};
-			const ideaRow = function (idea) {
+			const ideaRow = function (idea: MafiaDataIDEA) {
 				return `<tr><td style="text-align:left;width:100%" ><button class="button" name = "send" value = "/mafia dt ${idea.name}" > ${idea.name} </button> </td></tr >`;
 			};
-			const row = function (role) {
+			const row = function (role: MafiaDataRole) {
 				return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia role ${role.name}" > ${role.name} </button> </td><td style="text-align:left;width:70%">${role.memo.join(' ')} </td></tr >`;
 			};
 
 			if (dataSource === MafiaData.aliases) {
+				room = this.requireRoom();
 				this.checkCan('mute', null, room);
 				const aliases = Object.entries(MafiaData.aliases)
 					.map(([from, to]) => `${from}: ${to}`)
