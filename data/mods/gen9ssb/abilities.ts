@@ -893,7 +893,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Uses Dynamite Arrow upon switching in. x1.3 Speed; Moves always hit. Attacks have 1.5x power and +2 crit ratio unless this Pokemon was hit by an attacking move this turn or last turn.",
 		shortDesc: "Dynamite Arrow on switch-in; Moves always hit; 1.3x Speed; 1.5x Damage/+2 Crit unless hit by attack.",
 		onStart(target) {
-			this.actions.useMove('Dynamite Arrow', target);
+			target.addSideCondition('dynamitearrow');
 			this.effectState.lostConcentration = false;
 			this.effectState.damaged = false;
 		},
