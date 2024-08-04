@@ -1182,9 +1182,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('gigameld');
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Fire', type);
-		},
 		onHit(target, source, move) {
 			const lstats = ['atk', 'def', 'spa', 'spd', 'spe'];
 			const rstats = ['atk', 'def', 'spd', 'spe'];
