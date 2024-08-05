@@ -890,8 +890,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Trey
 	concentration: {
-		desc: "Uses Dynamite Arrow upon switching in. x1.3 Speed; Moves always hit. Attacks have 1.5x power and +2 crit ratio unless this Pokemon was hit by an attacking move this turn or last turn.",
-		shortDesc: "Dynamite Arrow on switch-in; Moves always hit; 1.3x Speed; 1.5x Damage/+2 Crit unless hit by attack.",
+		desc: "Starts Dynamite Arrow on the opposing side upon switching in. This Pokemon has x1.3 speed. This Pokemon's attacks cannot miss. This Pokemon's attacks have 1.5x power and +2 crit ratio after one full turn of not being attacked.",
+		shortDesc: "See '/ssb Trey' for more!",
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[0];
 			target.side.addSideCondition('dynamitearrow');
@@ -903,9 +903,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${target.name} lost their concentration!`);
 			}
 		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('concentration - user will not miss');
+			return true;
+		},
 		onResidual(pokemon, target) {
 			if (!pokemon.abilityState.concentrated) {
 				pokemon.abilityState.concentrated = true;
+				this.add('-anim', pokemon, 'Focus Energy', pokemon);
 				this.add('-message', `${pokemon.name} is building concentration!`);
 			}
 		},
