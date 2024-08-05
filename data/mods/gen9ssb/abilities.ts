@@ -895,10 +895,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[0];
 			target.side.addSideCondition('dynamitearrow');
+			pokemon.abilityState.damaged = false;
 			pokemon.abilityState.concentrated = false;
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (target.abilityState.concentrated) {
+			if (!target.abilityState.damaged || target.abilityState.concentrated) {
+				target.abilityState.damaged = true;
 				target.abilityState.concentrated = false;
 				this.add('-message', `${target.name} lost their concentration!`);
 			}
@@ -910,11 +912,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return true;
 		},
 		onResidual(pokemon, target) {
-			if (!pokemon.abilityState.concentrated) {
+			if (!pokemon.abilityState.damaged && !pokemon.activeTurns) {
 				pokemon.abilityState.concentrated = true;
 				this.add('-anim', pokemon, 'Focus Energy', pokemon);
 				this.add('-message', `${pokemon.name} is building concentration!`);
+				return;
 			}
+			if (!pokemon.abilityState.damaged && pokemon.activeTurns) {
+				pokemon.abilityState.concentrated = true;
+				this.add('-anim', pokemon, 'Focus Energy', pokemon);
+				this.add('-message', `${pokemon.name} is building concentration!`);
+				return;
+			}
+			pokemon.abilityState.damaged = false;
 		},
 		onBasePowerPriority: 29,
 		onBasePower(basePower, pokemon, target, move) {
