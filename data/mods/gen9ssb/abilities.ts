@@ -899,7 +899,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.abilityState.concentrated = false;
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (!target.abilityState.damaged || target.abilityState.concentrated) {
+			if (!target.abilityState.damaged && target.abilityState.concentrated) {
 				target.abilityState.damaged = true;
 				target.abilityState.concentrated = false;
 				this.add('-message', `${target.name} lost their concentration!`);
