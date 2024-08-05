@@ -1472,9 +1472,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		sideCondition: 'dynamitearrow',
 		flags: {mirror: 1, protect: 1, futuremove: 1},
-		basePowerCallback(pokemon, target, move) {
-			return 0;
-		},
 		condition: {
 			duration: 1,
 			onSideStart(targetSide) {
