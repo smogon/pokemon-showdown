@@ -1470,6 +1470,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 40,
 		noPPBoosts: true,
 		priority: 0,
+		sideCondition: 'dynamitearrow',
 		flags: {mirror: 1, protect: 1, futuremove: 1},
 		basePowerCallback(pokemon, target, move) {
 			return 0;
