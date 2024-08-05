@@ -528,6 +528,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			const problems: string[] = [];
 			const moves = [];
 			if (set.moves?.length) {
+				if (set.moves.length > this.ruleTable.maxMoveCount) {
+					problems.push(`${set.name} has ${set.moves.length} moves, which is more than the limit of ${this.ruleTable.maxMoveCount}.`);
+					return problems;
+				}
 				for (const [i, moveid] of set.moves.entries()) {
 					const pokemove = this.dex.species.get(moveid);
 					if (!pokemove.exists) continue;
