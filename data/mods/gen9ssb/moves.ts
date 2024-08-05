@@ -1473,7 +1473,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		sideCondition: 'dynamitearrow',
 		flags: {mirror: 1, protect: 1, futuremove: 1},
 		condition: {
-			duration: 1,
+			duration: 2,
 			onSideStart(targetSide) {
 				this.add('-sidestart', targetSide, 'Dynamite Arrow');
 			},
