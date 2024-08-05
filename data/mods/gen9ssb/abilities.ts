@@ -895,44 +895,35 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[0];
 			target.side.addSideCondition('dynamitearrow');
-			this.effectState.lostConcentration = false;
-			this.effectState.damaged = false;
-		},
-		onModifySpe(spe) {
-			return this.chainModify(1.3);
+			pokemon.abilityState.concentrated = false;
 		},
 		onDamagingHit(damage, target, source, move) {
-			this.effectState.lostConcentration = true;
-			this.effectState.undamagedTurns = 0;
-			this.effectState.damaged = true;
-			this.add('-message', `${move.name} made ${target.name} lose their focus!`);
+			if (target.abilityState.concentrated) {
+				target.abilityState.concentrated = false;
+				this.add('-message', `${target.name} lost their concentration!`);
+			}
 		},
 		onResidual(pokemon, target) {
-			if (!this.effectState.damaged) {
-				this.effectState.undamagedTurns++;
-				if (this.effectState.undamagedTurns > 0 && this.effectState.lostConcentration) {
-					this.effectState.lostConcentration = false;
-					this.add('-message', `${pokemon.name} is building concentration!`);
-				}
-			}
-			if (this.effectState.damaged) {
-				this.effectState.damaged = false;
-				return null;
+			if (!pokemon.abilityState.concentrated) {
+				pokemon.abilityState.concentrated = true;
+				this.add('-message', `${pokemon.name} is building concentration!`);
 			}
 		},
 		onBasePowerPriority: 29,
 		onBasePower(basePower, pokemon, target, move) {
-			if (!this.effectState.lostConcentration) {
+			if (pokemon.abilityState.concentrated) {
 				return move.basePower * 1.5;
 			}
 			return move.basePower;
 		},
-
 		onModifyCritRatio(critRatio, pokemon, target, move) {
-			if (!this.effectState.lostConcentration) {
+			if (pokemon.abilityState.concentrated) {
 				return move.critRatio + 2;
 			}
 			return move.critRatio;
+		},
+		onModifySpe(spe) {
+			return this.chainModify(1.3);
 		},
 		flags: {},
 		name: "Concentration",
