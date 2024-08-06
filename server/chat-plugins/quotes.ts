@@ -84,7 +84,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('mute', null, room);
 		if (!quotes[room.roomid]?.length) return this.errorReply(`This room has no quotes.`);
 		const roomQuotes = quotes[room.roomid];
-		const index = toID(target) === 'last' ? roomQuotes.length - 1 : parseInt(input) - 1;
+		const index = toID(target) === 'last' ? roomQuotes.length - 1 : parseInt(toID(target)) - 1;
 		if (isNaN(index)) {
 			return this.errorReply(`Invalid index.`);
 		}
