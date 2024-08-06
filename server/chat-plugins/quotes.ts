@@ -83,17 +83,17 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
 		if (!quotes[room.roomid]?.length) return this.errorReply(`This room has no quotes.`);
-		const index = parseInt(target.trim());
+		const roomQuotes = quotes[room.roomid];
+		const index = toID(target) === 'last' ? roomQuotes.length - 1 : parseInt(toID(target)) - 1;
 		if (isNaN(index)) {
 			return this.errorReply(`Invalid index.`);
 		}
-		const roomQuotes = quotes[room.roomid];
-		if (!roomQuotes[index - 1]) {
+		if (!roomQuotes[index]) {
 			return this.errorReply(`Quote not found.`);
 		}
-		const [removed] = roomQuotes.splice(index - 1, 1);
+		const [removed] = roomQuotes.splice(index, 1);
 		const collapsedQuote = removed.quote.replace(/\n/g, ' ');
-		this.privateModAction(`${user.name} removed quote indexed at ${index}: "${collapsedQuote}" (originally added by ${removed.userid}).`);
+		this.privateModAction(`${user.name} removed quote indexed at ${index + 1}: "${collapsedQuote}" (originally added by ${removed.userid}).`);
 		this.modlog(`REMOVEQUOTE`, null, collapsedQuote);
 		saveQuotes();
 		this.refreshPage(`quotes-${room.roomid}`);
