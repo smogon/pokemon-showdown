@@ -173,7 +173,7 @@ export const commands: Chat.ChatCommands = {
 				return this.parse(`/help ${cmd}`);
 			}
 			const [formatid, source] = this.splitOne(target).map(toID);
-			let bVal: number | undefined = parseInt(source);
+			let bVal: number | undefined = parseFloat(source);
 			if (cmd.startsWith('d')) {
 				bVal = undefined;
 			} else if (!source || isNaN(bVal) || bVal < 1) {
