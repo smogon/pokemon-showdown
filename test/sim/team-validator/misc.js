@@ -200,4 +200,12 @@ describe('Team Validator', function () {
 		];
 		assert.false.legalTeam(team, 'gen8ou');
 	});
+
+	it('should allow underleveled event Pokemon', function () {
+		const team = [
+			{species: 'mandibuzz', level: 25, ability: 'weakarmor', moves: ['pluck'], evs: {hp: 1}},
+			{species: 'volcarona', level: 35, ability: 'flamebody', moves: ['leechlife'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen8ou');
+	});
 });
