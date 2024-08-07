@@ -67,6 +67,15 @@ class Team {
 	}
 }
 
+function parseCredits(amount: string) {
+	let credits = Number(amount);
+	if (credits < 500) credits *= 1000;
+	if (!credits || credits % 500 !== 0) {
+		throw new Chat.ErrorMessage(`The amount of credits must be a multiple of 500.`);
+	}
+	return credits;
+}
+
 export class Auction extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'auction' as ID;
 	owners: Set<ID>;
@@ -244,10 +253,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.state !== 'setup') {
 			throw new Chat.ErrorMessage(`You cannot change the minimum bid after the auction has started.`);
 		}
-		if (amount < 500) amount *= 1000;
-		if (isNaN(amount) || amount < 500 || amount > 500000 || amount % 500 !== 0) {
-			throw new Chat.ErrorMessage(`The minimum bid must be a multiple of 500 between 500 and 500,000.`);
-		}
+		if (amount > 500000) throw new Chat.ErrorMessage(`The minimum bid must not exceed 500,000.`);
 		this.minBid = amount;
 	}
 
@@ -255,7 +261,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.state !== 'setup') {
 			throw new Chat.ErrorMessage(`You cannot change the minimum number of players after the auction has started.`);
 		}
-		if (isNaN(amount) || amount < 1 || amount > 30) {
+		if (!amount || amount > 30) {
 			throw new Chat.ErrorMessage(`The minimum number of players must be between 1 and 30.`);
 		}
 		this.minPlayers = amount;
@@ -430,9 +436,6 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 		const team = this.teams.get(toID(teamName));
 		if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
-		if (isNaN(amount) || amount % 500 !== 0) {
-			throw new Chat.ErrorMessage(`The amount of credits must be a multiple of 500.`);
-		}
 		const newCredits = team.credits + amount;
 		if (newCredits <= 0 || newCredits > 10000000) {
 			throw new Chat.ErrorMessage(`A team must have between 0 and 10,000,000 credits.`);
@@ -503,42 +506,46 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.state = 'bid';
 		this.highestBid = this.minBid;
 		this.highestBidder = this.nominatingTeam;
-		this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid to place a bid!`);
+		this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid or simply type a number to place a bid!`);
 		if (!this.blindMode) this.sendBidInfo();
 		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
 
-	bid(user: User, amount: number) {
+	onChatMessage(message: string, user: User) {
+		if (this.state !== 'bid' || !Number(message)) return;
+		this.bid(user, parseCredits(message));
+		return '';
+	}
+
+	bid(user: User, bid: number) {
 		if (this.state !== 'bid') throw new Chat.ErrorMessage(`There are no players up for auction right now.`);
 		const team = this.managers.get(user.id)?.team;
 		if (!team) throw new Chat.ErrorMessage(`Only managers can bid on players.`);
 		if (team.isSuspended()) throw new Chat.ErrorMessage(`Your team is suspended and cannot place bids.`);
 
-		if (amount < 500) amount *= 1000;
-		if (isNaN(amount) || amount % 500 !== 0) throw new Chat.ErrorMessage(`Your bid must be a multiple of 500.`);
-		if (amount > team.maxBid()) throw new Chat.ErrorMessage(`Your team cannot afford to bid that much.`);
+		if (bid > team.maxBid()) throw new Chat.ErrorMessage(`Your team cannot afford to bid that much.`);
 
 		if (this.blindMode) {
 			if (this.bidsPlaced.has(team)) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
-			if (amount <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
+			if (bid <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
 			for (const manager of this.managers.values()) {
 				if (manager.team !== team) continue;
-				const msg = `|c:|${Math.floor(Date.now() / 1000)}|&|/html Your team placed a bid of <b>${amount}</b> on <username>${Utils.escapeHTML(this.nominatedPlayer.name)}</username>.`;
+				const msg = `|c:|${Math.floor(Date.now() / 1000)}|&|/html Your team placed a bid of <b>${bid}</b> on <username>${Utils.escapeHTML(this.nominatedPlayer.name)}</username>.`;
 				Users.getExact(manager.id)?.sendTo(this.room, msg);
 			}
-			if (amount > this.highestBid) {
-				this.highestBid = amount;
+			if (bid > this.highestBid) {
+				this.highestBid = bid;
 				this.highestBidder = team;
 			}
-			this.bidsPlaced.set(team, amount);
+			this.bidsPlaced.set(team, bid);
 			if (this.bidsPlaced.size === this.teams.size) {
 				this.finishCurrentNom();
 			}
 		} else {
-			if (amount <= this.highestBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
-			this.highestBid = amount;
+			if (bid <= this.highestBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
+			this.highestBid = bid;
 			this.highestBidder = team;
-			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${amount}</b>`);
+			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${bid}</b>`);
 			this.sendBidInfo();
 			this.clearTimer();
 			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
@@ -612,13 +619,9 @@ export const commands: Chat.ChatCommands = {
 
 			let startingCredits;
 			if (target) {
-				startingCredits = parseInt(target);
-				if (
-					isNaN(startingCredits) ||
-					startingCredits < 10000 || startingCredits > 10000000 ||
-					startingCredits % 500 !== 0
-				) {
-					return this.errorReply(`Starting credits must be a multiple of 500 between 10,000 and 10,000,000.`);
+				startingCredits = parseCredits(target);
+				if (startingCredits < 10000 || startingCredits > 10000000) {
+					return this.errorReply(`Starting credits must be between 10,000 and 10,000,000.`);
 				}
 			}
 			const auction = new Auction(room, startingCredits);
@@ -672,7 +675,7 @@ export const commands: Chat.ChatCommands = {
 			auction.checkOwner(user);
 
 			if (!target) return this.parse('/help auction minbid');
-			const amount = parseInt(target);
+			const amount = parseCredits(target);
 			auction.setMinBid(amount);
 			this.addModAction(`${user.name} set the minimum bid to ${amount}.`);
 			this.modlog('AUCTION MINBID', null, `${amount}`);
@@ -880,9 +883,10 @@ export const commands: Chat.ChatCommands = {
 
 			const [teamName, amount] = target.split(',').map(x => x.trim());
 			if (!teamName || !amount) return this.parse('/help auction addcredits');
-			auction.addCreditsToTeam(teamName, parseInt(amount));
+			const credits = parseCredits(amount);
+			auction.addCreditsToTeam(teamName, credits);
 			const team = auction.teams.get(toID(teamName))!;
-			this.addModAction(`${user.name} added ${amount} credits to team ${team.name}.`);
+			this.addModAction(`${user.name} ${credits < 0 ? 'removed' : 'added'} ${Math.abs(credits)} credits ${credits < 0 ? 'from' : 'to'} team ${team.name}.`);
 		},
 		addcreditshelp: [
 			`/auction addcredits [team], [amount] - Adds credits to a team. Requires: # & auction owner`,
@@ -899,10 +903,11 @@ export const commands: Chat.ChatCommands = {
 		bid(target, room, user) {
 			const auction = this.requireGame(Auction);
 			if (!target) return this.parse('/help auction bid');
-			auction.bid(user, parseFloat(target));
+			auction.bid(user, parseCredits(target));
 		},
 		bidhelp: [
 			`/auction bid OR /bid [amount] - Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.`,
+			`During the bidding phase, all numbers typed in the chat will be treated as bids.`,
 		],
 		undo(target, room, user) {
 			const auction = this.requireGame(Auction);
