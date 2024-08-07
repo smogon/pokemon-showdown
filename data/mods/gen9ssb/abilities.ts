@@ -15,6 +15,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Shifu Robot
+	autorepair: {
+		name: "Auto Repair",
+		gen: 9,
+		// Handled in ../config/formats.ts
+	},
 	// Luminous
 	blindinglight: {
 		name: "Blinding Light",
