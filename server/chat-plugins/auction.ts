@@ -907,7 +907,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		bidhelp: [
 			`/auction bid OR /bid [amount] - Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.`,
-			`During the bidding phase, all numbers typed in the chat will be treated as bids.`,
+			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.`,
 		],
 		undo(target, room, user) {
 			const auction = this.requireGame(Auction);
@@ -961,6 +961,7 @@ export const commands: Chat.ChatCommands = {
 			`- nom [player]: Nominates a player for auction.<br/>` +
 			`- bid [amount]: Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.<br/>` +
 			`You may use /bid and /nom directly without the /auction prefix.<br/><br/>` +
+			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.<br>` +
 			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- minbid [amount]: Sets the minimum bid.<br/>` +
 			`- minplayers [amount]: Sets the minimum number of players.<br/>` +
