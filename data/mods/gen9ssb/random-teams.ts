@@ -103,13 +103,6 @@ export const ssbSets: SSBSets = {
       signatureMove: 'You Filthy Peasant',
       evs: {hp: 252, def: 196, spd: 60}, nature: 'Careful',
    },
-	/*
-	'Marisa Kirisame': {
-		species: 'Hatterene', ability: 'Ordinary Magician', item: 'Mini-Hakkero', gender: 'F',
-		moves: ['Flamethrower', 'Ice Beam', 'Thunderbolt'],
-		signatureMove: 'Orb Shield',
-		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
-	},*/
 	'Sanae Kochiya': {
 		species: 'Togekiss', ability: 'Wind Priestess', item: 'Leftovers', gender: 'F',
 		moves: ['Protect', 'Sparkly Swirl', 'Oblivion Wing'],
@@ -152,7 +145,19 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rainbow Maxifier',
 		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true, skip: 'Luminous',
 	},
+	'Shifu Robot': {
+		species: 'Genesect', ability: 'Auto Repair', item: 'Absorptive Shell', gender: 'N',
+		moves: ['Techno Blast', 'Flash Cannon', 'Explosion'],
+		signatureMove: 'Turbocharge',
+		evs: {hp: 128, spa: 128, spe: 252}, nature: 'Hasty', shiny: true,
+	},
 	/*
+	'Marisa Kirisame': {
+		species: 'Hatterene', ability: 'Ordinary Magician', item: 'Mini-Hakkero', gender: 'F',
+		moves: ['Flamethrower', 'Ice Beam', 'Thunderbolt'],
+		signatureMove: 'Orb Shield',
+		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	Glint: {
 		species: 'Meltan', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
 		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
