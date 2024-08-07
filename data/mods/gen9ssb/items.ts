@@ -1,4 +1,53 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Shifu Robot
+	absorptiveshell: {
+		name: "Absorptive Shell",
+		gen: 9,
+		onSwitchIn(pokemon) {
+			pokemon.abilityState.forcefield = false;
+			pokemon.abilityState.forcefieldHp = 0;
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
+				this.add('-message', `${pokemon.name} created a forcefield!`);
+				pokemon.abilityState.forcefield = true;
+				pokemon.abilityState.forcefieldHp = pokemon.maxhp / 3;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.abilityState.forcefield && target.abilityState.forcefieldHp > 0) {
+				this.add('-anim', target, 'Aqua Ring', target);
+				if (target.abilityState.forcefieldHp >= damage) {
+					target.abilityState.forcefieldHp -= damage;
+					if (target.abilityState.forcefieldHp <= 0) {
+						target.abilityState.forcefield = false;
+						target.abilityState.forcefieldHp = 0;
+						this.add('-message', `${target.name}'s forcefield shattered!`);
+					}
+					return 0;
+				}
+				if (damage > target.abilityState.forcefieldHp) {
+					let bleed = damage - target.abilityState.forcefieldHp;
+					target.abilityState.forcefield = false;
+					target.abilityState.forcefieldHp = 0;
+					this.add('-message', `${target.name}'s forcefield shattered!`);
+					return bleed;
+				}
+			}
+		},
+		onResidual(pokemon) {
+			let types = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Light', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Stellar', 'Water'];
+			let randomType = this.sample(types);
+			let newType = randomType + '/Steel';
+			this.add('-start', pokemon, 'typechange', newType, '[from] item: Absorptive Shell');
+			this.add('-message', `${pokemon.name}'s Techno Blast changed to ${pokemon.getTypes()[0]}-type!`);
+		},
+		onModifyType(move, pokemon) {
+			if (move.id === 'technoblast') {
+				move.type = pokemon.getTypes()[0];
+				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to ${move.type}-type!`);
+			}
+		},
+	},
 	// PokeKart
 	flameflyer: {
 		name: "Flame Flyer",
