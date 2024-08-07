@@ -68,7 +68,7 @@ class Team {
 }
 
 function parseCredits(amount: string) {
-	let credits = Number(amount);
+	let credits = Number(amount.replace(',', '.'));
 	if (credits < 500) credits *= 1000;
 	if (!credits || credits % 500 !== 0) {
 		throw new Chat.ErrorMessage(`The amount of credits must be a multiple of 500.`);
@@ -511,12 +511,6 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
 
-	onChatMessage(message: string, user: User) {
-		if (this.state !== 'bid' || !Number(message)) return;
-		this.bid(user, parseCredits(message));
-		return '';
-	}
-
 	bid(user: User, bid: number) {
 		if (this.state !== 'bid') throw new Chat.ErrorMessage(`There are no players up for auction right now.`);
 		const team = this.managers.get(user.id)?.team;
@@ -550,6 +544,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.clearTimer();
 			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 		}
+	}
+
+	onChatMessage(message: string, user: User) {
+		if (this.state !== 'bid' || !Number(message.replace(',', '.'))) return;
+		this.bid(user, parseCredits(message));
+		return '';
 	}
 
 	finishCurrentNom() {
