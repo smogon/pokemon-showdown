@@ -40,6 +40,64 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Shifu Robot
+	turbocharge: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Turbocharge",
+		pp: 1,
+		noPPBoosts: true,
+		priority: 6,
+		flags: {},
+		secondary: null,
+		target: "self",
+		type: "Electric",
+		volatileStatus: 'turbocharge',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Discharge', source);
+			this.add('-anim', source, 'Agility', source);
+		},
+		onHit(target, source, move) {
+			if (!target.hp) return;
+			target.abilityState.turbochargeStacks = Math.floor((target.hp - 1) / target.maxhp * 10);
+			target.hp = 1;
+			target.addVolatile('turbocharge');
+			target.addVolatile('protect');
+		},
+		condition: {
+			duration: 0,
+			onModifySpa(spa, pokemon) {
+				if (pokemon.abilityState.turbochargeStacks <= 0) return;
+				return this.chainModify(1+(0.1*pokemon.abilityState.turbochargeStacks));
+			},
+			onModifySpe(spe, pokemon) {
+				if (pokemon.abilityState.turbochargeStacks <= 0) return;
+				return this.chainModify(1+(0.1*pokemon.abilityState.turbochargeStacks));
+			},
+			onTryHeal(damage, target, source, effect) {
+				if ((effect?.id === 'zpower') || this.effectState.isZ) return damage;
+				this.add('cant', target, 'Turbocharge', 'Turbocharge');
+				return false;
+			},
+			onResidual(pokemon) {
+				pokemon.abilityState.turbochargeStacks--;
+				if (pokemon.abilityState.turbochargeStacks <= 0) {
+					pokemon.abilityState.turbochargeStacks = 0;
+					this.add('-message', `${pokemon.name}'s turbocharge wore off!`);
+					return;
+				}
+				this.add('-message', `${pokemon.name}'s turbocharge weakened in intensity!`);
+			}
+			onSwitchOut(pokemon) {
+				pokemon.abilityState.turbochargeStacks = 0;
+				pokemon.removeVolatile('turbocharge');
+			}
+		},
+	},
 	// Luminous
 	rainbowmaxifier: {
 		accuracy: 85,
