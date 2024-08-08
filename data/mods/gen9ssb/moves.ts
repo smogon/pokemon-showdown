@@ -528,12 +528,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Artemis
 	automatedresponse: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 80,
 		category: "Special",
 		shortDesc: "Change move/user's type to SE. 25% NVE instead.",
 		desc: "Randomly changes the move's and user's type to deal super effective damage. There is a 25% chance that this move has a false positive and changes the move's and user's type to deal not very effective damage instead.",
 		name: "Automated Response",
-		pp: 20,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1},
 		onTryMove() {
@@ -2103,6 +2103,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Dizzy Punch', target);
 			this.add('-anim', source, 'Bulk Up', source);
 		},
+		self: {
+			volatileStatus: 'cringedadjoke',
+		},
 		secondary: {
 			chance: 100,
 			volatileStatus: 'confusion',
@@ -2217,37 +2220,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Water",
 	},
 
-	// Goro Yagami
-	shadowambush: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Physical",
-		shortDesc: "-1 Def/SpD, gives Slow Start, user switches.",
-		desc: "Lowers the target's Defense and Special Defense by 1 stage and replaces the target's ability with Slow Start. If this move is successful, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members.",
-		name: "Shadow Ambush",
-		gen: 9,
-		pp: 15,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Spectral Thief', target);
-		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'slowstart',
-			boosts: {
-				def: -1,
-				spd: -1,
-			},
-		},
-		selfSwitch: true,
-		target: "normal",
-		type: "Ghost",
-	},
-
 	// Haste Inky
 	hastyrevolution: {
 		accuracy: 100,
@@ -2274,11 +2246,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			for (i in source.boosts) {
 				if (source.boosts[i] < 0) {
 					target.boosts[i] += source.boosts[i];
+					this.add('-setboost', target, i as string, target.boosts[i], '[silent]');
 					source.boosts[i] = -source.boosts[i];
+					this.add('-setboost', source, i as string, source.boosts[i], '[silent]');
 				}
 			}
-			this.add('-copyboost', target, source, '[from] move: Hasty Revolution');
-			this.add('-invertboost', source, '[from] move: Hasty Revolution');
+			this.add('-message', `${target.name} received ${source.name}'s negative stat boosts!'`);
+			this.add('-message', `${source.name} inverted their negative stat boosts!`);
 		},
 		stallingMove: true,
 		self: {
@@ -3088,7 +3062,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onModifyPriority(priority, source, target, move) {
-			if (target && Object.values(target.boosts).some(x => x !== 0)) {
+			const foe = source.foes()[0];
+			if (foe && Object.values(foe.boosts).some(x => x !== 0)) {
 				return priority + 1;
 			}
 		},
@@ -3373,11 +3348,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 
 	// Lily
-	recharge: {
+	powerup: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		name: "Recharge",
+		name: "Power Up",
 		shortDesc: "Heals 50% HP. Heals 3% more per fainted ally.",
 		desc: "Heals the user for 50% of their maximum HP. Heals an additional 3% of the user's maximum HP for each team member on the user's side that has fainted.",
 		pp: 5,
@@ -3610,7 +3585,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.boost({[boost]: 1}, pokemon);
 			}
 			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
-			const unloweredStat = this.sample(Object.keys(pokemon.boosts).filter(x => x !== ('evasion' as BoostID)));
+			const unloweredStat = this.sample(
+				Object.keys(pokemon.boosts).filter(x => !['evasion', 'accuracy'].includes(x as BoostID))
+			);
 			for (const boost in boosts) {
 				if ((boosts[boost as BoostID] >= 6 && maxBoostIDs.includes(boost as BoostID)) || boost === unloweredStat) continue;
 				this.boost({[boost]: -1}, pokemon);
@@ -3726,17 +3703,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		onTry(source) {
-			if (source.side.pokemonLeft === 1) return false;
+		onTryMove(source, target, move) {
+			this.attrLastMove('[still]');
+			if (source.side.pokemonLeft === 1) {
+				this.add('-fail', source);
+				return false;
+			}
 			if (!source.hasAbility('endround')) {
+				this.add('-fail', source);
 				this.hint(`The user's ability needs to be End Round for New Bracket to work.`);
 				return false;
 			}
-		},
-		onTryMove(source, target, move) {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source, move) {
 			this.attrLastMove(`[anim] Trick Room`);
 		},
 		onHitField(target, source, move) {
@@ -4663,7 +4640,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Removes any terrain, weather, entry hazard, or other removable field condition, and then causes the user to switch out out even if it is trapped and be replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, and the user will still attempt to switch out if there are no active field conditions.",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -5124,7 +5101,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
 				pokemon.removeVolatile('partiallytrapped');
 			}
-			for (let i = 0; i < 3; i++) {
+			for (let i = 0; i < 2; i++) {
 				const usableSideConditions = sideConditions.filter(condition => {
 					if (condition === 'spikes') {
 						return !target.side.sideConditions[condition] || target.side.sideConditions[condition].layers < 3;
@@ -5152,7 +5129,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
 				pokemon.removeVolatile('partiallytrapped');
 			}
-			for (let i = 0; i < 3; i++) {
+			for (let i = 0; i < 2; i++) {
 				const usableSideConditions = sideConditions.filter(condition => {
 					if (condition === 'spikes') {
 						return !target.side.sideConditions[condition] || target.side.sideConditions[condition].layers < 3;
@@ -5683,10 +5660,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 	// Tuthur
 	symphonieduzero: {
-		accuracy: 100,
-		basePower: 80,
+		accuracy: 85,
+		basePower: 35,
 		category: "Special",
-		shortDesc: "Salt cures target. Ignores abilities.",
+		shortDesc: "Fire Spin with no duration. Ignores abilities.",
 		name: "Symphonie du Ze\u0301ro",
 		pp: 10,
 		priority: 0,
@@ -5697,11 +5674,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Alluring Voice', target);
 		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'saltcure',
-		},
+		volatileStatus: 'partiallytrapped',
 		ignoreAbility: true,
+		secondary: null,
 		target: "normal",
 		type: "Fairy",
 	},

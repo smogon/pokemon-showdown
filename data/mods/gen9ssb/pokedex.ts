@@ -368,13 +368,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Gambling Addiction"},
 	},
 
-	// Goro Yagami
-	cyndaquil: {
-		inherit: true,
-		baseStats: {hp: 78, atk: 109, def: 78, spa: 84, spd: 85, spe: 100},
-		abilities: {0: "Illusion Master"},
-	},
-
 	// Haste Inky
 	falinks: {
 		inherit: true,
@@ -693,6 +686,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	delcatty: {
 		inherit: true,
 		types: ["Fairy"],
+		baseStats: {hp: 80, atk: 65, def: 80, spa: 70, spd: 80, spe: 90},
 		abilities: {0: "Adorable Grace"},
 	},
 

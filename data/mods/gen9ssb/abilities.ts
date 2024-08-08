@@ -249,8 +249,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (move.id === 'snipeshot') {
-				const ratio = source.getMoveHitData(move).crit ? 6 : 8;
-				this.heal(source.maxhp / ratio, source);
+				const ratio = target.getMoveHitData(move).crit ? 6 : 8;
+				this.heal(source.maxhp / ratio, source, source);
 			}
 		},
 		flags: {},
@@ -771,9 +771,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'recoil') {
+				let trueSource = source;
+				// For some reason, the source of the damage is the subsitute user when
+				// hitting a sub.
+				if (source !== target) trueSource = target;
 				if (!this.activeMove) throw new Error("Battle.activeMove is null");
 				if (this.activeMove.id !== 'struggle') {
-					if (!source.hasType(this.activeMove.type)) this.heal(damage);
+					if (!trueSource.hasType(this.activeMove.type)) this.heal(damage);
 					return null;
 				}
 			}
@@ -861,64 +865,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: {},
-	},
-
-	// Goro Yagami
-	illusionmaster: {
-		shortDesc: "This Pokemon has an illusion until it falls below 33% health.",
-		name: "Illusion Master",
-		onBeforeSwitchIn(pokemon) {
-			pokemon.illusion = null;
-			// yes, you can Illusion an active pokemon but only if it's to your right
-			for (let i = pokemon.side.pokemon.length - 1; i > pokemon.position; i--) {
-				const possibleTarget = pokemon.side.pokemon[i];
-				if (!possibleTarget.fainted) {
-					// If Ogerpon is in the last slot while the Illusion Pokemon is Terastallized
-					// Illusion will not disguise as anything
-					if (!pokemon.terastallized || possibleTarget.species.baseSpecies !== 'Ogerpon') {
-						pokemon.illusion = possibleTarget;
-					}
-					break;
-				}
-			}
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (target.illusion && target.hp < (target.maxhp / 3)) {
-				this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, source, move);
-			}
-		},
-		onEnd(pokemon) {
-			if (pokemon.illusion) {
-				this.debug('illusion master cleared');
-				let disguisedAs = this.toID(pokemon.illusion.name);
-				pokemon.illusion = null;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-				this.add('replace', pokemon, details);
-				this.add('-end', pokemon, 'Illusion');
-				if (this.ruleTable.has('illusionlevelmod')) {
-					this.hint("Illusion Level Mod is active, so this Pok\u00e9mon's true level was hidden.", true);
-				}
-				// Handle various POKEMON.
-				if (this.dex.species.get(disguisedAs).exists || this.dex.moves.get(disguisedAs).exists ||
-					this.dex.abilities.get(disguisedAs).exists || disguisedAs === 'blitz') {
-					disguisedAs += 'user';
-				}
-				if (pokemon.volatiles[disguisedAs]) {
-					pokemon.removeVolatile(disguisedAs);
-				}
-				if (!pokemon.volatiles[this.toID(pokemon.set.name)]) {
-					const status = this.dex.conditions.get(this.toID(pokemon.set.name));
-					if (status?.exists) {
-						pokemon.addVolatile(this.toID(pokemon.set.name), pokemon);
-					}
-				}
-			}
-		},
-		onFaint(pokemon) {
-			pokemon.illusion = null;
-		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1},
 	},
 
 	// havi
@@ -1855,7 +1801,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
 						(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
 					target.details = details;
-					this.add('detailschange', target, details);
+					this.add('replace', target, details);
 				}
 			}
 		},

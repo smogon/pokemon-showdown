@@ -882,40 +882,11 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint(pokemon) {
 			this.add(`c:|${getName('Froggeh')}|URG! I've croaked...`);
 		},
-		onFoeMoveAborted(target, source, move) {
-			if (source.getVolatile('confusion')) {
-				if (source.foes()) {
-					for (const foe of source.foes()) {
-						if (foe.illusion || foe.name !== 'Froggeh') continue;
-						this.boost({atk: 1, def: 1}, foe);
-					}
-				}
-			}
-		},
 	},
 	frostyicelad: {
 		noCopy: true,
-		onStart(pokemon) {
+		onStart() {
 			this.add(`c:|${getName('Frostyicelad')}|why am I a Qwilfish`);
-			if (pokemon.set.shiny) {
-				const moveIndex = Math.max(pokemon.moves.indexOf('direclaw'),
-					pokemon.moves.indexOf('meteormash'), pokemon.moves.indexOf('bittermalice'));
-				if (moveIndex < 0) {
-					return;
-				}
-				const replacement = this.dex.moves.get("fishiousrend");
-				const newMoveSlot = {
-					move: replacement.name,
-					id: replacement.id,
-					pp: replacement.pp,
-					maxpp: replacement.pp,
-					target: replacement.target,
-					disabled: false,
-					used: false,
-				};
-				pokemon.moveSlots[moveIndex] = newMoveSlot;
-				pokemon.teraType = "Water";
-			}
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('Frostyicelad')}|time to bring in the Ice types`);
@@ -3364,6 +3335,42 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 				this.add('-fail', attacker, move, '[from] Primordial Sea');
 				return this.chainModify(0.5);
 			}
+		},
+	},
+	confusion: {
+		inherit: true,
+		onBeforeMove(pokemon) {
+			pokemon.volatiles['confusion'].time--;
+			if (!pokemon.volatiles['confusion'].time) {
+				pokemon.removeVolatile('confusion');
+				return;
+			}
+			this.add('-activate', pokemon, 'confusion');
+			if (!this.randomChance(33, 100)) {
+				return;
+			}
+			this.activeTarget = pokemon;
+			const damage = this.actions.getConfusionDamage(pokemon, 40);
+			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
+			const activeMove = {id: this.toID('confused'), effectType: 'Move', type: '???'};
+			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
+			if (this.effectState.sourceEffect?.id === 'cringedadjoke') {
+				for (const target of this.getAllActive()) {
+					if (target === pokemon) continue;
+					if (target.volatiles['cringedadjoke']) {
+						this.boost({atk: 1, def: 1}, target);
+					}
+				}
+			}
+			return false;
+		},
+	},
+	partiallytrapped: {
+		inherit: true,
+		durationCallback(target, source, effect) {
+			if (effect?.name === "Symphonie du Ze\u0301ro") return 0;
+			if (source?.hasItem('gripclaw')) return 8;
+			return this.random(5, 7);
 		},
 	},
 };

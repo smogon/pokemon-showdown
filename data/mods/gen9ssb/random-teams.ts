@@ -409,12 +409,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wiggling Strike',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Grass', shiny: 2,
 	},
-	'Goro Yagami': {
-		species: 'Cyndaquil', ability: 'Illusion Master', item: '', gender: 'M',
-		moves: ['Victory Dance', 'Bitter Blade', 'Thief'],
-		signatureMove: 'Shadow Ambush',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Water',
-	},
 	'Haste Inky': {
 		species: 'Falinks', ability: 'Simple', item: 'Sitrus Berry', gender: 'N',
 		moves: ['Superpower', 'Ice Hammer', 'Throat Chop'],
@@ -574,7 +568,7 @@ export const ssbSets: SSBSets = {
 	Lily: {
 		species: 'Togedemaru', ability: 'Unaware', item: 'Leftovers', gender: 'F',
 		moves: ['Victory Dance', 'Plasma Fists', 'Meteor Mash'],
-		signatureMove: 'Recharge',
+		signatureMove: 'Power Up',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Fairy', shiny: 1734,
 	},
 	Lionyx: {
@@ -687,7 +681,7 @@ export const ssbSets: SSBSets = {
 	},
 	'nya~ ❤': {
 		species: 'Delcatty', ability: 'Adorable Grace', item: 'Focus Band', gender: 'F',
-		moves: ['Freeze-Dry', 'Tri Attack', 'Volt Switch'],
+		moves: ['Freeze-Dry', 'Flamethrower', 'Volt Switch'],
 		signatureMove: ':3',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Naive', teraType: 'Ice',
 	},
@@ -1213,6 +1207,14 @@ export class RandomStaffBrosTeams extends RandomTeams {
 					teraType = 'Electric';
 				} else {
 					teraType = 'Ice';
+				}
+			}
+			if (set.name === "Frostyicelad" && set.shiny) {
+				const moveIndex = Math.max(set.moves.indexOf('Dire Claw'),
+					set.moves.indexOf('Meteor Mash'), set.moves.indexOf('Bitter Malice'));
+				if (moveIndex >= 0) {
+					set.moves[moveIndex] = 'Fishious Rend';
+					teraType = 'Water';
 				}
 			}
 
