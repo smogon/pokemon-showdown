@@ -690,25 +690,88 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	timerstarting: {
+		effectType: 'Rule',
+		name: 'Timer Starting',
+		desc: "Amount of time given at the start of the battle in seconds",
+		hasValue: 'positive-integer',
+		// hardcoded in server/room-battle.ts
+	},
+	dctimer: {
+		effectType: 'Rule',
+		name: 'DC Timer',
+		desc: "Enables or disables the disconnection timer",
+		// hardcoded in server/room-battle.ts
+	},
+	dctimerbank: {
+		effectType: 'Rule',
+		name: 'DC Timer Bank',
+		desc: "Enables or disables the disconnection timer bank",
+		// hardcoded in server/room-battle.ts
+	},
+	timergrace: {
+		effectType: 'Rule',
+		name: 'Timer Grace',
+		desc: "Grace period between timer activation and when total time starts ticking down.",
+		hasValue: 'positive-integer',
+		// hardcoded in server/room-battle.ts
+	},
+	timeraddperturn: {
+		effectType: 'Rule',
+		name: 'Timer Add Per Turn',
+		desc: "Amount of additional time given per turn in seconds",
+		hasValue: 'integer',
+		// hardcoded in server/room-battle.ts
+	},
+	timermaxperturn: {
+		effectType: 'Rule',
+		name: 'Timer Max Per Turn',
+		desc: "Maximum amount of time allowed per turn in seconds",
+		hasValue: 'positive-integer',
+		// hardcoded in server/room-battle.ts
+	},
+	timermaxfirstturn: {
+		effectType: 'Rule',
+		name: 'Timer Max First Turn',
+		desc: "Maximum amount of time allowed for the first turn in seconds",
+		hasValue: 'positive-integer',
+		// hardcoded in server/room-battle.ts
+	},
+	timeoutautochoose: {
+		effectType: 'Rule',
+		name: 'Timeout Auto Choose',
+		desc: "Enables or disables automatic selection of moves when a player times out",
+		// hardcoded in server/room-battle.ts
+	},
+	timeraccelerate: {
+		effectType: 'Rule',
+		name: 'Timer Accelerate',
+		desc: "Enables or disables timer acceleration",
+		// hardcoded in server/room-battle.ts
+	},
 	blitz: {
 		effectType: 'Rule',
 		name: 'Blitz',
 		// THIS 100% INTENTIONALLY SAYS TEN SECONDS PER TURN
-		// IGNORE maxPerTurn. addPerTurn IS 5, TRANSLATING TO AN INCREMENT OF 10.
+		// IGNORE Max Per Turn. Add Per Turn IS 5, TRANSLATING TO AN INCREMENT OF 10.
 		desc: "Super-fast 'Blitz' timer giving 30 second Team Preview and 10 seconds per turn.",
 		onBegin() {
 			this.add('rule', 'Blitz: Super-fast timer');
 		},
-		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 40, grace: 30},
+		ruleset: [
+			'Timer Starting = 15', 'Timer Grace = 30',
+			'Timer Add Per Turn = 5', 'Timer Max Per Turn = 15', 'Timer Max First Turn = 40',
+		],
 	},
 	vgctimer: {
 		effectType: 'Rule',
 		name: 'VGC Timer',
 		desc: "VGC's timer: 90 second Team Preview, 7 minutes Your Time, 1 minute per turn",
-		timer: {
-			starting: 7 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90,
-			grace: 90, timeoutAutoChoose: true, dcTimerBank: false,
-		},
+		ruleset: [
+			'Timer Starting = 420', 'Timer Grace = 90',
+			'Timer Add Per Turn = 0', 'Timer Max Per Turn = 55', 'Timer Max First Turn = 90',
+			'Timeout Auto Choose', 'DC Timer Bank',
+		],
 	},
 	speciesclause: {
 		effectType: 'ValidatorRule',
