@@ -187,7 +187,8 @@ class Ladder extends LadderStore {
 		if (currentChallenges && currentChallenges.length >= 3 && !user.autoconfirmed) {
 			connection.popup(
 				`This user already has 3 pending challenges.\n` +
-				`You must be autoconfirmed to challenge them.`
+				`You must be autoconfirmed to challenge them.\n` +
+				`(Autoconfirmed users have won at least one rated battle and been registered for one week or longer.)`
 			);
 			return false;
 		}

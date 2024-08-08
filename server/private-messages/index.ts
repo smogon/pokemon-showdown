@@ -102,7 +102,10 @@ export const PrivateMessages = new class {
 		}
 		if (!(options.isLogin ? user.registered : user.autoconfirmed)) {
 			if (options.forceBool) return false;
-			throw new Chat.ErrorMessage("You must be autoconfirmed to use offine messaging.");
+			throw new Chat.ErrorMessage(
+				"You must be autoconfirmed to use offine messaging " +
+				"(autoconfirmed users have won at least one rated battle and been registered for one week or longer)."
+			);
 		}
 		if (!Users.globalAuth.atLeast(user, Config.usesqlitepms)) {
 			if (options.forceBool) return false;
