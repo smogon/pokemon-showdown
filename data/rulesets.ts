@@ -502,6 +502,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (type.name === 'Stellar') {
 				throw new Error(`There are no Stellar-type Pok\u00e9mon.`);
 			}
+			return type.name;
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
