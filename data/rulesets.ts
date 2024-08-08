@@ -29,8 +29,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	flatrules: {
 		effectType: 'ValidatorRule',
 		name: 'Flat Rules',
-		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
-		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		desc: "The in-game Flat Rules: Adjust Level Down 50, Species Clause, Item Clause = 1, -Mythical, -Restricted Legendary, Bring 6 Pick 3-6 depending on game type.",
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
 		banlist: ['Mythical', 'Restricted Legendary', 'Greninja-Bond'],
 	},
 	limittworestricted: {
@@ -752,47 +752,31 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Item Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same item",
+		hasValue: 'positive-integer',
 		onBegin() {
-			this.add('rule', 'Item Clause: Limit one of each item');
+			this.add('rule', `Item Clause: Limit ${this.ruleTable.valueRules.get('itemclause') || 1} of each item`);
+		},
+		onValidateRule(value) {
+			const num = Number(value);
+			if (num < 1 || num > this.ruleTable.maxTeamSize) {
+				throw new Error(`Item Clause must be between 1 and ${this.ruleTable.maxTeamSize}.`);
+			}
+			return value;
 		},
 		onValidateTeam(team) {
-			const itemTable = new Set<string>();
+			const itemTable = new this.dex.Multiset<string>();
 			for (const set of team) {
 				const item = this.toID(set.item);
 				if (!item) continue;
-				if (itemTable.has(item)) {
-					return [
-						`You are limited to one of each item by Item Clause.`,
-						`(You have more than one ${this.dex.items.get(item).name})`,
-					];
-				}
 				itemTable.add(item);
 			}
-		},
-	},
-	doubleitemclause: {
-		effectType: 'ValidatorRule',
-		name: 'Double Item Clause',
-		desc: "Prevents teams from having more than two Pok&eacute;mon with the same item",
-		onBegin() {
-			this.add('rule', 'Double Item Clause: Limit two of each item');
-		},
-		onValidateTeam(team) {
-			const itemTable: {[k: string]: number} = {};
-			for (const set of team) {
-				const item = this.toID(set.item);
-				if (!item) continue;
-				if (item in itemTable) {
-					if (itemTable[item] >= 2) {
-						return [
-							`You are limited to two of each item by Double Item Clause.`,
-							`(You have more than two ${this.dex.items.get(item).name})`,
-						];
-					}
-					itemTable[item]++;
-				} else {
-					itemTable[item] = 1;
-				}
+			const itemLimit = Number(this.ruleTable.valueRules.get('itemclause') || 1);
+			for (const [itemid, num] of itemTable) {
+				if (num <= itemLimit) continue;
+				return [
+					`You are limited to ${itemLimit} of each item by Item Clause.`,
+					`(You have more than ${itemLimit} ${this.dex.items.get(itemid).name})`,
+				];
 			}
 		},
 	},
