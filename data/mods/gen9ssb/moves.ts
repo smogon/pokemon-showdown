@@ -67,15 +67,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.damage(target.hp - 1, target);
 			target.addVolatile('turbocharge');
 			target.addVolatile('protect');
+			this.add('-message', `Level ${target.abilityState.turbochargeStacks} Turbocharge!`);
 		},
 		condition: {
 			duration: 0,
 			onModifySpa(spa, pokemon) {
 				if (pokemon.abilityState.turbochargeStacks <= 0) return;
+				this.add('-message', `${1+(0.1*pokemon.abilityState.turbochargeStacks)}x SpA`);
 				return this.chainModify(1+(0.1*pokemon.abilityState.turbochargeStacks));
 			},
 			onModifySpe(spe, pokemon) {
 				if (pokemon.abilityState.turbochargeStacks <= 0) return;
+				this.add('-message', `${1+(0.1*pokemon.abilityState.turbochargeStacks)}x Spe`);
 				return this.chainModify(1+(0.1*pokemon.abilityState.turbochargeStacks));
 			},
 			onTryHeal(damage, target, source, effect) {
@@ -85,12 +88,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onResidual(pokemon) {
 				pokemon.abilityState.turbochargeStacks--;
+				this.add('-message', `Remaining Turbocharge - ${pokemon.abilityState.turbochargeStacks} Turn(s)`);
 				if (pokemon.abilityState.turbochargeStacks <= 0) {
 					pokemon.abilityState.turbochargeStacks = 0;
 					this.add('-message', `${pokemon.name}'s turbocharge wore off!`);
 					return;
 				}
-				this.add('-message', `${pokemon.name}'s turbocharge weakened in intensity!`);
+				this.add('-anim', source, 'Discharge', source);
+				this.add('-message', `${pokemon.name} is turbocharged!`);
 			},
 			onSwitchOut(pokemon) {
 				pokemon.abilityState.turbochargeStacks = 0;
