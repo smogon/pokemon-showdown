@@ -58,13 +58,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Discharge', source);
+			this.add('-anim', source, 'Thunder', source);
 			this.add('-anim', source, 'Agility', source);
 		},
 		onHit(target, source, move) {
 			if (!target.hp) return;
 			target.abilityState.turbochargeStacks = Math.floor((target.hp - 1) / target.maxhp * 10);
-			target.hp = 1;
+			this.damage(target.hp - 1, target);
 			target.addVolatile('turbocharge');
 			target.addVolatile('protect');
 		},
