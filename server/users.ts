@@ -49,6 +49,7 @@ import {Utils, ProcessManager} from '../lib';
 import {
 	Auth, GlobalAuth, SECTIONLEADER_SYMBOL, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission,
 } from './user-groups';
+import {BattleReady} from './ladders-challenges';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
@@ -385,6 +386,7 @@ export class User extends Chat.MessageContext {
 		hidden: boolean,
 		inviteOnly: boolean,
 		special?: string,
+		teammate?: BattleReady,
 	};
 
 	isSysop: boolean;

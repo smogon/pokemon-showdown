@@ -1475,6 +1475,9 @@ export class GlobalRoomState {
 			if (level === 50) displayCode |= 16;
 			 // 32 was previously used for Multi Battles
 			if (format.bestOfDefault) displayCode |= 64;
+			if (format.gameType === 'multi') {
+				displayCode |= 32;
+			}
 			this.formatList += ',' + displayCode.toString(16);
 		}
 		return this.formatList;

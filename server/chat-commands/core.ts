@@ -1451,6 +1451,54 @@ export const commands: Chat.ChatCommands = {
 		`If no format is given, cancels searches for all formats.`,
 	],
 
+	requestpartner(target, room, user) {
+		const {targetUser, rest} = this.requireUser(target);
+		if (targetUser.locked && !user.locked) {
+			return this.popupReply(`That user is locked and cannot be invited to battles.`);
+		}
+		if (targetUser.id === user.id) {
+			return this.popupReply(`You cannot be your own partner.`);
+		}
+		if (user.locked && !targetUser.locked) {
+			return this.errorReply(`You are locked and cannot invite others to battles.`);
+		}
+		const format = Dex.formats.get(rest);
+		if (!format.exists) return this.popupReply(`Invalid format: ${rest}`);
+		if (format.gameType !== 'multi') {
+			return this.popupReply(`You cannot invite people to non-multibattle formats. Challenge them instead.`);
+		}
+		Ladders.challenges.add(new Ladders.GameChallenge(user.id, targetUser.id, format.id, {
+			acceptCommand: `/acceptpartner ${user.id}`,
+			rejectCommand: `/denypartner ${user.id}`,
+			message: `${user.name} wants you to play ${format.name} with them!`,
+		}));
+	},
+	async acceptpartner(target, room, user, connection) {
+		const challenge = Ladders.challenges.resolveAcceptCommand(this);
+		Ladders.challenges.remove(challenge, true);
+		const format = Dex.formats.get(challenge.format);
+		const targetUser = Users.get(challenge.from);
+		if (!targetUser) return this.popupReply(`${challenge.from} is not available right now.`);
+		const search = await Ladders(format.id).prepBattle(connection, 'rated', user.battleSettings.team, !!format.rated, true);
+		if (search === null) return null;
+		targetUser.battleSettings.teammate = search;
+		const latestConn = Utils.sortBy(targetUser.connections.slice(), b => -b.lastActiveTime)[0];
+		targetUser.chat(`/search ${format.id}`, null, latestConn);
+		targetUser.popup(`Your teammate has accepted, and a battle search has been started.`);
+		this.pmTarget = targetUser;
+		this.sendReply(`You accepted ${targetUser.name}'s partnership request!`);
+		user.send(`|updatesearch|${JSON.stringify({searching: [format.id], games: null})}`);
+	},
+	denypartner(target, room, user) {
+		const {targetUser} = this.splitUser(target);
+		if (!targetUser) return this.popupReply(`User not found.`);
+		const chall = Ladders.challenges.search(user.id, targetUser.id);
+		if (!chall) return this.popupReply(`Challenge not found between you and ${targetUser.name}`);
+		Ladders.challenges.remove(chall, false);
+		this.popupReply(`Request denied.`);
+		targetUser.popup(`${user.id} denied your teammate request.`);
+	},
+
 	chall: 'challenge',
 	challenge(target, room, user, connection) {
 		const {targetUser, targetUsername, rest: formatName} = this.splitUser(target);

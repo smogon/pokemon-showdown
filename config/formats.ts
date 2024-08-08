@@ -60,7 +60,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		team: 'random',
 		gameType: 'multi',
-		searchShow: false,
 		tournamentShow: false,
 		rated: false,
 		ruleset: [
