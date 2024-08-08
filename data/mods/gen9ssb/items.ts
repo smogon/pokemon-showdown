@@ -39,7 +39,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			let randomType = this.sample(types);
 			let newType = randomType + '/Steel';
 			this.add('-start', pokemon, 'typechange', newType, '[from] item: Absorptive Shell');
-			this.add('-message', `${pokemon.name}'s Techno Blast changed to ${pokemon.getTypes()[0]}-type!`);
+			this.add('-message', `${pokemon.name}'s Techno Blast changed to ${randomType}-type!`);
 		},
 		onModifyType(move, pokemon) {
 			if (move.id === 'technoblast') {
