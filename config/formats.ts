@@ -2550,8 +2550,13 @@ export const Formats: FormatList = [
 			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
 		},
 		onResidual() {
-			this.add('-message', `HAHA!`);
-			this.add('-message', `YES!`);
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair' && this.turn > 0) {
+					const health = pokemon.maxhp * 0.15;
+					pokemon.hp += health;
+					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
+				}
+			}
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
