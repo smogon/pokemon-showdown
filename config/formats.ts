@@ -2553,7 +2553,7 @@ export const Formats: FormatList = [
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair' && this.turn > 0) {
 					const health = pokemon.maxhp * 0.15;
-					if (pokemon === this.activePokemon || pokemon === this.activeTarget) {
+					if (pokemon === pokemon.side.active[0]) {
 						this.heal(health, pokemon);
 					} else {
 						pokemon.hp += health;
