@@ -643,9 +643,9 @@ exports.grouplist = [
 		globalGroupInPersonalRoom: '@',
 
 		announce: true,
-		warn: '\u2605u',
+		warn: true,
 		kick: true,
-		mute: '\u2605u',
+		mute: true,
 		lock: true,
 		forcerename: true,
 		timer: true,
