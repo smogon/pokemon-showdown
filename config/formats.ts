@@ -2554,11 +2554,11 @@ export const Formats: FormatList = [
 				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair' && this.turn > 0) {
 					const health = pokemon.maxhp * 0.15;
 					if (pokemon === pokemon.side.active[0]) {
-						this.heal(health, pokemon);
+						this.heal(health, pokemon, pokemon, pokemon.getAbility());
 					} else {
 						pokemon.hp += health;
+						this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
 					}
-					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
 				}
 			}
 		},
