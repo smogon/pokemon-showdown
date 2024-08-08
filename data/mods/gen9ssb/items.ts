@@ -477,8 +477,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onUpdate(pokemon) {
 			if (pokemon.abilityState.faintOnUpdate) {
 				pokemon.abilityState.faintOnUpdate = false;
-				if (!pokemon.hp) pokemon.faint();
-				if (pokemon.hp) this.damage(pokemon.hp, pokemon);
+				pokemon.faint();
 			}
 		},
 		desc: "On switch-in, starts Misty Terrain. If this Pokemon would faint, starts Tailwind and uses Healing Wish.",
