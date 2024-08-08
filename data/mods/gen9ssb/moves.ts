@@ -91,7 +91,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return;
 				}
 				this.add('-message', `${pokemon.name}'s turbocharge weakened in intensity!`);
-			}
+			},
 			onSwitchOut(pokemon) {
 				pokemon.abilityState.turbochargeStacks = 0;
 				pokemon.removeVolatile('turbocharge');
