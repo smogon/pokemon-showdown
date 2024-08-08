@@ -38,6 +38,7 @@ export interface PokemonSet {
 	 * These should always be converted to ids before use.
 	 */
 	moves: string[];
+	movePPUps?: number[];
 	/**
 	 * This can be an id, e.g. "adamant" or a full name, e.g. "Adamant".
 	 * This should always be converted to an id before use.
@@ -137,6 +138,11 @@ export const Teams = new class Teams {
 
 			// moves
 			buf += '|' + set.moves.map(this.packName).join(',');
+
+			// move PP
+			if (set.movePPUps) {
+				buf += ';' + set.movePPUps.join(',');
+			}
 
 			// nature
 			buf += '|' + (set.nature || '');
@@ -254,10 +260,21 @@ export const Teams = new class Teams {
 			i = j + 1;
 
 			// moves
-			j = buf.indexOf('|', i);
-			if (j < 0) return null;
+			j = buf.indexOf(';', i);
+			if (j < 0) {
+				j = buf.indexOf('|', i);
+				if (j < 0) return null;
+			}
 			set.moves = buf.substring(i, j).split(',', 24).map(name => this.unpackName(name, Dex.moves));
 			i = j + 1;
+
+			// move PP ups
+			if (buf.charAt(j) === ';') {
+				j = buf.indexOf('|', i);
+				if (j < 0) return null;
+				set.movePPUps = buf.substring(i, j).split(',', 24).map(number => parseInt(number));
+				i = j + 1;
+			}
 
 			// nature
 			j = buf.indexOf('|', i);
