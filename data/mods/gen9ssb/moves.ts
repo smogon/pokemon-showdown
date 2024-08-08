@@ -94,7 +94,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', `${pokemon.name}'s turbocharge wore off!`);
 					return;
 				}
-				this.add('-anim', source, 'Discharge', source);
+				this.add('-anim', pokemon, 'Discharge', pokemon);
 				this.add('-message', `${pokemon.name} is turbocharged!`);
 			},
 			onSwitchOut(pokemon) {
