@@ -2539,8 +2539,19 @@ export const Formats: FormatList = [
 			// TODO look into making an event to put this right after turn|1
 			// https://discordapp.com/channels/630837856075513856/630845310033330206/716126469528485909
 			// Requires client change
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair') {
+					const dmg = pokemon.maxhp - 1;
+					this.debug('shifu robot starts at 1 hp due to autorepair')
+					pokemon.hp -= dmg;
+				}
+			}
 			this.add(`raw|<div class='broadcast-blue'><b>The fourth iteration of Super Staff Brothers! Battle with a random team of gooners.<br /><a href="https://docs.google.com/spreadsheets/d/1HGB2YDZ-Pe2MtWa-IX8d24r4j2rxAkvIgP9NeeyNG0Y/edit?gid=200255702#gid=200255702" target="_blank">SEE THE ROSTER</a></b></div>`);
 			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
+		},
+		onResidual() {
+			this.add('-message', `HAHA!`);
+			this.add('-message', `YES!`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
