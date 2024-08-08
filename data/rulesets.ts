@@ -2765,6 +2765,55 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		// Implemented in Pokemon#getDetails
 	},
+	allowedpokemoves: {
+		effectType: 'ValidatorRule',
+		name: "Allowed Pokemoves",
+		desc: "Allows players to define the amount of Pokemoves allowed per set.",
+		hasValue: 'positive-integer',
+		onValidateRule(value) {
+			const num = Number(value);
+			if (num > this.ruleTable.maxMoveCount || num < 1) {
+				throw new Error(`Allowed Pokemoves must be between 1 and ${this.ruleTable.maxMoveCount}.`);
+			}
+			return value;
+		},
+		// Validation in the Pokemoves format
+	},
+	uniquepokemoves: {
+		effectType: 'ValidatorRule',
+		name: "Unique Pokemoves",
+		desc: "Allows players to define how many times a Pokemon can be used as a Pokemove per team.",
+		hasValue: 'positive-integer',
+		onValidateRule(value) {
+			const num = Number(value);
+			if (num > this.ruleTable.maxMoveCount || num < 1) {
+				throw new Error(`Unique Pokemoves must be between 1 and ${this.ruleTable.maxMoveCount}.`);
+			}
+			return value;
+		},
+		onValidateTeam(team, format, teamHas) {
+			const pokemoves = new this.dex.Multiset<ID>();
+			for (const set of team) {
+				if (set.moves?.length) {
+					for (const moveid of set.moves) {
+						const pokemove = this.dex.species.get(moveid);
+						if (!pokemove.exists) continue;
+						pokemoves.add(pokemove.id);
+					}
+				}
+			}
+			const problems: string[] = [];
+			const uniquePokemoves = Number(this.ruleTable.valueRules.get('uniquepokemoveclause') || 1);
+			for (const [moveid, num] of pokemoves) {
+				if (num <= uniquePokemoves) continue;
+				problems.push(
+					`You have ${num} Pok\u00e9mon with ${this.dex.species.get(moveid).name} as a Pokemove.`,
+					`(Each Pok\u00e9mon can only be used as a Pokemove ${uniquePokemoves} time${uniquePokemoves === 1 ? '' : 's'} per team.)`
+				);
+			}
+			return problems;
+		},
+	},
 	ferventimpersonationmod: {
 		effectType: 'Rule',
 		name: "Fervent Impersonation Mod",

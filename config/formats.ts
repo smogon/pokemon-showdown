@@ -504,7 +504,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Pokemoves",
 		desc: `Put a Pok&eacute;mon's name in a moveslot to turn them into a move. The move has 8 PP, 100% accuracy, and a category and Base Power matching their highest attacking stat. Use /pokemove for more info.`,
 		mod: 'pokemoves',
-		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause', 'Evasion Abilities Clause', 'Evasion Items Clause'],
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Allowed Pokemoves = 1', 'Unique Pokemoves = 1'],
 		banlist: [
 			'Arceus', 'Annihilape', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin',
 			'Dragapult', 'Espathra', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon', 'Hoopa-Unbound', 'Ho-Oh', 'Iron Bundle', 'Koraidon',
@@ -558,27 +558,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			set.moves.push(...moves);
 			return problems.length ? problems : null;
 		},
-		onValidateTeam(team, format, teamHas) {
-			const pokemoves = new this.dex.Multiset<ID>();
-			for (const set of team) {
-				if (set.moves?.length) {
-					for (const moveid of set.moves) {
-						const pokemove = this.dex.species.get(moveid);
-						if (!pokemove.exists) continue;
-						pokemoves.add(pokemove.id);
-					}
-				}
-			}
-			const problems: string[] = [];
-			for (const [moveid, num] of pokemoves) {
-				if (num <= 1) continue;
-				problems.push(
-					`You have ${num} Pok\u00e9mon with ${this.dex.species.get(moveid).name} as a Pokemove.`,
-					`(Only one Pok\u00e9mon can be used as a Pokemove per team.)`
-				);
-			}
-			return problems;
-		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				for (const move of pokemon.moves) {
@@ -621,12 +600,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
 				move.onAfterHit = function (t, s, m) {
 					if (s.getAbility().name === species.abilities['0']) return;
-					if (s.volatiles['ability:' + this.toID(species.abilities['0'])]) return;
 					const effect = 'ability:' + this.toID(species.abilities['0']);
+					if (s.volatiles[effect]) return;
 					s.addVolatile(effect);
 					if (s.volatiles[effect]) {
-						s.volatiles[effect].id = this.toID(effect);
-						s.volatiles[effect].target = s;
+						(s.volatiles[effect] as any).id = this.toID(effect);
+						(s.volatiles[effect] as any).target = s;
 					}
 				};
 			}
