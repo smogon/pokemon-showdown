@@ -14,6 +14,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		onDamage(damage, target, source, effect) {
+			if (effect?.effectType !== 'Move' || source === target) return;
 			if (target.abilityState.forcefield && target.abilityState.forcefieldHp > 0) {
 				this.add('-anim', target, 'Aqua Ring', target);
 				if (target.abilityState.forcefieldHp >= damage) {
