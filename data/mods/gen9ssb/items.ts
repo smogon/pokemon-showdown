@@ -13,7 +13,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				pokemon.abilityState.forcefieldHp = pokemon.maxhp / 3;
 			}
 		},
-		onSourceModifyDamage(damage, source, target, move) {
+		onDamage(damage, target, source, effect) {
 			if (target.abilityState.forcefield && target.abilityState.forcefieldHp > 0) {
 				this.add('-anim', target, 'Aqua Ring', target);
 				if (target.abilityState.forcefieldHp >= damage) {
