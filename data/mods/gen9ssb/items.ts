@@ -39,13 +39,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 			let types = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Light', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Stellar', 'Water'];
 			let randomType = this.sample(types);
 			let newType = randomType + '/Steel';
+			pokemon.abilityState.newType = randomType;
 			this.add('-start', pokemon, 'typechange', newType, '[from] item: Absorptive Shell');
 			this.add('-message', `${pokemon.name}'s Techno Blast changed to ${randomType}-type!`);
 		},
 		onModifyType(move, pokemon) {
 			if (move.id === 'technoblast') {
 				move.type = pokemon.getTypes()[0];
-				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to ${move.type}-type!`);
+				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to ${pokemon.abilityState.newType}-type!`);
 			}
 		},
 	},
