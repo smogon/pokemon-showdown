@@ -7,16 +7,76 @@
  * @license MIT license
  */
 
-import {ScavengerHunt, ScavengerHuntPlayer} from './scavengers';
+import {ScavengerHunt, ScavengerHuntPlayer as Scavenger, ScavengerHuntFinish} from './scavengers';
 import {Utils} from '../../lib';
 
-export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
-interface Twist {
+namespace Twists {
+	export interface PerfectScoreResult extends ScavengerHuntFinish {
+		isPerfect?: boolean;
+	}
+	export interface BonusRoundResult extends ScavengerHuntFinish {
+		noSkip?: boolean;
+	}
+	export interface SpamFilterResult extends ScavengerHuntFinish {
+		total: number;
+	}
+
+	export interface PerfectScore extends ScavengerHunt {
+		leftGame: Set<string>;
+		completed: PerfectScoreResult[];
+	}
+	export interface BonusRound extends ScavengerHunt {
+		completed: BonusRoundResult[];
+	}
+	export interface Incognito extends ScavengerHunt {
+		preCompleted: ScavengerHuntFinish[];
+	}
+	export interface SpamFilter extends ScavengerHunt {
+		completed: SpamFilterResult[];
+	}
+	export interface TimeTrial extends ScavengerHunt {
+		altIps: Record<string, {id: string, name: string}>;
+		startTimes: Record<string, number>;
+	}
+	export interface ScavengersFeud extends ScavengerHunt {
+		guesses: Record<string, string[]>;
+		incorrect: Record<string, Set<string>>[];
+	}
+	export interface Minesweeper extends ScavengerHunt {
+		mines: string[][];
+		guesses: {[playerId: string]: Set<string>}[];
+	}
+
+	export interface PerfectScorePlayer extends Scavenger {
+		answers: Record<number, string[]>;
+	}
+	export interface BonusRoundPlayer extends Scavenger {
+		skippedQuestion: boolean;
+	}
+	export interface BlindIncognitoPlayer extends Scavenger {
+		preCompleted?: boolean;
+	}
+}
+
+export type TwistEvent<T extends ScavengerHunt = ScavengerHunt> = (this: T, ...args: any[]) => void;
+export interface Twist<T extends ScavengerHunt = ScavengerHunt> {
 	name: string;
 	id: string;
 	isGameMode?: true;
 	desc?: string;
-	[eventid: string]: string | number | TwistEvent | boolean | undefined;
+	[event: `on${string}Priority`]: number;
+	[event: `on${string}`]: TwistEvent<T> | number;
+}
+
+export interface TwistCollection {
+	perfectscore: Twist<Twists.PerfectScore>;
+	bonusround: Twist<Twists.BonusRound>;
+	incognito: Twist<Twists.Incognito>;
+	spamfilter: Twist<Twists.SpamFilter>;
+	blindincognito: Twist<Twists.Incognito>;
+	timetrial: Twist<Twists.TimeTrial>;
+	scavengersfeud: Twist<Twists.ScavengersFeud>;
+	minesweeper: Twist<Twists.Minesweeper>;
 }
 
 type GameModeFunction = (this: ScavengerGameTemplate, ...args: any[]) => void;
@@ -98,19 +158,22 @@ class Leaderboard {
 	}
 }
 
-const TWISTS: {[k: string]: Twist} = {
+const TWISTS: TwistCollection = {
 	perfectscore: {
 		name: 'Perfect Score',
 		id: 'perfectscore',
 		desc: "Players who finish the hunt without submitting a single wrong answer get a shoutout!",
 
-		onLeave(player) {
-			if (!this.leftGame) this.leftGame = [];
-			this.leftGame.push(player.id);
+		onAfterLoad() {
+			this.leftGame = new Set();
+		},
+
+		onLeave(player: Twists.PerfectScorePlayer) {
+			this.leftGame.add(player.id);
 		},
 
 		onSubmitPriority: 1,
-		onSubmit(player, value) {
+		onSubmit(player: Twists.PerfectScorePlayer, value: string) {
 			const currentQuestion = player.currentQuestion;
 
 			if (!player.answers) player.answers = {};
@@ -121,14 +184,14 @@ const TWISTS: {[k: string]: Twist} = {
 			player.answers[currentQuestion].push(value);
 		},
 
-		onComplete(player, time, blitz) {
-			const isPerfect = !this.leftGame?.includes(player.id) &&
+		onComplete(player: Twists.PerfectScorePlayer, time: string, blitz: boolean) {
+			const isPerfect = !this.leftGame?.has(player.id) &&
 				Object.values(player.answers).every((attempts: any) => attempts.length <= 1);
-			return {name: player.name, time, blitz, isPerfect};
+			return {name: player.name, id: player.id, time, blitz, isPerfect};
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd(isReset) {
+		onAfterEnd(isReset: boolean) {
 			if (isReset) return;
 			const perfect = this.completed.filter(entry => entry.isPerfect).map(entry => entry.name);
 			if (perfect.length) {
@@ -142,24 +205,18 @@ const TWISTS: {[k: string]: Twist} = {
 		id: 'bonusround',
 		desc: "Players can choose whether or not they choose to complete the 4th question.",
 
-		onAfterLoad() {
-			if (this.questions.length === 3) {
-				this.announce('This twist requires at least four questions.  Please reset the hunt and make it again.');
-				this.huntLocked = true;
-			} else {
-				this.questions[this.questions.length - 1].hint += ' (You may choose to skip this question using ``/scavenge skip``.)';
+		onLoad(q: (string | string[])[]) {
+			if (q.length < 8) {
+				throw new Chat.ErrorMessage('This twist requires at least four questions. Please reset the hunt and make it again.');
 			}
 		},
-
-		onAnySubmit(player) {
-			if (this.huntLocked) {
-				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
-				return true;
-			}
+		onLoadPriority: 2,
+		onAfterLoad() {
+			this.questions[this.questions.length - 1].hint += ' (You may choose to skip this question using ``/scavenge skip``.)';
 		},
 
 		onSubmitPriority: 1,
-		onSubmit(player, value) {
+		onSubmit(player: Twists.BonusRoundPlayer, value: string) {
 			const currentQuestion = player.currentQuestion;
 
 			if (value === 'skip' && currentQuestion + 1 === this.questions.length) {
@@ -170,13 +227,13 @@ const TWISTS: {[k: string]: Twist} = {
 			}
 		},
 
-		onComplete(player, time, blitz) {
+		onComplete(player: Twists.BonusRoundPlayer, time: string, blitz: boolean) {
 			const noSkip = !player.skippedQuestion;
-			return {name: player.name, time, blitz, noSkip};
+			return {name: player.name, id: player.id, time, blitz, noSkip};
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd(isReset) {
+		onAfterEnd(isReset: boolean) {
 			if (isReset) return;
 			const noSkip = this.completed.filter(entry => entry.noSkip).map(entry => entry.name);
 			if (noSkip.length) {
@@ -190,7 +247,7 @@ const TWISTS: {[k: string]: Twist} = {
 		id: 'incognito',
 		desc: "Upon answering the last question correctly, the player's finishing time will not be announced in the room!  Results will only be known at the end of the hunt.",
 
-		onCorrectAnswer(player, value) {
+		onCorrectAnswer(player: Scavenger, value: string) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				this.runEvent('PreComplete', player);
 
@@ -200,7 +257,7 @@ const TWISTS: {[k: string]: Twist} = {
 			}
 		},
 
-		onPreComplete(player) {
+		onPreComplete(player: Scavenger) {
 			const now = Date.now();
 			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 			const canBlitz = this.completed.length < 3;
@@ -208,7 +265,8 @@ const TWISTS: {[k: string]: Twist} = {
 			const blitz = now - this.startTime <= 60000 && canBlitz &&
 				(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || this.gameType === 'official');
 
-			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
+			const fallbackResult = {name: player.name, id: player.id, time, blitz};
+			const result: ScavengerHuntFinish = this.runEvent('Complete', player, time, blitz) || fallbackResult;
 
 			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
 			player.completed = true;
@@ -226,7 +284,7 @@ const TWISTS: {[k: string]: Twist} = {
 
 		desc: 'Every wrong answer adds 30 seconds to your final time!',
 
-		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+		onIncorrectAnswer(player: Scavenger, value: string) {
 			if (!player.incorrect) player.incorrect = [];
 			const id = `${player.currentQuestion}-${value}`;
 			if (player.incorrect.includes(id)) return;
@@ -234,20 +292,19 @@ const TWISTS: {[k: string]: Twist} = {
 			player.incorrect.push(id);
 		},
 
-		onComplete(player, time, blitz) {
+		onComplete(player: Scavenger, time: string, blitz: boolean) {
 			const seconds = toSeconds(time);
-			if (!player.incorrect) return {name: player.name, total: seconds, blitz, time, original_time: time};
+			if (!player.incorrect) return {name: player.name, id: player.id, total: seconds, blitz, time};
 
 			const total = seconds + (30 * player.incorrect.length);
 			const finalTime = Chat.toDurationString(total * 1000, {hhmmss: true});
 			if (total > 60) blitz = false;
 
-			return {name: player.name, total, blitz, time: finalTime, original_time: time};
+			return {name: player.name, id: player.id, total, blitz, time: finalTime};
 		},
 
-		onConfirmCompletion(player, time, blitz, place, result) {
-			blitz = result.blitz;
-			time = result.time;
+		onConfirmCompletion(player: Scavenger, _time: string, _blitz: boolean, place: string, result: ScavengerHuntFinish) {
+			const {blitz, time} = result;
 			const deductionMessage = player.incorrect?.length ?
 				Chat.count(player.incorrect, 'incorrect guesses', 'incorrect guess') :
 				"Perfect!";
@@ -264,14 +321,14 @@ const TWISTS: {[k: string]: Twist} = {
 		id: 'blindincognito',
 		desc: "Upon completing the last question, neither you nor other players will know if the last question is correct!  You may be in for a nasty surprise when the hunt ends!",
 
-		onAnySubmit(player, value) {
-			if (player.precompleted) {
+		onAnySubmit(player: Twists.BlindIncognitoPlayer, value: string) {
+			if (player.preCompleted) {
 				player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
 				return true;
 			}
 		},
 
-		onCorrectAnswer(player, value) {
+		onCorrectAnswer(player: Twists.BlindIncognitoPlayer, value: string) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				this.runEvent('PreComplete', player);
 
@@ -280,14 +337,14 @@ const TWISTS: {[k: string]: Twist} = {
 			}
 		},
 
-		onIncorrectAnswer(player, value) {
+		onIncorrectAnswer(player: Twists.BlindIncognitoPlayer, value: string) {
 			if (player.currentQuestion + 1 >= this.questions.length) {
 				player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
 				return false;
 			}
 		},
 
-		onPreComplete(player) {
+		onPreComplete(player: Twists.BlindIncognitoPlayer) {
 			const now = Date.now();
 			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 			const canBlitz = this.completed.length < 3;
@@ -295,10 +352,11 @@ const TWISTS: {[k: string]: Twist} = {
 			const blitz = now - this.startTime <= 60000 && canBlitz &&
 				(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || this.gameType === 'official');
 
-			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
+			const fallbackResult = {name: player.name, id: player.id, time, blitz};
+			const result: ScavengerHuntFinish = this.runEvent('Complete', player, time, blitz) || fallbackResult;
 
 			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
-			player.precompleted = true;
+			player.preCompleted = true;
 		},
 
 		onEnd() {
@@ -311,18 +369,20 @@ const TWISTS: {[k: string]: Twist} = {
 		id: 'timetrial',
 		desc: "Time starts when the player starts the hunt!",
 
-		onAfterLoad() {
-			if (this.questions.length === 3) {
-				this.announce('This twist requires at least four questions. Please reset the hunt and make it again.');
-				this.huntLocked = true;
+		onLoad(q: (string | string[])[]) {
+			if (q.length < 8) {
+				throw new Chat.ErrorMessage('This twist requires at least four questions. Please reset the hunt and make it again.');
 			}
+		},
+		onLoadPriority: 2,
+		onAfterLoad() {
 			this.altIps = {};
 			this.startTimes = {};
 		},
 
-		onJoin(user: User) {
+		onJoin(user: Scavenger & User) {
 			if (!Config.noipchecks) {
-				const altIp = user.ips.find(ip => this.altIps[ip] && this.altsIps[ip].id !== user.id);
+				const altIp = user.ips.find(ip => this.altIps[ip] && this.joinedIps.includes(user.id));
 				if (altIp) {
 					user.sendTo(this.room, `You already have started the hunt as ${this.altIps[altIp].name}.`);
 					return true;
@@ -340,20 +400,13 @@ const TWISTS: {[k: string]: Twist} = {
 			return true;
 		},
 
-		onLeave(player) {
+		onLeave(player: Scavenger) {
 			for (const ip of player.joinIps) {
 				this.altIps[ip] = {id: player.id, name: player.name};
 			}
 		},
 
-		onAnySubmit(player) {
-			if (this.huntLocked) {
-				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
-				return true;
-			}
-		},
-
-		onComplete(player, time, blitz) {
+		onComplete(player: Scavenger, time: string, blitz: boolean) {
 			const now = Date.now();
 			const takenTime = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
 			const result = {name: player.name, id: player.id, time: takenTime, blitz};
@@ -385,17 +438,15 @@ const TWISTS: {[k: string]: Twist} = {
 			});
 		},
 
-		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+		onIncorrectAnswer(player: Scavenger, value: string) {
 			const curr = player.currentQuestion;
 
-			if (!this.incorrect[curr][value]) this.incorrect[curr][value] = [];
-			if (this.incorrect[curr][value].includes(player.id)) return;
-
-			this.incorrect[curr][value].push(player.id);
+			if (!this.incorrect[curr][value]) this.incorrect[curr][value] = new Set();
+			this.incorrect[curr][value].add(player.id);
 		},
 
 		onSubmitPriority: 1,
-		onSubmit(player, jumble, value) {
+		onSubmit(player: Scavenger, valueToId: string, value: string) {
 			const currentQuestion = player.currentQuestion;
 
 			if (currentQuestion + 1 === this.questions.length) {
@@ -410,7 +461,7 @@ const TWISTS: {[k: string]: Twist} = {
 			this.questions = this.questions.slice(0, -1); // remove the automatically added last question.
 		},
 
-		onAfterEnd(isReset) {
+		onAfterEnd(isReset: boolean) {
 			if (isReset) return;
 
 			const buffer = [];
@@ -418,7 +469,7 @@ const TWISTS: {[k: string]: Twist} = {
 				// collate the data for each question
 				let collection = [];
 				for (const str in data) {
-					collection.push({count: data[str].length, value: str});
+					collection.push({count: data[str].size, value: str});
 				}
 				collection = collection.sort((a, b) => b.count - a.count);
 				const maxValue = collection[0]?.count || 0;
@@ -427,10 +478,10 @@ const TWISTS: {[k: string]: Twist} = {
 					.filter(pair => pair.count === maxValue)
 					.map(pair => pair.value);
 
-				const matchedPlayers = [];
-				for (const playerid in this.guesses) {
-					const guesses = this.guesses[playerid];
-					if (matches.includes(guesses[idx])) matchedPlayers.push(playerid);
+				const matchedPlayers: string[] = [];
+				for (const playerId in this.guesses) {
+					const guesses = this.guesses[playerId];
+					if (matches.includes(guesses[idx])) matchedPlayers.push(playerId);
 				}
 
 				// display the data
@@ -449,16 +500,24 @@ const TWISTS: {[k: string]: Twist} = {
 		id: 'minesweeper',
 		name: 'Minesweeper',
 		desc: 'The huntmaker adds \'mines\' to the hunt using `!(mine)` - players that dodge all mines get extra points, while the huntmaker gets points every time a mine is hit.',
+		onLoad(q: (string | string[])[]) {
+			for (let i = 0; i < q.length; i += 2) {
+				const answer = q[i + 1] as string[];
+				if (answer.filter(ans => ans.startsWith('!')).length === 0) {
+					throw new Chat.ErrorMessage(`No mines were added for question #${i / 2 + 1}.`);
+				}
+				if (answer.filter(ans => !ans.startsWith('!')).length === 0) {
+					throw new Chat.ErrorMessage(`No correct answers were added for question #${i / 2 + 1}.`);
+				}
+			}
+		},
+		onLoadPriority: 2,
 		onAfterLoad() {
-			this.guesses = this.questions.map(() => []);
+			this.guesses = this.questions.map(() => ({}));
 			this.mines = [];
 			for (const question of this.questions) {
 				this.mines.push(question.answer.filter(ans => ans.startsWith('!')));
 				question.answer = question.answer.filter(ans => !ans.startsWith('!'));
-			}
-			if ((this.mines as string[][]).some(mineSet => mineSet.length === 0)) {
-				this.announce('This twist requires at least one mine for each question. Please reset the hunt and make it again.');
-				this.huntLocked = true;
 			}
 		},
 
@@ -494,14 +553,7 @@ const TWISTS: {[k: string]: Twist} = {
 			return true;
 		},
 
-		onAnySubmit(player) {
-			if (this.huntLocked) {
-				player.sendRoom('The hunt was not set up correctly.  Please wait for the host to reset the hunt and create a new one.');
-				return true;
-			}
-		},
-
-		onIncorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+		onIncorrectAnswer(player: Scavenger, value: string) {
 			const curr = player.currentQuestion;
 
 			if (!this.guesses[curr][player.id]) this.guesses[curr][player.id] = new Set();
@@ -516,7 +568,7 @@ const TWISTS: {[k: string]: Twist} = {
 
 			const mines: {mine: string, users: string[]}[][] = [];
 
-			for (const mineSet of this.mines as string[][]) {
+			for (const mineSet of this.mines) {
 				mines.push(mineSet.map(mine => ({mine: mine.substr(1), users: [] as string[]})));
 			}
 
@@ -545,7 +597,7 @@ const TWISTS: {[k: string]: Twist} = {
 			return true;
 		},
 
-		onEnd(isReset) {
+		onEnd(isReset: boolean) {
 			if (isReset) return;
 			for (const [q, guessObj] of this.guesses.entries()) {
 				const mines: string[] = this.mines[q];
@@ -554,14 +606,14 @@ const TWISTS: {[k: string]: Twist} = {
 					if (!player) continue;
 					if (!player.mines) player.mines = [];
 					(player.mines as {index: number, mine: string}[]).push(...mines
-						.filter(mine => (guesses as Set<string>).has(toID(mine)))
+						.filter(mine => guesses.has(toID(mine)))
 						.map(mine => ({index: q, mine: mine.substr(1)})));
 				}
 			}
 		},
 
 		onAfterEndPriority: 1,
-		onAfterEnd(isReset) {
+		onAfterEnd(isReset: boolean) {
 			if (isReset) return;
 			const noMines = [];
 			for (const {name} of this.completed) {
@@ -664,7 +716,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				this.setTimer(1);
 			},
 
-			onJoin(user) {
+			onJoin(user: User) {
 				const game = this.room.scavgame!;
 				if (game.playerlist && !game.playerlist.includes(user.id)) {
 					user.sendTo(this.room, 'You are not allowed to join this scavenger hunt.');
@@ -860,7 +912,7 @@ const MODES: {[k: string]: GameMode | string} = {
 		  } */
 		teams: {},
 
-		teamAnnounce(player: ScavengerHuntPlayer | User, message: string) {
+		teamAnnounce(player: Scavenger | User, message: string) {
 			const team = this.getPlayerTeam(player);
 
 			for (const userid of team.players) {
@@ -871,7 +923,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			}
 		},
 
-		getPlayerTeam(player: ScavengerHuntPlayer | User) {
+		getPlayerTeam(player: Scavenger | User) {
 			const game = this.room.scavgame!;
 			for (const teamID in game.teams) {
 				const team = game.teams[teamID];
@@ -882,7 +934,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			return null;
 		},
 
-		advanceTeam(answerer: ScavengerHuntPlayer, isFinished?: boolean) {
+		advanceTeam(answerer: Scavenger, isFinished?: boolean) {
 			const hunt = this.room.getGame(ScavengerHunt)!;
 
 			const team = this.getPlayerTeam(answerer);
@@ -908,7 +960,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				this.allowRenames = false;
 			},
 
-			onViewHunt(user) {
+			onViewHunt(user: User) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(user);
 				const player = this.playerTable[user.id];
@@ -919,7 +971,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				if (team.completed) player.completed = true;
 			},
 
-			onSendQuestion(player) {
+			onSendQuestion(player: Scavenger) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
 
@@ -933,7 +985,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				}
 			},
 
-			onConnect(user) {
+			onConnect(user: User) {
 				const player = this.playerTable[user.id];
 				if (!player) return;
 
@@ -946,7 +998,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				}
 			},
 
-			onJoin(user) {
+			onJoin(user: User) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(user);
 				if (!team) {
@@ -966,7 +1018,7 @@ const MODES: {[k: string]: GameMode | string} = {
 
 			// -1 so that blind incog takes precedence of this
 			onCorrectAnswerPriority: -1,
-			onCorrectAnswer(player, value) {
+			onCorrectAnswer(player: Scavenger, value: string) {
 				const game = this.room.scavgame!;
 
 				if (player.currentQuestion + 1 < this.questions.length) {
@@ -980,7 +1032,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				}
 			},
 
-			onAnySubmit(player, value) {
+			onAnySubmit(player: Scavenger, value: string) {
 				const game = this.room.scavgame!;
 
 				const team = game.getPlayerTeam(player);
@@ -998,7 +1050,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			},
 
 			onCompletePriority: 2,
-			onComplete(player, time, blitz) {
+			onComplete(player: Scavenger, time: string, blitz: boolean) {
 				const game = this.room.scavgame!;
 
 				const team = game.getPlayerTeam(player);
@@ -1006,7 +1058,7 @@ const MODES: {[k: string]: GameMode | string} = {
 			},
 
 			// workaround that gives the answer after verifying that completion should not be hidden
-			onConfirmCompletion(player, time, blitz) {
+			onConfirmCompletion(player: Scavenger, time: string, blitz: boolean) {
 				const game = this.room.scavgame!;
 				const team = game.getPlayerTeam(player);
 				team.completed = true;
