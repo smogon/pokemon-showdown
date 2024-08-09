@@ -2551,13 +2551,34 @@ export const Formats: FormatList = [
 		},
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair' && this.turn > 0) {
+				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair' && pokemon.hp) {
+					if (pokemon.abilityState.permdis) continue;
 					const health = pokemon.maxhp * 0.15;
 					if (pokemon === pokemon.side.active[0]) {
 						this.heal(health, pokemon, pokemon, pokemon.getAbility());
 					} else {
 						pokemon.hp += health;
 						this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
+					}
+				}
+			}
+		},
+		onUpdate() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && !pokemon.abilityState.reviveStarted) {
+					pokemon.abilityState.reviveStarted = true;
+					pokemon.abilityState.deathTurn = this.turn;
+				}
+				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && pokemon.abilityState.reviveStarted) {
+					let turnCount = this.turn - pokemon.abilityState.deathTurn;
+					if (turnCount >= 6) {
+						pokemon.fainted = false;
+						pokemon.faintQueued = false;
+						pokemon.subFainted = false;
+						pokemon.status = '';
+						pokemon.hp = 1;
+						pokemon.sethp(pokemon.maxhp / 2);
+						this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Auto Repair');
 					}
 				}
 			}
