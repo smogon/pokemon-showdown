@@ -39,11 +39,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onResidual(pokemon) {
 			let types = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Stellar', 'Water'];
-			let randomType = this.sample(types);
-			let newType = randomType + '/Steel';
-			pokemon.abilityState.newType = randomType;
-			pokemon.setType(newType);
-			this.add('-start', pokemon, 'typechange', newType, '[from] item: Absorptive Shell');
+			let newType = this.sample(types);
+			pokemon.abilityState.newType = newType;
+			pokemon.setType([newType, 'Steel']);
+			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[from] item: Absorptive Shell');
 		},
 		onModifyMove(move, pokemon) {
 			if (move.id === 'technoblast') {
