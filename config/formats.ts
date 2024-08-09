@@ -2577,8 +2577,10 @@ export const Formats: FormatList = [
 						pokemon.subFainted = false;
 						pokemon.status = '';
 						pokemon.hp = 1;
-						pokemon.sethp(pokemon.maxhp / 2);
-						this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Auto Repair');
+						pokemon.sethp(1);
+						pokemon.abilityState.reviveStarted = false;
+						this.add('-message', `${pokemon.getAbility().name} activated!`);
+						this.add('-message', `${pokemon.name} is back in the fight!`);
 					}
 				}
 			}
