@@ -511,14 +511,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	      }
 	      if (!possibleTypes.length) return;
 	      const randomType = this.sample(possibleTypes);
-	      if (!target.setType(randomType)) return false;
+	      target.setType(randomType);
 	      this.add('-start', target, 'typechange', randomType);
 		},
 		onPrepareHit(source, target, move) {
 	      if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 	      const type = move.type;
 	      if (type && type !== '???' && source.getTypes().join() !== type) {
-	        	if (!source.setType(type)) return;
+	        	source.setType(type);
 	        	this.add('-start', source, 'typechange', type, '[from] ability: Quick Camo');
 	      }	
 		},
