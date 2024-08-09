@@ -68,6 +68,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.addVolatile('turbocharge');
 			target.addVolatile('protect');
 			this.add('-message', `Level ${target.abilityState.turbochargeStacks} Turbocharge!`);
+			target.abilityState.permdis = true;
 		},
 		condition: {
 			duration: 0,
@@ -81,7 +82,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryHeal(damage, target, source, effect) {
 				if ((effect?.id === 'zpower') || this.effectState.isZ) return damage;
-				this.add('cant', target, 'Turbocharge', 'Turbocharge');
 				return false;
 			},
 			onResidual(pokemon) {
