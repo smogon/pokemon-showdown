@@ -43,9 +43,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (!pokemon.setType(newType)) return false;
 			this.add('-start', pokemon, 'typechange', newType, '[from] item: Absorptive Shell');
 		},
-		onModifyType(move, pokemon) {
+		onModifyMove(move, pokemon) {
 			if (move.id === 'technoblast') {
-				move.type = pokemon.getTypes()[0];
+				move.type = pokemon.abilityState.newType;
 				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to ${pokemon.abilityState.newType}-type!`);
 			}
 		},
