@@ -564,8 +564,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					continue;
 				} else if (newTarget === source) {
 					this.add('-immune', source, '[from] ability: Peal of Thunder');
-					this.heal(source.maxhp / 3);
-					this.boost({spa: 1, spe: 1});
+					this.heal(source.maxhp / 3, source);
+					this.boost({spa: 1, spe: 1}, source);
 					continue;
 				}
 				newTarget.hp -= dmg;
