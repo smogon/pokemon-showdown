@@ -4,6 +4,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Absorptive Shell",
 		gen: 9,
 		onSwitchIn(pokemon) {
+			pokemon.abilityState.newType = '';
 			pokemon.abilityState.forcefield = false;
 			pokemon.abilityState.forcefieldHp = 0;
 			if (pokemon.hp <= pokemon.maxhp / 2) {
@@ -45,9 +46,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[from] item: Absorptive Shell');
 		},
 		onModifyMove(move, pokemon) {
-			if (move.id === 'technoblast') {
+			if (move.id !== 'technoblast') return;
+			if (pokemon.abilityState.newType) {
 				move.type = pokemon.abilityState.newType;
 				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to ${pokemon.abilityState.newType}-type!`);
+			} else {
+				move.type = 'Bug';
+				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to Bug-type!`);
 			}
 		},
 	},
