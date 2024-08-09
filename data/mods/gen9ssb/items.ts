@@ -22,6 +22,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 					if (target.abilityState.forcefieldHp <= 0) {
 						target.abilityState.forcefield = false;
 						target.abilityState.forcefieldHp = 0;
+						this.add('-anim', target, 'Cosmic Power', target);
 						this.add('-message', `${target.name}'s forcefield shattered!`);
 					}
 					return 0;
@@ -30,6 +31,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 					let bleed = damage - target.abilityState.forcefieldHp;
 					target.abilityState.forcefield = false;
 					target.abilityState.forcefieldHp = 0;
+					this.add('-anim', target, 'Cosmic Power', target);
 					this.add('-message', `${target.name}'s forcefield shattered!`);
 					return bleed;
 				}
@@ -40,7 +42,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			let randomType = this.sample(types);
 			let newType = randomType + '/Steel';
 			pokemon.abilityState.newType = randomType;
-			if (!pokemon.setType(newType)) return false;
+			pokemon.setType(newType);
 			this.add('-start', pokemon, 'typechange', newType, '[from] item: Absorptive Shell');
 		},
 		onModifyMove(move, pokemon) {
