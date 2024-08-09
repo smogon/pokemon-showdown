@@ -415,12 +415,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Draft', 'Min Source Gen = 9'],
 	},
 	{
-		name: "[Gen 9] Tera Preview Draft",
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['[Gen 9] Draft', 'Tera Type Preview'],
-	},
-	{
 		name: "[Gen 9] 6v6 Doubles Draft",
 		mod: 'gen9',
 		gameType: 'doubles',
@@ -443,12 +437,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		teraPreviewDefault: true,
 		ruleset: ['Standard Draft', '+Unobtainable', '+Past'],
-	},
-	{
-		name: "[Gen 9] Tera Preview NatDex Draft",
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['[Gen 9] NatDex Draft', 'Tera Type Preview'],
 	},
 	{
 		name: "[Gen 9] NatDex 6v6 Doubles Draft",
