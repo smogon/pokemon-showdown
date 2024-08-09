@@ -1304,7 +1304,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			depth++;
 			let name;
 			if (!team.length) name = 'Shifu Robot'; // Guarantees whichever name you enter here will always show up in the 6th slot of both teams in every SSB battle, assuming it wasn't already selected to be on the team. Used for troubleshooting
-			if (team.length) name = this.sampleNoReplace(pool);
+			if (team.length) name = this.sampleNoReplace(pool.filter(i => i !== 'Shifu Robot'));
 			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
