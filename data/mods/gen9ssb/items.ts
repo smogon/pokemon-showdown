@@ -426,7 +426,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		onResidual(pokemon) {
-			let effectPool = ['aquaring', 'focusenergy', 'helpinghand', 'ingrain', 'laserfocus', 'magnetrise', 'substitute', 'stockpile', 'charge', 'curse', 'destinybond', 'dragoncheer', 'lockon'];
+			let effectPool = ['aquaring', 'focusenergy', 'helpinghand', 'ingrain', 'laserfocus', 'magnetrise', 'substitute', 'stockpile', 'charge', 'destinybond', 'dragoncheer', 'lockon'];
 			let randomEffect = this.sample(effectPool);
 			if (!pokemon.volatiles[randomEffect]) pokemon.addVolatile(randomEffect);
 			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, pokemon);
