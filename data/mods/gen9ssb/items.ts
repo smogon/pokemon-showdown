@@ -40,8 +40,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 			let randomType = this.sample(types);
 			let newType = randomType + '/Steel';
 			pokemon.abilityState.newType = randomType;
-			this.add('-start', pokemon, 'typechange', newType, '[from] item: Absorptive Shell');
 			this.add('-message', `${pokemon.abilityState.forcefield} ${pokemon.abilityState.forcefieldHp}`);
+			if (!pokemon.setType(newType)) return false;
+			this.add('-start', pokemon, 'typechange', newType, '[from] item: Absorptive Shell');
 		},
 		onModifyType(move, pokemon) {
 			if (move.id === 'technoblast') {
