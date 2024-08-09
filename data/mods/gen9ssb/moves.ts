@@ -541,22 +541,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let possibleTargets = [];
 
 			for (const pokemon of target.side.pokemon) {
-				if (pokemon.name === 'Quetzalcoatl') continue;
 				if (pokemon.hp) allPokemon.push(pokemon);
 			}
 			for (const pokemon of source.side.pokemon) {
-				if (pokemon.name === 'Quetzalcoatl') continue;
 				if (pokemon.hp) allPokemon.push(pokemon);
 			}
 
 			for (const pokemon of target.side.pokemon) {
-				if (pokemon.name === 'Quetzalcoatl') continue;
 				if (pokemon.hp) possibleTargets.push(pokemon);
 			}
 			for (const pokemon of source.side.pokemon) {
-				if (pokemon.name === 'Quetzalcoatl') continue;
 				if (pokemon.hp) possibleTargets.push(pokemon);
 			}
+
 			if (!possibleTargets) return null;
 
 			for (let i = 0; i < allPokemon.length; i++) {
@@ -566,7 +563,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.damage(dmg, target);
 					continue;
 				} else if (newTarget === source) {
-					this.damage(dmg, source);
+					this.add('-message', `${source.name} was struck by Big Thunder!`);
+					this.heal(source.maxhp / 3, source);
+					this.boost({spa: 1, spe: 1}, source);
 					continue;
 				}
 				newTarget.hp -= dmg;
