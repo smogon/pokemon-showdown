@@ -563,9 +563,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.damage(dmg, target);
 					continue;
 				} else if (newTarget === source) {
-					this.add('-message', `${source.name} was struck by Big Thunder!`);
-					this.heal(source.maxhp / 3, source);
-					this.boost({spa: 1, spe: 1}, source);
+					this.add('-immune', source, '[from] ability: Peal of Thunder');
+					this.heal(source.maxhp / 3);
+					this.boost({spa: 1, spe: 1});
 					continue;
 				}
 				newTarget.hp -= dmg;
