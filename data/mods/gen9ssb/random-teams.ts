@@ -157,13 +157,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Struggle',
 		evs: {hp: 252, spd: 4, spe: 252}, nature: 'Hasty', shiny: true,
 	},
-	/*
 	'Marisa Kirisame': {
-		species: 'Hatterene', ability: 'Ordinary Magician', item: 'Mini-Hakkero', gender: 'F',
-		moves: ['Flamethrower', 'Ice Beam', 'Thunderbolt'],
+		species: 'Hatterene', ability: 'Ordinary Magician', item: '', gender: 'F',
+		moves: ['Volt Switch', 'Overheat', 'Freezy Frost'],
 		signatureMove: 'Orb Shield',
 		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	/*
 	Glint: {
 		species: 'Meltan', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
 		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
