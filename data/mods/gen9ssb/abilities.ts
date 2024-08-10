@@ -15,6 +15,138 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Kaiser Dragon
+	elementalshift: {
+		desc: "This Pokemon becomes Fire/Grass/Water/Electric/Ice/Flying/Poison/Psychic/Fairy/Rock-type and sets the appropriate weather/terrain upon switching in.",
+		shortDesc: "Random type and move upon switching in.",
+		onStart(pokemon) {
+			let r = this.random(10);
+			if (r === 0) {
+				this.add('-start', pokemon, 'typechange', 'Fire');
+				pokemon.setType('Fire');
+				this.actions.useMove('Sunny Day', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('willowisp');
+				pokemon.moveSlots[1] = this.dex.moves.get('protect');
+				pokemon.moveSlots[2] = this.dex.moves.get('magmastorm');
+				pokemon.moveSlots[3] = this.dex.moves.get('firelash');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('willowisp');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('protect');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('magmastorm');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('firelash');
+			} else if (r === 1) {
+				this.add('-start', pokemon, 'typechange', 'Grass');
+				pokemon.setType('Grass');
+				this.actions.useMove('Grassy Terrain', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('leechseed');
+				pokemon.moveSlots[1] = this.dex.moves.get('protect');
+				pokemon.moveSlots[2] = this.dex.moves.get('hornleech');
+				pokemon.moveSlots[3] = this.dex.moves.get('gigadrain');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('leechseed');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('protect');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('hornleech');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('gigadrain');
+			} else if (r === 2) {
+				this.add('-start', pokemon, 'typechange', 'Water');
+				pokemon.setType('Water');
+				this.actions.useMove('Rain Dance', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('flipturn');
+				pokemon.moveSlots[1] = this.dex.moves.get('hydrovortex');
+				pokemon.moveSlots[2] = this.dex.moves.get('waterspout');
+				pokemon.moveSlots[3] = this.dex.moves.get('aquatail');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('flipturn');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('hydrovortex');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('waterspout');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('aquatail');
+			} else if (r === 3) {
+				this.add('-start', pokemon, 'typechange', 'Electric');
+				pokemon.setType('Electric');
+				this.actions.useMove('Electric Terrain', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('thunderwave');
+				pokemon.moveSlots[1] = this.dex.moves.get('voltswitch');
+				pokemon.moveSlots[2] = this.dex.moves.get('charge');
+				pokemon.moveSlots[3] = this.dex.moves.get('doubleshock');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('thunderwave');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('voltswitch');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('charge');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('doubleshock');
+			} else if (r === 4) {
+				this.add('-start', pokemon, 'typechange', 'Ice');
+				pokemon.setType('Ice');
+				this.actions.useMove('Snowscape', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('auroraveil');
+				pokemon.moveSlots[1] = this.dex.moves.get('freezyfrost');
+				pokemon.moveSlots[2] = this.dex.moves.get('icespinner');
+				pokemon.moveSlots[3] = this.dex.moves.get('blizzard');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('auroraveil');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('freezyfrost');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('icespinner');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('blizzard');
+			} else if (r === 5) {
+				this.add('-start', pokemon, 'typechange', 'Flying');
+				pokemon.setType('Flying');
+				this.actions.useMove('Tailwind', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('defog');
+				pokemon.moveSlots[1] = this.dex.moves.get('roost');
+				pokemon.moveSlots[2] = this.dex.moves.get('pluck');
+				pokemon.moveSlots[3] = this.dex.moves.get('oblivionwing');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('defog');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('roost');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('pluck');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('oblivionwing');
+			} else if (r === 6) {
+				this.add('-start', pokemon, 'typechange', 'Poison');
+				pokemon.setType('Poison');
+				this.actions.useMove('Haze', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('toxic');
+				pokemon.moveSlots[1] = this.dex.moves.get('protect');
+				pokemon.moveSlots[2] = this.dex.moves.get('venoshock');
+				pokemon.moveSlots[3] = this.dex.moves.get('barbbarrage');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('toxic');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('protect');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('venoshock');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('barbbarrage');
+			} else if (r === 7) {
+				this.add('-start', pokemon, 'typechange', 'Psychic');
+				pokemon.setType('Psychic');
+				this.actions.useMove('Psychic Terrain', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('lunardance');
+				pokemon.moveSlots[1] = this.dex.moves.get('revivalblessing');
+				pokemon.moveSlots[2] = this.dex.moves.get('futuresight');
+				pokemon.moveSlots[3] = this.dex.moves.get('psychicfangs');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('lunardance');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('revivalblessing');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('futuresight');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('psychicfangs');
+			} else if (r === 8) {
+				this.add('-start', pokemon, 'typechange', 'Fairy');
+				pokemon.setType('Fairy');
+				this.actions.useMove('Misty Terrain', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('moonlight');
+				pokemon.moveSlots[1] = this.dex.moves.get('protect');
+				pokemon.moveSlots[2] = this.dex.moves.get('sparklyswirl');
+				pokemon.moveSlots[3] = this.dex.moves.get('spiritbreak');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('moonlight');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('protect');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('sparklyswirl');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('spiritbreak');
+			} else {
+				this.add('-start', pokemon, 'typechange', 'Rock');
+				pokemon.setType('Rock');
+				this.actions.useMove('Sandstorm', pokemon);
+				pokemon.moveSlots[0] = this.dex.moves.get('stealthrock');
+				pokemon.moveSlots[1] = this.dex.moves.get('protect');
+				pokemon.moveSlots[2] = this.dex.moves.get('saltcure');
+				pokemon.moveSlots[3] = this.dex.moves.get('powergem');
+				pokemon.baseMoveSlots[0] = this.dex.moves.get('stealthrock');
+				pokemon.baseMoveSlots[1] = this.dex.moves.get('protect');
+				pokemon.baseMoveSlots[2] = this.dex.moves.get('saltcure');
+				pokemon.baseMoveSlots[3] = this.dex.moves.get('powergem');
+			}
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		name: "Elemental Shift",
+		gen: 9,
+	},
 	// Shifu Robot
 	autorepair: {
 		name: "Auto Repair",
