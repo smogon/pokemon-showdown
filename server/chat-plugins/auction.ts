@@ -176,18 +176,29 @@ export class Auction extends Rooms.SimpleRoomGame {
 	generatePriceList() {
 		const players = Utils.sortBy(this.getDraftedPlayers(), p => -p.price);
 		let buf = '';
+		let smogonExport = '';
+
 		for (const team of this.teams.values()) {
-			buf += Utils.html`<details><summary>${team.name}</summary><table>`;
+			buf += Utils.html`<details><summary>${team.name}</summary>`;
+			let table = `<table>`;
 			for (const player of players.filter(p => p.team === team)) {
-				buf += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+				table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 			}
-			buf += `</table></details><br/>`;
+			table += `</table>`;
+			buf += `${table}</details><br/>`;
+			smogonExport += `[SPOILER="${team.name}"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
 		}
-		buf += `<details><summary>All</summary><table>`;
+
+		buf += `<details><summary>All</summary>`;
+		let table = `<table>`;
 		for (const player of players) {
-			buf += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+			table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 		}
-		buf += `</table></details>`;
+		table += `</table>`;
+		buf += `${table}</details><br/>`;
+		smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+
+		buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
 		return buf;
 	}
 
