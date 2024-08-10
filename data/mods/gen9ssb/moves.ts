@@ -683,12 +683,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Creates a substitute equivalent to half of user's max HP at the cost of a quarter of its max HP. At the end of the turn the substitute vanishes and deals damage equal to its current HP.",
-		shortDesc: "Consumes 1/4 HP for 1/2 HP Substitute; Ends/damages end of turn.",
+		desc: "Creates a substitute without sacrificing HP. At the end of the same turn it is used, the substitute vanishes and deals damage equal to its current HP. Cannot be used twice in a row.",
+		shortDesc: "Creates a substitute that damages end of turn; no twice in a row.",
 		name: "Orb Shield",
 		pp: 5,
-		priority: 0,
-		flags: {snatch: 1},
+		priority: 4,
+		flags: {cantusetwice: 1, snatch: 1},
 		volatileStatus: 'orbshield',
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -697,24 +697,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Defense Curl', source);
 			this.add('-anim', source, 'Protect', source);
 		},
-		onTryHit(source) {
-			if (source.volatiles['orbshield']) {
-				this.add('-fail', source, 'move: Orb Shield');
-				return this.NOT_FAIL;
-			}
-			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) {
-				this.add('-fail', source, 'move: Orb Shield', '[weak]');
-				return this.NOT_FAIL;
-			}
-		},
-		onHit(target, source, move) {
-			this.directDamage(target.maxhp / 4);
-		},
 		condition: {
-			duration: 2,
+			duration: 1,
 			onStart(target, source, effect) {
 				this.add('-start', target, 'Orb Shield');
-				this.effectState.hp = Math.floor(target.maxhp / 2);
+				target.abilityState.orbHp = Math.floor(target.maxhp / 4);
 				if (target.volatiles['partiallytrapped']) {
 					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
 					delete target.volatiles['partiallytrapped'];
@@ -722,81 +709,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryPrimaryHitPriority: -1,
 			onTryPrimaryHit(target, source, move) {
-				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
-					return;
-				}
-				let damage = this.actions.getDamage(source, target, move);
-				if (!damage && damage !== 0) {
-					this.add('-fail', source);
-					this.attrLastMove('[still]');
+				if (target === source || move.flags['bypasssub'] || move.infiltrates || !target.abilityState.orbHp) return;
+				const damage = this.actions.getDamage(source, target, move);
+				if (!damage) {
+					this.add('-message', `${target.name} was protected by Orb Shield!`);
 					return null;
 				}
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) {
-					return damage;
-				}
-				if (damage > target.volatiles['orbshield'].hp) {
-					damage = target.volatiles['orbshield'].hp as number;
-				}
-				target.volatiles['orbshield'].hp -= damage;
-				source.lastDamage = damage;
-				if (target.volatiles['orbshield'].hp <= 0) {
-					if (move.ohko) this.add('-ohko');
-					target.removeVolatile('orbshield');
-				} else {
+				if (damage < target.abilityState.orbHp) {
+					target.abilityState.orbHp -= damage;
 					this.add('-activate', target, 'move: Orb Shield', '[damage]');
+				} else if (damage >= target.abilityState.orbHp) {
+					target.abilityState.orbHp = 0;
+					target.removeVolatile('orbshield');
+					this.add('-message', `${target.name}'s Orb Shield broke!`);
 				}
-				if (move.recoil || move.id === 'chloroblast') {
-					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
-				}
-				if (move.drain) {
-					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
-				}
-				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
-				this.runEvent('AfterSubDamage', target, source, move, damage);
-				return this.HIT_SUBSTITUTE;
+				if (move.recoil || move.id === 'chloroblast') this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
+				if (move.drain) this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				return null;
 			},
-			onEnd(target) {
-				const pokemon = target.side.foe.active[target.side.foe.active.length - 1 - target.position];
-				this.damage(this.effectState.hp, pokemon, target);
-				this.add('-end', target, 'Orb Shield');
+			onEnd(pokemon) {
+				const target = pokemon.side.foe.active[0];
+				if (pokemon.abilityState.orbHp) this.damage(pokemon.abilityState.orbHp, target, pokemon);
+				this.add('-end', pokemon, 'Orb Shield');
+				pokemon.abilityState.orbHp = 0;
 			},
 		},
 		secondary: null,
 		target: "self",
-		type: "Psychic",
-	},
-	// Marisa Kirisame
-	masterspark: {
-		accuracy: true,
-		basePower: 200,
-		category: "Special",
-		desc: "Breaks screens and Orb Shields, ignores abilities.",
-		shortDesc: "Breaks screens/Orb Shields, ignores abilities.",
-		name: "Master Spark",
-		gen: 9,
-		pp: 1,
-		priority: 0,
-		flags: {bypasssub: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Hyper Beam', target);
-		},
-		onTryHit(pokemon) {
-			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightscreen');
-			pokemon.side.removeSideCondition('auroraveil');
-			if (pokemon.volatiles['orbshield']) {
-				pokemon.removeVolatile('orbshield');
-				this.add('-end', pokemon, 'Orb Shield');
-			}
-		},
-		isZ: "minihakkero",
-		ignoreAbility: true,
-		secondary: null,
-		target: "normal",
 		type: "Fairy",
 	},
 	// Sanae Kochiya
