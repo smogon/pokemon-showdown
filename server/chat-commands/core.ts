@@ -155,8 +155,8 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 		for (const command of Chat.allCommands()) {
 			if (cmdPrefix === '!' && !command.broadcastable) continue;
 			const req = command.requiredPermission as GlobalPermission;
-			if (req &&
-				!(command.hasRoomPermissions ? this.room && user.can(req as RoomPermission, null, this.room) : user.can(req))
+			if (!!req &&
+				!(command.hasRoomPermissions ? !!this.room && user.can(req as RoomPermission, null, this.room) : user.can(req))
 			) {
 				continue;
 			}
