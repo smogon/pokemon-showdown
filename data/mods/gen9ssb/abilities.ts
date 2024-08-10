@@ -571,8 +571,33 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	// Marisa Kirisame
 	ordinarymagician: {
-		desc: "This Pokemon changes its type to the type of the move it uses and moves first in its priority bracket.",
-		shortDesc: "Change type to move; move first.",
+		desc: "This Pokemon is immune to status, and changes its typing to match the typing of the move it's using. On switch-in, user obtains either Assault Vest, Choice Specs, Expert Belt, Flame Orb, Light Ball, Razor Fang, or Toxic Orb. On switch-out, uses Fling.",
+		shortDesc: "Immune to status; Protean; Random item/fling on switch-in/out.",
+		onStart(pokemon) {
+			let i = this.random(7);
+			if (i === 0) {
+				pokemon.setItem('assaultvest');
+				this.add('-message', `${pokemon.name} obtained an Assault Vest!`);
+			} else if (i === 1) {
+				pokemon.setItem('choicespecs');
+				this.add('-message', `${pokemon.name} obtained Choice Specs!`);
+			} else if (i === 2) {
+				pokemon.setItem('expertbelt');
+				this.add('-message', `${pokemon.name} obtained an Expert Belt!`);
+			} else if (i === 3) {
+				pokemon.setItem('flameorb');
+				this.add('-message', `${pokemon.name} obtained a Flame Orb!`);
+			} else if (i === 4) {
+				pokemon.setItem('lightball');
+				this.add('-message', `${pokemon.name} obtained a Light Ball!`);
+			} else if (i === 5) {
+				pokemon.setItem('razorfang');
+				this.add('-message', `${pokemon.name} obtained a Razor Fang!`);
+			} else {
+				pokemon.setItem('toxicorb');
+				this.add('-message', `${pokemon.name} obtained a Toxic Orb!`);
+			}
+		},
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;
@@ -581,12 +606,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', source, 'typechange', type, '[from] ability: Ordinary Magician');
 			}
 		},
-		onFractionalPriorityPriority: -1,
-		onFractionalPriority(priority, pokemon, target, move) {
-			this.add('-activate', pokemon, 'ability: Ordinary Magician');
-			return 0.1;
+		onUpdate(pokemon) {
+			if (pokemon.status === 'brn' || pokemon.status === 'frz' || pokemon.status === 'par' || pokemon.status === 'psn' || pokemon.status === 'tox' || pokemon.status === 'slp') {
+				this.add('-activate', pokemon, 'ability: Ordinary Magician');
+				pokemon.cureStatus();
+			}
 		},
-		flags: {},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'brn' || status.id !== 'frz' || status.id !== 'par' || status.id !== 'psn' || status.id !== 'tox' || status.id !== 'slp') return;
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Ordinary Magician');
+			}
+			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.add('-immune', target, '[from] ability: Ordinary Magician');
+				return null;
+			}
+		},
+		onSwitchOut(pokemon) {
+			this.actions.useMove('Fling', pokemon);
+		},
+		flags: {breakable: 1},
 		name: "Ordinary Magician",
 		gen: 9,
 	},
