@@ -151,6 +151,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Turbocharge',
 		evs: {hp: 128, spa: 128, spe: 252}, nature: 'Hasty', shiny: true,
 	},
+	'Kaiser Dragon': {
+		species: 'Rayquaza', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
+		moves: ['Splash', 'Celebrate', 'Hold Hands'],
+		signatureMove: 'Struggle',
+		evs: {hp: 252, spd: 4, spe: 252}, nature: 'Hasty', shiny: true,
+	},
 	/*
 	'Marisa Kirisame': {
 		species: 'Hatterene', ability: 'Ordinary Magician', item: 'Mini-Hakkero', gender: 'F',
