@@ -105,6 +105,18 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Alexander489')}|kek`);
 		},
 	},
+	apple: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Apple')}|I'm boutta Wopple with Apple!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Apple')}|Apple you glad I am leavin'!? Get it? Apple instead of Orange? I'm wasted here! Bu-Bye!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Apple')}|Who's the floppling? Apple? AGAIN?!`);
+		},
+	},
 	appletunalamode: {
 		noCopy: true,
 		onStart() {
@@ -993,7 +1005,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		noCopy: true,
 		onStart() {
 			const tier = this.sample(['Partners in Crime', 'Sketchmons', 'OMMs', 'Triples']);
-			this.add(`c:|${getName('HiZo')}|Why am I needed here, I was busy playing ${tier} with my friends`);
+			this.add(`c:|${getName('HiZo')}|Why am I needed here, I was busy playing ${tier} with friends`);
 			this.add(`c:|${getName('HiZo')}|Did I break something again`);
 		},
 		onSwitchOut() {
@@ -1736,18 +1748,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Nyx')}|We let TPP cook too hard...`);
 		},
 		innateName: "Natural Cure",
-	},
-	opple: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Opple')}|I'm boutta Wopple with Opple!`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Opple')}|Opple you glad I am leavin'!? Get it? Opple instead of Orange? I'm wasted here! Bu-Bye!`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Opple')}|Who's the floppling? Opple? AGAIN?!`);
-		},
 	},
 	partman: {
 		noCopy: true,

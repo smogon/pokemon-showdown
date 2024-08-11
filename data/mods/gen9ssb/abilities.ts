@@ -151,6 +151,33 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 	},
 
+	// Apple
+	orchardsgift: {
+		shortDesc: "Summons Grassy Terrain. 1.5x Sp. Atk and Sp. Def during Grassy Terrain.",
+		name: "Orchard's Gift",
+		onStart(pokemon) {
+			if (this.field.setTerrain('grassyterrain')) {
+				this.add('-activate', pokemon, 'Orchard\'s Gift', '[source]');
+			} else if (this.field.isTerrain('grassyterrain')) {
+				this.add('-activate', pokemon, 'ability: Orchard\'s Gift');
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifySpA(spa, pokemon) {
+			if (this.field.isTerrain('grassyterrain')) {
+				this.debug('Orchard\'s Gift boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			if (this.field.isTerrain('grassyterrain')) {
+				this.debug('Orchard\'s Gift boost');
+				return this.chainModify(1.5);
+			}
+		},
+	},
+
 	// Appletun a la Mode
 	servedcold: {
 		shortDesc: "This Pokemon's Defense is raised 2 stages if hit by an Ice move; Ice immunity.",
@@ -1760,33 +1787,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onFoeBasePower(basePower, attacker, defender, move) {
 			if (this.effectState.fallen) {
 				return this.chainModify([10, (10 + this.effectState.fallen)]);
-			}
-		},
-	},
-
-	// Opple
-	orchardsgift: {
-		shortDesc: "Summons Grassy Terrain. 1.5x Sp. Atk and Sp. Def during Grassy Terrain.",
-		name: "Orchard's Gift",
-		onStart(pokemon) {
-			if (this.field.setTerrain('grassyterrain')) {
-				this.add('-activate', pokemon, 'Orchard\'s Gift', '[source]');
-			} else if (this.field.isTerrain('grassyterrain')) {
-				this.add('-activate', pokemon, 'ability: Orchard\'s Gift');
-			}
-		},
-		onModifyAtkPriority: 5,
-		onModifySpA(spa, pokemon) {
-			if (this.field.isTerrain('grassyterrain')) {
-				this.debug('Orchard\'s Gift boost');
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpDPriority: 6,
-		onModifySpD(spd, pokemon) {
-			if (this.field.isTerrain('grassyterrain')) {
-				this.debug('Orchard\'s Gift boost');
-				return this.chainModify(1.5);
 			}
 		},
 	},

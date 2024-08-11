@@ -43,6 +43,13 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Confirmed Town"},
 	},
 
+	// Apple
+	applin: {
+		inherit: true,
+		baseStats: {hp: 106, atk: 80, def: 110, spa: 120, spd: 80, spe: 44},
+		abilities: {0: "Orchard's Gift"},
+	},
+
 	// Appletun a la Mode
 	appletun: {
 		inherit: true,
@@ -698,13 +705,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	altariamega: {
 		inherit: true,
 		abilities: {0: "Last Hymn"},
-	},
-
-	// Opple
-	applin: {
-		inherit: true,
-		baseStats: {hp: 106, atk: 80, def: 110, spa: 120, spd: 80, spe: 44},
-		abilities: {0: "Orchard's Gift"},
 	},
 
 	// PartMan

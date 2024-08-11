@@ -72,6 +72,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Scumhunt',
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naughty', teraType: 'Fire', shiny: true,
 	},
+	Apple: {
+		species: 'Applin', ability: 'Orchard\'s Gift', item: 'Lum Berry', gender: ['M', 'F'],
+		moves: ['Apple Acid', 'Leech Seed', 'Dragon Pulse'],
+		signatureMove: 'Wopple or Flopple',
+		evs: {hp: 252, spa: 4, spd: 252}, nature: 'Sassy', shiny: 2, teraType: 'Dragon',
+	},
 	'Appletun a la Mode': {
 		species: 'Appletun', ability: 'Served Cold', item: 'Sitrus Berry', gender: 'F',
 		moves: ['Freeze-Dry', 'Apple Acid', 'Fickle Beam'],
@@ -690,12 +696,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Earthquake', 'Amnesia', 'Roost'],
 		signatureMove: 'Cotton Candy Crush',
 		evs: {hp: 248, spd: 164, spe: 96}, nature: 'Careful', shiny: 4,
-	},
-	Opple: {
-		species: 'Applin', ability: 'Orchard\'s Gift', item: 'Lum Berry', gender: ['M', 'F'],
-		moves: ['Apple Acid', 'Leech Seed', 'Dragon Pulse'],
-		signatureMove: 'Wopple or Flopple',
-		evs: {hp: 252, spa: 4, spd: 252}, nature: 'Sassy', shiny: 2, teraType: 'Dragon',
 	},
 	PartMan: {
 		species: 'Chandelure', ability: 'C- Tier Shitposter', item: 'Leek', gender: 'M',

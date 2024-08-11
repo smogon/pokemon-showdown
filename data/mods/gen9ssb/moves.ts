@@ -272,6 +272,38 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "???",
 	},
 
+	// Apple
+	woppleorflopple: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		shortDesc: "Confuse; +2 SpA/D. Fail=Confuse self; -1 SpA/D.",
+		desc: "Usually moves first. This move has a 50% chance of confusing the target and raising the user's Special Attack and Special Defense by 2 stages. Otherwise, it will confuse the user and lower the user's Special Attack and Special Defense by 1 stage.",
+		name: "Wopple or Flopple",
+		gen: 9,
+		pp: 10,
+		priority: 1,
+		flags: {protect: 1, reflectable: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Moonlight', source);
+		},
+		onHit(target, source, move) {
+			if (this.randomChance(1, 2)) {
+				target.addVolatile('confusion');
+				this.boost({spa: 2, spd: 2}, source);
+			} else {
+				source.addVolatile('confusion');
+				this.boost({spa: -1, spd: -1}, source);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Appletun a la Mode
 	extracourse: {
 		accuracy: true,
@@ -4096,38 +4128,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fairy",
 	},
 
-	// Opple
-	woppleorflopple: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		shortDesc: "Confuse; +2 SpA/D. Fail=Confuse self; -1 SpA/D.",
-		desc: "Usually moves first. This move has a 50% chance of confusing the target and raising the user's Special Attack and Special Defense by 2 stages. Otherwise, it will confuse the user and lower the user's Special Attack and Special Defense by 1 stage.",
-		name: "Wopple or Flopple",
-		gen: 9,
-		pp: 10,
-		priority: 1,
-		flags: {protect: 1, reflectable: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Moonlight', source);
-		},
-		onHit(target, source, move) {
-			if (this.randomChance(1, 2)) {
-				target.addVolatile('confusion');
-				this.boost({spa: 2, spd: 2}, source);
-			} else {
-				source.addVolatile('confusion');
-				this.boost({spa: -1, spd: -1}, source);
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
-	},
-
 	// PartMan
 	alting: {
 		accuracy: true,
@@ -6166,6 +6166,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 70,
 		category: "Physical",
 		shortDesc: "Gives foe Miracle Seed. Cycles Treasure Bag.",
+		desc: "If the target is holding an item that can be removed from it, it is replaced with a Mircle Seed. Cycles Treasure Bag.",
 		name: "top kek",
 		pp: 15,
 		priority: 0,
