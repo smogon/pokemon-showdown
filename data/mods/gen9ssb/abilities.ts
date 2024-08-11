@@ -1600,7 +1600,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				];
 				for (const volatile of volatilesToClear) {
 					if (mon.volatiles[volatile]) {
-						mon.removeVolatile(volatile);
+						if (volatile === 'perishsong') {
+							// will implode the pokemon otherwise
+							delete mon.volatiles[volatile];
+						} else {
+							mon.removeVolatile(volatile);
+						}
 						if (volatile === 'flipped') {
 							changeSet(this, mon, ssbSets['Clementine']);
 							this.add(`c:|${getName('Clementine')}|┬──┬◡ﾉ(° -°ﾉ)`);
