@@ -183,8 +183,9 @@ function generateSSBItemInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 
 function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	let buf = ``;
-	if (!Array.isArray(set.ability) && !baseDex.abilities.get(set.ability).exists) {
-		const sigAbil = Dex.deepClone(dex.abilities.get(set.ability));
+	if (!Array.isArray(set.ability) && (set.species === 'Sableye' || !baseDex.abilities.get(set.ability).exists)) {
+		let sigAbil = Dex.deepClone(dex.abilities.get(set.ability));
+		if (set.species === 'Sableye') sigAbil = Dex.deepClone(dex.abilities.get('Pestering Assault'));
 		if (!sigAbil.desc && !sigAbil.shortDesc) {
 			sigAbil.desc = `This ability doesn't have a description. Try contacting the SSB dev team.`;
 		}

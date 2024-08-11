@@ -2620,6 +2620,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 90,
 		category: "Physical",
 		shortDesc: "Super effective on Water.",
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
 		name: "vruuuuuum",
 		pp: 20,
 		priority: 0,
