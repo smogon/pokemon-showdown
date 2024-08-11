@@ -3330,30 +3330,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 		},
 	},
-	primordialsea: {
-		inherit: true,
-		onTryMove(attacker, defender, move) {
-			if (move.id === 'scorchingtruth') return;
-			if (move.type === 'Fire' && move.category !== 'Status') {
-				this.debug('Primordial Sea fire suppress');
-				this.add('-fail', attacker, move, '[from] Primordial Sea');
-				this.attrLastMove('[still]');
-				return null;
-			}
-		},
-		onWeatherModifyDamage(damage, attacker, defender, move) {
-			if (defender.hasItem('utilityumbrella')) return;
-			if (move.type === 'Water') {
-				this.debug('Rain water boost');
-				return this.chainModify(1.5);
-			}
-			if (move.id === 'scorchingtruth') {
-				this.debug('Scorching Truth debuff');
-				this.add('-fail', attacker, move, '[from] Primordial Sea');
-				return this.chainModify(0.5);
-			}
-		},
-	},
 	confusion: {
 		inherit: true,
 		onBeforeMove(pokemon) {

@@ -6117,14 +6117,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		shortDesc: "Always at least neutral. Hits in Primordial Sea.",
-		desc: "If the attack is successful, the move will always hit for at least neutral damage, but it may still deal super effective damage. Primordial Sea does not fizzle this move out, instead reducing damage by 50%.",
+		desc: "Damage is doubled if this move is not very effective against the target.",
+		shortDesc: "Deals 2x damage with resisted hits.",
 		name: "Scorching Truth",
 		gen: 9,
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		hasCrashDamage: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -6132,8 +6131,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Focus Energy', source);
 			this.add('-anim', source, 'Fusion Flare', target);
 		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (typeMod < 0) return 0;
+		onBasePower(basePower, source, target, move) {
+			if (target.runEffectiveness(move) < 0) {
+				this.debug(`Scorching truth resisted buff`);
+				return this.chainModify(2);
+			}
 		},
 		secondary: null,
 		target: "normal",
