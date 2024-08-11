@@ -108,13 +108,13 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 	apple: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('Apple')}|I'm boutta Wopple with Apple!`);
+			this.add(`c:|${getName('Apple')}|An Apple a day keeps the Opplesite mon away!`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('Apple')}|Apple you glad I am leavin'!? Get it? Apple instead of Orange? I'm wasted here! Bu-Bye!`);
+			this.add(`c:|${getName('Apple')}|Going to the teachers desk!`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('Apple')}|Who's the floppling? Apple? AGAIN?!`);
+			this.add(`c:|${getName('Apple')}|I crumbled like an Apple Pie :(`);
 		},
 	},
 	appletunalamode: {
