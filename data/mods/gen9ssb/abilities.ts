@@ -2302,7 +2302,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Solaros & Lunaris
 	ridethesun: {
-		shortDesc: "Drought + Chlorophyll",
+		shortDesc: "Drought + Spe 1.5x in sun.",
+		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active, this Pokemon's Speed is 1.5x.",
 		name: "Ride the Sun!",
 		onStart(source) {
 			for (const action of this.queue) {
@@ -2313,7 +2314,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onModifySpe(spe, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				return this.chainModify(2);
+				return this.chainModify(1.5);
 			}
 		},
 		flags: {},
