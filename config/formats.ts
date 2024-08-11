@@ -521,7 +521,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Latios', 'Magnezone', 'Mamoswine', 'Medicham', 'Meditite', 'Meloetta', 'Metagross', 'Muk-Base', 'Munkidori', 'Necrozma', 'Ninetales-Alola', 'Okidogi', 'Polteageist',
 			'Porygon-Z', 'Primarina', 'Raging Bolt', 'Rampardos', 'Regigigas', 'Rhydon', 'Rhyperior', 'Roaring Moon', 'Salamence', 'Sandshrew', 'Sandshrew-Alola', 'Sandslash',
 			'Sandslash-Alola', 'Scizor', 'Skuntank', 'Slaking', 'Slither Wing', 'Sneasler', 'Stunky', 'Terapagos-Stellar', 'Terrakion', 'Thundurus-Therian', 'Tyranitar',
-			'Ursaluna-Base', 'Ursaluna-Bloodmoon', 'Ursaring', 'Vikavolt', 'Volcanion', 'Volcarona', 'Vulpix-Alola', 'Yanma', 'Yanmega',
+			'Ursaluna', 'Ursaluna-Bloodmoon', 'Ursaring', 'Vikavolt', 'Volcanion', 'Volcarona', 'Vulpix-Alola', 'Yanma', 'Yanmega',
 		],
 		validateSet(set, teamHas) {
 			let pokemoves = 0;
