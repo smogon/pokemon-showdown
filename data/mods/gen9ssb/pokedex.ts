@@ -1129,6 +1129,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	sudowoodo: {
 		inherit: true,
 		abilities: {0: "Tree Stance"},
+		baseStats: {hp: 70, atk: 100, def: 115, spa: 30, spd: 65, spe: 50},
 	},
 
 	// xy01

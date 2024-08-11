@@ -1403,6 +1403,15 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint() {
 			this.add(`c:|${getName('Lionyx')}|I don't even like milk anyway`);
 		},
+		name: "Simple",
+		shortDesc: "When one of this Pokemon's stat stages is raised or lowered, the amount is doubled.",
+		onChangeBoost(boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			let i: BoostID;
+			for (i in boost) {
+				boost[i]! *= 2;
+			}
+		},
 	},
 	loethalion: {
 		noCopy: true,
