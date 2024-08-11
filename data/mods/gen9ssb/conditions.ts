@@ -1902,6 +1902,9 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 	},
 	phoopes: {
 		noCopy: true,
+		innateName: 'Gen 1 Special Stat',
+		desc: 'SpA stat changes also change SpD and vice versa.',
+		// implemented in scripts
 		onStart() {
 			this.add(`c:|${getName('phoopes')}|phoopes! (There It Is)`);
 		},
