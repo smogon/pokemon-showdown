@@ -1395,7 +1395,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint() {
 			this.add(`c:|${getName('Lionyx')}|I don't even like milk anyway`);
 		},
-		name: "Simple",
+		innateName: "Simple",
 		shortDesc: "When one of this Pokemon's stat stages is raised or lowered, the amount is doubled.",
 		onChangeBoost(boost, target, source, effect) {
 			if (target.illusion) return;
