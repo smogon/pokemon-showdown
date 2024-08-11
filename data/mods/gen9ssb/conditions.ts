@@ -992,20 +992,8 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 	hizo: {
 		noCopy: true,
 		onStart() {
-			let friends;
-			const tier = this.sample(['Partners in Crime', 'Sketchmons', 'Godly Power']);
-			switch (tier) {
-			case 'Partners in Crime':
-				friends = ['chromate', 'yuki', 'YoBuddyTheBaker', 'zoe', 'jasprose'];
-				break;
-			case 'Sketchmons':
-				friends = ['Eggs', 'career ended', 'ponchlake'];
-				break;
-			default:
-				friends = ['roonie217', 'chromate', 'tkhanh', 'lilyhii'];
-				break;
-			}
-			this.add(`c:|${getName('HiZo')}|Why am I needed here, I was in the middle of a game of ${tier} with ${this.sample(friends)}`);
+			const tier = this.sample(['Partners in Crime', 'Sketchmons', 'OMMs', 'Triples']);
+			this.add(`c:|${getName('HiZo')}|Why am I needed here, I was busy playing ${tier} with my friends`);
 			this.add(`c:|${getName('HiZo')}|Did I break something again`);
 		},
 		onSwitchOut() {
