@@ -168,10 +168,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// aQrator
 	neverendingfhunt: {
-		shortDesc: "This Pokemon's Status moves have priority raised by 1. Dark types are not immune.",
+		desc: "This Pokemon's non-damaging moves have their priority increased by 1. Opposing Dark-type Pokemon are immune to these moves, and any move called by these moves, if the resulting user of the move has this Ability.",
+		shortDesc: "This Pokemon's Status moves have priority raised by 1, but Dark types are immune.",
 		name: "Neverending fHunt",
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move?.category === 'Status') {
+				move.pranksterBoosted = true;
 				return priority + 1;
 			}
 		},
@@ -821,14 +823,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Fame
 	socialjumpluffwarrior: {
-		shortDesc: "Serene Grace + Mold Breaker.",
+		shortDesc: "Serene Grace + Mycelium Might.",
 		name: "Social Jumpluff Warrior",
-		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Social Jumpluff Warrior');
+		onFractionalPriority(priority, pokemon, target, move) {
+			if (move.category === 'Status') {
+				return -0.1;
+			}
 		},
 		onModifyMovePriority: -2,
 		onModifyMove(move) {
-			move.ignoreAbility = true;
+			if (move.category === 'Status') {
+				move.ignoreAbility = true;
+			}
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
@@ -1849,7 +1855,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// phoopes
 	ididitagain: {
-		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
+		shortDesc: "Bypasses Sleep Clause Mod.",
 		name: "I Did It Again",
 		flags: {},
 		// implemented in rulesets.ts
@@ -2220,14 +2226,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Sificon
 	perfectlyimperfect: {
-		shortDesc: "Magic Guard + Thick Fat.",
+		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's offensive stat is halved when calculating the damage to this Pokemon.",
+		shortDesc: "Fire-/Ice-type moves against this Pokemon deal damage with a halved offensive stat.",
 		name: "Perfectly Imperfect",
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
-			}
-		},
 		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {

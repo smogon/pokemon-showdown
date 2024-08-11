@@ -1616,7 +1616,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					hitResults[i] = false;
 				} else if (this.battle.gen >= 7 && move.pranksterBoosted &&
 					// Prankster Clone immunity
-					(pokemon.hasAbility('prankster') || pokemon.hasAbility('youkaiofthedusk') || pokemon.volatiles['irpachuza']) &&
+					(pokemon.hasAbility('prankster') || pokemon.hasAbility('youkaiofthedusk') ||
+						pokemon.volatiles['irpachuza'] || pokemon.hasAbility('neverendingfhunt')) &&
 					!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 					this.battle.debug('natural prankster immunity');
 					if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");

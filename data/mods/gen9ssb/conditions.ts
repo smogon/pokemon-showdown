@@ -575,6 +575,36 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint() {
 			this.add(`c:|${getName('Clefable')}|I needed a VISA to be in Paldea, Wasn't even worth it. Bloody Brexit.`);
 		},
+		innateName: "Oblivious",
+		desc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while infatuated or taunted cures it. This Pokemon is immune to the effect of the Intimidate Ability.",
+		shortDesc: "This Pokemon cannot be infatuated or taunted. Immune to Intimidate.",
+		onUpdate(pokemon) {
+			if (pokemon.volatiles['attract']) {
+				this.add('-activate', pokemon, 'ability: Oblivious');
+				pokemon.removeVolatile('attract');
+				this.add('-end', pokemon, 'move: Attract', '[from] ability: Oblivious');
+			}
+			if (pokemon.volatiles['taunt']) {
+				this.add('-activate', pokemon, 'ability: Oblivious');
+				pokemon.removeVolatile('taunt');
+				// Taunt's volatile already sends the -end message when removed
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'attract') return false;
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt') {
+				this.add('-immune', pokemon, '[from] ability: Oblivious');
+				return null;
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
+			}
+		},
 	},
 	clementine: {
 		noCopy: true,
@@ -894,20 +924,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint(pokemon) {
 			this.add(`c:|${getName('Frostyicelad')}|Why am I not lapras`);
 		},
-		onUpdate(pokemon) {
-			if (!pokemon.illusion && pokemon.status === 'brn') {
-				this.add('-activate', pokemon, 'ability: Water Veil');
-				pokemon.cureStatus();
-			}
-		},
-		onSetStatus(status, target, source, effect) {
-			if (target.illusion || status.id !== 'brn') return;
-			if ((effect as Move)?.status) {
-				this.add('-immune', target, '[from] ability: Water Veil');
-			}
-			return false;
-		},
-		innateName: "Water Veil",
 	},
 	frozoid: {
 		noCopy: true,
@@ -931,18 +947,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		onFaint() {
 			this.add(`c:|${getName('Ganjafin')}|I knew I'd die before Silksong came out`);
-		},
-	},
-	goroyagami: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Goro Yagami')}|It's now or never!`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Goro Yagami')}|Time for a special Cyndaquil retreat!`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Goro Yagami')}|Until next time!`);
 		},
 	},
 	hasteinky: {

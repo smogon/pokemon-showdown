@@ -62,7 +62,7 @@ export const ssbSets: SSBSets = {
 	},
 	Alex: {
 		species: 'Sprigatito', ability: 'Pawprints', item: 'Eviolite', gender: '',
-		moves: ['Substitute', 'Protect', 'Magic Powder'],
+		moves: [['Charm', 'Tickle'], 'Protect', 'Soak'],
 		signatureMove: 'Spicier Extract',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
 	},
@@ -176,7 +176,7 @@ export const ssbSets: SSBSets = {
 	},
 	Beowulf: {
 		species: 'Beedrill', ability: 'Intrepid Sword', item: 'Beedrillite', gender: 'M',
-		moves: ['Poison Jab', 'Attack Order', ['Sacred Fire', 'Earthquake', 'Volt Tackle', 'Glacial Lance']],
+		moves: ['Poison Jab', 'X-Scissor', ['Earthquake', 'Volt Tackle', 'Glacial Lance']],
 		signatureMove: 'Buzzer Stinger Counter',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: 2,
 	},
@@ -381,7 +381,7 @@ export const ssbSets: SSBSets = {
 	},
 	Felucia: {
 		species: 'Vespiquen', ability: 'Mountaineer', item: 'Red Card', gender: 'F',
-		moves: ['Strength Sap', ['Bug Buzz', 'Night Shade'], ['Thief', 'Calm Mind', 'Toxic']],
+		moves: ['Strength Sap', ['Oblivion Wing', 'Night Shade'], ['Thief', 'Calm Mind', 'Toxic']],
 		signatureMove: 'Rigged Dice',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
 	},
@@ -722,7 +722,7 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, def: 252, spe: 4}, nature: 'Adamant', teraType: 'Fire',
 	},
 	phoopes: {
-		species: 'Jynx', ability: 'I Did It Again', item: 'Red Card', gender: 'F',
+		species: 'Jynx', ability: 'I Did It Again', item: 'Focus Sash', gender: 'F',
 		moves: ['Lovely Kiss', 'Psychic', 'Amnesia'],
 		signatureMove: 'Gen 1 Blizzard',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Ice',
@@ -892,7 +892,7 @@ export const ssbSets: SSBSets = {
 	},
 	Struchni: {
 		species: 'Aggron', ability: 'Overasked Clause', item: 'Leftovers', gender: 'M',
-		moves: ['Protect', 'Encore', 'U-turn'],
+		moves: ['Detect', 'Encore', 'U-turn'],
 		signatureMove: '~randfact',
 		evs: {hp: 252, def: 16, spd: 240}, nature: 'Careful', teraType: 'Steel',
 	},
