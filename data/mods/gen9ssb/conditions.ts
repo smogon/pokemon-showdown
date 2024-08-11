@@ -2524,8 +2524,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		noCopy: true,
 		onStart(pokemon) {
 			this.add(`c:|${getName('Two of Roses')}|I'm here! I'm uhh- Yes! Also hi! Happy to be here.`);
-			// https://www.smogon.com/forums/threads/luxray.3726692/#post-9926007
-			if (!this.field.getTerrain().id) this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
 		},
 		onSwitchOut() {
@@ -2540,7 +2539,11 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			const currentWeather = this.field.getWeather().id;
 			const currentTerrain = this.field.getTerrain().id;
 			let type;
-			if (!currentWeather && !currentTerrain && !target.hasType('Dark')) {
+			if (!currentWeather && !target.hasType('Dark')) {
+				if (currentTerrain) {
+					this.singleEvent('TerrainChange', this.effect, this.effectState, target);
+					return;
+				}
 				type = 'Dark';
 			} else if (currentWeather) {
 				if (['raindance', 'primordialsea'].includes(currentWeather) && !target.hasType('Water')) {
@@ -2564,7 +2567,11 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			const currentWeather = this.field.getWeather().id;
 			const currentTerrain = this.field.getTerrain().id;
 			let type;
-			if (!currentWeather && !currentTerrain && !target.hasType('Dark')) {
+			if (!currentTerrain && !target.hasType('Dark')) {
+				if (currentWeather) {
+					this.singleEvent('WeatherChange', this.effect, this.effectState, target);
+					return;
+				}
 				type = 'Dark';
 			} else if (currentTerrain) {
 				if (currentTerrain === 'electricterrain') {
