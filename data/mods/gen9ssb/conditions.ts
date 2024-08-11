@@ -1717,6 +1717,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('nya~ ❤')}|>~<`);
 		},
 		innateName: "Fickle Beam",
+		shortDesc: "This Pokemon's moves have a 30% chance to be doubled in power.",
 		onBasePower(basePower, attacker, defender, move) {
 			if (attacker.illusion) return;
 			if (this.randomChance(3, 10)) {
