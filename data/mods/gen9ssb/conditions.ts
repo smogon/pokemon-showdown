@@ -2519,7 +2519,8 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		noCopy: true,
 		onStart(pokemon) {
 			this.add(`c:|${getName('Two of Roses')}|I'm here! I'm uhh- Yes! Also hi! Happy to be here.`);
-			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+			// https://www.smogon.com/forums/threads/luxray.3726692/#post-9926007
+			if (!this.field.getTerrain().id) this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
 		},
 		onSwitchOut() {

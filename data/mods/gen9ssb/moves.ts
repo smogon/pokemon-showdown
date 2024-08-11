@@ -423,8 +423,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Heals 50% HP + cures status + Focus Energy.",
-		desc: "Z-Move that requires Lilligantium Z. The user heals 50% of its maximum HP, cures its status, and gains the Focus Energy effect.",
+		shortDesc: "Cures team status, all but user heal 50% max HP.",
+		desc: "Z-Move that requires Lilligantium Z. Every Pokemon in the user's party is cured of its non-volatile status condition. With the exception of the user, every Pokemon in the user's party heals for 1/2 of their maximum HP. This effect cannot revive fainted Pokemon.",
 		name: "Aura Rain",
 		pp: 1,
 		priority: 0,
@@ -439,10 +439,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		onHit(pokemon) {
 			this.add('-message', 'An alleviating aura rains down on the field!');
-			pokemon.heal(pokemon.maxhp / 2, pokemon, this.effect);
-			this.add('-heal', pokemon, pokemon.getHealth);
-			pokemon.cureStatus();
-			pokemon.addVolatile('focusenergy', pokemon, this.effect);
+			let success = false;
+			const allies = [...pokemon.side.pokemon, ...pokemon.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (ally === pokemon) continue;
+				if (ally.heal(this.modify(ally.maxhp, 0.5))) {
+					this.add('-heal', ally, ally.getHealth);
+					success = true;
+				}
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
 		},
 		isZ: "lilligantiumz",
 		secondary: null,
