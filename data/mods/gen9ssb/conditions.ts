@@ -579,6 +579,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		desc: "This Pokemon cannot be infatuated or taunted. Gaining this Ability while infatuated or taunted cures it. This Pokemon is immune to the effect of the Intimidate Ability.",
 		shortDesc: "This Pokemon cannot be infatuated or taunted. Immune to Intimidate.",
 		onUpdate(pokemon) {
+			if (pokemon.illusion) return;
 			if (pokemon.volatiles['attract']) {
 				this.add('-activate', pokemon, 'ability: Oblivious');
 				pokemon.removeVolatile('attract');
@@ -591,15 +592,18 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 		},
 		onImmunity(type, pokemon) {
+			if (pokemon.illusion) return;
 			if (type === 'attract') return false;
 		},
 		onTryHit(pokemon, target, move) {
+			if (pokemon.illusion) return;
 			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt') {
 				this.add('-immune', pokemon, '[from] ability: Oblivious');
 				return null;
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
+			if (target.illusion) return;
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
@@ -1406,6 +1410,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		name: "Simple",
 		shortDesc: "When one of this Pokemon's stat stages is raised or lowered, the amount is doubled.",
 		onChangeBoost(boost, target, source, effect) {
+			if (target.illusion) return;
 			if (effect && effect.id === 'zpower') return;
 			let i: BoostID;
 			for (i in boost) {
