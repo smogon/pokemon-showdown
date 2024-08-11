@@ -1997,8 +1997,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Ransei
 	ultramystik: {
-		shortDesc: "Stats 1.5x until hit super effectively + Magic Guard + Leftovers.",
-		desc: "This Pokemon can only be damaged by direct attacks. At the end of each turn, this Pokemon restores 1/16 of its maximum HP. This Pokemon's Attack, Defense, Special Attack, Special Defense, and Speed are boosted by 1.5x if it has not been hit by a super effective attack during this battle.",
+		shortDesc: "Stats 1.3x + Magic Guard + Leftovers until hit super effectively.",
+		desc: "This Pokemon can only be damaged by direct attacks. At the end of each turn, this Pokemon restores 1/16 of its maximum HP. This Pokemon's Attack, Defense, Special Attack, Special Defense, and Speed are boosted by 1.3x. This ability will be replaced with Healer if it is hit with a super effective attack.",
 		name: "Ultra Mystik",
 		onStart(target) {
 			if (!this.effectState.superHit) {
