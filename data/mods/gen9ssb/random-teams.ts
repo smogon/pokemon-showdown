@@ -1095,6 +1095,14 @@ export const ssbSets: SSBSets = {
 	},
 };
 
+const afdSSBSets: SSBSets = {
+	'Fox': {
+		species: 'Fennekin', ability: 'No Ability', item: '', gender: '',
+		moves: [],
+		signatureMove: 'Super Metronome',
+	},
+};
+
 export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: {inBattle?: boolean} = {}) {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -1102,10 +1110,11 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
+		const meme = ruleTable.has('dynamaxclause') && !debug.length;
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
 			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
 
-		let pool = Object.keys(ssbSets);
+		let pool = meme ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
 		if (debug.length) {
 			while (debug.length < 6) {
 				const staff = this.sampleNoReplace(pool);
@@ -1125,12 +1134,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
-			const name = this.sampleNoReplace(pool);
-			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
+			const name = meme ? this.sample(pool) : this.sampleNoReplace(pool);
+			const ssbSet: SSBSet = meme ? this.dex.deepClone(afdSSBSets[name]) : this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
-			if (!(debug.length || monotype)) { // Type limits are ignored for debugging, monotype, or memes.
+			if (!(debug.length || monotype || meme)) { // Type limits are ignored for debugging, monotype, or memes.
 				const species = this.dex.species.get(ssbSet.species);
 
 				const weaknesses = [];
@@ -1224,7 +1233,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 
 			// Team specific tweaks occur here
 			// Swap last and second to last sets if last set has Illusion
-			if (team.length === this.maxTeamSize && (set.ability === 'Illusion' || set.ability === 'Illusion Master')) {
+			if (team.length === this.maxTeamSize && (set.ability === 'Illusion')) {
 				team[this.maxTeamSize - 1] = team[this.maxTeamSize - 2];
 				team[this.maxTeamSize - 2] = set;
 			}
