@@ -186,10 +186,10 @@ function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex)
 	const customMegaAbilities = ['Sableye', 'Ampharos'];
 	if (!Array.isArray(set.ability) &&
 		(customMegaAbilities.includes(set.species) || !baseDex.abilities.get(set.ability).exists)) {
-		let sigAbil = Dex.deepClone(dex.abilities.get(set.ability));
+		let sigAbil = baseDex.deepClone(dex.abilities.get(set.ability));
 		if (customMegaAbilities.includes(set.species)) {
 			const megaAbil = dex.species.get(`${set.species}-Mega`).abilities[0];
-			sigAbil = Dex.deepClone(dex.abilities.get(megaAbil));
+			sigAbil = baseDex.deepClone(dex.abilities.get(megaAbil));
 		}
 		if (!sigAbil.desc && !sigAbil.shortDesc) {
 			sigAbil.desc = `This ability doesn't have a description. Try contacting the SSB dev team.`;
