@@ -25,122 +25,192 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Fire');
 				pokemon.setType('Fire');
 				this.actions.useMove('Sunny Day', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('willowisp');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('magmastorm');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('firelash');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('willowisp');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('magmastorm');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('firelash');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['willowisp', 'protect', 'magmastorm', 'firelash'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else if (r === 1) {
 				this.add('-start', pokemon, 'typechange', 'Grass');
 				pokemon.setType('Grass');
 				this.actions.useMove('Grassy Terrain', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('leechseed');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('hornleech');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('gigadrain');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('leechseed');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('hornleech');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('gigadrain');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['leechseed', 'protect', 'hornleech', 'gigadrain'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else if (r === 2) {
 				this.add('-start', pokemon, 'typechange', 'Water');
 				pokemon.setType('Water');
 				this.actions.useMove('Rain Dance', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('flipturn');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('hydrovortex');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('waterspout');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('aquatail');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('flipturn');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('hydrovortex');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('waterspout');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('aquatail');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['flipturn', 'hydrovortex', 'waterspout', 'aquatail'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else if (r === 3) {
 				this.add('-start', pokemon, 'typechange', 'Electric');
 				pokemon.setType('Electric');
 				this.actions.useMove('Electric Terrain', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('thunderwave');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('voltswitch');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('charge');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('doubleshock');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('thunderwave');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('voltswitch');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('charge');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('doubleshock');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['thunderwave', 'voltswitch', 'charge', 'doubleshock'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else if (r === 4) {
 				this.add('-start', pokemon, 'typechange', 'Ice');
 				pokemon.setType('Ice');
 				this.actions.useMove('Snowscape', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('auroraveil');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('freezyfrost');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('icespinner');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('blizzard');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('auroraveil');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('freezyfrost');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('icespinner');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('blizzard');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['auroraveil', 'freezyfrost', 'icespinner', 'blizzard'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else if (r === 5) {
 				this.add('-start', pokemon, 'typechange', 'Flying');
 				pokemon.setType('Flying');
 				this.actions.useMove('Tailwind', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('defog');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('roost');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('pluck');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('oblivionwing');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('defog');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('roost');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('pluck');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('oblivionwing');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['roost', 'defog', 'pluck', 'oblivionwing'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else if (r === 6) {
 				this.add('-start', pokemon, 'typechange', 'Poison');
 				pokemon.setType('Poison');
 				this.actions.useMove('Haze', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('toxic');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('venoshock');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('barbbarrage');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('toxic');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('venoshock');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('barbbarrage');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['toxic', 'protect', 'venoshock', 'barbbarrage'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else if (r === 7) {
 				this.add('-start', pokemon, 'typechange', 'Psychic');
 				pokemon.setType('Psychic');
 				this.actions.useMove('Psychic Terrain', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('lunardance');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('revivalblessing');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('futuresight');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('psychicfangs');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('lunardance');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('revivalblessing');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('futuresight');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('psychicfangs');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['lunardance', 'revivalblessing', 'futuresight', 'psychicfangs'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else if (r === 8) {
 				this.add('-start', pokemon, 'typechange', 'Fairy');
 				pokemon.setType('Fairy');
 				this.actions.useMove('Misty Terrain', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('moonlight');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('sparklyswirl');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('spiritbreak');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('moonlight');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('sparklyswirl');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('spiritbreak');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['moonlight', 'protect', 'sparklyswirl', 'spiritbreak'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			} else {
 				this.add('-start', pokemon, 'typechange', 'Rock');
 				pokemon.setType('Rock');
 				this.actions.useMove('Sandstorm', pokemon);
-				pokemon.moveSlots[0] = this.dex.getActiveMove('stealthrock');
-				pokemon.moveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.moveSlots[2] = this.dex.getActiveMove('saltcure');
-				pokemon.moveSlots[3] = this.dex.getActiveMove('powergem');
-				pokemon.baseMoveSlots[0] = this.dex.getActiveMove('stealthrock');
-				pokemon.baseMoveSlots[1] = this.dex.getActiveMove('protect');
-				pokemon.baseMoveSlots[2] = this.dex.getActiveMove('saltcure');
-				pokemon.baseMoveSlots[3] = this.dex.getActiveMove('powergem');
+				for (let i = 0; i < 3; i++) {
+					let moves = ['stealthrock', 'protect', 'saltcure', 'powergem'];
+					const move = this.dex.moves.get(moves[i]);
+					const newSlot = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[i] = newSlot;
+					pokemon.baseMoveSlots[i] = newSlot;
+				}
 			}
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
