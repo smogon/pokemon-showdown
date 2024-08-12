@@ -969,8 +969,8 @@ export const commands: Chat.ChatCommands = {
 			`- pricelist: Displays the current prices of players by team.<br/>` +
 			`- nom [player]: Nominates a player for auction.<br/>` +
 			`- bid [amount]: Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.<br/>` +
-			`You may use /bid and /nom directly without the /auction prefix.<br/><br/>` +
-			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.<br>` +
+			`You may use /bid and /nom directly without the /auction prefix.<br/>` +
+			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.<br/><br/>` +
 			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- minbid [amount]: Sets the minimum bid.<br/>` +
 			`- minplayers [amount]: Sets the minimum number of players.<br/>` +
