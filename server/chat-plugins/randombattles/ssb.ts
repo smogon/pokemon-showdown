@@ -184,7 +184,8 @@ function generateSSBItemInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	let buf = ``;
 	const customMegaAbilities = ['Sableye', 'Ampharos'];
-	if (!Array.isArray(set.ability) && (customMegaAbilities.includes(set.species) || !baseDex.abilities.get(set.ability).exists)) {
+	if (!Array.isArray(set.ability) &&
+		(customMegaAbilities.includes(set.species) || !baseDex.abilities.get(set.ability).exists)) {
 		let sigAbil = Dex.deepClone(dex.abilities.get(set.ability));
 		if (customMegaAbilities.includes(set.species)) {
 			const megaAbil = dex.species.get(`${set.species}-Mega`).abilities[0];
