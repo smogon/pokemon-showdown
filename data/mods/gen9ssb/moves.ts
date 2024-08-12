@@ -1601,11 +1601,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Antidote",
-		shortDesc: "Recover + Magnet Rise for 3 turns.",
+		shortDesc: "Heal 50% HP + 3 turn Magnet Rise.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up. If the user is not currently under the effect of Magnet Rise, it gains the effect of Magnet Rise for 3 turns, causing it to be immune to all Ground-type moves except Thousand Arrows for the duration.",
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1, gravity: 1, metronome: 1},
-		heal: [1, 2],
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(pokemon) {
+			this.add('-anim', pokemon, 'Recover', pokemon);
+			this.add('-anim', pokemon, 'Magnet Rise', pokemon);
+		},
 		onTry(source, target, move) {
 			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
 
@@ -1616,9 +1623,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onHit(target, source, move) {
-			if (!source.volatiles['magnetrise']) {
-				source.addVolatile('magnetrise', source, move);
-			}
+			const success = !!this.heal(this.modify(source.maxhp, 0.25));
+			return source.addVolatile('magnetrise', source, move) || success;
 		},
 		secondary: null,
 		target: "self",
@@ -3952,7 +3958,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return move.basePower;
 		},
 		category: "Physical",
-		shortDesc: "User swap, replacement Booster Energy boost.",
+		shortDesc: "Pivot; switchin: Booster Energy. If last: 80BP.",
+		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The replacement party member gains a Cat Stamp of Approval with the effect of Booster Energy, boosting its highest stat by 1.3x, or 1.5x in the case of Speed. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities. If there are no unfainted party members, the move's Base Power is increased to 80 and the user gains the Cat Stamp of Approval boost instead.",
 		name: "Quality Control Zoomies",
 		gen: 9,
 		pp: 15,
@@ -4203,7 +4210,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-		shortDesc: "Applies Heal Block + taunts target.",
+		shortDesc: "Applies Heal Block and Taunt.",
+		desc: "If this move deals damage, the target is prevented from using any status moves for 3 turns or restoring any HP for 5 turns, with both effects ending if the target switches out. During the effect, status moves and draining moves are unusable, and Abilities and items that grant healing will not heal the user. If an affected Pokemon uses Baton Pass, the replacement will remain unable to restore its HP or use status moves. The Regenerator Ability is unaffected, and Pokemon with Oblivious are immune to the Taunt effect.",
 		name: "Call to Repentance",
 		gen: 9,
 		pp: 10,
@@ -5225,7 +5233,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 90,
 		basePower: 65,
 		category: "Physical",
-		shortDesc: "Sets Sticky Web. 1.3x BP if faster.",
+		shortDesc: "Sets Sticky Web. 1.3x power if moves first.",
+		desc: "If this move deals damage, it sets up a hazard on the opposing side of the field. This hazard lowers the Speed of each opposing Pokemon that switches in by 1 stage, unless it is a Flying-type Pokemon or has the Levitate Ability. This move's damage is multiplied by 1.3 if the user is the first Pokemon to move during the turn.",
 		name: "Shepherd of the Mafia Room",
 		gen: 9,
 		pp: 15,
@@ -5670,7 +5679,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 85,
 		basePower: 35,
 		category: "Special",
-		shortDesc: "Fire Spin with no duration. Ignores abilities.",
+		shortDesc: "Deals an additional 12.5% HP at end of turn.",
+		desc: "If this move deals damage, at the end of the turn, the target will take an additional 12.5% of its maximum HP in non-attack damage if it is still on the field.",
 		name: "Symphonie du Ze\u0301ro",
 		pp: 10,
 		priority: 0,
@@ -5681,8 +5691,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Alluring Voice', target);
 		},
-		volatileStatus: 'partiallytrapped',
-		ignoreAbility: true,
+		volatileStatus: 'symphonieduzero',
+		condition: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Symphonie du Ze\u0301ro');
+			},
+			onResidualOrder: 13,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / 8);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Symphonie du Ze\u0301ro');
+			},
+		},
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
@@ -6189,54 +6211,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						target.setItem('Miracle Seed', source, move);
 					}
 				}
-				if (source.m.bag) {
-					const currentItem = source.m.bag.shift();
-					switch (currentItem) {
-					case 'Blast Seed': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (target) {
-							this.damage(100, target, source, this.effect);
-						} else {
-							this.add('-message', `But there was no target!`);
-						}
-						break;
-					}
-					case 'Oran Berry': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found an ${currentItem}!`);
-						this.heal(100, source, source, this.dex.items.get('Oran Berry'));
-						break;
-					}
-					case 'Petrify Orb': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (target?.trySetStatus('par', source, this.effect)) {
-							this.add('-message', `${source.name} petrified ${target.name}`);
-						} else if (!target) {
-							this.add('-message', `But there was no target!`);
-						} else {
-							this.add('-message', `But it failed!`);
-						}
-						break;
-					}
-					case 'Luminous Orb': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (!source.side.addSideCondition('auroraveil', source, this.effect)) {
-							this.add('-message', `But it failed!`);
-						}
-						break;
-					}
-					case 'Reviver Seed': {
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						break;
-					}
-					}
-					source.m.bag = [...source.m.bag, currentItem];
-					source.m.cycledTreasureBag = currentItem;
-				}
 			}
 		},
 		secondary: null,
@@ -6279,7 +6253,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "User swaps, replacement: Focus Energy, +1 Spe.",
+		shortDesc: "Switch out; replacement: Focus Energy, +1 Spe.",
+		desc: "The user switches out even if it is trapped and is replaced immediately by a selected party member. The replacement's Speed is boosted by 1 stage, and its critical hit rate is boosted by 2 stages. The user does not switch out if there are no unfainted party members.",
 		name: "Tag, You're It!",
 		pp: 5,
 		priority: 0,

@@ -2804,7 +2804,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// yeet dab xd
 	treasurebag: {
-		shortDesc: "Cycles between Blast Seed, Oran Berry, Petrify Orb, Luminous Orb and Reviver Seed.",
+		shortDesc: "At the end of the turn and when top kek is used, use one Treasure Bag item in the cycle.",
+		desc: "At the end of each turn and when top kek is used, one of the following effects will occur, starting at the top and moving to the next item for each use of Treasure Bag: Deal 100 HP of damage to the foe, heal the user for 100 HP, paralyze the foe, set Aurora Veil for 5 turns, or grant the user a permanent Reviver Seed condition that causes it to revive to 50% upon reaching 0 HP once. If the Reviver Seed effect is set, all future cycles will replace that effect with a no-effect Reviser Seed item. The state of the cycle persists if the Pokemon switches out and back in.",
 		name: "Treasure Bag",
 		onStart(target) {
 			this.add('-ability', target, 'Treasure Bag');
@@ -2827,7 +2828,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					const currentItem = pokemon.m.bag.shift();
 					const foe = pokemon.foes()[0];
 					switch (currentItem) {
-					case 'Blast Seed': {
+					case 'Blast Seed':
 						this.add('-activate', pokemon, 'ability: Treasure Bag');
 						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
 						if (foe) {
@@ -2836,14 +2837,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 							this.add('-message', `But there was no target!`);
 						}
 						break;
-					}
-					case 'Oran Berry': {
+					case 'Oran Berry':
 						this.add('-activate', pokemon, 'ability: Treasure Bag');
 						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found an ${currentItem}!`);
 						this.heal(100, pokemon, pokemon, this.dex.items.get('Oran Berry'));
 						break;
-					}
-					case 'Petrify Orb': {
+					case 'Petrify Orb':
 						this.add('-activate', pokemon, 'ability: Treasure Bag');
 						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
 						if (foe?.trySetStatus('par', pokemon, this.effect)) {
@@ -2854,29 +2853,78 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 							this.add('-message', `But it failed!`);
 						}
 						break;
-					}
-					case 'Luminous Orb': {
+					case 'Luminous Orb':
 						this.add('-activate', pokemon, 'ability: Treasure Bag');
 						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
 						if (!pokemon.side.addSideCondition('auroraveil', pokemon, this.effect)) {
 							this.add('-message', `But it failed!`);
 						}
 						break;
-					}
 					// Handled separately
-					case 'Reviver Seed': {
+					case 'Reviver Seed':
 						this.add('-activate', pokemon, 'ability: Treasure Bag');
 						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a Reviver Seed!`);
+						pokemon.m.seedActive = true;
 						break;
-					}
 					}
 					pokemon.m.bag = [...pokemon.m.bag, currentItem];
 				}
 				delete pokemon.m.cycledTreasureBag;
 			},
+			onAfterMoveSecondarySelf(source, target, move) {
+				if (move.id !== 'topkek') return;
+				if (!source.m.bag) {
+					source.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
+				}
+				if (!source.m.cycledTreasureBag) {
+					const currentItem = source.m.bag.shift();
+					const foe = source.foes()[0];
+					switch (currentItem) {
+					case 'Blast Seed':
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (foe) {
+							this.damage(100, foe, source, this.effect);
+						} else {
+							this.add('-message', `But there was no target!`);
+						}
+						break;
+					case 'Oran Berry':
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found an ${currentItem}!`);
+						this.heal(100, source, source, this.dex.items.get('Oran Berry'));
+						break;
+					case 'Petrify Orb':
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (foe?.trySetStatus('par', source, this.effect)) {
+							this.add('-message', `${source.name} petrified ${foe.name}`);
+						} else if (!foe) {
+							this.add('-message', `But there was no target!`);
+						} else {
+							this.add('-message', `But it failed!`);
+						}
+						break;
+					case 'Luminous Orb':
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
+						if (!source.side.addSideCondition('auroraveil', source, this.effect)) {
+							this.add('-message', `But it failed!`);
+						}
+						break;
+					// Handled separately
+					case 'Reviver Seed':
+						this.add('-activate', source, 'ability: Treasure Bag');
+						this.add('-message', `${source.name} dug through its Treasure Bag and found a Reviver Seed!`);
+						source.m.seedActive = true;
+						break;
+					}
+					source.m.bag = [...source.m.bag, currentItem];
+				}
+				delete source.m.cycledTreasureBag;
+			},
 			onDamage(damage, pokemon, source, effect) {
-				if (damage >= pokemon.hp && pokemon.m.bag?.[0] === 'Reviver Seed') {
-					pokemon.m.seedActive = true;
+				if (damage >= pokemon.hp && pokemon.m.seedActive) {
 					if (!pokemon.m.reviverSeedTriggered) {
 						// Can't set hp to 0 because it causes visual bugs
 						pokemon.hp = 1;

@@ -3359,12 +3359,4 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			return false;
 		},
 	},
-	partiallytrapped: {
-		inherit: true,
-		durationCallback(target, source, effect) {
-			if (effect?.name === "Symphonie du Ze\u0301ro") return 0;
-			if (source?.hasItem('gripclaw')) return 8;
-			return this.random(5, 7);
-		},
-	},
 };
