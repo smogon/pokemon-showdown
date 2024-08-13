@@ -559,6 +559,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (let i = 0; i < allPokemon.length; i++) {
 				const newTarget = this.sample(possibleTargets);
 				let dmg = this.actions.getDamage(source, newTarget, move);
+				if (!dmg) {
+					this.add('-message', `${newTarget.name} was unaffected by Big Thunder!`);
+					continue;
+				}
 				if (newTarget === target) {
 					this.damage(dmg, target);
 					continue;
@@ -971,6 +975,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!possibleTargets) return null;
 			const newTarget = this.sample(possibleTargets);
 			const dmg = this.actions.getDamage(source, newTarget, move);
+			if (!dmg) {
+				this.add('-message', `${newTarget.name} was unaffected by Terrorize the Peaks!`);
+				continue;
+			}
 			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from Terrorize the Peaks!`);
 			if (newTarget.hp <= 0) {
