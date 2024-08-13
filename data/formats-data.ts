@@ -2861,7 +2861,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	darkrai: {
 		tier: "OU",
 		doublesTier: "DUber",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	shaymin: {
 		tier: "ZU",
