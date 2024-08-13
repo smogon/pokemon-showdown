@@ -163,17 +163,11 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Orb Shield',
 		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	Glint: {
-		species: 'Meltan', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
-		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
-		signatureMove: 'GigaMeld',
-		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
-	},
-	'Glint-Melmetal': {
-		species: 'Melmetal', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
-		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
-		signatureMove: 'GigaMeld',
-		evs: {atk: 252, def: 252, spd: 4}, nature: 'Adamant', shiny: true, skip: 'Glint',
+	Zeeb: {
+		species: 'Aipom', ability: 'Nutcracker', item: 'Slingshot', gender: 'M',
+		moves: ['Fake Out', 'Tidy Up', 'False Surrender'],
+		signatureMove: 'Three-Knuckle Shuffle',
+		evs: {atk: 252, spd: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
 	/*
 	Codie: {
