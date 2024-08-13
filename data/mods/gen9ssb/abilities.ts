@@ -15,7 +15,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
-	// Kaiser Dragon
+	// Zeeb
+	nutcracker: {
+		name: "Nutcracker",
+		gen: 9,
+		shortDesc: "Uses Speed in damage calculation. x1.33 damage to Males.",
+		desc: "Uses Speed in damage calculation instead of Attack or Special Attack. This Pokemon's attacks deal x1.33 damage to opposing Male Pokemon.",
+	},
+	// Kaiser Dragonhe mu
 	elementalshift: {
 		desc: "This Pokemon becomes Fire/Grass/Water/Electric/Ice/Flying/Poison/Psychic/Fairy/Rock-type and sets the appropriate weather/terrain upon switching in.",
 		shortDesc: "Random type and move upon switching in.",
