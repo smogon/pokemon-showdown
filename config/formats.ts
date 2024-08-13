@@ -2551,15 +2551,18 @@ export const Formats: FormatList = [
 		},
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair' && pokemon.hp) {
-					if (pokemon.abilityState.permdis) continue;
+				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
+				if (pokemon.hp <= 0) {
+					pokemon.sethp(0);
+				}
+			}
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.baseSpecies.id === 'genesect' && pokemon.getAbility().id === 'autorepair') {
+					if (pokemon.abilityState.permdis || pokemon.fainted) continue;
+					if (pokemon === pokemon.side.active[0]) continue;
 					const health = pokemon.maxhp * 0.15;
-					if (pokemon === pokemon.side.active[0]) {
-						this.heal(health, pokemon, pokemon, pokemon.getAbility());
-					} else {
-						pokemon.hp += health;
-						this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
-					}
+					pokemon.hp += health;
+					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
 				}
 			}
 		},
