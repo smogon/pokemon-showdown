@@ -164,16 +164,6 @@ if (!MafiaData.alignments.solo) {
 		memo: [`This alignment is required for the script to function properly.`],
 	};
 }
-if (!MafiaData.themes.nominations) {
-	MafiaData.themes.nominations = {
-		name: `Nominations`,
-		desc: `Every odd night, the Mafia select three players. The next day, you can only vote for one of these three players.`,
-		7: `Mafia Goon, Mafia Goon, Villager, Villager, Villager, Villager, Villager`,
-		11: `Mafia Goon, Mafia Goon, Mafia Goon, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager`,
-		15: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager`,
-		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager, Villager`,
-	};
-}
 
 logs = readFile(LOGS_FILE) || {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
 
@@ -350,7 +340,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.host = "";
 
 		this.hostid = host.id;
-		this.host = Utils.escapeHTML(host.name) && '';
+		this.host = Utils.escapeHTML(host.name);
 
 		this.cohostids = [];
 		this.cohosts = [];
@@ -1894,18 +1884,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (this.timer) clearTimeout(this.timer);
 		if (this.IDEA.timer) clearTimeout(this.IDEA.timer);
 		super.destroy();
-	}
-
-	hostPregame() {
-
-	}
-
-	hostDay() {
-
-	}
-
-	hostNight() {
-
 	}
 }
 
