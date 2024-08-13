@@ -163,18 +163,24 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Orb Shield',
 		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	/*
 	Glint: {
 		species: 'Meltan', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
 		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
 		signatureMove: 'GigaMeld',
-		evs: {hp: 252, atk: 252, def: 252, spd: 4}, nature: 'Adamant',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Calm',
 	},
 	'Glint-Melmetal': {
 		species: 'Melmetal', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
 		moves: ['Double Iron Bash', 'Body Press', 'Yawn'],
 		signatureMove: 'GigaMeld',
-		evs: {hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252}, nature: 'Adamant', shiny: true, skip: 'Glint',
+		evs: {atk: 252, def: 252, spd: 4}, nature: 'Adamant', shiny: true, skip: 'Glint',
+	},
+	/*
+	Codie: {
+		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
+		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
+		signatureMove: 'Conflux',
+		evs: {hp: 248, def: 8, spd: 252}, nature: 'Bold',
 	},
  	Shorikai: {
 		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
