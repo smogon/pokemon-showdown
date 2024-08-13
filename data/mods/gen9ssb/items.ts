@@ -1,4 +1,52 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Zeeb
+	slingshot: {
+		name: "Slingshot",
+		gen: 9,
+		onStart(pokemon) {
+			const target = pokemon.side.foe.active[0];
+			const move = this.dex.moves.get('tackle');
+			const slingshot = {
+				move: move.name,
+				basePower: 10,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			const dmg = this.actions.getDamage(pokemon, target, slingshot);
+			const hits = this.random(2, 3);
+			for (let i = 0; i < hits; i++) {
+				this.add('-anim', pokemon, 'Vacuum Wave', target);
+				this.damage(dmg, target);
+				if (this.randomChance(1, 10)) target.addVolatile('flinch');
+			}
+			this.add('-message', `${target.name} was pelted by ${pokemon.name}'s Slingshot!`);
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			const base = this.dex.moves.get('tackle');
+			const slingshot = {
+				move: base.name,
+				basePower: 10,
+				id: base.id,
+				pp: base.pp,
+				maxpp: base.pp,
+				target: base.target,
+				disabled: false,
+				used: false,
+			};
+			const dmg = this.actions.getDamage(source, target, slingshot);
+			const hits = this.random(2, 3);
+			for (let i = 0; i < hits; i++) {
+				this.add('-anim', source, 'Vacuum Wave', target);
+				this.damage(dmg, target);
+				if (this.randomChance(1, 10)) target.addVolatile('flinch');
+			}
+			this.add('-message', `${target.name} was pelted by ${source.name}'s Slingshot!`);
+		},
+	},
 	// Shifu Robot
 	absorptiveshell: {
 		name: "Absorptive Shell",
