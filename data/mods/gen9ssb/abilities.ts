@@ -25,7 +25,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Fire');
 				pokemon.setType('Fire');
 				this.actions.useMove('Sunny Day', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['willowisp', 'protect', 'magmastorm', 'firelash'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -44,7 +44,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Grass');
 				pokemon.setType('Grass');
 				this.actions.useMove('Grassy Terrain', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['leechseed', 'protect', 'hornleech', 'gigadrain'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -63,7 +63,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Water');
 				pokemon.setType('Water');
 				this.actions.useMove('Rain Dance', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['flipturn', 'hydrovortex', 'waterspout', 'aquatail'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -82,7 +82,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Electric');
 				pokemon.setType('Electric');
 				this.actions.useMove('Electric Terrain', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['thunderwave', 'voltswitch', 'charge', 'doubleshock'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -101,7 +101,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Ice');
 				pokemon.setType('Ice');
 				this.actions.useMove('Snowscape', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['auroraveil', 'freezyfrost', 'icespinner', 'blizzard'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -120,7 +120,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Flying');
 				pokemon.setType('Flying');
 				this.actions.useMove('Tailwind', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['roost', 'defog', 'pluck', 'oblivionwing'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -139,7 +139,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Poison');
 				pokemon.setType('Poison');
 				this.actions.useMove('Haze', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['toxic', 'protect', 'venoshock', 'barbbarrage'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -158,7 +158,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Psychic');
 				pokemon.setType('Psychic');
 				this.actions.useMove('Psychic Terrain', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['lunardance', 'revivalblessing', 'futuresight', 'psychicfangs'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -177,7 +177,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Fairy');
 				pokemon.setType('Fairy');
 				this.actions.useMove('Misty Terrain', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['moonlight', 'protect', 'sparklyswirl', 'spiritbreak'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
@@ -196,7 +196,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Rock');
 				pokemon.setType('Rock');
 				this.actions.useMove('Sandstorm', pokemon);
-				for (let i = 0; i < 3; i++) {
+				for (let i = 0; i < 4; i++) {
 					let moves = ['stealthrock', 'protect', 'saltcure', 'powergem'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
