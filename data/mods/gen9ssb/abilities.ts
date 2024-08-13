@@ -1136,6 +1136,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move.id === 'sketch') return priority + 1;
 		},
+		onAfterMove(source, target, move) {
+			source.storedStats.atk = target.storedStats.atk;
+			source.storedStats.def = target.storedStats.def;
+			source.storedStats.spa = target.storedStats.spa;
+			source.storedStats.spd = target.storedStats.spd;
+			source.storedStats.spe = target.storedStats.spe;
+			this.add('-message', `${source.name} sketched ${target.name}'s base stats!`);
+		},
 	},
 
 	// Trey
