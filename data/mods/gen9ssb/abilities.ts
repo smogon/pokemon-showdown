@@ -399,6 +399,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const newTarget = this.sample(possibleTargets);
 			const move = this.dex.getActiveMove('thundershock');
 			const dmg = this.actions.getDamage(pokemon, newTarget, move);
+			if (!dmg) {
+				this.add('-message', `${newTarget.name} was unaffected by Peal of Thunder!`);
+				return;
+			}
 			this.add('-message', `${newTarget.name} was struck by Peal of Thunder!`);
 			if (newTarget === target) {
 				this.damage(dmg, target, pokemon);
