@@ -8,7 +8,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const move = this.dex.moves.get('tackle');
 			const slingshot = {
 				move: move.name,
-				basePower: 10,
+				basePower: 20,
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.pp,
@@ -19,8 +19,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const dmg = this.actions.getDamage(pokemon, target, slingshot);
 			const hits = this.random(2, 3);
 			for (let i = 0; i < hits; i++) {
-				this.add('-anim', pokemon, 'Vacuum Wave', target);
-				this.damage(dmg, target);
+				this.add('-anim', pokemon, 'Bullet Seed', target);
+				this.damage(dmg, target, '[silent]');
 				if (this.randomChance(1, 10)) target.addVolatile('flinch');
 			}
 			this.add('-message', `${target.name} was pelted by ${pokemon.name}'s Slingshot!`);
@@ -40,8 +40,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const dmg = this.actions.getDamage(source, target, slingshot);
 			const hits = this.random(2, 3);
 			for (let i = 0; i < hits; i++) {
-				this.add('-anim', source, 'Vacuum Wave', target);
-				this.damage(dmg, target);
+				this.add('-anim', source, 'Bullet Seed', target);
+				this.damage(dmg, target, '[silent]');
 				if (this.randomChance(1, 10)) target.addVolatile('flinch');
 			}
 			this.add('-message', `${target.name} was pelted by ${source.name}'s Slingshot!`);
