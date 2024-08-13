@@ -2581,6 +2581,7 @@ export const Formats: FormatList = [
 						pokemon.status = '';
 						pokemon.hp = 1;
 						pokemon.sethp(1);
+						pokemon.side.pokemonLeft++;
 						pokemon.abilityState.reviveStarted = false;
 						this.add('-message', `${pokemon.getAbility().name} activated!`);
 						this.add('-message', `${pokemon.name} is back in the fight!`);
