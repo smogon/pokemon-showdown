@@ -1,8 +1,7 @@
 import {Utils, FS} from '../../lib';
 
 interface MafiaData {
-	[k: string]: any;
-
+	[key: string]: any;
 	// keys for all of these are IDs
 	alignments: {[k: string]: MafiaDataAlignment};
 	roles: {[k: string]: MafiaDataRole};
@@ -12,8 +11,6 @@ interface MafiaData {
 	aliases: {[k: string]: ID};
 }
 interface MafiaDataAlignment {
-	[k: string]: any;
-
 	name: string;
 	plural: string;
 	color?: string;
@@ -22,32 +19,24 @@ interface MafiaDataAlignment {
 	image?: string;
 }
 interface MafiaDataRole {
-	[k: string]: any;
-
 	name: string;
 	memo: string[];
 	alignment?: string;
 	image?: string;
 }
 interface MafiaDataTheme {
-	[k: string]: any;
-
 	name: string;
 	desc: string;
 	// roles
 	[players: number]: string;
 }
 interface MafiaDataIDEA {
-	[k: string]: any;
-
 	name: string;
 	roles: string[];
 	picks: string[];
 	choices: number;
 }
 interface MafiaDataTerm {
-	[k: string]: any;
-
 	name: string;
 	memo: string[];
 }
@@ -4029,7 +4018,7 @@ export const commands: Chat.ChatCommands = {
 			let foundTarget = false;
 			for (const entry of ['alignments', 'roles', 'themes', 'IDEAs', 'terms'] as (keyof MafiaData)[]) {
 				const dataEntry = MafiaData[entry];
-				if (from in dataEntry) return this.errorReply(`${from} is already a ${entry.slice(0, -1)}`);
+				if (from in dataEntry) return this.errorReply(`${from} is already a ${entry.toString().slice(0, -1)}`);
 				if (to in dataEntry) foundTarget = true;
 			}
 			if (!foundTarget) return this.errorReply(`No database entry exists with the key ${to}.`);
@@ -4125,12 +4114,8 @@ export const commands: Chat.ChatCommands = {
 		listdata(target, room, user, connection, cmd, message) {
 			if (!this.runBroadcast()) return false;
 
-			// Fix errors
-			// Fix searching on roles
-			// Fix random (do not pick empty)
-
 			// Determine non-search targets first, afterwards searching is done with the remainder
-			const targets = target.split(',').map(x => x.trim());
+			const targets = target.split(',').map(x => x.trim().toLowerCase());
 
 			// Determine search type
 			let searchType = '';
@@ -4212,12 +4197,15 @@ export const commands: Chat.ChatCommands = {
 					entries = entries.filter(([key, data]) => ([...Array(50).keys()])
 						.some(playerCount => playerCount in (MafiaData[searchType][key]) &&
 							(MafiaData[searchType][key])[playerCount].toString().toLowerCase().includes(alias)));
+				} else if (searchType === `IDEAs` && alias in MafiaData[`roles`]) {
+					entries = entries.filter(([key, data]) => MafiaData[`IDEAs`][key].roles.map(role =>
+						toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(alias));
 				} else if (searchType === `roles` && alias in MafiaData[`themes`]) {
 					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`themes`][alias])
 						.filter((newKey: any) => toID((MafiaData[`themes`][alias])[newKey].toString()).includes(key)).length > 0);
 				} else if (searchType === `roles` && alias in MafiaData[`IDEAs`]) {
-					entries = entries.filter(([key, data]) => Object.keys(MafiaData[`IDEAs`][alias])
-						.filter((newKey: any) => toID((MafiaData[`IDEAs`][alias])[newKey].toString()).includes(key)).length > 0);
+					entries = entries.filter(([key, data]) => MafiaData[`IDEAs`][alias].roles.map(role =>
+						toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(key));
 				} else {
 					entries = entries.filter(([key, data]) => Object.keys((MafiaData[searchType][key]))
 						.filter((newKey: any) => (MafiaData[searchType][key])[newKey]
@@ -4277,7 +4265,7 @@ export const commands: Chat.ChatCommands = {
 
 				if (entries.length === 1) {
 					this.target = entries[0][0];
-					return this.run(Chat.commands.mafia.data);
+					return this.run((Chat.commands.mafia as Chat.ChatCommands).data as Chat.AnnotatedChatHandler);
 				}
 
 				table += entries
