@@ -39,7 +39,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		onResidual(pokemon) {
-			let types = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Stellar', 'Water'];
+			let types = ['Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Water'];
 			let newType = this.sample(types);
 			pokemon.abilityState.newType = newType;
 			pokemon.setType([newType, 'Steel']);
@@ -51,8 +51,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 				move.type = pokemon.abilityState.newType;
 				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to ${pokemon.abilityState.newType}-type!`);
 			} else {
-				move.type = 'Bug';
-				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to Bug-type!`);
+				move.type = 'Steel';
+				this.add('-message', `${pokemon.getItem().name} changed ${move.name} to Steel-type!`);
 			}
 		},
 	},
