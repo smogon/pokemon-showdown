@@ -977,7 +977,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const dmg = this.actions.getDamage(source, newTarget, move);
 			if (!dmg) {
 				this.add('-message', `${newTarget.name} was unaffected by Terrorize the Peaks!`);
-				continue;
+				return;
 			}
 			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from Terrorize the Peaks!`);
