@@ -20,7 +20,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const hits = this.random(2, 3);
 			for (let i = 0; i < hits; i++) {
 				this.add('-anim', pokemon, 'Bullet Seed', target);
-				this.damage(dmg, target, '[silent]');
+				this.damage(dmg, target, pokemon);
 				if (this.randomChance(1, 10)) target.addVolatile('flinch');
 			}
 			this.add('-message', `${target.name} was pelted by ${pokemon.name}'s Slingshot!`);
@@ -41,7 +41,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const hits = this.random(2, 3);
 			for (let i = 0; i < hits; i++) {
 				this.add('-anim', source, 'Bullet Seed', target);
-				this.damage(dmg, target, '[silent]');
+				this.damage(dmg, target, source);
 				if (this.randomChance(1, 10)) target.addVolatile('flinch');
 			}
 			this.add('-message', `${target.name} was pelted by ${source.name}'s Slingshot!`);
