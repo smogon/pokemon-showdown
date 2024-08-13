@@ -146,7 +146,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 140, def: 56, spa: 60, spd: 252}, nature: 'Calm', shiny: true, skip: 'Luminous',
 	},
 	'Shifu Robot': {
-		species: 'Genesect', ability: 'Auto Repair', item: 'Absorptive Shell', gender: 'N',
+		species: 'Iron Thorns', ability: 'Auto Repair', item: 'Absorptive Shell', gender: 'N',
 		moves: ['Techno Blast', 'Flash Cannon', 'Explosion'],
 		signatureMove: 'Turbocharge',
 		evs: {hp: 128, spa: 128, spe: 252}, nature: 'Hasty', shiny: true,
