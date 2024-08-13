@@ -183,8 +183,14 @@ function generateSSBItemInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 
 function generateSSBAbilityInfo(set: SSBSet, dex: ModdedDex, baseDex: ModdedDex) {
 	let buf = ``;
-	if (!Array.isArray(set.ability) && !baseDex.abilities.get(set.ability).exists) {
-		const sigAbil = Dex.deepClone(dex.abilities.get(set.ability));
+	const customMegaAbilities = ['Sableye', 'Ampharos'];
+	if (!Array.isArray(set.ability) &&
+		(customMegaAbilities.includes(set.species) || !baseDex.abilities.get(set.ability).exists)) {
+		let sigAbil = baseDex.deepClone(dex.abilities.get(set.ability));
+		if (customMegaAbilities.includes(set.species)) {
+			const megaAbil = dex.species.get(`${set.species}-Mega`).abilities[0];
+			sigAbil = baseDex.deepClone(dex.abilities.get(megaAbil));
+		}
 		if (!sigAbil.desc && !sigAbil.shortDesc) {
 			sigAbil.desc = `This ability doesn't have a description. Try contacting the SSB dev team.`;
 		}
