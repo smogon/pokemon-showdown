@@ -411,7 +411,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	sketchbook: {
 		name: "Sketchbook",
 		spritenum: 200,
-		desc: "On switch-in, this Pokemon copies the positive stat changes of the opposing Pokemon.",
+		desc: "On switch-in, this Pokemon copies the positive stat changes of the opposing Pokemon, and receives a random positive volatile effect at the end of each full turn on the field.",
+		shortDesc: "Switch-in: Copies boosts; Random volatile each turn.",
 		gen: 9,
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
@@ -435,18 +436,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 			let effectPool = ['aquaring', 'focusenergy', 'helpinghand', 'ingrain', 'laserfocus', 'magnetrise', 'substitute', 'stockpile', 'charge', 'destinybond', 'dragoncheer', 'lockon'];
 			let randomEffect = this.sample(effectPool);
 			if (!pokemon.volatiles[randomEffect]) pokemon.addVolatile(randomEffect);
-			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, pokemon);
-		},
-		onSwitchOut(pokemon) {
-			for (const sketchedAbility of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
-				pokemon.removeVolatile(sketchedAbility);
-			}
-		},
-		onFaint(pokemon) {
-			for (const sketchedAbility of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
-				const innateEffect = this.dex.conditions.get(sketchedAbility) as Effect;
-				this.singleEvent('End', innateEffect, null, pokemon);
-			}
 		},
 	},
 	// Trey
