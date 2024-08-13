@@ -2,6 +2,10 @@ import {BattleStream, getPlayerStreams} from '../battle-stream';
 import {Battle} from '../battle';
 import {Teams} from '../teams';
 import * as readline from 'readline';
+import * as fs from 'fs';
+
+const teamFile = fs.readFileSync('./sim/examples/example_team.pokepaste', 'utf8');
+const team = Teams.import(teamFile);
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -150,10 +154,7 @@ async function runBattle() {
     const spec = {formatid: 'gen8customgame'};
     const p1spec = {
         name: 'Player 1',
-        team: Teams.pack([
-            {species: 'Pidgey', moves: ['tackle', 'gust']},
-            {species: 'Rattata', moves: ['tackle', 'quickattack']}
-        ]),
+        team: Teams.pack(team),
     };
     const p2spec = {
         name: 'Player 2',

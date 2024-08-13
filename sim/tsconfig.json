@@ -11,7 +11,8 @@
 			"allowJs": true,
 			"checkJs": true,
 			"incremental": true,
-			"allowUnreachableCode": false
+			"allowUnreachableCode": false,
+			"composite": true
 	},
 	"types": ["node"],
 	"include": [
