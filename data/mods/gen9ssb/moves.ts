@@ -529,7 +529,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 8,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {mirror: 1, protect: 1},
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -558,7 +558,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 			for (let i = 0; i < allPokemon.length; i++) {
 				const newTarget = this.sample(possibleTargets);
-				const dmg = this.actions.getDamage(source, newTarget, move);
+				let dmg = this.actions.getDamage(source, newTarget, move);
 				if (newTarget === target) {
 					this.damage(dmg, target);
 					continue;
@@ -568,9 +568,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.boost({spa: 1, spe: 1}, source);
 					continue;
 				}
+				if (dmg > newTarget.hp) dmg = newTarget.hp;
 				newTarget.hp -= dmg;
 				this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from ${move.name}!`);
-				if (newTarget.hp <= 0) newTarget.faint();
 			}
 		},
 		secondary: null,
