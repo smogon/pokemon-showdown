@@ -40,6 +40,61 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Zeeb
+	superknuckleshuffle: {
+		accuracy: 90,
+		basePower: 10,
+		category: "Physical",
+		name: "Three-Knuckle Shuffle",
+		pp: 24,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1, contact: 1},
+		secondary: null,
+		multihit: [3, 4],
+		target: "normal",
+		type: "Normal",
+		// 10, 20, 40, 80
+		basePowerCallback(pokemon, target, move) {
+			let power;
+			switch (move.hit) {
+				case 1:
+					power = 10;
+					break;
+				case 2:
+					power = 20;
+					break;
+				case 3:
+					power = 40;
+					break;
+				case 4:
+					power = 80;
+					break;
+			}
+			return power;
+		},
+		onHit(target, source, move) {
+			if (this.randomChance(1, 10)) source.addVolatile('confusion');
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			let typing;
+			switch (move.hit) {
+				case 1:
+					typing = 'Normal';
+					break;
+				case 2:
+					typing = 'Rock';
+					break;
+				case 3:
+					typing = 'Steel';
+					break;
+				case 4:
+					typing = 'Fire';
+					break;
+			}
+			if (typing && typing !== 'Normal') return typeMod + this.dex.getEffectiveness(typing, type);
+		},
+	},
 	// Shifu Robot
 	turbocharge: {
 		accuracy: true,
