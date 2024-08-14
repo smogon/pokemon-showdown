@@ -46,7 +46,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "Existing future moves are redirected towards foe and land immediately. User switches afterwards.",
-		shortDesc: "Redirect future moves & switch.",
+		shortDesc: "Redirects future moves to foe. User switches.",
 		name: "Misdirection",
 		pp: 1,
 		priority: -5,
@@ -55,36 +55,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Floral Healing', source);
 			this.add('-anim', source, 'Future Sight', source);
 		},
 		onHit(pokemon) {
+			let success = false;
 			const target = pokemon.side.foe.active[0];
 			for (const activePokemon of this.getAllActive()) {
-				this.add('-message', `${activePokemon.side.slotConditions[activePokemon.position]['futuremove'].move}`);
-				/*
 				if (!activePokemon.side.slotConditions[activePokemon.position]['futuremove']) continue;
-				const move = activePokemon.side.slotConditions[activePokemon.position]['futuremove'];
+				const move = this.dex.getActiveMove(activePokemon.side.slotConditions[activePokemon.position]['futuremove'].move);
+				const dmg = this.actions.getDamage(pokemon, activePokemon, move);
 				activePokemon.side.removeSlotCondition(activePokemon, 'futuremove');
-				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-					duration: 1,
-					move: move.name,
-					source: pokemon,
-					moveData: {
-						id: move.id,
-						name: move.name,
-						accuracy: move.accuracy,
-						basePower: 140,
-						category: "Special",
-						priority: 0,
-						flags: {metronome: 1, futuremove: 1},
-						effectType: 'Move',
-						type: 'Steel',
-					},
-				});
-				this.add('-start', source, 'Doom Desire');
-				return this.NOT_FAIL;
-	 			*/
+				this.add('-anim', pokemon, move.name, activePokemon);
+				this.damage(dmg, activePokemon, pokemon, move);
+				success = true;
 			}
+			if (success) this.add('-message', `${activePokemon.name} was assaulted with all active future moves!`);
 		},
 		selfSwitch: true,
 		secondary: null,
