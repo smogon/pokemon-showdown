@@ -26,7 +26,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onFoeTryMove(target, source, move) {
 			if (!source.side.addSlotCondition(source, 'futuremove')) return false;
 			Object.assign(source.side.slotConditions[source.position]['futuremove'], {
-				duration: 3,
+				duration: 2,
 				move: move.id,
 				source: target,
 				moveData: {
