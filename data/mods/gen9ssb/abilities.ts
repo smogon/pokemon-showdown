@@ -55,7 +55,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			// Learning An Opponent's Move
 			const target = pokemon.side.foe.active[0];
 			const slot = this.random(4);
-			const move = this.dex.moves.get(target.moveSlots[slot]);
+			const move = this.dex.moves.get(target.moveSlots[slot].id);
 			const newMove = {
 				move: move.name,
 				id: move.id,
