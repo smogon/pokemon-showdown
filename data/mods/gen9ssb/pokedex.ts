@@ -80,7 +80,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	gimmighoulroaming: {
 		inherit: true,
 		types: ['Ghost', 'Electric'],
-		baseStats: {hp: 45, atk: 50, def: 45, spa: 75, spd: 45, spe: 80},
+		baseStats: {hp: 45, atk: 75, def: 65, spa: 50, spd: 45, spe: 80},
 		abilities: {0: "Head-On Battery"},
 	},
 	mismagius: {
