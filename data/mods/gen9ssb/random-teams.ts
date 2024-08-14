@@ -169,6 +169,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Super-Knuckle Shuffle',
 		evs: {def: 128, spd: 128, spe: 252}, ivs: {atk: 0, spa: 0}, nature: 'Jolly',
 	},
+	Emerl: {
+		species: 'Genesect', ability: 'Perfect Copy', item: 'Choice Scarf', gender: 'N',
+		moves: ['U-Turn', 'Leech Life', 'Flash Cannon'],
+		signatureMove: 'Awakened Mode',
+		evs: {atk: 252, spa: 252, spe: 4}, nature: 'Hasty',
+	},
 	/*
 	Codie: {
 		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
