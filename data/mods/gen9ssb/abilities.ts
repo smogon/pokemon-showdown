@@ -15,6 +15,52 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+
+	// Emerl
+	perfectcopy: {
+		desc: "Upon switching in, this Pokemon adds a random move of the foe's to its moveset not already included. It also copies stat changes and ability.",
+		shortDesc: "Learns 1 enemy move; Copies stat changes, ability.",
+		onStart(pokemon) {
+			// Learning An Opponent's Move
+			const slot = this.random(4);
+			const move = this.dex.moves.get(target.moveSlots[slot]);
+			const newMove = {
+				move: move.name,
+				id: move.id,
+				pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+				maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			pokemon.moveSlots[4] = newMove;
+			this.add('-message', `${pokemon.name} learned ${newMove.name}!`);
+			// Copying Stat Changes
+			const target = pokemon.side.foe.active[0];
+			const boosts: SparseBoostsTable = {};
+			let i: BoostID;
+			let boosted = false;
+			if (!target.boosts) return;
+			for (i in target.boosts) {
+				if (target.boosts[i] !== 0) {
+					boosts[i] = target.boosts[i];
+					boosted = true;
+				}
+			}
+			if (boosted) {
+				this.add("-activate", pokemon, "ability: Perfect Copy");
+				this.boost(boosts, pokemon);
+				this.add('-message', `${pokemon.name} copied ${target.name}'s stat changes!`);
+			}
+			// Replace Ability
+			if (pokemon.setAbility(target.ability)) {
+				this.add('-ability', pokemon, pokemon.getAbility().name, '[from] ability: Perfect Copy', '[of] ' + target);
+			}
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		name: "Perfect Copy",
+		gen: 9,
+	},
 	// Zeeb
 	nutcracker: {
 		name: "Nutcracker",
