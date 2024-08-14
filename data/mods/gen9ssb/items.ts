@@ -16,6 +16,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-message', `${target.name} was pelted by ${pokemon.name}'s Slingshot!`);
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
+			if (source === target || move.category === 'Status') return;
 			const base = this.dex.getActiveMove('populationbomb');
 			const dmg = this.actions.getDamage(source, target, base);
 			const hits = this.random(2, 3);
