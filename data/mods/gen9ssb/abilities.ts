@@ -21,6 +21,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		shortDesc: "Uses Speed in damage calculation. x1.33 damage to Males.",
 		desc: "Uses Speed in damage calculation instead of Attack or Special Attack. This Pokemon's attacks deal x1.33 damage to opposing Male Pokemon.",
+		onSwitchIn(pokemon) {
+			this.add('-anim', pokemon, 'Celebrate', pokemon);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (move.category !== "Status") {
+				move.overrideOffensiveStat = 'spe';
+			}
+		},
 	},
 	// Kaiser Dragonhe mu
 	elementalshift: {
