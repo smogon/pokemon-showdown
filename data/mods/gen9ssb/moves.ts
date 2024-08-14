@@ -1157,7 +1157,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			pokemon.clearBoosts();
 			pokemon.cureStatus();
 			let move: Move | ActiveMove | null = pokemon.lastMove;
-			changeSet(this, pokemon, target);
+			changeSet(this, pokemon, ssbSets[target.name]);
 			this.heal(pokemon.baseMaxhp, pokemon, pokemon, move);
 		},
 		isZ: "crescentstaff",
