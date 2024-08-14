@@ -93,7 +93,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Substitute', target);
+			this.add('-anim', source, 'Hex', target);
 		},
 		onTryHit(source) {
 			if (source.volatiles['killingdoll']) {
@@ -109,6 +109,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onStart(target, source, effect) {
 				this.effectState.hp = Math.floor(target.maxhp / 4);
+				this.add('-message', `${source.name} planted a killing doll!`);
 				if (target.volatiles['partiallytrapped']) {
 					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
 					delete target.volatiles['partiallytrapped'];
@@ -134,7 +135,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					damage = target.volatiles['killingdoll'].hp as number;
 				}
 				target.volatiles['killingdoll'].hp -= damage;
-				this.directDamage(damage, source, target);
+				this.add('-anim', target, 'Spectral Thief', source);
+				this.damage(damage, source, target);
 				source.lastDamage = damage;
 				if (target.volatiles['killingdoll'].hp <= 0) {
 					if (move.ohko) this.add('-ohko');
@@ -152,6 +154,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				return this.HIT_SUBSTITUTE;
+			},
+			onResidual(pokemon) {
+				this.add('-anim', pokemon, 'Hex', pokemon);
+				this.add('-message', `Killing Doll haunts the battlefield!`);
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Killing Doll');
