@@ -53,6 +53,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "Learns 1 enemy move; Copies stat changes, ability.",
 		onStart(pokemon) {
 			// Learning An Opponent's Move
+			const target = pokemon.side.foe.active[0];
 			const slot = this.random(4);
 			const move = this.dex.moves.get(target.moveSlots[slot]);
 			const newMove = {
@@ -67,7 +68,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.moveSlots[4] = newMove;
 			this.add('-message', `${pokemon.name} learned ${newMove.name}!`);
 			// Copying Stat Changes
-			const target = pokemon.side.foe.active[0];
 			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
 			let boosted = false;
