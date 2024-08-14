@@ -5,18 +5,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 9,
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[0];
-			const move = this.dex.moves.get('populationbomb');
-			const slingshot = {
-				move: move.name,
-				type: "Normal",
-				id: move.id,
-				pp: move.pp,
-				maxpp: move.pp,
-				target: move.target,
-				disabled: false,
-				used: false,
-			};
-			const dmg = this.actions.getDamage(pokemon, target, slingshot);
+			const move = this.dex.getActiveMove('populationbomb');
+			const dmg = this.actions.getDamage(pokemon, target, move);
 			const hits = this.random(2, 3);
 			for (let i = 0; i < hits; i++) {
 				this.add('-anim', pokemon, 'Bullet Seed', target);
@@ -26,18 +16,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-message', `${target.name} was pelted by ${pokemon.name}'s Slingshot!`);
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			const base = this.dex.moves.get('populationbomb');
-			const slingshot = {
-				move: base.name,
-				type: "Normal",
-				id: base.id,
-				pp: base.pp,
-				maxpp: base.pp,
-				target: base.target,
-				disabled: false,
-				used: false,
-			};
-			const dmg = this.actions.getDamage(source, target, slingshot);
+			const base = this.dex.getActiveMove('populationbomb');
+			const dmg = this.actions.getDamage(source, target, base);
 			const hits = this.random(2, 3);
 			for (let i = 0; i < hits; i++) {
 				this.add('-anim', source, 'Bullet Seed', target);
