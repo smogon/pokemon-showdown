@@ -201,19 +201,21 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	generateAuctionTable() {
-		let buf = `<div class="ladder pad"><table style="width: 100%"><tr><th colspan=2>Order</th><th>Teams</th><th>Credits</th><th>Players</th></tr>`;
 		const queue = this.queue.filter(team => !team.isSuspended());
+		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${queue.length ? `<th colspan=2>Order</th>` : ''}<th>Team</th><th>Credits</th><th>Players</th></tr>`;
 		for (const team of this.teams.values()) {
-			let i1 = queue.indexOf(team) + 1;
-			let i2 = queue.lastIndexOf(team) + 1;
-			if (i1 > queue.length / 2) {
-				[i1, i2] = [i2, i1];
-			}
 			buf += `<tr>`;
-			buf += `<td align="center" style="width: 15px">${i1 > 0 ? i1 : '-'}</td><td align="center" style="width: 15px">${i2 > 0 ? i2 : '-'}</td>`;
+			if (queue.length) {
+				let i1 = queue.indexOf(team) + 1;
+				let i2 = queue.lastIndexOf(team) + 1;
+				if (i1 > queue.length / 2) {
+					[i1, i2] = [i2, i1];
+				}
+				buf += `<td align="center" style="width: 15px">${i1 || '-'}</td><td align="center" style="width: 15px">${i2 || '-'}</td>`;
+			}
 			buf += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br/>${this.generateUsernameList(team.getManagers(), 2, true)}</td>`;
 			buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
-			buf += `<td><div style="min-height: 32px; height: 32px; overflow: hidden; resize: vertical"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			buf += `<td><div style="min-height: 32px${queue.length ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div>`;
