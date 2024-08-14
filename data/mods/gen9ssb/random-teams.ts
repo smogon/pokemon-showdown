@@ -167,7 +167,7 @@ export const ssbSets: SSBSets = {
 		species: 'Aipom', ability: 'Nutcracker', item: 'Slingshot', gender: 'M',
 		moves: ['Fake Out', 'Tidy Up', 'False Surrender'],
 		signatureMove: 'Super-Knuckle Shuffle',
-		evs: {atk: 252, spd: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
+		evs: {def: 128, spd: 128, spe: 252}, ivs: {atk: 0, spa: 0}, nature: 'Jolly',
 	},
 	/*
 	Codie: {
