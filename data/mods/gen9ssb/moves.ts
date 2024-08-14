@@ -83,7 +83,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "User creates a substitute. Any damage it takes is dealt to foe.",
-		shortDesc: "Creates a substitute that damages foe.",
+		shortDesc: "Creates a substitute that damages the foe.",
 		name: "Killing Doll",
 		pp: 8,
 		noPPBoosts: true,
