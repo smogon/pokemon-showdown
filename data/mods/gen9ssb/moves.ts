@@ -1671,7 +1671,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 16,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {futuremove: 1},
+		flags: {futuremove: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
