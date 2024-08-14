@@ -45,7 +45,7 @@ export const ssbSets: SSBSets = {
 	},
 	Pablo: {
 		species: 'Smeargle', ability: 'Artist Block', item: 'Sketchbook', gender: 'M',
-		moves: ['Sketch', 'Me First', 'Assist'],
+		moves: ['Sketch', 'Copycat', 'Assist'],
 		signatureMove: 'Plagiarize',
 		evs: { hp: 252, spe: 252, spa: 4 }, nature: 'Naive', teraType: 'Normal',
 	},
