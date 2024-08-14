@@ -175,6 +175,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Awakened Mode',
 		evs: {atk: 252, spa: 252, spe: 4}, nature: 'Hasty',
 	},
+	'Sakuya Izayoi': {
+		species: 'Magearna', ability: 'The World', item: 'Stopwatch', gender: 'F',
+		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
+		signatureMove: 'Killing Doll',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
+	},
 	/*
 	Codie: {
 		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
