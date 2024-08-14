@@ -6,6 +6,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	aipom: {
+		inherit: true,
+		abilities: {0: "Nutcracker"},
+		baseStats: {hp: 55, atk: 70, def: 80, spa: 40, spd: 80, spe: 110},
+	},
 	ironthorns: {
 		inherit: true,
 		types: ['Steel'],
