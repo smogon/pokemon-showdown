@@ -2620,9 +2620,9 @@ export const Formats: FormatList = [
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 			}
 		},
-		onHit(target, source, move) {
-			this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
-		},
+		//onHit(target, source, move) {
+			//this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
+		//},
 	},
 	{
 		name: "[Gen 9] Monotype Random Battle",
