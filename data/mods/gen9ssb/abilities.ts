@@ -311,6 +311,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!target.abilityState.switches) target.abilityState.switches = 0;
 			if (target === source || move.category === 'Status') return;
 			if (target.abilityState.switches >= 3) return;
+			if (target.side.totalFainted >= 5) return;
 			target.abilityState.switches++;
 			this.add('-activate', target, 'ability: Lost and Found');
 			this.add('-message', `${target.name} scrambled away from danger!`);
