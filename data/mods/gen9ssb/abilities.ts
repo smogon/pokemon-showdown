@@ -29,6 +29,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.overrideOffensiveStat = 'spe';
 			}
 		},
+		onBasePowerPriority: 24,
+		onBasePower(basePower, attacker, defender, move) {
+			if (defender.gender === 'M') {
+				this.debug('nutcracker boost');
+				return this.chainModify(1.33);
+			}
+		},
 	},
 	// Kaiser Dragonhe mu
 	elementalshift: {
