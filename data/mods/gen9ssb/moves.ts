@@ -40,6 +40,65 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Emerl
+	awakenedmode: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "User fully restores HP and status conditions, starts Ingrain, and raises all stats by 1 stage (except acc/eva). User's item is replaced with Leftovers. This move is replaced with Gigaton Hammer. If this Pokemon learns U-turn, it is replaced with Bug Buzz.",
+		shortDesc: "100% HP; Ingrain; +1 Stats; Leftovers/Gigaton Hammer/Bug Buzz.",
+		name: "Awakened Mode",
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Evoboost', target);
+		},
+		onHit(pokemon) {
+			this.heal(pokemon.maxhp);
+			pokemon.cureStatus();
+			pokemon.setItem('Leftovers');
+			const AMIndex = pokemon.moves.indexOf('awakenedmode');
+			const UTIndex = pokemon.moves.indexOf('uturn');
+			const GT = this.dex.moves.get('gigatonhammer');
+			const GTF = {
+				move: GT.name,
+				id: GT.id,
+				pp: GT.pp,
+				maxpp: GT.pp,
+				target: GT.target,
+				disabled: false,
+				used: false,
+			};
+			const BB = this.dex.moves.get('bugbuzz');
+			const BBF = {
+				move: BB.name,
+				id: BB.id,
+				pp: BB.pp,
+				maxpp: BB.pp,
+				target: BB.target,
+				disabled: false,
+				used: false,
+			};
+			pokemon.moveSlots[AMIndex] = GTF;
+			pokemon.moveSlots[UTIndex] = BBF;
+		},
+		volatileStatus: 'ingrain',
+		boosts: {
+			atk: 1,
+			def: 1,
+			spa: 1,
+			spd: 1,
+			spe: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Steel",
+	},
 	// Zeeb
 	superknuckleshuffle: {
 		accuracy: 90,
