@@ -1281,7 +1281,7 @@ export const ssbSets: SSBSets = {
 export class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam(options: { inBattle?: boolean } = {}) {
 		this.enforceNoDirectCustomBanlistChanges();
-
+		let ptodAdded = false;
 		const team: PokemonSet[] = [];
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -1308,8 +1308,15 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
+			let ssbSetTemp;
 			const name = this.sampleNoReplace(pool);
-			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
+			if (Config.ssbptod && !ptodAdded) {
+				ssbSetTemp: SSBSet = this.dex.deepClone(ssbSets[Config.ssbptod]);
+				ptodAdded = true;
+			} else {
+				ssbSetTemp: SSBSet = this.dex.deepClone(ssbSets[name]);
+			}
+			const ssbSet = ssbSetTemp;
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
