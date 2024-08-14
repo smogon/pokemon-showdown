@@ -40,6 +40,141 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Sakuya Izayoi
+	misdirection: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Existing future moves are redirected towards foe and land immediately. User switches afterwards.",
+		shortDesc: "Redirect future moves & switch.",
+		name: "Misdirection",
+		pp: 1,
+		priority: -5,
+		flags: {},
+		onTryHit() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Future Sight', source);
+		},
+		onHit(pokemon) {
+			const target = pokemon.side.foe.active[0];
+			for (const activePokemon of this.getAllActive()) {
+				this.add('-message', `${activePokemon.side.slotConditions[activePokemon.position]['futuremove'].move}`);
+				/*
+				if (!activePokemon.side.slotConditions[activePokemon.position]['futuremove']) continue;
+				const move = activePokemon.side.slotConditions[activePokemon.position]['futuremove'];
+				activePokemon.side.removeSlotCondition(activePokemon, 'futuremove');
+				Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+					duration: 1,
+					move: move.name,
+					source: pokemon,
+					moveData: {
+						id: move.id,
+						name: move.name,
+						accuracy: move.accuracy,
+						basePower: 140,
+						category: "Special",
+						priority: 0,
+						flags: {metronome: 1, futuremove: 1},
+						effectType: 'Move',
+						type: 'Steel',
+					},
+				});
+				this.add('-start', source, 'Doom Desire');
+				return this.NOT_FAIL;
+	 			*/
+			}
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
+	// Sakuya Izayoi
+	killingdoll: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "User creates a substitute. Any damage it takes is dealt to foe.",
+		shortDesc: "Creates a substitute that damages foe.",
+		name: "Killing Doll",
+		pp: 8,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Substitute', target);
+		},
+		onTryHit(source) {
+			if (source.volatiles['killingdoll']) {
+				this.add('-fail', source, 'move: Killing Doll');
+				return this.NOT_FAIL;
+			}
+			if (source.hp <= source.maxhp / 4 || source.maxhp === 1) {
+				this.add('-fail', source, 'move: Killing Doll', '[weak]');
+				return this.NOT_FAIL;
+			}
+		},
+		volatileStatus: 'killingdoll',
+		condition: {
+			onStart(target, source, effect) {
+				this.effectState.hp = Math.floor(target.maxhp / 4);
+				if (target.volatiles['partiallytrapped']) {
+					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
+					delete target.volatiles['partiallytrapped'];
+				}
+			},
+			onTryPrimaryHitPriority: -1,
+			onTryPrimaryHit(target, source, move) {
+				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
+					return;
+				}
+				let damage = this.actions.getDamage(source, target, move);
+				if (!damage && damage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) {
+					return damage;
+				}
+				source.hp -= damage;
+				if (damage > target.volatiles['killingdoll'].hp) {
+					damage = target.volatiles['killingdoll'].hp as number;
+				}
+				target.volatiles['killingdoll'].hp -= damage;
+				this.directDamage(damage, source, target);
+				source.lastDamage = damage;
+				if (target.volatiles['killingdoll'].hp <= 0) {
+					if (move.ohko) this.add('-ohko');
+					target.removeVolatile('killingdoll');
+					source.hp = 0;
+				} else {
+					this.add('-activate', target, 'move: Killing Doll', '[damage]');
+				}
+				if (move.recoil || move.id === 'chloroblast') {
+					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
+				}
+				if (move.drain) {
+					this.heal(0, source, target, 'drain');
+				}
+				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return this.HIT_SUBSTITUTE;
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Killing Doll');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Dark",
+	},
 	// Emerl
 	awakenedmode: {
 		accuracy: true,
