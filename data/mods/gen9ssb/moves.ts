@@ -225,7 +225,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 1,
 		isZ: "spectralprism",
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, bypasssub: 1},
 		secondary: null,
 		target: "normal",
 		type: "Light",
