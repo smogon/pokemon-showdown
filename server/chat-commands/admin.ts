@@ -13,7 +13,7 @@
 import * as path from 'path';
 import * as child_process from 'child_process';
 import {FS, Utils, ProcessManager, SQL} from '../../lib';
-import {SSBSet, ssbSets} from "../../../data/mods/gen9ssb/random-teams";
+import {SSBSet, ssbSets} from "../../data/mods/gen9ssb/random-teams";
 
 interface ProcessData {
 	cmd: string;
