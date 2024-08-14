@@ -13,6 +13,7 @@
 import * as path from 'path';
 import * as child_process from 'child_process';
 import {FS, Utils, ProcessManager, SQL} from '../../lib';
+import {SSBSet, ssbSets} from "../../../data/mods/gen9ssb/random-teams";
 
 interface ProcessData {
 	cmd: string;
@@ -141,6 +142,22 @@ export const commands: Chat.ChatCommands = {
 	},
 	potdhelp: [
 		`/potd [pokemon] - Set the Pokemon of the Day to the given [pokemon]. Requires: &`,
+	],
+	
+	ssbpotd(target, room, user) {
+		this.canUseConsole();
+		if (!Object.keys(ssbSets).map(toID).includes(toID(target))) {
+			return {e: `Error: ${target.trim()} doesn't have a [Gen 9] Super Staff Bros Ultimate set.`};
+		}
+		Config.ssbpotd = target;
+		for (const process of Rooms.PM.processes) {
+			process.getProcess().send(`EVAL\n\nConfig.ssbpotd = '${target}'`);
+		}
+		this.addGlobalModAction(`${user.name} set the SSB PotD to ${target}.`);
+		this.globalModlog(`SSBPOTD`, null, target);
+	},
+	ssbpotdhelp: [
+		`/ssbpotd [pokemon] - Set the SSB Pokemon of the Day to the given [pokemon]. If the given Pokemon does not have an SSB set, this setting is ignored. Requires: &`,
 	],
 
 	/*********************************************************
