@@ -166,7 +166,7 @@ export const ssbSets: SSBSets = {
 	Zeeb: {
 		species: 'Aipom', ability: 'Nutcracker', item: 'Slingshot', gender: 'M',
 		moves: ['Fake Out', 'Tidy Up', 'False Surrender'],
-		signatureMove: 'Three-Knuckle Shuffle',
+		signatureMove: 'Super-Knuckle Shuffle',
 		evs: {atk: 252, spd: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
 	/*
