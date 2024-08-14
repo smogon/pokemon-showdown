@@ -58,39 +58,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source, move) {
-			switch (move.hit) {
-				case 1:
-					this.add('-anim', source, 'Celebrate', source);
-					this.add('-anim', source, 'Headbutt', target);
-					break;
-				case 2:
-					this.add('-anim', source, 'Rock Tomb', source);
-					this.add('-anim', source, 'Headbutt', target);
-					break;
-				case 3:
-					this.add('-anim', source, 'Shift Gear', source);
-					this.add('-anim', source, 'Headbutt', target);
-					break;
-				case 4:
-					this.add('-anim', source, 'Lava Plume', source);
-					this.add('-anim', source, 'Headbutt', target);
-					break;
-			}
+			this.add('-anim', source, 'Celebrate', source);
+			this.add('-anim', source, 'Geomancy', source);
 		},
 		basePowerCallback(pokemon, target, move) {
 			let power;
 			switch (move.hit) {
 				case 1:
 					power = 10;
+					this.add('-anim', pokemon, 'Headbutt', target);
 					break;
 				case 2:
 					power = 20;
+					this.add('-anim', pokemon, 'Rock Tomb', pokemon);
+					this.add('-anim', pokemon, 'Headbutt', target);
 					break;
 				case 3:
 					power = 40;
+					this.add('-anim', pokemon, 'Shift Gear', pokemon);
+					this.add('-anim', pokemon, 'Headbutt', target);
 					break;
 				case 4:
 					power = 80;
+					this.add('-anim', pokemon, 'Eruption', pokemon);
+					this.add('-anim', pokemon, 'Headbutt', target);
 					break;
 			}
 			return power;
