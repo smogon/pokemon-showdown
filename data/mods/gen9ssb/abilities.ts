@@ -42,7 +42,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					type: move.type,
 				},
 			});
-			this.add('-start', target, 'move: ' + move.name);
+			this.add('-start', source, 'move: ' + move.name, '[silent]');
+			this.add('-message', `${source.name} shifted ${move.name} into the future!`);
 			return this.NOT_FAIL;
 		},
 	},
