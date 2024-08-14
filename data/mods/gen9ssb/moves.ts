@@ -45,7 +45,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 90,
 		basePower: 10,
 		category: "Physical",
-		name: "Three-Knuckle Shuffle",
+		name: "Super-Knuckle Shuffle",
 		pp: 24,
 		noPPBoosts: true,
 		priority: 0,
