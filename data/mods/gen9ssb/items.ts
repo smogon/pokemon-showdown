@@ -9,6 +9,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const dmg = this.actions.getDamage(pokemon, target, move);
 			const hits = this.random(2, 3);
 			for (let i = 0; i < hits; i++) {
+				if (this.randomChance(1, 10)) {
+					this.add('-anim', pokemon, 'Bullet Seed', pokemon);
+					this.add('-anim', pokemon, 'Wake-Up Slap', pokemon);
+					this.add('-message', `${pokemon.name}! Turn the Slingshot the other way!`);
+					this.damage(dmg, pokemon, pokemon);
+					continue;
+				}
 				this.add('-anim', pokemon, 'Bullet Seed', target);
 				this.damage(dmg, target, pokemon);
 				if (this.randomChance(1, 10)) target.addVolatile('flinch');
