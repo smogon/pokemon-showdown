@@ -1,4 +1,14 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Sakuya Izayoi
+	stopwatch: {
+		name: "Stopwatch",
+		onTakeItem: false,
+		zMove: "Misdirection",
+		zMoveFrom: "Killing Doll",
+		itemUser: ["Magearna"],
+		desc: "If held by a Magearna with Killing Doll, it can use Misdirection.",
+		gen: 9,
+	},
 	// Zeeb
 	slingshot: {
 		name: "Slingshot",
