@@ -54,7 +54,29 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		multihit: [3, 4],
 		target: "normal",
 		type: "Normal",
-		// 10, 20, 40, 80
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			switch (move.hit) {
+				case 1:
+					this.add('-anim', source, 'Celebrate', source);
+					this.add('-anim', source, 'Headbutt', target);
+					break;
+				case 2:
+					this.add('-anim', source, 'Rock Tomb', source);
+					this.add('-anim', source, 'Headbutt', target);
+					break;
+				case 3:
+					this.add('-anim', source, 'Shift Gear', source);
+					this.add('-anim', source, 'Headbutt', target);
+					break;
+				case 4:
+					this.add('-anim', source, 'Lava Plume', source);
+					this.add('-anim', source, 'Headbutt', target);
+					break;
+			}
+		},
 		basePowerCallback(pokemon, target, move) {
 			let power;
 			switch (move.hit) {
