@@ -1270,6 +1270,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Magnetic Flux', source);
 			this.add('-anim', source, 'Pay Day', target);
 		},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Steel', type);
+		},
 		onAfterMove(source, target, move) {
 			if (!source.item) return;
 			this.add('-message', `${source.name} hurled the Inconspicuous Coin at ${target.name}!`);
@@ -1303,7 +1306,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		multihit: [3, 5],
 		secondary: null,
 		target: "normal",
-		type: "Steel",
+		type: "Electric",
 	},
 	// Glint
 	gigameld: {
