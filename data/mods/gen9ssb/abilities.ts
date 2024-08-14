@@ -16,6 +16,36 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
 
+	// Sakuya Izayoi
+	theworld: {
+		name: "The World",
+		gen: 9,
+		onSwitchIn(pokemon) {
+			if (!this.field.pseudoWeather.trickroom) this.field.addPseudoWeather('trickroom');
+		},
+		onFoeTryMove(target, source, move) {
+			if (!source.side.addSlotCondition(source, 'futuremove')) return false;
+			Object.assign(source.side.slotConditions[source.position]['futuremove'], {
+				duration: 3,
+				move: move.id,
+				source: target,
+				moveData: {
+					id: move.id,
+					name: move.name,
+					accuracy: move.accuracy,
+					basePower: move.basePower,
+					category: move.category,
+					priority: move.priority,
+					flags: move.flags,
+					ignoreImmunity: true,
+					effectType: 'Move',
+					type: move.type,
+				},
+			});
+			this.add('-start', target, 'move: ' + move.name);
+			return this.NOT_FAIL;
+		},
+	},
 	// Emerl
 	perfectcopy: {
 		desc: "Upon switching in, this Pokemon adds a random move of the foe's to its moveset not already included. It also copies stat changes and ability.",
