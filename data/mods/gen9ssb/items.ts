@@ -5,10 +5,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 9,
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[0];
-			const move = this.dex.moves.get('tackle');
+			const move = this.dex.moves.get('populationbomb');
 			const slingshot = {
 				move: move.name,
-				basePower: 20,
+				type: "Normal",
 				id: move.id,
 				pp: move.pp,
 				maxpp: move.pp,
@@ -26,10 +26,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-message', `${target.name} was pelted by ${pokemon.name}'s Slingshot!`);
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			const base = this.dex.moves.get('tackle');
+			const base = this.dex.moves.get('populationbomb');
 			const slingshot = {
 				move: base.name,
-				basePower: 10,
+				type: "Normal",
 				id: base.id,
 				pp: base.pp,
 				maxpp: base.pp,
