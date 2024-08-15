@@ -54,6 +54,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (!this.field.pseudoWeather.trickroom) this.field.addPseudoWeather('trickroom');
 		},
 		onFoeTryMove(target, source, move) {
+			if (move.category === 'Status' || move.flags['futuremove']) return;
 			if (!source.side.addSlotCondition(source, 'futuremove')) return false;
 			Object.assign(source.side.slotConditions[source.position]['futuremove'], {
 				duration: 2,
@@ -73,7 +74,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				},
 			});
 			this.add('-start', source, 'move: ' + move.name, '[silent]');
-			this.add('-message', `${source.name} shifted ${move.name} into the future!`);
+			this.add('-message', `${target.name} shifted ${move.name} into the future!`);
 			return this.NOT_FAIL;
 		},
 	},
