@@ -66,7 +66,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				used: false,
 			};
 			pokemon.moveSlots[4] = newMove;
-			this.add('-message', `${pokemon.name} learned ${newMove.name}!`);
+			this.add('-message', `${pokemon.name} learned ${this.dex.moves.get(target.moveSlots[slot].name}!`);
 			// Copying Stat Changes
 			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
