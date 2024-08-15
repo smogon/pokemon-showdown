@@ -15,7 +15,37 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
-
+	// Codie
+	vociferouscodex: {
+		name: "Vociferous Codex",
+		gen: 9,
+		onSourceModifyDamage(damage, source, target, move) {
+			if (!target.abilityState.codex) target.abilityState.codex = [];
+			if (!target.abilityState.codex.includes(move.name)) {
+				target.abilityState.codex.push(move.name);
+				this.add('-message', `${target.name} will remember ${source.name}'s ${move.name}!`);
+				return;
+			} else if (target.abilityState.codex.includes(move.name)) {
+				this.add('-anim', target, 'Miracle Eye', target);
+				this.debug(`vociferous codex lowering power`);
+				return this.chainModify(0.75);
+			}
+		},
+		onUpdate(pokemon) {
+			if (target.abilityState.codex >= 10) {
+				this.add('-message', `Codie began to seize!`);
+				this.add('-anim', pokemon, 'Agility', pokemon);
+				this.add('-anim', pokemon, 'Explosion', pokemon);
+				for (const target of this.getAllActive()) {
+					if (target === pokemon) continue;
+					const move = this.dex.getActiveMove('explosion');
+					const dmg = this.getDamage(target, pokemon, move);
+					this.damage(dmg, target, pokemon);
+				}
+				pokemon.faint();
+			}
+		},
+	},
 	// Sakuya Izayoi
 	theworld: {
 		name: "The World",
