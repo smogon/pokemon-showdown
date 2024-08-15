@@ -1405,8 +1405,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			}
 
 			if (teraType) set.teraType = teraType;
-
-			if (team.length === 5) this.maxTeamSize++;
 			team.push(set);
 
 			// Team specific tweaks occur here
