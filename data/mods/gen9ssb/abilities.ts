@@ -139,9 +139,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Uses Speed in damage calculation instead of Attack or Special Attack. This Pokemon's attacks deal x1.33 damage to opposing Male Pokemon.",
 		onSwitchIn(pokemon) {
 			this.add('-anim', pokemon, 'Celebrate', pokemon);
-			pokemon.side.pokemonLeft++;
-			pokemon.side.pokemon[6] = ssbSets['flufi'];
-			this.add('-message', `${pokemon.side.pokemon[6].gender}`);
 		},
 		onModifyMove(move, pokemon, target) {
 			if (move.category !== "Status") {
