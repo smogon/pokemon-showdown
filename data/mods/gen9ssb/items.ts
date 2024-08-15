@@ -1,4 +1,27 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Codie
+	evileyeoformsbygore: {
+		name: "Evil Eye of Orms-by-Gore",
+		gen: 9,
+		desc: "On switch-in, lowers the Attack of all active Pokemon by 1 stage, and restores HP equal to 50% of the total Attack lost. If holder is a Venomicon, turns Mind Reader into a 60 BP special move while retaining its secondary effects.",
+		shortDesc: "Switch-in: Heals, all Pokemon -1ATK; Mind Reader: 60BP.",
+		onSwitchIn(pokemon) {
+			let health = 0;
+			this.add('-anim', pokemon, 'Mean Look', pokemon);
+			for (const activePokemon of this.getAllActive()) {
+				health += activePokemon.storedStats.atk - (activePokemon.storedStats.atk * 0.67);
+				this.boost({atk: -1}, activePokemon);
+			}
+			this.heal(health, pokemon);
+		},
+		onModifyMovePriority: 1,
+		onModifyMove(move, pokemon) {
+			if (move.id === 'mindreader' && pokemon.species.name === 'Venomicon') {
+				move.category = 'Special';
+				move.basePower = 60;
+			}
+		},
+	},
 	// Sakuya Izayoi
 	stopwatch: {
 		name: "Stopwatch",
