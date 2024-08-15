@@ -2540,7 +2540,7 @@ export const Formats: FormatList = [
 			// https://discordapp.com/channels/630837856075513856/630845310033330206/716126469528485909
 			// Requires client change
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.baseSpecies.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
 					const dmg = pokemon.maxhp - 1;
 					this.debug('shifu robot starts at 1 hp due to autorepair')
 					pokemon.hp -= dmg;
@@ -2557,7 +2557,7 @@ export const Formats: FormatList = [
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.baseSpecies.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
 					if (pokemon.abilityState.permdis || pokemon.fainted) continue;
 					if (pokemon === pokemon.side.active[0]) continue;
 					const health = pokemon.maxhp * 0.15;
@@ -2568,11 +2568,11 @@ export const Formats: FormatList = [
 		},
 		onUpdate() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.baseSpecies.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && !pokemon.abilityState.reviveStarted) {
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && !pokemon.abilityState.reviveStarted) {
 					pokemon.abilityState.reviveStarted = true;
 					pokemon.abilityState.deathTurn = this.turn;
 				}
-				if (pokemon.baseSpecies.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && pokemon.abilityState.reviveStarted) {
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && pokemon.abilityState.reviveStarted) {
 					let turnCount = this.turn - pokemon.abilityState.deathTurn;
 					if (turnCount >= 6) {
 						pokemon.fainted = false;
