@@ -202,7 +202,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.setType('Water');
 				this.actions.useMove('Rain Dance', pokemon);
 				for (let i = 0; i < 4; i++) {
-					let moves = ['flipturn', 'hydrovortex', 'waterspout', 'aquatail'];
+					let moves = ['flipturn', 'hydrosteam', 'waterspout', 'aquatail'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
 						move: move.name,
