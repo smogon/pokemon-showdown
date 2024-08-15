@@ -537,7 +537,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-anim', pokemon, 'Thunderbolt', target);
 			const newTarget = this.sample(possibleTargets);
 			const move = this.dex.getActiveMove('thundershock');
-			const dmg = this.actions.getDamage(pokemon, newTarget, move);
+			let dmg = this.actions.getDamage(pokemon, newTarget, move);
 			if (!dmg) {
 				this.add('-message', `${newTarget.name} was unaffected by Peal of Thunder!`);
 				return;
@@ -548,14 +548,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			}
 			if (newTarget === pokemon) {
-	        if (!this.heal(pokemon.baseMaxhp / 3)) {
-	            this.add('-immune', pokemon, '[from] ability: Peal of Thunder');
-	        }
-	        if (!this.boost({spa: 1, spe: 1})) {
-	            this.add('-immune', pokemon, '[from] ability: Peal of Thunder');
-	        }
+	        if (!this.heal(pokemon.baseMaxhp / 3)) this.add('-immune', pokemon, '[from] ability: Peal of Thunder');
 	        return;
 	    	}
+			if (dmg > newTarget.hp) dmg = newTarget.hp;
 			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} lost ${Math.round(dmg/newTarget.baseMaxhp * 100)}% of its health!`);
 			if (newTarget.hp <= 0) newTarget.faint();
