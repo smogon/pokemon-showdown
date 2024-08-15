@@ -1234,6 +1234,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-message', `${newTarget.name} was unaffected by Terrorize the Peaks!`);
 				return;
 			}
+			if (dmg > newTarget.hp) dmg = newTarget.hp;
 			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from Terrorize the Peaks!`);
 			if (newTarget.hp <= 0) {
