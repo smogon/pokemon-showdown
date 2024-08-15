@@ -87,8 +87,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const target = pokemon.side.foe.active[0];
 			let possibleMoves = [];
 			for (const moveSlot of target.moveSlots) {
-				if (pokemon.moves.includes(target.moveSlots[moveSlot].id)) continue;
-				possibleMoves.push(target.moveSlots[moveSlot].id);
+				if (pokemon.moves.includes(moveSlot.id) continue;
+				possibleMoves.push(moveSlot.id);
 			}
 			if (possibleMoves.length) {
 				const moveid = this.sample(possibleMoves);
