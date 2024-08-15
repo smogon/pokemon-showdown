@@ -1229,7 +1229,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (!possibleTargets) return null;
 			const newTarget = this.sample(possibleTargets);
-			const dmg = this.actions.getDamage(source, newTarget, move);
+			let dmg = this.actions.getDamage(source, newTarget, move);
 			if (!dmg) {
 				this.add('-message', `${newTarget.name} was unaffected by Terrorize the Peaks!`);
 				return;
