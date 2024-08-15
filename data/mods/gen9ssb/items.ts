@@ -177,7 +177,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-anim', target, 'Aqua Ring', target);
 			target.addVolatile('bubblewand');
 			this.add('-message', `${target.name} was caught in a bubble by ${pokemon.name}'s Bubble Wand!`);
-			if (this.randomChance(1, 3)) {
+			if (this.randomChance(1, 2)) {
 				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
 				this.add('-message', `Oh no! ${pokemon.name} trapped themselves in a bubble!`);
 				pokemon.addVolatile('bubblewand');
