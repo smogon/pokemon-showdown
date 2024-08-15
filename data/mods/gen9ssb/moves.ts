@@ -1887,7 +1887,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const target = pokemon.side.foe.active[0];
 				if (target.lastMoveUsed && target.lastMoveUsed.id === 'blissfulbreeze') return;
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
-				const source = sources[0];
+				let source;
+				if (sources.length) {
+					source = sources[0];
+				} else {
+					source = target;
+				}
 				const move = this.dex.getActiveMove('blissfulbreeze');
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.add('-anim', pokemon, 'Gust', pokemon);
