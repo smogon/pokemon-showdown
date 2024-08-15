@@ -84,28 +84,36 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			// Learning An Opponent's Move
 			const target = pokemon.side.foe.active[0];
-			const slot = this.random(4);
-			const move = this.dex.moves.get(target.moveSlots[slot].id);
-			const newMove = {
-				move: move.name,
-				id: move.id,
-				pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-				maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-				target: move.target,
-				disabled: false,
-				used: false,
-			};
-			pokemon.moveSlots[4] = newMove;
-			this.add('-message', `${pokemon.name} learned ${this.dex.moves.get(pokemon.moveSlots[4].id).name}!`);
+			let possibleMoves = [];
+			for (const moveSlot of target.moveSlots) {
+				if (pokemon.moves.includes(target.moveSlots[moveSlot].id)) continue;
+				possibleMoves.push(target.moveSlots[moveSlot].id);
+			}
+			if (possibleMoves.length) {
+				const moveid = this.sample(possibleMoves);
+				const move = this.dex.moves.get(moveid);
+				const newMove = {
+					move: move.name,
+					id: move.id,
+					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					target: move.target,
+					disabled: false,
+					used: false,
+				};
+				pokemon.moveSlots[4] = newMove;
+				this.add('-message', `${pokemon.name} learned ${this.dex.moves.get(pokemon.moveSlots[4].id).name}!`);
+			}
 			// Copying Stat Changes
 			const boosts: SparseBoostsTable = {};
 			let i: BoostID;
 			let boosted = false;
-			if (!target.boosts) return;
-			for (i in target.boosts) {
-				if (target.boosts[i] !== 0) {
-					boosts[i] = target.boosts[i];
-					boosted = true;
+			if (target.boosts) {
+				for (i in target.boosts) {
+					if (target.boosts[i] !== 0) {
+						boosts[i] = target.boosts[i];
+						boosted = true;
+					}
 				}
 			}
 			if (boosted) {
