@@ -105,7 +105,7 @@ export const ssbSets: SSBSets = {
    },
 	'Sanae Kochiya': {
 		species: 'Togekiss', ability: 'Wind Priestess', item: 'Leftovers', gender: 'F',
-		moves: ['Protect', 'Sparkly Swirl', 'Oblivion Wing'],
+		moves: ['Revival Blessing', 'Sparkly Swirl', 'Oblivion Wing'],
 		signatureMove: 'Miracle',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
 	},
