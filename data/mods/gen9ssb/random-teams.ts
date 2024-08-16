@@ -181,23 +181,23 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Killing Doll',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 	},
-	'Castaways-Swalot': {
+	'Castaways': {
 		species: 'Swalot', ability: 'The World', item: 'Stopwatch', gender: 'F',
 		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
 		signatureMove: 'Killing Doll',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 	},
-	'Castaways-Carnivine': {
+	'Castaways-C': {
 		species: 'Carnivine', ability: 'The World', item: 'Stopwatch', gender: 'F',
 		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
 		signatureMove: 'Killing Doll',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', skip: 'Castaways-Swalot',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', skip: 'Castaways',
 	},
-	'Castaways-Perrserker': {
+	'Castaways-P': {
 		species: 'Perrserker', ability: 'The World', item: 'Stopwatch', gender: 'F',
 		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
 		signatureMove: 'Killing Doll',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', skip: 'Castaways-Swalot',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', skip: 'Castaways',
 	},
 	/*
 	Codie: {
