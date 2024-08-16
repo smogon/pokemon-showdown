@@ -3837,7 +3837,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			source.moveSlots[plagiarismIndex] = plagiarisedMove;
 			this.add('-activate', source, 'move: Plagiarism', move.name);
 			this.add('-message', `${source.name} plagiarised ${target.name}'s ${move.name}!`);
-			this.actions.useMove(move.id, source, target);
+			this.actions.useMove(move.id, source, {target});
 			delete target.volatiles['imprison'];
 			source.addVolatile('imprison', source);
 			source.m.usedPlagiarism = true;
@@ -4113,7 +4113,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-message', "The move backfired!");
 				const activeMove = this.dex.getActiveMove(':3');
 				activeMove.hasBounced = true;
-				this.actions.useMove(activeMove, target, pokemon);
+				this.actions.useMove(activeMove, target, {target: pokemon});
 				return null;
 			}
 		},
@@ -6130,15 +6130,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					}
 				}
 			},
-			onSourceAfterMove(source, target) {
-				if (source === this.effectState.target || target !== this.effectState.target) return;
-				if (!source.hp || !this.effectState.move) return;
+			onSourceAfterMove(target, source) {
+				if (target === this.effectState.target || source !== this.effectState.target) return;
+				if (!target.hp || !this.effectState.move) return;
 				const move = this.dex.getActiveMove(this.effectState.move);
 				if (move.isZ || move.isMax || move.category === 'Status') return;
-				this.add('-message', target.name + ' tried to copy the move!');
-				this.add('-anim', target, "Me First", source);
+				this.add('-message', source.name + ' tried to copy the move!');
+				this.add('-anim', source, "Me First", target);
 				move.overrideOffensiveStat = 'atk';
-				this.actions.useMove(move, target, source);
+				this.actions.useMove(move, source, {target});
 				delete this.effectState.move;
 			},
 			onBasePowerPriority: 12,

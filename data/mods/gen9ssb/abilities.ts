@@ -415,7 +415,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				move.accuracy = 40;
 				const target = pokemon.foes()[0];
 				if (target && !target.fainted) {
-					this.actions.useMove(move, pokemon, target, effect);
+					this.actions.useMove(move, pokemon, {target, sourceEffect: effect});
 				}
 			}
 		},
@@ -1442,7 +1442,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, target, source);
+			this.actions.useMove(newMove, target, {target: source});
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -1452,7 +1452,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, this.effectState.target, source);
+			this.actions.useMove(newMove, this.effectState.target, {target: source});
 			return null;
 		},
 		condition: {

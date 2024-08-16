@@ -11085,7 +11085,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
-				this.actions.useMove(newMove, target, source);
+				this.actions.useMove(newMove, target, {target: source});
 				return null;
 			},
 			onAllyTryHitSide(target, source, move) {
@@ -11095,7 +11095,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
-				this.actions.useMove(newMove, this.effectState.target, source);
+				this.actions.useMove(newMove, this.effectState.target, {target: source});
 				return null;
 			},
 		},
@@ -11934,7 +11934,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (move.category === 'Status' || move.flags['failmefirst']) return false;
 
 			pokemon.addVolatile('mefirst');
-			this.actions.useMove(move, pokemon, target);
+			this.actions.useMove(move, pokemon, {target});
 			return null;
 		},
 		condition: {
@@ -12459,7 +12459,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!move?.flags['mirror'] || move.isZ || move.isMax) {
 				return false;
 			}
-			this.actions.useMove(move.id, pokemon, target);
+			this.actions.useMove(move.id, pokemon, {target});
 			return null;
 		},
 		callsMove: true,
@@ -13046,7 +13046,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			} else if (this.field.isTerrain('psychicterrain')) {
 				move = 'psychic';
 			}
-			this.actions.useMove(move, pokemon, target);
+			this.actions.useMove(move, pokemon, {target});
 			return null;
 		},
 		callsMove: true,
