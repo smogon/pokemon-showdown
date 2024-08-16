@@ -1456,7 +1456,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Heal Pulse", "Helping Hand", "Seismic Toss", "Soft-Boiled", "Thunder Wave"],
+                "movepool": ["Heal Pulse", "Helping Hand", "Hyper Voice", "Protect", "Seismic Toss", "Soft-Boiled", "Thunder Wave"],
                 "abilities": ["Healer"],
                 "teraTypes": ["Fairy", "Ghost", "Poison"]
             }
@@ -1641,7 +1641,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Hurricane", "Hydro Pump", "Muddy Water", "Tailwind", "Wide Guard"],
+                "movepool": ["Hurricane", "Hydro Pump", "Muddy Water", "Protect", "Tailwind", "Wide Guard"],
                 "abilities": ["Drizzle"],
                 "teraTypes": ["Ground", "Steel"]
             }
@@ -2630,13 +2630,13 @@
         "level": 87,
         "sets": [
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Blizzard", "Calm Mind", "Freeze-Dry", "Shadow Ball"],
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Blizzard", "Freeze-Dry", "Mud Shot", "Protect"],
                 "abilities": ["Ice Body"],
-                "teraTypes": ["Ghost", "Ice"]
+                "teraTypes": ["Ground"]
             },
             {
-                "role": "Doubles Wallbreaker",
+                "role": "Doubles Setup Sweeper",
                 "movepool": ["Blizzard", "Calm Mind", "Freeze-Dry", "Mud Shot"],
                 "abilities": ["Ice Body"],
                 "teraTypes": ["Ground"]
@@ -4635,8 +4635,20 @@
         "level": 85,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Bulky Setup",
                 "movepool": ["Liquidation", "Lunge", "Protect", "Sticky Web", "Wide Guard"],
+                "abilities": ["Water Bubble"],
+                "teraTypes": ["Water"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Liquidation", "Leech Life", "Protect", "Sticky Web", "Wide Guard"],
+                "abilities": ["Water Bubble"],
+                "teraTypes": ["Water"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Hydro Pump", "Liquidation", "Protect", "Sticky Web", "Wide Guard"],
                 "abilities": ["Water Bubble"],
                 "teraTypes": ["Water"]
             }
@@ -5989,6 +6001,12 @@
                 "movepool": ["Psychic", "Revival Blessing", "Struggle Bug", "Trick Room"],
                 "abilities": ["Synchronize"],
                 "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Bug Buzz", "Psychic", "Revival Blessing", "Trick Room"],
+                "abilities": ["Synchronize"],
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -6468,7 +6486,7 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Dazzling Gleam", "Focus Blast", "Make It Rain", "Psychic", "Shadow Ball", "Thunderbolt", "Trick"],
+                "movepool": ["Dazzling Gleam", "Focus Blast", "Make It Rain", "Shadow Ball", "Thunderbolt", "Trick"],
                 "abilities": ["Good as Gold"],
                 "teraTypes": ["Fairy", "Steel"]
             },
@@ -6477,6 +6495,12 @@
                 "movepool": ["Make It Rain", "Nasty Plot", "Protect", "Shadow Ball"],
                 "abilities": ["Good as Gold"],
                 "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Dazzling Gleam", "Focus Blast", "Make It Rain", "Protect", "Shadow Ball"],
+                "abilities": ["Good as Gold"],
+                "teraTypes": ["Fairy", "Steel"]
             }
         ]
     },

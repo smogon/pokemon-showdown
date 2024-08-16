@@ -92,6 +92,11 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["curse", "earthquake", "glare", "haze", "sludgebomb"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["curse", "earthquake", "glare", "rockslide", "sludgebomb"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -178,7 +183,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "rest", "sleeptalk", "sunnyday", "toxic"]
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "rest", "sleeptalk", "sunnyday"]
             }
         ]
     },
@@ -186,11 +191,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["bodyslam", "doubleedge", "fireblast", "rest", "sleeptalk"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "doubleedge", "rest", "sleeptalk"]
+                "movepool": ["curse", "doubleedge", "rest", "sleeptalk", "thunder"]
             }
         ]
     },
@@ -219,11 +220,6 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["hiddenpowerbug", "spore", "swordsdance", "synthesis"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["bodyslam", "gigadrain", "hiddenpowerbug", "spore", "synthesis"],
-                "preferredTypes": ["Bug"]
             }
         ]
     },
@@ -232,7 +228,7 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["gigadrain", "hiddenpowerfire", "psychic", "sleeppowder", "sludgebomb", "stunspore"],
-                "preferredTypes": ["Psychic"]
+                "preferredTypes": ["Fire", "Psychic"]
             },
             {
                 "role": "Bulky Setup",
@@ -326,7 +322,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["bellydrum", "bodyslam", "earthquake", "lovelykiss", "return"]
+                "movepool": ["bellydrum", "earthquake", "lovelykiss", "return"]
             },
             {
                 "role": "Generalist",
@@ -340,10 +336,6 @@
                 "role": "Bulky Attacker",
                 "movepool": ["encore", "firepunch", "hiddenpowerdark", "psychic", "recover", "thunderwave"],
                 "preferredTypes": ["Fire"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["encore", "firepunch", "icepunch", "psychic", "recover", "thunderpunch"]
             }
         ]
     },
@@ -365,10 +357,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["hiddenpowerground", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"]
-            },
-            {
-                "role": "Generalist",
-                "movepool": ["hiddenpowerground", "razorleaf", "sleeppowder", "sludgebomb", "synthesis"]
             }
         ]
     },
@@ -448,7 +436,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["curse", "explosion", "fireblast", "hiddenpowerground", "sludgebomb"],
+                "movepool": ["curse", "explosion", "hiddenpowerground", "sludgebomb"],
                 "preferredTypes": ["Ground"]
             }
         ]
@@ -509,10 +497,6 @@
                 "role": "Bulky Setup",
                 "movepool": ["hiddenpowerground", "protect", "return", "substitute", "surf", "swordsdance"],
                 "preferredTypes": ["Normal"]
-            },
-            {
-                "role": "Generalist",
-                "movepool": ["doubleedge", "rest", "sleeptalk", "swordsdance"]
             }
         ]
     },
@@ -531,12 +515,8 @@
     "exeggutor": {
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["hiddenpowergrass", "psychic", "stunspore", "synthesis"]
-            },
-            {
                 "role": "Fast Attacker",
-                "movepool": ["explosion", "hiddenpowerfire", "hiddenpowergrass", "psychic", "sleeppowder"]
+                "movepool": ["explosion", "hiddenpowerfire", "hiddenpowergrass", "psychic", "sleeppowder", "stunspore", "thief"]
             },
             {
                 "role": "Generalist",
@@ -815,7 +795,7 @@
     "jolteon": {
         "sets": [
             {
-                "role": "Bulky Setup",
+                "role": "Setup Sweeper",
                 "movepool": ["batonpass", "growth", "hiddenpowerice", "substitute", "thunderbolt"]
             }
         ]
@@ -1152,6 +1132,10 @@
             {
                 "role": "Generalist",
                 "movepool": ["encore", "hiddenpowerflying", "leechseed", "stunspore"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["encore", "hiddenpowerflying", "sleeppowder", "stunspore"]
             }
         ]
     },
@@ -1322,12 +1306,8 @@
                 "movepool": ["curse", "glare", "hiddenpowerground", "return"]
             },
             {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "rest", "return", "sleeptalk"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["flamethrower", "rest", "return", "sleeptalk", "thunder"]
+                "role": "Generalist",
+                "movepool": ["curse", "rest", "return", "sleeptalk", "thunder"]
             }
         ]
     },
@@ -1467,7 +1447,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["curse", "recover", "rockslide", "sandstorm", "surf", "toxic"]
+                "movepool": ["curse", "icebeam", "recover", "rockslide", "sandstorm", "surf", "toxic"]
             }
         ]
     },
@@ -1499,11 +1479,11 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["curse", "drillpeck", "rest", "sleeptalk", "toxic"]
+                "movepool": ["curse", "drillpeck", "rest", "sleeptalk"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["curse", "drillpeck", "rest", "whirlwind"]
+                "movepool": ["curse", "drillpeck", "rest", "toxic", "whirlwind"]
             }
         ]
     },
@@ -1547,17 +1527,13 @@
     "porygon2": {
         "sets": [
             {
-                "role": "Generalist",
-                "movepool": ["icebeam", "recover", "thunderbolt", "thunderwave"]
-            },
-            {
                 "role": "Bulky Attacker",
                 "movepool": ["doubleedge", "icebeam", "recover", "thunder", "thunderwave"],
                 "preferredTypes": ["Ice"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["curse", "doubleedge", "icebeam", "recover", "thunderwave"]
+                "movepool": ["curse", "doubleedge", "icebeam", "recover", "thunder", "thunderwave"]
             }
         ]
     },

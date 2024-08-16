@@ -2173,7 +2173,6 @@
                   ["Curse"],
                   ["Trick Room"]
               ],
-              "gender": "F",
               "item": ["Life Orb"],
               "nature": "Adamant",
               "evs": {"hp": 36, "atk": 236, "def": 180, "spd": 4, "spe": 52},
@@ -2249,7 +2248,6 @@
                   ["Trick Room"],
                   ["Shadow Sneak"]
               ],
-              "gender": "F",
               "item": ["Covert Cloak"],
               "nature": "Adamant",
               "evs": {"hp": 36, "atk": 236, "def": 180, "spd": 4, "spe": 52},
@@ -2414,7 +2412,7 @@
           },
           {
               "species": "Basculegion",
-              "weight": 5,
+              "weight": 10,
               "moves": [
                   ["Wave Crash"],
                   ["Aqua Jet"],
@@ -2427,22 +2425,6 @@
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Ghost", "Normal", "Water"],
               "ability": ["Adaptability"]
-          },
-          {
-              "species": "Basculegion",
-              "weight": 5,
-              "moves": [
-                  ["Wave Crash"],
-                  ["Aqua Jet"],
-                  ["Flip Turn", "Liquidation", "Substitute"],
-                  ["Last Respects"]
-              ],
-              "gender": "M",
-              "item": ["Life Orb"],
-              "nature": "Adamant",
-              "evs": {"atk": 252, "spd": 4, "spe": 252},
-              "teraType": ["Water"],
-              "ability": ["Swift Swim"]
           }
       ]
   },
@@ -2928,7 +2910,6 @@
                   ["Fake Out"],
                   ["Toxic Spikes"]
               ],
-              "gender": "F",
               "item": ["Air Balloon", "Focus Sash", "Normal Gem", "Red Card", "Sitrus Berry"],
               "nature": "Adamant",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -2944,7 +2925,6 @@
                   ["Fake Out"],
                   ["Toxic Spikes"]
               ],
-              "gender": "F",
               "item": ["Air Balloon", "Focus Sash", "Sitrus Berry"],
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -2953,33 +2933,17 @@
           },
           {
               "species": "Sneasler",
-              "weight": 55,
+              "weight": 60,
               "moves": [
                   ["Dire Claw"],
                   ["Close Combat"],
                   ["Shadow Claw"],
                   ["Toxic Spikes"]
               ],
-              "gender": "F",
               "item": ["Air Balloon", "Focus Sash", "Red Card", "Sitrus Berry"],
               "nature": "Adamant",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Ghost"],
-              "ability": ["Unburden"]
-          },
-          {
-              "species": "Sneasler",
-              "weight": 5,
-              "moves": [
-                  ["Dire Claw"],
-                  ["Close Combat"],
-                  ["Swords Dance"],
-                  ["Acrobatics", "Shadow Claw"]
-              ],
-              "item": ["Grassy Seed"],
-              "nature": "Adamant",
-              "evs": {"hp": 92, "atk": 252, "def": 4, "spd": 4, "spe": 156},
-              "teraType": ["Flying", "Ghost"],
               "ability": ["Unburden"]
           }
       ]
@@ -3943,7 +3907,6 @@
                   ["Hammer Arm", "Low Kick", "Taunt"],
                   ["Thunder Wave"]
               ],
-              "gender": "M",
               "item": ["Focus Sash"],
               "nature": "Adamant",
               "evs": {"atk": 252, "def": 4, "spe": 252},
@@ -4571,49 +4534,13 @@
                   ["Roost"],
                   ["Taunt", "Toxic"],
                   ["U-turn"],
-                  ["Charm", "Play Rough"]
+                  ["Play Rough"]
               ],
               "item": ["Leftovers"],
               "nature": "Careful",
               "evs": {"hp": 252, "spd": 220, "spe": 36},
               "teraType": ["Flying", "Water"],
               "ability": ["Toxic Chain"]
-          }
-      ]
-  },
-  "pelipper": {
-      "weight": 3,
-      "sets": [
-          {
-              "species": "Pelipper",
-              "weight": 70,
-              "moves": [
-                  ["U-turn"],
-                  ["Hydro Pump", "Surf"],
-                  ["Ice Beam"],
-                  ["Hurricane", "Roost"]
-              ],
-              "item": ["Damp Rock"],
-              "nature": "Quiet",
-              "evs": {"hp": 252, "def": 4, "spa": 252},
-              "ivs": {"spe": 0},
-              "teraType": ["Grass", "Ground", "Steel"],
-              "ability": ["Drizzle"]
-          },
-          {
-              "species": "Pelipper",
-              "weight": 30,
-              "moves": [
-                  ["U-turn"],
-                  ["Hydro Pump", "Surf"],
-                  ["Ice Beam"],
-                  ["Hurricane"]
-              ],
-              "item": ["Choice Specs", "Damp Rock"],
-              "nature": "Modest",
-              "evs": {"spa": 252, "spd": 4, "spe": 252},
-              "teraType": ["Flying", "Grass", "Ground", "Steel", "Water"],
-              "ability": ["Drizzle"]
           }
       ]
   },
@@ -5058,7 +4985,7 @@
       "sets": [
           {
               "species": "Drifblim",
-              "weight": 95,
+              "weight": 100,
               "moves": [
                   ["Minimize"],
                   ["Substitute"],
@@ -5066,22 +4993,6 @@
                   ["Air Slash", "Shadow Ball", "Stockpile", "Strength Sap", "Will-O-Wisp"]
               ],
               "item": ["Kee Berry", "Sitrus Berry"],
-              "nature": "Timid",
-              "evs": {"def": 164, "spd": 92, "spe": 252},
-              "ivs": {"atk": 0},
-              "teraType": ["Dark", "Normal", "Water"],
-              "ability": ["Unburden"]
-          },
-          {
-              "species": "Drifblim",
-              "weight": 5,
-              "moves": [
-                  ["Minimize"],
-                  ["Substitute"],
-                  ["Baton Pass"],
-                  ["Air Slash", "Shadow Ball", "Stockpile", "Strength Sap", "Will-O-Wisp"]
-              ],
-              "item": ["Grassy Seed"],
               "nature": "Timid",
               "evs": {"def": 164, "spd": 92, "spe": 252},
               "ivs": {"atk": 0},

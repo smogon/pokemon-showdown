@@ -472,7 +472,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["drillrun", "flareblitz", "morningsun", "wildcharge", "willowisp"],
-                "abilities": ["Flash Fire"]
+                "abilities": ["Flame Body", "Flash Fire"]
             },
             {
                 "role": "Wallbreaker",
@@ -991,11 +991,6 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["bodyslam", "crunch", "curse", "earthquake", "rest", "sleeptalk"],
-                "abilities": ["Thick Fat"]
-            },
-            {
-                "role": "AV Pivot",
-                "movepool": ["bodyslam", "crunch", "earthquake", "pursuit"],
                 "abilities": ["Thick Fat"]
             }
         ]
@@ -2159,7 +2154,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["bulkup", "bulletpunch", "closecombat", "facade", "knockoff"],
+                "movepool": ["bulletpunch", "closecombat", "facade", "fakeout", "knockoff"],
                 "abilities": ["Guts"],
                 "preferredTypes": ["Dark"]
             }
@@ -2232,7 +2227,8 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["earthquake", "heavyslam", "roar", "stealthrock", "stoneedge", "thunderwave", "toxic"],
-                "abilities": ["Sturdy"]
+                "abilities": ["Sturdy"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -2332,9 +2328,10 @@
         "level": 90,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["earthquake", "encore", "icebeam", "painsplit", "sludgebomb", "toxic", "yawn"],
-                "abilities": ["Liquid Ooze"]
+                "abilities": ["Liquid Ooze"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Staller",
@@ -2554,11 +2551,6 @@
                 "role": "Fast Attacker",
                 "movepool": ["aquajet", "crabhammer", "dragondance", "knockoff", "superpower"],
                 "abilities": ["Adaptability"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["aquajet", "crabhammer", "dragondance", "knockoff", "swordsdance"],
-                "abilities": ["Adaptability"]
             }
         ]
     },
@@ -2577,13 +2569,14 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["curse", "recover", "seedbomb", "stoneedge", "swordsdance"],
+                "movepool": ["curse", "earthquake", "recover", "seedbomb", "stoneedge", "swordsdance"],
                 "abilities": ["Storm Drain"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["gigadrain", "recover", "stealthrock", "stoneedge", "toxic"],
-                "abilities": ["Storm Drain"]
+                "movepool": ["earthpower", "gigadrain", "recover", "stealthrock", "stoneedge", "toxic"],
+                "abilities": ["Storm Drain"],
+                "preferredTypes": ["Grass"]
             }
         ]
     },
@@ -4098,7 +4091,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["airslash", "earthpower", "leechseed", "rest", "seedflare", "substitute"],
+                "movepool": ["airslash", "earthpower", "leechseed", "seedflare", "substitute", "synthesis"],
                 "abilities": ["Natural Cure"],
                 "preferredTypes": ["Flying"]
             }
@@ -4425,9 +4418,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["crunch", "playrough", "return", "superpower", "wildcharge"],
-                "abilities": ["Scrappy"],
-                "preferredTypes": ["Fighting"]
+                "movepool": ["crunch", "facade", "return", "superpower"],
+                "abilities": ["Scrappy"]
             }
         ]
     },
