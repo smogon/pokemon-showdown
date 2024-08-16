@@ -1350,7 +1350,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			}
 			const name = nameTemp;
 			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
-			if (ssbSet.skip) continue;
+			if (ssbSet.skip && name !== 'Castaways-Swalot' && name !== 'Castaways-Carnivine' && name !== 'Castaways-Perrserker') continue;
 
 			// Enforce typing limits
 			if (!(debug.length || monotype)) { // Type limits are ignored for debugging, monotype, or memes.
