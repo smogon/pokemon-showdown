@@ -1348,10 +1348,10 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				let r = this.random(3);
 				switch (r) {
 					case 0:
-						name === 'Castaways-Carnivine';
+						name = 'Castaways-Carnivine';
 						ssbSet = this.dex.deepClone(ssbSets[name]);
 					case 1:
-						name === 'Castaways-Perrserker';
+						name = 'Castaways-Perrserker';
 						ssbSet = this.dex.deepClone(ssbSets[name]);
 				}
 			}
