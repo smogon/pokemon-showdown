@@ -181,6 +181,24 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Killing Doll',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 	},
+	'Castaways-Swalot': {
+		species: 'Swalot', ability: 'The World', item: 'Stopwatch', gender: 'F',
+		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
+		signatureMove: 'Killing Doll',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
+	},
+	'Castaways-Carnivine': {
+		species: 'Magearna', ability: 'The World', item: 'Stopwatch', gender: 'F',
+		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
+		signatureMove: 'Killing Doll',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', skip: 'Castaways-Swalot',
+	},
+	'Castaways-Perrserker': {
+		species: 'Magearna', ability: 'The World', item: 'Stopwatch', gender: 'F',
+		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
+		signatureMove: 'Killing Doll',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', skip: 'Castaways-Swalot',
+	},
 	/*
 	Codie: {
 		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
