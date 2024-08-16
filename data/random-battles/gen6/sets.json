@@ -3833,7 +3833,7 @@
                 "role": "Bulky Support",
                 "movepool": ["earthpower", "powergem", "stealthrock", "thunderwave", "toxic", "voltswitch"],
                 "abilities": ["Magnet Pull"],
-                "preferredTypes": ["Ground"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
