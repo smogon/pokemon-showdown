@@ -1341,11 +1341,11 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (nameTemp === 'Castaways-Swalot') {
 				const sel = this.random(3);
 				if (sel === 1) {
-					nameTemp === 'Castaways-Perrserker'
+					nameTemp === 'Castaways-Perrserker';
 				} else if (sel === 2) {
-					nameTemp === 'Castaways-Carnivine'
+					nameTemp === 'Castaways-Carnivine';
 				} else {
-					nameTemp === 'Castaways-Swalot'
+					nameTemp === 'Castaways-Swalot';
 				}
 			}
 			const name = nameTemp;
