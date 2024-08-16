@@ -4544,6 +4544,26 @@
           }
       ]
   },
+  "pelipper": {
+    "weight": 3,
+    "sets": [
+        {
+            "species": "Pelipper",
+            "weight": 100,
+            "moves": [
+                ["U-turn"],
+                ["Hydro Pump"],
+                ["Ice Beam"],
+                ["Hurricane"]
+            ],
+            "item": ["Choice Specs"],
+            "nature": "Modest",
+            "evs": {"spa": 252, "spd": 4, "spe": 252},
+            "teraType": ["Flying", "Grass", "Ground", "Steel", "Water"],
+            "ability": ["Drizzle"]
+        }
+    ]
+},
   "rotomheat": {
       "weight": 3,
       "sets": [
