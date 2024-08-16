@@ -1337,20 +1337,24 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
-			let nameTemp = this.sampleNoReplace(pool);
-			if (nameTemp === 'Castaways-Swalot') {
-				const sel = this.random(3);
-				if (sel === 1) {
-					nameTemp === 'Castaways-Perrserker';
-				} else if (sel === 2) {
-					nameTemp === 'Castaways-Carnivine';
-				} else {
-					nameTemp === 'Castaways-Swalot';
+			let name = this.sampleNoReplace(pool);
+			let ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
+			if (ssbSet.skip) continue;
+
+			// Castaways
+			if (name === 'Castaways-Swalot') {
+				// Yes, I am aware this.random(3) produces a range from 0 to 2. Yes, I am aware I didn't include a check for 2.
+				// It's because if 2 is rolled, the set is already set to Swalot, so nothing needs to happen.
+				let r = this.random(3);
+				switch (r) {
+					case 0:
+						name === 'Castaways-Carnivine';
+						ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
+					case 1:
+						name === 'Castaways-Perrserker';
+						ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
 				}
 			}
-			const name = nameTemp;
-			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
-			if (ssbSet.skip && name !== 'Castaways-Swalot' && name !== 'Castaways-Carnivine' && name !== 'Castaways-Perrserker') continue;
 
 			// Enforce typing limits
 			if (!(debug.length || monotype)) { // Type limits are ignored for debugging, monotype, or memes.
