@@ -1342,16 +1342,16 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			if (ssbSet.skip) continue;
 
 			// Castaways
-			if (name === 'Castaways-Swalot') {
+			if (name === 'Castaways') {
 				// Yes, I am aware this.random(3) produces a range from 0 to 2. Yes, I am aware I didn't include a check for 2.
 				// It's because if 2 is rolled, the set is already set to Swalot, so nothing needs to happen.
 				let r = this.random(3);
 				switch (r) {
 					case 0:
-						name = 'Castaways-Carnivine';
+						name = 'Castaways-C';
 						ssbSet = this.dex.deepClone(ssbSets[name]);
 					case 1:
-						name = 'Castaways-Perrserker';
+						name = 'Castaways-P';
 						ssbSet = this.dex.deepClone(ssbSets[name]);
 				}
 			}
