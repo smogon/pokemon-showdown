@@ -4642,7 +4642,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Liquidation", "Leech Life", "Protect", "Sticky Web", "Wide Guard"],
+                "movepool": ["Leech Life", "Liquidation", "Protect", "Sticky Web", "Wide Guard"],
                 "abilities": ["Water Bubble"],
                 "teraTypes": ["Water"]
             },
