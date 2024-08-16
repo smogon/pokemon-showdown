@@ -3828,6 +3828,12 @@
                 "role": "Bulky Attacker",
                 "movepool": ["earthpower", "flashcannon", "stealthrock", "thunderwave", "toxic", "voltswitch"],
                 "abilities": ["Magnet Pull"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["earthpower", "powergem", "stealthrock", "thunderwave", "toxic", "voltswitch"],
+                "abilities": ["Magnet Pull"],
+                "preferredTypes": ["Ground"],
             }
         ]
     },
