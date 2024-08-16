@@ -411,6 +411,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		gen: 9,
 		pp: 20,
 		priority: 4,
+		onTry(source) {
+			if (['Quagsire', 'Clodsire'].includes(source.species.name)) {
+				return;
+			}
+			this.hint("Only Clodsire and Quagsire can use this move.");
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Sire Switch');
+			return null;
+		},
 		onModifyPriority(relayVar, source, target, move) {
 			if (source.species.name === 'Clodsire') {
 				return -6;
@@ -1041,13 +1050,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "80%: Change into Lunala, else Solgaleo.",
-		desc: "This move has an 80% chance of transforming the user into Lunala. It has a 20% chance of instead transforming the user into Solgaleo, boosting its Attack by 1 stage, preventing it from switching out,  and causing it to faint after three turns, akin to Perish Song.",
+		shortDesc: "Cosmog: 80%: Change into Lunala, else Solgaleo.",
+		desc: "This move has an 80% chance of transforming the user into Lunala. It has a 20% chance of instead transforming the user into Solgaleo, boosting its Attack by 1 stage, preventing it from switching out,  and causing it to faint after three turns, akin to Perish Song. This move cannot be used successfully unless the user's current form, while considering Transform, is Cosmog.",
 		name: "Hack Check",
 		gen: 9,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, bypasssub: 1, failcopycat: 1},
+		onTry(source) {
+			if (source.species.name === 'Cosmog') {
+				return;
+			}
+			this.hint("Only Cosmog can use this move.");
+			this.attrLastMove('[still]');
+			this.add('-fail', source, 'move: Hack Check');
+			return null;
+		},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3796,7 +3814,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[anim] Imprison');
 		},
 		onHit(target, source, m) {
-			const sigMoveName = ssbSets[(target.illusion || target).name].signatureMove;
+			let sigMoveName = ssbSets[(target.illusion || target).name]?.signatureMove;
+			if (!sigMoveName) sigMoveName = target.moveSlots[target.moveSlots.length - 1].id;
 			const move = this.dex.getActiveMove(sigMoveName);
 			if (!target || this.queue.willSwitch(target) || target.beingCalledBack ||
 				move.flags['failcopycat'] || move.flags['nosketch']) {
@@ -4663,31 +4682,28 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Explosion', target);
 		},
 		onHit(target, source, move) {
+			let success = false;
 			const displayText = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
-			for (const targetCondition of Object.keys(target.side.sideConditions)) {
-				if (target.side.removeSideCondition(targetCondition) && displayText.includes(targetCondition)) {
-					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] move: Magic Trick', '[of] ' + source);
+			for (const player of this.sides) {
+				for (const targetCondition of Object.keys(player.sideConditions)) {
+					if (player.removeSideCondition(targetCondition)) {
+						success = true;
+						if (displayText.includes(targetCondition)) {
+							this.add('-sideend', player, this.dex.conditions.get(targetCondition).name, '[from] move: Magic Trick', '[of] ' + source);
+						}
+					}
 				}
 			}
-			for (const sideCondition of Object.keys(source.side.sideConditions)) {
-				if (source.side.removeSideCondition(sideCondition) && displayText.includes(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Magic Trick', '[of] ' + source);
-				}
-			}
-			this.field.clearTerrain();
-			this.field.clearWeather();
+			if (this.field.clearTerrain()) success = true;
+			if (this.field.clearWeather()) success = true;
 			for (const pseudoWeather of PSEUDO_WEATHERS) {
-				this.field.removePseudoWeather(pseudoWeather);
+				if (this.field.removePseudoWeather(pseudoWeather)) success = true;
 			}
-		},
-		self: {
-			onHit(target, source, move) {
-				return !!this.canSwitch(source.side);
-			},
+			return success || !!this.canSwitch(source.side);
 		},
 		selfSwitch: true,
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Normal",
 	},
 
