@@ -1337,7 +1337,18 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
-			const name = this.sampleNoReplace(pool);
+			let nameTemp = this.sampleNoReplace(pool);
+			if (nameTemp === 'Castaways-Swalot') {
+				const sel = this.random(3);
+				if (sel === 1) {
+					nameTemp === 'Castaways-Perrserker'
+				} else if (sel === 2) {
+					nameTemp === 'Castaways-Carnivine'
+				} else {
+					nameTemp === 'Castaways-Swalot'
+				}
+			}
+			const name = nameTemp;
 			const ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
