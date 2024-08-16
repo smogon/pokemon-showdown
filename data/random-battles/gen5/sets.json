@@ -433,7 +433,7 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["drillrun", "flareblitz", "morningsun", "wildcharge", "willowisp"],
-                "abilities": ["Flash Fire", "Flame Body"]
+                "abilities": ["Flame Body", "Flash Fire"]
             },
             {
                 "role": "Wallbreaker",
