@@ -196,9 +196,10 @@ interface ModdedBattleActions {
 	runMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
 	runMove?: (
-		this: BattleActions, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
-		options?: {sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean,
-			maxMove?: string, originalTarget?: Pokemon}
+		this: BattleActions, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, options?: {
+			sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean,
+			maxMove?: string, originalTarget?: Pokemon,
+		}
 	) => void;
 	runMoveEffects?: (
 		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
@@ -236,13 +237,13 @@ interface ModdedBattleActions {
 	useMove?: (
 		this: BattleActions, move: Move, pokemon: Pokemon, options?: {
 			target?: Pokemon | null, sourceEffect?: Effect | null,
-			zMove?: string, maxMove?: string
+			zMove?: string, maxMove?: string,
 		}
 	) => boolean;
 	useMoveInner?: (
 		this: BattleActions, move: Move, pokemon: Pokemon, options?: {
 			target?: Pokemon | null, sourceEffect?: Effect | null,
-			zMove?: string, maxMove?: string
+			zMove?: string, maxMove?: string,
 		}
 	) => boolean;
 	getDamage?: (

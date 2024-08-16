@@ -221,7 +221,10 @@ export class BattleActions {
 	 */
 	runMove(
 		moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
-		options?: {sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon}
+		options?: {
+			sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean,
+			maxMove?: string, originalTarget?: Pokemon,
+		}
 	) {
 		pokemon.activeMoveActions++;
 		const zMove = options?.zMove;
@@ -387,7 +390,7 @@ export class BattleActions {
 	useMoveInner(
 		moveOrMoveName: Move | string, pokemon: Pokemon, options?: {
 			target?: Pokemon | null, sourceEffect?: Effect | null,
-			zMove?: string, maxMove?: string
+			zMove?: string, maxMove?: string,
 		},
 	) {
 		let target = options?.target;

@@ -424,7 +424,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (dancer.fainted) continue;
 					this.battle.add('-activate', dancer, 'ability: Dancer');
 					const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
-					this.runMove(move.id, dancer, dancer.getLocOf(dancersTarget), {sourceEffect: this.dex.abilities.get('dancer'), externalMove: true});
+					this.runMove(move.id, dancer, dancer.getLocOf(dancersTarget),
+						{sourceEffect: this.dex.abilities.get('dancer'), externalMove: true});
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
