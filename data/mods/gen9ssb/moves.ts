@@ -4701,11 +4701,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			return success || !!this.canSwitch(source.side);
 		},
-		self: {
-			onHit(target, source, move) {
-
-			},
-		},
 		selfSwitch: true,
 		secondary: null,
 		target: "self",
