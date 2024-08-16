@@ -2725,15 +2725,15 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Crunch", "Flip Turn", "Ice Spinner", "Low Kick", "Wave Crash"],
+                "movepool": ["Crunch", "Flip Turn", "Ice Spinner", "Wave Crash"],
                 "abilities": ["Water Veil"],
                 "teraTypes": ["Water"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bulk Up", "Crunch", "Ice Spinner", "Low Kick", "Wave Crash"],
+                "movepool": ["Bulk Up", "Crunch", "Ice Spinner", "Wave Crash"],
                 "abilities": ["Water Veil"],
-                "teraTypes": ["Dark", "Fighting", "Ice", "Steel", "Water"]
+                "teraTypes": ["Dark", "Steel", "Water"]
             }
         ]
     },
