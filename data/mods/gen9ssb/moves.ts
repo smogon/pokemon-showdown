@@ -40,6 +40,75 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Codie
+	conflux: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Special",
+		desc: "Randomly selects two special moves learned by allies, and uses the base power of those moves in damage calculation ((Move 1 BP + Move 2 BP) / 2). If the two moves share a type, causes a conflux (Random effect. Burns the target, freezes the target, raises the Special Attack of all active Pokemon by 2 stages, or deals a random amount of damage to both the user and the target). Can only be used once per switch-in.",
+		shortDesc: "Selects two special moves to calculate damage; Random effect.",
+		name: "Conflux",
+		pp: 8,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1},
+		onTryHit() {
+			this.attrLastMove('[still]');
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Judgment', source);
+			let possibleMoves = [];
+			for (const ally of source.side.pokemon) {
+				for (const moveSlot of ally.moveSlots) {
+					const moveid = moveSlot.id;
+					const movedata = this.dex.moves.get(moveid);
+					if (movedata.category === 'Special') {
+						possibleMoves.push(moveid);
+					}
+				}
+			}
+			if (!possibleMoves.length) {
+				this.add('-message', `${source.name} couldn't read from an empty codex!`);
+				return null;
+			}
+			let imprints = [];
+			for (let i = 0; i < 2; i++) {
+				let imprintid = this.sample(possibleMoves);
+				let imprint = this.dex.moves.get(imprintid);
+				this.add('-anim', source, imprint.name, source);
+				imprints.push(imprint);
+			}
+			this.add('-anim', source, 'Boomburst', target);
+			move.basePower = (imprints[1].basePower + imprints[2].basePower) / 2;
+			if (imprints[1].type === imprints[2].type) {
+				this.effectState.conflux = true;
+			}
+		},
+		onHit(target, source, move) {
+			if (this.effectState.conflux) {
+				this.add('-message', `${source.name} created a conflux!`);
+				const r = this.random(4);
+				switch (r) {
+					case 0:
+						target.setStatus('brn', source, move);
+					case 1:
+						target.setStatus('frz', source, move);
+					case 2:
+						for (const pokemon of this.getAllActive()) {
+							this.boost({spa: 2}, pokemon, source, move);
+						}
+					case 3:
+						for (const pokemon of this.getAllActive()) {
+							this.damage(this.random(1, 300), pokemon, source, move)
+						}
+				}
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
 	// Sakuya Izayoi
 	misdirection: {
 		accuracy: true,
