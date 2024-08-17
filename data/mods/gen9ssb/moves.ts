@@ -240,7 +240,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Killing Doll', '[silent]');
-				target.removeVolatile('killingdoll');
 				this.add('-anim', target, 'Confuse Ray', target);
 				this.add('-message', `The Killing Doll vanished!`);
 			},
