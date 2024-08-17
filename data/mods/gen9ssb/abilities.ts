@@ -83,6 +83,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Upon switching in, this Pokemon adds a random move of the foe's to its moveset not already included. It also copies stat changes and ability.",
 		shortDesc: "Learns 1 enemy move; Copies stat changes, ability.",
 		onStart(pokemon) {
+			const target = pokemon.side.foe.active[0];
+			// Replace Ability
+			this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+			pokemon.ability = target.getAbility().id;
+			pokemon.setAbility(target.getAbility().id);
+			pokemon.abilityState = {id: this.toID(pokemon.ability), target: pokemon};
+			this.singleEvent('Start', target.getAbility(), target.abilityState, pokemon);
+			this.runEvent('SetAbility', pokemon, pokemon, this.effect, target.getAbility());
 			// Learning An Opponent's Move
 			const target = pokemon.side.foe.active[0];
 			let possibleMoves = [];
@@ -122,12 +130,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.boost(boosts, pokemon);
 				this.add('-message', `${pokemon.name} copied ${target.name}'s stat changes!`);
 			}
-			// Replace Ability
-			if (pokemon.setAbility(target.ability)) {
-				this.add('-ability', pokemon, pokemon.getAbility().name, '[from] ability: Perfect Copy', '[of] ' + target);
-			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
 		name: "Perfect Copy",
 		gen: 9,
 	},
