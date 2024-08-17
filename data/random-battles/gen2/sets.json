@@ -1041,7 +1041,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["charm", "curse", "doubleedge", "fireblast", "rest", "sleeptalk"]
+                "movepool": ["curse", "doubleedge", "fireblast", "rest", "sleeptalk"]
             },
             {
                 "role": "Setup Sweeper",
