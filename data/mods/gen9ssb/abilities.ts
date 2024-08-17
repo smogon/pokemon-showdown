@@ -92,7 +92,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.singleEvent('Start', target.getAbility(), target.abilityState, pokemon);
 			this.runEvent('SetAbility', pokemon, pokemon, this.effect, target.getAbility());
 			// Learning An Opponent's Move
-			const target = pokemon.side.foe.active[0];
 			let possibleMoves = [];
 			for (const moveSlot of target.moveSlots) {
 				if (pokemon.moves.includes(moveSlot.id)) continue;
