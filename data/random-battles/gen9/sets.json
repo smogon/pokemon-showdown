@@ -553,13 +553,13 @@
                 "role": "Wallbreaker",
                 "movepool": ["Focus Blast", "Nasty Plot", "Shadow Ball", "Sludge Wave", "Trick"],
                 "abilities": ["Cursed Body"],
-                "teraTypes": ["Fighting", "Ghost"]
+                "teraTypes": ["Dark", "Fighting", "Ghost"]
             },
             {
                 "role": "Fast Attacker",
                 "movepool": ["Encore", "Focus Blast", "Shadow Ball", "Sludge Wave", "Toxic Spikes", "Will-O-Wisp"],
                 "abilities": ["Cursed Body"],
-                "teraTypes": ["Fighting", "Ghost"]
+                "teraTypes": ["Dark", "Fighting", "Ghost"]
             }
         ]
     },
