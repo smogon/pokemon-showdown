@@ -2577,9 +2577,7 @@ export const commands: Chat.ChatCommands = {
 			this.addGlobalModAction(`${user.name} added the note "${note}" to ${ticket.userid}'s helpticket.`);
 			this.globalModlog(`HELPTICKET NOTE`, ticket.userid, note);
 		},
-		addnotehelp: [
-			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ &`,
-		],
+		addnotehelp: [`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ &`],
 
 		removenote(target, room, user) {
 			this.checkCan('lock');
