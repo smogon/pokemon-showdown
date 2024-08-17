@@ -171,6 +171,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Hex', target);
 		},
+		onHit(target, source, move) {
+			this.directDamage(target.maxhp / 4, target);
+		},
 		onTryHit(source) {
 			if (source.volatiles['killingdoll']) {
 				this.add('-fail', source, 'move: Killing Doll');
@@ -183,12 +186,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		volatileStatus: 'killingdoll',
 		condition: {
-			onStart(target, source, effect) {
-				this.effectState.hp = Math.floor(target.maxhp / 4);
-				this.add('-message', `${source.name} summoned a Killing Doll!`);
-				if (target.volatiles['partiallytrapped']) {
-					this.add('-end', target, target.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
-					delete target.volatiles['partiallytrapped'];
+			onStart(pokemon) {
+				pokemon.abilityState.dollhp = Math.floor(pokemon.maxhp / 4);
+				this.add('-message', `${pokemon.name} summoned a Killing Doll!`);
+				if (pokemon.volatiles['partiallytrapped']) {
+					this.add('-end', pokemon, pokemon.volatiles['partiallytrapped'].sourceEffect, '[partiallytrapped]', '[silent]');
+					delete pokemon.volatiles['partiallytrapped'];
 				}
 			},
 			onTryPrimaryHitPriority: -1,
@@ -197,25 +200,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return;
 				}
 				let damage = this.actions.getDamage(source, target, move);
-				if (!damage && damage !== 0) {
+				if (!damage) {
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
 					return null;
 				}
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) {
-					return damage;
+				this.add('-anim', target, 'Spectral Thief', source);
+				this.damage(damage, source, target, 'move: Killing Doll');
+				if (damage > target.abilityState.dollhp) {
+					damage = target.abilityState.dollhp as number;
 				}
-				source.hp -= damage;
-				if (damage > target.volatiles['killingdoll'].hp) {
-					damage = target.volatiles['killingdoll'].hp as number;
-				}
-				target.volatiles['killingdoll'].hp -= damage;
+				target.abilityState.dollhp -= damage;
 				source.lastDamage = damage;
-				if (target.volatiles['killingdoll'].hp <= 0) {
+				if (target.abilityState.dollhp <= 0) {
 					if (move.ohko) this.add('-ohko');
 					target.removeVolatile('killingdoll');
-					source.hp = 0;
+					target.abilityState.dollhp = 0;
 				} else {
 					this.add('-activate', target, 'move: Killing Doll', '[damage]');
 				}
@@ -225,18 +225,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (move.drain) {
 					this.heal(0, source, target, 'drain');
 				}
-				this.singleEvent('AfterSubDamage', move, null, target, source, move, damage);
-				this.runEvent('AfterSubDamage', target, source, move, damage);
-				this.add('-anim', target, 'Spectral Thief', source);
-				this.damage(damage, source, target);
 				return this.HIT_SUBSTITUTE;
 			},
 			onResidual(pokemon) {
-				this.add('-anim', pokemon, 'Hex', pokemon);
-				this.add('-message', `Killing Doll haunts the battlefield!`);
+				if (pokemon.abilityState.dollhp > 0) {
+					this.add('-anim', pokemon, 'Hex', pokemon);
+					this.add('-message', `Killing Doll haunts the battlefield!`);
+				} else if (!pokemon.abilityState.dollhp || pokemon.abilityState.dollhp <= 0) {
+					this.add('-end', pokemon, 'Killing Doll', '[silent]');
+					pokemon.removeVolatile('killingdoll');
+					this.add('-anim', pokemon, 'Confuse Ray', pokemon);
+					this.add('-message', `The Killing Doll vanished!`);
+				}
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Killing Doll', '[silent]');
+				target.removeVolatile('killingdoll');
 				this.add('-anim', target, 'Confuse Ray', target);
 				this.add('-message', `The Killing Doll vanished!`);
 			},
