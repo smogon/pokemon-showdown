@@ -181,25 +181,31 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Killing Doll',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 	},
+	Codie: {
+		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
+		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
+		signatureMove: 'Conflux',
+		evs: {hp: 248, def: 8, spd: 252}, nature: 'Bold',
+	},
+	/*
 	'Castaways': {
-		species: 'Swalot', ability: 'The World', item: 'Stopwatch', gender: 'F',
+		species: 'Swalot', ability: 'Aftermath', item: 'Black Sludge', gender: 'M',
 		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
 		signatureMove: 'Killing Doll',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 	},
 	'Castaways-C': {
-		species: 'Carnivine', ability: 'The World', item: 'Stopwatch', gender: 'F',
-		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
-		signatureMove: 'Killing Doll',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', skip: 'Castaways',
+		species: 'Carnivine', ability: 'Overgrow', item: 'Big Root', gender: 'M',
+		moves: ['Power Whip', 'Drill Run', 'Strength Sap'],
+		signatureMove: 'Silk Trap',
+		evs: {hp: 248, atk: 144, def: 116}, ivs: {spa: 0}, nature: 'Brave', skip: 'Castaways',
 	},
 	'Castaways-P': {
-		species: 'Perrserker', ability: 'The World', item: 'Stopwatch', gender: 'F',
-		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
-		signatureMove: 'Killing Doll',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet', skip: 'Castaways',
+		species: 'Perrserker', ability: 'Tough Claws', item: 'Expert Belt', gender: 'M',
+		moves: ['Hard Press', 'Flying Press', 'Hone Claws'],
+		signatureMove: 'Taunt',
+		evs: {hp: 120, atk: 252, spd: 136}, ivs: {spa: 0}, nature: 'Adamant', skip: 'Castaways',
 	},
-	/*
 	Codie: {
 		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
 		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
