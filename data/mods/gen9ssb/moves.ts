@@ -65,11 +65,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const movedata = this.dex.moves.get(moveid);
 					if (movedata.category === 'Special') {
 						possibleMoves.push(moveid);
+						this.add('-message', moveid);
 					}
 				}
 			}
-			if (!possibleMoves.length) {
-				this.add('-message', `${source.name} couldn't read from an empty codex!`);
+			if (!possibleMoves.length || possibleMoves.length < 2) {
+				this.add('-message', `${source.name} tried reading from an insufficient codex!`);
 				return null;
 			}
 			let imprints = [];
@@ -78,6 +79,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				let imprint = this.dex.moves.get(imprintid);
 				this.add('-anim', source, imprint.name, source);
 				imprints.push(imprint);
+			}
+			if (!imprints.length || imprints.length < 2) {
+				this.add('-message', `${source.name} tried reading an insufficient imprint!`);
+				return null;
 			}
 			this.add('-anim', source, 'Boomburst', target);
 			move.basePower = (imprints[1].basePower + imprints[2].basePower) / 2;
