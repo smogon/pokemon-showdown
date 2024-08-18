@@ -5676,8 +5676,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 	// Tuthur
 	symphonieduzero: {
-		accuracy: 85,
-		basePower: 35,
+		accuracy: 100,
+		basePower: 80,
 		category: "Special",
 		shortDesc: "Deals an additional 12.5% HP at end of turn.",
 		desc: "If this move deals damage, at the end of the turn, the target will take an additional 12.5% of its maximum HP in non-attack damage if it is still on the field.",
