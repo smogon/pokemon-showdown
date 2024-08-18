@@ -4375,7 +4375,7 @@
                 "role": "Fast Bulky Setup",
                 "movepool": ["Bug Buzz", "Fiery Dance", "Fire Blast", "Giga Drain", "Morning Sun", "Quiver Dance"],
                 "abilities": ["Flame Body", "Swarm"],
-                "teraTypes": ["Fire", "Grass"]
+                "teraTypes": ["Fire", "Grass", "Steel"]
             },
             {
                 "role": "Tera Blast user",
