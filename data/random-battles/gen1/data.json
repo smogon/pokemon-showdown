@@ -679,8 +679,7 @@
     },
     "snorlax": {
         "level": 69,
-        "moves": ["bodyslam", "thunderbolt"],
-        "essentialMoves": ["amnesia", "blizzard"],
+        "moves": ["amnesia", "blizzard", "bodyslam"],
         "exclusiveMoves": ["rest", "selfdestruct"],
         "comboMoves": ["bodyslam", "earthquake", "hyperbeam", "selfdestruct"]
     },

@@ -204,8 +204,13 @@
         "level": 97,
         "sets": [
             {
+                "role": "Fast Support",
+                "movepool": ["doubleedge", "protect", "thunderwave", "toxic", "wish"],
+                "abilities": ["Cute Charm"]
+            },
+            {
                 "role": "Bulky Support",
-                "movepool": ["bodyslam", "doubleedge", "fireblast", "healbell", "protect", "stealthrock", "thunderwave", "toxic", "wish"],
+                "movepool": ["bodyslam", "fireblast", "healbell", "protect", "stealthrock", "wish"],
                 "abilities": ["Cute Charm"]
             },
             {
@@ -352,7 +357,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bulkup", "bulletpunch", "dynamicpunch", "payback", "stoneedge"],
+                "movepool": ["bulletpunch", "dynamicpunch", "payback", "stoneedge", "toxic"],
                 "abilities": ["No Guard"]
             }
         ]
@@ -2049,9 +2054,10 @@
         "level": 92,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["earthquake", "encore", "explosion", "icebeam", "painsplit", "sludgebomb", "toxic", "yawn"],
-                "abilities": ["Liquid Ooze"]
+                "abilities": ["Liquid Ooze"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Staller",
@@ -2280,12 +2286,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["recover", "seedbomb", "stealthrock", "stoneedge", "toxic"],
-                "abilities": ["Suction Cups"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "recover", "seedbomb", "stoneedge", "swordsdance"],
+                "movepool": ["curse", "earthquake", "recover", "seedbomb", "stealthrock", "stoneedge", "swordsdance", "toxic"],
                 "abilities": ["Suction Cups"]
             }
         ]
@@ -3689,7 +3690,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["airslash", "earthpower", "leechseed", "rest", "seedflare", "substitute"],
+                "movepool": ["airslash", "earthpower", "leechseed", "seedflare", "substitute", "synthesis"],
                 "abilities": ["Natural Cure"],
                 "preferredTypes": ["Flying"]
             }
