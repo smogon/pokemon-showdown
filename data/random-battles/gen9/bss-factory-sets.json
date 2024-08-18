@@ -4978,7 +4978,7 @@
               "item": ["Focus Sash"],
               "nature": "Timid",
               "evs": {"def": 4, "spa": 252, "spe": 252},
-              "teraType": ["Fairy", "Fighting", "Ghost"],
+              "teraType": ["Fairy", "Fighting"],
               "wantsTera": true,
               "ability": ["Illusion"]
           },
