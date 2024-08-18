@@ -25,7 +25,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const move = this.dex.getActiveMove(action.linked?.[0] || action.move);
 				if (move.category !== 'Status' && !move.flags['failmefirst']) {
 					pokemon.addVolatile('mefirst');
-					this.actions.useMove(move, pokemon, target);
+					this.actions.useMove(move, pokemon, {target});
 					return null;
 				}
 			}
@@ -143,7 +143,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!move || !move.flags['mirror'] || move.isZ || move.isMax) {
 				return false;
 			}
-			this.actions.useMove(move.id, pokemon, target);
+			this.actions.useMove(move.id, pokemon, {target});
 			return null;
 		},
 	},
