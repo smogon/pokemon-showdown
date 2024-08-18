@@ -44,7 +44,7 @@
     },
     "pikachu": {
         "level": 92,
-        "moves": ["irontail", "knockoff", "surf", "voltswitch", "volttackle"],
+        "moves": ["knockoff", "playrough", "surf", "voltswitch", "volttackle"],
         "doublesLevel": 91,
         "doublesMoves": ["fakeout", "grassknot", "knockoff", "protect", "volttackle"]
     },
@@ -2685,7 +2685,7 @@
     },
     "zaciancrowned": {
         "level": 61,
-        "moves": ["behemothblade", "closecombat", "crunch", "playrough", "psychicfangs", "swordsdance"],
+        "moves": ["behemothblade", "closecombat", "playrough", "psychicfangs", "swordsdance"],
         "doublesLevel": 65,
         "doublesMoves": ["behemothblade", "closecombat", "playrough", "protect", "psychicfangs", "swordsdance"]
     },

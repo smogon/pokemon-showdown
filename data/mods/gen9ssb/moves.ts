@@ -5190,7 +5190,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 90,
 		category: "Special",
 		shortDesc: "If target has boosts, steals them, +1 prio, 0 BP.",
-		desc: "This move's base power is doubled if the target has a higher number of positive stat stage changes than the user. If this move's power is doubled, a random stat, except Accuracy and Evasion, is boosted for the user by 1 stage and lowered for the target by 1 stage.",
+		desc: "If the target of this move has positive stat stage changes, this move will usually move first, and on use the attack deals no damage and instead moves all positive stat stage changes from the target to the user.",
 		name: "Adaptive Beam",
 		pp: 15,
 		priority: 0,
@@ -5692,8 +5692,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 	// Tuthur
 	symphonieduzero: {
-		accuracy: 85,
-		basePower: 35,
+		accuracy: 100,
+		basePower: 80,
 		category: "Special",
 		shortDesc: "Deals an additional 12.5% HP at end of turn.",
 		desc: "If this move deals damage, at the end of the turn, the target will take an additional 12.5% of its maximum HP in non-attack damage if it is still on the field.",

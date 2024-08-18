@@ -870,7 +870,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (moves.has('shellsmash')) {
 			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
 		}
-		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
+		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk') && species.id !== 'stoutland') {
 			return (types.includes('Fire') || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
 		if (ability === 'Magic Guard') return moves.has('counter') ? 'Focus Sash' : 'Life Orb';

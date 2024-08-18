@@ -362,7 +362,6 @@ export class RandomGen2Teams extends RandomGen3Teams {
 	): string {
 		// First, the high-priority items
 		if (species.id === 'ditto') return 'Metal Powder';
-		if (species.id === 'farfetchd') return 'Stick';
 		if (species.id === 'marowak') return 'Thick Club';
 		if (species.id === 'pikachu') return 'Light Ball';
 
