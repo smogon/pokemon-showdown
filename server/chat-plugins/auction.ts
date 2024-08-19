@@ -603,7 +603,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (timeRemaining === 0) {
 			this.finishCurrentNom();
 		} else if (timeRemaining % 10 === 0 || timeRemaining === 5) {
-			this.sendMessage(`__${this.bidTimeLimit - this.bidTimeElapsed} seconds left!__`);
+			this.sendMessage(`__${timeRemaining} seconds left!__`);
 		}
 	}
 
@@ -1003,6 +1003,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	overpay() {
 		this.requireGame(Auction);
+		this.checkChat();
 		return '/announce OVERPAY!';
 	},
 };
