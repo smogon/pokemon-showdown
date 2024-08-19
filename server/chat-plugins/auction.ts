@@ -200,12 +200,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 		return buf;
 	}
 
-	generateAuctionTable() {
+	generateAuctionTable(ended = false) {
 		const queue = this.queue.filter(team => !team.isSuspended());
-		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${queue.length ? `<th colspan=2>Order</th>` : ''}<th>Team</th><th>Credits</th><th>Players</th></tr>`;
+		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th><th>Credits</th><th>Players</th></tr>`;
 		for (const team of this.teams.values()) {
 			buf += `<tr>`;
-			if (queue.length) {
+			if (!ended) {
 				let i1 = queue.indexOf(team) + 1;
 				let i2 = queue.lastIndexOf(team) + 1;
 				if (i1 > queue.length / 2) {
@@ -215,7 +215,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			}
 			buf += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br/>${this.generateUsernameList(team.getManagers(), 2, true)}</td>`;
 			buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
-			buf += `<td><div style="min-height: 32px${queue.length ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			buf += `<td><div style="min-height: 32px${!ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div>`;
@@ -608,7 +608,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	end(message?: string) {
-		this.sendHTMLBox(this.generateAuctionTable());
+		this.sendHTMLBox(this.generateAuctionTable(true));
 		this.sendHTMLBox(this.generatePriceList());
 		if (message) this.sendMessage(message);
 		this.destroy();
