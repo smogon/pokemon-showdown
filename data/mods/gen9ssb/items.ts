@@ -335,7 +335,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	smurfscrown: {
    	name: "Smurf\'s Crown",
       spritenum: 236,
-      onTakeItem: false,
       fling: {
          basePower: 300,
       },
