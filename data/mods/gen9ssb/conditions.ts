@@ -21,6 +21,29 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
 
+	// Morte
+	curseddoll: {
+		name: "Cursed Doll",
+		effectType: 'Condition',
+		duration: 4,
+		onSideStart(side, source) {
+			this.add('-sidestart', side, 'Cursed Doll');
+		},
+		onModifyDef(def, pokemon) {
+			return this.chainModify(0.7);
+		},
+		onModifySpd(spd, pokemon) {
+			return this.chainModify(0.7);
+		},
+		onResidual(pokemon) {
+			this.add('-anim', pokemon, 'Curse', pokemon);
+			this.add('-message', `${pokemon.name} is haunted by Cursed Doll!`);
+		},
+		onSideEnd(side) {
+			this.add('-sideend', side, 'Cursed Doll');
+		},
+	},
+	
 	// Urabrask
 	rainoffire: {
 		name: 'Rain of Fire',
