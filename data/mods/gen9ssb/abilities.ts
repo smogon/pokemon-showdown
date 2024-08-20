@@ -732,19 +732,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.name === 'Morte' && pokemon.species.id === 'mimikyu' && pokemon.abilityState.transform) {
 				this.add('-ability', pokemon, 'Dollkeeper');
 				pokemon.formeChange('Mimikyu-Busted');
-				this.heal(pokemon.baseMaxhp, pokemon);
+				this.heal(pokemon.maxhp, pokemon);
 				if (!pokemon.abilityState.duration) pokemon.abilityState.duration = 5;
 				target.side.addSideCondition('curseddoll');
 				pokemon.abilityState.transform = false;
 				this.add('-message', `${pokemon.abilityState.duration}`);
-				return;
 			}
-			if (pokemon.name === 'Morte' && pokemon.species.id !== 'mimikyu' && pokemon.abilityState.transform) {
+			if (pokemon.name === 'Morte' && pokemon.species.id === 'mimikyubusted' && pokemon.abilityState.transform) {
 				this.add('-ability', pokemon, 'Dollkeeper');
 				pokemon.formeChange('Mimikyu');
 				target.side.removeSideCondition('curseddoll');
 				pokemon.abilityState.transform = false;
-				return;
 			}
 		},
 		onDamagePriority: -30,
@@ -755,7 +753,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onBeforeMove(pokemon, target, move) {
-			if (pokemon.species.id !== 'mimikyu') {
+			if (pokemon.species.id === 'mimikyubusted') {
 				this.debug("Disabled by Dollkeeper");
 				this.add('-message', `${pokemon.name} can't move!`);
 				return false;
@@ -763,17 +761,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onResidual(pokemon) {
 			this.add('-message', `Transform: ${pokemon.abilityState.transform}`);
-			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-			this.add('-message', `${pokemon.abilityState.duration}`);
+			this.add('-message', `Duration: ${pokemon.abilityState.duration}`);
+			const target = pokemon.side.foe.active[0];
 			if (pokemon.abilityState.duration > -1) pokemon.abilityState.duration -= 1;
-			this.add('-message', `${pokemon.abilityState.duration}`);
+			this.add('-message', `New Duration: ${pokemon.abilityState.duration}`);
 			if (!pokemon.abilityState.duration || pokemon.abilityState.duration <= -1) {
 				this.add('-message', `onResidual detected Mimikyu has 0 or less duration remaining (${pokemon.abilityState.duration})`);
 				pokemon.abilityState.transform = true;
 			}
 		},
 		onFoeTryMove(target, source, move) {
-			if (target.hp && source.species.id !== 'mimikyu' && source.abilityState.duration > 0) {
+			if (target.hp && source.species.id === 'mimikyubusted' && source.abilityState.duration > 0) {
 				this.add('-activate', source, 'ability: Dollkeeper');
 				this.damage(target.baseMaxhp / 6, target);
 				target.addVolatile('yawn');
