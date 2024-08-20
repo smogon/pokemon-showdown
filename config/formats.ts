@@ -2552,17 +2552,24 @@ export const Formats: FormatList = [
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
 				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
-				if (pokemon.hp <= 0) {
-					pokemon.sethp(0);
-				}
-			}
-			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.hp <= 0) pokemon.sethp(0);
+	
 				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
 					if (pokemon.abilityState.permdis || pokemon.fainted) continue;
 					if (pokemon === pokemon.side.active[0]) continue;
 					const health = pokemon.maxhp * 0.15;
 					pokemon.hp += health;
 					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
+				}
+			}
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.species.id === 'mimikyubusted') {
+					if (!pokemon.abilityState.dollDur || pokemon.abilityState.dollDur <= 0) {
+						pokemon.formeChange('Mimikyu');
+						pokemon.abilityState.dollDur = 0;
+					} else if (pokemon.abilityState.dollDur) {
+						pokemon.abilityState.dollDur--;
+					}
 				}
 			}
 		},
