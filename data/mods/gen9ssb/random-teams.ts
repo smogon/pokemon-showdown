@@ -187,6 +187,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Conflux',
 		evs: {hp: 248, def: 8, spd: 252}, nature: 'Bold',
 	},
+	Morte: {
+		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
+		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
+		signatureMove: 'Omen of Defeat',
+		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
+	},
 	/*
 	'Castaways': {
 		species: 'Swalot', ability: 'Aftermath', item: 'Black Sludge', gender: 'M',
@@ -241,12 +247,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Bleakwind Storm', 'Inferno', 'Golden Order'],
 		signatureMove: 'Olympic Order',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
-	},
-	Morte: {
-		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
-		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
-		signatureMove: 'Omen of Defeat',
-		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
 	aegii: {
 		species: 'Scizor', ability: 'Unburden', item: 'Lansat Berry', gender: 'M',
