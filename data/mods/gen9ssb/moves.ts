@@ -1015,6 +1015,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Omen of Defeat');
+				this.add('-anim', pokemon, 'Confuse Ray', pokemon);
 				this.add('-message', `${pokemon.name} prepared for defeat!`);
 			},
 			onDamage(damage, target, source, effect) {
@@ -1023,12 +1024,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return target.hp - 1;
 				}
 			},
-			onEnd(pokemon) {
-				if (pokemon.species.id === 'mimikyu') {
-					pokemon.abilityState.transform = true;
-					pokemon.abilityState.duration = 5;
-				}
-			},
+			//onEnd(pokemon) {
+			//},
 		},
 		secondary: null,
 		target: "normal",
