@@ -162,9 +162,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<span style="font-size: 90%">`;
 		buf += players.slice(0, max).map(p => {
 			if (typeof p === 'object') {
-				return `<username title="Tiers: ${p.tiers?.length ? `${Utils.escapeHTML(p.tiers.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''} style="font-weight: normal">${Utils.escapeHTML(p.name)}</username>`;
+				return `<username title="Tiers: ${p.tiers?.length ? `${Utils.escapeHTML(p.tiers.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
 			}
-			return `<username${clickable ? ' class="username"' : ''} style="font-weight: normal">${Utils.escapeHTML(p)}</username>`;
+			return `<username${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p)}</username>`;
 		}).join(', ');
 		if (players.length > max) {
 			buf += ` <span title="${players.slice(max).map(p => Utils.escapeHTML(typeof p === 'object' ? p.name : p)).join(', ')}">(+${players.length - max})</span>`;
