@@ -24,7 +24,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (effect?.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.species.id) && damage >= target.hp) {
 				this.add('-activate', target, 'ability: Dollkeeper');
 				target.formeChange('Mimikyu-Busted');
-				target.abilityState.dollDuration = 3;
+				target.abilityState.dollDur = 3;
 				target.hp = target.baseMaxhp;
 				this.add('-heal', target, target.getHealth, '[silent]');
 				source.side.addSideCondition('Cursed Doll', target);
