@@ -1024,8 +1024,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onEnd(pokemon) {
-				if (pokemon.species.id === 'mimikyu') pokemon.abilityState.transform = true;
-				pokemon.abilityState.duration = 5;
+				if (pokemon.species.id === 'mimikyu') {
+					pokemon.abilityState.transform = true;
+					pokemon.abilityState.duration = 5;
+				}
 			},
 		},
 		secondary: null,
