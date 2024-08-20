@@ -1024,8 +1024,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return target.hp - 1;
 				}
 			},
-			//onEnd(pokemon) {
-			//},
+			onEnd(pokemon) {
+				const targetSide = pokemon.side.foe.active[0].side;
+				pokemon.formeChange('Mimikyu-Busted');
+				pokemon.abilityState.dollDur = 3;
+				pokemon.hp = pokemon.baseMaxhp;
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+				targetSide.addSideCondition('Cursed Doll', pokemon);
+			},
 		},
 		secondary: null,
 		target: "normal",
