@@ -40,6 +40,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			}
 		},
+		onBeforeMove(pokemon, target, move) {
+			if (pokemon.species.id === 'mimikyubusted') {
+				this.debug(`${pokemon.name}: cannot move due to Dollkeeper`);
+				this.add('-message', `${pokemon.name} couldn't move!`);
+				return false;
+			}
+		},
 	},
 	// Codie
 	vociferouscodex: {
