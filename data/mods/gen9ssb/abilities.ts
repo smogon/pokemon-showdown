@@ -28,7 +28,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else if (target.abilityState.codex.includes(move.name)) {
 				this.add('-anim', target, 'Miracle Eye', target);
 				this.debug(`vociferous codex lowering power`);
-				return this.chainModify(0.1);
+				return this.chainModify(0.8);
 			}
 		},
 		onUpdate(pokemon) {
