@@ -309,6 +309,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 	// Zeeb
+	slingshot: {
+		accuracy: true,
+		basePower: 20,
+		category: "Physical",
+		name: "Slingshot",
+		pp: 24,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1},
+		secondary: null,
+		type: "Normal",
+		target: "normal",
+	},
+	// Zeeb
 	superknuckleshuffle: {
 		accuracy: 90,
 		basePower: 10,
