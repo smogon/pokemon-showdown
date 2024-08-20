@@ -60,6 +60,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Judgment', source);
 			let possibleMoves = [];
 			for (const ally of source.side.pokemon) {
+				if (ally === source) continue;
 				for (const moveSlot of ally.moveSlots) {
 					const moveid = moveSlot.id;
 					const movedata = this.dex.moves.get(moveid);
