@@ -317,6 +317,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		shortDesc: "If holder is damaged by an attack, uses Torment on attacker.",
 		onDamagingHitOrder: 2,
 		onDamagingHit(damage, target, source, move) {
+			this.add('-activate', target, 'item: Malediction', target);
 			source.addVolatile('torment');
 		},
 	},
