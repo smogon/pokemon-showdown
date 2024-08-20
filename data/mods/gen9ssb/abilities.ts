@@ -55,7 +55,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onFoeTryMove(target, source, move) {
 			if (move.category === 'Status' || move.flags['futuremove']) return;
-			if (!source.side.addSlotCondition(source, 'futuremove')) return false;
+			if (!source.side.addSlotCondition(source, 'futuremove')) return;
 			Object.assign(source.side.slotConditions[source.position]['futuremove'], {
 				duration: 2,
 				move: move.id,
