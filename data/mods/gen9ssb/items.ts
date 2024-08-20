@@ -38,7 +38,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 9,
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[0];
-			const move = this.dex.getActiveMove('populationbomb');
+			const move = this.dex.getActiveMove('slingshot');
 			const dmg = this.actions.getDamage(pokemon, target, move);
 			const hits = this.random(2, 3);
 			for (let i = 0; i < hits; i++) {
