@@ -159,7 +159,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	generateUsernameList(players: (string | Player)[], max = players.length, clickable = false) {
-		let buf = `<span style="font-size: 90%">`;
+		let buf = `<span style="font-size: 85%">`;
 		buf += players.slice(0, max).map(p => {
 			if (typeof p === 'object') {
 				return `<username title="Tiers: ${p.tiers?.length ? `${Utils.escapeHTML(p.tiers.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
