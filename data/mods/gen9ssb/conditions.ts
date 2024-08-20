@@ -25,7 +25,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	curseddoll: {
 		name: "Cursed Doll",
 		effectType: 'Condition',
-		duration: 4,
+		duration: 3,
 		onSideStart(side, source) {
 			this.add('-sidestart', side, 'Cursed Doll');
 		},
