@@ -15,6 +15,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Morte
+	dollkeeper: {
+		name: "Dollkeeper",
+		gen: 9,
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (effect?.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.species.id) && damage >= target.hp) {
+				this.add('-activate', target, 'ability: Dollkeeper');
+				target.formeChange('Mimikyu-Busted');
+				target.abilityState.dollDuration = 3;
+				target.hp = target.baseMaxhp;
+				this.add('-heal', target, target.getHealth, '[silent]');
+				source.side.addSideCondition('Cursed Doll', target);
+				return 0;
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target.species.id === 'mimikyubusted') {
+				this.add('-activate', target, 'ability: Dollkeeper');
+				move.priority = -6;
+				source.addVolatile('yawn');
+				this.damage(source.maxhp / 6, source, target, 'ability: Dollkeeper');
+				return;
+			}
+		},
+	},
 	// Codie
 	vociferouscodex: {
 		name: "Vociferous Codex",
@@ -712,11 +738,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-sideend', side, 'ability: Cursed Doll');
 			},
 		},
-	},
-	// Morte
-	dollkeeper: {
-		name: "Dollkeeper",
-		gen: 9,
 	},
 	// Marisa Kirisame
 	ordinarymagician: {
