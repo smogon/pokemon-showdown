@@ -69,7 +69,7 @@ class Team {
 
 function parseCredits(amount: string) {
 	let credits = Number(amount.replace(',', '.'));
-	if (credits < 500) credits *= 1000;
+	if (Math.abs(credits) < 500) credits *= 1000;
 	if (!credits || credits % 500 !== 0) {
 		throw new Chat.ErrorMessage(`The amount of credits must be a multiple of 500.`);
 	}
