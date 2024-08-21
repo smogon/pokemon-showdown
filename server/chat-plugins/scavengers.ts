@@ -436,6 +436,10 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		this.runEvent('Connect', user, connection);
 	}
 
+	formatOutput(text: string): string {
+		return this.isHTML ? text : Chat.formatText(text);
+	}
+
 	getCreationMessage(newHunt?: boolean): string {
 		const message = this.runEvent('CreateCallback');
 		if (message) return message;
@@ -450,7 +454,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 
 		return `|raw|<div class="broadcast-blue"><strong>${huntType} scavenger hunt by <em>${hosts}</em> has been started${staffHost}.</strong>` +
 			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:scroll; max-height: 50vh">` +
-			`<strong><em>Hint #1:</em> ${this.isHTML ? this.questions[0].hint : Chat.formatText(this.questions[0].hint)}</strong>` +
+			`<strong><em>Hint #1:</em> ${this.formatOutput(this.questions[0].hint)}</strong>` +
 			`</div>` +
 			`(To answer, use <kbd>/scavenge <em>ANSWER</em></kbd>)</div>`;
 	}
@@ -623,7 +627,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		return `|raw|<div class="ladder"><table style="width:100%;table-layout:fixed;"><tr>` +
 			`<td style="width: 20%;"><strong style="white-space: nowrap">${finalHint}Hint #${current.number}:</strong></td>` +
 			`<td><div style="overflow:auto; max-width: 100vw; max-height: 50vh">${
-				this.isHTML ? current.question.hint : Chat.formatText(current.question.hint) +
+				this.formatOutput(current.question.hint) +
 				(showHints && current.question.spoilers.length ?
 					`<details><summary>Extra Hints:</summary>${
 						current.question.spoilers.map(p => `- ${p}`).join('<br />')
@@ -666,7 +670,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				`<tr><td>${
 					i + 1
 				}</td><td><div style="overflow:auto; max-width: 100vw; max-height: 30vh">${
-					this.isHTML ? q.hint : Chat.formatText(q.hint) +
+					this.formatOutput(q.hint) +
 					(q.spoilers.length ?
 						`<details><summary>Extra Hints:</summary>${
 							q.spoilers.map(s => `- ${s}`).join('<br />')
@@ -717,7 +721,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}` +
 			`${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
 			`<details style="cursor: pointer; overflow:scroll; max-height: 50vh"><summary>Solution: </summary><br />` +
-			`${this.questions.map((q, i) => `${i + 1}) ${this.isHTML ? q.hint : Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}` +
+			`${this.questions.map((q, i) => `${i + 1}) ${this.formatOutput(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}` +
 			`</details>`
 		);
 	}
@@ -1027,7 +1031,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	onNotifyChange(num: number) {
 		this.game.runEvent('NotifyChange', this, num);
 		if (num === this.currentQuestion) {
-			this.sendRoom(`|raw|<div style="overflow:scroll; max-height: 50vh"><strong>The hint has been changed to:</strong> ${this.game.isHTML ? this.game.questions[num].hint : Chat.formatText(this.game.questions[num].hint)}</div>`);
+			this.sendRoom(`|raw|<div style="overflow:scroll; max-height: 50vh"><strong>The hint has been changed to:</strong> ${this.game.formatOutput(this.game.questions[num].hint)}</div>`);
 		}
 	}
 
