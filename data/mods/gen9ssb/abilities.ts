@@ -65,6 +65,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onUpdate(pokemon) {
+			if (!pokemon.abilityState.codex) pokemon.abilityState.codex = [];
 			if (pokemon.abilityState.codex.length >= 10) {
 				this.add('-message', `Codie began to seize!`);
 				this.add('-anim', pokemon, 'Agility', pokemon);
