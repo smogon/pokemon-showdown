@@ -142,6 +142,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					disabled: false,
 					used: false,
 				};
+				pokemon.baseMoveSlots[pokemon.moveSlots.length] = newMove;
 				pokemon.moveSlots[pokemon.moveSlots.length] = newMove;
 				this.add('-message', `${pokemon.name} learned ${this.dex.moves.get(pokemon.moveSlots[pokemon.moveSlots.length - 1].id).name}!`);
 			}
