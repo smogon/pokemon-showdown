@@ -69,7 +69,7 @@ class Team {
 
 function parseCredits(amount: string) {
 	let credits = Number(amount.replace(',', '.'));
-	if (credits < 500) credits *= 1000;
+	if (Math.abs(credits) < 500) credits *= 1000;
 	if (!credits || credits % 500 !== 0) {
 		throw new Chat.ErrorMessage(`The amount of credits must be a multiple of 500.`);
 	}
@@ -159,12 +159,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	generateUsernameList(players: (string | Player)[], max = players.length, clickable = false) {
-		let buf = `<span style="font-size: 90%">`;
+		let buf = `<span style="font-size: 85%">`;
 		buf += players.slice(0, max).map(p => {
 			if (typeof p === 'object') {
-				return `<username title="Tiers: ${p.tiers?.length ? `${Utils.escapeHTML(p.tiers.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''} style="font-weight: normal">${Utils.escapeHTML(p.name)}</username>`;
+				return `<username title="Tiers: ${p.tiers?.length ? `${Utils.escapeHTML(p.tiers.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
 			}
-			return `<username${clickable ? ' class="username"' : ''} style="font-weight: normal">${Utils.escapeHTML(p)}</username>`;
+			return `<username${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p)}</username>`;
 		}).join(', ');
 		if (players.length > max) {
 			buf += ` <span title="${players.slice(max).map(p => Utils.escapeHTML(typeof p === 'object' ? p.name : p)).join(', ')}">(+${players.length - max})</span>`;
@@ -176,35 +176,46 @@ export class Auction extends Rooms.SimpleRoomGame {
 	generatePriceList() {
 		const players = Utils.sortBy(this.getDraftedPlayers(), p => -p.price);
 		let buf = '';
+		let smogonExport = '';
+
 		for (const team of this.teams.values()) {
-			buf += Utils.html`<details><summary>${team.name}</summary><table>`;
+			let table = `<table>`;
 			for (const player of players.filter(p => p.team === team)) {
-				buf += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+				table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 			}
-			buf += `</table></details><br/>`;
+			table += `</table>`;
+			buf += `<details><summary>${Utils.escapeHTML(team.name)}</summary>${table}</details><br/>`;
+			smogonExport += `[SPOILER="${team.name}"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
 		}
-		buf += `<details><summary>All</summary><table>`;
+
+		let table = `<table>`;
 		for (const player of players) {
-			buf += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+			table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
 		}
-		buf += `</table></details>`;
+		table += `</table>`;
+		buf += `<details><summary>All</summary>${table}</details><br/>`;
+		smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+
+		buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
 		return buf;
 	}
 
-	generateAuctionTable() {
-		let buf = `<div class="ladder pad"><table style="width: 100%"><tr><th colspan=2>Order</th><th>Teams</th><th>Credits</th><th>Players</th></tr>`;
+	generateAuctionTable(ended = false) {
 		const queue = this.queue.filter(team => !team.isSuspended());
+		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th><th>Credits</th><th>Players</th></tr>`;
 		for (const team of this.teams.values()) {
-			let i1 = queue.indexOf(team) + 1;
-			let i2 = queue.lastIndexOf(team) + 1;
-			if (i1 > queue.length / 2) {
-				[i1, i2] = [i2, i1];
-			}
 			buf += `<tr>`;
-			buf += `<td align="center" style="width: 15px">${i1 > 0 ? i1 : '-'}</td><td align="center" style="width: 15px">${i2 > 0 ? i2 : '-'}</td>`;
+			if (!ended) {
+				let i1 = queue.indexOf(team) + 1;
+				let i2 = queue.lastIndexOf(team) + 1;
+				if (i1 > queue.length / 2) {
+					[i1, i2] = [i2, i1];
+				}
+				buf += `<td align="center" style="width: 15px">${i1 || '-'}</td><td align="center" style="width: 15px">${i2 || '-'}</td>`;
+			}
 			buf += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br/>${this.generateUsernameList(team.getManagers(), 2, true)}</td>`;
 			buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
-			buf += `<td><div style="min-height: 32px; height: 32px; overflow: hidden; resize: vertical"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			buf += `<td><div style="min-height: 32px${!ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div>`;
@@ -592,12 +603,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (timeRemaining === 0) {
 			this.finishCurrentNom();
 		} else if (timeRemaining % 10 === 0 || timeRemaining === 5) {
-			this.sendMessage(`__${this.bidTimeLimit - this.bidTimeElapsed} seconds left!__`);
+			this.sendMessage(`__${timeRemaining} seconds left!__`);
 		}
 	}
 
 	end(message?: string) {
-		this.sendHTMLBox(this.generateAuctionTable());
+		this.sendHTMLBox(this.generateAuctionTable(true));
 		this.sendHTMLBox(this.generatePriceList());
 		if (message) this.sendMessage(message);
 		this.destroy();
@@ -960,8 +971,8 @@ export const commands: Chat.ChatCommands = {
 			`- pricelist: Displays the current prices of players by team.<br/>` +
 			`- nom [player]: Nominates a player for auction.<br/>` +
 			`- bid [amount]: Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.<br/>` +
-			`You may use /bid and /nom directly without the /auction prefix.<br/><br/>` +
-			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.<br>` +
+			`You may use /bid and /nom directly without the /auction prefix.<br/>` +
+			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.<br/><br/>` +
 			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- minbid [amount]: Sets the minimum bid.<br/>` +
 			`- minplayers [amount]: Sets the minimum number of players.<br/>` +
@@ -992,6 +1003,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	overpay() {
 		this.requireGame(Auction);
+		this.checkChat();
 		return '/announce OVERPAY!';
 	},
 };
