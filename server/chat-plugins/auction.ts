@@ -289,7 +289,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.state !== 'setup') {
 			throw new Chat.ErrorMessage(`You cannot change the bid time limit after the auction has started.`);
 		}
-		if (seconds < 7 || seconds > 120) {
+		if (!seconds || seconds < 7 || seconds > 120) {
 			throw new Chat.ErrorMessage(`The bid time limit must be between 7 and 120 seconds.`);
 		}
 		this.bidTimeLimit = this.bidTimeRemaining = seconds;
