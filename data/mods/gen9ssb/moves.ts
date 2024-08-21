@@ -66,7 +66,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const movedata = this.dex.moves.get(moveid);
 					if (movedata.category === 'Special') {
 						possibleMoves.push(moveid);
-						this.add('-message', moveid);
 					}
 				}
 			}
