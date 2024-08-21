@@ -3619,48 +3619,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Dragon",
 	},
 
-	// Mad Monty
-	stormshelter: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Storm Shelter",
-		shortDesc: "User protects and boosts random stat by 1 stage.",
-		desc: "Nearly always moves first. Protects the user from most attacks made by other Pokemon this turn, and boosts a random stat of the user by 1 stage, excluding Accuracy and Evasion. This move fails if the user moves last or if the foe switches out, and it has an increasing chance to fail if used consecutively.",
-		pp: 5,
-		priority: 4,
-		flags: {},
-		stallingMove: true,
-		volatileStatus: 'protect',
-		onPrepareHit(pokemon) {
-			this.attrLastMove('[anim] Protect');
-			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-		},
-		onHit(pokemon) {
-			pokemon.addVolatile('stall');
-			const boosts = pokemon.boosts;
-			const maxBoostIDs: BoostID[] = [];
-			for (const boost in boosts) {
-				if (boosts[boost as BoostID] >= 6) {
-					maxBoostIDs.push(boost as BoostID);
-					continue;
-				}
-				this.boost({[boost]: 1}, pokemon);
-			}
-			this.add(`c:|${getName((pokemon.illusion || pokemon).name)}|Ope! Wrong button, sorry.`);
-			const unloweredStat = this.sample(
-				Object.keys(pokemon.boosts).filter(x => !['evasion', 'accuracy'].includes(x as BoostID))
-			);
-			for (const boost in boosts) {
-				if ((boosts[boost as BoostID] >= 6 && maxBoostIDs.includes(boost as BoostID)) || boost === unloweredStat) continue;
-				this.boost({[boost]: -1}, pokemon);
-			}
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-	},
-
 	// marillvibes
 	goodvibesonly: {
 		accuracy: 100,
