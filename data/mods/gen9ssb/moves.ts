@@ -84,11 +84,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-message', `${source.name} tried reading an insufficient imprint!`);
 				return null;
 			}
-			const m1 = this.dex.moves.get(imprints[1]);
-			const m2 = this.dex.moves.get(imprints[2]);
-			move.basePower = (m1.basePower + m2.basePower) / 2;
+			let m1 = this.dex.getActiveMove(imprints[0]);
+			let m2 = this.dex.getActiveMove(imprints[1]);
+			let tbp = m1.basePower + m2.basePower;
+			move.basePower = tbp / 2;
 			this.add('-message', move.basePower);
-			this.add('-anim', source, 'Boomburst', target);
+			this.add('-anim', source, 'Discharge', target);
 			if (m1.type === m2.type) {
 				this.effectState.conflux = true;
 			}
