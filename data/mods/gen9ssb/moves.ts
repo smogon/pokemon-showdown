@@ -78,7 +78,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (let i = 0; i < 2; i++) {
 				let imprintid = this.sample(possibleMoves);
 				let imprint = this.dex.moves.get(imprintid);
-				this.add('-anim', source, imprint.name, source);
+				this.add('-anim', source, imprint.name, target);
 				imprints.push(imprintid);
 			}
 			if (!imprints.length || imprints.length < 2) {
@@ -88,6 +88,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const m1 = this.dex.moves.get(imprints[1]);
 			const m2 = this.dex.moves.get(imprints[2]);
 			move.basePower = (m1.basePower + m2.basePower) / 2;
+			this.add('-message', move.basePower);
 			this.add('-anim', source, 'Boomburst', target);
 			if (m1.type === m2.type) {
 				this.effectState.conflux = true;
