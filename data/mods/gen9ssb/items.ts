@@ -187,14 +187,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 			duration: 4,
 			onModifyDamage(damage, source, target, move) {
 				if (!move) return;
-				if (move.type === 'Water') return this.chainModify(1.25);
-				return this.chainModify(0.75);
+				if (pokemon.hasType('Water')) {
+					return this.chainModify (1.25);
+				} else {
+					return this.chainModify(0.75);
+				}
 			},
-			onModifySpe(spe) {
-				return this.chainModify(0.75);
-			},
-			onSourceModifyDamage(damage, source, target, move) {
-				return this.chainModify(0.75);
+			onModifySpe(spe, pokemon) {
+				if (pokemon.hasType('Water')) {
+					return this.chainModify (1.25);
+				} else {
+					return this.chainModify(0.75);
+				}
 			},
 			onResidual(pokemon) {
 				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
