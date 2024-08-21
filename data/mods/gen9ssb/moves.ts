@@ -1009,7 +1009,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Spectral Thief', target);
 		},
 		priorityChargeCallback(pokemon) {
-			pokemon.addVolatile('omenofdefeat');
+			if (pokemon.species.id !== 'mimikyubusted') pokemon.addVolatile('omenofdefeat');
 		},
 		condition: {
 			duration: 1,
