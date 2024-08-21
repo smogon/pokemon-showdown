@@ -1025,12 +1025,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onEnd(pokemon) {
-				const targetSide = pokemon.side.foe.active[0].side;
-				pokemon.formeChange('Mimikyu-Busted');
-				pokemon.abilityState.dollDur = 3;
-				pokemon.hp = pokemon.baseMaxhp;
-				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-				targetSide.addSideCondition('Cursed Doll', pokemon);
+				if (pokemon.species.id === 'mimikyu') {
+					const targetSide = pokemon.side.foe.active[0].side;
+					pokemon.formeChange('Mimikyu-Busted');
+					pokemon.abilityState.dollDur = 3;
+					pokemon.hp = pokemon.baseMaxhp;
+					this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+					targetSide.addSideCondition('Cursed Doll', pokemon);
+				}
 			},
 		},
 		secondary: null,
