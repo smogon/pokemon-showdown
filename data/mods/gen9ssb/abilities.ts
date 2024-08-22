@@ -666,18 +666,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			}
 			this.add('-message', `${newTarget.name} was struck by Peal of Thunder!`);
+			if (newTarget.ability === 'pealofthunder' || newTarget === pokemon) {
+				if (newTarget.isActive) {
+					this.heal(newTarget.baseMaxhp / 3, newTarget);
+					this.add('-immune', newTarget, '[from] ability: Peal of Thunder');
+					return;
+				} else {
+					newTarget.hp += newTarget.baseMaxhp / 3;
+					this.add('-immune', newTarget, '[from] ability: Peal of Thunder');
+					return;
+				}
+			}
 			if (newTarget === target) {
 				this.damage(dmg, target, pokemon);
 				return;
 			}
-			if (newTarget === pokemon) {
-	        if (!this.heal(pokemon.baseMaxhp / 3)) this.add('-immune', pokemon, '[from] ability: Peal of Thunder');
-	        return;
-	    	}
 			if (dmg > newTarget.hp) dmg = newTarget.hp;
 			newTarget.hp -= dmg;
 			this.add('-message', `${newTarget.name} lost ${Math.round(dmg/newTarget.baseMaxhp * 100)}% of its health!`);
-			if (newTarget.hp <= 0) newTarget.faint();
 		},
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
