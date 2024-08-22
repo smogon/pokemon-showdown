@@ -1,3 +1,4 @@
+import {RESTORATIVE_BERRIES} from '../../../sim/pokemon';
 import {SSBSet} from "./random-teams";
 import {ChosenAction} from '../../../sim/side';
 import {FS} from '../../../lib';
