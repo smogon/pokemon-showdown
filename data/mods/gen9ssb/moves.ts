@@ -40,6 +40,56 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Journeyman
+	newbeginnings: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "User fully restores HP, status conditions, and the PP of it's moves, loses all moves and items obtained through Love of the Journey, and switches to an ally of choice. 30% chance to fail. Usually goes last.",
+		shortDesc: "Restores HP/Status/PP, loses moves/items, switches.",
+		name: "New Beginnings",
+		pp: 1,
+		noPPBoosts: true,
+		priority: -1,
+		flags: {},
+		onTryHit() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Synthesis', source);
+			this.add('-anim', source, 'Celebrate', source);
+		},
+		onHit(target, source, move) {
+			if (this.randomChance(7, 10) {
+				this.add(`raw|It is never too late for <b>New Beginnings</b>!<br>Good luck, ${source.name}!`);
+				source.hp = source.maxhp;
+				source.cureStatus();
+				for (const moveSlot of source.moveSlots) {
+					if (source.moves.indexOf(moveSlot) > 3) {
+						delete source.moveSlots[moveSlot];
+						delete source.baseMoveSlots[moveSlot];
+						this.add('-message', `${source.name} forgot ${moveSlot.name}!`);
+					} else {
+						moveSlot.pp = moveSlot.maxpp;
+					}
+				}
+				if (source.item === 'colossuscarrier') source.abilityState.carrierItems = [];
+			} else {
+				this.add('-anim', source, 'Wake-Up Slap', source);
+				const ally = this.sample(source.allies);
+				this.add('-message', `Wait! ${ally.name} encouraged ${source.name} to keep fighting!`);
+				this.add('-anim', source, 'Work Up', source);
+				source.hp += source.hp / 3;
+				this.boost({spe: 1}, source);
+				this.add('-message', `That's the spirit, ${source.name}!`);
+				move.selfSwitch = false;
+			}
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "self",
+		type: "Grass",
+	},
 	// Codie
 	conflux: {
 		accuracy: 100,
@@ -144,8 +194,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const move = this.dex.getActiveMove(activePokemon.side.slotConditions[activePokemon.position]['futuremove'].move);
 				const dmg = this.actions.getDamage(pokemon, activePokemon, move);
 				activePokemon.side.removeSlotCondition(activePokemon, 'futuremove');
-				this.add('-anim', pokemon, move.name, activePokemon);
-				this.damage(dmg, activePokemon, pokemon, move);
+				this.add('-anim', activePokemon, move.name, target);
+				this.damage(dmg, target, pokemon, move);
 				success = true;
 			}
 			if (success) this.add('-message', `${target.name} was assaulted with all active future moves!`);
