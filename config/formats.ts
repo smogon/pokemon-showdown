@@ -2550,8 +2550,7 @@ export const Formats: FormatList = [
 			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
 		},
 		getSharedItems(pokemon) {
-			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
-				this.add('-message', `getSharedItems for Colossus Carrier triggered`);
+			if (pokemon.item && pokemon.item === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
 				const items = new Set<string>();
 				for (const baggedItem of pokemon.abilityState.carrierItems) {
 					if (items.has(baggedItem)) continue;
@@ -2675,7 +2674,15 @@ export const Formats: FormatList = [
 						this.add('-message', `${pokemon.name} is back in the fight!`);
 					}
 				}
-			}
+				if (pokemon.item && pokemon.item === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+					if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
+					for (const item of format.getSharedItems!(pokemon)) {
+						if (pokemon.m.sharedItemsUsed.includes(item)) continue;
+						const effect = 'item:' + item;
+						delete pokemon.volatiles[effect];
+						pokemon.addVolatile(effect);
+					}
+				}
 		},
 		//onHit(target, source, move) {
 			//this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
