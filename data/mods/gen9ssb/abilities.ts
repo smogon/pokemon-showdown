@@ -46,7 +46,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				tileType = 'item';
 			}
 			pokemon.abilityState.currentTile = {
-				effectType: tiletype,
+				effectType: tileType,
 				moveData: '',
 				tutorName: '',
 				itemName: '',
