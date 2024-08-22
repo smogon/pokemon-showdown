@@ -22,14 +22,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			if (pokemon.species.id !== 'stonjourner') return;
 			if (!pokemon.abilityState.started) {
-				this.add(`<b>${pokemon.species.name}</b>`);
+				this.add(`raw|<b>${pokemon.species.name}</b>`);
 				this.add('-message', `Your journey starts here!`);
 				this.add('-message', `Good luck!`);
-				this.add('-anim', pokemon, 'Celebrate', pokemon);
+				this.add('-anim', pokemon, 'Splash', pokemon);
 				pokemon.abilityState.started = true;
 			}
 		},
 		onFaint(pokemon) {
+			this.add('-anim', pokemon, 'Celebrate', pokemon);
 			this.add('-message', `Your journey ends here!`);
 			this.add('-message', `Goodbye, ${pokemon.name}!`);
 		},
@@ -59,7 +60,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					const tutor = this.sample(tutorNames);
 					this.add('-message', `${pokemon.name} encountered Move Tutor ${tutor}!`);
 					this.add('-message', `${tutor} taught ${pokemon.name} how to use ${move.name}!`);
-					this.add('-anim', pokemon, 'Celebrate', pokemon);
+					this.add('-anim', pokemon, 'Work Up', pokemon);
 				case 'item':
 					if (!pokemon.abilityState.carrier) pokemon.abilityState.carrier = [];
 					const items = this.dex.items.all().filter(item => (
@@ -70,7 +71,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.abilityState.carrier.push(item);
 					this.add('-message', 'Jackpot!');
 					this.add('-message', `${pokemon.name} obtained one ${item.name}!`);
-					this.add('-anim', pokemon, 'Celebrate', pokemon);
+					this.add('-anim', pokemon, 'Splash', pokemon);
 				case 'trap':
 					let trapdamage = 0;
 					const types = ['spikes', 'snare', 'bomb'];
