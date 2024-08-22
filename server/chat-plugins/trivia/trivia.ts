@@ -737,7 +737,7 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 			if (!user) continue;
 			user.sendTo(
 				this.room.roomid,
-				(this.game.givesPoints ? this.room.tr`You gained ${player.points} and answered ` : this.room.tr`You answered `) +
+				(this.game.givesPoints ? this.room.tr`You gained ${player.points} points and answered ` : this.room.tr`You answered `) +
 				this.room.tr`${player.correctAnswers} questions correctly.`
 			);
 		}
