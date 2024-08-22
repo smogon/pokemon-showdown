@@ -33,8 +33,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onResidual(pokemon) {
 			if (pokemon.species.id !== 'stonjourner') return;
+			let tileType;
 			const tiles = ['movetutor', 'trap', 'item'];
-			const tiletype = this.sample(tiles);
+			const r = this.random(1, 10);
+			if (r === 1 || r === 2) {
+				tileType = 'trap';
+			} else if (r >= 3 && r <= 6) {
+				tileType = 'movetutor';
+			} else if (r >= 7 && r <= 10) {
+				tileType = 'item';
+			} else {
+				tileType = 'item';
+			}
 			pokemon.abilityState.currentTile = {
 				effectType: tiletype,
 				moveData: '',
