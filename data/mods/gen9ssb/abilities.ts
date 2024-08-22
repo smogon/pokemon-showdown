@@ -74,8 +74,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					const items = this.dex.items.all().filter(item => (
 						(pokemon.item !== item) &&
 						(!pokemon.abilityState.carrierItems.includes(item)) &&
-						(['Memory', 'TR', 'Power', 'Ball', 'Stone'].indexOf(item.name) === -1) &&
-						(!item.name.includes['Memory', 'TR', 'Power', 'Ball', 'Stone'])
+						(!item.name.includes('TR')) && (!item.name.includes('Memory')) &&
+						(!item.name.includes('Power')) && (!item.name.includes('Ball')) &&
+						(!item.name.includes('Stone'))
 					));
 					const item = this.sample(items);
 					pokemon.abilityState.currentTile.itemName = item.name;
