@@ -76,8 +76,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (source.item === 'colossuscarrier') source.abilityState.carrierItems = [];
 			} else {
 				this.add('-anim', source, 'Wake-Up Slap', source);
-				const ally = this.sample(source.allies);
-				this.add('-message', `Wait! ${ally.name} encouraged ${source.name} to keep fighting!`);
+				const ally = this.sample(source.side.pokemon);
+				if (ally === source) {
+					this.add('-message', `${source.name} found the motivation to keep going!`);
+				} else {
+					this.add('-message', `Wait! ${ally.name} encouraged ${source.name} to keep fighting!`);
+				}
 				this.add('-anim', source, 'Work Up', source);
 				source.hp += source.hp / 3;
 				this.boost({spe: 1}, source);
