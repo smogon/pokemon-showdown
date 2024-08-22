@@ -67,7 +67,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', `${tutor} taught ${pokemon.name} how to use ${move.name}!`);
 					this.add('-anim', pokemon, 'Work Up', pokemon);
 					pokemon.abilityState.currentTile.moveData = move;
-					pokemon.abilityState.tutorName = tutor;
+					pokemon.abilityState.currentTile.tutorName = tutor;
 					break;
 				case 'item':
 					if (!pokemon.abilityState.carrierItems) pokemon.abilityState.carrierItems = [];
