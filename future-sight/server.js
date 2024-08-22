@@ -5,11 +5,11 @@ const app = express();
 const corsOptions = {
     origin: 'http://localhost:5173', // Allow only this origin
     optionsSuccessStatus: 200 // For legacy browser support
-  }
-  
+}
+
 app.use(cors(corsOptions));
 const port = 3000;
-const { pastesToBattleState, getPossibleActions, updateBattleStateWithActions } = require("./smogon_wrappers");
+const { pastesToBattleState, getPossibleActions, updateBattleStateWithActions, summarizeBattleState } = require("./smogon_wrappers");
 
 app.use(express.json());
 
@@ -36,17 +36,23 @@ app.get('/getPossibleActions', (req, res) => {
         return res.status(404).send('Battle state not found');
     }
     const possible_choices = getPossibleActions(battle_state)
-    console.log('Possible choices:', possible_choices);
     res.send(possible_choices);
 });
 
+app.get('/getBattleStateSummary', (req, res) => {
+    const battle_state = battleStates.get(req.query.battleId);
+    if (!battle_state) {
+        return res.status(404).send('Battle state not found');
+    }
+    const summary = summarizeBattleState(battle_state)
+
+    res.json(summary);
+});
+
 app.post('/updateBattleStateWithActions/:battleId', (req, res) => {
-    console.log('Received battleId:', req.params.battleId);
-    console.log('Received body:', req.body);
 
     const battle_state = battleStates.get(req.params.battleId);
     if (!battle_state) {
-        console.log('Battle state not found for id:', req.params.battleId);
         return res.status(404).send('Battle state not found');
     }
 
