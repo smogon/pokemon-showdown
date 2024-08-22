@@ -607,12 +607,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wrath of Frozen Flames',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Dragon',
 	},
-	'Mad Monty': {
-		species: 'Castform', ability: 'Climate Change', item: 'Heavy-Duty Boots', gender: 'M',
-		moves: ['Weather Ball', 'Defog', ['Solar Beam', 'Thunder', 'Aurora Veil']],
-		signatureMove: 'Storm Shelter',
-		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Rock',
-	},
 	'marillvibes ♫': {
 		species: 'Marill', ability: 'Huge Power', item: 'Life Orb', gender: 'M',
 		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],

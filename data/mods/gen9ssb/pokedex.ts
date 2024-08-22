@@ -594,24 +594,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Magic Aura"},
 	},
 
-	// Mad Monty
-	castform: {
-		inherit: true,
-		abilities: {0: "Climate Change"},
-	},
-	castformrainy: {
-		inherit: true,
-		abilities: {0: "Climate Change"},
-	},
-	castformsnowy: {
-		inherit: true,
-		abilities: {0: "Climate Change"},
-	},
-	castformsunny: {
-		inherit: true,
-		abilities: {0: "Climate Change"},
-	},
-
 	// marillvibes
 	marill: {
 		inherit: true,

@@ -479,26 +479,15 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 	breadstycks: {
 		noCopy: true,
 		onStart(pokemon) {
-			if (enemyStaff(pokemon) === "Mad Monty") {
-				this.add(`c:|${getName('Breadstycks')}|Ope, sorry`);
-			} else {
-				this.add(`c:|${getName('Breadstycks')}|I loeuf you <3`);
-			}
+			this.add(`c:|${getName('Breadstycks')}|I loeuf you <3`);
 		},
 		// onSwitchOut implemented in ability instead
-		onFoeSwitchIn(pokemon) {
-			if (pokemon.name === "Mad Monty") {
-				this.add(`c:|${getName('Breadstycks')}|Ope, sorry`);
-			}
-		},
 		onFaint() {
 			this.add(`c:|${getName('Breadstycks')}|Oh, ma vie... c'est 'pitable'...`);
 		},
 		onFoeFaint(target, source, effect) {
 			if (source === this.effectState.target && effect?.name === 'Painful Exit') {
 				this.add(`c:|${getName('Breadstycks')}|Ashes to ashes, crust to crust.`);
-			} else if (target.name === "Mad Monty") {
-				this.add(`c:|${getName('Breadstycks')}|G.G, weather you like it or not`);
 			} else {
 				this.add(`c:|${getName('Breadstycks')}|Ope, someone's swallowing fishes.`);
 			}
@@ -1540,18 +1529,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 				break;
 			}
 			this.add(`c:|${getName('Lyna 氷')}|${phrase}`);
-		},
-	},
-	madmonty: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Mad Monty')}|I'm here to make sure you don't get eaten by llamas!`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Mad Monty')}|Ope! The Library's on fire. Gotta tend to that for a sec...`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Mad Monty')}|Well great. Now the llamas are gonna come back. Is that what you wanted?`);
 		},
 	},
 	marillvibes: {
