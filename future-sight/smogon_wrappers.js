@@ -127,19 +127,13 @@ const updateBattleStateWithActions = (battle_state, p1Action, p2Action) => {
 };
 
 function summarizePokemon(pokemon) {
-    if (!pokemon.species) {
-        console.log("tf", pokemon)
-        // throw new Error('test')
-    } else {
-        console.log("success", pokemon.species)
-    }
-    
     if (!pokemon) return null;
     return {
         name: pokemon.species,
         currentHp: pokemon.hp,
         totalHp: pokemon.maxhp,
-        status: pokemon.status || 'healthy'
+        status: pokemon.status || 'healthy',
+        switchFlag: pokemon.switchFlag
     };
 }
 
