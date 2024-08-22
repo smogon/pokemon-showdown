@@ -3,6 +3,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	colossuscarrier: {
 		name: "Colossus Carrier",
 		gen: 9,
+		onTakeItem: false,
 		// Handled in ../config/formats.ts
 	},
 	// Codie
