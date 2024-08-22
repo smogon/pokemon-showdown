@@ -144,6 +144,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 						this.add('-message', `${foe.name} encountered Move Tutor ${tutor}!`);
 						this.add('-message', `${tutor} taught ${foe.name} how to use ${newMove.move}!`);
 						this.add('-anim', foe, 'Work Up', foe);
+						break;
 					case 'trap':
 						this.add('-message', `${source.name} launched the trap to the opposing court!`);
 						if (source.abilityState.currentTile.trapAnim.length) {
@@ -151,13 +152,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 								this.add('-anim', foe, anim, foe);
 							}
 						}
-						foe.hp -= pokemon.abilityState.currentTile.trapDamage;
+						foe.hp -= source.abilityState.currentTile.trapDamage;
+						break;
 					case 'item':
 						const newItem = this.dex.moves.get(source.abilityState.currentTile.itemName);
 						this.add('-message', `${source.name} crushed the opposing ${foe.name}'s ${foe.item}!`);
 						this.add('-message', `${foe.name} obtained one ${newItem.name}!`);
 						this.add('-enditem', foe, foe.item, '[from] move: Court Change');
 						foe.setItem(newItem);
+						break;
 				}
 			}
 		},
