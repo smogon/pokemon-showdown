@@ -112,7 +112,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							pokemon.abilityState.currentTile.trapAnim.push('Crunch');
 							break;
 						case 'bomb':
-							trapdamage = this.random(200, 500);
+							trapdamage = this.random(160, 200);
 							this.add('-message', `Oh, no! ${pokemon.name} stepped on a Seed Bomb!`);
 							this.add('-anim', pokemon, 'Seed Bomb', pokemon);
 							this.add('-anim', pokemon, 'Explosion', pokemon);
