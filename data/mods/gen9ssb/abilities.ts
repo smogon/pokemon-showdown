@@ -61,6 +61,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', `${pokemon.name} encountered Move Tutor ${tutor}!`);
 					this.add('-message', `${tutor} taught ${pokemon.name} how to use ${move.name}!`);
 					this.add('-anim', pokemon, 'Work Up', pokemon);
+					break;
 				case 'item':
 					if (!pokemon.abilityState.carrier) pokemon.abilityState.carrier = [];
 					const items = this.dex.items.all().filter(item => (
@@ -72,6 +73,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', 'Jackpot!');
 					this.add('-message', `${pokemon.name} obtained one ${item.name}!`);
 					this.add('-anim', pokemon, 'Splash', pokemon);
+					break;
 				case 'trap':
 					let trapdamage = 0;
 					const types = ['spikes', 'snare', 'bomb'];
@@ -82,18 +84,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							this.add('-message', `Yikes! ${pokemon.name} stepped on Spikes!`);
 							this.add('-anim', pokemon, 'Horn Attack', pokemon);
 							this.damage(trapdamage, pokemon);
+							break;
 						case 'snare':
 							trapdamage = this.random(80, 160);
 							this.add('-message', `Ouch! ${pokemon.name} was caught in a Beast Snare!`);
 							this.add('-anim', pokemon, 'Crunch', pokemon);
 							this.damage(trapdamage, pokemon);
+							break;
 						case 'bomb':
 							trapdamage = this.random(200, 500);
 							this.add('-message', `Oh, no! ${pokemon.name} stepped on a Seed Bomb!`);
 							this.add('-anim', pokemon, 'Seed Bomb', pokemon);
 							this.add('-anim', pokemon, 'Explosion', pokemon);
 							this.damage(trapdamage, pokemon);
+							break;
 					}
+					break;
 			}
 		},
 	},
