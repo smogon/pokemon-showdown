@@ -2683,6 +2683,7 @@ export const Formats: FormatList = [
 						pokemon.addVolatile(effect);
 					}
 				}
+			}
 		},
 		//onHit(target, source, move) {
 			//this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
