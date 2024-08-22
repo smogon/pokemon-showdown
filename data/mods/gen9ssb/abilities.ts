@@ -66,11 +66,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 						(!pokemon.abilityState.carrierItems.includes(item))
 					));
 					const item = this.sample(items);
-					pokemon.abilityState.carrierItems.push(item);
-					this.add('-message', 'Jackpot!');
-					this.add('-message', `${pokemon.name} obtained one ${item.name}!`);
-					this.add('-anim', pokemon, 'Splash', pokemon);
-					break;
+					if (pokemon.abilityState.carrierItems.length < 8 && pokemon.item === 'colossuscarrier') {
+						pokemon.abilityState.carrierItems.push(item);
+						this.add('-message', 'Jackpot!');
+						this.add('-message', `${pokemon.name} obtained one ${item.name}!`);
+						this.add('-anim', pokemon, 'Splash', pokemon);
+						break;
+					} else if (pokemon.abilityState.carrierItems.length >= 8 || !pokemon.item || pokemon.item !== 'colossuscarrier') {
+						this.add('-anim', pokemon, 'Celebrate', pokemon);
+						this.add('-message', `${pokemon.name} found a ${item.name}, but has no more capacity for items!`);
+						break;
+					}
 				case 'trap':
 					let trapdamage = 0;
 					const types = ['spikes', 'snare', 'bomb'];
