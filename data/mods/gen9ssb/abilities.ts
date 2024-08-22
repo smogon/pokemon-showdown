@@ -123,38 +123,38 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					break;
 			}
 		},
-		onModifyMove(move, pokemon, target) {
-			if (move.name === 'Court Change' && pokemon.ability === 'loveofthejourney') {
-				if (!pokemon.abilityState.currentTile || !pokemon.abilityState.currentTile.effectType) return;
-				const foe = pokemon.side.foe.active[0];
-				switch (pokemon.abilityState.currentTile.effectType) {
+		onPrepareHit(source, target, move) {
+			if (move.name === 'Court Change' && source.ability === 'loveofthejourney') {
+				if (!source.abilityState.currentTile || !source.abilityState.currentTile.effectType) return;
+				const foe = source.side.foe.active[0];
+				switch (source.abilityState.currentTile.effectType) {
 					case 'movetutor':
 						const newMove = {
-							move: pokemon.abilityState.currentTile.moveData.name,
-							id: pokemon.abilityState.currentTile.moveData.id,
-							pp: pokemon.abilityState.currentTile.moveData.pp,
-							maxpp: pokemon.abilityState.currentTile.moveData.maxpp,
-							target: pokemon.abilityState.currentTile.moveData.target,
+							move: source.abilityState.currentTile.moveData.name,
+							id: source.abilityState.currentTile.moveData.id,
+							pp: source.abilityState.currentTile.moveData.pp,
+							maxpp: source.abilityState.currentTile.moveData.maxpp,
+							target: source.abilityState.currentTile.moveData.target,
 							disabled: false,
 							used: false,
 						};
 						foe.baseMoveSlots[foe.moveSlots.length] = newMove;
 						foe.moveSlots[foe.moveSlots.length] = newMove;
-						const tutor = pokemon.abilityState.currentTile.tutorName;
+						const tutor = source.abilityState.currentTile.tutorName;
 						this.add('-message', `${foe.name} encountered Move Tutor ${tutor}!`);
 						this.add('-message', `${tutor} taught ${foe.name} how to use ${newMove.move}!`);
 						this.add('-anim', foe, 'Work Up', foe);
 					case 'trap':
-						this.add('-message', `${pokemon.name} launched the trap to the opposing court!`);
-						if (pokemon.abilityState.currentTile.trapAnim.length) {
-							for (const anim in pokemon.abilityState.currentTile.trapAnim) {
+						this.add('-message', `${source.name} launched the trap to the opposing court!`);
+						if (source.abilityState.currentTile.trapAnim.length) {
+							for (const anim in source.abilityState.currentTile.trapAnim) {
 								this.add('-anim', foe, anim, foe);
 							}
 						}
 						foe.hp -= pokemon.abilityState.currentTile.trapDamage;
 					case 'item':
-						const newItem = this.dex.moves.get(pokemon.abilityState.currentTile.itemName);
-						this.add('-message', `${pokemon.name} crushed the opposing ${foe.name}'s ${foe.item}!`);
+						const newItem = this.dex.moves.get(source.abilityState.currentTile.itemName);
+						this.add('-message', `${source.name} crushed the opposing ${foe.name}'s ${foe.item}!`);
 						this.add('-message', `${foe.name} obtained one ${newItem.name}!`);
 						this.add('-enditem', foe, foe.item, '[from] move: Court Change');
 						foe.setItem(newItem);
