@@ -129,7 +129,7 @@ const updateBattleStateWithActions = (battle_state, p1Action, p2Action) => {
 function summarizePokemon(pokemon) {
     if (!pokemon) return null;
     return {
-        name: pokemon.species,
+        name: pokemon.species.replace(/^\[Species:|\]$/g, '').trim(),  // Remove "[Species:" prefix and "]" suffix
         currentHp: pokemon.hp,
         totalHp: pokemon.maxhp,
         status: pokemon.status || 'healthy',
