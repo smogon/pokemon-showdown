@@ -2549,10 +2549,24 @@ export const Formats: FormatList = [
 			this.add(`raw|<div class='broadcast-blue'><b>The fourth iteration of Super Staff Brothers! Battle with a random team of gooners.<br /><a href="https://docs.google.com/spreadsheets/d/1HGB2YDZ-Pe2MtWa-IX8d24r4j2rxAkvIgP9NeeyNG0Y/edit?gid=200255702#gid=200255702" target="_blank">SEE THE ROSTER</a></b></div>`);
 			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
 		},
+		getSharedItems(pokemon) {
+			if (pokemon.item && pokemon.getItem().id === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+				const items = new Set<string>();
+				for (const baggedItem of pokemon.abilityState.carrierItems) {
+					if (items.has(baggedItem)) continue;
+					items.add(baggedItem);
+				}
+				if (items.has(pokemon.item)) items.delete(pokemon.item);
+				return items;
+			}
+		},
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
 				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
-				if (pokemon.hp <= 0) pokemon.sethp(0);
+				if (pokemon.hp <= 0 && !pokemon.fainted) {
+					pokemon.sethp(0);
+					pokemon.faint();
+				}
 	
 				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
 					if (pokemon.abilityState.permdis || pokemon.fainted) continue;
@@ -2573,26 +2587,17 @@ export const Formats: FormatList = [
 				}
 			}
 		},
-		onUpdate() {
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && !pokemon.abilityState.reviveStarted) {
-					pokemon.abilityState.reviveStarted = true;
-					pokemon.abilityState.deathTurn = this.turn;
-				}
-				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && pokemon.abilityState.reviveStarted) {
-					let turnCount = this.turn - pokemon.abilityState.deathTurn;
-					if (turnCount >= 6) {
-						pokemon.fainted = false;
-						pokemon.faintQueued = false;
-						pokemon.subFainted = false;
-						pokemon.status = '';
-						pokemon.hp = 1;
-						pokemon.sethp(1);
-						pokemon.side.pokemonLeft++;
-						pokemon.abilityState.reviveStarted = false;
-						this.add('-message', `${pokemon.getAbility().name} activated!`);
-						this.add('-message', `${pokemon.name} is back in the fight!`);
-					}
+		onBeforeSwitchIn(pokemon) {
+			if (pokemon.item && pokemon.getItem().id === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+				let format = this.format;
+				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
+				if (!pokemon.m.sharedItemsUsed) pokemon.m.sharedItemsUsed = [];
+				for (const item of format.getSharedItems!(pokemon)) {
+					if (pokemon.m.sharedItemsUsed.includes(item)) continue;
+					const effect = 'item:' + item;
+					pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
+					if (!pokemon.m.items) pokemon.m.items = [];
+					if (!pokemon.m.items.includes(effect)) pokemon.m.items.push(effect);
 				}
 			}
 		},
@@ -2625,6 +2630,41 @@ export const Formats: FormatList = [
 				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
 				!pokemon.terastallized) {
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			}
+
+			// Handling Colossus Carrier
+			if (pokemon.item && pokemon.getItem().id === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+				let format = this.format;
+				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
+				for (const item of format.getSharedItems!(pokemon)) {
+					if (pokemon.m.sharedItemsUsed.includes(item)) continue;
+					const effect = 'item:' + item;
+					delete pokemon.volatiles[effect];
+					pokemon.addVolatile(effect);
+				}
+			}
+		},
+		onUpdate() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && !pokemon.abilityState.reviveStarted) {
+					pokemon.abilityState.reviveStarted = true;
+					pokemon.abilityState.deathTurn = this.turn;
+				}
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && pokemon.abilityState.reviveStarted) {
+					let turnCount = this.turn - pokemon.abilityState.deathTurn;
+					if (turnCount >= 6) {
+						pokemon.fainted = false;
+						pokemon.faintQueued = false;
+						pokemon.subFainted = false;
+						pokemon.status = '';
+						pokemon.hp = 1;
+						pokemon.sethp(1);
+						pokemon.side.pokemonLeft++;
+						pokemon.abilityState.reviveStarted = false;
+						this.add('-message', `${pokemon.getAbility().name} activated!`);
+						this.add('-message', `${pokemon.name} is back in the fight!`);
+					}
+				}
 			}
 		},
 		//onHit(target, source, move) {
