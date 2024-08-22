@@ -77,7 +77,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 						(!item.name.includes['Memory', 'TR', 'Power', 'Ball', 'Stone'])
 					));
 					const item = this.sample(items);
-					pokemon.abilityState.itemName = item.name;
+					pokemon.abilityState.currentTile.itemName = item.name;
 					if (pokemon.abilityState.carrierItems.length < 8 && pokemon.item === 'colossuscarrier') {
 						pokemon.abilityState.carrierItems.push(item);
 						this.add('-message', 'Jackpot!');
@@ -99,16 +99,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							this.add('-message', `Yikes! ${pokemon.name} stepped on a spike!`);
 							this.add('-anim', pokemon, 'Horn Attack', pokemon);
 							pokemon.hp -= trapdamage;
-							pokemon.abilityState.trapDamage = trapdamage;
-							pokemon.abilityState.trapAnim.push('Horn Attack');
+							pokemon.abilityState.currentTile.trapDamage = trapdamage;
+							pokemon.abilityState.currentTile.trapAnim.push('Horn Attack');
 							break;
 						case 'snare':
 							trapdamage = this.random(80, 160);
 							this.add('-message', `Ouch! ${pokemon.name} was caught in a snare!`);
 							this.add('-anim', pokemon, 'Crunch', pokemon);
 							pokemon.hp -= trapdamage;
-							pokemon.abilityState.trapDamage = trapdamage;
-							pokemon.abilityState.trapAnim.push('Crunch');
+							pokemon.abilityState.currentTile.trapDamage = trapdamage;
+							pokemon.abilityState.currentTile.trapAnim.push('Crunch');
 							break;
 						case 'bomb':
 							trapdamage = this.random(200, 500);
@@ -116,8 +116,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							this.add('-anim', pokemon, 'Seed Bomb', pokemon);
 							this.add('-anim', pokemon, 'Explosion', pokemon);
 							pokemon.hp -= trapdamage;
-							pokemon.abilityState.trapDamage = trapdamage;
-							pokemon.abilityState.trapAnim.push('Seed Bomb', 'Explosion');
+							pokemon.abilityState.currentTile.trapDamage = trapdamage;
+							pokemon.abilityState.currentTile.trapAnim.push('Seed Bomb', 'Explosion');
 							break;
 					}
 					break;
