@@ -2550,7 +2550,8 @@ export const Formats: FormatList = [
 			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
 		},
 		getSharedItems(pokemon) {
-			if (pokemon.item && pokemon.getItem().id === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
+				this.add('-message', `getSharedItems for Colossus Carrier triggered`);
 				const items = new Set<string>();
 				for (const baggedItem of pokemon.abilityState.carrierItems) {
 					if (items.has(baggedItem)) continue;
@@ -2588,7 +2589,8 @@ export const Formats: FormatList = [
 			}
 		},
 		onBeforeSwitchIn(pokemon) {
-			if (pokemon.item && pokemon.getItem().id === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
+				this.add('-message', `onBeforeSwitchIn for Colossus Carrier triggered`);
 				let format = this.format;
 				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
 				if (!pokemon.m.sharedItemsUsed) pokemon.m.sharedItemsUsed = [];
@@ -2633,7 +2635,8 @@ export const Formats: FormatList = [
 			}
 
 			// Handling Colossus Carrier
-			if (pokemon.item && pokemon.getItem().id === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
+				this.add('-message', `onSwitchIn for Colossus Carrier triggered`);
 				let format = this.format;
 				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
 				for (const item of format.getSharedItems!(pokemon)) {
