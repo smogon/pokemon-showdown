@@ -22,9 +22,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			if (pokemon.species.id !== 'stonjourner') return;
 			if (!pokemon.abilityState.started) {
-				this.add(`raw|<b>${pokemon.species.name}</b>`);
-				this.add('-message', `Your journey starts here!`);
-				this.add('-message', `Good luck!`);
+				this.add(`raw|<b>${pokemon.species.name}</b>!<br>Your journey starts here!<br>Good luck!`);
 				this.add('-anim', pokemon, 'Splash', pokemon);
 				pokemon.abilityState.started = true;
 			}
