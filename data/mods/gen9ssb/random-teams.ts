@@ -193,6 +193,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Omen of Defeat',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
+	Journeyman: {
+		species: 'Stonjourner', ability: 'Love of the Journey', item: 'Colossus Carrier', gender: 'M',
+		moves: ['Mighty Cleave', 'Trailblaze', 'Court Change'],
+		signatureMove: 'New Beginnings',
+		evs: {atk: 188, spd: 104, spe: 216}, ivs: {spa: 0}, nature: 'Adamant',
+	},
 	/*
 	'Castaways': {
 		species: 'Swalot', ability: 'Aftermath', item: 'Black Sludge', gender: 'M',
