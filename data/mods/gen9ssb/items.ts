@@ -1,4 +1,10 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Journeyman
+	colossuscarrier: {
+		name: "Colossus Carrier",
+		gen: 9,
+		// Handled in ../config/formats.ts
+	},
 	// Codie
 	evileyeoformsbygore: {
 		name: "Evil Eye of Orms-by-Gore",
