@@ -204,12 +204,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[0];
 			// Replace Ability
-			this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
-			pokemon.ability = target.getAbility().id;
-			pokemon.setAbility(target.getAbility().id);
-			pokemon.abilityState = {id: this.toID(pokemon.ability), target: pokemon};
-			this.singleEvent('Start', target.getAbility(), target.abilityState, pokemon);
-			this.runEvent('SetAbility', pokemon, pokemon, this.effect, target.getAbility());
+			if (target.ability !== 'perfectcopy') {
+				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				pokemon.setAbility(target.getAbility().id);
+				pokemon.abilityState = {id: this.toID(target.ability), target: pokemon};
+				this.singleEvent('Start', target.getAbility(), target.abilityState, pokemon);
+			}
 			// Learning An Opponent's Move
 			let possibleMoves = [];
 			for (const moveSlot of target.moveSlots) {
