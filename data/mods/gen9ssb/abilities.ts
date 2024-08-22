@@ -60,7 +60,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', `${pokemon.name} encountered Move Tutor ${tutor}!`);
 					this.add('-message', `${tutor} taught ${pokemon.name} how to use ${move.name}!`);
 					this.add('-anim', pokemon, 'Celebrate', pokemon);
-				case 'item';
+				case 'item':
 					if (!pokemon.abilityState.carrier) pokemon.abilityState.carrier = [];
 					const items = this.dex.items.all().filter(item => (
 						(pokemon.item !== item) &&
