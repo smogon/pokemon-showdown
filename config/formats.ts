@@ -2675,6 +2675,7 @@ export const Formats: FormatList = [
 					}
 				}
 				if (pokemon.item && pokemon.item === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+					let format = this.format;
 					if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
 					for (const item of format.getSharedItems!(pokemon)) {
 						if (pokemon.m.sharedItemsUsed.includes(item)) continue;
