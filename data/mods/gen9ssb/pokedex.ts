@@ -6,6 +6,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	stonjourner: {
+		inherit: true,
+		abilities: {0: "Love of the Journey"},
+		types: ['Rock', 'Grass'],
+		baseStats: {hp: 100, atk: 125, def: 135, spa: 50, spd: 50, spe: 70},
+	},
 	venomicon: {
 		inherit: true,
 		abilities: {0: "Vociferous Codex"},
