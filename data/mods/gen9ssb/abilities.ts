@@ -99,7 +99,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							trapdamage = this.random(40, 80);
 							this.add('-message', `Yikes! ${pokemon.name} stepped on a spike!`);
 							this.add('-anim', pokemon, 'Horn Attack', pokemon);
-							pokemon.hp -= trapdamage;
+							this.damage(trapdamage, pokemon);
 							pokemon.abilityState.currentTile.trapDamage = trapdamage;
 							pokemon.abilityState.currentTile.trapAnim.push('Horn Attack');
 							break;
@@ -107,7 +107,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							trapdamage = this.random(80, 160);
 							this.add('-message', `Ouch! ${pokemon.name} was caught in a snare!`);
 							this.add('-anim', pokemon, 'Crunch', pokemon);
-							pokemon.hp -= trapdamage;
+							this.damage(trapdamage, pokemon);
 							pokemon.abilityState.currentTile.trapDamage = trapdamage;
 							pokemon.abilityState.currentTile.trapAnim.push('Crunch');
 							break;
@@ -116,7 +116,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							this.add('-message', `Oh, no! ${pokemon.name} stepped on a Seed Bomb!`);
 							this.add('-anim', pokemon, 'Seed Bomb', pokemon);
 							this.add('-anim', pokemon, 'Explosion', pokemon);
-							pokemon.hp -= trapdamage;
+							this.damage(trapdamage, pokemon);
 							pokemon.abilityState.currentTile.trapDamage = trapdamage;
 							pokemon.abilityState.currentTile.trapAnim.push('Seed Bomb', 'Explosion');
 							break;
