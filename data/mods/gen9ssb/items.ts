@@ -4,6 +4,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Colossus Carrier",
 		gen: 9,
 		onTakeItem: false,
+		shortDesc: "The holder can hold up to eight additional items.",
+		desc: "The holder can hold up to eight additional items, other than Colossus Carrier, that are unaffected by Knock Off or other means of being taken, disabled, or removed.",
 		// Handled in ../config/formats.ts
 	},
 	// Codie
