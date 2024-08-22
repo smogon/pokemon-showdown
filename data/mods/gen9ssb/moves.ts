@@ -60,7 +60,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Celebrate', source);
 		},
 		onHit(target, source, move) {
-			if (this.randomChance(7, 10) {
+			if (this.randomChance(7, 10)) {
 				this.add(`raw|It is never too late for <b>New Beginnings</b>!<br>Good luck, ${source.name}!`);
 				source.hp = source.maxhp;
 				source.cureStatus();
