@@ -2678,6 +2678,7 @@ export const Formats: FormatList = [
 					let format = this.format;
 					if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
 					for (const item of format.getSharedItems!(pokemon)) {
+						if (!pokemon.m.sharedItemsUsed) pokemon.m.sharedItemsUsed = [];
 						if (pokemon.m.sharedItemsUsed.includes(item)) continue;
 						const effect = 'item:' + item;
 						delete pokemon.volatiles[effect];
