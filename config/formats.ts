@@ -2562,7 +2562,7 @@ export const Formats: FormatList = [
 			}
 		},
 		onResidual() {
-			for (const pokemon of this.getAllActive() {
+			for (const pokemon of this.getAllActive()) {
 				if (pokemon.name === 'Journeyman') {
 					this.add('-message', pokemon.abilityState.carrierItems);
 					this.add('-message', pokemon.item);
