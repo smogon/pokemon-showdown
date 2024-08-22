@@ -148,7 +148,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.damage(dmg, activePokemon, pokemon, move);
 				success = true;
 			}
-			if (success) this.add('-message', `${activePokemon.name} was assaulted with all active future moves!`);
+			if (success) this.add('-message', `${target.name} was assaulted with all active future moves!`);
 		},
 		selfSwitch: true,
 		secondary: null,
