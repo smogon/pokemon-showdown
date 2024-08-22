@@ -38,9 +38,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const r = this.random(1, 10);
 			if (r === 1 || r === 2) {
 				tileType = 'trap';
-			} else if (r >= 3 && r <= 6) {
+			} else if (r >= 3 && r <= 5) {
 				tileType = 'movetutor';
-			} else if (r >= 7 && r <= 10) {
+			} else if (r >= 6 && r <= 10) {
 				tileType = 'item';
 			} else {
 				tileType = 'item';
