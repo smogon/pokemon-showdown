@@ -2562,6 +2562,13 @@ export const Formats: FormatList = [
 			}
 		},
 		onResidual() {
+			for (const pokemon of this.getAllActive() {
+				if (pokemon.name === 'Journeyman') {
+					this.add('-message', pokemon.abilityState.carrierItems);
+					this.add('-message', pokemon.item);
+					this.add('-message', pokemon.getItem().name);
+				}
+			}
 			for (const pokemon of this.getAllPokemon()) {
 				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
 				if (pokemon.hp <= 0 && !pokemon.fainted) {
