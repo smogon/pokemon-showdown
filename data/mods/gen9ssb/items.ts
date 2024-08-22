@@ -194,7 +194,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			duration: 4,
 			onModifyDamage(damage, source, target, move) {
 				if (!move) return;
-				if (pokemon.hasType('Water')) {
+				if (source.hasType('Water')) {
 					return this.chainModify (1.25);
 				} else {
 					return this.chainModify(0.75);
