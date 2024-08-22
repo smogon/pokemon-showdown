@@ -61,13 +61,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-anim', pokemon, 'Work Up', pokemon);
 					break;
 				case 'item':
-					if (!pokemon.abilityState.carrier) pokemon.abilityState.carrier = [];
+					if (!pokemon.abilityState.carrierItems) pokemon.abilityState.carrierItems = [];
 					const items = this.dex.items.all().filter(item => (
 						(pokemon.item !== item) &&
-						(!pokemon.abilityState.carrier.includes(item))
+						(!pokemon.abilityState.carrierItems.includes(item))
 					));
 					const item = this.sample(items);
-					pokemon.abilityState.carrier.push(item);
+					pokemon.abilityState.carrierItems.push(item);
 					this.add('-message', 'Jackpot!');
 					this.add('-message', `${pokemon.name} obtained one ${item.name}!`);
 					this.add('-anim', pokemon, 'Splash', pokemon);
