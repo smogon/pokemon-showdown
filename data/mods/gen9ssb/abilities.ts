@@ -74,6 +74,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					const items = this.dex.items.all().filter(item => (
 						(pokemon.item !== item) &&
 						(!pokemon.abilityState.carrierItems.includes(item)) &&
+						(['Memory', 'TR', 'Power', 'Ball', 'Stone'].indexOf(item.name) === -1) &&
 						(!item.name.includes['Memory', 'TR', 'Power', 'Ball', 'Stone'])
 					));
 					const item = this.sample(items);
