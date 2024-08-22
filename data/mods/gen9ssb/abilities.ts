@@ -81,22 +81,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					switch (type) {
 						case 'spikes':
 							trapdamage = this.random(40, 80);
-							this.add('-message', `Yikes! ${pokemon.name} stepped on Spikes!`);
+							this.add('-message', `Yikes! ${pokemon.name} stepped on a spike!`);
 							this.add('-anim', pokemon, 'Horn Attack', pokemon);
-							this.damage(trapdamage, pokemon);
+							pokemon.hp -= trapdamage;
 							break;
 						case 'snare':
 							trapdamage = this.random(80, 160);
-							this.add('-message', `Ouch! ${pokemon.name} was caught in a Beast Snare!`);
+							this.add('-message', `Ouch! ${pokemon.name} was caught in a snare!`);
 							this.add('-anim', pokemon, 'Crunch', pokemon);
-							this.damage(trapdamage, pokemon);
+							pokemon.hp -= trapdamage;
 							break;
 						case 'bomb':
 							trapdamage = this.random(200, 500);
 							this.add('-message', `Oh, no! ${pokemon.name} stepped on a Seed Bomb!`);
 							this.add('-anim', pokemon, 'Seed Bomb', pokemon);
 							this.add('-anim', pokemon, 'Explosion', pokemon);
-							this.damage(trapdamage, pokemon);
+							pokemon.hp -= trapdamage;
 							break;
 					}
 					break;
