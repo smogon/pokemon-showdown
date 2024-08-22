@@ -63,7 +63,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					if (!pokemon.abilityState.carrierItems) pokemon.abilityState.carrierItems = [];
 					const items = this.dex.items.all().filter(item => (
 						(pokemon.item !== item) &&
-						(!pokemon.abilityState.carrierItems.includes(item))
+						(!pokemon.abilityState.carrierItems.includes(item)) &&
+						(!item.name.includes['Memory', 'TR', 'Power', 'Ball', 'Stone'])
 					));
 					const item = this.sample(items);
 					if (pokemon.abilityState.carrierItems.length < 8 && pokemon.item === 'colossuscarrier') {
