@@ -159,7 +159,7 @@ export async function updateBadgeholders() {
 	if (!data.badgeholders[period]) {
 		data.badgeholders[period] = {};
 	}
-	for (const formatName of data.formatSchedule[period]) {
+	for (const formatName of data.formatSchedule[findPeriod()]) {
 		const formatid = `gen${Dex.gen}${formatName}`;
 		const response = await getLadderTop(formatid);
 		if (!response) continue; // ??
