@@ -161,7 +161,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wingattack: ["1L13"],
 			stunspore: ["1L21"],
 			pinmissile: ["1L29"],
-			camoflauge: ["1L31"],
+			camouflage: ["1L31"],
 			aurorabeam: ["1L33"],
 			razorleaf: ["1L41"],
 			mist: ["1L51"],
