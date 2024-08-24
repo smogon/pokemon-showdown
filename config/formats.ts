@@ -379,7 +379,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `A Gen 1 metagame where Fakemon are added in a similar fashion to Smogon's official Create-A-Pokemon Project.`,
 		mod: 'gen1rbycap',
 		ruleset: ['Standard'],
-		banlist: ['Uber'],
+		banlist: ['Uber', 'Camouflage'],
 		onBegin() {
 			this.add('-message', `Welcome to RBY CAP!`);
 			this.add('-message', `This is a Generation 1 OU-based Pet Mod where Fakemon are added in a similar way to the official CAP project.`);
