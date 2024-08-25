@@ -677,6 +677,9 @@ export class TeamValidator {
 			} else {
 				set.teraType = type.name;
 			}
+			if (dex.gen !== 9) {
+				delete set.teraType;
+			}
 		}
 
 		let problem = this.checkSpecies(set, species, tierSpecies, setHas);
