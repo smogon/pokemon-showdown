@@ -677,7 +677,7 @@ export class TeamValidator {
 			} else {
 				set.teraType = type.name;
 			}
-			if (dex.gen !== 9) {
+			if (dex.gen !== 9 || ruleTable.has('terastalclause')) {
 				delete set.teraType;
 			}
 		}
