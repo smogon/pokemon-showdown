@@ -110,8 +110,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					}
 					let target = this.sample(allies);
 					let item = this.dex.items.get(target.item);
-					this.add(`${target.name} loaned their ${item.name} to ${pokemon.name}!`);
+					this.add('-message', `${target.name} loaned their ${item.name} to ${pokemon.name}!`);
 	  				this.add('-message', `This could be useful!`);
+					if (!pokemon.abilityState.carrierItems) pokemon.abilityState.carrierItems = [];
 					pokemon.abilityState.carrierItems.push(item);
 				case 'rest':
 					this.add('-anim', pokemon, 'Rest', pokemon);
