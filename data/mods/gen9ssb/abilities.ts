@@ -35,11 +35,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.species.id !== 'stonjourner') return;
 
 			// Chooses and executes tile effect
-			let tileType;
 			const tiles = ['movetutor', 'trap', 'allyitem', 'rest', 'weather'];
 			const r = this.sample(tiles);
 			pokemon.abilityState.currentTile = {
-				effectType: tileType,
+				effectType: r,
 				moveData: '',
 				tutorName: '',
 				trapDamage: '',
