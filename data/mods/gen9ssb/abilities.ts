@@ -117,11 +117,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				case 'rest':
 					this.add('-anim', pokemon, 'Rest', pokemon);
 					this.add('-anim', pokemon, 'Morning Sun', pokemon);
-					this.add(`${pokemon.name} took time to rest and recover!`);
+					this.add('-message', `${pokemon.name} took time to rest and recover!`);
 					pokemon.hp += pokemon.maxhp / 3;
 					pokemon.cureStatus();
 				case 'weather':
-					this.add(`${pokemon.name} traveled into another climate!`);
+					this.add('-message', `${pokemon.name} traveled into another climate!`);
 					let weathers = ['sunnyday', 'snowscape', 'sandstorm', 'raindance'];
 					let weather = this.sample(weathers);
 					this.field.setWeather(weather);
