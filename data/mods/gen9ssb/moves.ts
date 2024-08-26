@@ -62,14 +62,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, move) {
 			if (this.randomChance(7, 10)) {
 				this.add(`raw|It is never too late for <b>New Beginnings</b>!<br>Good luck, ${source.name}!`);
-				source.hp = source.maxhp;
+				this.heal(source.maxhp, source);
 				source.cureStatus();
 				for (const moveSlot of source.moveSlots) {
 					let moveid = moveSlot.id;
 					if (source.moves.indexOf(moveid) > 3) {
-						delete source.moveSlots[moveSlot];
-						delete source.baseMoveSlots[moveSlot];
 						this.add('-message', `${source.name} forgot ${moveSlot.name}!`);
+						source.moveSlots[moveSlot] = null;
+						source.baseMoveSlots = null;
+						source.moves[moveid] = null;
+						//delete source.moveSlots[moveSlot];
+						//delete source.baseMoveSlots[moveSlot];
+						//delete source.moves[moveid];
 					} else {
 						moveSlot.pp = moveSlot.maxpp;
 					}
