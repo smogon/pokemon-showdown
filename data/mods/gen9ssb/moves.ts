@@ -67,13 +67,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				for (const moveSlot of source.moveSlots) {
 					let moveid = moveSlot.id;
 					if (source.moves.indexOf(moveid) > 3) {
-						this.add('-message', `${source.name} forgot ${moveSlot.name}!`);
-						source.moveSlots[moveSlot] = null;
-						source.baseMoveSlots = null;
-						source.moves[moveid] = null;
-						//delete source.moveSlots[moveSlot];
-						//delete source.baseMoveSlots[moveSlot];
-						//delete source.moves[moveid];
+						this.add('-message', `${source.name} forgot ${moveSlot.move}!`);
+						delete source.moveSlots[source.moves.indexOf(moveid)];
+						delete source.baseMoveSlots[source.moves.indexOf(moveid)];
+						delete source.moves[moveid];
 					} else {
 						moveSlot.pp = moveSlot.maxpp;
 					}
