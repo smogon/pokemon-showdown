@@ -265,7 +265,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
 			if ([
 				'endeavor', 'seismictoss', 'psywave', 'nightshade', 'sonicboom', 'dragonrage',
-				'superfang', 'naturesmadness', 'bide', 'counter', 'mirrorcoat', 'metalburst'
+				'superfang', 'naturesmadness', 'bide', 'counter', 'mirrorcoat', 'metalburst',
 			].includes(move.id)) return;
 			if (!move.spreadHit && !move.isZ && !move.isMax) {
 				move.multihit = 2;
