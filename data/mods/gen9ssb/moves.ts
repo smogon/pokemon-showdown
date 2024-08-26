@@ -65,7 +65,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.hp = source.maxhp;
 				source.cureStatus();
 				for (const moveSlot of source.moveSlots) {
-					if (source.moves.indexOf(moveSlot) > 3) {
+					let moveid = moveSlot.id;
+					if (source.moves.indexOf(moveid) > 3) {
 						delete source.moveSlots[moveSlot];
 						delete source.baseMoveSlots[moveSlot];
 						this.add('-message', `${source.name} forgot ${moveSlot.name}!`);
