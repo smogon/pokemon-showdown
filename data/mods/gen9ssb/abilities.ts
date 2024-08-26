@@ -104,7 +104,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					break;
 				case 'allyitem':
 					let allies = [];
-					for (const ally in pokemon.side.pokemon) {
+					for (const ally of pokemon.side.pokemon) {
 						if (ally === pokemon) continue;
 						allies.push(ally);
 					}
@@ -114,17 +114,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	  				this.add('-message', `This could be useful!`);
 					if (!pokemon.abilityState.carrierItems) pokemon.abilityState.carrierItems = [];
 					pokemon.abilityState.carrierItems.push(item);
+					break;
 				case 'rest':
 					this.add('-anim', pokemon, 'Rest', pokemon);
 					this.add('-anim', pokemon, 'Morning Sun', pokemon);
 					this.add('-message', `${pokemon.name} took time to rest and recover!`);
 					pokemon.hp += pokemon.maxhp / 3;
 					pokemon.cureStatus();
+					break;
 				case 'weather':
 					this.add('-message', `${pokemon.name} traveled into another climate!`);
 					let weathers = ['sunnyday', 'snowscape', 'sandstorm', 'raindance'];
 					let weather = this.sample(weathers);
 					this.field.setWeather(weather);
+					break;
 			}
 
 			// Then 50% chance of finding an item each turn
