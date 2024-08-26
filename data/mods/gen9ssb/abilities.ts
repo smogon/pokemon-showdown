@@ -81,7 +81,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							this.add('-anim', pokemon, 'Horn Attack', pokemon);
 							this.damage(trapdamage, pokemon);
 							pokemon.abilityState.currentTile.trapDamage = trapdamage;
-							pokemon.abilityState.currentTile.trapAnim.push('Horn Attack');
+							pokemon.abilityState.currentTile.trapAnim = 'Horn Attack';
 							break;
 						case 'snare':
 							trapdamage = this.random(80, 160);
@@ -89,16 +89,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							this.add('-anim', pokemon, 'Crunch', pokemon);
 							this.damage(trapdamage, pokemon);
 							pokemon.abilityState.currentTile.trapDamage = trapdamage;
-							pokemon.abilityState.currentTile.trapAnim.push('Crunch');
+							pokemon.abilityState.currentTile.trapAnim = 'Crunch';
 							break;
 						case 'bomb':
 							trapdamage = this.random(160, 200);
 							this.add('-message', `Oh, no! ${pokemon.name} stepped on a Seed Bomb!`);
 							this.add('-anim', pokemon, 'Seed Bomb', pokemon);
-							this.add('-anim', pokemon, 'Explosion', pokemon);
 							this.damage(trapdamage, pokemon);
 							pokemon.abilityState.currentTile.trapDamage = trapdamage;
-							pokemon.abilityState.currentTile.trapAnim.push('Seed Bomb', 'Explosion');
+							pokemon.abilityState.currentTile.trapAnim = 'Seed Bomb';
 							break;
 					}
 					break;
@@ -119,7 +118,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-anim', pokemon, 'Rest', pokemon);
 					this.add('-anim', pokemon, 'Morning Sun', pokemon);
 					this.add('-message', `${pokemon.name} took time to rest and recover!`);
-					pokemon.hp += pokemon.maxhp / 3;
+					this.heal(pokemon.maxhp / 3, pokemon);
 					pokemon.cureStatus();
 					break;
 				case 'weather':
@@ -176,12 +175,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 						break;
 					case 'trap':
 						this.add('-message', `${source.name} launched the trap to the opposing court!`);
-						if (source.abilityState.currentTile.trapAnim.length) {
-							for (const anim in source.abilityState.currentTile.trapAnim) {
-								this.add('-anim', foe, anim, foe);
-							}
-						}
-						foe.hp -= source.abilityState.currentTile.trapDamage;
+						this.add('-anim', foe, source.abilityState.currentTile.trapAnim, foe);
+						this.damage(source.abilityState.currentTile.trapDamage, foe);
 						break;
 				}
 			}
