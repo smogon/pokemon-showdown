@@ -110,16 +110,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					}
 					let target = this.sample(allies);
 					let item = target.getItem();
-					this.add(`|raw|${target.name} loaned their ${item.name} to ${pokemon.name}!<br>This could be useful!`);
+					this.add(`${target.name} loaned their ${item.name} to ${pokemon.name}!`);
+	  				this.add('-message', `This could be useful!`);
 					pokemon.abilityState.carrierItems.push(item);
 				case 'rest':
 					this.add('-anim', pokemon, 'Rest', pokemon);
 					this.add('-anim', pokemon, 'Morning Sun', pokemon);
-					this.add(`|raw|${pokemon.name} took time to rest and recover!`);
+					this.add(`${pokemon.name} took time to rest and recover!`);
 					pokemon.hp += pokemon.maxhp / 3;
 					pokemon.cureStatus();
 				case 'weather':
-					this.add(`|raw|${pokemon.name} traveled into another climate!`);
+					this.add(`${pokemon.name} traveled into another climate!`);
 					let weathers = ['sunnyday', 'snowscape', 'sandstorm', 'raindance'];
 					let weather = this.sample(weathers);
 					this.field.setWeather(weather);
