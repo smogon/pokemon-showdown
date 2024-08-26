@@ -110,7 +110,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 						allies.push(ally);
 					}
 					let target = this.sample(allies);
-					let item = ally.getItem();
+					let item = target.getItem();
 					this.add(`|raw|${target.name} loaned their ${item.name} to ${pokemon.name}!<br>This could be useful!`);
 					pokemon.abilityState.carrierItems.push(item);
 				case 'rest':
