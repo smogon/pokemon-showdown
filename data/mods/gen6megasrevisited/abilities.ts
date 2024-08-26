@@ -260,6 +260,32 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "On switch-in, sets Delta Stream. User takes halved damage from hazards.",
 		rating: 5,
 	},
+	parentalbond: {
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.selfdestruct || move.multihit) return;
+			if ([
+				'endeavor', 'seismictoss', 'psywave', 'nightshade', 'sonicboom', 'dragonrage',
+				'superfang', 'naturesmadness', 'bide', 'counter', 'mirrorcoat', 'metalburst',
+			].includes(move.id)) return;
+			if (!move.spreadHit && !move.isZ && !move.isMax) {
+				move.multihit = 2;
+				move.multihitType = 'parentalbond';
+			}
+		},
+		onBasePowerPriority: 7,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
+		},
+		onSourceModifySecondaries(secondaries, target, source, move) {
+			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
+				// hack to prevent accidentally suppressing King's Rock/Razor Fang
+				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
+			}
+		},
+		name: "Parental Bond",
+		rating: 4.5,
+		num: 184,
+	},
 
 	// for ngas
 	galewings: {
