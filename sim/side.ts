@@ -1072,9 +1072,7 @@ export class Side {
 
 	choosePass(): boolean | Side {
 		const index = this.getChoiceIndex(true);
-		if (index >= this.active.length) {
-			return true;
-		}
+		if (index >= this.active.length) return true;
 		const pokemon: Pokemon = this.active[index];
 
 		switch (this.requestState) {
