@@ -2079,13 +2079,13 @@ export class Battle {
 
 	// For SSB use only
 	inject(set: PokemonSet, side: SideID) {
-		if (!ssbSets[set.name] || !set || !side) return false;
 		if (side.pokemon.length >= 24) return false;
 		const newPokemon = new Pokemon(set, side);
 		newPokemon.position = side.pokemon.length;
+		this.add('-message', `${newPokemon.name} entered the fight!`);
 		side.pokemon.push(newPokemon);
 		side.pokemonLeft++;
-		return true;
+		return newPokemon;
 	}
 	
 	heal(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: 'drain' | Effect | null = null) {
