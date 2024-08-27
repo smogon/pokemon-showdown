@@ -793,7 +793,7 @@ export const commands: Chat.ChatCommands = {
 		const id = toID(target);
 		if (!id || this.cmd === 'makechatroom') return this.parse('/help makechatroom');
 		if (!Rooms.global.addChatRoom(target)) {
-			return this.errorReply(`An error occurred while trying to create the room '${target}'.`);
+			return this.errorReply(`The room '${target}' already exists or it is using an invalid title.`);
 		}
 
 		const targetRoom = Rooms.search(target);
