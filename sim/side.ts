@@ -1073,7 +1073,7 @@ export class Side {
 	choosePass(): boolean | Side {
 		const index = this.getChoiceIndex(true);
 		if (index >= this.active.length) {
-			return this.emitChoiceError(`Can't pass: You sent more choices than unfainted Pokémon`);
+			return true;
 		}
 		const pokemon: Pokemon = this.active[index];
 
