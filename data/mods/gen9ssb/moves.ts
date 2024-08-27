@@ -40,6 +40,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	'Peewee Multiplication': {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Peewee Multiplication",
+		pp: 5,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {},
+		onHit(pokemon) {
+			this.addPokemon(ssbSets['Gooner']);
+			this.add('-message', `${pokemon.name} multiplied!`);
+		},
+		secondary: null,
+		type: "Dark",
+		target: "self",
+	},
 	// Journeyman
 	newbeginnings: {
 		accuracy: true,
