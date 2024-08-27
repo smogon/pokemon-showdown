@@ -40,7 +40,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
-	'Peewee Multiplication': {
+	peeweemultiplication: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
