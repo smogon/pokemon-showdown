@@ -290,7 +290,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				pokemon.setAbility(target.getAbility().id);
 				pokemon.abilityState = {id: this.toID(target.ability), target: pokemon};
-				this.singleEvent('Start', target.getAbility(), target.abilityState, pokemon);
 			}
 			// Learning An Opponent's Move
 			let possibleMoves = [];
