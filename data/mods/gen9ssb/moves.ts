@@ -153,7 +153,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				randomMove = this.sample(otherMoves);
 			}
 			this.actions.useMove(randomMove, source, target);
-			if (this.randomChance(3, 10) {
+			if (this.randomChance(3, 10)) {
 				target.setType(this.dex.moves.get(randomMove).type);
 				this.add('-start', target, 'typechange', this.dex.moves.get(randomMove).type);
 			}
