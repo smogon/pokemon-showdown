@@ -445,7 +445,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		for (const id of users.map(toID)) {
 			const manager = this.managers.get(id);
 			if (!manager) {
-				this.managers.set(id, {id: id as ID, team});
+				this.managers.set(id, {id, team});
 			} else {
 				manager.team = team;
 			}
