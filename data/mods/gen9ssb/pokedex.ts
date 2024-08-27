@@ -562,12 +562,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Unaware"},
 	},
 
-	// Lionyx
-	miltank: {
-		inherit: true,
-		abilities: {0: "EnorMOOs"},
-	},
-
 	// Loethalion
 	ralts: {
 		inherit: true,

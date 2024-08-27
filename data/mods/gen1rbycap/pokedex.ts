@@ -1,4 +1,16 @@
 export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
+	pineguin: {
+		num: 2000,
+		name: "Pineguin",
+		types: ["Grass", "Ice"],
+		baseStats: {hp: 120, atk: 70, def: 40, spa: 95, spd: 95, spe: 80},
+		abilities: {0: "No Ability"},
+		heightm: 3.2,
+		weightkg: 106,
+		color: "Green",
+		eggGroups: ["Water 1", "Grass"],
+		gen: 1,
+	},
 	corupcake: {
 		num: 2001,
 		name: "Corupcake",

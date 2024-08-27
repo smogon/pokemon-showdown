@@ -1385,28 +1385,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Lily')}|oh dear, i am dead`);
 		},
 	},
-	lionyx: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Lionyx')}| It's Lionyx busting in once again (⌐■_■)`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Lionyx')}|Wherever you go and whoever you meet, don't forget us, will you?`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Lionyx')}|I don't even like milk anyway`);
-		},
-		innateName: "Simple",
-		shortDesc: "When one of this Pokemon's stat stages is raised or lowered, the amount is doubled.",
-		onChangeBoost(boost, target, source, effect) {
-			if (target.illusion) return;
-			if (effect && effect.id === 'zpower') return;
-			let i: BoostID;
-			for (i in boost) {
-				boost[i]! *= 2;
-			}
-		},
-	},
 	loethalion: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -1474,7 +1452,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 				break;
 			case 'r8':
 			case 'clementine':
-			case 'lionyx':
 			case 'teclis':
 			case 'swiffix':
 			case 'ironwater':
@@ -1495,7 +1472,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 				break;
 			case 'r8':
 			case 'clementine':
-			case 'lionyx':
 			case 'teclis':
 			case 'swiffix':
 			case 'ironwater':
@@ -1518,7 +1494,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 				phrase = 'ok mais on dit pain au chocolat.';
 				break;
 			case 'clementine':
-			case 'lionyx':
 			case 'teclis':
 			case 'swiffix':
 			case 'ironwater':
