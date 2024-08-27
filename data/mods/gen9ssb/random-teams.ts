@@ -577,12 +577,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Power Up',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Fairy', shiny: 1734,
 	},
-	Lionyx: {
-		species: 'Miltank', ability: 'EnorMOOs', item: 'Leftovers', gender: 'M',
-		moves: [['Glacial Lance', 'Bolt Strike'], 'Milk Drink', 'Defense Curl'],
-		signatureMove: 'Super Rollout',
-		evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0, spa: 0}, nature: 'Impish', teraType: ['Electric', 'Ice'], shiny: true,
-	},
 	Loethalion: {
 		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
 		moves: [['Esper Wing', 'Lumina Crash', 'Psychic Noise'], ['Agility', 'Calm Mind'], ['Draining Kiss', 'Matcha Gotcha']],
@@ -1203,13 +1197,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				const cmIndex = set.moves.indexOf("Calm Mind");
 				if (cmIndex >= 0 && set.moves.includes("Night Shade")) {
 					set.moves[cmIndex] = this.sample(["Thief", "Toxic"]);
-				}
-			}
-			if (set.name === "Lionyx") {
-				if (set.moves.includes("Bolt Strike")) {
-					teraType = 'Electric';
-				} else {
-					teraType = 'Ice';
 				}
 			}
 			if (set.name === "Frostyicelad" && set.shiny) {
