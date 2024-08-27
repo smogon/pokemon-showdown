@@ -199,8 +199,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!activePokemon.side.slotConditions[activePokemon.position]['futuremove']) continue;
 				const move = this.dex.getActiveMove(activePokemon.side.slotConditions[activePokemon.position]['futuremove'].move);
 				const dmg = this.actions.getDamage(pokemon, activePokemon, move);
-				activePokemon.side.removeSlotCondition(activePokemon, 'futuremove', '[silent]');
-				this.add('-anim', activePokemon, move.name, target);
+				delete activePokemon.side.slotConditions[activePokemon.position]['futuremove'];
+				if (move === 'doomdesire') {
+					this.add('-anim', activePokemon, 'Steel Beam', target);
+				} else {
+					this.add('-anim', activePokemon, move.name, target);
+				}
 				this.damage(dmg, target, pokemon, move);
 				success = true;
 			}
