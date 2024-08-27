@@ -144,7 +144,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let m2 = this.dex.getActiveMove(imprints[1]);
 			let tbp = m1.basePower + m2.basePower;
 			move.basePower = (tbp / 2) * 1.5;
-			this.add('-message', move.basePower);
 			this.add('-anim', source, 'Discharge', target);
 			if (m1.type === m2.type) {
 				this.effectState.conflux = true;
