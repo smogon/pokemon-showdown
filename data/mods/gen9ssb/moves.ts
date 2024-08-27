@@ -147,6 +147,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Discharge', target);
 			if (m1.type === m2.type) {
 				this.effectState.conflux = true;
+				this.add('-message', `A CONFLUX SHOULD BE HAPPENING RIGHT NOW!!!!!`);
 			}
 		},
 		onHit(target, source, move) {
