@@ -421,6 +421,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (team.suspended) throw new Chat.ErrorMessage(`Team ${name} is already suspended.`);
 		if (this.nominatingTeam === team) throw new Chat.ErrorMessage(`You cannot suspend the current nominating team.`);
 		team.suspended = true;
+		return team;
 	}
 
 	unsuspendTeam(name: string) {
@@ -431,26 +432,34 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (!team) throw new Chat.ErrorMessage(`Team "${name}" not found.`);
 		if (!team.suspended) throw new Chat.ErrorMessage(`Team ${name} is not suspended.`);
 		team.suspended = false;
+		return team;
 	}
 
 	addManagers(teamName: string, users: string[]) {
 		const team = this.teams.get(toID(teamName));
 		if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
-		for (const name of users) {
-			const user = Users.getExact(name);
-			if (!user) throw new Chat.ErrorMessage(`User "${name}" not found.`);
-			const manager = this.managers.get(user.id);
+		const problemUsers = users.filter(user => !toID(user) || toID(user).length > 18);
+		if (problemUsers.length) {
+			throw new Chat.ErrorMessage(`Invalid usernames: ${problemUsers.join(', ')}`);
+		}
+		for (const id of users.map(toID)) {
+			const manager = this.managers.get(id);
 			if (!manager) {
-				this.managers.set(user.id, {id: user.id, team});
+				this.managers.set(id, {id, team});
 			} else {
 				manager.team = team;
 			}
 		}
+		return team;
 	}
 
 	removeManagers(users: string[]) {
-		for (const name of users) {
-			if (!this.managers.delete(toID(name))) throw new Chat.ErrorMessage(`User "${name}" is not a manager.`);
+		const problemUsers = users.filter(user => !this.managers.has(toID(user)));
+		if (problemUsers.length) {
+			throw new Chat.ErrorMessage(`Invalid managers: ${problemUsers.join(', ')}`);
+		}
+		for (const id of users.map(toID)) {
+			this.managers.delete(id);
 		}
 	}
 
@@ -468,6 +477,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			throw new Chat.ErrorMessage(`A team must have enough credits to draft the minimum amount of players.`);
 		}
 		team.credits = newCredits;
+		return team;
 	}
 
 	start() {
@@ -846,11 +856,11 @@ export const commands: Chat.ChatCommands = {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			const [name, ...managers] = target.split(',').map(x => x.trim());
+			const [name, ...managerNames] = target.split(',').map(x => x.trim());
 			if (!name) return this.parse('/help auction addteam');
 			const team = auction.addTeam(name);
-			auction.addManagers(team.name, managers);
 			this.addModAction(`${user.name} added team ${team.name} to the auction.`);
+			auction.addManagers(team.name, managerNames);
 		},
 		addteamhelp: [
 			`/auction addteam [name], [manager1], [manager2], ... - Adds a team to the auction. Requires: # & auction owner`,
@@ -871,8 +881,7 @@ export const commands: Chat.ChatCommands = {
 			auction.checkOwner(user);
 
 			if (!target) return this.parse('/help auction suspendteam');
-			auction.suspendTeam(target);
-			const team = auction.teams.get(toID(target))!;
+			const team = auction.suspendTeam(target);
 			this.addModAction(`${user.name} suspended team ${team.name}.`);
 		},
 		suspendteamhelp: [
@@ -884,8 +893,7 @@ export const commands: Chat.ChatCommands = {
 			auction.checkOwner(user);
 
 			if (!target) return this.parse('/help auction unsuspendteam');
-			auction.unsuspendTeam(target);
-			const team = auction.teams.get(toID(target))!;
+			const team = auction.unsuspendTeam(target);
 			this.addModAction(`${user.name} unsuspended team ${team.name}.`);
 		},
 		unsuspendteamhelp: [
@@ -896,11 +904,11 @@ export const commands: Chat.ChatCommands = {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			const [teamName, ...managers] = target.split(',').map(x => x.trim());
-			if (!teamName || !managers.length) return this.parse('/help auction addmanagers');
-			auction.addManagers(teamName, managers);
-			const team = auction.teams.get(toID(teamName))!;
-			this.addModAction(`${user.name} added ${Chat.toListString(managers.map(m => Users.getExact(m)!.name))} as manager${Chat.plural(managers.length)} for team ${team.name}.`);
+			const [teamName, ...managerNames] = target.split(',').map(x => x.trim());
+			if (!teamName || !managerNames.length) return this.parse('/help auction addmanagers');
+			const team = auction.addManagers(teamName, managerNames);
+			const managers = managerNames.map(m => Users.getExact(m)?.name || toID(m));
+			this.addModAction(`${user.name} added ${Chat.toListString(managers)} as manager${Chat.plural(managers.length)} for team ${team.name}.`);
 		},
 		addmanagershelp: [
 			`/auction addmanagers [team], [user1], [user2], ... - Adds users as managers to a team. Requires: # & auction owner`,
@@ -910,10 +918,11 @@ export const commands: Chat.ChatCommands = {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			const managers = target.split(',').map(x => x.trim());
-			if (!managers.length) return this.parse('/help auction removemanagers');
-			auction.removeManagers(managers);
-			this.addModAction(`${user.name} removed ${Chat.toListString(managers.map(m => Users.getExact(m)?.name || m))} as manager${Chat.plural(managers.length)}.`);
+			if (!target) return this.parse('/help auction removemanagers');
+			const managerNames = target.split(',').map(x => x.trim());
+			auction.removeManagers(managerNames);
+			const managers = managerNames.map(m => Users.getExact(m)?.name || toID(m));
+			this.addModAction(`${user.name} removed ${Chat.toListString(managers)} as manager${Chat.plural(managers.length)}.`);
 		},
 		removemanagershelp: [
 			`/auction removemanagers [user1], [user2], ... - Removes users as managers. Requires: # & auction owner`,
@@ -925,8 +934,7 @@ export const commands: Chat.ChatCommands = {
 			const [teamName, amount] = target.split(',').map(x => x.trim());
 			if (!teamName || !amount) return this.parse('/help auction addcredits');
 			const credits = parseCredits(amount);
-			auction.addCreditsToTeam(teamName, credits);
-			const team = auction.teams.get(toID(teamName))!;
+			const team = auction.addCreditsToTeam(teamName, credits);
 			this.addModAction(`${user.name} ${credits < 0 ? 'removed' : 'added'} ${Math.abs(credits)} credits ${credits < 0 ? 'from' : 'to'} team ${team.name}.`);
 		},
 		addcreditshelp: [
