@@ -1370,18 +1370,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 	},
 
-	// Lionyx
-	enormoos: {
-		shortDesc: "This Pokemon's Defense is used in damage calculation instead of Attack or Sp. Atk.",
-		name: "EnorMOOs",
-		onModifyMove(move, pokemon, target) {
-			if (move.category !== "Status") {
-				move.overrideOffensiveStat = 'def';
-			}
-		},
-		flags: {},
-	},
-
 	// Lumari
 	pyrotechnic: {
 		shortDesc: "Critical hits are guaranteed when the foe is burned.",
