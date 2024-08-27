@@ -50,7 +50,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		onHit(pokemon) {
-			if (!this.inject(ssbSets['Gooner'], pokemon.side) return null;
+			this.inject(ssbSets['Gooner'], pokemon.side);
 		},
 		secondary: null,
 		type: "Dark",
