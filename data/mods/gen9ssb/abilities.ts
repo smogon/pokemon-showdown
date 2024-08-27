@@ -275,7 +275,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				},
 			});
 			this.add('-start', source, 'move: ' + move.name, '[silent]');
-			this.add('-message', `${target.name} shifted ${move.name} into the future!`);
+			this.add('-message', `${source.name} shifted ${move.name} into the future!`);
 			return this.NOT_FAIL;
 		},
 	},
