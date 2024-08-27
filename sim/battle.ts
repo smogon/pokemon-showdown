@@ -20,6 +20,7 @@ import {Field} from './field';
 import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
+import {ssbSets} from "../data/mods/gen9ssb/random-teams";
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
@@ -2076,6 +2077,17 @@ export class Battle {
 		return damage;
 	}
 
+	// For SSB use only
+	inject(set: PokemonSet, side: SideID) {
+		if (!ssbSets[set.name] || !set || !side) return false;
+		if (side.pokemon.length >= 24) return false;
+		const newPokemon = new Pokemon(set, side);
+		newPokemon.position = side.pokemon.length;
+		side.pokemon.push(newPokemon);
+		side.pokemonLeft++;
+		return true;
+	}
+	
 	heal(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: 'drain' | Effect | null = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
