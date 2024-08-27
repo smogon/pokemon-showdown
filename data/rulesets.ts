@@ -441,7 +441,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		banlist: [
 			'Wooper-Paldea', 'Raichu-Alola', 'Vulpix-Alola', 'Ninetales-Alola', 'Growlithe-Hisui', 'Arcanine-Hisui',
 			'Geodude-Alola', 'Graveler-Alola', 'Golem-Alola', 'Sandshrew-Alola', 'Sandslash-Alola', 'Weezing-Galar',
-			'Sneasel-Hisui', 'Sliggoo-Hisui', 'Goodra-Hisui', 'Basculin-Base', 'Basculin-Blue-Striped', 'Ursaluna-Base',
+			'Sneasel-Hisui', 'Sliggoo-Hisui', 'Goodra-Hisui', 'Basculin-Red-Striped', 'Basculin-Blue-Striped', 'Ursaluna-Base',
 		],
 		onValidateSet(set, format) {
 			const kitakamiDex = [
