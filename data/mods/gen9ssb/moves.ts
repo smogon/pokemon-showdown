@@ -50,7 +50,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		onHit(pokemon) {
-			this.addPokemon(ssbSets['Gooner']);
+			pokemon.side.addPokemon(ssbSets['Gooner']);
 			this.add('-message', `${pokemon.name} multiplied!`);
 		},
 		secondary: null,
