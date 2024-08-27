@@ -2812,7 +2812,7 @@ export class Battle {
 
 		if (!side.choose(input)) {
 			if (!side.choice.error) {
-				side.emitChoiceError(`Unknown error for choice ${input}. Please save the replay and report it here https://www.smogon.com/forums/ps-bug-report-form/.`);
+				side.emitChoiceError(`Unknown error for choice: ${input}. Please save the replay and report it here https://www.smogon.com/forums/ps-bug-report-form/.`);
 			}
 			return false;
 		}
