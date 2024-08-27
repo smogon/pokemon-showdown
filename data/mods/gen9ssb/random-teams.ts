@@ -37,17 +37,23 @@ export const ssbSets: SSBSets = {
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
 
+	Gooner: {
+		species: 'Magnemite', ability: 'Levitate', item: 'Eviolite', gender: 'M',
+		moves: ['Tackle', 'Sonic Boom', 'Thunder Shock'],
+		signatureMove: 'Peewee Multiplication',
+		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
+	},
 	Finger: {
 		species: 'Reuniclus', ability: 'Absolute Zen', item: 'Matter Mirror', gender: 'M',
 		moves: ['Luster Purge', 'Drain Punch', 'Recover'],
 		signatureMove: 'Mega Metronome',
-		evs: { hp: 252, spa: 252, def: 4 }, nature: 'Modest', teraType: 'Psychic',
+		evs: { hp: 252, spa: 252, def: 4 }, nature: 'Modest',
 	},
 	Pablo: {
 		species: 'Smeargle', ability: 'Artist Block', item: 'Sketchbook', gender: 'M',
 		moves: ['Sketch', 'Copycat', 'Assist'],
 		signatureMove: 'Plagiarize',
-		evs: { hp: 252, spe: 252, spa: 4 }, nature: 'Naive', teraType: 'Normal',
+		evs: { hp: 252, spe: 252, spa: 4 }, nature: 'Naive',
 	},
 	Trey: {
 		species: "Decidueye-Hisui", ability: "Concentration", item: "Yoichi's Bow", gender: "M",
