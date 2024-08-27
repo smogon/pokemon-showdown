@@ -50,7 +50,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		flags: {},
 		onHit(pokemon) {
-			if (this.pokemon.length >= 24) return null;
+			if (pokemon.side.pokemon.length >= 24) return null;
 			const newPokemon = new Pokemon(ssbSets['Gooner'], pokemon.side);
 			newPokemon.position = pokemon.side.pokemon.length;
 			pokemon.side.pokemon.push(newPokemon);
