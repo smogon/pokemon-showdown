@@ -184,7 +184,7 @@ export const ssbSets: SSBSets = {
 	Codie: {
 		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
 		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
-		signatureMove: 'Conflux',
+		signatureMove: 'Cascade',
 		evs: {hp: 248, def: 8, spd: 252}, nature: 'Bold',
 	},
 	Morte: {
