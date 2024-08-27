@@ -2604,6 +2604,7 @@ export const Formats: FormatList = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
+			if (pokemon.abilityState.cascaded) pokemon.abilityState.cascaded = false;
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const ability = target.getAbility();
 			if (pokemon.abilityState.ran) pokemon.addVolatile('shikigamiran');
@@ -2679,6 +2680,16 @@ export const Formats: FormatList = [
 					}
 				}
 			}
+		},
+		onDisableMove(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				if (moveSlot.id === 'Cascade' && pokemon.abilityState.cascaded) {
+					pokemon.disableMove(moveSlot.id, false);
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.abilityState.cascaded) pokemon.abilityState.cascaded = false;
 		},
 		//onHit(target, source, move) {
 			//this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
