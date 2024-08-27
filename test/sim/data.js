@@ -28,6 +28,7 @@ describe('Dex data', function () {
 				assert(!entry.baseSpecies, `Base species ${entry.name} should not have its own baseSpecies.`);
 				assert(!entry.changesFrom, `Base species ${entry.name} should not change from anything (its changesFrom forme should be base).`);
 				assert(!entry.battleOnly, `Base species ${entry.name} should not be battle-only (its out-of-battle forme should be base).`);
+				assert(!entry.baseForme || Dex.data.Aliases[pokemonid + toID(entry.baseForme)] === entry.name.replace(/\u0301/g, ""), `Base species ${entry.name}-${entry.baseForme} should be aliased to ${entry.name}`);
 			}
 
 			if (entry.prevo) {
