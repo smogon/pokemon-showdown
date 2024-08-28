@@ -123,7 +123,7 @@ export const ssbSets: SSBSets = {
 	},
 	flufi: {
 		species: 'Pikachu', ability: 'Force of Will', item: 'Silly Costume', gender: 'M',
-		moves: ['Volt Tackle', 'Thunderous Kick', 'No Retreat'],
+		moves: ['Plasma Fists', 'Thunderous Kick', 'No Retreat'],
 		signatureMove: 'Cranberry Cutter',
 		evs: {atk: 252, spe: 252, spd: 4}, nature: 'Jolly',
 	},
