@@ -1362,7 +1362,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			// if it naturally samples the PotD, skip it to avoid duplicates, as it's already guaranteed in the second slot
 			if (name === Config.ssbpotd) continue;
 			if (usePotD && team.length === 1) {
-				name = Config.ssbpotd;
+				if (ssbSets[Config.ssbpotd]) name = Config.ssbpotd;
 			}
 			let ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
