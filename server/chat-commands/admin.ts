@@ -124,7 +124,6 @@ async function updateserver(context: Chat.CommandContext, codePath: string) {
 
 export const commands: Chat.ChatCommands = {
 	potd(target, room, user) {
-		this.canUseConsole();
 		const species = Dex.species.get(target);
 		if (species.id === Config.potd) {
 			return this.errorReply(`The PotD is already set to ${species.name}`);
@@ -145,9 +144,8 @@ export const commands: Chat.ChatCommands = {
 	],
 	
 	ssbpotd(target, room, user) {
-		this.canUseConsole();
 		if (!Object.keys(ssbSets).map(toID).includes(toID(target))) {
-			return {e: `Error: ${target.trim()} doesn't have a [Gen 9] Super Staff Bros Ultimate set.`};
+			return this.errorReply(`"${target}" is not a valid [Gen 9] Super Staff Bros set. (Note: For ease of programming, this command is case sensitive!)`);
 		}
 		Config.ssbpotd = target;
 		for (const process of Rooms.PM.processes) {
