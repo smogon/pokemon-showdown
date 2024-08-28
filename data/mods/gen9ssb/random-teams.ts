@@ -1350,12 +1350,20 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		if (global.Config?.disabledssbsets?.length) {
 			pool = pool.filter(x => !global.Config.disabledssbsets.includes(this.dex.toID(x)));
 		}
+		const usePotD = global.Config && Config.ssbpotd;
+		const potd = usePotD ? Config.ssbpotd : null;
 		const typePool: { [k: string]: number } = {};
 		let depth = 0;
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
 			let name = this.sampleNoReplace(pool);
+			// if PotD is currently active, sets the second slot to that staffmon
+			// if it naturally samples the PotD, skip it to avoid duplicates, as it's already guaranteed in the second slot
+			if (name === Config.ssbpotd) continue;
+			if (usePotD && team.length === 1) {
+				name = Config.ssbpotd;
+			}
 			let ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
