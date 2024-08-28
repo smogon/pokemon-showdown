@@ -144,7 +144,7 @@ export const commands: Chat.ChatCommands = {
 	],
 	
 	ssbpotd(target, room, user) {
-		if (!Object.keys(ssbSets).map(toID).includes(toID(target))) {
+		if (!Object.keys(ssbSets).map(toID).includes(toID(target)) || !ssbSets[target]) {
 			return this.errorReply(`"${target}" is not a valid [Gen 9] Super Staff Bros set. (Note: For ease of programming, this command is case sensitive!)`);
 		}
 		Config.ssbpotd = target;
