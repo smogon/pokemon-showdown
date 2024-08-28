@@ -1,4 +1,46 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Jack
+	hagakure: {
+		name: "Hagakure",
+		gen: 9,
+		onStart(pokemon) {
+			if (pokemon.hp === pokemon.maxhp) {
+				if (!pokemon.abilityState.hagakure) {
+					this.add('-anim', pokemon, 'Mist', pokemon);
+					this.add('-message', `${pokemon.name}'s Hagakure activated!`);
+				}
+				pokemon.abilityState.hagakure = true;
+			} else {
+				pokemon.abilityState.hagakure = false;
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp === pokemon.maxhp) {
+				if (!pokemon.abilityState.hagakure) {
+					this.add('-anim', pokemon, 'Mist', pokemon);
+					this.add('-message', `${pokemon.name}'s Hagakure activated!`);
+				}
+				pokemon.abilityState.hagakure = true;
+			} else {
+				if (pokemon.abilityState.hagakure) {
+					this.add('-message', `${pokemon.name}'s Hagakure vanished!`);
+				}
+				pokemon.abilityState.hagakure = false;
+			}
+		},
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.abilityState.hagakure) return this.chainModify(2);
+		},
+		onModifyDef(def, pokemon) {
+			if (pokemon.abilityState.hagakure) return this.chainModify(0.5);
+		},
+		onModifySpd(spd, pokemon) {
+			if (pokemon.abilityState.hagakure) return this.chainModify(0.5);
+		},
+		onModifyCritRatio(critRatio, user) {
+			if (pokemon.abilityState.hagakure) return critRatio + 5;
+		},
+	},
 	// Journeyman
 	colossuscarrier: {
 		name: "Colossus Carrier",
