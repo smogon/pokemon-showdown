@@ -15,6 +15,35 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Jack
+	tranquility: {
+		name: "Tranquility",
+		gen: 9,
+		onModifyMove(move, pokemon) {
+			if (move.id === 'tachyoncutter') move.category === 'Physical';
+			const target = pokemon.side.foe.active[0];
+			const foeAction = this.queue.willMove(target);
+			const foeMove = action?.choice === 'move' ? action.move : null;
+			if (foeMove && move.category !== 'Status' && foeMove.flags['contact']) {
+				move.priority = 5;
+				move.critRatio = 5;
+			}
+		},
+		onHit(target, source, move) {
+			if (move && move.flags['contact']) {
+				target.abilityState.willSlash = true;
+				this.add('-activate', target, 'Tranquility');
+				this.add('-message', `${target.name} prepared Reflexive Slash!`);
+			}
+		},
+		onResidual(pokemon) {
+			const target = pokemon.side.foe.active[0];
+			if (pokemon.abilityState.willSlash) {
+				this.actions.useMove('Reflexive Slash', target, pokemon);
+				pokemon.abilityState.willSlash = false;
+			}
+		},
+	},
 	// Journeyman
 	loveofthejourney: {
 		name: "Love of the Journey",
