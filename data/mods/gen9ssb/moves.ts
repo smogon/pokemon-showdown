@@ -40,6 +40,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Jack
+	piercinggleam: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Piercing Gleam",
+		pp: 3,
+		noPPBoosts: true,
+		priority: 0,
+		onTryHit() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Pyro Ball', target);
+		},
+		onHit(target, souce, move) {
+			if (target.newlySwitched) {
+				this.boost({def: -2}, target, source, move);
+			} else {
+				this.boost({def: -1}, target, source, move);
+			}
+			source.abilityState.gleamBoost = true;
+		},
+		flags: {reflectable: 1, protect: 1, mirror: 1},
+		secondary: null,
+		type: "Fire",
+		target: "normal",
+	},
+	// Jack
 	reflexiveslash: {
 		accuracy: true,
 		basePower: 60,
