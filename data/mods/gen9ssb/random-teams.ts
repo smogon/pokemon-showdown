@@ -193,6 +193,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Omen of Defeat',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
+	Jack: {
+		species: 'Dewott', ability: 'Tranquility', item: 'Hagakure', gender: 'M',
+		moves: ['Aqua Jet', 'Tachyon Cutter', 'Mighty Cleave'],
+		signatureMove: 'Piercing Gleam',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
+	},
 	/*
 	Journeyman: {
 		species: 'Stonjourner', ability: 'Love of the Journey', item: 'Colossus Carrier', gender: 'M',
