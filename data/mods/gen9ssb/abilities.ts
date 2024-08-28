@@ -29,10 +29,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.critRatio = 5;
 			}
 		},
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add('-ability', target, 'Tranquility');
+				return target.hp - 1;
+			}
+		},
 		onHit(target, source, move) {
 			if (move && move.flags['contact']) {
 				target.abilityState.willSlash = true;
-				this.add('-activate', target, 'Tranquility');
+				this.add('-ability', target, 'Tranquility');
 				this.add('-message', `${target.name} prepared Reflexive Slash!`);
 			}
 		},
@@ -41,6 +48,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.abilityState.willSlash) {
 				this.actions.useMove('Reflexive Slash', target, pokemon);
 				pokemon.abilityState.willSlash = false;
+			}
+			this.heal(pokemon.maxhp / 5, pokemon, pokemon);
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp < pokemon.maxhp) {
+				for (const moveSlot of pokemon.moveSlots) {
+					const move = this.dex.moves.get('transientcrimsonblizzard');
+					const moveData = {
+						move: move.name,
+						id: move.id,
+						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					if (moveSlot.move === 'Piercing Gleam') {
+						pokemon.moveSlots[moveSlot] = moveData;
+						pokemon.baseMoveSlots[moveSlot] = moveData;
+					}
+				}
 			}
 		},
 	},
