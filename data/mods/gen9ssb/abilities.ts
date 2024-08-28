@@ -19,6 +19,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	tranquility: {
 		name: "Tranquility",
 		gen: 9,
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (pokemon.abilityState.gleamBoost) {
+				pokemon.abilityState.gleamBoost = false;
+				return this.chainModify(1.5);
+			}
+		},
 		onModifyMove(move, pokemon) {
 			if (move.id === 'tachyoncutter') move.category === 'Physical';
 			const target = pokemon.side.foe.active[0];
@@ -52,6 +59,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.heal(pokemon.maxhp / 5, pokemon, pokemon);
 		},
 		onUpdate(pokemon) {
+			pokemon.abilityState.gleamBoost = false;
 			if (pokemon.hp < pokemon.maxhp) {
 				for (const moveSlot of pokemon.moveSlots) {
 					const move = this.dex.moves.get('transientcrimsonblizzard');
@@ -70,6 +78,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					}
 				}
 			}
+		},
+		onSwitchOut(pokemon) {
+			pokemon.abilityState.gleamBoost = false;
 		},
 	},
 	// Journeyman
