@@ -40,21 +40,24 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
-	peeweemultiplication: {
+	reflexiveslash: {
 		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Peewee Multiplication",
-		pp: 5,
+		basePower: 60,
+		category: "Physical",
+		name: "Reflexive Slash",
+		pp: 16,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {},
-		onHit(pokemon) {
-			this.inject(ssbSets['Gooner'], pokemon.side);
+		onTryHit() {
+			this.attrLastMove('[still]');
 		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Fire Lash', target);
+		},
+		flags: {slicing: 1, protect: 1},
 		secondary: null,
-		type: "Dark",
-		target: "self",
+		type: "Fire",
+		target: "normal",
 	},
 	// Journeyman
 	newbeginnings: {
