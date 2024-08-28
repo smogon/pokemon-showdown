@@ -2810,7 +2810,12 @@ export class Battle {
 	choose(sideid: SideID, input: string) {
 		const side = this.getSide(sideid);
 
-		if (!side.choose(input)) return false;
+		if (!side.choose(input)) {
+			if (!side.choice.error) {
+				side.emitChoiceError(`Unknown error for choice: ${input}. If you're not using a custom client, please report this as a bug.`);
+			}
+			return false;
+		}
 
 		if (!side.isChoiceDone()) {
 			side.emitChoiceError(`Incomplete choice: ${input} - missing other pokemon`);
