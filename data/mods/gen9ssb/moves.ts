@@ -41,6 +41,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Jack
+	transientcrimsonblizzard: {
+		accuracy: 100,
+		basePower: 150,
+		category: "Physical",
+		name: "Transient Crimson Blizzard",
+		pp: 1,
+		noPPBoosts: true,
+		priority: 1,
+		onTryHit() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Torch Song', source);
+			this.add('-anim', source, 'Inferno', source);
+			this.add('-anim', source, 'Sacred Sword', target);
+		},
+		onModifyMove(move, pokemon) {
+			if (move.hit === 1) move.type = 'Fire';
+			if (move.hit === 2) move.type = 'Ice';
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			pokemon.faint();
+		},
+		flags: {reflectable: 1, protect: 1, mirror: 1},
+		secondary: null,
+		multihit: 2,
+		type: "Fire",
+		target: "normal",
+	},
+	// Jack
 	piercinggleam: {
 		accuracy: 100,
 		basePower: 0,
@@ -53,7 +83,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Pyro Ball', target);
+			this.add('-anim', source, 'Aurora Beam', target);
 		},
 		onHit(target, souce, move) {
 			if (target.newlySwitched) {
