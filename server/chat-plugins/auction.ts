@@ -59,7 +59,7 @@ class Team {
 	}
 
 	isSuspended() {
-		return this.credits < this.auction.minBid || this.suspended;
+		return this.suspended || (this.auction.type === 'snake' ? this.players.length >= this.auction.minPlayers : this.credits < this.auction.minBid);
 	}
 
 	maxBid(credits = this.credits) {
@@ -78,52 +78,34 @@ function parseCredits(amount: string) {
 
 export class Auction extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'auction' as ID;
-	owners: Set<ID>;
-	teams: Map<string, Team>;
-	managers: Map<string, Manager>;
-	auctionPlayers: Map<string, Player>;
+	owners: Set<ID> = new Set();
+	teams: Map<string, Team> = new Map();
+	managers: Map<string, Manager> = new Map();
+	auctionPlayers: Map<string, Player> = new Map();
 
 	startingCredits: number;
-	minBid: number;
-	minPlayers: number;
-	blindMode: boolean;
+	minBid = 3000;
+	minPlayers = 10;
+	type: 'auction' | 'blind' | 'snake' = 'auction';
 
-	lastQueue: Team[] | null;
-	queue: Team[];
-	bidTimer: NodeJS.Timer;
+	lastQueue: Team[] | null = null;
+	queue: Team[] = [];
+	bidTimer: NodeJS.Timer = null!;
 	/** Measured in seconds */
-	bidTimeLimit: number;
+	bidTimeLimit = 10;
 	/** Measured in seconds */
-	bidTimeRemaining: number;
-	nominatingTeam: Team;
-	nominatedPlayer: Player;
-	highestBidder: Team;
-	highestBid: number;
+	bidTimeRemaining = 10;
+	nominatingTeam: Team = null!;
+	nominatedPlayer: Player = null!;
+	highestBidder: Team = null!;
+	highestBid: number = 0;
 	/** Used for blind mode */
-	bidsPlaced: Map<Team, number>;
+	bidsPlaced: Map<Team, number> = new Map();
 	state: 'setup' | 'nom' | 'bid' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
 		this.title = `Auction (${room.title})`;
-		this.owners = new Set();
-		this.teams = new Map();
-		this.managers = new Map();
-		this.auctionPlayers = new Map();
-
 		this.startingCredits = startingCredits;
-		this.minBid = 3000;
-		this.minPlayers = 10;
-		this.blindMode = false;
-
-		this.lastQueue = null;
-		this.queue = [];
-		this.bidTimer = null!;
-		this.bidTimeLimit = this.bidTimeRemaining = 10;
-		this.nominatingTeam = null!;
-		this.nominatedPlayer = null!;
-		this.highestBidder = null!;
-		this.highestBid = 0;
-		this.bidsPlaced = new Map();
 	}
 
 	sendMessage(message: string) {
@@ -245,7 +227,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		buf += `- Minimum bid: <b>${this.minBid.toLocaleString()}</b><br/>`;
 		buf += `- Minimum players per team: <b>${this.minPlayers}</b><br/>`;
 		buf += `- Bid timer: <b>${this.bidTimeLimit}s</b><br/>`;
-		buf += `- Blind mode: <b>${this.blindMode ? 'On' : 'Off'}</b><br/>`;
+		buf += `- Auction type: <b>${this.type}</b><br/>`;
 		buf += `</details>`;
 		return buf;
 	}
@@ -269,7 +251,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	setMinBid(amount: number) {
 		if (this.state !== 'setup') {
-			throw new Chat.ErrorMessage(`You cannot change the minimum bid after the auction has started.`);
+			throw new Chat.ErrorMessage(`The minimum bid cannot be changed after the auction has started.`);
 		}
 		if (amount > 500000) throw new Chat.ErrorMessage(`The minimum bid must not exceed 500,000.`);
 		this.minBid = amount;
@@ -277,7 +259,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	setMinPlayers(amount: number) {
 		if (this.state !== 'setup') {
-			throw new Chat.ErrorMessage(`You cannot change the minimum number of players after the auction has started.`);
+			throw new Chat.ErrorMessage(`The minimum number of players cannot be changed after the auction has started.`);
 		}
 		if (!amount || amount > 30) {
 			throw new Chat.ErrorMessage(`The minimum number of players must be between 1 and 30.`);
@@ -287,7 +269,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	setTimeLimit(seconds: number) {
 		if (this.state !== 'setup') {
-			throw new Chat.ErrorMessage(`You cannot change the bid time limit after the auction has started.`);
+			throw new Chat.ErrorMessage(`The bid time limit cannot be changed after the auction has started.`);
 		}
 		if (!seconds || seconds < 7 || seconds > 120) {
 			throw new Chat.ErrorMessage(`The bid time limit must be between 7 and 120 seconds.`);
@@ -295,12 +277,15 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.bidTimeLimit = this.bidTimeRemaining = seconds;
 	}
 
-	setBlindMode(blind: boolean) {
+	setType(auctionType: string) {
 		if (this.state !== 'setup') {
-			throw new Chat.ErrorMessage(`You cannot toggle blind mode after the auction has started.`);
+			throw new Chat.ErrorMessage(`The auction type cannot be changed after the auction has started.`);
 		}
-		this.blindMode = blind;
-		this.bidTimeLimit = this.bidTimeRemaining = blind ? 30 : 10;
+		if (!['auction', 'blind', 'snake'].includes(toID(auctionType))) {
+			throw new Chat.ErrorMessage(`Invalid auction type "${auctionType}". Valid types are "auction", "blind", and "snake".`);
+		}
+		this.type = toID(auctionType) as 'auction' | 'blind' | 'snake';
+		this.bidTimeLimit = this.bidTimeRemaining = this.type === 'blind' ? 30 : 10;
 	}
 
 	getUndraftedPlayers() {
@@ -313,7 +298,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	importPlayers(data: string) {
 		if (this.state !== 'setup') {
-			throw new Chat.ErrorMessage(`You cannot import a player list after the auction has started.`);
+			throw new Chat.ErrorMessage(`Player lists cannot be imported after the auction has started.`);
 		}
 		const rows = data.replace('\r', '').split('\n');
 		const tierNames = rows.shift()!.split('\t').slice(1);
@@ -341,9 +326,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	addAuctionPlayer(name: string, tiers?: string[]) {
-		if (this.state !== 'setup' && this.state !== 'nom') {
-			throw new Chat.ErrorMessage(`You cannot add players to the auction right now.`);
-		}
+		if (this.state === 'bid') throw new Chat.ErrorMessage(`Players cannot be added during a nomination.`);
 		if (name.length > 25) throw new Chat.ErrorMessage(`Player names must be 25 characters or less.`);
 		const player: Player = {
 			id: toID(name),
@@ -361,9 +344,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	removeAuctionPlayer(name: string) {
-		if (this.state !== 'setup' && this.state !== 'nom') {
-			throw new Chat.ErrorMessage(`You cannot remove players from the auction right now.`);
-		}
+		if (this.state === 'bid') throw new Chat.ErrorMessage(`Players cannot be removed during a nomination.`);
 		const player = this.auctionPlayers.get(toID(name));
 		if (!player) throw new Chat.ErrorMessage(`Player "${name}" not found.`);
 		player.team?.removePlayer(player);
@@ -375,9 +356,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	assignPlayer(name: string, teamName?: string) {
-		if (this.state !== 'setup' && this.state !== 'nom') {
-			throw new Chat.ErrorMessage(`You cannot assign players to a team right now.`);
-		}
+		if (this.state === 'bid') throw new Chat.ErrorMessage(`Players cannot be assigned during a nomination.`);
 		const player = this.auctionPlayers.get(toID(name));
 		if (!player) throw new Chat.ErrorMessage(`Player "${name}" not found.`);
 		if (teamName) {
@@ -394,7 +373,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	addTeam(name: string) {
-		if (this.state !== 'setup') throw new Chat.ErrorMessage(`You cannot add teams after the auction has started.`);
+		if (this.state !== 'setup') throw new Chat.ErrorMessage(`Teams cannot be added after the auction has started.`);
 		if (name.length > 40) throw new Chat.ErrorMessage(`Team names must be 40 characters or less.`);
 		const team = new Team(name, this);
 		this.teams.set(team.id, team);
@@ -404,7 +383,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	removeTeam(name: string) {
-		if (this.state !== 'setup') throw new Chat.ErrorMessage(`You cannot remove teams after the auction has started.`);
+		if (this.state !== 'setup') throw new Chat.ErrorMessage(`Teams cannot be removed after the auction has started.`);
 		const team = this.teams.get(toID(name));
 		if (!team) throw new Chat.ErrorMessage(`Team "${name}" not found.`);
 		this.queue = this.queue.filter(t => t !== team);
@@ -413,21 +392,17 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	suspendTeam(name: string) {
-		if (this.state !== 'setup' && this.state !== 'nom') {
-			throw new Chat.ErrorMessage(`You cannot suspend teams right now.`);
-		}
+		if (this.state === 'bid') throw new Chat.ErrorMessage(`Teams cannot be suspended during a nomination.`);
 		const team = this.teams.get(toID(name));
 		if (!team) throw new Chat.ErrorMessage(`Team "${name}" not found.`);
 		if (team.suspended) throw new Chat.ErrorMessage(`Team ${name} is already suspended.`);
-		if (this.nominatingTeam === team) throw new Chat.ErrorMessage(`You cannot suspend the current nominating team.`);
+		if (this.nominatingTeam === team) throw new Chat.ErrorMessage(`The nominating team cannot be suspended.`);
 		team.suspended = true;
 		return team;
 	}
 
 	unsuspendTeam(name: string) {
-		if (this.state !== 'setup' && this.state !== 'nom') {
-			throw new Chat.ErrorMessage(`You cannot unsuspend teams right now.`);
-		}
+		if (this.state === 'bid') throw new Chat.ErrorMessage(`Teams cannot be unsuspended during a nomination.`);
 		const team = this.teams.get(toID(name));
 		if (!team) throw new Chat.ErrorMessage(`Team "${name}" not found.`);
 		if (!team.suspended) throw new Chat.ErrorMessage(`Team ${name} is not suspended.`);
@@ -464,9 +439,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	addCreditsToTeam(teamName: string, amount: number) {
-		if (this.state !== 'setup' && this.state !== 'nom') {
-			throw new Chat.ErrorMessage(`You cannot add credits to a team right now.`);
-		}
+		if (this.type === 'snake') throw new Chat.ErrorMessage(`Snake draft does not support credits.`);
+		if (this.state === 'bid') throw new Chat.ErrorMessage(`Credits cannot be changed during a nomination.`);
 		const team = this.teams.get(toID(teamName));
 		if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
 		const newCredits = team.credits + amount;
@@ -537,13 +511,19 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (!player) throw new Chat.ErrorMessage(`${target} is not a valid player.`);
 		if (player.team) throw new Chat.ErrorMessage(`${player.name} has already been drafted.`);
 		this.nominatedPlayer = player;
-		this.state = 'bid';
-		this.highestBid = this.minBid;
-		this.highestBidder = this.nominatingTeam;
-		this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid or type a number to place a bid!`);
-		if (!this.blindMode) this.sendBidInfo();
-		this.sendBidTimer();
-		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
+		if (this.type === 'snake') {
+			this.sendMessage(Utils.html`/html <b>${this.nominatingTeam.name}</b> drafted <username>${this.nominatedPlayer.name}</username>!`);
+			this.nominatingTeam.addPlayer(this.nominatedPlayer);
+			this.next();
+		} else {
+			this.state = 'bid';
+			this.highestBid = this.minBid;
+			this.highestBidder = this.nominatingTeam;
+			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid or type a number to place a bid!`);
+			if (this.type === 'auction') this.sendBidInfo();
+			this.sendBidTimer();
+			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
+		}
 	}
 
 	bid(user: User, bid: number) {
@@ -554,7 +534,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 		if (bid > team.maxBid()) throw new Chat.ErrorMessage(`Your team cannot afford to bid that much.`);
 
-		if (this.blindMode) {
+		if (this.type === 'blind') {
 			if (this.bidsPlaced.has(team)) throw new Chat.ErrorMessage(`Your team has already placed a bid.`);
 			if (bid <= this.minBid) throw new Chat.ErrorMessage(`Your bid must be higher than the minimum bid.`);
 			for (const manager of this.managers.values()) {
@@ -589,7 +569,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	finishCurrentNom() {
-		if (this.blindMode) {
+		if (this.type === 'blind') {
 			let buf = `<div class="ladder pad"><table><tr><th>Team</th><th>Bid</th></tr>`;
 			if (!this.bidsPlaced.has(this.nominatingTeam)) {
 				buf += Utils.html`<tr><td>${this.nominatingTeam.name}</td><td>${this.minBid}</td></tr>`;
@@ -608,8 +588,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	undoLastNom() {
-		if (this.state !== 'nom') throw new Chat.ErrorMessage(`You cannot undo a nomination right now.`);
-		if (!this.lastQueue) throw new Chat.ErrorMessage(`You cannot undo more than one nomination at a time.`);
+		if (this.state !== 'nom') throw new Chat.ErrorMessage(`Nominations cannot be undone right now.`);
+		if (!this.lastQueue) throw new Chat.ErrorMessage(`Only one nomination can be undone at a time.`);
 		this.queue = this.lastQueue;
 		this.lastQueue = null;
 		this.highestBidder.removePlayer(this.nominatedPlayer);
@@ -746,23 +726,16 @@ export const commands: Chat.ChatCommands = {
 		timerhelp: [
 			`/auction timer [seconds] - Sets the bid timer to [seconds] seconds. Requires: # & auction owner`,
 		],
-		blindmode(target, room, user) {
+		settype(target, room, user) {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			if (this.meansYes(target)) {
-				auction.setBlindMode(true);
-				this.addModAction(`${user.name} turned on blind mode.`);
-			} else if (this.meansNo(target)) {
-				auction.setBlindMode(false);
-				this.addModAction(`${user.name} turned off blind mode.`);
-			} else {
-				return this.parse('/help auction blindmode');
-			}
+			if (!target) return this.parse('/help auction settype');
+			auction.setType(target);
+			this.addModAction(`${user.name} set the auction type to ${toID(target)}.`);
 		},
-		blindmodehelp: [
-			`/auction blindmode [on/off] - Enables or disables blind mode. Requires: # & auction owner`,
-			`When blind mode is enabled, teams may only place one bid per nomination and only the highest bid is revealed once the timer runs out or after all teams have placed a bid.`,
+		settypehelp: [
+			`/auction settype [auction|blind|snake] - Sets the auction type. Requires: # & auction owner`,
 		],
 		addowner: 'addowners',
 		addowners(target, room, user) {
