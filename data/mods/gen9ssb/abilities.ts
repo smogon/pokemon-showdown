@@ -53,7 +53,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidual(pokemon) {
 			const target = pokemon.side.foe.active[0];
 			if (pokemon.abilityState.willSlash) {
-				this.actions.useMove('Reflexive Slash', target, pokemon);
+				this.actions.useMove('Reflexive Slash', pokemon, target);
 				pokemon.abilityState.willSlash = false;
 			}
 			this.heal(pokemon.maxhp / 5, pokemon, pokemon);
@@ -386,7 +386,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				};
 				pokemon.baseMoveSlots[pokemon.moveSlots.length] = newMove;
 				pokemon.moveSlots[pokemon.moveSlots.length] = newMove;
-				this.add('-message', `${pokemon.name} learned ${this.dex.moves.get(pokemon.moveSlots[pokemon.moveSlots.length - 1].id).name}!`);
+				this.add('-message', `${pokemon.name} copied ${target.name}'s ${target.ability.name} and ${this.dex.moves.get(pokemon.moveSlots[pokemon.moveSlots.length - 1].id).name}!`);
 			}
 			// Copying Stat Changes
 			const boosts: SparseBoostsTable = {};
