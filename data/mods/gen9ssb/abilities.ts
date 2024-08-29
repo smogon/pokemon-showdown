@@ -30,7 +30,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.id === 'tachyoncutter') move.category === 'Physical';
 			const target = pokemon.side.foe.active[0];
 			const foeAction = this.queue.willMove(target);
-			const foeMove = action?.choice === 'move' ? action.move : null;
+			const foeMove = foeAction?.choice === 'move' ? foeAction.move : null;
 			if (foeMove && move.category !== 'Status' && foeMove.flags['contact']) {
 				move.priority = 5;
 				move.critRatio = 5;
