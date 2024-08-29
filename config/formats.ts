@@ -2560,18 +2560,30 @@ export const Formats: FormatList = [
 				return items;
 			}
 		},
+		onModifyCritRatio(critRatio, source, target) {
+			let success;
+			for (const ally of source.side.pokemon) {
+				if (ally.fainted && ally.abilityState.teamCritBoost) success = true;
+			}
+			if (success) return critRatio + 1;
+		},
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
 				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
 				if (pokemon.hp <= 0 && !pokemon.fainted) {
+					pokemon.hp = 0;
 					pokemon.sethp(0);
-					pokemon.faint();
 				}
 	
-				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
-					if (pokemon.abilityState.permdis || pokemon.fainted) continue;
-					if (pokemon === pokemon.side.active[0]) continue;
+				if (pokemon.getAbility().id === 'autorepair') {
+					if (pokemon.abilityState.permdis || pokemon.fainted || pokemon.isActive) continue;
 					const health = pokemon.maxhp * 0.15;
+					pokemon.hp += health;
+					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
+				}
+				if (pokemon.getAbility().id === 'tranquility') {
+					if (pokemon.fainted || pokemon.isActive) continue;
+					const health = pokemon.maxhp * 0.2;
 					pokemon.hp += health;
 					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
 				}
