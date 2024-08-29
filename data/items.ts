@@ -31,6 +31,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 674,
 		gen: 6,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	absolite: {
@@ -45,6 +46,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 677,
 		gen: 6,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	absorbbulb: {
@@ -82,6 +84,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Dialga-Origin",
 		itemUser: ["Dialga-Origin"],
 		num: 1777,
+		unusable: true,
 		gen: 8,
 	},
 	adamantorb: {
@@ -98,6 +101,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		itemUser: ["Dialga"],
 		num: 135,
+		unusable: true,
 		gen: 4,
 	},
 	adrenalineorb: {
@@ -122,6 +126,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			spe: 1,
 		},
 		num: 846,
+		unusable: true,
 		gen: 7,
 	},
 	aerodactylite: {
@@ -136,6 +141,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 672,
 		gen: 6,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	aggronite: {
@@ -150,6 +156,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 667,
 		gen: 6,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	aguavberry: {
@@ -220,6 +227,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 679,
 		gen: 6,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	aloraichiumz: {
@@ -231,6 +239,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Raichu-Alola"],
 		num: 803,
 		gen: 7,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	altarianite: {
@@ -245,6 +254,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 755,
 		gen: 6,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	ampharosite: {
@@ -289,6 +299,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 104,
 		gen: 4,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	aspearberry: {
@@ -1017,6 +1028,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 100,
 		gen: 3,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	clearamulet: {
@@ -1141,6 +1153,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 572,
 		gen: 5,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	covertcloak: {
@@ -1196,6 +1209,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 60,
 		},
+		unusable: true,
 		num: 285,
 		gen: 4,
 	},
@@ -1293,6 +1307,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Clamperl"],
 		num: 226,
 		gen: 3,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	destinyknot: {
@@ -1308,6 +1323,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			if (!source.volatiles['attract']) source.addVolatile('attract', target);
 		},
 		num: 280,
+		unusable: true,
 		gen: 4,
 	},
 	diancite: {
@@ -1339,6 +1355,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 102,
 		gen: 3,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	dousedrive: {
@@ -1505,6 +1522,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 80,
 		},
+		unusable: true,
 		num: 108,
 		gen: 4,
 	},
@@ -1891,6 +1909,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
+		unusable: true,
 		num: 82,
 		gen: 1,
 	},
@@ -1938,6 +1957,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onResidual(pokemon) {
 			pokemon.trySetStatus('brn', pokemon);
 		},
+		unusable: true,
 		num: 273,
 		gen: 4,
 	},
@@ -2065,6 +2085,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1105,
 		gen: 8,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	fossilizeddino: {
@@ -2075,6 +2096,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1108,
 		gen: 8,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	fossilizeddrake: {
@@ -2085,6 +2107,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1107,
 		gen: 8,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	fossilizedfish: {
@@ -2095,6 +2118,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1106,
 		gen: 8,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	friendball: {
@@ -2121,6 +2145,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
+		unusable: true,
 		num: 1582,
 		gen: 8,
 	},
@@ -2130,6 +2155,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
+		unusable: true,
 		num: 1592,
 		gen: 8,
 	},
@@ -2271,6 +2297,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 30,
 		},
+		unusable: true,
 		num: 796,
 		gen: 7,
 	},
@@ -2534,6 +2561,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 284,
 		gen: 4,
+		unusable: true,
 	},
 	heavyball: {
 		name: "Heavy Ball",
@@ -2560,6 +2588,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 101,
 		gen: 3,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	heracronite: {
@@ -2705,6 +2734,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 40,
 		},
+		unusable: true,
 		num: 282,
 		gen: 4,
 	},
@@ -2754,6 +2784,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
+		unusable: true,
 		num: 278,
 		gen: 4,
 	},
@@ -2804,6 +2835,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 710,
 		gen: 6,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	kasibberry: {
@@ -3015,6 +3047,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		num: 85,
+		unusable: true,
 		gen: 1,
 	},
 	leek: {
@@ -3853,6 +3886,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		num: 81,
+		unusable: true,
 		gen: 1,
 	},
 	muscleband: {
@@ -4264,6 +4298,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 573,
 		gen: 5,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	poisonbarb: {
@@ -4902,6 +4937,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				pokemon.useItem(pokemon);
 			}
 		},
+		unusable: true,
 		boosts: {
 			spe: -1,
 		},
@@ -4916,6 +4952,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 99,
 		gen: 3,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	roseincense: {
@@ -4954,6 +4991,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				}
 			}
 		},
+		unusable: true,
 		onEat() { },
 		num: 686,
 		gen: 6,
@@ -5025,6 +5063,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 647,
 		gen: 6,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	safariball: {
@@ -5058,6 +5097,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 100,
 		},
+		unusable: true,
 		num: 711,
 		gen: 6,
 		isNonstandard: "Past",
@@ -5217,6 +5257,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 107,
 		gen: 4,
+		unusable: true,
 	},
 	shockdrive: {
 		name: "Shock Drive",
@@ -5318,6 +5359,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 105,
 		gen: 4,
+		unusable: true,
 		isNonstandard: "Past",
 	},
 	skyplate: {
@@ -5360,6 +5402,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		fling: {
 			basePower: 10,
 		},
+		unusable: true,
 		num: 283,
 		gen: 4,
 	},
@@ -5643,6 +5686,7 @@ export const Items: {[itemid: string]: ItemData} = {
 				// no message for Sticky Barb changing hands
 			}
 		},
+		unusable: true,
 		num: 288,
 		gen: 4,
 	},
@@ -5691,6 +5735,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 80,
 		gen: 2,
+		unusable: true,
 	},
 	swampertite: {
 		name: "Swampertite",
@@ -5787,6 +5832,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 60,
 		},
 		num: 879,
+		unusable: true,
 		gen: 7,
 	},
 	thickclub: {
@@ -5830,6 +5876,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			basePower: 30,
 		},
 		num: 83,
+		unusable: true,
 		gen: 1,
 	},
 	timerball: {
@@ -5851,6 +5898,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		onResidual(pokemon) {
 			pokemon.trySetStatus('tox', pokemon);
 		},
+		unusable: true,
 		num: 272,
 		gen: 4,
 	},
@@ -7043,6 +7091,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 84,
 		gen: 1,
+		unusable: true,
 	},
 	wateriumz: {
 		name: "Waterium Z",
