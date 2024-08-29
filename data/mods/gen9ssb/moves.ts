@@ -83,9 +83,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Aurora Beam', target);
+			this.add('-anim', source, 'Pyro Ball', target);
 		},
-		onHit(target, souce, move) {
+		onHit(target, source, move) {
 			if (target.newlySwitched) {
 				this.boost({def: -2}, target, source, move);
 			} else {
