@@ -3459,7 +3459,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Standard Doubles', 'Sleep Clause Mod'],
-		banlist: ['Mewtwo'],
+		banlist: ['DUber'],
 	},
 	{
 		name: "[Gen 7] Doubles Custom Game",
