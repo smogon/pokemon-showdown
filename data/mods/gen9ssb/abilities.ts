@@ -87,6 +87,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (ally === pokemon || ally.fainted) continue;
 				ally.abilityState.tcbCritBoost = true;
 			}
+			this.add('-message', `${pokemon.name}'s allies are now more likely to land critical hits!`);
 		},
 	},
 	// Journeyman
