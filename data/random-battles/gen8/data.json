@@ -1502,7 +1502,7 @@
         "doublesMoves": ["geargrind", "protect", "shiftgear", "wildcharge"]
     },
     "beheeyem": {
-        "level": 90,
+        "level": 89,
         "moves": ["darkpulse", "psychic", "thunderbolt", "trick", "trickroom"],
         "doublesLevel": 88,
         "doublesMoves": ["protect", "psychic", "shadowball", "thunderbolt", "trickroom"]
