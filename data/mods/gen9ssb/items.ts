@@ -38,7 +38,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (pokemon.abilityState.hagakure) return this.chainModify(0.5);
 		},
 		onModifyCritRatio(critRatio, user) {
-			if (pokemon.abilityState.hagakure) return critRatio + 5;
+			if (user.abilityState.hagakure) return critRatio + 5;
 		},
 	},
 	// Journeyman
