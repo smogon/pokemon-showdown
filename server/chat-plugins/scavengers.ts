@@ -845,7 +845,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				if (game) {
 					game.setTimer(duration); // auto timer for queue'd games.
 					room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
-					this.modlog('SCAV NEW', null, `${game.gameType.toUpperCase()}: creators - ${game.hosts.map(h => h.id)}`);
+					room.modlog({action: 'SCAV NEW', note: `${game.gameType.toUpperCase()}: creators - ${game.hosts.map(h => h.id)}`});
 				}
 
 				// update the saved queue.
