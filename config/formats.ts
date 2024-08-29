@@ -2561,11 +2561,10 @@ export const Formats: FormatList = [
 			}
 		},
 		onModifyCritRatio(critRatio, source, target) {
-			let success;
-			for (const ally of source.side.pokemon) {
-				if (ally.fainted && ally.abilityState.teamCritBoost) success = true;
+			if (source.abilityState.tcbCritBoost) {
+				this.debug(`TCB boosting ${source.name}'s crit ratio`);
+				return critRatio + 1;
 			}
-			if (success) return critRatio + 1;
 		},
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
