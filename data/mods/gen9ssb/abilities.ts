@@ -72,7 +72,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 						disabled: false,
 						used: false,
 					};
-					if (moveSlot.move === 'Piercing Gleam') {
+					if (moveSlot.id === 'piercinggleam') {
 						pokemon.moveSlots[moveSlot] = moveData;
 						pokemon.baseMoveSlots[moveSlot] = moveData;
 					}
