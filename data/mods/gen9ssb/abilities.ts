@@ -204,8 +204,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					(pokemon.item !== item) &&
 					(!pokemon.abilityState.carrierItems.includes(item)) &&
 					(!item.name.includes('TR')) && (!item.name.includes('Memory')) &&
-					(!item.name.includes('Power')) && (!item.name.includes('Ball')) &&
-					(!item.name.includes('Stone'))
+					(!item.name.includes('Power')) && (!item.isPokeball) &&
+					(!item.name.includes('Stone')) && (!item.megaStone) &&
+					(!item.unusable)
 				));
 				const item = this.sample(items);
 				if (pokemon.abilityState.carrierItems.length < 8 && pokemon.item === 'colossuscarrier') {
