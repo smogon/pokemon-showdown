@@ -125,15 +125,15 @@ class PunishmentMap extends Map<string, Punishment[]> {
 		}
 	}
 	deleteOne(k: string, punishment: Punishment) {
-		const list = this.get(k);
+		let list = this.get(k);
 		if (!list) return;
-		for (const [i, cur] of list.entries()) {
-			if (punishment.type === cur.type && cur.id === punishment.id) {
-				list.splice(i, 1);
-			}
-		}
+		list = list.filter((cur) => {
+			return !(punishment.type === cur.type && cur.id === punishment.id);
+		});
 		if (!list.length) {
 			this.delete(k);
+		} else {
+			super.set(k, list);
 		}
 		return true;
 	}
@@ -143,7 +143,8 @@ class PunishmentMap extends Map<string, Punishment[]> {
 			list = [];
 			this.set(k, list);
 		}
-		for (const [i, curPunishment] of list.entries()) {
+		for (let i = list.length - 1; i >= 0; i--) {
+			const curPunishment = list[i];
 			if (punishment.type === curPunishment.type) {
 				if (curPunishment.expireTime >= punishment.expireTime) {
 					curPunishment.reason = punishment.reason;
