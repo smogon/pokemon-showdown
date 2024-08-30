@@ -125,15 +125,18 @@ class PunishmentMap extends Map<string, Punishment[]> {
 		}
 	}
 	deleteOne(k: string, punishment: Punishment) {
-		let list = this.get(k);
+		const list = this.get(k);
 		if (!list) return;
-		list = list.filter((cur) => {
-			return !(punishment.type === cur.type && cur.id === punishment.id);
-		});
+		for (let i = list.length - 1; i >= 0; i--) {
+			const cur = list[i];
+			if (punishment.type === cur.type && cur.id === punishment.id) {
+				list.splice(i, 1);
+				break; // we don't need to run the rest of the list here
+				// given we will only ever have one punishment of one type
+			}
+		}
 		if (!list.length) {
 			this.delete(k);
-		} else {
-			super.set(k, list);
 		}
 		return true;
 	}
