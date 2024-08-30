@@ -130,8 +130,6 @@ class PunishmentMap extends Map<string, Punishment[]> {
 		for (const [i, cur] of list.entries()) {
 			if (punishment.type === cur.type && cur.id === punishment.id) {
 				list.splice(i, 1);
-				break; // we don't need to run the rest of the list here
-				// given we will only ever have one punishment of one type
 			}
 		}
 		if (!list.length) {
@@ -147,7 +145,7 @@ class PunishmentMap extends Map<string, Punishment[]> {
 		}
 		for (const [i, curPunishment] of list.entries()) {
 			if (punishment.type === curPunishment.type) {
-				if (punishment.expireTime <= curPunishment.expireTime) {
+				if (curPunishment.expireTime >= punishment.expireTime) {
 					curPunishment.reason = punishment.reason;
 					// if we already have a punishment of the same type with a higher expiration date
 					// we want to just update the reason and ignore it
