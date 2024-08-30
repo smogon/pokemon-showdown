@@ -131,8 +131,6 @@ class PunishmentMap extends Map<string, Punishment[]> {
 			const cur = list[i];
 			if (punishment.type === cur.type && cur.id === punishment.id) {
 				list.splice(i, 1);
-				break; // we don't need to run the rest of the list here
-				// given we will only ever have one punishment of one type
 			}
 		}
 		if (!list.length) {
