@@ -4264,7 +4264,7 @@ export const commands: Chat.ChatCommands = {
 						.toString().toLowerCase().includes(searchTarget)).length > 0);
 			}
 			return negation ? entriesCopy.filter(element => !entries.includes(element)) : entries;
-		};
+		},
 
 		disable(target, room, user) {
 			room = this.requireRoom();
