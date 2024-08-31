@@ -245,6 +245,7 @@ export class Elimination {
 			for (const depth in matchesByDepth) {
 				if (depth === '0') continue;
 				const matchesThisDepth = matchesByDepth[depth];
+				Utils.shuffle(matchesThisDepth);
 				let n = 0;
 				for (; n < matchesThisDepth.length - 1; n += 2) {
 					// Replace old leaf with:
