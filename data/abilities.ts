@@ -2027,6 +2027,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(pokemon) {
 			if (pokemon.illusion) {
+				pokemon.apparentType = pokemon.illusion.apparentType;
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
