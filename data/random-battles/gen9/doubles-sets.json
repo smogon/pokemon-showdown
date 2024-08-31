@@ -1427,13 +1427,13 @@
         "level": 100,
         "sets": [
             {
-                "role": "Doubles Support",
-                "movepool": ["Decorate", "Fake Out", "Follow Me", "Pollen Puff", "Tailwind"],
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Baton Pass", "No Retreat", "Population Bomb", "Spiky Shield"],
                 "abilities": ["Technician"],
                 "teraTypes": ["Ghost"]
             },
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Support",
                 "movepool": ["Decorate", "Fake Out", "Follow Me", "Tailwind"],
                 "abilities": ["Technician"],
                 "teraTypes": ["Ghost"]
@@ -1475,7 +1475,7 @@
                 "role": "Bulky Protect",
                 "movepool": ["Electroweb", "Protect", "Scald", "Snarl", "Thunder Wave", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Inner Focus"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Water"]
             }
         ]
     },
@@ -2464,15 +2464,15 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Protect"],
+                "movepool": ["Close Combat", "Extreme Speed", "Flash Cannon", "Protect"],
                 "abilities": ["Inner Focus"],
                 "teraTypes": ["Normal"]
             },
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Aura Sphere", "Flash Cannon", "Nasty Plot", "Protect", "Vacuum Wave"],
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Close Combat", "Extreme Speed", "Meteor Mash", "Rock Slide"],
                 "abilities": ["Inner Focus"],
-                "teraTypes": ["Fighting", "Steel"]
+                "teraTypes": ["Normal"]
             }
         ]
     },
@@ -3963,7 +3963,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Earth Power", "Nasty Plot", "Protect", "Psychic", "Sandsear Storm", "Sludge Bomb"],
+                "movepool": ["Earth Power", "Nasty Plot", "Protect", "Psychic", "Rock Slide", "Sandsear Storm", "Sludge Bomb"],
                 "abilities": ["Sheer Force"],
                 "teraTypes": ["Ground", "Poison", "Psychic"]
             }
@@ -5192,9 +5192,9 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Close Combat", "Iron Head", "Knock Off", "No Retreat"],
+                "movepool": ["Close Combat", "Iron Head", "Knock Off", "No Retreat", "Protect", "Rock Slide"],
                 "abilities": ["Defiant"],
-                "teraTypes": ["Dark", "Fighting", "Steel"]
+                "teraTypes": ["Dark", "Steel"]
             }
         ]
     },
@@ -6790,8 +6790,20 @@
         "level": 85,
         "sets": [
             {
+                "role": "Bulky Protect",
+                "movepool": ["Fickle Beam", "Giga Drain", "Leaf Storm", "Pollen Puff", "Protect"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Fire", "Steel"]
+            },
+            {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Earth Power", "Fickle Beam", "Leaf Storm", "Pollen Puff", "Protect"],
+                "movepool": ["Draco Meteor", "Earth Power", "Giga Drain", "Leaf Storm"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Fire", "Grass", "Steel"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Earth Power", "Fickle Beam", "Giga Drain", "Leaf Storm", "Pollen Puff"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Steel"]
             }
