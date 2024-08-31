@@ -713,7 +713,7 @@ export abstract class BasicRoom {
 		}
 		if (this.settings.modjoin) {
 			const modjoin = this.settings.modjoin === true ? this.settings.modchat : this.settings.modjoin;
-			message += ` [${modjoin} or higher to join]`;
+			if (modjoin !== null) message += ` [${modjoin} or higher to join]`;
 		}
 		if (this.settings.slowchat) {
 			message += ` [Slowchat ${this.settings.slowchat}s]`;
