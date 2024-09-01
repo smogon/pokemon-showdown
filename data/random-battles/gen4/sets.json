@@ -116,7 +116,7 @@
         ]
     },
     "pikachu": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -378,7 +378,7 @@
         ]
     },
     "tentacruel": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -903,7 +903,7 @@
         ]
     },
     "dragonite": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1144,7 +1144,7 @@
         ]
     },
     "sunflora": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1352,7 +1352,7 @@
         ]
     },
     "magcargo": {
-        "level": 96,
+        "level": 97,
         "sets": [
             {
                 "role": "Staller",
@@ -1362,7 +1362,7 @@
         ]
     },
     "corsola": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1935,7 +1935,7 @@
         ]
     },
     "sableye": {
-        "level": 99,
+        "level": 98,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2021,7 +2021,7 @@
         ]
     },
     "volbeat": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2754,7 +2754,7 @@
         ]
     },
     "staraptor": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3366,7 +3366,7 @@
         ]
     },
     "gallade": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3506,7 +3506,7 @@
         ]
     },
     "uxie": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Support",

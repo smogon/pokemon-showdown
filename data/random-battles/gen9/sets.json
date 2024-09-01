@@ -830,7 +830,7 @@
         ]
     },
     "lapras": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1533,7 +1533,7 @@
         ]
     },
     "magcargo": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2851,7 +2851,7 @@
         ]
     },
     "spiritomb": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3003,7 +3003,7 @@
         ]
     },
     "rhyperior": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3752,7 +3752,7 @@
         ]
     },
     "arceuspoison": {
-        "level": 71,
+        "level": 70,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3937,7 +3937,7 @@
         ]
     },
     "leavanny": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Support",
@@ -5299,7 +5299,7 @@
         ]
     },
     "salazzle": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Support",
@@ -5845,7 +5845,7 @@
         ]
     },
     "pincurchin": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5890,7 +5890,7 @@
         ]
     },
     "eiscue": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -6097,7 +6097,7 @@
         ]
     },
     "regieleki": {
-        "level": 78,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Support",
