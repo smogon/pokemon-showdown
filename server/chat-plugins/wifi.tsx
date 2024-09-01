@@ -414,7 +414,8 @@ export class QuestionGiveaway extends Giveaway {
 		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) throw new Chat.ErrorMessage("Invalid TID");
 		if (!targetUser.autoconfirmed) {
-			throw new Chat.ErrorMessage(`User '${targetUser.name}' needs to be autoconfirmed to give something away.`);
+			throw new Chat.ErrorMessage(`User '${targetUser.name}' needs to be autoconfirmed ` +
+			`(have won at least one rated battle and been registered for one week or longer) to give something away.`);
 		}
 		if (Giveaway.checkBanned(context.room!, targetUser)) {
 			throw new Chat.ErrorMessage(`User '${targetUser.name}' is giveaway banned.`);
