@@ -833,13 +833,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["crosschop", "fireblast", "flamethrower", "focuspunch", "hiddenpowergrass", "hiddenpowerice", "psychic", "substitute", "thunderpunch"],
+                "movepool": ["crosschop", "fireblast", "flamethrower", "focuspunch", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderpunch", "toxic"],
                 "abilities": ["Flame Body"],
                 "preferredTypes": ["Electric"]
             },
             {
                 "role": "Berry Sweeper",
-                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "psychic", "substitute", "thunderpunch"],
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderpunch"],
                 "abilities": ["Flame Body"],
                 "preferredTypes": ["Electric"]
             }
@@ -1547,12 +1547,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"],
-                "abilities": ["Sturdy"]
-            },
-            {
-                "role": "Generalist",
-                "movepool": ["explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"],
+                "movepool": ["earthquake", "explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"],
                 "abilities": ["Sturdy"]
             }
         ]
@@ -1917,11 +1912,6 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["protect", "seismictoss", "toxic", "wish"],
-                "abilities": ["Natural Cure"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["calmmind", "icebeam", "softboiled", "thunderbolt"],
                 "abilities": ["Natural Cure"]
             }
         ]
@@ -2492,7 +2482,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["aromatherapy", "hiddenpowerfire", "magicalleaf", "spikes", "synthesis", "toxic"],
+                "movepool": ["hiddenpowerfire", "magicalleaf", "spikes", "synthesis"],
                 "abilities": ["Natural Cure"]
             },
             {
@@ -3070,7 +3060,7 @@
                 "role": "Wallbreaker",
                 "movepool": ["earthquake", "extremespeed", "hiddenpowerflying", "overheat", "rockslide"],
                 "abilities": ["Air Lock"],
-                "preferredTypes": ["Ground"]
+                "preferredTypes": ["Ground", "Normal"]
             }
         ]
     },
@@ -3095,7 +3085,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "spikes", "superpower"],
+                "movepool": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "superpower"],
                 "abilities": ["Pressure"],
                 "preferredTypes": ["Fighting", "Ghost"]
             }

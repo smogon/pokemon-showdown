@@ -514,6 +514,11 @@
                 "role": "Staller",
                 "movepool": ["protect", "seismictoss", "toxic", "wish"],
                 "abilities": ["Insomnia"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["batonpass", "focusblast", "nastyplot", "psychic"],
+                "abilities": ["Insomnia"]
             }
         ]
     },
@@ -1996,7 +2001,8 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["batonpass", "encore", "hiddenpowerice", "nastyplot", "thunderbolt"],
-                "abilities": ["Plus"]
+                "abilities": ["Plus"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Setup Sweeper",
@@ -2011,7 +2017,8 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["batonpass", "encore", "hiddenpowerice", "nastyplot", "thunderbolt"],
-                "abilities": ["Minus"]
+                "abilities": ["Minus"],
+                "preferredTypes": ["Ice"]
             },
             {
                 "role": "Setup Sweeper",
@@ -2230,7 +2237,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "calmmind", "earthpower", "psychic", "shadowball", "substitute"],
+                "movepool": ["batonpass", "calmmind", "earthpower", "psychic", "signalbeam", "substitute"],
                 "abilities": ["Levitate"]
             },
             {
@@ -2361,9 +2368,8 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aerialace", "dragondance", "earthquake", "leafblade", "roost"],
-                "abilities": ["Chlorophyll"],
-                "preferredTypes": ["Ground"]
+                "movepool": ["aerialace", "dragondance", "earthquake", "leafblade"],
+                "abilities": ["Chlorophyll"]
             }
         ]
     },
@@ -3258,7 +3264,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthquake", "fireblast", "focusblast", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderbolt"],
+                "movepool": ["earthquake", "fireblast", "focusblast", "hiddenpowerice", "taunt", "thunderbolt"],
                 "abilities": ["Flame Body"],
                 "preferredTypes": ["Electric"]
             }
