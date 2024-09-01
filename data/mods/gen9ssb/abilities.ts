@@ -2844,8 +2844,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "On switch-in, this Pokemon's ability is replaced with a random teammate's ability.",
 		name: "Party Up",
 		onStart(target) {
-			this.add('-ability', target, 'Party Up');
 			const abilities = target.side.pokemon.map(x => x.getAbility()).filter(x => !x.flags['notrace']);
+			if (!abilities.length) return;
+			this.add('-ability', target, 'Party Up');
 			target.setAbility(this.sample(abilities), target);
 			this.add('-ability', target, target.getAbility().name);
 		},
