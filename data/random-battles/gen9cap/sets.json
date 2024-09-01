@@ -112,7 +112,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Defog", "Encore", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
+                "movepool": ["Defog", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Dark", "Water"]
             }
