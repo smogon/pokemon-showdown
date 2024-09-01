@@ -624,11 +624,7 @@ export const Teams = new class Teams {
 			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
 		} else if (toID(format).includes('gen9babyrandombattle')) {
 			TeamGenerator = require(`../data/random-battles/gen9baby/teams`).default;
-		} else if (
-				// when removing cap rands ladder, remove the line below and collapse
-				toID(format).includes('gen9caprandombattle') ||
-				(toID(format).includes('gen9randombattle') && format.customRules?.includes('+cap'))
-			) {
+		} else if (toID(format).includes('gen9randombattle') && format.customRules?.includes('+cap')) {
 			TeamGenerator = require(`../data/random-battles/gen9cap/teams`).default;
 		} else {
 			TeamGenerator = require(`../data/random-battles/${format.mod}/teams`).default;
