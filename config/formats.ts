@@ -2230,7 +2230,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		// searchShow: false,
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Species Clause'],
-		banlist: ['Assist'],
+		banlist: ['Shedinja', 'Assist'],
 	},
 	{
 		name: "[Gen 9] National Dex Ubers UU",
