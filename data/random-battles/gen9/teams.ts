@@ -1057,6 +1057,17 @@ export class RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
+		// ffa abilities that differ from doubles
+		if (this.format.gameType === 'freeforall') {
+			if (species.id === 'bellossom') return 'Chlorophyll';
+			if (species.id === 'sinistcha') return 'Heatproof';
+			if (species.id === 'oranguru') return 'Inner Focus';
+			if (species.id === 'duraludon') return 'Light Metal';
+			if (species.id === 'clefairy') return 'Magic Guard';
+			if (species.id === 'blissey') return 'Natural Cure';
+			if (species.id === 'barraskewda') return 'Swift Swim';
+		}
+
 		if (abilities.length <= 1) return abilities[0];
 
 		// Hard-code abilities here
@@ -1067,18 +1078,6 @@ export class RandomTeams {
 		if (species.id === 'toucannon' && counter.get('skilllink')) return 'Skill Link';
 		if (abilities.includes('Slush Rush') && moves.has('snowscape')) return 'Slush Rush';
 		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
-
-		// ffa abilities that differ from doubles
-		if (this.format.gameType === 'freeforall') {
-			if (species.id === 'bellossom') return 'Chlorophyll';
-			if (species.id === 'sinistcha') return 'Heatproof';
-			if (species.id === 'oranguru') return 'Inner Focus';
-			if (species.id === 'duraludon') return 'Light Metal';
-			if (species.id === 'clefairy') return 'Magic Guard';
-			if (species.id === 'blissey') return 'Natural Cure';
-			if (species.id === 'barraskewda') return 'Swift Swim';
-			if (abilities.includes('Pressure') && abilities.includes('Telepathy')) return 'Pressure';
-		}
 
 		const abilityAllowed: string[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
