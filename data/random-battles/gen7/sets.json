@@ -1440,7 +1440,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["agility", "dragonpulse", "focusblast", "healbell", "thunderbolt", "voltswitch"],
+                "movepool": ["agility", "dragonpulse", "focusblast", "thunderbolt", "voltswitch"],
+                "abilities": ["Static"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["discharge", "dragonpulse", "focusblast", "healbell", "rest", "sleeptalk", "voltswitch"],
                 "abilities": ["Static"]
             }
         ]
@@ -1548,7 +1553,8 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["calmmind", "dazzlinggleam", "morningsun", "psychic", "psyshock", "shadowball", "trick"],
-                "abilities": ["Magic Bounce"]
+                "abilities": ["Magic Bounce"],
+                "preferredTypes": ["Fairy"]
             }
         ]
     },
@@ -2941,13 +2947,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["fireblast", "knockoff", "playrough", "pursuit", "suckerpunch", "superpower"],
-                "abilities": ["Justified"],
-                "preferredTypes": ["Fairy"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["knockoff", "playrough", "suckerpunch", "superpower", "swordsdance"],
+                "movepool": ["irontail", "knockoff", "playrough", "pursuit", "suckerpunch", "superpower", "swordsdance"],
                 "abilities": ["Justified"],
                 "preferredTypes": ["Fairy"]
             }
@@ -3811,7 +3811,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aurasphere", "darkpulse", "flashcannon", "nastyplot", "vacuumwave"],
+                "movepool": ["aurasphere", "flashcannon", "nastyplot", "vacuumwave"],
                 "abilities": ["Inner Focus"]
             }
         ]
@@ -3997,7 +3997,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "fireblast", "focusblast", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderbolt"],
+                "movepool": ["earthquake", "fireblast", "focusblast", "hiddenpowerice", "taunt", "thunderbolt"],
                 "abilities": ["Flame Body"],
                 "preferredTypes": ["Electric"]
             }
@@ -5091,7 +5091,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["gigadrain", "hiddenpowerfire", "knockoff", "spikes", "suckerpunch", "synthesis", "toxic"],
+                "movepool": ["gigadrain", "hiddenpowerfire", "knockoff", "spikes", "synthesis", "toxic"],
                 "abilities": ["Storm Drain", "Water Absorb"]
             },
             {
@@ -5888,6 +5888,12 @@
                 "role": "Wallbreaker",
                 "movepool": ["closecombat", "knockoff", "relicsong", "return"],
                 "abilities": ["Serene Grace"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["celebrate", "focusblast", "hypervoice", "psyshock"],
+                "abilities": ["Serene Grace"],
+                "preferredTypes": ["Normal"]
             }
         ]
     },
@@ -6672,13 +6678,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["accelerock", "drillrun", "firefang", "stoneedge", "swordsdance"],
+                "movepool": ["accelerock", "drillrun", "stoneedge", "swordsdance", "zenheadbutt"],
                 "abilities": ["Sand Rush"],
                 "preferredTypes": ["Ground"]
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["accelerock", "drillrun", "firefang", "stoneedge", "swordsdance"],
+                "movepool": ["accelerock", "drillrun", "stoneedge", "swordsdance", "zenheadbutt"],
                 "abilities": ["Sand Rush"],
                 "preferredTypes": ["Ground"]
             }
@@ -6704,13 +6710,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["accelerock", "drillrun", "firefang", "return", "stoneedge", "swordsdance"],
+                "movepool": ["accelerock", "drillrun", "return", "stoneedge", "swordsdance", "zenheadbutt"],
                 "abilities": ["Tough Claws"],
                 "preferredTypes": ["Ground"]
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["accelerock", "drillrun", "firefang", "return", "stoneedge", "swordsdance"],
+                "movepool": ["accelerock", "drillrun", "return", "stoneedge", "swordsdance", "zenheadbutt"],
                 "abilities": ["Tough Claws"],
                 "preferredTypes": ["Ground"]
             }
@@ -7319,17 +7325,20 @@
             {
                 "role": "Bulky Attacker",
                 "movepool": ["earthquake", "flareblitz", "knockoff", "morningsun", "stoneedge", "sunsteelstrike", "zenheadbutt"],
-                "abilities": ["Full Metal Body"]
+                "abilities": ["Full Metal Body"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Fast Attacker",
                 "movepool": ["earthquake", "flareblitz", "knockoff", "stoneedge", "sunsteelstrike", "zenheadbutt"],
-                "abilities": ["Full Metal Body"]
+                "abilities": ["Full Metal Body"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Bulky Setup",
                 "movepool": ["earthquake", "flamecharge", "knockoff", "psychic", "sunsteelstrike"],
-                "abilities": ["Full Metal Body"]
+                "abilities": ["Full Metal Body"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },

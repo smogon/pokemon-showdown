@@ -3126,7 +3126,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aurasphere", "darkpulse", "flashcannon", "nastyplot", "vacuumwave"],
+                "movepool": ["aurasphere", "flashcannon", "nastyplot", "vacuumwave"],
                 "abilities": ["Inner Focus"]
             }
         ]
@@ -3284,7 +3284,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthquake", "fireblast", "focusblast", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderbolt"],
+                "movepool": ["earthquake", "fireblast", "focusblast", "hiddenpowerice", "taunt", "thunderbolt"],
                 "abilities": ["Flame Body", "Vital Spirit"],
                 "preferredTypes": ["Electric"]
             }
@@ -4274,7 +4274,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["gigadrain", "hiddenpowerfire", "spikes", "suckerpunch", "synthesis", "toxic"],
+                "movepool": ["gigadrain", "hiddenpowerfire", "spikes", "synthesis", "toxic"],
                 "abilities": ["Storm Drain", "Water Absorb"]
             },
             {
