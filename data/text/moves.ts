@@ -2052,7 +2052,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	firstimpression: {
 		name: "First Impression",
 		desc: "Fails unless it is the user's first turn on the field.",
-		shortDesc: "Hits first. First turn out only.",
+		shortDesc: "Nearly always goes first. First turn out only.",
 	},
 	fishiousrend: {
 		name: "Fishious Rend",
