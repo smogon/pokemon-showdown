@@ -3180,12 +3180,6 @@
                 "movepool": ["Body Press", "Flash Cannon", "Iron Defense", "Power Gem", "Rest", "Thunder Wave"],
                 "abilities": ["Magnet Pull"],
                 "teraTypes": ["Fighting"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["Body Press", "Flash Cannon", "Power Gem", "Stealth Rock", "Thunder Wave", "Volt Switch"],
-                "abilities": ["Magnet Pull"],
-                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -4871,12 +4865,6 @@
     "carbink": {
         "level": 90,
         "sets": [
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["Body Press", "Moonblast", "Power Gem", "Spikes", "Stealth Rock"],
-                "abilities": ["Sturdy"],
-                "teraTypes": ["Fighting"]
-            },
             {
                 "role": "Fast Bulky Setup",
                 "movepool": ["Body Press", "Iron Defense", "Moonblast", "Rest", "Rock Polish"],
