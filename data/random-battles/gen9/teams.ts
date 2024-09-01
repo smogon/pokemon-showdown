@@ -316,10 +316,7 @@ export class RandomTeams {
 	 * Doesn't count bans nested inside other formats/rules.
 	 */
 	private hasDirectCustomBanlistChanges() {
-		if (
-			this.format.customRules &&
-			this.format.customRules.length === 1 && ['+cap'].includes(this.format.customRules[0])
-		) return false;
+		if (this.format.ruleTable?.has('+pokemontag:cap')) return false;
 		if (this.format.banlist.length || this.format.restricted.length || this.format.unbanlist.length) return true;
 		if (!this.format.customRules) return false;
 		for (const rule of this.format.customRules) {
