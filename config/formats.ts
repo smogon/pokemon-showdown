@@ -2318,7 +2318,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 9] Bring 12 Pick 6 Shared Power Random Battle",
+		name: "[Gen 9] Shared Power Random Battle (Bring 12, Pick 6)",
 		desc: `[Gen 9] Random Battle with Team Preview, Bring 12 Pick 6, and Shared Power.`,
 		mod: 'sharedpower',
 		team: 'random',
