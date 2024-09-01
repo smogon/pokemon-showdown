@@ -1593,8 +1593,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					set.moves.splice(i, 1);
 				}
 			}
-			if (pokemoves > 1) {
-				problems.push(`${set.species} has ${pokemoves} Pokemoves.`, `(Pok\u00e9mon can only have 1 Pokemove each.)`);
+			const allowedPokemoves = this.ruleTable.valueRules.get('allowedpokemoves') || 1;
+			if (pokemoves > Number(allowedPokemoves)) {
+				problems.push(
+					`${set.species} has ${pokemoves} Pokemoves.`,
+					`(Pok\u00e9mon can only have ${allowedPokemoves} Pokemove${allowedPokemoves + '' === '1' ? '' : 's'} each.)`
+				);
 			}
 			if (this.validateSet(set, teamHas)) {
 				return this.validateSet(set, teamHas);
