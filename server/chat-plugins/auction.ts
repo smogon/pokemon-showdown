@@ -61,8 +61,8 @@ class Team {
 	isSuspended() {
 		return this.suspended || (
 			this.auction.type === 'snake' ?
-			this.players.length >= this.auction.minPlayers :
-			this.credits < this.auction.minBid
+				this.players.length >= this.auction.minPlayers :
+				this.credits < this.auction.minBid
 		);
 	}
 
