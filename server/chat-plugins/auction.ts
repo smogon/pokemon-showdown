@@ -90,10 +90,11 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	lastQueue: Team[] | null = null;
 	queue: Team[] = [];
+	nomTimer: NodeJS.Timer = null!;
+	nomTimeLimit = 0;
+	nomTimeRemaining = 0;
 	bidTimer: NodeJS.Timer = null!;
-	/** Measured in seconds */
 	bidTimeLimit = 10;
-	/** Measured in seconds */
 	bidTimeRemaining = 10;
 	nominatingTeam: Team = null!;
 	nominatedPlayer: Player = null!;
@@ -104,7 +105,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	state: 'setup' | 'nom' | 'bid' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
-		this.title = `Auction (${room.title})`;
+		this.title = 'Auction';
 		this.startingCredits = startingCredits;
 	}
 
@@ -226,7 +227,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 		buf += `<details><summary>Auction Settings</summary>`;
 		buf += `- Minimum bid: <b>${this.minBid.toLocaleString()}</b><br/>`;
 		buf += `- Minimum players per team: <b>${this.minPlayers}</b><br/>`;
-		buf += `- Bid timer: <b>${this.bidTimeLimit}s</b><br/>`;
+		buf += `- Nom timer: <b>${this.nomTimeLimit}s</b><br/>`;
+		if (this.type !== 'snake') buf += `- Bid timer: <b>${this.bidTimeLimit}s</b><br/>`;
 		buf += `- Auction type: <b>${this.type}</b><br/>`;
 		buf += `</details>`;
 		return buf;
@@ -242,9 +244,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.room.add(`|uhtml|bid-${this.nominatedPlayer.id}|${buf}`).update();
 	}
 
-	sendBidTimer(change = false) {
+	sendTimer(change = false, nom = false) {
 		let buf = `<div class="infobox message-error">`;
-		buf += `<i class="fa fa-hourglass-start"></i> ${Chat.toDurationString(this.bidTimeRemaining * 1000, {hhmmss: true}).slice(1)}`;
+		buf += `<i class="fa fa-hourglass-start"></i> ${Chat.toDurationString((nom ? this.nomTimeRemaining : this.bidTimeRemaining) * 1000, {hhmmss: true}).slice(1)}`;
 		buf += `</div>`;
 		this.room.add(`|uhtml${change ? 'change' : ''}|timer|${buf}`).update();
 	}
@@ -267,7 +269,17 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.minPlayers = amount;
 	}
 
-	setTimeLimit(seconds: number) {
+	setNomTimeLimit(seconds: number) {
+		if (this.state !== 'setup') {
+			throw new Chat.ErrorMessage(`The nomination time limit cannot be changed after the auction has started.`);
+		}
+		if (isNaN(seconds) || (seconds && (seconds < 7 || seconds > 300))) {
+			throw new Chat.ErrorMessage(`The nomination time limit must be between 7 and 300 seconds.`);
+		}
+		this.nomTimeLimit = this.nomTimeRemaining = seconds;
+	}
+
+	setBidTimeLimit(seconds: number) {
 		if (this.state !== 'setup') {
 			throw new Chat.ErrorMessage(`The bid time limit cannot be changed after the auction has started.`);
 		}
@@ -285,6 +297,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			throw new Chat.ErrorMessage(`Invalid auction type "${auctionType}". Valid types are "auction", "blind", and "snake".`);
 		}
 		this.type = toID(auctionType) as 'auction' | 'blind' | 'snake';
+		this.nomTimeLimit = this.nomTimeRemaining = this.type === 'snake' ? 60 : 0;
 		this.bidTimeLimit = this.bidTimeRemaining = this.type === 'blind' ? 30 : 10;
 	}
 
@@ -369,7 +382,6 @@ export class Auction extends Rooms.SimpleRoomGame {
 		} else {
 			player.team?.removePlayer(player);
 		}
-		this.sendHTMLBox(this.generateAuctionTable());
 	}
 
 	addTeam(name: string) {
@@ -477,7 +489,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 		this.lastQueue = null;
 		this.queue = teams.concat(teams.slice().reverse());
-		this.clearTimer();
+		this.clearNomTimer();
+		this.clearBidTimer();
 		this.state = 'setup';
 		this.sendHTMLBox(this.generateAuctionTable());
 	}
@@ -496,6 +509,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 		} while (this.nominatingTeam.isSuspended());
 		this.sendHTMLBox(this.generateAuctionTable());
 		this.sendMessage(`/html It is now <b>${Utils.escapeHTML(this.nominatingTeam.name)}</b>'s turn to nominate a player. Managers: ${this.nominatingTeam.getManagers().map(m => `<username class="username">${Utils.escapeHTML(m)}</username>`).join(' ')}`);
+		if (this.nomTimeLimit) {
+			this.sendTimer(false, true);
+			this.nomTimer = setInterval(() => this.pokeNomTimer(), 1000);
+		}
 	}
 
 	nominate(user: User, target: string) {
@@ -510,6 +527,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		const player = this.auctionPlayers.get(toID(target));
 		if (!player) throw new Chat.ErrorMessage(`${target} is not a valid player.`);
 		if (player.team) throw new Chat.ErrorMessage(`${player.name} has already been drafted.`);
+		this.clearNomTimer();
 		this.nominatedPlayer = player;
 		if (this.type === 'snake') {
 			this.sendMessage(Utils.html`/html <b>${this.nominatingTeam.name}</b> drafted <username>${this.nominatedPlayer.name}</username>!`);
@@ -519,9 +537,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.state = 'bid';
 			this.highestBid = this.minBid;
 			this.highestBidder = this.nominatingTeam;
+			this.room.add(Utils.html`|notify|${this.room.title} Auction|${player.name} has been nominated!`);
 			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid or type a number to place a bid!`);
 			if (this.type === 'auction') this.sendBidInfo();
-			this.sendBidTimer();
+			this.sendTimer();
 			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 		}
 	}
@@ -555,10 +574,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.highestBid = bid;
 			this.highestBidder = team;
 			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${bid}</b>`);
-			this.clearTimer();
+			this.clearBidTimer();
 			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 			this.sendBidInfo();
-			this.sendBidTimer();
+			this.sendTimer();
 		}
 	}
 
@@ -566,6 +585,13 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (this.state !== 'bid' || !Number(message.replace(',', '.'))) return;
 		this.bid(user, parseCredits(message));
 		return '';
+	}
+
+	skipNom() {
+		if (this.state !== 'nom') throw new Chat.ErrorMessage(`Nominations cannot be skipped right now.`);
+		this.sendMessage(`**${this.nominatingTeam.name}**'s nomination turn has been skipped!`);
+		this.clearNomTimer();
+		this.next();
 	}
 
 	finishCurrentNom() {
@@ -583,7 +609,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 		this.sendMessage(Utils.html`/html <b>${this.highestBidder.name}</b> bought <username>${this.nominatedPlayer.name}</username> for <b>${this.highestBid}</b> credits!`);
 		this.highestBidder.addPlayer(this.nominatedPlayer, this.highestBid);
-		this.clearTimer();
+		this.clearBidTimer();
 		this.next();
 	}
 
@@ -597,10 +623,28 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.next();
 	}
 
-	clearTimer() {
+	clearNomTimer() {
+		clearInterval(this.nomTimer);
+		this.nomTimeRemaining = this.nomTimeLimit;
+		this.room.add('|uhtmlchange|timer|');
+	}
+
+	clearBidTimer() {
 		clearInterval(this.bidTimer);
 		this.bidTimeRemaining = this.bidTimeLimit;
 		this.room.add('|uhtmlchange|timer|');
+	}
+
+	pokeNomTimer() {
+		this.nomTimeRemaining--;
+		if (!this.nomTimeRemaining) {
+			this.skipNom();
+		} else {
+			this.sendTimer(true, true);
+			if (this.nomTimeRemaining % 30 === 0 || [20, 10, 5].includes(this.nomTimeRemaining)) {
+				this.sendMessage(`/html <span class="message-error">${this.nomTimeRemaining} seconds left!</span>`);
+			}
+		}
 	}
 
 	pokeBidTimer() {
@@ -608,7 +652,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (!this.bidTimeRemaining) {
 			this.finishCurrentNom();
 		} else {
-			this.sendBidTimer(true);
+			this.sendTimer(true);
 			if (this.bidTimeRemaining % 30 === 0 || [20, 10, 5].includes(this.bidTimeRemaining)) {
 				this.sendMessage(`/html <span class="message-error">${this.bidTimeRemaining} seconds left!</span>`);
 			}
@@ -623,7 +667,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	destroy() {
-		this.clearTimer();
+		this.clearNomTimer();
+		this.clearBidTimer();
 		super.destroy();
 	}
 }
@@ -714,16 +759,28 @@ export const commands: Chat.ChatCommands = {
 		minplayershelp: [
 			`/auction minplayers [amount] - Sets the minimum number of players. Requires: # & auction owner`,
 		],
-		timer(target, room, user) {
+		nomtimer(target, room, user) {
+			const auction = this.requireGame(Auction);
+			auction.checkOwner(user);
+
+			if (!target) return this.parse('/help auction nomtimer');
+			const seconds = this.meansNo(target) ? 0 : parseInt(target);
+			auction.setNomTimeLimit(seconds);
+			this.addModAction(`${user.name} set the nomination timer to ${seconds} seconds.`);
+		},
+		nomtimerhelp: [
+			`/auction nomtimer [seconds/off] - Sets the nomination timer to [seconds] seconds or disables it. Requires: # & auction owner`,
+		],
+		bidtimer(target, room, user) {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
 			if (!target) return this.parse('/help auction settimer');
 			const seconds = parseInt(target);
-			auction.setTimeLimit(seconds);
+			auction.setBidTimeLimit(seconds);
 			this.addModAction(`${user.name} set the bid timer to ${seconds} seconds.`);
 		},
-		timerhelp: [
+		bidtimerhelp: [
 			`/auction timer [seconds] - Sets the bid timer to [seconds] seconds. Requires: # & auction owner`,
 		],
 		settype(target, room, user) {
@@ -931,6 +988,14 @@ export const commands: Chat.ChatCommands = {
 			`/auction bid OR /bid [amount] - Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.`,
 			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.`,
 		],
+		skip: 'skipnom',
+		skipnom(target, room, user) {
+			const auction = this.requireGame(Auction);
+			auction.checkOwner(user);
+
+			auction.skipNom();
+			this.addModAction(`${user.name} skipped the previous nomination.`);
+		},
 		undo(target, room, user) {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
@@ -987,7 +1052,8 @@ export const commands: Chat.ChatCommands = {
 			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- minbid [amount]: Sets the minimum bid.<br/>` +
 			`- minplayers [amount]: Sets the minimum number of players.<br/>` +
-			`- timer [seconds] - Sets the bid timer to [seconds] seconds.<br/>` +
+			`- nomtimer [seconds]: Sets the nomination timer to [seconds] seconds.<br/>` +
+			`- bidtimer [seconds]: Sets the bid timer to [seconds] seconds.<br/>` +
 			`- blindmode [on/off]: Enables or disables blind mode.<br/>` +
 			`- addowners [user1], [user2], ...: Adds users as auction owners.<br/>` +
 			`- removeowners [user1], [user2], ...: Removes users as auction owners.<br/>` +
@@ -1002,6 +1068,7 @@ export const commands: Chat.ChatCommands = {
 			`- addmanagers [team], [user1], [user2], ...: Adds users as managers to a team.<br/>` +
 			`- removemanagers [user1], [user2], ...: Removes users as managers..<br/>` +
 			`- addcredits [team], [amount]: Adds credits to a team.<br/>` +
+			`- skipnom: Skips the current nomination.<br/>` +
 			`- undo: Undoes the last nomination.<br/>` +
 			`- [enable/disable]: Enables or disables auctions from being started in a room.<br/>` +
 			`</details>`
