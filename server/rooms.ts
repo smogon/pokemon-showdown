@@ -852,6 +852,12 @@ export abstract class BasicRoom {
 			}
 		}
 		this.bestOf?.setPrivacyOfGames(privacy);
+
+		if (this.game) {
+			for (const player of this.game.players) {
+				player.getUser()?.updateSearch();
+			}
+		}
 	}
 	validateSection(section: string) {
 		const target = toID(section);
