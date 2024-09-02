@@ -21,7 +21,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	absorb: {
 		num: 71,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 70,
 		category: "Special",
 		name: "Absorb",
 		pp: 25,
@@ -36,7 +36,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	accelerock: {
 		num: 709,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 80,
 		category: "Physical",
 		name: "Accelerock",
 		pp: 20,
