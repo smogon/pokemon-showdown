@@ -59,7 +59,11 @@ class Team {
 	}
 
 	isSuspended() {
-		return this.suspended || (this.auction.type === 'snake' ? this.players.length >= this.auction.minPlayers : this.credits < this.auction.minBid);
+		return this.suspended || (
+			this.auction.type === 'snake' ?
+			this.players.length >= this.auction.minPlayers :
+			this.credits < this.auction.minBid
+		);
 	}
 
 	maxBid(credits = this.credits) {
@@ -99,7 +103,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	nominatingTeam: Team = null!;
 	nominatedPlayer: Player = null!;
 	highestBidder: Team = null!;
-	highestBid: number = 0;
+	highestBid = 0;
 	/** Used for blind mode */
 	bidsPlaced: Map<Team, number> = new Map();
 	state: 'setup' | 'nom' | 'bid' = 'setup';
@@ -227,7 +231,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		buf += `<details><summary>Auction Settings</summary>`;
 		buf += `- Minimum bid: <b>${this.minBid.toLocaleString()}</b><br/>`;
 		buf += `- Minimum players per team: <b>${this.minPlayers}</b><br/>`;
-		buf += `- Nom timer: <b>${this.nomTimeLimit}s</b><br/>`;
+		buf += `- Nom timer: <b>${this.nomTimeLimit ? `${this.nomTimeLimit}s` : 'Off'}</b><br/>`;
 		if (this.type !== 'snake') buf += `- Bid timer: <b>${this.bidTimeLimit}s</b><br/>`;
 		buf += `- Auction type: <b>${this.type}</b><br/>`;
 		buf += `</details>`;
