@@ -593,6 +593,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	skipNom() {
 		if (this.state !== 'nom') throw new Chat.ErrorMessage(`Nominations cannot be skipped right now.`);
+		this.nominatedPlayer = null!;
 		this.sendMessage(`**${this.nominatingTeam.name}**'s nomination turn has been skipped!`);
 		this.clearNomTimer();
 		this.next();
@@ -622,8 +623,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 		if (!this.lastQueue) throw new Chat.ErrorMessage(`Only one nomination can be undone at a time.`);
 		this.queue = this.lastQueue;
 		this.lastQueue = null;
-		this.highestBidder.removePlayer(this.nominatedPlayer);
-		this.highestBidder.credits += this.highestBid;
+		if (this.nominatedPlayer) {
+			this.highestBidder.removePlayer(this.nominatedPlayer);
+			this.highestBidder.credits += this.highestBid;
+		}
 		this.next();
 	}
 
