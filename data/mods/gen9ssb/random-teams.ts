@@ -181,12 +181,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Killing Doll',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 	},
-	Codie: {
-		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
-		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
-		signatureMove: 'Cascade',
-		evs: {hp: 248, def: 8, spd: 252}, nature: 'Bold',
-	},
 	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
 		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
@@ -200,6 +194,12 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
 	/*
+ 	Codie: {
+		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
+		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
+		signatureMove: 'Cascade',
+		evs: {hp: 248, def: 8, spd: 252}, nature: 'Bold',
+	},
 	Journeyman: {
 		species: 'Stonjourner', ability: 'Love of the Journey', item: 'Colossus Carrier', gender: 'M',
 		moves: ['Mighty Cleave', 'Trailblaze', 'Court Change'],
@@ -223,12 +223,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Hard Press', 'Flying Press', 'Hone Claws'],
 		signatureMove: 'Taunt',
 		evs: {hp: 120, atk: 252, spd: 136}, ivs: {spa: 0}, nature: 'Adamant', skip: 'Castaways',
-	},
-	Codie: {
-		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
-		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
-		signatureMove: 'Conflux',
-		evs: {hp: 248, def: 8, spd: 252}, nature: 'Bold',
 	},
  	Shorikai: {
 		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
