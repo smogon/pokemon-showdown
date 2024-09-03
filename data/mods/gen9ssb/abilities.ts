@@ -26,11 +26,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
+		onPrepareHit(target, source, move) {
+			if (move.id === 'tachyoncutter') move.category === 'Physical';
+			if (target === source || !move || move.category === 'Status') return;
+			const foeAction = this.queue.willMove(target);
+			const myAction = this.queue.willMove(source);
+			if (foeAction.choice === 'move' && foeAction.move.flags['contact']) {
+				this.debug(`Tranquility prioritizing ${source.name}'s attack`);
+				this.queue.prioritizeAction(myAction, move);
+				move.accuracy = true;
+				move.priority = 5;
+			}
+		},
 		onModifyMove(move, pokemon) {
 			if (move.id === 'tachyoncutter') move.category === 'Physical';
 			const target = pokemon.side.foe.active[0];
-			const foeAction = this.queue.willMove(target);
-			const foeMove = foeAction?.choice === 'move' ? foeAction.move : null;
+			const action = this.queue.willMove(target);
+			if (action.choice === 'move') {
+				const fMove = this.dex.moves.get(
+			}
+			const fMove = action?.choice === 'move' ? foeAction.move : null;
 			if (foeMove && move.category !== 'Status' && foeMove.flags['contact']) {
 				move.priority = 5;
 				move.critRatio = 5;
