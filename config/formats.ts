@@ -2692,18 +2692,18 @@ export const Formats: FormatList = [
 				}
 			}
 		},
-		onPrepareHit(target, source, move) {
-			// Jack's Tranquility
+		priorityChargeCallback(pokemon) {
+			const target = this.effectState.target;
+			this.add('-message', `priorityChargeCallback triggered`);
+			this.add('-message', 'pokemon:' + pokemon.name)
 			this.add('-message', 'target:' + target.name)
-			this.add('-message', 'source:' + source.name)
-			this.add('-message', `onPrepareHit triggered`);
 			if (
-				move.flags['contact'] && target !== source &&
-				source.getAbility().id === 'tranquility'
+				pokemon !== target &&
+				target.getAbility().id === 'tranquility'
 			) {
 				this.add('-message', `First check passed`);
-				const attackerAction = this.queue.willMove(target);
-				const defenderAction = this.queue.willMove(source);
+				const attackerAction = this.queue.willMove(pokemon);
+				const defenderAction = this.queue.willMove(target);
 				this.add('-message', attackerAction);
 				this.add('-message', defenderAction);
 				if (
@@ -2715,7 +2715,7 @@ export const Formats: FormatList = [
 					return;
 				}
 				this.add('-message', `Second check passed`);
-				this.add('-message', `${source.name}'s intuition let them to move first!`);
+				this.add('-message', `${target.name}'s intuition let them to move first!`);
 				this.queue.prioritzeAction(defenderAction);
 			} else {
 				this.add('-message', `First check failed`);
