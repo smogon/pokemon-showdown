@@ -2694,6 +2694,8 @@ export const Formats: FormatList = [
 		},
 		onPrepareHit(target, source, move) {
 			// Jack's Tranquility
+			this.add('-message', 'target:' + target.name)
+			this.add('-message', 'source:' + source.name)
 			this.add('-message', `onPrepareHit triggered`);
 			if (
 				move.flags['contact'] && target !== source &&
