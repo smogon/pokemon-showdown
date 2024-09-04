@@ -31,10 +31,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target === source || !move || move.category === 'Status') return;
 			const foeAction = this.queue.willMove(target);
 			const myAction = this.queue.willMove(source);
-			this.add('-message', foeAction.choice);
-			this.add('-message', foeAction.move);
+
+			this.add('-message', foeAction);
+			this.add('-message', foeAction.move.id);
 			this.add('-message', foeAction.move.flags);
-			if (foeAction.choice === 'move' && foeAction.move.flags['contact']) {
+			if (foeAction && foeAction.move.flags['contact']) {
 				this.add('-activate', source, 'Tranquility');
 				this.debug(`Tranquility prioritizing ${source.name}'s attack`);
 				this.queue.prioritizeAction(myAction, move);
