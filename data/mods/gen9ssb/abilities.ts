@@ -33,6 +33,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return target.hp - 1;
 			}
 		},
+		onFoeTryMove(target, source, move) {
+			const defender = source.side.foe.active[0];
+			this.add('-message', defender.name);
+		},
+		/*
 		onModifyMove(move, pokemon) {
 			if (!move || move.category === 'Status') return;
 			const target = pokemon.side.foe.active[0];
@@ -47,7 +52,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.priority = 6;
 				move.accuracy = true;
 			}
-		},
+		},*/
 		onPrepareHit(target, source, move) {
 			if (move.id === 'tachyoncutter') move.category === 'Physical';
 		},
