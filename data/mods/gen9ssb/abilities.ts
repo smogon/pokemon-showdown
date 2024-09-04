@@ -34,8 +34,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onFoeTryMove(target, source, move) {
-			const defender = source.side.foe.active[0];
-			this.add('-message', defender.name);
+			if (source === this.effectState.target) {
+				this.add('-message', `YEAH!!!`);
+				this.add('-message', this.effectState.target);
+			}
 		},
 		/*
 		onModifyMove(move, pokemon) {
