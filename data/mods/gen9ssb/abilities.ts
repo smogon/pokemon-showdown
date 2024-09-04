@@ -26,29 +26,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
-		onPrepareHit(target, source, move) {
-			if (move.id === 'tachyoncutter') move.category === 'Physical';
-			if (target === source || !move || move.category === 'Status') return;
-			const foeAction = this.queue.willMove(target);
-			const myAction = this.queue.willMove(source);
-
-			this.add('-message', foeAction);
-			this.add('-message', foeAction.move.id);
-			this.add('-message', foeAction.move.flags);
-			if (foeAction && foeAction.move.flags['contact']) {
-				this.add('-activate', source, 'Tranquility');
-				this.debug(`Tranquility prioritizing ${source.name}'s attack`);
-				this.queue.prioritizeAction(myAction, move);
-				move.accuracy = true;
-				move.priority = 5;
-			}
-		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add('-ability', target, 'Tranquility');
 				return target.hp - 1;
 			}
+		},
+		onPrepareHit(target, source, move) {
+			if (move.id === 'tachyoncutter') move.category === 'Physical';
 		},
 		onHit(target, source, move) {
 			if (move && move.flags['contact']) {
