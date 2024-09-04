@@ -2693,22 +2693,16 @@ export const Formats: FormatList = [
 			}
 		},
 		onBeforeMove(pokemon, target, move) {
+			// Jack's Tranquility
 			if (
 				target.getAbility().id === 'tranquility' && 
 				pokemon !== target && move.flags['contact']
 			) {
-				this.add('-message', `${move.name}: First check passed.`);
 				const tAction = this.queue.willMove(target);
-				if (!tAction || !tAction.move || tAction.move.category === 'Status') {
-					this.add('-message', `${move.name}: Second check failed; ${target.name} either has no action in the queue, is not using a move, or is using a Status move.`);
-					return;
-				}
-				this.add('-message', `${move.name}: Second check passed.`);
+				if (!tAction || !tAction.move || tAction.move.category === 'Status') return;
 				this.add('-message', `${target.name}'s intuition let them move first!`);
 				this.queue.cancelMove(target);
 				this.actions.runMove(tAction.move.name, target, target.getLocOf(pokemon));
-			} else {
-				this.add('-message', `${move.name}: First check failed.`);
 			}
 		},
 		onDisableMove(pokemon) {
