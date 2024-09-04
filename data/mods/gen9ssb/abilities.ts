@@ -33,11 +33,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return target.hp - 1;
 			}
 		},
+		onModifyMove(move, pokemon) {
+			if (!move || move.category === 'Status') return;
+			const target = pokemon.side.foe.active[0];
+			const fAction = this.queue.willMove(target);
+			const uAction = this.queue.willMove(pokemon);
+			const fMove = this.dex.moves.get(fAction.move.id);
+			if (fMove.flags['contact']) {
+				this.add('-activate', pokemon, 'Tranquility');
+				this.add('-message', `${pokemon.name}'s intuition let them move first!`);
+				this.queue.prioritizeAction(uAction);
+				this.effectState.dns = true;
+				move.priority = 6;
+				move.accuracy = true;
+			}
+		},
 		onPrepareHit(target, source, move) {
 			if (move.id === 'tachyoncutter') move.category === 'Physical';
 		},
 		onHit(target, source, move) {
 			if (move && move.flags['contact']) {
+				if (this.effectState.dns) return;
 				target.abilityState.willSlash = true;
 				this.add('-ability', target, 'Tranquility');
 				this.add('-message', `${target.name} prepared Reflexive Slash!`);
@@ -50,6 +66,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.abilityState.willSlash = false;
 			}
 			this.heal(pokemon.maxhp / 5, pokemon, pokemon);
+			this.effectState.dns = false;
 		},
 		onUpdate(pokemon) {
 			pokemon.abilityState.gleamBoost = false;
