@@ -2694,19 +2694,27 @@ export const Formats: FormatList = [
 		},
 		onPrepareHit(target, source, move) {
 			// Jack's Tranquility
+			this.add('-message', `onPrepareHit triggered`);
 			if (
 				move.flags['contact'] && target !== source &&
 				target.getAbility().id === 'tranquility'
 			) {
+				this.add('-message', `First check passed`);
 				const attackerAction = this.queue.willMove(source);
 				const defenderAction = this.queue.willMove(target);
 				if (
 					!attackerAction || !defenderAction ||
 					!attackerAction.move || !defenderAction.move ||
 					defenderAction.move.category === 'Status'
-				) return;
+				) {
+					this.add('-message', `Second check failed`);
+					return;
+				}
+				this.add('-message', `Second check passed`);
 				this.add('-message', `${target.name}'s intuition let them to move first!`);
 				this.queue.prioritzeAction(defenderAction);
+			} else {
+				this.add('-message', `First check failed`);
 			}
 		},
 		onDisableMove(pokemon) {
