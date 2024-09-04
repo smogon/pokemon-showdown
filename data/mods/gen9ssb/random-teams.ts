@@ -194,9 +194,9 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
 	Neptune: {
-		species: 'Pidgeot-Mega', ability: 'Blessing of Veridicus', item: 'Crimson Vows', gender: 'M',
-		moves: ['Bleakwind Storm', 'Inferno', 'Golden Order'],
-		signatureMove: 'Olympic Order',
+		species: 'Pidgeot-Mega', ability: 'Crimson Vow', item: 'Storm Talisman', gender: 'M',
+		moves: ['Bleakwind Storm', 'Magma Storm', 'Thunder Cage'],
+		signatureMove: 'Golden Order',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
 	},
 	/*
