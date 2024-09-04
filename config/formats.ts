@@ -2692,6 +2692,23 @@ export const Formats: FormatList = [
 				}
 			}
 		},
+		onPrepareHit(target, source, move) {
+			// Jack's Tranquility
+			if (
+				move.flags['contact'] && target !== source &&
+				target.getAbility().id === 'tranquility'
+			) {
+				const attackerAction = this.queue.willMove(source);
+				const defenderAction = this.queue.willMove(target);
+				if (
+					!attackerAction || !defenderAction ||
+					!attackerAction.move || !defenderAction.move ||
+					defenderAction.move.category === 'Status'
+				) return;
+				this.add('-message', `${target.name}'s intuition let them to move first!`);
+				this.queue.prioritzeAction(defenderAction);
+			}
+		},
 		onDisableMove(pokemon) {
 			for (const moveSlot of pokemon.moveSlots) {
 				if (moveSlot.id === 'Cascade' && pokemon.abilityState.cascaded) {
