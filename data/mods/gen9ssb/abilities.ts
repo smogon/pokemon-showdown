@@ -31,6 +31,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target === source || !move || move.category === 'Status') return;
 			const foeAction = this.queue.willMove(target);
 			const myAction = this.queue.willMove(source);
+			this.add('-message', ${foeAction.choice});
+			this.add('-message', ${foeAction.move}});
+			this.add('-message', ${foeAction.move.flags}});
 			if (foeAction.choice === 'move' && foeAction.move.flags['contact']) {
 				this.add('-activate', source, 'Tranquility');
 				this.debug(`Tranquility prioritizing ${source.name}'s attack`);
