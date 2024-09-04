@@ -2692,33 +2692,23 @@ export const Formats: FormatList = [
 				}
 			}
 		},
-		priorityChargeCallback(pokemon) {
-			const target = this.effectState.target;
-			this.add('-message', `priorityChargeCallback triggered`);
-			this.add('-message', 'pokemon:' + pokemon.name)
-			this.add('-message', 'target:' + target.name)
+		onBeforeMove(pokemon, target, move) {
 			if (
-				pokemon !== target &&
-				target.getAbility().id === 'tranquility'
+				target.getAbility().id === 'tranquility' && 
+				pokemon !== target && move.flags['contact']
 			) {
-				this.add('-message', `First check passed`);
-				const attackerAction = this.queue.willMove(pokemon);
-				const defenderAction = this.queue.willMove(target);
-				this.add('-message', attackerAction);
-				this.add('-message', defenderAction);
-				if (
-					!attackerAction || !defenderAction ||
-					!attackerAction.move || !defenderAction.move ||
-					defenderAction.move.category === 'Status'
-				) {
-					this.add('-message', `Second check failed`);
+				this.add('-message', `${move.name}: First check passed.`);
+				const tAction = this.queue.willMove(target);
+				if (!tAction || !tAction.move || tAction.move.category === 'Status') {
+					this.add('-message', `${move.name}: Second check failed; ${target.name} either has no action in the queue, is not using a move, or is using a Status move.`);
 					return;
 				}
-				this.add('-message', `Second check passed`);
-				this.add('-message', `${target.name}'s intuition let them to move first!`);
-				this.queue.prioritzeAction(defenderAction);
+				this.add('-message', `${move.name}: Second check passed.`);
+				this.add('-message', `${target.name}'s intuition let them move first!`);
+				this.queue.cancelMove(target);
+				this.actions.runMove(tAction.move.name, target, target.getLocOf(pokemon));
 			} else {
-				this.add('-message', `First check failed`);
+				this.add('-message', `${move.name}: First check failed.`);
 			}
 		},
 		onDisableMove(pokemon) {
