@@ -402,7 +402,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				};
 				pokemon.baseMoveSlots[pokemon.moveSlots.length] = newMove;
 				pokemon.moveSlots[pokemon.moveSlots.length] = newMove;
-				this.add('-message', `${pokemon.name} copied ${target.name}'s ${target.ability.name} and ${this.dex.moves.get(pokemon.moveSlots[pokemon.moveSlots.length - 1].id).name}!`);
+				this.add('-message', `${pokemon.name} copied ${target.name}'s ${target.getAbility().name} and ${this.dex.moves.get(pokemon.moveSlots[pokemon.moveSlots.length - 1].id).name}!`);
 			}
 			// Copying Stat Changes
 			const boosts: SparseBoostsTable = {};
