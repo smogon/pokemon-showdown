@@ -33,28 +33,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return target.hp - 1;
 			}
 		},
-		onFoeTryMove(target, source, move) {
-			if (source === this.effectState.target) {
-				this.add('-message', `YEAH!!!`);
-				this.add('-message', this.effectState.target);
-			}
-		},
-		/*
-		onModifyMove(move, pokemon) {
-			if (!move || move.category === 'Status') return;
-			const target = pokemon.side.foe.active[0];
-			const fAction = this.queue.willMove(target);
-			const uAction = this.queue.willMove(pokemon);
-			const fMove = this.dex.moves.get(fAction.move.id);
-			if (fMove.flags['contact']) {
-				this.add('-activate', pokemon, 'Tranquility');
-				this.add('-message', `${pokemon.name}'s intuition let them move first!`);
-				this.queue.prioritizeAction(uAction);
-				this.effectState.dns = true;
-				move.priority = 6;
-				move.accuracy = true;
-			}
-		},*/
 		onPrepareHit(target, source, move) {
 			if (move.id === 'tachyoncutter') move.category === 'Physical';
 		},
