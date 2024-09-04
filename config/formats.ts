@@ -2702,6 +2702,8 @@ export const Formats: FormatList = [
 				this.add('-message', `First check passed`);
 				const attackerAction = this.queue.willMove(source);
 				const defenderAction = this.queue.willMove(target);
+				this.add('-message', attackerAction);
+				this.add('-message', defenderAction);
 				if (
 					!attackerAction || !defenderAction ||
 					!attackerAction.move || !defenderAction.move ||
