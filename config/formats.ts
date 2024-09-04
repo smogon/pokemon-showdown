@@ -2699,11 +2699,11 @@ export const Formats: FormatList = [
 			this.add('-message', `onPrepareHit triggered`);
 			if (
 				move.flags['contact'] && target !== source &&
-				target.getAbility().id === 'tranquility'
+				source.getAbility().id === 'tranquility'
 			) {
 				this.add('-message', `First check passed`);
-				const attackerAction = this.queue.willMove(source);
-				const defenderAction = this.queue.willMove(target);
+				const attackerAction = this.queue.willMove(target);
+				const defenderAction = this.queue.willMove(source);
 				this.add('-message', attackerAction);
 				this.add('-message', defenderAction);
 				if (
@@ -2715,7 +2715,7 @@ export const Formats: FormatList = [
 					return;
 				}
 				this.add('-message', `Second check passed`);
-				this.add('-message', `${target.name}'s intuition let them to move first!`);
+				this.add('-message', `${source.name}'s intuition let them to move first!`);
 				this.queue.prioritzeAction(defenderAction);
 			} else {
 				this.add('-message', `First check failed`);
