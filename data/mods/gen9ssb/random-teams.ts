@@ -193,12 +193,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Piercing Gleam',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
-	Neptune: {
-		species: 'Pidgeot-Mega', ability: 'Crimson Vow', item: 'Storm Talisman', gender: 'M',
-		moves: ['Bleakwind Storm', 'Magma Storm', 'Thunder Cage'],
-		signatureMove: 'Golden Order',
-		evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
-	},
 	/*
  	Codie: {
 		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
