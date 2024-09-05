@@ -38,7 +38,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onHit(target, source, move) {
 			if (move && move.flags['contact']) {
-				if (this.effectState.dns) return;
+				if (target.abilityState.dns) return;
 				target.abilityState.willSlash = true;
 				this.add('-ability', target, 'Tranquility');
 				this.add('-message', `${target.name} prepared Reflexive Slash!`);
@@ -51,7 +51,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.abilityState.willSlash = false;
 			}
 			this.heal(pokemon.maxhp / 5, pokemon, pokemon);
-			this.effectState.dns = false;
+			pokemon.abilityState.dns = false;
 		},
 		onUpdate(pokemon) {
 			pokemon.abilityState.gleamBoost = false;
