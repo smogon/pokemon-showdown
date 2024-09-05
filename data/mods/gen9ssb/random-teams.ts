@@ -200,6 +200,12 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
 	/*
+	'Castaways': {
+		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
+		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
+		signatureMove: 'Killing Doll',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
+	},
  	Codie: {
 		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
 		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
