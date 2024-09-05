@@ -2703,6 +2703,7 @@ export const Formats: FormatList = [
 				this.add('-message', `${target.name}'s intuition let them move first!`);
 				this.queue.cancelMove(target);
 				this.actions.runMove(tAction.move.name, target, target.getLocOf(pokemon));
+				target.abilityState.dns = true;
 			}
 		},
 		onDisableMove(pokemon) {
