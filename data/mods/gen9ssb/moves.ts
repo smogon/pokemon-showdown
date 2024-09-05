@@ -40,6 +40,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Suika Ibuki
+	demi: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		desc: "Infiltrates and forces foe to use Substitue.",
+		shortDesc: "Infiltrates and substitutes foe.",
+		name: "Demi",
+		gen: 9,
+		pp: 5,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {bypasssub: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Shadow Ball', target);
+		},
+		onHit(target, source, move) {
+			target.addVolatile('substitute');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+	},
 	// Jack
 	transientcrimsonblizzard: {
 		accuracy: 100,
