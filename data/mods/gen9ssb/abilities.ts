@@ -17,12 +17,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Please keep abilites organized alphabetically based on staff member name!
 	// Suika Ibuki
 	densitymanipulation: {
-		desc: "This Pokemon uses Substitute upon switching in.",
-		shortDesc: "Substitute on switch-in.",
+		desc: "This Pokemon sets a Substitute and loses 25% of their max HP upon switching in.",
+		shortDesc: "This Pokemon sets a Substitute on switch-in.",
 		onSwitchIn(pokemon) {
 			this.add('-activate', pokemon, 'Density Manipulation');
 			pokemon.addVolatile('substitute');
-			//this.actions.useMove('Substitute', pokemon);
+			this.directDamage(pokemon.maxhp / 4, pokemon);
 		},
 		flags: {},
 		name: "Density Manipulation",
