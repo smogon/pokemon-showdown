@@ -6,21 +6,15 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	ogerpon: {
+		inherit: true,
+		types: ['Fighting', 'Rock'],
+		abilities: {0: "Density Manipulation"},
+	},
 	dewott: {
 		inherit: true,
 		abilities: {0: "Tranquility"},
 		types: ['Water', 'Fire'],
-	},
-	stonjourner: {
-		inherit: true,
-		abilities: {0: "Love of the Journey"},
-		types: ['Rock', 'Grass'],
-		baseStats: {hp: 100, atk: 125, def: 135, spa: 50, spd: 50, spe: 70},
-	},
-	venomicon: {
-		inherit: true,
-		abilities: {0: "Vociferous Codex"},
-		types: ['Poison', 'Steel'],
 	},
 	aipom: {
 		inherit: true,
@@ -85,14 +79,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 95, atk: 45, def: 50, spa: 90, spd: 80, spe: 100},
 		abilities: {0: "Woven Together, Cohere Forever"},
 	},
-	meltan: {
-		inherit: true,
-		abilities: {0: "Augment the Giants"},
-	},
-	melmetal: {
-		inherit: true,
-		abilities: {0: "Augment the Giants"},
-	},
 	gimmighoulroaming: {
 		inherit: true,
 		types: ['Ghost', 'Electric'],
@@ -108,5 +94,9 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		types: ['Dark', 'Fairy'],
 		abilities: {0: "Angel of Death"},
+	},
+	vikavolt: {
+		inherit: true,
+		abilities: {0: "Battery Life"},
 	},
 };
