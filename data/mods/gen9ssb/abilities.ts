@@ -63,28 +63,40 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.actions.useMove('Reflexive Slash', pokemon, target);
 				pokemon.abilityState.willSlash = false;
 			}
-			this.heal(pokemon.maxhp / 5, pokemon, pokemon);
 			pokemon.abilityState.dns = false;
 		},
 		onUpdate(pokemon) {
 			pokemon.abilityState.gleamBoost = false;
-			if (pokemon.hp < pokemon.maxhp) {
-				for (const moveSlot of pokemon.moveSlots) {
-					const move = this.dex.moves.get('transientcrimsonblizzard');
-					const moveData = {
-						move: move.name,
-						id: move.id,
-						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-						target: move.target,
-						disabled: false,
-						used: false,
-					};
-					if (moveSlot.id === 'piercinggleam') {
-						pokemon.moveSlots[moveSlot] = moveData;
-						pokemon.baseMoveSlots[moveSlot] = moveData;
-					}
-				}
+			if (pokemon.hp === 1) {
+				const gleamIndex = source.moves.indexOf('piercinggleam');
+				const move = this.dex.moves.get('transientcrimsonblizzard');
+				const moveData = {
+					move: move.name,
+					id: move.id,
+					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					target: move.target,
+					disabled: false,
+					used: false,
+				};
+				if (!gleamIndex) return;
+				pokemon.moveSlots[gleamIndex] = moveData;
+				pokemon.baseMoveSlots[gleamIndex] = moveData;
+			} else if (pokemon.hp > 1) {
+				const tcbIndex = source.moves.indexOf('transientcrimsonblizzard');
+				const move = this.dex.moves.get('piercinggleam');
+				const moveData = {
+					move: move.name,
+					id: move.id,
+					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					target: move.target,
+					disabled: false,
+					used: false,
+				};
+				if (!tcbIndex) return;
+				pokemon.moveSlots[tcbIndex] = moveData;
+				pokemon.baseMoveSlots[tcbIndex] = moveData;
 			}
 		},
 		onSwitchOut(pokemon) {
