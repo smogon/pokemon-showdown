@@ -1,4 +1,39 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Suika Ibuki
+	ibukigourd: {
+		name: "Ibuki Gourd",
+		spritenum: 697,
+		desc: "1.5x Attack and +1/16 HP per turn if held by an Ogerpon, otherwise the user loses 1/8 HP instead; only the first move executed can be selected.",
+		fling: {
+			basePower: 80,
+		},
+		onStart(pokemon) {
+			if (pokemon.volatiles['choicelock']) {
+				this.debug('removing choicelock: ' + pokemon.volatiles['choicelock']);
+			}
+			pokemon.removeVolatile('choicelock');
+		},
+		onModifyMove(move, pokemon) {
+			pokemon.addVolatile('choicelock');
+		},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.species.id === 'ogerpon') {
+				return this.chainModify(1.5);
+			}
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			if (pokemon.species.id === 'ogerpon') {
+				this.heal(pokemon.baseMaxhp / 16);
+			} else {
+				this.damage(pokemon.baseMaxhp / 8);
+			}
+		},
+		isChoice: true,
+		gen: 9,
+	},
 	// Jack
 	hagakure: {
 		name: "Hagakure",
