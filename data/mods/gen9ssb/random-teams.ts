@@ -199,6 +199,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Demi',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
+	'Toshinori': {
+		species: 'Machamp-Gmax', ability: 'One for All', item: '', gender: 'M',
+		moves: ['Dynamic Punch', 'Wicked Blow', 'Brave Bird'],
+		signatureMove: 'Heroic Intervention',
+		evs: {hp: 132, atk: 252, spe: 124}, nature: 'Brave',
+	},
 	/*
 	'Castaways': {
 		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
