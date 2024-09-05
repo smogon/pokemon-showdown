@@ -77,13 +77,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onSwitchOut(pokemon) {
 			pokemon.abilityState.gleamBoost = false;
 		},
-		onFaint(pokemon) {
-			for (const ally of pokemon.side.pokemon) {
-				if (ally === pokemon || ally.fainted) continue;
-				ally.abilityState.tcbCritBoost = true;
-			}
-			this.add('-message', `${pokemon.name}'s allies are now more likely to land critical hits!`);
-		},
 	},
 	// Journeyman
 	loveofthejourney: {
