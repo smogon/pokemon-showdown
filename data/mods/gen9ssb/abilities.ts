@@ -19,7 +19,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	densitymanipulation: {
 		desc: "This Pokemon uses Substitute upon switching in.",
 		shortDesc: "Substitute on switch-in.",
-		onStart(pokemon) {
+		onSwitchIn(pokemon) {
 			this.add('-activate', pokemon, 'Density Manipulation');
 			pokemon.addVolatile('substitute');
 			//this.actions.useMove('Substitute', pokemon);
