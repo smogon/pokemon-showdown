@@ -200,7 +200,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
 	'Toshinori': {
-		species: 'Machamp-Gmax', ability: 'One for All', item: '', gender: 'M',
+		species: 'Machamp-Gmax', ability: 'One for All', item: 'High-Density Weights', gender: 'M',
 		moves: ['Dynamic Punch', 'Wicked Blow', 'Brave Bird'],
 		signatureMove: 'Heroic Intervention',
 		evs: {hp: 132, atk: 252, spe: 124}, nature: 'Brave',
