@@ -60,8 +60,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Shadow Ball', target);
 		},
 		onHit(target, source, move) {
-			target.addVolatile('substitute');
-			this.directDamage(target.maxhp / 4, target);
+			if (!target.volatiles['substitute']) {
+				this.directDamage(target.maxhp / 4, target);
+				target.addVolatile('substitute');
+			}
 		},
 		secondary: null,
 		target: "normal",
