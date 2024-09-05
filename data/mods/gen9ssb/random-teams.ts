@@ -193,6 +193,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Piercing Gleam',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 	},
+	'Suika Ibuki': {
+		species: 'Ogerpon', ability: 'Density Manipulation', item: 'Ibuki Gourd', gender: 'F',
+		moves: ['U-Turn', 'Switcheroo', 'Drain Punch'],
+		signatureMove: 'Demi',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+	},
 	/*
  	Codie: {
 		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
