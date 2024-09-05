@@ -61,6 +61,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			target.addVolatile('substitute');
+			this.directDamage(target.maxhp / 4, target);
 		},
 		secondary: null,
 		target: "normal",
