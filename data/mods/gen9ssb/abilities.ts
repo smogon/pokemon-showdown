@@ -15,6 +15,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Suika Ibuki
+	densitymanipulation: {
+		desc: "This Pokemon uses Substitute upon switching in.",
+		shortDesc: "Substitute on switch-in.",
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'Density Manipulation');
+			pokemon.addVolatile('substitute');
+			//this.actions.useMove('Substitute', pokemon);
+		},
+		flags: {},
+		name: "Density Manipulation",
+		gen: 9,
+	},
 	// Jack
 	tranquility: {
 		name: "Tranquility",
