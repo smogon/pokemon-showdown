@@ -34,20 +34,40 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
+			let totalModify = 0;
 			if (pokemon.abilityState.gleamBoost) {
 				pokemon.abilityState.gleamBoost = false;
-				return this.chainModify(1.5);
+				totalModify += 1.5;
 			}
+			if (pokemon.abilityState.damageDoubled) {
+				pokemon.abilityState.damageDoubled = false;
+				totalModify += 2;
+			}
+			return this.chainModify(totalModify);
 		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+			if (effect.effectType !== 'Move' && target.hp === 1) {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+			if (damage >= target.hp && target.hp > 1 && effect && effect.effectType === 'Move') {
 				this.add('-ability', target, 'Tranquility');
 				return target.hp - 1;
 			}
 		},
 		onPrepareHit(target, source, move) {
 			if (move.id === 'tachyoncutter') move.category === 'Physical';
+		},
+		onTryHit(pokemon, target, move) {
+			if (move && move.category === 'Special' && pokemon.hp === 1) {
+				pokemon.abilityState.damageDoubled = true;
+			}
+			if (move && move.category === 'Special' && !pokemon.abilityState.specialNullified && pokemon.hp === 1) {
+				this.add('-immune', pokemon, '[from] ability: Tranquility');
+				pokemon.abilityState.specialNullified = true;
+				return null;
+			}
 		},
 		onHit(target, source, move) {
 			if (move && move.flags['contact']) {
@@ -68,6 +88,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onUpdate(pokemon) {
 			pokemon.abilityState.gleamBoost = false;
 			if (pokemon.hp === 1) {
+				pokemon.cureStatus();
 				const gleamIndex = source.moves.indexOf('piercinggleam');
 				const move = this.dex.moves.get('transientcrimsonblizzard');
 				const moveData = {
