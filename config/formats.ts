@@ -2573,16 +2573,9 @@ export const Formats: FormatList = [
 					pokemon.hp = 0;
 					pokemon.sethp(0);
 				}
-	
 				if (pokemon.getAbility().id === 'autorepair') {
 					if (pokemon.abilityState.permdis || pokemon.fainted || pokemon.isActive) continue;
 					const health = pokemon.maxhp * 0.15;
-					pokemon.hp += health;
-					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
-				}
-				if (pokemon.getAbility().id === 'tranquility') {
-					if (pokemon.fainted || pokemon.isActive) continue;
-					const health = pokemon.maxhp * 0.2;
 					pokemon.hp += health;
 					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
 				}
