@@ -1105,7 +1105,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			dex[species.id] = species;
 		}
 	}
-	console.log("dex size:", Object.keys(dex).length);
+	console.log("filtered dex size:", Object.keys(dex).length);
 
 	// Prioritize searches with the least alternatives.
 	const accumulateKeyCount = (count: number, searchData: AnyObject) =>
@@ -1129,6 +1129,29 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let weak_filter_total_time = 0;
 	let ability_filter_total_time = 0;
 	let forme_filter_total_time = 0;
+
+	// Prepare move validator etc outside the hot loop
+	let validator;
+	let pokemonSource;
+	{
+		const pre_move_filter_start_time = performance.now();
+		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
+		pre_move_get_format_total_time += performance.now() - pre_move_filter_start_time;
+		const formatStr = format ? format[1].name : 'gen9ou';
+		const get_ruletable_start_time = performance.now();
+		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(formatStr));
+		pre_move_get_ruletable_total_time += performance.now() - get_ruletable_start_time;
+		const additionalRules = [];
+		if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
+		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
+		const get_validator_start_time = performance.now();
+		validator = TeamValidator.get(`${formatStr}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
+		pre_move_get_validator_total_time += performance.now() - get_validator_start_time;
+		const get_pokemonsource_start_time = performance.now();
+		pokemonSource = validator.allSources();
+		pre_move_get_pokemonsource_total_time += performance.now() - get_pokemonsource_start_time;
+		pre_move_filter_total_time += performance.now() - pre_move_filter_start_time;
+	}
 	for (const alts of searches) {
 		if (alts.skip) continue;
 		for (const mon in dex) {
@@ -1306,22 +1329,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			stat_filter_total_time += performance.now() - stat_filter_start_time;
 			if (matched) continue;
 
-			const pre_move_filter_start_time = performance.now();
-			const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
-			pre_move_get_format_total_time += performance.now() - pre_move_filter_start_time;
-			const formatStr = format ? format[1].name : 'gen9ou';
-			const get_ruletable_start_time = performance.now();
-			const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(formatStr));
-			pre_move_get_ruletable_total_time += performance.now() - get_ruletable_start_time;
-			const additionalRules = [];
-			if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
-			if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
-			const get_validator_start_time = performance.now();
-			const validator = TeamValidator.get(`${formatStr}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
-			pre_move_get_validator_total_time += performance.now() - get_validator_start_time;
-			const get_pokemonsource_start_time = performance.now();
-			const pokemonSource = validator.allSources();
-			pre_move_get_pokemonsource_total_time += performance.now() - get_pokemonsource_start_time;
 			const move_filter_start_time = performance.now();
 			for (const move of Object.keys(alts.moves).map(x => mod.moves.get(x))) {
 				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
@@ -1331,7 +1338,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (!pokemonSource.size()) break;
 			}
 			move_filter_total_time += performance.now() - move_filter_start_time;
-			pre_move_filter_total_time += move_filter_start_time - pre_move_filter_start_time;
 			if (matched) continue;
 
 			delete dex[mon];
@@ -1387,7 +1393,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
-	console.log("sort:\t", performance.now() - sort_start_time, "ms");
+	console.log("sort", performance.now() - sort_start_time, "ms");
 
 	if (usedMod === 'gen7letsgo') {
 		results = results.filter(name => {
@@ -1436,7 +1442,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
-	console.log("total run time:\t\t\t", performance.now() - start_time, "ms");
+	console.log("entire run time:\t\t\t", performance.now() - start_time, "ms");
 	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
 }
