@@ -1159,6 +1159,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	for (const alts of searches) {
 		if (alts.skip) continue;
+		const move_filter_start_time = performance.now();
+		const altsMoves = Object.keys(alts.moves).map(x => mod.moves.get(x));
+		move_filter_get_list_total_time += performance.now() - move_filter_start_time;
+		move_filter_total_time += performance.now() - move_filter_start_time;
 		for (const mon in dex) {
 			let matched = false;
 			if (alts.gens && Object.keys(alts.gens).length) {
@@ -1334,10 +1338,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			stat_filter_total_time += performance.now() - stat_filter_start_time;
 			if (matched) continue;
 
-			const move_filter_start_time = performance.now();
-			const mod_moves = Object.keys(alts.moves).map(x => mod.moves.get(x));
-			move_filter_get_list_total_time += performance.now() - move_filter_start_time;
-			for (const move of mod_moves) {
+			const check_moves_start_time = performance.now();
+			for (const move of altsMoves) {
 				const learn_check_start_time = performance.now();
 				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					move_filter_learn_check_total_time += performance.now() - learn_check_start_time;
@@ -1347,7 +1349,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				move_filter_learn_check_total_time += performance.now() - learn_check_start_time;
 				if (!pokemonSource.size()) break;
 			}
-			move_filter_total_time += performance.now() - move_filter_start_time;
+			move_filter_total_time += performance.now() - check_moves_start_time;
 			if (matched) continue;
 
 			delete dex[mon];
