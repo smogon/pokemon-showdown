@@ -1355,6 +1355,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			delete dex[mon];
 		}
+		console.log(pokemonSource);
 	}
 	const filters_total_time = performance.now() - filters_start_time;
 	console.log("filters total:\t", filters_total_time, "ms");
