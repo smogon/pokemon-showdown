@@ -1074,7 +1074,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			searches.push(orGroup);
 		}
 	}
-	console.log("query prep:\t", performance.now() - query_prep_start_time, "ms");
+	const query_prep_total_time = performance.now() - query_prep_start_time;
+	console.log("query prep:\t", query_prep_total_time, "ms");
 	if (
 		showAll && searches.length === 0 && singleTypeSearch === null &&
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
@@ -1117,11 +1118,15 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	// there's probably a package to do nested profiling but this is fine - we're not trying to measure microseconds
 	const filters_start_time = performance.now();
 	let move_filter_total_time = 0;
+	let move_filter_get_list_total_time = 0;
+	let move_filter_learn_check_total_time = 0;
+
 	let pre_move_filter_total_time = 0;
 	let pre_move_get_format_total_time = 0;
 	let pre_move_get_ruletable_total_time = 0;
 	let pre_move_get_validator_total_time = 0;
 	let pre_move_get_pokemonsource_total_time = 0;
+
 	let stat_filter_total_time = 0;
 	let egg_filter_total_time = 0;
 	let type_filter_total_time = 0;
@@ -1330,11 +1335,16 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (matched) continue;
 
 			const move_filter_start_time = performance.now();
-			for (const move of Object.keys(alts.moves).map(x => mod.moves.get(x))) {
+			const mod_moves = Object.keys(alts.moves).map(x => mod.moves.get(x));
+			move_filter_get_list_total_time += performance.now() - move_filter_start_time;
+			for (const move of mod_moves) {
+				const learn_check_start_time = performance.now();
 				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+					move_filter_learn_check_total_time += performance.now() - learn_check_start_time;
 					matched = true;
 					break;
 				}
+				move_filter_learn_check_total_time += performance.now() - learn_check_start_time;
 				if (!pokemonSource.size()) break;
 			}
 			move_filter_total_time += performance.now() - move_filter_start_time;
@@ -1343,7 +1353,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			delete dex[mon];
 		}
 	}
-	console.log("filters total:\t", performance.now() - filters_start_time, "ms");
+	const filters_total_time = performance.now() - filters_start_time;
+	console.log("filters total:\t", filters_total_time, "ms");
 	console.log("\tstat filters:\t", stat_filter_total_time, "ms");
 	console.log("\tegg filters:\t", egg_filter_total_time, "ms");
 	console.log("\ttype filters:\t", type_filter_total_time, "ms");
@@ -1351,12 +1362,18 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	console.log("\tweak filters:\t", weak_filter_total_time, "ms");
 	console.log("\tability filters:", ability_filter_total_time, "ms");
 	console.log("\tforme filters:\t", forme_filter_total_time, "ms");
+
 	console.log("\tprepare move filters:", pre_move_filter_total_time, "ms");
 	console.log("\t\tformat:   \t", pre_move_get_format_total_time, "ms");
 	console.log("\t\truletable:\t", pre_move_get_ruletable_total_time, "ms");
 	console.log("\t\tvalidator:\t", pre_move_get_validator_total_time, "ms");
 	console.log("\t\tpokesource:\t", pre_move_get_pokemonsource_total_time, "ms");
+	console.log("\t\tunaccounted:\t", pre_move_filter_total_time - pre_move_get_format_total_time - pre_move_get_ruletable_total_time - pre_move_get_validator_total_time - pre_move_get_pokemonsource_total_time, "ms");
+
 	console.log("\tmove filters:\t", move_filter_total_time, "ms");
+	console.log("\t\tget moves:\t", move_filter_get_list_total_time, "ms");
+	console.log("\t\tlearn check:\t", move_filter_learn_check_total_time, "ms");
+	console.log("\t\tunaccounted:\t", move_filter_total_time - move_filter_get_list_total_time - move_filter_learn_check_total_time, "ms");
 
 	const stat = sort?.slice(0, -1);
 
@@ -1393,7 +1410,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
-	console.log("sort", performance.now() - sort_start_time, "ms");
+	const sort_total_time = performance.now() - sort_start_time;
+	console.log("sort", sort_total_time, "ms");
 
 	if (usedMod === 'gen7letsgo') {
 		results = results.filter(name => {
@@ -1442,7 +1460,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
-	console.log("entire run time:\t\t\t", performance.now() - start_time, "ms");
+	const total_time = performance.now() - start_time;
+	console.log("*** entire run time:\t\t\t", total_time, "ms ***");
+	console.log("*** unaccounted:\t\t\t", total_time - query_prep_total_time - filters_total_time - sort_total_time, "ms ***");
 	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
 }
