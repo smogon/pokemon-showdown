@@ -2391,7 +2391,7 @@ export class TeamValidator {
 		const baseSpecies = dex.species.get(originalSpecies);
 
 		const format = this.format;
-		const ruleTable = dex.formats.getRuleTable(format);
+		const ruleTable = this.ruleTable;
 		const level = set.level || 100;
 
 		let cantLearnReason = null;
