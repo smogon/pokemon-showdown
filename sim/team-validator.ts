@@ -2693,7 +2693,9 @@ export class TeamValidator {
 		if (!setSources.restrictiveMoves) {
 			setSources.restrictiveMoves = [];
 		}
-		setSources.restrictiveMoves.push(move.name);
+		if (!setSources.restrictiveMoves.includes(move.name)) {
+			setSources.restrictiveMoves.push(move.name);
+		}
 
 		const checkedSpecies = babyOnly ? fullLearnset[fullLearnset.length - 1].species : baseSpecies;
 		if (checkedSpecies && setSources.isFromPokemonGo &&

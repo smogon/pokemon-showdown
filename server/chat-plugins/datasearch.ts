@@ -1135,6 +1135,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let ability_filter_total_time = 0;
 	let forme_filter_total_time = 0;
 
+	let check_can_learn_call_count = 0;
+
 	// Prepare move validator etc outside the hot loop
 	let validator;
 	let pokemonSource;
@@ -1342,6 +1344,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const check_moves_start_time = performance.now();
 			for (const move of altsMoves) {
 				const learn_check_start_time = performance.now();
+				check_can_learn_call_count += 1;
 				if (!validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					move_filter_learn_check_total_time += performance.now() - learn_check_start_time;
 					matched = true;
@@ -1467,6 +1470,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	const total_time = performance.now() - start_time;
 	console.log("*** entire run time:\t\t\t", total_time, "ms ***");
 	console.log("*** unaccounted:\t\t\t", total_time - query_prep_total_time - filters_total_time - sort_total_time, "ms ***");
+	console.log("called checkCanLearn", check_can_learn_call_count, "times");
 	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
 }
