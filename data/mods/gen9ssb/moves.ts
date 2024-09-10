@@ -40,6 +40,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Ace - Attack Card
 	attack: {
 		accuracy: 100,
 		basePower: 30,
