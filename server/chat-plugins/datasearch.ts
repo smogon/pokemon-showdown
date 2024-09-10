@@ -1136,11 +1136,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let forme_filter_total_time = 0;
 
 	let check_can_learn_call_count = 0;
-
-	// Prepare move validator etc outside the hot loop
+	// Prepare move validator and pokemonSource outside the hot loop
+	// but don't prepare them at all if there are no moves to check...
+	// These only ever get accessed if there are moves to filter by.
 	let validator;
 	let pokemonSource;
-	{
+	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
 		const pre_move_filter_start_time = performance.now();
 		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
 		pre_move_get_format_total_time += performance.now() - pre_move_filter_start_time;
@@ -1345,12 +1346,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			for (const move of altsMoves) {
 				const learn_check_start_time = performance.now();
 				check_can_learn_call_count += 1;
+				/** @ts-expect-error validator and pokemonSource won't be undefined if there's at least one move */
 				if (!validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					move_filter_learn_check_total_time += performance.now() - learn_check_start_time;
 					matched = true;
 					break;
 				}
 				move_filter_learn_check_total_time += performance.now() - learn_check_start_time;
+				/** @ts-expect-error pokemonSource won't be undefined if there's at least one move */
 				if (!pokemonSource.size()) break;
 			}
 			move_filter_total_time += performance.now() - check_moves_start_time;
@@ -1358,7 +1361,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			delete dex[mon];
 		}
-		console.log(pokemonSource);
 	}
 	const filters_total_time = performance.now() - filters_start_time;
 	console.log("filters total:\t", filters_total_time, "ms");
@@ -1463,6 +1465,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
 	} else if (results.length === 1) {
+		const total_time = performance.now() - start_time;
+		console.log("*** entire run time:\t\t\t", total_time, "ms ***");
+		console.log("*** unaccounted:\t\t\t", total_time - query_prep_total_time - filters_total_time - sort_total_time, "ms ***");
+		console.log("called checkCanLearn", check_can_learn_call_count, "times");
 		return {dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}`};
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
