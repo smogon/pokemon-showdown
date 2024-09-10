@@ -6,6 +6,12 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	kadabra: {
+		inherit: true,
+		types: ['Ice', 'Psychic'],
+		abilities: {0: "Wild Card"},
+		baseStats: {hp: 100, atk: 70, def: 70, spa: 70, spd: 70, spe: 70},
+	},
 	ogerpon: {
 		inherit: true,
 		types: ['Fighting', 'Rock'],
