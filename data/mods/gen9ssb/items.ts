@@ -81,9 +81,28 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Colossus Carrier",
 		gen: 9,
 		onTakeItem: false,
-		shortDesc: "The holder can hold up to eight additional items.",
-		desc: "The holder can hold up to eight additional items, other than Colossus Carrier, that are unaffected by Knock Off or other means of being taken, disabled, or removed.",
-		// Handled in ../config/formats.ts
+		shortDesc: "User can hold 8 items; New item each turn.",
+		desc: "The holder can hold up to eight additional items, other than Colossus Carrier, that are unaffected by Knock Off or other means of being taken, disabled, or removed. Colossus Carrier itself also cannot be taken, disabled, or removed. At the end of each turn, the holder picks up a random item that it isn't already holding.",
+		onResidual(pokemon) {
+			if (!pokemon.abilityState.carrierItems) pokemon.abilityState.carrierItems = [];
+			const items = this.dex.items.all().filter(item => (
+				pokemon.item !== item &&
+				!pokemon.abilityState.carrierItems.includes(item) &&
+				!item.name.includes('TR') && !item.itemUser &&
+				!item.name.includes('Power') && !item.isPokeball &&
+				!item.megaStone && !item.unusable
+			));
+			const item = this.sample(items);
+			if (pokemon.abilityState.carrierItems.length < 8 && pokemon.item === 'colossuscarrier') {
+				pokemon.abilityState.carrierItems.push(item);
+				this.add('-anim', pokemon, 'Splash', pokemon);
+				this.add('-message', `${pokemon.name} found one ${item.name}!`);
+			} else if (pokemon.abilityState.carrierItems.length >= 8 || !pokemon.item || pokemon.item !== 'colossuscarrier') {
+				this.add('-anim', pokemon, 'Celebrate', pokemon);
+				this.add('-message', `${pokemon.name} found one ${item.name}, but has no more capacity for items!`);
+			}
+		},
+		// Ability to carry multiple items handled in ../config/formats.ts
 	},
 	// Codie
 	evileyeoformsbygore: {
