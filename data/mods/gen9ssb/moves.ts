@@ -40,6 +40,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	attack: {
+		accuracy: 100,
+		basePower: 30,
+		category: "Physical",
+		name: "Attack",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
 	// Suika Ibuki
 	demi: {
 		accuracy: 100,
@@ -50,7 +63,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Demi",
 		gen: 9,
 		pp: 5,
-		noPPBoosts: true,
 		priority: 0,
 		flags: {bypasssub: 1, mirror: 1, protect: 1},
 		onTryMove() {
