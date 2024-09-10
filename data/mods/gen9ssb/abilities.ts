@@ -15,6 +15,97 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Ace
+	wildcard: {
+		name: "Wild Card",
+		gen: 9,
+		flags: {},
+		onStart(pokemon) {
+			if (!pokemon.abilityState.cards) pokemon.abilityState.cards = [];
+			const cardTypes = ['Attack', 'Defense', 'Life', 'Support'];
+			switch (pokemon.abilityState.cards.length) {
+				case undefined:
+				case 0:
+				case 1:
+					let draws = [];
+					draws.push(this.sample(cardTypes));
+					draws.push(this.sample(cardTypes));
+					pokemon.abilityState.cards.push(draws[0]);
+					pokemon.abilityState.cards.push(draws[1]);
+					if (draws[0] === draws[1]) {
+						this.add('-message', `${pokemon.name} drew two ${draws[0]} cards!`);
+					} else {
+						this.add('-message', `${pokemon.name} drew one ${draws[0]} card and one ${draws[1]} card!`);
+					}
+					break;
+				case 2:
+				case 3:
+				case 4:
+					let draw = this.sample(cardTypes);
+					pokemon.abilityState.cards.push(draw);
+					this.add('-message', `${pokemon.name} drew a ${draw} card!`);
+					break;
+			}
+			if (pokemon.side.faintedThisTurn && pokemon.abilityState.cards.length < 5) {
+				let draw = this.sample(cardTypes);
+				pokemon.abilityState.cards.push(draw);
+				this.add('-message', `${pokemon.name} drew a ${draw} card!`);
+			}
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				if (source.abilityState.cards.length < 4) {
+					let draws = [];
+					draws.push(this.sample(cardTypes));
+					draws.push(this.sample(cardTypes));
+					source.abilityState.cards.push(draws[0]);
+					source.abilityState.cards.push(draws[1]);
+					if (draws[0] === draws[1]) {
+						this.add('-message', `${source.name} drew two ${draws[0]} cards!`);
+					} else {
+						this.add('-message', `${source.name} drew one ${draws[0]} card and one ${draws[1]} card!`);
+					}
+				} else if (source.abilityState.cards.length === 4) {
+					let draw = this.sample(cardTypes);
+					source.abilityState.cards.push(draw);
+					this.add('-message', `${source.name} drew a ${draw} card!`);
+				}
+			}
+		},
+		onResidual(pokemon) {
+			if (pokemon.abilityState.cards.length < 5) {
+				const r = ['Attack Hand', 'Defense Hand', 'Life Hand', 'Support Hand'];
+				const rSel = this.sample(r);
+				const move = this.dex.getActiveMove(rSel);
+				const moveData = {
+					move: move.name,
+					id: move.id,
+					pp: move.pp,
+					maxpp: move.pp,
+					target: move.target,
+					disabled: false,
+					used: false,
+				};
+				pokemon.moveSlots[3] = moveData;
+				pokemon.baseMoveSlots[3] = moveData;
+				this.add('-message', `${pokemon.name} swapped to their ${move.name}!`);
+			} else if (pokemon.abilityState.cards.length === 5) {
+				const move = this.dex.getActiveMove('Jackpot Shot');
+				const moveData = {
+					move: move.name,
+					id: move.id,
+					pp: move.pp,
+					maxpp: move.pp,
+					target: move.target,
+					disabled: false,
+					used: false,
+				};
+				pokemon.moveSlots[3] = moveData;
+				pokemon.baseMoveSlots[3] = moveData;
+				this.add('-message', `${pokemon.name} unlocked ${move.name}!`);
+			}
+		},
+	},
 	// Suika Ibuki
 	densitymanipulation: {
 		desc: "This Pokemon sets a Substitute and loses 25% of their max HP upon switching in.",
