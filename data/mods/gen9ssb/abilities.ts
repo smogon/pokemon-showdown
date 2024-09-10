@@ -16,6 +16,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
 	// Ace
+	/*
 	wildcard: {
 		name: "Wild Card",
 		gen: 9,
@@ -117,15 +118,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				for (const card of source.abilityState.cards) {
 					switch (card) {
 						case 'Attack':
-							
+							let damage = this.actions.getDamage(source, foe, 'Attack');
+							this.damage(damage, foe);
+							break;
 						case 'Defense':
 						case 'Life':
 						case 'Support':
 					}
 				}
+				source.abilityState.cards = [];
 			}
 		},
 	},
+ 	*/
 	// Suika Ibuki
 	densitymanipulation: {
 		desc: "This Pokemon sets a Substitute and loses 25% of their max HP upon switching in.",
