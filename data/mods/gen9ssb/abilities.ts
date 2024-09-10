@@ -105,6 +105,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${pokemon.name} unlocked ${move.name}!`);
 			}
 		},
+		onModifyMove(move, pokemon) {
+			if (move.id === 'teleport') {
+				move.priority = 0;
+			}
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			const foe = source.side.foe.active[0];
+			if (move.id === 'teleport' && source.abilityState.cards && source.abilityState.cards.length) {
+				this.add('-message', `${source.name} emptied their deck!`);
+				for (const card of source.abilityState.cards) {
+					switch (card) {
+						case 'Attack':
+							
+						case 'Defense':
+						case 'Life':
+						case 'Support':
+					}
+				}
+			}
+		},
 	},
 	// Suika Ibuki
 	densitymanipulation: {
