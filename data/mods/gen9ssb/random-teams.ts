@@ -199,13 +199,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Demi',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
-	Ace: {
+	/*
+ 	Ace: {
 		species: 'Kadabra', ability: 'Wild Card', item: 'Akademia Deck', gender: 'M',
 		moves: ['Teleport', 'Icicle Spear', 'Extrasensory'],
 		signatureMove: 'Jackpot Shot',
 		evs: {hp: 10, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, nature: 'Serious',
 	},
-	/*
 	'Castaways': {
 		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
 		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
