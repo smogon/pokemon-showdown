@@ -104,11 +104,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (move.hit === 2) move.type = 'Ice';
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			pokemon.faint();
 			for (const ally of pokemon.side.pokemon) {
 				if (ally === pokemon || ally.fainted) continue;
 				ally.abilityState.tcbCritBoost = true;
 			}
+			pokemon.faint();
 			this.add('-message', `${pokemon.name}'s allies are now more likely to land critical hits!`);
 		},
 		flags: {reflectable: 1, protect: 1, mirror: 1},
