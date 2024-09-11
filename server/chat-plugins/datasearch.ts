@@ -1135,6 +1135,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let ability_filter_total_time = 0;
 	let forme_filter_total_time = 0;
 
+	let delete_total_time = 0;
+
 	let check_can_learn_call_count = 0;
 	// Prepare move validator and pokemonSource outside the hot loop
 	// but don't prepare them at all if there are no moves to check...
@@ -1359,7 +1361,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			move_filter_total_time += performance.now() - check_moves_start_time;
 			if (matched) continue;
 
+			const delete_start_time = performance.now();
 			delete dex[mon];
+			delete_total_time += performance.now() - delete_start_time;
 		}
 	}
 	const filters_total_time = performance.now() - filters_start_time;
@@ -1383,6 +1387,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	console.log("\t\tget moves:\t", move_filter_get_list_total_time, "ms");
 	console.log("\t\tlearn check:\t", move_filter_learn_check_total_time, "ms");
 	console.log("\t\tunaccounted:\t", move_filter_total_time - move_filter_get_list_total_time - move_filter_learn_check_total_time, "ms");
+	console.log("\tdelete from dex:\t", delete_total_time, "ms");
 
 	const stat = sort?.slice(0, -1);
 
@@ -1420,7 +1425,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results.push(dex[mon].name);
 	}
 	const sort_total_time = performance.now() - sort_start_time;
-	console.log("sort", sort_total_time, "ms");
+	console.log("sort:\t", sort_total_time, "ms");
 
 	if (usedMod === 'gen7letsgo') {
 		results = results.filter(name => {
@@ -1446,6 +1451,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 
+	const format_result_start_time = performance.now();
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	if (results.length > 1) {
 		results.sort();
@@ -1473,9 +1479,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
+	const format_result_total_time = performance.now() - format_result_start_time;
 	const total_time = performance.now() - start_time;
+	console.log("format result:\t", format_result_total_time, "ms");
 	console.log("*** entire run time:\t\t\t", total_time, "ms ***");
-	console.log("*** unaccounted:\t\t\t", total_time - query_prep_total_time - filters_total_time - sort_total_time, "ms ***");
+	console.log("*** unaccounted:\t\t\t", total_time - query_prep_total_time - filters_total_time - sort_total_time - format_result_total_time, "ms ***");
 	console.log("called checkCanLearn", check_can_learn_call_count, "times");
 	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
