@@ -2569,10 +2569,7 @@ export const Formats: FormatList = [
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
 				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
-				if (pokemon.hp <= 0 && !pokemon.fainted) {
-					pokemon.hp = 0;
-					pokemon.sethp(0);
-				}
+				if (pokemon.hp <= 0 && !pokemon.fainted) pokemon.hp = 0;
 				if (pokemon.getAbility().id === 'autorepair') {
 					if (pokemon.abilityState.permdis || pokemon.fainted || pokemon.isActive) continue;
 					const health = pokemon.maxhp * 0.15;
@@ -2593,7 +2590,6 @@ export const Formats: FormatList = [
 		},
 		onBeforeSwitchIn(pokemon) {
 			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
-				this.add('-message', `onBeforeSwitchIn for Colossus Carrier triggered`);
 				let format = this.format;
 				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
 				if (!pokemon.m.sharedItemsUsed) pokemon.m.sharedItemsUsed = [];
@@ -2698,16 +2694,6 @@ export const Formats: FormatList = [
 				this.actions.runMove(tAction.move.name, target, target.getLocOf(pokemon));
 				target.abilityState.dns = true;
 			}
-		},
-		onDisableMove(pokemon) {
-			for (const moveSlot of pokemon.moveSlots) {
-				if (moveSlot.id === 'Cascade' && pokemon.abilityState.cascaded) {
-					pokemon.disableMove(moveSlot.id, false);
-				}
-			}
-		},
-		onSwitchOut(pokemon) {
-			if (pokemon.abilityState.cascaded) pokemon.abilityState.cascaded = false;
 		},
 		//onHit(target, source, move) {
 			//this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
