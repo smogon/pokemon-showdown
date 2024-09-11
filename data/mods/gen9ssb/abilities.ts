@@ -205,7 +205,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			pokemon.abilityState.gleamBoost = false;
 			if (pokemon.hp === 1) {
 				pokemon.cureStatus();
-				const gleamIndex = source.moves.indexOf('piercinggleam');
+				const gleamIndex = pokemon.moves.indexOf('piercinggleam');
 				const move = this.dex.moves.get('transientcrimsonblizzard');
 				const moveData = {
 					move: move.name,
@@ -220,7 +220,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.moveSlots[gleamIndex] = moveData;
 				pokemon.baseMoveSlots[gleamIndex] = moveData;
 			} else if (pokemon.hp > 1) {
-				const tcbIndex = source.moves.indexOf('transientcrimsonblizzard');
+				const tcbIndex = pokemon.moves.indexOf('transientcrimsonblizzard');
 				const move = this.dex.moves.get('piercinggleam');
 				const moveData = {
 					move: move.name,
