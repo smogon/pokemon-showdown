@@ -2563,6 +2563,7 @@ export const Formats: FormatList = [
 		onModifyCritRatio(critRatio, source, target) {
 			if (source.abilityState.tcbCritBoost) {
 				this.debug(`TCB boosting ${source.name}'s crit ratio`);
+				this.add('-message', `${source.name} GOT A TCB BOOST WOOOOOOOOOOOOOO CRITS FOR EVERYBODY BABY`);
 				return critRatio + 1;
 			}
 		},
