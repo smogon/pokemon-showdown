@@ -2701,6 +2701,183 @@ export const Formats: FormatList = [
 		//},
 	},
 	{
+		name: "[Gen 9] Super Staff Bros Ultimate FFA",
+		desc: "The fourth iteration of Super Staff Bros is here! Battle with a random team of gooners... 4-PLAYER STYLE!!!",
+		threads: [
+			`&bullet; <a href="https://docs.google.com/spreadsheets/d/1HGB2YDZ-Pe2MtWa-IX8d24r4j2rxAkvIgP9NeeyNG0Y/edit?gid=200255702#gid=200255702">See the Roster</a>`,
+		],
+
+		mod: 'gen9ssb',
+		debug: true,
+		gameType: 'freeforall',
+		team: 'randomStaffBros',
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Team Preview', 'Terastal Clause'],
+		onBegin() {
+			// TODO look into making an event to put this right after turn|1
+			// https://discordapp.com/channels/630837856075513856/630845310033330206/716126469528485909
+			// Requires client change
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
+					const dmg = pokemon.maxhp - 1;
+					this.debug('shifu robot starts at 1 hp due to autorepair')
+					pokemon.hp -= dmg;
+				}
+			}
+			this.add(`raw|<div class='broadcast-blue'><b>The fourth iteration of Super Staff Brothers! Battle with a random team of gooners.<br /><a href="https://docs.google.com/spreadsheets/d/1HGB2YDZ-Pe2MtWa-IX8d24r4j2rxAkvIgP9NeeyNG0Y/edit?gid=200255702#gid=200255702" target="_blank">SEE THE ROSTER</a></b></div>`);
+			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
+		},
+		getSharedItems(pokemon) {
+			if (pokemon.item && pokemon.item === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+				const items = new Set<string>();
+				for (const baggedItem of pokemon.abilityState.carrierItems) {
+					if (items.has(baggedItem)) continue;
+					items.add(baggedItem);
+				}
+				if (items.has(pokemon.item)) items.delete(pokemon.item);
+				return items;
+			}
+		},
+		onModifyCritRatio(critRatio, source, target) {
+			if (source.abilityState.tcbCritBoost) {
+				this.debug(`TCB boosting ${source.name}'s crit ratio`);
+				this.add('-message', `${source.name} GOT A TCB BOOST WOOOOOOOOOOOOOO CRITS FOR EVERYBODY BABY`);
+				return critRatio + 1;
+			}
+		},
+		onResidual() {
+			for (const pokemon of this.getAllPokemon()) {
+				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
+				if (pokemon.hp <= 0 && !pokemon.fainted) pokemon.hp = 0;
+				if (pokemon.getAbility().id === 'autorepair') {
+					if (pokemon.abilityState.permdis || pokemon.fainted || pokemon.isActive) continue;
+					const health = pokemon.maxhp * 0.15;
+					pokemon.hp += health;
+					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
+				}
+			}
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.species.id === 'mimikyubusted') {
+					if (!pokemon.abilityState.dollDur || pokemon.abilityState.dollDur <= 0) {
+						pokemon.formeChange('Mimikyu');
+						pokemon.abilityState.dollDur = 0;
+					} else if (pokemon.abilityState.dollDur) {
+						pokemon.abilityState.dollDur--;
+					}
+				}
+			}
+		},
+		onBeforeSwitchIn(pokemon) {
+			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
+				let format = this.format;
+				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
+				if (!pokemon.m.sharedItemsUsed) pokemon.m.sharedItemsUsed = [];
+				for (const item of format.getSharedItems!(pokemon)) {
+					if (pokemon.m.sharedItemsUsed.includes(item)) continue;
+					const effect = 'item:' + item;
+					pokemon.volatiles[effect] = {id: this.toID(effect), target: pokemon};
+					if (!pokemon.m.items) pokemon.m.items = [];
+					if (!pokemon.m.items.includes(effect)) pokemon.m.items.push(effect);
+				}
+			}
+		},
+		onSwitchInPriority: 100,
+		onSwitchIn(pokemon) {
+			if (pokemon.abilityState.cascaded) pokemon.abilityState.cascaded = false;
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			const ability = target.getAbility();
+			if (pokemon.abilityState.ran) pokemon.addVolatile('shikigamiran');
+			if (ability && pokemon.item.id === 'sketchbook') {
+				const effect = 'ability:' + ability.id;
+				pokemon.addVolatile(effect);
+				this.add('-message', `${pokemon.name} sketched ${target.name}'s ${ability.name}!`);
+			}
+			let name: string = this.toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
+			if (this.dex.species.get(name).exists || this.dex.moves.get(name).exists ||
+				this.dex.abilities.get(name).exists || name === 'blitz') {
+				// Certain pokemon have volatiles named after their id
+				// To prevent overwriting those, and to prevent accidentaly leaking
+				// that a pokemon is on a team through the onStart even triggering
+				// at the start of a match, users with pokemon names will need their
+				// statuses to end in "user".
+				name = name + 'user';
+			}
+			// Add the mon's status effect to it as a volatile.
+			const status = this.dex.conditions.get(name);
+			if (status?.exists) {
+				pokemon.addVolatile(name, pokemon);
+			}
+			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
+				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
+				!pokemon.terastallized) {
+				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			}
+
+			// Handling Colossus Carrier
+			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
+				this.add('-message', `onSwitchIn for Colossus Carrier triggered`);
+				let format = this.format;
+				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
+				for (const item of format.getSharedItems!(pokemon)) {
+					if (pokemon.m.sharedItemsUsed.includes(item)) continue;
+					const effect = 'item:' + item;
+					delete pokemon.volatiles[effect];
+					pokemon.addVolatile(effect);
+				}
+			}
+		},
+		onUpdate() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && !pokemon.abilityState.reviveStarted) {
+					pokemon.abilityState.reviveStarted = true;
+					pokemon.abilityState.deathTurn = this.turn;
+				}
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && pokemon.abilityState.reviveStarted) {
+					let turnCount = this.turn - pokemon.abilityState.deathTurn;
+					if (turnCount >= 6) {
+						pokemon.fainted = false;
+						pokemon.faintQueued = false;
+						pokemon.subFainted = false;
+						pokemon.status = '';
+						pokemon.hp = 1;
+						pokemon.sethp(1);
+						pokemon.side.pokemonLeft++;
+						pokemon.abilityState.reviveStarted = false;
+						this.add('-message', `${pokemon.getAbility().name} activated!`);
+						this.add('-message', `${pokemon.name} is back in the fight!`);
+					}
+				}
+				if (pokemon.item && pokemon.item === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
+					let format = this.format;
+					if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
+					for (const item of format.getSharedItems!(pokemon)) {
+						if (!pokemon.m.sharedItemsUsed) pokemon.m.sharedItemsUsed = [];
+						if (pokemon.m.sharedItemsUsed.includes(item)) continue;
+						const effect = 'item:' + item;
+						delete pokemon.volatiles[effect];
+						pokemon.addVolatile(effect);
+					}
+				}
+			}
+		},
+		onBeforeMove(pokemon, target, move) {
+			// Jack's Tranquility
+			if (
+				target.getAbility().id === 'tranquility' && 
+				pokemon !== target && move.flags['contact']
+			) {
+				const tAction = this.queue.willMove(target);
+				if (!tAction || !tAction.move || tAction.move.category === 'Status') return;
+				this.add('-message', `${target.name}'s intuition let them move first!`);
+				this.queue.cancelMove(target);
+				this.actions.runMove(tAction.move.name, target, target.getLocOf(pokemon));
+				target.abilityState.dns = true;
+			}
+		},
+		//onHit(target, source, move) {
+			//this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
+		//},
+	},
+	{
 		name: "[Gen 9] Monotype Random Battle",
 
 		mod: 'gen9',
