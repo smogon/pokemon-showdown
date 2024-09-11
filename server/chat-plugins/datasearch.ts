@@ -619,8 +619,6 @@ function getMod(target: string) {
 }
 
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
-	console.log("\n\t\tnow executing:", target);
-	const start_time = performance.now();
 	const searches: DexOrGroup[] = [];
 	const {splitTarget, usedMod, count: c} = getMod(target);
 	if (c > 1) {
@@ -708,7 +706,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		return false;
 	};
 
-	const query_prep_start_time = performance.now();
 	for (const andGroup of splitTarget) {
 		const orGroup: DexOrGroup = {
 			abilities: {}, tiers: {}, doublesTiers: {}, colors: {}, 'egg groups': {}, formes: {},
@@ -1071,8 +1068,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			searches.push(orGroup);
 		}
 	}
-	const query_prep_total_time = performance.now() - query_prep_start_time;
-	console.log("query prep:\t", query_prep_total_time, "ms");
 	if (
 		showAll && searches.length === 0 && singleTypeSearch === null &&
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
@@ -1109,7 +1104,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		Object.values(search).reduce(accumulateKeyCount, 0)
 	));
 
-	const filters_start_time = performance.now();
 	// Prepare move validator and pokemonSource outside the hot loop
 	// but don't prepare them at all if there are no moves to check...
 	// These only ever get accessed if there are moves to filter by.
@@ -1303,8 +1297,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			delete dex[mon];
 		}
 	}
-	const filters_total_time = performance.now() - filters_start_time;
-	console.log("filters total:\t", filters_total_time, "ms");
 
 	const stat = sort?.slice(0, -1);
 
@@ -1324,7 +1316,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		}
 	}
 
-	const sort_start_time = performance.now();
 	let results: string[] = [];
 	for (const mon of Object.keys(dex).sort()) {
 		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
@@ -1341,8 +1332,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(dex[mon].name);
 	}
-	const sort_total_time = performance.now() - sort_start_time;
-	console.log("sort:\t\t", sort_total_time, "ms");
 
 	if (usedMod === 'gen7letsgo') {
 		results = results.filter(name => {
@@ -1366,7 +1355,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 
-	const format_result_start_time = performance.now();
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	if (results.length > 1) {
 		results.sort();
@@ -1386,18 +1374,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
 	} else if (results.length === 1) {
-		const total_time = performance.now() - start_time;
-		console.log("*** entire run time:\t\t\t", total_time, "ms ***");
-		console.log("*** unaccounted:\t\t\t", total_time - query_prep_total_time - filters_total_time - sort_total_time, "ms ***");
 		return {dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}`};
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
-	const format_result_total_time = performance.now() - format_result_start_time;
-	const total_time = performance.now() - start_time;
-	console.log("format result:\t", format_result_total_time, "ms");
-	console.log("*** entire run time:\t\t\t", total_time, "ms ***");
-	console.log("*** unaccounted:\t\t\t", total_time - query_prep_total_time - filters_total_time - sort_total_time - format_result_total_time, "ms ***");
 	if (isTest) return {results, reply: resultsStr};
 	return {reply: resultsStr};
 }
