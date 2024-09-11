@@ -150,14 +150,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			let totalModify = 0;
+			let totalModify = 1;
 			if (pokemon.abilityState.gleamBoost) {
 				pokemon.abilityState.gleamBoost = false;
-				totalModify += 1.5;
+				totalModify += 0.5;
 			}
 			if (pokemon.abilityState.damageDoubled) {
 				pokemon.abilityState.damageDoubled = false;
-				totalModify += 2;
+				totalModify += 1;
 			}
 			return this.chainModify(totalModify);
 		},
