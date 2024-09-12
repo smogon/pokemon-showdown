@@ -95966,8 +95966,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			seedbomb: ["9M", "9L24", "8M", "8L24", "7T", "7L39"],
 			shadowball: ["9M", "9L36", "8M", "8L36", "7M", "7L43", "5M", "5L44"],
 			shadowsneak: ["9L4", "8L4", "7L4", "5L13"],
-			shellsmash: ["9E"],
-			sketch: ["7E", "5E"],
+			sketch: ["9S0", "5E"],
 			skittersmack: ["8T"],
 			sleeptalk: ["9M", "8M", "7M"],
 			snore: ["8M", "7T"],
@@ -95987,6 +95986,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			willowisp: ["9M", "9L20", "8M", "8L20", "7M", "7L15", "5M", "5L19"],
 			worryseed: ["7T"],
 		},
+		eventData: [
+			{generation: 9, level: 1, shiny: 1, moves: ["sketch"]},
+		],
 	},
 	necturna: {
 		learnset: {
