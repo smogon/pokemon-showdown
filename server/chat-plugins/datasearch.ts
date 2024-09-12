@@ -1247,7 +1247,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-
 			for (const stat in alts.stats) {
 				let monStat = 0;
 				if (stat === 'bst') {
@@ -1283,12 +1282,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (matched) continue;
 
 			for (const move of altsMoves) {
-				/** @ts-expect-error validator and pokemonSource won't be undefined if there's at least one move */
 				if (!validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
-				/** @ts-expect-error pokemonSource won't be undefined if there's at least one move */
 				if (!pokemonSource.size()) break;
 			}
 			if (matched) continue;
