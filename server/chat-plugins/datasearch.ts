@@ -1282,11 +1282,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (matched) continue;
 
 			for (const move of altsMoves) {
-				if (!validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+				if (validator && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
-				if (!pokemonSource.size()) break;
+				if (pokemonSource && !pokemonSource.size()) break;
 			}
 			if (matched) continue;
 
