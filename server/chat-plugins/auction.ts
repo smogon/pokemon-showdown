@@ -188,7 +188,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	generateAuctionTable(ended = false) {
 		const queue = this.queue.filter(team => !team.isSuspended());
-		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th><th>Credits</th><th>Players</th></tr>`;
+		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th>${this.type !== 'snake' ? `<th>Credits</th><th>` : ''}Players</th></tr>`;
 		for (const team of this.teams.values()) {
 			buf += `<tr>`;
 			if (!ended) {
@@ -200,7 +200,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 				buf += `<td align="center" style="width: 15px">${i1 || '-'}</td><td align="center" style="width: 15px">${i2 || '-'}</td>`;
 			}
 			buf += `<td style="white-space: nowrap"><strong>${Utils.escapeHTML(team.name)}</strong><br/>${this.generateUsernameList(team.getManagers(), 2, true)}</td>`;
-			buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
+			if (this.type !== 'snake') buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
 			buf += `<td><div style="min-height: 32px${!ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
 			buf += `</tr>`;
 		}
