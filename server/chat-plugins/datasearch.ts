@@ -1110,13 +1110,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let validator;
 	let pokemonSource;
 	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
-		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
-		const formatStr = format ? format[1].name : 'gen9ou';
-		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(formatStr));
+		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
+		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
 		const additionalRules = [];
 		if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
 		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
-		validator = TeamValidator.get(`${formatStr}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
+		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
 		pokemonSource = validator.allSources();
 	}
 	for (const alts of searches) {
