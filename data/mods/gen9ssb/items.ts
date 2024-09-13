@@ -1,4 +1,27 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Aevum
+	rewindwatch: {
+		name: "Rewind Watch",
+		gen: 9,
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Calyrex' && pokemon.setType(['Grass', 'Steel'])) {
+				this.add('-start', pokemon, 'typechange', 'Grass/Steel', '[from] item: Rewind Watch');
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp && effect && effect.effectType === 'Move') {
+				target.itemState.useWatch = true;
+				this.add("-activate", target, "item: Rewind Watch");
+				return target.hp - 1;
+			}
+		},
+		onAfterMoveSecondary(target, source, move) {
+			if (target.itemState.useWatch) {
+				target.useItem();
+				this.heal(target.maxhp, target, target, 'item: Rewind Watch');
+			}
+		},
+	},
 	// Suika Ibuki
 	ibukigourd: {
 		name: "Ibuki Gourd",
