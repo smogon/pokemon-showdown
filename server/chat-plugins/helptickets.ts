@@ -1414,6 +1414,14 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 					"Apologies for the inconvenience. It should expire in a few days.",
 				];
 			}
+
+			if (!user.registered) {
+				return [
+					"Because this account isn't registered (with a password), we cannot verify your identity.",
+					"Please come back with a different account you've registered in the past.",
+				];
+			}
+
 			return true;
 		},
 		async onSubmit(ticket, text, user) {
