@@ -626,6 +626,84 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	const mod = Dex.mod(usedMod || 'base');
+	global.gc();
+	const assert = require('node:assert/strict');
+	function deepEquals(left, right) {
+		let eq = true;
+		try {
+			assert.deepEqual(left, right);
+		} catch (e) {
+			eq = false;
+		}
+		return eq;
+	}
+	// Drives the dedup script. Can add an entry for any relevant field of mod
+	const dedup_tables = {
+		species: {
+			bucket_key: function(s) { return s.id; },
+			get_iter: function(m) { return m.species.all(); },
+		},
+		// This one doesn't seem to work so good. Might need to look more closely at formats
+		// formats: {
+		// bucket_key: function(f) { return f.name; },
+		// get_iter: function(m) { return Object.values(m.formats); },
+		// },
+	};
+	for (const k of Object.keys(dedup_tables)) {
+		const o = dedup_tables[k];
+		o.buckets = new Map();
+		o.mod_added = new Map();
+		o.counts_table = new Map();
+		o.uniq_objs = new Set();
+		o.num_uniq_vals = 0;
+	}
+	const mod_list = ["base", "gen9", "fullpotential", "gen1", "gen1jpn", "gen1rbycap", "gen1stadium", "gen2", "gen2stadium2", "gen3", "gen4", "gen4pt", "gen5", "gen5bw1", "gen6", "gen6megasrevisited", "gen6xy", "gen7", "gen7letsgo", "gen7pokebilities", "gen7sm", "gen8", "gen8bdsp", "gen8dlc1", "gen8linked", "gen9dlc1", "gen9predlc", "gen9ssb", "gennext", "mixandmega", "partnersincrime", "pokebilities", "pokemoves", "randomroulette", "sharedpower", "sharingiscaring", "thecardgame", "trademarked"
+	];
+	for (const mod_str of mod_list) {
+		console.log('now doing', mod_str);
+		const mod = Dex.mod(mod_str);
+		for (const [k, v] of Object.entries(dedup_tables)) {
+			const dataset = v.get_iter(mod);
+			let numNew = 0;
+			for (const data of dataset) {
+				if (!data) continue; // occasional null, apparently? i don't remember
+				v.uniq_objs.add(data);
+				let bk_id = v.bucket_key(data);
+				let bucket = v.buckets.get(bk_id);
+				if (!bucket) {
+					bucket = [];
+					v.buckets.set(bk_id, bucket);
+				}
+				if (!bucket.some(other => deepEquals(data, other))) {
+					bucket.push(data);
+					numNew++;
+				}
+			}
+			v.mod_added.set(mod_str, numNew);
+		}
+	}
+	for (const [k, v] of Object.entries(dedup_tables)) {
+		for (const [id, bucket] of v.buckets) {
+			const old_count = v.counts_table.get(bucket.length) || 0;
+			v.counts_table.set(bucket.length, old_count + 1);
+			v.num_uniq_vals += bucket.length;
+		}
+		console.log('\n\tmod sub data:', k);
+		console.log("num unique ids: ", v.buckets.size);
+		console.log("key: #objs per id, value: how many items had this count", v.counts_table);
+		console.log("amt added by each mod (depends on mod order):", v.mod_added);
+		console.log("num unique objects:", v.uniq_objs.size);
+		console.log("num unique value:", v.num_uniq_vals);
+		// probably unnecessary but w/e
+		v.mod_added.clear();
+		v.buckets.clear();
+		v.counts_table.clear();
+		v.uniq_objs.clear();
+	}
+	global.gc();
+	return {result: "placeholder"};
+
+
 	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
