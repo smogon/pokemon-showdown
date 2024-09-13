@@ -40,6 +40,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Aevum
+	genesisray: {
+		accuracy: 80,
+		basePower: 60,
+		category: "Special",
+		name: "Genesis Ray",
+		gen: 9,
+		pp: 16,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Terrain Pulse', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
 	// Ace - Attack Card
 	attack: {
 		accuracy: 100,
