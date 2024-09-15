@@ -2291,7 +2291,7 @@
                 "teraTypes": ["Steel"]
             },
             {
-                "role": "Bulky Setup",
+                "role": "Setup Sweeper",
                 "movepool": ["Dragon Dance", "Dual Wingbeat", "Earthquake", "Leaf Blade", "Synthesis"],
                 "abilities": ["Harvest"],
                 "teraTypes": ["Ground"]
