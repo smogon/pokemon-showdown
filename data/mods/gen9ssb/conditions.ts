@@ -42,6 +42,26 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 	},
+	megamushroom: {
+		name: "Mega Mushroom",
+		duration: 3,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Mega Mushroom');
+			pokemon.abilityState.originalMaxHp = pokemon.maxhp;
+			pokemon.maxhp *= 2;
+			pokemon.baseMaxhp *= 2;
+		},
+		onModifyMove(move, pokemon) {
+			move.onHit = function (t, s, m) {
+				t.addVolatile('squash');
+			};
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Mega Mushroom');
+			pokemon.maxhp = pokemon.abilityState.originalMaxHp;
+			pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
+		},
+	},
 	// Morte
 	curseddoll: {
 		name: "Cursed Doll",
