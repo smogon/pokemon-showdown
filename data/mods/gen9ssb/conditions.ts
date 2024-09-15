@@ -21,6 +21,27 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
 
+	// PokeKart
+	lightning: {
+		name: "Lightning",
+		effectType: 'Condition',
+		duration: 3,
+		onSideStart(side, source) {
+			this.add('-sidestart', side, 'Lightning');
+			for (const pokemon of side.pokemon) {
+				pokemon.abilityState.originalMaxHp = pokemon.maxhp;
+				pokemon.maxhp /= 2;
+				pokemon.baseMaxhp /= 2;
+			}
+		},
+		onSideEnd(side) {
+			this.add('-sideend', side, 'Lightning');
+			for (const pokemon of side.pokemon) {
+				pokemon.maxhp = pokemon.abilityState.originalMaxHp;
+				pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
+			}
+		},
+	},
 	// Morte
 	curseddoll: {
 		name: "Cursed Doll",
