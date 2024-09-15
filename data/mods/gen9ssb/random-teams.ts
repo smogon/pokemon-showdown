@@ -199,13 +199,19 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Demi',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
-	Aevum: {
+	PokéKart: {
+		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
+		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
+		signatureMove: 'Item Box',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
+	},
+	/*
+ 	Aevum: {
 		species: 'Calyrex', ability: 'Temporal Domain', item: 'Rewind Watch', gender: 'M',
 		moves: ['Matcha Gotcha', 'Freezing Glare', 'Earth Power'],
 		signatureMove: 'Genesis Ray',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
-	/*
  	Ace: {
 		species: 'Kadabra', ability: 'Wild Card', item: 'Akademia Deck', gender: 'M',
 		moves: ['Teleport', 'Icicle Spear', 'Extrasensory'],
