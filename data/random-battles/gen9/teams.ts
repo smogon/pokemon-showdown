@@ -212,16 +212,15 @@ export class RandomTeams {
 				)
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
-			Ice: (movePool, moves, abilities, types, counter) => (
-				(movePool.includes('freezedry') && movePool.includes('icebeam')) || !counter.get('Ice')
-			),
+			Ice: (movePool, moves, abilities, types, counter) => (!counter.get('Ice')),
 			Normal: (movePool, moves, types, counter) => (movePool.includes('boomburst') || movePool.includes('hypervoice')),
 			Poison: (movePool, moves, abilities, types, counter) => {
 				if (types.includes('Ground')) return false;
 				return !counter.get('Poison');
 			},
 			Psychic: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => {
-				if ((types.includes('Steel') || types.includes('Water')) && !movePool.includes('psychicfangs')) return false;
+				if ((isDoubles || species.id === 'bruxish') && movePool.includes('psychicfangs')) return false;
+				if (['Dark', 'Steel', 'Water'].some(m => types.includes(m))) return false;
 				return !counter.get('Psychic');
 			},
 			Rock: (movePool, moves, abilities, types, counter, species) => !counter.get('Rock') && species.baseStats.atk >= 80,
@@ -743,6 +742,12 @@ export class RandomTeams {
 		// Enforce Facade if Guts is a possible ability
 		if (movePool.includes('facade') && abilities.includes('Guts')) {
 			counter = this.addMove('facade', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce Freeze-Dry if Ice Beam and Freeze-Dry are possible moves
+		if (movePool.includes('freezedry') && movePool.includes('icebeam')) {
+			counter = this.addMove('freezedry', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
 		}
 

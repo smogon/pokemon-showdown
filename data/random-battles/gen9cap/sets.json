@@ -230,7 +230,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["Blizzard", "Bug Buzz", "Focus Blast", "Hydro Pump", "Overheat", "Psychic", "Psyshock", "Thunder"],
+                "movepool": ["Bug Buzz", "Focus Blast", "Hydro Pump", "Overheat", "Psychic", "Psyshock", "Thunder"],
                 "abilities": ["No Guard"],
                 "teraTypes": ["Fighting", "Fire"]
             },
