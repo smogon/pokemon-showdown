@@ -258,7 +258,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Flame Flyer",
 		gen: 9,
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'typechange', 'Steel/Fire', '[from] item: Flame Flyer');
+			if (pokemon.setType(['Steel', 'Fire'])) this.add('-start', pokemon, 'typechange', 'Steel/Fire', '[from] item: Flame Flyer');
 		},
 		onModifySpePriority: 1,
 		onModifySpe(spe, pokemon) {
