@@ -212,7 +212,9 @@ export class RandomTeams {
 				)
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
-			Ice: (movePool, moves, abilities, types, counter) => (!counter.get('Ice')),
+			Ice: (movePool, moves, abilities, types, counter) => (
+				movePool.includes('freezedry') || movePool.includes('blizzard') || !counter.get('Ice')
+			),
 			Normal: (movePool, moves, types, counter) => (movePool.includes('boomburst') || movePool.includes('hypervoice')),
 			Poison: (movePool, moves, abilities, types, counter) => {
 				if (types.includes('Ground')) return false;
@@ -745,14 +747,8 @@ export class RandomTeams {
 				movePool, teraType, role);
 		}
 
-		// Enforce Freeze-Dry if Ice Beam and Freeze-Dry are possible moves
-		if (movePool.includes('freezedry') && movePool.includes('icebeam')) {
-			counter = this.addMove('freezedry', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-
-		// Enforce Blizzard, Night Shade, Revelation Dance, Revival Blessing, and Sticky Web
-		for (const moveid of ['blizzard', 'nightshade', 'revelationdance', 'revivalblessing', 'stickyweb']) {
+		// Enforce Night Shade, Revelation Dance, Revival Blessing, and Sticky Web
+		for (const moveid of ['nightshade', 'revelationdance', 'revivalblessing', 'stickyweb']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);

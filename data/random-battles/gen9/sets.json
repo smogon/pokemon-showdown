@@ -179,7 +179,13 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Aurora Veil", "Blizzard", "Encore", "Freeze-Dry", "Moonblast", "Nasty Plot"],
+                "movepool": ["Aurora Veil", "Blizzard", "Encore", "Moonblast", "Nasty Plot"],
+                "abilities": ["Snow Warning"],
+                "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Aurora Veil", "Blizzard", "Freeze-Dry", "Moonblast", "Nasty Plot"],
                 "abilities": ["Snow Warning"],
                 "teraTypes": ["Steel", "Water"]
             }
