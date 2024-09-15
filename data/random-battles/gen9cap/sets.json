@@ -186,7 +186,7 @@
                 "role": "Bulky Setup",
                 "movepool": ["Horn Leech", "Shadow Claw", "Stone Edge", "Victory Dance"],
                 "abilities": ["Forewarn"],
-                "teraTypes": ["Rock", "Water"]
+                "teraTypes": ["Fairy", "Rock", "Water"]
             },
             {
                 "role": "Bulky Attacker",
