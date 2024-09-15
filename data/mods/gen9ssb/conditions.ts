@@ -53,7 +53,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onModifyMove(move, pokemon) {
 			move.onHit = function (t, s, m) {
-				t.addVolatile('squash');
+				t.addVolatile('quash');
 			};
 		},
 		onEnd(pokemon) {
