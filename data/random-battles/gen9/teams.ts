@@ -219,7 +219,7 @@ export class RandomTeams {
 				return !counter.get('Poison');
 			},
 			Psychic: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => {
-				if ((isDoubles || species.id === 'bruxish') && movePool.includes('psychicfangs')) return false;
+				if ((isDoubles || species.id === 'bruxish') && movePool.includes('psychicfangs')) return true;
 				if (['Dark', 'Steel', 'Water'].some(m => types.includes(m))) return false;
 				return !counter.get('Psychic');
 			},
