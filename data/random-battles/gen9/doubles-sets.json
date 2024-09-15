@@ -6847,8 +6847,14 @@
         "level": 77,
         "sets": [
             {
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Close Combat", "Mighty Cleave", "Protect", "Swords Dance"],
+                "abilities": ["Quark Drive"],
+                "teraTypes": ["Fighting"]
+            },
+            {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Mighty Cleave", "Protect", "Swords Dance", "Zen Headbutt"],
+                "movepool": ["Close Combat", "Mighty Cleave", "Protect", "Zen Headbutt"],
                 "abilities": ["Quark Drive"],
                 "teraTypes": ["Fighting"]
             }
