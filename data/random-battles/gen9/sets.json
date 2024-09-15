@@ -89,7 +89,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Alluring Voice", "Encore", "Focus Blast", "Grass Knot", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Alluring Voice", "Encore", "Focus Blast", "Grass Knot", "Knock Off", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Lightning Rod"],
                 "teraTypes": ["Grass", "Water"]
             },
@@ -178,20 +178,8 @@
         "level": 78,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Aurora Veil", "Blizzard", "Encore", "Moonblast"],
-                "abilities": ["Snow Warning"],
-                "teraTypes": ["Steel", "Water"]
-            },
-            {
-                "role": "Fast Bulky Setup",
-                "movepool": ["Aurora Veil", "Blizzard", "Moonblast", "Nasty Plot"],
-                "abilities": ["Snow Warning"],
-                "teraTypes": ["Steel", "Water"]
-            },
-            {
                 "role": "Fast Support",
-                "movepool": ["Aurora Veil", "Blizzard", "Freeze-Dry", "Moonblast"],
+                "movepool": ["Aurora Veil", "Blizzard", "Encore", "Freeze-Dry", "Moonblast", "Nasty Plot"],
                 "abilities": ["Snow Warning"],
                 "teraTypes": ["Steel", "Water"]
             }
@@ -342,9 +330,15 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Head Smash", "Morning Sun", "Wild Charge"],
+                "movepool": ["Close Combat", "Extreme Speed", "Flare Blitz", "Head Smash", "Wild Charge"],
                 "abilities": ["Rock Head"],
-                "teraTypes": ["Rock"]
+                "teraTypes": ["Fire", "Normal", "Rock"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Extreme Speed", "Flare Blitz", "Head Smash", "Morning Sun"],
+                "abilities": ["Rock Head"],
+                "teraTypes": ["Fire", "Grass", "Normal", "Rock"]
             }
         ]
     },
@@ -1226,6 +1220,12 @@
                 "movepool": ["Aqua Jet", "Belly Drum", "Liquidation", "Play Rough"],
                 "abilities": ["Huge Power"],
                 "teraTypes": ["Water"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Aqua Jet", "Knock Off", "Liquidation", "Play Rough"],
+                "abilities": ["Huge Power"],
+                "teraTypes": ["Dragon", "Steel", "Water"]
             }
         ]
     },
@@ -1840,12 +1840,6 @@
                 "movepool": ["Close Combat", "Flare Blitz", "Knock Off", "Protect", "Stone Edge", "Swords Dance"],
                 "abilities": ["Speed Boost"],
                 "teraTypes": ["Dark", "Fighting"]
-            },
-            {
-                "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Fire Blast", "Knock Off", "Protect"],
-                "abilities": ["Speed Boost"],
-                "teraTypes": ["Dark", "Fighting", "Fire"]
             }
         ]
     },
@@ -1864,7 +1858,7 @@
         "level": 95,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Bulky Attacker",
                 "movepool": ["Crunch", "Play Rough", "Poison Fang", "Sucker Punch", "Taunt", "Throat Chop"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Fairy", "Poison"]
@@ -2295,6 +2289,12 @@
                 "movepool": ["Air Slash", "Leech Seed", "Protect", "Substitute"],
                 "abilities": ["Harvest"],
                 "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Dragon Dance", "Dual Wingbeat", "Earthquake", "Leaf Blade", "Synthesis"],
+                "abilities": ["Harvest"],
+                "teraTypes": ["Ground"]
             }
         ]
     },
@@ -2421,7 +2421,7 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Aura Sphere", "Calm Mind", "Draco Meteor", "Psyshock", "Recover"],
+                "movepool": ["Calm Mind", "Draco Meteor", "Psyshock", "Recover"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Steel"]
             }
@@ -3135,6 +3135,12 @@
                 "movepool": ["Earthquake", "Ice Shard", "Icicle Crash", "Knock Off", "Stealth Rock"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Ground", "Ice"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Earthquake", "Ice Shard", "Icicle Crash", "Trailblaze"],
+                "abilities": ["Thick Fat"],
+                "teraTypes": ["Grass"]
             }
         ]
     },
@@ -3505,6 +3511,12 @@
                 "movepool": ["Dark Pulse", "Focus Blast", "Hypnosis", "Nasty Plot", "Sludge Bomb", "Substitute"],
                 "abilities": ["Bad Dreams"],
                 "teraTypes": ["Poison"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Dark Pulse", "Focus Blast", "Sludge Bomb", "Trick"],
+                "abilities": ["Bad Dreams"],
+                "teraTypes": ["Poison"]
             }
         ]
     },
@@ -3569,16 +3581,10 @@
         "level": 73,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Calm Mind", "Earth Power", "Ice Beam", "Judgment"],
-                "abilities": ["Multitype"],
-                "teraTypes": ["Ground"]
-            },
-            {
                 "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Fire Blast", "Judgment", "Recover"],
+                "movepool": ["Calm Mind", "Earth Power", "Fire Blast", "Judgment", "Recover"],
                 "abilities": ["Multitype"],
-                "teraTypes": ["Fire"]
+                "teraTypes": ["Fire", "Ground"]
             }
         ]
     },
@@ -3598,15 +3604,15 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Extreme Speed", "Gunk Shot", "Outrage", "Swords Dance"],
+                "movepool": ["Extreme Speed", "Flare Blitz", "Heavy Slam", "Outrage", "Swords Dance"],
                 "abilities": ["Multitype"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Fire"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Dragon Dance", "Earthquake", "Gunk Shot", "Outrage"],
+                "movepool": ["Dragon Dance", "Flare Blitz", "Heavy Slam", "Outrage"],
                 "abilities": ["Multitype"],
-                "teraTypes": ["Ground", "Poison"]
+                "teraTypes": ["Fire", "Steel"]
             },
             {
                 "role": "Fast Bulky Setup",
@@ -4826,6 +4832,12 @@
                 "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "U-turn", "Water Pulse"],
                 "abilities": ["Mega Launcher"],
                 "teraTypes": ["Dark", "Dragon", "Fighting"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "U-turn", "Water Pulse"],
+                "abilities": ["Mega Launcher"],
+                "teraTypes": ["Dragon"]
             }
         ]
     },
@@ -5571,6 +5583,12 @@
                 "movepool": ["Grassy Glide", "High Horsepower", "Knock Off", "Swords Dance", "U-turn", "Wood Hammer"],
                 "abilities": ["Grassy Surge"],
                 "teraTypes": ["Grass"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Grassy Glide", "High Horsepower", "U-turn", "Wood Hammer"],
+                "abilities": ["Grassy Surge"],
+                "teraTypes": ["Grass", "Poison", "Steel"]
             }
         ]
     },
