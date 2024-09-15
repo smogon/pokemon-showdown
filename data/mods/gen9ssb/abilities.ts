@@ -16,7 +16,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
 	// Ace
-	/*
 	wildcard: {
 		name: "Wild Card",
 		gen: 9,
@@ -115,22 +114,32 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const foe = source.side.foe.active[0];
 			if (move.id === 'teleport' && source.abilityState.cards && source.abilityState.cards.length) {
 				this.add('-message', `${source.name} emptied their deck!`);
+				let acUsed = false;
+				let dcUsed = false;
+				source.abilityState.acCount = 0;
+				source.abilityState.dcCount = 0;
 				for (const card of source.abilityState.cards) {
 					switch (card) {
 						case 'Attack':
 							let damage = this.actions.getDamage(source, foe, 'Attack');
 							this.damage(damage, foe);
+							source.abilityState.acCount++;
+							acUsed = true;
 							break;
 						case 'Defense':
+							source.abilityState.dcCount++;
+							dcUsed = true;
+							break;
 						case 'Life':
 						case 'Support':
 					}
 				}
+				if (acUsed) source.side.addSideCondition('Attack Card', source);
+				if (dcUsed) source.side.addSideCondition('Defense Card', source);
 				source.abilityState.cards = [];
 			}
 		},
 	},
- 	*/
 	// Suika Ibuki
 	densitymanipulation: {
 		desc: "This Pokemon sets a Substitute and loses 25% of their max HP upon switching in.",
