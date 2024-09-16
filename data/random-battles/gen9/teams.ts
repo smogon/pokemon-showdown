@@ -1338,7 +1338,7 @@ export class RandomTeams {
 		if (moves.has('substitute')) return 'Leftovers';
 		if (
 			moves.has('stickyweb') && isLead &&
-			(species.baseStats.hp + species.baseStats.def + species.baseStats.spd) >= 235
+			(species.baseStats.hp + species.baseStats.def + species.baseStats.spd) < 235
 		) return 'Focus Sash';
 		if (this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
 		if (
