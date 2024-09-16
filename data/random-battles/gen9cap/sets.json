@@ -196,7 +196,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Horn Leech", "Pain Split", "Power Whip", "Shadow Claw", "Sticky Web", "Toxic Spikes", "Will-O-Wisp"],
+                "movepool": ["Horn Leech", "Pain Split", "Power Whip", "Shadow Claw", "Shadow Sneak", "Sticky Web", "Toxic Spikes", "Will-O-Wisp"],
                 "abilities": ["Forewarn"],
                 "teraTypes": ["Fairy", "Water"]
             }
