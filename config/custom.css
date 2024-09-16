@@ -1,0 +1,1234 @@
+.alert {
+	padding: 19px;
+	background-color: #f44336;
+	color: #fff;
+	margin-bottom: 15px;
+}
+
+.roomcounters .battlecount {
+	display: block;
+	width: 46px;
+	height: 76px;
+	position: absolute;
+	right: -30px;
+	bottom: -10px;
+	background: url("https://img.pokemondb.net/sprites/black-white/normal/snivy.png")
+		center no-repeat;
+}
+
+.roomcounters .usercount {
+	display: block;
+	width: 49px;
+	height: 63px;
+	position: absolute;
+	left: -30px;
+	bottom: -5px;
+	background: url("https://img.pokemondb.net/sprites/black-white/normal/oshawott.png")
+		center no-repeat;
+}
+
+.closebtn {
+	margin-left: 15px;
+	color: #fff;
+	font-weight: 700;
+	float: right;
+	font-size: 22px;
+	line-height: 20px;
+}
+
+.closebtn:hover {
+	color: #000;
+}
+
+body {
+	background-image: url("https://pbs.twimg.com/media/Fs-9MG2WIAAl4EG?format=jpg&name=large") !important;
+}
+
+.ps-room.ps-room-light {
+	background-color: rgba(24, 116, 205, 0.5) !important;
+	border-color: #000 !important;
+}
+
+.ps-room.ps-room-light.scrollable {
+	background-color: rgba(255, 254, 253, 0.71) !important;
+}
+
+.pad .button,
+.ps-room.ps-room-light.scrollable p .button {
+	background: rgba(0, 162, 255, 0.85) !important;
+	border-color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff !important;
+}
+
+.pad .button:hover,
+.ps-room.ps-room-light.scrollable p .button:hover {
+	background: rgba(58, 160, 255, 0.58) !important;
+	border-color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff;
+}
+
+.ps-room.ps-room-light .roomlist,
+.roomlisttop {
+	width: 100%;
+}
+
+.ps-room.ps-room-light .roomlist {
+	background: none !important;
+}
+
+.roomlist a.ilink {
+	background: rgba(255, 195, 0, 0.75);
+	border-color: #fffcfc;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff;
+}
+
+.roomlist a.ilink:hover {
+	background: rgba(255, 195, 0, 0.86)
+		url("http://orig00.deviantart.net/0d08/f/2016/160/a/7/solgaleo_sprite_by_shhmew-da5n4dn.gif")
+		no-repeat right;
+	border-color: #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.roomlist a.ilink small {
+	text-shadow: none !important;
+	color: #fff;
+}
+
+.roomcounters .picon {
+	background: url("http://www.diamondgamers.net/images/icons/diamond-icon.gif")
+		no-repeat bottom !important;
+}
+
+.roomcounters button,
+roomcounters button {
+	background: none !important;
+	border-color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff !important;
+}
+
+.textbox,
+.textbox:hover,
+.textbox:focus {
+	background: #fff;
+	border-color: #fff;
+	color: #101010;
+}
+
+.broadcast-blue {
+	background-color: #b3e6ff;
+	border: 3px #000 !important;
+	color: #000 !important;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	text-align: center;
+}
+
+.broadcast-blue a {
+	color: #0b1361;
+}
+
+.broadcast-red {
+	background-color: #ffb3b3;
+	border: 3px #000 !important;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #610b0b;
+	text-align: center;
+}
+
+.broadcast-red a {
+	color: #610b0b;
+}
+
+.broadcast-green {
+	background-color: #c3ffb3;
+	border: 3px #000 !important;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #19610b;
+	text-align: center;
+}
+
+.broadcast-green a {
+	color: #19610b;
+}
+
+.message-announce {
+	background: #67b5ff;
+	font-style: italic;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff;
+}
+
+.header {
+	background: rgba(255, 255, 255, 0.94) url("http://i.imgur.com/DgkiFAd.png")
+		no-repeat 12pt !important;
+}
+
+.header .logo {
+	opacity: 0;
+}
+
+.maintabbarbottom {
+	background: #4b93ff;
+	border-color: #42b1fc;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff;
+}
+
+.tabbar a.button.notifying {
+	background: #1874cd;
+	border-color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff;
+}
+
+.tabbar a.button.notifying:hover {
+	background: #1566b7;
+}
+
+.tabbar a.button.subtle-notifying {
+	background: #1874cd;
+	border-color: #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.tabbar a.button.cur,
+.tabbar a.button.cur:hover {
+	background: #4b93ff;
+	border-color: #f0f2f4;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.tabbar a.cur + .closebutton {
+	color: #000;
+}
+
+.tabbar a.button,
+.userbar button.icon {
+	background: #5aafff;
+	border-color: #f0f2f4;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff;
+}
+
+.tabbar .closebutton {
+	color: #fff;
+}
+
+.tabbar .closebutton:hover,
+.tabbar a.cur + .closebutton:hover {
+	color: #fff;
+}
+
+.tabbar a.button:hover,
+.userbar button.icon:hover {
+	background: #42b1fc;
+	border-color: #f0f2f4;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.userbar .username {
+	color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.chat-log {
+	background: #f2f3f8;
+	border-width: 0 0 1px 1px;
+	border-style: solid;
+	border-color: #000;
+	color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.chat small {
+	color: #f50e0e;
+}
+
+.infobox {
+	background: transparent !important;
+	border: 3px #000 !important;
+	color: #000 !important;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.infobox code {
+	color: #000;
+}
+
+.message small {
+	color: #000 !important;
+}
+
+.message .utilichart .result {
+	border-color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #000;
+}
+
+.pm-log a.ilink,
+a.ilink {
+	color: #fff !important;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.chat-log a.ilink,
+.chat-log a.ilink {
+	background: #fff !important;
+	color: #05646b !important;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.infobox a.ilink,
+.infobox a.ilink {
+	color: #05646b !important;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.chat.mine {
+	background: transparent;
+}
+
+.message-pm {
+	color: #fff;
+}
+
+.chat-log-add {
+	border-color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #000;
+}
+
+.chat-log-add .chatbox label {
+}
+
+.userlist {
+	background: rgb(255, 255, 255)
+		url("https://i.pinimg.com/564x/ef/71/86/ef7186fc71d307e41ce9631918ed05a9.jpg");
+	border-color: rgba(235, 235, 235, 0.5);
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+/* Fundador */
+.userlist li button[data-roomgroup^="&"] {
+	background: url(https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/cherish.png)
+		no-repeat left;
+}
+
+/* Room Owner */
+.userlist li button[data-roomgroup^="#"] {
+	background: url(https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/park.png)
+		no-repeat left;
+}
+
+/* Moderador */
+.userlist li button[data-roomgroup^="@"] {
+	background: url(https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/great.png)
+		no-repeat left;
+}
+
+/* Organizador */
+.userlist li button[data-roomgroup^="%"] {
+	background: url(https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/quick.png)
+		no-repeat left;
+}
+
+/* Líder */
+.userlist li button[data-roomgroup^="\u00A7"] {
+	background: url(https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/dive.png)
+		no-repeat left;
+}
+
+/* Bot */
+.userlist li button[data-roomgroup^="*"] {
+	background: url(https://raw.githubusercontent.com/msikma/pokesprite/master/items/hold-item/magnet.png)
+		no-repeat left;
+}
+
+/* Mega Usuario */
+.userlist li button[data-roomgroup^="+"] {
+	background: url(https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/premier.png)
+		no-repeat left;
+}
+
+.userlist li button {
+	border-color: #000;
+	background: url(https://raw.githubusercontent.com/msikma/pokesprite/master/items/ball/poke.png)
+		no-repeat left;
+}
+
+.userlist li em.group {
+	visibility: hidden;
+	margin-right: 12%;
+}
+
+.userlist li:hover {
+	background: rgba(54, 198, 255, 0.57);
+}
+
+.userlist li span,
+.userlist li strong {
+	text-shadow: none;
+}
+
+.userlist li button {
+	text-shadow: 1px 1px 0 #020202;
+}
+
+.userlist li button:hover {
+	background: rgba(245, 243, 231, 0.61);
+}
+
+.userlist-count {
+	color: #fff;
+	background: url("https://www.smogon.com/forums/media/minisprites/celebi.png.m.1716648629")
+		no-repeat right;
+}
+
+.menugroup {
+	background: none !important;
+	border: none !important;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.menugroup button,
+.select,
+.menugroup .button.mainmenu2,
+.menugroup .button.mainmenu4 {
+	background: #186edf;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.menugroup button:hover,
+.select:hover,
+.menugroup .button.mainmenu2:hover,
+.menugroup .button.mainmenu4:hover {
+	background: #3a94dd;
+}
+
+.menugroup a.ilink,
+.menugroup a.ilink {
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-weight: 700;
+	font-style: italic;
+	color: #fff;
+}
+
+.select,
+.select:hover {
+	background: #4b93ff;
+	border: 2px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.select {
+	background: #0a335c;
+}
+
+.teamselect strong {
+	color: #fff;
+}
+
+.menugroup .button.mainmenu1,
+.menugroup .button.mainmenu3,
+.menugroup .button.mainmenu5 {
+	background: #4b93ff;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.menugroup .button.mainmenu1:hover,
+.menugroup .button.mainmenu3:hover,
+.menugroup .button.mainmenu5:hover {
+	background: #4b93ff
+		url("https://img.pokemondb.net/sprites/black-white/normal/patrat.png")
+		no-repeat right;
+}
+
+.battleform label {
+	background: transparent url("http://i.imgur.com/yFWeHx0.png") no-repeat
+		scroll left center !important;
+	padding: 4px;
+	color: #fff;
+	text-align: left;
+}
+
+.pm-window h3 {
+	background: #4b93ff;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.pm-window .closebutton,
+.pm-window .minimizebutton {
+	color: #fff;
+}
+
+.pm-window h3 small {
+	color: #fff;
+}
+
+.pm-window h3:hover {
+	background: #ffc300;
+	color: #fff;
+}
+
+.pm-window .closebutton:hover,
+.pm-window .minimizebutton:hover,
+.pm-window h3:hover .minimizebutton {
+	color: #fff;
+}
+
+.pm-window .closebutton:hover + .minimizebutton {
+	color: #fff !important;
+}
+
+.pm-window.focused h3 {
+	background: #0a335c;
+	border: 2px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.pm-window.focused h3:hover {
+	background: #0f4d8a;
+}
+
+.pm-log,
+.pm-window.focused .pm-log {
+	background: #fff !important;
+	border-color: #000;
+	color: #000 !important;
+}
+
+.unread {
+	background: none;
+}
+
+.challenge {
+	background: #0b335b;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.challenge .buttonbar button {
+	background: #0a335c;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.challenge .buttonbar button:hover {
+}
+
+.pm-log-add,
+.pm-window.focused .pm-log-add {
+	background: #fff !important;
+	border: 0 #000;
+	color: #000 !important;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.pm-log-add .textbox {
+	color: #000;
+}
+
+.mainmenufooter {
+	background: none !important;
+	border: none !important;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.mainmenufooter a {
+	color: #fff;
+}
+
+.mainmenufooter a:hover {
+	color: #fff;
+}
+
+.tournament-title {
+	background: #4b93ff;
+	color: #fff;
+	border-color: #000;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.tournament-status,
+.tournament-toggle {
+	background: #082644;
+	border-color: #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.tournament-box {
+	border-color: #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.tournament-bracket {
+	background: #4b93ff;
+	border-color: #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.tournament-bracket-tree {
+	border-color: #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.tournament-tools {
+	background: 0;
+	border-color: #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.tournament-tools .button {
+	background: #082644;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.tournament-tools .button:hover {
+	background: #4b93ff;
+}
+
+.tournament-tools .select {
+	background: #082644;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.tournaments-tools .select {
+	background: #4b93ff;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
+.tournament-tools .teamselect strong {
+	color: #fff;
+}
+
+.tournament-tools .select:hover {
+	background: #4b93ff;
+}
+
+.tournament-format {
+	color: #fff !important;
+	font-size: 14pt;
+	font-family: Gerogia, Times, "Times New Roman", serif !important;
+}
+
+.ps-popup.tournament-popout-bracket {
+	background: rgba(15, 62, 112, 0.5);
+	color: #fff;
+}
+
+.ps-popup {
+	background: #fff;
+	color: #000 !important;
+	border: 4px #000;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+.ps-popup .buttonbar button {
+	background: #ffe900;
+	border: 4px #000;
+	color: #000 !important;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+.ps-popup .buttonbar button:hover {
+	background: #ffc300;
+	color: #000 !important;
+}
+
+.ps-popup a,
+.ps-popup a.ilink,
+.popupmenu h3 {
+	color: #f3bc0a !important;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+.ps-popup a:hover,
+.ps-popup a.ilink:hover {
+}
+
+.ps-popup a.ilink.yours {
+	color: #00008b !important;
+	font-style: italic;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+.popupmenu button.sel {
+	color: #000 !important;
+	border-color: #000;
+}
+
+.popupmenu button.sel:hover {
+	background: transparent;
+	color: #fff !important;
+	border-color: #000;
+}
+
+.popupmenu button:hover {
+	background: #0b335b;
+	color: #fff !important;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+.sunweather,
+.sunnydayweather,
+.desolatelandweather {
+	height: 400px !important;
+	width: 800px !important;
+	overflow: hidden;
+	background: #feb url("http://i.imgur.com/DNMtOWR.gif") no-repeat scroll left
+		top;
+	color: #641;
+}
+
+.rainweather,
+.raindanceweather,
+.primordialseaweather {
+	height: 400px !important;
+	width: 800px !important;
+	overflow: hidden;
+	background: #9bf url("http://i.imgur.com/NQqkU6j.gif") no-repeat scroll left
+		top;
+	color: #04b;
+}
+
+.sandstormweather {
+	height: 400px !important;
+	width: 800px !important;
+	overflow: hidden;
+	background: #e6e0ac url("http://i.imgur.com/OEB3hum.gif") no-repeat scroll
+		left top;
+	color: #543;
+}
+
+.hailweather {
+	height: 400px !important;
+	width: 800px !important;
+	overflow: hidden;
+	background: #ade url("http://i.imgur.com/PweinWm.gif") no-repeat scroll left
+		top;
+	color: #145;
+}
+
+.deltastreamweather {
+	height: 400px !important;
+	width: 800px !important;
+	overflow: hidden;
+	background: #aaa
+		url("http://play.pokemonshowdown.com/fx/weather-strongwind.png") no-repeat
+		scroll left top;
+	color: #666;
+}
+
+.pseudoweather {
+	height: 400px !important;
+	width: 800px !important;
+	overflow: hidden;
+	background: #dae
+		url("http://play.pokemonshowdown.com/fx/weather-trickroom.png") no-repeat
+		scroll left top;
+	color: #615;
+}
+
+.backdrop {
+	width: 640px;
+	height: 360px;
+	overflow: hidden;
+	background-image: url("http://i.imgur.com/KXYj116.png");
+	opacity: 1 !important;
+	top: 0px;
+}
+
+.ps-room.ps-room-opaque {
+}
+
+.ps-room .battle-controls {
+	background: transparent;
+}
+
+.ps-room .battle-controls button,
+.ps-room .battle-controls .button {
+	background: #4b93ff;
+	border: 3px #000 !important;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.ps-room .battle-controls button:hover,
+.ps-room .battle-controls .button:hover {
+	background: #0b335b;
+}
+
+.battle-controls .whatdo {
+	color: #fff;
+}
+
+.battle-controls .whatdo small {
+	border-color: #000;
+}
+
+.moveselect button {
+	text-decoration: underline;
+	text-align: center !important;
+	border: none !important;
+	color: #fff !important;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+.movemenu button {
+	height: 50px !important;
+	color: #fff !important;
+	font-weight: 700;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+.movemenu button small {
+	text-shadow: none !important;
+	font-weight: 400;
+}
+
+.movemenu button.type-Normal {
+	background: #c7afb5 url("http://i.imgur.com/3C1Bacx.png?2") no-repeat center !important;
+	border-color: #75525c !important;
+}
+
+.movemenu button.type-Normal small {
+	color: #75525c;
+}
+
+.movemenu button.type-Normal:hover {
+	background: #dfcdd2 url("http://i.imgur.com/3C1Bacx.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Fire {
+	background: #fd4b5a url("http://i.imgur.com/4sLBBTN.png?2") no-repeat center !important;
+	border-color: #ab1f24 !important;
+}
+
+.movemenu button.type-Fire small {
+	color: #ab1f24;
+}
+
+.movemenu button.type-Fire:hover {
+	background: #ff767f url("http://i.imgur.com/4sLBBTN.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Water {
+	background: #85a8fb url("http://i.imgur.com/K7r8LVH.png?2") no-repeat center !important;
+	border-color: #1552e1 !important;
+}
+
+.movemenu button.type-Water small {
+	color: #1552e1;
+}
+
+.movemenu button.type-Water:hover {
+	background: #a9c3ff url("http://i.imgur.com/K7r8LVH.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Grass {
+	background: #42c665 url("http://i.imgur.com/628FI5x.png?2") no-repeat center !important;
+	border-color: #147b3d !important;
+}
+
+.movemenu button.type-Grass small {
+	color: #147b3d;
+}
+
+.movemenu button.type-Grass:hover {
+	background: #56d879 url("http://i.imgur.com/628FI5x.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Electric {
+	background: #fafa72 url("http://i.imgur.com/bzW9xyl.png?2") no-repeat center !important;
+	border-color: #c6c61d !important;
+}
+
+.movemenu button.type-Electric small {
+	color: #c6c61d;
+}
+
+.movemenu button.type-Electric:hover {
+	background: #ffff9b url("http://i.imgur.com/bzW9xyl.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Ice {
+	background: #d8f0fa url("http://i.imgur.com/otB37l2.png?2") no-repeat center !important;
+	border-color: #7cc6eb !important;
+}
+
+.movemenu button.type-Ice small {
+	color: #7cc6eb;
+}
+
+.movemenu button.type-Ice:hover {
+	background: #e6f8ff url("http://i.imgur.com/otB37l2.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Ground {
+	background: #a8702d url("http://i.imgur.com/F2Ngn3T.png?2") no-repeat center !important;
+	border-color: #6e491f !important;
+}
+
+.movemenu button.type-Ground small {
+	color: #6e491f;
+}
+
+.movemenu button.type-Ground:hover {
+	background: #ba843c url("http://i.imgur.com/F2Ngn3T.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Flying {
+	background: #94b2c7 url("http://i.imgur.com/Al6Gb8u.png?2") no-repeat center !important;
+	border-color: #4a677d !important;
+}
+
+.movemenu button.type-Flying small {
+	color: #4a677d;
+}
+
+.movemenu button.type-Flying:hover {
+	background: #a4c0d5 url("http://i.imgur.com/Al6Gb8u.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Poison {
+	background: #9b69da url("http://i.imgur.com/d3QQ9Af.png?2") no-repeat center !important;
+	border-color: #5e2d89 !important;
+}
+
+.movemenu button.type-Poison small {
+	color: #5e2d89;
+}
+
+.movemenu button.type-Poison:hover {
+	background: #bf8ef6 url("http://i.imgur.com/d3QQ9Af.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Fighting {
+	background: #ef6239 url("http://i.imgur.com/0fjqBIB.png?2") no-repeat center !important;
+	border-color: #994025 !important;
+}
+
+.movemenu button.type-Fighting small {
+	color: #994025;
+}
+
+.movemenu button.type-Fighting:hover {
+	background: #fa7851 url("http://i.imgur.com/0fjqBIB.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Psychic {
+	background: #f369b3 url("http://i.imgur.com/QzQIgYi.png?2") no-repeat center !important;
+	border-color: #a52a6c !important;
+}
+
+.movemenu button.type-Psychic small {
+	color: #a52a6c;
+}
+
+.movemenu button.type-Psychic:hover {
+	background: #fd7dc1 url("http://i.imgur.com/QzQIgYi.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Dark {
+	background: #595978 url("http://i.imgur.com/dpxY9u7.png?2") no-repeat center !important;
+	border-color: #040707 !important;
+}
+
+.movemenu button.type-Dark small {
+	color: #040707;
+}
+
+.movemenu button.type-Dark:hover {
+	background: #737392 url("http://i.imgur.com/dpxY9u7.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Rock {
+	background: #8b3e22 url("http://i.imgur.com/uQRUH3r.png?2") no-repeat center !important;
+	border-color: #48190b !important;
+}
+
+.movemenu button.type-Rock small {
+	color: #48190b;
+}
+
+.movemenu button.type-Rock:hover {
+	background: #a25032 url("http://i.imgur.com/uQRUH3r.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Bug {
+	background: #3c9950 url("http://i.imgur.com/oPBAAYf.png?2") no-repeat center !important;
+	border-color: #1c4b27 !important;
+}
+
+.movemenu button.type-Bug small {
+	color: #1c4b27;
+}
+
+.movemenu button.type-Bug:hover {
+	background: #4faf65 url("http://i.imgur.com/oPBAAYf.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Ghost {
+	background: #906791 url("http://i.imgur.com/jwbeQbI.png?2") no-repeat center !important;
+	border-color: #33336b !important;
+}
+
+.movemenu button.type-Ghost small {
+	color: #33336b;
+}
+
+.movemenu button.type-Ghost:hover {
+	background: #ae81ae url("http://i.imgur.com/jwbeQbI.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Steel {
+	background: #60756e url("http://i.imgur.com/KCc2bLu.png?2") no-repeat center !important;
+	border-color: #38a480 !important;
+}
+
+.movemenu button.type-Steel small {
+	color: #38a480;
+}
+
+.movemenu button.type-Steel:hover {
+	background: #829790 url("http://i.imgur.com/KCc2bLu.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Dragon {
+	background: #62cad9 url("http://i.imgur.com/ygEvaDc.png?2") no-repeat center !important;
+	border-color: #448a95 !important;
+}
+
+.movemenu button.type-Dragon small {
+	color: #448a95;
+}
+
+.movemenu button.type-Dragon:hover {
+	background: #7edceb url("http://i.imgur.com/ygEvaDc.png?2") no-repeat center !important;
+}
+
+.movemenu button.type-Fairy {
+	background: #e91368 url("http://i.imgur.com/0qO7BN7.png?2") no-repeat center !important;
+	border-color: #961a45 !important;
+}
+
+.movemenu button.type-Fairy small {
+	color: #961a45;
+}
+
+.movemenu button.type-Fairy:hover {
+	background: #ff3c8a url("http://i.imgur.com/0qO7BN7.png?2") no-repeat center !important;
+}
+
+.switchselect button {
+	background: #4b93ff;
+	border: 3px #000 !important;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.switchmenu button.disabled,
+.switchmenu button {
+	background: #4b93ff;
+	border: 3px #000 !important;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
+
+.switchmenu button {
+	padding: 0 !important;
+}
+
+.switchmenu button .hpbar {
+	border-color: #000;
+}
+
+.megaevo {
+	background: none;
+	border: none;
+	color: #000;
+}
+
+.leftbar,
+.rightbar {
+	background: rgba(16, 176, 216, 0.7);
+	border-color: #000;
+}
+
+.trainer strong {
+	color: #fff;
+	font-size: larger;
+}
+
+.battle {
+	border-color: #000 !important;
+}
+
+.battle-log {
+	background: #fff;
+	border-color: #000;
+}
+
+.battle-log-add {
+	background: transparent;
+	border-top-color: #000;
+	border-left-color: #000;
+	color: #000;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+.battle-log-add .textbox,
+.battle-log-add .textbox:hover,
+.battle-log-add .textbox:focus {
+	border-color: #000;
+}
+
+.battle-log h2 {
+	background: #4b93ff url();
+	border-color: #000;
+	color: #fff;
+	font-size: large;
+}
+
+.turn {
+	opacity: 0.7 !important;
+	background: #4b93ff;
+	padding: 4px 8px;
+	border-width: 1px;
+	border-color: #000;
+	color: #fff;
+	font-weight: 900;
+	font-style: italic;
+}
+
+.battle-log .rated strong {
+	background: #4b93ff;
+	font-style: italic;
+	font-family: Georgia, Times, "Times New Roman", serif !important;
+}
+
+#lobby-userlist-user-whoissaskex:hover {
+	background: url("https://i.pinimg.com/originals/3b/ff/34/3bff343a42a62de3285b6ca670a020e6.jpg");
+}
+
+#lobby-userlist-user-whosissaskex strong em,
+#lobby-userlist-user-whosissaskex strong,
+#lobby-userlist-user-whosissaskex span,
+#staff-userlist-user-whosissaskex strong em,
+#staff-userlist-user-whosissaskex strong,
+#staff-userlist-user-whosissaskex span,
+#shadowbanroom-userlist-user-whosissaskex strong em,
+#shadowbanroom-userlist-user-whosissaskex strong,
+#shadowbanroom-userlist-user-whosissaskex span {
+	color: #ff0044 !important;
+}
+
+.chat.chatmessage-whosissaskex strong {
+	color: #ff0044 !important;
+	font-style: italic;
+}
+
+#lobby-userlist-user-coralinebot strong em,
+#lobby-userlist-user-coralinebot strong,
+#lobby-userlist-user-coralinebot span,
+#staff-userlist-user-coralinebot strong em,
+#staff-userlist-user-coralinebot strong,
+#staff-userlist-user-coralinebot span,
+#shadowbanroom-userlist-user-coralinebot strong em,
+#shadowbanroom-userlist-user-coralinebot strong,
+#shadowbanroom-userlist-user-coralinebot span {
+	color: #4169e1 !important;
+}
+
+.chat.chatmessage-coralinebot strong {
+	color: #4169e1 !important;
+}
+
+#lobby-userlist-user-ohhiitsjune strong em,
+#lobby-userlist-user-ohhiitsjune strong,
+#lobby-userlist-user-ohhiitsjune span,
+#staff-userlist-user-ohhiitsjune strong em,
+#staff-userlist-user-ohhiitsjune strong,
+#staff-userlist-user-ohhiitsjune span,
+#shadowbanroom-userlist-user-ohhiitsjune strong em,
+#shadowbanroom-userlist-user-ohhiitsjune strong,
+#shadowbanroom-userlist-user-ohhiitsjune span {
+	color: #008000 !important;
+}
+
+.chat.chatmessage-ohhiitsjune strong {
+	color: #008000 !important;
+}
+
+#lobby-userlist-user-coralinebot strong em,
+#lobby-userlist-user-coralinebot strong,
+#lobby-userlist-user-coralinebot span,
+#staff-userlist-user-coralinebot strong em,
+#staff-userlist-user-coralinebot strong,
+#staff-userlist-user-coralinebot span,
+#shadowbanroom-userlist-user-coralinebot strong em,
+#shadowbanroom-userlist-user-coralinebot strong,
+#shadowbanroom-userlist-user-coralinebot span,
+#banroom-userlist-user-coralinebot strong em,
+#banroom-userlist-user-coralinebot strong,
+#banroom-userlist-user-coralinebot span,
+#desarrollo-userlist-user-coralinebot strong em,
+#desarrollo-userlist-user-coralinebot strong,
+#desarrollo-userlist-user-coralinebot span,
+#roleplay-userlist-user-coralinebot strong em,
+#roleplay-userlist-user-coralinebot strong,
+#roleplay-userlist-user-coralinebot span,
+#animemanga-userlist-user-coralinebot strong em,
+#animemanga-userlist-user-coralinebot strong,
+#animemanga-userlist-user-coralinebot span,
+#torneos-userlist-user-coralinebot strong em,
+#torneos-userlist-user-coralinebot strong,
+#torneos-userlist-user-coralinebot span,
+#overused-userlist-user-coralinebot strong em,
+#overused-userlist-user-coralinebot strong,
+#overused-userlist-user-coralinebot span,
+#ratemyteam-userlist-user-coralinebot strong em,
+#ratemyteam-userlist-user-coralinebot strong,
+#ratemyteam-userlist-user-coralinebot span,
+#zonacompetitiva-userlist-user-coralinebot strong em,
+#zonacompetitiva-userlist-user-coralinebot strong,
+#zonacompetitiva-userlist-user-coralinebot span,
+#ayuda-userlist-user-coralinebot strong em,
+#ayuda-userlist-user-coralinebot strong,
+#ayuda-userlist-user-coralinebot span,
+#sdlgv-userlist-user-coralinebot strong em,
+#sdlgv-userlist-user-coralinebot strong,
+#sdlgv-userlist-user-coralinebot span {
+	color: #4169e1 !important;
+}
