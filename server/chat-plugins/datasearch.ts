@@ -625,8 +625,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		return {error: `You can't run searches for multiple mods.`};
 	}
 
-	const mod = Dex.mod(usedMod || 'base');
 	global.gc();
+	console.log("start:", process.memoryUsage());
+	const mod = Dex.mod(usedMod || 'base');
 	const assert = require('node:assert/strict');
 	function deepEquals(left, right) {
 		let eq = true;
@@ -681,6 +682,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			v.mod_added.set(mod_str, numNew);
 		}
+		console.log(process.memoryUsage());
+		console.log();
 	}
 	for (const [k, v] of Object.entries(dedup_tables)) {
 		for (const [id, bucket] of v.buckets) {
@@ -701,6 +704,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		v.uniq_objs.clear();
 	}
 	global.gc();
+	console.log("final:", process.memoryUsage());
+	console.log();
 	return {result: "placeholder"};
 
 
