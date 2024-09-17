@@ -775,11 +775,9 @@ export class RandomTeams {
 		}
 
 		// Enforce Aurora Veil if the team doesn't already have screens
-		if (!teamDetails.screens) {
-			if (movePool.includes('auroraveil')) {
-				counter = this.addMove('auroraveil', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
+		if (!teamDetails.screens && movePool.includes('auroraveil')) {
+			counter = this.addMove('auroraveil', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 
 		// Enforce Knock Off on pure Normal- and Fighting-types in singles
