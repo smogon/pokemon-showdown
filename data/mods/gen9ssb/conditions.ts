@@ -27,7 +27,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		effectType: 'Condition',
 		duration: 3,
 		onSideStart(side, source) {
-			this.add('-sidestart', side, 'Lightning');
+			this.add('-sidestart', side, 'Lightning', '[silent]');
 			for (const pokemon of side.pokemon) {
 				pokemon.abilityState.originalMaxHp = pokemon.maxhp;
 				pokemon.maxhp /= 2;
@@ -35,7 +35,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onSideEnd(side) {
-			this.add('-sideend', side, 'Lightning');
+			this.add('-sideend', side, 'Lightning', '[silent]');
 			for (const pokemon of side.pokemon) {
 				pokemon.maxhp = pokemon.abilityState.originalMaxHp;
 				pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
@@ -46,7 +46,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: "Mega Mushroom",
 		duration: 3,
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'Mega Mushroom');
+			this.add('-start', pokemon, 'Mega Mushroom', '[silent]');
 			pokemon.abilityState.originalMaxHp = pokemon.maxhp;
 			pokemon.maxhp *= 2;
 			pokemon.baseMaxhp *= 2;
@@ -57,9 +57,31 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			};
 		},
 		onEnd(pokemon) {
-			this.add('-end', pokemon, 'Mega Mushroom');
+			this.add('-end', pokemon, 'Mega Mushroom', '[silent]');
 			pokemon.maxhp = pokemon.abilityState.originalMaxHp;
 			pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
+		},
+	},
+	boo: {
+		name: "Boo",
+		duration: 2,
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Boo', '[silent]');
+			this.add('-anim', pokemon, 'Mist', pokemon);
+			this.add('-anim', pokemon, 'Teleport', pokemon);
+		},
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (effect?.effectType === 'Move') {
+				return false;
+			}
+		},
+		onEnd(pokemon) {
+			const target = pokemon.side.foe.active[0];
+			const targetSig = this.dex.getActiveMove(target.moveSlots[3].id);
+			this.add('-anim', pokemon, 'Phantom Force', pokemon);
+			this.add('-end', pokemon, 'Boo', '[silent]');
+			this.actions.useMove(targetSig, pokemon, target);
 		},
 	},
 	// Morte
