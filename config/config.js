@@ -1,5 +1,8 @@
 "use strict";
 
+exports.serverid = "pokemonespanol";
+exports.servertoken = process.env.servertoken;
+
 /**
  * The server port - the port to run Pokemon Showdown under
  *
