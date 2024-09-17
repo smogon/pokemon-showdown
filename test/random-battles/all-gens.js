@@ -252,7 +252,8 @@ describe("New set format (slow)", () => {
 							const stealthRock = Math.floor(i / 2) % 2;
 							const stickyWeb = Math.floor(i / 4) % 2;
 							const spikes = Math.floor(i / 8) % 2;
-							const teamDetails = {rapidSpin, stealthRock, stickyWeb, spikes};
+							const screens = Math.floor(i / 2) % 2;
+							const teamDetails = {rapidSpin, stealthRock, stickyWeb, spikes, screens};
 							// randomMoveset() deletes moves from the movepool, so recreate it every time
 							const movePool = set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id));
 							let moveSet;
