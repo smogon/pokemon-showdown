@@ -112,7 +112,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Defog", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
+                "movepool": ["Defog", "Encore", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Dark", "Water"]
             }
@@ -180,13 +180,25 @@
         ]
     },
     "necturna": {
-        "level": 82,
+        "level": 80,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Power Whip", "Shadow Claw", "Shell Smash", "Stone Edge"],
+                "role": "Bulky Setup",
+                "movepool": ["Horn Leech", "Shadow Claw", "Stone Edge", "Victory Dance"],
                 "abilities": ["Forewarn"],
-                "teraTypes": ["Rock"]
+                "teraTypes": ["Fairy", "Rock", "Water"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Horn Leech", "Pain Split", "Rage Fist", "Toxic Spikes", "Will-O-Wisp"],
+                "abilities": ["Forewarn"],
+                "teraTypes": ["Fairy", "Water"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Horn Leech", "Pain Split", "Power Whip", "Shadow Claw", "Shadow Sneak", "Sticky Web", "Toxic Spikes", "Will-O-Wisp"],
+                "abilities": ["Forewarn"],
+                "teraTypes": ["Fairy", "Water"]
             }
         ]
     },

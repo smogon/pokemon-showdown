@@ -357,8 +357,9 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bulletpunch", "dynamicpunch", "payback", "stoneedge", "toxic"],
-                "abilities": ["No Guard"]
+                "movepool": ["bulletpunch", "dynamicpunch", "earthquake", "payback", "stoneedge", "toxic"],
+                "abilities": ["No Guard"],
+                "preferredTypes": ["Dark"]
             }
         ]
     },
@@ -3876,14 +3877,10 @@
         "level": 69,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["calmmind", "earthpower", "fireblast", "judgment", "recover"],
-                "abilities": ["Multitype"]
-            },
-            {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "darkpulse", "focusblast", "judgment"],
-                "abilities": ["Multitype"]
+                "movepool": ["calmmind", "darkpulse", "focusblast", "judgment", "recover"],
+                "abilities": ["Multitype"],
+                "preferredTypes": ["Fighting"]
             }
         ]
     },
