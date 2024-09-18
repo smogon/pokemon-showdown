@@ -1,7 +1,7 @@
 import {ssbSets} from "./random-teams";
 import {changeSet, getName, enemyStaff, PSEUDO_WEATHERS} from "./scripts";
 
-const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'deserteddunes', 'millenniumcastle'];
+const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'millenniumcastle'];
 
 export const Abilities: {[k: string]: ModdedAbilityData} = {
 	/*
@@ -144,8 +144,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${source.name} emptied their deck!`);
 				let acUsed = false;
 				let dcUsed = false;
+				let lcUsed = false;
+				let scUsed = false;
 				source.abilityState.acCount = 0;
 				source.abilityState.dcCount = 0;
+				source.abilityState.lcCount = 0;
+				source.abilityState.scCount = 0;
 				for (const card of source.abilityState.cards) {
 					switch (card) {
 						case 'Attack':
@@ -159,7 +163,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 							dcUsed = true;
 							break;
 						case 'Life':
+							source.abilityState.lcCount++;
+							lcUsed = true;
+							break;
 						case 'Support':
+							source.abilityState.scCount++;
+							scUsed = true;
+							break;
 					}
 				}
 				if (acUsed) source.side.addSideCondition('Attack Card', source);
