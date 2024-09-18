@@ -23,6 +23,8 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 
 	// Ace
 	attackcard: {
+		effectType: 'Condition',
+		duration: 9,
 		onSideStart(side) {
 			this.add('-sidestart', side, 'Attack Card', '[silent]');
 		},
@@ -43,6 +45,26 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 	},
 	defensecard: {
+		effectType: 'Condition',
+		duration: 9,
+		onSideStart(side) {
+			this.add('-sidestart', side, 'Attack Card', '[silent]');
+		},
+		onModifyDef(def, pokemon) {
+			const source = side.pokemon.filter(pokemon => pokemon.name === 'Ace');
+			const MOD = 1 + source.abilityState.dcCount * 0.15;
+			if (MOD > 1) this.add('-message', `${pokemon.name}'s defenses were strengthed by ${source.name}'s Defense cards!`);
+			return this.chainModify(MOD);
+		},
+		onModifySpd(spd, pokemon) {
+			const source = side.pokemon.filter(pokemon => pokemon.name === 'Ace');
+			const MOD = 1 + source.abilityState.dcCount * 0.15;
+			if (MOD > 1) this.add('-message', `${pokemon.name}'s defenses were strengthed by ${source.name}'s Defense cards!`);
+			return this.chainModify(MOD);
+		},
+		onSideEnd(side) {
+			this.add('-sideend', side, 'Attack Card', '[silent]');
+		},
 	},
 	// PokeKart
 	lightning: {
