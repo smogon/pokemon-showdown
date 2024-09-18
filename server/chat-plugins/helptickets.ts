@@ -1159,7 +1159,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			];
 			const tar = toID(ticket.text[0]); // should always be the reported userid
 			const name = Utils.escapeHTML(Users.getExact(tar)?.name || tar);
-			buf += `<br /><strong>Reported user:</strong> ${name} `;
+			buf += `<br /><strong>Reported user:</strong> <a href="https://${Config.routes.root}/users/${name}">${name}</a> `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
 			buf += `<details ${state?.list ? 'open' : ''} class="readmore">`;
 			buf += `<summary>Punish <strong>${name}</strong> (reported user)</summary>`;
