@@ -110,6 +110,34 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.priority = 0;
 			}
 		},
+		onModifyAtk(atk, pokemon) {
+			let MOD = 1;
+			for (const card of pokemon.abilityState.cards) {
+				if (card === 'Attack') MOD += 0.5;
+			}
+			return this.chainModify(MOD);
+		},
+		onModifySpa(spa, pokemon) {
+			let MOD = 1;
+			for (const card of pokemon.abilityState.cards) {
+				if (card === 'Attack') MOD += 0.5;
+			}
+			return this.chainModify(MOD);
+		},
+		onModifyDef(def, pokemon) {
+			let MOD = 1;
+			for (const card of pokemon.abilityState.cards) {
+				if (card === 'Defense') MOD += 0.5;
+			}
+			return this.chainModify(MOD);
+		},
+		onModifySpd(spd, pokemon) {
+			let MOD = 1;
+			for (const card of pokemon.abilityState.cards) {
+				if (card === 'Defense') MOD += 0.5;
+			}
+			return this.chainModify(MOD);
+		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			const foe = source.side.foe.active[0];
 			if (move.id === 'teleport' && source.abilityState.cards && source.abilityState.cards.length) {
