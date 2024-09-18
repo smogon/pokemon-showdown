@@ -21,6 +21,29 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
 
+	// Ace
+	attackcard: {
+		onSideStart(side) {
+			this.add('-sidestart', side, 'Attack Card', '[silent]');
+		},
+		onModifyAtk(atk, pokemon) {
+			const source = side.pokemon.filter(pokemon => pokemon.name === 'Ace');
+			const MOD = 1 + source.abilityState.acCount * 0.15;
+			if (MOD > 1) this.add('-message', `${pokemon.name}'s power was strengthed by ${source.name}'s Attack cards!`);
+			return this.chainModify(MOD);
+		},
+		onModifySpa(spa, pokemon) {
+			const source = side.pokemon.filter(pokemon => pokemon.name === 'Ace');
+			const MOD = 1 + source.abilityState.acCount * 0.15;
+			if (MOD > 1) this.add('-message', `${pokemon.name}'s power was strengthed by ${source.name}'s Attack cards!`);
+			return this.chainModify(MOD);
+		},
+		onSideEnd(side) {
+			this.add('-sideend', side, 'Attack Card', '[silent]');
+		},
+	},
+	defensecard: {
+	},
 	// PokeKart
 	lightning: {
 		name: "Lightning",
