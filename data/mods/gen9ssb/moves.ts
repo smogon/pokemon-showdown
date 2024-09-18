@@ -4210,41 +4210,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Steel",
 	},
 
-	// PenQuin
-	splashnluckyblaze: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Physical",
-		name: "Splash n' Lucky Blaze",
-		shortDesc: "User: +1 Attack; target: 100% chance of burn.",
-		desc: "Has a 100% chance to raise the user's Attack by 1 stage and a 100% chance to burn the target.",
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Jet Punch', target);
-			this.add('-anim', source, 'Flare Blitz', target);
-		},
-		secondaries: [
-			{
-				chance: 100,
-				status: 'brn',
-			}, {
-				chance: 100,
-				self: {
-					boosts: {
-						atk: 1,
-					},
-				},
-			},
-		],
-		target: "normal",
-		type: "Water",
-	},
-
 	// phoopes
 	gen1blizzard: {
 		accuracy: 90,
