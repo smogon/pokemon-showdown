@@ -69,14 +69,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryMove(pokemon, target, move) {
 				if (move.flags['contact']) {
 					this.add('-anim', pokemon, 'Terrain Pulse', pokemon);
-					this.damage(target.abilityState.grDamage, pokemon);
+					this.damage(pokemon.abilityState.grDamage, pokemon);
 					this.add('-message', `${pokemon.name} was assaulted by Genesis Ray!`);
 					pokemon.removeVolatile('genesisray');
 				}
 			},
 			onSwitchOut(pokemon) {
 				this.add('-anim', pokemon, 'Terrain Pulse', pokemon);
-				this.damage(target.abilityState.grDamage, pokemon);
+				this.damage(pokemon.abilityState.grDamage, pokemon);
 				this.add('-message', `${pokemon.name} was assaulted by Genesis Ray!`);
 				pokemon.removeVolatile('genesisray');
 			},
