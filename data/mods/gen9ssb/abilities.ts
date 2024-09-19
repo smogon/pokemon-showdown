@@ -25,8 +25,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onTryHit(target, source, move) {
 			if (
-				target === source || !move || move.category !== 'Status' || 
-				move.accuracy === true || move.accuracy === 100
+				target === source || !move || 
+				move.category !== 'Status' || move.accuracy === true
 			) return;
 			this.add('-activate', this.effectState.target, 'ability: Temporal Domain');
 			this.add('-message', `${this.effectState.target} disrupted ${this.effectState.source}'s accuracy!`);
