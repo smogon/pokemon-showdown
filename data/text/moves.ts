@@ -2260,7 +2260,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	foresight: {
 		name: "Foresight",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type. Fails if the target is already affected, or affected by Miracle Eye or Odor Sleuth.",
+		desc: "Target's Evasiveness stat stage is ignored during accuracy checks if it is greater than 0 as long as the target remains active. Normal and Fighting type attacks can hit the target if it is a Ghost type. Fails if the target is already affected or affected by Miracle Eye or Odor Sleuth.",
 		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
@@ -2366,7 +2366,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	futuresight: {
 		name: "Future Sight",
-		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
+		desc: "Deals damage two turns after this move is used. Damage is calculated and dealt at the end of the second turn to the Pokemon at the original position of the target. If the user is no longer active, damage is calculated based on it's Special Attack stat, types and level ignoring any boosts from held items or ability. Fails if this move or Doom Desire is already in effect for the target's position.",
 		shortDesc: "Hits two turns after being used.",
 		gen4: {
 			desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
@@ -4153,7 +4153,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	miracleeye: {
 		name: "Miracle Eye",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
+		desc: "Target's Evasiveness stat stage is ignored during accuracy checks if it is greater than 0 as long as the target remains active. Psychic type attacks can hit the target if it is a Dark type. Fails if the target is already affected or affected by Foresight or Odor Sleuth.",
 		shortDesc: "Psychic hits Dark. Evasiveness ignored.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type.",
@@ -4478,7 +4478,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	odorsleuth: {
 		name: "Odor Sleuth",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type. Fails if the target is already affected, or affected by Foresight or Miracle Eye.",
+		desc: "Target's Evasiveness stat stage is ignored during accuracy checks if it is greater than 0 as long as the target remains active. Normal and Fighting type attacks can hit the target if it is a Ghost type. Fails if the target is already affected or affected by Foresight or Miracle Eye.",
 		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
