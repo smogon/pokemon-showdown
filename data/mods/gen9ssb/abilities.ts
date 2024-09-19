@@ -18,6 +18,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Aevum
 	temporaldomain: {
 		name: "Temporal Domain",
+		desc: "Starts Temporal Terrain on switch-in.",
 		gen: 9,
 		flags: {},
 		onStart() {
