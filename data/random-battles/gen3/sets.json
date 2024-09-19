@@ -1003,12 +1003,12 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["bodyslam", "curse", "rest", "sleeptalk"],
-                "abilities": ["Immunity"]
+                "abilities": ["Thick Fat"]
             },
             {
                 "role": "Bulky Setup",
                 "movepool": ["bodyslam", "curse", "earthquake", "rest"],
-                "abilities": ["Immunity"]
+                "abilities": ["Immunity", "Thick Fat"]
             }
         ]
     },

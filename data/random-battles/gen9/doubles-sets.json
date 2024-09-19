@@ -105,9 +105,9 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["High Horsepower", "Knock Off", "Leech Life", "Protect", "Stone Edge", "Swords Dance"],
+                "movepool": ["Gunk Shot", "High Horsepower", "Knock Off", "Protect", "Rapid Spin", "Stone Edge", "Swords Dance"],
                 "abilities": ["Sand Rush"],
-                "teraTypes": ["Bug", "Dark", "Rock"]
+                "teraTypes": ["Poison", "Rock"]
             },
             {
                 "role": "Doubles Bulky Attacker",
@@ -3683,13 +3683,13 @@
             {
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Close Combat", "Iron Head", "Protect", "Scale Shot", "Swords Dance"],
-                "abilities": ["Mold Breaker"],
+                "abilities": ["Unnerve"],
                 "teraTypes": ["Dragon", "Fighting", "Steel"]
             },
             {
                 "role": "Offensive Protect",
                 "movepool": ["Close Combat", "Dragon Claw", "First Impression", "Iron Head", "Protect"],
-                "abilities": ["Mold Breaker"],
+                "abilities": ["Unnerve"],
                 "teraTypes": ["Fighting", "Steel"]
             }
         ]
@@ -5652,7 +5652,7 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Flower Trick", "Knock Off", "Pollen Puff", "Protect", "Sucker Punch", "Taunt"],
+                "movepool": ["Flower Trick", "Knock Off", "Protect", "Sucker Punch", "Taunt"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Poison"]
             }
@@ -6847,8 +6847,14 @@
         "level": 77,
         "sets": [
             {
+                "role": "Doubles Setup Sweeper",
+                "movepool": ["Close Combat", "Mighty Cleave", "Protect", "Swords Dance"],
+                "abilities": ["Quark Drive"],
+                "teraTypes": ["Fighting"]
+            },
+            {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Mighty Cleave", "Protect", "Swords Dance", "Zen Headbutt"],
+                "movepool": ["Close Combat", "Mighty Cleave", "Protect", "Zen Headbutt"],
                 "abilities": ["Quark Drive"],
                 "teraTypes": ["Fighting"]
             }

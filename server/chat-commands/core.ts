@@ -406,10 +406,23 @@ export const commands: Chat.ChatCommands = {
 
 		const pmTarget = this.pmTarget; // not room means it's a PM
 		if (!pmTarget) {
-			const {targetUser, rest: targetRoomid} = this.requireUser(target);
-			const targetRoom = targetRoomid ? Rooms.search(targetRoomid) : room;
-			if (!targetRoom) return this.errorReply(this.tr`The room "${targetRoomid}" was not found.`);
-			return this.parse(`/pm ${targetUser.name}, /invite ${targetRoom.roomid}`);
+			const users = target.split(',').map(part => part.trim());
+			let targetRoom;
+			if (users.length > 1 && Rooms.search(users[users.length - 1])) {
+				targetRoom = users.pop();
+			} else {
+				targetRoom = room;
+			}
+			if (users.length > 1 && !user.trusted) {
+				return this.errorReply("You do not have permission to mass-invite users.");
+			}
+			if (users.length > 10) {
+				return this.errorReply("You cannot invite more than 10 users at once.");
+			}
+			for (const toInvite of users) {
+				this.parse(`/pm ${toInvite}, /invite ${targetRoom}`);
+			}
+			return;
 		}
 
 		const targetRoom = Rooms.search(target);
@@ -436,6 +449,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	invitehelp: [
 		`/invite [username] - Invites the player [username] to join the room you sent the command to.`,
+		`/invite [comma-separated usernames] - Invites multiple users to join the room you sent the command to. Requires trusted`,
 		`/invite [username], [roomname] - Invites the player [username] to join the room [roomname].`,
 		`(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname].`,
 	],
