@@ -2563,7 +2563,6 @@ export const Formats: FormatList = [
 		onModifyCritRatio(critRatio, source, target) {
 			if (source.abilityState.tcbCritBoost) {
 				this.debug(`TCB boosting ${source.name}'s crit ratio`);
-				this.add('-message', `${source.name} GOT A TCB BOOST WOOOOOOOOOOOOOO CRITS FOR EVERYBODY BABY`);
 				return critRatio + 1;
 			}
 		},
@@ -2637,7 +2636,6 @@ export const Formats: FormatList = [
 
 			// Handling Colossus Carrier
 			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
-				this.add('-message', `onSwitchIn for Colossus Carrier triggered`);
 				let format = this.format;
 				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
 				for (const item of format.getSharedItems!(pokemon)) {
@@ -2740,7 +2738,6 @@ export const Formats: FormatList = [
 		onModifyCritRatio(critRatio, source, target) {
 			if (source.abilityState.tcbCritBoost) {
 				this.debug(`TCB boosting ${source.name}'s crit ratio`);
-				this.add('-message', `${source.name} GOT A TCB BOOST WOOOOOOOOOOOOOO CRITS FOR EVERYBODY BABY`);
 				return critRatio + 1;
 			}
 		},
@@ -2814,7 +2811,6 @@ export const Formats: FormatList = [
 
 			// Handling Colossus Carrier
 			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
-				this.add('-message', `onSwitchIn for Colossus Carrier triggered`);
 				let format = this.format;
 				if (!format.getSharedItems) format = this.dex.formats.get('gen9superstaffbrosultimate');
 				for (const item of format.getSharedItems!(pokemon)) {
