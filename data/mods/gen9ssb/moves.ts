@@ -46,6 +46,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 60,
 		category: "Special",
 		name: "Genesis Ray",
+		desc: "Traps the target in Genesis Ray, dealing a second hit with double damage if the target uses a contact move or switches, then ending.",
+		shortDesc: "Traps the target in Genesis Ray.",
 		gen: 9,
 		pp: 16,
 		noPPBoosts: true,
