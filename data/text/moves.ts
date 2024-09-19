@@ -2260,7 +2260,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	foresight: {
 		name: "Foresight",
-		desc: "Target's Evasiveness stat stage is ignored during accuracy checks if it is greater than 0 as long as the target remains active. Normal and Fighting type attacks can hit the target if it is a Ghost type. Fails if the target is already affected or affected by Miracle Eye or Odor Sleuth.",
+		desc: "As long as the target remains active, its Evasiveness stat stage is ignored during accuracy checks if it is greater than 0. Normal and Fighting type attacks can hit the target if it is a Ghost type. Fails if the target is already affected or affected by Miracle Eye or Odor Sleuth.",
 		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
@@ -4153,7 +4153,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	miracleeye: {
 		name: "Miracle Eye",
-		desc: "Target's Evasiveness stat stage is ignored during accuracy checks if it is greater than 0 as long as the target remains active. Psychic type attacks can hit the target if it is a Dark type. Fails if the target is already affected or affected by Foresight or Odor Sleuth.",
+		desc: "As long as the target remains active, its Evasiveness stat stage is ignored during accuracy checks if it is greater than 0. Psychic type attacks can hit the target if it is a Dark type. Fails if the target is already affected or affected by Foresight or Odor Sleuth.",
 		shortDesc: "Psychic hits Dark. Evasiveness ignored.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type.",
@@ -4478,7 +4478,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	odorsleuth: {
 		name: "Odor Sleuth",
-		desc: "Target's Evasiveness stat stage is ignored during accuracy checks if it is greater than 0 as long as the target remains active. Normal and Fighting type attacks can hit the target if it is a Ghost type. Fails if the target is already affected or affected by Foresight or Miracle Eye.",
+		desc: "As long as the target remains active, its Evasiveness stat stage is ignored during accuracy checks if it is greater than 0. Normal and Fighting type attacks can hit the target if it is a Ghost type. Fails if the target is already affected or affected by Foresight or Miracle Eye.",
 		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
