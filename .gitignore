@@ -1,4 +1,3 @@
-
 /config/secret.json
 !/config/formats.ts
 /logs/**/*
