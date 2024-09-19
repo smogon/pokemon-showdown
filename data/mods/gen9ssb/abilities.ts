@@ -18,7 +18,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Aevum
 	temporaldomain: {
 		name: "Temporal Domain",
-		desc: "Starts Temporal Terrain on switch-in.",
+		shortDesc: "Temporal Terrain; Status moves miss the user.",
+		desc: "Starts Temporal Terrain on switch-in. At the end of each turn, raises the user's speed by 1 stage, or lowers the opposing Pokemon's speed by 1 stage. Status moves that do not have fixed accuracy are guaranteed to miss against the user.",
 		gen: 9,
 		flags: {},
 		onStart() {
