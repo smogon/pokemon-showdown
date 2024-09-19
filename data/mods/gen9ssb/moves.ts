@@ -46,8 +46,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Ecosystem Drain",
-		shortDesc: "Heals/boosts power by form-dependent amount.",
-		desc: "Heals the user, and boosts the power of the user's attacks next turn, by an amount dependent on the current Zygarde form. Complete: 25% Heal/Boost; 50%: 50% Heal/Boost; 10%: 25% Heal/Boost.",
+		shortDesc: "Heals; Boosts power next turn; Grassy Terrain.",
+		desc: "Heals the user, and boosts the power of the user's attacks next turn, by an amount dependent on the current Zygarde form. Complete: 25% Heal/Boost; 50%: 50% Heal/Boost; 10%: 25% Heal/Boost. Clears any active weather conditions, if present, and sets Grassy Terrain.",
 		gen: 9,
 		pp: 5,
 		priority: 0,
@@ -71,6 +71,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.heal(pokemon.maxhp / 1.33);
 					pokemon.abilityState.boostMod = 1.75;
 			}
+			this.field.clearWeather();
+			this.field.setTerrain('grassyterrain');
 		},
 		volatileStatus: 'ecosystemdrain',
 		condition: {
