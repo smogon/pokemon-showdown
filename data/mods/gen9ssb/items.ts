@@ -1,4 +1,18 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Varnava
+	varnaviumz: {
+		name: "Varnavium Z",
+		gen: 9,
+		desc: "If held by Varnava with Core Enforcer, it can use Southern Island's Last Defense, and its moves have -1 priority.",
+		shortDesc: "-1 Priority. If held by Varnava with Core Enforcer, it can use Southern Island's Last Defense.",
+		onTakeItem: false,
+		zMove: "Southern Island's Last Defense",
+		zMoveFrom: "Core Enforcer",
+		itemUser: ["Zygarde-Complete", "Zygarde-10%", "Zygarde"],
+		onModifyMove(move, pokemon) {
+			if (pokemon.name === 'Varnava' && pokemon.moves.indexOf('coreenforcer')) move.priority = -1;
+		},
+	},
 	// Aevum
 	rewindwatch: {
 		name: "Rewind Watch",
