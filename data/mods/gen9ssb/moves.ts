@@ -116,6 +116,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-fieldend', 'move: Temporal Terrain');
 			},
 			onModifyMove(move, pokemon) {
+				if (move.category === 'Status') return;
 				if (!move.flags['futuremove']) {
 					move.flags['futuremove'] = 1;
 					delete move.flags['protect'];
