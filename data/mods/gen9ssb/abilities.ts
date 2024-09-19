@@ -15,6 +15,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Varnava
+	celldeconstruct: {
+		name: "Cell Deconstruct",
+		shortDesc: "See '/ssb Varnava' for more!",
+		gen: 9,
+		flags: {},
+	},
 	// Aevum
 	temporaldomain: {
 		name: "Temporal Domain",
