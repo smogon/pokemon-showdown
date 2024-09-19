@@ -40,6 +40,59 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Varnava
+	ecosystemdrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Ecosystem Drain",
+		shortDesc: "Heals/boosts power by form-dependent amount.",
+		desc: "Heals the user, and boosts the power of the user's attacks next turn, by an amount dependent on the current Zygarde form. Complete: 25% Heal/Boost; 50%: 50% Heal/Boost; 10%: 25% Heal/Boost.",
+		gen: 9,
+		pp: 5,
+		priority: 0,
+		flags: {reflectable: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Rototiller', source);
+			this.add('-anim', source, 'Geomancy', source);
+		},
+		onHit(pokemon) {
+			switch (pokemon.species.id) {
+				case 'zygardecomplete':
+					this.heal(pokemon.maxhp / 4);
+					pokemon.abilityState.boostMod = 1.25;
+				case 'zygarde':
+					this.heal(pokemon.maxhp / 2);
+					pokemon.abilityState.boostMod = 1.5;
+				case 'zygarde10':
+					this.heal(pokemon.maxhp / 1.33);
+					pokemon.abilityState.boostMod = 1.75;
+			}
+		},
+		volatileStatus: 'ecosystemdrain',
+		condition: {
+			duration: 2,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Ecosystem Drain', '[silent]');
+			},
+			onBasePower(basePower, source, target, move) {
+				if (pokemon.abilityState.boostMod) {
+					pokemon.abilityState.boostMod = false;
+					return this.chainModify(boostMod);
+				}
+			},
+			onEnd(pokemon) {
+				if (pokemon.abilityState.boostMod) pokemon.abilityState.boostMod = false;
+				this.add('-end', pokemon, 'Ecosystem Drain', '[silent]');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Grass",
+	},
 	// Aevum
 	genesisray: {
 		accuracy: 80,
