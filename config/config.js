@@ -1,7 +1,8 @@
 "use strict";
+const secrets = require("./secret.json");
 
 exports.serverid = "pokemonespanol";
-exports.servertoken = process.env.servertoken;
+exports.servertoken = secrets.tokens.servertoken;
 
 /**
  * The server port - the port to run Pokemon Showdown under
