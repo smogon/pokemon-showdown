@@ -121,7 +121,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					delete move.flags['protect'];
 				}
 				const newDuration = this.effectState.domain + 1;
-				this.add('-message', newDuration);
 				move.onTry = function (source, t) {
 					if (!t.side.addSlotCondition(t, 'futuremove')) {
 						this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
@@ -139,10 +138,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						source: source,
 						moveData: moveData,
 					});
-					return this.NOT_FAIL;
+					return null;
 				};
-				//this.add('-message', `${move.name} entered the Temporal Domain!`);
-				this.add('-message', `${move.name} was shifted ${this.effectState.domain} turns into the future by Temporal Domain!`);
+				move.onDamage = function (d, t, s, e) {
+					if (e.effectType === 'Move') this.add('-anim', s, e.id, t);
+				};
+				this.add('-message', `${move.name} entered the Temporal Domain!`);
 				switch (this.effectState.domain) {
 					case 2:
 						this.effectState.domain = 3;
@@ -154,11 +155,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.effectState.domain = 2;
 						break;
 				}
-			},
-			onResidual(pokemon) {
-				const move = pokemon.side.slotConditions[pokemon.position]['futuremove'];
-				if (!move) return;
-				this.add('-message', `${move.move} duration remaining: ${move.duration}`);
 			},
 		},
 		secondary: null,
