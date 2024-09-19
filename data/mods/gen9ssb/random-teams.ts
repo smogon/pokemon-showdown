@@ -703,12 +703,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gear Grind',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
-	PenQuin: {
-		species: 'Empoleon', ability: '\'Poleon\'s Pyro Quirk', item: 'Assault Vest', gender: 'M',
-		moves: ['Liquidation', 'Sacred Fire', 'Knock Off'],
-		signatureMove: 'Splash n\' Lucky Blaze',
-		evs: {atk: 252, def: 252, spe: 4}, nature: 'Adamant', teraType: 'Fire',
-	},
 	phoopes: {
 		species: 'Jynx', ability: 'I Did It Again', item: 'Focus Sash', gender: 'F',
 		moves: ['Lovely Kiss', 'Psychic', 'Amnesia'],

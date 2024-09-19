@@ -1104,8 +1104,23 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		Object.values(search).reduce(accumulateKeyCount, 0)
 	));
 
+	// Prepare move validator and pokemonSource outside the hot loop
+	// but don't prepare them at all if there are no moves to check...
+	// These only ever get accessed if there are moves to filter by.
+	let validator;
+	let pokemonSource;
+	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
+		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
+		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
+		const additionalRules = [];
+		if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
+		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
+		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
+		pokemonSource = validator.allSources();
+	}
 	for (const alts of searches) {
 		if (alts.skip) continue;
+		const altsMoves = Object.keys(alts.moves).map(x => mod.moves.get(x)).filter(move => move.gen <= mod.gen);
 		for (const mon in dex) {
 			let matched = false;
 			if (alts.gens && Object.keys(alts.gens).length) {
@@ -1266,20 +1281,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
-			const formatStr = format ? format[1].name : 'gen9ou';
-			const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(formatStr));
-			const additionalRules = [];
-			if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
-			if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
-			const validator = TeamValidator.get(`${formatStr}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
-			const pokemonSource = validator.allSources();
-			for (const move of Object.keys(alts.moves).map(x => mod.moves.get(x))) {
-				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+			for (const move of altsMoves) {
+				if (validator && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
-				if (!pokemonSource.size()) break;
+				if (pokemonSource && !pokemonSource.size()) break;
 			}
 			if (matched) continue;
 
