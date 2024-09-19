@@ -57,6 +57,30 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Terrain Pulse', target);
 		},
+		onHit(target, source, move) {
+			this.add('-message', `${target.name} was encased by Genesis Ray!`);
+		},
+		onDamage(damage, target, source, effect) {
+			target.abilityState.grDamage = damage * 2;
+		},
+		volatileStatus: 'genesisray',
+		condition: {
+			duration: 3,
+			onTryMove(pokemon, target, move) {
+				if (move.flags['contact']) {
+					this.add('-anim', pokemon, 'Terrain Pulse', pokemon);
+					this.damage(target.abilityState.grDamage, pokemon);
+					this.add('-message', `${pokemon.name} was assaulted by Genesis Ray!`);
+					pokemon.removeVolatile('genesisray');
+				}
+			},
+			onSwitchOut(pokemon) {
+				this.add('-anim', pokemon, 'Terrain Pulse', pokemon);
+				this.damage(target.abilityState.grDamage, pokemon);
+				this.add('-message', `${pokemon.name} was assaulted by Genesis Ray!`);
+				pokemon.removeVolatile('genesisray');
+			},
+		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
