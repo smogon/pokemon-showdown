@@ -205,13 +205,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Genesis Ray',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	/*
 	Varnava: {
 		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
 		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
 		signatureMove: 'Southern Island\'s Last Defense',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant,
 	},
-	/*
 	PokéKart: {
 		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
 		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
