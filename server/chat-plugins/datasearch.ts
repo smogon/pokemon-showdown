@@ -624,8 +624,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	if (c > 1) {
 		return {error: `You can't run searches for multiple mods.`};
 	}
+	const v8 = require('v8');
 
 	global.gc();
+	v8.writeHeapSnapshot();
 	console.log("start:", process.memoryUsage());
 	const mod = Dex.mod(usedMod || 'base');
 	const assert = require('node:assert/strict');
@@ -640,15 +642,42 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	// Drives the dedup script. Can add an entry for any relevant field of mod
 	const dedup_tables = {
+		// formats: { // this is only supposed to be loaded by the base mod
+		//	bucket_key: function(f) { return f.name; },
+		//	get_iter: function(m) { return m.formats.all(); },
+		// },
+		abilities: {
+			bucket_key: function(a) { return a.name; },
+			get_iter: function(m) { return m.abilities.all(); },
+		},
+		items: {
+			bucket_key: function(i) { return i.name; },
+			get_iter: function(m) { return m.items.all(); },
+		},
+		moves: {
+			bucket_key: function(m) { return m.name; },
+			get_iter: function(m) { return m.moves.all();	},
+		},
 		species: {
 			bucket_key: function(s) { return s.id; },
 			get_iter: function(m) { return m.species.all(); },
 		},
-		// This one doesn't seem to work so good. Might need to look more closely at formats
-		// formats: {
-		// bucket_key: function(f) { return f.name; },
-		// get_iter: function(m) { return Object.values(m.formats); },
+		learnsets: {
+			bucket_key: function(l) { return l.species.id; },
+			get_iter: function(m) { return m.species.all().map((s) => m.species.getLearnsetData(s.id)); },
+		},
+		// conditions: { // would have to iterate over conditions to populate the cache
+		//	bucket_key: function(c) { return f.id; },
+		//	get_iter: function(m) { return m.conditions.conditionCache.values(); },
 		// },
+		natures: {
+			bucket_key: function(n) { return n.name; },
+			get_iter: function(m) { return m.natures.all(); },
+		},
+		types: {
+			bucket_key: function(t) { return t.id; },
+			get_iter: function(m) { return m.types.all(); },
+		},
 	};
 	for (const k of Object.keys(dedup_tables)) {
 		const o = dedup_tables[k];
@@ -660,6 +689,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	const mod_list = ["base", "gen9", "fullpotential", "gen1", "gen1jpn", "gen1rbycap", "gen1stadium", "gen2", "gen2stadium2", "gen3", "gen4", "gen4pt", "gen5", "gen5bw1", "gen6", "gen6megasrevisited", "gen6xy", "gen7", "gen7letsgo", "gen7pokebilities", "gen7sm", "gen8", "gen8bdsp", "gen8dlc1", "gen8linked", "gen9dlc1", "gen9predlc", "gen9ssb", "gennext", "mixandmega", "partnersincrime", "pokebilities", "pokemoves", "randomroulette", "sharedpower", "sharingiscaring", "thecardgame", "trademarked"
 	];
+	const num_mods = mod_list.length;
+	let mod_idx = 0;
 	for (const mod_str of mod_list) {
 		console.log('now doing', mod_str);
 		const mod = Dex.mod(mod_str);
@@ -667,7 +698,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const dataset = v.get_iter(mod);
 			let numNew = 0;
 			for (const data of dataset) {
-				if (!data) continue; // occasional null, apparently? i don't remember
 				v.uniq_objs.add(data);
 				let bk_id = v.bucket_key(data);
 				let bucket = v.buckets.get(bk_id);
@@ -682,8 +712,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			v.mod_added.set(mod_str, numNew);
 		}
-		console.log(process.memoryUsage());
-		console.log();
+		if (mod_idx++ == 17) {
+			console.log(process.memoryUsage());
+			console.log();
+		}
 	}
 	for (const [k, v] of Object.entries(dedup_tables)) {
 		for (const [id, bucket] of v.buckets) {
@@ -693,10 +725,10 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		}
 		console.log('\n\tmod sub data:', k);
 		console.log("num unique ids: ", v.buckets.size);
-		console.log("key: #objs per id, value: how many items had this count", v.counts_table);
+		console.log("key: dup count, value: frequency", v.counts_table);
 		console.log("amt added by each mod (depends on mod order):", v.mod_added);
 		console.log("num unique objects:", v.uniq_objs.size);
-		console.log("num unique value:", v.num_uniq_vals);
+		console.log("num unique values: ", v.num_uniq_vals);
 		// probably unnecessary but w/e
 		v.mod_added.clear();
 		v.buckets.clear();
@@ -706,6 +738,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	global.gc();
 	console.log("final:", process.memoryUsage());
 	console.log();
+	v8.writeHeapSnapshot();
 	return {result: "placeholder"};
 
 
