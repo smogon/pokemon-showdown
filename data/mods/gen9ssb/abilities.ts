@@ -23,19 +23,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart() {
 			this.field.setTerrain('temporalterrain');
 		},
-		onTryHit(target, source, move) {
+		onTryHit(pokemon, target, move) {
 			if (
-				target === source || !move || 
+				target === pokemon || !move || 
 				move.category !== 'Status' || move.accuracy === true
 			) return;
-			this.add('-activate', this.effectState.target, 'ability: Temporal Domain');
-			this.add('-message', `${this.effectState.target} disrupted ${this.effectState.source}'s accuracy!`);
+			this.add('-activate', pokemon, 'ability: Temporal Domain');
+			this.add('-message', `${pokemon.name} disrupted ${target.name}'s accuracy!`);
 			move.accuracy = 0;
 			//this.add('-immune', this.effectState.target, 'ability: Temporal Domain');
 			//return false;
 		},
 		onResidual(pokemon) {
 			const target = pokemon.side.foe.active[0];
+			this.add('-activate', pokemon, 'ability: Temporal Domain');
 			if (this.randomChance(1, 2)) {
 				this.boost({spe: 1}, pokemon, pokemon, 'ability: Temporal Domain');
 			} else {
