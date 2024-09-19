@@ -230,7 +230,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBasePower(basePower, pokemon, target, move) {
 			let totalModify = 1;
 			if (pokemon.abilityState.gleamBoost) {
-				this.add('-message', `YEAHHHH ${pokemon.name} HAS A GLEAM BOOST WOOOOOOO`);
 				pokemon.abilityState.gleamBoost = false;
 				totalModify += 0.5;
 			}
@@ -238,7 +237,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.abilityState.damageDoubled = false;
 				totalModify += 1;
 			}
-			this.add('-message', `Damage Modifier: ${totalModify}x`);
 			return this.chainModify(totalModify);
 		},
 		onDamagePriority: -30,
