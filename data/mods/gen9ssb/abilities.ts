@@ -15,6 +15,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Aevum
+	temporaldomain: {
+		name: "Temporal Domain",
+		gen: 9,
+		flags: {},
+		onStart() {
+			this.field.setTerrain('temporalterrain');
+		},
+	},
 	// Ace
 	wildcard: {
 		name: "Wild Card",
