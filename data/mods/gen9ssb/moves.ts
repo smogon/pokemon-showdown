@@ -131,7 +131,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						moveData.flags['futuremove'] = 1;
 						delete moveData.flags['protect'];
 					}
-					this.add('-message', newDuration);
 					Object.assign(t.side.slotConditions[t.position]['futuremove'], {
 						duration: newDuration,
 						move: moveData.id,
