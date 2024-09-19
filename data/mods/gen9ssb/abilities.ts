@@ -788,9 +788,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Blinding Light",
 		gen: 9,
 		onSwitchIn(pokemon) {
-			const target = pokemon.side.foe.active[0];
 			this.add('-anim', pokemon, 'Flash', pokemon);
-			target.addVolatile('blindinglight');
+			for (const target of this.getAllActive()) {
+				if (pokemon === target) continue;
+				target.addVolatile('blindinglight');
+			}
 		},
 		onModifyType(move, pokemon) {
 			this.debug(`LOR typechange to Light-type`);
