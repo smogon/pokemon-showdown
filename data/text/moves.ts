@@ -2366,7 +2366,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	futuresight: {
 		name: "Future Sight",
-		desc: "Deals damage two turns after this move is used. Damage is calculated and dealt at the end of the second turn to the Pokemon at the original position of the target. If the user is no longer active, damage is calculated based on it's Special Attack stat, types and level ignoring any boosts from held items or ability. Fails if this move or Doom Desire is already in effect for the target's position.",
+		desc: "Deals damage two turns after this move is used. Damage is calculated and dealt at the end of the second turn to the Pokemon at the original position of the target. If the user is no longer active, damage is calculated based on it's natural Special Attack stat, types and level ignoring any boosts from held items or ability. Fails if this move or Doom Desire is already in effect for the target's position.",
 		shortDesc: "Hits two turns after being used.",
 		gen4: {
 			desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
