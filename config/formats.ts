@@ -2684,7 +2684,7 @@ export const Formats: FormatList = [
 			// Jack's Tranquility
 			if (
 				target.getAbility().id === 'tranquility' && 
-				pokemon !== target && move.flags['contact']
+				pokemon !== target && move.category === 'Physical'
 			) {
 				const tAction = this.queue.willMove(target);
 				if (!tAction || !tAction.move || tAction.move.category === 'Status') return;
