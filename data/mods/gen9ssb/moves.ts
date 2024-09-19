@@ -153,6 +153,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						break;
 				}
 			},
+			onResidual(pokemon) {
+				const move = pokemon.side.slotConditions[pokemon.position]['futuremove'];
+				if (!move) return;
+				this.add('-message', `${move.move} duration remaining: ${move.duration}`);
+			},
 		},
 		secondary: null,
 		target: "all",
