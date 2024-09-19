@@ -61,6 +61,79 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+	temporalterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Temporal Terrain",
+		pp: 10,
+		priority: 0,
+		flags: {nonsky: 1, metronome: 1},
+		terrain: 'temporalterrain',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Temporal Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Temporal Terrain');
+				}
+				this.effectState.domain = 2;
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Temporal Terrain');
+			},
+			onModifyMove(move, pokemon) {
+				if (!move.flags['futuremove']) {
+					move.flags['futuremove'] = 1;
+					delete move.flags['protect'];
+				}
+				move.onTry = function (source, t) {
+					if (!t.side.addSlotCondition(t, 'futuremove')) {
+						this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
+						return false;
+					}
+					const moveData = this.dex.getActiveMove(move.id);
+					if (!moveData.flags['futuremove']) {
+						moveData.flags['futuremove'] = 1;
+						delete moveData.flags['protect'];
+					}
+					let newDur = this.effectState.domain + 1;
+					Object.assign(t.side.slotConditions[t.position]['futuremove'], {
+						duration: newDur,
+						move: moveData.id,
+						source: source,
+						moveData: moveData,
+					});
+					return this.NOT_FAIL;
+				};
+				//this.add('-message', `${move.name} entered the Temporal Domain!`);
+				this.add('-message', `${move.name} was shifted ${this.effectState.domain} turns into the future by Temporal Domain!`);
+				switch (this.effectState.domain) {
+					case 2:
+						this.effectState.domain = 3;
+						break;
+					case 3:
+						this.effectState.domain = 1;
+						break;
+					case 1:
+						this.effectState.domain = 2;
+						break;
+				}
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "???",
+	},
 	// Ace - Attack Card
 	attack: {
 		accuracy: 100,
