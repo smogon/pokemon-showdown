@@ -1,3 +1,25 @@
+.userdetails a {
+	color: #fff;
+}
+
+
+@keyframes glow {
+    from {
+      text-shadow: 0 0 20px #2d9da9;
+    }
+    to {
+      text-shadow: 0 0 30px #34b3c1, 0 0 10px #4dbbc7;
+    }
+}
+
+.dark .userdetails small {
+	animation: glow 2s ease-in-out infinite alternate;
+}
+
+.userdetails small {
+	color: #fff;
+}
+
 .alert {
 	padding: 19px;
 	background-color: #f44336;
@@ -42,6 +64,10 @@
 
 body {
 	background-image: url("https://pbs.twimg.com/media/Fs-9MG2WIAAl4EG?format=jpg&name=large") !important;
+}
+
+.dark body {
+	background-image: url("https://i.pinimg.com/originals/9e/97/f7/9e97f76a24f3841ad8e01b36b8b1bfd2.jpg") !important;
 }
 
 .ps-room.ps-room-light {
@@ -117,7 +143,6 @@ roomcounters button {
 .textbox:focus {
 	background: #fff;
 	border-color: #fff;
-	color: #101010;
 }
 
 .broadcast-blue {
@@ -164,12 +189,20 @@ roomcounters button {
 }
 
 .header {
-	background: rgba(255, 255, 255, 0.94) url("http://i.imgur.com/DgkiFAd.png")
+	background: url("https://raw.githubusercontent.com/nzkdevsaider/pokemon-showdown/9ae7375bbf535ba7f08015e876c73f418f54e069/assets/identity/pelogoDragonite.png")
 		no-repeat 12pt !important;
+	backdrop-filter: blur(5px);
 }
 
 .header .logo {
 	opacity: 0;
+}
+
+.dark .maintabbarbottom {
+	background: #124161;
+	border-color: #42b1fcb8;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff;
 }
 
 .maintabbarbottom {
@@ -196,6 +229,13 @@ roomcounters button {
 	color: #fff;
 	font-family: Verdana, Helvetica, Arial, sans-serif !important;
 }
+.dark .tabbar a.button.cur,
+.dark .tabbar a.button.cur:hover {
+	background: #124161;
+	border-color: #3592d1;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+}
 
 .tabbar a.button.cur,
 .tabbar a.button.cur:hover {
@@ -207,6 +247,14 @@ roomcounters button {
 
 .tabbar a.cur + .closebutton {
 	color: #000;
+}
+
+.dark .tabbar a.button,
+.dark .userbar button.icon {
+	background: #124161;
+	border-color: #3592d1;
+	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+	color: #fff;
 }
 
 .tabbar a.button,
@@ -234,61 +282,27 @@ roomcounters button {
 	font-family: Verdana, Helvetica, Arial, sans-serif !important;
 }
 
-.userbar .username {
-	color: #000;
-	font-family: Verdana, Helvetica, Arial, sans-serif !important;
+.dark .chat-log {
+	background: rgb(4 3 3 / 78%);
 }
 
 .chat-log {
-	background: #f2f3f8;
+	background: #f2f3f8
+		url("https://raw.githubusercontent.com/po-devs/pokemon-online/refs/heads/master/bin/Themes/Classic/mainchat.png")
+		center;
 	border-width: 0 0 1px 1px;
 	border-style: solid;
 	border-color: #000;
-	color: #000;
 	font-family: Verdana, Helvetica, Arial, sans-serif !important;
 }
 
 .chat small {
-	color: #f50e0e;
-}
-
-.infobox {
-	background: transparent !important;
-	border: 3px #000 !important;
-	color: #000 !important;
-	font-family: Verdana, Helvetica, Arial, sans-serif !important;
-}
-
-.infobox code {
-	color: #000;
-}
-
-.message small {
-	color: #000 !important;
-}
-
-.message .utilichart .result {
-	border-color: #000;
-	font-family: Verdana, Helvetica, Arial, sans-serif !important;
-	color: #000;
+	color: #ff9f9f;
 }
 
 .pm-log a.ilink,
 a.ilink {
 	color: #fff !important;
-	font-family: Verdana, Helvetica, Arial, sans-serif !important;
-}
-
-.chat-log a.ilink,
-.chat-log a.ilink {
-	background: #fff !important;
-	color: #05646b !important;
-	font-family: Verdana, Helvetica, Arial, sans-serif !important;
-}
-
-.infobox a.ilink,
-.infobox a.ilink {
-	color: #05646b !important;
 	font-family: Verdana, Helvetica, Arial, sans-serif !important;
 }
 
@@ -306,7 +320,9 @@ a.ilink {
 	color: #000;
 }
 
-.chat-log-add .chatbox label {
+.dark .userlist {
+	background: rgba(4, 3, 3, 0.459);
+	backdrop-filter: blur(2px);
 }
 
 .userlist {
@@ -449,6 +465,13 @@ a.ilink {
 	font-family: Verdana, Helvetica, Arial, sans-serif;
 }
 
+.menugroup .button.mainmenu6 {
+	background: #4b93ff;
+	border: 4px #000;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+
 .menugroup .button.mainmenu1:hover,
 .menugroup .button.mainmenu3:hover,
 .menugroup .button.mainmenu5:hover {
@@ -530,21 +553,6 @@ a.ilink {
 	border: 4px #000;
 	color: #fff;
 	font-family: Verdana, Helvetica, Arial, sans-serif;
-}
-
-.challenge .buttonbar button:hover {
-}
-
-.pm-log-add,
-.pm-window.focused .pm-log-add {
-	background: #fff !important;
-	border: 0 #000;
-	color: #000 !important;
-	font-family: Verdana, Helvetica, Arial, sans-serif;
-}
-
-.pm-log-add .textbox {
-	color: #000;
 }
 
 .mainmenufooter {
@@ -642,62 +650,12 @@ a.ilink {
 	font-family: Gerogia, Times, "Times New Roman", serif !important;
 }
 
-.ps-popup.tournament-popout-bracket {
-	background: rgba(15, 62, 112, 0.5);
-	color: #fff;
-}
-
 .ps-popup {
-	background: #fff;
-	color: #000 !important;
-	border: 4px #000;
-	font-family: Georgia, Times, "Times New Roman", serif !important;
-}
-
-.ps-popup .buttonbar button {
-	background: #ffe900;
-	border: 4px #000;
-	color: #000 !important;
-	font-family: Georgia, Times, "Times New Roman", serif !important;
-}
-
-.ps-popup .buttonbar button:hover {
-	background: #ffc300;
-	color: #000 !important;
-}
-
-.ps-popup a,
-.ps-popup a.ilink,
-.popupmenu h3 {
-	color: #f3bc0a !important;
-	font-family: Georgia, Times, "Times New Roman", serif !important;
-}
-
-.ps-popup a:hover,
-.ps-popup a.ilink:hover {
-}
-
-.ps-popup a.ilink.yours {
-	color: #00008b !important;
-	font-style: italic;
-	font-family: Georgia, Times, "Times New Roman", serif !important;
-}
-
-.popupmenu button.sel {
-	color: #000 !important;
+	background: #6aa0f1;
 	border-color: #000;
-}
-
-.popupmenu button.sel:hover {
-	background: transparent;
-	color: #fff !important;
-	border-color: #000;
-}
-
-.popupmenu button:hover {
-	background: #0b335b;
-	color: #fff !important;
-	font-family: Georgia, Times, "Times New Roman", serif !important;
+	color: #fff;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+	border-radius: 5%;
 }
 
 .sunweather,
@@ -1173,22 +1131,6 @@ a.ilink {
 
 .chat.chatmessage-coralinebot strong {
 	color: #4169e1 !important;
-}
-
-#lobby-userlist-user-ohhiitsjune strong em,
-#lobby-userlist-user-ohhiitsjune strong,
-#lobby-userlist-user-ohhiitsjune span,
-#staff-userlist-user-ohhiitsjune strong em,
-#staff-userlist-user-ohhiitsjune strong,
-#staff-userlist-user-ohhiitsjune span,
-#shadowbanroom-userlist-user-ohhiitsjune strong em,
-#shadowbanroom-userlist-user-ohhiitsjune strong,
-#shadowbanroom-userlist-user-ohhiitsjune span {
-	color: #008000 !important;
-}
-
-.chat.chatmessage-ohhiitsjune strong {
-	color: #008000 !important;
 }
 
 #lobby-userlist-user-coralinebot strong em,
