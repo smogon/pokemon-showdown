@@ -264,11 +264,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onFoeTryMove(target, source, move) {
-			if (source !== target && move.category === 'Physical') {
-				
+			if (source !== target && move.category === 'Physical' && !source.abilityState.dns) {
 				this.add('-activate', source, 'ability: Tranquility');
 				this.actions.useMove('Reflexive Slash', source, target);
 			}
+		},
+		onResidual(pokemon) {
+			pokemon.abilityState.dns = false;
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp === 1) {
