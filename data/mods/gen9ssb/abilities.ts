@@ -263,21 +263,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return null;
 			}
 		},
-		onHit(target, source, move) {
-			if (move && move.flags['contact']) {
-				if (target.abilityState.dns) return;
-				target.abilityState.willSlash = true;
-				this.add('-ability', target, 'Tranquility');
-				this.add('-message', `${target.name} prepared Reflexive Slash!`);
+		onFoeTryMove(target, source, move) {
+			if (source !== target && move.category === 'Physical') {
+				
+				this.add('-activate', source, 'ability: Tranquility');
+				this.actions.useMove('Reflexive Slash', source, target);
 			}
-		},
-		onResidual(pokemon) {
-			const target = pokemon.side.foe.active[0];
-			if (pokemon.abilityState.willSlash) {
-				this.actions.useMove('Reflexive Slash', pokemon, target);
-				pokemon.abilityState.willSlash = false;
-			}
-			pokemon.abilityState.dns = false;
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp === 1) {
