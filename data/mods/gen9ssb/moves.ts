@@ -95,6 +95,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Grass",
 	},
+	southernislandslastdefense: {
+		accuracy: true,
+		basePower: 300,
+		category: "Physical",
+		name: "Southern Island's Last Defense",
+		shortDesc: "See '/ssb Varnava' for more!",
+		desc: "Fails if user has any remaining healthy allies, or if user has more than 1/4 of its max HP remaining. Transforms into Zygarde-Complete before attacking. Ignores weaknesses and resistances. Damage is calculated using the lower of the opposing Pokemon's two defense stats. If the opposing Pokemon is not knocked out by this attack, the user faints after damage is dealt. If the opposing Pokemon is knocked out by this attack, starts Endure lasting until the end of next turn.",
+		gen: 9,
+		pp: 1,
+		priority: 6,
+		flags: {bypasssub: 1},
+		ignoreImmunity: true,
+		breaksProtect: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			const remainingPokemon = source.side.pokemon.filter(pokemon => !pokemon.fainted);
+			if (remainingPokemon.length > 1 || source.hp > source.maxhp / 4) return false;
+			source.formeChange('Zygarde-Complete');
+			this.add('-anim', source, 'Core Enforcer', target);
+			this.add('-anim', source, 'Supersonic Skystrike', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			return 0;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+	},
 	// Aevum
 	genesisray: {
 		accuracy: 80,
