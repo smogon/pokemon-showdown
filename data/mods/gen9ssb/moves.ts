@@ -92,6 +92,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Temporal Terrain",
+		shortDesc: "Moves are delayed by 2/3/1 turn(s).",
+		desc: "For 5 turns, non-status moves used by any Pokemon are turned into future moves that hit 2, 3, or 1 turn(s) later, in that order.",  
 		pp: 10,
 		priority: 0,
 		flags: {nonsky: 1, metronome: 1},
@@ -195,7 +197,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Shadow Ball', target);
 		},
 		onHit(target, source, move) {
-			if (!target.volatiles['substitute']) {
+			if (!target.volatiles['substitute'] && target.hp > target.maxhp / 4) {
 				this.directDamage(target.maxhp / 4, target);
 				target.addVolatile('substitute');
 			}
