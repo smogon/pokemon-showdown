@@ -120,6 +120,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					move.flags['futuremove'] = 1;
 					delete move.flags['protect'];
 				}
+				const newDuration = this.effectState.domain + 1;
+				this.add('-message', newDuration);
 				move.onTry = function (source, t) {
 					if (!t.side.addSlotCondition(t, 'futuremove')) {
 						this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
@@ -130,9 +132,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						moveData.flags['futuremove'] = 1;
 						delete moveData.flags['protect'];
 					}
-					let newDur = this.effectState.domain + 1;
+					this.add('-message', newDuration);
 					Object.assign(t.side.slotConditions[t.position]['futuremove'], {
-						duration: newDur,
+						duration: newDuration,
 						move: moveData.id,
 						source: source,
 						moveData: moveData,
