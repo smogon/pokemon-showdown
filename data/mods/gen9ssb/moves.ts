@@ -1255,33 +1255,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryHit(target, source, move) {
 			this.add('-anim', source, 'Hurricane', source);
 			this.add('-anim', source, 'Thunder', target);
-
-			let allPokemon = [];
 			let possibleTargets = [];
-
-			for (const pokemon of target.side.pokemon) {
-				if (pokemon.hp) allPokemon.push(pokemon);
+			for (const pokemon of this.getAllPokemon()) {
+				if (!pokemon.fainted) possibleTargets.push(pokemon);
 			}
-			for (const pokemon of source.side.pokemon) {
-				if (pokemon.hp) allPokemon.push(pokemon);
-			}
-
-			for (const pokemon of target.side.pokemon) {
-				if (pokemon.hp) possibleTargets.push(pokemon);
-			}
-			for (const pokemon of source.side.pokemon) {
-				if (pokemon.hp) possibleTargets.push(pokemon);
-			}
-
 			if (!possibleTargets) return null;
-
-			for (let i = 0; i < allPokemon.length; i++) {
+			for (let i = 0; i < possibleTargets.length; i++) {
 				const newTarget = this.sample(possibleTargets);
-				let dmg = this.actions.getDamage(source, newTarget, move);
-				if (!dmg) {
-					this.add('-message', `${newTarget.name} was unaffected by Big Thunder!`);
+				if (this.dex.getImmunity(move.type, newTarget)) {
+					this.add('-immune', newTarget);
+					i++;
 					continue;
 				}
+				let dmg = this.actions.getDamage(source, newTarget, move);
+				if (!dmg) continue;
 				if (newTarget === target) {
 					this.damage(dmg, target);
 					continue;
