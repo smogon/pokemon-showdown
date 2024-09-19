@@ -123,7 +123,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				const newDuration = this.effectState.domain + 1;
 				move.onTry = function (source, t) {
-					if (!t.side.addSlotCondition(t, 'futuremove')) {
+					if (!t.side.addSlotCondition(t, 'futuremove') && !this.effectState.hinted) {
+						this.effectState.hinted = true;
 						this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
 						return false;
 					}
@@ -138,10 +139,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						source: source,
 						moveData: moveData,
 					});
-					return null;
-				};
-				move.onDamage = function (d, t, s, e) {
-					if (e.effectType === 'Move') this.add('-anim', s, e.id, t);
+					this.attrLastMove('[still]');
+					return this.NOT_FAIL;
 				};
 				this.add('-message', `${move.name} entered the Temporal Domain!`);
 				switch (this.effectState.domain) {
