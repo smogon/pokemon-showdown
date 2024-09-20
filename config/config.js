@@ -1,8 +1,7 @@
 "use strict";
-const secrets = require("./secret.json");
 
-exports.serverid = "pokemonespanol";
-exports.servertoken = secrets.tokens.servertoken;
+exports.serverid = process.env.SERVERID || "pokemonespanol";
+exports.servertoken = process.env.SERVERTOKEN;
 
 /**
  * The server port - the port to run Pokemon Showdown under
@@ -94,7 +93,7 @@ Main's SSL deploy script from Let's Encrypt looks like:
  *   know what you are doing
  * @type {false | string[]}.
  */
-exports.proxyip = ["127.0.0.1"];
+exports.proxyip = [process.env.PROXYIP || "127.0.0.1"];
 
 /**
  * Various debug options
@@ -156,10 +155,13 @@ exports.crashguard = true;
  *   This is the URL of the user database and ladder mentioned earlier.
  *   Don't change this setting - there aren't any other login servers right now
  */
-exports.loginserver = "http://play.pokemonshowdown.com/";
-exports.loginserverkeyalgo = "RSA-SHA1";
-exports.loginserverpublickeyid = 4;
-exports.loginserverpublickey = `-----BEGIN PUBLIC KEY-----
+exports.loginserver =
+	process.env.LOGINSERVER || "http://play.pokemonshowdown.com/";
+exports.loginserverkeyalgo = process.env.LOGINSERVERKEYALGO || "RSA-SHA1";
+exports.loginserverpublickeyid = process.env.LOGINSERVERPUBLICKEYID || 4;
+exports.loginserverpublickey =
+	process.env.LOGINSERVERPUBLICKEY ||
+	`-----BEGIN PUBLIC KEY-----
 MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAzfWKQXg2k8c92aiTyN37
 dl76iW0aeAighgzeesdar4xZT1A9yzLpj2DgR8F8rh4R32/EVOPmX7DCf0bYWeh3
 QttP0HVKKKfsncJZ9DdNtKj1vWdUTklH8oeoIZKs54dwWgnEFKzb9gxqu+z+FJoQ
@@ -365,7 +367,7 @@ exports.forceregisterelo = false;
  *   etc. If you do not trust Pokemon Showdown with admin access, you should
  *   disable this feature.
  */
-exports.backdoor = true;
+exports.backdoor = process.env.PSBACKDOOR || true;
 
 /**
  * List of IPs and user IDs with dev console (>> and >>>) access.
