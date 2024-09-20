@@ -1262,13 +1262,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!possibleTargets) return null;
 			for (let i = 0; i < possibleTargets.length; i++) {
 				const newTarget = this.sample(possibleTargets);
-				if (this.dex.types.get(newTarget.getTypes()).damageTaken[move.type] === 3) {
+				let dmg = this.actions.getDamage(source, newTarget, move);
+				if (!dmg || newTarget.runEffectiveness(move) === -3) {
 					this.add('-immune', newTarget);
 					i++;
 					continue;
 				}
-				let dmg = this.actions.getDamage(source, newTarget, move);
-				if (!dmg) continue;
 				if (newTarget === target) {
 					this.damage(dmg, target);
 					continue;
