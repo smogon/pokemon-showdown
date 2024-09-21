@@ -81,8 +81,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-start', pokemon, 'Ecosystem Drain', '[silent]');
 			},
 			onBasePower(basePower, source, target, move) {
-				if (pokemon.abilityState.boostMod) {
-					pokemon.abilityState.boostMod = false;
+				if (source.abilityState.boostMod) {
+					source.abilityState.boostMod = false;
 					return this.chainModify(boostMod);
 				}
 			},
