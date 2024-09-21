@@ -209,7 +209,7 @@ export const ssbSets: SSBSets = {
 		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
 		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
 		signatureMove: 'Southern Island\'s Last Defense',
-		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant,
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
 	/*
 	PokéKart: {
