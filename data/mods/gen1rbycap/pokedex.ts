@@ -15,7 +15,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		num: 2001,
 		name: "Corupcake",
 		types: ["Fire", "Poison"],
-		baseStats: {hp: 93, atk: 105, def: 82, spa: 95, spd: 95, spe: 81},
+		baseStats: {hp: 97, atk: 105, def: 87, spa: 95, spd: 95, spe: 81},
 		abilities: {0: "No Ability"},
 		heightm: 1.4,
 		weightkg: 189.5,

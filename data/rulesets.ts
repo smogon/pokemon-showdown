@@ -441,7 +441,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		banlist: [
 			'Wooper-Paldea', 'Raichu-Alola', 'Vulpix-Alola', 'Ninetales-Alola', 'Growlithe-Hisui', 'Arcanine-Hisui',
 			'Geodude-Alola', 'Graveler-Alola', 'Golem-Alola', 'Sandshrew-Alola', 'Sandslash-Alola', 'Weezing-Galar',
-			'Sneasel-Hisui', 'Sliggoo-Hisui', 'Goodra-Hisui', 'Basculin-Base', 'Basculin-Blue-Striped', 'Ursaluna-Base',
+			'Sneasel-Hisui', 'Sliggoo-Hisui', 'Goodra-Hisui', 'Basculin-Red-Striped', 'Basculin-Blue-Striped', 'Ursaluna-Base',
 		],
 		onValidateSet(set, format) {
 			const kitakamiDex = [
@@ -2802,6 +2802,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	ferventimpersonationmod: {
 		effectType: 'Rule',
 		name: "Fervent Impersonation Mod",
+		desc: `Nickname a Pok&eacute;mon after another Pok&eacute;mon that it shares a moveset with, and it will transform into the Pok&eacute;mon it's nicknamed after once it drops to or below 50% health.`,
 		onValidateTeam(team, format, teamHas) {
 			const exhaustedSpecies = new Set<string>();
 			for (const set of team) {

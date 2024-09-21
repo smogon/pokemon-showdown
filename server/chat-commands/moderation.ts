@@ -23,7 +23,7 @@ const REQUIRE_REASONS = true;
 
 /**
  * Promotes a user within a room. Returns a User object if a popup should be shown to the user,
- * and null otherwise. Throws a Chat.ErrorMesage on an error.
+ * and null otherwise. Throws a Chat.ErrorMessage on an error.
  *
  * @param promoter the User object of the user who is promoting
  * @param room the Room in which the promotion is happening

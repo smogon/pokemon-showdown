@@ -1,6 +1,7 @@
 import {Utils} from '../lib';
 import {toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
+import {SpeciesData} from './dex-species';
 import {Tags} from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';
@@ -950,8 +951,8 @@ export class DexFormats {
 			}
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
-					const species: Species = table[id] as Species;
-					if ((species.otherFormes || species.cosmeticFormes) && ruleid !== species.id + toID(species.baseForme)) {
+					const species = table[id] as SpeciesData;
+					if ((species.otherFormes || species.cosmeticFormes) && ruleid === id) {
 						matches.push('basepokemon:' + id);
 						continue;
 					}

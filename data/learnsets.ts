@@ -77510,10 +77510,11 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			bounce: ["8M", "7T"],
 			bulletseed: ["9M"],
 			captivate: ["7L37"],
+			celebrate: ["9S1"],
 			charm: ["9M", "8M"],
 			confide: ["7M"],
 			covet: ["7T"],
-			dazzlinggleam: ["9M", "8M", "7M"],
+			dazzlinggleam: ["9M", "9S1", "8M", "7M"],
 			doubleslap: ["7L1", "7S0"],
 			doubleteam: ["7M"],
 			drainingkiss: ["9M", "8M"],
@@ -77552,10 +77553,10 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			sleeptalk: ["9M", "8M", "7M"],
 			snore: ["8M", "7T"],
 			solarbeam: ["9M", "8M", "7M"],
-			splash: ["9L1", "8L1", "7L1"],
+			splash: ["9L1", "9S1", "8L1", "7L1"],
 			stomp: ["9L28", "8L28", "7L29"],
 			substitute: ["9M", "8M", "7M"],
-			sunnyday: ["9M", "8M", "7M"],
+			sunnyday: ["9M", "9S1", "8M", "7M"],
 			swagger: ["7M"],
 			sweetscent: ["9L16", "8L16", "7L17", "7S0"],
 			swift: ["9M"],
@@ -77571,6 +77572,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		},
 		eventData: [
 			{generation: 7, level: 20, nature: "Naive", abilities: ["leafguard"], moves: ["magicalleaf", "doubleslap", "sweetscent"], pokeball: "cherishball"},
+			{generation: 9, level: 50, abilities: ["leafguard"], moves: ["celebrate", "sunnyday", "splash", "dazzlinggleam"], pokeball: "cherishball"},
 		],
 	},
 	tsareena: {
@@ -95966,8 +95968,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			seedbomb: ["9M", "9L24", "8M", "8L24", "7T", "7L39"],
 			shadowball: ["9M", "9L36", "8M", "8L36", "7M", "7L43", "5M", "5L44"],
 			shadowsneak: ["9L4", "8L4", "7L4", "5L13"],
-			shellsmash: ["9E"],
-			sketch: ["7E", "5E"],
+			sketch: ["9S0", "5E"],
 			skittersmack: ["8T"],
 			sleeptalk: ["9M", "8M", "7M"],
 			snore: ["8M", "7T"],
@@ -95987,6 +95988,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			willowisp: ["9M", "9L20", "8M", "8L20", "7M", "7L15", "5M", "5L19"],
 			worryseed: ["7T"],
 		},
+		eventData: [
+			{generation: 9, level: 1, shiny: 1, moves: ["sketch"]},
+		],
 	},
 	necturna: {
 		learnset: {

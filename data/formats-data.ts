@@ -327,7 +327,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	ninetales: {
-		tier: "PU",
+		tier: "ZU",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
@@ -758,7 +758,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	electrodehisui: {
-		tier: "ZU",
+		tier: "ZUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -5429,7 +5429,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "OU",
 	},
 	brutebonnet: {
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
@@ -5634,7 +5634,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "UU",
 	},
 	gougingfire: {
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 		natDexTier: "OU",
 	},

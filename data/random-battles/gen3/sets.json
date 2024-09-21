@@ -1,6 +1,6 @@
 {
     "venusaur": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Staller",
@@ -85,7 +85,7 @@
         ]
     },
     "pidgeot": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -101,7 +101,7 @@
         ]
     },
     "raticate": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -286,7 +286,7 @@
         ]
     },
     "dugtrio": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -296,7 +296,7 @@
         ]
     },
     "persian": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Berry Sweeper",
@@ -383,7 +383,7 @@
         ]
     },
     "alakazam": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -510,7 +510,7 @@
         ]
     },
     "dodrio": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -833,13 +833,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["crosschop", "fireblast", "flamethrower", "focuspunch", "hiddenpowergrass", "hiddenpowerice", "psychic", "substitute", "thunderpunch"],
+                "movepool": ["crosschop", "fireblast", "flamethrower", "focuspunch", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderpunch", "toxic"],
                 "abilities": ["Flame Body"],
                 "preferredTypes": ["Electric"]
             },
             {
                 "role": "Berry Sweeper",
-                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "psychic", "substitute", "thunderpunch"],
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "hiddenpowerice", "substitute", "thunderpunch"],
                 "abilities": ["Flame Body"],
                 "preferredTypes": ["Electric"]
             }
@@ -888,7 +888,7 @@
         ]
     },
     "lapras": {
-        "level": 79,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1003,12 +1003,12 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["bodyslam", "curse", "rest", "sleeptalk"],
-                "abilities": ["Immunity"]
+                "abilities": ["Thick Fat"]
             },
             {
                 "role": "Bulky Setup",
                 "movepool": ["bodyslam", "curse", "earthquake", "rest"],
-                "abilities": ["Immunity"]
+                "abilities": ["Immunity", "Thick Fat"]
             }
         ]
     },
@@ -1372,7 +1372,7 @@
         ]
     },
     "sunflora": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1547,12 +1547,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["earthquake", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"],
-                "abilities": ["Sturdy"]
-            },
-            {
-                "role": "Generalist",
-                "movepool": ["explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"],
+                "movepool": ["earthquake", "explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"],
                 "abilities": ["Sturdy"]
             }
         ]
@@ -1717,7 +1712,7 @@
         ]
     },
     "magcargo": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1917,11 +1912,6 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["protect", "seismictoss", "toxic", "wish"],
-                "abilities": ["Natural Cure"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["calmmind", "icebeam", "softboiled", "thunderbolt"],
                 "abilities": ["Natural Cure"]
             }
         ]
@@ -2143,7 +2133,7 @@
         ]
     },
     "dustox": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Staller",
@@ -2264,7 +2254,7 @@
         ]
     },
     "ninjask": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2397,7 +2387,7 @@
         ]
     },
     "medicham": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2488,11 +2478,11 @@
         ]
     },
     "roselia": {
-        "level": 96,
+        "level": 97,
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["aromatherapy", "hiddenpowerfire", "magicalleaf", "spikes", "synthesis", "toxic"],
+                "movepool": ["hiddenpowerfire", "magicalleaf", "spikes", "synthesis"],
                 "abilities": ["Natural Cure"]
             },
             {
@@ -2695,7 +2685,7 @@
         ]
     },
     "whiscash": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2876,7 +2866,7 @@
         ]
     },
     "walrein": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Staller",
@@ -3070,7 +3060,7 @@
                 "role": "Wallbreaker",
                 "movepool": ["earthquake", "extremespeed", "hiddenpowerflying", "overheat", "rockslide"],
                 "abilities": ["Air Lock"],
-                "preferredTypes": ["Ground"]
+                "preferredTypes": ["Ground", "Normal"]
             }
         ]
     },
@@ -3095,7 +3085,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "spikes", "superpower"],
+                "movepool": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "superpower"],
                 "abilities": ["Pressure"],
                 "preferredTypes": ["Fighting", "Ghost"]
             }

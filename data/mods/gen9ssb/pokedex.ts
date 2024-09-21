@@ -701,12 +701,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Levitate"},
 	},
 
-	// PenQuin
-	empoleon: {
-		inherit: true,
-		abilities: {0: "'Poleon's Pyro Quirk"},
-	},
-
 	// phoopes
 	jynx: {
 		inherit: true,

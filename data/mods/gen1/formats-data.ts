@@ -273,7 +273,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	gastly: {
-		tier: "PUBL",
+		tier: "PU",
 	},
 	haunter: {
 		tier: "UU",

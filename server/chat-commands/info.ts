@@ -2631,7 +2631,7 @@ export const commands: Chat.ChatCommands = {
 			buf = Utils.html`<img src="${request.link}" width="${width}" height="${height}" />`;
 			if (resized) buf += Utils.html`<br /><a href="${request.link}" target="_blank">full-size image</a>`;
 		} else {
-			buf = await YouTube.generateVideoDisplay(request.link, false, true);
+			buf = await YouTube.generateVideoDisplay(request.link, false);
 			if (!buf) return this.errorReply('Could not get YouTube video');
 		}
 		buf += Utils.html`<br /><div class="infobox"><small>(Requested by ${request.name})</small>`;
@@ -2706,7 +2706,7 @@ export const commands: Chat.ChatCommands = {
 		this.runBroadcast();
 		let buf;
 		if (YouTube.linkRegex.test(link)) {
-			buf = await YouTube.generateVideoDisplay(link, false, this.broadcasting);
+			buf = await YouTube.generateVideoDisplay(link, false);
 			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();

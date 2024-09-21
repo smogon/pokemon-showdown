@@ -1159,7 +1159,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			];
 			const tar = toID(ticket.text[0]); // should always be the reported userid
 			const name = Utils.escapeHTML(Users.getExact(tar)?.name || tar);
-			buf += `<br /><strong>Reported user:</strong> ${name} `;
+			buf += `<br /><strong>Reported user:</strong> <a href="https://${Config.routes.root}/users/${name}">${name}</a> `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
 			buf += `<details ${state?.list ? 'open' : ''} class="readmore">`;
 			buf += `<summary>Punish <strong>${name}</strong> (reported user)</summary>`;
@@ -1396,6 +1396,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			if (!(user.locked || user.namelocked || user.semilocked)) {
 				return ['You are not punished.'];
+			}
+			if (!user.registered) {
+				return [
+					"Because this account isn't registered (with a password), we cannot verify your identity.",
+					"Please come back with a different account you've registered in the past.",
+				];
 			}
 			const punishments = Punishments.search(user.id);
 			const userids = [user.id, ...user.previousIDs];
@@ -2337,7 +2343,7 @@ export const commands: Chat.ChatCommands = {
 				const validation = await textTicket.checker?.(text, contextString || '', ticket.type, user, reportTarget);
 				if (Array.isArray(validation) && validation.length) {
 					this.parse(`/join view-${pageId}`);
-					return this.popupReply(`|html|` + validation.join('||'));
+					return this.popupReply(`|html|` + validation.join('<br />'));
 				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
