@@ -21,6 +21,48 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		shortDesc: "See '/ssb Varnava' for more!",
 		gen: 9,
 		flags: {},
+		onModifyMove(move, pokemon) {
+			if (move.id === 'coreenforcer') move.category = 'Physical';
+			if (['zygarde', 'zygardecomplete'].includes(pokemon.species.id) && !move.multihit) {
+				move.multihit = 2;
+			}
+		},
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.hit === 2) {
+				if (pokemon.species.id === 'zygardecomplete') return basePower / 2;
+				if (pokemon.species.id === 'zygarde') return basePower / 4;
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (target.hp > target.maxhp / 2) {
+				if (target.hp - damage < target.maxhp / 2) {
+					return target.hp - target.maxhp / 2;
+				}
+			}
+			if (target.hp <= target.maxhp / 2 && target.hp > target.maxhp / 4) {
+				if (target.hp - damage < target.maxhp / 4) {
+					return target.hp - target.maxhp / 4;
+				}
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp > pokemon.maxhp / 2 && pokemon.species.id !== 'zygardecomplete') {
+				if (pokemon.abilityState.transformedComplete) return;
+				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
+				pokemon.formeChange('Zygarde-Complete');
+				pokemon.abilityState.transformedComplete = true;
+			} else if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hp > pokemon.maxhp / 4 && pokemon.species.id !== 'zygarde') {
+				if (pokemon.abilityState.transformed50) return;
+				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
+				pokemon.formeChange('Zygarde');
+				pokemon.abilityState.transformed50 = true;
+			} else if (pokemon.hp <= pokemon.maxhp / 4 && pokemon.species.id !== 'zygarde10') {
+				if (pokemon.abilityState.transformed10) return;
+				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
+				pokemon.formeChange('Zygarde-10%');
+				pokemon.abilityState.transformed10 = true;
+			}
+		},
 	},
 	// Aevum
 	temporaldomain: {
