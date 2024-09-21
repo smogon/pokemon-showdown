@@ -82,6 +82,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onBasePower(basePower, source, target, move) {
 				if (source.abilityState.boostMod) {
+					this.add('-message', `ECOSYSTEM BOOST: ${source.abilityState.boostMod}x`);
 					source.abilityState.boostMod = false;
 					return this.chainModify(boostMod);
 				}
