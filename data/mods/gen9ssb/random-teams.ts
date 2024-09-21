@@ -205,24 +205,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Genesis Ray',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
-	/*
 	Varnava: {
 		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
 		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
 		signatureMove: 'Southern Island\'s Last Defense',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant,
 	},
+	/*
 	PokéKart: {
 		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
 		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
 		signatureMove: 'Item Box',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
-	},
- 	Aevum: {
-		species: 'Calyrex', ability: 'Temporal Domain', item: 'Rewind Watch', gender: 'M',
-		moves: ['Matcha Gotcha', 'Freezing Glare', 'Earth Power'],
-		signatureMove: 'Genesis Ray',
-		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
  	Ace: {
 		species: 'Kadabra', ability: 'Wild Card', item: 'Akademia Deck', gender: 'M',
@@ -248,24 +242,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'New Beginnings',
 		evs: {atk: 188, spd: 104, spe: 216}, ivs: {spa: 0}, nature: 'Adamant',
 	},
-	'Castaways': {
-		species: 'Swalot', ability: 'Aftermath', item: 'Black Sludge', gender: 'M',
-		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
-		signatureMove: 'Killing Doll',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
-	},
-	'Castaways-C': {
-		species: 'Carnivine', ability: 'Overgrow', item: 'Big Root', gender: 'M',
-		moves: ['Power Whip', 'Drill Run', 'Strength Sap'],
-		signatureMove: 'Silk Trap',
-		evs: {hp: 248, atk: 144, def: 116}, ivs: {spa: 0}, nature: 'Brave', skip: 'Castaways',
-	},
-	'Castaways-P': {
-		species: 'Perrserker', ability: 'Tough Claws', item: 'Expert Belt', gender: 'M',
-		moves: ['Hard Press', 'Flying Press', 'Hone Claws'],
-		signatureMove: 'Taunt',
-		evs: {hp: 120, atk: 252, spd: 136}, ivs: {spa: 0}, nature: 'Adamant', skip: 'Castaways',
-	},
  	Shorikai: {
 		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
 		moves: ['Metal Burst', 'King\'s Shield', 'Spikes'],
@@ -283,12 +259,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Eerie Spell', 'Topsy Turvy', 'Kniffel'],
 		signatureMove: 'Faustian Bargain',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Hasty', skip: 'Croupier',
-	},
-	PokéKart: {
-		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
-		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
-		signatureMove: 'Item Box',
-		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 	aegii: {
 		species: 'Scizor', ability: 'Unburden', item: 'Lansat Berry', gender: 'M',
