@@ -23,7 +23,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 		onModifyMove(move, pokemon) {
 			if (move.id === 'coreenforcer') move.category = 'Physical';
-			if (['zygarde', 'zygardecomplete'].includes(pokemon.species.id) && !move.multihit) {
+			if (['zygarde', 'zygardecomplete'].includes(pokemon.species.id) && !move.multihit && move.category !== 'Status') {
 				move.multihit = 2;
 			}
 		},
