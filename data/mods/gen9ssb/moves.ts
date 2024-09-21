@@ -82,10 +82,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onBasePower(basePower, source, target, move) {
 				if (source.abilityState.boostMod) {
-					this.add('-message', `ECOSYSTEM BOOST: ${source.abilityState.boostMod}x`);
-					source.abilityState.boostMod = false;
+					this.add('-anim', source, 'Absorb', source);
 					return this.chainModify(boostMod);
 				}
+			},
+			onAfterMove(pokemon) {
+				pokemon.abilityState.boostMod = false;
 			},
 			onEnd(pokemon) {
 				if (pokemon.abilityState.boostMod) pokemon.abilityState.boostMod = false;
