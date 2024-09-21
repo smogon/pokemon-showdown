@@ -64,12 +64,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				case 'zygardecomplete':
 					this.heal(pokemon.maxhp / 4);
 					pokemon.abilityState.boostMod = 1.25;
+					break;
 				case 'zygarde':
 					this.heal(pokemon.maxhp / 2);
 					pokemon.abilityState.boostMod = 1.5;
+					break;
 				case 'zygarde10':
 					this.heal(pokemon.maxhp / 1.33);
 					pokemon.abilityState.boostMod = 1.75;
+					break;
 			}
 			this.field.clearWeather();
 			this.field.setTerrain('grassyterrain');
