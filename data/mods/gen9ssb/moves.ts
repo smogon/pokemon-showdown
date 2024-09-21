@@ -121,6 +121,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onEffectiveness(typeMod, target, type) {
 			return 0;
 		},
+		onAfterMove(pokemon, target, move) {
+			if (!target.side.faintedThisTurn) {
+				pokemon.faint();
+				return;
+			} else if (target.side.faintedThisTurn) {
+				if (!pokemon.volatiles['endure']) pokemon.addVolatile('endure');
+				pokemon.volatiles['endure'].duration = 2;
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
