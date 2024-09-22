@@ -99531,7 +99531,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			venoshock: ["9M"],
 		},
 		eventData: [
-			{generation: 9, level: 50, shiny: true, abilities: ["armortail"],  moves: ["celebrate", "dragontail", "sludgebomb", "dragondance"], pokeball: "cherishball"},
+			{generation: 9, level: 50, shiny: true, abilities: ["armortail"], moves: ["celebrate", "dragontail", "sludgebomb", "dragondance"], pokeball: "cherishball"},
 		],
 	},
 	pokestarsmeargle: {
