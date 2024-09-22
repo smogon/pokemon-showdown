@@ -829,6 +829,7 @@ export class TeamValidator {
 		let eventOnlyData;
 
 		if ((!setSources.sourcesBefore && setSources.sources.length) || isUnderleveled) {
+			let checkGoLegality = false;
 			let skippedEggSource = true;
 			const legalSources = [];
 			let evoSpecies = species;
@@ -846,17 +847,20 @@ export class TeamValidator {
 					if (evoSpecies.name === isUnderleveled) break;
 					evoSpecies = dex.species.get(evoSpecies.prevo);
 				}
+			} else {
+				checkGoLegality = true;
 			}
 			for (const source of setSources.sources) {
-				if (isUnderleveled && source.charAt(1) !== 'S') continue;
+				if (isUnderleveled && source.charAt(1) !== 'S' && source !== '8V') continue;
 				if (['2E', '3E'].includes(source.substr(0, 2)) && set.level < 5) continue;
 				skippedEggSource = false;
 				if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
 				legalSources.push(source);
 			}
-			if (pokemonGoProblems && !pokemonGoProblems.length) {
+			if (checkGoLegality && !legalSources.includes('8V')) setSources.isFromPokemonGo = false;
+			if (setSources.isFromPokemonGo !== false && pokemonGoProblems && !pokemonGoProblems.length) {
 				if (!legalSources.length) setSources.isFromPokemonGo = true;
-				legalSources.push('8V');
+				if (!legalSources.includes('8V')) legalSources.push('8V');
 			}
 			if (legalSources.length) {
 				setSources.sources = legalSources;
