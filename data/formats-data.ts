@@ -5636,7 +5636,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	gougingfire: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	ragingbolt: {
 		tier: "OU",
