@@ -23,6 +23,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 		onStart(pokemon) {
 			pokemon.abilityState.caliber = 1;
+			this.add('-anim', pokemon, 'Swords Dance', pokemon);
+			this.add('-anim', pokemon, 'Secret Sword', pokemon);
 		},
 		onResidual(pokemon) {
 			if (pokemon.abilityState.caliber === 1) 
