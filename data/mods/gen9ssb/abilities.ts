@@ -42,9 +42,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.abilityState.caliber === 1) {
-				if (pokemon.set.shiny) pokemon.set.shiny = false;
+				pokemon.set.shiny = false;
+				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				pokemon.details = details;
+				this.add('replace', pokemon, details);
 			} else if (pokemon.abilityState.caliber === 2) {
-				if (!pokemon.set.shiny) pokemon.set.shiny = true;
+				pokemon.set.shiny = true;
+				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				pokemon.details = details;
+				this.add('replace', pokemon, details);
 			}
 		},
 	},
