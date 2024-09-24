@@ -1449,18 +1449,13 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			};
 
 			// Any set specific tweaks occur here.
-			if (set.name === "Felucia") {
-				const cmIndex = set.moves.indexOf("Calm Mind");
-				if (cmIndex >= 0 && set.moves.includes("Night Shade")) {
-					set.moves[cmIndex] = this.sample(["Thief", "Toxic"]);
-				}
-			}
-			if (set.name === "Lionyx") {
-				if (set.moves.includes("Bolt Strike")) {
-					teraType = 'Electric';
-				} else {
-					teraType = 'Ice';
-				}
+
+			// Prince Smurf - First moveslot always Psyshield Bash
+			if (set.name === "Prince Smurf" && set.moves[0] !== "Psyshield Bash") {
+				const swapMove = set.moves[0];
+				const bashIndex = set.moves.indexOf("Psyshield Bash");
+				set.moves[bashIndex] = swapMove;
+				set.moves[0] = "Psyshield Bash";
 			}
 
 			if (teraType) set.teraType = teraType;
