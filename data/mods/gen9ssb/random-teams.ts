@@ -35,7 +35,6 @@ export const ssbSets: SSBSets = {
 	// You can also skip shiny, defaults to false. Level can be skipped (defaults to 100).
 	// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 	*/
-	// Please keep sets organized alphabetically based on staff member name!
 
 	Finger: {
 		species: 'Reuniclus', ability: 'Absolute Zen', item: 'Matter Mirror', gender: 'M',
@@ -210,6 +209,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
 		signatureMove: 'Ecosystem Drain',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+	},
+	Ingrid: {
+		species: 'Doublade', ability: 'Caliber Conversion', item: '', gender: 'N',
+		moves: ['Smart Strike', 'Sacred Sword', 'Acrobatics'],
+		signatureMove: 'Equip Spectre',
+		evs: {hp: 40, atk: 252, spe: 216}, nature: 'Adamant',
 	},
 	/*
 	PokéKart: {
