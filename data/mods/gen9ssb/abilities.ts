@@ -23,8 +23,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 		onStart(pokemon) {
 			pokemon.abilityState.caliber = 1;
-			this.add('-anim', pokemon, 'Swords Dance', pokemon);
-			this.add('-anim', pokemon, 'Secret Sword', pokemon);
+			if (pokemon.hp > pokemon.maxhp / 3) {
+				this.add('-anim', pokemon, 'Swords Dance', pokemon);
+				this.add('-anim', pokemon, 'Secret Sword', pokemon);
+				this.add('-message', `${pokemon.name} is prepared for battle!`);
+			} else if (pokemon.hp <= pokemon.maxhp / 3) {
+				this.add('-anim', pokemon, 'Hex', pokemon);
+				this.add('-anim', pokemon, 'Swords Dance', pokemon);
+				this.add('-message', `${pokemon.name} can't hold on much longer!`);
+			}
 		},
 		onResidual(pokemon) {
 			if (pokemon.abilityState.caliber === 1) 
