@@ -33,9 +33,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.abilityState.caliber === 1) {
-				if (pokemon.shiny) pokemon.shiny = false;
+				if (pokemon.set.shiny) pokemon.set.shiny = false;
 			} else if (pokemon.abilityState.caliber === 2) {
-				if (!pokemon.shiny) pokemon.shiny = true;
+				if (!pokemon.set.shiny) pokemon.set.shiny = true;
 			}
 		},
 	},
