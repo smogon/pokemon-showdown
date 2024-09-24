@@ -44,8 +44,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidual(pokemon) {
 			if (pokemon.abilityState.caliber === 1) 
 				pokemon.abilityState.caliber = 2;
+				this.add('-message', `${pokemon.name} converted to Second Caliber!`);
 			else if (pokemon.abilityState.caliber === 2) {
 				pokemon.abilityState.caliber = 1;
+				this.add('-message', `${pokemon.name} converted to First Caliber!`);
 			}
 		},
 		onUpdate(pokemon) {
@@ -55,14 +57,45 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				pokemon.details = details;
 				this.add('replace', pokemon, details);
-				this.add('-message', `${pokemon.name} converted to First Caliber!`);
+				const newMoves = ['Smart Strike', 'Sacred Sword', 'Acrobatics', 'Equip Spectre'];
+				for (const move of newMoves) {
+					const moveData = this.dex.moves.get(move);
+					const moveFill = {
+						move: moveData.name,
+						id: moveData.id,
+						pp: (moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5,
+						maxpp: (moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5,
+						target: moveData.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[index] = moveFill;
+					pokemon.baseMoveSlots[index] = moveFill;
+					index++;
+				}
 			} else if (pokemon.abilityState.caliber === 2) {
 				pokemon.set.shiny = true;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				pokemon.details = details;
 				this.add('replace', pokemon, details);
-				this.add('-message', `${pokemon.name} converted to Second Caliber!`);
+				const newMoves = ['Smart Strike', 'Counter', 'Detect', 'Impaling Thrust'];
+				let index = 0;
+				for (const move of newMoves) {
+					const moveData = this.dex.moves.get(move);
+					const moveFill = {
+						move: moveData.name,
+						id: moveData.id,
+						pp: (moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5,
+						maxpp: (moveData.noPPBoosts || moveData.isZ) ? moveData.pp : moveData.pp * 8 / 5,
+						target: moveData.target,
+						disabled: false,
+						used: false,
+					};
+					pokemon.moveSlots[index] = moveFill;
+					pokemon.baseMoveSlots[index] = moveFill;
+					index++;
+				}
 			}
 		},
 	},
