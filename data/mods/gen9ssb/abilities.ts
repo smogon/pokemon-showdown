@@ -30,7 +30,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else if (pokemon.hp <= pokemon.maxhp / 3) {
 				this.add('-anim', pokemon, 'Hex', pokemon);
 				this.add('-anim', pokemon, 'Swords Dance', pokemon);
-				this.add('-message', `${pokemon.name} can't hold on much longer!`);
+				if (this.randomChance(1, 3)) {
+					this.add('-message', `${pokemon.name} can't hold on much longer!`);
+				} else {
+					if (this.randomChance(1, 2)) {
+						this.add('-message', `${pokemon.name} is losing courage!`);
+					} else {
+						this.add('-message', `${pokemon.name} won't give in!`);
+					}
+				}
 			}
 		},
 		onResidual(pokemon) {
@@ -47,12 +55,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				pokemon.details = details;
 				this.add('replace', pokemon, details);
+				this.add('-message', `${pokemon.name} converted to First Caliber!`);
 			} else if (pokemon.abilityState.caliber === 2) {
 				pokemon.set.shiny = true;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				pokemon.details = details;
 				this.add('replace', pokemon, details);
+				this.add('-message', `${pokemon.name} converted to Second Caliber!`);
 			}
 		},
 	},
