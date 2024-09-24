@@ -15,6 +15,31 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Ingrid
+	caliberconversion: {
+		name: "Caliber Conversion",
+		gen: 9,
+		shortDesc: "If Doublade, changes between 1st/2nd Caliber each turn.",
+		gen: 9,
+		flags: {},
+		onStart(pokemon) {
+			pokemon.abilityState.caliber = 1;
+		},
+		onResidual(pokemon) {
+			if (pokemon.abilityState.caliber === 1) 
+				pokemon.abilityState.caliber = 2;
+			else if (pokemon.abilityState.caliber === 2) {
+				pokemon.abilityState.caliber = 1;
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.abilityState.caliber === 1) {
+				if (pokemon.shiny) pokemon.shiny = false;
+			} else if (pokemon.abilityState.caliber === 2) {
+				if (!pokemon.shiny) pokemon.shiny = true;
+			}
+		},
+	},
 	// Varnava
 	celldeconstruct: {
 		name: "Cell Deconstruct",
