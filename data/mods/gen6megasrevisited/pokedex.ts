@@ -81,7 +81,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	altariamega: {
 		inherit: true,
 		types: ["Dragon", "Fairy"],
-		baseStats: {hp: 75, atk: 70, def: 95, spa: 140, spd: 115, spe: 95},
+		baseStats: {hp: 75, atk: 90, def: 90, spa: 140, spd: 115, spe: 80},
 		abilities: {0: "Weather Report"},
 	},
 	sceptilemega: {
@@ -191,7 +191,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	kangaskhanmega: {
 		inherit: true,
 		types: ["Normal", "Ground"],
-		baseStats: {hp: 105, atk: 135, def: 105, spa: 40, spd: 105, spe: 100},
+		baseStats: {hp: 105, atk: 125, def: 105, spa: 50, spd: 105, spe: 100},
 	},
 	salamencemega: {
 		inherit: true,
