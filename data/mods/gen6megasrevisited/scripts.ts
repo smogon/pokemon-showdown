@@ -120,7 +120,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "salamence").learnset.airslash = ["6L1"];
 		this.modData("Learnsets", "salamence").learnset.ironhead = ["6L1"];
 		this.modData("Learnsets", "tyranitar").learnset.wildcharge = ["6L1"];
-		this.modData("Learnsets", "tyranitar").learnset.iciclecrash = ["6L1"];
 		this.modData("Learnsets", "tyranitar").learnset.waterfall = ["6L1"];
 		this.modData("Learnsets", "diancie").learnset.spikyshield = ["6L1"];
 		this.modData("Learnsets", "blaziken").learnset.uturn = ["6L1"];
