@@ -216,6 +216,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Equip Spectre',
 		evs: {hp: 40, atk: 252, spe: 216}, nature: 'Adamant',
 	},
+	Toshinori: {
+		species: 'Machamp-Gmax', ability: 'One for All', item: 'Dying Embers', gender: 'M',
+		moves: ['Cross Chop'],
+		//signatureMove: '',
+		evs: {hp: 132, atk: 252, spe: 124}, nature: 'Brave',
+	},
 	/*
 	PokéKart: {
 		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
