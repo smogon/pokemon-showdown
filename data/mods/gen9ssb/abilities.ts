@@ -34,7 +34,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', `${pokemon.name} can't hold on much longer!`);
 				} else {
 					if (this.randomChance(1, 2)) {
-						this.add('-message', `${pokemon.name} is losing courage!`);
+						this.add('-message', `${pokemon.name} is losing hope!`);
 					} else {
 						this.add('-message', `${pokemon.name} won't give in!`);
 					}
@@ -45,19 +45,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.abilityState.caliber === 1) 
 				pokemon.abilityState.caliber = 2;
 				this.add('-message', `${pokemon.name} converted to Second Caliber!`);
-			else if (pokemon.abilityState.caliber === 2) {
-				pokemon.abilityState.caliber = 1;
-				this.add('-message', `${pokemon.name} converted to First Caliber!`);
-			}
-		},
-		onUpdate(pokemon) {
-			if (pokemon.abilityState.caliber === 1) {
-				pokemon.set.shiny = false;
+				pokemon.set.shiny = true;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				pokemon.details = details;
 				this.add('replace', pokemon, details);
-				const newMoves = ['Smart Strike', 'Sacred Sword', 'Acrobatics', 'Equip Spectre'];
+				const newMoves = ['Smart Strike', 'Counter', 'Detect', 'Impaling Thrust'];
+				let index = 0;
 				for (const move of newMoves) {
 					const moveData = this.dex.moves.get(move);
 					const moveFill = {
@@ -73,14 +67,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.baseMoveSlots[index] = moveFill;
 					index++;
 				}
-			} else if (pokemon.abilityState.caliber === 2) {
-				pokemon.set.shiny = true;
+			else if (pokemon.abilityState.caliber === 2) {
+				pokemon.abilityState.caliber = 1;
+				this.add('-message', `${pokemon.name} converted to First Caliber!`);
+				pokemon.set.shiny = false;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				pokemon.details = details;
 				this.add('replace', pokemon, details);
-				const newMoves = ['Smart Strike', 'Counter', 'Detect', 'Impaling Thrust'];
-				let index = 0;
+				const newMoves = ['Smart Strike', 'Sacred Sword', 'Acrobatics', 'Equip Spectre'];
 				for (const move of newMoves) {
 					const moveData = this.dex.moves.get(move);
 					const moveFill = {
