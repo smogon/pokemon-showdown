@@ -218,8 +218,7 @@ export const ssbSets: SSBSets = {
 	},
 	Toshinori: {
 		species: 'Machamp-Gmax', ability: 'One for All', item: 'Dying Embers', gender: 'M',
-		moves: ['Cross Chop'],
-		//signatureMove: '',
+		moves: ['All-Out Pummeling', 'Continental Crush', 'Flying Press'],
 		evs: {hp: 132, atk: 252, spe: 124}, nature: 'Brave',
 	},
 	/*
