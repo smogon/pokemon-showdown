@@ -2051,11 +2051,10 @@ export class GameRoom extends BasicRoom {
 		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
 		if (silent) connection = undefined;
 		const isPrivate = this.settings.isPrivate || this.hideReplay;
-		const hidden = options === 'forpunishment' || options === 'auto' ? 10 :
-			(this as any).unlistReplay ? 2 :
+		const hidden = options === 'auto' ? 10 :
+			options === 'forpunishment' || (this as any).unlistReplay ? 2 :
 			isPrivate ? 1 :
 			0;
-
 		if (isPrivate && hidden === 10) {
 			password = Replays.generatePassword();
 		}
