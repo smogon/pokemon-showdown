@@ -15,6 +15,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Toshinori
+	oneforall: {
+		name: "One for All",
+		gen: 9,
+		flags: {},
+		shortDesc: "See '/ssb Toshinori' for more!",
+		onModifyMove(move, pokemon) {
+			let stats = [];
+			for (const stat of pokemon.storedStats) {
+				stats.push(stat + ':' + pokemon.storedStats[stat]);
+			}
+			this.add('-message', stats);
+			//move.overrideOffensiveStat
+		},
+	},
 	// Ingrid
 	caliberconversion: {
 		name: "Caliber Conversion",
