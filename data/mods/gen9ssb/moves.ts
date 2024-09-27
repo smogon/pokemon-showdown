@@ -95,6 +95,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-sideend', side, 'Dominus Lapidis');
 			},
 		},
+		isZ: 'hadeansoil',
 		secondary: null,
 		target: "allySide",
 		type: "Ground",
