@@ -15,6 +15,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Morax
+	heraldoforder: {
+		name: "Herald of Order",
+		gen: 9,
+		flags: {},
+		shortDesc: "See '/ssb Morax' for more!",
+		onModifyMove(move, pokemon) {
+			if (move.category !== 'Status' && move.target !== 'allAdjacent') move.target = 'allAdjacent';
+		},
+	},
 	// Toshinori
 	oneforall: {
 		name: "One for All",
