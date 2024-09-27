@@ -6,6 +6,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onStart(pokemon) {
 			if (pokemon.itemState.soilActivated) return;
 			this.add('-activate', pokemon, 'item: Hadean Soil');
+			this.add('-anim', pokemon, 'Sand Attack', pokemon);
 			this.add('-message', `${pokemon.name}'s maximum HP increased!`);
 			const newHp = Math.ceil(pokemon.hp * 1.31);
 			const newMaxHp = Math.ceil(pokemon.maxhp * 1.31);
