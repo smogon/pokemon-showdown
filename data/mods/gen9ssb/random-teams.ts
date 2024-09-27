@@ -216,12 +216,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Equip Spectre',
 		evs: {hp: 40, atk: 252, spe: 216}, nature: 'Adamant',
 	},
+	Morax: {
+		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
+		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
+		signatureMove: 'Dominus Lapidis',
+		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
+	},
+	/*
 	Toshinori: {
 		species: 'Machamp-Gmax', ability: 'One for All', item: 'Dying Embers', gender: 'M',
 		moves: ['All-Out Pummeling', 'Continental Crush', 'Flying Press'],
 		evs: {hp: 132, atk: 252, spe: 124}, nature: 'Brave',
 	},
-	/*
 	PokéKart: {
 		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
 		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
