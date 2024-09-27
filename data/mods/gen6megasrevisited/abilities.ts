@@ -272,10 +272,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				move.multihitType = 'parentalbond';
 			}
 		},
-		onBasePowerPriority: 7,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
-		},
 		onSourceModifySecondaries(secondaries, target, source, move) {
 			if (move.multihitType === 'parentalbond' && move.id === 'secretpower' && move.hit < 2) {
 				// hack to prevent accidentally suppressing King's Rock/Razor Fang
