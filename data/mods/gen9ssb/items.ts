@@ -1,4 +1,35 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Morax
+	hadeansoil: {
+		name: "Hadean Soil",
+		gen: 9,
+		onStart(pokemon) {
+			if (pokemon.itemState.soilActivated) return;
+			this.add('-activate', pokemon, 'item: Hadean Soil');
+			this.add('-message', `${pokemon.name}'s maximum HP increased!`);
+			const newHp = Math.ceil(pokemon.hp * 1.31);
+			const newMaxHp = Math.ceil(pokemon.maxhp * 1.31);
+			pokemon.hp = newHp;
+			pokemon.maxhp = newMaxHp;
+			pokemon.baseMaxhp = newMaxHp;
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			pokemon.itemState.soilActivated = true;
+		},
+		onTryHit(pokemon, source, move) {
+			if (pokemon !== source && move.type === 'Ground' || move.type === 'Rock') {
+				this.add('-activate', pokemon, 'item: Hadean Soil', move.name);
+				this.heal(pokemon.maxhp / 16, pokemon, 'item: Hadean Soil');
+				return null;
+			}
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source !== target && move.category !== 'Status' && move.type === 'Ground' || move.type === 'Rock') {
+				if (target.side.sideConditions['stealthrock']) return;
+				this.add('-activate', source, 'item: Hadean Soil', move.name);
+				target.side.addSideCondition('stealthrock', target);
+			}
+		},
+	},
 	// Varnava
 	varnaviumz: {
 		name: "Varnavium Z",
