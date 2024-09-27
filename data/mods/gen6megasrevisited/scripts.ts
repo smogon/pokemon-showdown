@@ -47,7 +47,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
 				}
-	
 				baseDamage = this.battle.modify(baseDamage, stab);
 			}
 			let typeMod = target.runEffectiveness(move);
@@ -55,14 +54,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			target.getMoveHitData(move).typeMod = typeMod;
 			if (typeMod > 0) {
 				if (!suppressMessages) this.battle.add('-supereffective', target);
-	
 				for (let i = 0; i < typeMod; i++) {
 					baseDamage *= 2;
 				}
 			}
 			if (typeMod < 0) {
 				if (!suppressMessages) this.battle.add('-resisted', target);
-	
 				for (let i = 0; i > typeMod; i--) {
 					baseDamage = tr(baseDamage / 2);
 				}
