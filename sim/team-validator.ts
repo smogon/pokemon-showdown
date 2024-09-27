@@ -107,6 +107,11 @@ export class PokemonSources {
 	 */
 	eventOnlyMinSourceGen?: number;
 	/**
+	 * A list of movepools, identified by gen and species, which moves can be pulled from.
+	 * Used to deal with compatibility issues for prevo/evo-exclusive moves
+	 */
+	learnsetDomain?: string[] | null;
+	/**
 	 * Some Pokemon evolve by having a move in their learnset (like Piloswine
 	 * with Ancient Power). These can only carry three other moves from their
 	 * prevo, because the fourth move must be the evo move. This restriction
@@ -263,6 +268,13 @@ export class PokemonSources {
 				this.pomegEggMoves = other.pomegEggMoves;
 			} else {
 				this.pomegEggMoves.push(...other.pomegEggMoves);
+			}
+		}
+		if (other.learnsetDomain) {
+			if (!this.learnsetDomain) {
+				this.learnsetDomain = other.learnsetDomain;
+			} else {
+				this.learnsetDomain.filter(source => other.learnsetDomain?.includes(source));
 			}
 		}
 		if (this.possiblyLimitedEggMoves && !this.sourcesBefore) {
@@ -2421,6 +2433,7 @@ export class TeamValidator {
 		const format = this.format;
 		const ruleTable = this.ruleTable;
 		const level = set.level || 100;
+		const canLearnSpecies: ID[] = [];
 
 		let cantLearnReason = null;
 
@@ -2429,6 +2442,7 @@ export class TeamValidator {
 		let blockedHM = false;
 
 		let babyOnly = '';
+		let minLearnGen = dex.gen;
 
 		// This is a pretty complicated algorithm
 
@@ -2512,6 +2526,12 @@ export class TeamValidator {
 				//   teach it, and transfer it to the current gen.)
 
 				const learnedGen = parseInt(learned.charAt(0));
+				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + species.id)) {
+					if (!cantLearnReason) {
+						cantLearnReason = `is incompatible with ${(setSources.restrictiveMoves || []).join(', ')}.`;
+					}
+					continue;
+				}
 				if (learnedGen < this.minSourceGen) {
 					if (!cantLearnReason) {
 						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
@@ -2526,9 +2546,6 @@ export class TeamValidator {
 				}
 
 				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
-
-				// redundant
-				if (learnedGen <= moveSources.sourcesBefore) continue;
 
 				if (
 					baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8 &&
@@ -2612,7 +2629,7 @@ export class TeamValidator {
 								setSources.babyOnly = babyOnly;
 							}
 						}
-						if (!moveSources.moveEvoCarryCount) return null;
+						if (!moveSources.moveEvoCarryCount && !setSources.babyOnly) return null;
 					}
 					// past-gen level-up, TM, or tutor moves:
 					//   available as long as the source gen was or was before this gen
@@ -2673,6 +2690,8 @@ export class TeamValidator {
 					}
 					moveSources.add(learned);
 				}
+				if (!canLearnSpecies.includes(species.id)) canLearnSpecies.push(species.id);
+				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
 				// include the Mimic Glitch when checking this mon's learnset
@@ -2755,6 +2774,32 @@ export class TeamValidator {
 						}
 					}
 				}
+			}
+		}
+
+		let nextSpecies;
+		nextSpecies = baseSpecies;
+		let speciesCount = 0;
+		if (!tradebackEligible) {
+			while (nextSpecies) {
+				for (let gen = nextSpecies.gen; gen <= dex.gen; gen++) {
+					/**
+					 * Case 1: The species can learn the move - allow moves of the species from all gens
+					 * Case 2: Both prevo and evo can learn the move - same as case 1
+					 * Case 3: Prevo-only move - allow moves of the species from the min gen and later
+					 * Case 4: Evo-only move - allow moves of the species from the max gen and before
+					*/
+					if (canLearnSpecies.includes(nextSpecies.id) ||
+						(0 < speciesCount && speciesCount < canLearnSpecies.length) ||
+						(speciesCount === 0 && gen >= minLearnGen) ||
+						(speciesCount === canLearnSpecies.length && gen <= moveSources.sourcesBefore)
+					) {
+						if (!moveSources.learnsetDomain) moveSources.learnsetDomain = [];
+						moveSources.learnsetDomain.push(gen + nextSpecies.id);
+					}
+				}
+				if (canLearnSpecies.includes(nextSpecies.id)) speciesCount++;
+				nextSpecies = dex.species.learnsetParent(nextSpecies);
 			}
 		}
 
