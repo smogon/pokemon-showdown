@@ -40,6 +40,65 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Morax
+	dominuslapidis: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Dominus Lapidis",
+		shortDesc: "Summons Jade Shield. Always goes last.",
+		desc: "User focuses, then summons Jade Shield after the target moves for 5 turns.",
+		gen: 9,
+		pp: 5,
+		priority: -8,
+		flags: {},
+		sideCondition: 'dominuslapidis',
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Work Up', source);
+			this.add('-anim', source, 'Aqua Ring', source);
+		},
+		condition: {
+			duration: 5,
+			onSideStart(side, source) {
+				this.add('-sidestart', side, 'Dominus Lapidis', source);
+				this.effectState.hp = Math.floor(source.maxhp * 0.3);
+				this.effectState.source = source;
+			},
+			onTryPrimaryHit(target, source, move) {
+				if (target === source || move.infiltrates) return;
+				this.add('-message', target.side.sideConditions['dominuslapidis'].source.name);
+				let damage = this.actions.getDamage(source, target.side.sideConditions['dominuslapidis'].source, move);
+				if (!damage && damage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) return damage;
+				if (damage > target.side.sideConditions['dominuslapidis'].hp) damage = target.side.sideConditions['dominuslapidis'].hp as number;
+				target.side.sideConditions['dominuslapidis'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.side.sideConditions['dominuslapidis'].hp <= 0) {
+					if (move.ohko) this.add('-ohko');
+					target.side.removeSideCondition('dominuslapidis');
+				} else {
+					this.add('-activate', target, 'move: Dominus Lapidis', '[damage]');
+				}
+				if (move.recoil || move.id === 'chloroblast') this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
+				if (move.drain) this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				return this.HIT_SUBSTITUTE;
+			},
+			onSideEnd(side) {
+				this.add('-sideend', side, 'Dominus Lapidis');
+			},
+		},
+		secondary: null,
+		target: "allySide",
+		type: "Ground",
+	},
 	// Varnava
 	ecosystemdrain: {
 		accuracy: true,
