@@ -41,6 +41,54 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Morax
+	planetbefall: {
+		accuracy: true,
+		basePower: 250,
+		physical: "Physical",
+		name: "Planet Befall",
+		gen: 9,
+		pp: 1,
+		isZ: 'hadeansoil',
+		priority: 0,
+		flags: {},
+		volatileStatus: 'planetbefall',
+		onHit(target, source, move) {
+			source.side.addSideCondition('dominuslapidis');
+		},
+		condition: {
+			onStart(pokemon) {
+				this.effectState.turns = 0;
+				this.add('-start', pokemon, 'Planet Befall', '[silent]');
+				this.add('-message', `${pokemon.name} was petrified!`);
+				if (pokemon.hasType('Rock')) return false;
+				if (!pokemon.addType('Rock')) return false;
+				this.add('-start', pokemon, 'typeadd', 'Rock', '[from] move: Planet Befall');
+			},
+			onResidual(pokemon) {
+				this.add('-message', `${pokemon.name} is petrified!`);
+				pokemon.volatiles['planetbefall'].turns++;
+			},
+			onTryMove(attacker, defender, move) {
+				if (attacker.volatiles['planetbefall'].turns <= 0) {
+					this.add('-message', `${attacker.name} couldn't move!`);
+					return false;
+				}
+			},
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			onDamagingHit(damage, target, source, move) {
+				target.removeVolatile('planetbefall');
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Planet Befall', '[silent]');
+				this.add('-message', `${pokemon.name} snapped out of it!`);
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+	},
 	dominuslapidis: {
 		accuracy: true,
 		basePower: 0,
@@ -95,7 +143,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-sideend', side, 'Dominus Lapidis');
 			},
 		},
-		isZ: 'hadeansoil',
 		secondary: null,
 		target: "allySide",
 		type: "Ground",
