@@ -22,11 +22,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 		shortDesc: "See '/ssb Toshinori' for more!",
 		onModifyMove(move, pokemon) {
-			let stats = [];
+			let statName = [];
+			let statNum = [];
 			for (const stat of pokemon.storedStats) {
-				stats.push(stat + ':' + pokemon.storedStats[stat]);
+				statName.push(stat);
+				statNum.push(pokemon.storedStats[stat]);
 			}
+			let highStat = Math.max(statNum);
+			let pos = statNum.indexOf(Math.max(statNum));
 			this.add('-message', stats);
+			this.add('-message', `highest stat is ${statName[pos]}: ${Math.max}`);
 			//move.overrideOffensiveStat
 		},
 	},
