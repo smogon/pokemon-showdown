@@ -72,7 +72,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onResidual(pokemon) {
-			if (pokemon.abilityState.caliber === 1) 
+			if (pokemon.abilityState.caliber === 1) {
 				pokemon.abilityState.caliber = 2;
 				this.add('-message', `${pokemon.name} converted to Second Caliber!`);
 				pokemon.set.shiny = true;
@@ -97,7 +97,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.baseMoveSlots[index] = moveFill;
 					index++;
 				}
-			else if (pokemon.abilityState.caliber === 2) {
+			} else if (pokemon.abilityState.caliber === 2) {
 				pokemon.abilityState.caliber = 1;
 				this.add('-message', `${pokemon.name} converted to First Caliber!`);
 				pokemon.set.shiny = false;
