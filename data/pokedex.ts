@@ -13327,7 +13327,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		prevo: "Rockruff",
 		evoLevel: 25,
-		evoCondition: "from a special Rockruff",
+		evoCondition: "from a special Rockruff during the evening",
 		eggGroups: ["Field"],
 	},
 	wishiwashi: {
