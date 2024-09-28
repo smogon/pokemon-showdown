@@ -1049,6 +1049,27 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 	},
 
+	// Imperial
+	frozenfortuity: {
+		shortDesc: "On switch-in, changes the Pokemon to Kyurem-Black if the target's Defense is lower, otherwise Kyurem-White.",
+		name: "Frozen Fortuity",
+		onStart(pokemon) {
+			let totaldef = 0;
+			let totalspd = 0;
+			for (const target of pokemon.foes()) {
+				totaldef += target.getStat('def', false, true);
+				totalspd += target.getStat('spd', false, true);
+			}
+			this.add('-ability', pokemon, 'Frozen Fortuity');
+			if (totaldef < totalspd) {
+				changeSet(this, pokemon, ssbSets['Imperial-Black']);
+			} else {
+				changeSet(this, pokemon, ssbSets['Imperial-White']);
+			}
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+	},
+
 	// in the hills
 	illiterit: {
 		shortDesc: "Immune to moves with 12 or more alphanumeric characters.",

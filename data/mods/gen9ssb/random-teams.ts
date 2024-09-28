@@ -457,6 +457,24 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Hydrostatics',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Water', shiny: 2,
 	},
+	Imperial: {
+		species: 'Kyurem', ability: 'Frozen Fortuity', item: 'Never-Melt Ice', gender: 'N',
+		moves: ['Chilly Reception', 'Fusion Bolt', 'Fusion Flare'],
+		signatureMove: 'Storm Shroud',
+		evs: {atk: 128, spa: 128, spe: 252}, nature: 'Docile', teraType: 'Ice', shiny: 193,
+	},
+	'Imperial-Black': {
+		species: 'Kyurem-Black', ability: 'Frozen Fortuity', item: 'Never-Melt Ice', gender: 'N',
+		moves: ['Mountain Gale', 'Fusion Bolt', 'Ice Shard'],
+		signatureMove: 'Storm Shroud',
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', teraType: 'Electric', shiny: 193, skip: 'Imperial',
+	},
+	'Imperial-White': {
+		species: 'Kyurem-White', ability: 'Frozen Fortuity', item: 'Never-Melt Ice', gender: 'N',
+		moves: ['Ice Beam', 'Freeze-Dry', 'Fusion Flare'],
+		signatureMove: 'Storm Shroud',
+		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest', teraType: 'Fire', shiny: 193, skip: 'Imperial',
+	},
 	'in the hills': {
 		species: 'Gligar', ability: 'Illiterit', item: 'Eviolite', gender: 'M',
 		moves: ['Roost', 'Knock Off', 'Tidy Up'],

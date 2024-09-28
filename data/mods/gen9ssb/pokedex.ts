@@ -424,6 +424,20 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		types: ["Electric", "Water"],
 	},
 
+	// Imperial
+	kyurem: {
+		inherit: true,
+		abilities: {0: "Frozen Fortuity"},
+	},
+	kyuremblack: {
+		inherit: true,
+		abilities: {0: "Frozen Fortuity"},
+	},
+	kyuremwhite: {
+		inherit: true,
+		abilities: {0: "Frozen Fortuity"},
+	},
+
 	// in the hills
 	gligar: {
 		inherit: true,
@@ -683,6 +697,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Last Hymn"},
 	},
 
+	// pants
+	annihilape: {
+		inherit: true,
+		abilities: {0: "Drifting"},
+	},
+
 	// PartMan
 	chandelure: {
 		inherit: true,
@@ -777,6 +797,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	oranguru: {
 		inherit: true,
 		abilities: {0: "Monke See Monke Do"},
+	},
+
+	// Rissoux
+	arcaninehisui: {
+		inherit: true,
+		abilities: {0: "Hard Headed"},
 	},
 
 	// RSB
