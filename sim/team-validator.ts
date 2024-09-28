@@ -2526,7 +2526,9 @@ export class TeamValidator {
 				//   teach it, and transfer it to the current gen.)
 
 				const learnedGen = parseInt(learned.charAt(0));
-				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + species.id)) {
+				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + species.id) &&
+					(learned.charAt(1) !== 'E' || learnedGen < 8)
+				) {
 					if (!cantLearnReason) {
 						cantLearnReason = `is incompatible with ${(setSources.restrictiveMoves || []).join(', ')}.`;
 					}
@@ -2689,6 +2691,9 @@ export class TeamValidator {
 						continue;
 					}
 					moveSources.add(learned);
+				}
+				if (learned.charAt(1) === 'E' && learnedGen >= 8 && !canLearnSpecies.includes(baseSpecies.id)) {
+					canLearnSpecies.push(baseSpecies.id);
 				}
 				if (!canLearnSpecies.includes(species.id)) canLearnSpecies.push(species.id);
 				minLearnGen = Math.min(minLearnGen, learnedGen);
