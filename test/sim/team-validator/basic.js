@@ -243,4 +243,11 @@ describe('Team Validator', function () {
 		];
 		assert.legalTeam(team, 'gen8ou');
 	});
+
+	it(`should disallow past gen only moves in Gen 9`, function () {
+		const team = [
+			{species: 'oricorio', ability: 'dancer', moves: ['roleplay'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen9ou');
+	});
 });
