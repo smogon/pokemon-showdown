@@ -132,7 +132,7 @@
         ]
     },
     "pidgeot": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -342,7 +342,7 @@
         ]
     },
     "wigglytuff": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1108,7 +1108,7 @@
         ]
     },
     "jolteon": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1212,7 +1212,7 @@
         ]
     },
     "articuno": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Staller",
@@ -1376,7 +1376,7 @@
         ]
     },
     "ariados": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1594,7 +1594,7 @@
         ]
     },
     "wobbuffet": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1832,7 +1832,7 @@
         ]
     },
     "mantine": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1857,7 +1857,7 @@
         ]
     },
     "houndoom": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2358,7 +2358,7 @@
         ]
     },
     "shedinja": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2707,7 +2707,7 @@
         ]
     },
     "altaria": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3195,7 +3195,7 @@
         ]
     },
     "latiosmega": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3440,7 +3440,7 @@
         ]
     },
     "kricketune": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3491,7 +3491,7 @@
         ]
     },
     "bastiodon": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3868,7 +3868,7 @@
         ]
     },
     "carnivine": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3878,7 +3878,7 @@
         ]
     },
     "lumineon": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3993,7 +3993,7 @@
         ]
     },
     "magmortar": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4071,7 +4071,7 @@
         ]
     },
     "gliscor": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4733,7 +4733,7 @@
         ]
     },
     "emboar": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5083,7 +5083,7 @@
         ]
     },
     "darmanitan": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -5093,7 +5093,7 @@
         ]
     },
     "maractus": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Fast Support",
@@ -6418,7 +6418,7 @@
         ]
     },
     "xerneas": {
-        "level": 66,
+        "level": 65,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -6699,7 +6699,7 @@
         ]
     },
     "lycanrocmidnight": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -7219,7 +7219,7 @@
         ]
     },
     "bruxish": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Attacker",
