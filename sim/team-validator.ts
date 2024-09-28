@@ -2692,7 +2692,7 @@ export class TeamValidator {
 					}
 					moveSources.add(learned);
 				}
-				if (learned.charAt(1) == 'E' && learnedGen >= 8) {
+				if (learned.charAt(1) === 'E' && learnedGen >= 8) {
 					if (!canLearnSpecies.includes(baseSpecies.id)) canLearnSpecies.push(baseSpecies.id);
 				} else {
 					if (!canLearnSpecies.includes(species.id)) canLearnSpecies.push(species.id);
