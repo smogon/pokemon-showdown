@@ -2591,9 +2591,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "Hackmons Forme Legality",
 		desc: `Enforces proper forme legality for hackmons-based metagames.`,
-		ruleset: ['+Xerneas-Neutral'],
 		unbanlist: ['All Pokemon'],
-		banlist: ['CAP', 'LGPE', 'Future', 'Custom'],
+		banlist: ['CAP', 'LGPE', 'Future'],
 		onChangeSet(set, format, setHas, teamHas) {
 			let species = this.dex.species.get(set.species);
 			if (
