@@ -125,7 +125,19 @@ export const Scripts: ModdedBattleScriptsData = {
 		runMove(moveOrMoveName, pokemon, targetLoc, options) {
 			let sourceEffect = options?.sourceEffect;
 			const target = this.battle.getTarget(pokemon, moveOrMoveName, targetLoc);
-			const move = this.battle.dex.getActiveMove(moveOrMoveName);
+			let move = this.battle.dex.getActiveMove(moveOrMoveName);
+
+			// If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn,
+			// the user of Hyper Beam will automatically use Hyper Beam during that turn.
+			const autoHyperBeam = (
+				move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']
+			);
+			if (autoHyperBeam) {
+				move = this.battle.dex.getActiveMove('hyperbeam');
+				this.battle.hint(`In Gen 1, If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn, ` +
+					`the user of Hyper Beam will automatically use Hyper Beam during that turn.`, true);
+			}
+
 			if (target?.subFainted) target.subFainted = null;
 
 			this.battle.setActiveMove(move, pokemon, target);
@@ -156,7 +168,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.deductPP(pokemon.volatiles['twoturnmove'].originalMove, null, target);
 				}
 			}
-			if (pokemon.volatiles['partialtrappinglock'] && target !== pokemon.volatiles['partialtrappinglock'].locked) {
+			if (
+				(pokemon.volatiles['partialtrappinglock'] && target !== pokemon.volatiles['partialtrappinglock'].locked) ||
+				autoHyperBeam
+			) {
 				const moveSlot = pokemon.moveSlots.find(ms => ms.id === move.id);
 				if (moveSlot && moveSlot.pp < 0) {
 					moveSlot.pp = 63;
