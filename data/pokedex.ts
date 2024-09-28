@@ -13325,7 +13325,7 @@ export const Pokedex: {[speciesid: string]: SpeciesData} = {
 		color: "Brown",
 		prevo: "Rockruff",
 		evoLevel: 25,
-		evoCondition: "from a special Rockruff",
+		evoCondition: "from a special Rockruff during the evening",
 		eggGroups: ["Field"],
 	},
 	wishiwashi: {
