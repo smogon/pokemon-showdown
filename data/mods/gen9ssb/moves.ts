@@ -627,6 +627,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.type = pokemon.m.artemisMoveType;
 			}
 		},
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
 		target: "normal",
 		type: "Electric",
 	},
