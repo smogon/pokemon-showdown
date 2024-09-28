@@ -1,6 +1,85 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 6,
 	inherit: 'gen6',
+	actions: {
+		// for parental bond
+		modifyDamage(
+			baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
+		) {
+			const tr = this.battle.trunc;
+			if (!move.type) move.type = '???';
+			const type = move.type;
+			baseDamage += 2;
+			if (move.spreadHit) {
+				// multi-target modifier (doubles only)
+				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
+				this.battle.debug('Spread modifier: ' + spreadModifier);
+				baseDamage = this.battle.modify(baseDamage, spreadModifier);
+			} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
+				// Parental Bond modifier
+				const bondModifier = this.battle.gen > 6 ? 0.25 : 0.25;
+				this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
+				baseDamage = this.battle.modify(baseDamage, bondModifier);
+			}
+			baseDamage = this.battle.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
+			const isCrit = target.getMoveHitData(move).crit;
+			if (isCrit) {
+				baseDamage = tr(baseDamage * (move.critModifier || (this.battle.gen >= 6 ? 1.5 : 2)));
+			}
+			baseDamage = this.battle.randomizer(baseDamage);
+			if (type !== '???') {
+				let stab: number | [number, number] = 1;
+				const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type);
+				if (isSTAB) {
+					stab = 1.5;
+				}
+				if (pokemon.terastallized === 'Stellar') {
+					if (!pokemon.stellarBoostedTypes.includes(type) || move.stellarBoosted) {
+						stab = isSTAB ? 2 : [4915, 4096];
+						move.stellarBoosted = true;
+						if (pokemon.species.name !== 'Terapagos-Stellar') {
+							pokemon.stellarBoostedTypes.push(type);
+						}
+					}
+				} else {
+					if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
+						stab = 2;
+					}
+					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
+				}
+				baseDamage = this.battle.modify(baseDamage, stab);
+			}
+			let typeMod = target.runEffectiveness(move);
+			typeMod = this.battle.clampIntRange(typeMod, -6, 6);
+			target.getMoveHitData(move).typeMod = typeMod;
+			if (typeMod > 0) {
+				if (!suppressMessages) this.battle.add('-supereffective', target);
+				for (let i = 0; i < typeMod; i++) {
+					baseDamage *= 2;
+				}
+			}
+			if (typeMod < 0) {
+				if (!suppressMessages) this.battle.add('-resisted', target);
+				for (let i = 0; i > typeMod; i--) {
+					baseDamage = tr(baseDamage / 2);
+				}
+			}
+			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
+			if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
+				if (this.battle.gen < 6 || move.id !== 'facade') {
+					baseDamage = this.battle.modify(baseDamage, 0.5);
+				}
+			}
+			if (this.battle.gen === 5 && !baseDamage) baseDamage = 1;
+			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
+			if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
+				baseDamage = this.battle.modify(baseDamage, 0.25);
+				this.battle.add('-zbroken', target);
+			}
+			if (this.battle.gen !== 5 && !baseDamage) return 1;
+			return tr(baseDamage, 16);
+		},
+	},
 	pokemon: {
 		// for neutralizing gas
 		ignoringAbility() {
@@ -120,7 +199,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "salamence").learnset.airslash = ["6L1"];
 		this.modData("Learnsets", "salamence").learnset.ironhead = ["6L1"];
 		this.modData("Learnsets", "tyranitar").learnset.wildcharge = ["6L1"];
-		this.modData("Learnsets", "tyranitar").learnset.iciclecrash = ["6L1"];
 		this.modData("Learnsets", "tyranitar").learnset.waterfall = ["6L1"];
 		this.modData("Learnsets", "diancie").learnset.spikyshield = ["6L1"];
 		this.modData("Learnsets", "blaziken").learnset.uturn = ["6L1"];
