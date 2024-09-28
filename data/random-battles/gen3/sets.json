@@ -85,7 +85,7 @@
         ]
     },
     "pidgeot": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -394,7 +394,7 @@
         ]
     },
     "machamp": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -525,7 +525,7 @@
         ]
     },
     "dewgong": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Staller",
@@ -571,7 +571,7 @@
         ]
     },
     "gengar": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -602,7 +602,7 @@
         ]
     },
     "kingler": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -888,7 +888,7 @@
         ]
     },
     "lapras": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1155,7 +1155,7 @@
         ]
     },
     "furret": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1221,7 +1221,7 @@
         ]
     },
     "crobat": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1387,7 +1387,7 @@
         ]
     },
     "yanma": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Berry Sweeper",
@@ -1774,7 +1774,7 @@
         ]
     },
     "mantine": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2244,7 +2244,7 @@
         ]
     },
     "slaking": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2997,7 +2997,7 @@
         ]
     },
     "latias": {
-        "level": 66,
+        "level": 67,
         "sets": [
             {
                 "role": "Bulky Setup",
