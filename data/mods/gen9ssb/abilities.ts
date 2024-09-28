@@ -1678,6 +1678,43 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 	},
 
+	// pants
+	drifting: {
+		shortDesc: "Wandering Spirit + Stakeout.",
+		name: "Drifting",
+		onDamagingHit(damage, target, source, move) {
+			if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
+
+			if (this.checkMoveMakesContact(move, source, target)) {
+				const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, source.ability);
+				if (!targetCanBeSet) return targetCanBeSet;
+				const sourceAbility = source.setAbility('drifting', target);
+				if (!sourceAbility) return;
+				if (target.isAlly(source)) {
+					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
+				} else {
+					this.add('-activate', target, 'ability: Drifting', this.dex.abilities.get(sourceAbility).name, 'Drifting', '[of] ' + source);
+				}
+				target.setAbility(sourceAbility);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender) {
+			if (!defender.activeTurns) {
+				this.debug('Stakeout boost');
+				return this.chainModify(2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender) {
+			if (!defender.activeTurns) {
+				this.debug('Stakeout boost');
+				return this.chainModify(2);
+			}
+		},
+		flags: {},
+	},
+
 	// PartMan
 	ctiershitposter: {
 		shortDesc: "-1 Atk/SpA, +1 Def/SpD. +1 Atk/SpA/Spe, -1 Def/SpD, Mold Breaker if 420+ dmg taken.",
@@ -1979,6 +2016,26 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
+	},
+
+	// Rissoux
+	hardheaded: {
+		shortDesc: "Reckless + Rock Head.",
+		name: "Hard Headed",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.recoil || move.hasCrashDamage) {
+				this.debug('Reckless boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'recoil') {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (this.activeMove.id !== 'struggle') return null;
+			}
+		},
+		flags: {},
 	},
 
 	// RSB

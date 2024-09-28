@@ -685,6 +685,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cotton Candy Crush',
 		evs: {hp: 248, spd: 164, spe: 96}, nature: 'Careful', shiny: 4,
 	},
+	pants: {
+		species: 'Annihilape', ability: 'Drifting', item: 'Leftovers', gender: 'M',
+		moves: ['Rage Fist', 'Drain Punch', 'Dragon Dance'],
+		signatureMove: 'Eerie Apathy',
+		evs: {hp: 240, spd: 252, spe: 16}, nature: 'Careful', teraType: 'Ghost',
+	},
 	PartMan: {
 		species: 'Chandelure', ability: 'C- Tier Shitposter', item: 'Leek', gender: 'M',
 		moves: ['Searing Shot', 'Hex', 'Morning Sun'],
@@ -781,6 +787,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Hyper Voice', 'Psyshock', 'Focus Blast'],
 		signatureMove: 'Monke Magic',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {spe: 0}, nature: 'Quiet', teraType: 'Fighting',
+	},
+	Rissoux: {
+		species: 'Arcanine-Hisui', ability: 'Hard Headed', item: 'Heavy-Duty Boots', gender: 'M',
+		moves: ['Head Smash', 'Flare Blitz', 'Morning Sun'],
+		signatureMove: 'Call of the Wild',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', teraType: 'Grass',
 	},
 	RSB: {
 		species: 'Growlithe', ability: 'Hot Pursuit', item: 'Eviolite', gender: 'M',
