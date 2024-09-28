@@ -2692,11 +2692,10 @@ export class TeamValidator {
 					}
 					moveSources.add(learned);
 				}
-				if (learned.charAt(1) === 'E' && learnedGen >= 8) {
-					if (!canLearnSpecies.includes(baseSpecies.id)) canLearnSpecies.push(baseSpecies.id);
-				} else {
-					if (!canLearnSpecies.includes(species.id)) canLearnSpecies.push(species.id);
+				if (learned.charAt(1) === 'E' && learnedGen >= 8 && !canLearnSpecies.includes(baseSpecies.id)) {
+					canLearnSpecies.push(baseSpecies.id);
 				}
+				if (!canLearnSpecies.includes(species.id)) canLearnSpecies.push(species.id);
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
