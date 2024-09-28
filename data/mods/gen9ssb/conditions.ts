@@ -1702,6 +1702,18 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		innateName: "Natural Cure",
 	},
+	pants: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('pants')}|hell yeah, bro`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('pants')}|cya, dude :)`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('pants')}|peace, bud`);
+		},
+	},
 	partman: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -1997,6 +2009,15 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		onFaint() {
 			this.add(`c:|${getName('ReturnToMonkey')}|Reject the humanity...if you dare...`);
+		},
+	},
+	rissoux: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Rissoux')}|:squad:`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Rissoux')}|Welcome to the Family`);
 		},
 	},
 	rsb: {

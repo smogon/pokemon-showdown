@@ -4074,6 +4074,35 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fairy",
 	},
 
+	// pants
+	eerieapathy: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Eerie Apathy",
+		shortDesc: "Wish + Taunts the foe.",
+		pp: 15,
+		priority: 0,
+		flags: {snatch: 1, heal: 1, protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+		self: {
+			slotCondition: 'Wish',
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Memento', target);
+		},
+		onHit(target, source, move) {
+			if (!target.volatiles['taunt']) {
+				target.addVolatile('taunt', source, move);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// PartMan
 	alting: {
 		accuracy: true,
@@ -4680,6 +4709,33 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "all",
 		type: "Psychic",
+	},
+
+	// Rissoux
+	callofthewild: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Call of the Wild",
+		shortDesc: "Boosts Atk, Spe, and accuracy by 1 stage.",
+		pp: 5,
+		priority: 0,
+		flags: {sound: 1},
+		boosts: {
+			atk: 1,
+			spe: 1,
+			accuracy: 1,
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dragon Dance', source);
+			this.add('-anim', source, 'Lock-On', source);
+		},
+		secondary: null,
+		target: "self",
+		type: "Fire",
 	},
 
 	// RSB
