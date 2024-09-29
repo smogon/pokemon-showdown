@@ -282,6 +282,7 @@ export const commands: Chat.ChatCommands = {
 				"You must be registered in order to use this command. If you just registered, please refresh and try again."
 			);
 		}
+		this.sendReply("Linking...");
 		const response = await LoginServer.request("smogon/validate", {
 			username: user.id,
 		});
