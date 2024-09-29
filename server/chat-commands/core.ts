@@ -273,6 +273,25 @@ export const commands: Chat.ChatCommands = {
 	},
 	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
 
+	async linksmogon(target, room, user) {
+		if (Config.smogonauth && !Users.globalAuth.atLeast(user, Config.smogonauth)) {
+			throw new Chat.ErrorMessage("Access denied.");
+		}
+		if (!user.registered) {
+			throw new Chat.ErrorMessage(
+				"You must be registered in order to use this command. If you just registered, please refresh and try again."
+			);
+		}
+		const response = await LoginServer.request("smogon/validate", {
+			username: user.id,
+		});
+		const name = response[0]?.signed_username;
+		if (response[1] || !name) {
+			throw new Chat.ErrorMessage("Error while verifying username: " + (response[1]?.message || "malformed name received"));
+		}
+		user.send(`|openpage|https://smogon.com/tools/connect-ps-account/${user.id}/${name}`);
+	},
+
 	async msgroom(target, room, user, connection) {
 		const [targetId, message] = Utils.splitFirst(target, ',').map(i => i.trim());
 		if (!targetId || !message) {
