@@ -1054,6 +1054,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "On switch-in, changes the Pokemon to Kyurem-Black if the target's Defense is lower, otherwise Kyurem-White.",
 		name: "Frozen Fortuity",
 		onStart(pokemon) {
+			if (pokemon.species.id !== 'kyurem' || pokemon.transformed || !pokemon.hp) return;
+			if (pokemon.beingCalledBack) return;
 			let totaldef = 0;
 			let totalspd = 0;
 			for (const target of pokemon.foes()) {
@@ -1066,6 +1068,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			} else {
 				changeSet(this, pokemon, ssbSets['Imperial-White']);
 			}
+		},
+		onSwitchOut(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Kyurem' || pokemon.transformed || !pokemon.hp) return;
+			changeSet(this, pokemon, ssbSets['Imperial']);
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 	},
