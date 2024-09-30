@@ -578,6 +578,7 @@ export class DexSpecies {
 		const movePool = new Set<ID>();
 		for (const {species, learnset} of this.getFullLearnset(id)) {
 			for (const moveid in learnset) {
+				eggMovesOnly = this.eggMovesOnly(species, this.get(id));
 				if (eggMovesOnly) {
 					if (learnset[moveid].some(source => source.startsWith('9E'))) {
 						movePool.add(moveid as ID);
@@ -723,5 +724,14 @@ export class DexSpecies {
 		}
 		this.allCache = Object.freeze(species);
 		return this.allCache;
+	}
+
+	eggMovesOnly(child: Species, father: Species | null) {
+		if (child.baseSpecies === father?.baseSpecies) return false;
+		while (father) {
+			if (father.name === child.name) return false;
+			father = this.learnsetParent(father);
+		}
+		return true;
 	}
 }

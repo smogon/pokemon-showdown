@@ -2483,13 +2483,7 @@ export class TeamValidator {
 				}
 			}
 
-			let formeCantInherit = false;
-			let nextSpecies = dex.species.learnsetParent(baseSpecies);
-			while (nextSpecies) {
-				if (nextSpecies.name === species.name) break;
-				nextSpecies = dex.species.learnsetParent(nextSpecies);
-			}
-			if (checkingPrevo && !nextSpecies) formeCantInherit = true;
+			const formeCantInherit = dex.species.eggMovesOnly(species, baseSpecies);
 			if (formeCantInherit && dex.gen < 9) break;
 
 			let sources = learnset[moveid] || [];
@@ -2526,6 +2520,7 @@ export class TeamValidator {
 				//   teach it, and transfer it to the current gen.)
 
 				const learnedGen = parseInt(learned.charAt(0));
+				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
 				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + species.id) &&
 					(learned.charAt(1) !== 'E' || learnedGen < 8)
 				) {
@@ -2546,8 +2541,6 @@ export class TeamValidator {
 					}
 					continue;
 				}
-
-				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
 
 				if (
 					baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8 &&
