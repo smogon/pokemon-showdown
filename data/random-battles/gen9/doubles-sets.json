@@ -1367,7 +1367,7 @@
             {
                 "role": "Doubles Fast Attacker",
                 "movepool": ["Dark Pulse", "Heat Wave", "Nasty Plot", "Protect", "Sucker Punch"],
-                "abilities": ["Flash Fire"],
+                "abilities": ["Flash Fire", "Unnerve"],
                 "teraTypes": ["Dark", "Fire", "Ghost", "Grass"]
             }
         ]
@@ -5603,7 +5603,13 @@
                 "role": "Bulky Protect",
                 "movepool": ["Blood Moon", "Earth Power", "Hyper Voice", "Protect"],
                 "abilities": ["Mind's Eye"],
-                "teraTypes": ["Ghost", "Normal", "Water"]
+                "teraTypes": ["Ghost", "Normal", "Poison", "Water"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Blood Moon", "Earth Power", "Hyper Voice", "Vacuum Wave"],
+                "abilities": ["Mind's Eye"],
+                "teraTypes": ["Ghost", "Normal", "Poison", "Water"]
             }
         ]
     },

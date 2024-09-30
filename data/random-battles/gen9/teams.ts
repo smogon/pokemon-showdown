@@ -1080,6 +1080,7 @@ export class RandomTeams {
 
 		// Hard-code abilities here
 		if (species.id === 'drifblim') return moves.has('defog') ? 'Aftermath' : 'Unburden';
+		if (abilities.includes('Flash Fire') && this.dex.getEffectiveness('Fire', teraType) >= 1) return 'Flash Fire';
 		if (species.id === 'hitmonchan' && counter.get('ironfist')) return 'Iron Fist';
 		if ((species.id === 'thundurus' || species.id === 'tornadus') && !counter.get('Physical')) return 'Prankster';
 		if (species.id === 'swampert' && (counter.get('Water') || moves.has('flipturn'))) return 'Torrent';
@@ -1142,6 +1143,7 @@ export class RandomTeams {
 		if (role === 'AV Pivot') return 'Assault Vest';
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
+		if (types.includes('Normal') && moves.has('doubleedge') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
 			species.id === 'froslass' || moves.has('populationbomb') ||
 			(ability === 'Hustle' && counter.get('setup') && !isDoubles && this.randomChance(1, 2))
@@ -1181,8 +1183,8 @@ export class RandomTeams {
 		}
 		if (counter.get('Status') && (species.name === 'Latias' || species.name === 'Latios')) return 'Soul Dew';
 		if (species.id === 'scyther' && !isDoubles) return (isLead && !moves.has('uturn')) ? 'Eviolite' : 'Heavy-Duty Boots';
+		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
 		if (species.nfe) return 'Eviolite';
-		if (ability === 'Poison Heal') return 'Toxic Orb';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
@@ -1231,7 +1233,7 @@ export class RandomTeams {
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
 
-		if (species.id === 'ursalunabloodmoon' || (moves.has('doubleedge') && moves.has('fakeout'))) return 'Silk Scarf';
+		if (species.id === 'ursalunabloodmoon' && moves.has('protect')) return 'Silk Scarf';
 		if (
 			moves.has('flipturn') && moves.has('protect') && (moves.has('aquajet') || (moves.has('jetpunch')))
 		) return 'Mystic Water';
@@ -1300,7 +1302,6 @@ export class RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
-		if (types.includes('Normal') && moves.has('fakeout')) return 'Silk Scarf';
 		if (
 			species.id !== 'jirachi' && (counter.get('Physical') >= 4) &&
 			['dragontail', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
@@ -1498,8 +1499,8 @@ export class RandomTeams {
 		if (['axekick', 'highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if ((moves.has('substitute') && ['Sitrus Berry', 'Salac Berry'].includes(item))) {
-				// Two Substitutes should activate Sitrus Berry
+			if ((moves.has('substitute') && ['Sitrus Berry', 'Salac Berry'].includes(item)) || species.id === 'minior') {
+				// Two Substitutes should activate Sitrus Berry. Two switch-ins to Stealth Rock should activate Shields Down on Minior.
 				if (hp % 4 === 0) break;
 			} else if (
 				(moves.has('bellydrum') || moves.has('filletaway') || moves.has('shedtail')) &&

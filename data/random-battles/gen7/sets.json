@@ -1305,6 +1305,11 @@
                 "role": "Z-Move user",
                 "movepool": ["aurasphere", "earthpower", "fireblast", "nastyplot", "psychic", "roost"],
                 "abilities": ["Synchronize"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["earthquake", "leechlife", "swordsdance", "zenheadbutt"],
+                "abilities": ["Synchronize"]
             }
         ]
     },
@@ -2613,7 +2618,7 @@
         "level": 90,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Setup Sweeper",
                 "movepool": ["earthquake", "fireblast", "rockpolish", "stoneedge"],
                 "abilities": ["Solid Rock"]
             },
@@ -2790,6 +2795,11 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["dragondance", "earthquake", "stoneedge", "waterfall"],
+                "abilities": ["Hydration", "Oblivious"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["earthquake", "protect", "scald", "toxic"],
                 "abilities": ["Hydration", "Oblivious"]
             }
         ]
@@ -3027,7 +3037,7 @@
             {
                 "role": "Staller",
                 "movepool": ["icebeam", "protect", "scald", "substitute", "toxic"],
-                "abilities": ["Swift Swim"]
+                "abilities": ["Hydration"]
             }
         ]
     },
@@ -3347,7 +3357,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "signalbeam"],
+                "movepool": ["focusblast", "nastyplot", "psychic", "psyshock", "recover", "signalbeam"],
                 "abilities": ["Pressure"]
             }
         ]
@@ -3358,6 +3368,11 @@
             {
                 "role": "Fast Support",
                 "movepool": ["knockoff", "psychoboost", "spikes", "stealthrock", "superpower", "taunt"],
+                "abilities": ["Pressure"]
+            },
+            {
+                "role": "Z-Move user",
+                "movepool": ["darkpulse", "focusblast", "nastyplot", "psychoboost"],
                 "abilities": ["Pressure"]
             }
         ]
@@ -3682,7 +3697,8 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["dazzlinggleam", "mysticalfire", "nastyplot", "shadowball", "thunderbolt", "trick"],
-                "abilities": ["Levitate"]
+                "abilities": ["Levitate"],
+                "preferredTypes": ["Fairy"]
             }
         ]
     },
@@ -3971,7 +3987,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "knockoff", "leafstorm", "leechseed", "powerwhip", "rockslide", "sleeppowder", "sludgebomb", "synthesis"],
+                "movepool": ["earthquake", "knockoff", "leafstorm", "leechseed", "morningsun", "powerwhip", "rockslide", "sleeppowder", "sludgebomb"],
                 "abilities": ["Regenerator"]
             },
             {
@@ -6172,7 +6188,7 @@
         "level": 81,
         "sets": [
             {
-                "role": "Bulky Attacker",
+                "role": "Bulky Setup",
                 "movepool": ["knockoff", "rest", "sleeptalk", "superpower"],
                 "abilities": ["Contrary"]
             },

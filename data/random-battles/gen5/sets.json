@@ -2288,6 +2288,11 @@
                 "role": "Setup Sweeper",
                 "movepool": ["dragondance", "earthquake", "stoneedge", "waterfall"],
                 "abilities": ["Anticipation", "Hydration"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["earthquake", "protect", "scald", "toxic"],
+                "abilities": ["Anticipation", "Hydration"]
             }
         ]
     },
@@ -2502,7 +2507,7 @@
             {
                 "role": "Staller",
                 "movepool": ["icebeam", "protect", "scald", "substitute", "toxic"],
-                "abilities": ["Swift Swim"]
+                "abilities": ["Hydration"]
             }
         ]
     },
@@ -2792,6 +2797,11 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
+                "movepool": ["quickattack", "return", "waterfall", "workup"],
+                "abilities": ["Simple"]
+            },
+            {
+                "role": "Bulky Setup",
                 "movepool": ["curse", "quickattack", "return", "waterfall"],
                 "abilities": ["Simple"]
             }
@@ -3258,7 +3268,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "hiddenpowerfire", "leafstorm", "leechseed", "powerwhip", "rockslide", "sleeppowder", "synthesis"],
+                "movepool": ["earthquake", "hiddenpowerfire", "leafstorm", "leechseed", "morningsun", "powerwhip", "rockslide", "sleeppowder"],
                 "abilities": ["Regenerator"]
             },
             {
@@ -3320,7 +3330,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["airslash", "bugbuzz", "hiddenpowerground", "uturn"],
+                "movepool": ["airslash", "bugbuzz", "gigadrain", "uturn"],
                 "abilities": ["Tinted Lens"]
             }
         ]

@@ -1248,6 +1248,11 @@
                 "role": "Staller",
                 "movepool": ["charm", "encore", "flamethrower", "seismictoss", "softboiled", "thunderwave", "toxic"],
                 "abilities": ["Serene Grace"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["protect", "seismictoss", "toxic", "wish"],
+                "abilities": ["Serene Grace"]
             }
         ]
     },
@@ -2273,8 +2278,9 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["agility", "batonpass", "hiddenpowerfighting", "hiddenpowerground", "shadowball", "silverwind", "toxic"],
-                "abilities": ["Wonder Guard"]
+                "movepool": ["agility", "batonpass", "hiddenpowerfighting", "shadowball", "silverwind", "toxic"],
+                "abilities": ["Wonder Guard"],
+                "preferredTypes": ["Fighting"]
             }
         ]
     },
