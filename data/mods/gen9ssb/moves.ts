@@ -2613,11 +2613,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 
 	// Imperial
-	snowshroud: {
+	stormshroud: {
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
-		name: "Snow Shroud",
+		name: "Storm Shroud",
 		shortDesc: "Physical + contact if stronger.",
 		desc: "This move becomes a physical attack that makes contact if the value of ((((2 * the user's level / 5 + 2) * 90 * X) / Y) / 50), where X is the user's Attack stat and Y is the target's Defense stat, is greater than the same value where X is the user's Special Attack stat and Y is the target's Special Defense stat. No stat modifiers other than stat stage changes are considered for this purpose. If the two values are equal, this move chooses a damage category at random.",
 		pp: 10,
