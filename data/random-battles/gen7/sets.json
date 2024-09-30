@@ -3373,7 +3373,8 @@
             {
                 "role": "Z-Move user",
                 "movepool": ["darkpulse", "focusblast", "nastyplot", "psychoboost"],
-                "abilities": ["Pressure"]
+                "abilities": ["Pressure"],
+                "preferredTypes": ["Psychic"]
             }
         ]
     },
