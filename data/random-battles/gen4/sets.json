@@ -2166,7 +2166,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthquake", "fireblast", "outrage", "roost", "stoneedge", "uturn"],
+                "movepool": ["earthquake", "outrage", "roost", "stoneedge", "uturn"],
                 "abilities": ["Levitate"]
             },
             {
@@ -2784,6 +2784,11 @@
                 "role": "Setup Sweeper",
                 "movepool": ["curse", "quickattack", "return", "waterfall"],
                 "abilities": ["Simple"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "quickattack", "return", "waterfall"],
+                "abilities": ["Simple"]
             }
         ]
     },
@@ -3239,7 +3244,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "hiddenpowerfire", "leafstorm", "powerwhip", "rockslide", "sleeppowder", "synthesis"],
+                "movepool": ["earthquake", "hiddenpowerfire", "leafstorm", "morningsun", "powerwhip", "rockslide", "sleeppowder"],
                 "abilities": ["Chlorophyll"]
             },
             {

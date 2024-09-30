@@ -342,7 +342,7 @@
     },
     "tauros": {
         "level": 81,
-        "moves": ["bodyslam", "closecombat", "rockslide", "throatchop", "zenheadbutt"],
+        "moves": ["bodyslam", "closecombat", "throatchop", "zenheadbutt"],
         "doublesLevel": 84,
         "doublesMoves": ["bodyslam", "closecombat", "lashout", "protect", "rockslide"]
     },
@@ -617,7 +617,7 @@
     },
     "mantine": {
         "level": 86,
-        "moves": ["defog", "hurricane", "icebeam", "roost", "scald", "toxic"],
+        "moves": ["defog", "hurricane", "roost", "scald", "toxic"],
         "doublesLevel": 88,
         "doublesMoves": ["haze", "helpinghand", "hurricane", "roost", "scald", "tailwind"]
     },
@@ -1947,7 +1947,7 @@
     },
     "primarina": {
         "level": 80,
-        "moves": ["energyball", "hydropump", "moonblast", "psychic", "sparklingaria"],
+        "moves": ["energyball", "hydropump", "moonblast", "psychic", "scald"],
         "doublesLevel": 82,
         "doublesMoves": ["dazzlinggleam", "flipturn", "hypervoice", "moonblast", "protect", "psychic"]
     },
