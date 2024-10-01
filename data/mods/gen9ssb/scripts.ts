@@ -1,4 +1,3 @@
-import {RESTORATIVE_BERRIES} from '../../../sim/pokemon';
 import {SSBSet} from "./random-teams";
 import {ChosenAction} from '../../../sim/side';
 import {FS} from '../../../lib';
@@ -74,6 +73,12 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.set.evs = evs;
 	pokemon.set.ivs = ivs;
 	if (newSet.nature) pokemon.set.nature = Array.isArray(newSet.nature) ? context.sample(newSet.nature) : newSet.nature;
+	const oldGender = pokemon.set.gender;
+	if ((pokemon.set.gender !== newSet.gender) && !Array.isArray(newSet.gender)) {
+		pokemon.set.gender = newSet.gender;
+		// @ts-ignore Shut up sharp_claw wanted this
+		pokemon.gender = newSet.gender;
+	}
 	const oldShiny = pokemon.set.shiny;
 	pokemon.set.shiny = (typeof newSet.shiny === 'number') ? context.randomChance(1, newSet.shiny) : !!newSet.shiny;
 	let percent = (pokemon.hp / pokemon.baseMaxhp);
@@ -89,7 +94,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	}
 	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-	if (oldShiny !== pokemon.set.shiny) context.add('replace', pokemon, details);
+	if (oldShiny !== pokemon.set.shiny || oldGender !== pokemon.gender) context.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string, undefined, true);
 
 	pokemon.baseMaxhp = pokemon.species.name === 'Shedinja' ? 1 : Math.floor(Math.floor(
@@ -112,7 +117,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	}
 	pokemon.canMegaEvo = context.actions.canMegaEvo(pokemon);
 	pokemon.canUltraBurst = context.actions.canUltraBurst(pokemon);
-	pokemon.canTerastallize = context.actions.canTerastallize(pokemon);
+	pokemon.canTerastallize = (pokemon.canTerastallize === null) ? null : context.actions.canTerastallize(pokemon);
 	context.add('message', `${pokemon.name} changed form!`);
 }
 
@@ -438,8 +443,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			this.actions.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
-				action.zmove, undefined, action.maxMove, action.originalTarget);
+			this.actions.runMove(action.move, action.pokemon, action.targetLoc, {
+				sourceEffect: action.sourceEffect, zMove: action.zmove,
+				maxMove: action.maxMove, originalTarget: action.originalTarget,
+			});
 			break;
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
@@ -1120,15 +1127,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			return hitResults;
 		},
 
-		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove, originalTarget) {
+		runMove(moveOrMoveName, pokemon, targetLoc, options) {
 			pokemon.activeMoveActions++;
+			const zMove = options?.zMove;
+			const maxMove = options?.maxMove;
+			const externalMove = options?.externalMove;
+			const originalTarget = options?.originalTarget;
+			let sourceEffect = options?.sourceEffect;
 			let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 			let baseMove = this.dex.getActiveMove(moveOrMoveName);
+			const priority = baseMove.priority;
 			const pranksterBoosted = baseMove.pranksterBoosted;
 			if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
 				const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, baseMove);
 				if (changedMove && changedMove !== true) {
 					baseMove = this.dex.getActiveMove(changedMove);
+					baseMove.priority = priority;
 					if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
 					target = this.battle.getRandomTarget(pokemon, baseMove);
 				}
@@ -1202,7 +1216,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const oldActiveMove = move;
 
-			const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
+			const moveDidSomething = this.useMove(baseMove, pokemon, {target, sourceEffect, zMove, maxMove});
 			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
@@ -1233,7 +1247,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						targetOf1stDance :
 						pokemon;
 					const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-					this.runMove(move.id, dancer, dancersTargetLoc, dancer.getAbility(), undefined, true);
+					this.runMove(move.id, dancer, dancersTargetLoc, {sourceEffect: dancer.getAbility(), externalMove: true});
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -1245,7 +1259,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.activeMove = oldActiveMove;
 			}
 		},
-		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove, maxMove) {
+		useMoveInner(moveOrMoveName, pokemon, options) {
+			let target = options?.target;
+			let sourceEffect = options?.sourceEffect;
+			const zMove = options?.zMove;
+			const maxMove = options?.maxMove;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 
@@ -1609,7 +1627,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					hitResults[i] = false;
 				} else if (this.battle.gen >= 7 && move.pranksterBoosted &&
 					// Prankster Clone immunity
-					(pokemon.hasAbility('prankster') || pokemon.hasAbility('youkaiofthedusk') || pokemon.volatiles['irpachuza']) &&
+					(pokemon.hasAbility('prankster') || pokemon.hasAbility('youkaiofthedusk') ||
+						pokemon.volatiles['irpachuza'] || pokemon.hasAbility('neverendingfhunt')) &&
 					!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 					this.battle.debug('natural prankster immunity');
 					if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
@@ -1735,135 +1754,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 			if ('smackdown' in this.volatiles) return true;
 			const item = (this.ignoringItem() ? '' : this.item);
-			if (item === 'ironball' || (this.volatiles['item:ironball'] && !this.ignoringItem())) return true;
+			if (item === 'ironball') return true;
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 			if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 			if (this.hasAbility('levitate') && !this.battle.suppressingAbility(this)) return null;
 			if ('magnetrise' in this.volatiles) return false;
 			if ('riseabove' in this.volatiles) return false;
 			if ('telekinesis' in this.volatiles) return false;
-			if (item === 'airballoon' || (this.volatiles['item:airballoon'] && !this.ignoringItem())) return false;
-		},
-		hasItem(item) {
-			if (Array.isArray(item)) {
-				return item.some(i => this.hasItem(i));
-			} else {
-				if (this.battle.toID(item) !== this.item && !this.volatiles['item:' + this.battle.toID(item)]) return false;
-			}
-			return !this.ignoringItem();
-		},
-		useItem(source, sourceEffect) {
-			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
-			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
-			if ((!this.hp && !item.isGem) || !this.isActive) return false;
-			if (!hasAnyItem) return false;
-
-			if (this.battle.runEvent('UseItem', this, null, null, item)) {
-				switch (item.id.startsWith('item:') ? item.id.slice(5) : item.id) {
-				case 'redcard':
-					this.battle.add('-enditem', this, item.fullname, '[of] ' + source);
-					break;
-				default:
-					if (item.isGem) {
-						this.battle.add('-enditem', this, item.fullname, '[from] gem');
-					} else {
-						this.battle.add('-enditem', this, item.fullname);
-					}
-					break;
-				}
-				if (item.boosts) {
-					this.battle.boost(item.boosts, this, source, item);
-				}
-
-				this.battle.singleEvent('Use', item, this.itemState, this, source, sourceEffect);
-
-				if (item.id.startsWith('item:')) {
-					delete this.volatiles[item.id];
-					this.m.sharedItemsUsed.push(item.id.slice(5));
-				} else {
-					this.lastItem = this.item;
-					this.item = '';
-					this.itemState = {id: '', target: this};
-				}
-				this.usedItemThisTurn = true;
-				this.battle.runEvent('AfterUseItem', this, null, null, item);
-				return true;
-			}
-			return false;
-		},
-		eatItem(force, source, sourceEffect) {
-			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
-			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
-			if (!hasAnyItem) return false;
-			if ((!this.hp && this.battle.toID(item.name) !== 'jabocaberry' && this.battle.toID(item.name) !== 'rowapberry') ||
-				!this.isActive) return false;
-
-			if (
-				this.battle.runEvent('UseItem', this, null, null, item) &&
-				(force || this.battle.runEvent('TryEatItem', this, null, null, item))
-			) {
-				this.battle.add('-enditem', this, item.fullname, '[eat]');
-
-				this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
-				this.battle.runEvent('EatItem', this, null, null, item);
-
-				if (RESTORATIVE_BERRIES.has(item.id.startsWith('item:') ? item.id.slice(5) as ID : item.id)) {
-					switch (this.pendingStaleness) {
-					case 'internal':
-						if (this.staleness !== 'external') this.staleness = 'internal';
-						break;
-					case 'external':
-						this.staleness = 'external';
-						break;
-					}
-					this.pendingStaleness = undefined;
-				}
-
-				if (item.id.startsWith('item:')) {
-					delete this.volatiles[item.id];
-					this.m.sharedItemsUsed.push(item.id.slice(5));
-				} else {
-					this.lastItem = this.item;
-					this.item = '';
-					this.itemState = {id: '', target: this};
-				}
-				this.usedItemThisTurn = true;
-				this.ateBerry = true;
-				this.battle.runEvent('AfterUseItem', this, null, null, item);
-				return true;
-			}
-			return false;
-		},
-		setItem(item, source, effect) {
-			if (!this.hp || !this.isActive) return false;
-			if (this.itemState.knockedOff) return false;
-			if (typeof item === 'string') item = this.battle.dex.items.get(item);
-
-			const effectid = this.battle.effect ? this.battle.effect.id : '';
-			if (RESTORATIVE_BERRIES.has('leppaberry' as ID)) {
-				const inflicted = ['trick', 'switcheroo'].includes(effectid);
-				const external = inflicted && source && !source.isAlly(this);
-				this.pendingStaleness = external ? 'external' : 'internal';
-			} else {
-				this.pendingStaleness = undefined;
-			}
-			const oldItem = this.getItem();
-			const oldItemState = this.itemState;
-			this.item = item.id;
-			this.itemState = {id: item.id, target: this};
-			if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
-			if (item.id) {
-				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
-				for (const ally of this.side.pokemon) {
-					if (!ally.m.sharedItemsUsed) continue;
-					ally.m.sharedItemsUsed = ally.m.sharedItemsUsed.filter((i: ID) => i !== (item as Item).id);
-				}
-			}
-			return true;
+			return item !== 'airballoon';
 		},
 		effectiveWeather() {
 			const weather = this.battle.field.effectiveWeather();
