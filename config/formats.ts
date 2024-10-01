@@ -2177,6 +2177,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "National Dex Other Tiers",
 	},
 	{
+		name: "[Gen 9] National Dex 35 Pokes",
+		desc: `Only 35 Pok&eacute;mon are legal.`,
+		mod: 'gen9',
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'DryPass Clause', 'Sleep Clause Mod', 'Forme Clause', 'Z-Move Clause', 'Terastal Clause'],
+		banlist: [
+			'Mega', 'All Pokemon', 'Battle Bond', 'Moody', 'Shadow Tag', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Acupressure', 'Hidden Power', 'Last Respects',
+		],
+		unbanlist: [
+			'Accelgor', 'Amoonguss', 'Bellossom', 'Bisharp', 'Blastoise-Base', 'Clawitzer', 'Doublade', 'Dudunsparce', 'Dugtrio-Alola', 'Emboar', 'Gengar-Base',
+			'Guzzlord', 'Honchkrow', 'Houndstone', 'Klinklang', 'Magmortar', 'Munkidori', 'Ninjask', 'Noivern', 'Perrserker', 'Porygon-Z', 'Rhydon', 'Samurott-Base',
+			'Sandaconda', 'Scyther', 'Seviper', 'Sinistcha', 'Snorlax', 'Stoutland', 'Stunfisk-Base', 'Sudowoodo', 'Sylveon', 'Vigoroth', 'Vikavolt', 'Zoroark-Hisui',
+		],
+	},
+	{
 		name: "[Gen 9] National Dex Ubers",
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Items Clause', 'Species Clause', 'Sleep Clause Mod', 'Mega Rayquaza Clause'],
@@ -2240,7 +2254,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] National Dex Doubles Ubers",
 		mod: 'gen9',
 		gameType: 'doubles',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Moves Clause', 'Evasion Abilities Clause', 'Species Clause'],
 		banlist: ['Shedinja', 'Assist'],
 	},
