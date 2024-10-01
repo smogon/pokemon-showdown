@@ -1330,10 +1330,10 @@ const ScavengerCommands: Chat.ChatCommands = {
 		},
 	},
 	teamscavshelp: [
-		'/tscav createteam [team name], [leader name] - creates a new team for the current Team Scavs game. (Requires: % @ * # &)',
-		'/tscav deleteteam [team name] - deletes an existing team for the current Team Scavs game. (Requires: % @ * # &)',
+		'/tscav createteam [team name], [leader name] - creates a new team for the current Team Scavs game. (Requires: % @ * # ~)',
+		'/tscav deleteteam [team name] - deletes an existing team for the current Team Scavs game. (Requires: % @ * # ~)',
 		'/tscav addplayer [user] - allows a team leader to add a player onto their team.',
-		'/tscav editplayers [team name], [added user | -removed user], [...] (use - preceding a user\'s name to remove a user) - Edits the players within an existing team. (Requires: % @ * # &)',
+		'/tscav editplayers [team name], [added user | -removed user], [...] (use - preceding a user\'s name to remove a user) - Edits the players within an existing team. (Requires: % @ * # ~)',
 		'/tscav teams - views the list of teams and the players on each team.',
 		'/tscav guesses - views the list of guesses already submitted by your team for the current question.',
 		'/tscav chat [message] - adds a message that can be seen by all of your teammates in the Team Scavs game.',
@@ -2689,9 +2689,9 @@ export const commands: Chat.ChatCommands = {
 
 		const gamesCommands = [
 			"<strong>Game commands:</strong>",
-			"- /scav game create <em>[kogames | pointrally | scavengergames | jumpstart | teamscavs]</em>: Start a new scripted scavenger game. (Requires: % @ * # &)",
-			"- /scav game end: End the current scavenger game. (Requires: % @ * # &)",
-			"- /scav game kick <em>[user]</em>: Kick the user from the current scavenger game. (Requires: % @ * # &)",
+			"- /scav game create <em>[kogames | pointrally | scavengergames | jumpstart | teamscavs]</em>: Start a new scripted scavenger game. (Requires: % @ * # ~)",
+			"- /scav game end: End the current scavenger game. (Requires: % @ * # ~)",
+			"- /scav game kick <em>[user]</em>: Kick the user from the current scavenger game. (Requires: % @ * # ~)",
 			"- /scav game score: Show the current scoreboard for any game with a leaderboard.",
 			"- /scav game rank <em>[user]</em>: Show a user's rank in the current scavenger game leaderboard.",
 		].join('<br />');

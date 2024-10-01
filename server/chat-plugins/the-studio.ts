@@ -229,7 +229,7 @@ class RecommendationsInterface {
 		if (!YouTube.linkRegex.test(url)) {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
-		url = url.split('&')[0];
+		url = url.split('~')[0];
 		const videoInfo = await YouTube.getVideoData(url);
 		this.checkTags(tags);
 		// JUST in case
@@ -272,7 +272,7 @@ class RecommendationsInterface {
 		if (!YouTube.linkRegex.test(url)) {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
-		url = url.split('&')[0];
+		url = url.split('~')[0];
 		const videoInfo = await YouTube.getVideoData(url);
 		this.checkTags(tags);
 		const rec: Recommendation = {artist, title, videoInfo, url, description, tags, userData: {name: username}, likes: 0};
@@ -468,7 +468,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog(`RECOMMENDATION`, null, `add: '${toID(title)}' by ${toID(artist)}`);
 	},
 	addrecommendationhelp: [
-		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # &`,
+		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # ~`,
 	],
 
 	delrec: 'removerecommendation',
@@ -487,7 +487,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog(`RECOMMENDATION`, null, `remove: '${toID(title)}' by ${toID(artist)}`);
 	},
 	removerecommendationhelp: [
-		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # &`,
+		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # ~`,
 		`If you added a recommendation, you can remove it on your own without being one of the required ranks.`,
 	],
 
@@ -530,7 +530,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog(`RECOMMENDATION`, null, `approve: '${toID(title)}' by ${toID(artist)} from ${submitter}`);
 	},
 	approvesuggestionhelp: [
-		`/approvesuggestion submitter | artist | strong title - Approve a submitted song recommendation. Requires: % @ * # &`,
+		`/approvesuggestion submitter | artist | strong title - Approve a submitted song recommendation. Requires: % @ * # ~`,
 	],
 
 	denysuggestion(target, room, user) {
@@ -545,7 +545,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog(`RECOMMENDATION`, null, `deny: '${toID(title)}' by ${toID(artist)} from ${submitter}`);
 	},
 	denysuggestionhelp: [
-		`/denysuggestion submitter | artist | strong title - Deny a submitted song recommendation. Requires: % @ * # &`,
+		`/denysuggestion submitter | artist | strong title - Deny a submitted song recommendation. Requires: % @ * # ~`,
 	],
 
 	rec: 'recommendation',
@@ -580,8 +580,8 @@ export const commands: Chat.ChatCommands = {
 	recommendationhelp: [
 		`/recommendation [key1, key2, key3, ...] - Displays a random recommendation that matches all keys, if one exists.`,
 		`If no arguments are provided, a random recommendation is shown.`,
-		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # &`,
-		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # &`,
+		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # ~`,
+		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # ~`,
 		`If you added a recommendation, you can remove it on your own without being one of the required ranks.`,
 		`/suggestrecommendation artist | song title | url | description | tag1 | tag2 | ... - Suggest a song recommendation.`,
 	],
@@ -614,7 +614,7 @@ export const commands: Chat.ChatCommands = {
 		this.parse(`/j view-suggestedrecommendations-${room.roomid}`);
 	},
 	viewsuggestedrecommendationshelp: [
-		`/viewsuggestedrecommendations OR /viewsuggestions - View all suggested recommended songs. Requires: % @ * # &`,
+		`/viewsuggestedrecommendations OR /viewsuggestions - View all suggested recommended songs. Requires: % @ * # ~`,
 	],
 };
 

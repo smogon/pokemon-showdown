@@ -167,7 +167,7 @@ describe('Users features', function () {
 					assert.equal(user.can('globalban', target), true, 'targeting lower rank');
 					target.tempGroup = '@';
 					assert.equal(user.can('globalban', target), false, 'targeting same rank');
-					target.tempGroup = '&';
+					target.tempGroup = '~';
 					assert.equal(user.can('globalban', target), false, 'targeting higher rank');
 				});
 				it(`should not allow users to demote themselves`, function () {

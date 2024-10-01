@@ -130,7 +130,7 @@ export const commands: Chat.ChatCommands = {
 		return this.sendReplyBox(<SearchUsernames target={target} />);
 	},
 	usersearchhelp: [
-		`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ &`,
+		`/usersearch [pattern]: Looks for all names matching the [pattern]. Requires: % @ ~`,
 		`Adding "page" to the end of the command, i.e. /usersearchpage OR /uspage will bring up a page.`,
 		`See also /usnames for a staff-curated list of the most commonly searched terms.`,
 	],
@@ -202,8 +202,8 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 	usnameshelp: [
-		`/usnames add [...terms]: Adds the given [terms] to the usersearch name list. Requires: % @ &`,
-		`/usnames remove [...terms]: Removes the given [terms] from the usersearch name list. Requires: % @ &`,
+		`/usnames add [...terms]: Adds the given [terms] to the usersearch name list. Requires: % @ ~`,
+		`/usnames remove [...terms]: Removes the given [terms] from the usersearch name list. Requires: % @ ~`,
 		`/usnames OR /usnames list: Shows the usersearch name list.`,
 	],
 };

@@ -742,7 +742,7 @@ export const commands: Chat.ChatCommands = {
 
 			switch (key) {
 			case 'moves':
-				for (const rawMove of value.split('&')) {
+				for (const rawMove of value.split('~')) {
 					const move = dex.moves.get(rawMove);
 					if (!move.exists) {
 						throw new Chat.ErrorMessage(`"${rawMove}" is not a move in the specified format.`);
@@ -846,7 +846,7 @@ export const commands: Chat.ChatCommands = {
 			`</ul>` +
 			`The given probability is for a set that matches EVERY provided condition. ` +
 			`Conditions can be negated by prefixing the <code>[matching value]</code> with <code>!</code>.<br />` +
-			`Requires: % @ # & (globally or in the Random Battles room)`
+			`Requires: % @ # ~ (globally or in the Random Battles room)`
 		);
 	},
 
@@ -872,5 +872,5 @@ export const commands: Chat.ChatCommands = {
 			.join('');
 		return this.sendReplyBox(`<strong>Team for ${format.name}</strong>:` + teamHTML);
 	},
-	generateteamhelp: [`/genteam [format] - Generates a team for the given format. Requires: % @ & or Random Battles room auth`],
+	generateteamhelp: [`/genteam [format] - Generates a team for the given format. Requires: % @ ~ or Random Battles room auth`],
 };

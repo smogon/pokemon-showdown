@@ -16,7 +16,7 @@ describe('room promotions', function () {
 		this.room = Rooms.get('promotiontesting');
 
 		this.user = makeUser('Annika', '127.0.0.1');
-		this.user.setGroup('&');
+		this.user.setGroup('~');
 
 		this.targetUser = makeUser('Heart of Etheria', '127.0.0.1');
 	});

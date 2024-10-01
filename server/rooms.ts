@@ -417,7 +417,7 @@ export abstract class BasicRoom {
 	 * Like addByUser, but without logging
 	 */
 	sendByUser(user: User | null, text: string) {
-		this.send('|c|' + (user ? user.getIdentity(this) : '&') + '|/log ' + text);
+		this.send('|c|' + (user ? user.getIdentity(this) : '~') + '|/log ' + text);
 	}
 	/**
 	 * Like addByUser, but sends to mods only.
@@ -1372,7 +1372,7 @@ export class GlobalRoomState {
 		this.battlesLoading = true;
 		for (const u of Users.users.values()) {
 			u.send(
-				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
+				`|pm|~|${u.getIdentity()}|/uhtml restartmsg,` +
 				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
 			);
 		}
@@ -1391,7 +1391,7 @@ export class GlobalRoomState {
 			if (this.deserializeBattleRoom(JSON.parse(line))) count++;
 		}
 		for (const u of Users.users.values()) {
-			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
+			u.send(`|pm|~|${u.getIdentity()}|/uhtmlchange restartmsg,`);
 		}
 		await Monitor.logPath('battles.jsonl').unlinkIfExists();
 		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
@@ -1767,7 +1767,7 @@ export class GlobalRoomState {
 			}
 		}
 		for (const user of Users.users.values()) {
-			user.send(`|pm|&|${user.tempGroup}${user.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
+			user.send(`|pm|~|${user.tempGroup}${user.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
 		}
 
 		this.lockdown = true;
