@@ -52,7 +52,7 @@ function savePrenoms() {
 }
 
 function toNominationId(nomination: string) {
-	return nomination.toLowerCase().replace(/\s/g, '').replace(/\b~\b/g, '');
+	return nomination.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
 }
 
 class OtdHandler {

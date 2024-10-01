@@ -1604,7 +1604,7 @@ export const Chat = new class {
 			// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
 			name = name.replace(
 				// eslint-disable-next-line no-misleading-character-class
-				/[^a-zA-Z0-9 /\\.~()<>^*%~=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g,
+				/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g,
 				''
 			);
 

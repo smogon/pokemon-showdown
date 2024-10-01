@@ -387,7 +387,7 @@ export const pages: Chat.PageTable = {
 				.replace(/&quot;/g, '"')
 				.replace(/&gt;/g, '>')
 				.replace(/&lt;/g, '<')
-				.replace(/&amp;/g, '~');
+				.replace(/&amp;/g, '&');
 			// stuff!
 			let buf = `${back(categoryID)}${refresh(this.pageid)}<br />`;
 			buf += `<center><h2><a href="${tour.url}">${tour.title}</a></h2>`;
