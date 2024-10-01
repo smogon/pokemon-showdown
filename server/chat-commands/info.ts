@@ -1759,7 +1759,7 @@ export const commands: Chat.ChatCommands = {
 	smogintro(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
-			`Welcome to Smogon's official simulator! The <a href="https://www.smogon.com/forums/forums/intro_hub">Information ~ Resources forum</a> can help you get integrated into the community.<br />` +
+			`Welcome to Smogon's official simulator! The <a href="https://www.smogon.com/forums/forums/intro_hub">Information & Resources forum</a> can help you get integrated into the community.<br />` +
 			`- <a href="https://www.smogon.com/forums/threads/3526346">Useful Smogon Info</a><br />` +
 			`- <a href="https://www.smogon.com/forums/threads/3644714">Tiering FAQ</a><br />`
 		);
@@ -2707,7 +2707,7 @@ export const commands: Chat.ChatCommands = {
 		let buf;
 		if (YouTube.linkRegex.test(link)) {
 			buf = await YouTube.generateVideoDisplay(link, false);
-			this.message = this.message.replace(/&ab_channel=(.*)(~|)/ig, '').replace(/https:\/\/www\./ig, '');
+			this.message = this.message.replace(/&ab_channel=(.*)(&|)/ig, '').replace(/https:\/\/www\./ig, '');
 		} else if (Twitch.linkRegex.test(link)) {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
 			if (!channelId) return this.errorReply(`Specify a Twitch channel.`);

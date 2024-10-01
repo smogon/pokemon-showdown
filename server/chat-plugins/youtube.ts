@@ -225,7 +225,7 @@ export class YoutubeInterface {
 		} else {
 			id = link.split('channel/')[1] || '';
 		}
-		if (id.includes('~')) id = id.split('~')[0];
+		if (id.includes('&')) id = id.split('&')[0];
 		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
@@ -446,7 +446,7 @@ export class GroupWatch extends Rooms.SimpleRoomGame {
 		let addendum = '';
 		if (this.started) {
 			const diff = Date.now() - this.started;
-			addendum = `~start=${Math.floor(diff / 1000)}`;
+			addendum = `&start=${Math.floor(diff / 1000)}`;
 		}
 		buf += `<youtube src="${url}${addendum}"></youtube>`;
 		buf += `<br />`.repeat(4);

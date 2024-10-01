@@ -590,7 +590,7 @@ export const pages: Chat.PageTable = {
 				content += filterWords[key].map(({regex, word, reason, publicReason, replacement, hits}) => {
 					let entry = Utils.html`<abbr title="${reason}"><code>${word}</code></abbr>`;
 					if (publicReason) entry += Utils.html` <small>(public reason: ${publicReason})</small>`;
-					if (replacement) entry += Utils.html` &rarr; ${replacement}`;
+					if (replacement) entry += Utils.html` &rArr; ${replacement}`;
 					return `<tr><td>${entry}</td><td>${hits}</td></tr>`;
 				}).join('');
 			}
