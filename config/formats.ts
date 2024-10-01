@@ -2180,10 +2180,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] National Dex 35 Pokes",
 		desc: `Only 35 Pok&eacute;mon are legal.`,
 		mod: 'gen9',
-		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'DryPass Clause', 'Sleep Clause Mod', 'Forme Clause', 'Z-Move Clause', 'Terastal Clause'],
-		banlist: [
-			'Mega', 'All Pokemon', 'Battle Bond', 'Moody', 'Shadow Tag', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Acupressure', 'Hidden Power', 'Last Respects',
-		],
+		ruleset: ['Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'DryPass Clause', 'Sleep Clause Mod', 'Forme Clause', 'Z-Move Clause', 'Terastal Clause', 'NFE Clause',],
+		banlist: ['ND Uber', 'ND AG', 'ND OU', 'ND UUBL', 'ND UU', 'ND RUBL', 'ND RU', 'NUBL', 'NU', 'PUBL', 'PU', 'LC', 
+			'Hidden Power', 'Acupressure', 'Battle Bond', 'Shadow Tag', 'Last Respects', 'Quick Claw', 'Razor Fang', 'King\'s Rock', 'Blastoise-Mega',],
 		unbanlist: [
 			'Accelgor', 'Amoonguss', 'Bellossom', 'Bisharp', 'Blastoise-Base', 'Clawitzer', 'Doublade', 'Dudunsparce', 'Dugtrio-Alola', 'Emboar', 'Gengar-Base',
 			'Guzzlord', 'Honchkrow', 'Houndstone', 'Klinklang', 'Magmortar', 'Munkidori', 'Ninjask', 'Noivern', 'Perrserker', 'Porygon-Z', 'Rhydon', 'Samurott-Base',
