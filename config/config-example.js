@@ -555,7 +555,7 @@ exports.chatlogreader = 'fs';
  */
 exports.grouplist = [
 	{
-		symbol: '&',
+		symbol: '~',
 		id: "admin",
 		name: "Administrator",
 		inherit: '@',
@@ -565,7 +565,7 @@ exports.grouplist = [
 		console: true,
 		bypassall: true,
 		lockdown: true,
-		promote: '&u',
+		promote: '~u',
 		roomowner: true,
 		roombot: true,
 		roommod: true,
@@ -651,7 +651,7 @@ exports.grouplist = [
 		timer: true,
 		modlog: true,
 		alts: '%u',
-		bypassblocks: 'u%@&~',
+		bypassblocks: 'u%@~',
 		receiveauthmessages: true,
 		gamemoderation: true,
 		jeopardy: true,
