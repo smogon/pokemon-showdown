@@ -87,7 +87,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	sceptilemega: {
 		inherit: true,
 		types: ["Grass", "Dragon"],
-		baseStats: {hp: 75, atk: 95, def: 79, spa: 145, spd: 99, spe: 142},
+		baseStats: {hp: 70, atk: 95, def: 79, spa: 145, spd: 99, spe: 142},
 		abilities: {0: "Armor Tail"},
 	},
 	swampertmega: {
@@ -156,7 +156,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	ampharosmega: {
 		inherit: true,
 		types: ["Electric", "Dragon"],
-		baseStats: {hp: 90, atk: 95, def: 95, spa: 165, spd: 115, spe: 55},
+		baseStats: {hp: 90, atk: 95, def: 95, spa: 165, spd: 110, spe: 55},
 		abilities: {0: "Mega Launcher"},
 	},
 	gyaradosmega: {
