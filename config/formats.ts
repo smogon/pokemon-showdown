@@ -2549,9 +2549,6 @@ export const Formats: FormatList = [
 			this.add(`raw|<div class='broadcast-blue'><b>The fourth iteration of Super Staff Brothers! Battle with a random team of gooners.<br /><a href="https://docs.google.com/spreadsheets/d/1HGB2YDZ-Pe2MtWa-IX8d24r4j2rxAkvIgP9NeeyNG0Y/edit?gid=200255702#gid=200255702" target="_blank">SEE THE ROSTER</a></b></div>`);
 			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
 		},
-		onTryHit(target, source, move) {
-			this.add('-message', target.isGrounded());
-		},
 		getSharedItems(pokemon) {
 			if (pokemon.item && pokemon.item === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
 				const items = new Set<string>();
