@@ -1386,7 +1386,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const newTarget = this.sample(possibleTargets);
 				this.add('-message', `effectiveness: ${this.dex.getEffectiveness(move.type, newTarget)}`);
 				let dmg = this.actions.getDamage(source, newTarget, move);
-				if (!dmg || newTarget.runEffectiveness(move) === -3) {
+				if (!dmg || this.dex.getEffectiveness(move.type, newTarget) === -3) {
 					this.add('-immune', newTarget);
 					i++;
 					continue;
