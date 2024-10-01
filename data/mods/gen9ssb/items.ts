@@ -30,6 +30,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				target.side.addSideCondition('stealthrock', target);
 			}
 		},
+		onTakeItem: false,
+		zMove: "Planet Befall",
+		zMoveFrom: "Dominus Lapidis",
+		itemUser: ["Landorus"],
 	},
 	// Varnava
 	varnaviumz: {
