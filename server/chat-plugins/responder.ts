@@ -164,11 +164,11 @@ export class AutoResponder {
 		}
 		if (str.length > 300 && !raw) throw new Chat.ErrorMessage("Your given string is too long.");
 		return args.map(item => {
-			const split = item.split('~').map(string => {
+			const split = item.split('&').map(string => {
 				// allow raw regex for admins and users with @ in Dev
 				if (raw) return string;
 				// escape
-				return string.replace(/[\\^$.*+?()[\]{}]/g, '\\$~').trim();
+				return string.replace(/[\\^$.*+?()[\]{}]/g, '\\$&').trim();
 			});
 			return split.map(term => {
 				if (term.length > 100 && !raw) {
