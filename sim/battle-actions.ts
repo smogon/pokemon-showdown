@@ -1644,7 +1644,11 @@ export class BattleActions {
 
 		if (!basePower) return 0;
 		basePower = this.battle.clampIntRange(basePower, 1);
+
 		// Hacked Max Moves have 0 base power, even if you Dynamax
+		if ((!source.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
+			basePower = 0;
+		}
 
 		if (
 			basePower < 60 && source.getTypes(true).includes(move.type) && source.terastallized && move.priority <= 0 &&
