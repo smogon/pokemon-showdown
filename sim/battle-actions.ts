@@ -220,17 +220,27 @@ export class BattleActions {
 	 * Dancer.
 	 */
 	runMove(
-		moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null,
-		zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon
+		moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
+		options?: {
+			sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean,
+			maxMove?: string, originalTarget?: Pokemon,
+		}
 	) {
 		pokemon.activeMoveActions++;
+		const zMove = options?.zMove;
+		const maxMove = options?.maxMove;
+		const externalMove = options?.externalMove;
+		const originalTarget = options?.originalTarget;
+		let sourceEffect = options?.sourceEffect;
 		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
+		const priority = baseMove.priority;
 		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
 			const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, baseMove);
 			if (changedMove && changedMove !== true) {
 				baseMove = this.dex.getActiveMove(changedMove);
+				baseMove.priority = priority;
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
 				target = this.battle.getRandomTarget(pokemon, baseMove);
 			}
@@ -309,7 +319,7 @@ export class BattleActions {
 
 		const oldActiveMove = move;
 
-		const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
+		const moveDidSomething = this.useMove(baseMove, pokemon, {target, sourceEffect, zMove, maxMove});
 		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 		if (this.battle.activeMove) move = this.battle.activeMove;
 		this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
@@ -343,7 +353,7 @@ export class BattleActions {
 					targetOf1stDance :
 					pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-				this.runMove(move.id, dancer, dancersTargetLoc, this.dex.abilities.get('dancer'), undefined, true);
+				this.runMove(move.id, dancer, dancersTargetLoc, {sourceEffect: this.dex.abilities.get('dancer'), externalMove: true});
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -366,19 +376,27 @@ export class BattleActions {
 	 * Dancer.
 	 */
 	useMove(
-		move: Move | string, pokemon: Pokemon, target?: Pokemon | null,
-		sourceEffect?: Effect | null, zMove?: string, maxMove?: string
+		move: Move | string, pokemon: Pokemon, options?: {
+			target?: Pokemon | null, sourceEffect?: Effect | null,
+			zMove?: string, maxMove?: string,
+		}
 	) {
 		pokemon.moveThisTurnResult = undefined;
 		const oldMoveResult: boolean | null | undefined = pokemon.moveThisTurnResult;
-		const moveResult = this.useMoveInner(move, pokemon, target, sourceEffect, zMove, maxMove);
+		const moveResult = this.useMoveInner(move, pokemon, options);
 		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;
 		return moveResult;
 	}
 	useMoveInner(
-		moveOrMoveName: Move | string, pokemon: Pokemon, target?: Pokemon | null,
-		sourceEffect?: Effect | null, zMove?: string, maxMove?: string
+		moveOrMoveName: Move | string, pokemon: Pokemon, options?: {
+			target?: Pokemon | null, sourceEffect?: Effect | null,
+			zMove?: string, maxMove?: string,
+		},
 	) {
+		let target = options?.target;
+		let sourceEffect = options?.sourceEffect;
+		const zMove = options?.zMove;
+		const maxMove = options?.maxMove;
 		if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 		if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 
@@ -790,7 +808,7 @@ export class BattleActions {
 					boosts[statName2] = 0;
 				}
 				target.setBoost(boosts);
-				if (move.id === "Spectral Thief") {
+				if (move.id === "spectralthief") {
 					this.battle.addMove('-anim', pokemon, "Spectral Thief", target);
 				}
 			}
@@ -1644,7 +1662,6 @@ export class BattleActions {
 
 		if (!basePower) return 0;
 		basePower = this.battle.clampIntRange(basePower, 1);
-
 		// Hacked Max Moves have 0 base power, even if you Dynamax
 		if ((!source.volatiles['dynamax'] && move.isMax) || (move.isMax && this.dex.moves.get(move.baseMove).isMax)) {
 			basePower = 0;
