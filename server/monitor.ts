@@ -145,7 +145,7 @@ export const Monitor = new class {
 	slow(text: string) {
 		const logRoom = Rooms.get('slowlog');
 		if (logRoom) {
-			logRoom.add(`|c|&|/log ${text}`).update();
+			logRoom.add(`|c|~|/log ${text}`).update();
 		} else {
 			this.warn(text);
 		}

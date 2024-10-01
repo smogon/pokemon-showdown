@@ -440,11 +440,11 @@ export const commands: Chat.ChatCommands = {
 		this.runBroadcast();
 		return this.sendReply(
 			'/battlesearch [args] - Searches rated battle history for the provided [args] and returns information on battles between the userids given.\n' +
-			`If a number is provided in the [args], it is assumed to be a turn limit, else they're assumed to be userids. Requires &`
+			`If a number is provided in the [args], it is assumed to be a turn limit, else they're assumed to be userids. Requires ~`
 		);
 	},
 	rustbattlesearchhelp: [
-		`/battlesearch <user>, <format>, <days> - Searches for battles played by <user> in the past <days> days. Requires: &`,
+		`/battlesearch <user>, <format>, <days> - Searches for battles played by <user> in the past <days> days. Requires: ~`,
 	],
 };
 

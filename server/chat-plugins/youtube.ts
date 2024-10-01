@@ -225,7 +225,7 @@ export class YoutubeInterface {
 		} else {
 			id = link.split('channel/')[1] || '';
 		}
-		if (id.includes('&')) id = id.split('&')[0];
+		if (id.includes('~')) id = id.split('~')[0];
 		if (id.includes('?')) id = id.split('?')[0];
 		return id;
 	}
@@ -446,7 +446,7 @@ export class GroupWatch extends Rooms.SimpleRoomGame {
 		let addendum = '';
 		if (this.started) {
 			const diff = Date.now() - this.started;
-			addendum = `&start=${Math.floor(diff / 1000)}`;
+			addendum = `~start=${Math.floor(diff / 1000)}`;
 		}
 		buf += `<youtube src="${url}${addendum}"></youtube>`;
 		buf += `<br />`.repeat(4);
@@ -670,11 +670,11 @@ export const commands: Chat.ChatCommands = {
 		`/youtube channel [channel] - View the data of a specified channel. Can be either channel ID or channel name.`,
 		`/youtube video [video] - View data of a specified video. Can be either channel ID or channel name.`,
 		`/youtube update [channel], [name] - sets a channel's PS username to [name]. Requires: % @ #`,
-		`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # &`,
-		`/youtube addcategory [name] - Adds the [category] to the channel category list. Requires: @ # &`,
-		`/youtube removecategory [name] - Removes the [category] from the channel category list. Requires: @ # &`,
-		`/youtube setcategory [category], [channel name] - Sets the category for [channel] to [category]. Requires: @ # &`,
-		`/youtube decategorize [channel name] - Removes the category for the [channel], if there is one. Requires: @ # &`,
+		`/youtube repeat [time] - Sets an interval for [time] minutes, showing a random channel each time. Requires: # ~`,
+		`/youtube addcategory [name] - Adds the [category] to the channel category list. Requires: @ # ~`,
+		`/youtube removecategory [name] - Removes the [category] from the channel category list. Requires: @ # ~`,
+		`/youtube setcategory [category], [channel name] - Sets the category for [channel] to [category]. Requires: @ # ~`,
+		`/youtube decategorize [channel name] - Removes the category for the [channel], if there is one. Requires: @ # ~`,
 		`/youtube categores - View all channels sorted by category.`,
 	],
 	groupwatch: {
@@ -727,10 +727,10 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 	groupwatchhelp: [
-		`/groupwatch create [link],[title] - create a groupwatch for the given Youtube or Twitch [link] with the [title]. Requires: % @ & #`,
-		`/groupwatch end - End the current room's groupwatch, if one exists. Requires: % @ & #`,
-		`/groupwatch start - Begin playback for the current groupwatch. Requires: % @ & #`,
-		`/groupwatch edit [link] - Change the current groupwatch, if one exists, to be viewing the given [link]. Requires: % @ & #`,
+		`/groupwatch create [link],[title] - create a groupwatch for the given Youtube or Twitch [link] with the [title]. Requires: % @ ~ #`,
+		`/groupwatch end - End the current room's groupwatch, if one exists. Requires: % @ ~ #`,
+		`/groupwatch start - Begin playback for the current groupwatch. Requires: % @ ~ #`,
+		`/groupwatch edit [link] - Change the current groupwatch, if one exists, to be viewing the given [link]. Requires: % @ ~ #`,
 	],
 	twitch: {
 		async channel(target, room, user) {

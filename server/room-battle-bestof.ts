@@ -44,14 +44,14 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 		}
 
 		if (this.ready === null) {
-			const button = `|c|&|/uhtml controls,`;
+			const button = `|c|~|/uhtml controls,`;
 			this.sendRoom(button);
 			battleRoom?.sendUser(user, button);
 			return;
 		}
 
 		const cmd = `/msgroom ${room.roomid},/confirmready`;
-		const button = `|c|&|/uhtml controls,<div class="infobox"><p style="margin:6px">Are you ready for game ${gameNum}, ${this.name}?</p><p style="margin:6px">` +
+		const button = `|c|~|/uhtml controls,<div class="infobox"><p style="margin:6px">Are you ready for game ${gameNum}, ${this.name}?</p><p style="margin:6px">` +
 			(this.ready ?
 				`<button class="button" disabled><i class="fa fa-check"></i> I'm ready!</button> &ndash; waiting for opponent...` :
 				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`) +

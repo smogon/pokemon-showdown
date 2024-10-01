@@ -122,7 +122,7 @@ export function globalModlog(action: string, user: User | ID | null, note: strin
 }
 
 export function addModAction(message: string) {
-	Rooms.get('staff')?.add(`|c|&|/log ${message}`).update();
+	Rooms.get('staff')?.add(`|c|~|/log ${message}`).update();
 }
 
 export async function getModlog(params: {user?: ID, ip?: string, actions?: string[]}) {
@@ -518,7 +518,7 @@ export async function runPunishments(ticket: TicketState & {text: [string, strin
 			ticket.recommended = [];
 			for (const res of result.values()) {
 				Rooms.get('abuselog')?.add(
-					`|c|&|/log [${ticket.type} Monitor] Recommended: ${res.action}: for ${res.user} (${res.reason})`
+					`|c|~|/log [${ticket.type} Monitor] Recommended: ${res.action}: for ${res.user} (${res.reason})`
 				).update();
 				ticket.recommended.push(`${res.action}: for ${res.user} (${res.reason})`);
 			}
@@ -719,11 +719,11 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 	autohelptickethelp: [
-		`/aht addpunishment [args] - Adds a punishment with the given [args]. Requires: whitelist &`,
-		`/aht deletepunishment [index] - Deletes the automatic helpticket punishment at [index]. Requires: whitelist &`,
-		`/aht viewpunishments - View automatic helpticket punishments. Requires: whitelist &`,
-		`/aht togglepunishments [on | off] - Turn [on | off] automatic helpticket punishments. Requires: whitelist &`,
-		`/aht stats - View success rates of the Artemis ticket handler. Requires: whitelist &`,
+		`/aht addpunishment [args] - Adds a punishment with the given [args]. Requires: whitelist ~`,
+		`/aht deletepunishment [index] - Deletes the automatic helpticket punishment at [index]. Requires: whitelist ~`,
+		`/aht viewpunishments - View automatic helpticket punishments. Requires: whitelist ~`,
+		`/aht togglepunishments [on | off] - Turn [on | off] automatic helpticket punishments. Requires: whitelist ~`,
+		`/aht stats - View success rates of the Artemis ticket handler. Requires: whitelist ~`,
 	],
 };
 
@@ -786,7 +786,7 @@ export const pages: Chat.PageTable = {
 				data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
 				if (cur.failures) {
 					data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
-				} else { // so one cannot confuse dead tickets & false hit tickets
+				} else { // so one cannot confuse dead tickets ~ false hit tickets
 					data += ' | 0 (0%)';
 				}
 				data += '</small></td>';

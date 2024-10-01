@@ -58,7 +58,7 @@ export const Friends = new class {
 		for (const f of friends) {
 			const curUser = Users.getExact(f.friend);
 			if (curUser?.settings.allowFriendNotifications) {
-				curUser.send(`|pm|&|${curUser.getIdentity()}|${message}`);
+				curUser.send(`|pm|~|${curUser.getIdentity()}|${message}`);
 			}
 		}
 	}

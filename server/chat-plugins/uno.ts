@@ -303,13 +303,13 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 			if (this.timer) clearTimeout(this.timer);
 			const player = this.currentPlayer!;
 
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name}'s turn.`);
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${player.name}'s turn.`);
 			this.state = 'play';
 			if (player.cardLock) player.cardLock = null;
 			player.sendDisplay();
 
 			this.timer = setTimeout(() => {
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name} has been automatically disqualified.`);
+				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${player.name} has been automatically disqualified.`);
 				this.eliminate(player.id);
 			}, this.maxTime * 1000);
 		});
@@ -336,7 +336,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 
 		this.onCheckUno();
 
-		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${player.name} has drawn a card.`);
+		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${player.name} has drawn a card.`);
 
 		const card = this.onDrawCard(player, 1);
 		player.sendDisplay();
@@ -402,17 +402,17 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		switch (value) {
 		case 'Reverse':
 			this.direction *= -1;
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|The direction of the game has changed.`);
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|The direction of the game has changed.`);
 			// in 2 player games, reverse sends the turn back to the player.
 			if (!initialize && this.playerCount === 2) this.onNextPlayer();
 			break;
 		case 'Skip':
 			this.onNextPlayer();
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.currentPlayer!.name}'s turn has been skipped.`);
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${this.currentPlayer!.name}'s turn has been skipped.`);
 			break;
 		case '+2':
 			this.onNextPlayer();
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.currentPlayer!.name} has been forced to draw 2 cards.`);
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${this.currentPlayer!.name} has been forced to draw 2 cards.`);
 			this.onDrawCard(this.currentPlayer!, 2);
 			break;
 		case '+4':
@@ -420,11 +420,11 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 			this.state = 'color';
 			// apply to the next in line, since the current player still has to choose the color
 			const next = this.getNextPlayer();
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${next.name} has been forced to draw 4 cards.`);
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${next.name} has been forced to draw 4 cards.`);
 			this.onDrawCard(next, 4);
 			this.isPlusFour = true;
 			this.timer = setTimeout(() => {
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.currentPlayer!.name} has been automatically disqualified.`);
+				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${this.currentPlayer!.name} has been automatically disqualified.`);
 				this.eliminate(this.currentPlayer!.id);
 			}, this.maxTime * 1000);
 			break;
@@ -432,7 +432,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 			this.currentPlayer!.sendRoom(colorDisplay);
 			this.state = 'color';
 			this.timer = setTimeout(() => {
-				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.currentPlayer!.name} has been automatically disqualified.`);
+				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${this.currentPlayer!.name} has been automatically disqualified.`);
 				this.eliminate(this.currentPlayer!.id);
 			}, this.maxTime * 1000);
 			break;
@@ -453,7 +453,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 			throw new Error(`No top card in the discard pile.`);
 		}
 		this.topCard.changedColor = color;
-		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|The color has been changed to ${color}.`);
+		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|The color has been changed to ${color}.`);
 		if (this.timer) clearTimeout(this.timer);
 
 		// remove color change menu and send the display of their cards again
@@ -501,7 +501,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	onUno(player: UNOPlayer, unoId: ID) {
 		// uno id makes spamming /uno uno impossible
 		if (this.unoId !== unoId || player !== this.awaitUnoPlayer) return false;
-		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|**UNO!** ${player.name} is down to their last card!`);
+		this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|**UNO!** ${player.name} is down to their last card!`);
 		this.awaitUnoPlayer = null;
 		this.unoId = null;
 	}
@@ -510,7 +510,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		if (!this.awaitUnoPlayer) return;
 		// if the previous player hasn't hit UNO before the next player plays something, they are forced to draw 2 cards;
 		if (this.awaitUnoPlayer !== this.currentPlayer) {
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${this.awaitUnoPlayer.name} forgot to say UNO! and is forced to draw 2 cards.`);
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${this.awaitUnoPlayer.name} forgot to say UNO! and is forced to draw 2 cards.`);
 			this.onDrawCard(this.awaitUnoPlayer, 2);
 		}
 		this.awaitUnoPlayer = null;
@@ -795,7 +795,7 @@ export const commands: Chat.ChatCommands = {
 			if (!player.cardLock) throw new Chat.ErrorMessage("You cannot pass until you draw a card.");
 			if (game.state === 'color') throw new Chat.ErrorMessage("You cannot pass until you choose a color.");
 
-			game.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|&|${user.name} has passed.`);
+			game.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${user.name} has passed.`);
 			game.nextTurn();
 		},
 
@@ -893,13 +893,13 @@ export const commands: Chat.ChatCommands = {
 	},
 
 	unohelp: [
-		`/uno create [player cap] - creates a new UNO game with an optional player cap (default player cap at 12). Use the command [createpublic] to force a public game or [createprivate] to force a private game. Requires: % @ # &`,
-		`/uno setcap [player cap] - adjusts the player cap of the current UNO game. Requires: % @ # &`,
-		`/uno timer [amount] - sets an auto disqualification timer for [amount] seconds. Requires: % @ # &`,
-		`/uno autostart [amount] - sets an auto starting timer for [amount] seconds. Requires: % @ # &`,
-		`/uno end - ends the current game of UNO. Requires: % @ # &`,
-		`/uno start - starts the current game of UNO. Requires: % @ # &`,
-		`/uno disqualify [player] - disqualifies the player from the game. Requires: % @ # &`,
+		`/uno create [player cap] - creates a new UNO game with an optional player cap (default player cap at 12). Use the command [createpublic] to force a public game or [createprivate] to force a private game. Requires: % @ # ~`,
+		`/uno setcap [player cap] - adjusts the player cap of the current UNO game. Requires: % @ # ~`,
+		`/uno timer [amount] - sets an auto disqualification timer for [amount] seconds. Requires: % @ # ~`,
+		`/uno autostart [amount] - sets an auto starting timer for [amount] seconds. Requires: % @ # ~`,
+		`/uno end - ends the current game of UNO. Requires: % @ # ~`,
+		`/uno start - starts the current game of UNO. Requires: % @ # ~`,
+		`/uno disqualify [player] - disqualifies the player from the game. Requires: % @ # ~`,
 		`/uno hand - displays your own hand.`,
 		`/uno cards - displays the number of cards for each player.`,
 		`/uno getusers - displays the players still in the game.`,

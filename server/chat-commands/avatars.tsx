@@ -202,7 +202,7 @@ export const Avatars = new class {
 		const entry = customAvatars[user.id];
 		if (entry?.notNotified) {
 			user.send(
-				`|pm|&|${user.getIdentity()}|/raw ` +
+				`|pm|~|${user.getIdentity()}|/raw ` +
 				Chat.html`${<>
 					<p>
 						You have a new custom avatar!
@@ -786,7 +786,7 @@ export const commands: Chat.ChatCommands = {
 	avatarshelp: [
 		`/avatars - Explains how to change avatars.`,
 		`/avatars [username] - Shows custom avatars available to a user.`,
-		`!avatars - Show everyone that information. Requires: + % @ # &`,
+		`!avatars - Show everyone that information. Requires: + % @ # ~`,
 	],
 
 	addavatar() {
@@ -940,7 +940,7 @@ export const commands: Chat.ChatCommands = {
 		Avatars.tryNotify(Users.get(to));
 	},
 	moveavatarshelp: [
-		`/moveavatars [from user], [to user] - Move all of the custom avatars from [from user] to [to user]. Requires: &`,
+		`/moveavatars [from user], [to user] - Move all of the custom avatars from [from user] to [to user]. Requires: ~`,
 	],
 
 	async masspavatar(target, room, user) {

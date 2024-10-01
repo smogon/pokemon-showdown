@@ -164,11 +164,11 @@ export class AutoResponder {
 		}
 		if (str.length > 300 && !raw) throw new Chat.ErrorMessage("Your given string is too long.");
 		return args.map(item => {
-			const split = item.split('&').map(string => {
+			const split = item.split('~').map(string => {
 				// allow raw regex for admins and users with @ in Dev
 				if (raw) return string;
 				// escape
-				return string.replace(/[\\^$.*+?()[\]{}]/g, '\\$&').trim();
+				return string.replace(/[\\^$.*+?()[\]{}]/g, '\\$~').trim();
 			});
 			return split.map(term => {
 				if (term.length > 100 && !raw) {
@@ -421,11 +421,11 @@ export const commands: Chat.ChatCommands = {
 	autoresponderhelp() {
 		const help = [
 			`<code>/autoresponder view [page]</code> - Views the Autoresponder page [page]. (options: keys, stats)`,
-			`<code>/autoresponder toggle [on | off]</code> - Enables or disables the Autoresponder for the current room. Requires: @ # &`,
+			`<code>/autoresponder toggle [on | off]</code> - Enables or disables the Autoresponder for the current room. Requires: @ # ~`,
 			`<code>/autoresponder add [input] => [faq]</code> - Adds regex made from the input string to the current room's Autoresponder, to respond with [faq] to matches.`,
 			`<code>/autoresponder remove [faq], [regex index]</code> - removes the regex matching the [index] from the current room's responses for [faq].`,
 			`Indexes can be found in /autoresponder keys.`,
-			`Requires: @ # &`,
+			`Requires: @ # ~`,
 		];
 		return this.sendReplyBox(help.join('<br/ >'));
 	},

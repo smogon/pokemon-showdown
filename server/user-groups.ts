@@ -2,7 +2,7 @@ import {FS} from '../lib/fs';
 import type {RoomSection} from './chat-commands/room-settings';
 import {toID} from '../sim/dex-data';
 
-export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
+export type GroupSymbol = '~' | '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
@@ -293,7 +293,7 @@ export class RoomAuth extends Auth {
 		// Plus, using user.can is cleaner than Users.globalAuth.get(user) === admin and it accounts for more things.
 		// (and no this won't recurse or anything since user.can() with no room doesn't call this)
 		if (this.room.settings.isPrivate === true && user.can('makeroom')) {
-			// not hardcoding & here since globalAuth.get should return & in basically all cases
+			// not hardcoding ~ here since globalAuth.get should return ~ in basically all cases
 			// except sysops, and there's an override for them anyways so it doesn't matter
 			return Users.globalAuth.get(user);
 		}

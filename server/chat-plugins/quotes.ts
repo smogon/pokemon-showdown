@@ -77,7 +77,7 @@ export const commands: Chat.ChatCommands = {
 		this.privateModAction(`${user.name} added a new quote: "${collapsedQuote}".`);
 		return this.modlog(`ADDQUOTE`, null, collapsedQuote);
 	},
-	addquotehelp: [`/addquote [quote] - Adds [quote] to the room's quotes. Requires: % @ # &`],
+	addquotehelp: [`/addquote [quote] - Adds [quote] to the room's quotes. Requires: % @ # ~`],
 
 	removequote(target, room, user) {
 		room = this.requireRoom();
@@ -98,7 +98,7 @@ export const commands: Chat.ChatCommands = {
 		saveQuotes();
 		this.refreshPage(`quotes-${room.roomid}`);
 	},
-	removequotehelp: [`/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # &`],
+	removequotehelp: [`/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # ~`],
 
 	viewquote(target, room, user) {
 		room = this.requireRoom();
@@ -121,7 +121,7 @@ export const commands: Chat.ChatCommands = {
 	viewquotehelp: [
 		`/viewquote [index][, params] - View the quote from the room's quotes.`,
 		`If 'showauthor' is used for the [params] argument, it shows who added the quote and when.`,
-		`Requires: % @ # &`,
+		`Requires: % @ # ~`,
 	],
 
 	viewquotes: 'quotes',
@@ -138,10 +138,10 @@ export const commands: Chat.ChatCommands = {
 	},
 	quotehelp: [
 		"/randquote [showauthor] - Show a random quote from the room. Add 'showauthor' to see who added it and when.",
-		"/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # &",
+		"/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # ~",
 		"/viewquote [index][, params] - View the quote from the room's quotes.",
 		"If 'showauthor' is used for the [params] argument, it shows who added the quote and when.",
-		"Requires: % @ # &", "/quotes [room] - Shows all quotes for [room]. Defaults the room the command is used in.",
+		"Requires: % @ # ~", "/quotes [room] - Shows all quotes for [room]. Defaults the room the command is used in.",
 	],
 };
 

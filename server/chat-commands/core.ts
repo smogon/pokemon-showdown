@@ -570,7 +570,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	blockinviteshelp: [
 		`/blockinvites [rank] - Allows only users with the given [rank] to invite you to rooms.`,
-		`Valid settings: autoconfirmed, trusted, unlocked, +, %, @, &.`,
+		`Valid settings: autoconfirmed, trusted, unlocked, +, %, @, ~.`,
 		`/unblockinvites - Allows anyone to invite you to rooms.`,
 	],
 
@@ -639,7 +639,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	clearstatushelp: [
 		`/clearstatus - Clears your status message.`,
-		`/clearstatus user, reason - Clears another person's status message. Requires: % @ &`,
+		`/clearstatus user, reason - Clears another person's status message. Requires: % @ ~`,
 	],
 
 	unaway: 'back',
@@ -862,7 +862,7 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(this.tr`Battle input log re-requested.`);
 		}
 	},
-	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: &`],
+	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: ~`],
 
 	importinputlog(target, room, user, connection) {
 		this.checkCan('importinputlog');
@@ -887,7 +887,7 @@ export const commands: Chat.ChatCommands = {
 			battleRoom.battle!.sendInviteForm(user);
 		}, 500);
 	},
-	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ &`],
+	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ ~`],
 
 	showteam: 'showset',
 	async showset(target, room, user, connection, cmd) {
@@ -1048,7 +1048,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 	},
-	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Can only be used after 100+ turns have passed. Requires: \u2606 @ # &`],
+	offertiehelp: [`/offertie - Offers a tie to all players in a battle; if all accept, it ties. Can only be used after 100+ turns have passed. Requires: \u2606 @ # ~`],
 
 	rejectdraw: 'rejecttie',
 	rejecttie(target, room, user) {
@@ -1161,7 +1161,7 @@ export const commands: Chat.ChatCommands = {
 		if (room.battle.replaySaved) this.parse('/savereplay');
 		this.addModAction(room.tr`${user.name} hid the replay of this battle.`);
 	},
-	hidereplayhelp: [`/hidereplay - Hides the replay of the current battle. Requires: ${Users.PLAYER_SYMBOL} &`],
+	hidereplayhelp: [`/hidereplay - Hides the replay of the current battle. Requires: ${Users.PLAYER_SYMBOL} ~`],
 
 	addplayer: 'invitebattle',
 	invitebattle(target, room, user, connection) {
@@ -1287,7 +1287,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	uninvitebattlehelp: [
 		`/uninvitebattle [username] - Revokes an invite from a user to join a battle.`,
-		`Requires: ${Users.PLAYER_SYMBOL} &`,
+		`Requires: ${Users.PLAYER_SYMBOL} ~`,
 	],
 
 	restoreplayers(target, room, user) {
@@ -1349,7 +1349,7 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply("/kickbattle - User isn't in battle.");
 		}
 	},
-	kickbattlehelp: [`/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ &`],
+	kickbattlehelp: [`/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ ~`],
 
 	kickinactive(target, room, user) {
 		this.parse(`/timer on`);
@@ -1395,7 +1395,7 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	timerhelp: [
-		`/timer [start|stop] - Starts or stops the game timer. Requires: ${Users.PLAYER_SYMBOL} % @ &`,
+		`/timer [start|stop] - Starts or stops the game timer. Requires: ${Users.PLAYER_SYMBOL} % @ ~`,
 	],
 
 	autotimer: 'forcetimer',
@@ -1414,7 +1414,7 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	forcetimerhelp: [
-		`/forcetimer [start|stop] - Forces all battles to have the inactive timer enabled. Requires: &`,
+		`/forcetimer [start|stop] - Forces all battles to have the inactive timer enabled. Requires: ~`,
 	],
 
 	forcetie: 'forcewin',
@@ -1442,8 +1442,8 @@ export const commands: Chat.ChatCommands = {
 		this.modlog('FORCEWIN', targetUser.id);
 	},
 	forcewinhelp: [
-		`/forcetie - Forces the current match to end in a tie. Requires: &`,
-		`/forcewin [user] - Forces the current match to end in a win for a user. Requires: &`,
+		`/forcetie - Forces the current match to end in a tie. Requires: ~`,
+		`/forcewin [user] - Forces the current match to end in a win for a user. Requires: ~`,
 	],
 
 	/*********************************************************
@@ -1702,7 +1702,7 @@ export const commands: Chat.ChatCommands = {
 		if (target.startsWith('/') || target.startsWith('!')) target = target.slice(1);
 
 		if (!target) {
-			const broadcastMsg = this.tr`(replace / with ! to broadcast. Broadcasting requires: + % @ # &)`;
+			const broadcastMsg = this.tr`(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)`;
 
 			this.sendReply(`${this.tr`COMMANDS`}: /report, /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /join, /leave, /userauth, /roomauth`);
 			this.sendReply(`${this.tr`BATTLE ROOM COMMANDS`}: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit`);

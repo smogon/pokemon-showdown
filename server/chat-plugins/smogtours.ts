@@ -250,9 +250,9 @@ export const commands: Chat.ChatCommands = {
 	smogtourshelp: [
 		`/smogtours view - View a list of ongoing forum tournaments.`,
 		`/smogtours whitelist [section], [user] - Whitelists the given [user] to manage tournaments for the given [section].`,
-		`Requires: &`,
+		`Requires: ~`,
 		`/smogtours unwhitelist [section], [user] - Removes the given [user] from the [section]'s management whitelist.`,
-		`Requires: &`,
+		`Requires: ~`,
 	],
 };
 
@@ -387,7 +387,7 @@ export const pages: Chat.PageTable = {
 				.replace(/&quot;/g, '"')
 				.replace(/&gt;/g, '>')
 				.replace(/&lt;/g, '<')
-				.replace(/&amp;/g, '&');
+				.replace(/&amp;/g, '~');
 			// stuff!
 			let buf = `${back(categoryID)}${refresh(this.pageid)}<br />`;
 			buf += `<center><h2><a href="${tour.url}">${tour.title}</a></h2>`;

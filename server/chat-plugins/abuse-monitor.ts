@@ -177,7 +177,7 @@ function displayResolved(review: ReviewRequest, justSubmitted = false) {
 	if (!user) return;
 	const resolved = review.resolved;
 	if (!resolved) return;
-	const prefix = `|pm|&|${user.getIdentity()}|`;
+	const prefix = `|pm|~|${user.getIdentity()}|`;
 	user.send(
 		prefix +
 		`Your Artemis review for <<${review.room}>> was resolved by ${resolved.by}` +
@@ -329,7 +329,7 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 		if (user.trusted) {
 			// force just logging for any sort of punishment. requested by staff
 			Rooms.get('staff')?.add(
-				`|c|&|/log [Artemis] ${getViewLink(room.roomid)} ${punishment} recommended for trusted user ${user.id}` +
+				`|c|~|/log [Artemis] ${getViewLink(room.roomid)} ${punishment} recommended for trusted user ${user.id}` +
 				`${user.trusted !== user.id ? ` [${user.trusted}]` : ''} `
 			).update();
 			return; // we want nothing else to be executed. staff want trusted users to be reviewed manually for now
@@ -389,8 +389,8 @@ function globalModlog(
 const getViewLink = (roomid: RoomID) => `<<view-battlechat-${roomid.replace('battle-', '')}>>`;
 
 function addGlobalModAction(message: string, room: GameRoom) {
-	room.add(`|c|&|/log ${message}`).update();
-	Rooms.get(`staff`)?.add(`|c|&|/log ${getViewLink(room.roomid)} ${message}`).update();
+	room.add(`|c|~|/log ${message}`).update();
+	Rooms.get(`staff`)?.add(`|c|~|/log ${getViewLink(room.roomid)} ${message}`).update();
 }
 
 const DISCLAIMER = (
@@ -402,7 +402,7 @@ const DISCLAIMER = (
 export async function lock(user: User, room: GameRoom, reason: string, isWeek?: boolean) {
 	if (settings.recommendOnly) {
 		Rooms.get('staff')?.add(
-			`|c|&|/log [Artemis] ${getViewLink(room.roomid)} ${isWeek ? "WEEK" : ""}LOCK recommended for ${user.id}`
+			`|c|~|/log [Artemis] ${getViewLink(room.roomid)} ${isWeek ? "WEEK" : ""}LOCK recommended for ${user.id}`
 		).update();
 		room.hideText([user.id], undefined, true);
 		return false;
@@ -420,11 +420,11 @@ export async function lock(user: User, room: GameRoom, reason: string, isWeek?: 
 	addGlobalModAction(`${user.name} was locked from talking by Artemis${isWeek ? ' for a week. ' : ". "}(${reason})`, room);
 	if (affected.length > 1) {
 		Rooms.get('staff')?.add(
-			`|c|&|/log (${user.id}'s ` +
+			`|c|~|/log (${user.id}'s ` +
 			`locked alts: ${affected.slice(1).map(curUser => curUser.getLastName()).join(", ")})`
 		);
 	}
-	room.add(`|c|&|/raw ${DISCLAIMER}`).update();
+	room.add(`|c|~|/raw ${DISCLAIMER}`).update();
 	room.hideText(affected.map(f => f.id), undefined, true);
 	let message = `|popup||html|Artemis has locked you from talking in chats, battles, and PMing regular users`;
 	message += ` ${!isWeek ? "for two days" : "for a week"}`;
@@ -462,7 +462,7 @@ const punishmentHandlers: Record<string, PunishmentHandler> = {
 			if (room.auth.get(u) !== Users.PLAYER_SYMBOL) continue;
 			u.sendTo(
 				room.roomid,
-				`|c|&|/uhtml report,` +
+				`|c|~|/uhtml report,` +
 				`Toxicity has been automatically detected in this battle, ` +
 				`please click below if you would like to report it.<br />` +
 				`<a class="button notifying" href="/view-help-request">Make a report</a>`
@@ -490,7 +490,7 @@ const punishmentHandlers: Record<string, PunishmentHandler> = {
 		punishments['WARN']++;
 		punishmentCache.set(user, punishments);
 
-		room.add(`|c|&|/raw ${DISCLAIMER}`).update();
+		room.add(`|c|~|/raw ${DISCLAIMER}`).update();
 		room.hideText([user.id], undefined, true);
 	},
 	lock(user, room, response, message) {
@@ -553,7 +553,7 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 			}
 		} else {
 			this.sendReply(
-				`|c|&|/raw <div class="message-error">` +
+				`|c|~|/raw <div class="message-error">` +
 				`Your behavior in this battle has been automatically identified as breaking ` +
 				`<a href="https://${Config.routes.root}/rules">Pokemon Showdown's global rules.</a> ` +
 				`Repeated instances of misbehavior may incur harsher punishment.</div>`
@@ -968,7 +968,7 @@ export const commands: Chat.ChatCommands = {
 			const result = await this.parse(`${cmd} ${rest}`, {bypassRoomCheck: true});
 			if (result) { // command succeeded - send followup
 				this.add(
-					'|c|&|/raw If you have questions about this action, please contact staff ' +
+					'|c|~|/raw If you have questions about this action, please contact staff ' +
 					'by making a <a href="view-help-request" class="button">help ticket</a>'
 				);
 			}
@@ -1759,27 +1759,27 @@ export const commands: Chat.ChatCommands = {
 	abusemonitorhelp() {
 		return this.sendReplyBox([
 			`<strong>Staff commands:</strong>`,
-			`/am userlogs [user] - View the Artemis flagged message logs for the given [user]. Requires: % @ &`,
-			`/am unmute [user] - Remove the Artemis mute from the given [user]. Requires: % @ &`,
-			`/am review - Submit feedback for manual abuse monitor review. Requires: % @ &`,
+			`/am userlogs [user] - View the Artemis flagged message logs for the given [user]. Requires: % @ ~`,
+			`/am unmute [user] - Remove the Artemis mute from the given [user]. Requires: % @ ~`,
+			`/am review - Submit feedback for manual abuse monitor review. Requires: % @ ~`,
 			`</details><br /><details class="readmore"><summary><strong>Management commands:</strong></summary>`,
-			`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist &`,
-			`/am threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist &`,
-			`/am resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ &`,
-			`/am respawn - Respawns abuse monitor processes. Requires: whitelist &`,
+			`/am toggle - Toggle the abuse monitor on and off. Requires: whitelist ~`,
+			`/am threshold [number] - Set the abuse monitor trigger threshold. Requires: whitelist ~`,
+			`/am resolve [room] - Mark a abuse monitor flagged room as handled by staff. Requires: % @ ~`,
+			`/am respawn - Respawns abuse monitor processes. Requires: whitelist ~`,
 			`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
-			`If a userid is given, searches only logs from that userid. Requires: whitelist &`,
-			`/am edithistory [user] - Clear specific abuse monitor hit(s) for a user. Requires: @ &`,
-			`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist &`,
-			`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist &`,
-			`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist &`,
+			`If a userid is given, searches only logs from that userid. Requires: whitelist ~`,
+			`/am edithistory [user] - Clear specific abuse monitor hit(s) for a user. Requires: @ ~`,
+			`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist ~`,
+			`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist ~`,
+			`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist ~`,
 			`[score] can be either a number or MAXIMUM, which will set it to the maximum score possible (that will trigger an action)`,
-			`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist &`,
-			`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist &`,
-			`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist &`,
+			`/am deletespecial [type], [percent] - Deletes a special case for the abuse monitor. Requires: whitelist ~`,
+			`/am editmin [number] - Sets the minimum percent needed to process for all flags. Requires: whitelist ~`,
+			`/am viewsettings - View the current settings for the abuse monitor. Requires: whitelist ~`,
 			`/am thresholdincrement [num], [amount][, min turns] - Sets the threshold increment for the abuse monitor to increase [amount] every [num] turns.`,
-			`If [min turns] is provided, increments will start after that turn number. Requires: whitelist &`,
-			`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist &`,
+			`If [min turns] is provided, increments will start after that turn number. Requires: whitelist ~`,
+			`/am deleteincrement - clear abuse-monitor threshold increment. Requires: whitelist ~`,
 			`</details>`,
 		].join('<br />'));
 	},
@@ -2068,7 +2068,7 @@ export const pages: Chat.PageTable = {
 				data += `<td><small>${cur.successes} (${percent(cur.successes, cur.total)}%)`;
 				if (cur.failures) {
 					data += ` | ${cur.failures} (${percent(cur.failures, cur.total)}%)`;
-				} else { // so one cannot confuse dead tickets & false hit tickets
+				} else { // so one cannot confuse dead tickets ~ false hit tickets
 					data += ' | 0 (0%)';
 				}
 				if (cur.dead) data += ` | ${cur.dead}`;
@@ -2145,7 +2145,7 @@ export const pages: Chat.PageTable = {
 					data += `<td><small>${curAccurate} (${percent(curAccurate, cur.total)}%)`;
 					if (cur.inaccurate) {
 						data += ` | ${cur.inaccurate} (${percent(cur.inaccurate, cur.total)}%)`;
-					} else { // so one cannot confuse dead tickets & false hit tickets
+					} else { // so one cannot confuse dead tickets ~ false hit tickets
 						data += ' | 0 (0%)';
 					}
 					data += '</small></td>';
