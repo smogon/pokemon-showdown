@@ -28,7 +28,7 @@ export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections
 		languages: 'Languages',
 		entertainment: 'Entertainment',
 		gaming: 'Gaming',
-		lifehobbies: 'Life ~ hobbies',
+		lifehobbies: 'Life & hobbies',
 		onsitegames: 'On-site games',
 	},
 	sections,
