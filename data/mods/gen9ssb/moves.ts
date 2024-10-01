@@ -126,7 +126,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				damage = this.runEvent('SubDamage', target, source, move, damage);
 				if (!damage) return damage;
-				if (damage > target.side.sideConditions['dominuslapidis'].hp) damage = target.side.sideConditions['dominuslapidis'].hp as number;
+				if (damage > target.side.sideConditions['dominuslapidis'].hp) {
+					damage -= target.side.sideConditions['dominuslapidis'].hp as number;
+					this.damage(damage, target, source, move);
+				}
 				target.side.sideConditions['dominuslapidis'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.side.sideConditions['dominuslapidis'].hp <= 0) {
