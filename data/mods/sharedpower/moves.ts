@@ -15,23 +15,4 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 	},
-	rest: {
-		inherit: true,
-		onTry(source) {
-			if (source.status === 'slp' || source.hasAbility('comatose')) return false;
-
-			if (source.hp === source.maxhp) {
-				this.add('-fail', source, 'heal');
-				return null;
-			}
-			if (source.hasAbility('insomnia')) {
-				this.add('-fail', source, '[from] ability: Insomnia', '[of] ' + source);
-				return null;
-			}
-			if (source.hasAbility('vitalspirit')) {
-				this.add('-fail', source, '[from] ability: Vital Spirit', '[of] ' + source);
-				return null;
-			}
-		},
-	},
 };
