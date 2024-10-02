@@ -2330,11 +2330,11 @@ export const commands: Chat.ChatCommands = {
 		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # ~`,
 	],
 
-	veekun(target, broadcast, user) {
-		if (!target) return this.parse('/help veekun');
+	bulbapedia(target, broadcast, user) {
+		if (!target) return this.parse('/help bulbapedia');
 		if (!this.runBroadcast()) return;
 
-		const baseLink = 'http://veekun.com/dex/';
+		const baseLink = 'https://bulbapedia.bulbagarden.net/wiki/';
 
 		const pokemon = Dex.species.get(target);
 		const item = Dex.items.get(target);
@@ -2349,28 +2349,11 @@ export const commands: Chat.ChatCommands = {
 			if (pokemon.isNonstandard && pokemon.isNonstandard !== 'Past') {
 				return this.errorReply(`${pokemon.name} is not a real Pok\u00e9mon.`);
 			}
+			let baseSpecies = pokemon.baseSpecies;
+			if (pokemon.id.startsWith('flabebe')) baseSpecies = 'Flabébé';
+			const link = `${baseLink}${encodeURIComponent(baseSpecies)}_(Pokémon)`;
 
-			const baseSpecies = pokemon.baseSpecies || pokemon.name;
-			let forme = pokemon.forme;
-
-			// Showdown and Veekun have different names for various formes
-			if (baseSpecies === 'Meowstic' && forme === 'F') forme = 'Female';
-			if (baseSpecies === 'Zygarde' && forme === '10%') forme = '10';
-			if (baseSpecies === 'Necrozma' && !Dex.species.get(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
-			if (baseSpecies === 'Pikachu' && Dex.species.get(baseSpecies + forme).gen === 7) forme += '-Cap';
-			if (forme.endsWith('Totem')) {
-				if (baseSpecies === 'Raticate') forme = 'Totem-Alola';
-				if (baseSpecies === 'Marowak') forme = 'Totem';
-				if (baseSpecies === 'Mimikyu') forme += forme === 'Busted-Totem' ? '-Busted' : '-Disguised';
-			}
-
-			let link = `${baseLink}pokemon/${baseSpecies.toLowerCase()}`;
-			if (forme) {
-				if (baseSpecies === 'Arceus' || baseSpecies === 'Silvally') link += '/flavor';
-				link += `?form=${forme.toLowerCase()}`;
-			}
-
-			this.sendReplyBox(`<a href="${link}">${pokemon.name} description</a> by Veekun`);
+			this.sendReplyBox(Utils.html`<a href="${link}">${pokemon.name} in-game information</a>, provided by Bulbapedia`);
 		}
 
 		// Item
@@ -2379,8 +2362,9 @@ export const commands: Chat.ChatCommands = {
 			if (item.isNonstandard && item.isNonstandard !== 'Past') {
 				return this.errorReply(`${item.name} is not a real item.`);
 			}
-			const link = `${baseLink}items/${item.name.toLowerCase()}`;
-			this.sendReplyBox(`<a href="${link}">${item.name} item description</a> by Veekun`);
+			let link = `${baseLink}${encodeURIComponent(item.name)}`;
+			if (Dex.moves.get(item.name).exists) link += '_(item)';
+			this.sendReplyBox(Utils.html`<a href="${link}">${item.name} item description</a>, provided by Bulbapedia`);
 		}
 
 		// Ability
@@ -2389,8 +2373,8 @@ export const commands: Chat.ChatCommands = {
 			if (ability.isNonstandard && ability.isNonstandard !== 'Past') {
 				return this.errorReply(`${ability.name} is not a real ability.`);
 			}
-			const link = `${baseLink}abilities/${ability.name.toLowerCase()}`;
-			this.sendReplyBox(`<a href="${link}">${ability.name} ability description</a> by Veekun`);
+			const link = `${baseLink}${encodeURIComponent(ability.name)}_(Ability)`;
+			this.sendReplyBox(`<a href="${link}">${ability.name} ability description</a>, provided by Bulbapedia`);
 		}
 
 		// Move
@@ -2399,24 +2383,24 @@ export const commands: Chat.ChatCommands = {
 			if (move.isNonstandard && move.isNonstandard !== 'Past') {
 				return this.errorReply(`${move.name} is not a real move.`);
 			}
-			const link = `${baseLink}moves/${move.name.toLowerCase()}`;
-			this.sendReplyBox(`<a href="${link}">${move.name} move description</a> by Veekun`);
+			const link = `${baseLink}${encodeURIComponent(move.name)}_(move)`;
+			this.sendReplyBox(`<a href="${link}">${move.name} move description</a>, provided by Bulbapedia`);
 		}
 
 		// Nature
 		if (nature.exists) {
 			atLeastOne = true;
-			const link = `${baseLink}natures/${nature.name.toLowerCase()}`;
-			this.sendReplyBox(`<a href="${link}">${nature.name} nature description</a> by Veekun`);
+			const link = `${baseLink}Nature`;
+			this.sendReplyBox(`<a href="${link}">Nature descriptions</a>, provided by Bulbapedia`);
 		}
 
 		if (!atLeastOne) {
 			return this.sendReplyBox(`Pok&eacute;mon, item, move, ability, or nature not found.`);
 		}
 	},
-	veekunhelp: [
-		`/veekun [pokemon] - Links to Veekun website for this pokemon/item/move/ability/nature.`,
-		`!veekun [pokemon] - Shows everyone this link. Requires: + % @ # ~`,
+	bulbapediahelp: [
+		`/veekun [pokemon/item/move/ability/nature] - Links to Bulbapedia wiki page for this pokemon/item/move/ability/nature.`,
+		`!veekun [pokemon/item/move/ability/nature] - Shows everyone this link. Requires: + % @ # ~`,
 	],
 
 	register() {
