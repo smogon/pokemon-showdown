@@ -19,7 +19,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Como los Voice, y también pueden dar locks y revisar las alts",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Lo mismo que arriba y además pueden expulsar globalmente del servidor",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Igual que un moderador, pero el símbolo identifica que es un Bot",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Pueden hacer cualquier cosa, como cambiar lo que dice este mensaje",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>Global Administrator</strong> - Pueden hacer cualquier cosa, como cambiar lo que dice este mensaje",
 
 		"<strong>Room ranks</strong>": "<strong>Rangos de Sala</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - No tienen ningún poder más allá del símbolo.",
@@ -42,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "COMANDOS DE MODERATOR",
 		"ADMIN COMMANDS": "COMANDOS DE ADMINISTRATOR",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(sustituye / con ! para hacer público un comando. Esto requiere: + % @ # &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(sustituye / con ! para hacer público un comando. Esto requiere: + % @ # ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>Sanciones de la sala</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Muestra una ventana de di&aacute;logo con las reglas.",

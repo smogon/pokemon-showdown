@@ -19,7 +19,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - Like Voice, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%): ボイスに似ているが上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@): 上記に加えてユーザーをサイト全体からBANできる。",
 		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "<strong>グローバルボット</strong>(*): どこでもmuteやBANをしたり、HTMLを扱うことができる自動化されたアカウント。",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;): 何でもできる。この文章を編集したり、ユーザーをグローバルに昇格させたりできる。",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(~): 何でもできる。この文章を編集したり、ユーザーをグローバルに昇格させたりできる。",
 
 		"<strong>Room ranks</strong>": "<strong>日本語部屋のユーザーランク</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "<strong>プライズウィナー</strong>(^): 部屋のシンボルや象徴であり、何も権限を持ちません。",
@@ -40,9 +40,9 @@ export const translations: Translations = {
 		"DATA COMMANDS": "ポケモンデータコマンド",
 		"DRIVER COMMANDS": "ドライバー(%)コマンド",
 		"MODERATOR COMMANDS": "モデレーター(@)コマンド",
-		"ADMIN COMMANDS": "アドミニストレーター(&)コマンド",
+		"ADMIN COMMANDS": "アドミニストレーター(~)コマンド",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(/の代わりに!を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(/の代わりに!を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # ~ の権限が必要です。)",
 
 		"<strong>Room punishments</strong>:": "<strong>チャット罰則一覧</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - ユーザーにチャットルールのポップアップが表示されます。",

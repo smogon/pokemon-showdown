@@ -19,7 +19,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Como Voice, além de poderem dar locks e verificar contas alternativas",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - O de cima, além de poderem banir usuários do servidor",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Igual ao cargo de Moderator, mas deixa claro que o usuário é um bot",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Eles podem fazer qualquer coisa, como mudar o que esta mensagem diz",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>Global Administrator</strong> - Eles podem fazer qualquer coisa, como mudar o que esta mensagem diz",
 
 		"<strong>Room ranks</strong>": "<strong>Cargos da Sala</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Eles não têm poder algum além de um símbolo.",
@@ -42,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "COMANDOS DE MODERATOR",
 		"ADMIN COMMANDS": "COMANDOS DE ADMINISTRATOR",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(substitua / por ! para exibir um comando publicamente. Isso requer: + % @ # &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(substitua / por ! para exibir um comando publicamente. Isso requer: + % @ # ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>Puni&ccedil;&otilde;es da sala</strong>",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Faz uma mensagem com as regras aparecer.",

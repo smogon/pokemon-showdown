@@ -1594,7 +1594,7 @@ export const commands: Chat.ChatCommands = {
 			`% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts`,
 			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
 			`* <strong>Global Bot</strong> - An automated account that can use HTML anywhere`,
-			`&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
+			`~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally`,
 		];
 
 		this.sendReplyBox(
