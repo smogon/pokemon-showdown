@@ -209,6 +209,7 @@ describe('Team Validator', function () {
 
 		team = [
 			{species: 'incineroar', ability: 'blaze', moves: ['knockoff', 'partingshot'], evs: {hp: 1}},
+			{species: 'shelloseast', ability: 'stickyhold', moves: ['infestation', 'stringshot'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen8ou');
 	});

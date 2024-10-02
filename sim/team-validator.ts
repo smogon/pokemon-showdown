@@ -2779,6 +2779,9 @@ export class TeamValidator {
 		nextSpecies = baseSpecies;
 		let speciesCount = 0;
 		if (!tradebackEligible) {
+			if (!dex.species.getLearnsetData(nextSpecies.id).learnset) {
+				nextSpecies = dex.species.get(nextSpecies.changesFrom || nextSpecies.baseSpecies);
+			}
 			while (nextSpecies) {
 				for (let gen = nextSpecies.gen; gen <= dex.gen; gen++) {
 					/**
