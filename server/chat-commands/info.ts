@@ -2399,8 +2399,8 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	bulbapediahelp: [
-		`/veekun [pokemon/item/move/ability/nature] - Links to Bulbapedia wiki page for this pokemon/item/move/ability/nature.`,
-		`!veekun [pokemon/item/move/ability/nature] - Shows everyone this link. Requires: + % @ # ~`,
+		`/bulbapedia [pokemon/item/move/ability/nature] - Links to Bulbapedia wiki page for this pokemon/item/move/ability/nature.`,
+		`!bulbapedia [pokemon/item/move/ability/nature] - Shows everyone this link. Requires: + % @ # ~`,
 	],
 
 	register() {
