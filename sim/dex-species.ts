@@ -578,7 +578,7 @@ export class DexSpecies {
 		const movePool = new Set<ID>();
 		for (const {species, learnset} of this.getFullLearnset(id)) {
 			for (const moveid in learnset) {
-				eggMovesOnly = this.eggMovesOnly(species, this.get(id));
+				if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
 				if (eggMovesOnly) {
 					if (learnset[moveid].some(source => source.startsWith('9E'))) {
 						movePool.add(moveid as ID);
