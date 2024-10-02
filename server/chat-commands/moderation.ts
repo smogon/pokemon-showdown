@@ -303,8 +303,6 @@ export const commands: Chat.ChatCommands = {
 		const buffer = Utils.sortBy(
 			Object.entries(rankLists) as [GroupSymbol, string[]][],
 			([symbol]) => -Users.Auth.getGroup(symbol).rank
-		).filter(
-			([symbol]) => symbol !== Users.SECTIONLEADER_SYMBOL
 		).map(
 			([symbol, names]) => (
 				`${(Config.groups[symbol] ? `**${Config.groups[symbol].name}s** (${symbol})` : symbol)}:\n` +
@@ -1584,19 +1582,10 @@ export const commands: Chat.ChatCommands = {
 		} else if (!Users.globalAuth.sectionLeaders.has(targetUser?.id || userid) && demoting) {
 			throw new Chat.ErrorMessage(`${name} is not a Section Leader.`);
 		}
-		const staffRoom = Rooms.get('staff');
 		if (!demoting) {
 			Users.globalAuth.setSection(userid, section);
 			this.addGlobalModAction(`${name} was appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			this.globalModlog(`SECTION LEADER`, userid, section);
-			if (targetUser) {
-				// do not use global /forcepromote
-				if (!Users.globalAuth.atLeast(targetUser, Users.SECTIONLEADER_SYMBOL)) {
-					this.parse(`/globalsectionleader ${userid}`);
-				}
-			} else {
-				this.sendReply(`User ${userid} is offline and unrecognized, and so can't be globally promoted.`);
-			}
 			targetUser?.popup(`You were appointed Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		} else {
 			const group = Users.globalAuth.get(userid);
@@ -1604,7 +1593,6 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${name} was demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 			if (group === ' ') this.sendReply(`They are also no longer manually trusted. If they should be, use '/trustuser'.`);
 			this.globalModlog(`DESECTION LEADER`, userid, section);
-			if (staffRoom?.auth.getDirect(userid) as any === '\u25B8') this.parse(`/msgroom staff,/roomdeauth ${userid}`);
 			targetUser?.popup(`You were demoted from Section Leader of ${RoomSections.sectionNames[section]} by ${user.name}.`);
 		}
 
