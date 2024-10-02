@@ -15500,8 +15500,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-fail', source, 'heal');
 				return null;
 			}
-			if (source.hasAbility(['insomnia', 'vitalspirit'])) {
-				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
+			// insomnia and vital spirit checks are separate so that the message is accurate in multi-ability mods
+			if (source.hasAbility('insomnia')) {
+				this.add('-fail', source, '[from] ability: Insomnia', '[of] ' + source);
+				return null;
+			}
+			if (source.hasAbility('vitalspirit')) {
+				this.add('-fail', source, '[from] ability: Vital Spirit', '[of] ' + source);
 				return null;
 			}
 		},
