@@ -684,7 +684,7 @@ export class TeamValidator {
 		}
 		if (set.teraType) {
 			const type = dex.types.get(set.teraType);
-			if (!type.exists) {
+			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
 			} else {
 				set.teraType = type.name;
