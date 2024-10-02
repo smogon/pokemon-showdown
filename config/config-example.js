@@ -661,13 +661,6 @@ exports.grouplist = [
 		hiderank: true,
 	},
 	{
-		symbol: '\u00a7',
-		id: "sectionleader",
-		name: "Section Leader",
-		inherit: '+',
-		jurisdiction: 'u',
-	},
-	{
 		// Bots are ranked below Driver/Mod so that Global Bots can be kept out
 		// of modjoin % rooms (namely, Staff).
 		// (They were previously above Driver/Mod so they can have game management

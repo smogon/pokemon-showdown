@@ -13,7 +13,6 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Rangs globaux</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
-		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Ils supervisent les rooms d'une section donnée",
 		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir des utilisateurs du site",
 		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "* <strong>Global Bot</strong> - Un compte automatisé qui peut utiliser le HTML n'importe où",
