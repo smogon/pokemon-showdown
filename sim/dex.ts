@@ -117,8 +117,8 @@ export class ModdedDex {
 
 	readonly toID = Data.toID;
 
-	gen = 0;
-	parentMod = '';
+	readonly gen: number;
+	readonly parentMod: string;
 	modsLoaded = false; // TODO: deprecate
 
 	dataCache: DexTableData;
@@ -145,6 +145,24 @@ export class ModdedDex {
 
 		this.textCache = null;
 
+		const basePath = this.dataDir + '/';
+		const Scripts = this.loadDataFile(basePath, 'Scripts');
+		this.parentMod = this.isBase ? '' : (Scripts.inherit || 'base');
+
+		let parentDex;
+		if (this.parentMod) {
+			parentDex = this.mod(this.parentMod);
+			if (!parentDex || parentDex === this) {
+				throw new Error(
+					`Unable to load ${this.currentMod}. 'inherit' in scripts.ts should specify a parent mod from which to inherit data, or must be not specified.`
+				);
+			}
+		}
+		// Flag the generation. Required for team validator.
+		const gen = Scripts.gen || parentDex?.gen;
+		if (typeof gen !== 'number') throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
+		this.gen = gen;
+
 		this.formats = new DexFormats(this);
 		this.abilities = new DexAbilities(this);
 		this.items = new DexItems(this);
@@ -155,11 +173,53 @@ export class ModdedDex {
 		this.types = new Data.DexTypes(this);
 		this.stats = new Data.DexStats(this);
 
-		this.dataCache = this.loadData();
-		// Flag the generation. Required for team validator.
-		const gen = this.dataCache.Scripts.gen;
-		if (typeof gen !== 'number') throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
-		this.gen = gen as number;
+		if (!parentDex) {
+			// Formats are inherited by mods and used by Rulesets
+			this.formats.load();
+		}
+		const dataCache: {[k in keyof DexTableData]?: any} = {};
+		for (const dataType of DATA_TYPES.concat('Aliases')) {
+			const BattleData = this.loadDataFile(basePath, dataType);
+			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
+			if (dataType === 'Rulesets' && !parentDex) {
+				for (const format of this.formats.all()) {
+					BattleData[format.id] = {...format, ruleTable: null};
+				}
+			}
+		}
+		if (parentDex) {
+			for (const dataType of DATA_TYPES) {
+				const parentTypedData: DexTable<any> = parentDex.data[dataType];
+				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
+				for (const entryId in parentTypedData) {
+					if (childTypedData[entryId] === null) {
+						// null means don't inherit
+						delete childTypedData[entryId];
+					} else if (!(entryId in childTypedData)) {
+						// If it doesn't exist it's inherited from the parent data
+						if (dataType === 'Pokedex') {
+							// Pokedex entries can be modified too many different ways
+							// e.g. inheriting different formats-data/learnsets
+							childTypedData[entryId] = this.deepClone(parentTypedData[entryId]);
+						} else {
+							childTypedData[entryId] = parentTypedData[entryId];
+						}
+					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
+						// {inherit: true} can be used to modify only parts of the parent data,
+						// instead of overwriting entirely
+						delete childTypedData[entryId].inherit;
+
+						// Merge parent into children entry, preserving existing childs' properties.
+						for (const key in parentTypedData[entryId]) {
+							if (key in childTypedData[entryId]) continue;
+							childTypedData[entryId][key] = parentTypedData[entryId][key];
+						}
+					}
+				}
+			}
+			dataCache['Aliases'] = parentDex.data['Aliases'];
+		}
+		this.dataCache = dataCache as DexTableData;
 
 		// Execute initialization script.
 		if (this.data.Scripts.init) this.data.Scripts.init.call(this);
@@ -511,75 +571,10 @@ export class ModdedDex {
 		return dexes['base'].textCache;
 	}
 
+	// TODO: deprecate
 	loadData(): DexTableData {
-		if (this.dataCache) {
-			console.log("dex.loadData() - This is no longer necessary to call!");
-			return this.dataCache;
-		}
-		const dataCache: {[k in keyof DexTableData]?: any} = {};
-
-		const basePath = this.dataDir + '/';
-
-		const Scripts = this.loadDataFile(basePath, 'Scripts');
-		this.parentMod = this.isBase ? '' : (Scripts.inherit || 'base');
-
-		let parentDex;
-		if (this.parentMod) {
-			parentDex = this.mod(this.parentMod);
-			if (!parentDex || parentDex === this) {
-				throw new Error(
-					`Unable to load ${this.currentMod}. 'inherit' in scripts.ts should specify a parent mod from which to inherit data, or must be not specified.`
-				);
-			}
-		}
-
-		if (!parentDex) {
-			// Formats are inherited by mods and used by Rulesets
-			this.formats.load();
-		}
-		for (const dataType of DATA_TYPES.concat('Aliases')) {
-			const BattleData = this.loadDataFile(basePath, dataType);
-			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
-			if (dataType === 'Rulesets' && !parentDex) {
-				for (const format of this.formats.all()) {
-					BattleData[format.id] = {...format, ruleTable: null};
-				}
-			}
-		}
-		if (parentDex) {
-			for (const dataType of DATA_TYPES) {
-				const parentTypedData: DexTable<any> = parentDex.data[dataType];
-				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
-				for (const entryId in parentTypedData) {
-					if (childTypedData[entryId] === null) {
-						// null means don't inherit
-						delete childTypedData[entryId];
-					} else if (!(entryId in childTypedData)) {
-						// If it doesn't exist it's inherited from the parent data
-						if (dataType === 'Pokedex') {
-							// Pokedex entries can be modified too many different ways
-							// e.g. inheriting different formats-data/learnsets
-							childTypedData[entryId] = this.deepClone(parentTypedData[entryId]);
-						} else {
-							childTypedData[entryId] = parentTypedData[entryId];
-						}
-					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
-						// {inherit: true} can be used to modify only parts of the parent data,
-						// instead of overwriting entirely
-						delete childTypedData[entryId].inherit;
-
-						// Merge parent into children entry, preserving existing childs' properties.
-						for (const key in parentTypedData[entryId]) {
-							if (key in childTypedData[entryId]) continue;
-							childTypedData[entryId][key] = parentTypedData[entryId][key];
-						}
-					}
-				}
-			}
-			dataCache['Aliases'] = parentDex.data['Aliases'];
-		}
-
-		return dataCache as DexTableData;
+		console.log("dex.loadData() - This is no longer necessary to call!");
+		return this.dataCache;
 	}
 
 	// TODO: deprecate
