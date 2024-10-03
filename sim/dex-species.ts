@@ -581,9 +581,11 @@ export class DexSpecies {
 		for (const {species, learnset} of this.getFullLearnset(id)) {
 			for (const moveid in learnset) {
 				if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5) {
-					if (!learnset[moveid].some(source => source.startsWith('5'))) continue;
+					if (!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 5 && 
+						parseInt(source.charAt(0)) <= this.dex.gen)) continue;
 				} else if (gen3HMMoves.includes(moveid) && this.dex.gen >= 4 &&
-					!learnset[moveid].some(source => source.startsWith('4'))) {
+					!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 4 && 
+					parseInt(source.charAt(0)) <= this.dex.gen)) {
 					continue;
 				}
 				if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
