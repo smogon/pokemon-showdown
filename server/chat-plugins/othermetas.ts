@@ -17,8 +17,7 @@ interface StoneDeltas {
 type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'ZUBL' | 'ZU' | 'NFE' | 'LC';
 
 function getMegaStone(stone: string, mod = 'gen9'): Item | null {
-	let dex = Dex;
-	if (mod && toID(mod) in Dex.dexes) dex = Dex.mod(toID(mod));
+	const dex = (mod && Dex.mod(toID(mod))) || Dex;
 	const item = dex.items.get(stone);
 	if (!item.exists) {
 		if (toID(stone) === 'dragonascent') {
@@ -86,12 +85,11 @@ export const commands: Chat.ChatCommands = {
 		const stoneName = sep.slice(1).join('@').trim().split(',');
 		const mod = stoneName[1];
 		if (mod) {
-			if (toID(mod) in Dex.dexes) {
-				dex = Dex.mod(toID(mod));
-			} else {
+			dex = Dex.mod(toID(mod));
+			if (!dex) {
 				throw new Chat.ErrorMessage(`A mod by the name of '${mod.trim()}' does not exist.`);
 			}
-			if (dex === Dex.dexes['gen9ssb']) {
+			if (dex.currentMod === 'gen9ssb') {
 				throw new Chat.ErrorMessage(`The SSB mod supports custom elements for Mega Stones that have the capability of crashing the server.`);
 			}
 		}
@@ -203,12 +201,11 @@ export const commands: Chat.ChatCommands = {
 		const sep = target.split(',');
 		let dex = Dex;
 		if (sep[1]) {
-			if (toID(sep[1]) in Dex.dexes) {
-				dex = Dex.mod(toID(sep[1]));
-			} else {
+			dex = Dex.mod(toID(sep[1]));
+			if (!dex) {
 				throw new Chat.ErrorMessage(`A mod by the name of '${sep[1].trim()}' does not exist.`);
 			}
-			if (dex === Dex.dexes['gen9ssb']) {
+			if (dex.currentMod === 'gen9ssb') {
 				throw new Chat.ErrorMessage(`The SSB mod supports custom elements for Mega Stones that have the capability of crashing the server.`);
 			}
 		}
@@ -345,13 +342,8 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!toID(args[0])) return this.parse('/help 350cup');
 		this.runBroadcast();
-		let dex = Dex;
-		if (args[1] && toID(args[1]) in Dex.dexes) {
-			dex = Dex.dexes[toID(args[1])];
-		} else if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-		}
+		const dex = (args[1] && Dex.mod(toID(args[1]))) ||
+			(room?.battle && Dex.forFormat(room.battle.format)) || Dex;
 		const species = Utils.deepClone(dex.species.get(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
@@ -386,13 +378,8 @@ export const commands: Chat.ChatCommands = {
 		this.runBroadcast();
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen && !args[1]) args[1] = `gen${targetGen}`;
-		let dex = Dex;
-		if (args[1] && toID(args[1]) in Dex.dexes) {
-			dex = Dex.dexes[toID(args[1])];
-		} else if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-		}
+		const dex = (args[1] && Dex.mod(toID(args[1]))) ||
+			(room?.battle && Dex.forFormat(room.battle.format)) || Dex;
 		const species = Utils.deepClone(dex.species.get(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
@@ -599,13 +586,8 @@ export const commands: Chat.ChatCommands = {
 		this.runBroadcast();
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen && !args[1]) args[1] = `gen${targetGen}`;
-		let dex = Dex;
-		if (args[1] && toID(args[1]) in Dex.dexes) {
-			dex = Dex.dexes[toID(args[1])];
-		} else if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-		}
+		const dex = (args[1] && Dex.mod(toID(args[1]))) ||
+			(room?.battle && Dex.forFormat(room.battle.format)) || Dex;
 		const species = Utils.deepClone(dex.species.get(args[0]));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : args[0].trim();
@@ -646,12 +628,7 @@ export const commands: Chat.ChatCommands = {
 		let mod = args[1];
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen && !mod) mod = `gen${targetGen}`;
-		let dex = Dex;
-		if (mod && toID(mod) in Dex.dexes) {
-			dex = Dex.dexes[toID(mod)];
-		} else if (room?.battle) {
-			dex = Dex.forFormat(room.battle.format);
-		}
+		const dex = (mod && Dex.mod(toID(mod))) || (room?.battle && Dex.forFormat(room.battle.format)) || Dex;
 		const species = Utils.deepClone(dex.species.get(mon));
 		if (!species.exists || species.gen > dex.gen) {
 			const monName = species.gen > dex.gen ? species.name : mon.trim();
@@ -697,13 +674,8 @@ export const commands: Chat.ChatCommands = {
 		const pokemon = args[1];
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen && !args[2]) args[2] = `gen${targetGen}`;
-		let dex = Dex;
-		if (args[2] && toID(args[2]) in Dex.dexes) {
-			dex = Dex.dexes[toID(args[2])];
-		} else if (room?.battle) {
-			const format = Dex.formats.get(room.battle.format);
-			dex = Dex.mod(format.mod);
-		}
+		const dex = (args[2] && Dex.mod(toID(args[2]))) ||
+			(room?.battle && Dex.forFormat(room.battle.format)) || Dex;
 		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
 		this.runBroadcast();
 		const natureObj = dex.natures.get(nature);

@@ -52,7 +52,7 @@ type Direction = 'less' | 'greater' | 'equal';
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
-const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
+const dexesHelp = Array.from(global.Dex?.scanMods() || []).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 
 function escapeHTML(str?: string) {
 	if (!str) return '';
@@ -608,7 +608,7 @@ function getMod(target: string) {
 	const arr = target.split(',').map(x => x.trim());
 	const modTerm = arr.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
-		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
+		return sanitizedStr.startsWith('mod=') && Dex.mod(toID(sanitizedStr.split('=')[1]));
 	});
 	const count = arr.filter(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
@@ -704,13 +704,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			fs.mkdirSync(`./tmp/${iso_date}`, {recursive: true});
 			const content1 = JSON.stringify(Dex.data.Aliases, null, 2);
 			fs.writeFileSync(`./tmp/${iso_date}/aliases.json`, content1);
-			const content2 = JSON.stringify(Dex.textCache, null, 2);
+			const content2 = JSON.stringify(Dex.loadTextData(), null, 2);
 			fs.writeFileSync(`./tmp/${iso_date}/text.json`, content2);
 		}
 		for (const mod_str of mod_list) {
 			console.log('now doing', mod_str);
 			const mod = Dex.mod(mod_str);
-			fs.mkdirSync(`./tmp/${iso_date}/${mod_str}`, {recursive: true});
+			if (mode === 'dump') fs.mkdirSync(`./tmp/${iso_date}/${mod_str}`, {recursive: true});
 			for (const [label, v1] of Object.entries(dedup_tables)) {
 				const v: any = v1;
 				const dataset = v.get_iter(mod);

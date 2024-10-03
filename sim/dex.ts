@@ -42,6 +42,8 @@ const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
+const detectedMods: Set<string> = new Set();
+let modsScanned = false;
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
 type DataType =
@@ -116,7 +118,7 @@ export class ModdedDex {
 
 	gen = 0;
 	parentMod = '';
-	modsLoaded = false;
+	modsLoaded = false; // TODO: deprecate
 
 	dataCache: DexTableData | null;
 	textCache: TextTableData | null;
@@ -158,14 +160,17 @@ export class ModdedDex {
 		return this.loadData();
 	}
 
+	// TODO: deprecate
 	get dexes(): {[mod: string]: ModdedDex} {
 		this.includeMods();
 		return dexes;
 	}
 
-	mod(mod: string | undefined): ModdedDex {
-		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
-		return dexes[mod || 'base'];
+	mod(mod: string): ModdedDex {
+		if (!(mod in dexes) && Dex.scanMods().has(mod)) {
+			dexes[mod] = new ModdedDex(mod);
+		}
+		return dexes[mod];
 	}
 
 	forGen(gen: number) {
@@ -174,14 +179,13 @@ export class ModdedDex {
 	}
 
 	forFormat(format: Format | string): ModdedDex {
-		if (!this.modsLoaded) this.includeMods();
 		const mod = this.formats.get(format).mod;
-		return dexes[mod || BASE_MOD].includeData();
+		return this.mod(mod || BASE_MOD).includeData();
 	}
 
 	modData(dataType: DataType, id: string) {
 		if (this.isBase) return this.data[dataType][id];
-		if (this.data[dataType][id] !== dexes[this.parentMod].data[dataType][id]) return this.data[dataType][id];
+		if (this.data[dataType][id] !== this.mod(this.parentMod).data[dataType][id]) return this.data[dataType][id];
 		return (this.data[dataType][id] = Utils.deepClone(this.data[dataType][id]));
 	}
 
@@ -445,11 +449,13 @@ export class ModdedDex {
 		return require(`${DATA_DIR}/text/${name}`)[exportName];
 	}
 
+	// TODO: deprecate
 	includeMods(): this {
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
 		for (const mod of fs.readdirSync(MODS_DIR)) {
+			if (mod in dexes) continue;
 			dexes[mod] = new ModdedDex(mod);
 		}
 		this.modsLoaded = true;
@@ -457,9 +463,22 @@ export class ModdedDex {
 		return this;
 	}
 
+	scanMods(force = false): Set<string> {
+		if (force || !modsScanned) {
+			modsScanned = true;
+			for (const mod in dexes) {
+				detectedMods.add(mod);
+			}
+			for (const mod of fs.readdirSync(MODS_DIR)) {
+				detectedMods.add(mod);
+			}
+		}
+		return detectedMods;
+	}
+
 	includeModData(): this {
-		for (const mod in this.dexes) {
-			dexes[mod].includeData();
+		for (const mod in this.scanMods()) { // TODO: won't need includeData
+			this.mod(mod).includeData();
 		}
 		return this;
 	}
@@ -483,7 +502,6 @@ export class ModdedDex {
 
 	loadData(): DexTableData {
 		if (this.dataCache) return this.dataCache;
-		dexes['base'].includeMods();
 		const dataCache: {[k in keyof DexTableData]?: any} = {};
 
 		const basePath = this.dataDir + '/';
@@ -493,7 +511,7 @@ export class ModdedDex {
 
 		let parentDex;
 		if (this.parentMod) {
-			parentDex = dexes[this.parentMod];
+			parentDex = this.mod(this.parentMod);
 			if (!parentDex || parentDex === this) {
 				throw new Error(
 					`Unable to load ${this.currentMod}. 'inherit' in scripts.ts should specify a parent mod from which to inherit data, or must be not specified.`

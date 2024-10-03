@@ -30,7 +30,7 @@ class TestTools {
 		if (cache.has(mod)) return cache.get(mod);
 
 		if (typeof mod !== 'string') throw new Error("This only supports strings");
-		if (!Dex.dexes[mod]) throw new Error(`Mod ${mod} does not exist`);
+		if (!Dex.scanMods().has(mod)) throw new Error(`Mod ${mod} does not exist`);
 
 		const moddedTestTools = new TestTools(mod);
 		cache.set(mod, moddedTestTools);
