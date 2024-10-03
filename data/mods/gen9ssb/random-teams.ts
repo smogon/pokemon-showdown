@@ -186,41 +186,17 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Omen of Defeat',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
-	Jack: {
-		species: 'Dewott', ability: 'Tranquility', item: 'Hagakure', gender: 'M',
-		moves: ['Aqua Jet', 'Tachyon Cutter', 'Mighty Cleave'],
-		signatureMove: 'Piercing Gleam',
-		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
-	},
 	'Suika Ibuki': {
 		species: 'Ogerpon', ability: 'Density Manipulation', item: 'Ibuki Gourd', gender: 'F',
 		moves: ['U-Turn', 'Switcheroo', 'Drain Punch'],
 		signatureMove: 'Demi',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
-	Aevum: {
-		species: 'Calyrex', ability: 'Temporal Domain', item: 'Rewind Watch', gender: 'M',
-		moves: ['Matcha Gotcha', 'Freezing Glare', 'Earth Power'],
-		signatureMove: 'Genesis Ray',
-		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
-	},
 	Varnava: {
 		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
 		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
 		signatureMove: 'Ecosystem Drain',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
-	},
-	Ingrid: {
-		species: 'Doublade', ability: 'Caliber Conversion', item: '', gender: 'N',
-		moves: ['Smart Strike', 'Sacred Sword', 'Acrobatics'],
-		signatureMove: 'Equip Spectre',
-		evs: {hp: 40, atk: 252, spe: 216}, nature: 'Adamant',
-	},
-	Morax: {
-		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
-		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
-		signatureMove: 'Dominus Lapidis',
-		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
 	/*
 	Toshinori: {
