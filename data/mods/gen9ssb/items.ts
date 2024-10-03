@@ -100,9 +100,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
-			if (pokemon.species.id === 'ogerpon') {
-				this.heal(pokemon.baseMaxhp / 16);
-			} else {
+			if (pokemon.species.id !== 'ogerpon') {
 				this.damage(pokemon.baseMaxhp / 8);
 			}
 		},
