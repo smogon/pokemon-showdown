@@ -370,12 +370,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	// Suika Ibuki
 	densitymanipulation: {
-		desc: "This Pokemon sets a Substitute and loses 25% of their max HP upon switching in.",
-		shortDesc: "This Pokemon sets a Substitute on switch-in.",
+		desc: "This Pokemon sets a Substitute and loses 33% of their max HP upon switching in.",
+		shortDesc: "Switch-in: -33% HP, sets Substitute.",
 		onSwitchIn(pokemon) {
-			this.add('-activate', pokemon, 'Density Manipulation');
-			pokemon.addVolatile('substitute');
-			this.directDamage(pokemon.maxhp / 4, pokemon);
+			if (pokemon.hp > pokemon.maxhp / 3) {
+				this.add('-activate', pokemon, 'Density Manipulation');
+				pokemon.addVolatile('substitute');
+				this.directDamage(pokemon.maxhp / 3, pokemon);
+			}
 		},
 		flags: {},
 		name: "Density Manipulation",
