@@ -575,9 +575,15 @@ export class DexSpecies {
 	getMovePool(id: ID, isNatDex = false): Set<ID> {
 		let eggMovesOnly = false;
 		let maxGen = this.dex.gen;
+		const gen3HMMoves = ['cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive'];
+		const gen4HMMoves = ['cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb'];
 		const movePool = new Set<ID>();
 		for (const {species, learnset} of this.getFullLearnset(id)) {
 			for (const moveid in learnset) {
+				if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5 && 
+					!learnset[moveid].some(source => source.startsWith('5'))) continue;
+				if (gen3HMMoves.includes(moveid) && this.dex.gen >= 4 && 
+					!learnset[moveid].some(source => source.startsWith('4'))) continue;
 				if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
 				if (eggMovesOnly) {
 					if (learnset[moveid].some(source => source.startsWith('9E'))) {
