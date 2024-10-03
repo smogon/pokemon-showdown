@@ -168,14 +168,6 @@ export class ModdedDex {
 		this.gen = gen;
 
 		this.formats = new DexFormats(this);
-		this.abilities = new DexAbilities(this);
-		this.items = new DexItems(this);
-		this.moves = new DexMoves(this);
-		this.species = new DexSpecies(this);
-		this.conditions = new DexConditions(this);
-		this.natures = new Data.DexNatures(this);
-		this.types = new Data.DexTypes(this);
-		this.stats = new Data.DexStats(this);
 
 		const dataCache: {[k in keyof DexTableData]?: any} = {};
 		for (const dataType of DATA_TYPES) {
@@ -226,6 +218,15 @@ export class ModdedDex {
 
 		// Execute initialization script.
 		if (this.data.Scripts.init) this.data.Scripts.init.call(this);
+
+		this.abilities = new DexAbilities(this);
+		this.items = new DexItems(this);
+		this.moves = new DexMoves(this);
+		this.species = new DexSpecies(this);
+		this.conditions = new DexConditions(this);
+		this.natures = new Data.DexNatures(this);
+		this.types = new Data.DexTypes(this);
+		this.stats = new Data.DexStats(this);
 	}
 
 	// TODO: un-getter-ify
