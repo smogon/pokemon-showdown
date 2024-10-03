@@ -177,21 +177,21 @@ export class ModdedDex {
 		this.types = new Data.DexTypes(this);
 		this.stats = new Data.DexStats(this);
 
+		const dataCache: {[k in keyof DexTableData]?: any} = {};
+		for (const dataType of DATA_TYPES) {
+			dataCache[dataType] = this.loadDataFile(basePath, dataType);
+		}
 		if (!parentDex) {
+			dataCache['Aliases'] = this.loadDataFile(basePath, 'Aliases');
 			// Formats are inherited by mods and used by Rulesets
 			this.formats.load();
-		}
-		const dataCache: {[k in keyof DexTableData]?: any} = {};
-		for (const dataType of DATA_TYPES.concat('Aliases')) {
-			const BattleData = this.loadDataFile(basePath, dataType);
-			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
-			if (dataType === 'Rulesets' && !parentDex) {
-				for (const format of this.formats.all()) {
-					BattleData[format.id] = {...format, ruleTable: null};
-				}
+			const r = dataCache['Rulesets'];
+			for (const format of this.formats.all()) {
+				r[format.id] = {...format, ruleTable: null};
 			}
 		}
 		if (parentDex) {
+			dataCache['Aliases'] = parentDex.data['Aliases'];
 			for (const dataType of DATA_TYPES) {
 				const parentTypedData: DexTable<any> = parentDex.data[dataType];
 				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
@@ -221,7 +221,6 @@ export class ModdedDex {
 					}
 				}
 			}
-			dataCache['Aliases'] = parentDex.data['Aliases'];
 		}
 		this.dataCache = dataCache as DexTableData;
 
