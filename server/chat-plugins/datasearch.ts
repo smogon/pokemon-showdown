@@ -2746,7 +2746,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	}
 	let gen;
 	if (!format.exists) {
-		const dex = Dex.mod(formatid).includeData();
+		const dex = Dex.mod(formatid);
 		// can happen if you hotpatch formats without hotpatching chat
 		if (!dex) return {error: `"${formatid}" is not a supported format.`};
 
@@ -2992,7 +2992,6 @@ if (!PM.isParentProcess) {
 
 	global.Dex = require('../../sim/dex').Dex;
 	global.toID = Dex.toID;
-	Dex.includeData();
 
 	// @ts-ignore
 	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval

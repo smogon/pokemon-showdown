@@ -9,15 +9,16 @@
  * Dex.forFormat(format).
  *
  * You may choose to preload some things:
- * - Dex.includeMods() ~10ms
- *   This will preload `Dex.dexes`, giving you a list of possible mods.
- * - Dex.includeFormats() ~30ms
- *   As above, but will also preload `Dex.formats.all()`.
- * - Dex.includeData() ~500ms
- *   As above, but will also preload all of Dex.data for Gen 8, so
- *   functions like `Dex.species.get`, etc will be instantly usable.
- * - Dex.includeModData() ~1500ms
- *   As above, but will also preload `Dex.dexes[...].data` for all mods.
+ * - Dex.scanMods()
+ *   This will scan the mods folder and give you the Set of names of possible mods.
+ * - Dex.includeMods()
+ *   This will preload all mods and their data.
+ * - Dex.includeFormats()
+ *   Deprecated.
+ * - Dex.includeData()
+ *   Deprecated.
+ * - Dex.includeModData()
+ *   This will preload all mods and their data.
  *
  * Note that preloading is never necessary. All the data will be
  * automatically preloaded when needed, preloading will just spend time
@@ -120,7 +121,7 @@ export class ModdedDex {
 	parentMod = '';
 	modsLoaded = false; // TODO: deprecate
 
-	dataCache: DexTableData | null;
+	dataCache: DexTableData;
 	textCache: TextTableData | null;
 
 	deepClone = Utils.deepClone;
@@ -142,7 +143,6 @@ export class ModdedDex {
 		this.currentMod = mod;
 		this.dataDir = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
 
-		this.dataCache = null;
 		this.textCache = null;
 
 		this.formats = new DexFormats(this);
@@ -154,10 +154,20 @@ export class ModdedDex {
 		this.natures = new Data.DexNatures(this);
 		this.types = new Data.DexTypes(this);
 		this.stats = new Data.DexStats(this);
+
+		this.dataCache = this.loadData();
+		// Flag the generation. Required for team validator.
+		const gen = this.dataCache.Scripts.gen;
+		if (typeof gen !== 'number') throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
+		this.gen = gen as number;
+
+		// Execute initialization script.
+		if (this.data.Scripts.init) this.data.Scripts.init.call(this);
 	}
 
+	// TODO: un-getter-ify
 	get data(): DexTableData {
-		return this.loadData();
+		return this.dataCache;
 	}
 
 	// TODO: deprecate
@@ -180,7 +190,7 @@ export class ModdedDex {
 
 	forFormat(format: Format | string): ModdedDex {
 		const mod = this.formats.get(format).mod;
-		return this.mod(mod || BASE_MOD).includeData();
+		return this.mod(mod || BASE_MOD);
 	}
 
 	modData(dataType: DataType, id: string) {
@@ -477,14 +487,15 @@ export class ModdedDex {
 	}
 
 	includeModData(): this {
-		for (const mod in this.scanMods()) { // TODO: won't need includeData
-			this.mod(mod).includeData();
+		for (const mod in this.scanMods()) {
+			this.mod(mod);
 		}
 		return this;
 	}
 
+	// TODO: deprecate
 	includeData(): this {
-		this.loadData();
+		console.log("dex.includeData() - This is no longer necessary to call!");
 		return this;
 	}
 
@@ -501,7 +512,10 @@ export class ModdedDex {
 	}
 
 	loadData(): DexTableData {
-		if (this.dataCache) return this.dataCache;
+		if (this.dataCache) {
+			console.log("dex.loadData() - This is no longer necessary to call!");
+			return this.dataCache;
+		}
 		const dataCache: {[k in keyof DexTableData]?: any} = {};
 
 		const basePath = this.dataDir + '/';
@@ -521,7 +535,7 @@ export class ModdedDex {
 
 		if (!parentDex) {
 			// Formats are inherited by mods and used by Rulesets
-			this.includeFormats();
+			this.formats.load();
 		}
 		for (const dataType of DATA_TYPES.concat('Aliases')) {
 			const BattleData = this.loadDataFile(basePath, dataType);
@@ -565,23 +579,18 @@ export class ModdedDex {
 			dataCache['Aliases'] = parentDex.data['Aliases'];
 		}
 
-		// Flag the generation. Required for team validator.
-		this.gen = dataCache.Scripts.gen;
-		if (!this.gen) throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
-		this.dataCache = dataCache as DexTableData;
-
-		// Execute initialization script.
-		if (Scripts.init) Scripts.init.call(this);
-
-		return this.dataCache;
+		return dataCache as DexTableData;
 	}
 
+	// TODO: deprecate
 	includeFormats(): this {
-		this.formats.load();
+		console.log("dex.includeFormats() - This is no longer necessary to call!");
 		return this;
 	}
 }
 
+detectedMods.add('base');
+detectedMods.add(BASE_MOD);
 dexes['base'] = new ModdedDex();
 
 // "gen9" is an alias for the current base data

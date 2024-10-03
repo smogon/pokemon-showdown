@@ -316,7 +316,7 @@ export abstract class MessageContext {
 	}
 	extractFormat(formatOrMod?: string): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
 		if (!formatOrMod) {
-			return {dex: Dex.includeData(), format: null, isMatch: false};
+			return {dex: Dex, format: null, isMatch: false};
 		}
 
 		const format = Dex.formats.get(formatOrMod);
@@ -326,7 +326,7 @@ export abstract class MessageContext {
 
 		const mod = Dex.mod(toID(formatOrMod));
 		if (mod) {
-			return {dex: mod.includeData(), format: null, isMatch: true};
+			return {dex: mod, format: null, isMatch: true};
 		}
 
 		return this.extractFormat();

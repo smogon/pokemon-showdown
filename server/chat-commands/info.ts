@@ -3335,7 +3335,6 @@ export const pages: Chat.PageTable = {
 };
 
 process.nextTick(() => {
-	Dex.includeData();
 	Chat.multiLinePattern.register(
 		'/htmlbox', '/quote', '/addquote', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduhtml',
 		'/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox', '/addrankuhtml', '/addhtmlfaq',

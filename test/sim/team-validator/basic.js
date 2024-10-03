@@ -5,7 +5,6 @@ const Teams = require('../../../dist/sim/teams').Teams;
 
 describe('Team Validator', function () {
 	it('should have valid formats to work with', function () {
-		Dex.includeFormats();
 		for (const format in Dex.formatsCache) {
 			try {
 				Dex.formats.getRuleTable(Dex.formats.get(format));
