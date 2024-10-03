@@ -46,6 +46,13 @@ const MODS_DIR = path.resolve(DATA_DIR, './mods');
 const detectedMods: Set<string> = new Set();
 let modsScanned = false;
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
+const textCache = {
+	Pokedex: require(DATA_DIR + '/text/pokedex').PokedexText,
+	Moves: require(DATA_DIR + '/text/moves').MovesText,
+	Abilities: require(DATA_DIR + '/text/abilities').AbilitiesText,
+	Items: require(DATA_DIR + '/text/items').ItemsText,
+	Default: require(DATA_DIR + '/text/default').DefaultText,
+};
 
 type DataType =
 	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
@@ -122,7 +129,6 @@ export class ModdedDex {
 	modsLoaded = false; // TODO: deprecate
 
 	dataCache: DexTableData;
-	textCache: TextTableData | null;
 
 	deepClone = Utils.deepClone;
 	deepFreeze = Utils.deepFreeze;
@@ -142,8 +148,6 @@ export class ModdedDex {
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
 		this.dataDir = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
-
-		this.textCache = null;
 
 		const basePath = this.dataDir + '/';
 		const Scripts = this.loadDataFile(basePath, 'Scripts');
@@ -352,7 +356,7 @@ export class ModdedDex {
 				shortDesc: dataEntry.shortDesc,
 			};
 		}
-		const entry = this.loadTextData()[table][id];
+		const entry = textCache[table][id];
 		if (!entry) return null;
 		const descs = {
 			desc: '',
@@ -513,6 +517,7 @@ export class ModdedDex {
 		return {};
 	}
 
+	// TODO: deprecate
 	loadTextFile(
 		name: string, exportName: string
 	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
@@ -525,8 +530,7 @@ export class ModdedDex {
 		if (this.modsLoaded) return this;
 
 		for (const mod of fs.readdirSync(MODS_DIR)) {
-			if (mod in dexes) continue;
-			dexes[mod] = new ModdedDex(mod);
+			this.mod(mod);
 		}
 		this.modsLoaded = true;
 
@@ -559,16 +563,9 @@ export class ModdedDex {
 		return this;
 	}
 
+	// TODO: deprecate
 	loadTextData() {
-		if (dexes['base'].textCache) return dexes['base'].textCache;
-		dexes['base'].textCache = {
-			Pokedex: this.loadTextFile('pokedex', 'PokedexText') as DexTable<PokedexText>,
-			Moves: this.loadTextFile('moves', 'MovesText') as DexTable<MoveText>,
-			Abilities: this.loadTextFile('abilities', 'AbilitiesText') as DexTable<AbilityText>,
-			Items: this.loadTextFile('items', 'ItemsText') as DexTable<ItemText>,
-			Default: this.loadTextFile('default', 'DefaultText') as DexTable<DefaultText>,
-		};
-		return dexes['base'].textCache;
+		return textCache;
 	}
 
 	// TODO: deprecate
