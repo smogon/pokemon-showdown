@@ -277,11 +277,21 @@ export class TypeInfo implements Readonly<TypeData> {
 export class DexTypes {
 	readonly dex: ModdedDex;
 	readonly typeCache = new Map<ID, TypeInfo>();
-	allCache: readonly TypeInfo[] | null = null;
-	namesCache: readonly string[] | null = null;
+	allCache: readonly TypeInfo[];
+	namesCache: readonly string[];
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
+		const allCache = [];
+		const namesCache = [];
+		for (const _id in this.dex.data.TypeChart) {
+			const id = _id as ID;
+			const type = this.getByID(id);
+			allCache.push(type);
+			if (!type.isNonstandard) namesCache.push(type.name);
+		}
+		this.allCache = Object.freeze(allCache);
+		this.namesCache = Object.freeze(namesCache);
 	}
 
 	get(name: string | TypeInfo): TypeInfo {
@@ -296,19 +306,15 @@ export class DexTypes {
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
 			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
+			this.typeCache.set(id, this.dex.deepFreeze(type));
 		} else {
 			type = new TypeInfo({name: typeName, id, exists: false, effectType: 'EffectType'});
 		}
 
-		if (type.exists) this.typeCache.set(id, this.dex.deepFreeze(type));
 		return type;
 	}
 
 	names(): readonly string[] {
-		if (this.namesCache) return this.namesCache;
-
-		this.namesCache = this.all().filter(type => !type.isNonstandard).map(type => type.name);
-
 		return this.namesCache;
 	}
 
@@ -319,12 +325,6 @@ export class DexTypes {
 	}
 
 	all(): readonly TypeInfo[] {
-		if (this.allCache) return this.allCache;
-		const types = [];
-		for (const id in this.dex.data.TypeChart) {
-			types.push(this.getByID(id as ID));
-		}
-		this.allCache = Object.freeze(types);
 		return this.allCache;
 	}
 }
