@@ -318,7 +318,7 @@ export class DexTypes {
 	isName(name: string): boolean {
 		const id = name.toLowerCase();
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-		return name === typeName && this.dex.data.TypeChart.hasOwnProperty(id);
+		return name === typeName && this.typeCache.has(id as ID);
 	}
 
 	all(): readonly TypeInfo[] {

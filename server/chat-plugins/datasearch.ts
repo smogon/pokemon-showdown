@@ -2418,9 +2418,10 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		let type = "";
 
 		for (let word of searchedWords) {
-			if (word in dex.data.TypeChart) {
+			const typeInfo = dex.types.getByID(word as ID);
+			if (typeInfo.exists) {
 				if (type) return {error: "Only specify natural gift type once."};
-				type = word.charAt(0).toUpperCase() + word.slice(1);
+				type = typeInfo.name;
 			} else {
 				if (word.endsWith('bp') && word.length > 2) word = word.slice(0, -2);
 				if (Number.isInteger(Number(word))) {
