@@ -716,7 +716,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const dataset = v.get_iter(mod);
 
 				if (mode === 'dump') {
-					const content = JSON.stringify(dataset, null, 2);
+					const sortedData = Utils.sortBy(Array.from(dataset), v.bucket_key);
+					const content = JSON.stringify(sortedData, null, 2);
 					fs.writeFileSync(`./tmp/${iso_date}/${mod_str}/${label}.json`, content);
 					continue;
 				}
