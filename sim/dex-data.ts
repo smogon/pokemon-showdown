@@ -255,18 +255,23 @@ export class TypeInfo implements Readonly<TypeData> {
 	readonly HPdvs: SparseStatsTable;
 
 	constructor(data: AnyObject) {
-		this.exists = true;
-		Object.assign(this, data);
-
-		this.name = data.name;
+		// initialize required fields in a consistent order bc of V8's hidden classes
 		this.id = data.id;
+		this.name = data.name;
 		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
-		this.exists = !!(this.exists && this.id);
+		this.exists = !!((data.exists || !('exists' in data)) && data.id);
 		this.gen = data.gen || 0;
 		this.isNonstandard = data.isNonstandard || null;
 		this.damageTaken = data.damageTaken || {};
 		this.HPivs = data.HPivs || {};
 		this.HPdvs = data.HPdvs || {};
+		// handle extra fields, if any
+		// DexItems passes in ItemData, which doesn't have extra fields,
+		// so DexItems gets a consistent object shape / hidden class (good).
+		for (const k of Object.keys(data)) { // TODO: replace with for..in + Object.hasOwn
+			if (k in this) continue;
+			(this as any)[k] = data[k];
+		}
 	}
 
 	toString() {
