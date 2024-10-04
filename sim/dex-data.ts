@@ -286,7 +286,9 @@ export class DexTypes {
 		const namesCache = [];
 		for (const _id in this.dex.data.TypeChart) {
 			const id = _id as ID;
-			const type = this.getByID(id);
+			const typeName = id.charAt(0).toUpperCase() + id.substr(1);
+			const type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
+			this.typeCache.set(id, this.dex.deepFreeze(type));
 			allCache.push(type);
 			if (!type.isNonstandard) namesCache.push(type.name);
 		}
@@ -300,18 +302,13 @@ export class DexTypes {
 	}
 
 	getByID(id: ID): TypeInfo {
-		let type = this.typeCache.get(id);
-		if (type) return type;
-
-		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
-			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
-			this.typeCache.set(id, this.dex.deepFreeze(type));
-		} else {
-			type = new TypeInfo({name: typeName, id, exists: false, effectType: 'EffectType'});
-		}
-
-		return type;
+		return this.typeCache.get(id) ||
+			new TypeInfo({
+				name: id.charAt(0).toUpperCase() + id.substr(1),
+				id,
+				exists: false,
+				effectType: 'EffectType',
+			});
 	}
 
 	names(): readonly string[] {
