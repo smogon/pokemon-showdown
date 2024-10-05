@@ -31,8 +31,6 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
-import {DexTable} from './dex-data';
-export {DexTable} from './dex-data';
 import {Condition, DexConditions} from './dex-conditions';
 import {DataMove, DexMoves} from './dex-moves';
 import {Item, DexItems} from './dex-items';
@@ -59,10 +57,11 @@ const textCache = {
 type DataType =
 	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
 	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart' | 'PokemonGoData';
-const DATA_TYPES: (DataType | 'Aliases')[] = [
+const DATA_TYPES: DataType[] = [
 	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
 	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData',
 ];
+const COW_DATA_TYPES: DataType[] = ['Natures', 'TypeChart'];
 
 const DATA_FILES = {
 	Abilities: 'abilities',
@@ -80,6 +79,8 @@ const DATA_FILES = {
 	TypeChart: 'typechart',
 };
 
+/** Unfortunately we do for..in too much to want to deal with the casts */
+export interface DexTable<T> {[id: string]: T}
 export interface AliasesTable {[id: IDEntry]: string}
 
 interface DexTableData {
@@ -89,13 +90,13 @@ interface DexTableData {
 	Items: DexTable<import('./dex-items').ItemData>;
 	Learnsets: DexTable<import('./dex-species').LearnsetData>;
 	Moves: DexTable<import('./dex-moves').MoveData>;
-	Natures: DexTable<import('./dex-data').NatureData>;
+	Natures: Data.ModdedNatureDataTable;
 	Pokedex: DexTable<import('./dex-species').SpeciesData>;
 	FormatsData: DexTable<import('./dex-species').SpeciesFormatsData>;
 	PokemonGoData: DexTable<import('./dex-species').PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
 	Conditions: DexTable<import('./dex-conditions').ConditionData>;
-	TypeChart: import('./dex-data').ModdedTypeDataTable;
+	TypeChart: Data.ModdedTypeDataTable;
 }
 interface TextTableData {
 	Abilities: DexTable<AbilityText>;
@@ -185,7 +186,7 @@ export class ModdedDex {
 		if (parentDex) {
 			dataCache['Aliases'] = parentDex.data['Aliases'];
 			for (const dataType of DATA_TYPES) {
-				if (dataType === 'TypeChart') continue; // ported to CoW
+				if (COW_DATA_TYPES.includes(dataType)) continue; // ported to CoW
 				const parentTypedData: DexTable<any> = parentDex.data[dataType];
 				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
 				for (const entryId in parentTypedData) {
@@ -225,7 +226,8 @@ export class ModdedDex {
 		this.moves = new DexMoves(this);
 		this.species = new DexSpecies(this);
 		this.conditions = new DexConditions(this);
-		this.natures = new Data.DexNatures(this);
+		this.natures = new Data.DexNatures(this, dataCache.Natures, parentDex?.natures);
+		delete dataCache.Natures;
 		this.types = new Data.DexTypes(this, dataCache.TypeChart, parentDex?.types);
 		delete dataCache.TypeChart;
 		this.stats = new Data.DexStats(this);
@@ -260,7 +262,8 @@ export class ModdedDex {
 	}
 
 	modData(dataType: DataType, id: string) {
-		if (dataType === 'TypeChart') throw new Error("todo: modify modData");
+		if (COW_DATA_TYPES.includes(dataType)) throw new Error("todo: modify modData");
+		if (dataType === 'Natures' || dataType === 'TypeChart') throw new Error("unreachable, tmp for tsc");
 		if (this.isBase) return this.data[dataType][id];
 		if (this.data[dataType][id] !== this.mod(this.parentMod).data[dataType][id]) return this.data[dataType][id];
 		return (this.data[dataType][id] = Utils.deepClone(this.data[dataType][id]));
@@ -444,6 +447,9 @@ export class ModdedDex {
 		return num >>> 0;
 	}
 
+	// FIXME: COW types won't have .data entries. uses of .data will be replaced with the 'searchObject'
+	// i.e. this.data.Natures -> this.natures
+	// Easier to fix this when all 5 types have been ported to CoW.
 	dataSearch(
 		target: string, searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures')[] | null, isInexact?: boolean
 	): AnyObject[] | null {

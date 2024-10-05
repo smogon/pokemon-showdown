@@ -111,6 +111,7 @@ export class BasicEffect implements EffectData {
 	 */
 	constructor(data: AnyObject, copyOtherFields = true) {
 		this.name = Utils.getString(data.name).trim();
+		// TODO: this logic needs to be in Moves constructor
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Utils.getString(data.fullname) || this.name;
 		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
@@ -165,10 +166,12 @@ export interface NatureData {
 	plus?: StatIDExceptHP;
 	minus?: StatIDExceptHP;
 }
+const NATURE_DATA_KEYS: readonly (keyof NatureData)[] = Object.freeze(['name', 'plus', 'minus']);
 
 export type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
 
 export interface NatureDataTable {[natureid: IDEntry]: NatureData}
+export interface ModdedNatureDataTable {[natureid: IDEntry]: ModdedNatureData}
 
 
 export class DexNatures {
@@ -176,12 +179,61 @@ export class DexNatures {
 	readonly natureCache = new Map<ID, Nature>();
 	allCache: readonly Nature[];
 
-	constructor(dex: ModdedDex) {
+	constructor(dex: ModdedDex, patches: ModdedNatureDataTable, parent?: DexNatures) {
 		this.dex = dex;
+		let patchesEmpty = true;
+		for (const k in patches) { // eslint-disable-line @typescript-eslint/no-unused-vars
+			patchesEmpty = false;
+			break;
+		}
+		// If we're at the transition point where Natures become nonstandard, we can't inherit parent's caches.
+		// gen = 3 is hard-coded in the Nature constructor
+		if (parent && patchesEmpty && !(dex.gen < 3 && parent.dex.gen >= 3)) {
+			this.allCache = parent.allCache;
+			this.natureCache = parent.natureCache;
+			return;
+		}
 		const allCache = [];
-		for (const _id in this.dex.data.Natures) {
+		if (parent) {
+			for (const parentNature of parent.all()) {
+				// Note: if id in ModdedNatureDataTable doesn't follow the same rules as toID,
+				// this will misbehave in non-obvious ways.
+				// This is not a new problem, just documenting it.
+				const id = parentNature.id;
+				let patchEntry = patches[id];
+				// null means don't inherit
+				if (patchEntry === null) {
+					delete patches[id];
+					continue;
+				}
+				let nature;
+				// need a new Nature if newly nonStandard.
+				// i.e. if the condition holds and parent doesn't already have the value we would set
+				const becameNonstandard = (parentNature.gen > dex.gen) && (parentNature.isNonstandard !== 'Future');
+				if (becameNonstandard && !patchEntry) patchEntry = {inherit: true};
+				if (patchEntry) {
+					if ('inherit' in patchEntry && patchEntry.inherit === true) {
+						delete (patchEntry as any).inherit;
+						for (const field of NATURE_DATA_KEYS) {
+							if (field in patchEntry) continue;
+							(patchEntry as any)[field] = parentNature[field];
+						}
+						// patchEntry is now a complete NatureData
+					}
+					nature = new Nature(patchEntry);
+					if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
+					dex.deepFreeze(nature);
+					delete patches[id];
+				} else {
+					nature = parentNature;
+				}
+				this.natureCache.set(id, nature);
+				allCache.push(nature);
+			}
+		}
+		for (const _id in patches) {
 			const id = _id as ID;
-			const natureData = dex.data.Natures[id];
+			const natureData = patches[id];
 			const nature = new Nature(natureData);
 			if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
 			this.natureCache.set(id, dex.deepFreeze(nature));
