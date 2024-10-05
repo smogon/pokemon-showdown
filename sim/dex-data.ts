@@ -104,15 +104,17 @@ export class BasicEffect implements EffectData {
 	/** ??? */
 	sourceEffect: string;
 
-	constructor(data: AnyObject) {
-		this.exists = true;
-		Object.assign(this, data);
-
+	/**
+	 * Pass 'false' for the second parameter if you only want the declared fields of BasicEffect
+	 * to be initialized - the other properties of data will not be copied.
+	 * This is to help w/ V8 hidden classes (want to init fields in consistent order)
+	 */
+	constructor(data: AnyObject, copyOtherFields = true) {
 		this.name = Utils.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Utils.getString(data.fullname) || this.name;
 		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
-		this.exists = !!(this.exists && this.id);
+		this.exists = !!((data.exists || !('exists' in data)) && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
 		this.shortDesc = data.shortDesc || '';
@@ -124,6 +126,13 @@ export class BasicEffect implements EffectData {
 		this.status = data.status as ID || undefined;
 		this.weather = data.weather as ID || undefined;
 		this.sourceEffect = data.sourceEffect || '';
+
+		if (copyOtherFields) {
+			for (const k of Object.keys(data)) { // TODO: migrate to for..in + Object.hasOwn
+				if (k in this) continue;
+				(this as any)[k] = data[k];
+			}
+		}
 	}
 
 	toString() {
