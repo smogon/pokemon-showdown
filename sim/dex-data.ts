@@ -145,15 +145,18 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 	readonly plus?: StatIDExceptHP;
 	readonly minus?: StatIDExceptHP;
 	constructor(data: AnyObject) {
-		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		super(data, false);
 
 		this.fullname = `nature: ${this.name}`;
 		this.effectType = 'Nature';
 		this.gen = 3;
 		this.plus = data.plus || undefined;
 		this.minus = data.minus || undefined;
+
+		for (const k of Object.keys(data)) { // TODO: migrate to for..in + Object.hasOwn
+			if (k in this) continue;
+			(this as any)[k] = data[k];
+		}
 	}
 }
 
