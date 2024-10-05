@@ -31,6 +31,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
+import {DexTable} from './dex-data';
+export {DexTable} from './dex-data';
 import {Condition, DexConditions} from './dex-conditions';
 import {DataMove, DexMoves} from './dex-moves';
 import {Item, DexItems} from './dex-items';
@@ -78,8 +80,6 @@ const DATA_FILES = {
 	TypeChart: 'typechart',
 };
 
-/** Unfortunately we do for..in too much to want to deal with the casts */
-export interface DexTable<T> {[id: string]: T}
 export interface AliasesTable {[id: IDEntry]: string}
 
 interface DexTableData {
@@ -95,7 +95,7 @@ interface DexTableData {
 	PokemonGoData: DexTable<import('./dex-species').PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
 	Conditions: DexTable<import('./dex-conditions').ConditionData>;
-	TypeChart: DexTable<import('./dex-data').TypeData>;
+	TypeChart: import('./dex-data').ModdedTypeDataTable;
 }
 interface TextTableData {
 	Abilities: DexTable<AbilityText>;
@@ -185,6 +185,7 @@ export class ModdedDex {
 		if (parentDex) {
 			dataCache['Aliases'] = parentDex.data['Aliases'];
 			for (const dataType of DATA_TYPES) {
+				if (dataType === 'TypeChart') continue; // ported to CoW
 				const parentTypedData: DexTable<any> = parentDex.data[dataType];
 				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
 				for (const entryId in parentTypedData) {
@@ -225,7 +226,8 @@ export class ModdedDex {
 		this.species = new DexSpecies(this);
 		this.conditions = new DexConditions(this);
 		this.natures = new Data.DexNatures(this);
-		this.types = new Data.DexTypes(this);
+		this.types = new Data.DexTypes(this, dataCache.TypeChart, parentDex?.types);
+		delete dataCache.TypeChart;
 		this.stats = new Data.DexStats(this);
 	}
 
@@ -258,6 +260,7 @@ export class ModdedDex {
 	}
 
 	modData(dataType: DataType, id: string) {
+		if (dataType === 'TypeChart') throw new Error("todo: modify modData");
 		if (this.isBase) return this.data[dataType][id];
 		if (this.data[dataType][id] !== this.mod(this.parentMod).data[dataType][id]) return this.data[dataType][id];
 		return (this.data[dataType][id] = Utils.deepClone(this.data[dataType][id]));

@@ -6,6 +6,9 @@
  */
 import {Utils} from '../lib';
 
+/** Unfortunately we do for..in too much to want to deal with the casts */
+export interface DexTable<T> {[id: string]: T}
+
 /**
 * Converts anything to an ID. An ID must have only lowercase alphanumeric
 * characters.
@@ -210,6 +213,7 @@ export interface TypeData {
 	HPivs?: SparseStatsTable;
 	isNonstandard?: Nonstandard | null;
 }
+const TYPE_DATA_KEYS: readonly (keyof TypeData)[] = Object.freeze(['damageTaken', 'HPivs', 'HPdvs', 'isNonstandard']);
 
 export type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & {inherit: true};
 export interface TypeDataTable {[typeid: IDEntry]: TypeData}
@@ -285,15 +289,61 @@ export class DexTypes {
 	allCache: readonly TypeInfo[];
 	namesCache: readonly string[];
 
-	constructor(dex: ModdedDex) {
+	constructor(dex: ModdedDex, patches: ModdedTypeDataTable, parent?: DexTypes) {
 		this.dex = dex;
+
+		let patchesEmpty = true;
+		for (const k in patches) { // eslint-disable-line @typescript-eslint/no-unused-vars
+			patchesEmpty = false;
+			break;
+		}
+		if (parent && patchesEmpty) {
+			this.allCache = parent.allCache;
+			this.namesCache = parent.namesCache;
+			this.typeCache = parent.typeCache;
+			return;
+		}
 		const allCache = [];
 		const namesCache = [];
-		for (const _id in this.dex.data.TypeChart) {
+		if (parent) {
+			for (const parentType of parent.all()) {
+				const id = parentType.id;
+				const patchEntry = patches[id];
+				// null means don't inherit
+				if (patchEntry === null) {
+					delete patches[id];
+					continue;
+				}
+				let type;
+				// if patchEntry present, construct
+				// else re-use parent's object
+				if (patchEntry) {
+					// if inherit, copy fields from parent into child
+					if ('inherit' in patchEntry && patchEntry.inherit === true) {
+						delete (patchEntry as any).inherit;
+						for (const field of TYPE_DATA_KEYS) {
+							if (field in patchEntry) continue;
+							// nonsense to appease tsc.
+							(patchEntry as any)[field] = parentType[field];
+						}
+						// patchEntry is now a complete TypeData
+					}
+					type = new TypeInfo({name: parentType.name, id, ...patchEntry});
+					type = dex.deepFreeze(type);
+					delete patches[id];
+				} else {
+					type = parentType;
+				}
+				this.typeCache.set(id, type);
+				allCache.push(type);
+				if (!type.isNonstandard) namesCache.push(type.name);
+			}
+		}
+		for (const _id in patches) {
 			const id = _id as ID;
 			const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-			const type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
-			this.typeCache.set(id, this.dex.deepFreeze(type));
+			const type = new TypeInfo({name: typeName, id, ...patches[id]});
+			this.typeCache.set(id, dex.deepFreeze(type));
 			allCache.push(type);
 			if (!type.isNonstandard) namesCache.push(type.name);
 		}
