@@ -221,6 +221,7 @@ export interface ModdedTypeDataTable {[typeid: IDEntry]: ModdedTypeData}
 
 type TypeInfoEffectType = 'Type' | 'EffectType';
 
+const EMPTY_OBJECT = {};
 export class TypeInfo implements Readonly<TypeData> {
 	/**
 	 * ID. This will be a lowercase version of the name with all the
@@ -258,7 +259,12 @@ export class TypeInfo implements Readonly<TypeData> {
 	/** The DVs to get this Type Hidden Power (in gen 2). */
 	readonly HPdvs: SparseStatsTable;
 
-	constructor(data: AnyObject) {
+	/**
+	* If 'true' is passed for the 'canCacheFields' parameter, objects may be re-used
+	* across instances of TypeInfo. Basically, if you're going to immediately deepFreeze this,
+	* you can safely pass true.
+	*/
+	constructor(data: AnyObject, canCacheFields = false) {
 		// initialize required fields in a consistent order bc of V8's hidden classes
 		this.id = data.id;
 		this.name = data.name;
@@ -266,9 +272,9 @@ export class TypeInfo implements Readonly<TypeData> {
 		this.exists = !!((data.exists || !('exists' in data)) && data.id);
 		this.gen = data.gen || 0;
 		this.isNonstandard = data.isNonstandard || null;
-		this.damageTaken = data.damageTaken || {};
-		this.HPivs = data.HPivs || {};
-		this.HPdvs = data.HPdvs || {};
+		this.damageTaken = data.damageTaken || (canCacheFields ? EMPTY_OBJECT : {});
+		this.HPivs = data.HPivs || (canCacheFields ? EMPTY_OBJECT : {});
+		this.HPdvs = data.HPdvs || (canCacheFields ? EMPTY_OBJECT : {});
 		// handle extra fields, if any
 		// DexItems passes in ItemData, which doesn't have extra fields,
 		// so DexItems gets a consistent object shape / hidden class (good).
@@ -328,7 +334,7 @@ export class DexTypes {
 						}
 						// patchEntry is now a complete TypeData
 					}
-					type = new TypeInfo({name: parentType.name, id, ...patchEntry});
+					type = new TypeInfo({name: parentType.name, id, ...patchEntry}, true);
 					type = dex.deepFreeze(type);
 					delete patches[id];
 				} else {
@@ -342,7 +348,7 @@ export class DexTypes {
 		for (const _id in patches) {
 			const id = _id as ID;
 			const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-			const type = new TypeInfo({name: typeName, id, ...patches[id]});
+			const type = new TypeInfo({name: typeName, id, ...patches[id]}, true);
 			this.typeCache.set(id, dex.deepFreeze(type));
 			allCache.push(type);
 			if (!type.isNonstandard) namesCache.push(type.name);
