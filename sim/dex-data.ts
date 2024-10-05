@@ -167,38 +167,33 @@ export class DexNatures {
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
 		const allCache = [];
-		for (const id in this.dex.data.Natures) {
-			allCache.push(this.getByID(id as ID));
+		for (const _id in this.dex.data.Natures) {
+			const id = _id as ID;
+			const natureData = dex.data.Natures[id];
+			const nature = new Nature(natureData);
+			if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
+			this.natureCache.set(id, dex.deepFreeze(nature));
+			allCache.push(nature);
 		}
 		this.allCache = Object.freeze(allCache);
 	}
 
 	get(name: string | Nature): Nature {
 		if (name && typeof name !== 'string') return name;
-
 		return this.getByID(toID(name));
 	}
+
 	getByID(id: ID): Nature {
 		let nature = this.natureCache.get(id);
 		if (nature) return nature;
 
 		if (this.dex.data.Aliases.hasOwnProperty(id)) {
 			nature = this.get(this.dex.data.Aliases[id]);
-			if (nature.exists) {
-				this.natureCache.set(id, nature);
-			}
+			if (nature.exists) this.natureCache.set(id, nature);
 			return nature;
-		}
-		if (id && this.dex.data.Natures.hasOwnProperty(id)) {
-			const natureData = this.dex.data.Natures[id];
-			nature = new Nature(natureData);
-			if (nature.gen > this.dex.gen) nature.isNonstandard = 'Future';
 		} else {
-			nature = new Nature({name: id, exists: false});
+			return new Nature({name: id, exists: false});
 		}
-
-		if (nature.exists) this.natureCache.set(id, this.dex.deepFreeze(nature));
-		return nature;
 	}
 
 	all(): readonly Nature[] {
