@@ -124,4 +124,19 @@ describe('Inverse Battle', function () {
 		battle.makeChoices();
 		assert.equal(battle.p2.active[0].status, 'slp');
 	});
+
+	it(`should let Tera Shell take not very effective damage`, function () {
+		battle = common.createBattle({inverseMod: true}, [[
+			{species: 'wynaut', moves: ['wickedblow']},
+		], [
+			{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		const terapagos = battle.p2.active[0];
+		const damage = terapagos.maxhp - terapagos.hp;
+		assert.bounded(damage, [14, 16], `Tera Shell should yield not very effective damage roll, actual damage taken is ${damage}`);
+
+		battle.makeChoices();
+		assert.bounded(terapagos.maxhp - terapagos.hp - damage, [28, 33], `Tera Shell should not reduce damage, because Terapagos-Terastal was not at full HP`);
+	});
 });
