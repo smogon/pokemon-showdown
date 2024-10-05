@@ -160,11 +160,10 @@ describe('Dex data', function () {
 	});
 
 	it('should have valid Natures entries', function () {
-		const Natures = Dex.data.Natures;
-		for (const natureid in Natures) {
-			const entry = Natures[natureid];
-			assert.equal(toID(entry.name), natureid, `Mismatched Nature key "${natureid}" of "${entry.name}"`);
-			assert.equal(!!entry.plus, !!entry.minus, `Mismatched Nature values "+${entry.plus}"/"-${entry.minus}" of "${entry.name}"`);
+		const natures = Dex.natures;
+		for (const nature of natures.all()) {
+			assert.equal(toID(nature.name), nature.id, `Mismatched Nature key "${nature.id}" of "${nature.name}"`);
+			assert.equal(!!nature.plus, !!nature.minus, `Mismatched Nature values "+${nature.plus}"/"-${nature.minus}" of "${nature.name}"`);
 		}
 	});
 

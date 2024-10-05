@@ -202,7 +202,7 @@ class TeamGenerator {
 		this.pools = pools;
 		this.signatures = signatures;
 
-		this.natures = Object.keys(this.dex.data.Natures);
+		this.natures = dex.natures.all().map(n => n.id);
 	}
 
 	get exhausted() {

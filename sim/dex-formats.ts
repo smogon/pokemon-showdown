@@ -928,15 +928,28 @@ export class DexFormats {
 		}
 		const ruleid = id;
 		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
+		const cowTypes = ['nature']; // dex.data won't work for these types, need different path
 		for (const matchType of matchTypes) {
 			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
+
+			// the transition period will be ugly, but temporary.
+			if (cowTypes.includes(matchType)) {
+				let table;
+				switch (matchType) {
+				case 'nature': table = this.dex.natures; break;
+				default: throw new Error('Unrecognized CoW match type.');
+				}
+				if (table.getByID(id).exists) {
+					matches.push(matchType + ':' + id);
+				}
+				continue;
+			}
 			let table;
 			switch (matchType) {
 			case 'pokemon': table = this.dex.data.Pokedex; break;
 			case 'move': table = this.dex.data.Moves; break;
 			case 'item': table = this.dex.data.Items; break;
 			case 'ability': table = this.dex.data.Abilities; break;
-			case 'nature': table = this.dex.data.Natures; break;
 			case 'pokemontag':
 				// valid pokemontags
 				const validTags = [
