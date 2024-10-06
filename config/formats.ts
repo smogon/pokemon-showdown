@@ -385,14 +385,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			pokemon.apparentType = pokemon.getTypes(true).join('/');
 		},
 	},
-	{
-		name: "[Gen 6] NEXT OU",
-		mod: 'gennext',
-		searchShow: false,
-		challengeShow: false,
-		ruleset: ['Obtainable', 'Standard NEXT', 'Team Preview'],
-		banlist: ['Uber'],
-	},
 
 	// Draft League
 	///////////////////////////////////////////////////////////////////

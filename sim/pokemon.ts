@@ -283,7 +283,6 @@ export class Pokemon {
 	 * An object for storing untyped data, for mods to use.
 	 */
 	m: {
-		gluttonyFlag?: boolean, // Gen-NEXT
 		innate?: string, // Partners in Crime
 		originalSpecies?: string, // Mix and Mega
 		[key: string]: any,
