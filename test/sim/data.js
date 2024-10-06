@@ -131,10 +131,8 @@ describe('Dex data', function () {
 	});
 
 	it('should have valid Abilities entries', function () {
-		const Abilities = Dex.data.Abilities;
-		for (const abilityid in Abilities) {
-			const entry = Abilities[abilityid];
-			assert.equal(toID(entry.name), abilityid, `Mismatched Ability key "${abilityid}" of "${entry.name}"`);
+		for (const entry of Dex.abilities.all()) {
+			assert.equal(toID(entry.name), entry.id, `Mismatched Ability key "${entry.id}" of "${entry.name}"`);
 			assert.equal(typeof entry.num, 'number', `Ability ${entry.name} should have a number`);
 			assert.equal(typeof entry.rating, 'number', `Ability ${entry.name} should have a rating`);
 		}

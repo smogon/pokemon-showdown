@@ -113,13 +113,13 @@ export class ExhaustiveRunner {
 
 	private createPools(dex: typeof Dex): Pools {
 		return {
-			pokemon: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Pokedex, p => dex.species.get(p), (_, p) =>
+			pokemon: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.species.all(), p =>
 				(p.name !== 'Pichu-Spiky-eared' && p.name.substr(0, 8) !== 'Pikachu-') && p.name !== 'Greninja-Bond'),
 			this.prng),
-			items: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Items, i => dex.items.get(i)), this.prng),
-			abilities: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Abilities, a => dex.abilities.get(a)), this.prng),
-			moves: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.data.Moves, m => dex.moves.get(m),
-				m => (m !== 'struggle' && (m === 'hiddenpower' || m.substr(0, 11) !== 'hiddenpower'))), this.prng),
+			items: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.items.all()), this.prng),
+			abilities: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.abilities.all()), this.prng),
+			moves: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.moves.all(),
+				m => (m.id !== 'struggle' && (m.id === 'hiddenpower' || m.id.substr(0, 11) !== 'hiddenpower'))), this.prng),
 		};
 	}
 
@@ -163,16 +163,17 @@ export class ExhaustiveRunner {
 		return signatures;
 	}
 
-	private static onlyValid<T>(
-		gen: number, obj: {[key: string]: T}, getter: (k: string) => AnyObject,
-		additional?: (k: string, v: AnyObject) => boolean, nonStandard?: boolean
+	private static onlyValid(
+		gen: number, values: readonly AnyObject[],
+		additional?: (v: AnyObject) => boolean, nonStandard?: boolean
 	) {
-		return Object.keys(obj).filter(k => {
-			const v = getter(k);
-			return v.gen <= gen &&
-				(!v.isNonstandard || !!nonStandard) &&
-				(!additional || additional(k, v));
-		});
+		const keys = [];
+		for (const v of values) {
+			if (v.gen <= gen && (!v.isNonstandard || !!nonStandard) && (!additional || additional(v))) {
+				keys.push(v.id);
+			}
+		}
+		return keys;
 	}
 }
 

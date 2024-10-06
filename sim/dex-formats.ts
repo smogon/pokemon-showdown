@@ -928,7 +928,7 @@ export class DexFormats {
 		}
 		const ruleid = id;
 		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
-		const cowTypes = ['nature']; // dex.data won't work for these types, need different path
+		const cowTypes = ['nature', 'ability']; // dex.data won't work for these types, need different path
 		for (const matchType of matchTypes) {
 			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
 
@@ -937,6 +937,7 @@ export class DexFormats {
 				let table;
 				switch (matchType) {
 				case 'nature': table = this.dex.natures; break;
+				case 'ability': table = this.dex.abilities; break;
 				default: throw new Error('Unrecognized CoW match type.');
 				}
 				if (table.getByID(id).exists) {
@@ -949,7 +950,6 @@ export class DexFormats {
 			case 'pokemon': table = this.dex.data.Pokedex; break;
 			case 'move': table = this.dex.data.Moves; break;
 			case 'item': table = this.dex.data.Items; break;
-			case 'ability': table = this.dex.data.Abilities; break;
 			case 'pokemontag':
 				// valid pokemontags
 				const validTags = [
