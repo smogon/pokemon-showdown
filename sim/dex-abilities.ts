@@ -83,9 +83,29 @@ export class DexAbilities {
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
+		const patches = this.dex.data.Abilities;
 		const abilities = [];
-		for (const id in this.dex.data.Abilities) {
-			abilities.push(this.getByID(id as ID));
+		for (const _id in patches) {
+			const id = _id as ID;
+			const abilityData = patches[id] as any;
+			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);
+			const ability = new Ability({
+				name: id,
+				...abilityData,
+				...abilityTextData,
+			}, true);
+			if (ability.gen > this.dex.gen) {
+				(ability as any).isNonstandard = 'Future';
+			}
+			if (this.dex.currentMod === 'gen7letsgo' && ability.id !== 'noability') {
+				(ability as any).isNonstandard = 'Past';
+			}
+			if ((this.dex.currentMod === 'gen7letsgo' || this.dex.gen <= 2) && ability.id === 'noability') {
+				(ability as any).isNonstandard = null;
+			}
+			dex.deepFreeze(ability);
+			abilities.push(ability);
+			this.abilityCache.set(id, ability);
 		}
 		this.allCache = abilities;
 	}
@@ -103,30 +123,12 @@ export class DexAbilities {
 
 		if (this.dex.data.Aliases.hasOwnProperty(id)) {
 			ability = this.get(this.dex.data.Aliases[id]);
-		} else if (id && this.dex.data.Abilities.hasOwnProperty(id)) {
-			const abilityData = this.dex.data.Abilities[id] as any;
-			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);
-			ability = new Ability({
-				name: id,
-				...abilityData,
-				...abilityTextData,
-			});
-			if (ability.gen > this.dex.gen) {
-				(ability as any).isNonstandard = 'Future';
-			}
-			if (this.dex.currentMod === 'gen7letsgo' && ability.id !== 'noability') {
-				(ability as any).isNonstandard = 'Past';
-			}
-			if ((this.dex.currentMod === 'gen7letsgo' || this.dex.gen <= 2) && ability.id === 'noability') {
-				(ability as any).isNonstandard = null;
-			}
+			this.abilityCache.set(id, ability);
 		} else {
 			ability = new Ability({
 				id, name: id, exists: false,
 			});
 		}
-
-		if (ability.exists) this.abilityCache.set(id, this.dex.deepFreeze(ability));
 		return ability;
 	}
 
