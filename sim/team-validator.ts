@@ -2566,7 +2566,7 @@ export class TeamValidator {
 					continue;
 				}
 
-				if (!species.isNonstandard) {
+				if (species.isNonstandard !== 'CAP') {
 					// HMs can't be transferred
 					if (dex.gen >= 4 && learnedGen <= 3 && [
 						'cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive',
