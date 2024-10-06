@@ -19,7 +19,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>वैश्विक Driver</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा lock या alt भी जाँच सकते हैं",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>वैश्विक Moderator</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा वैश्विक स्तर पे ban भी कर सकते हैं",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>वैश्विक Bot</strong> - Moderator जैसा पर केवल Bots के लिए",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>वैश्विक Administrator</strong> - ये लोग कुछ भी कर सकते हैं, जैसे की इस सन्देश को बदलना",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>वैश्विक Administrator</strong> - ये लोग कुछ भी कर सकते हैं, जैसे की इस सन्देश को बदलना",
 
 		"<strong>Room ranks</strong>": "<strong>रूम के पद</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
@@ -42,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "Moderators के कमांड",
 		"ADMIN COMMANDS": "Administrators के कमांड",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(प्रसारित करने के लिए / को ! से बदलें. प्रसारण के लिए आवश्यक पद: + % @ # &) ",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(प्रसारित करने के लिए / को ! से बदलें. प्रसारण के लिए आवश्यक पद: + % @ # ~) ",
 
 		"<strong>Room punishments</strong>:": "<strong>Room के दंड</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - नियमों का एक popup दिखाता है.",

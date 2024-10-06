@@ -16,7 +16,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir des utilisateurs du site",
 		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "* <strong>Global Bot</strong> - Un compte automatisé qui peut utiliser le HTML n'importe où",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
 
 		"<strong>Room ranks</strong>": "<strong>Rangs des rooms</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Ils n'ont aucun pouvoir, seulement un symbole honorifique",
@@ -39,7 +39,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "COMMANDES DES MODERATEURS",
 		"ADMIN COMMANDS": "COMMANDES DES ADMINISTRATEURS",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(Remplace / par ! pour afficher publiquement les commandes. Les afficher publiquement requiert : + % @ &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(Remplace / par ! pour afficher publiquement les commandes. Les afficher publiquement requiert : + % @ ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>Punitions des rooms</strong>",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Affiche une fen&ecirc;tre avec les r&egrave;gles.",

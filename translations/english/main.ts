@@ -19,7 +19,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "",
 		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "",
-		"&amp; <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "",
+		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "",
 
 		"<strong>Room ranks</strong>": "",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
@@ -42,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "",
 		"ADMIN COMMANDS": "",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "",
 
 		"<strong>Room punishments</strong>:": "",
 		"<strong>warn</strong> - Displays a popup with the rules.": "",

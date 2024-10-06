@@ -1482,24 +1482,24 @@ export const commands: Chat.ChatCommands = {
 		const buf = [];
 		if (user.can('show', null, room)) {
 			buf.push(<details><summary>Staff commands</summary>
-				<code>/giveaway create</code> - Pulls up a page to create a giveaway. Requires: + % @ # &amp;<br />
+				<code>/giveaway create</code> - Pulls up a page to create a giveaway. Requires: + % @ # ~<br />
 				<code>
 					/giveaway create question Giver | OT | TID | Game | Question | Answer 1, Answer 2, Answer 3 | IV/IV/IV/IV/IV/IV | Pok&eacute; Ball | Extra Info | Prize
-				</code> - Start a new question giveaway (voices can only host their own). Requires: + % @ # &amp;<br />
+				</code> - Start a new question giveaway (voices can only host their own). Requires: + % @ # ~<br />
 				<code>
 					/giveaway create lottery Giver | OT | TID | Game | # of Winners | IV/IV/IV/IV/IV/IV | Pok&eacute; Ball | Extra Info | Prize
-				</code> - Start a new lottery giveaway (voices can only host their own). Requires: + % @ # &amp;<br />
+				</code> - Start a new lottery giveaway (voices can only host their own). Requires: + % @ # ~<br />
 				<code>
 					/giveaway changequestion/changeanswer
 				</code> - Changes the question/answer of a question giveaway. Requires: Being giveaway host<br />
 				<code>/giveaway viewanswer</code> - Shows the answer of a question giveaway. Requires: Being giveaway host/giver<br />
 				<code>
 					/giveaway ban [user], [reason]
-				</code> - Temporarily bans [user] from entering giveaways. Requires: % @ # &amp;<br />
-				<code>/giveaway end</code> - Forcibly ends the current giveaway. Requires: % @ # &amp;<br />
+				</code> - Temporarily bans [user] from entering giveaways. Requires: % @ # ~<br />
+				<code>/giveaway end</code> - Forcibly ends the current giveaway. Requires: % @ # ~<br />
 				<code>/giveaway count [pokemon]</code> - Shows how frequently a certain Pok&eacute;mon has been given away.<br />
-				<code>/giveaway whitelist [user]</code> - Allow the given [user] to make giveaways. Requires: % @ # &amp;<br />
-				<code>/giveaway unwhitelist [user]</code> - Remove the given user from the giveaway whitelist. Requires: % @ # &amp;
+				<code>/giveaway whitelist [user]</code> - Allow the given [user] to make giveaways. Requires: % @ # ~<br />
+				<code>/giveaway unwhitelist [user]</code> - Remove the given user from the giveaway whitelist. Requires: % @ # ~
 			</details>);
 		}
 		// Giveaway stuff

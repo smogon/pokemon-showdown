@@ -40,7 +40,7 @@ Messages from the user to the server are in the form:
 
 `ROOMID` can optionally be left blank if unneeded (commands like `/join lobby`
 can be sent anywhere). Responses will be sent to a PM box with no username
-(so `|/command` is equivalent to `|/pm &, /command`).
+(so `|/command` is equivalent to `|/pm ~, /command`).
 
 `TEXT` can contain newlines, in which case it'll be treated the same
 way as if each line were sent to the room separately.
