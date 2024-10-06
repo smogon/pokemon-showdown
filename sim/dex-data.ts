@@ -318,10 +318,10 @@ export class TypeInfo implements Readonly<TypeData> {
 	readonly HPdvs: SparseStatsTable;
 
 	/**
-	* If 'true' is passed for the 'canCacheFields' parameter, objects may be re-used
-	* across instances of TypeInfo. Basically, if you're going to immediately deepFreeze this,
-	* you can safely pass true.
-	*/
+	 * If 'true' is passed for the 'canCacheFields' parameter, objects may be re-used
+	 * across instances of TypeInfo. Basically, if you're going to immediately deepFreeze this,
+	 * you can safely pass true.
+	 */
 	constructor(data: AnyObject, canCacheFields = false) {
 		// initialize required fields in a consistent order bc of V8's hidden classes
 		this.id = data.id;

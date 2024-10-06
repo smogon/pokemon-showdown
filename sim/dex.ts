@@ -40,6 +40,7 @@ import {Format, DexFormats} from './dex-formats';
 import {Utils} from '../lib';
 
 const BASE_MOD = 'gen9' as ID;
+const BASE_MOD_GEN = 9;
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
@@ -146,6 +147,9 @@ export class ModdedDex {
 	readonly stats: Data.DexStats;
 
 	constructor(mod = 'base') {
+		if (mod in dexes) {
+			throw new Error(`Trying to construct a mod twice: ${mod}`);
+		}
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
 		this.dataDir = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
@@ -368,7 +372,7 @@ export class ModdedDex {
 			desc: '',
 			shortDesc: '',
 		};
-		for (let i = this.gen; i < dexes['base'].gen; i++) {
+		for (let i = this.gen; i < BASE_MOD_GEN; i++) {
 			const curDesc = entry[`gen${i}` as keyof typeof entry]?.desc;
 			const curShortDesc = entry[`gen${i}` as keyof typeof entry]?.shortDesc;
 			if (!descs.desc && curDesc) {

@@ -28,6 +28,7 @@ export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: t
 export interface AbilityDataTable {[abilityid: IDEntry]: AbilityData}
 export interface ModdedAbilityDataTable {[abilityid: IDEntry]: ModdedAbilityData}
 
+const EMPTY_OBJECT = {};
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Ability';
 
@@ -37,14 +38,19 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	readonly flags: AbilityFlags;
 	declare readonly condition?: ConditionData;
 
-	constructor(data: AnyObject) {
-		super(data);
+	/**
+	 * If 'true' is passed for the 'canCacheFields' parameter, objects may be re-used
+	 * across instances of Ability. Basically, if you're going to immediately deepFreeze this,
+	 * you can safely pass true.
+	 */
+	constructor(data: AnyObject, canCacheFields = false) {
+		super(data, false);
 
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
-		this.suppressWeather = !!data.suppressWeather;
-		this.flags = data.flags || {};
 		this.rating = data.rating || 0;
+		this.suppressWeather = !!data.suppressWeather;
+		this.flags = data.flags || (canCacheFields ? EMPTY_OBJECT : {});
 
 		if (!this.gen) {
 			if (this.num >= 268) {
@@ -63,16 +69,25 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 				this.gen = 3;
 			}
 		}
+		for (const k of Object.keys(data)) { // TODO: migrate to for..in + Object.hasOwn
+			if (k in this) continue;
+			(this as any)[k] = data[k];
+		}
 	}
 }
 
 export class DexAbilities {
 	readonly dex: ModdedDex;
 	readonly abilityCache = new Map<ID, Ability>();
-	allCache: readonly Ability[] | null = null;
+	allCache: readonly Ability[];
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
+		const abilities = [];
+		for (const id in this.dex.data.Abilities) {
+			abilities.push(this.getByID(id as ID));
+		}
+		this.allCache = abilities;
 	}
 
 	get(name: string | Ability = ''): Ability {
@@ -116,12 +131,6 @@ export class DexAbilities {
 	}
 
 	all(): readonly Ability[] {
-		if (this.allCache) return this.allCache;
-		const abilities = [];
-		for (const id in this.dex.data.Abilities) {
-			abilities.push(this.getByID(id as ID));
-		}
-		this.allCache = abilities;
 		return this.allCache;
 	}
 }
