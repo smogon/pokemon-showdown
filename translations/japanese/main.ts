@@ -19,7 +19,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - Like Voice, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%): ボイスに似ているが上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@): 上記に加えてユーザーをサイト全体からBANできる。",
 		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "<strong>グローバルボット</strong>(*): どこでもmuteやBANをしたり、HTMLを扱うことができる自動化されたアカウント。",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;): 何でもできる。この文章を編集したり、ユーザーをグローバルに昇格させたりできる。",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(~): 何でもできる。この文章を編集したり、ユーザーをグローバルに昇格させたりできる。",
 
 		"<strong>Room ranks</strong>": "<strong>日本語部屋のユーザーランク</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "<strong>プライズウィナー</strong>(^): 部屋のシンボルや象徴であり、何も権限を持ちません。",
@@ -40,9 +40,9 @@ export const translations: Translations = {
 		"DATA COMMANDS": "ポケモンデータコマンド",
 		"DRIVER COMMANDS": "ドライバー(%)コマンド",
 		"MODERATOR COMMANDS": "モデレーター(@)コマンド",
-		"ADMIN COMMANDS": "アドミニストレーター(&)コマンド",
+		"ADMIN COMMANDS": "アドミニストレーター(~)コマンド",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(/の代わりに!を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(/の代わりに!を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # ~ の権限が必要です。)",
 
 		"<strong>Room punishments</strong>:": "<strong>チャット罰則一覧</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - ユーザーにチャットルールのポップアップが表示されます。",
@@ -153,7 +153,7 @@ export const translations: Translations = {
 		"You are now blocking challenges, except from staff and ${status} users.": "対戦の申し込みをブロックしました。グローバルスタッフと${status}状態のユーザーからはブロックされません。",
 		"Staff FAQ": "スタッフに関するよくある質問",
 		"You cannot broadcast all FAQs at once.": "1回でFAQを全て表示させることはできません。",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "レートが有効なバトルで1回以上勝利し、アカウントを登録してから1週間が経過するアカウントが自動承認されます(autoconfirmed)。承認されていないユーザーはグローバルスタッフ(いかなる場所でも名前の前に %、 @、 & がついています)以外にPMを送信することができません。また、チャットルームでは荒らしを防止するためにmodchatで承認済みのユーザーのみが発言できるようにすることができます。もしあなたが承認されていない場合はルームスタッフ(名前の前に %、@、# がついているユーザーです)にPMを送信し、modchatを無効にするように依頼することができますが、スタッフは無効化する義務はありません。",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "レートが有効なバトルで1回以上勝利し、アカウントを登録してから1週間が経過するアカウントが自動承認されます(autoconfirmed)。承認されていないユーザーはグローバルスタッフ(いかなる場所でも名前の前に %、 @、 ~ がついています)以外にPMを送信することができません。また、チャットルームでは荒らしを防止するためにmodchatで承認済みのユーザーのみが発言できるようにすることができます。もしあなたが承認されていない場合はルームスタッフ(名前の前に %、@、# がついているユーザーです)にPMを送信し、modchatを無効にするように依頼することができますが、スタッフは無効化する義務はありません。",
 		"How the ladder works": "Ladderの仕組み",
 		"Tiering FAQ": "",
 		"Badge FAQ": "",
