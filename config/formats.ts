@@ -472,6 +472,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard Draft', 'Moody Clause', 'Swagger Clause'],
 		banlist: ['Soul Dew'],
 	},
+	{
+		name: "[Gen 3] Draft",
+		mod: 'gen3',
+		searchShow: false,
+		ruleset: ['Standard Draft', 'Swagger Clause', 'DryPass Clause'],
+		banlist: ['King\'s Rock', 'Quick Claw', 'Assist']
+	},
 
 	// OM of the Month
 	///////////////////////////////////////////////////////////////////
