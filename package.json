@@ -5,10 +5,12 @@
   "main": "dist/sim/index.js",
   "dependencies": {
     "esbuild": "^0.16.10",
+    "ioredis": "^5.4.1",
     "mysql2": "^3.9.7",
     "preact": "^10.5.15",
     "preact-render-to-string": "^5.1.19",
     "probe-image-size": "^7.2.3",
+    "redis": "^4.7.0",
     "sockjs": "^0.3.21",
     "source-map-support": "^0.5.21"
   },

@@ -90,6 +90,10 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('');
 		console.log('  Reads a team in any format from stdin, writes the exported (human-readable) team to stdout');
 		console.log('');
+		console.log('pokemon-showdown advance-state STATE_HASH');
+		console.log('');
+		console.log('  Fetches the value corresponding to the given state hash from Redis');
+		console.log('');
 		console.log('pokemon-showdown help');
 		console.log('');
 		console.log('  Displays this reference');
@@ -244,6 +248,30 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			});
 		}
 		break;
+
+	case 'advance-state':
+		{
+			if (!process.argv[3]) {
+				console.error('Please provide a state hash.');
+				process.exit(1);
+			}
+			const stateHash = process.argv[3];
+			const { getStateValue } = require('./server/redis');
+			getStateValue(stateHash).then((value) => {
+				if (value === null) {
+					console.error(`No value found for state hash: ${stateHash}`);
+					process.exit(1);
+				} else {
+					console.log(value);
+					process.exit(0);
+				}
+			}).catch((error) => {
+				console.error('Error:', error);
+				process.exit(1);
+			});
+		}
+		break;
+
 	default:
 		console.error('Unrecognized command: ' + process.argv[2]);
 		console.error('Use `pokemon-showdown help` for help');
