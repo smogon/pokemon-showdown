@@ -1555,6 +1555,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 				target.switchFlag = true;
 				if (target.useItem()) {
+					if (this.gen === 6) target.lastTurnEjected = this.turn;
 					source.switchFlag = false;
 				} else {
 					target.switchFlag = false;

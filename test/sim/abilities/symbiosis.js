@@ -79,7 +79,7 @@ describe('Symbiosis', function () {
 	});
 
 	// See Marty's research for many more examples: https://www.smogon.com/forums/threads/battle-mechanics-research.3489239/post-6401506
-	describe.skip('Symbiosis Eject Button Glitch (Gen 6 only)', function () {
+	describe('Symbiosis Eject Button Glitch (Gen 6 only)', function () {
 		it('should cause Leftovers to restore HP 4 times', function () {
 			battle = common.gen(6).createBattle({gameType: 'doubles'}, [[
 				{species: 'florges', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
