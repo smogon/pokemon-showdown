@@ -451,9 +451,6 @@ export class ModdedDex {
 		return num >>> 0;
 	}
 
-	// FIXME: COW types won't have .data entries. uses of .data will be replaced with the 'searchObject'
-	// i.e. this.data.Natures -> this.natures
-	// Easier to fix this when all 5 types have been ported to CoW.
 	dataSearch(
 		target: string, searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures')[] | null, isInexact?: boolean
 	): AnyObject[] | null {
@@ -491,19 +488,32 @@ export class ModdedDex {
 			maxLd = 2;
 		}
 		searchResults = null;
-		for (const table of [...searchIn, 'Aliases'] as const) {
-			const searchObj = this.data[table] as DexTable<any>;
+		for (const table of searchIn) {
+			// all of these support .all()
+			const searchObj = this[searchObjects[table]];
 			if (!searchObj) continue;
 
-			for (const j in searchObj) {
-				const ld = Utils.levenshtein(cmpTarget, j, maxLd);
+			for (const j of searchObj.all()) {
+				const ld = Utils.levenshtein(cmpTarget, j.id, maxLd);
 				if (ld <= maxLd) {
-					const word = searchObj[j].name || j;
-					const results = this.dataSearch(word, searchIn, word);
+					const word = j.name;
+					const results = this.dataSearch(word, searchIn, !!word);
 					if (results) {
 						searchResults = results;
 						maxLd = ld;
 					}
+				}
+			}
+		}
+		// but Aliases doesn't support .all()
+		for (const j in this.data.Aliases) {
+			const ld = Utils.levenshtein(cmpTarget, j, maxLd);
+			if (ld <= maxLd) {
+				const word = j;
+				const results = this.dataSearch(word, searchIn, !!word);
+				if (results) {
+					searchResults = results;
+					maxLd = ld;
 				}
 			}
 		}
