@@ -4116,7 +4116,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen2',
 		searchShow: false,
 		ruleset: ['[Gen 2] NU'],
-		banlist: ['NU', 'PUBL'],
+		banlist: ['NU', 'PUBL', 'Spider Web + Baton Pass', 'Mean Look + Baton Pass'],
 		unbanlist: ['Swagger'],
 	},
 	{
