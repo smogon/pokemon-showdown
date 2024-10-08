@@ -1509,7 +1509,7 @@ export const pages: Chat.PageTable = {
 				case 'pmharassment':
 					buf += `<p>${this.tr`If someone is harassing you in private messages (PMs), click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it.`}`;
 					if (!this.pageid.includes('confirm')) {
-						buf += ` If it's a minor issue, consider using <code>/ignore [username]</code> instead.`;
+						buf += `${this.tr` If it's a minor issue, consider using <code>/ignore [username]</code> instead.`}`;
 					}
 					buf += `</p>`;
 					if (!isLast) break;
@@ -1518,7 +1518,7 @@ export const pages: Chat.PageTable = {
 				case 'battleharassment':
 					buf += `<p>${this.tr`If someone is harassing you in a battle, click the button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it.`}`;
 					if (!this.pageid.includes('confirm')) {
-						buf += ` If it's a minor issue, consider using <code>/ignore [username]</code> instead.`;
+						buf += `${this.tr` If it's a minor issue, consider using <code>/ignore [username]</code> instead.`}`;
 					}
 					buf += `</p>`;
 					buf += `<p>${this.tr`Please save a replay of the battle if it has ended, or provide a link to the battle if it is still ongoing.`}</p>`;
@@ -1537,13 +1537,13 @@ export const pages: Chat.PageTable = {
 					buf += `<p><Button>confirminappokemon</Button></p>`;
 					break;
 				case 'cheating':
-					buf += `<p>Your opponent cannot control how lucky or unlucky you are, what moves you choose, or the mechanics of the battle. You may just be misunderstanding what happened in your battle!</p>`;
-					buf += `<h4>Some common situations</h4><ul>`;
+					buf += `<p>${this.tr`Your opponent cannot control how lucky or unlucky you are, what moves you choose, or the mechanics of the battle. You may just be misunderstanding what happened in your battle!`}</p>`;
+					buf += `<h4>${this.tr`Some common situations`}</h4><ul>`;
 					for (const [scenario, explanation] of cheatingScenarios) {
-						buf += `<li><details class="readmore"><summary>${scenario}</summary><br />${explanation}<br /><br /></details></li>`;
+						buf += `<li><details class="readmore"><summary>${this.tr(scenario)}</summary><br />${this.tr(explanation)}<br /><br /></details></li>`;
 					}
-					buf += `</ul><p>There are many more situations like this where the opponent was not cheating or hacking. If you're confused about what happened, upload your battle replay and share it with the Help room. They can help you understand what happened!</p>`;
-					buf += `<p style="text-align: center"><button class="button" name="send" value="/j help"><strong>Join the Help Room</strong></button></p>`;
+					buf += `</ul><p>${this.tr`There are many more situations like this where the opponent was not cheating or hacking. If you're confused about what happened, upload your battle replay and share it with the Help room. They can help you understand what happened!`}</p>`;
+					buf += `<p style="text-align: center"><button class="button" name="send" value="/j help"><strong>${this.tr`Join the Help Room`}</strong></button></p>`;
 					break;
 				case 'appeal':
 					// buf += `<p><b>${this.tr`What would you like to appeal?`}</b></p>`;
@@ -1551,7 +1551,7 @@ export const pages: Chat.PageTable = {
 					if (user.locked || isStaff) {
 						const hostfiltered = user.locked === '#hostfilter' || (user.latestHostType === 'proxy' && user.locked !== user.id);
 						if (!hostfiltered) {
-							buf += `<p><strong>I want to appeal my lock.</strong></p>`;
+							buf += `<p><strong>${this.tr`I want to appeal my lock.`}</strong></p>`;
 							const namelocked = user.named && user.id.startsWith('guest');
 							if (user.locked === user.id || namelocked || isStaff) {
 								if (user.permalocked || isStaff) {
@@ -1565,7 +1565,7 @@ export const pages: Chat.PageTable = {
 								buf += `<p><Button>${type}</Button></p>`;
 							}
 						}
-						buf += `<p><strong>I'm locked under a name or IP I don't recognize.</strong></p>`;
+						buf += `<p><strong>${this.tr`I'm locked under a name or IP I don't recognize.`}</strong></p>`;
 						if (hostfiltered) {
 							buf += `<p><Button>hostfilter</Button></p>`;
 						}
@@ -1578,7 +1578,7 @@ export const pages: Chat.PageTable = {
 							}
 						}
 					}
-					buf += `<p><strong>I am punished but do not fall under any of the above.</strong></p>`;
+					buf += `<p><strong>${this.tr`I am punished but do not fall under any of the above.`}</strong></p>`;
 					if (user.semilocked || isStaff) {
 						buf += `<p><Button>semilock</Button></p>`;
 					}
@@ -1591,7 +1591,7 @@ export const pages: Chat.PageTable = {
 					break;
 				case 'lock':
 					buf += `<p>${this.tr`If you want to appeal your lock or namelock, click the button below and a global staff member will be with you shortly.`}</p>`;
-					buf += `<p>You will have to explain in detail why your punishment is unjustified and why we would want to unlock you. Insufficient explanations such as "lol this is bs unlock me" will not be considered.</p>`;
+					buf += `<p>${this.tr`You will have to explain in detail why your punishment is unjustified and why we would want to unlock you. Insufficient explanations such as "lol this is bs unlock me" will not be considered.`}</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmappeal</Button></p>`;
 					break;
@@ -1601,34 +1601,34 @@ export const pages: Chat.PageTable = {
 					buf += `<p><Button>confirmipappeal</Button></p>`;
 					break;
 				case 'homeip':
-					buf += `<p>If you are using your home's wifi network, it means that the person you are being mistaken for did as well (maybe a family member?).</p>`;
-					buf += `<p>In any case, we have no ability to make the difference - for all we know, you are the same user. Please wait out the lock.</p>`;
+					buf += `<p>${this.tr`If you are using your home's wifi network, it means that the person you are being mistaken for did as well (maybe a family member?).`}</p>`;
+					buf += `<p>${this.tr`In any case, we have no ability to make the difference - for all we know, you are the same user. Please wait out the lock.`}</p>`;
 					break;
 				case 'device':
-					buf += `<p>Sorry, but you are considered responsible for whoever has access to your computer.</p>`;
-					buf += `<p>We have no way to make the difference between two people using the exact same computer. Please wait out the lock.</p>`;
+					buf += `<p>${this.tr`Sorry, but you are considered responsible for whoever has access to your computer.`}</p>`;
+					buf += `<p>${this.tr`We have no way to make the difference between two people using the exact same computer. Please wait out the lock.`}</p>`;
 					break;
 				case 'mobileip':
-					buf += `<p>If you are not the user who was punished, the lock should expire on its own within a few hours.</p>`;
-					buf += `<p>If you are in a hurry to communicate with another user, you can click on the following button to open a ticket.</p>`;
-					buf += `<p>A staff member will look at your case as soon as possible.</p>`;
+					buf += `<p>${this.tr`If you are not the user who was punished, the lock should expire on its own within a few hours.`}</p>`;
+					buf += `<p>${this.tr`If you are in a hurry to communicate with another user, you can click on the following button to open a ticket.`}</p>`;
+					buf += `<p>${this.tr`A staff member will look at your case as soon as possible.`}</p>`;
 					if (!isLast) break;
-					buf += `<button name="send" value="/ht submit IP-Appeal|||I am on a mobile IP.|">Submit ticket</button>`;
+					buf += `<button class="button notifying" name="send" value="/ht submit IP-Appeal|||I am on a mobile IP.|">Submit ticket</button>`;
 					break;
 				case 'public':
 					if (user.ips.some(ip => Punishments.sharedIpBlacklist.has(ip))) {
 						buf += "<p>The public place you are in has had frequent misbehavior. As such, we can not unlock it, to prevent the bad users on it from abusing this. We apologize for the inconvenience.</p>";
 						break;
 					} else {
-						buf += `<p>If you have been locked at school or in a library, please write down its name, city and country in the form below so we can verify your claim. This information is strictly confidential, and global staff will only use it to deal with your appeal.</p>`;
-						buf += `<p>If you have been locked using the wifi of another type of facility, please write down which kind it is in the form.</p>`;
+						buf += `<p>${this.tr`If you have been locked at school or in a library, please write down its name, city and country in the form below so we can verify your claim. This information is strictly confidential, and global staff will only use it to deal with your appeal.`}</p>`;
+						buf += `<p>${this.tr`If you have been locked using the wifi of another type of facility, please write down which kind it is in the form.`}</p>`;
 						buf += `<p><Button>confirmipappeal</Button></p>`;
 					}
 					break;
 				case 'timeleft':
 					const expiry = Punishments.checkLockExpiration(user.id);
 					if (typeof expiry !== 'string') {
-						buf += `<p>You aren't locked.</p>`;
+						buf += `<p>${this.tr`You aren't locked.`}</p>`;
 					} else {
 						buf += `Your lock ${expiry.trim().replace('(', '').replace(')', '') || "expires soon"}.`;
 					}
@@ -1638,7 +1638,7 @@ export const pages: Chat.PageTable = {
 						.map(p => p[2])
 						.filter(t => ['LOCK', 'NAMELOCK'].includes(t.type));
 					if (!punishments.some(p => p.reason)) {
-						buf += `<p>No reasons were found on your lock.</p>`;
+						buf += `<p>${this.tr`No reasons were found on your lock.`}</p>`;
 						break;
 					}
 					for (const [idx, punishment] of punishments.entries()) {
@@ -1650,8 +1650,8 @@ export const pages: Chat.PageTable = {
 					}
 					break;
 				case 'startedit':
-					buf += `<p>If you have been locked, it is because your behavior on its own has broken PS rules - whether someone else "started" it does not excuse it.</p>`;
-					buf += `<p>If someone broke the rules during the interaction with led to your lock, they should have been punished as well when we addressed the report concerning you.</p>`;
+					buf += `<p>${this.tr`If you have been locked, it is because your behavior on its own has broken PS rules - whether someone else "started" it does not excuse it.`}</p>`;
+					buf += `<p>${this.tr`If someone broke the rules during the interaction with led to your lock, they should have been punished as well when we addressed the report concerning you.`}</p>`;
 					break;
 				case 'hostfilter':
 					buf += `<p>${this.tr`We automatically lock proxies and VPNs to prevent evasion of punishments and other attacks on our server. To get unlocked, you need to disable your proxy or VPN.`}</p>`;
@@ -1684,8 +1684,8 @@ export const pages: Chat.PageTable = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'password':
-					buf += `<p>If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">Password Reset Form</a>.</p>`;
-					buf += `<p>You will need to make a Smogon account to be able to fill out a form.`;
+					buf += `<p>${this.tr`If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">Password Reset Form</a>.`}</p>`;
+					buf += `<p>${this.tr`You will need to make a Smogon account to be able to fill out a form.`}`;
 					break;
 				case 'roomhelp':
 					buf += `<p>${this.tr`If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!`}</p>`;
@@ -1712,9 +1712,9 @@ export const pages: Chat.PageTable = {
 						}
 						buf += `<form data-submitsend="/helpticket submit ${ticketTitles[page.slice(7)]} ${submitMeta} | {text} | {context}">`;
 						buf += `<textarea style="width: 100%" name="text"></textarea><br />`;
-						buf += `<strong>${"Do you have any other information you want to provide? (this is optional)"}</strong>`;
+						buf += `<strong>${this.tr("Do you have any other information you want to provide? (this is optional)")}</strong>`;
 						if (textTicket.contextMessage) {
-							buf += `<br />${textTicket.contextMessage}`;
+							buf += `<br />${this.tr(textTicket.contextMessage)}`;
 						}
 						buf += `<br />`;
 						buf += `<textarea style="width: 100%" name="context"></textarea><br />`;
@@ -1726,8 +1726,8 @@ export const pages: Chat.PageTable = {
 					}
 					if (textTicket || page.includes('confirmpmharassment')) {
 						buf += `<p>`;
-						buf += `Global staff might take more than a few minutes to handle your report. `;
-						buf += `If you are being disturbed by another user, we advise you to type <code>/ignore [username]</code> in a chatroom to ignore their messages.`;
+						buf += `${this.tr`Global staff might take more than a few minutes to handle your report. `}`;
+						buf += `${this.tr`If you are being disturbed by another user, we advise you to type <code>/ignore [username]</code> in a chatroom to ignore their messages.`}`;
 					}
 					break;
 				}
