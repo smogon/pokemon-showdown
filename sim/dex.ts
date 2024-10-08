@@ -612,6 +612,37 @@ dexes['base'] = new ModdedDex();
 dexes[BASE_MOD] = dexes['base'];
 
 export const Dex = dexes['base'];
+
+// populate _toIDCache with data from base mod.
+// It's representative enough for all other mods, so we don't need to dynamically grow the cache.
+{
+	const cache = Data._toIDCache;
+	const sources: readonly (readonly BasicEffect[])[] = [
+		Dex.species.all(), Dex.items.all(), Dex.moves.all(),
+		Dex.types.all() as any as readonly BasicEffect[], Dex.abilities.all(), Dex.natures.all(),
+	];
+	for (const source of sources) {
+		for (const effect of source) {
+			const name = effect.name;
+			if (!name) continue;
+			// we can't just use effect.id because of cases like hidden power
+			const id = toID(name);
+			const old = cache.get(name);
+			if (old === undefined) cache.set(name, id);
+			else if (old !== id) throw new Error("internal error with ID logic");
+		}
+	}
+	const aliases = Dex.data.Aliases;
+	for (const k in aliases) {
+		const name = aliases[k];
+		const id = toID(name);
+		const old = cache.get(name);
+		if (old === undefined) cache.set(name, id);
+		else if (old !== id) throw new Error("internal error with ID logic");
+	}
+	Object.freeze(cache);
+}
+
 export namespace Dex {
 	export type Species = import('./dex-species').Species;
 	export type Item = import('./dex-items').Item;
