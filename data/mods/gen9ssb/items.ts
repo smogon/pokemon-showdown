@@ -355,12 +355,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-anim', pokemon, 'Bubble Beam', pokemon);
 			for (const target of this.getAllActive()) {
 				if (pokemon === target) continue;
-				this.boost({spe: -1}, target, pokemon, this.effect);
-				if (target.happiness < 255) target.happiness += 30;
-				if (target.happiness > 255) target.happiness = 255;
+				this.boost({spe: -1}, target, target, this.effect);
+				//if (target.happiness < 255) target.happiness += 30;
+				//if (target.happiness > 255) target.happiness = 255;
 			}
-			if (pokemon.happiness < 255) pokemon.happiness += 30;
-			if (pokemon.happiness > 255) target.happiness = 255;
+			//if (pokemon.happiness < 255) pokemon.happiness += 30;
+			//if (pokemon.happiness > 255) target.happiness = 255;
 		},
 	},
 	// Faust
