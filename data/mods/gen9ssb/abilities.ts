@@ -1011,7 +1011,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-message', `${target.name} scrambled away from danger!`);
 			this.add('-anim', target, 'Dive', target);
 			target.side.addSideCondition('lostandfound');
-			target.forceSwitchFlag = true;
+			target.switchFlag = true;
 			return null;
 		},
 		condition: {
