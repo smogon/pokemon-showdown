@@ -742,7 +742,7 @@ export const commands: Chat.ChatCommands = {
 
 			switch (key) {
 			case 'moves':
-				for (const rawMove of value.split('~')) {
+				for (const rawMove of value.split('&')) {
 					const move = dex.moves.get(rawMove);
 					if (!move.exists) {
 						throw new Chat.ErrorMessage(`"${rawMove}" is not a move in the specified format.`);
