@@ -2604,9 +2604,18 @@ export const Formats: FormatList = [
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
-			const signatureMove = this.dex.moves.get(pokemon.moveSlots[3].id);
-			pokemon.moveSlots[3].name = signatureMove.name;
-			pokemon.baseMoveSlots[3].name = signatureMove.name;
+			const sMove = this.dex.moves.get(pokemon.moveSlots[3].id);
+			const signatureMove = {
+				move: sMove.name,
+				id: sMove.id,
+				pp: sMove.pp,
+				maxpp: sMove.pp,
+				target: sMove.target,
+				disabled: false,
+				used: false,
+			};
+			pokemon.moveSlots[3] = signatureMove;
+			pokemon.baseMoveSlots[3] = signatureMove;
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const ability = target.getAbility();
 			if (pokemon.abilityState.ran) pokemon.addVolatile('shikigamiran');
