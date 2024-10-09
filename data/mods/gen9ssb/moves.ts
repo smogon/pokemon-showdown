@@ -391,7 +391,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Suika Ibuki
 	demi: {
 		accuracy: 100,
-		basePower: 100,
+		basePower: 75,
 		category: "Physical",
 		desc: "Infiltrates and forces foe to use Substitue.",
 		shortDesc: "Infiltrates and substitutes foe.",
