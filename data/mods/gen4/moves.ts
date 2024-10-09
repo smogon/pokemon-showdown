@@ -155,6 +155,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		recoil: [1, 3],
 	},
+	brickbreak: {
+		inherit: true,
+		onTryHit() {},
+		onTryMove(source, target) {
+			if (!target.isProtected()) {
+				target.side.removeSideCondition('reflect');
+				target.side.removeSideCondition('light screen');
+			}
+		},
+	},
 	bulletseed: {
 		inherit: true,
 		basePower: 10,
