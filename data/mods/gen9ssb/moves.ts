@@ -1365,7 +1365,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Quetzalcoatl
 	bigthunder: {
 		accuracy: true,
-		basePower: 20,
+		basePower: 0,
 		category: "Special",
 		desc: "Hits once for each healthy Pokemon in the battle, both allies and foes. Each hit hits a random active or inactive Pokemon on either side.",
 		shortDesc: "Hits a random active/inactive Pokemon with each hit.",
@@ -1380,35 +1380,61 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryHit(target, source, move) {
 			this.add('-anim', source, 'Hurricane', source);
 			this.add('-anim', source, 'Thunder', target);
-			let possibleTargets = [];
+		},
+		onHit(target, source, move) {
+			let allPokemon = [];
+			// Gather all possible targets into an array
 			for (const pokemon of this.getAllPokemon()) {
-				if (!pokemon.fainted) possibleTargets.push(pokemon);
+				if (pokemon.hasType('Ground') || ['lightningrod', 'voltabsorb'].includes(pokemon.ability)) continue;
+				allPokemon.push(pokemon);
 			}
-			if (!possibleTargets) return null;
-			for (let i = 0; i < possibleTargets.length; i++) {
-				const newTarget = this.sample(possibleTargets);
-				if (this.dex.getEffectiveness(move.type, newTarget) === 1) {
-					this.add('-immune', newTarget);
-					i++;
-					continue;
+			// Randomly assign the damage amongst all possible targets
+			for (let i = 0; i <= this.getAllPokemon().length; i++) {
+				this.sample(allPokemon).abilityState.btDmg += 20;
+			}
+			// Execute damage
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.abilityState.btDmg) {
+					// If the target is Quetzalcoatl (Peal of Thunder) immune + heal
+					if (pokemon.ability === 'pealofthunder') {
+						if (pokemon.isActive) {
+							this.heal(pokemon.maxhp / 3, pokemon, pokemon, this.effect);
+						} else {
+							pokemon.hp += pokemon.maxhp / 3;
+							this.add('-heal', pokemon, pokemon.getHealth, this.effect);
+						}
+						continue;
+					}
+					const nMove = {
+						move: move.name,
+						id: move.id,
+						basePower: pokemon.abilityState.btDmg,
+						pp: move.pp,
+						maxpp: move.pp,
+						target: move.target,
+						disabled: false,
+						used: false,
+					};
+					const dmg = this.actions.getDamage(source, pokemon, nMove);
+					if (!dmg) {
+						this.add('-immune', pokemon);
+						continue;
+					}
+					if (pokemon.isActive) {
+						this.damage(dmg, pokemon, source, this.effect);
+						continue;
+					} else {
+						pokemon.hp -= dmg;
+						if (pokemon.hp < 0) pokemon.hp = 0;
+						this.add('-message', `${pokemon.name} took ${Math.round(dmg/pokemon.baseMaxhp * 100)}% from ${nMove.move}!`);
+						continue;
+					}
 				}
-				let dmg = this.actions.getDamage(source, newTarget, move);
-				if (!dmg) {
-					this.add('-immune', newTarget);
-					i++;
-					continue;
-				}
-				if (newTarget === target) {
-					this.damage(dmg, target);
-					continue;
-				} else if (newTarget === source) {
-					this.add('-immune', source, '[from] ability: Peal of Thunder');
-					this.heal(source.maxhp / 3, source);
-					continue;
-				}
-				if (dmg > newTarget.hp) dmg = newTarget.hp;
-				newTarget.hp -= dmg;
-				this.add('-message', `${newTarget.name} took ${Math.round(dmg/newTarget.baseMaxhp * 100)}% from ${move.name}!`);
+			}
+		},
+		onAfterMoveSecondarySelf() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.abilityState.btDmg = 0;
 			}
 		},
 		secondary: null,
