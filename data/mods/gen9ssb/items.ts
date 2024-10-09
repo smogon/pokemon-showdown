@@ -349,39 +349,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 	bubblewand: {
 		name: 'Bubble Wand',
 		gen: 9,
-		onStart(pokemon) {
-			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-			this.add('-anim', pokemon, 'Bubble', target);
-			this.add('-anim', target, 'Aqua Ring', target);
-			target.addVolatile('bubblewand');
-			this.add('-message', `${target.name} was caught in a bubble by ${pokemon.name}'s Bubble Wand!`);
-			if (this.randomChance(1, 2)) {
-				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
-				this.add('-message', `Oh no! ${pokemon.name} trapped themselves in a bubble!`);
-				pokemon.addVolatile('bubblewand');
+		desc: "Upon switching out, all adjacent Pokemon's Speed stats are lowered by one stage, and all active Pokemon's happiness stats are increased by 30 points, or increased to max if differential between current and max happiness is less than 30.",
+		shortDesc: "Switch-out: Lowers Pokemon's Speed by 1; Boosts happiness.",
+		onSwitchOut(pokemon) {
+			this.add('-anim', pokemon, 'Bubble Beam', pokemon);
+			for (const target of this.getAllActive()) {
+				if (pokemon === target) continue;
+				this.boost({spe: -1}, target, pokemon, this.effect);
+				if (target.happiness < 255) target.happiness += 30;
+				if (target.happiness > 255) target.happiness = 255;
 			}
-		},
-		condition: {
-			duration: 4,
-			onModifyDamage(damage, source, target, move) {
-				if (!move) return;
-				if (source.hasType('Water')) {
-					return this.chainModify (1.25);
-				} else {
-					return this.chainModify(0.75);
-				}
-			},
-			onModifySpe(spe, pokemon) {
-				if (pokemon.hasType('Water')) {
-					return this.chainModify (1.25);
-				} else {
-					return this.chainModify(0.75);
-				}
-			},
-			onResidual(pokemon) {
-				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
-				this.add('-message', `${pokemon.name} is encased in the bubble!`);
-			},
+			if (pokemon.happiness < 255) pokemon.happiness += 30;
+			if (pokemon.happiness > 255) target.happiness = 255;
 		},
 	},
 	// Faust
