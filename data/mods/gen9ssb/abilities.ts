@@ -1012,14 +1012,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-anim', target, 'Dive', target);
 			target.side.addSideCondition('lostandfound');
 			target.switchFlag = true;
+			this.effectState.incMove = this.activeMove;
+			this.effectState.attackingFoe = source;
 			return null;
 		},
 		condition: {
 			onSwitchIn(pokemon) {
-				const target = pokemon.side.foe.active[0];
-				const dmg = this.actions.getDamage(target, pokemon, this.activeMove);
-				this.add('-anim', target, this.activeMove.name, pokemon);
-				this.damage(dmg, pokemon, target);
+				const dmg = this.actions.getDamage(this.effectState.attackingFoe, pokemon, this.effectState.incMove);
+				this.add('-anim', this.effectState.attackingFoe, this.effectState.incMove.name, pokemon);
+				this.damage(dmg, pokemon, this.effectState.attackingFoe, this.effectState.incMove);
 				pokemon.side.removeSideCondition('lostandfound');
 			},
 		},
