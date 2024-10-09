@@ -190,7 +190,7 @@ export const ssbSets: SSBSets = {
 		species: 'Ogerpon', ability: 'Density Manipulation', item: 'Ibuki Gourd', gender: 'F',
 		moves: ['U-Turn', 'Switcheroo', 'Drain Punch'],
 		signatureMove: 'Demi',
-		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	Varnava: {
 		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
