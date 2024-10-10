@@ -8,7 +8,6 @@ import * as smogon from 'smogon';
 import {Streams} from '../../lib';
 import {Dex, toID} from '../../sim/dex';
 import {TeamValidator} from '../../sim/team-validator';
-Dex.includeModData();
 
 type DeepPartial<T> = {
 	[P in keyof T]?: T[P] extends (infer I)[]

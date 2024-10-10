@@ -9,15 +9,16 @@
  * Dex.forFormat(format).
  *
  * You may choose to preload some things:
- * - Dex.includeMods() ~10ms
- *   This will preload `Dex.dexes`, giving you a list of possible mods.
- * - Dex.includeFormats() ~30ms
- *   As above, but will also preload `Dex.formats.all()`.
- * - Dex.includeData() ~500ms
- *   As above, but will also preload all of Dex.data for Gen 8, so
- *   functions like `Dex.species.get`, etc will be instantly usable.
- * - Dex.includeModData() ~1500ms
- *   As above, but will also preload `Dex.dexes[...].data` for all mods.
+ * - Dex.scanMods()
+ *   This will scan the mods folder and give you the Set of names of possible mods.
+ * - Dex.includeMods()
+ *   This will preload all mods and their data.
+ * - Dex.includeFormats()
+ *   Deprecated.
+ * - Dex.includeData()
+ *   Deprecated.
+ * - Dex.includeModData()
+ *   This will preload all mods and their data.
  *
  * Note that preloading is never necessary. All the data will be
  * automatically preloaded when needed, preloading will just spend time
@@ -39,18 +40,29 @@ import {Format, DexFormats} from './dex-formats';
 import {Utils} from '../lib';
 
 const BASE_MOD = 'gen9' as ID;
+const BASE_MOD_GEN = 9;
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
+const detectedMods: Set<string> = new Set();
+let modsScanned = false;
 const dexes: {[mod: string]: ModdedDex} = Object.create(null);
+const textCache = {
+	Pokedex: require(DATA_DIR + '/text/pokedex').PokedexText,
+	Moves: require(DATA_DIR + '/text/moves').MovesText,
+	Abilities: require(DATA_DIR + '/text/abilities').AbilitiesText,
+	Items: require(DATA_DIR + '/text/items').ItemsText,
+	Default: require(DATA_DIR + '/text/default').DefaultText,
+};
 
 type DataType =
 	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
 	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart' | 'PokemonGoData';
-const DATA_TYPES: (DataType | 'Aliases')[] = [
+const DATA_TYPES: DataType[] = [
 	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
 	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData',
 ];
+const COW_DATA_TYPES: DataType[] = ['Natures', 'TypeChart'];
 
 const DATA_FILES = {
 	Abilities: 'abilities',
@@ -79,13 +91,13 @@ interface DexTableData {
 	Items: DexTable<import('./dex-items').ItemData>;
 	Learnsets: DexTable<import('./dex-species').LearnsetData>;
 	Moves: DexTable<import('./dex-moves').MoveData>;
-	Natures: DexTable<import('./dex-data').NatureData>;
+	Natures: Data.ModdedNatureDataTable;
 	Pokedex: DexTable<import('./dex-species').SpeciesData>;
 	FormatsData: DexTable<import('./dex-species').SpeciesFormatsData>;
 	PokemonGoData: DexTable<import('./dex-species').PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
 	Conditions: DexTable<import('./dex-conditions').ConditionData>;
-	TypeChart: DexTable<import('./dex-data').TypeData>;
+	TypeChart: Data.ModdedTypeDataTable;
 }
 interface TextTableData {
 	Abilities: DexTable<AbilityText>;
@@ -114,12 +126,11 @@ export class ModdedDex {
 
 	readonly toID = Data.toID;
 
-	gen = 0;
-	parentMod = '';
-	modsLoaded = false;
+	readonly gen: number;
+	readonly parentMod: string;
+	modsLoaded = false; // TODO: deprecate
 
-	dataCache: DexTableData | null;
-	textCache: TextTableData | null;
+	dataCache: DexTableData;
 
 	deepClone = Utils.deepClone;
 	deepFreeze = Utils.deepFreeze;
@@ -136,36 +147,112 @@ export class ModdedDex {
 	readonly stats: Data.DexStats;
 
 	constructor(mod = 'base') {
+		if (mod in dexes) {
+			throw new Error(`Trying to construct a mod twice: ${mod}`);
+		}
 		this.isBase = (mod === 'base');
 		this.currentMod = mod;
 		this.dataDir = (this.isBase ? DATA_DIR : MODS_DIR + '/' + this.currentMod);
 
-		this.dataCache = null;
-		this.textCache = null;
+		const basePath = this.dataDir + '/';
+		const Scripts = this.loadDataFile(basePath, 'Scripts');
+		this.parentMod = this.isBase ? '' : (Scripts.inherit || 'base');
+
+		let parentDex;
+		if (this.parentMod) {
+			parentDex = this.mod(this.parentMod);
+			if (!parentDex || parentDex === this) {
+				throw new Error(
+					`Unable to load ${this.currentMod}. 'inherit' in scripts.ts should specify a parent mod from which to inherit data, or must be not specified.`
+				);
+			}
+		}
+		// Flag the generation. Required for team validator.
+		const gen = Scripts.gen || parentDex?.gen;
+		if (typeof gen !== 'number') throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
+		this.gen = gen;
 
 		this.formats = new DexFormats(this);
+
+		const dataCache: {[k in keyof DexTableData]?: any} = {};
+		for (const dataType of DATA_TYPES) {
+			dataCache[dataType] = this.loadDataFile(basePath, dataType);
+		}
+		if (!parentDex) {
+			dataCache['Aliases'] = this.loadDataFile(basePath, 'Aliases');
+			// Formats are inherited by mods and used by Rulesets
+			this.formats.load();
+			const r = dataCache['Rulesets'];
+			for (const format of this.formats.all()) {
+				r[format.id] = {...format, ruleTable: null};
+			}
+		}
+		if (parentDex) {
+			dataCache['Aliases'] = parentDex.data['Aliases'];
+			for (const dataType of DATA_TYPES) {
+				if (COW_DATA_TYPES.includes(dataType)) continue; // ported to CoW
+				const parentTypedData: DexTable<any> = parentDex.data[dataType];
+				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
+				for (const entryId in parentTypedData) {
+					if (childTypedData[entryId] === null) {
+						// null means don't inherit
+						delete childTypedData[entryId];
+					} else if (!(entryId in childTypedData)) {
+						// If it doesn't exist it's inherited from the parent data
+						if (dataType === 'Pokedex') {
+							// Pokedex entries can be modified too many different ways
+							// e.g. inheriting different formats-data/learnsets
+							childTypedData[entryId] = this.deepClone(parentTypedData[entryId]);
+						} else {
+							childTypedData[entryId] = parentTypedData[entryId];
+						}
+					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
+						// {inherit: true} can be used to modify only parts of the parent data,
+						// instead of overwriting entirely
+						delete childTypedData[entryId].inherit;
+
+						// Merge parent into children entry, preserving existing childs' properties.
+						for (const key in parentTypedData[entryId]) {
+							if (key in childTypedData[entryId]) continue;
+							childTypedData[entryId][key] = parentTypedData[entryId][key];
+						}
+					}
+				}
+			}
+		}
+		this.dataCache = dataCache as DexTableData;
+
+		// Execute initialization script.
+		if (this.data.Scripts.init) this.data.Scripts.init.call(this);
+
 		this.abilities = new DexAbilities(this);
 		this.items = new DexItems(this);
 		this.moves = new DexMoves(this);
 		this.species = new DexSpecies(this);
 		this.conditions = new DexConditions(this);
-		this.natures = new Data.DexNatures(this);
-		this.types = new Data.DexTypes(this);
+		this.natures = new Data.DexNatures(this, dataCache.Natures, parentDex?.natures);
+		delete dataCache.Natures;
+		this.types = new Data.DexTypes(this, dataCache.TypeChart, parentDex?.types);
+		delete dataCache.TypeChart;
 		this.stats = new Data.DexStats(this);
 	}
 
+	// TODO: un-getter-ify
 	get data(): DexTableData {
-		return this.loadData();
+		return this.dataCache;
 	}
 
+	// TODO: deprecate
 	get dexes(): {[mod: string]: ModdedDex} {
 		this.includeMods();
 		return dexes;
 	}
 
-	mod(mod: string | undefined): ModdedDex {
-		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
-		return dexes[mod || 'base'];
+	mod(mod: string): ModdedDex {
+		if (!(mod in dexes) && Dex.scanMods().has(mod)) {
+			dexes[mod] = new ModdedDex(mod);
+		}
+		return dexes[mod];
 	}
 
 	forGen(gen: number) {
@@ -174,14 +261,15 @@ export class ModdedDex {
 	}
 
 	forFormat(format: Format | string): ModdedDex {
-		if (!this.modsLoaded) this.includeMods();
 		const mod = this.formats.get(format).mod;
-		return dexes[mod || BASE_MOD].includeData();
+		return this.mod(mod || BASE_MOD);
 	}
 
 	modData(dataType: DataType, id: string) {
+		if (COW_DATA_TYPES.includes(dataType)) throw new Error("todo: modify modData");
+		if (dataType === 'Natures' || dataType === 'TypeChart') throw new Error("unreachable, tmp for tsc");
 		if (this.isBase) return this.data[dataType][id];
-		if (this.data[dataType][id] !== dexes[this.parentMod].data[dataType][id]) return this.data[dataType][id];
+		if (this.data[dataType][id] !== this.mod(this.parentMod).data[dataType][id]) return this.data[dataType][id];
 		return (this.data[dataType][id] = Utils.deepClone(this.data[dataType][id]));
 	}
 
@@ -278,13 +366,13 @@ export class ModdedDex {
 				shortDesc: dataEntry.shortDesc,
 			};
 		}
-		const entry = this.loadTextData()[table][id];
+		const entry = textCache[table][id];
 		if (!entry) return null;
 		const descs = {
 			desc: '',
 			shortDesc: '',
 		};
-		for (let i = this.gen; i < dexes['base'].gen; i++) {
+		for (let i = this.gen; i < BASE_MOD_GEN; i++) {
 			const curDesc = entry[`gen${i}` as keyof typeof entry]?.desc;
 			const curShortDesc = entry[`gen${i}` as keyof typeof entry]?.shortDesc;
 			if (!descs.desc && curDesc) {
@@ -400,19 +488,32 @@ export class ModdedDex {
 			maxLd = 2;
 		}
 		searchResults = null;
-		for (const table of [...searchIn, 'Aliases'] as const) {
-			const searchObj = this.data[table] as DexTable<any>;
+		for (const table of searchIn) {
+			// all of these support .all()
+			const searchObj = this[searchObjects[table]];
 			if (!searchObj) continue;
 
-			for (const j in searchObj) {
-				const ld = Utils.levenshtein(cmpTarget, j, maxLd);
+			for (const j of searchObj.all()) {
+				const ld = Utils.levenshtein(cmpTarget, j.id, maxLd);
 				if (ld <= maxLd) {
-					const word = searchObj[j].name || j;
-					const results = this.dataSearch(word, searchIn, word);
+					const word = j.name;
+					const results = this.dataSearch(word, searchIn, !!word);
 					if (results) {
 						searchResults = results;
 						maxLd = ld;
 					}
+				}
+			}
+		}
+		// but Aliases doesn't support .all()
+		for (const j in this.data.Aliases) {
+			const ld = Utils.levenshtein(cmpTarget, j, maxLd);
+			if (ld <= maxLd) {
+				const word = j;
+				const results = this.dataSearch(word, searchIn, !!word);
+				if (results) {
+					searchResults = results;
+					maxLd = ld;
 				}
 			}
 		}
@@ -439,137 +540,109 @@ export class ModdedDex {
 		return {};
 	}
 
+	// TODO: deprecate
 	loadTextFile(
 		name: string, exportName: string
 	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
 		return require(`${DATA_DIR}/text/${name}`)[exportName];
 	}
 
+	// TODO: deprecate
 	includeMods(): this {
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
 		for (const mod of fs.readdirSync(MODS_DIR)) {
-			dexes[mod] = new ModdedDex(mod);
+			this.mod(mod);
 		}
 		this.modsLoaded = true;
 
 		return this;
 	}
 
+	scanMods(force = false): Set<string> {
+		if (force || !modsScanned) {
+			modsScanned = true;
+			for (const mod in dexes) {
+				detectedMods.add(mod);
+			}
+			for (const mod of fs.readdirSync(MODS_DIR)) {
+				detectedMods.add(mod);
+			}
+		}
+		return detectedMods;
+	}
+
 	includeModData(): this {
-		for (const mod in this.dexes) {
-			dexes[mod].includeData();
+		for (const mod in this.scanMods()) {
+			this.mod(mod);
 		}
 		return this;
 	}
 
+	// TODO: deprecate
 	includeData(): this {
-		this.loadData();
+		console.log("dex.includeData() - This is no longer necessary to call!");
 		return this;
 	}
 
+	// TODO: deprecate
 	loadTextData() {
-		if (dexes['base'].textCache) return dexes['base'].textCache;
-		dexes['base'].textCache = {
-			Pokedex: this.loadTextFile('pokedex', 'PokedexText') as DexTable<PokedexText>,
-			Moves: this.loadTextFile('moves', 'MovesText') as DexTable<MoveText>,
-			Abilities: this.loadTextFile('abilities', 'AbilitiesText') as DexTable<AbilityText>,
-			Items: this.loadTextFile('items', 'ItemsText') as DexTable<ItemText>,
-			Default: this.loadTextFile('default', 'DefaultText') as DexTable<DefaultText>,
-		};
-		return dexes['base'].textCache;
+		return textCache;
 	}
 
+	// TODO: deprecate
 	loadData(): DexTableData {
-		if (this.dataCache) return this.dataCache;
-		dexes['base'].includeMods();
-		const dataCache: {[k in keyof DexTableData]?: any} = {};
-
-		const basePath = this.dataDir + '/';
-
-		const Scripts = this.loadDataFile(basePath, 'Scripts');
-		this.parentMod = this.isBase ? '' : (Scripts.inherit || 'base');
-
-		let parentDex;
-		if (this.parentMod) {
-			parentDex = dexes[this.parentMod];
-			if (!parentDex || parentDex === this) {
-				throw new Error(
-					`Unable to load ${this.currentMod}. 'inherit' in scripts.ts should specify a parent mod from which to inherit data, or must be not specified.`
-				);
-			}
-		}
-
-		if (!parentDex) {
-			// Formats are inherited by mods and used by Rulesets
-			this.includeFormats();
-		}
-		for (const dataType of DATA_TYPES.concat('Aliases')) {
-			const BattleData = this.loadDataFile(basePath, dataType);
-			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
-			if (dataType === 'Rulesets' && !parentDex) {
-				for (const format of this.formats.all()) {
-					BattleData[format.id] = {...format, ruleTable: null};
-				}
-			}
-		}
-		if (parentDex) {
-			for (const dataType of DATA_TYPES) {
-				const parentTypedData: DexTable<any> = parentDex.data[dataType];
-				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
-				for (const entryId in parentTypedData) {
-					if (childTypedData[entryId] === null) {
-						// null means don't inherit
-						delete childTypedData[entryId];
-					} else if (!(entryId in childTypedData)) {
-						// If it doesn't exist it's inherited from the parent data
-						if (dataType === 'Pokedex') {
-							// Pokedex entries can be modified too many different ways
-							// e.g. inheriting different formats-data/learnsets
-							childTypedData[entryId] = this.deepClone(parentTypedData[entryId]);
-						} else {
-							childTypedData[entryId] = parentTypedData[entryId];
-						}
-					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
-						// {inherit: true} can be used to modify only parts of the parent data,
-						// instead of overwriting entirely
-						delete childTypedData[entryId].inherit;
-
-						// Merge parent into children entry, preserving existing childs' properties.
-						for (const key in parentTypedData[entryId]) {
-							if (key in childTypedData[entryId]) continue;
-							childTypedData[entryId][key] = parentTypedData[entryId][key];
-						}
-					}
-				}
-			}
-			dataCache['Aliases'] = parentDex.data['Aliases'];
-		}
-
-		// Flag the generation. Required for team validator.
-		this.gen = dataCache.Scripts.gen;
-		if (!this.gen) throw new Error(`Mod ${this.currentMod} needs a generation number in scripts.js`);
-		this.dataCache = dataCache as DexTableData;
-
-		// Execute initialization script.
-		if (Scripts.init) Scripts.init.call(this);
-
+		console.log("dex.loadData() - This is no longer necessary to call!");
 		return this.dataCache;
 	}
 
+	// TODO: deprecate
 	includeFormats(): this {
-		this.formats.load();
+		console.log("dex.includeFormats() - This is no longer necessary to call!");
 		return this;
 	}
 }
 
+detectedMods.add('base');
+detectedMods.add(BASE_MOD);
 dexes['base'] = new ModdedDex();
 
 // "gen9" is an alias for the current base data
 dexes[BASE_MOD] = dexes['base'];
 
 export const Dex = dexes['base'];
+
+// populate _toIDCache with data from base mod.
+// It's representative enough for all other mods, so we don't need to dynamically grow the cache.
+{
+	const cache = Data._toIDCache;
+	const sources: readonly (readonly BasicEffect[])[] = [
+		Dex.species.all(), Dex.items.all(), Dex.moves.all(),
+		Dex.types.all() as any as readonly BasicEffect[], Dex.abilities.all(), Dex.natures.all(),
+	];
+	for (const source of sources) {
+		for (const effect of source) {
+			const name = effect.name;
+			if (!name) continue;
+			// we can't just use effect.id because of cases like hidden power
+			const id = toID(name);
+			const old = cache.get(name);
+			if (old === undefined) cache.set(name, id);
+			else if (old !== id) throw new Error("internal error with ID logic");
+		}
+	}
+	const aliases = Dex.data.Aliases;
+	for (const k in aliases) {
+		const name = aliases[k];
+		const id = toID(name);
+		const old = cache.get(name);
+		if (old === undefined) cache.set(name, id);
+		else if (old !== id) throw new Error("internal error with ID logic");
+	}
+	Object.freeze(cache);
+}
+
 export namespace Dex {
 	export type Species = import('./dex-species').Species;
 	export type Item = import('./dex-items').Item;

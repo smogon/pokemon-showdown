@@ -91,7 +91,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require('../sim/dex').Dex.includeData();
+	global.Dex = require('../sim/dex').Dex;
 	global.Teams = require('../sim/teams').Teams;
 
 	// eslint-disable-next-line no-eval

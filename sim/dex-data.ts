@@ -6,6 +6,15 @@
  */
 import {Utils} from '../lib';
 
+/** Unfortunately we do for..in too much to want to deal with the casts */
+export interface DexTable<T> {[id: string]: T}
+
+
+/**
+* Do not insert user input, only populate with trusted data.
+* Populated by ./sim/dex.ts then frozen.
+*/
+export const _toIDCache: Map<string, ID> = new Map();
 /**
 * Converts anything to an ID. An ID must have only lowercase alphanumeric
 * characters.
@@ -20,18 +29,18 @@ import {Utils} from '../lib';
 * commonly it's used.
 */
 export function toID(text: any): ID {
-	// The sucrase transformation of optional chaining is too expensive to be used in a hot function like this.
-	/* eslint-disable @typescript-eslint/prefer-optional-chain */
-	if (text && text.id) {
-		text = text.id;
-	} else if (text && text.userid) {
-		text = text.userid;
-	} else if (text && text.roomid) {
-		text = text.roomid;
+	if (typeof text === 'string') {
+	        // 99% case, skip checks
+	} else {
+	        if (text) text = text.id || text.userid || text.roomid || text;
+	        if (typeof text === 'number') text = '' + text;
+	        else if (typeof text !== 'string') return '';
 	}
-	if (typeof text !== 'string' && typeof text !== 'number') return '';
-	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
-	/* eslint-enable @typescript-eslint/prefer-optional-chain */
+	// very often text is already a valid ID.
+	if (/^[a-z0-9]*$/.test(text)) return text;
+	// Next, we often produce the same IDs many times.
+	// Otherwise, fallback to the generic case
+	return _toIDCache.get(text) || text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 }
 
 export class BasicEffect implements EffectData {
@@ -101,15 +110,18 @@ export class BasicEffect implements EffectData {
 	/** ??? */
 	sourceEffect: string;
 
-	constructor(data: AnyObject) {
-		this.exists = true;
-		Object.assign(this, data);
-
+	/**
+	 * Pass 'false' for the second parameter if you only want the declared fields of BasicEffect
+	 * to be initialized - the other properties of data will not be copied.
+	 * This is to help w/ V8 hidden classes (want to init fields in consistent order)
+	 */
+	constructor(data: AnyObject, copyOtherFields = true) {
 		this.name = Utils.getString(data.name).trim();
+		// TODO: this logic needs to be in Moves constructor
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Utils.getString(data.fullname) || this.name;
 		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
-		this.exists = !!(this.exists && this.id);
+		this.exists = !!((data.exists || !('exists' in data)) && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
 		this.shortDesc = data.shortDesc || '';
@@ -121,6 +133,13 @@ export class BasicEffect implements EffectData {
 		this.status = data.status as ID || undefined;
 		this.weather = data.weather as ID || undefined;
 		this.sourceEffect = data.sourceEffect || '';
+
+		if (copyOtherFields) {
+			for (const k of Object.keys(data)) { // TODO: migrate to for..in + Object.hasOwn
+				if (k in this) continue;
+				(this as any)[k] = data[k];
+			}
+		}
 	}
 
 	toString() {
@@ -133,15 +152,18 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 	readonly plus?: StatIDExceptHP;
 	readonly minus?: StatIDExceptHP;
 	constructor(data: AnyObject) {
-		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		super(data, false);
 
 		this.fullname = `nature: ${this.name}`;
 		this.effectType = 'Nature';
 		this.gen = 3;
 		this.plus = data.plus || undefined;
 		this.minus = data.minus || undefined;
+
+		for (const k of Object.keys(data)) { // TODO: migrate to for..in + Object.hasOwn
+			if (k in this) continue;
+			(this as any)[k] = data[k];
+		}
 	}
 }
 
@@ -150,56 +172,101 @@ export interface NatureData {
 	plus?: StatIDExceptHP;
 	minus?: StatIDExceptHP;
 }
+const NATURE_DATA_KEYS: readonly (keyof NatureData)[] = Object.freeze(['name', 'plus', 'minus']);
 
 export type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
 
 export interface NatureDataTable {[natureid: IDEntry]: NatureData}
+export interface ModdedNatureDataTable {[natureid: IDEntry]: ModdedNatureData}
 
 
 export class DexNatures {
 	readonly dex: ModdedDex;
 	readonly natureCache = new Map<ID, Nature>();
-	allCache: readonly Nature[] | null = null;
+	allCache: readonly Nature[];
 
-	constructor(dex: ModdedDex) {
+	constructor(dex: ModdedDex, patches: ModdedNatureDataTable, parent?: DexNatures) {
 		this.dex = dex;
+		let patchesEmpty = true;
+		for (const k in patches) { // eslint-disable-line @typescript-eslint/no-unused-vars
+			patchesEmpty = false;
+			break;
+		}
+		// If we're at the transition point where Natures become nonstandard, we can't inherit parent's caches.
+		// gen = 3 is hard-coded in the Nature constructor
+		if (parent && patchesEmpty && !(dex.gen < 3 && parent.dex.gen >= 3)) {
+			this.allCache = parent.allCache;
+			this.natureCache = parent.natureCache;
+			return;
+		}
+		const allCache = [];
+		if (parent) {
+			for (const parentNature of parent.all()) {
+				// Note: if id in ModdedNatureDataTable doesn't follow the same rules as toID,
+				// this will misbehave in non-obvious ways.
+				// This is not a new problem, just documenting it.
+				const id = parentNature.id;
+				let patchEntry = patches[id];
+				// null means don't inherit
+				if (patchEntry === null) {
+					delete patches[id];
+					continue;
+				}
+				let nature;
+				// need a new Nature if newly nonStandard.
+				// i.e. if the condition holds and parent doesn't already have the value we would set
+				const becameNonstandard = (parentNature.gen > dex.gen) && (parentNature.isNonstandard !== 'Future');
+				if (becameNonstandard && !patchEntry) patchEntry = {inherit: true};
+				if (patchEntry) {
+					if ('inherit' in patchEntry && patchEntry.inherit === true) {
+						delete (patchEntry as any).inherit;
+						for (const field of NATURE_DATA_KEYS) {
+							if (field in patchEntry) continue;
+							(patchEntry as any)[field] = parentNature[field];
+						}
+						// patchEntry is now a complete NatureData
+					}
+					nature = new Nature(patchEntry);
+					if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
+					dex.deepFreeze(nature);
+					delete patches[id];
+				} else {
+					nature = parentNature;
+				}
+				this.natureCache.set(id, nature);
+				allCache.push(nature);
+			}
+		}
+		for (const _id in patches) {
+			const id = _id as ID;
+			const natureData = patches[id];
+			const nature = new Nature(natureData);
+			if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
+			this.natureCache.set(id, dex.deepFreeze(nature));
+			allCache.push(nature);
+		}
+		this.allCache = Object.freeze(allCache);
 	}
 
 	get(name: string | Nature): Nature {
 		if (name && typeof name !== 'string') return name;
-
 		return this.getByID(toID(name));
 	}
+
 	getByID(id: ID): Nature {
 		let nature = this.natureCache.get(id);
 		if (nature) return nature;
 
 		if (this.dex.data.Aliases.hasOwnProperty(id)) {
 			nature = this.get(this.dex.data.Aliases[id]);
-			if (nature.exists) {
-				this.natureCache.set(id, nature);
-			}
+			if (nature.exists) this.natureCache.set(id, nature);
 			return nature;
-		}
-		if (id && this.dex.data.Natures.hasOwnProperty(id)) {
-			const natureData = this.dex.data.Natures[id];
-			nature = new Nature(natureData);
-			if (nature.gen > this.dex.gen) nature.isNonstandard = 'Future';
 		} else {
-			nature = new Nature({name: id, exists: false});
+			return new Nature({name: id, exists: false});
 		}
-
-		if (nature.exists) this.natureCache.set(id, this.dex.deepFreeze(nature));
-		return nature;
 	}
 
 	all(): readonly Nature[] {
-		if (this.allCache) return this.allCache;
-		const natures = [];
-		for (const id in this.dex.data.Natures) {
-			natures.push(this.getByID(id as ID));
-		}
-		this.allCache = Object.freeze(natures);
 		return this.allCache;
 	}
 }
@@ -210,6 +277,7 @@ export interface TypeData {
 	HPivs?: SparseStatsTable;
 	isNonstandard?: Nonstandard | null;
 }
+const TYPE_DATA_KEYS: readonly (keyof TypeData)[] = Object.freeze(['damageTaken', 'HPivs', 'HPdvs', 'isNonstandard']);
 
 export type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & {inherit: true};
 export interface TypeDataTable {[typeid: IDEntry]: TypeData}
@@ -217,6 +285,7 @@ export interface ModdedTypeDataTable {[typeid: IDEntry]: ModdedTypeData}
 
 type TypeInfoEffectType = 'Type' | 'EffectType';
 
+const EMPTY_OBJECT = {};
 export class TypeInfo implements Readonly<TypeData> {
 	/**
 	 * ID. This will be a lowercase version of the name with all the
@@ -254,34 +323,103 @@ export class TypeInfo implements Readonly<TypeData> {
 	/** The DVs to get this Type Hidden Power (in gen 2). */
 	readonly HPdvs: SparseStatsTable;
 
-	constructor(data: AnyObject) {
-		this.exists = true;
-		Object.assign(this, data);
-
-		this.name = data.name;
+	/**
+	 * If 'true' is passed for the 'canCacheFields' parameter, objects may be re-used
+	 * across instances of TypeInfo. Basically, if you're going to immediately deepFreeze this,
+	 * you can safely pass true.
+	 */
+	constructor(data: AnyObject, canCacheFields = false) {
+		// initialize required fields in a consistent order bc of V8's hidden classes
 		this.id = data.id;
+		this.name = data.name;
 		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
-		this.exists = !!(this.exists && this.id);
+		this.exists = !!((data.exists || !('exists' in data)) && data.id);
 		this.gen = data.gen || 0;
 		this.isNonstandard = data.isNonstandard || null;
-		this.damageTaken = data.damageTaken || {};
-		this.HPivs = data.HPivs || {};
-		this.HPdvs = data.HPdvs || {};
+		this.damageTaken = data.damageTaken || (canCacheFields ? EMPTY_OBJECT : {});
+		this.HPivs = data.HPivs || (canCacheFields ? EMPTY_OBJECT : {});
+		this.HPdvs = data.HPdvs || (canCacheFields ? EMPTY_OBJECT : {});
+		// handle extra fields, if any
+		// DexItems passes in ItemData, which doesn't have extra fields,
+		// so DexItems gets a consistent object shape / hidden class (good).
+		for (const k of Object.keys(data)) { // TODO: replace with for..in + Object.hasOwn
+			if (k in this) continue;
+			(this as any)[k] = data[k];
+		}
 	}
 
 	toString() {
 		return this.name;
 	}
 }
+const EMPTY_TYPE_INFO = Utils.deepFreeze(new TypeInfo({name: '', id: '', exists: false, effectType: 'EffectType'}));
 
 export class DexTypes {
 	readonly dex: ModdedDex;
 	readonly typeCache = new Map<ID, TypeInfo>();
-	allCache: readonly TypeInfo[] | null = null;
-	namesCache: readonly string[] | null = null;
+	allCache: readonly TypeInfo[];
+	namesCache: readonly string[];
 
-	constructor(dex: ModdedDex) {
+	constructor(dex: ModdedDex, patches: ModdedTypeDataTable, parent?: DexTypes) {
 		this.dex = dex;
+
+		let patchesEmpty = true;
+		for (const k in patches) { // eslint-disable-line @typescript-eslint/no-unused-vars
+			patchesEmpty = false;
+			break;
+		}
+		if (parent && patchesEmpty) {
+			this.allCache = parent.allCache;
+			this.namesCache = parent.namesCache;
+			this.typeCache = parent.typeCache;
+			return;
+		}
+		const allCache = [];
+		const namesCache = [];
+		if (parent) {
+			for (const parentType of parent.all()) {
+				const id = parentType.id;
+				const patchEntry = patches[id];
+				// null means don't inherit
+				if (patchEntry === null) {
+					delete patches[id];
+					continue;
+				}
+				let type;
+				// if patchEntry present, construct
+				// else re-use parent's object
+				if (patchEntry) {
+					// if inherit, copy fields from parent into child
+					if ('inherit' in patchEntry && patchEntry.inherit === true) {
+						delete (patchEntry as any).inherit;
+						for (const field of TYPE_DATA_KEYS) {
+							if (field in patchEntry) continue;
+							// nonsense to appease tsc.
+							(patchEntry as any)[field] = parentType[field];
+						}
+						// patchEntry is now a complete TypeData
+					}
+					type = new TypeInfo({name: parentType.name, id, ...patchEntry}, true);
+					type = dex.deepFreeze(type);
+					delete patches[id];
+				} else {
+					type = parentType;
+				}
+				this.typeCache.set(id, type);
+				allCache.push(type);
+				if (!type.isNonstandard) namesCache.push(type.name);
+			}
+		}
+		for (const _id in patches) {
+			const id = _id as ID;
+			const typeName = id.charAt(0).toUpperCase() + id.substr(1);
+			const type = new TypeInfo({name: typeName, id, ...patches[id]}, true);
+			this.typeCache.set(id, dex.deepFreeze(type));
+			allCache.push(type);
+			if (!type.isNonstandard) namesCache.push(type.name);
+		}
+		this.allCache = Object.freeze(allCache);
+		this.namesCache = Object.freeze(namesCache);
 	}
 
 	get(name: string | TypeInfo): TypeInfo {
@@ -290,41 +428,27 @@ export class DexTypes {
 	}
 
 	getByID(id: ID): TypeInfo {
-		let type = this.typeCache.get(id);
-		if (type) return type;
-
-		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
-			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
-		} else {
-			type = new TypeInfo({name: typeName, id, exists: false, effectType: 'EffectType'});
-		}
-
-		if (type.exists) this.typeCache.set(id, this.dex.deepFreeze(type));
-		return type;
+		if (id === '') return EMPTY_TYPE_INFO;
+		return this.typeCache.get(id) ||
+			new TypeInfo({
+				name: id.charAt(0).toUpperCase() + id.substr(1),
+				id,
+				exists: false,
+				effectType: 'EffectType',
+			});
 	}
 
 	names(): readonly string[] {
-		if (this.namesCache) return this.namesCache;
-
-		this.namesCache = this.all().filter(type => !type.isNonstandard).map(type => type.name);
-
 		return this.namesCache;
 	}
 
 	isName(name: string): boolean {
 		const id = name.toLowerCase();
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-		return name === typeName && this.dex.data.TypeChart.hasOwnProperty(id);
+		return name === typeName && this.typeCache.has(id as ID);
 	}
 
 	all(): readonly TypeInfo[] {
-		if (this.allCache) return this.allCache;
-		const types = [];
-		for (const id in this.dex.data.TypeChart) {
-			types.push(this.getByID(id as ID));
-		}
-		this.allCache = Object.freeze(types);
 		return this.allCache;
 	}
 }

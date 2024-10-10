@@ -567,7 +567,6 @@ export class DexFormats {
 
 	load(): this {
 		if (!this.dex.isBase) throw new Error(`This should only be run on the base mod`);
-		this.dex.includeMods();
 		if (this.formatsListCache) return this;
 
 		const formatsList = [];
@@ -611,7 +610,9 @@ export class DexFormats {
 			if (format.bestOfDefault === undefined) format.bestOfDefault = false;
 			if (format.teraPreviewDefault === undefined) format.teraPreviewDefault = false;
 			if (format.mod === undefined) format.mod = 'gen9';
-			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
+			if (!this.dex.scanMods().has(format.mod)) {
+				throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
+			}
 
 			const ruleset = new Format(format);
 			this.rulesetCache.set(id, ruleset);
@@ -962,15 +963,28 @@ export class DexFormats {
 		}
 		const ruleid = id;
 		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
+		const cowTypes = ['nature', 'ability']; // dex.data won't work for these types, need different path
 		for (const matchType of matchTypes) {
 			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
+
+			// the transition period will be ugly, but temporary.
+			if (cowTypes.includes(matchType)) {
+				let table;
+				switch (matchType) {
+				case 'nature': table = this.dex.natures; break;
+				case 'ability': table = this.dex.abilities; break;
+				default: throw new Error('Unrecognized CoW match type.');
+				}
+				if (table.getByID(id).exists) {
+					matches.push(matchType + ':' + id);
+				}
+				continue;
+			}
 			let table;
 			switch (matchType) {
 			case 'pokemon': table = this.dex.data.Pokedex; break;
 			case 'move': table = this.dex.data.Moves; break;
 			case 'item': table = this.dex.data.Items; break;
-			case 'ability': table = this.dex.data.Abilities; break;
-			case 'nature': table = this.dex.data.Natures; break;
 			case 'pokemontag':
 				// valid pokemontags
 				const validTags = [

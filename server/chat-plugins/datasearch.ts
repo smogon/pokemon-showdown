@@ -52,7 +52,7 @@ type Direction = 'less' | 'greater' | 'equal';
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
-const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
+const dexesHelp = Array.from(global.Dex?.scanMods() || []).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 
 function escapeHTML(str?: string) {
 	if (!str) return '';
@@ -608,7 +608,7 @@ function getMod(target: string) {
 	const arr = target.split(',').map(x => x.trim());
 	const modTerm = arr.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
-		return sanitizedStr.startsWith('mod=') && Dex.dexes[toID(sanitizedStr.split('=')[1])];
+		return sanitizedStr.startsWith('mod=') && Dex.mod(toID(sanitizedStr.split('=')[1]));
 	});
 	const count = arr.filter(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
@@ -624,8 +624,161 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	if (c > 1) {
 		return {error: `You can't run searches for multiple mods.`};
 	}
+	const assert = require('node:assert/strict');
+	function deepEquals(left: any, right: any) {
+		let eq = true;
+		try {
+			assert.deepEqual(left, right);
+		} catch (e) {
+			eq = false;
+		}
+		return eq;
+	}
+	// temporary hack for profiling and testing
+	if (usedMod === 'gen1' || usedMod === 'gen2') {
+		const mode = (usedMod === 'gen1') ? 'prof' : 'dump';
+		// const v8 = require('v8');
+
+		global.gc();
+		// v8.writeHeapSnapshot();
+		console.log("start:", process.memoryUsage());
+
+		// Drives the dedup script. Can add an entry for any relevant field of mod
+		const dedup_tables: any = {
+			// formats: { // this is only supposed to be loaded by the base mod
+			//	bucket_key: function(f) { return f.name; },
+			//	get_iter: function(m) { return m.formats.all(); },
+			// },
+			abilities: {
+				bucket_key: (a: any) => a.id,
+				get_iter: (m: any) => m.abilities.all(),
+			},
+			items: {
+				bucket_key: (i: any) => i.id,
+				get_iter: (m: any) => m.items.all(),
+			},
+			moves: {
+				bucket_key: (m: any) => m.id,
+				get_iter: (m: any) => m.moves.all(),
+			},
+			species: {
+				bucket_key: (s: any) => s.id,
+				get_iter: (m: any) => m.species.all(),
+			},
+			learnsets: {
+				bucket_key: (l: any) => l.species.id,
+				get_iter: (m: any) => m.species.all().map((s: any) => m.species.getLearnsetData(s.id)),
+			},
+			// conditions: { // would have to iterate over conditions to populate the cache
+			//	bucket_key: function(c) { return f.id; },
+			//	get_iter: function(m) { return m.conditions.conditionCache.values(); },
+			// },
+			natures: {
+				bucket_key: (n: any) => n.name,
+				get_iter: (m: any) => m.natures.all(),
+			},
+			types: {
+				bucket_key: (t: any) => t.id,
+				get_iter: (m: any) => m.types.all(),
+			},
+		};
+		for (const k of Object.keys(dedup_tables)) {
+			const o = dedup_tables[k];
+			o.buckets = new Map();
+			o.mod_added = new Map();
+			o.counts_table = new Map();
+			o.uniq_objs = new Set();
+			o.num_uniq_vals = 0;
+		}
+		const mod_list = ["base", "gen9", "fullpotential", "gen1", "gen1jpn", "gen1rbycap", "gen1stadium",
+			"gen2", "gen2stadium2", "gen3", "gen4", "gen4pt", "gen5", "gen5bw1", "gen6",
+			"gen6megasrevisited", "gen6xy", "gen7", "gen7letsgo", "gen7pokebilities", "gen7sm", "gen8",
+			"gen8bdsp", "gen8dlc1", "gen8linked", "gen9dlc1", "gen9predlc", "gen9ssb", "gennext",
+			"mixandmega", "partnersincrime", "pokebilities", "pokemoves", "randomroulette", "sharedpower",
+			"sharingiscaring", "thecardgame", "trademarked",
+		];
+		let mod_idx = 0;
+		const fs = require('node:fs');
+		const iso_date = (new Date()).toISOString();
+		if (mode === 'dump') {
+			fs.mkdirSync(`./tmp/${iso_date}`, {recursive: true});
+			const content1 = JSON.stringify(Dex.data.Aliases, null, 2);
+			fs.writeFileSync(`./tmp/${iso_date}/aliases.json`, content1);
+			const content2 = JSON.stringify(Dex.loadTextData(), null, 2);
+			fs.writeFileSync(`./tmp/${iso_date}/text.json`, content2);
+		}
+		for (const mod_str of mod_list) {
+			console.log('now doing', mod_str);
+			const mod = Dex.mod(mod_str);
+			if (mode === 'dump') fs.mkdirSync(`./tmp/${iso_date}/${mod_str}`, {recursive: true});
+			for (const [label, v1] of Object.entries(dedup_tables)) {
+				const v: any = v1;
+				const dataset = v.get_iter(mod);
+
+				if (mode === 'dump') {
+					const sortedData = Utils.sortBy(Array.from(dataset), v.bucket_key);
+					const content = JSON.stringify(sortedData, null, 2);
+					fs.writeFileSync(`./tmp/${iso_date}/${mod_str}/${label}.json`, content);
+					continue;
+				}
+
+				let numNew = 0;
+				for (const data of dataset) {
+					if (!data.exists) {
+						console.log(mod_str, data.id);
+					}
+					v.uniq_objs.add(data);
+					const bk_id = v.bucket_key(data);
+					let bucket = v.buckets.get(bk_id);
+					// const d = {...data};
+					// delete d.name;
+					if (!bucket) {
+						bucket = [];
+						v.buckets.set(bk_id, bucket);
+					}
+					if (!bucket.some((other: any) => deepEquals(data, other))) {
+						bucket.push(data);
+						numNew++;
+					}
+				}
+				v.mod_added.set(mod_str, numNew);
+			}
+			if (mode === 'prof' && mod_idx++ === 17) {
+				console.log(process.memoryUsage());
+				console.log();
+			}
+		}
+		if (mode === 'dump') {
+			return {reply: "placeholder"};
+		}
+		for (const [k, v1] of Object.entries(dedup_tables)) {
+			const v: any = v1;
+			for (const bucket of v.buckets.values()) {
+				const old_count = v.counts_table.get(bucket.length) || 0;
+				v.counts_table.set(bucket.length, old_count + 1);
+				v.num_uniq_vals += bucket.length;
+			}
+			console.log('\n\tmod sub data:', k);
+			console.log("num unique ids: ", v.buckets.size);
+			console.log("key: dup count, value: frequency", v.counts_table);
+			console.log("amt added by each mod (depends on mod order):", v.mod_added);
+			console.log("num unique objects:", v.uniq_objs.size);
+			console.log("num unique values: ", v.num_uniq_vals);
+			// probably unnecessary but w/e
+			v.mod_added.clear();
+			v.buckets.clear();
+			v.counts_table.clear();
+			v.uniq_objs.clear();
+		}
+		global.gc();
+		console.log("final:", process.memoryUsage());
+		console.log();
+		// v8.writeHeapSnapshot();
+		return {reply: "placeholder"};
+	}
 
 	const mod = Dex.mod(usedMod || 'base');
+
 	const allTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -2273,9 +2426,10 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		let type = "";
 
 		for (let word of searchedWords) {
-			if (word in dex.data.TypeChart) {
+			const typeInfo = dex.types.getByID(word as ID);
+			if (typeInfo.exists) {
 				if (type) return {error: "Only specify natural gift type once."};
-				type = word.charAt(0).toUpperCase() + word.slice(1);
+				type = typeInfo.name;
 			} else {
 				if (word.endsWith('bp') && word.length > 2) word = word.slice(0, -2);
 				if (Number.isInteger(Number(word))) {
@@ -2601,7 +2755,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	}
 	let gen;
 	if (!format.exists) {
-		const dex = Dex.mod(formatid).includeData();
+		const dex = Dex.mod(formatid);
 		// can happen if you hotpatch formats without hotpatching chat
 		if (!dex) return {error: `"${formatid}" is not a supported format.`};
 
@@ -2847,7 +3001,6 @@ if (!PM.isParentProcess) {
 
 	global.Dex = require('../../sim/dex').Dex;
 	global.toID = Dex.toID;
-	Dex.includeData();
 
 	// @ts-ignore
 	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval

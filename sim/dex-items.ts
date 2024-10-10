@@ -1,3 +1,4 @@
+import {Utils} from '../lib';
 import type {PokemonEventMethods, ConditionData} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
@@ -154,6 +155,8 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	}
 }
 
+const EMPTY_ITEM = Utils.deepFreeze(new Item({name: '', exists: false}));
+
 export class DexItems {
 	readonly dex: ModdedDex;
 	readonly itemCache = new Map<ID, Item>();
@@ -165,13 +168,13 @@ export class DexItems {
 
 	get(name?: string | Item): Item {
 		if (name && typeof name !== 'string') return name;
-
-		name = (name || '').trim();
-		const id = toID(name);
+		let id = '' as ID;
+		if (name) id = toID(name.trim());
 		return this.getByID(id);
 	}
 
 	getByID(id: ID): Item {
+		if (id === '') return EMPTY_ITEM;
 		let item = this.itemCache.get(id);
 		if (item) return item;
 		if (this.dex.data.Aliases.hasOwnProperty(id)) {

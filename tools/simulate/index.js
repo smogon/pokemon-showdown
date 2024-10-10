@@ -37,9 +37,7 @@ if (process.argv[2]) {
 }
 
 require('child_process').execSync('node ' + __dirname + "/../../build");
-const Dex = require('../../sim/dex').Dex;
 global.Config = {allowrequestingties: false};
-Dex.includeModData();
 
 const {ExhaustiveRunner} = require('../../sim/tools/exhaustive-runner');
 const {MultiRandomRunner} = require('../../sim/tools/multi-random-runner');
