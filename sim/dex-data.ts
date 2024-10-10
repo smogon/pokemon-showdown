@@ -6,10 +6,6 @@
  */
 import {Utils} from '../lib';
 
-/** Unfortunately we do for..in too much to want to deal with the casts */
-export interface DexTable<T> {[id: string]: T}
-
-
 /**
 * Do not insert user input, only populate with trusted data.
 * Populated by ./sim/dex.ts then frozen.
@@ -166,6 +162,7 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 		}
 	}
 }
+const EMPTY_NATURE = Utils.deepFreeze(new Nature({name: '', exists: false}));
 
 export interface NatureData {
 	name: string;
@@ -253,17 +250,23 @@ export class DexNatures {
 		return this.getByID(toID(name));
 	}
 
-	getByID(id: ID): Nature {
-		let nature = this.natureCache.get(id);
-		if (nature) return nature;
-
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			nature = this.get(this.dex.data.Aliases[id]);
-			if (nature.exists) this.natureCache.set(id, nature);
-			return nature;
-		} else {
-			return new Nature({name: id, exists: false});
+	// TBD naming
+	// Returns null if ID is invalid
+	getByID2(id: ID): Nature | null {
+		if (id === '') return null;
+		let nature = this.natureCache.get(id) || null;
+		if (!nature && this.dex.data.Aliases.hasOwnProperty(id)) {
+			nature = this.getByID2(toID(this.dex.data.Aliases[id]));
+			// TODO: I don't think it's possible for .exists to be false here
+			// We probably have the invariant that natureCache only contains .exists=true
+			if (nature && nature.exists) this.natureCache.set(id, nature);
 		}
+		return nature;
+	}
+
+	getByID(id: ID): Nature {
+		if (id === '') return EMPTY_NATURE;
+		return this.getByID2(id) || new Nature({name: id, exists: false});
 	}
 
 	all(): readonly Nature[] {
@@ -427,9 +430,14 @@ export class DexTypes {
 		return this.getByID(toID(name));
 	}
 
+	getByID2(id: ID): TypeInfo | null {
+		if (id === '') return null;
+		return this.typeCache.get(id) || null;
+	}
+
 	getByID(id: ID): TypeInfo {
 		if (id === '') return EMPTY_TYPE_INFO;
-		return this.typeCache.get(id) ||
+		return this.getByID2(id) ||
 			new TypeInfo({
 				name: id.charAt(0).toUpperCase() + id.substr(1),
 				id,

@@ -658,9 +658,11 @@ export class DexConditions {
 
 		let found;
 		if (id.startsWith('item:')) {
+			// FIXME: this is either wrong or inefficient.
 			const item = this.dex.items.getByID(id.slice(5) as ID);
 			condition = {...item, id: 'item:' + item.id as ID} as any as Condition;
 		} else if (id.startsWith('ability:')) {
+			// FIXME: this is either wrong or inefficient.
 			const ability = this.dex.abilities.getByID(id.slice(8) as ID);
 			condition = {...ability, id: 'ability:' + ability.id as ID} as any as Condition;
 		} else if (this.dex.data.Rulesets.hasOwnProperty(id)) {
@@ -672,7 +674,7 @@ export class DexConditions {
 			condition = new Condition({name: id, ...this.dex.data.Conditions[id]});
 		} else if (
 			(this.dex.data.Moves.hasOwnProperty(id) && (found = this.dex.data.Moves[id]).condition) ||
-			((found = this.dex.abilities.getByID(id)).exists && found.condition) ||
+			((found = this.dex.abilities.getByID2(id)) && found.condition) ||
 			(this.dex.data.Items.hasOwnProperty(id) && (found = this.dex.data.Items[id]).condition)
 		) {
 			condition = new Condition({name: found.name || id, ...found.condition});
@@ -684,6 +686,7 @@ export class DexConditions {
 			condition = new Condition({name: id, exists: false});
 		}
 
+		// FIXME: do you really want to be caching this unconditionally?
 		this.conditionCache.set(id, this.dex.deepFreeze(condition));
 		return condition;
 	}

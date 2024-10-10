@@ -940,7 +940,7 @@ export class DexFormats {
 				case 'ability': table = this.dex.abilities; break;
 				default: throw new Error('Unrecognized CoW match type.');
 				}
-				if (table.getByID(id).exists) {
+				if (table.getByID2(id)?.exists) {
 					matches.push(matchType + ':' + id);
 				}
 				continue;

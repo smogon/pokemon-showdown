@@ -120,20 +120,19 @@ export class DexAbilities {
 		return this.getByID(id);
 	}
 
-	getByID(id: ID): Ability {
-		if (id === '') return EMPTY_ABILITY;
-		let ability = this.abilityCache.get(id);
-		if (ability) return ability;
-
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			ability = this.get(this.dex.data.Aliases[id]);
-			this.abilityCache.set(id, ability);
-		} else {
-			ability = new Ability({
-				id, name: id, exists: false,
-			});
+	getByID2(id: ID): Ability | null {
+		if (id === '') return null;
+		let ability = this.abilityCache.get(id) || null;
+		if (!ability && this.dex.data.Aliases.hasOwnProperty(id)) {
+			ability = this.getByID2(toID(this.dex.data.Aliases[id]));
+			if (ability && ability.exists) this.abilityCache.set(id, ability);
 		}
 		return ability;
+	}
+
+	getByID(id: ID): Ability {
+		if (id === '') return EMPTY_ABILITY;
+		return this.getByID2(id) || new Ability({id, name: id, exists: false});
 	}
 
 	all(): readonly Ability[] {
