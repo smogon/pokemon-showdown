@@ -1,5 +1,6 @@
 import type {PokemonEventMethods, ConditionData} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
+import {Utils} from '../lib';
 
 interface AbilityEventMethods {
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
@@ -76,6 +77,8 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	}
 }
 
+const EMPTY_ABILITY = Utils.deepFreeze(new Ability({name: '', exists: false}));
+
 export class DexAbilities {
 	readonly dex: ModdedDex;
 	readonly abilityCache = new Map<ID, Ability>();
@@ -112,12 +115,13 @@ export class DexAbilities {
 
 	get(name: string | Ability = ''): Ability {
 		if (name && typeof name !== 'string') return name;
-
-		const id = toID(name);
+		let id = '' as ID;
+		if (name) id = toID(name.trim());
 		return this.getByID(id);
 	}
 
 	getByID(id: ID): Ability {
+		if (id === '') return EMPTY_ABILITY;
 		let ability = this.abilityCache.get(id);
 		if (ability) return ability;
 

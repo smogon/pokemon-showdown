@@ -11,7 +11,7 @@ export interface DexTable<T> {[id: string]: T}
 
 
 /**
-* Do not expose to user input. Only populate with trusted data.
+* Do not insert user input, only populate with trusted data.
 * Populated by ./sim/dex.ts then frozen.
 */
 export const _toIDCache: Map<string, ID> = new Map();
@@ -29,10 +29,8 @@ export const _toIDCache: Map<string, ID> = new Map();
 * commonly it's used.
 */
 export function toID(text: any): ID {
-	// The sucrase transformation of optional chaining is too expensive to be used in a hot function like this.
-	/* eslint-disable @typescript-eslint/prefer-optional-chain */
 	if (typeof text === 'string') {
-	        // 99.9% case, skip checks
+	        // 99% case, skip checks
 	} else {
 	        if (text) text = text.id || text.userid || text.roomid || text;
 	        if (typeof text === 'number') text = '' + text;
@@ -43,7 +41,6 @@ export function toID(text: any): ID {
 	// Next, we often produce the same IDs many times.
 	// Otherwise, fallback to the generic case
 	return _toIDCache.get(text) || text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
-	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 }
 
 export class BasicEffect implements EffectData {
@@ -355,6 +352,7 @@ export class TypeInfo implements Readonly<TypeData> {
 		return this.name;
 	}
 }
+const EMPTY_TYPE_INFO = Utils.deepFreeze(new TypeInfo({name: '', id: '', exists: false, effectType: 'EffectType'}));
 
 export class DexTypes {
 	readonly dex: ModdedDex;
@@ -430,6 +428,7 @@ export class DexTypes {
 	}
 
 	getByID(id: ID): TypeInfo {
+		if (id === '') return EMPTY_TYPE_INFO;
 		return this.typeCache.get(id) ||
 			new TypeInfo({
 				name: id.charAt(0).toUpperCase() + id.substr(1),
