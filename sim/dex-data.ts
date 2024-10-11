@@ -39,6 +39,21 @@ export function toID(text: any): ID {
 	return _toIDCache.get(text) || text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 }
 
+/**
+ * Like Object.assign but only fields missing from self.
+ * Facilitates consistent field ordering in constructors.
+ * Modifies self in-place.
+ */
+export function assignNewFields(self: AnyObject, data: AnyObject) {
+	for (const k in data) {
+		// to behave like Object.assign, skip inherited fields
+		if (!data.hasOwnProperty(k)) continue;
+		// FIXME: decide whether this should be 'in' or 'hasOwnProperty'
+		if (k in self) continue;
+		self[k] = data[k];
+	}
+}
+
 export class BasicEffect implements EffectData {
 	/**
 	 * ID. This will be a lowercase version of the name with all the
@@ -131,10 +146,7 @@ export class BasicEffect implements EffectData {
 		this.sourceEffect = data.sourceEffect || '';
 
 		if (copyOtherFields) {
-			for (const k of Object.keys(data)) { // TODO: migrate to for..in + Object.hasOwn
-				if (k in this) continue;
-				(this as any)[k] = data[k];
-			}
+			assignNewFields(this, data);
 		}
 	}
 
@@ -156,10 +168,7 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 		this.plus = data.plus || undefined;
 		this.minus = data.minus || undefined;
 
-		for (const k of Object.keys(data)) { // TODO: migrate to for..in + Object.hasOwn
-			if (k in this) continue;
-			(this as any)[k] = data[k];
-		}
+		assignNewFields(this, data);
 	}
 }
 const EMPTY_NATURE = Utils.deepFreeze(new Nature({name: '', exists: false}));
@@ -298,13 +307,7 @@ export class TypeInfo implements Readonly<TypeData> {
 		this.damageTaken = data.damageTaken || (canCacheFields ? EMPTY_OBJECT : {});
 		this.HPivs = data.HPivs || (canCacheFields ? EMPTY_OBJECT : {});
 		this.HPdvs = data.HPdvs || (canCacheFields ? EMPTY_OBJECT : {});
-		// handle extra fields, if any
-		// DexItems passes in ItemData, which doesn't have extra fields,
-		// so DexItems gets a consistent object shape / hidden class (good).
-		for (const k of Object.keys(data)) { // TODO: replace with for..in + Object.hasOwn
-			if (k in this) continue;
-			(this as any)[k] = data[k];
-		}
+		assignNewFields(this, data);
 	}
 
 	toString() {
