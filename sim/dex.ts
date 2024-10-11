@@ -62,7 +62,6 @@ const DATA_TYPES: DataType[] = [
 	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
 	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData',
 ];
-const COW_DATA_TYPES: DataType[] = ['Natures', 'TypeChart'];
 
 const DATA_FILES = {
 	Abilities: 'abilities',
@@ -91,13 +90,13 @@ interface DexTableData {
 	Items: DexTable<import('./dex-items').ItemData>;
 	Learnsets: DexTable<import('./dex-species').LearnsetData>;
 	Moves: DexTable<import('./dex-moves').MoveData>;
-	Natures: Data.ModdedNatureDataTable;
+	Natures: DexTable<Data.NatureData>;
 	Pokedex: DexTable<import('./dex-species').SpeciesData>;
 	FormatsData: DexTable<import('./dex-species').SpeciesFormatsData>;
 	PokemonGoData: DexTable<import('./dex-species').PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
 	Conditions: DexTable<import('./dex-conditions').ConditionData>;
-	TypeChart: Data.ModdedTypeDataTable;
+	TypeChart: DexTable<Data.TypeData>;
 }
 interface TextTableData {
 	Abilities: DexTable<AbilityText>;
@@ -190,7 +189,6 @@ export class ModdedDex {
 		if (parentDex) {
 			dataCache['Aliases'] = parentDex.data['Aliases'];
 			for (const dataType of DATA_TYPES) {
-				if (COW_DATA_TYPES.includes(dataType)) continue; // ported to CoW
 				const parentTypedData: DexTable<any> = parentDex.data[dataType];
 				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
 				for (const entryId in parentTypedData) {
@@ -230,10 +228,8 @@ export class ModdedDex {
 		this.moves = new DexMoves(this);
 		this.species = new DexSpecies(this);
 		this.conditions = new DexConditions(this);
-		this.natures = new Data.DexNatures(this, dataCache.Natures, parentDex?.natures);
-		delete dataCache.Natures;
-		this.types = new Data.DexTypes(this, dataCache.TypeChart, parentDex?.types);
-		delete dataCache.TypeChart;
+		this.natures = new Data.DexNatures(this);
+		this.types = new Data.DexTypes(this);
 		this.stats = new Data.DexStats(this);
 	}
 
@@ -266,8 +262,6 @@ export class ModdedDex {
 	}
 
 	modData(dataType: DataType, id: string) {
-		if (COW_DATA_TYPES.includes(dataType)) throw new Error("todo: modify modData");
-		if (dataType === 'Natures' || dataType === 'TypeChart') throw new Error("unreachable, tmp for tsc");
 		if (this.isBase) return this.data[dataType][id];
 		if (this.data[dataType][id] !== this.mod(this.parentMod).data[dataType][id]) return this.data[dataType][id];
 		return (this.data[dataType][id] = Utils.deepClone(this.data[dataType][id]));

@@ -114,7 +114,7 @@ export class ExhaustiveRunner {
 	private createPools(dex: typeof Dex): Pools {
 		return {
 			pokemon: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.species.all(), p =>
-				(p.name !== 'Pichu-Spiky-eared' && p.name.substr(0, 8) !== 'Pikachu-') && p.name !== 'Greninja-Bond'),
+				(p.name !== 'Pichu-Spiky-eared' && !p.name!.startsWith('Pikachu-')) && p.name !== 'Greninja-Bond'),
 			this.prng),
 			items: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.items.all()), this.prng),
 			abilities: new Pool(ExhaustiveRunner.onlyValid(dex.gen, dex.abilities.all()), this.prng),
@@ -164,8 +164,8 @@ export class ExhaustiveRunner {
 	}
 
 	private static onlyValid(
-		gen: number, values: readonly AnyObject[],
-		additional?: (v: AnyObject) => boolean, nonStandard?: boolean
+		gen: number, values: readonly BasicEffect[],
+		additional?: (v: BasicEffect) => boolean, nonStandard?: boolean
 	) {
 		const keys = [];
 		for (const v of values) {

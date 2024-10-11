@@ -169,7 +169,6 @@ export interface NatureData {
 	plus?: StatIDExceptHP;
 	minus?: StatIDExceptHP;
 }
-const NATURE_DATA_KEYS: readonly (keyof NatureData)[] = Object.freeze(['name', 'plus', 'minus']);
 
 export type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
 
@@ -182,61 +181,13 @@ export class DexNatures {
 	readonly natureCache = new Map<ID, Nature>();
 	allCache: readonly Nature[];
 
-	constructor(dex: ModdedDex, patches: ModdedNatureDataTable, parent?: DexNatures) {
+	constructor(dex: ModdedDex) {
 		this.dex = dex;
-		let patchesEmpty = true;
-		for (const k in patches) { // eslint-disable-line @typescript-eslint/no-unused-vars
-			patchesEmpty = false;
-			break;
-		}
-		// If we're at the transition point where Natures become nonstandard, we can't inherit parent's caches.
-		// gen = 3 is hard-coded in the Nature constructor
-		if (parent && patchesEmpty && !(dex.gen < 3 && parent.dex.gen >= 3)) {
-			this.allCache = parent.allCache;
-			this.natureCache = parent.natureCache;
-			return;
-		}
 		const allCache = [];
-		if (parent) {
-			for (const parentNature of parent.all()) {
-				// Note: if id in ModdedNatureDataTable doesn't follow the same rules as toID,
-				// this will misbehave in non-obvious ways.
-				// This is not a new problem, just documenting it.
-				const id = parentNature.id;
-				let patchEntry = patches[id];
-				// null means don't inherit
-				if (patchEntry === null) {
-					delete patches[id];
-					continue;
-				}
-				let nature;
-				// need a new Nature if newly nonStandard.
-				// i.e. if the condition holds and parent doesn't already have the value we would set
-				const becameNonstandard = (parentNature.gen > dex.gen) && (parentNature.isNonstandard !== 'Future');
-				if (becameNonstandard && !patchEntry) patchEntry = {inherit: true};
-				if (patchEntry) {
-					if ('inherit' in patchEntry && patchEntry.inherit === true) {
-						delete (patchEntry as any).inherit;
-						for (const field of NATURE_DATA_KEYS) {
-							if (field in patchEntry) continue;
-							(patchEntry as any)[field] = parentNature[field];
-						}
-						// patchEntry is now a complete NatureData
-					}
-					nature = new Nature(patchEntry);
-					if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
-					dex.deepFreeze(nature);
-					delete patches[id];
-				} else {
-					nature = parentNature;
-				}
-				this.natureCache.set(id, nature);
-				allCache.push(nature);
-			}
-		}
-		for (const _id in patches) {
+		const Natures = dex.data.Natures;
+		for (const _id in Natures) {
 			const id = _id as ID;
-			const natureData = patches[id];
+			const natureData = Natures[id];
 			const nature = new Nature(natureData);
 			if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
 			this.natureCache.set(id, dex.deepFreeze(nature));
@@ -271,7 +222,6 @@ export interface TypeData {
 	HPivs?: SparseStatsTable;
 	isNonstandard?: Nonstandard | null;
 }
-const TYPE_DATA_KEYS: readonly (keyof TypeData)[] = Object.freeze(['damageTaken', 'HPivs', 'HPdvs', 'isNonstandard']);
 
 export type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & {inherit: true};
 export interface TypeDataTable {[typeid: IDEntry]: TypeData}
@@ -354,60 +304,15 @@ export class DexTypes {
 	allCache: readonly TypeInfo[];
 	namesCache: readonly string[];
 
-	constructor(dex: ModdedDex, patches: ModdedTypeDataTable, parent?: DexTypes) {
+	constructor(dex: ModdedDex) {
 		this.dex = dex;
-
-		let patchesEmpty = true;
-		for (const k in patches) { // eslint-disable-line @typescript-eslint/no-unused-vars
-			patchesEmpty = false;
-			break;
-		}
-		if (parent && patchesEmpty) {
-			this.allCache = parent.allCache;
-			this.namesCache = parent.namesCache;
-			this.typeCache = parent.typeCache;
-			return;
-		}
 		const allCache = [];
 		const namesCache = [];
-		if (parent) {
-			for (const parentType of parent.all()) {
-				const id = parentType.id;
-				const patchEntry = patches[id];
-				// null means don't inherit
-				if (patchEntry === null) {
-					delete patches[id];
-					continue;
-				}
-				let type;
-				// if patchEntry present, construct
-				// else re-use parent's object
-				if (patchEntry) {
-					// if inherit, copy fields from parent into child
-					if ('inherit' in patchEntry && patchEntry.inherit === true) {
-						delete (patchEntry as any).inherit;
-						for (const field of TYPE_DATA_KEYS) {
-							if (field in patchEntry) continue;
-							// nonsense to appease tsc.
-							(patchEntry as any)[field] = parentType[field];
-						}
-						// patchEntry is now a complete TypeData
-					}
-					type = new TypeInfo({name: parentType.name, id, ...patchEntry}, true);
-					type = dex.deepFreeze(type);
-					delete patches[id];
-				} else {
-					type = parentType;
-				}
-				this.typeCache.set(id, type);
-				allCache.push(type);
-				if (!type.isNonstandard) namesCache.push(type.name);
-			}
-		}
-		for (const _id in patches) {
+		const TypeChart = dex.data.TypeChart;
+		for (const _id in TypeChart) {
 			const id = _id as ID;
 			const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-			const type = new TypeInfo({name: typeName, id, ...patches[id]}, true);
+			const type = new TypeInfo({name: typeName, id, ...TypeChart[id]}, true);
 			this.typeCache.set(id, dex.deepFreeze(type));
 			allCache.push(type);
 			if (!type.isNonstandard) namesCache.push(type.name);
@@ -439,7 +344,7 @@ export class DexTypes {
 	isName(name: string): boolean {
 		const id = name.toLowerCase();
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-		return name === typeName && this.typeCache.has(id as ID);
+		return name === typeName && this.dex.data.TypeChart.hasOwnProperty(id as ID);
 	}
 
 	all(): readonly TypeInfo[] {
