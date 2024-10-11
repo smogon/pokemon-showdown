@@ -570,6 +570,35 @@ dexes['base'] = new ModdedDex();
 dexes[BASE_MOD] = dexes['base'];
 
 export const Dex = dexes['base'];
+
+// Populate _toIDCache with data from the base mod.
+// It's representative enough for all other mods, so we don't need to dynamically grow the cache.
+{
+	const cache = Data._toIDCache;
+	const doName = (name?: string) => {
+		if (!name) return;
+		const id = toID(name);
+		const old = cache.get(name);
+		if (old === undefined) cache.set(name, id);
+		else if (old !== id) throw new Error("internal error with ID caching logic");
+	};
+	const sources: DataType[] = ['Abilities', 'Rulesets', 'Items', 'Moves', 'Natures', 'Pokedex', 'Conditions'];
+	for (const sourceName of sources) {
+		const source = Dex.data[sourceName] as any;
+		for (const k in source) {
+			doName(source[k].name);
+		}
+	}
+	for (const type of Dex.types.all()) {
+		doName(type.name);
+	}
+	const aliases = Dex.data.Aliases;
+	for (const k in aliases) {
+		doName(aliases[k]);
+	}
+	Object.freeze(cache);
+}
+
 export namespace Dex {
 	export type Species = import('./dex-species').Species;
 	export type Item = import('./dex-items').Item;

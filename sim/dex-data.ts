@@ -7,6 +7,12 @@
 import {Utils} from '../lib';
 
 /**
+ * Do not insert user data, only populate with trusted data.
+ * Populated by ./sim/dex.ts, then frozen.
+ */
+export const _toIDCache: Map<string, ID> = new Map();
+
+/**
 * Converts anything to an ID. An ID must have only lowercase alphanumeric
 * characters.
 *
@@ -20,18 +26,21 @@ import {Utils} from '../lib';
 * commonly it's used.
 */
 export function toID(text: any): ID {
-	// The sucrase transformation of optional chaining is too expensive to be used in a hot function like this.
-	/* eslint-disable @typescript-eslint/prefer-optional-chain */
-	if (text && text.id) {
-		text = text.id;
-	} else if (text && text.userid) {
-		text = text.userid;
-	} else if (text && text.roomid) {
-		text = text.roomid;
+	if (typeof text === 'string') {
+		// 99% case, skip checks
+	} else {
+		if (text) text = text.id || text.userid || text.roomid || text;
+		if (typeof text === 'number') text = '' + text;
+		else if (typeof text !== 'string') return '';
 	}
-	if (typeof text !== 'string' && typeof text !== 'number') return '';
-	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
-	/* eslint-enable @typescript-eslint/prefer-optional-chain */
+	// text is now guaranteed to be a string.
+	// Very often text is already a valid ID.
+	if (/^[a-z0-9]*$/.test(text)) return text;
+	// Next, we often produce the same IDs many times.
+	const c = _toIDCache.get(text);
+	if (c !== undefined) return c;
+	// Otherwise, fallback to the generic case
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 }
 
 export class BasicEffect implements EffectData {
