@@ -611,10 +611,16 @@ const EMPTY_MOVE = Utils.deepFreeze(new DataMove({name: '', exists: false}));
 export class DexMoves {
 	readonly dex: ModdedDex;
 	readonly moveCache = new Map<ID, Move>();
-	allCache: readonly Move[] | null = null;
+	allCache: readonly Move[];
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
+		const Moves = dex.data.Moves;
+		const allCache = [];
+		for (const id in Moves) {
+			allCache.push(this.getByID(id as ID));
+		}
+		this.allCache = Object.freeze(allCache);
 	}
 
 	get(name?: string | Move): Move {
@@ -659,12 +665,6 @@ export class DexMoves {
 	}
 
 	all(): readonly Move[] {
-		if (this.allCache) return this.allCache;
-		const moves = [];
-		for (const id in this.dex.data.Moves) {
-			moves.push(this.getByID(id as ID));
-		}
-		this.allCache = Object.freeze(moves);
 		return this.allCache;
 	}
 }
