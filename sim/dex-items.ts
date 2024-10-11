@@ -164,9 +164,32 @@ export class DexItems {
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
+		const Items = dex.data.Items;
+		const parent = dex.parentMod ? dex.mod(dex.parentMod) : undefined;
 		const items = [];
-		for (const id in this.dex.data.Items) {
-			items.push(this.getByID(id as ID));
+		for (const _id in Items) {
+			const id = _id as ID;
+			const itemData = Items[id] as any;
+			const itemTextData = this.dex.getDescs('Items', id, itemData);
+			let item = new Item({
+				name: id,
+				...itemData,
+				...itemTextData,
+			});
+			if (item.gen > this.dex.gen) (item as any).isNonstandard = 'Future';
+			if (parent) {
+				const parentItem = parent.items.getByID(id);
+				if (itemData === parent.data.Items[id] &&
+					item.exists === parentItem.exists &&
+					item.isNonstandard === parentItem.isNonstandard &&
+					item.desc === parentItem.desc &&
+					item.shortDesc === parentItem.shortDesc
+				) {
+					item = parentItem;
+				}
+			}
+			items.push(this.dex.deepFreeze(item));
+			if (item.exists) this.itemCache.set(id, item);
 		}
 		this.allCache = Object.freeze(items);
 	}
@@ -183,7 +206,7 @@ export class DexItems {
 		let item = this.itemCache.get(id);
 		if (item) return item;
 		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			item = this.get(this.dex.data.Aliases[id]);
+			item = this.getByID(toID(this.dex.data.Aliases[id]));
 			if (item.exists) {
 				this.itemCache.set(id, item);
 			}
@@ -194,23 +217,7 @@ export class DexItems {
 			this.itemCache.set(id, item);
 			return item;
 		}
-		if (id && this.dex.data.Items.hasOwnProperty(id)) {
-			const itemData = this.dex.data.Items[id] as any;
-			const itemTextData = this.dex.getDescs('Items', id, itemData);
-			item = new Item({
-				name: id,
-				...itemData,
-				...itemTextData,
-			});
-			if (item.gen > this.dex.gen) {
-				(item as any).isNonstandard = 'Future';
-			}
-		} else {
-			item = new Item({name: id, exists: false});
-		}
-
-		if (item.exists) this.itemCache.set(id, this.dex.deepFreeze(item));
-		return item;
+		return new Item({name: id, exists: false});
 	}
 
 	all(): readonly Item[] {
