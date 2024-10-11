@@ -86,13 +86,14 @@ export class DexAbilities {
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
-		const patches = this.dex.data.Abilities;
+		const Abilities = this.dex.data.Abilities;
+		const parent = dex.parentMod ? dex.mod(dex.parentMod) : undefined;
 		const abilities = [];
-		for (const _id in patches) {
+		for (const _id in Abilities) {
 			const id = _id as ID;
-			const abilityData = patches[id] as any;
+			const abilityData = Abilities[id] as any;
 			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);
-			const ability = new Ability({
+			let ability = new Ability({
 				name: id,
 				...abilityData,
 				...abilityTextData,
@@ -105,6 +106,20 @@ export class DexAbilities {
 			}
 			if ((this.dex.currentMod === 'gen7letsgo' || this.dex.gen <= 2) && ability.id === 'noability') {
 				(ability as any).isNonstandard = null;
+			}
+
+			if (parent) {
+				const parentAbility = parent.abilities.getByID(id);
+				// if this child didn't override the data,
+				// and all the fields whose value depend on something other than .data are identical,
+				// we can re-use the parent's object
+				if (parentAbility.exists &&
+						abilityData === parent.data.Abilities[id] &&
+						ability.isNonstandard === parentAbility.isNonstandard &&
+						ability.desc === parentAbility.desc &&
+						ability.shortDesc === parentAbility.shortDesc) {
+					ability = parentAbility;
+				}
 			}
 			dex.deepFreeze(ability);
 			abilities.push(ability);
@@ -120,19 +135,14 @@ export class DexAbilities {
 		return this.getByID(id);
 	}
 
-	getByID2(id: ID): Ability | null {
-		if (id === '') return null;
-		let ability = this.abilityCache.get(id) || null;
-		if (!ability && this.dex.data.Aliases.hasOwnProperty(id)) {
-			ability = this.getByID2(toID(this.dex.data.Aliases[id]));
-			if (ability && ability.exists) this.abilityCache.set(id, ability);
-		}
-		return ability;
-	}
-
 	getByID(id: ID): Ability {
 		if (id === '') return EMPTY_ABILITY;
-		return this.getByID2(id) || new Ability({id, name: id, exists: false});
+		let ability = this.abilityCache.get(id);
+		if (!ability && this.dex.data.Aliases.hasOwnProperty(id)) {
+			ability = this.getByID(toID(this.dex.data.Aliases[id]));
+			if (ability && ability.exists) this.abilityCache.set(id, ability);
+		}
+		return ability || new Ability({id, name: id, exists: false});
 	}
 
 	all(): readonly Ability[] {

@@ -183,14 +183,29 @@ export class DexNatures {
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
-		const allCache = [];
 		const Natures = dex.data.Natures;
+		const parent = dex.parentMod ? dex.mod(dex.parentMod) : undefined;
+		// 3 is hard-coded in Nature ctor, and this must match logic for nature.isNonstandard.
+		const sameGenClass = parent && (parent.gen < 3) === (dex.gen < 3);
+		if (parent && Natures === parent.data.Natures && sameGenClass) {
+			this.natureCache = parent.natures.natureCache;
+			this.allCache = parent.natures.all();
+			return;
+		}
+
+		const allCache = [];
 		for (const _id in Natures) {
 			const id = _id as ID;
 			const natureData = Natures[id];
-			const nature = new Nature(natureData);
-			if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
-			this.natureCache.set(id, dex.deepFreeze(nature));
+			let nature;
+			if (parent && sameGenClass && natureData === parent.data.Natures[id]) {
+				nature = parent.natures.getByID(id);
+			} else {
+				nature = new Nature(natureData);
+				if (nature.gen > dex.gen) nature.isNonstandard = 'Future';
+				dex.deepFreeze(nature);
+			}
+			this.natureCache.set(id, nature);
 			allCache.push(nature);
 		}
 		this.allCache = Object.freeze(allCache);
@@ -306,16 +321,30 @@ export class DexTypes {
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
+		const TypeChart = dex.data.TypeChart;
+		const parent = dex.parentMod ? dex.mod(dex.parentMod) : undefined;
+		if (parent && TypeChart === parent.data.TypeChart) {
+			this.typeCache = parent.types.typeCache;
+			this.allCache = parent.types.all();
+			this.namesCache = parent.types.namesCache;
+			return;
+		}
 		const allCache = [];
 		const namesCache = [];
-		const TypeChart = dex.data.TypeChart;
 		for (const _id in TypeChart) {
 			const id = _id as ID;
-			const typeName = id.charAt(0).toUpperCase() + id.substr(1);
-			const type = new TypeInfo({name: typeName, id, ...TypeChart[id]}, true);
-			this.typeCache.set(id, dex.deepFreeze(type));
-			allCache.push(type);
-			if (!type.isNonstandard) namesCache.push(type.name);
+			const typeData = TypeChart[id];
+			let typeInfo;
+			if (parent && typeData === parent.data.TypeChart[id]) {
+				typeInfo = parent.types.getByID(id);
+			} else {
+				const typeName = id.charAt(0).toUpperCase() + id.substr(1);
+				typeInfo = new TypeInfo({name: typeName, id, ...typeData}, true);
+				dex.deepFreeze(typeInfo);
+			}
+			this.typeCache.set(id, typeInfo);
+			allCache.push(typeInfo);
+			if (!typeInfo.isNonstandard) namesCache.push(typeInfo.name);
 		}
 		this.allCache = Object.freeze(allCache);
 		this.namesCache = Object.freeze(namesCache);
