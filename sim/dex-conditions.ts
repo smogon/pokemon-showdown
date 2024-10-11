@@ -673,7 +673,7 @@ export class DexConditions {
 			condition = new Condition({name: id, ...this.dex.data.Conditions[id]});
 		} else if (
 			(this.dex.data.Moves.hasOwnProperty(id) && (found = this.dex.data.Moves[id]).condition) ||
-			((found = this.dex.abilities.getByID2(id)) && found.condition) ||
+			(this.dex.data.Abilities.hasOwnProperty(id) && (found = this.dex.data.Abilities[id]).condition) ||
 			(this.dex.data.Items.hasOwnProperty(id) && (found = this.dex.data.Items[id]).condition)
 		) {
 			condition = new Condition({name: found.name || id, ...found.condition});
