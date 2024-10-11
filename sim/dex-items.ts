@@ -160,10 +160,15 @@ const EMPTY_ITEM = Utils.deepFreeze(new Item({name: '', exists: false}));
 export class DexItems {
 	readonly dex: ModdedDex;
 	readonly itemCache = new Map<ID, Item>();
-	allCache: readonly Item[] | null = null;
+	allCache: readonly Item[];
 
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
+		const items = [];
+		for (const id in this.dex.data.Items) {
+			items.push(this.getByID(id as ID));
+		}
+		this.allCache = Object.freeze(items);
 	}
 
 	get(name?: string | Item): Item {
@@ -209,12 +214,6 @@ export class DexItems {
 	}
 
 	all(): readonly Item[] {
-		if (this.allCache) return this.allCache;
-		const items = [];
-		for (const id in this.dex.data.Items) {
-			items.push(this.getByID(id as ID));
-		}
-		this.allCache = Object.freeze(items);
 		return this.allCache;
 	}
 }
