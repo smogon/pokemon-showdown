@@ -381,7 +381,11 @@ export class Learnset {
 		this.species = species;
 	}
 }
-const EMPTY_SPECIES = Utils.deepFreeze(new Species({name: '', exists: false}));
+const EMPTY_SPECIES = Utils.deepFreeze(new Species({
+	id: '', name: '', exists: false,
+	tier: 'Illegal', doublesTier: 'Illegal',
+	natDexTier: 'Illegal', isNonstandard: 'Custom',
+}));
 
 export class DexSpecies {
 	readonly dex: ModdedDex;
