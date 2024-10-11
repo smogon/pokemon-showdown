@@ -1,6 +1,6 @@
 import {Utils} from '../lib';
 import type {ConditionData} from './dex-conditions';
-import {BasicEffect, toID} from './dex-data';
+import {BasicEffect, toID, assignNewFields} from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -356,6 +356,21 @@ export interface ActiveMove extends MutableMove {
 
 type MoveCategory = 'Physical' | 'Special' | 'Status';
 
+function computeDataMoveGen(num: number, isMax: boolean): number {
+	// special handling for gen8 gmax moves (all of them have num 1000 but they are part of gen8)
+	if (num >= 827 && !isMax) return 9;
+	else if (num >= 743) return 8;
+	else if (num >= 622) return 7;
+	else if (num >= 560) return 6;
+	else if (num >= 468) return 5;
+	else if (num >= 355) return 4;
+	else if (num >= 252) return 3;
+	else if (num >= 166) return 2;
+	else if (num >= 1) return 1;
+	else return 0;
+}
+const DATA_MOVE_IS_MAX_DEFAULT = false;
+
 export class DataMove extends BasicEffect implements Readonly<BasicEffect & MoveData> {
 	declare readonly effectType: 'Move';
 	/** Move type. */
@@ -480,9 +495,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly volatileStatus?: ID;
 
 	constructor(data: AnyObject) {
-		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		super(data, false);
 
 		this.fullname = `move: ${this.name}`;
 		this.effectType = 'Move';
@@ -509,7 +522,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.pp = Number(data.pp);
 		this.noPPBoosts = !!data.noPPBoosts;
 		this.isZ = data.isZ || false;
-		this.isMax = data.isMax || false;
+		this.isMax = data.isMax || DATA_MOVE_IS_MAX_DEFAULT;
 		this.flags = data.flags || {};
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
 		this.pressureTarget = data.pressureTarget || '';
@@ -589,28 +602,8 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 			}
 		}
 
-		if (!this.gen) {
-			// special handling for gen8 gmax moves (all of them have num 1000 but they are part of gen8)
-			if (this.num >= 827 && !this.isMax) {
-				this.gen = 9;
-			} else if (this.num >= 743) {
-				this.gen = 8;
-			} else if (this.num >= 622) {
-				this.gen = 7;
-			} else if (this.num >= 560) {
-				this.gen = 6;
-			} else if (this.num >= 468) {
-				this.gen = 5;
-			} else if (this.num >= 355) {
-				this.gen = 4;
-			} else if (this.num >= 252) {
-				this.gen = 3;
-			} else if (this.num >= 166) {
-				this.gen = 2;
-			} else if (this.num >= 1) {
-				this.gen = 1;
-			}
-		}
+		if (!this.gen) this.gen = computeDataMoveGen(this.num, !!this.isMax);
+		assignNewFields(this, data);
 	}
 }
 const EMPTY_MOVE = Utils.deepFreeze(new DataMove({name: '', exists: false}));
