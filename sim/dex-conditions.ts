@@ -1,5 +1,6 @@
 import {BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
+import {Utils} from '../lib';
 
 export interface EventMethods {
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
@@ -633,7 +634,7 @@ export class Condition extends BasicEffect implements
 	}
 }
 
-const EMPTY_CONDITION: Condition = new Condition({name: '', exists: false});
+const EMPTY_CONDITION: Condition = Utils.deepFreeze(new Condition({name: '', exists: false}));
 
 export class DexConditions {
 	readonly dex: ModdedDex;
@@ -658,11 +659,9 @@ export class DexConditions {
 
 		let found;
 		if (id.startsWith('item:')) {
-			// FIXME: this is either wrong or inefficient.
 			const item = this.dex.items.getByID(id.slice(5) as ID);
 			condition = {...item, id: 'item:' + item.id as ID} as any as Condition;
 		} else if (id.startsWith('ability:')) {
-			// FIXME: this is either wrong or inefficient.
 			const ability = this.dex.abilities.getByID(id.slice(8) as ID);
 			condition = {...ability, id: 'ability:' + ability.id as ID} as any as Condition;
 		} else if (this.dex.data.Rulesets.hasOwnProperty(id)) {
