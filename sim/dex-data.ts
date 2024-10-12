@@ -152,15 +152,13 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 	readonly plus?: StatIDExceptHP;
 	readonly minus?: StatIDExceptHP;
 	constructor(data: AnyObject) {
-		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
-
+		super(data, false);
 		this.fullname = `nature: ${this.name}`;
 		this.effectType = 'Nature';
 		this.gen = 3;
 		this.plus = data.plus || undefined;
 		this.minus = data.minus || undefined;
+		assignNewFields(this, data);
 	}
 }
 
@@ -274,18 +272,17 @@ export class TypeInfo implements Readonly<TypeData> {
 	readonly HPdvs: SparseStatsTable;
 
 	constructor(data: AnyObject) {
-		this.exists = true;
-		Object.assign(this, data);
-
 		this.name = data.name;
 		this.id = data.id;
 		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
-		this.exists = !!(this.exists && this.id);
+		const exists = Object.prototype.propertyIsEnumerable.call(data, 'exists') ? data.exists : true;
+		this.exists = !!(exists && this.id);
 		this.gen = data.gen || 0;
 		this.isNonstandard = data.isNonstandard || null;
 		this.damageTaken = data.damageTaken || {};
 		this.HPivs = data.HPivs || {};
 		this.HPdvs = data.HPdvs || {};
+		assignNewFields(this, data);
 	}
 
 	toString() {

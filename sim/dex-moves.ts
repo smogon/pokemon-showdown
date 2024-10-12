@@ -1,6 +1,6 @@
 import {Utils} from '../lib';
 import type {ConditionData} from './dex-conditions';
-import {BasicEffect, toID} from './dex-data';
+import {assignNewFields, BasicEffect, toID} from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -480,9 +480,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly volatileStatus?: ID;
 
 	constructor(data: AnyObject) {
-		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		super(data, false);
 
 		this.fullname = `move: ${this.name}`;
 		this.effectType = 'Move';
@@ -520,7 +518,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.forceSTAB = !!data.forceSTAB;
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
-		if (this.category !== 'Status' && !this.maxMove && this.id !== 'struggle') {
+		if (this.category !== 'Status' && !data.maxMove && this.id !== 'struggle') {
 			this.maxMove = {basePower: 1};
 			if (this.isMax || this.isZ) {
 				// already initialized to 1
@@ -560,10 +558,10 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 				}
 			}
 		}
-		if (this.category !== 'Status' && !this.zMove && !this.isZ && !this.isMax && this.id !== 'struggle') {
+		if (this.category !== 'Status' && !data.zMove && !this.isZ && !this.isMax && this.id !== 'struggle') {
 			let basePower = this.basePower;
 			this.zMove = {};
-			if (Array.isArray(this.multihit)) basePower *= 3;
+			if (Array.isArray(data.multihit)) basePower *= 3;
 			if (!basePower) {
 				this.zMove.basePower = 100;
 			} else if (basePower >= 140) {
@@ -611,6 +609,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 				this.gen = 1;
 			}
 		}
+		assignNewFields(this, data);
 	}
 }
 
