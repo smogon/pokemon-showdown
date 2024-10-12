@@ -518,6 +518,16 @@ export class ModdedDex {
 			for (const dataType of DATA_TYPES) {
 				const parentTypedData: DexTable<any> = parentDex.data[dataType];
 				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
+				// if child is empty and there's no Scripts.init, there's no need to copy, just re-use.
+				let childIsEmpty = true;
+				for (const k in childTypedData) { // eslint-disable-line @typescript-eslint/no-unused-vars
+					childIsEmpty = false;
+					break;
+				}
+				if (dataType !== 'Pokedex' && childIsEmpty && !Scripts.init) {
+					dataCache[dataType] = parentTypedData;
+					continue;
+				}
 				for (const entryId in parentTypedData) {
 					if (childTypedData[entryId] === null) {
 						// null means don't inherit
