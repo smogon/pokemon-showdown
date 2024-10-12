@@ -1001,8 +1001,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	lostandfound: {
 		name: "Lost and Found",
 		gen: 9,
-		desc: `Whenever this Pokemon is damaged by an attacking move, it takes 1/5 of the damage 
-  					and immediately switches to an ally of choice. Three times per battle.`,
+		desc: "Whenever this Pokemon is damaged by an attacking move, it takes 1/5 of the damage and immediately switches to an ally of choice. Three times per battle.",
 		shortDesc: "Takes 1/5 damage from attacks, then switches to ally of choice.",
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
