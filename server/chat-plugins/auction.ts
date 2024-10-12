@@ -638,6 +638,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.highestBidder.removePlayer(this.nominatedPlayer);
 			this.highestBidder.credits += this.highestBid;
 		}
+		this.clearNomTimer();
 		this.next();
 	}
 
