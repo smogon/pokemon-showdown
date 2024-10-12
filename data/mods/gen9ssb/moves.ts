@@ -1014,6 +1014,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 65,
 		category: "Physical",
 		name: "Bubble Guppy Uppercut",
+		shortDesc: "Hits twice; Always goes last; Immune to contact while charging.",
 		pp: 8,
 		noPPBoosts: true,
 		priority: -8,
