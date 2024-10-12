@@ -1,3 +1,4 @@
+import {Utils} from '../lib';
 import {toID, BasicEffect} from './dex-data';
 
 interface SpeciesAbility {
@@ -355,6 +356,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	}
 }
 
+const EMPTY_SPECIES = Utils.deepFreeze(new Species({
+	id: '', name: '', exists: false,
+	tier: 'Illegal', doublesTier: 'Illegal',
+	natDexTier: 'Illegal', isNonstandard: 'Custom',
+}));
+
 export class Learnset {
 	readonly effectType: 'Learnset';
 	/**
@@ -394,17 +401,21 @@ export class DexSpecies {
 	get(name?: string | Species): Species {
 		if (name && typeof name !== 'string') return name;
 
-		name = (name || '').trim();
-		let id = toID(name);
-		if (id === 'nidoran' && name.endsWith('♀')) {
-			id = 'nidoranf' as ID;
-		} else if (id === 'nidoran' && name.endsWith('♂')) {
-			id = 'nidoranm' as ID;
+		let id = '' as ID;
+		if (name) {
+			name = name.trim();
+			id = toID(name);
+			if (id === 'nidoran' && name.endsWith('♀')) {
+				id = 'nidoranf' as ID;
+			} else if (id === 'nidoran' && name.endsWith('♂')) {
+				id = 'nidoranm' as ID;
+			}
 		}
-
 		return this.getByID(id);
 	}
+
 	getByID(id: ID): Species {
+		if (id === '') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
 
