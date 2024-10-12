@@ -99,7 +99,7 @@ describe('Rage Fist', function () {
 		assert.equal(annihilape.timesAttacked, 0, `timesAttacked should not have incremented after a not-full HP Pollen Puff`);
 	});
 
-	it.skip(`should increase BP when hit by Dragon Darts`, function () {
+	it(`should increase BP when hit by Dragon Darts`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Primeape', moves: ['sleeptalk', 'ragefist']},
 			{species: 'Wynaut', moves: ['sleeptalk', 'allyswitch']},

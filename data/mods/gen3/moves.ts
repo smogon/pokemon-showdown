@@ -2,7 +2,7 @@
  * Gen 3 moves
  */
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	absorb: {
 		inherit: true,
 		pp: 20,
@@ -345,6 +345,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 	},
+	flail: {
+		inherit: true,
+		basePowerCallback(pokemon) {
+			const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
+			let bp;
+			if (ratio < 2) {
+				bp = 200;
+			} else if (ratio < 5) {
+				bp = 150;
+			} else if (ratio < 10) {
+				bp = 100;
+			} else if (ratio < 17) {
+				bp = 80;
+			} else if (ratio < 33) {
+				bp = 40;
+			} else {
+				bp = 20;
+			}
+			this.debug('BP: ' + bp);
+			return bp;
+		},
+	},
 	flash: {
 		inherit: true,
 		accuracy: 70,
@@ -532,13 +554,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		pp: 20,
 	},
+	reversal: {
+		inherit: true,
+		basePowerCallback(pokemon) {
+			const ratio = Math.max(Math.floor(pokemon.hp * 48 / pokemon.maxhp), 1);
+			let bp;
+			if (ratio < 2) {
+				bp = 200;
+			} else if (ratio < 5) {
+				bp = 150;
+			} else if (ratio < 10) {
+				bp = 100;
+			} else if (ratio < 17) {
+				bp = 80;
+			} else if (ratio < 33) {
+				bp = 40;
+			} else {
+				bp = 20;
+			}
+			this.debug('BP: ' + bp);
+			return bp;
+		},
+	},
 	rocksmash: {
 		inherit: true,
 		basePower: 20,
 	},
 	sketch: {
 		inherit: true,
-		flags: {bypasssub: 1, failencore: 1, noassist: 1, failmimic: 1},
+		flags: {bypasssub: 1, failencore: 1, noassist: 1, failmimic: 1, nosketch: 1},
 	},
 	sleeptalk: {
 		inherit: true,
@@ -596,7 +640,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, noassist: 1, failencore: 1, failmimic: 1},
+		flags: {contact: 1, protect: 1, noassist: 1, failencore: 1, failmimic: 1, nosketch: 1},
 		accuracy: 100,
 		recoil: [1, 4],
 		struggleRecoil: false,

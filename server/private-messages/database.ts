@@ -4,55 +4,39 @@
  * @author mia-pi-git
  */
 import {SQL, FS} from '../../lib';
-import {EXPIRY_TIME, SEEN_EXPIRY_TIME, MAX_PENDING} from '.';
+import {MAX_PENDING} from '.';
 
-export const functions: {[k: string]: (...args: any) => any} = {
-	should_expire: (time) => {
-		const diff = Date.now() - time;
-		if (diff > EXPIRY_TIME) {
-			return 1;
-		}
-		return 0;
-	},
-	seen_duration: (seen) => {
-		if (!seen) return 0;
-		const diff = Date.now() - seen;
-		if (diff >= SEEN_EXPIRY_TIME) {
-			return 1;
-		}
-		return 0;
-	},
-};
-
-export const statements: {[k: string]: string} = {
+export const statements = {
 	send: 'INSERT INTO offline_pms (sender, receiver, message, time) VALUES (?, ?, ?, ?)',
 	clear: 'DELETE FROM offline_pms WHERE receiver = ?',
 	fetch: 'SELECT * FROM offline_pms WHERE receiver = ?',
 	fetchNew: 'SELECT * FROM offline_pms WHERE receiver = ? AND seen IS NULL',
-	clearDated: 'DELETE FROM offline_pms WHERE EXISTS (SELECT * FROM offline_pms WHERE should_expire(time) = 1)',
+	clearDated: 'DELETE FROM offline_pms WHERE ? - time >= ?',
 	checkSentCount: 'SELECT count(*) as count FROM offline_pms WHERE sender = ? AND receiver = ?',
-	setSeen: 'UPDATE offline_pms SET seen = ? WHERE receiver = ?',
-	clearSeen: 'DELETE FROM offline_pms WHERE seen_duration(seen) = 1',
+	setSeen: 'UPDATE offline_pms SET seen = ? WHERE receiver = ? AND seen IS NULL',
+	clearSeen: 'DELETE FROM offline_pms WHERE ? - seen >= ?',
 	getSettings: 'SELECT * FROM pm_settings WHERE userid = ?',
 	setBlock: 'REPLACE INTO pm_settings (userid, view_only) VALUES (?, ?)',
 	deleteSettings: 'DELETE FROM pm_settings WHERE userid = ?',
-};
+} as const;
+
+type Statement = keyof typeof statements;
 
 class StatementMap {
 	env: SQL.TransactionEnvironment;
 	constructor(env: SQL.TransactionEnvironment) {
 		this.env = env;
 	}
-	run(name: string, args: any[] | AnyObject) {
+	run(name: Statement, args: any[] | AnyObject) {
 		return this.getStatement(name).run(args);
 	}
-	all(name: string, args: any[] | AnyObject) {
+	all(name: Statement, args: any[] | AnyObject) {
 		return this.getStatement(name).all(args);
 	}
-	get(name: string, args: any[] | AnyObject) {
+	get(name: Statement, args: any[] | AnyObject) {
 		return this.getStatement(name).get(args);
 	}
-	getStatement(name: string) {
+	getStatement(name: Statement) {
 		const source = statements[name];
 		return this.env.statements.get(source)!;
 	}

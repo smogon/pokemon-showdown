@@ -4,7 +4,7 @@
  * a volatile along with them to keep track of if their respective stat changes should be factored
  * in during stat calculations or not.
  */
-export const Conditions: {[k: string]: ModdedConditionData} = {
+export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',

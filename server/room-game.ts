@@ -62,6 +62,7 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 	 * `this.getUser().games`.
 	 */
 	readonly id: ID;
+	completed?: boolean;
 	constructor(user: User | string | null, game: GameClass, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;
@@ -230,7 +231,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * Like `setPlayerUser`, but bypasses some unnecessary game list updates if
 	 * the user renamed directly from the old userid.
 	 *
-	 * `this.playerTable[oldUserid]` mnust exist or this will crash.
+	 * `this.playerTable[oldUserid]` must exist or this will crash.
 	 */
 	renamePlayer(user: User, oldUserid: ID) {
 		if (user.id === oldUserid) {

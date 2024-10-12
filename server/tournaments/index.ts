@@ -2,7 +2,6 @@
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
 import {Utils} from '../../lib';
-import {SampleTeams, teamData} from '../chat-plugins/sample-teams';
 import {PRNG} from '../../sim/prng';
 import type {BestOfGame} from '../room-battle-bestof';
 
@@ -16,7 +15,6 @@ export interface TournamentRoomSettings {
 	forcePublic?: boolean;
 	forceTimer?: boolean;
 	playerCap?: number;
-	showSampleTeams?: boolean;
 	recentToursLength?: number;
 	recentTours?: {name: string, baseFormat: string, time: number}[];
 	blockRecents?: boolean;
@@ -928,23 +926,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.autostartcap = true;
 		this.room.add(`The tournament will start once ${this.playerCap} players have joined.`);
 	}
-	showSampleTeams() {
-		if (teamData.teams[this.baseFormat]) {
-			let buf = ``;
-			for (const categoryName in teamData.teams[this.baseFormat]) {
-				if (!Object.keys(teamData.teams[this.baseFormat][categoryName]).length) continue;
-				if (buf) buf += `<hr />`;
-				buf += `<details${Object.keys(teamData.teams[this.baseFormat]).length < 2 ? ` open` : ``}><summary><strong style="letter-spacing:1.2pt">${categoryName.toUpperCase()}</strong></summary>`;
-				for (const [i, teamName] of Object.keys(teamData.teams[this.baseFormat][categoryName]).entries()) {
-					if (i) buf += `<hr />`;
-					buf += SampleTeams.formatTeam(teamName, teamData.teams[this.baseFormat][categoryName][teamName], true);
-				}
-				buf += `</details>`;
-			}
-			if (!buf) return;
-			this.room.add(`|html|<div class="infobox"><center><h3>Sample Teams for ${SampleTeams.getFormatName(this.baseFormat)}</h3></center><hr />${buf}</div>`).update();
-		}
-	}
 
 	async challenge(user: User, targetUserid: ID, output: Chat.CommandContext) {
 		if (!this.isTournamentStarted) {
@@ -1303,7 +1284,6 @@ function createTournament(
 		if (settings.forceTimer) tour.setForceTimer(true);
 		if (settings.allowModjoin === false) tour.setModjoin(false);
 		if (settings.allowScouting === false) tour.setScouting(false);
-		if (settings.showSampleTeams) tour.showSampleTeams();
 	}
 	return tour;
 }
@@ -2238,33 +2218,6 @@ const commands: Chat.ChatCommands = {
 					return this.sendReply(`Usage: ${this.cmdToken}${this.fullCmd} <number|off>`);
 				}
 			},
-			sampleteams(target, room, user) {
-				room = this.requireRoom();
-				this.checkCan('declare', null, room);
-				if (!target) return this.parse(`/help tour settings`);
-				const tour = room.getGame(Tournament);
-				room.settings.tournaments ||= {};
-				if (this.meansYes(target)) {
-					if (room.settings.tournaments.showSampleTeams) {
-						throw new Chat.ErrorMessage(`Sample teams are already shown for every tournament.`);
-					}
-					if (tour && !tour.isTournamentStarted) tour.showSampleTeams();
-					room.settings.tournaments.showSampleTeams = true;
-					room.saveSettings();
-					this.privateModAction(`Show Sample Teams was set to ON for every tournament by ${user.name}`);
-					this.modlog('TOUR SETTINGS', null, `show sample teams: ON`);
-				} else if (this.meansNo(target)) {
-					if (!room.settings.tournaments.showSampleTeams) {
-						throw new Chat.ErrorMessage(`Sample teams are already not shown for every tournament.`);
-					}
-					delete room.settings.tournaments.showSampleTeams;
-					room.saveSettings();
-					this.privateModAction(`Show Sample Teams was set to OFF for every tournament by ${user.name}`);
-					this.modlog('TOUR SETTINGS', null, `show sample teams: OFF`);
-				} else {
-					return this.sendReply(`Usage: ${this.cmdToken}${this.fullCmd} <on|off>`);
-				}
-			},
 			recenttours(target, room, user) {
 				room = this.requireRoom();
 				this.checkCan('declare', null, room);
@@ -2337,23 +2290,25 @@ const commands: Chat.ChatCommands = {
 				this.parse(`${this.cmdToken}help tour settings`);
 			},
 		},
-		settingshelp: [
-			`/tour settings autodq <minutes|off> - Sets the automatic disqualification timeout for every tournament.`,
-			`/tour settings autostart <on|minutes|off> - Sets the automatic start timeout for every tournament.`,
-			`/tour settings forcepublic <on|off> - Specifies whether users can hide their battles for every tournament.`,
-			`/tour settings forcetimer <on|off> - Specifies whether users can toggle the timer for every tournament.`,
-			`/tour settings modjoin <on|off> - Specifies whether users can modjoin their battles for every tournament.`,
-			`/tour settings autoconfirmedonly: <on|off> - Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.`,
-			`/tour settings playercap <number> - Sets the playercap for every tournament.`,
-			`/tour settings scouting <on|off> - Specifies whether users can spectate other participants for every tournament.`,
-			`/tour settings sampleteams <on|off> - Specifies whether sample teams are shown for every tournament.`,
-			`/tour settings recenttours <number|off|forcedelete> - Specifies the amount of recent tournaments to list in /recenttours.`,
-			`/tour settings blockrecents <on|off> - Toggles blocking tours in /recenttours from being made.`,
-			`Requires: # &`,
-		],
 	},
-	tournamenthelp() {
+	tournamenthelp(target) {
 		if (!this.runBroadcast()) return;
+		if (target.endsWith('settings')) {
+			return this.sendReplyBox(
+				`<code>/tour settings autodq &lt;minutes|off></code> - Sets the automatic disqualification timeout for every tournament.<br />` +
+				`<code>/tour settings autostart &lt;on|minutes|off></code> - Sets the automatic start timeout for every tournament.<br />` +
+				`<code>/tour settings forcepublic &lt;on|off></code> - Specifies whether users can hide their battles for every tournament.<br />` +
+				`<code>/tour settings forcetimer &lt;on|off></code> - Specifies whether users can toggle the timer for every tournament.<br />` +
+				`<code>/tour settings modjoin &lt;on|off></code> - Specifies whether users can modjoin their battles for every tournament.<br />`	+
+				`<code>/tour settings autoconfirmedonly&lt;on|off></code> - Set requirement for signups for this tournament. If this is on, only autoconfirmed users can join a tournament.<br />`	+
+				`<code>/tour settings playercap &lt;number></code> - Sets the playercap for every tournament.<br />` +
+				`<code>/tour settings scouting &lt;on|off></code> - Specifies whether users can spectate other participants for every tournament.<br />` +
+				`<code>/tour settings recenttours &lt;number|off|forcedelete></code> - Specifies the amount of recent tournaments to list in /recenttours.<br />` +
+				`<code>/tour settings blockrecents &lt;on|off></code> - Toggles blocking tours in /recenttours from being made.<br />` +
+				`Requires: # ~`,
+			);
+		}
+
 		this.sendReplyBox(
 			`Tournament Commands<br/>` +
 			`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +

@@ -83,15 +83,15 @@ export const Replays = new class {
 		if (replayData.private === 1 && !replayData.password) {
 			replayData.password = Replays.generatePassword();
 		} else {
-			if (replayData.private === 2) replayData.private = 1;
-			replayData.password = null;
+			if (replayData.private === 2) {
+				replayData.private = 1;
+				replayData.password = null;
+			}
 		}
 		return replayData;
 	}
 
 	async add(replay: Replay) {
-		const fullid = replay.id + (replay.password ? `-${replay.password}pw` : '');
-
 		// obviously upsert exists but this is the easiest way when multiple things need to be changed
 		const replayData = this.toReplayRow(replay);
 		try {
@@ -124,7 +124,7 @@ export const Replays = new class {
 				password: replayData.password,
 			})`WHERE id = ${replay.id}`;
 		}
-		return fullid;
+		return replayData.id + (replayData.password ? `-${replayData.password}pw` : '');
 	}
 
 	async get(id: string): Promise<Replay | null> {

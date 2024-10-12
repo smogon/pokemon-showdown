@@ -1,4 +1,4 @@
-export const Conditions: {[k: string]: ConditionData} = {
+export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	brn: {
 		name: 'brn',
 		effectType: 'Status',
@@ -27,6 +27,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 				this.add('-status', target, 'par');
 			}
 		},
+		onModifySpePriority: -101,
 		onModifySpe(spe, pokemon) {
 			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
 			spe = this.finalModify(spe);

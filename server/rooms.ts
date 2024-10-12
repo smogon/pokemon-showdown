@@ -105,8 +105,8 @@ export interface RoomSettings {
 	jeopardyDisabled?: boolean;
 	mafiaDisabled?: boolean;
 	unoDisabled?: boolean;
-	blackjackDisabled?: boolean;
 	hangmanDisabled?: boolean;
+	auctionDisabled?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
 	spotlight?: string;
@@ -121,6 +121,7 @@ export interface RoomSettings {
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
+	topics?: string[];
 	autoModchat?: {
 		rank: GroupSymbol,
 		time: number,
@@ -179,6 +180,12 @@ export abstract class BasicRoom {
 	 */
 	battle: RoomBattle | null;
 	/**
+	 * The room's current best-of set. Best-of sets are a type of RoomGame, so in best-of set
+	 * rooms (which can only be `GameRoom`s), `this.bestof === this.game`.
+	 * In all other rooms, `this.bestof` is `null`.
+	 */
+	bestOf: BestOfGame | null;
+	/**
 	 * The game room's current tournament. If the room is a battle room whose
 	 * battle is part of a tournament, `this.tour === this.parent.game`.
 	 * In all other rooms, `this.tour` is `null`.
@@ -234,6 +241,7 @@ export abstract class BasicRoom {
 		this.muteQueue = [];
 
 		this.battle = null;
+		this.bestOf = null;
 		this.game = null;
 		this.subGame = null;
 		this.tour = null;
@@ -409,7 +417,7 @@ export abstract class BasicRoom {
 	 * Like addByUser, but without logging
 	 */
 	sendByUser(user: User | null, text: string) {
-		this.send('|c|' + (user ? user.getIdentity(this) : '&') + '|/log ' + text);
+		this.send('|c|' + (user ? user.getIdentity(this) : '~') + '|/log ' + text);
 	}
 	/**
 	 * Like addByUser, but sends to mods only.
@@ -824,7 +832,7 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.battle) {
+		if (this.battle || this.bestOf) {
 			if (privacy) {
 				if (this.roomid.endsWith('pw')) return true;
 
@@ -841,6 +849,13 @@ export abstract class BasicRoom {
 				if (lastDashIndex < 0) throw new Error(`invalid battle ID ${this.roomid}`);
 
 				this.rename(this.title, this.roomid.slice(0, lastDashIndex) as RoomID);
+			}
+		}
+		this.bestOf?.setPrivacyOfGames(privacy);
+
+		if (this.game) {
+			for (const player of this.game.players) {
+				player.getUser()?.updateSearch();
 			}
 		}
 	}
@@ -1208,7 +1223,7 @@ export class GlobalRoomState {
 				auth: {},
 				creationTime: Date.now(),
 				isPrivate: 'hidden',
-				modjoin: Users.SECTIONLEADER_SYMBOL,
+				modjoin: '%',
 				autojoin: true,
 			}];
 		}
@@ -1256,7 +1271,7 @@ export class GlobalRoomState {
 
 		// init battle room logging
 		if (Config.logladderip) {
-			this.ladderIpLog = FS('logs/ladderip/ladderip.txt').createAppendStream();
+			this.ladderIpLog = Monitor.logPath('ladderip/ladderip.txt').createAppendStream();
 		} else {
 			// Prevent there from being two possible hidden classes an instance
 			// of GlobalRoom can have.
@@ -1280,7 +1295,7 @@ export class GlobalRoomState {
 
 		let lastBattle;
 		try {
-			lastBattle = FS('logs/lastbattle.txt').readSync('utf8');
+			lastBattle = Monitor.logPath('lastbattle.txt').readSync('utf8');
 		} catch {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
@@ -1337,7 +1352,7 @@ export class GlobalRoomState {
 
 	async saveBattles() {
 		let count = 0;
-		const out = FS('logs/battles.jsonl.progress').createAppendStream();
+		const out = Monitor.logPath('battles.jsonl.progress').createAppendStream();
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
 			room.battle.frozen = true;
@@ -1348,7 +1363,7 @@ export class GlobalRoomState {
 			count++;
 		}
 		await out.writeEnd();
-		await FS('logs/battles.jsonl.progress').rename('logs/battles.jsonl');
+		await Monitor.logPath('battles.jsonl.progress').rename(Monitor.logPath('battles.jsonl').path);
 		return count;
 	}
 
@@ -1357,7 +1372,7 @@ export class GlobalRoomState {
 		this.battlesLoading = true;
 		for (const u of Users.users.values()) {
 			u.send(
-				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
+				`|pm|~|${u.getIdentity()}|/uhtml restartmsg,` +
 				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
 			);
 		}
@@ -1365,7 +1380,7 @@ export class GlobalRoomState {
 		let count = 0;
 		let input;
 		try {
-			const stream = FS('logs/battles.jsonl').createReadStream();
+			const stream = Monitor.logPath('battles.jsonl').createReadStream();
 			await stream.fd;
 			input = stream.byLine();
 		} catch (e) {
@@ -1376,9 +1391,9 @@ export class GlobalRoomState {
 			if (this.deserializeBattleRoom(JSON.parse(line))) count++;
 		}
 		for (const u of Users.users.values()) {
-			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
+			u.send(`|pm|~|${u.getIdentity()}|/uhtmlchange restartmsg,`);
 		}
-		await FS('logs/battles.jsonl').unlinkIfExists();
+		await Monitor.logPath('battles.jsonl').unlinkIfExists();
 		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
 		this.battlesLoading = false;
 	}
@@ -1387,7 +1402,8 @@ export class GlobalRoomState {
 		for (const room of Rooms.rooms.values()) {
 			const player = room.game && !room.game.ended && room.game.playerTable[user.id];
 			if (!player) continue;
-
+			// prevents players from being re-added to games like Scavengers after they've finished
+			if (player.completed) continue;
 			user.games.add(room.roomid);
 			player.name = user.name;
 			user.joinRoom(room.roomid);
@@ -1417,7 +1433,7 @@ export class GlobalRoomState {
 			if (this.lastBattle < this.lastWrittenBattle) return;
 			this.lastWrittenBattle = this.lastBattle + LAST_BATTLE_WRITE_THROTTLE;
 		}
-		FS('logs/lastbattle.txt').writeUpdate(
+		Monitor.logPath('lastbattle.txt').writeUpdate(
 			() => `${this.lastWrittenBattle}`
 		);
 	}
@@ -1465,6 +1481,7 @@ export class GlobalRoomState {
 			if (level === 50) displayCode |= 16;
 			 // 32 was previously used for Multi Battles
 			if (format.bestOfDefault) displayCode |= 64;
+			if (format.teraPreviewDefault) displayCode |= 128;
 			this.formatList += ',' + displayCode.toString(16);
 		}
 		return this.formatList;
@@ -1482,9 +1499,8 @@ export class GlobalRoomState {
 			if (!Config.groups[rank] || !rank) continue;
 
 			const tarGroup = Config.groups[rank];
-			let groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
+			const groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
 				'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
-			if (tarGroup.id === 'sectionleader') groupType = 'staff';
 
 			rankList.push({
 				symbol: rank,
@@ -1750,7 +1766,7 @@ export class GlobalRoomState {
 			}
 		}
 		for (const user of Users.users.values()) {
-			user.send(`|pm|&|${user.tempGroup}${user.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
+			user.send(`|pm|~|${user.tempGroup}${user.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
 		}
 
 		this.lockdown = true;
@@ -1889,6 +1905,7 @@ export class GameRoom extends BasicRoom {
 	 */
 	rated: number;
 	declare battle: RoomBattle | null;
+	declare bestOf: BestOfGame | null;
 	declare game: RoomGame;
 	modchatUser: string;
 	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
@@ -1915,6 +1932,7 @@ export class GameRoom extends BasicRoom {
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 
 		this.battle = null;
+		this.bestOf = null;
 		this.game = null!;
 
 		this.modchatUser = '';
@@ -2032,11 +2050,10 @@ export class GameRoom extends BasicRoom {
 		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
 		if (silent) connection = undefined;
 		const isPrivate = this.settings.isPrivate || this.hideReplay;
-		const hidden = options === 'forpunishment' || options === 'auto' ? 10 :
-			(this as any).unlistReplay ? 2 :
+		const hidden = options === 'auto' ? 10 :
+			options === 'forpunishment' || (this as any).unlistReplay ? 2 :
 			isPrivate ? 1 :
 			0;
-
 		if (isPrivate && hidden === 10) {
 			password = Replays.generatePassword();
 		}
@@ -2084,7 +2101,7 @@ export class GameRoom extends BasicRoom {
 			players: battle.players.map(p => p.name).join(','),
 			format: format.name,
 			rating, // will probably do nothing
-			hidden,
+			hidden: hidden === 0 ? '' : hidden,
 			inputlog: battle.inputLog?.join('\n') || undefined,
 			password,
 		});
@@ -2103,7 +2120,7 @@ export class GameRoom extends BasicRoom {
 	}
 
 	getReplayData() {
-		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
+		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7), password: null};
 		const end = this.roomid.length - 2;
 		const lastHyphen = this.roomid.lastIndexOf('-', end);
 		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
@@ -2111,7 +2128,14 @@ export class GameRoom extends BasicRoom {
 }
 
 function getRoom(roomid?: string | BasicRoom) {
-	if (typeof roomid === 'string') return Rooms.rooms.get(roomid as RoomID);
+	if (typeof roomid === 'string') {
+		// Accounts for private battles that were made public
+		if ((roomid.startsWith('battle-') || roomid.startsWith('game-bestof')) && roomid.endsWith('pw')) {
+			const room = Rooms.rooms.get(roomid.slice(0, roomid.lastIndexOf('-')) as RoomID);
+			if (room) return room;
+		}
+		return Rooms.rooms.get(roomid as RoomID);
+	}
 	return roomid as Room;
 }
 
@@ -2222,12 +2246,17 @@ export const Rooms = {
 		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
+		let game: RoomBattle | BestOfGame;
 		if (options.isBestOfSubBattle || !isBestOf) {
-			const battle = new Rooms.RoomBattle(room, options);
-			room.game = battle;
-			battle.checkPrivacySettings(options);
+			game = new RoomBattle(room, options);
 		} else {
-			room.game = new BestOfGame(room, options);
+			game = new BestOfGame(room, options);
+		}
+		room.game = game;
+		if (options.isBestOfSubBattle && room.parent) {
+			room.setPrivate(room.parent.settings.isPrivate || false);
+		} else {
+			game.checkPrivacySettings(options);
 		}
 
 		for (const p of players) {

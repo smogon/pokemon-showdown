@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	cutecharm: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
@@ -54,6 +54,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	forecast: {
 		inherit: true,
 		flags: {},
+	},
+	hustle: {
+		inherit: true,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			const physicalTypes = ['Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel'];
+			if (physicalTypes.includes(move.type) && typeof accuracy === 'number') {
+				return this.chainModify([3277, 4096]);
+			}
+		},
 	},
 	intimidate: {
 		inherit: true,
@@ -167,7 +176,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	trace: {
 		inherit: true,
-		onUpdate(pokemon) {
+		onUpdate() {},
+		onStart(pokemon) {
 			if (!pokemon.isStarted) return;
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;

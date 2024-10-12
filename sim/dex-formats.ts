@@ -1,6 +1,7 @@
 import {Utils} from '../lib';
 import {toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
+import {SpeciesData} from './dex-species';
 import {Tags} from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';
@@ -11,12 +12,26 @@ export interface FormatData extends Partial<Format>, EventMethods {
 
 export type FormatList = (FormatData | {section: string, column?: number})[];
 export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
+export interface FormatDataTable {[id: IDEntry]: FormatData}
+export interface ModdedFormatDataTable {[id: IDEntry]: ModdedFormatData}
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
 export type ComplexTeamBan = ComplexBan;
+
+export interface GameTimerSettings {
+	dcTimer: boolean;
+	dcTimerBank: boolean;
+	starting: number;
+	grace: number;
+	addPerTurn: number;
+	maxPerTurn: number;
+	maxFirstTurn: number;
+	timeoutAutoChoose: boolean;
+	accelerate: boolean;
+}
 
 /**
  * A RuleTable keeps track of the rules that a format has. The key can be:
@@ -69,13 +84,13 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`-basepokemon:${toID(species.baseSpecies)}`)) return true;
 		for (const tagid in Tags) {
-			const tag = Tags[tagid];
+			const tag = Tags[tagid as ID];
 			if (this.has(`-pokemontag:${tagid}`)) {
 				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
-			const tag = Tags[tagid];
+			const tag = Tags[tagid as ID];
 			if (this.has(`+pokemontag:${tagid}`)) {
 				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
@@ -94,13 +109,13 @@ export class RuleTable extends Map<string, string> {
 		if (this.has(`+basepokemon:${toID(species.baseSpecies)}`)) return false;
 		if (this.has(`*basepokemon:${toID(species.baseSpecies)}`)) return true;
 		for (const tagid in Tags) {
-			const tag = Tags[tagid];
+			const tag = Tags[tagid as ID];
 			if (this.has(`*pokemontag:${tagid}`)) {
 				if ((tag.speciesFilter || tag.genericFilter)!(species)) return true;
 			}
 		}
 		for (const tagid in Tags) {
-			const tag = Tags[tagid];
+			const tag = Tags[tagid as ID];
 			if (this.has(`+pokemontag:${tagid}`)) {
 				if ((tag.speciesFilter || tag.genericFilter)!(species)) return false;
 			}
@@ -212,7 +227,38 @@ export class RuleTable extends Map<string, string> {
 		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || 0;
 		this.adjustLevel = Number(this.valueRules.get('adjustlevel')) || null;
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
-		this.evLimit = Number(this.valueRules.get('evlimit')) || null;
+		this.evLimit = Number(this.valueRules.get('evlimit'));
+		if (isNaN(this.evLimit)) this.evLimit = null;
+
+		const timer: Partial<GameTimerSettings> = {};
+		if (this.valueRules.has('timerstarting')) {
+			timer.starting = Number(this.valueRules.get('timerstarting'));
+		}
+		if (this.has('dctimer')) {
+			timer.dcTimer = true;
+		}
+		if (this.has('dctimerbank')) {
+			timer.dcTimer = true;
+		}
+		if (this.valueRules.has('timergrace')) {
+			timer.grace = Number(this.valueRules.get('timergrace'));
+		}
+		if (this.valueRules.has('timeraddperturn')) {
+			timer.addPerTurn = Number(this.valueRules.get('timeraddperturn'));
+		}
+		if (this.valueRules.has('timermaxperturn')) {
+			timer.maxPerTurn = Number(this.valueRules.get('timermaxperturn'));
+		}
+		if (this.valueRules.has('timermaxfirstturn')) {
+			timer.maxFirstTurn = Number(this.valueRules.get('timermaxfirstturn'));
+		}
+		if (this.has('timeoutautochoose')) {
+			timer.timeoutAutoChoose = true;
+		}
+		if (this.has('timeraccelerate')) {
+			timer.accelerate = true;
+		}
+		if (Object.keys(timer).length) this.timer = [timer, format.name];
 
 		if (this.valueRules.get('pickedteamsize') === 'Auto') {
 			this.pickedTeamSize = (
@@ -293,6 +339,22 @@ export class RuleTable extends Map<string, string> {
 		}
 		if (this.evLimit && this.evLimit < 0) {
 			throw new Error(`EV Limit ${this.evLimit}${this.blame('evlimit')} can't be less than 0 (you might have meant: "! EV Limit" to remove the limit, or "EV Limit = 0" to ban EVs).`);
+		}
+
+		if (timer.starting !== undefined && (timer.starting < 10 || timer.starting > 1200)) {
+			throw new Error(`Timer starting value ${timer.starting}${this.blame('timerstarting')} must be between 10 and 1200 seconds.`);
+		}
+		if (timer.grace && timer.grace > 300) {
+			throw new Error(`Timer grace value ${timer.grace}${this.blame('timergrace')} must be at most 300 seconds.`);
+		}
+		if (timer.addPerTurn && timer.addPerTurn > 30) {
+			throw new Error(`Timer add per turn value ${timer.addPerTurn}${this.blame('timeraddperturn')} must be at most 30 seconds.`);
+		}
+		if (timer.maxPerTurn !== undefined && (timer.maxPerTurn < 10 || timer.maxPerTurn > 1200)) {
+			throw new Error(`Timer max per turn value ${timer.maxPerTurn}${this.blame('timermaxperturn')} must be between 10 and 1200 seconds.`);
+		}
+		if (timer.maxFirstTurn !== undefined && (timer.maxFirstTurn < 10 || timer.maxFirstTurn > 1200)) {
+			throw new Error(`Timer max first turn value ${timer.maxFirstTurn}${this.blame('timermaxfirstturn')} must be between 10 and 1200 seconds.`);
 		}
 
 		if ((format as any).cupLevelLimit) {
@@ -382,8 +444,8 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly challengeShow?: boolean;
 	declare readonly searchShow?: boolean;
 	declare readonly bestOfDefault?: boolean;
+	declare readonly teraPreviewDefault?: boolean;
 	declare readonly threads?: string[];
-	declare readonly timer?: Partial<GameTimerSettings>;
 	declare readonly tournamentShow?: boolean;
 	declare readonly checkCanLearn?: (
 		this: TeamValidator, move: Move, species: Species, setSources: PokemonSources, set: PokemonSet
@@ -547,6 +609,7 @@ export class DexFormats {
 			if (format.searchShow === undefined) format.searchShow = true;
 			if (format.tournamentShow === undefined) format.tournamentShow = true;
 			if (format.bestOfDefault === undefined) format.bestOfDefault = false;
+			if (format.teraPreviewDefault === undefined) format.teraPreviewDefault = false;
 			if (format.mod === undefined) format.mod = 'gen9';
 			if (!this.dex.dexes[format.mod]) throw new Error(`Format "${format.name}" requires nonexistent mod: '${format.mod}'`);
 
@@ -660,9 +723,6 @@ export class DexFormats {
 		if (format.checkCanLearn) {
 			ruleTable.checkCanLearn = [format.checkCanLearn, format.name];
 		}
-		if (format.timer) {
-			ruleTable.timer = [format.timer, format.name];
-		}
 
 		// apply rule repeals before other rules
 		// repeals is a ruleid:depth map (positive: unused, negative: used)
@@ -734,6 +794,7 @@ export class DexFormats {
 						throw new Error(`In rule "${ruleSpec}", "${value}" must be positive.`);
 					}
 				}
+
 				const oldValue = ruleTable.valueRules.get(subformat.id);
 				if (oldValue === value) {
 					throw new Error(`Rule "${ruleSpec}" is redundant with existing rule "${subformat.id}=${value}"${ruleTable.blame(subformat.id)}.`);
@@ -808,14 +869,6 @@ export class DexFormats {
 					);
 				}
 				ruleTable.checkCanLearn = subRuleTable.checkCanLearn;
-			}
-			if (subRuleTable.timer) {
-				if (ruleTable.timer) {
-					throw new Error(
-						`"${format.name}" has conflicting timer validation rules from "${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`
-					);
-				}
-				ruleTable.timer = subRuleTable.timer;
 			}
 		}
 		ruleTable.getTagRules();
@@ -933,8 +986,8 @@ export class DexFormats {
 			}
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
-					const species: Species = table[id] as Species;
-					if ((species.otherFormes || species.cosmeticFormes) && ruleid !== species.id + toID(species.baseForme)) {
+					const species = table[id] as SpeciesData;
+					if ((species.otherFormes || species.cosmeticFormes) && ruleid === id) {
 						matches.push('basepokemon:' + id);
 						continue;
 					}

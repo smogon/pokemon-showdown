@@ -1,4 +1,4 @@
-import {PokemonEventMethods} from './dex-conditions';
+import type {PokemonEventMethods, ConditionData} from './dex-conditions';
 import {BasicEffect, toID} from './dex-data';
 
 interface AbilityEventMethods {
@@ -25,6 +25,8 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Poke
 }
 
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
+export interface AbilityDataTable {[abilityid: IDEntry]: AbilityData}
+export interface ModdedAbilityDataTable {[abilityid: IDEntry]: ModdedAbilityData}
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Ability';

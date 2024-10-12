@@ -2,16 +2,15 @@ import {FS} from '../lib/fs';
 import type {RoomSection} from './chat-commands/room-settings';
 import {toID} from '../sim/dex-data';
 
-export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
+export type GroupSymbol = '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
-export const SECTIONLEADER_SYMBOL: GroupSymbol = '\u00a7';
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 export const ROOM_PERMISSIONS = [
-	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomsectionleader', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
+	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
 ] as const;
 
 export const GLOBAL_PERMISSIONS = [
@@ -64,7 +63,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			// At one point bots used to be ranked above drivers, so this checks
 			// driver rank to make sure this function works on servers that
 			// did not reorder the ranks.
-			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, SECTIONLEADER_SYMBOL) || Auth.atLeast(rank, '%');
+			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, '%');
 		} else {
 			return false;
 		}
@@ -139,11 +138,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 
 		let group = Auth.getGroup(symbol);
 		if (group['root']) return true;
+		// Global drivers who are SLs should get room mod powers too
 		if (
 			room?.settings.section &&
 			room.settings.section === Users.globalAuth.sectionLeaders.get(user.id) &&
-			// Global drivers who are SLs should get room mod powers too
-			Users.globalAuth.atLeast(user, SECTIONLEADER_SYMBOL) &&
 			// But dont override ranks above moderator such as room owner
 			(Auth.getGroup('@').rank > group.rank)
 		) {
@@ -293,7 +291,7 @@ export class RoomAuth extends Auth {
 		// Plus, using user.can is cleaner than Users.globalAuth.get(user) === admin and it accounts for more things.
 		// (and no this won't recurse or anything since user.can() with no room doesn't call this)
 		if (this.room.settings.isPrivate === true && user.can('makeroom')) {
-			// not hardcoding & here since globalAuth.get should return & in basically all cases
+			// not hardcoding ~ here since globalAuth.get should return ~ in basically all cases
 			// except sysops, and there's an override for them anyways so it doesn't matter
 			return Users.globalAuth.get(user);
 		}

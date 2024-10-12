@@ -149,14 +149,14 @@ export default class TeamGenerator {
 	}
 
 	protected makeSet(species: Species, teamStats: TeamStats): PokemonSet {
-		const abilityPool = Object.values(species.abilities);
+		const abilityPool: string[] = Object.values(species.abilities);
 		const abilityWeights = abilityPool.map(a => this.getAbilityWeight(this.dex.abilities.get(a)));
 		const ability = this.weightedRandomPick(abilityPool, abilityWeights);
 		const level = this.forceLevel || TeamGenerator.getLevel(species);
 
 		const moves: Move[] = [];
 
-		let movePool: string[] = [...this.dex.species.getMovePool(species.id)];
+		let movePool: IDEntry[] = [...this.dex.species.getMovePool(species.id)];
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
 
 		// Consider either the top 15 moves or top 30% of moves, whichever is greater.
@@ -173,7 +173,7 @@ export default class TeamGenerator {
 		// this is just a second reference the array because movePool gets set to point to a new array before the old one
 		// gets mutated
 		const movePoolCopy = movePool;
-		let interimMovePool: {move: string, weight: number}[] = [];
+		let interimMovePool: {move: IDEntry, weight: number}[] = [];
 		while (moves.length < 4 && movePool.length) {
 			let weights;
 			if (!movePoolIsTrimmed) {
@@ -514,8 +514,8 @@ export default class TeamGenerator {
 		if (move.category === 'Special' && hasPhysicalSetup) powerEstimate *= 0.7;
 
 		const abilityBonus = (
-			((ABILITY_MOVE_BONUSES[ability] || {})[move.id] || 1) *
-			((ABILITY_MOVE_TYPE_BONUSES[ability] || {})[moveType] || 1)
+			((ABILITY_MOVE_BONUSES[this.dex.toID(ability)] || {})[move.id] || 1) *
+			((ABILITY_MOVE_TYPE_BONUSES[this.dex.toID(ability)] || {})[moveType] || 1)
 		);
 
 		let weight = powerEstimate * abilityBonus;

@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	acupressure: {
 		inherit: true,
 		flags: {snatch: 1, metronome: 1},
@@ -476,7 +476,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	flail: {
 		inherit: true,
-		basePowerCallback(pokemon, target) {
+		basePowerCallback(pokemon) {
 			const ratio = Math.max(Math.floor(pokemon.hp * 64 / pokemon.maxhp), 1);
 			let bp;
 			if (ratio < 2) {
@@ -802,7 +802,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const item = target.getItem();
 			if (this.runEvent('TakeItem', target, source, move, item)) {
 				target.itemState.knockedOff = true;
-				this.add('-enditem', target, item.name, '[from] move: Knock Off');
+				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
 				this.hint("In Gens 3-4, Knock Off only makes the target's item unusable; it cannot obtain a new item.", true);
 			}
 		},
@@ -931,7 +931,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				target.removeVolatile('magiccoat');
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
-				this.actions.useMove(newMove, target, source);
+				this.actions.useMove(newMove, target, {target: source});
 				return null;
 			},
 		},
@@ -980,7 +980,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mimic: {
 		inherit: true,
 		flags: {
-			protect: 1, bypasssub: 1, allyanim: 1, noassist: 1, failcopycat: 1, failencore: 1, failinstruct: 1, failmimic: 1,
+			protect: 1, allyanim: 1, noassist: 1, failcopycat: 1, failencore: 1, failinstruct: 1, failmimic: 1,
 		},
 		onHit(target, source) {
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
@@ -1088,14 +1088,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	mudsport: {
 		inherit: true,
 		condition: {
-			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Mud Sport');
 			},
 			onAnyBasePowerPriority: 3,
 			onAnyBasePower(basePower, user, target, move) {
 				if (move.type === 'Electric') {
-					this.debug('mud sport weaken');
+					this.debug('Mud Sport weaken');
 					return this.chainModify(0.5);
 				}
 			},
@@ -1289,7 +1288,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	reversal: {
 		inherit: true,
-		basePowerCallback(pokemon, target) {
+		basePowerCallback(pokemon) {
 			const ratio = Math.max(Math.floor(pokemon.hp * 64 / pokemon.maxhp), 1);
 			let bp;
 			if (ratio < 2) {
@@ -1388,13 +1387,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	sketch: {
 		inherit: true,
-		flags: {bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1},
+		flags: {
+			bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1,
+			failcopycat: 1, failinstruct: 1, failmimic: 1, nosketch: 1,
+		},
 		onHit(target, source) {
-			const disallowedMoves = ['chatter', 'sketch', 'struggle'];
 			if (source.transformed || !target.lastMove || target.volatiles['substitute']) {
 				return false;
 			}
-			if (disallowedMoves.includes(target.lastMove.id) || source.moves.includes(target.lastMove.id)) {
+			if (target.lastMove.flags['nosketch'] || source.moves.includes(target.lastMove.id)) {
 				 return false;
 			}
 			const sketchIndex = source.moves.indexOf('sketch');
@@ -1473,7 +1474,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	struggle: {
 		inherit: true,
 		flags: {
-			contact: 1, protect: 1, failencore: 1, failmefirst: 1, noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1,
+			contact: 1, protect: 1, failencore: 1, failmefirst: 1,
+			noassist: 1, failcopycat: 1, failinstruct: 1, failmimic: 1, nosketch: 1,
 		},
 		onModifyMove(move) {
 			move.type = '???';
@@ -1752,14 +1754,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	watersport: {
 		inherit: true,
 		condition: {
-			noCopy: true,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Water Sport');
 			},
 			onAnyBasePowerPriority: 3,
 			onAnyBasePower(basePower, user, target, move) {
 				if (move.type === 'Fire') {
-					this.debug('water sport weaken');
+					this.debug('Water Sport weaken');
 					return this.chainModify(0.5);
 				}
 			},

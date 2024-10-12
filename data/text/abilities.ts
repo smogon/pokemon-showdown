@@ -1,4 +1,4 @@
-export const AbilitiesText: {[k: string]: AbilityText} = {
+export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	noability: {
 		name: "No Ability",
 		shortDesc: "Does nothing.",
@@ -727,6 +727,7 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage. This Pokemon ignores a target's evasiveness stat stage.",
 		shortDesc: "This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat.",
 		gen8: {
+			desc: "No competitive use.",
 			shortDesc: "No competitive use.",
 		},
 	},
@@ -1229,7 +1230,11 @@ export const AbilitiesText: {[k: string]: AbilityText} = {
 	},
 	pickup: {
 		name: "Pickup",
+		desc: "At the end of each turn, if this Pokemon is not holding an item and at least one adjacent Pokemon used an item during this turn, one of those Pokemon is selected at random and this Pokemon obtains that Pokemon's last used item. An item is not considered the last used if it was a popped Air Balloon, if the item was picked up by another Pokemon with this Ability, or if the item was lost to Bug Bite, Corrosive Gas, Covet, Incinerate, Knock Off, Pluck, or Thief. Items thrown with Fling can be picked up.",
 		shortDesc: "If this Pokemon has no item, it finds one used by an adjacent Pokemon this turn.",
+		gen7: {
+			desc: "At the end of each turn, if this Pokemon is not holding an item and at least one adjacent Pokemon used an item during this turn, one of those Pokemon is selected at random and this Pokemon obtains that Pokemon's last used item. An item is not considered the last used if it was a popped Air Balloon, if the item was picked up by another Pokemon with this Ability, or if the item was lost to Bug Bite, Covet, Incinerate, Knock Off, Pluck, or Thief. Items thrown with Fling can be picked up.",
+		},
 		gen4: {
 			desc: "No competitive use.",
 			shortDesc: "No competitive use.",
