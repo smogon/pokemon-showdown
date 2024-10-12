@@ -1001,28 +1001,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	lostandfound: {
 		name: "Lost and Found",
 		gen: 9,
-		onTryHit(target, source, move) {
+		desc: `Whenever this Pokemon is damaged by an attacking move, it takes 1/5 of the damage 
+  					and immediately switches to an ally of choice. Three times per battle.`,
+		shortDesc: "Takes 1/5 damage from attacks, then switches to ally of choice.",
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
 			if (!target.abilityState.switches) target.abilityState.switches = 0;
-			if (target === source || move.category === 'Status') return;
-			if (target.abilityState.switches >= 3) return;
-			if (target.side.totalFainted >= 5) return;
+			if (target === source || !damage ||
+			effect.effectType !== 'Move' || target.abilityState.switches >= 3 ||
+			target.side.totalFainted >= 5) return;
 			target.abilityState.switches++;
 			this.add('-activate', target, 'ability: Lost and Found');
 			this.add('-message', `${target.name} scrambled away from danger!`);
 			this.add('-anim', target, 'Dive', target);
-			target.side.addSideCondition('lostandfound');
 			target.switchFlag = true;
-			this.effectState.incMove = this.activeMove;
-			this.effectState.attackingFoe = source;
-			return null;
-		},
-		condition: {
-			onSwitchIn(pokemon) {
-				const dmg = this.actions.getDamage(this.effectState.attackingFoe, pokemon, this.effectState.incMove);
-				this.add('-anim', this.effectState.attackingFoe, this.effectState.incMove.name, pokemon);
-				this.damage(dmg, pokemon, this.effectState.attackingFoe, this.effectState.incMove);
-				pokemon.side.removeSideCondition('lostandfound');
-			},
+			return damage / 5;
 		},
 	},
 	// Faust
@@ -1792,13 +1785,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move.id === 'sketch') return priority + 1;
 		},
-		onAfterMove(source, target, move) {
-			source.storedStats.atk = target.storedStats.atk;
-			source.storedStats.def = target.storedStats.def;
-			source.storedStats.spa = target.storedStats.spa;
-			source.storedStats.spd = target.storedStats.spd;
-			source.storedStats.spe = target.storedStats.spe;
-			this.add('-message', `${source.name} sketched ${target.name}'s base stats!`);
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source move.id === 'sketch') {
+				source.storedStats.atk = target.storedStats.atk;
+				source.storedStats.def = target.storedStats.def;
+				source.storedStats.spa = target.storedStats.spa;
+				source.storedStats.spd = target.storedStats.spd;
+				source.storedStats.spe = target.storedStats.spe;
+				this.add('-message', `${source.name} sketched ${target.name}'s base stats!`);
+			}
 		},
 	},
 
