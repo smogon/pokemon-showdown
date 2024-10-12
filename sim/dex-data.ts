@@ -34,6 +34,20 @@ export function toID(text: any): ID {
 	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 }
 
+/**
+ * Like Object.assign but only assigns fields missing from self.
+ * Facilitates consistent field ordering in constructors.
+ * Modifies self in-place.
+ */
+export function assignNewFields(self: AnyObject, data: AnyObject) {
+	for (const k in data) {
+		// to behave like Object.assign, skip data's inherited properties
+		if (!Object.prototype.hasOwnProperty.call(data, k)) continue;
+		if (Object.prototype.hasOwnProperty.call(self, k)) continue;
+		self[k] = data[k];
+	}
+}
+
 export class BasicEffect implements EffectData {
 	/**
 	 * ID. This will be a lowercase version of the name with all the
@@ -101,15 +115,18 @@ export class BasicEffect implements EffectData {
 	/** ??? */
 	sourceEffect: string;
 
-	constructor(data: AnyObject) {
-		this.exists = true;
-		Object.assign(this, data);
-
+	/**
+	 * Pass 'false' for the second parameter if you only want the declared fields of BasicEffect
+	 * to be initialized - the other properties of data will ignored.
+	 * This is to help w/ V8 hidden classes (want to init fields in consistent order)
+	 */
+	constructor(data: AnyObject, copyOtherFields = true) {
 		this.name = Utils.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Utils.getString(data.fullname) || this.name;
 		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
-		this.exists = !!(this.exists && this.id);
+		const exists = Object.prototype.propertyIsEnumerable.call(data, 'exists') ? data.exists : true;
+		this.exists = !!(exists && this.id);
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
 		this.shortDesc = data.shortDesc || '';
@@ -121,6 +138,8 @@ export class BasicEffect implements EffectData {
 		this.status = data.status as ID || undefined;
 		this.weather = data.weather as ID || undefined;
 		this.sourceEffect = data.sourceEffect || '';
+
+		if (copyOtherFields) assignNewFields(this, data);
 	}
 
 	toString() {
