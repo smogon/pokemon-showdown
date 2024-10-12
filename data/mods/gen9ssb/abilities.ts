@@ -1786,7 +1786,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.id === 'sketch') return priority + 1;
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (source move.id === 'sketch') {
+			if (move.id === 'sketch') {
 				source.storedStats.atk = target.storedStats.atk;
 				source.storedStats.def = target.storedStats.def;
 				source.storedStats.spa = target.storedStats.spa;
