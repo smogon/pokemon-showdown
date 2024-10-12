@@ -616,9 +616,35 @@ export class DexMoves {
 	constructor(dex: ModdedDex) {
 		this.dex = dex;
 		const Moves = dex.data.Moves;
+		const parent = dex.parentMod ? dex.mod(dex.parentMod) : undefined;
 		const allCache = [];
-		for (const id in Moves) {
-			allCache.push(this.getByID(id as ID));
+		for (const _id in Moves) {
+			let id = _id as ID;
+			if (id.startsWith('hiddenpower')) {
+				id = /([a-z]*)([0-9]*)/.exec(id)![1] as ID;
+			}
+			const moveData = this.dex.data.Moves[id] as any;
+			const moveTextData = this.dex.getDescs('Moves', id, moveData);
+			let move: Move = new DataMove({
+				name: id,
+				...moveData,
+				...moveTextData,
+			});
+			if (move.gen > this.dex.gen) {
+				(move as any).isNonstandard = 'Future';
+			}
+			if (parent) {
+				const parentData = parent.data.Moves[id];
+				const parentMove = parent.moves.getByID(id);
+				if (moveData === parentData &&
+					move.isNonstandard === parentMove.isNonstandard &&
+					move.shortDesc === parentMove.shortDesc &&
+					move.desc === parentMove.desc) {
+					move = parentMove;
+				}
+			}
+			this.moveCache.set(id, move);
+			allCache.push(dex.deepFreeze(move));
 		}
 		this.allCache = Object.freeze(allCache);
 	}
@@ -632,6 +658,9 @@ export class DexMoves {
 
 	getByID(id: ID): Move {
 		if (id === '') return EMPTY_MOVE;
+		if (id.startsWith('hiddenpower')) {
+			id = /([a-z]*)([0-9]*)/.exec(id)![1] as ID;
+		}
 		let move = this.moveCache.get(id);
 		if (move) return move;
 		if (this.dex.data.Aliases.hasOwnProperty(id)) {
@@ -641,27 +670,7 @@ export class DexMoves {
 			}
 			return move;
 		}
-		if (id.startsWith('hiddenpower')) {
-			id = /([a-z]*)([0-9]*)/.exec(id)![1] as ID;
-		}
-		if (id && this.dex.data.Moves.hasOwnProperty(id)) {
-			const moveData = this.dex.data.Moves[id] as any;
-			const moveTextData = this.dex.getDescs('Moves', id, moveData);
-			move = new DataMove({
-				name: id,
-				...moveData,
-				...moveTextData,
-			});
-			if (move.gen > this.dex.gen) {
-				(move as any).isNonstandard = 'Future';
-			}
-		} else {
-			move = new DataMove({
-				name: id, exists: false,
-			});
-		}
-		if (move.exists) this.moveCache.set(id, this.dex.deepFreeze(move));
-		return move;
+		return new DataMove({name: id, exists: false});
 	}
 
 	all(): readonly Move[] {
