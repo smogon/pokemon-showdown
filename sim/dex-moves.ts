@@ -614,6 +614,8 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	}
 }
 
+const EMPTY_MOVE = Utils.deepFreeze(new DataMove({name: '', exists: false}));
+
 export class DexMoves {
 	readonly dex: ModdedDex;
 	readonly moveCache = new Map<ID, Move>();
@@ -625,13 +627,12 @@ export class DexMoves {
 
 	get(name?: string | Move): Move {
 		if (name && typeof name !== 'string') return name;
-
-		name = (name || '').trim();
-		const id = toID(name);
+		const id = name ? toID(name.trim()) : '' as ID;
 		return this.getByID(id);
 	}
 
 	getByID(id: ID): Move {
+		if (id === '') return EMPTY_MOVE;
 		let move = this.moveCache.get(id);
 		if (move) return move;
 		if (this.dex.data.Aliases.hasOwnProperty(id)) {

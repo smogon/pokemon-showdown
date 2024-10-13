@@ -145,6 +145,8 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 	}
 }
 
+const EMPTY_NATURE = Utils.deepFreeze(new Nature({name: '', exists: false}));
+
 export interface NatureData {
 	name: string;
 	plus?: StatIDExceptHP;
@@ -167,10 +169,10 @@ export class DexNatures {
 
 	get(name: string | Nature): Nature {
 		if (name && typeof name !== 'string') return name;
-
 		return this.getByID(toID(name));
 	}
 	getByID(id: ID): Nature {
+		if (id === '') return EMPTY_NATURE;
 		let nature = this.natureCache.get(id);
 		if (nature) return nature;
 
@@ -274,6 +276,8 @@ export class TypeInfo implements Readonly<TypeData> {
 	}
 }
 
+const EMPTY_TYPE_INFO = Utils.deepFreeze(new TypeInfo({name: '', id: '', exists: false, effectType: 'EffectType'}));
+
 export class DexTypes {
 	readonly dex: ModdedDex;
 	readonly typeCache = new Map<ID, TypeInfo>();
@@ -290,6 +294,7 @@ export class DexTypes {
 	}
 
 	getByID(id: ID): TypeInfo {
+		if (id === '') return EMPTY_TYPE_INFO;
 		let type = this.typeCache.get(id);
 		if (type) return type;
 
