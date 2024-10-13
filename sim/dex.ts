@@ -420,7 +420,7 @@ export class ModdedDex {
 		return searchResults;
 	}
 
-	loadDataFile(basePath: string, dataType: DataType | 'Aliases'): AnyObject {
+	loadDataFile(basePath: string, dataType: DataType | 'Aliases'): AnyObject | void {
 		try {
 			const filePath = basePath + DATA_FILES[dataType];
 			const dataObject = require(filePath);
@@ -436,7 +436,6 @@ export class ModdedDex {
 				throw e;
 			}
 		}
-		return {};
 	}
 
 	loadTextFile(
@@ -488,7 +487,9 @@ export class ModdedDex {
 
 		const basePath = this.dataDir + '/';
 
-		const Scripts = this.loadDataFile(basePath, 'Scripts');
+		const Scripts = this.loadDataFile(basePath, 'Scripts') || {};
+		// We want to inherit most of Scripts but not this.
+		const init = Scripts.init;
 		this.parentMod = this.isBase ? '' : (Scripts.inherit || 'base');
 
 		let parentDex;
@@ -506,28 +507,21 @@ export class ModdedDex {
 			this.includeFormats();
 		}
 		for (const dataType of DATA_TYPES.concat('Aliases')) {
-			const BattleData = this.loadDataFile(basePath, dataType);
-			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
+			dataCache[dataType] = this.loadDataFile(basePath, dataType);
 			if (dataType === 'Rulesets' && !parentDex) {
 				for (const format of this.formats.all()) {
-					BattleData[format.id] = {...format, ruleTable: null};
+					dataCache.Rulesets[format.id] = {...format, ruleTable: null};
 				}
 			}
 		}
 		if (parentDex) {
 			for (const dataType of DATA_TYPES) {
 				const parentTypedData: DexTable<any> = parentDex.data[dataType];
-				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
-				// if child is empty and there's no Scripts.init, there's no need to copy, just re-use.
-				let childIsEmpty = true;
-				for (const k in childTypedData) { // eslint-disable-line @typescript-eslint/no-unused-vars
-					childIsEmpty = false;
-					break;
-				}
-				if (dataType !== 'Pokedex' && childIsEmpty && !Scripts.init) {
+				if (!dataCache[dataType] && !init) {
 					dataCache[dataType] = parentTypedData;
 					continue;
 				}
+				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
 				for (const entryId in parentTypedData) {
 					if (childTypedData[entryId] === null) {
 						// null means don't inherit
@@ -557,7 +551,7 @@ export class ModdedDex {
 		this.dataCache = dataCache as DexTableData;
 
 		// Execute initialization script.
-		if (Scripts.init) Scripts.init.call(this);
+		if (init) init.call(this);
 
 		return this.dataCache;
 	}
