@@ -524,13 +524,7 @@ export class ModdedDex {
 						delete childTypedData[entryId];
 					} else if (!(entryId in childTypedData)) {
 						// If it doesn't exist it's inherited from the parent data
-						if (dataType === 'Pokedex') {
-							// Pokedex entries can be modified too many different ways
-							// e.g. inheriting different formats-data/learnsets
-							childTypedData[entryId] = this.deepClone(parentTypedData[entryId]);
-						} else {
-							childTypedData[entryId] = parentTypedData[entryId];
-						}
+						childTypedData[entryId] = parentTypedData[entryId];
 					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
 						// {inherit: true} can be used to modify only parts of the parent data,
 						// instead of overwriting entirely

@@ -17,8 +17,9 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 1,
 	init() {
 		for (const i in this.data.Pokedex) {
-			(this.data.Pokedex[i] as any).gender = 'N';
-			(this.data.Pokedex[i] as any).eggGroups = null;
+			const poke = this.modData('Pokedex', i);
+			poke.gender = 'N';
+			poke.eggGroups = null;
 		}
 	},
 	// BattlePokemon scripts.
