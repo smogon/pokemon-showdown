@@ -241,6 +241,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	sendBidInfo() {
+		if (this.type === 'blind') return;
 		let buf = `<div class="infobox">`;
 		buf += Utils.html`Player: <username>${this.nominatedPlayer.name}</username> `;
 		buf += `Top bid: <b>${this.highestBid}</b> `;
@@ -515,10 +516,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		} while (this.nominatingTeam.isSuspended());
 		this.sendHTMLBox(this.generateAuctionTable());
 		this.sendMessage(`/html It is now <b>${Utils.escapeHTML(this.nominatingTeam.name)}</b>'s turn to nominate a player. Managers: ${this.nominatingTeam.getManagers().map(m => `<username class="username">${Utils.escapeHTML(m)}</username>`).join(' ')}`);
-		if (this.nomTimeLimit) {
-			this.sendTimer(false, true);
-			this.nomTimer = setInterval(() => this.pokeNomTimer(), 1000);
-		}
+		this.startNomTimer();
 	}
 
 	nominate(user: User, target: string) {
@@ -551,9 +549,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 			}
 
 			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid or type a number to place a bid!`);
-			if (this.type === 'auction') this.sendBidInfo();
-			this.sendTimer();
-			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
+			this.sendBidInfo();
+			this.startBidTimer();
 		}
 	}
 
@@ -588,10 +585,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.highestBid = bid;
 			this.highestBidder = team;
 			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${bid}</b>`);
-			this.clearBidTimer();
-			this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 			this.sendBidInfo();
-			this.sendTimer();
+			this.startBidTimer();
 		}
 	}
 
@@ -647,10 +642,24 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.room.add('|uhtmlchange|timer|');
 	}
 
+	startNomTimer() {
+		if (!this.nomTimeLimit) return;
+		this.clearNomTimer();
+		this.sendTimer(false, true);
+		this.nomTimer = setInterval(() => this.pokeNomTimer(), 1000);
+	}
+
 	clearBidTimer() {
 		clearInterval(this.bidTimer);
 		this.bidTimeRemaining = this.bidTimeLimit;
 		this.room.add('|uhtmlchange|timer|');
+	}
+
+	startBidTimer() {
+		if (!this.bidTimeLimit) return;
+		this.clearBidTimer();
+		this.sendTimer();
+		this.bidTimer = setInterval(() => this.pokeBidTimer(), 1000);
 	}
 
 	pokeNomTimer() {
