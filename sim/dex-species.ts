@@ -590,6 +590,7 @@ export class DexSpecies {
 		const gen4HMMoves = ['cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb'];
 		const movePool = new Set<ID>();
 		for (const {species, learnset} of this.getFullLearnset(id)) {
+			if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
 			for (const moveid in learnset) {
 				if (species.isNonstandard !== 'CAP') {
 					if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5) {
@@ -601,7 +602,6 @@ export class DexSpecies {
 						continue;
 					}
 				}
-				if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
 				if (eggMovesOnly) {
 					if (learnset[moveid].some(source => source.startsWith('9E'))) {
 						movePool.add(moveid as ID);
