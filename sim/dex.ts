@@ -489,6 +489,8 @@ export class ModdedDex {
 		const basePath = this.dataDir + '/';
 
 		const Scripts = this.loadDataFile(basePath, 'Scripts');
+		// We want to inherit most of Scripts but not this.
+		const init = Scripts.init;
 		this.parentMod = this.isBase ? '' : (Scripts.inherit || 'base');
 
 		let parentDex;
@@ -524,7 +526,7 @@ export class ModdedDex {
 					childIsEmpty = false;
 					break;
 				}
-				if (dataType !== 'Pokedex' && childIsEmpty && !Scripts.init) {
+				if (dataType !== 'Pokedex' && childIsEmpty && !init) {
 					dataCache[dataType] = parentTypedData;
 					continue;
 				}
@@ -557,7 +559,7 @@ export class ModdedDex {
 		this.dataCache = dataCache as DexTableData;
 
 		// Execute initialization script.
-		if (Scripts.init) Scripts.init.call(this);
+		if (init) init.call(this);
 
 		return this.dataCache;
 	}
