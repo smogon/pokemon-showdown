@@ -384,11 +384,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!lastMove) return false;
 			const possibleTypes = [];
 			const attackType = lastMove.type;
-			for (const type in this.dex.data.TypeChart) {
-				if (source.hasType(type)) continue;
-				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
+			for (const type of this.dex.types.all()) {
+				if (source.hasType(type.name)) continue;
+				const typeCheck = type.damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
-					possibleTypes.push(type);
+					possibleTypes.push(type.name);
 				}
 			}
 			if (!possibleTypes.length) {
