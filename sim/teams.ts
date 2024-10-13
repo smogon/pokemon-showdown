@@ -225,6 +225,7 @@ export const Teams = new class Teams {
 		const team = [];
 		let i = 0;
 		let j = 0;
+		let k = 0;
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
@@ -261,8 +262,9 @@ export const Teams = new class Teams {
 
 			// moves
 			j = buf.indexOf(';', i);
-			if (j < 0) {
-				j = buf.indexOf('|', i);
+			k = buf.indexOf('|', i);
+			if (j < 0 || j > k) {
+				j = k;
 				if (j < 0) return null;
 			}
 			set.moves = buf.substring(i, j).split(',', 24).map(name => this.unpackName(name, Dex.moves));
@@ -452,11 +454,16 @@ export const Teams = new class Teams {
 		}
 
 		// moves
-		for (let move of set.moves) {
+		for (let i = 0; i < set.moves.length; i++) {
+			let move = set.moves[i];
+			let PPUps = ``;
 			if (move.startsWith(`Hidden Power `) && move.charAt(13) !== '[') {
 				move = `Hidden Power [${move.slice(13)}]`;
 			}
-			out += `- ${move}  \n`;
+			if (set.movePPUps && !isNaN(set.movePPUps[i]) && set.movePPUps[i] < 3) {
+				PPUps = ` (PP Ups: ${set.movePPUps[i]})`;
+			}
+			out += `- ${move}${PPUps}  \n`;
 		}
 
 		return out;
@@ -542,9 +549,10 @@ export const Teams = new class Teams {
 			if (line !== 'undefined') set.nature = aggressive ? toID(line) : line;
 		} else if (line.startsWith('-') || line.startsWith('~')) {
 			line = line.slice(line.charAt(1) === ' ' ? 2 : 1);
-			if (line.startsWith('Hidden Power [')) {
-				const hpType = line.slice(14, -1);
-				line = 'Hidden Power ' + hpType;
+			let [move, PPUps] = line.split(' (PP Ups: ');
+			if (move.startsWith('Hidden Power [')) {
+				const hpType = move.slice(14, -1);
+				move = 'Hidden Power ' + hpType;
 				if (!set.ivs && Dex.types.isName(hpType)) {
 					set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 					const hpIVs = Dex.types.get(hpType).HPivs || {};
@@ -553,10 +561,12 @@ export const Teams = new class Teams {
 					}
 				}
 			}
-			if (line === 'Frustration' && set.happiness === undefined) {
+			if (!set.movePPUps) set.movePPUps = [];
+			set.movePPUps.push(parseInt(PPUps?.charAt(0)) || 3);
+			if (move === 'Frustration' && set.happiness === undefined) {
 				set.happiness = 0;
 			}
-			set.moves.push(line);
+			set.moves.push(move);
 		}
 	}
 	/** Accepts a team in any format (JSON, packed, or exported) */
