@@ -1,3 +1,4 @@
+import {Utils} from '../lib';
 import {BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
 
@@ -633,7 +634,7 @@ export class Condition extends BasicEffect implements
 	}
 }
 
-const EMPTY_CONDITION: Condition = new Condition({name: '', exists: false});
+const EMPTY_CONDITION: Condition = Utils.deepFreeze(new Condition({name: '', exists: false}));
 
 export class DexConditions {
 	readonly dex: ModdedDex;
@@ -651,7 +652,7 @@ export class DexConditions {
 	}
 
 	getByID(id: ID): Condition {
-		if (!id) return EMPTY_CONDITION;
+		if (id === '') return EMPTY_CONDITION;
 
 		let condition = this.conditionCache.get(id);
 		if (condition) return condition;
