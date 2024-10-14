@@ -106,26 +106,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Work Up', source);
-			this.add('-anim', source, 'Aqua Ring', source);
+			this.add('-anim', source, 'Reflect', source);
 		},
 		condition: {
 			duration: 5,
 			onSideStart(side, source) {
 				this.add('-sidestart', side, 'Dominus Lapidis', source);
 				this.effectState.hp = Math.floor(source.maxhp * 0.33);
-				this.effectState.source = source;
 			},
-			onUpdate(pokemon) {
-				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
+			onResidual(pokemon) {
+				this.add('-anim', pokemon, 'Reflect', pokemon);
 			},
-			onEffectiveness(typeMod, target, type, move) {
-				if (!target || move.category === 'Status') return;
-				return this.dex.getEffectiveness(move.type, 'Ground');
-			},
+			//onEffectiveness(typeMod, target, type, move) {
+				//if (!target || move.category === 'Status') return;
+				//return this.dex.getEffectiveness(move.type, 'Ground');
+			//},
 			onTryPrimaryHit(target, source, move) {
 				if (target === source || move.infiltrates) return;
-				this.add('-message', target.side.sideConditions['dominuslapidis'].source.name);
-				let damage = this.actions.getDamage(source, target.side.sideConditions['dominuslapidis'].source, move);
+				move.onEffectiveness = function () {
+					return this.dex.getEffectiveness(move.type, 'Ground');
+				};
+				let damage = this.actions.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
