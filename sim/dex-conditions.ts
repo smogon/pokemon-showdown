@@ -1,5 +1,5 @@
 import {Utils} from '../lib';
-import {BasicEffect, toID} from './dex-data';
+import {assignNewFields, BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
 
 export interface EventMethods {
@@ -627,10 +627,9 @@ export class Condition extends BasicEffect implements
 	) => boolean | null | void;
 
 	constructor(data: AnyObject) {
-		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		super(data, false);
 		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
+		assignNewFields(this, data);
 	}
 }
 
