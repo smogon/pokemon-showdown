@@ -1208,19 +1208,35 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				move.flags['futuremove'] = 1;
 				delete move.flags['protect'];
 				move.onTry = function (source, t) {
-					if (!t.side.addSlotCondition(t, 'futuremove')) {
-						this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
-						return false;
+					if (move.target === "self") {
+						if (!t.side.addSlotCondition(t, 'selfforesighter')) {
+							this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
+							return false;
+						}
+						const moveData = this.dex.getActiveMove(move.id);
+						moveData.flags['futuremove'] = 1;
+						delete moveData.flags['protect'];
+						Object.assign(t.side.slotConditions[t.position]['selfforesighter'], {
+							duration: 3,
+							move: moveData.id,
+							source: source,
+							moveData: moveData,
+						});
+					} else {
+						if (!t.side.addSlotCondition(t, 'futuremove')) {
+							this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
+							return false;
+						}
+						const moveData = this.dex.getActiveMove(move.id);
+						moveData.flags['futuremove'] = 1;
+						delete moveData.flags['protect'];
+						Object.assign(t.side.slotConditions[t.position]['futuremove'], {
+							duration: 3,
+							move: moveData.id,
+							source: source,
+							moveData: moveData,
+						});
 					}
-					const moveData = this.dex.getActiveMove(move.id);
-					moveData.flags['futuremove'] = 1;
-					delete moveData.flags['protect'];
-					Object.assign(t.side.slotConditions[t.position]['futuremove'], {
-						duration: 3,
-						move: moveData.id,
-						source: source,
-						moveData: moveData,
-					});
 					this.add('-message', `${source.name} foresaw an attack!`);
 					return this.NOT_FAIL;
 				};
