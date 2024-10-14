@@ -95,7 +95,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Status",
 		name: "Dominus Lapidis",
 		shortDesc: "Summons Jade Shield. Always goes last.",
-		desc: "User focuses, then summons Jade Shield after the target moves for 5 turns.",
+		desc: "User focuses, then summons Jade Shield for 5 turns after the opponent moves.",
 		gen: 9,
 		pp: 5,
 		priority: -8,
@@ -112,8 +112,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 5,
 			onSideStart(side, source) {
 				this.add('-sidestart', side, 'Dominus Lapidis', source);
-				this.effectState.hp = Math.floor(source.maxhp * 0.3);
+				this.effectState.hp = Math.floor(source.maxhp * 0.33);
 				this.effectState.source = source;
+			},
+			onUpdate(pokemon) {
+				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
+			},
+			onEffectiveness(typeMod, target, type, move) {
+				if (!target || move.category === 'Status') return;
+				return this.dex.getEffectiveness(move.type, 'Ground');
 			},
 			onTryPrimaryHit(target, source, move) {
 				if (target === source || move.infiltrates) return;
@@ -128,9 +135,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (!damage) return damage;
 				if (damage > target.side.sideConditions['dominuslapidis'].hp) {
 					damage -= target.side.sideConditions['dominuslapidis'].hp as number;
+					target.side.sideConditions['dominuslapidis'].hp = 0;
 					this.damage(damage, target, source, move);
+				} else {
+					target.side.sideConditions['dominuslapidis'].hp -= damage;
 				}
-				target.side.sideConditions['dominuslapidis'].hp -= damage;
 				source.lastDamage = damage;
 				if (target.side.sideConditions['dominuslapidis'].hp <= 0) {
 					if (move.ohko) this.add('-ohko');
