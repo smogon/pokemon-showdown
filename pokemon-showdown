@@ -251,22 +251,28 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 
 	case 'advance-state':
 		{
+			build();
 			if (!process.argv[3]) {
 				console.error('Please provide a state hash.');
 				process.exit(1);
 			}
+			if (!process.argv[4]) {
+				console.error('Please provide actions, e.g. \'move bulkup\', \'move peck\'');
+				process.exit(1);
+			}
+			if (!process.argv[5]) {
+				console.error('Please provide actions, e.g. \'move bulkup\', \'move peck\'');
+				process.exit(1);
+			}
 			const stateHash = process.argv[3];
-			const { getStateValue } = require('./server/redis');
-			getStateValue(stateHash).then((value) => {
-				if (value === null) {
-					console.error(`No value found for state hash: ${stateHash}`);
-					process.exit(1);
-				} else {
-					console.log(value);
-					process.exit(0);
-				}
+			const player1Action = process.argv[4];
+			const player2Action = process.argv[5];
+
+			const { applyAction } = require('./dist/sim/redis');
+			applyAction(stateHash, player1Action, player2Action).then((newStateHash) => {
+				console.log(newStateHash);
 			}).catch((error) => {
-				console.error('Error:', error);
+				console.error('Error applying action:', error);
 				process.exit(1);
 			});
 		}
