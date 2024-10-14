@@ -1,4 +1,5 @@
-import {assignNewFields, toID, BasicEffect} from './dex-data';
+import {assignNewFields, BasicEffect, toID} from './dex-data';
+import {Utils} from '../lib';
 
 interface SpeciesAbility {
 	0: string;
@@ -354,6 +355,12 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	}
 }
 
+const EMPTY_SPECIES = Utils.deepFreeze(new Species({
+	id: '', name: '', exists: false,
+	tier: 'Illegal', doublesTier: 'Illegal',
+	natDexTier: 'Illegal', isNonstandard: 'Custom',
+}));
+
 export class Learnset {
 	readonly effectType: 'Learnset';
 	/**
@@ -393,17 +400,21 @@ export class DexSpecies {
 	get(name?: string | Species): Species {
 		if (name && typeof name !== 'string') return name;
 
-		name = (name || '').trim();
-		let id = toID(name);
-		if (id === 'nidoran' && name.endsWith('♀')) {
-			id = 'nidoranf' as ID;
-		} else if (id === 'nidoran' && name.endsWith('♂')) {
-			id = 'nidoranm' as ID;
+		let id = '' as ID;
+		if (name) {
+			name = name.trim();
+			id = toID(name);
+			if (id === 'nidoran' && name.endsWith('♀')) {
+				id = 'nidoranf' as ID;
+			} else if (id === 'nidoran' && name.endsWith('♂')) {
+				id = 'nidoranm' as ID;
+			}
 		}
-
 		return this.getByID(id);
 	}
+
 	getByID(id: ID): Species {
+		if (id === '') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
 
@@ -578,6 +589,7 @@ export class DexSpecies {
 		const gen4HMMoves = ['cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb'];
 		const movePool = new Set<ID>();
 		for (const {species, learnset} of this.getFullLearnset(id)) {
+			if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
 			for (const moveid in learnset) {
 				if (species.isNonstandard !== 'CAP') {
 					if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5) {
@@ -589,7 +601,6 @@ export class DexSpecies {
 						continue;
 					}
 				}
-				if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
 				if (eggMovesOnly) {
 					if (learnset[moveid].some(source => source.startsWith('9E'))) {
 						movePool.add(moveid as ID);
