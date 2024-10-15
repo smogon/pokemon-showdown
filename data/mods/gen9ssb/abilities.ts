@@ -1194,7 +1194,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onBasePower(basePower, attacker, defender, move) {
 			if (!attacker.abilityState.gauges || attacker.abilityState.gauges === undefined) attacker.abilityState.gauges = 0;
-			return basePower - (10 * (5 - attacker.abilityState.gauges));
+			switch (attacker.abilityState.gauges) {
+				case 3:
+				case 0:
+					break;
+				case 1:
+					return this.chainModify(0.5);
+					break;
+				case 2:
+					return this.chainModify(0.75);
+					break;
+				case 4:
+					return this.chainModify(1.25);
+					break;
+				case 5:
+					return this.chainModify(1.5);
+					break;
+			}
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
