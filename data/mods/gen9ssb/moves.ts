@@ -978,7 +978,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 		],
 		target: "normal",
-		type: "Fire",
+		type: "Water",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -986,8 +986,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Tri Attack', target);
 			this.add('-anim', source, 'Aurora Beam', target);
 		},
+		onModifyType(move, pokemon) {
+			if (pokemon.species.id === 'necrozmaultra') {
+				move.type = 'Light';
+			} else {
+				move.type = 'Water';
+			}
+		},
 		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Water', type);
+			if (this.effectState.source.species.id !== 'necrozmaultra') return typeMod + this.dex.getEffectiveness('Fire', type);
 		},
 		onHit(target, source, move) {
 			source.side.addSideCondition('waterpledge');
