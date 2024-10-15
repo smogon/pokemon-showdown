@@ -215,7 +215,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Slingshot",
 		gen: 9,
 		onStart(pokemon) {
-			const target = pokemon.side.foe.active[0];
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const move = this.dex.getActiveMove('slingshot');
 			const dmg = this.actions.getDamage(pokemon, target, move);
 			const hits = this.random(2, 3);
