@@ -1789,6 +1789,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			if (!pokemon.lastMoveUsed) return;
 			if (pokemon.lastMoveUsed.id === 'sketch') {
+				if (['sketch', 'plagiarize'].includes(move.id)) return;
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
