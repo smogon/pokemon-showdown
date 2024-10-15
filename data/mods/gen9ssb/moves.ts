@@ -106,7 +106,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Work Up', source);
-			this.add('-anim', source, 'Reflect', source);
+			this.add('-anim', source, 'Aqua Ring', source);
 		},
 		condition: {
 			duration: 5,
@@ -115,7 +115,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.effectState.hp = Math.floor(source.maxhp * 0.33);
 			},
 			onResidual(pokemon) {
-				this.add('-anim', pokemon, 'Reflect', pokemon);
+				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
 			},
 			//onEffectiveness(typeMod, target, type, move) {
 				//if (!target || move.category === 'Status') return;
@@ -124,6 +124,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryPrimaryHit(target, source, move) {
 				if (target === source || move.infiltrates) return;
 				move.onEffectiveness = function () {
+					this.add('-message', `onEffectiveness for ${move.name} triggered. Getting effectiveness of ${move.type} on Ground`);
 					return this.dex.getEffectiveness(move.type, 'Ground');
 				};
 				let damage = this.actions.getDamage(source, target, move);
