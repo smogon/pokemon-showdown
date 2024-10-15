@@ -2691,23 +2691,6 @@ export const Formats: FormatList = [
 				}
 			}
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Jack's Tranquility
-			if (
-				target.getAbility().id === 'tranquility' && 
-				pokemon !== target && move.category === 'Physical'
-			) {
-				const tAction = this.queue.willMove(target);
-				if (!tAction || !tAction.move || tAction.move.category === 'Status') return;
-				this.add('-message', `${target.name}'s intuition let them move first!`);
-				this.queue.cancelMove(target);
-				this.actions.runMove(tAction.move.name, target, target.getLocOf(pokemon));
-				target.abilityState.dns = true;
-			}
-		},
-		//onHit(target, source, move) {
-			//this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
-		//},
 	},
 	{
 		name: "[Gen 9] Super Staff Bros Ultimate FFA",
@@ -2868,23 +2851,6 @@ export const Formats: FormatList = [
 				}
 			}
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Jack's Tranquility
-			if (
-				target.getAbility().id === 'tranquility' && 
-				pokemon !== target && move.flags['contact']
-			) {
-				const tAction = this.queue.willMove(target);
-				if (!tAction || !tAction.move || tAction.move.category === 'Status') return;
-				this.add('-message', `${target.name}'s intuition let them move first!`);
-				this.queue.cancelMove(target);
-				this.actions.runMove(tAction.move.name, target, target.getLocOf(pokemon));
-				target.abilityState.dns = true;
-			}
-		},
-		//onHit(target, source, move) {
-			//this.add(`raw|<div class='broadcast-green'><b>TROUBLESHOOTING MOVE REPORT</b><br />ATTACKER (POKEMON/SOURCE): ${source.name}<br />ATTACKER TYPE: ${source.getTypes().join('/')}<br />DEFENDER (TARGET): ${target.name}<br />DEFENDER TYPE: ${target.getTypes().join('/')}<br />MOVE DATA:<br />BP: ${move.basePower}<br />ACC: ${move.accuracy}<br />TYPE: ${move.type}<br /></div>`);
-		//},
 	},
 	{
 		name: "[Gen 9] Monotype Random Battle",
