@@ -1453,7 +1453,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Starts Dynamite Arrow on the opposing side upon switching in. This Pokemon has x1.3 speed. This Pokemon's attacks cannot miss. This Pokemon's attacks have 1.5x power and +2 crit ratio after one full turn of not being attacked.",
 		shortDesc: "See '/ssb Trey' for more!",
 		onStart(pokemon) {
-			const target = pokemon.side.foe.active[0];
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			target.side.addSideCondition('dynamitearrow');
 			pokemon.abilityState.damaged = false;
 			pokemon.abilityState.concentrated = false;
