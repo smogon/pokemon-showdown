@@ -117,17 +117,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onResidual(pokemon) {
 				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
 			},
-			//onEffectiveness(typeMod, target, type, move) {
-				//if (!target || move.category === 'Status') return;
-				//return this.dex.getEffectiveness(move.type, 'Ground');
-			//},
 			onTryPrimaryHit(target, source, move) {
 				if (target === source || move.infiltrates) return;
-				move.onEffectiveness = function () {
-					this.add('-message', this.dex.getEffectiveness(move.type, 'Ground'));
-					this.add('-message', `onEffectiveness for ${move.name} triggered. Getting effectiveness of ${move.type} on Ground`);
-					return this.dex.getEffectiveness(move.type, 'Ground');
-				};
+				if (!this.dex.getImmunity(move.type, 'Ground')) {
+					this.add('-immune', target);
+					return null;
+				} else {
+					move.onEffectiveness = function () {
+						this.add('-message', this.dex.getEffectiveness(move.type, 'Ground'));
+						this.add('-message', `onEffectiveness for ${move.name} triggered. Getting effectiveness of ${move.type} on Ground`);
+						return this.dex.getEffectiveness(move.type, 'Ground');
+					};
+				}
 				let damage = this.actions.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
 					this.add('-fail', source);
