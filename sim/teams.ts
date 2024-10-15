@@ -144,7 +144,7 @@ export const Teams = new class Teams {
 				const PPUps = set.movePPUps.map(n => {
 					if (n === 3) return '';
 					return n.toString();
-				})
+				});
 				buf += ';' + PPUps.join(',');
 			}
 
@@ -280,7 +280,7 @@ export const Teams = new class Teams {
 				if (j < 0) return null;
 				set.movePPUps = buf.substring(i, j).split(',', 24).map(n => {
 					if (!n) return 3;
-					return parseInt(n); 
+					return parseInt(n);
 				});
 				i = j + 1;
 			}
