@@ -174,200 +174,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-	// Aevum
-	temporaldomain: {
-		name: "Temporal Domain",
-		shortDesc: "Temporal Terrain; Status moves miss the user.",
-		desc: "Starts Temporal Terrain on switch-in. At the end of each turn, raises the user's speed by 1 stage, or lowers the opposing Pokemon's speed by 1 stage. Status moves that do not have fixed accuracy are guaranteed to miss against the user.",
-		gen: 9,
-		flags: {},
-		onStart() {
-			this.field.setTerrain('temporalterrain');
-		},
-		onTryHit(pokemon, target, move) {
-			if (
-				target === pokemon || !move || 
-				move.category !== 'Status' || move.accuracy === true
-			) return;
-			this.add('-activate', pokemon, 'ability: Temporal Domain');
-			this.add('-message', `${pokemon.name} disrupted ${target.name}'s accuracy!`);
-			move.accuracy = 0;
-			//this.add('-immune', this.effectState.target, 'ability: Temporal Domain');
-			//return false;
-		},
-		onResidual(pokemon) {
-			const target = pokemon.side.foe.active[0];
-			this.add('-activate', pokemon, 'ability: Temporal Domain');
-			if (this.randomChance(1, 2)) {
-				this.boost({spe: 1}, pokemon, pokemon, 'ability: Temporal Domain');
-			} else {
-				this.boost({spe: -1}, target, target, 'ability: Temporal Domain');
-			}
-		},
-	},
-	// Ace
-	wildcard: {
-		name: "Wild Card",
-		gen: 9,
-		flags: {},
-		onStart(pokemon) {
-			if (!pokemon.abilityState.cards) pokemon.abilityState.cards = [];
-			const cardTypes = ['Attack', 'Defense', 'Life', 'Support'];
-			switch (pokemon.abilityState.cards.length) {
-				case undefined:
-				case 0:
-				case 1:
-					let draws = [];
-					draws.push(this.sample(cardTypes));
-					draws.push(this.sample(cardTypes));
-					pokemon.abilityState.cards.push(draws[0]);
-					pokemon.abilityState.cards.push(draws[1]);
-					if (draws[0] === draws[1]) {
-						this.add('-message', `${pokemon.name} drew two ${draws[0]} cards!`);
-					} else {
-						this.add('-message', `${pokemon.name} drew one ${draws[0]} card and one ${draws[1]} card!`);
-					}
-					break;
-				case 2:
-				case 3:
-				case 4:
-					let draw = this.sample(cardTypes);
-					pokemon.abilityState.cards.push(draw);
-					this.add('-message', `${pokemon.name} drew a ${draw} card!`);
-					break;
-			}
-			if (pokemon.side.faintedThisTurn && pokemon.abilityState.cards.length < 5) {
-				let draw = this.sample(cardTypes);
-				pokemon.abilityState.cards.push(draw);
-				this.add('-message', `${pokemon.name} drew a ${draw} card!`);
-			}
-		},
-		onSourceAfterFaint(length, target, source, effect) {
-			if (effect && effect.effectType === 'Move') {
-				if (source.abilityState.cards.length < 4) {
-					let draws = [];
-					draws.push(this.sample(cardTypes));
-					draws.push(this.sample(cardTypes));
-					source.abilityState.cards.push(draws[0]);
-					source.abilityState.cards.push(draws[1]);
-					if (draws[0] === draws[1]) {
-						this.add('-message', `${source.name} drew two ${draws[0]} cards!`);
-					} else {
-						this.add('-message', `${source.name} drew one ${draws[0]} card and one ${draws[1]} card!`);
-					}
-				} else if (source.abilityState.cards.length === 4) {
-					let draw = this.sample(cardTypes);
-					source.abilityState.cards.push(draw);
-					this.add('-message', `${source.name} drew a ${draw} card!`);
-				}
-			}
-		},
-		onResidual(pokemon) {
-			if (pokemon.abilityState.cards.length < 5) {
-				const r = ['Attack Hand', 'Defense Hand', 'Life Hand', 'Support Hand'];
-				const rSel = this.sample(r);
-				const move = this.dex.getActiveMove(rSel);
-				const moveData = {
-					move: move.name,
-					id: move.id,
-					pp: move.pp,
-					maxpp: move.pp,
-					target: move.target,
-					disabled: false,
-					used: false,
-				};
-				pokemon.moveSlots[3] = moveData;
-				pokemon.baseMoveSlots[3] = moveData;
-				this.add('-message', `${pokemon.name} swapped to their ${move.name}!`);
-			} else if (pokemon.abilityState.cards.length === 5) {
-				const move = this.dex.getActiveMove('Jackpot Shot');
-				const moveData = {
-					move: move.name,
-					id: move.id,
-					pp: move.pp,
-					maxpp: move.pp,
-					target: move.target,
-					disabled: false,
-					used: false,
-				};
-				pokemon.moveSlots[3] = moveData;
-				pokemon.baseMoveSlots[3] = moveData;
-				this.add('-message', `${pokemon.name} unlocked ${move.name}!`);
-			}
-		},
-		onModifyMove(move, pokemon) {
-			if (move.id === 'teleport') {
-				move.priority = 0;
-			}
-		},
-		onModifyAtk(atk, pokemon) {
-			let MOD = 1;
-			for (const card of pokemon.abilityState.cards) {
-				if (card === 'Attack') MOD += 0.5;
-			}
-			return this.chainModify(MOD);
-		},
-		onModifySpa(spa, pokemon) {
-			let MOD = 1;
-			for (const card of pokemon.abilityState.cards) {
-				if (card === 'Attack') MOD += 0.5;
-			}
-			return this.chainModify(MOD);
-		},
-		onModifyDef(def, pokemon) {
-			let MOD = 1;
-			for (const card of pokemon.abilityState.cards) {
-				if (card === 'Defense') MOD += 0.5;
-			}
-			return this.chainModify(MOD);
-		},
-		onModifySpd(spd, pokemon) {
-			let MOD = 1;
-			for (const card of pokemon.abilityState.cards) {
-				if (card === 'Defense') MOD += 0.5;
-			}
-			return this.chainModify(MOD);
-		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			const foe = source.side.foe.active[0];
-			if (move.id === 'teleport' && source.abilityState.cards && source.abilityState.cards.length) {
-				this.add('-message', `${source.name} emptied their deck!`);
-				let acUsed = false;
-				let dcUsed = false;
-				let lcUsed = false;
-				let scUsed = false;
-				source.abilityState.acCount = 0;
-				source.abilityState.dcCount = 0;
-				source.abilityState.lcCount = 0;
-				source.abilityState.scCount = 0;
-				for (const card of source.abilityState.cards) {
-					switch (card) {
-						case 'Attack':
-							let damage = this.actions.getDamage(source, foe, 'Attack');
-							this.damage(damage, foe);
-							source.abilityState.acCount++;
-							acUsed = true;
-							break;
-						case 'Defense':
-							source.abilityState.dcCount++;
-							dcUsed = true;
-							break;
-						case 'Life':
-							source.abilityState.lcCount++;
-							lcUsed = true;
-							break;
-						case 'Support':
-							source.abilityState.scCount++;
-							scUsed = true;
-							break;
-					}
-				}
-				if (acUsed) source.side.addSideCondition('Attack Card', source);
-				if (dcUsed) source.side.addSideCondition('Defense Card', source);
-				source.abilityState.cards = [];
-			}
-		},
-	},
 	// Suika Ibuki
 	densitymanipulation: {
 		desc: "This Pokemon sets a Substitute and loses 33% of their max HP upon switching in.",
@@ -382,94 +188,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 		name: "Density Manipulation",
 		gen: 9,
-	},
-	// Jack
-	tranquility: {
-		name: "Tranquility",
-		gen: 9,
-		onBasePowerPriority: 23,
-		onBasePower(basePower, pokemon, target, move) {
-			let totalModify = 1;
-			if (pokemon.abilityState.gleamBoost) {
-				pokemon.abilityState.gleamBoost = false;
-				totalModify += 0.5;
-			}
-			if (pokemon.abilityState.damageDoubled) {
-				pokemon.abilityState.damageDoubled = false;
-				totalModify += 1;
-			}
-			return this.chainModify(totalModify);
-		},
-		onDamagePriority: -30,
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move' && target.hp === 1) {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
-			}
-			if (damage >= target.hp && target.hp > 1 && effect && effect.effectType === 'Move') {
-				this.add('-ability', target, 'Tranquility');
-				return target.hp - 1;
-			}
-		},
-		onPrepareHit(target, source, move) {
-			if (move.id === 'tachyoncutter') move.category === 'Physical';
-		},
-		onTryHit(pokemon, target, move) {
-			if (move && move.category === 'Special' && pokemon.hp === 1) {
-				pokemon.abilityState.damageDoubled = true;
-			}
-			if (move && move.category === 'Special' && !pokemon.abilityState.specialNullified && pokemon.hp === 1) {
-				this.add('-immune', pokemon, '[from] ability: Tranquility');
-				pokemon.abilityState.specialNullified = true;
-				return null;
-			}
-		},
-		onFoeTryMove(target, source, move) {
-			if (source !== target && move.category === 'Physical' && !source.abilityState.dns) {
-				this.add('-activate', source, 'ability: Tranquility');
-				this.actions.useMove('Reflexive Slash', source, target);
-			}
-		},
-		onResidual(pokemon) {
-			pokemon.abilityState.dns = false;
-		},
-		onUpdate(pokemon) {
-			if (pokemon.hp === 1) {
-				pokemon.cureStatus();
-				const gleamIndex = pokemon.moves.indexOf('piercinggleam');
-				const move = this.dex.moves.get('transientcrimsonblizzard');
-				const moveData = {
-					move: move.name,
-					id: move.id,
-					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-					target: move.target,
-					disabled: false,
-					used: false,
-				};
-				if (!gleamIndex) return;
-				pokemon.moveSlots[gleamIndex] = moveData;
-				pokemon.baseMoveSlots[gleamIndex] = moveData;
-			} else if (pokemon.hp > 1) {
-				const tcbIndex = pokemon.moves.indexOf('transientcrimsonblizzard');
-				const move = this.dex.moves.get('piercinggleam');
-				const moveData = {
-					move: move.name,
-					id: move.id,
-					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-					target: move.target,
-					disabled: false,
-					used: false,
-				};
-				if (!tcbIndex) return;
-				pokemon.moveSlots[tcbIndex] = moveData;
-				pokemon.baseMoveSlots[tcbIndex] = moveData;
-			}
-		},
-		onSwitchOut(pokemon) {
-			pokemon.abilityState.gleamBoost = false;
-		},
 	},
 	// Journeyman
 	loveofthejourney: {
@@ -587,38 +305,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-	// Codie
-	vociferouscodex: {
-		name: "Vociferous Codex",
-		gen: 9,
-		onSourceModifyDamage(damage, source, target, move) {
-			if (!target.abilityState.codex) target.abilityState.codex = [];
-			if (!target.abilityState.codex.includes(move.name)) {
-				target.abilityState.codex.push(move.name);
-				this.add('-message', `${target.name} will remember ${source.name}'s ${move.name}!`);
-				return;
-			} else if (target.abilityState.codex.includes(move.name)) {
-				this.add('-anim', target, 'Miracle Eye', target);
-				this.debug(`vociferous codex lowering power`);
-				return this.chainModify(0.8);
-			}
-		},
-		onUpdate(pokemon) {
-			if (!pokemon.abilityState.codex) pokemon.abilityState.codex = [];
-			if (pokemon.abilityState.codex.length >= 10) {
-				this.add('-message', `Codie began to seize!`);
-				this.add('-anim', pokemon, 'Agility', pokemon);
-				this.add('-anim', pokemon, 'Explosion', pokemon);
-				for (const target of this.getAllActive()) {
-					if (target === pokemon) continue;
-					const move = this.dex.getActiveMove('explosion');
-					const dmg = this.getDamage(target, pokemon, move);
-					this.damage(dmg, target, pokemon);
-				}
-				pokemon.faint();
-			}
-		},
-	},
 	// Sakuya Izayoi
 	theworld: {
 		name: "The World",
@@ -729,10 +415,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-	// Kaiser Dragonhe mu
+	// Kaiser Dragon
 	elementalshift: {
 		desc: "This Pokemon becomes Fire/Grass/Water/Electric/Ice/Flying/Poison/Psychic/Fairy/Rock-type and sets the appropriate weather/terrain upon switching in.",
-		shortDesc: "Random type and move upon switching in.",
+		shortDesc: "Random type + corresponding move upon switch-in.",
 		onStart(pokemon) {
 			let r = this.random(10);
 			if (r === 0) {
@@ -1015,57 +701,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-anim', target, 'Dive', target);
 			target.switchFlag = true;
 			return damage / 5;
-		},
-	},
-	// Faust
-	thedevilisinthedetails: {
-		name: "The Devil is in the Details",
-		gen: 9,
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.category === 'Status') {
-				this.debug(`tdiitd priority boost`);
-				return priority + 6;
-			}
-		},
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
-			}
-		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (this.queue.willMove(target)) {
-				this.debug('tdiitd halving damage');
-				return this.chainModify(0.5);
-			}
-		},
-	},
-	// Croupier
-	fairplay: {
-		name: "Fair Play",
-		gen: 9,
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.category === 'Status') {
-				this.debug(`Fair Play priority boost`);
-				return priority + 1;
-			}
-		},
-		onDamage(damage, target, source, effect) {
-			if (effect.effectType !== 'Move') {
-				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
-				return false;
-			}
-		},
-		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			const abilityHolder = this.effectState.target;
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			} else if ((source.isAlly(abilityHolder) || move.target === 'all') && move.priority > 0.1) {
-				this.attrLastMove('[still]');
-				this.add('cant', abilityHolder, 'ability: Fair Play', move, '[of] ' + target);
-				return false;
-			}
 		},
 	},
 	// flufi
@@ -1812,7 +1447,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-
 	// Trey
 	concentration: {
 		desc: "Starts Dynamite Arrow on the opposing side upon switching in. This Pokemon has x1.3 speed. This Pokemon's attacks cannot miss. This Pokemon's attacks have 1.5x power and +2 crit ratio after one full turn of not being attacked.",
