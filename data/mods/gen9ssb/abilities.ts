@@ -342,7 +342,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "Upon switching in, this Pokemon adds a random move of the foe's to its moveset not already included. It also copies stat changes and ability.",
 		shortDesc: "Learns 1 enemy move; Copies stat changes, ability.",
 		onStart(pokemon) {
-			const target = pokemon.side.foe.active[0];
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			// Replace Ability
 			if (target.ability !== 'perfectcopy') {
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
@@ -1308,7 +1308,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Woven Together, Cohere Forever",
 		gen: 9,
 		onModifyMove(move, pokemon) {
-			const target = pokemon.side.foe.active[0];
+			const target = this.effectState.target;
+			if (target === pokemon) return;
 			if (move.type === 'Flying' && pokemon.abilityState.lastMoveUsedResidual) {
 				target.side.addSideCondition('woventogethercohereforever');
 				pokemon.abilityState.imprintedMove = move.id;
