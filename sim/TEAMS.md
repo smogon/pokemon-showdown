@@ -180,7 +180,8 @@ NICKNAME|SPECIES|ITEM|ABILITY|MOVES;PPUPS|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPP
 
 - `MOVES` is a comma-separated list of move IDs.
 
-- `PPUPS` can be left blank for 3 PP Ups in all moves.
+- `PPUPS` correspond to the moves as specified in `MOVES`. A blank value is for
+  3 PP Ups, and if all values are blank, the semicolon and commas can be removed.
 
 - `NATURE` left blank means Serious, except in Gen 1-2, where it means no Nature.
 
