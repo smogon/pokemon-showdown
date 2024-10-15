@@ -637,7 +637,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(pokemon) {
 			let success = false;
-			const target = pokemon.side.foe.active[0];
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			for (const activePokemon of this.getAllActive()) {
 				if (!activePokemon.side.slotConditions[activePokemon.position]['futuremove']) continue;
 				const move = this.dex.getActiveMove(activePokemon.side.slotConditions[activePokemon.position]['futuremove'].move);
@@ -1489,7 +1489,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEntryHazard(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Galvanic Web');
-				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('galvanicweb'));
+				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position], this.dex.getActiveMove('galvanicweb'));
 				switch (this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('galvanicweb')), -6, 6)) {
 					case 2:
 						this.damage(pokemon.baseMaxhp / 2, pokemon);
@@ -1514,7 +1514,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onSideEnd(side) {
 				this.add('-sideend', side, 'move: Galvanic Web');
-				side.active[0].trySetStatus('par');
+				for (const pokemon of side.active) {
+					pokemon.trySetStatus('par');
+				}
 			},
 		},
 		secondary: null,
@@ -1620,7 +1622,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return null;
 			},
 			onEnd(pokemon) {
-				const target = pokemon.side.foe.active[0];
+				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 				if (pokemon.abilityState.orbHp) this.damage(pokemon.abilityState.orbHp, target, pokemon);
 				this.add('-end', pokemon, 'Orb Shield');
 				pokemon.abilityState.orbHp = 0;
