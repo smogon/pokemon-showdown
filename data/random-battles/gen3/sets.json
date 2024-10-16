@@ -2590,9 +2590,8 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["dragonclaw", "earthquake", "fireblast", "hiddenpowerbug", "rockslide"],
-                "abilities": ["Levitate"],
-                "preferredTypes": ["Bug", "Rock"]
+                "movepool": ["earthquake","hiddenpowerbug", "quickattack", "rockslide"],
+                "abilities": ["Levitate"]
             },
             {
                 "role": "Staller",
