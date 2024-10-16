@@ -543,7 +543,7 @@ export class RandomGen8Teams {
 			for (const species of speciesPool) {
 				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
 				if (requireMoves) {
-					const hasMovesInCurrentGen = this.dex.species.getMovePool(species.id).size;
+					const hasMovesInCurrentGen = this.dex.species.getMovePool(species.id, false, 1).size;
 					if (!hasMovesInCurrentGen) continue;
 				}
 				if (requiredType && !species.types.includes(requiredType)) continue;
