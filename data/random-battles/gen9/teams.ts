@@ -137,7 +137,7 @@ const DOUBLES_NO_LEAD_POKEMON = [
 ];
 
 const DEFENSIVE_TERA_BLAST_USERS = [
-	'alcremie', 'bellossom', 'comfey', 'fezandipiti', 'florges', 'raikou'
+	'alcremie', 'bellossom', 'comfey', 'fezandipiti', 'florges', 'raikou',
 ];
 
 function sereneGraceBenefits(move: Move) {
