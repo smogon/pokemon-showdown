@@ -2590,7 +2590,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["earthquake","hiddenpowerbug", "quickattack", "rockslide"],
+                "movepool": ["earthquake", "hiddenpowerbug", "quickattack", "rockslide"],
                 "abilities": ["Levitate"]
             },
             {
