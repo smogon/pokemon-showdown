@@ -2621,7 +2621,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["defog", "fireblast", "icebeam", "return", "scald", "thunderbolt", "thunderwave"],
+                "movepool": ["fireblast", "icebeam", "return", "scald", "thunderbolt", "thunderwave"],
                 "abilities": ["Forecast"],
                 "preferredTypes": ["Water"]
             }

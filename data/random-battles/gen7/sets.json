@@ -5167,7 +5167,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["airslash", "cosmicpower", "storedpower", "roost"],
+                "movepool": ["airslash", "cosmicpower", "roost", "storedpower"],
                 "abilities": ["Magic Guard"]
             }
         ]
