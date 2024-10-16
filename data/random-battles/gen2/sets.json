@@ -981,7 +981,7 @@
             {
                 "role": "Thief user",
                 "movepool": ["hypnosis", "return", "thief", "toxic", "whirlwind"]
-            }
+            },
             {
                 "role": "Bulky Support",
                 "movepool": ["curse", "nightshade", "rest", "return", "sleeptalk"]
