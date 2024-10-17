@@ -1377,21 +1377,6 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			let ssbSet: SSBSet = this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
-			// Castaways
-			if (name === 'Castaways') {
-				// Yes, I am aware this.random(3) produces a range from 0 to 2. Yes, I am aware I didn't include a check for 2.
-				// It's because if 2 is rolled, the set is already set to Swalot, so nothing needs to happen.
-				let r = this.random(3);
-				switch (r) {
-					case 0:
-						name = 'Castaways-C';
-						ssbSet = this.dex.deepClone(ssbSets[name]);
-					case 1:
-						name = 'Castaways-P';
-						ssbSet = this.dex.deepClone(ssbSets[name]);
-				}
-			}
-
 			// Enforce typing limits
 			if (!(debug.length || monotype)) { // Type limits are ignored for debugging, monotype, or memes.
 				const species = this.dex.species.get(ssbSet.species);
