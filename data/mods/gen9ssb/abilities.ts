@@ -15,6 +15,22 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Castaways
+	tumultuoustrio: {
+		name: "Tumultuous Trio",
+		gen: 9,
+		flags: {},
+		onResidual(pokemon) {
+			switch (pokemon.species.id) {
+				case 'swalot':
+					let set = ssbSets['Castaways'];
+					Object.assign(set, ssbSets['Castaways-Carnivine']);
+					changeSet(this, pokemon, set);
+				case 'carnivine':
+					changeSet(this, pokemon, ssbSets['Castaways']);
+			}
+		},
+	},
 	// Morax
 	heraldoforder: {
 		name: "Herald of Order",
