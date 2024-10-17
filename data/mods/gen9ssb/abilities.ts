@@ -26,8 +26,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					let set = ssbSets['Castaways'];
 					Object.assign(set, ssbSets['Castaways-Carnivine']);
 					changeSet(this, pokemon, set);
+					break;
 				case 'carnivine':
-					changeSet(this, pokemon, ssbSets['Castaways']);
+					let set = ssbSets['Castaways'];
+					Object.assign(set, ssbSets['Castaways']);
+					changeSet(this, pokemon, set);
+					break;
 			}
 		},
 	},
