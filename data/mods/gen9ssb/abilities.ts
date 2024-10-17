@@ -162,15 +162,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamage(damage, target, source, effect) {
 			if (target.hp > target.maxhp / 2) {
 				if (target.hp - damage < target.maxhp / 2) {
-					if (target.abilityState.50capped) return;
-					target.abilityState.50capped = true;
+					if (target.abilityState.halfCapped) return;
+					target.abilityState.halfCapped = true;
 					return target.hp - target.maxhp / 2;
 				}
 			}
 			if (target.hp <= target.maxhp / 2 && target.hp > target.maxhp / 4) {
 				if (target.hp - damage < target.maxhp / 4) {
-					if (target.abilityState.25capped) return;
-					target.abilityState.25capped = true;
+					if (target.abilityState.quarterCapped) return;
+					target.abilityState.quarterCapped = true;
 					return target.hp - target.maxhp / 4;
 				}
 			}
