@@ -146,22 +146,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamage(damage, target, source, effect) {
 			if (target.hp > target.maxhp / 2) {
 				if (target.hp - damage < target.maxhp / 2) {
+					if (target.abilityState.50capped) return;
+					target.abilityState.50capped = true;
 					return target.hp - target.maxhp / 2;
 				}
 			}
 			if (target.hp <= target.maxhp / 2 && target.hp > target.maxhp / 4) {
 				if (target.hp - damage < target.maxhp / 4) {
+					if (target.abilityState.25capped) return;
+					target.abilityState.25capped = true;
 					return target.hp - target.maxhp / 4;
 				}
 			}
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp > pokemon.maxhp / 2 && pokemon.species.id !== 'zygardecomplete') {
-				if (pokemon.abilityState.transformedComplete) return;
-				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
-				pokemon.formeChange('Zygarde-Complete');
-				pokemon.abilityState.transformedComplete = true;
-			} else if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hp > pokemon.maxhp / 4 && pokemon.species.id !== 'zygarde') {
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hp > pokemon.maxhp / 4 && pokemon.species.id !== 'zygarde') {
 				if (pokemon.abilityState.transformed50) return;
 				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
 				pokemon.formeChange('Zygarde');
