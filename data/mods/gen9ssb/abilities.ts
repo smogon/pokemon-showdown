@@ -21,21 +21,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		flags: {},
 		onResidual(pokemon) {
-			let set = {};
 			switch (pokemon.species.id) {
 				case 'swalot':
-					// Base set is always set to Castaways as to retain the nickname
-					set = ssbSets['Castaways'];
-					// The set is then injected with Carnivine's stuff
-					Object.assign(set, ssbSets['Castaways-Carnivine']);
-					// And the active Pokemon transforms into that set
-					changeSet(this, pokemon, set);
+					pokemon.formeChange('Carnivine');
+					pokemon.set.evs = {hp: 248, atk: 56, def: 204, spa: 0, spd: 0, spe: 0}
+					pokemon.set.nature = 'Relaxed';
 					break;
 				case 'carnivine':
-					// Rinse and repeat for the other forms
-					set = ssbSets['Castaways'];
-					Object.assign(set, ssbSets['Castaways']);
-					changeSet(this, pokemon, set);
+					pokemon.formeChange('Perrserker');
+					pokemon.set.evs = {hp: 0, atk: 252, def: 4, spa: 0, spd: 0, spe: 252}
+					pokemon.set.nature = 'Naughty';
+					break;
+				case 'perrserker':
+					pokemon.formeChange('Swalot');
+					pokemon.set.evs = {hp: 248, atk: 56, def: 204, spa: 0, spd: 0, spe: 0}
+					pokemon.set.nature = 'Relaxed';
 					break;
 			}
 		},
