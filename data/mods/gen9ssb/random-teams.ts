@@ -198,13 +198,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ecosystem Drain',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
+	/*
 	Morax: {
 		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
 		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
 		signatureMove: 'Dominus Lapidis',
 		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
-	/*
 	Toshinori: {
 		species: 'Machamp-Gmax', ability: 'One for All', item: 'Dying Embers', gender: 'M',
 		moves: ['All-Out Pummeling', 'Continental Crush', 'Flying Press'],
