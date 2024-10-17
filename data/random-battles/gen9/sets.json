@@ -1758,7 +1758,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Ice Beam", "Rest", "Scald", "Substitute"],
+                "movepool": ["Calm Mind", "Ice Beam", "Scald", "Substitute"],
                 "abilities": ["Pressure"],
                 "teraTypes": ["Dragon", "Steel"]
             },
