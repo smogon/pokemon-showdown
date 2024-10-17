@@ -201,8 +201,14 @@ export const ssbSets: SSBSets = {
 	'Castaways': {
 		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
 		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
-		signatureMove: 'Killing Doll',
+		signatureMove: 'Sludge Wave',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
+	},
+	'Castaways-Carnivine': {
+		species: 'Carnivine', ability: 'Tumultuous Trio', item: 'Big Root', gender: 'M',
+		moves: ['Strength Sap', 'Doom Desire', 'Fleur Cannon'],
+		signatureMove: 'Wood Hammer',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Adamant',
 	},
 	/*
 	Morax: {
