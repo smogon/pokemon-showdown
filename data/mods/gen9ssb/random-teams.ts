@@ -200,15 +200,9 @@ export const ssbSets: SSBSets = {
 	},
 	'Castaways': {
 		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
-		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
-		signatureMove: 'Sludge Wave',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
-	},
-	'Castaways-Carnivine': {
-		species: 'Carnivine', ability: 'Tumultuous Trio', item: 'Big Root', gender: 'M',
-		moves: ['Strength Sap', 'Doom Desire', 'Fleur Cannon'],
-		signatureMove: 'Wood Hammer',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Adamant', skip: 'Castaways',
+		moves: ['Mortal Spin', 'Toxic Spikes', 'Water Sport'],
+		signatureMove: 'Pain Split',
+		evs: {hp: 248, def: 104, spd: 156}, ivs: {spa: 0}, nature: 'Careful',
 	},
 	/*
 	Morax: {
@@ -227,24 +221,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
 		signatureMove: 'Item Box',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
-	},
- 	Ace: {
-		species: 'Kadabra', ability: 'Wild Card', item: 'Akademia Deck', gender: 'M',
-		moves: ['Teleport', 'Icicle Spear', 'Extrasensory'],
-		signatureMove: 'Jackpot Shot',
-		evs: {hp: 10, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, nature: 'Serious',
-	},
-	'Castaways': {
-		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
-		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
-		signatureMove: 'Killing Doll',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
-	},
- 	Codie: {
-		species: 'Venomicon', ability: 'Vociferous Codex', item: 'Evil Eye of Orms-by-Gore', gender: 'N',
-		moves: ['Mind Reader', 'Hypnosis', 'Clear Smog'],
-		signatureMove: 'Cascade',
-		evs: {hp: 248, def: 8, spd: 252}, nature: 'Bold',
 	},
 	Journeyman: {
 		species: 'Stonjourner', ability: 'Love of the Journey', item: 'Colossus Carrier', gender: 'M',
