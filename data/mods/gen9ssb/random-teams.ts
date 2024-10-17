@@ -198,6 +198,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ecosystem Drain',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
+	'Castaways': {
+		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
+		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
+		signatureMove: 'Killing Doll',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
+	},
 	/*
 	Morax: {
 		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
