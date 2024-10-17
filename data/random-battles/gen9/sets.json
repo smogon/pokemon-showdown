@@ -151,7 +151,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Flamethrower", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
+                "movepool": ["Fire Blast", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
                 "abilities": ["Magic Guard", "Unaware"],
                 "teraTypes": ["Poison", "Steel"]
             },
