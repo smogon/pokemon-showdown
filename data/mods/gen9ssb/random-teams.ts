@@ -208,7 +208,7 @@ export const ssbSets: SSBSets = {
 		species: 'Carnivine', ability: 'Tumultuous Trio', item: 'Big Root', gender: 'M',
 		moves: ['Strength Sap', 'Doom Desire', 'Fleur Cannon'],
 		signatureMove: 'Wood Hammer',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Adamant',
+		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Adamant', skip: 'Castaways',
 	},
 	/*
 	Morax: {
