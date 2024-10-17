@@ -124,8 +124,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return null;
 				} else {
 					move.onEffectiveness = function () {
-						this.add('-message', this.dex.getEffectiveness(move.type, 'Ground'));
-						this.add('-message', `onEffectiveness for ${move.name} triggered. Getting effectiveness of ${move.type} on Ground`);
 						return this.dex.getEffectiveness(move.type, 'Ground');
 					};
 				}
