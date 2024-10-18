@@ -312,7 +312,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Drain Punch", "Rock Slide", "Spikes", "Synthesis", "Wood Hammer"],
+                "movepool": ["Bullet Seed", "Drain Punch", "Rock Slide", "Spikes", "Synthesis"],
                 "abilities": ["Bulletproof"],
                 "teraTypes": ["Poison", "Steel"]
             }
@@ -1201,7 +1201,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Flare Blitz", "Morning Sun", "Roar", "Wild Charge", "Will-O-Wisp"],
+                "movepool": ["Close Combat", "Flamethrower", "Morning Sun", "Roar", "Wild Charge", "Will-O-Wisp"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Dragon", "Fairy", "Fighting"]
             }
@@ -2215,10 +2215,16 @@
         "level": 6,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Close Combat", "Copycat", "Crunch", "Earthquake", "Ice Punch", "Swords Dance"],
-                "abilities": ["Inner Focus", "Prankster"],
+                "role": "Bulky Setup",
+                "movepool": ["Close Combat", "Crunch", "Earthquake", "Ice Punch", "Swords Dance"],
+                "abilities": ["Inner Focus"],
                 "teraTypes": ["Dark", "Fighting", "Ground"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Close Combat", "Copycat", "Crunch", "Ice Punch"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Dark", "Fighting"]
             }
         ]
     },
@@ -2547,7 +2553,7 @@
         ]
     },
     "silicobra": {
-        "level": 7,
+        "level": 6,
         "sets": [
             {
                 "role": "Bulky Attacker",
