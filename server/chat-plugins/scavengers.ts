@@ -64,6 +64,11 @@ function getScavsRoom(room?: Room) {
 	return null;
 }
 
+// Normalize answers before checking, eg: Pokémon! -> pokemon
+export function sanitizeAnswer(answer: string): string {
+	return toID(answer.normalize('NFD'));
+}
+
 class Ladder {
 	file: string;
 	data: {[userid: string]: AnyObject};
@@ -590,7 +595,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		if (!(user.id in this.playerTable)) {
 			if (!this.joinGame(user)) return false;
 		}
-		const value = toID(originalValue);
+		const value = sanitizeAnswer(originalValue);
 
 		const player = this.playerTable[user.id];
 
@@ -1023,9 +1028,9 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 
 	verifyAnswer(value: string) {
 		const answer = this.getCurrentQuestion().question.answer;
-		value = toID(value);
+		value = sanitizeAnswer(value);
 
-		return answer.some((a: string) => toID(a) === value);
+		return answer.some((a: string) => sanitizeAnswer(a) === value);
 	}
 
 	onNotifyChange(num: number) {
