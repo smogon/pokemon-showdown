@@ -14921,7 +14921,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 							if (action.pokemon === source) {
 								if (action.choice === 'megaEvo') this.actions.runMegaEvo(source);
 								// Also a "forme" change that happens before moves, though only possible in NatDex
-								if (action.choice === 'terastallize') this.actions.terastallize(source);
+								else if (action.choice === 'terastallize') this.actions.terastallize(source);
 								else continue;
 								this.queue.list.splice(actionIndex, 1);
 								break;
