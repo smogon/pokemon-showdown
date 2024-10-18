@@ -14919,12 +14919,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (source.canMegaEvo || source.canUltraBurst || source.canTerastallize) {
 						for (const [actionIndex, action] of this.queue.entries()) {
 							if (action.pokemon === source) {
-								if (action.choice === 'megaEvo') {
-									this.actions.runMegaEvo(source);
-								} else if (action.choice === 'terastallize') {
-									// Also a "forme" change that happens before moves, though only possible in NatDex
-									this.actions.terastallize(source);
-								}
+								if (action.choice === 'megaEvo') this.actions.runMegaEvo(source);
+								// Also a "forme" change that happens before moves, though only possible in NatDex
+								if (action.choice === 'terastallize') this.actions.terastallize(source);
 								this.queue.list.splice(actionIndex, 1);
 								break;
 							}
