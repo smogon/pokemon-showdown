@@ -5993,6 +5993,12 @@
                 "movepool": ["Dragon Dance", "Dragon Darts", "Fire Blast", "Tera Blast"],
                 "abilities": ["Clear Body"],
                 "teraTypes": ["Ghost"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Dragon Darts", "Shadow Ball", "U-turn", "Will-O-Wisp"],
+                "abilities": ["Cursed Body", "Infiltrator"],
+                "teraTypes": ["Dragon", "Fairy"]
             }
         ]
     },
