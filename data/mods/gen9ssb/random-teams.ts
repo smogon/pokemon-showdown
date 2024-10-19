@@ -198,13 +198,19 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ecosystem Drain',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
+	Genus: {
+		species: 'Dusclops', ability: 'Lucky Charm', item: 'Gachium Z', gender: 'N',
+		moves: ['Substitute', 'Roar', 'Recover'],
+		signatureMove: 'Star Pull',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Serious', shiny: true,
+	},
+	/*
 	'Castaways': {
 		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
 		moves: ['Mortal Spin', 'Toxic Spikes', 'Water Sport'],
 		signatureMove: 'Pain Split',
 		evs: {hp: 248, def: 104, spd: 156}, ivs: {spa: 0}, nature: 'Careful',
 	},
-	/*
 	Morax: {
 		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
 		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
