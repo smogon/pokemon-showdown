@@ -15,6 +15,48 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Genus
+	luckycharm: {
+		name: "Lucky Charm",
+		gen: 9,
+		flags: {},
+		onStart(pokemon) {
+			if (pokemon.abilityState.charmBoost) pokemon.abilityState.charmBoost = false;
+			let statsN = ['HP', 'Attack', 'Defense', 'Special Attack', 'Special Defense', 'Speed'];
+			let stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+			let boostedStat = this.sample(statsN);
+			boostedStat = stats[statsN.indexOf(boostedStat)];
+			pokemon.abilityState.charmBoost = boostedStat;
+			switch (boostedStat) {
+				case 'hp':
+					pokemon.hp *= 1.5;
+					pokemon.maxhp *= 1.5;
+					this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+					break;
+				case 'atk':
+				case 'def':
+				case 'spa':
+				case 'spd':
+				case 'spe':
+					pokemon.storedStats[boostedStat] *= 1.5;
+					break;
+			}
+			this.add('-activate', pokemon, 'ability: Lucky Charm');
+			this.add('-message', `Lucky Charm boosted ${pokemon.name}'s ${boostedStat}!`);
+		},
+		onUpdate(pokemon) {
+			if (pokemon.volatiles['taunt']) {
+				this.add('-activate', pokemon, 'ability: Lucky Charm');
+				pokemon.removeVolatile('taunt');
+			}
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.id === 'taunt') {
+				this.add('-immune', pokemon, '[from] ability: Lucky Charm');
+				return null;
+			}
+		},
+	},
 	// Castaways
 	tumultuoustrio: {
 		name: "Tumultuous Trio",
