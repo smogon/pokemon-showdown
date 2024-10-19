@@ -6,21 +6,21 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				this.effectState.stage++;
 			}
 			const calc = calculate(this, this.effectState.source, pokemon);
-			if (calc) this.damage(calc * this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
+			this.damage(calc * this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage);
 		},
 	},
 	brn: {
 		inherit: true,
 		onResidual(pokemon) {
 			const calc = calculate(this, this.effectState.source, pokemon);
-			if (calc) this.damage(calc * pokemon.baseMaxhp / 16);
+			this.damage(calc * pokemon.baseMaxhp / 16);
 		},
 	},
 	psn: {
 		inherit: true,
 		onResidual(pokemon) {
 			const calc = calculate(this, this.effectState.source, pokemon);
-			if (calc) this.damage(calc * pokemon.baseMaxhp / 8);
+			this.damage(calc * pokemon.baseMaxhp / 8);
 		},
 	},
 	partiallytrapped: {
@@ -35,14 +35,14 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				return;
 			}
 			const calc = calculate(this, source, pokemon);
-			if (calc) this.damage(calc * pokemon.baseMaxhp / this.effectState.boundDivisor);
+			this.damage(calc * pokemon.baseMaxhp / this.effectState.boundDivisor);
 		},
 	},
 	sandstorm: {
 		inherit: true,
 		onWeather(target) {
 			const calc = calculate(this, this.effectState.source, target);
-			if (calc) this.damage(calc * target.baseMaxhp / 16);
+			this.damage(calc * target.baseMaxhp / 16);
 		},
 	},
 };
