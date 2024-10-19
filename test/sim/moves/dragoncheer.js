@@ -113,6 +113,26 @@ describe('Dragon Cheer', function () {
 		battle.makeChoices('move bubble, move sleeptalk', 'auto');
 	});
 
+	it(`should be copied by Psych Up, using the target's Dragon Cheer level and replacing the user's current critical hit stage`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble', 'focusenergy']},
+			{species: 'comfey', moves: ['sleeptalk']},
+		], [
+			{species: 'wynaut', moves: ['sleeptalk']},
+			{species: 'wobbuffet', moves: ['sleeptalk']},
+		]]);
+
+		battle.onEvent(
+			'ModifyCritRatio', battle.format, -99,
+			(critRatio) => assert.equal(critRatio, 2)
+		);
+
+		battle.makeChoices('move focusenergy, move sleeptalk', 'auto');
+		battle.makeChoices('move dragoncheer -2, move sleeptalk', 'auto');
+		battle.makeChoices('move psychup -2, move sleeptalk', 'auto');
+		battle.makeChoices('move bubble, move sleeptalk', 'auto');
+	});
+
 	it(`should be copied by Transform, using the target's Dragon Cheer level`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'milotic', moves: ['dragoncheer', 'transform']},

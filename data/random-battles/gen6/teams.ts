@@ -649,7 +649,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
 		}
 		if (moves.has('psychoshift')) return 'Flame Orb';
-		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
+		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk') && species.id !== 'stoutland') {
 			return species.name === 'Conkeldurr' ? 'Flame Orb' : 'Toxic Orb';
 		}
 		if (ability === 'Magic Guard') return moves.has('counter') ? 'Focus Sash' : 'Life Orb';

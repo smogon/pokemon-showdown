@@ -206,7 +206,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		// Add other moves you really want to have, e.g. STAB, recovery, setup.
 
 		// Enforce Seismic Toss and Spore
-		for (const moveid of ['seismictoss', 'spore']) {
+		for (const moveid of ['seismictoss', 'spikes', 'spore']) {
 			if (movePool.includes(moveid)) {
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead,
 					movePool, preferredType, role);

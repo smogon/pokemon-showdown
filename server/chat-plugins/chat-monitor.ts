@@ -742,14 +742,14 @@ export const commands: Chat.ChatCommands = {
 		},
 		testhelp: [
 			`/filter test [test string] - Tests whether or not the provided test string would trigger any of the chat monitors.`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 	},
 	filterhelp: [
-		`/filter add list, word, reason[, optional public reason] - Adds a word to the given filter list. Requires: &`,
-		`/filter remove list, words - Removes words from the given filter list. Requires: &`,
-		`/filter view - Opens the list of filtered words. Requires: % @ &`,
-		`/filter test [test string] - Tests whether or not the provided test string would trigger any of the chat monitors. Requires: % @ &`,
+		`/filter add list, word, reason[, optional public reason] - Adds a word to the given filter list. Requires: ~`,
+		`/filter remove list, words - Removes words from the given filter list. Requires: ~`,
+		`/filter view - Opens the list of filtered words. Requires: % @ ~`,
+		`/filter test [test string] - Tests whether or not the provided test string would trigger any of the chat monitors. Requires: % @ ~`,
 		`You may use / instead of , in /filter add if you want to specify a reason that includes commas.`,
 	],
 	allowname(target, room, user) {

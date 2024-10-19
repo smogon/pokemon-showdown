@@ -150,12 +150,18 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
 
-	it.skip('should allow evolved Pokemon obtainable from events at lower levels than they could otherwise be obtained', function () {
-		const team = [
-			{species: 'dragonite', ability: 'innerfocus', moves: ['dracometeor'], evs: {hp: 1}, level: 50},
+	it('should allow evolved Pokemon obtainable from events at lower levels than they could otherwise be obtained', function () {
+		let team = [
+			{species: 'dragonite', ability: 'innerfocus', moves: ['dracometeor'], nature: 'Mild', evs: {hp: 1}, level: 50},
 			{species: 'magmar', ability: 'flamebody', moves: ['ember'], evs: {hp: 1}, level: 10},
 			{species: 'electivire', ability: 'motordrive', moves: ['quickattack'], evs: {hp: 1}, level: 10},
 		];
 		assert.legalTeam(team, 'gen4ou');
+
+		team = [
+			{species: 'mandibuzz', level: 25, ability: 'weakarmor', moves: ['pluck'], evs: {hp: 1}},
+			{species: 'volcarona', level: 35, ability: 'flamebody', moves: ['leechlife'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen5ou');
 	});
 });

@@ -66,7 +66,9 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			),
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
-			Poison: (movePool, moves, abilities, types, counter) => (!counter.get('Poison') && types.has('Grass')),
+			Poison: (movePool, moves, abilities, types, counter, species) => (
+				!counter.get('Poison') && (types.has('Grass') || species.id === 'gengar')
+			),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
 			),

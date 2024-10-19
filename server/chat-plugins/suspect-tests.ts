@@ -172,8 +172,9 @@ export const commands: Chat.ChatCommands = {
 			if (!toID(target)) {
 				return this.parse(`/help ${cmd}`);
 			}
-			const [formatid, source] = this.splitOne(target).map(toID);
-			let bVal: number | undefined = parseInt(source);
+			const [format, source] = this.splitOne(target);
+			const formatid = toID(format);
+			let bVal: number | undefined = parseFloat(source);
 			if (cmd.startsWith('d')) {
 				bVal = undefined;
 			} else if (!source || isNaN(bVal) || bVal < 1) {
@@ -205,7 +206,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		setcoilhelp: [
 			`/suspects setcoil OR /suspects sc [formatid], [B value] - Activate COIL ranking for the given [formatid] with the given [B value].`,
-			`Requires: suspect whitelist &`,
+			`Requires: suspect whitelist ~`,
 		],
 	},
 
@@ -213,12 +214,12 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(
 			`Commands to manage suspect tests:<br />` +
 			`<code>/suspects</code>: displays currently running suspect tests.<br />` +
-			`<code>/suspects add [tier], [suspect], [date], [link]</code>: adds a suspect test. Date in the format MM/DD. Requires: &<br />` +
-			`<code>/suspects remove [tier]</code>: deletes a suspect test. Requires: &<br />` +
-			`<code>/suspects whitelist [username]</code>: allows [username] to add suspect tests. Requires: &<br />` +
-			`<code>/suspects unwhitelist [username]</code>: disallows [username] from adding suspect tests. Requires: &<br />` +
-			`/suspects setcoil OR /suspects sc [formatid], [B value] - Activate COIL ranking for the given [formatid] with the given [B value].` +
-			`Requires: suspect whitelist &`
+			`<code>/suspects add [tier], [suspect], [date], [link]</code>: adds a suspect test. Date in the format MM/DD. Requires: ~<br />` +
+			`<code>/suspects remove [tier]</code>: deletes a suspect test. Requires: ~<br />` +
+			`<code>/suspects whitelist [username]</code>: allows [username] to add suspect tests. Requires: ~<br />` +
+			`<code>/suspects unwhitelist [username]</code>: disallows [username] from adding suspect tests. Requires: ~<br />` +
+			`<code>/suspects setcoil OR /suspects sc [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value].` +
+			`Requires: suspect whitelist ~`
 		);
 	},
 };

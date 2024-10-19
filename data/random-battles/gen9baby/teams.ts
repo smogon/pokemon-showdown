@@ -57,6 +57,9 @@ export class RandomBabyTeams extends RandomTeams {
 		this.moveEnforcementCheckers['Bug'] = (movePool, moves, abilities, types, counter) => (
 			!counter.get('Bug')
 		);
+		this.moveEnforcementCheckers['Grass'] = (movePool, moves, abilities, types, counter, species) => (
+			!counter.get('Grass') && species.id !== 'rowlet'
+		);
 	}
 
 
@@ -488,7 +491,6 @@ export class RandomBabyTeams extends RandomTeams {
 		if (ability === 'Guts' && moves.has('facade')) return 'Flame Orb';
 		if (ability === 'Quick Feet') return 'Toxic Orb';
 
-		if (types.includes('Bug') && types.includes('Flying')) return 'Heavy-Duty Boots';
 		if (['Harvest', 'Ripen', 'Unburden'].includes(ability) || moves.has('bellydrum')) return 'Oran Berry';
 	}
 

@@ -618,7 +618,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	yanma: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	wooper: {
 		tier: "LC",

@@ -73,6 +73,12 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	pokemon.set.evs = evs;
 	pokemon.set.ivs = ivs;
 	if (newSet.nature) pokemon.set.nature = Array.isArray(newSet.nature) ? context.sample(newSet.nature) : newSet.nature;
+	const oldGender = pokemon.set.gender;
+	if ((pokemon.set.gender !== newSet.gender) && !Array.isArray(newSet.gender)) {
+		pokemon.set.gender = newSet.gender;
+		// @ts-ignore Shut up sharp_claw wanted this
+		pokemon.gender = newSet.gender;
+	}
 	const oldShiny = pokemon.set.shiny;
 	pokemon.set.shiny = (typeof newSet.shiny === 'number') ? context.randomChance(1, newSet.shiny) : !!newSet.shiny;
 	let percent = (pokemon.hp / pokemon.baseMaxhp);
@@ -88,7 +94,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	}
 	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
 		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-	if (oldShiny !== pokemon.set.shiny) context.add('replace', pokemon, details);
+	if (oldShiny !== pokemon.set.shiny || oldGender !== pokemon.gender) context.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string, undefined, true);
 
 	pokemon.baseMaxhp = pokemon.species.name === 'Shedinja' ? 1 : Math.floor(Math.floor(
@@ -111,7 +117,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	}
 	pokemon.canMegaEvo = context.actions.canMegaEvo(pokemon);
 	pokemon.canUltraBurst = context.actions.canUltraBurst(pokemon);
-	pokemon.canTerastallize = context.actions.canTerastallize(pokemon);
+	pokemon.canTerastallize = (pokemon.canTerastallize === null) ? null : context.actions.canTerastallize(pokemon);
 	context.add('message', `${pokemon.name} changed form!`);
 }
 
@@ -437,8 +443,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			this.actions.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
-				action.zmove, undefined, action.maxMove, action.originalTarget);
+			this.actions.runMove(action.move, action.pokemon, action.targetLoc, {
+				sourceEffect: action.sourceEffect, zMove: action.zmove,
+				maxMove: action.maxMove, originalTarget: action.originalTarget,
+			});
 			break;
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
@@ -1119,8 +1127,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			return hitResults;
 		},
 
-		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove, maxMove, originalTarget) {
+		runMove(moveOrMoveName, pokemon, targetLoc, options) {
 			pokemon.activeMoveActions++;
+			const zMove = options?.zMove;
+			const maxMove = options?.maxMove;
+			const externalMove = options?.externalMove;
+			const originalTarget = options?.originalTarget;
+			let sourceEffect = options?.sourceEffect;
 			let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 			let baseMove = this.dex.getActiveMove(moveOrMoveName);
 			const priority = baseMove.priority;
@@ -1203,7 +1216,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const oldActiveMove = move;
 
-			const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
+			const moveDidSomething = this.useMove(baseMove, pokemon, {target, sourceEffect, zMove, maxMove});
 			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
@@ -1234,7 +1247,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						targetOf1stDance :
 						pokemon;
 					const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-					this.runMove(move.id, dancer, dancersTargetLoc, dancer.getAbility(), undefined, true);
+					this.runMove(move.id, dancer, dancersTargetLoc, {sourceEffect: dancer.getAbility(), externalMove: true});
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -1246,7 +1259,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.activeMove = oldActiveMove;
 			}
 		},
-		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove, maxMove) {
+		useMoveInner(moveOrMoveName, pokemon, options) {
+			let target = options?.target;
+			let sourceEffect = options?.sourceEffect;
+			const zMove = options?.zMove;
+			const maxMove = options?.maxMove;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 
@@ -1610,7 +1627,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					hitResults[i] = false;
 				} else if (this.battle.gen >= 7 && move.pranksterBoosted &&
 					// Prankster Clone immunity
-					(pokemon.hasAbility('prankster') || pokemon.hasAbility('youkaiofthedusk') || pokemon.volatiles['irpachuza']) &&
+					(pokemon.hasAbility('prankster') || pokemon.hasAbility('youkaiofthedusk') ||
+						pokemon.volatiles['irpachuza'] || pokemon.hasAbility('neverendingfhunt')) &&
 					!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 					this.battle.debug('natural prankster immunity');
 					if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
