@@ -266,6 +266,34 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (calc) this.damage(calc * source.baseMaxhp / 2, source, source, this.dex.conditions.get('Supercell Slam'));
 		},
 	},
+	toxicspikes: {
+		inherit: true,
+		condition: {
+			// this is a side condition
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Toxic Spikes');
+				this.effectState.layers = 1;
+			},
+			onSideRestart(side) {
+				if (this.effectState.layers >= 2) return false;
+				this.add('-sidestart', side, 'move: Toxic Spikes');
+				this.effectState.layers++;
+			},
+			onEntryHazard(pokemon) {
+				if (!pokemon.isGrounded()) return;
+				if (pokemon.hasType('Poison')) {
+					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
+					pokemon.side.removeSideCondition('toxicspikes');
+				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
+					return;
+				} else if (this.effectState.layers >= 2) {
+					pokemon.trySetStatus('tox', this.effectState.source);
+				} else {
+					pokemon.trySetStatus('psn', this.effectState.source);
+				}
+			},
+		},
+	},
 };
 
 function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon, moveid = 'tackle') {
