@@ -26,23 +26,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-anim', pokemon, 'Razor Leaf', pokemon);
 					this.damage(pokemon.maxhp / 10, pokemon);
 					pokemon.formeChange('Carnivine');
-					pokemon.set.evs = {hp: 248, atk: 56, def: 204, spa: 0, spd: 0, spe: 0}
+					pokemon.set.evs = {hp: 248, atk: 56, def: 204, spa: 0, spd: 0, spe: 0};
 					pokemon.set.nature = 'Relaxed';
 					break;
 				case 'carnivine':
 					this.add('-anim', pokemon, 'Flash Cannon', pokemon);
 					this.damage(pokemon.maxhp / 10, pokemon);
 					pokemon.formeChange('Perrserker');
-					pokemon.set.evs = {hp: 0, atk: 252, def: 4, spa: 0, spd: 0, spe: 252}
+					pokemon.set.evs = {hp: 0, atk: 252, def: 4, spa: 0, spd: 0, spe: 252};
 					pokemon.set.nature = 'Naughty';
 					break;
 				case 'perrserker':
-					this.add('-anim', pokemon, 'Sludge Wave', pokemon);
+					this.add('-anim', pokemon, 'Mud Bomb', pokemon);
 					this.damage(pokemon.maxhp / 10, pokemon);
 					pokemon.formeChange('Swalot');
-					pokemon.set.evs = {hp: 248, atk: 0, def: 104, spa: 0, spd: 156, spe: 0}
+					pokemon.set.evs = {hp: 248, atk: 0, def: 104, spa: 0, spd: 156, spe: 0};
 					pokemon.set.nature = 'Careful';
 					break;
+				this.
 			}
 		},
 	},
