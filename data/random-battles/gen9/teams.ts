@@ -168,6 +168,7 @@ export class RandomTeams {
 	private poolsCacheKey: any[] | undefined;
 	private cachedPool: number[] | undefined;
 	private cachedSpeciesPool: Species[] | undefined;
+	private cachedStatusMoves: ID[];
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.formats.get(format);
@@ -240,6 +241,7 @@ export class RandomTeams {
 		this.poolsCacheKey = undefined;
 		this.cachedPool = undefined;
 		this.cachedSpeciesPool = undefined;
+		this.cachedStatusMoves = this.dex.moves.all().filter(move => move.category === 'Status').map(move => move.id);
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
@@ -483,9 +485,7 @@ export class RandomTeams {
 		}
 
 		// Develop additional move lists
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// Team-based move culls
 		if (teamDetails.screens) {
