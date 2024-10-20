@@ -168,7 +168,7 @@ export class RandomTeams {
 	private poolsCacheKey: any[] | undefined;
 	private cachedPool: number[] | undefined;
 	private cachedSpeciesPool: Species[] | undefined;
-	private cachedStatusMoves: ID[];
+	protected cachedStatusMoves: ID[];
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.formats.get(format);
