@@ -584,7 +584,7 @@ export class DexSpecies {
 	 * lumped together. However, Necturna and Necturine's Sketchable moves are omitted from this pool, as their fundamental
 	 * incompatibility with each other is essential to the nature of those species.
 	 */
-	getMovePool(id: ID, isNatDex = false, sizeLimit = 0): Set<ID> {
+	getMovePool(id: ID, isNatDex = false): Set<ID> {
 		let eggMovesOnly = false;
 		let maxGen = this.dex.gen;
 		const gen3HMMoves = ['cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive'];
@@ -593,9 +593,6 @@ export class DexSpecies {
 		for (const {species, learnset} of this.getFullLearnset(id)) {
 			if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
 			for (const moveid in learnset) {
-				if (sizeLimit && movePool.size >= sizeLimit) {
-					return movePool;
-				}
 				if (species.isNonstandard !== 'CAP') {
 					if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5) {
 						if (!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 5 &&
