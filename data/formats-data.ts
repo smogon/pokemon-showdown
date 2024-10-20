@@ -5521,7 +5521,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "AG",
 	},
 	miraidon: {
-		tier: "Uber",
+		tier: "AG",
 		doublesTier: "DUber",
 		natDexTier: "AG",
 	},
