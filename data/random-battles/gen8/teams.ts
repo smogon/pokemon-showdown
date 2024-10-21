@@ -95,7 +95,7 @@ function sereneGraceBenefits(move: Move) {
 }
 
 export class RandomGen8Teams {
-	dex: ModdedDex;
+	readonly dex: ModdedDex;
 	gen: number;
 	factoryTier: string;
 	format: Format;
