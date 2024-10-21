@@ -85,7 +85,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.set.evs = {hp: 248, atk: 0, def: 104, spa: 0, spd: 156, spe: 0};
 					pokemon.set.nature = 'Careful';
 					break;
-				this.
 			}
 		},
 	},
