@@ -86,7 +86,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			}
 			if (!pullPool || !pullPool.length) return false;
-			pullPool.sort((a, b) => b.bst - a.bst);
+			pullPool.sort((a, b) => a.bst - b.bst);
 			for (const pulledPokemon of pullPool) {
 				pokemon.formeChange(pulledPokemon);
 				this.add('-message', `${pulledPokemon.bst}`);
