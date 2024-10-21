@@ -99,7 +99,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			this.add('-message', `${highRoll} Star Pull!`);
 			this.add('-message', `${pokemon.name} transformed into ${pokemon.species.name}!`);
-			randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 		},
 		secondary: null,
 		type: "???",
