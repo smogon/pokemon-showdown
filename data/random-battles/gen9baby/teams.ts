@@ -102,9 +102,7 @@ export class RandomBabyTeams extends RandomTeams {
 		}
 
 		// Create list of all status moves to be used later
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// Team-based move culls
 		if (teamDetails.screens && movePool.length >= this.maxMoveCount + 2) {
