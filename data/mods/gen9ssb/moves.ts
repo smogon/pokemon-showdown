@@ -40,11 +40,67 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Genus
+	starpull: {
+		name: "Star Pull",
+		basePower: 0,
+		category: "Status",
+		gen: 9,
+		priority: 6,
+		flags: {},
+		accuracy: true,
+		pp: 64,
+		noPPBoosts: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Confuse Ray', source);
+		},
+		onHit(pokemon) {
+			let starPool = [
+				1, 1, 1, 1, 1, // 33.3%
+				2, 2, 2, 2, // 26.6%
+				3, 3, 3, // 20.0%
+				4, 4, // 13.3%
+				5 // 6.6%
+			];
+			let pullPool = [];
+			for (let i = 0; i < 10; i++) {
+				switch (this.sample(starPool)) {
+					case 1:
+						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 200)));
+						break;
+					case 2:
+						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 300 && p.bst >= 201)));
+						break;
+					case 3:
+						pullPool.push(this.sample(Dex.species.all().filter(!pullPool.includes(p) && !p.isNonstandard && p => p.bst <= 400 && p.bst >= 301)));
+						break;
+					case 4:
+						pullPool.push(this.sample(Dex.species.all().filter(!pullPool.includes(p) && !p.isNonstandard && p => p.bst <= 500 && p.bst >= 401)));
+						break;
+					case 5:
+						pullPool.push(this.sample(Dex.species.all().filter(!pullPool.includes(p) && !p.isNonstandard && p => p.bst <= 600 && p.bst >= 501)));
+						break;
+				}
+			}
+			if (!pullPool || !pullPool.length) return false;
+			pullPool.sort((a, b) => b.bst - a.bst);
+			for (const pulledPokemon of pullPool) {
+				pokemon.formeChange(pulledPokemon);
+				this.add('-message', `${pulledPokemon.bst}`);
+			}
+		},
+		secondary: null,
+		type: "???",
+		target: "self",
+	},
 	// Morax
 	planetbefall: {
 		accuracy: true,
 		basePower: 250,
-		physical: "Physical",
+		category: "Physical",
 		name: "Planet Befall",
 		gen: 9,
 		pp: 1,
