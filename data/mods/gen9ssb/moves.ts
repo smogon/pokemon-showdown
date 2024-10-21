@@ -66,22 +66,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				5 // 6.6%
 			];
 			let pullPool = [];
+			let highRoll = 0;
 			for (let i = 0; i < 10; i++) {
 				switch (this.sample(starPool)) {
 					case 1:
 						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 200)));
+						if (highRoll < 1) highRoll = 1;
 						break;
 					case 2:
 						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 300 && p.bst >= 201)));
+						if (highRoll < 2) highRoll = 2;
 						break;
 					case 3:
 						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 400 && p.bst >= 301)));
+						if (highRoll < 3) highRoll = 3;
 						break;
 					case 4:
 						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 500 && p.bst >= 401)));
+						if (highRoll < 4) highRoll = 4;
 						break;
 					case 5:
 						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 600 && p.bst >= 501)));
+						if (highRoll < 5) highRoll = 5;
 						break;
 				}
 			}
@@ -89,8 +95,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			pullPool.sort((a, b) => a.bst - b.bst);
 			for (const pulledPokemon of pullPool) {
 				pokemon.formeChange(pulledPokemon);
-				this.add('-message', `${pulledPokemon.bst}`);
+				//this.add('-message', `${pulledPokemon.bst}`);
 			}
+			this.add('-message', `${highRoll} Star Pull!`);
+			this.add('-message', `${pokemon.name} transformed into ${pokemon.species.name}!`);
+			randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
 		},
 		secondary: null,
 		type: "???",
