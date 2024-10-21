@@ -1,5 +1,5 @@
 import type {PokemonEventMethods, ConditionData} from './dex-conditions';
-import {BasicEffect, toID} from './dex-data';
+import {assignNewFields, BasicEffect, toID} from './dex-data';
 import {Utils} from '../lib';
 
 interface AbilityEventMethods {
@@ -39,7 +39,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly condition?: ConditionData;
 
 	constructor(data: AnyObject) {
-		super(data);
+		super(data, false);
 
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
@@ -64,6 +64,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 				this.gen = 3;
 			}
 		}
+		assignNewFields(this, data);
 	}
 }
 

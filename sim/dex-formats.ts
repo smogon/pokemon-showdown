@@ -1,5 +1,5 @@
 import {Utils} from '../lib';
-import {toID, BasicEffect} from './dex-data';
+import {assignNewFields, toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
 import {SpeciesData} from './dex-species';
 import {Tags} from '../data/tags';
@@ -477,9 +477,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly column?: number;
 
 	constructor(data: AnyObject) {
-		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		super(data, false);
 
 		this.mod = Utils.getString(data.mod) || 'gen9';
 		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Format';
@@ -496,6 +494,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.onBegin = data.onBegin || undefined;
 		this.noLog = !!data.noLog;
 		this.playerCount = (this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2);
+		assignNewFields(this, data);
 	}
 }
 

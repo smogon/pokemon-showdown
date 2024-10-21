@@ -1,5 +1,5 @@
 import type {PokemonEventMethods, ConditionData} from './dex-conditions';
-import {BasicEffect, toID} from './dex-data';
+import {assignNewFields, BasicEffect, toID} from './dex-data';
 import {Utils} from '../lib';
 
 interface FlingData {
@@ -106,9 +106,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly onEnd?: (this: Battle, target: Pokemon) => void;
 
 	constructor(data: AnyObject) {
-		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
+		super(data, false);
 
 		this.fullname = `item: ${this.name}`;
 		this.effectType = 'Item';
@@ -152,6 +150,8 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		if (this.onDrive) this.fling = {basePower: 70};
 		if (this.megaStone) this.fling = {basePower: 80};
 		if (this.onMemory) this.fling = {basePower: 50};
+
+		assignNewFields(this, data);
 	}
 }
 
