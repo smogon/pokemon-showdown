@@ -42,6 +42,11 @@ export const RESTORATIVE_BERRIES = new Set([
 	'leppaberry', 'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry',
 ] as ID[]);
 
+export const DMG_REDUCING_BERRIES = new Set([
+	'babiriberry', 'chartiberry', 'chilanberry', 'chopleberry', 'cobaberry', 'colburberry', 'habanberry', 'kasibberry', 'kebiaberry',
+	'occaberry', 'passhoberry', 'payapaberry', 'rindoberry', 'roseliberry', 'shucaberry', 'tangaberry', 'wacanberry', 'yacheberry',
+] as ID[]);
+
 export class Pokemon {
 	readonly side: Side;
 	readonly battle: Battle;
@@ -148,6 +153,9 @@ export class Pokemon {
 	draggedIn: number | null;
 	newlySwitched: boolean;
 	beingCalledBack: boolean;
+
+	// Gen 6 only
+	lastTurnEjected: number | null;
 
 	lastMove: ActiveMove | null;
 	// Gen 2 only
@@ -434,10 +442,17 @@ export class Pokemon {
 		this.newlySwitched = false;
 		this.beingCalledBack = false;
 
+		/**
+		 * Tracks the last turn the pokemon was ejected
+		 * as a result of the eject button. Relevant in
+		 * gen 6 to detect the validity of the symbiosis
+		 * eject button glitch.
+		 */
+		this.lastTurnEjected = null;
+
 		this.lastMove = null;
 		// This is used in gen 2 only, here to avoid code repetition.
 		// Only declared if gen 2 to avoid declaring an object we aren't going to need.
-		if (this.battle.gen === 2) this.lastMoveEncore = null;
 		this.lastMoveUsed = null;
 		this.moveThisTurn = '';
 		this.statsRaisedThisTurn = false;
@@ -649,7 +664,10 @@ export class Pokemon {
 	*/
 
 	getWeight() {
-		const weighthg = this.battle.runEvent('ModifyWeight', this, null, null, this.weighthg);
+		let weighthg = this.battle.runEvent('ModifyWeight', this, null, null, this.weighthg);
+		if ((this.item === 'floatstone' || this.item === 'ironball') && this.lastTurnEjected) {
+			weighthg = this.battle.runEvent('ModifyWeight', this, null, null, weighthg);
+		}
 		return Math.max(1, weighthg);
 	}
 
@@ -1713,6 +1731,13 @@ export class Pokemon {
 
 			this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
 			this.battle.runEvent('EatItem', this, null, null, item);
+			if (this.lastTurnEjected && this.battle.turn !== this.lastTurnEjected && !this.newlySwitched) {
+				this.battle.singleEvent('Eat', item, this.itemState, this, source, sourceEffect);
+				this.battle.runEvent('EatItem', this, null, null, item);
+				if (!DMG_REDUCING_BERRIES.has(item.id)) {
+					this.lastTurnEjected = null;
+				}
+			}
 
 			if (RESTORATIVE_BERRIES.has(item.id)) {
 				switch (this.pendingStaleness) {
@@ -1759,6 +1784,10 @@ export class Pokemon {
 			}
 			if (item.boosts) {
 				this.battle.boost(item.boosts, this, source, item);
+				if (this.lastTurnEjected) {
+					this.battle.boost(item.boosts, this, source, item);
+					this.lastTurnEjected = null;
+				}
 			}
 
 			this.battle.singleEvent('Use', item, this.itemState, this, source, sourceEffect);
@@ -1787,6 +1816,7 @@ export class Pokemon {
 			const oldItemState = this.itemState;
 			this.itemState = {id: '', target: this};
 			this.pendingStaleness = undefined;
+			source.lastTurnEjected = null;
 			this.battle.singleEvent('End', item, oldItemState, this);
 			this.battle.runEvent('AfterTakeItem', this, null, null, item);
 			return item;
