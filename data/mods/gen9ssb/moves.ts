@@ -75,13 +75,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 300 && p.bst >= 201)));
 						break;
 					case 3:
-						pullPool.push(this.sample(Dex.species.all().filter(!pullPool.includes(p) && !p.isNonstandard && p => p.bst <= 400 && p.bst >= 301)));
+						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 400 && p.bst >= 301)));
 						break;
 					case 4:
-						pullPool.push(this.sample(Dex.species.all().filter(!pullPool.includes(p) && !p.isNonstandard && p => p.bst <= 500 && p.bst >= 401)));
+						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 500 && p.bst >= 401)));
 						break;
 					case 5:
-						pullPool.push(this.sample(Dex.species.all().filter(!pullPool.includes(p) && !p.isNonstandard && p => p.bst <= 600 && p.bst >= 501)));
+						pullPool.push(this.sample(Dex.species.all().filter(p => !pullPool.includes(p) && !p.isNonstandard && p.bst <= 600 && p.bst >= 501)));
 						break;
 				}
 			}
