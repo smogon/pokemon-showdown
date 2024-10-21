@@ -149,7 +149,7 @@
     },
     "golduck": {
         "level": 85,
-        "moves": ["calmmind", "focusblast", "icebeam", "psyshock", "scald", "substitute"],
+        "moves": ["calmmind", "focusblast", "icebeam", "scald", "substitute"],
         "doublesLevel": 88,
         "doublesMoves": ["calmmind", "encore", "icebeam", "muddywater", "protect"]
     },
@@ -898,7 +898,7 @@
     },
     "salamence": {
         "level": 75,
-        "moves": ["dragondance", "dualwingbeat", "earthquake", "outrage", "roost"],
+        "moves": ["dragondance", "dualwingbeat", "earthquake", "outrage"],
         "doublesLevel": 79,
         "doublesMoves": ["dragonclaw", "fireblast", "hurricane", "protect", "tailwind"]
     },
@@ -953,7 +953,7 @@
     },
     "rayquaza": {
         "level": 73,
-        "moves": ["dracometeor", "dragonascent", "dragondance", "earthquake", "extremespeed", "swordsdance", "vcreate"],
+        "moves": ["dragonascent", "dragondance", "earthquake", "extremespeed", "swordsdance", "vcreate"],
         "doublesLevel": 74,
         "doublesMoves": ["dracometeor", "dragonascent", "dragonclaw", "dragondance", "earthpower", "extremespeed", "vcreate"],
         "noDynamaxMoves": ["dracometeor", "dragonascent", "dragondance", "earthquake", "extremespeed", "vcreate"]
@@ -1533,7 +1533,7 @@
     },
     "accelgor": {
         "level": 90,
-        "moves": ["bugbuzz", "energyball", "focusblast", "sludgebomb", "spikes", "toxic", "yawn"],
+        "moves": ["bugbuzz", "energyball", "focusblast", "sludgebomb", "spikes", "toxicspikes", "yawn"],
         "doublesLevel": 88,
         "doublesMoves": ["acidspray", "bugbuzz", "encore", "energyball", "focusblast"],
         "noDynamaxMoves": ["bugbuzz", "encore", "energyball", "focusblast", "spikes", "toxic"]
