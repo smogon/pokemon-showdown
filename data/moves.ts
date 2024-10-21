@@ -2511,7 +2511,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		// Recoil implemented in battle-actions.ts
+		chloroblastRecoil: [1, 2],
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -19051,7 +19051,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				} else {
 					this.add('-activate', target, 'move: Substitute', '[damage]');
 				}
-				if (move.recoil || move.id === 'chloroblast') {
+				if (move.recoil || move.chloroblastRecoil) {
 					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
 				}
 				if (move.drain) {
