@@ -139,7 +139,6 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'tox',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			this.add('-message', sourceEffect.id);
 			this.effectState.sourceEffect = sourceEffect.id;
 			if (sourceEffect.id === 'transfusetoxin') {
 				this.effectState.stage = 4;
