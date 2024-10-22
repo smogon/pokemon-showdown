@@ -137,7 +137,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 			onTrapPokemon(pokemon) {
-				pokemon.tryTrap();
+				pokemon.tryTrap(true);
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (target === source || !move || target.volatiles['planetbefall'].turns <= 0) return;
