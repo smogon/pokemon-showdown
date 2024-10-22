@@ -1433,8 +1433,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		// Damage Recovery
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (!source.abilityState.damageThisTurn) source.abilityState.damageThisTurn = 0;
-			source.abilityState.damageThisTurn += damage;
+			if (!target.abilityState.damageThisTurn) target.abilityState.damageThisTurn = 0;
+			target.abilityState.damageThisTurn += damage;
 		},
 		onResidual(pokemon) {
 			if (!pokemon.abilityState.damageThisTurn) pokemon.abilityState.damageThisTurn = 0;
