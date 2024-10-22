@@ -204,18 +204,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Star Pull',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Serious', shiny: true,
 	},
+	Morax: {
+		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
+		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
+		signatureMove: 'Dominus Lapidis',
+		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
+	},
 	/*
 	'Castaways': {
 		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
 		moves: ['Mortal Spin', 'Toxic Spikes', 'Water Sport'],
 		signatureMove: 'Pain Split',
 		evs: {hp: 248, def: 104, spd: 156}, ivs: {spa: 0}, nature: 'Careful',
-	},
-	Morax: {
-		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
-		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
-		signatureMove: 'Dominus Lapidis',
-		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
 	Toshinori: {
 		species: 'Machamp-Gmax', ability: 'One for All', item: 'Dying Embers', gender: 'M',
