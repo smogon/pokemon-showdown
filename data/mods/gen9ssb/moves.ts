@@ -50,7 +50,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		accuracy: 95,
 		pp: 5,
-		desc: "Badly poisons the foe, always starting at the third stage, regardless of its typing. Replaces existing status conditions. The user is then inflicted with Curse if the attack is successful.",
+		desc: "Badly poisons the foe, always starting at the fourth stage, regardless of its typing. Replaces existing status conditions. The user is then inflicted with Curse if the attack is successful.",
 		shortDesc: "Very badly poisons the target. User becomes cursed.",
 		onTryMove() {
 			this.attrLastMove('[still]');
