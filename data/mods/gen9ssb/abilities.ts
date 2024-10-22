@@ -24,8 +24,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.abilityState.charmBoost) pokemon.abilityState.charmBoost = false;
 			let statsN = ['HP', 'Attack', 'Defense', 'Special Attack', 'Special Defense', 'Speed'];
 			let stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-			let boostedStat = this.sample(statsN);
-			boostedStat = stats[statsN.indexOf(boostedStat)];
+			let boostedStat = this.sample(stats);
 			pokemon.abilityState.charmBoost = boostedStat;
 			switch (boostedStat) {
 				case 'hp':
@@ -41,6 +40,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.storedStats[boostedStat] *= 1.5;
 					break;
 			}
+			boostedStat = statsN[stats.indexOf(boostedStat)];
 			this.add('-activate', pokemon, 'ability: Lucky Charm');
 			this.add('-message', `Lucky Charm boosted ${pokemon.name}'s ${boostedStat}!`);
 		},
