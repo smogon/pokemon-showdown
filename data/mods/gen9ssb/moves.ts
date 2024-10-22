@@ -50,6 +50,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		accuracy: 95,
 		pp: 5,
+		desc: "Badly poisons the foe, always starting at the third stage, regardless of its typing. Replaces existing status conditions. The user is then inflicted with Curse if the attack is successful.",
+		shortDesc: "Very badly poisons the target. User becomes cursed.",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -57,12 +59,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Sludge Wave', target);
 			this.add('-anim', source, 'Strength Sap', target);
 		},
-		onAfterMove(pokemon, target, move) {
-			this.add('-message', target.status);
-			this.add('-message', target.status.effectState.stage);
-			this.add('-message', this.effectState.stage);
+		onHit(target, source, move) {
+			target.setStatus('tox', source, move);
 		},
-		status: 'tox',
+		// Stage advancement handled in ../../../conditions.ts
 		secondary: null,
 		type: "Dark",
 		target: "normal",
