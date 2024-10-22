@@ -1427,13 +1427,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Finger
 	absolutezen: {
 		name: "Absolute Zen",
-		desc: "Immune to Taunt/Confusion/Attract; Heals 1/6 max HP after being attacked.",
+		desc: "This Pokemon cannot be taunted, confused, or infatuated, and at the end of every turn, restores HP equal to 1/5 of the total damage dealt to this Pokemon this turn.",
+		shortDesc: "Immune to Taunt/Confusion/Infatuation; Heals 1/5 total damage taken at end of turn.",
 		gen: 9,
 		// Damage Recovery
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			this.add('-activate', target, 'ability: Absolute Zen');
-			this.heal(target.baseMaxhp / 6);
+			if (!source.abilityState.damageThisTurn) source.abilityState.damageThisTurn = 0;
+			source.abilityState.damageThisTurn += damage;
+		},
+		onResidual(pokemon) {
+			if (!pokemon.abilityState.damageThisTurn) pokemon.abilityState.damageThisTurn = 0;
+			if (pokemon.abilityState.damageThisTurn > 0) {
+				this.heal(pokemon.abilityState.damageThisTurn / 5, pokemon, pokemon, this.effect);
+				pokemon.abilityState.damageThisTurn = 0;
+			}
 		},
 		onUpdate(pokemon) {
 			// Infatuation Immunity
