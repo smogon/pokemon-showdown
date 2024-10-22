@@ -192,18 +192,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Demi',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
-	Varnava: {
-		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
-		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
-		signatureMove: 'Ecosystem Drain',
-		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
-	},
-	Genus: {
-		species: 'Dusclops', ability: 'Lucky Charm', item: 'Gachium Z', gender: 'N',
-		moves: ['Substitute', 'Roar', 'Recover'],
-		signatureMove: 'Star Pull',
-		evs: {hp: 252, def: 4, spe: 252}, nature: 'Serious', shiny: true,
-	},
 	Morax: {
 		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
 		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
@@ -217,6 +205,18 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 108, spd: 148}, ivs: {atk: 0}, nature: 'Bold',
 	},
 	/*
+ 	Varnava: {
+		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
+		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
+		signatureMove: 'Ecosystem Drain',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+	},
+ 	Genus: {
+		species: 'Dusclops', ability: 'Lucky Charm', item: 'Gachium Z', gender: 'N',
+		moves: ['Substitute', 'Roar', 'Recover'],
+		signatureMove: 'Star Pull',
+		evs: {hp: 252, def: 4, spe: 252}, nature: 'Serious', shiny: true,
+	},
 	Toshinori: {
 		species: 'Machamp-Gmax', ability: 'One for All', item: 'Dying Embers', gender: 'M',
 		moves: ['All-Out Pummeling', 'Continental Crush', 'Flying Press'],
