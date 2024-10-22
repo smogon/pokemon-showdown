@@ -1781,7 +1781,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Fire Blast", "Ice Beam", "Knock Off", "Stealth Rock", "Stone Edge", "Thunder Wave"],
+                "movepool": ["Dragon Tail", "Earthquake", "Ice Beam", "Knock Off", "Stealth Rock", "Stone Edge", "Thunder Wave"],
                 "abilities": ["Sand Stream"],
                 "teraTypes": ["Ghost", "Rock"]
             }
@@ -3907,10 +3907,16 @@
         "level": 80,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Iron Head", "Rapid Spin", "Rock Slide", "Swords Dance"],
+                "role": "Bulky Setup",
+                "movepool": ["Earthquake", "Iron Head", "Rapid Spin", "Swords Dance"],
                 "abilities": ["Mold Breaker", "Sand Rush"],
                 "teraTypes": ["Grass", "Ground", "Water"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Earthquake", "Iron Head", "Rapid Spin", "Rock Slide"],
+                "abilities": ["Mold Breaker", "Sand Rush"],
+                "teraTypes": ["Grass", "Water"]
             }
         ]
     },
