@@ -59,7 +59,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onAfterMove(pokemon, target, move) {
 			this.add('-message', target.status);
-			this.add('-message', target.status.stage);
+			this.add('-message', target.status.effectState.stage);
+			this.add('-message', this.effectState.stage);
 		},
 		status: 'tox',
 		secondary: null,
