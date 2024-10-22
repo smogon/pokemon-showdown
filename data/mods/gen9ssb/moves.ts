@@ -40,6 +40,32 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Mink
+	transfusetoxin: {
+		name: "Transfuse Toxin",
+		basePower: 0,
+		category: "Status",
+		gen: 9,
+		priority: 0,
+		flags: {},
+		accuracy: 95,
+		pp: 5,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Sludge Wave', target);
+			this.add('-anim', source, 'Strength Sap', target);
+		},
+		onAfterMove(pokemon, target, move) {
+			this.add('-message', target.status);
+			this.add('-message', target.status.stage);
+		},
+		status: 'tox',
+		secondary: null,
+		type: "Dark",
+		target: "normal",
+	},
 	// Genus
 	starpull: {
 		name: "Star Pull",
