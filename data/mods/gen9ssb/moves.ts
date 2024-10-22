@@ -62,6 +62,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, move) {
 			target.setStatus('tox', source, move);
 		},
+		onAfterMove(pokemon) {
+			this.add('-anim', pokemon, 'Night Shade', pokemon);
+			pokemon.addVolatile('curse');
+		},
 		// Stage advancement handled in ../../../conditions.ts
 		secondary: null,
 		type: "Dark",
