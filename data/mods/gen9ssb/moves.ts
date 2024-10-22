@@ -121,11 +121,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			onStart(pokemon) {
-				this.effectState.turns = 0;
+				pokemon.volatiles['planetbefall'].turns = 0;
 				this.add('-start', pokemon, 'Planet Befall', '[silent]');
-				this.add('-message', `${pokemon.name} was petrified!`);
-				if (pokemon.hasType('Rock')) return false;
+				if (pokemon.hasType('Rock') || !pokemon.addType('Rock')) return false;
 				if (!pokemon.addType('Rock')) return false;
+				this.add('-message', `${pokemon.name} was petrified!`);
 				this.add('-start', pokemon, 'typeadd', 'Rock', '[from] move: Planet Befall');
 			},
 			onResidual(pokemon) {
@@ -142,6 +142,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.tryTrap();
 			},
 			onDamagingHit(damage, target, source, move) {
+				if (target === source || !move || target.volatiles['planetbefall'].turns <= 0) return;
 				target.removeVolatile('planetbefall');
 			},
 			onEnd(pokemon) {
