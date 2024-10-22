@@ -142,7 +142,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 			this.add('-message', sourceEffect.id);
 			this.effectState.sourceEffect = sourceEffect.id;
 			if (sourceEffect.id === 'transfusetoxin') {
-				this.effectState.stage = 7;
+				this.effectState.stage = 4;
 			} else {
 				this.effectState.stage = 0;
 			}
@@ -156,7 +156,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onSwitchIn() {
 			if (this.effectState.sourceEffect === 'transfusetoxin') {
-				this.effectState.stage = 7;
+				this.effectState.stage = 4;
 			} else {
 				this.effectState.stage = 0;
 			}
