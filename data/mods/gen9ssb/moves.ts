@@ -95,7 +95,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			pullPool.sort((a, b) => a.bst - b.bst);
 			for (const pulledPokemon of pullPool) {
 				pokemon.formeChange(pulledPokemon);
-				//this.add('-message', `${pulledPokemon.bst}`);
 			}
 			this.add('-message', `${highRoll} Star Pull!`);
 			this.add('-message', `${pokemon.name} transformed into ${pokemon.species.name}!`);
@@ -115,9 +114,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isZ: 'hadeansoil',
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Draco Meteor', target);
+			this.add('-anim', source, 'Continental Crush', target);
+		},
 		volatileStatus: 'planetbefall',
 		onHit(target, source, move) {
-			source.side.addSideCondition('dominuslapidis');
+			const sourceSide = source.side;
+			sourceSide.addSideCondition('jadeshield');
 		},
 		condition: {
 			onStart(pokemon) {
@@ -163,7 +170,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: -8,
 		flags: {},
-		sideCondition: 'dominuslapidis',
+		sideCondition: 'jadeshield',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -171,10 +178,28 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Work Up', source);
 			this.add('-anim', source, 'Aqua Ring', source);
 		},
+		secondary: null,
+		target: "allySide",
+		type: "Ground",
+	},
+	// Morax
+	// Visuals Only
+	jadeshield: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Jade Shield",
+		shortDesc: "Summons Jade Shield. Always goes last.",
+		desc: "User focuses, then summons Jade Shield for 5 turns after the opponent moves.",
+		gen: 9,
+		pp: 5,
+		priority: -8,
+		flags: {},
+		sideCondition: 'jadeshield',
 		condition: {
 			duration: 5,
 			onSideStart(side, source) {
-				this.add('-sidestart', side, 'Dominus Lapidis', source);
+				this.add('-sidestart', side, 'Jade Shield', source);
 				this.effectState.hp = Math.floor(source.maxhp * 0.33);
 			},
 			onResidual(pokemon) {
@@ -198,26 +223,26 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				damage = this.runEvent('SubDamage', target, source, move, damage);
 				if (!damage) return damage;
-				if (damage > target.side.sideConditions['dominuslapidis'].hp) {
-					damage -= target.side.sideConditions['dominuslapidis'].hp as number;
-					target.side.sideConditions['dominuslapidis'].hp = 0;
+				if (damage > target.side.sideConditions['jadeshield'].hp) {
+					damage -= target.side.sideConditions['jadeshield'].hp as number;
+					target.side.sideConditions['jadeshield'].hp = 0;
 					this.damage(damage, target, source, move);
 				} else {
-					target.side.sideConditions['dominuslapidis'].hp -= damage;
+					target.side.sideConditions['jadeshield'].hp -= damage;
 				}
 				source.lastDamage = damage;
-				if (target.side.sideConditions['dominuslapidis'].hp <= 0) {
+				if (target.side.sideConditions['jadeshield'].hp <= 0) {
 					if (move.ohko) this.add('-ohko');
-					target.side.removeSideCondition('dominuslapidis');
+					target.side.removeSideCondition('jadeshield');
 				} else {
-					this.add('-activate', target, 'move: Dominus Lapidis', '[damage]');
+					this.add('-activate', target, 'move: Jade Shield', '[damage]');
 				}
 				if (move.recoil || move.id === 'chloroblast') this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
 				if (move.drain) this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
 				return this.HIT_SUBSTITUTE;
 			},
 			onSideEnd(side) {
-				this.add('-sideend', side, 'Dominus Lapidis');
+				this.add('-sideend', side, 'Jade Shield');
 			},
 		},
 		secondary: null,
