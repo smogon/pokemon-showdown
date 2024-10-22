@@ -141,7 +141,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		onStart(target, source, sourceEffect) {
 			this.effectState.sourceEffect = sourceEffect.id;
 			if (sourceEffect.id === 'transfusetoxin') {
-				this.effectState.stage = 4;
+				this.effectState.stage = 3;
 			} else {
 				this.effectState.stage = 0;
 			}
@@ -155,7 +155,7 @@ export const Conditions: {[k: string]: ConditionData} = {
 		},
 		onSwitchIn() {
 			if (this.effectState.sourceEffect === 'transfusetoxin') {
-				this.effectState.stage = 4;
+				this.effectState.stage = 3;
 			} else {
 				this.effectState.stage = 0;
 			}
