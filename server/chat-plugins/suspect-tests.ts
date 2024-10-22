@@ -100,7 +100,7 @@ export const commands: Chat.ChatCommands = {
 				reqData[k] = val;
 			}
 
-			const [error] = await LoginServer.request("suspects/add", {
+			const [, error] = await LoginServer.request("suspects/add", {
 				format: format.id,
 				reqs: JSON.stringify(reqData),
 			});
@@ -129,7 +129,7 @@ export const commands: Chat.ChatCommands = {
 			const test = suspectTests.suspects[format];
 			if (!test) return this.errorReply(`There is no suspect test for '${target}'. Check spelling?`);
 
-			const [error] = await LoginServer.request('suspects/end', {
+			const [, error] = await LoginServer.request('suspects/end', {
 				format,
 			});
 			if (error) throw new Chat.ErrorMessage(`Error ending suspect: ${error.message}`);
