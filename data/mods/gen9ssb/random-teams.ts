@@ -210,13 +210,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Dominus Lapidis',
 		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
-	/*
-	'Castaways': {
-		species: 'Swalot', ability: 'Tumultuous Trio', item: 'Black Sludge', gender: 'M',
-		moves: ['Mortal Spin', 'Toxic Spikes', 'Water Sport'],
-		signatureMove: 'Pain Split',
-		evs: {hp: 248, def: 104, spd: 156}, ivs: {spa: 0}, nature: 'Careful',
+	Mink: {
+		species: 'Venusaur-Mega', ability: 'Viridian Behemoth', item: 'Corpse Lily', gender: 'M',
+		moves: ['Seed Flare', 'Earth Power', 'Rototiller'],
+		signatureMove: 'Transfuse Toxin',
+		evs: {hp: 252, def: 108, spd: 148}, ivs: {atk: 0}, nature: 'Bold',
 	},
+	/*
 	Toshinori: {
 		species: 'Machamp-Gmax', ability: 'One for All', item: 'Dying Embers', gender: 'M',
 		moves: ['All-Out Pummeling', 'Continental Crush', 'Flying Press'],
