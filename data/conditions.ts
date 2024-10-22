@@ -139,7 +139,13 @@ export const Conditions: {[k: string]: ConditionData} = {
 		name: 'tox',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			this.effectState.stage = 0;
+			this.add('-message', sourceEffect.id);
+			this.effectState.sourceEffect = sourceEffect.id;
+			if (sourceEffect.id === 'transfusetoxin') {
+				this.effectState.stage = 7;
+			} else {
+				this.effectState.stage = 0;
+			}
 			if (sourceEffect && sourceEffect.id === 'toxicorb') {
 				this.add('-status', target, 'tox', '[from] item: Toxic Orb');
 			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -149,7 +155,11 @@ export const Conditions: {[k: string]: ConditionData} = {
 			}
 		},
 		onSwitchIn() {
-			this.effectState.stage = 0;
+			if (this.effectState.sourceEffect === 'transfusetoxin') {
+				this.effectState.stage = 7;
+			} else {
+				this.effectState.stage = 0;
+			}
 		},
 		onResidualOrder: 9,
 		onResidual(pokemon) {
