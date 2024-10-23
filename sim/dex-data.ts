@@ -48,7 +48,7 @@ export function assignNewFields(self: AnyObject, data: AnyObject) {
 	}
 }
 
-export class BasicEffect implements EffectData {
+export abstract class BasicEffect implements EffectData {
 	/**
 	 * ID. This will be a lowercase version of the name with all the
 	 * non-alphanumeric characters removed. So, for instance, "Mr. Mime"
@@ -115,12 +115,7 @@ export class BasicEffect implements EffectData {
 	/** ??? */
 	sourceEffect: string;
 
-	/**
-	 * Pass 'false' for the second parameter if you only want the declared fields of BasicEffect
-	 * to be initialized - the other properties of data will ignored.
-	 * This is to help w/ V8 hidden classes (want to init fields in consistent order)
-	 */
-	constructor(data: AnyObject, copyOtherFields = true) {
+	constructor(data: AnyObject) {
 		this.name = Utils.getString(data.name).trim();
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Utils.getString(data.fullname) || this.name;
@@ -138,8 +133,6 @@ export class BasicEffect implements EffectData {
 		this.status = data.status as ID || undefined;
 		this.weather = data.weather as ID || undefined;
 		this.sourceEffect = data.sourceEffect || '';
-
-		if (copyOtherFields) assignNewFields(this, data);
 	}
 
 	toString() {
@@ -152,7 +145,7 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 	readonly plus?: StatIDExceptHP;
 	readonly minus?: StatIDExceptHP;
 	constructor(data: AnyObject) {
-		super(data, false);
+		super(data);
 		this.fullname = `nature: ${this.name}`;
 		this.effectType = 'Nature';
 		this.gen = 3;

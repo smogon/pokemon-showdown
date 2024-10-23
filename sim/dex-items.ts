@@ -106,7 +106,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly onEnd?: (this: Battle, target: Pokemon) => void;
 
 	constructor(data: AnyObject) {
-		super(data, false);
+		super(data);
 
 		this.fullname = `item: ${this.name}`;
 		this.effectType = 'Item';

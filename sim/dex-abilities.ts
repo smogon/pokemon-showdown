@@ -39,7 +39,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly condition?: ConditionData;
 
 	constructor(data: AnyObject) {
-		super(data, false);
+		super(data);
 
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';

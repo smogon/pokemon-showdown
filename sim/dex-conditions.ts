@@ -627,7 +627,7 @@ export class Condition extends BasicEffect implements
 	) => boolean | null | void;
 
 	constructor(data: AnyObject) {
-		super(data, false);
+		super(data);
 		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
 		assignNewFields(this, data);
 	}

@@ -480,7 +480,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly volatileStatus?: ID;
 
 	constructor(data: AnyObject) {
-		super(data, false);
+		super(data);
 
 		this.fullname = `move: ${this.name}`;
 		this.effectType = 'Move';

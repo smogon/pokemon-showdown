@@ -477,7 +477,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly column?: number;
 
 	constructor(data: AnyObject) {
-		super(data, false);
+		super(data);
 
 		this.mod = Utils.getString(data.mod) || 'gen9';
 		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Format';

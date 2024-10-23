@@ -272,7 +272,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly natDexTier: TierTypes.Singles | TierTypes.Other;
 
 	constructor(data: AnyObject) {
-		super(data, false);
+		super(data);
 
 		this.fullname = `pokemon: ${data.name}`;
 		this.effectType = 'Pokemon';
