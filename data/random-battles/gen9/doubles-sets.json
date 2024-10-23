@@ -6043,7 +6043,7 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Aqua Jet", "Liquidation", "Memento", "Stomping Tantrum", "Throat Chop"],
+                "movepool": ["Aqua Jet", "Liquidation", "Stomping Tantrum", "Throat Chop"],
                 "abilities": ["Gooey"],
                 "teraTypes": ["Dark", "Ground"]
             }
