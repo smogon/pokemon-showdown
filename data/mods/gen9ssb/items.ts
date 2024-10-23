@@ -11,7 +11,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	// Arya
 	flygonite: {
-		inherit: true,
+		name: "Flygonite",
 		spritenum: 111,
 		itemUser: ["Flygon"],
 		megaEvolves: "Flygon",
