@@ -984,11 +984,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["nightshade", "rest", "sleeptalk", "toxic"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "rest", "return", "sleeptalk"]
+                "movepool": ["curse", "nightshade", "rest", "return", "sleeptalk"]
             }
         ]
     },
