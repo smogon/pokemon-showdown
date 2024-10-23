@@ -2017,7 +2017,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Encore", "Knock Off", "Recover", "Taunt", "Thunder Wave", "Will-O-Wisp"],
+                "movepool": ["Encore", "Knock Off", "Recover", "Thunder Wave", "Will-O-Wisp"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Steel"]
             }
@@ -3958,7 +3958,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Encore", "Giga Drain", "Moonblast", "Stun Spore", "Taunt", "U-turn"],
+                "movepool": ["Encore", "Giga Drain", "Moonblast", "Stun Spore", "U-turn"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Poison", "Steel"]
             },
