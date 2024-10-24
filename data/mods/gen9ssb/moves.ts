@@ -121,6 +121,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return null;
 				}
 			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'move: Taiji', '[silent]');
+			},
 		},
 		secondary: null,
 		type: "Fighting",
