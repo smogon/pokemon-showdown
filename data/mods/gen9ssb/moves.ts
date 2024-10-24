@@ -1,4 +1,4 @@
-import {ssbSets} from "./random-teams";
+I am import {ssbSets} from "./random-teams";
 import {PSEUDO_WEATHERS, changeSet, getName} from "./scripts";
 import {Teams} from '../../../sim/teams';
 
@@ -40,6 +40,107 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Tao
+	taiji: {
+		name: "Taiji",
+		shortDesc: "User focuses, then hits last at varying power.",
+		desc: "User focuses, then moves last. If the user is not damaged by an attacking move while focusing, this move always results in a critical hit and forces the target to recharge. If the user is targeted by an attacking move while focusing, this move will hit first at halved power.",
+		basePower: 80,
+		category: "Physical",
+		accuracy: true,
+		gen: 9,
+		priority: -8,
+		flags: {contact: 1, protect: 1, punch: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+		pp: 5,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Detect', source);
+			this.add('-anim', source, 'Force Palm', target);
+		},
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('taiji');
+		},
+		onModifyMove(move, pokemon) {
+			if (!pokemon.volatiles['taiji']?.damaged) {
+				move.willCrit = true;
+				move.onHit = function (foe) {
+					foe.addVolatile('mustrecharge');
+				};
+			} 
+		},
+		beforeMoveCallback(pokemon) {
+			if (pokemon.volatiles['taiji']?.damaged) return true;
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Taiji', '[silent]');
+				this.add('-anim', pokemon, 'Laser Focus', pokemon);
+				this.add('-message', `${pokemon.name} tightened their focus!`);
+			},
+			onFoeBeforeMovePriority: 6,
+			onFoeBeforeMove(attacker, defender, move) {
+				// If the foe targets the user with a damaging move before Taiji hits,
+				// Taiji will hit first at halved power
+				if (
+					attacker !== defender &&
+					move.category !== 'Status' &&
+					this.actions.getDamage(attacker, defender, move)
+				) {
+					// Getting move data
+					const targetLoc = this.queue.willMove(defender).targetLoc;
+					const foeTargetLoc = this.queue.willMove(attacker).targetLoc;
+					const moveTemp = this.dex.moves.get('taiji');
+					const moveMod = {
+						move: moveTemp.name,
+						id: moveTemp.id,
+						basePower: moveTemp.basePower / 2,
+						pp: moveTemp.pp,
+						maxpp: moveTemp.pp,
+						target: moveTemp.target,
+						disabled: false,
+						used: false,
+					};
+					// Easiest way to do this was to cancel the opponent's move, manually
+					// insert Taiji into the queue, and then reinsert opponent's move after
+					this.queue.cancelMove(attacker);
+					this.queue.prioritizeAction(this.queue.resolveAction({
+						choice: 'move',
+						pokemon: defender,
+						move: moveMod,
+						targetLoc: targetLoc,
+					})[0] as MoveAction);
+
+					this.queue.prioritizeAction(this.queue.resolveAction({
+						choice: 'move',
+						pokemon: attacker,
+						move: move,
+						targetLoc: foeTargetLoc,
+					})[0] as MoveAction);
+					this.effectState.damaged = true;
+					return null;
+				}
+			},
+		},
+		secondary: null,
+		type: "Fighting",
+		target: "normal",
+	},
+	wuji: {
+		name: "Wuji",
+		basePower: 80,
+		category: "Physical",
+		accuracy: true,
+		gen: 9,
+		priority: -8,
+		flags: {contact: 1, protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+		pp: 5,
+		secondary: null,
+		type: "Fighting",
+		target: "normal",
+	},
 	// Mink
 	toxicdeluge: {
 		name: "Toxic Deluge",
