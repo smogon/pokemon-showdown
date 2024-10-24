@@ -103,7 +103,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					};
 					// Easiest way to do this was to cancel the opponent's move, manually
 					// insert Taiji into the queue, and then reinsert opponent's move after
-					this.queue.cancelMove(attacker);
+	
 					this.queue.prioritizeAction(this.queue.resolveAction({
 						choice: 'move',
 						pokemon: defender,
