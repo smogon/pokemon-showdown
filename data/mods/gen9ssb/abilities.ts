@@ -15,6 +15,33 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Mink
+	putridity: {
+		name: "Putridity",
+		gen: 9,
+		flags: {},
+		desc: "At the end of every turn, this Pokemon restores 1/16 of its max HP for each teammate inflicted with poison or toxic, and has a 10% chance to set either Safeguard or Grassy Terrain. This chance increases by 10% for each teammate inflicted with poison or toxic.",
+		shortDesc: "For each poisoned ally at end of turn: +1/16 HP; +10% of Safeguard/Grassy Terrain.",
+		onResidual(pokemon) {
+			let totalHP = 0;
+			let chance = 1;
+			for (const ally of pokemon.side.allies()) {
+				if (['psn', 'tox'].includes(ally.status)) {
+					totalHP += pokemon.maxhp / 16;
+					chance++;
+				}
+			}
+			if (totalHP > 0) this.heal(totalHP, pokemon, pokemon, this.effect);
+			if (this.randomChance(chance, 10)) {
+				this.add('-activate', pokemon, 'ability: Putridity');
+				if (this.randomChance(1, 2)) {
+					pokemon.side.addSideCondition('safeguard');
+				} else {
+					this.field.setTerrain('grassyterrain');
+				}
+			}
+		},
+	},
 	// Genus
 	luckycharm: {
 		name: "Lucky Charm",
