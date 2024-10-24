@@ -103,6 +103,7 @@ export const commands: Chat.ChatCommands = {
 			const [, error] = await LoginServer.request("suspects/add", {
 				format: format.id,
 				reqs: JSON.stringify(reqData),
+				url: urlActual,
 			});
 			if (error) throw new Chat.ErrorMessage("Error adding suspect test: " + error.message);
 
