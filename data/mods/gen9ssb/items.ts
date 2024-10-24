@@ -6,10 +6,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "Whenever this Pokemon switches out, the ally replacing it is poisoned. At the end of every turn, each adjacent ally has a 30% chance to become poisoned. If held by Mink with Transfuse Toxin, it can use Toxic Deluge.",
 		shortDesc: "On switch-out, the replacement ally is poisoned. 30% chance to poison adjacent allies.",
 		onSwitchOut(pokemon) {
-			const side = pokemon.side;
-			if (!side.sideConditions.includes('corpselily')) {
-				pokemon.side.addSideCondition('corpselily');
-			}
+			pokemon.side.addSideCondition('corpselily');
 		},
 		onResidual(pokemon) {
 			for (const ally of pokemon.adjacentAllies()) {
