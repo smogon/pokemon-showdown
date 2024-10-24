@@ -41,6 +41,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Mink
+	toxicdeluge: {
+		name: "Toxic Deluge",
+		basePower: 40,
+		category: "Special",
+		gen: 9,
+		priority: 0,
+		flags: {},
+		accuracy: true,
+		pp: 1,
+		desc: "Combines Dark in its type effectiveness. Hits one additional time for each teammate inflicted with poison or toxic. Each hit has a 100% chance to poison regardless of typing. If the target is already poisoned, the target is inflicted with toxic instead.",
+		shortDesc: "Hits for each poisoned ally. 100%: Poisons targets.",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Barb Barrage', source);
+			this.add('-anim', source, 'Acid Downpour', target);
+		},
+		onModifyMove(move, pokemon) {
+			let hitCount = 1;
+			for (const ally of pokemon.side.allies()) {
+				if (['psn', 'tox'].includes(ally.status)) hitCount++;
+			}
+			if (hitCount > 1) move.multihit = hitCount;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Dark', type);
+		},
+		onHit(target, source, move) {
+			if (!target.status || !['psn', 'tox'].includes(target.status)) {
+				target.setStatus('psn');
+			} else if (target.status === 'psn') {
+				target.setStatus('tox');
+			}
+		},
+		secondary: null,
+		type: "Poison",
+		target: "allAdjacent",
+	},
+	// Mink
 	transfusetoxin: {
 		name: "Transfuse Toxin",
 		basePower: 0,
