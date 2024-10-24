@@ -82,14 +82,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFoeBeforeMovePriority: 6,
 			onFoeBeforeMove(attacker, defender, move) {
-				// If the foe targets the user with a damaging move before Taiji hits,
-				// Taiji will hit first at halved power
 				if (
 					attacker !== defender &&
 					move.category !== 'Status' &&
 					this.actions.getDamage(attacker, defender, move)
 				) {
-					// Getting move data
 					const moveTemp = this.dex.moves.get('taiji');
 					const moveMod = {
 						move: moveTemp.name,
@@ -101,24 +98,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						disabled: false,
 						used: false,
 					};
-					// Easiest way to do this was to cancel the opponent's move, manually
-					// insert Taiji into the queue, and then reinsert opponent's move after
-	
 					this.queue.prioritizeAction(this.queue.resolveAction({
 						choice: 'move',
 						pokemon: defender,
 						move: moveMod,
 						targetLoc: defender.getLocOf(attacker),
 					})[0] as MoveAction);
-
-					this.queue.prioritizeAction(this.queue.resolveAction({
-						choice: 'move',
-						pokemon: attacker,
-						move: move,
-						targetLoc: attacker.getLocOf(defender),
-					})[0] as MoveAction);
 					this.effectState.damaged = true;
-					return null;
 				}
 			},
 			onEnd(pokemon) {
