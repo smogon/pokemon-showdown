@@ -1131,7 +1131,7 @@ export class Pokemon {
 			entry.commanding = !!this.volatiles['commanding'] && !this.fainted;
 			entry.reviving = this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'];
 		}
-		if (this.battle.gen === 9) {
+		if (this.terastallized || this.battle.gen === 9 && this.canTerastallize) {
 			entry.teraType = this.teraType;
 			entry.terastallized = this.terastallized || '';
 		}
