@@ -148,11 +148,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Acid Downpour', target);
 		},
 		onModifyMove(move, pokemon) {
-			let hitCount = 1;
-			for (const ally of pokemon.side.allies()) {
-				if (['psn', 'tox'].includes(ally.status)) hitCount++;
+			let c = 0;
+			for (const target of pokemon.side.pokemon) {
+				if (target.status === 'psn' || target.status === 'tox') {
+					c++;
+				}
 			}
-			if (hitCount > 1) move.multihit = hitCount;
+			if (c <= 0) return;
+			move.multihit = c;
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Dark', type);
