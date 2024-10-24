@@ -1,4 +1,46 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Mink
+	corpselily: {
+		name: "Corpse Lily",
+		gen: 9,
+		onSwitchOut(pokemon) {
+			const side = pokemon.side;
+			if (!side.sideConditions.includes('corpselily')) {
+				pokemon.side.addSideCondition('corpselily');
+			}
+		},
+		onResidual(pokemon) {
+			for (const ally of pokemon.adjacentAllies()) {
+				const proc = this.randomChance(3, 10);
+				if (!proc || ally.runImmunity('Poison')) continue;
+				this.add('-anim', pokemon, 'Poison Powder', ally);
+				if (!ally.trySetStatus('psn', pokemon, this.effect)) {
+					this.add('-immune', ally);
+					continue;
+				}
+			}
+		},
+		condition: {
+			onSideStart(side) {
+				this.add('-sidestart', side, 'item: Corpse Lily', '[silent]');
+			},
+			onSideEnd(side) {
+				this.add('-sideend', side, 'item: Corpse Lily', '[silent]');
+			},
+			onSwitchIn(pokemon) {
+				this.add('-anim', pokemon, 'Poison Powder', pokemon);
+				if (pokemon.trySetStatus('psn', pokemon, this.effect)) {
+					pokemon.side.removeSideCondition('corpselily');
+				} else {
+					this.add('-immune', pokemon);
+				}
+			},
+		},
+		onTakeItem: false,
+		zMove: "Toxic Deluge",
+		zMoveFrom: "Transfuse Toxin",
+		itemUser: ["Venusaur-Mega"],
+	},
 	// Morax
 	hadeansoil: {
 		name: "Hadean Soil",
