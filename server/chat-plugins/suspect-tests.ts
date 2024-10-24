@@ -106,7 +106,7 @@ export const commands: Chat.ChatCommands = {
 				url: urlActual,
 			});
 			if (out?.actionerror || error) {
-				throw new Chat.ErrorMessage("Error adding suspect test: " + (out?.actionerror || error.message));
+				throw new Chat.ErrorMessage("Error adding suspect test: " + (out?.actionerror || error?.message));
 			}
 
 			this.privateGlobalModAction(`${user.name} ${suspectTests.suspects[format.id] ? "edited the" : "added a"} ${format.name} suspect test.`);
