@@ -1146,7 +1146,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Yellow Magic"},
 	},
 
-	ninetaleslola: {
+	ninetalesalola: {
 		inherit: true,
 		abilities: {0: "Party Up"},
 	},

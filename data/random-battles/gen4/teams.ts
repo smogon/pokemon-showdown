@@ -166,7 +166,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		}
 
 		// Develop additional move lists
-		const badWithSetup = ['healbell', 'pursuit', 'toxic'];
+		const badWithSetup = ['pursuit', 'toxic'];
 		const statusMoves = this.cachedStatusMoves;
 
 		// General incompatibilities

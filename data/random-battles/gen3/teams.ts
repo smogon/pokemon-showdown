@@ -661,6 +661,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
 
+			// Prevent Shedinja from generating after Tyranitar
+			if (species.name === 'Shedinja' && teamDetails.sand) continue;
+
 			// Limit to one Wobbuffet per battle (not just per team)
 			if (species.name === 'Wobbuffet' && this.battleHasWobbuffet) continue;
 			// Limit to one Ditto per battle in Gen 2
