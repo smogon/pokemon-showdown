@@ -152,10 +152,6 @@ describe("New set format (slow)", () => {
 			filename: "gen9baby/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
 		},
-		"gen9caprandombattle": {
-			filename: "gen9cap/sets",
-			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
-		},
 	};
 	for (const format of Object.keys(formatInfo)) {
 		const filename = formatInfo[format].filename;
