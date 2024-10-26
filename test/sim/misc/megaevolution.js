@@ -163,7 +163,8 @@ describe('Mega Evolution', function () {
 			assertLegalButCantMega('gen9nationaldexag@@@-ndag');
 
 			// don't add it where unnecessary
-			assert.false(Dex.formats.getRuleTable(Dex.formats.get('gen4anythinggoes')).has('megarayquazaclause'));
+			const format = common.getFormat({formatid: 'gen4anythinggoes'});
+			assert.false(Dex.formats.getRuleTable(format).has('megarayquazaclause'));
 		});
 	});
 });
