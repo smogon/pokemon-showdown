@@ -323,6 +323,9 @@ export class TeamValidator {
 	readonly toID: (str: any) => ID;
 	constructor(format: string | Format, dex = Dex) {
 		this.format = dex.formats.get(format);
+		if (this.format.exists === false || this.format.effectType !== 'Format') {
+			throw new Error("`format` should exist and be a format");
+		}
 		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(this.format);
