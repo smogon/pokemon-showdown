@@ -45,6 +45,7 @@ class TestTools {
 		if (options.formatid) {
 			const format = Dex.formats.get(options.formatid);
 			if (!format.exists) throw new Error(`Unidentified format: ${options.formatid}`);
+			if (format.effectType !== 'Format') throw new Error(`Has type '${format.effectType}' not 'Format': ${options.formatid}`);
 			return format;
 		}
 
