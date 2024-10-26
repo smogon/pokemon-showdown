@@ -304,8 +304,16 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 
 			for (const type in setsJSON) {
 				const typeTable = filename.includes('bss-factory-sets') ? setsJSON : setsJSON[type];
-				const vType = filename.includes('bss-factory-sets') ? `battle${genNum === 8 ? 'stadium' : 'spot'}singles` :
-					type === 'Mono' ? 'monotype' : type.toLowerCase();
+				let vType;
+				if (filename.includes('bss-factory-sets')) {
+					vType = `battle${genNum === 8 ? 'stadium' : 'spot'}singles`;
+				} else if (type === 'Mono') {
+					vType = 'monotype';
+				} else if (type === 'Uber') {
+					vType = 'ubers';
+				} else {
+					vType = type.toLowerCase();
+				}
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
