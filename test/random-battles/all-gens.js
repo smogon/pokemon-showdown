@@ -5,6 +5,7 @@
 'use strict';
 
 const assert = require('../assert');
+const common = require('../common');
 const {Utils} = require('../../dist/lib');
 const {testTeam, assertSetValidity, validateLearnset} = require('./tools');
 const {default: Dex} = require('../../dist/sim/dex');
@@ -156,10 +157,9 @@ describe("New set format (slow)", () => {
 	for (const format of Object.keys(formatInfo)) {
 		const filename = formatInfo[format].filename;
 		const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
-		const mod = filename.split('/')[0];
-		const genNum = parseInt(mod[3]);
+		const dex = common.mod(common.getFormat({formatid: format}).mod).dex; // verifies format exists
+		const genNum = dex.gen;
 		const rounds = 100;
-		const dex = Dex.forFormat(format);
 		it(`${filename}.json should have valid set data`, () => {
 			const validRoles = formatInfo[format].roles;
 			for (const [id, sets] of Object.entries(setsJSON)) {
