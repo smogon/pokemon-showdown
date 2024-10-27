@@ -99,14 +99,16 @@ export const commands: Chat.ChatCommands = {
 				}
 				reqData[k] = val;
 			}
-
-			const [out, error] = await LoginServer.request("suspects/add", {
-				format: format.id,
-				reqs: JSON.stringify(reqData),
-				url: urlActual,
-			});
-			if (out?.actionerror || error) {
-				throw new Chat.ErrorMessage("Error adding suspect test: " + (out?.actionerror || error?.message));
+			const isEdit = suspectTests.suspects[format.id];
+			if (!isEdit) {
+				const [out, error] = await LoginServer.request("suspects/add", {
+					format: format.id,
+					reqs: JSON.stringify(reqData),
+					url: urlActual,
+				});
+				if (out?.actionerror || error) {
+					throw new Chat.ErrorMessage("Error adding suspect test: " + (out?.actionerror || error?.message));
+				}
 			}
 
 			this.privateGlobalModAction(`${user.name} ${suspectTests.suspects[format.id] ? "edited the" : "added a"} ${format.name} suspect test.`);
