@@ -128,9 +128,9 @@ export const ssbSets: SSBSets = {
 	},
 	Fblthp: {
 		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
-		moves: ['Jet Punch', 'Dizzy Punch', 'Belly Drum'],
-		signatureMove: 'Bubble Guppy Uppercut',
-		evs: {hp: 252, atk: 136, spd: 120}, nature: 'Adamant', shiny: true,
+		moves: ['Bouncy Bubble', 'Yawn', 'Helping Hand'],
+		signatureMove: 'Blow and Go',
+		evs: {hp: 248, spa: 140, spd: 120}, nature: 'Modest',
 	},
 	Luminous: {
 		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
