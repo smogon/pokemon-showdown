@@ -45,6 +45,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Lost and Found"},
 		types: ['Water', 'Normal'],
+		baseStats: {hp: 65, atk: 65, def: 65, spa: 90, spd: 50, spe: 90},
 	},
 	pikachu: {
 		inherit: true,
