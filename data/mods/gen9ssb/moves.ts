@@ -1277,47 +1277,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 	},
 	// Fblthp
-	bubbleguppyuppercut: {
-		accuracy: 85,
-		basePower: 65,
-		category: "Physical",
-		name: "Bubble Guppy Uppercut",
-		desc: "Hits twice. User charges, then hits after the foe. While the user is charging, it cannot be damaged by contact moves.",
-		shortDesc: "Hits twice; Always goes last; Immune to contact.",
-		pp: 8,
-		noPPBoosts: true,
-		priority: -8,
-		flags: {contact: 1, protect: 1},
+	bouncybubble: {
+		inherit: true,
+		basePower: 90,
+	},
+	// Fblthp
+	blowandgo: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Blow and Go",
+		desc: "Lowers target's Atk, Sp. Atk by 1, starts Aqua Ring on the target, changes the target's type to Water, then user switches to an ally of choice.",
+		shortDesc: "Parting Shot + Soak; Starts Aqua Ring on target.",
+		pp: 5,
+		priority: 1,
+		flags: {reflectable: 1, mirror: 1, protect: 1},
+		selfSwitch: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Water Sport', source);
+			this.add('-anim', source, 'Bubble Beam', target);
+			this.add('-anim', source, 'Dive', source);
 		},
-		priorityChargeCallback(pokemon) {
-			pokemon.addVolatile('bubbleguppyuppercut');
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Fighting', type);
-		},
-		condition: {
-			duration: 1,
-			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Bubble Guppy Uppercut');
-				this.add('-message', `${pokemon.name} smells something fierce!`);
-			},
-			onTryHit(target, source, move) {
-				if (move.flags['contact']) {
-					this.add('-immune', target, '[from] move: Bubble Guppy Uppercut');
-					return null;
-				}
-			},
-			onEnd(pokemon) {
-				this.add('-anim', pokemon, 'Sky Uppercut', this.effectState.target);
-			},
+		onHit(target, source, move) {
+			this.boost({atk: -1, spa: -1}, target, source, this.effect);
+			if (target.setType('Water')) this.add('-start', target, 'typechange', 'Water');
+			target.addVolatile('aquaring');
 		},
 		secondary: null,
-		multihit: 2,
 		target: "normal",
 		type: "Water",
 	},
