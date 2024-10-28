@@ -2757,15 +2757,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-sidestart', targetSide, 'Blissful Breeze');
 			},
 			onResidual(pokemon) {
-				const target = pokemon.side.foe.active[0];
-				if (target.lastMoveUsed && target.lastMoveUsed.id === 'blissfulbreeze') return;
-				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Aeri');
-				let source;
-				if (sources.length) {
-					source = sources[0];
-				} else {
-					source = target;
-				}
+				let target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+				let source =  pokemon.side.foe.pokemon.filter(ally => ally.name === 'Aeri')[0];
+				if (!source) source = target;
 				const move = this.dex.getActiveMove('blissfulbreeze');
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.add('-anim', pokemon, 'Gust', pokemon);
