@@ -199,7 +199,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
 	Mink: {
-		species: 'Venusaur-Mega', ability: 'Viridian Behemoth', item: 'Corpse Lily', gender: 'M',
+		species: 'Venusaur-Mega', ability: 'Putridity', item: 'Corpse Lily', gender: 'M',
 		moves: ['Seed Flare', 'Earth Power', 'Rototiller'],
 		signatureMove: 'Transfuse Toxin',
 		evs: {hp: 252, def: 108, spd: 148}, ivs: {atk: 0}, nature: 'Bold',
