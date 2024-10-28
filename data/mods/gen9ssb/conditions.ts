@@ -74,16 +74,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onSideStart(side, source) {
 			this.add('-sidestart', side, 'Lightning', '[silent]');
 			for (const pokemon of side.pokemon) {
+				this.add('-anim', source, 'Thunder Shock', pokemon);
 				pokemon.abilityState.originalMaxHp = pokemon.maxhp;
 				pokemon.maxhp /= 2;
 				pokemon.baseMaxhp /= 2;
+				this.add('-message', `${pokemon.name}'s max HP was halved!`);
 			}
 		},
 		onSideEnd(side) {
 			this.add('-sideend', side, 'Lightning', '[silent]');
 			for (const pokemon of side.pokemon) {
+				this.add('-anim', pokemon, 'Growth', pokemon);
 				pokemon.maxhp = pokemon.abilityState.originalMaxHp;
 				pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
+				this.add('-message', `${pokemon.name} returned to normal size!`);
 			}
 		},
 	},
@@ -92,9 +96,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		duration: 3,
 		onStart(pokemon) {
 			this.add('-start', pokemon, 'Mega Mushroom', '[silent]');
+			this.add('-anim', pokemon, 'Growth', pokemon);
 			pokemon.abilityState.originalMaxHp = pokemon.maxhp;
 			pokemon.maxhp *= 2;
 			pokemon.baseMaxhp *= 2;
+			this.add('-message', `${pokemon.name}'s max HP was doubled!`);
 		},
 		onModifyMove(move, pokemon) {
 			move.onHit = function (t, s, m) {
@@ -103,8 +109,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Mega Mushroom', '[silent]');
+			this.add('-anim', pokemon, 'Minimize', pokemon);
 			pokemon.maxhp = pokemon.abilityState.originalMaxHp;
 			pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
+			this.add('-message', `${pokemon.name} returned to normal size!`);
 		},
 	},
 	boo: {
@@ -118,14 +126,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
 			if (effect?.effectType === 'Move') {
+				this.add('-fail', source);
 				return false;
 			}
 		},
 		onEnd(pokemon) {
-			const target = pokemon.side.foe.active[0];
+			this.add('-end', pokemon, 'Boo', '[silent]');
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const targetSig = this.dex.getActiveMove(target.moveSlots[3].id);
 			this.add('-anim', pokemon, 'Phantom Force', pokemon);
-			this.add('-end', pokemon, 'Boo', '[silent]');
 			this.actions.useMove(targetSig, pokemon, target);
 		},
 	},
