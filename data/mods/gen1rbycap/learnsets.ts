@@ -189,6 +189,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			doubleteam: ["1M"],
 			reflect: ["1M"],
 			substitute: ["1M"],
+			rest: ["1M"],
 			counter: ["2E"],
 			seismictoss: ["2E"],
 			selfdestruct: ["2E"],
@@ -197,6 +198,29 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			defensecurl: ["2M"],
 			drillpeck: ["2E"],
 			strength: ["2M"],
+		},
+		encounters: [
+			{generation: 1, level: 5},
+		],
+	},
+	probosicle: {
+		learnset: {
+			slash: ["1M"],
+			bodyslam: ["1M"],
+			doubleedge: ["1M"],
+			icebeam: ["1M"],
+			blizzard: ["1M"],
+			hyperbeam: ["1M"],
+			seismictoss: ["1M"],
+			rest: ["1M"],
+			substitute: ["1M"],
+			probosiclesignature: ["1M"], // replace with real name later
+			bide: ["1M"],
+			doubleteam: ["1M"],
+			mimic: ["1M"],
+			rage: ["1M"],
+			toxic: ["1M"],
+			takedown: ["1M"],
 		},
 		encounters: [
 			{generation: 1, level: 5},
