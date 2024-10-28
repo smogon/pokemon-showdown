@@ -14,4 +14,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	pineguin: {
 		tier: "OU",
 	},
+	probosicle: {
+		tier: "OU",
+	},
 };
