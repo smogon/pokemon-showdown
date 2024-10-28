@@ -15,7 +15,7 @@ export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit:
 export interface FormatDataTable {[id: IDEntry]: FormatData}
 export interface ModdedFormatDataTable {[id: IDEntry]: ModdedFormatData}
 
-type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
+type FormatEffectType = 'Condition' | 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
 /** rule, source, limit, bans */
 export type ComplexBan = [string, string, number, string[]];
@@ -480,7 +480,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		super(data);
 
 		this.mod = Utils.getString(data.mod) || 'gen9';
-		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Format';
+		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Condition';
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
 		this.gameType = data.gameType || 'singles';
