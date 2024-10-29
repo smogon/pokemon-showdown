@@ -5,6 +5,7 @@
 'use strict';
 
 const assert = require('../assert');
+const common = require('../common');
 const {Utils} = require('../../dist/lib');
 const {testTeam, assertSetValidity, validateLearnset} = require('./tools');
 const {default: Dex} = require('../../dist/sim/dex');
@@ -152,7 +153,7 @@ describe("New set format (slow)", () => {
 			filename: "gen9baby/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
 		},
-		"gen9caprandombattle": {
+		"gen9randombattle@@@+cap": {
 			filename: "gen9cap/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
@@ -160,10 +161,9 @@ describe("New set format (slow)", () => {
 	for (const format of Object.keys(formatInfo)) {
 		const filename = formatInfo[format].filename;
 		const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
-		const mod = filename.split('/')[0];
-		const genNum = parseInt(mod[3]);
+		const dex = common.mod(common.getFormat({formatid: format}).mod).dex; // verifies format exists
+		const genNum = dex.gen;
 		const rounds = 100;
-		const dex = Dex.forFormat(format);
 		it(`${filename}.json should have valid set data`, () => {
 			const validRoles = formatInfo[format].roles;
 			for (const [id, sets] of Object.entries(setsJSON)) {
@@ -304,8 +304,16 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 
 			for (const type in setsJSON) {
 				const typeTable = filename.includes('bss-factory-sets') ? setsJSON : setsJSON[type];
-				const vType = filename.includes('bss-factory-sets') ? `battle${genNum === 8 ? 'stadium' : 'spot'}singles` :
-					type === 'Mono' ? 'monotype' : type.toLowerCase();
+				let vType;
+				if (filename.includes('bss-factory-sets')) {
+					vType = `battle${genNum === 8 ? 'stadium' : 'spot'}singles`;
+				} else if (type === 'Mono') {
+					vType = 'monotype';
+				} else if (type === 'Uber') {
+					vType = 'ubers';
+				} else {
+					vType = type.toLowerCase();
+				}
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
@@ -372,7 +380,7 @@ describe('[Gen 9] BSS Factory data should be valid (slow)', () => {
 		const genNum = 9;
 
 		for (const speciesid in setsJSON) {
-			const vType = 'battlestadiumsingles';
+			const vType = 'bssregh';
 			let totalWeight = 0;
 			for (const set of setsJSON[speciesid].sets) {
 				totalWeight += set.weight;
