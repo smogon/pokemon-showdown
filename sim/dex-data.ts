@@ -120,8 +120,7 @@ export abstract class BasicEffect implements EffectData {
 		this.id = data.realMove ? toID(data.realMove) : toID(this.name); // Hidden Power hack
 		this.fullname = Utils.getString(data.fullname) || this.name;
 		this.effectType = Utils.getString(data.effectType) as EffectType || 'Condition';
-		const exists = Object.prototype.propertyIsEnumerable.call(data, 'exists') ? data.exists : true;
-		this.exists = !!(exists && this.id);
+		this.exists = data.exists ?? !!this.id;
 		this.num = data.num || 0;
 		this.gen = data.gen || 0;
 		this.shortDesc = data.shortDesc || '';
@@ -270,8 +269,7 @@ export class TypeInfo implements Readonly<TypeData> {
 		this.name = data.name;
 		this.id = data.id;
 		this.effectType = Utils.getString(data.effectType) as TypeInfoEffectType || 'Type';
-		const exists = Object.prototype.propertyIsEnumerable.call(data, 'exists') ? data.exists : true;
-		this.exists = !!(exists && this.id);
+		this.exists = data.exists ?? !!this.id;
 		this.gen = data.gen || 0;
 		this.isNonstandard = data.isNonstandard || null;
 		this.damageTaken = data.damageTaken || {};
