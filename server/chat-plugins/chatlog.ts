@@ -483,7 +483,7 @@ export abstract class Searcher {
 		let buf = Utils.html`<div class="pad"><h2>Linecounts on `;
 		buf += `${roomid}${user ? ` for the user ${user}` : ` (top ${MAX_TOPUSERS})`}</h2>`;
 		buf += `<strong>Total lines: {total}</strong><br />`;
-		buf += `<strong>Month: ${month}:</strong><br />`;
+		buf += `<strong>Month: ${month}</strong><br />`;
 		const nextMonth = LogReader.nextMonth(month);
 		const prevMonth = LogReader.prevMonth(month);
 		if (Monitor.logPath(`chat/${roomid}/${prevMonth}`).existsSync()) {
