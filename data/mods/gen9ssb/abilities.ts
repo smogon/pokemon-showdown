@@ -1502,6 +1502,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	artistblock: {
 		name: 'Artist Block',
 		gen: 9,
+		desc: "Whenever this Pokemon has a stat lowered, its Attack, Special Attack, and Speed increase by 2 stages. This Pokemon cannot be taunted. This Pokemon usually goes first when using Sketch.",
+		shortDesc: "Stat(s) lowered: +2 Atk/Spa/Spe; Cannot be taunted; Sketch: +1 Priority.",
 		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.isAlly(source)) {
 				return;
@@ -1530,29 +1532,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-immune', pokemon, '[from] ability: Artist Block');
 				return null;
 			}
-			if (!pokemon.lastMoveUsed) return;
-			if (pokemon.lastMoveUsed.id === 'sketch') {
-				if (['sketch', 'plagiarize'].includes(move.id)) return;
-				const newMove = this.dex.getActiveMove(move.id);
-				newMove.hasBounced = true;
-				newMove.pranksterBoosted = false;
-				this.actions.useMove(newMove, pokemon, target);
-				this.add('-immune', pokemon, '[from] move: Sketch');
-				return null;
-			}
 		},
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move.id === 'sketch') return priority + 1;
-		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (move.id === 'sketch') {
-				source.storedStats.atk = target.storedStats.atk;
-				source.storedStats.def = target.storedStats.def;
-				source.storedStats.spa = target.storedStats.spa;
-				source.storedStats.spd = target.storedStats.spd;
-				source.storedStats.spe = target.storedStats.spe;
-				this.add('-message', `${source.name} sketched ${target.name}'s base stats!`);
-			}
 		},
 	},
 	// Trey
