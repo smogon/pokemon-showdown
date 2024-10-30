@@ -1,6 +1,6 @@
 import {Utils} from '../lib';
 import type {ConditionData} from './dex-conditions';
-import {assignNewFields, BasicEffect, toID} from './dex-data';
+import {assignMissingFields, BasicEffect, toID} from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -609,7 +609,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 				this.gen = 1;
 			}
 		}
-		assignNewFields(this, data);
+		assignMissingFields(this, data);
 	}
 }
 

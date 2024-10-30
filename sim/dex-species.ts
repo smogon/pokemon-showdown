@@ -1,4 +1,4 @@
-import {assignNewFields, BasicEffect, toID} from './dex-data';
+import {assignMissingFields, BasicEffect, toID} from './dex-data';
 import {Utils} from '../lib';
 
 interface SpeciesAbility {
@@ -351,7 +351,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 				this.gen = 1;
 			}
 		}
-		assignNewFields(this, data);
+		assignMissingFields(this, data);
 	}
 }
 

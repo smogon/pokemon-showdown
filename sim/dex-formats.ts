@@ -1,5 +1,5 @@
 import {Utils} from '../lib';
-import {assignNewFields, toID, BasicEffect} from './dex-data';
+import {assignMissingFields, toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
 import {SpeciesData} from './dex-species';
 import {Tags} from '../data/tags';
@@ -494,7 +494,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.onBegin = data.onBegin || undefined;
 		this.noLog = !!data.noLog;
 		this.playerCount = (this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2);
-		assignNewFields(this, data);
+		assignMissingFields(this, data);
 	}
 }
 

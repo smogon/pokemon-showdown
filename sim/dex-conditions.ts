@@ -1,5 +1,5 @@
 import {Utils} from '../lib';
-import {assignNewFields, BasicEffect, toID} from './dex-data';
+import {assignMissingFields, BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
 
 export interface EventMethods {
@@ -629,7 +629,7 @@ export class Condition extends BasicEffect implements
 	constructor(data: AnyObject) {
 		super(data);
 		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
-		assignNewFields(this, data);
+		assignMissingFields(this, data);
 	}
 }
 

@@ -1,5 +1,5 @@
 import type {PokemonEventMethods, ConditionData} from './dex-conditions';
-import {assignNewFields, BasicEffect, toID} from './dex-data';
+import {assignMissingFields, BasicEffect, toID} from './dex-data';
 import {Utils} from '../lib';
 
 interface FlingData {
@@ -151,7 +151,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		if (this.megaStone) this.fling = {basePower: 80};
 		if (this.onMemory) this.fling = {basePower: 50};
 
-		assignNewFields(this, data);
+		assignMissingFields(this, data);
 	}
 }
 

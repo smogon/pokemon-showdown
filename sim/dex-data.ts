@@ -39,7 +39,7 @@ export function toID(text: any): ID {
  * Facilitates consistent field ordering in constructors.
  * Modifies self in-place.
  */
-export function assignNewFields(self: AnyObject, data: AnyObject) {
+export function assignMissingFields(self: AnyObject, data: AnyObject) {
 	for (const k in data) {
 		// to behave like Object.assign, skip data's inherited properties
 		if (!Object.prototype.hasOwnProperty.call(data, k)) continue;
@@ -150,7 +150,7 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 		this.gen = 3;
 		this.plus = data.plus || undefined;
 		this.minus = data.minus || undefined;
-		assignNewFields(this, data);
+		assignMissingFields(this, data);
 	}
 }
 
@@ -275,7 +275,7 @@ export class TypeInfo implements Readonly<TypeData> {
 		this.damageTaken = data.damageTaken || {};
 		this.HPivs = data.HPivs || {};
 		this.HPdvs = data.HPdvs || {};
-		assignNewFields(this, data);
+		assignMissingFields(this, data);
 	}
 
 	toString() {
