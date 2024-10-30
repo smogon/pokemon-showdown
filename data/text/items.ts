@@ -1767,7 +1767,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	strangeball: {
 		name: "Strange Ball",
-		shortDesc: "Placeholder if caught in Pokéball not in current game."
+		shortDesc: "Placeholder if caught in Poke Ball not in current game.",
 	},
 	strawberrysweet: {
 		name: "Strawberry Sweet",
