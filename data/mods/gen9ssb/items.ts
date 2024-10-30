@@ -60,7 +60,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onTryHit(pokemon, source, move) {
 			if (pokemon !== source && move.type === 'Ground' || move.type === 'Rock') {
 				this.add('-activate', pokemon, 'item: Hadean Soil', move.name);
-				this.heal(pokemon.maxhp / 16, pokemon);
+				this.heal(pokemon.maxhp / 4, pokemon);
 				return false;
 			}
 		},
