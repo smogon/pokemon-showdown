@@ -416,8 +416,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					};
 					let resDamage = this.actions.getDamage(resSource, source, resWave);
 					if (resDamage) {
-						this.add('-anim', target, 'Echoed Voice', source);
-						this.damage(resDamage, source, resSource);
+						this.add('-anim', target, 'Power Gem', source);
+						this.damage(resDamage, source, resSource, this.effect);
 					}
 				}
 				return this.HIT_SUBSTITUTE;
