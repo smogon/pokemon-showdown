@@ -1702,6 +1702,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						this.add('-immune', pokemon);
 						continue;
 					}
+					if (pokemon.side.sideConditions['jadeshield']) {
+						this.add('-immune', pokemon, 'Jade Shield');
+						continue;
+					}
 					if (pokemon.isActive) {
 						this.damage(dmg, pokemon, source, this.effect);
 						continue;
