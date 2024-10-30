@@ -332,7 +332,7 @@
         ]
     },
     "arcaninehisui": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -536,7 +536,7 @@
         ]
     },
     "cloyster": {
-        "level": 79,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2559,7 +2559,7 @@
         ]
     },
     "deoxysdefense": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3498,7 +3498,7 @@
         ]
     },
     "darkrai": {
-        "level": 76,
+        "level": 77,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -5059,7 +5059,7 @@
         ]
     },
     "incineroar": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -5496,7 +5496,7 @@
         ]
     },
     "necrozma": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -5846,7 +5846,7 @@
         ]
     },
     "falinks": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -6447,7 +6447,7 @@
         ]
     },
     "dachsbun": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -6919,7 +6919,7 @@
         ]
     },
     "tatsugiri": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Support",
