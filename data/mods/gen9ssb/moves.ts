@@ -422,6 +422,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				return this.HIT_SUBSTITUTE;
 			},
+			onModifyDamage(damage, source, target, move) {
+				if (!move || source.name === 'Morax') return;
+				this.debug('Jade Shield boosting power ("reducing defenses")');
+				return this.chainModify(1.2);
+			},
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Jade Shield');
 			},
