@@ -368,6 +368,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
 			},
 			onTryPrimaryHit(target, source, move) {
+				let originalDamage = this.actions.getDamage(source, target, move);
 				if (target === source || move.infiltrates) return;
 				if (!this.dex.getImmunity(move.type, 'Ground')) {
 					this.add('-immune', target);
@@ -386,9 +387,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				damage = this.runEvent('SubDamage', target, source, move, damage);
 				if (!damage) return damage;
 				if (damage > target.side.sideConditions['jadeshield'].hp) {
-					damage -= target.side.sideConditions['jadeshield'].hp as number;
+					originalDamage -= target.side.sideConditions['jadeshield'].hp as number;
 					target.side.sideConditions['jadeshield'].hp = 0;
-					this.damage(damage, target, source, move);
+					this.damage(originalDamage, target, source, move);
 				} else {
 					target.side.sideConditions['jadeshield'].hp -= damage;
 				}
