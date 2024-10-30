@@ -2567,14 +2567,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-activate', source, 'move: Sketch', move.name);
 		},
 		onAfterMove(pokemon, target, move) {
-			let oldStats = [];
-			let newStats = [];
-			for (const stat of pokemon.storedStats) {
-				oldStats.push(pokemon.storedStats[stat]);
-				pokemon.storedStats[stat] = target.storedStats[stat];
-				newStats.push(pokemon.storedStats[stat]);
-			}
-			if (oldStats !== newStats) this.add('-message', `${source.name} sketched ${target.name}'s base stats!`);
+			pokemon.storedStats.atk = target.storedStats.atk;
+			pokemon.storedStats.def = target.storedStats.def;
+			pokemon.storedStats.spa = target.storedStats.spa;
+			pokemon.storedStats.spd = target.storedStats.spd;
+			pokemon.storedStats.spe = target.storedStats.spe;
+			this.add('-message', `${source.name} sketched ${target.name}'s base stats!`);
 		},
 		condition: {
 			duration: 1,
