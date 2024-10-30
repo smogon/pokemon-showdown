@@ -359,7 +359,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		sideCondition: 'jadeshield',
 		condition: {
-			duration: 5,
 			onSideStart(side, source) {
 				this.add('-sidestart', side, 'Jade Shield', source);
 				this.effectState.hp = Math.floor(source.maxhp * 0.33);
@@ -421,11 +420,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 				return this.HIT_SUBSTITUTE;
-			},
-			onModifyDamage(damage, source, target, move) {
-				if (!move || source.name === 'Morax') return;
-				this.debug('Jade Shield boosting power ("reducing defenses")');
-				return this.chainModify(1.2);
 			},
 			onSideEnd(side) {
 				this.add('-sideend', side, 'Jade Shield');
@@ -1700,10 +1694,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					const dmg = this.actions.getDamage(source, pokemon, nMove);
 					if (!dmg) {
 						this.add('-immune', pokemon);
-						continue;
-					}
-					if (pokemon.side.sideConditions['jadeshield']) {
-						this.add('-immune', pokemon, 'Jade Shield');
 						continue;
 					}
 					if (pokemon.isActive) {
