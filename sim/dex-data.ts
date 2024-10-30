@@ -41,9 +41,7 @@ export function toID(text: any): ID {
  */
 export function assignMissingFields(self: AnyObject, data: AnyObject) {
 	for (const k in data) {
-		// to behave like Object.assign, skip data's inherited properties
-		if (!Object.prototype.hasOwnProperty.call(data, k)) continue;
-		if (Object.prototype.hasOwnProperty.call(self, k)) continue;
+		if (k in self) continue;
 		self[k] = data[k];
 	}
 }
