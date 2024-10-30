@@ -1271,8 +1271,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Light That Burns the Sky', target);
 			this.add('-anim', source, 'Flash', target);
 		},
-		onAfterMove(target, source, move) {
-			if (source.species.id === 'necrozma') changeSet(this, source, ssbSets['Luminous-N'], true);
+		onAfterMove(pokemon, target, move) {
+			if (pokemon.species.id === 'necrozma') changeSet(this, pokemon, ssbSets['Luminous-N'], true);
 		},
 	},
 	// Fblthp
@@ -2528,13 +2528,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {
 			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failmimic: 1, failinstruct: 1, nosketch: 1,
-		},
+		}, 
 		onHit(target, source) {
 			const move = target.lastMove;
-			if (source.transformed || !move || source.moves.includes(move.id)) return false;
-			if (move.flags['nosketch'] || move.isZ || move.isMax) return false;
+			source.addVolatile('sketch');
+			if (source.transformed || !move || source.moves.includes(move.id)) return;
+			if (move.flags['nosketch'] || move.isZ || move.isMax) return;
 			const sketchIndex = source.moves.indexOf('sketch');
-			if (sketchIndex < 0) return false;
+			if (sketchIndex < 0) return;
 			const sketchedMove = {
 				move: move.name,
 				id: move.id,
@@ -2546,6 +2547,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			};
 			source.moveSlots[sketchIndex] = sketchedMove;
 			this.add('-activate', source, 'move: Sketch', move.name);
+		},
+		onAfterMove(pokemon, target, move) {
+			let oldStats = [];
+			let newStats = [];
+			for (const stat of pokemon.storedStats) {
+				oldStats.push(pokemon.storedStats[stat]);
+				pokemon.storedStats[stat] = target.storedStats[stat];
+				newStats.push(pokemon.storedStats[stat]);
+			}
+			if (oldStats !== newStats) this.add('-message', `${source.name} sketched ${target.name}'s base stats!`);
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'move: Sketch', '[silent]');
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'move: Sketch', '[silent]');
+			},
+			onTryHit(pokemon, target, move) {
+				if (['sketch', 'plagiarize'].includes(move.id)) return;
+				const newMove = this.dex.getActiveMove(move.id);
+				newMove.hasBounced = true;
+				newMove.pranksterBoosted = false;
+				this.actions.useMove(newMove, pokemon, target);
+				this.add('-immune', pokemon, '[from] move: Sketch');
+				return null;
+			},
 		},
 		secondary: null,
 		target: "normal",
