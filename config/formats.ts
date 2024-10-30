@@ -150,6 +150,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Sub-Legendary', 'Paradox', 'Gouging Fire', 'Iron Boulder', 'Iron Crown', 'Raging Bolt'],
 	},
 	{
+		name: "[Gen 9] Team Star Challenge",
+		mod: 'gen9',
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Force Select = Revavroom', 'Min Source Gen = 9', 'VGC Timer'],
+		banlist: ['All Pokemon'],
+		unbanlist: [
+			'Annihilape', 'Arcanine-Base', 'Armarouge', 'Azumarill', 'Cacturne', 'Coalossal', 'Dachsbun', 'Dragalge', 'Hatterene', 'Honchkrow',
+			'Houndoom', 'Kingambit', 'Klefki', 'Krookodile', 'Lucario', 'Mabosstiff', 'Muk-Base', 'Passimian', 'Pawniard', 'Primeape',
+			'Revavroom', 'Skuntank', 'Torkoal', 'Toxapex', 'Toxicroak', 'Wigglytuff',
+		],
+	},
+	{
 		name: "[Gen 9] Custom Game",
 		mod: 'gen9',
 		searchShow: false,
