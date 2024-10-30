@@ -1261,7 +1261,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isZ: "spectralprism",
 		priority: 0,
 		flags: {protect: 1, bypasssub: 1},
-		secondary: null,
+		secondary: 'brn',
 		target: "normal",
 		type: "Light",
 		onTryMove() {
@@ -1271,9 +1271,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Light That Burns the Sky', target);
 			this.add('-anim', source, 'Flash', target);
 		},
-		onHit(target, source, move) {
-			changeSet(this, source, ssbSets['Luminous-N'], true);
-			target.trySetStatus('brn', source);
+		onAfterMove(target, source, move) {
+			if (source.species.id === 'necrozma') changeSet(this, source, ssbSets['Luminous-N'], true);
 		},
 	},
 	// Fblthp
