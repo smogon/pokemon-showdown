@@ -1280,7 +1280,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isZ: "spectralprism",
 		priority: 0,
 		flags: {protect: 1, bypasssub: 1},
-		secondary: 'brn',
+		status: 'brn',
 		target: "normal",
 		type: "Light",
 		onTryMove() {
