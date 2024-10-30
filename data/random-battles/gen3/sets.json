@@ -260,7 +260,7 @@
         ]
     },
     "parasect": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -430,7 +430,7 @@
         ]
     },
     "tentacruel": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -500,7 +500,7 @@
         ]
     },
     "farfetchd": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1876,7 +1876,7 @@
         ]
     },
     "smeargle": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Generalist",
@@ -1995,7 +1995,7 @@
         ]
     },
     "lugia": {
-        "level": 70,
+        "level": 69,
         "sets": [
             {
                 "role": "Staller",
@@ -2112,7 +2112,7 @@
         ]
     },
     "linoone": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2214,7 +2214,7 @@
         ]
     },
     "masquerain": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2705,7 +2705,7 @@
         ]
     },
     "crawdaunt": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2845,7 +2845,7 @@
         ]
     },
     "absol": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Setup Sweeper",
