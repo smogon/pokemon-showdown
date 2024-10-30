@@ -180,12 +180,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Killing Doll',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 	},
-	Morte: {
-		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
-		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
-		signatureMove: 'Omen of Defeat',
-		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
-	},
 	'Suika Ibuki': {
 		species: 'Ogerpon', ability: 'Density Manipulation', item: 'Ibuki Gourd', gender: 'F',
 		moves: ['U-Turn', 'Switcheroo', 'Drain Punch'],
@@ -205,6 +199,12 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 108, spd: 148}, ivs: {atk: 0}, nature: 'Bold',
 	},
 	/*
+ 	Morte: {
+		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
+		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
+		signatureMove: 'Omen of Defeat',
+		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
+	},
 	Tao: {
 		species: 'Kubfu', ability: 'Shangqing', item: 'Zhuyou', gender: 'M',
 		moves: ['Triple Kick', 'Circle Throw', 'Taiji'],
