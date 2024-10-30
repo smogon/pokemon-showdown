@@ -402,6 +402,24 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				if (move.recoil || move.id === 'chloroblast') this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
 				if (move.drain) this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				let resSource = target.side.pokemon.filter(ally => ally.name === 'Morax')[0];
+				if (resSource) {
+					const resWave = {
+						move: 'Mud-Slap',
+						id: 'mudslap',
+						basePower: 40,
+						pp: 10,
+						maxpp: 25,
+						target: 'normal',
+						disabled: false,
+						used: false,
+					};
+					let resDamage = this.actions.getDamage(resSource, source, resWave);
+					if (resDamage) {
+						this.add('-anim', target, 'Echoed Voice', source);
+						this.damage(resDamage, source, resSource);
+					}
+				}
 				return this.HIT_SUBSTITUTE;
 			},
 			onSideEnd(side) {
