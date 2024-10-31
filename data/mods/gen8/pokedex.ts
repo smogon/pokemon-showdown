@@ -116,4 +116,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: {0: "Healer", H: "Contrary"},
 	},
+	kitsunoh: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 103, def: 85, spa: 55, spd: 80, spe: 110},
+		abilities: {0: "Frisk", 1: "Limber", H: "Iron Fist"},
+	},
 };

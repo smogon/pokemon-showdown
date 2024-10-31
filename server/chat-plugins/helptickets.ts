@@ -286,8 +286,8 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		if (
 			(!user.isStaff || this.ticket.userid === user.id) && (message.length < 3 || blockedMessages.includes(toID(message)))
 		) {
-			this.room.add(`|c|&Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
-			this.room.add(`|c|&Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
+			this.room.add(`|c|~Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
+			this.room.add(`|c|~Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
 			this.room.update();
 			return false;
 		}
@@ -296,11 +296,11 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			this.activationTime = Date.now();
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
-			this.room.add(`|c|&Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
+			this.room.add(`|c|~Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
 			switch (this.ticket.type) {
 			case 'PM Harassment':
 				this.room.add(
-					`|c|&Staff|Global staff might take more than a few minutes to handle your report. ` +
+					`|c|~Staff|Global staff might take more than a few minutes to handle your report. ` +
 					`If you are being disturbed by another user, you can type \`\`/ignore [username]\`\` in any chat to ignore their messages immediately`
 				).update();
 				break;
@@ -703,12 +703,12 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		const {result, time, by, seen, note} = ticket.resolved as ResolvedTicketInfo;
 		if (seen) return;
 		const timeString = (Date.now() - time) > 1000 ? `, ${Chat.toDurationString(Date.now() - time)} ago.` : '.';
-		user.send(`|pm|&Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
+		user.send(`|pm|~Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
 		if (result?.trim()) {
-			user.send(`|pm|&Staff|${user.getIdentity()}|The result was "${result}"`);
+			user.send(`|pm|~Staff|${user.getIdentity()}|The result was "${result}"`);
 		}
 		if (note?.trim()) {
-			user.send(`|pm|&Staff|${user.getIdentity()}|/raw <small>${note}</small>`);
+			user.send(`|pm|~Staff|${user.getIdentity()}|/raw <small>${note}</small>`);
 		}
 		tickets[userid].resolved!.seen = true;
 		writeTickets();
@@ -759,7 +759,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 
 		if (ticket.needsDelayWarning && !ticket.claimed && delayWarnings[ticket.type]) {
 			ticketRoom.add(
-				`|c|&Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
+				`|c|~Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
 			).update();
 			ticket.needsDelayWarning = false;
 		}
@@ -909,13 +909,9 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 		}
 	}
 	if (!room) {
-		const replayUrl = Net(`https://${Config.routes.replays}/${link.slice(link.indexOf('-') + 1)}.json`);
-		try {
-			const body = await replayUrl.get();
-			const data = JSON.parse(body);
-			return data.p1id === submitter ? data.p2id : data.p1id;
-		} catch {
-			return null;
+		const battleData = await getBattleLog(link);
+		if (battleData) {
+			return battleData.players.p1 === submitter ? battleData.players.p2 : battleData.players.p1;
 		}
 	}
 	return null;
@@ -924,99 +920,70 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 export async function getBattleLog(battle: string, noReplay = false): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	const seenPokemon = new Set<string>();
-	if (battleRoom && battleRoom.type !== 'chat') {
-		const playerTable: Partial<BattleInfo['players']> = {};
-		const monTable: BattleInfo['pokemon'] = {};
-		// i kinda hate this, but this will always be accurate to the battle players.
-		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
-		for (const line of battleRoom.log.log) {
-			// |switch|p2a: badnite|Dragonite, M|323/323
-			if (line.startsWith('|switch|')) { // name cannot have been seen until it switches in
+	let data: {log: string, players: string[]} | null = null;
+	// try battle room first
+	if (battleRoom && battleRoom.type !== 'chat' && battleRoom.battle) {
+		data = {
+			log: battleRoom.log.log.join('\n'),
+			players: battleRoom.battle.players.map(x => x.id),
+		};
+	} else { // fall back to replay
+		if (noReplay) return null;
+		battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
+
+		if (Rooms.Replays.db) { // direct conn exists, use it
+			if (battle.endsWith('pw')) {
+				battle = battle.slice(0, battle.lastIndexOf("-", battle.length - 2));
+			}
+			data = await Rooms.Replays.get(battle);
+		} else {
+			// call out to API
+			try {
+				const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
+				data = JSON.parse(raw);
+			} catch {}
+		}
+	}
+
+	// parse
+	if (data?.log?.length) {
+		const log = data.log.split('\n');
+		const players: BattleInfo['players'] = {} as any;
+		for (const [i, id] of data.players.entries()) {
+			players[`p${i + 1}` as SideID] = toID(id);
+		}
+		const chat = [];
+		const mons: BattleInfo['pokemon'] = {};
+		for (const line of log) {
+			if (line.startsWith('|c|')) {
+				chat.push(line);
+			} else if (line.startsWith('|switch|')) {
 				const [, , playerWithNick, speciesWithGender] = line.split('|');
-				let [slot, name] = playerWithNick.split(':');
 				const species = speciesWithGender.split(',')[0].trim(); // should always exist
+				let [slot, name] = playerWithNick.split(':');
 				slot = slot.slice(0, -1); // p2a -> p2
-				if (!monTable[slot]) monTable[slot] = [];
-				const identifier = `${name || ""}-${species}`;
-				if (seenPokemon.has(identifier)) continue;
-				// technically, if several mons have the same name and species, this will ignore them.
-				// BUT if they have the same name and species we only need to see it once
-				// so it doesn't matter
-				seenPokemon.add(identifier);
+				// safe to not check here bc this should always exist in the players table.
+				// if it doesn't, there's a problem
+				const id = players[slot as SideID] as string;
+				if (!mons[id]) mons[id] = [];
 				name = name?.trim() || "";
-				monTable[slot].push({
-					species,
-					name: species === name ? undefined : name,
+				const setId = `${name || ""}-${species}`;
+				if (seenPokemon.has(setId)) continue;
+				seenPokemon.add(setId);
+				mons[id].push({
+					species, // don't want to see a name if it's the same as the species
+					name: name === species ? undefined : name,
 				});
-			}
-			if (line.startsWith('|player|')) {
-				// |player|p1|Mia|miapi.png|1000
-				const [, , playerSlot, name] = line.split('|');
-				playerTable[playerSlot as SideID] = toID(name);
-			}
-			for (const k in monTable) {
-				// SideID => userID, cannot do conversion at time of collection
-				// because the playerID => userid mapping might not be there.
-				// strictly, yes it will, but this is for maximum safety.
-				const userid = playerTable[k as SideID];
-				if (userid) {
-					monTable[userid] = monTable[k];
-					delete monTable[k];
-				}
 			}
 		}
 		return {
-			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
-			title: battleRoom.title,
-			url: `/${battle}`,
-			players: playerTable as BattleInfo['players'],
-			pokemon: monTable,
+			log: chat,
+			title: `${players.p1} vs ${players.p2}`,
+			url: `https://${Config.routes.replays}/${battle}`,
+			players,
+			pokemon: mons,
 		};
 	}
-	if (noReplay) return null;
-	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
-	try {
-		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
-		const data = JSON.parse(raw);
-		if (data.log?.length) {
-			const log = data.log.split('\n');
-			const players: BattleInfo['players'] = {} as any;
-			for (const [i, id] of data.players.entries()) {
-				players[`p${i + 1}` as SideID] = toID(id);
-			}
-			const chat = [];
-			const mons: BattleInfo['pokemon'] = {};
-			for (const line of log) {
-				if (line.startsWith('|c|')) {
-					chat.push(line);
-				} else if (line.startsWith('|switch|')) {
-					const [, , playerWithNick, speciesWithGender] = line.split('|');
-					const species = speciesWithGender.split(',')[0].trim(); // should always exist
-					let [slot, name] = playerWithNick.split(':');
-					slot = slot.slice(0, -1); // p2a -> p2
-					// safe to not check here bc this should always exist in the players table.
-					// if it doesn't, there's a problem
-					const id = players[slot as SideID] as string;
-					if (!mons[id]) mons[id] = [];
-					name = name?.trim() || "";
-					const setId = `${name || ""}-${species}`;
-					if (seenPokemon.has(setId)) continue;
-					seenPokemon.add(setId);
-					mons[id].push({
-						species, // don't want to see a name if it's the same as the species
-						name: name === species ? undefined : name,
-					});
-				}
-			}
-			return {
-				log: chat,
-				title: `${players.p1} vs ${players.p2}`,
-				url: `https://${Config.routes.replays}/${battle}`,
-				players,
-				pokemon: mons,
-			};
-		}
-	} catch {}
 	return null;
 }
 
@@ -1192,7 +1159,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			];
 			const tar = toID(ticket.text[0]); // should always be the reported userid
 			const name = Utils.escapeHTML(Users.getExact(tar)?.name || tar);
-			buf += `<br /><strong>Reported user:</strong> ${name} `;
+			buf += `<br /><strong>Reported user:</strong> <a href="https://${Config.routes.root}/users/${name}">${name}</a> `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
 			buf += `<details ${state?.list ? 'open' : ''} class="readmore">`;
 			buf += `<summary>Punish <strong>${name}</strong> (reported user)</summary>`;
@@ -1337,30 +1304,28 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += `<p><strong>Battle links given:</strong><p>`;
 			links = links.filter((url, i) => links.indexOf(url) === i);
 			buf += links.map(uri => Chat.formatText(`<<${uri}>>`)).join(', ');
-			const battleRooms = links.map(r => Rooms.get(r)).filter(room => room?.battle) as GameRoom[];
-			if (battleRooms.length) {
-				buf += `<div class="infobox"><strong>Names in given battles:</strong><hr />`;
-				for (const room of battleRooms) {
-					const names = [];
-					for (const id in room.battle!.playerTable) {
-						const user = Users.get(id);
-						if (!user) continue;
-						const team = await room.battle!.getTeam(user);
-						if (team) {
-							const teamNames = team.map(p => (
-								p.name !== p.species ? Utils.html`${p.name} (${p.species})` : p.species
-							));
-							names.push(`<strong>${user.id}:</strong> ${teamNames.join(', ')}`);
-						}
-					}
-					if (names.length) {
-						buf += `<a href="/${room.roomid}">${room.title}</a><br />`;
-						buf += names.join('<br />');
-						buf += `<hr />`;
+			buf += `<div class="infobox"><strong>Names in given battles:</strong><hr />`;
+			for (const link of links) {
+				const names = [];
+				const roomData = await getBattleLog(link);
+				if (!roomData) continue;
+				for (const id of Object.values(roomData.players)) {
+					const user = Users.get(id)?.name || id;
+					const team = roomData.pokemon[id];
+					if (team) {
+						const teamNames = team.map(p => (
+							p.name !== p.species ? Utils.html`${p.name} (${p.species})` : p.species
+						));
+						names.push(`<strong>${user}:</strong> ${teamNames.join(', ')}`);
 					}
 				}
-				buf += `</div>`;
+				if (names.length) {
+					buf += `<a href="/${getBattleLinks(link)[0]}">${roomData.title}</a><br />`;
+					buf += names.join('<br />');
+					buf += `<hr />`;
+				}
 			}
+			buf += `</div>`;
 			return buf;
 		},
 		onSubmit(ticket, text, submitter, conn) {
@@ -1431,6 +1396,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			if (!(user.locked || user.namelocked || user.semilocked)) {
 				return ['You are not punished.'];
+			}
+			if (!user.registered) {
+				return [
+					"Because this account isn't registered (with a password), we cannot verify your identity.",
+					"Please come back with a different account you've registered in the past.",
+				];
 			}
 			const punishments = Punishments.search(user.id);
 			const userids = [user.id, ...user.previousIDs];
@@ -2372,7 +2343,7 @@ export const commands: Chat.ChatCommands = {
 				const validation = await textTicket.checker?.(text, contextString || '', ticket.type, user, reportTarget);
 				if (Array.isArray(validation) && validation.length) {
 					this.parse(`/join view-${pageId}`);
-					return this.popupReply(`|html|` + validation.join('||'));
+					return this.popupReply(`|html|` + validation.join('<br />'));
 				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
@@ -2501,7 +2472,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			}
 			if (context) {
-				helpRoom.add(`|c|&Staff|${this.tr(context)}`);
+				helpRoom.add(`|c|~Staff|${this.tr(context)}`);
 				helpRoom.update();
 			}
 			if (pmRequestButton) {
@@ -2570,7 +2541,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			return this.parse('/join view-help-tickets');
 		},
-		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
+		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ ~`],
 
 		inapnames: 'massview',
 		usernames: 'massview',
@@ -2589,7 +2560,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			return this.parse('/join view-help-stats');
 		},
-		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
+		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ ~`],
 
 		note: 'addnote',
 		addnote(target, room, user) {
@@ -2613,10 +2584,8 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`HELPTICKET NOTE`, ticket.userid, note);
 		},
 		addnotehelp: [
-			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text.`,
-			`Requires: % @ &`,
+			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ ~`,
 		],
-
 		removenote(target, room, user) {
 			this.checkCan('lock');
 			target = target.trim();
@@ -2646,7 +2615,7 @@ export const commands: Chat.ChatCommands = {
 		removenotehelp: [
 			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
 			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		ar: 'addresponse',
@@ -2677,7 +2646,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		addresponsehelp: [
 			`/helpticket addresponse [type], [name], [response] - Adds a [response] button to the given ticket [type] with the given [name].`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		rr: 'removeresponse',
@@ -2702,7 +2671,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		removeresponsehelp: [
 			`/helpticket removeresponse [type], [name] - Removes the response button with the given [name] from the given ticket [type].`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		lr: 'listresponses',
@@ -2728,7 +2697,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		listresponseshelp: [
 			`/helpticket listresponses [optional type] - List current response buttons for text tickets. `,
-			`If a [type] is given, lists responses only for that type. Requires: % @ &`,
+			`If a [type] is given, lists responses only for that type. Requires: % @ ~`,
 		],
 
 		close(target, room, user) {
@@ -2763,7 +2732,7 @@ export const commands: Chat.ChatCommands = {
 			ticket.claimed = user.name;
 			this.sendReply(`You closed ${ticket.creator}'s ticket.`);
 		},
-		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
+		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ ~`],
 
 		tb: 'ban',
 		ticketban: 'ban',
@@ -2862,7 +2831,7 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff();
 			return true;
 		},
-		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`],
+		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ ~`],
 
 		unticketban: 'unban',
 		unban(target, room, user) {
@@ -2881,7 +2850,7 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog("UNTICKETBAN", toID(target));
 			Users.get(target)?.popup(`${user.name} has ticket unbanned you.`);
 		},
-		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
+		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ ~`],
 
 		ignore(target, room, user) {
 			this.checkCan('lock');
@@ -2892,7 +2861,7 @@ export const commands: Chat.ChatCommands = {
 			user.update();
 			this.sendReply(this.tr`You are now ignoring help ticket notifications.`);
 		},
-		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
+		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ ~`],
 
 		unignore(target, room, user) {
 			this.checkCan('lock');
@@ -2903,7 +2872,7 @@ export const commands: Chat.ChatCommands = {
 			user.update();
 			this.sendReply(this.tr`You will now receive help ticket notifications.`);
 		},
-		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`],
+		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ ~`],
 
 		delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
@@ -2921,7 +2890,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.sendReply(this.tr`You deleted ${target}'s ticket.`);
 		},
-		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: &`],
+		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: ~`],
 
 		logs(target, room, user) {
 			this.checkCan('lock');
@@ -2933,7 +2902,7 @@ export const commands: Chat.ChatCommands = {
 		logshelp: [
 			`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. `,
 			`If a [month] is given, searches only that month.`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		async private(target, room, user) {
@@ -2958,7 +2927,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} set the ticket logs for '${userid}' on '${date}' to be private.`);
 		},
 		privatehelp: [
-			`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: &`,
+			`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: ~`,
 		],
 		async public(target, room, user) {
 			this.checkCan('bypassall');
@@ -2983,7 +2952,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} set the ticket logs for '${userid}' on '${date}' to be public.`);
 		},
 		publichelp: [
-			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
+			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: ~`,
 		],
 	},
 
@@ -2995,18 +2964,17 @@ export const commands: Chat.ChatCommands = {
 
 	helptickethelp: [
 		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
-		`/helpticket list - Lists all tickets. Requires: % @ &`,
-		`/helpticket close [user] - Closes an open ticket. Requires: % @ &`,
-		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`,
-		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`,
-		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`,
-		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`,
-		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
-		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ &`,
-		`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. `,
-		`Requires: % @ &`,
-		`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: &`,
-		`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
+		`/helpticket list - Lists all tickets. Requires: % @ ~`,
+		`/helpticket close [user] - Closes an open ticket. Requires: % @ ~`,
+		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ ~`,
+		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ ~`,
+		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ ~`,
+		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ ~`,
+		`/helpticket delete [user] - Deletes a user's ticket. Requires: ~`,
+		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ ~`,
+		`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ ~`,
+		`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: ~`,
+		`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: ~`,
 	],
 };
 

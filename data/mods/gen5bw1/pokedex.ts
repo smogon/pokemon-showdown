@@ -43,6 +43,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		unreleasedHidden: true,
 	},
+	ditto: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 	snorlax: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -215,7 +219,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		unreleasedHidden: true,
 	},
-	lillpup: {
+	lillipup: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
@@ -379,7 +383,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		unreleasedHidden: true,
 	},
-	lillgant: {
+	lilligant: {
 		inherit: true,
 		unreleasedHidden: true,
 	},

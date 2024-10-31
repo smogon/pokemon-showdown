@@ -231,7 +231,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	explosion: {
 		inherit: true,
-		noSketch: true,
+		flags: {protect: 1, mirror: 1, metronome: 1, noparentalbond: 1, nosketch: 1},
 	},
 	flail: {
 		inherit: true,
@@ -402,14 +402,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	metronome: {
 		inherit: true,
-		flags: {failencore: 1},
-		noSketch: true,
+		flags: {failencore: 1, nosketch: 1},
 	},
 	mimic: {
 		inherit: true,
 		accuracy: 100,
-		noSketch: true,
-		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1},
+		flags: {protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, nosketch: 1},
 	},
 	mindreader: {
 		inherit: true,
@@ -436,7 +434,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mirrormove: {
 		inherit: true,
-		flags: {metronome: 1, failencore: 1},
+		flags: {metronome: 1, failencore: 1, nosketch: 1},
 		onHit(pokemon) {
 			const noMirror = ['metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'transform'];
 			const target = pokemon.side.foe.active[0];
@@ -449,7 +447,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			this.actions.useMove(lastMove, pokemon);
 		},
-		noSketch: true,
 	},
 	mist: {
 		num: 54,
@@ -727,11 +724,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	selfdestruct: {
 		inherit: true,
-		noSketch: true,
+		flags: {protect: 1, mirror: 1, metronome: 1, noparentalbond: 1, nosketch: 1},
 	},
 	sketch: {
 		inherit: true,
-		flags: {bypasssub: 1, failencore: 1, noassist: 1},
+		flags: {bypasssub: 1, failencore: 1, noassist: 1, nosketch: 1},
 		onHit() {
 			// Sketch always fails in Link Battles
 			this.add('-nothing');
@@ -757,7 +754,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: {failencore: 1, nosleeptalk: 1},
+		flags: {failencore: 1, nosleeptalk: 1, nosketch: 1},
 		onHit(pokemon) {
 			const moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
@@ -772,7 +769,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!randomMove) return false;
 			this.actions.useMove(randomMove, pokemon);
 		},
-		noSketch: true,
 	},
 	solarbeam: {
 		inherit: true,
@@ -934,7 +930,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	transform: {
 		inherit: true,
-		noSketch: true,
+		flags: {bypasssub: 1, metronome: 1, failencore: 1, nosketch: 1},
 	},
 	triattack: {
 		inherit: true,

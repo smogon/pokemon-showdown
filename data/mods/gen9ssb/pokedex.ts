@@ -43,6 +43,13 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Confirmed Town"},
 	},
 
+	// Apple
+	applin: {
+		inherit: true,
+		baseStats: {hp: 106, atk: 80, def: 110, spa: 120, spd: 80, spe: 44},
+		abilities: {0: "Orchard's Gift"},
+	},
+
 	// Appletun a la Mode
 	appletun: {
 		inherit: true,
@@ -368,13 +375,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Gambling Addiction"},
 	},
 
-	// Goro Yagami
-	cyndaquil: {
-		inherit: true,
-		baseStats: {hp: 78, atk: 109, def: 78, spa: 84, spd: 85, spe: 100},
-		abilities: {0: "Illusion Master"},
-	},
-
 	// Haste Inky
 	falinks: {
 		inherit: true,
@@ -422,6 +422,20 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: {hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90},
 		abilities: {0: 'Hydrostatic Positivity'},
 		types: ["Electric", "Water"],
+	},
+
+	// Imperial
+	kyurem: {
+		inherit: true,
+		abilities: {0: "Frozen Fortuity"},
+	},
+	kyuremblack: {
+		inherit: true,
+		abilities: {0: "Frozen Fortuity"},
+	},
+	kyuremwhite: {
+		inherit: true,
+		abilities: {0: "Frozen Fortuity"},
 	},
 
 	// in the hills
@@ -562,12 +576,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Unaware"},
 	},
 
-	// Lionyx
-	miltank: {
-		inherit: true,
-		abilities: {0: "EnorMOOs"},
-	},
-
 	// Loethalion
 	ralts: {
 		inherit: true,
@@ -592,24 +600,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		baseStats: {hp: 82, atk: 80, def: 80, spa: 80, spd: 80, spe: 80},
 		abilities: {0: "Magic Aura"},
-	},
-
-	// Mad Monty
-	castform: {
-		inherit: true,
-		abilities: {0: "Climate Change"},
-	},
-	castformrainy: {
-		inherit: true,
-		abilities: {0: "Climate Change"},
-	},
-	castformsnowy: {
-		inherit: true,
-		abilities: {0: "Climate Change"},
-	},
-	castformsunny: {
-		inherit: true,
-		abilities: {0: "Climate Change"},
 	},
 
 	// marillvibes
@@ -693,6 +683,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	delcatty: {
 		inherit: true,
 		types: ["Fairy"],
+		baseStats: {hp: 80, atk: 65, def: 80, spa: 70, spd: 80, spe: 90},
 		abilities: {0: "Adorable Grace"},
 	},
 
@@ -706,11 +697,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Last Hymn"},
 	},
 
-	// Opple
-	applin: {
+	// pants
+	annihilape: {
 		inherit: true,
-		baseStats: {hp: 106, atk: 80, def: 110, spa: 120, spd: 80, spe: 44},
-		abilities: {0: "Orchard's Gift"},
+		abilities: {0: "Drifting"},
 	},
 
 	// PartMan
@@ -729,12 +719,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	klinklang: {
 		inherit: true,
 		abilities: {0: "Levitate"},
-	},
-
-	// PenQuin
-	empoleon: {
-		inherit: true,
-		abilities: {0: "'Poleon's Pyro Quirk"},
 	},
 
 	// phoopes
@@ -813,6 +797,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	oranguru: {
 		inherit: true,
 		abilities: {0: "Monke See Monke Do"},
+	},
+
+	// Rissoux
+	arcaninehisui: {
+		inherit: true,
+		abilities: {0: "Hard Headed"},
 	},
 
 	// RSB
@@ -1135,6 +1125,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	sudowoodo: {
 		inherit: true,
 		abilities: {0: "Tree Stance"},
+		baseStats: {hp: 70, atk: 100, def: 115, spa: 30, spd: 65, spe: 50},
 	},
 
 	// xy01
@@ -1155,7 +1146,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Yellow Magic"},
 	},
 
-	ninetaleslola: {
+	ninetalesalola: {
 		inherit: true,
 		abilities: {0: "Party Up"},
 	},

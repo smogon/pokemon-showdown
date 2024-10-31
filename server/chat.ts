@@ -603,7 +603,8 @@ export class CommandContext extends MessageContext {
 			if (this.handler) {
 				if (this.handler.disabled) {
 					throw new Chat.ErrorMessage(
-						`The command /${this.cmd} is temporarily unavailable due to technical difficulties. Please try again in a few hours.`
+						`The command /${this.fullCmd.trim()} is temporarily unavailable due to technical difficulties. ` +
+						`Please try again in a few hours.`
 					);
 				}
 				message = this.run(this.handler);
@@ -779,7 +780,7 @@ export class CommandContext extends MessageContext {
 		}
 		if (!message) return true;
 		if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
-			throw new Chat.ErrorMessage(`Your username, status, or message contained a word banned by this room.`);
+			throw new Chat.ErrorMessage(`Your message contained a word banned by this room.`);
 		}
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
@@ -1245,8 +1246,6 @@ export class CommandContext extends MessageContext {
 
 		this.checkSlowchat(room, user);
 
-		if (!user.can('bypassall')) this.checkBanwords(room, user.name);
-		if (user.userMessage && !user.can('bypassall')) this.checkBanwords(room, user.userMessage);
 		if (room && !user.can('mute', null, room)) this.checkBanwords(room, message);
 
 		const gameFilter = this.checkGameFilter();
@@ -2579,7 +2578,7 @@ export const Chat = new class {
 	 * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
 	 */
 	maybeNotifyBlocked(blocked: 'pm' | 'challenge' | 'invite', targetUser: User, user: User) {
-		const prefix = `|pm|&|${targetUser.getIdentity()}|/nonotify `;
+		const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
 			if (!targetUser.notified.blockPMs) {

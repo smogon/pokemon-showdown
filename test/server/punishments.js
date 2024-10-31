@@ -141,7 +141,7 @@ describe('broader, more integrated Punishments tests', function () {
 		// determining whether a PM was sucessful (such as modifying Chat.sendPM), or skipped entirely.
 		it('should prevent users from sending PMs other than to staff while they are locked', async () => {
 			makeUser("Some Random Reg", '127.0.0.4');
-			makeUser("Annika", '127.0.0.5').tempGroup = '&';
+			makeUser("Annika", '127.0.0.5').tempGroup = '~';
 
 			let result = await this.parse("/msg Some Random Reg, Hi! I'm a locked user!");
 			assert.equal(result, false, `user should be unable to sucessfully send PMs while locked`);

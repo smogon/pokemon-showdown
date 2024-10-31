@@ -89,10 +89,10 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		inherit: true,
-		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
+		runMove(moveOrMoveName, pokemon, targetLoc, options) {
 			let move = this.dex.getActiveMove(moveOrMoveName);
 			let target = this.battle.getTarget(pokemon, move, targetLoc);
-			if (!sourceEffect && move.id !== 'struggle') {
+			if (!options?.sourceEffect && move.id !== 'struggle') {
 				const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, move);
 				if (changedMove && changedMove !== true) {
 					move = this.dex.getActiveMove(changedMove);
@@ -135,7 +135,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			pokemon.moveUsed(move);
-			this.battle.actions.useMove(move, pokemon, target, sourceEffect);
+			this.battle.actions.useMove(move, pokemon, {target, sourceEffect: options?.sourceEffect});
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 		},

@@ -57,6 +57,9 @@ export class RandomBabyTeams extends RandomTeams {
 		this.moveEnforcementCheckers['Bug'] = (movePool, moves, abilities, types, counter) => (
 			!counter.get('Bug')
 		);
+		this.moveEnforcementCheckers['Grass'] = (movePool, moves, abilities, types, counter, species) => (
+			!counter.get('Grass') && species.id !== 'rowlet'
+		);
 	}
 
 
@@ -431,7 +434,9 @@ export class RandomBabyTeams extends RandomTeams {
 
 		// Hard-code abilities here
 		if (species.id === 'rowlet' && counter.get('Grass')) return 'Overgrow';
+		if (species.id === 'riolu') return moves.has('copycat') ? 'Prankster' : 'Inner Focus';
 		if (species.id === 'pikipek' && counter.get('skilllink')) return 'Skill Link';
+		if (species.id === 'psyduck' && teamDetails.rain) return 'Swift Swim';
 
 		const abilityAllowed: string[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
@@ -486,9 +491,6 @@ export class RandomBabyTeams extends RandomTeams {
 		if (ability === 'Guts' && moves.has('facade')) return 'Flame Orb';
 		if (ability === 'Quick Feet') return 'Toxic Orb';
 
-		if (
-			this.dex.getEffectiveness('Rock', species) >= 2 && this.dex.getEffectiveness('Ground', species) >= 0
-		) return 'Heavy-Duty Boots';
 		if (['Harvest', 'Ripen', 'Unburden'].includes(ability) || moves.has('bellydrum')) return 'Oran Berry';
 	}
 
@@ -622,7 +624,9 @@ export class RandomBabyTeams extends RandomTeams {
 			const move = this.dex.moves.get(m);
 			if (move.damageCallback || move.damage) return true;
 			if (move.id === 'shellsidearm') return false;
-			if (move.id === 'terablast' && species.baseStats.atk > species.baseStats.spa) return false;
+			if (move.id === 'terablast' && (
+				species.id === 'porygon' || species.baseStats.atk > species.baseStats.spa)
+			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 
@@ -733,6 +737,13 @@ export class RandomBabyTeams extends RandomTeams {
 				}
 				if (skip) continue;
 
+				// Count Dry Skin/Fluffy as Fire weaknesses
+				if (
+					this.dex.getEffectiveness('Fire', species) === 0 &&
+					Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a)).length &&
+					typeWeaknesses.get('Fire') >= 3 * limitFactor
+				) continue;
+
 				// Limit four weak to Freeze-Dry
 				if (weakToFreezeDry) {
 					if (typeWeaknesses.get('Freeze-Dry') >= 4 * limitFactor) continue;
@@ -767,6 +778,10 @@ export class RandomBabyTeams extends RandomTeams {
 				if (this.dex.getEffectiveness(typeName, species) > 1) {
 					typeDoubleWeaknesses.add(typeName);
 				}
+			}
+			// Count Dry Skin/Fluffy as Fire weaknesses
+			if (['Dry Skin', 'Fluffy'].includes(set.ability) && this.dex.getEffectiveness('Fire', species) === 0) {
+				typeWeaknesses.add('Fire');
 			}
 			if (weakToFreezeDry) typeWeaknesses.add('Freeze-Dry');
 

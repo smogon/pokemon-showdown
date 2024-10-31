@@ -42,7 +42,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	beedrill: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	pidgey: {
 		tier: "LC",
@@ -210,7 +210,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	alakazam: {
-		tier: "UUBL",
+		tier: "OU",
 	},
 	machop: {
 		tier: "LC",
@@ -393,7 +393,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 	},
 	staryu: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	starmie: {
 		tier: "OU",
@@ -444,13 +444,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	eevee: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	vaporeon: {
 		tier: "OU",
 	},
 	jolteon: {
-		tier: "UUBL",
+		tier: "OU",
 	},
 	flareon: {
 		tier: "NU",

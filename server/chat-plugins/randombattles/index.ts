@@ -540,8 +540,9 @@ export const commands: Chat.ChatCommands = {
 						}
 						buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}<br/>`;
 						if (set.abilities) {
-							buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().join(', ')}</details>`;
+							buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().join(', ')}`;
 						}
+						buf += '</details>';
 						setCount++;
 					}
 					movesets.push(buf);
@@ -845,7 +846,7 @@ export const commands: Chat.ChatCommands = {
 			`</ul>` +
 			`The given probability is for a set that matches EVERY provided condition. ` +
 			`Conditions can be negated by prefixing the <code>[matching value]</code> with <code>!</code>.<br />` +
-			`Requires: % @ # & (globally or in the Random Battles room)`
+			`Requires: % @ # ~ (globally or in the Random Battles room)`
 		);
 	},
 
@@ -871,5 +872,5 @@ export const commands: Chat.ChatCommands = {
 			.join('');
 		return this.sendReplyBox(`<strong>Team for ${format.name}</strong>:` + teamHTML);
 	},
-	generateteamhelp: [`/genteam [format] - Generates a team for the given format. Requires: % @ & or Random Battles room auth`],
+	generateteamhelp: [`/genteam [format] - Generates a team for the given format. Requires: % @ ~ or Random Battles room auth`],
 };

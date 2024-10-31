@@ -137,12 +137,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					types.has('Fighting') || movePool.includes('psychicfangs') || movePool.includes('calmmind')
 				)
 			),
-			Rock: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Rock') && (species.baseStats.atk >= 100 || abilities.includes('Rock Head'))
-			),
-			Steel: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Steel') && species.baseStats.atk >= 100
-			),
+			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
+			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.baseStats.atk >= 100),
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
 	}
@@ -349,7 +345,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			['wildcharge', 'thunderbolt'],
 			['gunkshot', 'poisonjab'],
 			[['drainpunch', 'focusblast'], ['closecombat', 'highjumpkick', 'superpower']],
-			['stoneedge', 'headsmash'],
 			['dracometeor', 'dragonpulse'],
 			['dragonclaw', 'outrage'],
 			['knockoff', ['darkestlariat', 'darkpulse', 'foulplay']],
@@ -363,7 +358,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			// Lunatone
 			['moonlight', 'rockpolish'],
 			// Smeargle
-			['destinybond', 'whirlwind'],
+			['nuzzle', 'whirlwind'],
 			// Liepard
 			['copycat', 'uturn'],
 			// Seviper
@@ -775,6 +770,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.id === 'marowak' && counter.get('recoil')) return 'Rock Head';
 		if (species.id === 'sawsbuck') return moves.has('headbutt') ? 'Serene Grace' : 'Sap Sipper';
 		if (species.id === 'toucannon' && counter.get('skilllink')) return 'Skill Link';
+		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
 		if (species.id === 'roserade' && counter.get('technician')) return 'Technician';
 
 		const abilityAllowed: string[] = [];
@@ -819,6 +815,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			if (species.baseSpecies === 'Arceus' && species.requiredItems) return species.requiredItems[1];
 			if (species.name === 'Raichu-Alola') return 'Aloraichium Z';
 			if (species.name === 'Decidueye') return 'Decidium Z';
+			if (species.name === 'Incineroar') return 'Incinium Z';
 			if (species.name === 'Kommo-o') return 'Kommonium Z';
 			if (species.name === 'Lunala') return 'Lunalium Z';
 			if (species.baseSpecies === 'Lycanroc') return 'Lycanium Z';
@@ -873,7 +870,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (moves.has('shellsmash')) {
 			return (ability === 'Solid Rock' && !!counter.get('priority')) ? 'Weakness Policy' : 'White Herb';
 		}
-		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
+		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk') && species.id !== 'stoutland') {
 			return (types.includes('Fire') || ability === 'Quick Feet' || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
 		if (ability === 'Magic Guard') return moves.has('counter') ? 'Focus Sash' : 'Life Orb';
@@ -940,8 +937,14 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		}
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
-			(ability === 'Rough Skin') || (species.id !== 'hooh' &&
-			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
+			(ability === 'Rough Skin') || (
+				species.id !== 'hooh' &&
+				ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2)
+			) || (
+				ability !== 'Regenerator' && !counter.get('setup') && counter.get('recovery') &&
+				this.dex.getEffectiveness('Fighting', species) < 1 &&
+				(species.baseStats.hp + species.baseStats.def) > 200 && this.randomChance(1, 2)
+			)
 		) return 'Rocky Helmet';
 		if (['kingsshield', 'protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
@@ -1271,6 +1274,15 @@ export class RandomGen7Teams extends RandomGen8Teams {
 						}
 						if (skip) continue;
 
+						// Count Dry Skin/Fluffy as Fire weaknesses
+						if (
+							this.dex.getEffectiveness('Fire', species) === 0 &&
+							Object.values(species.abilities).filter(a => ['Dry Skin', 'Fluffy'].includes(a)).length
+						) {
+							if (!typeWeaknesses['Fire']) typeWeaknesses['Fire'] = 0;
+							if (typeWeaknesses['Fire'] >= 3 * limitFactor) continue;
+						}
+
 						// Limit four weak to Freeze-Dry
 						if (weakToFreezeDry) {
 							if (!typeWeaknesses['Freeze-Dry']) typeWeaknesses['Freeze-Dry'] = 0;
@@ -1333,6 +1345,10 @@ export class RandomGen7Teams extends RandomGen8Teams {
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						typeDoubleWeaknesses[typeName]++;
 					}
+				}
+				// Count Dry Skin/Fluffy as Fire weaknesses
+				if (['Dry Skin', 'Fluffy'].includes(set.ability) && this.dex.getEffectiveness('Fire', species) === 0) {
+					typeWeaknesses['Fire']++;
 				}
 				if (weakToFreezeDry) typeWeaknesses['Freeze-Dry']++;
 

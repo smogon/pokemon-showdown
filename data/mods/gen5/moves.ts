@@ -111,7 +111,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			chance: 10,
 			volatileStatus: 'confusion',
 		},
-		flags: {protect: 1, sound: 1, distance: 1, noassist: 1, failcopycat: 1, failmefirst: 1, nosleeptalk: 1, failmimic: 1},
+		flags: {
+			protect: 1, sound: 1, distance: 1, noassist: 1, failcopycat: 1,
+			failmefirst: 1, nosleeptalk: 1, failmimic: 1, nosketch: 1,
+		},
 	},
 	conversion: {
 		inherit: true,

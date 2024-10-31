@@ -533,9 +533,9 @@ export const commands: Chat.ChatCommands = {
 			this.sendReply(`Removed ${targetID}'s permalock post icon.`);
 		},
 		help: [
-			'/perma nom OR /perma - Open the page to make a nomination for a permanent punishment. Requires: % @ &',
-			'/perma list - View open nominations. Requires: &',
-			'/perma viewnom [userid] - View a nomination for the given [userid]. Requires: &',
+			'/perma nom OR /perma - Open the page to make a nomination for a permanent punishment. Requires: % @ ~',
+			'/perma list - View open nominations. Requires: ~',
+			'/perma viewnom [userid] - View a nomination for the given [userid]. Requires: ~',
 		],
 	},
 };

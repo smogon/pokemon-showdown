@@ -483,7 +483,7 @@ export abstract class Searcher {
 		let buf = Utils.html`<div class="pad"><h2>Linecounts on `;
 		buf += `${roomid}${user ? ` for the user ${user}` : ` (top ${MAX_TOPUSERS})`}</h2>`;
 		buf += `<strong>Total lines: {total}</strong><br />`;
-		buf += `<strong>Month: ${month}:</strong><br />`;
+		buf += `<strong>Month: ${month}</strong><br />`;
 		const nextMonth = LogReader.nextMonth(month);
 		const prevMonth = LogReader.prevMonth(month);
 		if (Monitor.logPath(`chat/${roomid}/${prevMonth}`).existsSync()) {
@@ -1018,7 +1018,7 @@ export const commands: Chat.ChatCommands = {
 	chatloghelp() {
 		const strings = [
 			`/chatlog [optional room], [opts] - View chatlogs from the given room. `,
-			`If none is specified, shows logs from the room you're in. Requires: % @ * # &`,
+			`If none is specified, shows logs from the room you're in. Requires: % @ * # ~`,
 			`Supported options:`,
 			`<code>txt</code> - Do not render logs.`,
 			`<code>txt-onlychat</code> - Show only chat lines, untransformed.`,
@@ -1070,7 +1070,7 @@ export const commands: Chat.ChatCommands = {
 			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
-			"Requires: &</div>";
+			"Requires: ~</div>";
 		return this.sendReplyBox(buffer);
 	},
 	topusers: 'linecount',
@@ -1159,7 +1159,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	battleloghelp: [
 		`/battlelog [battle link] - View the log of the given [battle link], even if the replay was not saved.`,
-		`Requires: % @ &`,
+		`Requires: % @ ~`,
 	],
 
 
@@ -1192,6 +1192,16 @@ export const commands: Chat.ChatCommands = {
 		let log: string[];
 		if (tarRoom) {
 			log = tarRoom.log.log;
+		} else if (Rooms.Replays.db) {
+			let battleId = roomid.replace('battle-', '');
+			if (battleId.endsWith('pw')) {
+				battleId = battleId.slice(0, battleId.lastIndexOf("-", battleId.length - 2));
+			}
+			const replayData = await Rooms.Replays.get(battleId);
+			if (!replayData) {
+				return this.errorReply(`No room or replay found for that battle.`);
+			}
+			log = replayData.log.split('\n');
 		} else {
 			try {
 				const raw = await Net(`https://${Config.routes.replays}/${roomid.slice('battle-'.length)}.json`).get();
@@ -1227,7 +1237,7 @@ export const commands: Chat.ChatCommands = {
 	getbattlechathelp: [
 		`/getbattlechat [battle link][, username] - Gets all battle chat logs from the given [battle link].`,
 		`If a [username] is given, searches only chat messages from the given username.`,
-		`Requires: % @ &`,
+		`Requires: % @ ~`,
 	],
 
 	logsaccess(target, room, user) {
@@ -1238,7 +1248,7 @@ export const commands: Chat.ChatCommands = {
 	logsaccesshelp: [
 		`/logsaccess [type], [user] - View chatlog access logs for the given [type] and [user].`,
 		`If no arguments are given, shows the entire access log.`,
-		`Requires: &`,
+		`Requires: ~`,
 	],
 
 
@@ -1264,7 +1274,7 @@ export const commands: Chat.ChatCommands = {
 		);
 	},
 	groupchatsearchhelp: [
-		`/groupchatsearch [target] - Searches for logs of groupchats with names containing the [target]. Requires: % @ &`,
+		`/groupchatsearch [target] - Searches for logs of groupchats with names containing the [target]. Requires: % @ ~`,
 	],
 
 	roomact: 'roomactivity',
@@ -1278,6 +1288,6 @@ export const commands: Chat.ChatCommands = {
 	roomactivityhelp: [
 		`/roomactivity [room][, date] - View room activity logs for the given room.`,
 		`If a date is provided, it searches for logs from that date. Otherwise, it searches the current month.`,
-		`Requires: &`,
+		`Requires: ~`,
 	],
 };

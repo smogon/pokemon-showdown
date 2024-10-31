@@ -83,9 +83,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
 			),
-			Rock: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Rock') && (species.baseStats.atk >= 95 || abilities.includes('Rock Head'))
-			),
+			Rock: (movePool, moves, abilities, types, counter, species) => (!counter.get('Rock') && species.baseStats.atk >= 80),
 			Steel: (movePool, moves, abilities, types, counter, species) => (
 				!counter.get('Steel') && ['aggron', 'metagross'].includes(species.id)
 			),
@@ -541,6 +539,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		// Hard-code abilities here
 		if (species.id === 'marowak' && counter.get('recoil')) return 'Rock Head';
 		if (species.id === 'kingler' && counter.get('sheerforce')) return 'Sheer Force';
+		if (species.id === 'golduck' && teamDetails.rain) return 'Swift Swim';
 
 		const abilityAllowed: string[] = [];
 		// Obtain a list of abilities that are allowed (not culled)
@@ -872,6 +871,9 @@ export class RandomGen5Teams extends RandomGen6Teams {
 			// Illusion shouldn't be in the last slot
 			if (species.name === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
+			// Prevent Shedinja from generating after Sandstorm/Hail setters
+			if (species.name === 'Shedinja' && (teamDetails.sand || teamDetails.hail)) continue;
+
 			// Dynamically scale limits for different team sizes. The default and minimum value is 1.
 			const limitFactor = Math.round(this.maxTeamSize / 6) || 1;
 
@@ -909,6 +911,12 @@ export class RandomGen5Teams extends RandomGen6Teams {
 				}
 				if (skip) continue;
 
+				// Count Dry Skin as a Fire weakness
+				if (this.dex.getEffectiveness('Fire', species) === 0 && Object.values(species.abilities).includes('Dry Skin')) {
+					if (!typeWeaknesses['Fire']) typeWeaknesses['Fire'] = 0;
+					if (typeWeaknesses['Fire'] >= 3 * limitFactor) continue;
+				}
+
 				// Limit one level 100 Pokemon
 				if (!this.adjustLevel && (this.getLevel(species) === 100) && numMaxLevelPokemon >= limitFactor) {
 					continue;
@@ -945,6 +953,8 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					typeDoubleWeaknesses[typeName]++;
 				}
 			}
+			// Count Dry Skin as a Fire weakness
+			if (set.ability === 'Dry Skin' && this.dex.getEffectiveness('Fire', species) === 0) typeWeaknesses['Fire']++;
 
 			// Increment level 100 counter
 			if (set.level === 100) numMaxLevelPokemon++;
