@@ -165,7 +165,7 @@ export class ModdedDex {
 
 	mod(mod: string | undefined): ModdedDex {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
-		return dexes[mod || 'base'];
+		return dexes[mod || 'base'].includeData();
 	}
 
 	forGen(gen: number) {
