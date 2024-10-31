@@ -628,7 +628,7 @@ export class DexFormats {
 	validate(name: string) {
 		const [formatName, customRulesString] = name.split('@@@', 2);
 		const format = this.get(formatName);
-		if (!format.exists) throw new Error(`Unrecognized format "${formatName}"`);
+		if (format.effectType !== 'Format') throw new Error(`Unrecognized format "${formatName}"`);
 		if (!customRulesString) return format.id;
 		const ruleTable = this.getRuleTable(format);
 		const customRules = customRulesString.split(',').map(rule => {
