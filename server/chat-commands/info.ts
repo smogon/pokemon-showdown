@@ -585,7 +585,7 @@ export const commands: Chat.ChatCommands = {
 		const gen = parseInt(cmd.substr(-1));
 		if (gen) target += `, gen${gen}`;
 
-		const {dex, format, targets} = this.splitFormat(target, true);
+		const {dex, format, targets} = this.splitFormat(target, true, true);
 
 		let buffer = '';
 		target = targets.join(',');
@@ -2819,7 +2819,7 @@ export const commands: Chat.ChatCommands = {
 			allowEmpty: true, useIDs: false,
 		});
 		const format = Dex.formats.get(toID(args.format[0]));
-		if (!format.exists) {
+		if (format.effectType !== 'Format') {
 			return this.popupReply(`The format '${format}' does not exist.`);
 		}
 		delete args.format;
@@ -3170,8 +3170,8 @@ export const pages: Chat.PageTable = {
 		buf += `<hr />`;
 		const formatId = toID(query[0]);
 		const format = Dex.formats.get(formatId);
-		if (!formatId || !format.exists) {
-			if (formatId && !format.exists) {
+		if (!formatId || format.effectType !== 'Format') {
+			if (formatId) {
 				buf += `<div class="message-error">The format '${formatId}' does not exist.</div><br />`;
 			}
 			buf += `<form data-submitsend="/buildformat {format}">`;

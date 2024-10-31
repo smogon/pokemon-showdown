@@ -1149,7 +1149,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
 				// as well as event-only Pokemon that are not eligible for LC despite being the first stage
 				let format = Dex.formats.get('gen' + mod.gen + 'lc');
-				if (!format.exists) format = Dex.formats.get('gen9lc');
+				if (format.effectType !== 'Format') format = Dex.formats.get('gen9lc');
 				if (
 					alts.tiers.LC &&
 					!dex[mon].prevo &&
@@ -2576,7 +2576,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	while (targets.length) {
 		const targetid = toID(targets[0]);
 		if (targetid === 'pentagon') {
-			if (format.exists) {
+			if (format.effectType === 'Format') {
 				return {error: "'pentagon' can't be used with formats."};
 			}
 			minSourceGen = 6;
@@ -2584,7 +2584,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 			continue;
 		}
 		if (targetid.startsWith('minsourcegen')) {
-			if (format.exists) {
+			if (format.effectType === 'Format') {
 				return {error: "'min source gen' can't be used with formats."};
 			}
 			minSourceGen = parseInt(targetid.slice(12));
@@ -2600,14 +2600,15 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 		break;
 	}
 	let gen;
-	if (!format.exists) {
+	if (format.effectType !== 'Format') {
+		if (!(formatid in Dex.dexes)) {
+			// can happen if you hotpatch formats without hotpatching chat
+			return {error: `"${formatid}" is not a supported format.`};
+		}
 		const dex = Dex.mod(formatid).includeData();
-		// can happen if you hotpatch formats without hotpatching chat
-		if (!dex) return {error: `"${formatid}" is not a supported format.`};
-
 		gen = dex.gen;
 		formatName = `Gen ${gen}`;
-		format = new Dex.Format({mod: formatid});
+		format = new Dex.Format({mod: formatid, effectType: 'Format', exists: true});
 		const ruleTable = dex.formats.getRuleTable(format);
 		if (minSourceGen) {
 			formatName += ` (Min Source Gen = ${minSourceGen})`;

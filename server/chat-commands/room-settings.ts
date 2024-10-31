@@ -1615,7 +1615,7 @@ export const commands: Chat.ChatCommands = {
 
 		target = toID(target);
 		const format = Dex.formats.get(target);
-		if (format.exists) {
+		if (format.effectType === 'Format') {
 			target = format.name;
 		}
 		const {isMatch} = this.extractFormat(target);
