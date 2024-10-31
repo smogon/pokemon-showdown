@@ -1,5 +1,5 @@
+import {assignMissingFields, BasicEffect, toID} from './dex-data';
 import {Utils} from '../lib';
-import {toID, BasicEffect} from './dex-data';
 
 interface SpeciesAbility {
 	0: string;
@@ -273,8 +273,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 
 	constructor(data: AnyObject) {
 		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
 
 		this.fullname = `pokemon: ${data.name}`;
 		this.effectType = 'Pokemon';
@@ -306,7 +304,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 			this.gender === 'N' ? {M: 0, F: 0} :
 			{M: 0.5, F: 0.5});
 		this.requiredItem = data.requiredItem || undefined;
-		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
+		this.requiredItems = data.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
 		this.baseStats = data.baseStats || {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 		this.bst = this.baseStats.hp + this.baseStats.atk + this.baseStats.def +
 			this.baseStats.spa + this.baseStats.spd + this.baseStats.spe;
@@ -325,8 +323,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
 			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
+		if (Array.isArray(this.changesFrom)) this.changesFrom = this.changesFrom[0];
 		this.pokemonGoData = data.pokemonGoData || undefined;
-		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 906 || this.forme.includes('Paldea')) {
@@ -353,6 +351,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 				this.gen = 1;
 			}
 		}
+		assignMissingFields(this, data);
 	}
 }
 
