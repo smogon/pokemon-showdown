@@ -67,7 +67,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const format = Dex.formats.get(tier);
-			if (!format.exists) throw new Chat.ErrorMessage(`"${tier}" is not a valid tier.`);
+			if (format.effectType !== 'Format') throw new Chat.ErrorMessage(`"${tier}" is not a valid tier.`);
 
 			const suspectString = suspect.trim();
 
