@@ -2224,7 +2224,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: [
-			'Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'Species Clause', 'DryPass Clause',
+			'Standard NatDex', 'OHKO Clause', 'Evasion Clause', 'DryPass Clause',
 			'Sleep Clause Mod', 'Forme Clause', 'Z-Move Clause', 'Terastal Clause', 'Mega Rayquaza Clause',
 		],
 		banlist: [
@@ -2232,9 +2232,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Battle Bond', 'Moody', 'Shadow Tag', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Acupressure', 'Hidden Power', 'Last Respects',
 		],
 		unbanlist: [
-			'Accelgor', 'Amoonguss', 'Bellossom', 'Bisharp', 'Blastoise-Base', 'Clawitzer', 'Doublade', 'Dudunsparce', 'Dugtrio-Alola', 'Emboar', 'Gengar-Base',
-			'Guzzlord', 'Honchkrow', 'Houndstone', 'Klinklang', 'Magmortar', 'Munkidori', 'Ninjask', 'Noivern', 'Perrserker', 'Porygon-Z', 'Rhydon', 'Samurott-Base',
-			'Sandaconda', 'Scyther', 'Seviper', 'Sinistcha', 'Snorlax', 'Stoutland', 'Stunfisk-Base', 'Sudowoodo', 'Sylveon', 'Vigoroth', 'Vikavolt', 'Zoroark-Hisui',
+			'Ampharos', 'Appletun', 'Araquanid', 'Arbok', 'Centiskorch', 'Drampa', 'Dusknoir', 'Exeggutor-Alola', 'Exeggutor-Base', 'Frosmoth', 'Gabite', 'Glaceon',
+			'Golduck', 'Gourgeist-Average', 'Gourgeist-Super', 'Granbull', 'Gumshoos', 'Guzzlord', 'Kecleon', 'Ledian', 'Lurantis', 'Oricorio-Baile', 'Overqwil',
+			'Pinsir', 'Qwilfish-Base', 'Reuniclus', 'Shedinja', 'Shelgon', 'Spiritomb', 'Trapinch', 'Tsareena', 'Turtonator', 'Unown', 'Wigglytuff', 'Wishiwashi',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
