@@ -46,6 +46,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	bh: "[Gen 9] Balanced Hackmons",
 	mnm: "[Gen 9] Mix and Mega",
 	aaa: "[Gen 9] Almost Any Ability",
+	aaauu: "[Gen 9] Almost Any Ability UU",
 	stab: "[Gen 9] STABmons",
 	gg: "[Gen 9] Godly Gift",
 	pic: "[Gen 9] Partners in Crime",
@@ -89,8 +90,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Convergence",
-	lcotm: "[Gen 9] Inverse",
+	omotm: "[Gen 9] Passive Aggressive",
+	lcotm: "[Gen 9] Almost Any Ability UU",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
