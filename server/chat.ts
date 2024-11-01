@@ -325,7 +325,7 @@ export abstract class MessageContext {
 		}
 
 		if (toID(formatOrMod) in Dex.dexes) {
-			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
+			return {dex: Dex.mod(toID(formatOrMod)), format: null, isMatch: true};
 		}
 
 		return this.extractFormat();
