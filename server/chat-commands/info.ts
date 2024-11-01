@@ -1869,7 +1869,7 @@ export const commands: Chat.ChatCommands = {
 
 		if (!this.runBroadcast(`!formathelp ${format ? format.id : target}`)) return;
 
-		if (format && format.exists) {
+		if (format?.exists) {
 			const rules: string[] = [];
 			let rulesetHtml = '';
 			if (['Format', 'Rule', 'ValidatorRule'].includes(format.effectType)) {
