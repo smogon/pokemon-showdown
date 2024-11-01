@@ -320,7 +320,7 @@ export abstract class MessageContext {
 		}
 
 		const format = Dex.formats.get(formatOrMod);
-		if (format.effectType === 'Format' || allowRules && format.effectType === 'Rule') {
+		if (format.exists && (format.effectType === 'Format' || allowRules && format.effectType === 'Rule')) {
 			return {dex: Dex.forFormat(format), format: format, isMatch: true};
 		}
 
