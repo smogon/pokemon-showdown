@@ -2371,7 +2371,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6',
 		team: 'randomCC',
 		gameType: 'triples',
-		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod']
+		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 
 	// Randomized Metas
