@@ -165,7 +165,7 @@ export class RandomTeams {
 	moveEnforcementCheckers: {[k: string]: MoveEnforcementChecker};
 
 	/** Used by .getPools() */
-	private poolsCacheKey: any[] | undefined;
+	private poolsCacheKey: [string | undefined, number | undefined, RuleTable | undefined, boolean] | undefined;
 	private cachedPool: number[] | undefined;
 	private cachedSpeciesPool: Species[] | undefined;
 	protected cachedStatusMoves: ID[];
@@ -1988,7 +1988,7 @@ export class RandomTeams {
 		let speciesPool: Species[] = [];
 		const ck = this.poolsCacheKey;
 		if (ck && this.cachedPool && this.cachedSpeciesPool &&
-			ck[0] === requiredType && ck[1] === minSourceGen && ck[2] === requireMoves && ck[3] === ruleTable) {
+			ck[0] === requiredType && ck[1] === minSourceGen && ck[2] === ruleTable && ck[3] === requireMoves) {
 			speciesPool = this.cachedSpeciesPool.slice();
 			pool = this.cachedPool.slice();
 		} else if (isNotCustom) {
@@ -2005,7 +2005,7 @@ export class RandomTeams {
 				if (num <= 0 || pool.includes(num)) continue;
 				pool.push(num);
 			}
-			this.poolsCacheKey = [requiredType, minSourceGen, requireMoves, ruleTable];
+			this.poolsCacheKey = [requiredType, minSourceGen, ruleTable, requireMoves];
 			this.cachedPool = pool.slice();
 			this.cachedSpeciesPool = speciesPool.slice();
 		} else {
@@ -2052,7 +2052,7 @@ export class RandomTeams {
 				if (pool.includes(num)) continue;
 				pool.push(num);
 			}
-			this.poolsCacheKey = [requiredType, minSourceGen, requireMoves, ruleTable];
+			this.poolsCacheKey = [requiredType, minSourceGen, ruleTable, requireMoves];
 			this.cachedPool = pool.slice();
 			this.cachedSpeciesPool = speciesPool.slice();
 		}
