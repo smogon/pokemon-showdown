@@ -745,7 +745,6 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			this.room.settings.scavQueue.push({
 				hosts: next.hosts,
 				questions: correctlyFormattedQuestions,
-				isHTML: next.isHTML,
 				staffHostId: 'scavengermanager',
 				isHTML: next.isHTML,
 				staffHostName: 'Scavenger Manager',
