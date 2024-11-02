@@ -978,7 +978,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		return hosts;
 	}
 
-	static parseQuestions(questionArray: string[], force: boolean = false): AnyObject {
+	static parseQuestions(questionArray: string[], force = false): AnyObject {
 		if (questionArray.length % 2 === 1 && !force) return {err: "Your final question is missing an answer"};
 		if (questionArray.length < 6 && !force) return {err: "You must have at least 3 hints and answers"};
 
@@ -993,7 +993,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				}
 			} else {
 				// Skip last question if there is no answer
-				if (i + 1 == questionArray.length) { continue; }
+				if (i + 1 === questionArray.length) { continue; }
 
 				question = question.trim();
 				formattedQuestions[i] = question;
