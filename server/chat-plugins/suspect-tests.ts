@@ -86,7 +86,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("At least one requirement for qualifying must be provided.");
 			}
 			for (const req of reqs) {
-				const [k, v] = req.split('=').map(toID);
+				let [k, v] = req.split('=');
+				k = toID(k);
 				if (!['elo', 'gxe', 'coil'].includes(k)) {
 					return this.errorReply(`Invalid requirement type: ${k}. Must be 'coil', 'gxe', or 'elo'.`);
 				}
