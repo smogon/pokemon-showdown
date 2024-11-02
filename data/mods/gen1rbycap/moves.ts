@@ -71,18 +71,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contestType: "Clever",
 		gen: 1,
 	},
-	probosiclesignature: {
+	icicle: {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
 		shortDesc: "High critical hit ratio.",
-		name: "Probosicle Signature",
+		name: "Icicle",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Sheer Cold", target);
+			this.add('-anim', source, "Icicle Crash", target);
 		},
 		critRatio: 2,
 		secondary: null,
