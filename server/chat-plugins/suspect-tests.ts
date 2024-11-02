@@ -99,7 +99,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				reqData[k] = val;
 			}
-			const [out, error] = await LoginServer.request("suspects/add", {
+			const [out, error] = await LoginServer.request(suspectTests.suspects[format.id] ? "suspects/edit" : "suspects/add", {
 				format: format.id,
 				reqs: JSON.stringify(reqData),
 				url: urlActual,
