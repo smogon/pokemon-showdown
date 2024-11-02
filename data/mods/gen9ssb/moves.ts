@@ -340,6 +340,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Work Up', source);
 			this.add('-anim', source, 'Aqua Ring', source);
 		},
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('dominuslapidis');
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Dominus Lapidis', '[silent]');
+			},
+		},
 		secondary: null,
 		target: "allySide",
 		type: "Ground",
