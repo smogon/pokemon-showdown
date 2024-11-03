@@ -228,8 +228,7 @@ export function rollTimer() {
 	void updateBadgeholders();
 	const time = Date.now();
 	const next = new Date();
-	next.setHours(next.getHours() + 1);
-	next.setMinutes(0, 0, 0);
+	next.setHours(next.getHours() + 1, 0, 0, 0);
 	updateTimeout = setTimeout(() => rollTimer(), next.getTime() - time);
 
 	const discussionRoom = Rooms.search('seasondiscussion');

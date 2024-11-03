@@ -327,8 +327,8 @@ export class Roomlog {
 			log.setupRoomlogStream();
 		}
 		const time = Date.now();
-		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
-		nextMidnight.setHours(0, 0, 1);
+		const nextMidnight = new Date();
+		nextMidnight.setHours(24, 0, 0, 0);
 		Roomlogs.rollLogTimer = setTimeout(() => Roomlog.rollLogs(), nextMidnight.getTime() - time);
 	}
 	truncate() {

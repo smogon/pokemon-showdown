@@ -52,7 +52,7 @@ function nextDaily() {
 
 const midnight = new Date();
 midnight.setHours(24, 0, 0, 0);
-let timeout = setTimeout(nextDaily, midnight.valueOf() - Date.now());
+let timeout = setTimeout(nextDaily, midnight.getTime() - Date.now());
 
 export async function renderSpotlight(roomid: RoomID, key: string, index: number) {
 	let imgHTML = '';
