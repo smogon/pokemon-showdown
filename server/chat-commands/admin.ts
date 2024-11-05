@@ -384,6 +384,8 @@ export const commands: Chat.ChatCommands = {
 
 		const successes: string[] = [], errors: string[] = [];
 
+		content = this.checkHTML(content);
+
 		targets.forEach(targetUsername => {
 			const targetUser = Users.get(targetUsername);
 			if (!targetUser) return errors.push(`${targetUsername} [offline/misspelled]`);
@@ -401,11 +403,13 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!targetConnections.length) {
 				// no connection has requested it - verify that we share a room
-				this.checkPMHTML(targetUser);
+				try {
+					this.checkPMHTML(targetUser);
+				} catch {
+					return errors.push(`${targetUser.name} [not in room / blocking PMs]`);
+				}
 				targetConnections = targetUser.connections;
 			}
-
-			content = this.checkHTML(content);
 
 			for (const targetConnection of targetConnections) {
 				const context = new Chat.PageContext({
