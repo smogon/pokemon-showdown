@@ -1223,7 +1223,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Sand Veil', 'Snow Cloak', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Dire Claw', 'Last Respects', 'Shed Tail',
 		],
 		restricted: [
-			'Beat Up', 'Belly Drum', 'Clangorous Soul', 'Dragon Dance', 'Endeavor', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Tail Glow', 'Tidy Up', 'Victory Dance',
+			'Belly Drum', 'Clangorous Soul', 'Dragon Dance', 'Endeavor', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Tail Glow', 'Tidy Up', 'Victory Dance',
 		],
 		onValidateSet(set) {
 			const fsMove = this.dex.moves.get(set.moves[0]);
@@ -1243,6 +1243,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					const moveData = this.dex.getActiveMove(move.id);
 					moveData.flags['futuremove'] = 1;
 					delete moveData.flags['protect'];
+					if (moveData.id === 'beatup') this.singleEvent('ModifyMove', moveData, null, pokemon, null, null, moveData);
 					Object.assign(t.side.slotConditions[t.position]['futuremove'], {
 						duration: 3,
 						move: moveData.id,
