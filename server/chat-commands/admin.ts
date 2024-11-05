@@ -368,7 +368,8 @@ export const commands: Chat.ChatCommands = {
 
 		const closeHtmlPage = cmd === 'closehtmlpage';
 
-		const {targetUser, rest} = this.requireUser(target);
+		const [targetStr, rest] = this.splitOne(target).map(str => str.trim());
+		const targets = targetStr.split(';').map(u => u.trim()); // Maybe cap this at something like 25?
 		let [pageid, content] = this.splitOne(rest);
 		let selector: string | undefined;
 		if (cmd === 'changehtmlpageselector') {
@@ -381,47 +382,66 @@ export const commands: Chat.ChatCommands = {
 
 		pageid = `${user.id}-${toID(pageid)}`;
 
-		if (targetUser.locked && !this.user.can('lock')) {
-			this.errorReply("This user is currently locked, so you cannot send them HTML.");
-			return false;
-		}
+		const successes: string[] = [], errors: string[] = [];
 
-		let targetConnections = [];
-		// find if a connection has specifically requested this page
-		for (const c of targetUser.connections) {
-			if (c.lastRequestedPage === pageid) {
-				targetConnections.push(c);
+		targets.forEach(targetUsername => {
+			const targetUser = Users.get(targetUsername);
+			if (!targetUser) return errors.push(`${targetUsername} [offline/misspelled]`);
+
+			if (targetUser.locked && !this.user.can('lock')) {
+				return errors.push(`${targetUser.name} [locked]`);
 			}
-		}
-		if (!targetConnections.length) {
-			// no connection has requested it - verify that we share a room
-			this.checkPMHTML(targetUser);
-			targetConnections = targetUser.connections;
-		}
 
-		content = this.checkHTML(content);
-
-		for (const targetConnection of targetConnections) {
-			const context = new Chat.PageContext({
-				user: targetUser,
-				connection: targetConnection,
-				pageid: `view-bot-${pageid}`,
-			});
-			if (closeHtmlPage) {
-				context.send(`|deinit|`);
-			} else if (selector) {
-				context.send(`|selectorhtml|${selector}|${content}`);
-			} else {
-				context.title = `[${user.name}] ${pageid}`;
-				context.setHTML(content);
+			let targetConnections = [];
+			// find if a connection has specifically requested this page
+			for (const c of targetUser.connections) {
+				if (c.lastRequestedPage === pageid) {
+					targetConnections.push(c);
+				}
 			}
-		}
+			if (!targetConnections.length) {
+				// no connection has requested it - verify that we share a room
+				this.checkPMHTML(targetUser);
+				targetConnections = targetUser.connections;
+			}
+
+			content = this.checkHTML(content);
+
+			for (const targetConnection of targetConnections) {
+				const context = new Chat.PageContext({
+					user: targetUser,
+					connection: targetConnection,
+					pageid: `view-bot-${pageid}`,
+				});
+				if (closeHtmlPage) {
+					context.send(`|deinit|`);
+				} else if (selector) {
+					context.send(`|selectorhtml|${selector}|${content}`);
+				} else {
+					context.title = `[${user.name}] ${pageid}`;
+					context.setHTML(content);
+				}
+			}
+			successes.push(targetUser.name);
+		});
 
 		if (closeHtmlPage) {
-			this.sendReply(`Closed the bot page ${pageid} for ${targetUser.name}.`);
+			if (successes.length) {
+				this.sendReply(`Closed the bot page ${pageid} for ${Chat.toListString(successes)}.`);
+			}
+			if (errors.length) {
+				this.errorReply(`Unable to close the bot page for ${Chat.toListString(errors)}.`);
+			}
 		} else {
-			this.sendReply(`Sent ${targetUser.name}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
+			if (successes.length) {
+				this.sendReply(`Sent ${Chat.toListString(successes)}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
+			}
+			if (errors.length) {
+				this.errorReply(`Unable to send the bot page ${pageid} to ${Chat.toListString(errors)}.`);
+			}
 		}
+
+		if (!successes.length) return false;
 	},
 	sendhtmlpagehelp: [
 		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # ~`,
