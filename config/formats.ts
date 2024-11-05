@@ -2232,9 +2232,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Battle Bond', 'Moody', 'Shadow Tag', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Acupressure', 'Last Respects',
 		],
 		unbanlist: [
-			'Ampharos-Base', 'Appletun', 'Araquanid', 'Arbok', 'Centiskorch', 'Drampa', 'Dusknoir', 'Exeggutor-Alola', 'Exeggutor-Base', 'Frosmoth', 'Gabite', 'Glaceon',
-			'Golduck', 'Gourgeist-Average', 'Gourgeist-Super', 'Granbull', 'Gumshoos', 'Guzzlord', 'Kecleon', 'Ledian', 'Lurantis', 'Oricorio-Baile', 'Overqwil',
-			'Pinsir-Base', 'Qwilfish-Base', 'Reuniclus', 'Shedinja', 'Shelgon', 'Spiritomb', 'Trapinch', 'Tsareena', 'Turtonator', 'Unown', 'Wigglytuff', 'Wishiwashi',
+			'Ampharos-Base', 'Appletun', 'Araquanid', 'Arbok', 'Centiskorch', 'Drampa', 'Dusknoir', 'Exeggutor-Alola', 'Exeggutor-Base', 'Frosmoth', 'Gabite', 'Galvantula',
+			'Glaceon', 'Golduck', 'Gorebyss', 'Gourgeist-Average', 'Gourgeist-Super', 'Granbull', 'Gumshoos', 'Guzzlord', 'Kecleon', 'Ledian', 'Lurantis', 'Pinsir-Base',
+			'Qwilfish-Base', 'Reuniclus', 'Shedinja', 'Shelgon', 'Spiritomb', 'Trapinch', 'Tsareena', 'Turtonator', 'Unown', 'Wigglytuff', 'Wishiwashi',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
