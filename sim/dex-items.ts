@@ -199,6 +199,16 @@ export class DexItems {
 			if (item.gen > this.dex.gen) {
 				(item as any).isNonstandard = 'Future';
 			}
+			if (this.dex.parentMod) {
+				const parent = this.dex.mod(this.dex.parentMod);
+				const parentItem = parent.items.getByID(id);
+				if (itemData === parent.data.Items[id] &&
+				    item.isNonstandard === parentItem.isNonstandard &&
+				    item.desc === parentItem.desc &&
+				    item.shortDesc === parentItem.shortDesc) {
+					item = parentItem;
+				}
+			}
 		} else {
 			item = new Item({name: id, exists: false});
 		}
