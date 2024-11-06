@@ -369,7 +369,7 @@ export const commands: Chat.ChatCommands = {
 		const closeHtmlPage = cmd === 'closehtmlpage';
 
 		const [targetStr, rest] = this.splitOne(target).map(str => str.trim());
-		const targets = targetStr.split(';').map(u => u.trim()); // Maybe cap this at something like 25?
+		const targets = targetStr.split('|').map(u => u.trim());
 		let [pageid, content] = this.splitOne(rest);
 		let selector: string | undefined;
 		if (cmd === 'changehtmlpageselector') {
