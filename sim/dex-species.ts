@@ -414,6 +414,14 @@ export class DexSpecies {
 	}
 
 	getByID(id: ID): Species {
+		function deepStrictEqual(a: AnyObject, b: AnyObject) {
+			try {
+				require('assert').deepStrictEqual(a, b);
+				return true;
+			} catch {
+				return false;
+			}
+		}
 		if (id === '') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
@@ -569,6 +577,13 @@ export class DexSpecies {
 				id, name: id,
 				exists: false, tier: 'Illegal', doublesTier: 'Illegal', natDexTier: 'Illegal', isNonstandard: 'Custom',
 			});
+		}
+		if (this.dex.parentMod && species.exists) {
+			const parent = this.dex.mod(this.dex.parentMod);
+			const parentSpecies = parent.species.getByID(id);
+			if (deepStrictEqual(species, parentSpecies)) {
+				species = parentSpecies;
+			}
 		}
 		if (species.exists) this.speciesCache.set(id, this.dex.deepFreeze(species));
 		return species;
