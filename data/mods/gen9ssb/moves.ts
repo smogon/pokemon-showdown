@@ -2556,24 +2556,24 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failmimic: 1, failinstruct: 1, nosketch: 1,
 		}, 
-		onHit(target, source) {
-			const move = target.lastMove;
+		onHit(target, source, move) {
+			const lmove = target.lastMove;
 			source.addVolatile('sketch');
-			if (source.transformed || !move || source.moves.includes(move.id)) return;
-			if (move.flags['nosketch'] || move.isZ || move.isMax) return;
+			if (source.transformed || !lmove || source.moves.includes(lmove.id)) return;
+			if (lmove.flags['nosketch'] || lmove.isZ || lmove.isMax) return;
 			const sketchIndex = source.moves.indexOf('sketch');
 			if (sketchIndex < 0) return;
 			const sketchedMove = {
-				move: move.name,
-				id: move.id,
-				pp: move.pp,
-				maxpp: move.pp,
-				target: move.target,
+				move: lmove.name,
+				id: lmove.id,
+				pp: lmove.pp,
+				maxpp: lmove.pp,
+				target: lmove.target,
 				disabled: false,
 				used: false,
 			};
 			source.moveSlots[sketchIndex] = sketchedMove;
-			this.add('-activate', source, 'move: Sketch', move.name);
+			this.add('-activate', source, 'move: Sketch', lmove.name);
 		},
 		onAfterMove(pokemon, target, move) {
 			pokemon.storedStats.atk = target.storedStats.atk;
