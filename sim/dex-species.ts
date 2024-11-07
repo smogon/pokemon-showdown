@@ -386,6 +386,17 @@ export class Learnset {
 		this.species = species;
 	}
 }
+// TODO: remove below comment before undrafting PR
+// I would keep this inside the function, but it saves ~100/2360 ms
+const _assertDeepEqual = require('assert').deepStrictEqual;
+function deepStrictEqual(a: AnyObject, b: AnyObject) {
+	try {
+		_assertDeepEqual(a, b);
+		return true;
+	} catch {
+		return false;
+	}
+}
 
 export class DexSpecies {
 	readonly dex: ModdedDex;
@@ -414,14 +425,6 @@ export class DexSpecies {
 	}
 
 	getByID(id: ID): Species {
-		function deepStrictEqual(a: AnyObject, b: AnyObject) {
-			try {
-				require('assert').deepStrictEqual(a, b);
-				return true;
-			} catch {
-				return false;
-			}
-		}
 		if (id === '') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
@@ -572,18 +575,21 @@ export class DexSpecies {
 				delete species.abilities['H'];
 			}
 			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
+
+			if (this.dex.parentMod) {
+				const parentMod = this.dex.mod(this.dex.parentMod);
+				if (this.dex.data.Pokedex[id] === parentMod.data.Pokedex[id]) {
+					const parentSpecies = parentMod.species.getByID(id);
+					if (species.tier === parentSpecies.tier && deepStrictEqual(species, parentSpecies)) {
+						species = parentSpecies;
+					}
+				}
+			}
 		} else {
 			species = new Species({
 				id, name: id,
 				exists: false, tier: 'Illegal', doublesTier: 'Illegal', natDexTier: 'Illegal', isNonstandard: 'Custom',
 			});
-		}
-		if (this.dex.parentMod && species.exists) {
-			const parent = this.dex.mod(this.dex.parentMod);
-			const parentSpecies = parent.species.getByID(id);
-			if (deepStrictEqual(species, parentSpecies)) {
-				species = parentSpecies;
-			}
 		}
 		if (species.exists) this.speciesCache.set(id, this.dex.deepFreeze(species));
 		return species;
