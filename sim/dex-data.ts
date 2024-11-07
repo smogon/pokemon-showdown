@@ -22,7 +22,7 @@ import {Utils} from '../lib';
 export function toID(text: any): ID {
 	if (typeof text !== 'string') {
 		if (text) text = text.id || text.userid || text.roomid || text;
-		if (typeof text === 'number') return ('' + text) as ID;
+		if (typeof text === 'number') text = '' + text;
 		else if (typeof text !== 'string') return '';
 	}
 	return text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
