@@ -1101,7 +1101,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	checkForcedUserSettings(user: User) {
 		this.forcedSettings = {
 			modchat: this.forcedSettings.modchat || RoomBattle.battleForcedSetting(user, 'modchat'),
-			privacy: this.forcedSettings.privacy || RoomBattle.battleForcedSetting(user, 'privacy'),
+			privacy: !!this.options.rated && (this.forcedSettings.privacy || RoomBattle.battleForcedSetting(user, 'privacy')),
 		};
 		if (
 			this.players.some(p => p.getUser()?.battleSettings.special) ||
