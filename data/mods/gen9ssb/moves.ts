@@ -2581,7 +2581,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			pokemon.storedStats.spa = target.storedStats.spa;
 			pokemon.storedStats.spd = target.storedStats.spd;
 			pokemon.storedStats.spe = target.storedStats.spe;
-			this.add('-message', `${source.name} sketched ${target.name}'s base stats!`);
+			this.add('-message', `${pokemon.name} sketched ${target.name}'s base stats!`);
 		},
 		condition: {
 			duration: 1,
