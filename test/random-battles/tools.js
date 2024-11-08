@@ -20,8 +20,8 @@ const {TeamValidator, PokemonSources} = require('../../dist/sim/team-validator')
 function testSet(pokemon, options, test) {
 	const rounds = options.rounds || 1000;
 
-	const isDoubles = !!(options.isDoubles || (options.format && options.format.includes('doubles')));
-	const isDynamax = !!(options.isDynamax || !(options.format && options.format.includes('nodmax')));
+	const isDoubles = options.isDoubles || (options.format && options.format.includes('doubles'));
+	const isDynamax = options.isDynamax || !(options.format && options.format.includes('nodmax'));
 	const generator = Teams.getGenerator(options.format, [0, 0, 0, 0]);
 	for (let i = 0; i < rounds; i++) {
 		// If undefined, test lead 1/6 of the time

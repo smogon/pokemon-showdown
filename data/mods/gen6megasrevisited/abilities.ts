@@ -15,6 +15,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.category === 'Status') {
 				move.selfSwitch = true;
 				this.add('-ability', pokemon, 'Pocket Dimension');
+				this.add('-message', `${pokemon.name} will switch out if this moves lands!`);
 			}
 		},
 		name: "Pocket Dimension",
@@ -122,14 +123,43 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		name: "Exoskeleton",
-		shortDesc: "This Pokemon takes halved damage from physical moves; Hazard immunity.",
+		shortDesc: "This Pokemon receives 1/2 damage from physical attacks; Hazard immunity.",
 		rating: 4,
 	},
 	icescales: {
 		inherit: true,
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ice') {
+				this.debug('Ice Scales boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ice') {
+				this.debug('Ice Scales boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onImmunity(type, pokemon) {
+			if (type === 'hail') return false;
+		},
+		shortDesc: "This Pokemon receives 1/2 damage from special attacks. Ice moves have 1.5x power. Hail immunity.",
 		gen: 6,
 	},
 	eartheater: {
+		inherit: true,
+		onDamage(damage, target, source, effect) {
+			if (effect && (effect.id === 'stealthrock' || effect.id === 'spikes')) {
+				this.heal(damage);
+				return false;
+			}
+		},
+		shortDesc: "Heals 1/4 of its max HP when hit by Ground; Ground immunity. Healed by Spikes and Stealth Rock.",
+		gen: 6,
+	},
+	toxicchain: {
 		inherit: true,
 		gen: 6,
 	},
@@ -139,8 +169,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.category === 'Special') {
 				attacker.addVolatile('shellejection');
 				this.add('-ability', attacker, 'Shell Ejection');
-				this.add('-message', `Slowbro is getting ready to leave the battlefield!`);
-				this.add('-message', `Slowbro can no longer use status moves!`);
+				this.add('-message', `${attacker.name} is getting ready to leave the battlefield!`);
+				this.add('-message', `${attacker.name} can no longer use status moves!`);
 			}
 		},
 		condition: {
@@ -153,16 +183,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					}
 				}
 			},
+			onSwitchOut(pokemon) {
+				pokemon.heal(pokemon.baseMaxhp / 3);
+			},
 			onEnd(pokemon) {
 				this.add('-ability', pokemon, 'Shell Ejection');
-				this.add('-message', `Slowbro ejected itself from its shell!`);
+				this.add('-message', `${pokemon.name} ejected itself from its shell!`);
+				pokemon.heal(pokemon.baseMaxhp / 3);
 				pokemon.switchFlag = true;
 			},
 		},
 		name: "Shell Ejection",
 		rating: 3.5,
 		gen: 6,
-		shortDesc: "After using a Special move, this Pokemon switches out at the end of the next turn and it can't use status moves.",
+		shortDesc: "On using Special move: switching heals 1/3, can't use status, switches out at end of next turn.",
 	},
 	sharpness: {
 		inherit: true,
@@ -172,20 +206,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			this.boost({def: 1}, pokemon);
 			pokemon.addVolatile('dauntlessshield');
-			this.add('-message', `${pokemon.name} has its shield up!`);
 		},
-		condition: {
-			duration: 2,
-			onEnd(pokemon) {
-				this.add('-ability', pokemon, 'Dauntless Shield');
-				this.add('-message', `${pokemon.name} lowered its shield!`);
-				this.boost({def: -1}, pokemon);
-			},
+		onResidualOrder: 6,
+		onResidual(pokemon) {
+			if (pokemon.positiveBoosts()) {
+				this.heal(pokemon.baseMaxhp / 16);
+				this.add('-message', `${pokemon.name}'s shield gives it strength!`);
+			}
 		},
 		name: "Dauntless Shield",
-		rating: 3.5,
+		rating: 5,
 		num: 235,
-		shortDesc: "+1 Defense on switch-in. Boost goes away at the end of the next turn.",
+		shortDesc: "+1 Defense on switch-in. Heals 1/16 of max HP if it has a positive boost.",
 		gen: 6,
 	},
 	confidence: {
@@ -209,6 +241,28 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	opportunist: {
 		inherit: true,
+		onUpdate(pokemon) {
+			let activate = false;
+			const boosts: SparseBoostsTable = {};
+			let i: BoostID;
+			for (i in pokemon.boosts) {
+				if (pokemon.boosts[i] < 0) {
+					activate = true;
+					boosts[i] = 0;
+				}
+			}
+			if (this.effectState.herb) return;
+			if (activate) {
+				pokemon.setBoost(boosts);
+				this.effectState.herb = true;
+				this.add('-ability', pokemon, 'Opportunist');
+				this.add('-clearnegativeboost', pokemon, '[silent]');
+			}
+		},
+		onSwitchIn(pokemon) {
+			delete this.effectState.herb;
+		},
+		shortDesc: "Copies foe's stat gains as they happen. Resets negative stat changes once per switch-in.",
 		gen: 6,
 	},
 	intoxicate: {

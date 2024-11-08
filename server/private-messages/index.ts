@@ -140,8 +140,8 @@ export const PrivateMessages = new class {
 		if (!PM.isParentProcess) return null!;
 		const time = Date.now();
 		// even though we expire once a week atm, we check once a day
-		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
-		nextMidnight.setHours(0, 0, 1);
+		const nextMidnight = new Date();
+		nextMidnight.setHours(24, 0, 0, 0);
 		if (this.clearInterval) clearTimeout(this.clearInterval);
 		this.clearInterval = setTimeout(() => {
 			void this.clearOffline();

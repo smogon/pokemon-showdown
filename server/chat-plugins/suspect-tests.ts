@@ -67,7 +67,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			const format = Dex.formats.get(tier);
-			if (!format.exists) throw new Chat.ErrorMessage(`"${tier}" is not a valid tier.`);
+			if (format.effectType !== 'Format') throw new Chat.ErrorMessage(`"${tier}" is not a valid tier.`);
 
 			const suspectString = suspect.trim();
 
@@ -86,7 +86,8 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply("At least one requirement for qualifying must be provided.");
 			}
 			for (const req of reqs) {
-				const [k, v] = req.split('=').map(toID);
+				let [k, v] = req.split('=');
+				k = toID(k);
 				if (!['elo', 'gxe', 'coil'].includes(k)) {
 					return this.errorReply(`Invalid requirement type: ${k}. Must be 'coil', 'gxe', or 'elo'.`);
 				}
@@ -99,8 +100,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				reqData[k] = val;
 			}
-
-			const [out, error] = await LoginServer.request("suspects/add", {
+			const [out, error] = await LoginServer.request(suspectTests.suspects[format.id] ? "suspects/edit" : "suspects/add", {
 				format: format.id,
 				reqs: JSON.stringify(reqData),
 				url: urlActual,
@@ -191,6 +191,28 @@ export const commands: Chat.ChatCommands = {
 
 			suspectTests.whitelist.splice(index, 1);
 			saveSuspectTests();
+		},
+
+		async verify(target, room, user) {
+			const formatid = toID(target);
+			if (!suspectTests.suspects[formatid]) {
+				throw new Chat.ErrorMessage("There is no suspect test running for the given format.");
+			}
+			const [out, error] = await LoginServer.request("suspects/verify", {
+				formatid,
+				userid: user.id,
+			});
+			if (error) {
+				throw new Chat.ErrorMessage("Error verifying for suspect: " + error.message);
+			}
+			if (out?.actionerror) {
+				throw new Chat.ErrorMessage(out.actionerror);
+			}
+			this.sendReply(
+				out.result ?
+					`You have successfully verified for the ${formatid} suspect test.` :
+					`You could not verify for the ${formatid} suspect test, as you do not meet the requirements.`
+			);
 		},
 
 		help() {

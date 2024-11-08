@@ -9,6 +9,15 @@ At the highest level, PS is split into three parts:
 
 All three communicate directly with each other.
 
+A user starts by visiting `https://play.pokemonshowdown.com/`. This is handled by an Apache server (in the Client), which serves mostly static files but uses some PHP (legacy, intended to be migrated to Loginserver).
+
+The user's web browser (running Client code) will then communicate with the Login server (mounted at `https://play.pokemonshowdown.com/api/` to handle logins mostly, or otherwise interface with the Client databases one way or another).
+
+The user's web browser will also connect to the Game server, through SockJS. The Game server handles the chat rooms, matchmaking, and actual battle simulation.
+
+The Game server also communicates with the Login server, to handle replay uploads (and, for the main server, ladder updates).
+
+
 Game server
 -----------
 
@@ -26,6 +35,7 @@ Its entry point is [server/index.ts](./server/index.ts), which launches several 
 
 `Rooms` also includes support for battle rooms, which is where the server connects to the game simulator itself. Game simulation code is in [sim/](./sim/).
 
+
 Client
 ------
 
@@ -35,9 +45,12 @@ Its entry point is [index.template.html](https://github.com/smogon/pokemon-showd
 
 It was written long ago, so instead of a single JS entry point, it includes a lot of JS files. Everything important is launched from [js/client.js](https://github.com/smogon/pokemon-showdown-client/blob/master/play.pokemonshowdown.com/js/client.js)
 
+
 Login server
 ------------
 
-The client’s login server, which handles logins and most database interaction, is written in TypeScript in progress. The backend is split between a MySQL InnoDB database (for most things) and a Postgres database (for Replays).
+The client’s login server, which handles logins and most database interaction, is written in TypeScript. The backend is currently split between a MySQL InnoDB database (for users, ladder, and most other things) and a Postgres (technically Cockroach) database (for Replays).
 
 Its entry point is [server.ts](https://github.com/smogon/pokemon-showdown-loginserver/blob/master/src/server.ts).
+
+It's intended to replace all of the old PHP code in the Client, but that migration is only halfway done at the moment.

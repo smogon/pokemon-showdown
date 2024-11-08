@@ -1765,6 +1765,10 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 		name: "Stone Plate",
 		shortDesc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type.",
 	},
+	strangeball: {
+		name: "Strange Ball",
+		shortDesc: "Placeholder if caught in Poke Ball not in current game.",
+	},
 	strawberrysweet: {
 		name: "Strawberry Sweet",
 		shortDesc: "Evolves Milcery into Alcremie when held and spun around.",
