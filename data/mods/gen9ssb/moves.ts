@@ -2527,7 +2527,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				used: false,
 				virtual: true,
 			};
-			this.add('-start', source, 'Plagiarize', move.name);
+			this.add('-start', source, 'Plagiarize', move.name, '[silent]');
+			this.add('-message', `${source.name} plagiarized ${target.name}'s ${move.name}!`);
 		},
 		// PP Nullification
 		onTryHit(target) {
@@ -2536,7 +2537,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 			const ppDeducted = target.deductPP(move.id, 64);
 			if (!ppDeducted) return false;
-			this.add("-activate", target, 'move: Plagiarize', move.name, ppDeducted);
+			this.add('-activate', target, 'move: Plagiarize', move.name, ppDeducted, '[silent]');
+			this.add('-message', `${move.name}'s PP was nullified!`);
 		},
 		flags: {},
 		target: "normal",
