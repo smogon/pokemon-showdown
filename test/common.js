@@ -21,7 +21,7 @@ const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
 class TestTools {
 	constructor(mod = 'base') {
 		this.currentMod = mod;
-		this.dex = Dex.mod(mod);
+		this.dex = Dex.mod(mod).includeData(); // ensure that gen is initialized
 
 		this.modPrefix = this.dex.isBase ? `[gen9] ` : `[${mod}] `;
 	}
@@ -42,7 +42,11 @@ class TestTools {
 	}
 
 	getFormat(options) {
-		if (options.formatid) return Dex.formats.get(options.formatid);
+		if (options.formatid) {
+			const format = Dex.formats.get(options.formatid);
+			if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${options.formatid}`);
+			return format;
+		}
 
 		const gameType = Dex.toID(options.gameType || 'singles');
 		const customRules = [
@@ -73,7 +77,7 @@ class TestTools {
 		if (format) return format;
 
 		format = Dex.formats.get(formatName);
-		if (!format.exists) throw new Error(`Unidentified format: ${formatName}`);
+		if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${formatName}`);
 
 		formatsCache.set(formatName, format);
 		return format;

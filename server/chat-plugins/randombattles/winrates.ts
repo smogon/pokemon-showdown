@@ -21,13 +21,13 @@ interface FormatData {
 	period?: number; // how often it resets - defaults to 1mo
 }
 
-const STATS_PATH = 'logs/randbats/{{MONTH}}-winrates.json';
+const STATS_PATH = Monitor.logPath('randbats/{{MONTH}}-winrates.json').path;
 export const stats: Stats = getDefaultStats();
 
 try {
 	const path = STATS_PATH.replace('{{MONTH}}', getMonth());
-	if (!FS('logs/randbats/').existsSync()) {
-		FS('logs/randbats/').mkdirSync();
+	if (!Monitor.logPath('randbats/').existsSync()) {
+		Monitor.logPath('randbats/').mkdirSync();
 	}
 	const savedStats = JSON.parse(FS(path).readSync());
 	stats.elo = savedStats.elo;
@@ -46,6 +46,8 @@ function getDefaultStats() {
 			// so i'm not spending the time to add commands to toggle this
 			gen9randombattle: {mons: {}},
 			gen9randomdoublesbattle: {mons: {}},
+			gen9babyrandombattle: {mons: {}},
+			gen9superstaffbrosultimate: {mons: {}},
 			gen8randombattle: {mons: {}},
 			gen7randombattle: {mons: {}},
 			gen6randombattle: {mons: {}},
@@ -96,6 +98,10 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Keldeo';
 	} else if (species === "Zarude-Dada") {
 		return 'Zarude';
+	} else if (species === 'Polteageist-Antique') {
+		return 'Polteageist';
+	} else if (species === 'Sinistcha-Masterpiece') {
+		return 'Sinistcha';
 	} else if (species === "Squawkabilly-Blue") {
 		return "Squawkabilly";
 	} else if (species === "Squawkabilly-White") {
@@ -116,6 +122,8 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return 'Toxtricity';
 	} else if (species.startsWith("Tatsugiri-")) {
 		return 'Tatsugiri';
+	} else if (species.startsWith("Alcremie-")) {
+		return 'Alcremie';
 	} else if (species === "Zacian" && item.name === "Rusted Sword") {
 		return 'Zacian-Crowned';
 	} else if (species === "Zamazenta" && item.name === "Rusted Shield") {
@@ -128,6 +136,16 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 		return item.megaStone;
 	} else if (species === "Rayquaza" && moves.includes('Dragon Ascent') && !item.zMove && megaRayquazaPossible) {
 		return "Rayquaza-Mega";
+	} else if (species === "Poltchageist-Artisan") { // Babymons from here on out
+		return "Poltchageist";
+	} else if (species === "Shellos-East") {
+		return "Shellos";
+	} else if (species === "Sinistea-Antique") {
+		return "Sinistea";
+	} else if (species.startsWith("Deerling-")) {
+		return "Deerling";
+	} else if (species.startsWith("Flabe\u0301be\u0301-")) {
+		return "Flabe\u0301be\u0301";
 	} else {
 		return species;
 	}
@@ -156,22 +174,25 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	const formatData = stats.formats[battle.format];
 	let eloFloor = stats.elo;
 	const format = Dex.formats.get(battle.format);
-	if (format.mod !== `gen${Dex.gen}`) {
+	if (format.mod === 'gen2' || format.team === 'randomBaby') {
+		// ladders are inactive, so use a lower threshold
+		eloFloor = 1150;
+	} else if (format.mod !== `gen${Dex.gen}`) {
 		eloFloor = 1300;
 	} else if (format.gameType === 'doubles') {
-		// may need to be raised again if doubles ladder takes off
-		eloFloor = 1300;
+		// may need to be raised again if ladder takes off further
+		eloFloor = 1400;
 	}
-	if (!formatData || battle.rated < eloFloor) return;
+	if (!formatData || (format.mod !== 'gen9ssb' && battle.rated < eloFloor) || !winner) return;
 	checkRollover();
-	for (const p of players) {
-		const team = await battle.getTeam(p);
+	for (const p of battle.players) {
+		const team = await battle.getPlayerTeam(p);
 		if (!team) return; // ???
 		const mons = team.map(f => getSpeciesName(f, format));
 		for (const mon of mons) {
 			if (!formatData.mons[mon]) formatData.mons[mon] = {timesGenerated: 0, numWins: 0};
 			formatData.mons[mon].timesGenerated++;
-			if (toID(winner) === toID(p)) {
+			if (toID(winner) === toID(p.name)) {
 				formatData.mons[mon].numWins++;
 			}
 		}
@@ -182,6 +203,11 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 export const commands: Chat.ChatCommands = {
 	rwr: 'randswinrates',
 	randswinrates(target, room, user) {
+		target = toID(target);
+		if (/^(gen|)[0-9]+$/.test(target)) {
+			if (target.startsWith('gen')) target = target.slice(3);
+			target = `gen${target}randombattle`;
+		}
 		return this.parse(`/j view-winrates-${target ? Dex.formats.get(target).id : `gen${Dex.gen}randombattle`}`);
 	},
 	randswinrateshelp: [

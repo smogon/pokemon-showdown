@@ -72,7 +72,8 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		inherit: true,
-		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
+		runMove(moveOrMoveName, pokemon, targetLoc, options) {
+			let sourceEffect = options?.sourceEffect;
 			const move = this.dex.getActiveMove(moveOrMoveName);
 			const target = this.battle.getTarget(pokemon, move, targetLoc);
 			if (target?.subFainted) target.subFainted = null;
@@ -102,12 +103,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else {
 				sourceEffect = move;
 			}
-			this.battle.actions.useMove(move, pokemon, target, sourceEffect);
+			this.battle.actions.useMove(move, pokemon, {target, sourceEffect});
 		},
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
-		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
-			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, target, sourceEffect);
+		useMove(moveOrMoveName, pokemon, options) {
+			let sourceEffect = options?.sourceEffect;
+			let target = options?.target;
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, {target, sourceEffect});
 
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
@@ -164,7 +167,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// This is the function that actually uses the move, running ModifyMove events.
 		// It uses the move and then deals with the effects after the move.
-		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect) {
+		useMoveInner(moveOrMoveName, pokemon, options) {
+			let sourceEffect = options?.sourceEffect;
+			let target = options?.target;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
 			let move = this.battle.dex.getActiveMove(baseMove);
@@ -691,7 +696,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
-			// This is what cuases the roll over bugs.
+			// This is what causes the rollover bugs.
 			if (attack >= 256 || defense >= 256) {
 				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.

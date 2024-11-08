@@ -1,4 +1,5 @@
-import {toID, BasicEffect} from './dex-data';
+import {assignMissingFields, BasicEffect, toID} from './dex-data';
+import {Utils} from '../lib';
 
 interface SpeciesAbility {
 	0: string;
@@ -7,7 +8,7 @@ interface SpeciesAbility {
 	S?: string;
 }
 
-type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Paradox";
+type SpeciesTag = "Mythical" | "Restricted Legendary" | "Sub-Legendary" | "Ultra Beast" | "Paradox";
 
 export interface SpeciesData extends Partial<Species> {
 	name: string;
@@ -34,7 +35,7 @@ export interface SpeciesFormatsData {
 export type ModdedSpeciesFormatsData = SpeciesFormatsData & {inherit?: true};
 
 export interface LearnsetData {
-	learnset?: {[moveid: string]: MoveSource[]};
+	learnset?: {[moveid: IDEntry]: MoveSource[]};
 	eventData?: EventInfo[];
 	eventOnly?: boolean;
 	encounters?: EventInfo[];
@@ -47,6 +48,42 @@ export interface PokemonGoData {
 	encounters?: string[];
 	LGPERestrictiveMoves?: {[moveid: string]: number | null};
 }
+
+export interface SpeciesDataTable {[speciesid: IDEntry]: SpeciesData}
+export interface ModdedSpeciesDataTable {[speciesid: IDEntry]: ModdedSpeciesData}
+export interface SpeciesFormatsDataTable {[speciesid: IDEntry]: SpeciesFormatsData}
+export interface ModdedSpeciesFormatsDataTable {[speciesid: IDEntry]: ModdedSpeciesFormatsData}
+export interface LearnsetDataTable {[speciesid: IDEntry]: LearnsetData}
+export interface ModdedLearnsetDataTable {[speciesid: IDEntry]: ModdedLearnsetData}
+export interface PokemonGoDataTable {[speciesid: IDEntry]: PokemonGoData}
+
+/**
+ * Describes a possible way to get a move onto a pokemon.
+ *
+ * First character is a generation number, 1-9.
+ * Second character is a source ID, one of:
+ *
+ * - M = TM/HM
+ * - T = tutor
+ * - L = start or level-up, 3rd char+ is the level
+ * - R = restricted (special moves like Rotom moves)
+ * - E = egg
+ * - D = Dream World, only 5D is valid
+ * - S = event, 3rd char+ is the index in .eventData
+ * - V = Virtual Console or Let's Go transfer, only 7V/8V is valid
+ * - C = NOT A REAL SOURCE, see note, only 3C/4C is valid
+ *
+ * C marks certain moves learned by a pokemon's prevo. It's used to
+ * work around the chainbreeding checker's shortcuts for performance;
+ * it lets the pokemon be a valid father for teaching the move, but
+ * is otherwise ignored by the learnset checker (which will actually
+ * check prevos for compatibility).
+ */
+export type MoveSource = `${
+	1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+}${
+	'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C'
+}${string}`;
 
 export class Species extends BasicEffect implements Readonly<BasicEffect & SpeciesFormatsData> {
 	declare readonly effectType: 'Pokemon';
@@ -175,6 +212,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * This is mainly relevant to Gen 5.
 	 */
 	readonly maleOnlyHidden: boolean;
+	/** Possible mother for a male-only Pokemon. */
+	readonly mother?: string;
 	/** True if a pokemon is mega. */
 	readonly isMega?: boolean;
 	/** True if a pokemon is primal. */
@@ -234,8 +273,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 
 	constructor(data: AnyObject) {
 		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
 
 		this.fullname = `pokemon: ${data.name}`;
 		this.effectType = 'Pokemon';
@@ -267,7 +304,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 			this.gender === 'N' ? {M: 0, F: 0} :
 			{M: 0.5, F: 0.5});
 		this.requiredItem = data.requiredItem || undefined;
-		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
+		this.requiredItems = data.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
 		this.baseStats = data.baseStats || {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 		this.bst = this.baseStats.hp + this.baseStats.atk + this.baseStats.def +
 			this.baseStats.spa + this.baseStats.spd + this.baseStats.spe;
@@ -286,8 +323,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
 			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
+		if (Array.isArray(this.changesFrom)) this.changesFrom = this.changesFrom[0];
 		this.pokemonGoData = data.pokemonGoData || undefined;
-		if (Array.isArray(data.changesFrom)) this.changesFrom = data.changesFrom[0];
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 906 || this.forme.includes('Paldea')) {
@@ -314,8 +351,15 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 				this.gen = 1;
 			}
 		}
+		assignMissingFields(this, data);
 	}
 }
+
+const EMPTY_SPECIES = Utils.deepFreeze(new Species({
+	id: '', name: '', exists: false,
+	tier: 'Illegal', doublesTier: 'Illegal',
+	natDexTier: 'Illegal', isNonstandard: 'Custom',
+}));
 
 export class Learnset {
 	readonly effectType: 'Learnset';
@@ -330,14 +374,16 @@ export class Learnset {
 	readonly eventData?: EventInfo[];
 	readonly encounters?: EventInfo[];
 	readonly exists: boolean;
+	readonly species: Species;
 
-	constructor(data: AnyObject) {
+	constructor(data: AnyObject, species: Species) {
 		this.exists = true;
 		this.effectType = 'Learnset';
 		this.learnset = data.learnset || undefined;
 		this.eventOnly = !!data.eventOnly;
 		this.eventData = data.eventData || undefined;
 		this.encounters = data.encounters || undefined;
+		this.species = species;
 	}
 }
 
@@ -354,17 +400,21 @@ export class DexSpecies {
 	get(name?: string | Species): Species {
 		if (name && typeof name !== 'string') return name;
 
-		name = (name || '').trim();
-		let id = toID(name);
-		if (id === 'nidoran' && name.endsWith('♀')) {
-			id = 'nidoranf' as ID;
-		} else if (id === 'nidoran' && name.endsWith('♂')) {
-			id = 'nidoranm' as ID;
+		let id = '' as ID;
+		if (name) {
+			name = name.trim();
+			id = toID(name);
+			if (id === 'nidoran' && name.endsWith('♀')) {
+				id = 'nidoranf' as ID;
+			} else if (id === 'nidoran' && name.endsWith('♂')) {
+				id = 'nidoranm' as ID;
+			}
 		}
-
 		return this.getByID(id);
 	}
+
 	getByID(id: ID): Species {
+		if (id === '') return EMPTY_SPECIES;
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
 
@@ -397,13 +447,13 @@ export class DexSpecies {
 					}
 				}
 			}
-			this.speciesCache.set(id, species);
+			this.speciesCache.set(id, this.dex.deepFreeze(species));
 			return species;
 		}
 
 		if (!this.dex.data.Pokedex.hasOwnProperty(id)) {
 			let aliasTo = '';
-			const formeNames: {[k: string]: string[]} = {
+			const formeNames: {[k: IDEntry]: IDEntry[]} = {
 				alola: ['a', 'alola', 'alolan'],
 				galar: ['g', 'galar', 'galarian'],
 				hisui: ['h', 'hisui', 'hisuian'],
@@ -413,7 +463,7 @@ export class DexSpecies {
 			};
 			for (const forme in formeNames) {
 				let pokeName = '';
-				for (const i of formeNames[forme]) {
+				for (const i of formeNames[forme as ID]) {
 					if (id.startsWith(i)) {
 						pokeName = id.slice(i.length);
 					} else if (id.endsWith(i)) {
@@ -445,9 +495,10 @@ export class DexSpecies {
 			// Inherit any statuses from the base species (Arceus, Silvally).
 			const baseSpeciesStatuses = this.dex.data.Conditions[toID(species.baseSpecies)];
 			if (baseSpeciesStatuses !== undefined) {
-				let key: keyof EffectData;
-				for (key in baseSpeciesStatuses) {
-					if (!(key in species)) (species as any)[key] = baseSpeciesStatuses[key];
+				for (const key in baseSpeciesStatuses) {
+					if (!(key in species)) {
+						(species as any)[key] = (baseSpeciesStatuses as any)[key];
+					}
 				}
 			}
 			if (!species.tier && !species.doublesTier && !species.natDexTier && species.baseSpecies !== species.name) {
@@ -508,7 +559,10 @@ export class DexSpecies {
 			species.canHatch = species.canHatch ||
 				(!['Ditto', 'Undiscovered'].includes(species.eggGroups[0]) && !species.prevo && species.name !== 'Manaphy');
 			if (this.dex.gen === 1) species.bst -= species.baseStats.spd;
-			if (this.dex.gen < 5) delete species.abilities['H'];
+			if (this.dex.gen < 5) {
+				species.abilities = this.dex.deepClone(species.abilities);
+				delete species.abilities['H'];
+			}
 			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
 		} else {
 			species = new Species({
@@ -516,22 +570,167 @@ export class DexSpecies {
 				exists: false, tier: 'Illegal', doublesTier: 'Illegal', natDexTier: 'Illegal', isNonstandard: 'Custom',
 			});
 		}
-		if (species.exists) this.speciesCache.set(id, species);
+		if (species.exists) this.speciesCache.set(id, this.dex.deepFreeze(species));
 		return species;
 	}
 
-	getLearnset(id: ID): Learnset['learnset'] {
-		return this.getLearnsetData(id).learnset;
+	/**
+	 * @param id the ID of the species the move pool belongs to
+	 * @param isNatDex
+	 * @returns a Set of IDs of the full valid movepool of the given species for the current generation/mod.
+	 * Note that inter-move incompatibilities, such as those from exclusive events, are not considered and all moves are
+	 * lumped together. However, Necturna and Necturine's Sketchable moves are omitted from this pool, as their fundamental
+	 * incompatibility with each other is essential to the nature of those species.
+	 */
+	getMovePool(id: ID, isNatDex = false): Set<ID> {
+		let eggMovesOnly = false;
+		let maxGen = this.dex.gen;
+		const gen3HMMoves = ['cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive'];
+		const gen4HMMoves = ['cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb'];
+		const movePool = new Set<ID>();
+		for (const {species, learnset} of this.getFullLearnset(id)) {
+			if (!eggMovesOnly) eggMovesOnly = this.eggMovesOnly(species, this.get(id));
+			for (const moveid in learnset) {
+				if (species.isNonstandard !== 'CAP') {
+					if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5) {
+						if (!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 5 &&
+							parseInt(source.charAt(0)) <= this.dex.gen)) continue;
+					} else if (gen3HMMoves.includes(moveid) && this.dex.gen >= 4 &&
+						!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 4 &&
+						parseInt(source.charAt(0)) <= this.dex.gen)) {
+						continue;
+					}
+				}
+				if (eggMovesOnly) {
+					if (learnset[moveid].some(source => source.startsWith('9E'))) {
+						movePool.add(moveid as ID);
+					}
+				} else if (maxGen >= 9) {
+					// Pokemon Home now strips learnsets on withdrawal
+					if (isNatDex || learnset[moveid].some(source => source.startsWith('9'))) {
+						movePool.add(moveid as ID);
+					}
+				} else {
+					if (learnset[moveid].some(source => parseInt(source.charAt(0)) <= maxGen)) {
+						movePool.add(moveid as ID);
+					}
+				}
+				if (moveid === 'sketch' && movePool.has('sketch' as ID)) {
+					if (species.isNonstandard === 'CAP') {
+						// Given what this function is generally used for, adding all sketchable moves to Necturna and Necturine's
+						// movepools would be undesirable as it would be impossible to tell sketched moves apart from normal ones
+						// so any code calling this one will need to get and handle those moves separately themselves
+						continue;
+					}
+					// Smeargle time
+					// A few moves like Dark Void were made unSketchable in a generation later than when they were introduced
+					// However, this has only happened in a gen where transfer moves are unavailable
+					const sketchables = this.dex.moves.all().filter(m => !m.flags['nosketch'] && !m.isNonstandard);
+					for (const move of sketchables) {
+						movePool.add(move.id);
+					}
+					// Smeargle has some event moves; they're all sketchable, so let's just skip them
+					break;
+				}
+			}
+			if (species.evoRegion) {
+				// species can only evolve in this gen, so prevo can't have any moves
+				// from after that gen
+				if (this.dex.gen >= 9) eggMovesOnly = true;
+				if (this.dex.gen === 8 && species.evoRegion === 'Alola') maxGen = 7;
+			}
+		}
+		return movePool;
 	}
 
+	getFullLearnset(id: ID): (Learnset & {learnset: NonNullable<Learnset['learnset']>})[] {
+		const originalSpecies = this.get(id);
+		let species: Species | null = originalSpecies;
+		const out: (Learnset & {learnset: NonNullable<Learnset['learnset']>})[] = [];
+		const alreadyChecked: {[k: string]: boolean} = {};
+
+		while (species?.name && !alreadyChecked[species.id]) {
+			alreadyChecked[species.id] = true;
+			const learnset = this.getLearnsetData(species.id);
+			if (learnset.learnset) {
+				out.push(learnset as any);
+				species = this.learnsetParent(species, true);
+				continue;
+			}
+
+			// no learnset
+			if ((species.changesFrom || species.baseSpecies) !== species.name) {
+				// forme without its own learnset
+				species = this.get(species.changesFrom || species.baseSpecies);
+				// warning: formes with their own learnset, like Wormadam, should NOT
+				// inherit from their base forme unless they're freely switchable
+				continue;
+			}
+			if (species.isNonstandard) {
+				// It's normal for a nonstandard species not to have learnset data
+
+				// Formats should replace the `Obtainable Moves` rule if they want to
+				// allow pokemon without learnsets.
+				return out;
+			}
+			if (species.prevo && this.getLearnsetData(toID(species.prevo)).learnset) {
+				species = this.get(toID(species.prevo));
+				continue;
+			}
+
+			// should never happen
+			throw new Error(`Species with no learnset data: ${species.id}`);
+		}
+
+		return out;
+	}
+
+	learnsetParent(species: Species, checkingMoves = false) {
+		// Own Tempo Rockruff and Battle Bond Greninja are special event formes
+		// that are visually indistinguishable from their base forme but have
+		// different learnsets. To prevent a leak, we make them show up as their
+		// base forme, but hardcode their learnsets into Rockruff-Dusk and
+		// Greninja-Ash
+		if (['Gastrodon', 'Pumpkaboo', 'Sinistea', 'Tatsugiri'].includes(species.baseSpecies) && species.forme) {
+			return this.get(species.baseSpecies);
+		} else if (species.name === 'Lycanroc-Dusk') {
+			return this.get('Rockruff-Dusk');
+		} else if (species.prevo) {
+			// there used to be a check for Hidden Ability here, but apparently it's unnecessary
+			// Shed Skin Pupitar can definitely evolve into Unnerve Tyranitar
+			species = this.get(species.prevo);
+			if (species.gen > Math.max(2, this.dex.gen)) return null;
+			return species;
+		} else if (species.changesFrom && species.baseSpecies !== 'Kyurem') {
+			// For Pokemon like Rotom and Necrozma whose movesets are extensions are their base formes
+			return this.get(species.changesFrom);
+		} else if (
+			checkingMoves && !species.prevo && species.baseSpecies && this.get(species.baseSpecies).prevo
+		) {
+			// For Pokemon like Cap Pikachu, who should be able to have egg moves in Gen 9
+			let baseEvo = this.get(species.baseSpecies);
+			while (baseEvo.prevo) {
+				baseEvo = this.get(baseEvo.prevo);
+			}
+			return baseEvo;
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the raw learnset data for the species.
+	 *
+	 * In practice, if you're trying to figure out what moves a pokemon learns,
+	 * you probably want to `getFullLearnset` or `getMovePool` instead.
+	 */
 	getLearnsetData(id: ID): Learnset {
 		let learnsetData = this.learnsetCache.get(id);
 		if (learnsetData) return learnsetData;
 		if (!this.dex.data.Learnsets.hasOwnProperty(id)) {
-			return new Learnset({exists: false});
+			return new Learnset({exists: false}, this.get(id));
 		}
-		learnsetData = new Learnset(this.dex.data.Learnsets[id]);
-		this.learnsetCache.set(id, learnsetData);
+		learnsetData = new Learnset(this.dex.data.Learnsets[id], this.get(id));
+		this.learnsetCache.set(id, this.dex.deepFreeze(learnsetData));
 		return learnsetData;
 	}
 
@@ -545,7 +744,16 @@ export class DexSpecies {
 		for (const id in this.dex.data.Pokedex) {
 			species.push(this.getByID(id as ID));
 		}
-		this.allCache = species;
+		this.allCache = Object.freeze(species);
 		return this.allCache;
+	}
+
+	eggMovesOnly(child: Species, father: Species | null) {
+		if (child.baseSpecies === father?.baseSpecies) return false;
+		while (father) {
+			if (father.name === child.name) return false;
+			father = this.learnsetParent(father);
+		}
+		return true;
 	}
 }

@@ -98,4 +98,21 @@ describe('Rage Fist', function () {
 		battle.makeChoices('move pollenpuff -2, move bellydrum', 'auto');
 		assert.equal(annihilape.timesAttacked, 0, `timesAttacked should not have incremented after a not-full HP Pollen Puff`);
 	});
+
+	it(`should increase BP when hit by Dragon Darts`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Primeape', moves: ['sleeptalk', 'ragefist']},
+			{species: 'Wynaut', moves: ['sleeptalk', 'allyswitch']},
+		], [
+			{species: 'Dreepy', moves: ['dragondarts']},
+			{species: 'Pichu', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('auto', 'move dragondarts 1, move sleeptalk');
+		const primeape = battle.p1.active[1];
+		assert.equal(primeape.timesAttacked, 1, `timesAttacked should have been increased by Dragon Darts targeting the left slot`);
+
+		battle.makeChoices('move sleeptalk, move allyswitch', 'move dragondarts 1, move sleeptalk');
+		assert.equal(primeape.timesAttacked, 2, `timesAttacked should have been increased by Dragon Darts targeting the right slot`);
+	});
 });

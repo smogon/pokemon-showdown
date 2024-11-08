@@ -92,7 +92,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.queue.addChoice({choice: 'start'});
 		this.midTurn = true;
-		if (!this.requestState) this.go();
+		if (!this.requestState) this.turnLoop();
 	},
 	runAction(action) {
 		const pokemonOriginalHP = action.pokemon?.hp;
@@ -175,8 +175,10 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			this.actions.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
-				action.zmove, undefined, action.maxMove, action.originalTarget);
+			this.actions.runMove(action.move, action.pokemon, action.targetLoc, {
+				sourceEffect: action.sourceEffect, zMove: action.zmove,
+				maxMove: action.maxMove, originalTarget: action.originalTarget,
+			});
 			break;
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
@@ -433,6 +435,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
 				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 			}
+			if (pokemon.illusion?.species.baseSpecies === 'Terapagos') {
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
+			}
 
 			let type = pokemon.teraType;
 			if (pokemon.species.baseSpecies !== 'Ogerpon' && pokemon.getItem().name.endsWith('Mask')) {
@@ -464,9 +469,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
-			if (pokemon.species.baseSpecies === 'Ogerpon') {
-				const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
-				pokemon.formeChange(pokemon.species.id + tera, pokemon.getItem(), true);
+			if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
+				pokemon.formeChange('Terapagos-Stellar', null, true);
 			}
 			this.battle.runEvent('AfterTerastallization', pokemon);
 		},

@@ -24,8 +24,27 @@ describe('Ice Face', function () {
 		assert.hurts(eiscue, () => battle.makeChoices());
 	});
 
-	it(`should not trigger if the Pokemon was KOed`, function () {
-		// TODO: Make compatible with gen 9
+	it(`should not work while Transformed`, function () {
+		battle = common.createBattle([[
+			{species: 'Eiscue', ability: 'iceface', moves: ['transform']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk', 'aerialace', 'hail']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move aerialace', 'move aerialace');
+		const transformedEiscue = battle.p1.active[0];
+		assert.species(transformedEiscue, 'Eiscue', `Transformed Eiscue should not have changed to Eiscue-Noice after taking physical damage`);
+		assert.false.fullHP(transformedEiscue);
+
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('move transform', 'auto');
+		battle.makeChoices('move hail', 'auto');
+		assert.species(transformedEiscue, 'Eiscue-Noice', `Transformed Eiscue should not have changed to Eiscue after hail was set`);
+	});
+
+	it(`should not trigger if the Pokemon was KOed by Max Hailstorm`, function () {
 		battle = common.gen(8).createBattle([[
 			{species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk']},
 		], [

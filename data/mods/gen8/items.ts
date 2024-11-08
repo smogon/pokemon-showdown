@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	adamantcrystal: {
 		inherit: true,
 		isNonstandard: "Future",
@@ -128,14 +128,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		isNonstandard: null,
 	},
 	fullincense: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	galaricacuff: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	galaricawreath: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -282,10 +274,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	safariball: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	seaincense: {
 		inherit: true,
 		isNonstandard: null,
@@ -298,10 +286,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	souldew: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	splashplate: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -309,10 +293,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	spookyplate: {
 		inherit: true,
 		isNonstandard: "Past",
-	},
-	sportball: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	starsweet: {
 		inherit: true,

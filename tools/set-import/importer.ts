@@ -46,7 +46,7 @@ export const TIERS = new Set([
 	// UGH
 	'battlestadiumsinglesseries2', 'battlestadiumsinglesregulationc',
 	//
-	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', '1v1',
+	'vgc2016', 'vgc2017', 'vgc2018', 'vgc2019ultraseries', 'vgc2020', 'vgc2023regulatione', 'vgc', '1v1',
 	'anythinggoes', 'nationaldexag', 'almostanyability', 'balancedhackmons',
 	'letsgoou', 'monotype', 'purehackmons', 'nationaldexmonotype',
 ]);
@@ -55,7 +55,7 @@ const VALIDATORS = new Map<ID, TeamValidator>();
 for (let gen = 1; gen <= 9; gen++) {
 	for (const tier of TIERS) {
 		const format = Dex.formats.get(`gen${gen}${tier}`);
-		if (format.exists) {
+		if (format.effectType === 'Format') {
 			FORMATS.set(format.id, {gen: gen as GenerationNum, format});
 			VALIDATORS.set(format.id, new TeamValidator(format));
 		}
@@ -402,6 +402,7 @@ const SMOGON = {
 	vgc17: 'vgc2017',
 	vgc18: 'vgc2018',
 	vgc19: 'vgc2019ultraseries',
+	vgc24regulatione: 'vgc2023regulatione',
 	// bssseries1: 'battlestadiumsinglesseries1', // ?
 	bssseries2: 'battlestadiumsinglesseries2',
 } as unknown as {[id: string]: ID};

@@ -2,7 +2,7 @@
  * Other Metagames chat plugin
  * Lets users see elements of Pokemon in various Other Metagames.
  * Originally by Spandan.
- * @author Kris
+ * @author dhelmise
 */
 
 import {Utils} from '../../lib';
@@ -14,7 +14,7 @@ interface StoneDeltas {
 	type?: string;
 }
 
-type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'NFE' | 'LC';
+type TierShiftTiers = 'UU' | 'RUBL' | 'RU' | 'NUBL' | 'NU' | 'PUBL' | 'PU' | 'ZUBL' | 'ZU' | 'NFE' | 'LC';
 
 function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 	let dex = Dex;
@@ -70,11 +70,11 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (target === 'month') this.target = 'omofthemonth';
-		this.run('formathelp');
+		return this.run('formathelp');
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
-		`!om - Show everyone that information. Requires: + % @ # &`,
+		`!om - Show everyone that information. Requires: + % @ # ~`,
 	],
 
 	mnm: 'mixandmega',
@@ -91,7 +91,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				throw new Chat.ErrorMessage(`A mod by the name of '${mod.trim()}' does not exist.`);
 			}
-			if (dex === Dex.dexes['ssb']) {
+			if (dex === Dex.dexes['gen9ssb']) {
 				throw new Chat.ErrorMessage(`The SSB mod supports custom elements for Mega Stones that have the capability of crashing the server.`);
 			}
 		}
@@ -208,7 +208,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				throw new Chat.ErrorMessage(`A mod by the name of '${sep[1].trim()}' does not exist.`);
 			}
-			if (dex === Dex.dexes['ssb']) {
+			if (dex === Dex.dexes['gen9ssb']) {
 				throw new Chat.ErrorMessage(`The SSB mod supports custom elements for Mega Stones that have the capability of crashing the server.`);
 			}
 		}
@@ -407,6 +407,8 @@ export const commands: Chat.ChatCommands = {
 			NU: 25,
 			PUBL: 25,
 			PU: 30,
+			ZUBL: 30,
+			ZU: 30,
 			NFE: 30,
 			LC: 30,
 		};
@@ -813,7 +815,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	reevo: 'showevo',
-	showevo(target, user, room, connection, cmd) {
+	showevo(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		const targetid = toID(target);
 		const isReEvo = cmd === 'reevo';
@@ -823,34 +825,36 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon ${target} not found.`);
 		}
 		if (!evo.prevo) {
-			const evoBaseSpecies = Dex.species.get(evo.baseSpecies);
+			const evoBaseSpecies = Dex.species.get(
+				(Array.isArray(evo.battleOnly) ? evo.battleOnly[0] : evo.battleOnly) || evo.changesFrom || evo.name
+			);
 			if (!evoBaseSpecies.prevo) throw new Chat.ErrorMessage(`Error: ${evoBaseSpecies.name} is not an evolution.`);
 			const prevoSpecies = Dex.species.get(evoBaseSpecies.prevo);
 			const deltas = Utils.deepClone(evo);
-		    if (!isReEvo) {
-			    deltas.tier = 'CE';
-			    deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
-			    deltas.types = [];
-			    if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
-			    if (evo.types[1] !== prevoSpecies.types[1]) {
-				    deltas.types[1] = evo.types[1] || evo.types[0];
-			    }
-			    if (deltas.types.length) {
+			if (!isReEvo) {
+				deltas.tier = 'CE';
+				deltas.weightkg = evo.weightkg - prevoSpecies.weightkg;
+				deltas.types = [];
+				if (evo.types[0] !== prevoSpecies.types[0]) deltas.types[0] = evo.types[0];
+				if (evo.types[1] !== prevoSpecies.types[1]) {
+					deltas.types[1] = evo.types[1] || evo.types[0];
+				}
+				if (deltas.types.length) {
 					// Undefined type remover
-				    deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
+					deltas.types = deltas.types.filter((type: string | undefined) => type !== undefined);
 
 					if (deltas.types[0] === deltas.types[1]) deltas.types = [deltas.types[0]];
-			    } else {
+				} else {
 					deltas.types = null;
-			    }
-		    }
-		    deltas.bst = 0;
-		    let i: StatID;
-		    for (i in evo.baseStats) {
+				}
+			}
+			deltas.bst = 0;
+			let i: StatID;
+			for (i in evo.baseStats) {
 				const statChange = evoBaseSpecies.baseStats[i] - prevoSpecies.baseStats[i];
 				const formeChange = evo.baseStats[i] - evoBaseSpecies.baseStats[i];
 				if (!isReEvo) {
-			    if (!evo.prevo) {
+					if (!evo.prevo) {
 						deltas.baseStats[i] = formeChange;
 					} else {
 						deltas.baseStats[i] = statChange;
@@ -917,5 +921,25 @@ export const commands: Chat.ChatCommands = {
 	],
 	showevohelp: [
 		`/showevo <Pok\u00e9mon> - Shows the changes that a Pok\u00e9mon applies in Cross Evolution`,
+	],
+
+	pokemove(target, room, user) {
+		if (!this.runBroadcast()) return;
+		const species = Dex.species.get(target);
+		if (!species.exists) return this.parse('/help pokemove');
+		const move = Utils.deepClone(Dex.moves.get('tackle'));
+		move.name = species.name;
+		move.type = species.types[0];
+		move.flags = {protect: 1};
+		move.basePower = Math.max(species.baseStats['atk'], species.baseStats['spa']);
+		move.pp = 5;
+		move.gen = species.gen;
+		move.num = species.num;
+		move.desc = move.shortDesc = `Gives ${species.abilities['0']} as a second ability after use.`;
+		move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
+		this.sendReply(`|raw|${Chat.getDataMoveHTML(move)}`);
+	},
+	pokemovehelp: [
+		`/pokemove <Pok\u00e9mon> - Shows the Pokemove data for <Pok\u00e9mon>.`,
 	],
 };

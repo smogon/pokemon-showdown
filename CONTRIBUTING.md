@@ -128,14 +128,14 @@ BAD:
 
 ```ts
 // if ten seconds have passed and the user is staff
-if (now > then + 10_000 && '&@%'.includes(user.tempGroup)) {
+if (now > then + 10_000 && '~@%'.includes(user.tempGroup)) {
 ```
 
 GOOD:
 
 ```ts
 const tenSecondsPassed = now > then + 10_000;
-const userIsStaff = '&@%'.includes(user.tempGroup);
+const userIsStaff = '~@%'.includes(user.tempGroup);
 if (tenSecondsPassed && userIsStaff) {
 ```
 

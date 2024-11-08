@@ -200,4 +200,17 @@ describe('Team Validator', function () {
 		];
 		assert.false.legalTeam(team, 'gen8ou');
 	});
+
+	it('should check for legal combinations of prevo/evo-exclusive moves', function () {
+		let team = [
+			{species: 'slowking', ability: 'oblivious', moves: ['counter', 'slackoff'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen7ou');
+
+		team = [
+			{species: 'incineroar', ability: 'blaze', moves: ['knockoff', 'partingshot'], evs: {hp: 1}},
+			{species: 'shelloseast', ability: 'stickyhold', moves: ['infestation', 'stringshot'], evs: {hp: 1}},
+		];
+		assert.legalTeam(team, 'gen8ou');
+	});
 });

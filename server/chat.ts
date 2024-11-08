@@ -30,6 +30,7 @@ import {FriendsDatabase, PM} from './friends';
 import {SQL, Repl, FS, Utils} from '../lib';
 import * as Artemis from './artemis';
 import {Dex} from '../sim';
+import {PrivateMessages} from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 
@@ -85,6 +86,9 @@ interface Handlers {
 	onRename: (user: User, oldID: ID, newID: ID) => void;
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
+	onMessageOffline: (context: Chat.CommandContext, message: string, targetUserID: ID) => void;
+	onBattleJoin: (slot: string, user: User, battle: RoomBattle) => void;
+	onPunishUser: (type: string, user: User, room?: Room | null) => void;
 }
 
 export interface ChatPlugin {
@@ -287,19 +291,19 @@ export abstract class MessageContext {
 	 * for the format/mod, or the default dex if none was found), and
 	 * `targets` (the rest of the array).
 	 */
-	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
+	splitFormat(target: string | string[], atLeastOneTarget?: boolean, allowRules?: boolean) {
 		const targets = typeof target === 'string' ? target.split(',') : target;
 		if (!targets[0].trim()) targets.pop();
 
 		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
-			const {dex, format, isMatch} = this.extractFormat(targets[0].trim());
+			const {dex, format, isMatch} = this.extractFormat(targets[0].trim(), allowRules);
 			if (isMatch) {
 				targets.shift();
 				return {dex, format, targets};
 			}
 		}
 		if (targets.length > 1) {
-			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim());
+			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim(), allowRules);
 			if (isMatch) {
 				targets.pop();
 				return {dex, format, targets};
@@ -307,21 +311,21 @@ export abstract class MessageContext {
 		}
 
 		const room = (this as any as CommandContext).room;
-		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
 		return {dex, format, targets};
 	}
-	extractFormat(formatOrMod?: string): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
+	extractFormat(formatOrMod?: string, allowRules?: boolean): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
 		if (!formatOrMod) {
 			return {dex: Dex.includeData(), format: null, isMatch: false};
 		}
 
 		const format = Dex.formats.get(formatOrMod);
-		if (format.exists) {
+		if (format.effectType === 'Format' || allowRules && format.effectType === 'Rule') {
 			return {dex: Dex.forFormat(format), format: format, isMatch: true};
 		}
 
 		if (toID(formatOrMod) in Dex.dexes) {
-			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
+			return {dex: Dex.mod(toID(formatOrMod)), format: null, isMatch: true};
 		}
 
 		return this.extractFormat();
@@ -599,7 +603,8 @@ export class CommandContext extends MessageContext {
 			if (this.handler) {
 				if (this.handler.disabled) {
 					throw new Chat.ErrorMessage(
-						`The command /${this.cmd} is temporarily unavailable due to technical difficulties. Please try again in a few hours.`
+						`The command /${this.fullCmd.trim()} is temporarily unavailable due to technical difficulties. ` +
+						`Please try again in a few hours.`
 					);
 				}
 				message = this.run(this.handler);
@@ -689,12 +694,10 @@ export class CommandContext extends MessageContext {
 					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
 				}
 			}
-			Chat.sendPM(message, this.user, this.pmTarget);
+			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
-			if (this.room.game && this.room.game.onLogMessage) {
-				this.room.game.onLogMessage(message, this.user);
-			}
+			this.room.game?.onLogMessage?.(message, this.user);
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
 		}
@@ -777,13 +780,12 @@ export class CommandContext extends MessageContext {
 		}
 		if (!message) return true;
 		if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
-			throw new Chat.ErrorMessage(`Your username, status, or message contained a word banned by this room.`);
+			throw new Chat.ErrorMessage(`Your message contained a word banned by this room.`);
 		}
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
 	checkGameFilter() {
-		if (!this.room?.game || !this.room.game.onChatMessage) return;
-		return this.room.game.onChatMessage(this.message, this.user);
+		return this.room?.game?.onChatMessage?.(this.message, this.user);
 	}
 	pmTransform(originalMessage: string, sender?: User, receiver?: User | null | string) {
 		if (!sender) {
@@ -1146,9 +1148,13 @@ export class CommandContext extends MessageContext {
 				}
 				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
-						throw new Chat.ErrorMessage(
-							this.tr`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
+						this.errorReply(
+							this.tr`Moderated chat is set. To speak in this room, your account must be autoconfirmed, which means being registered for at least one week and winning at least one rated game (any game started through the 'Battle!' button).`
 						);
+						if (!user.registered) {
+							this.sendReply(this.tr`|html|You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`);
+						}
+						throw new Chat.Interruption();
 					}
 					if (room.settings.modchat === 'trusted') {
 						throw new Chat.ErrorMessage(
@@ -1240,8 +1246,6 @@ export class CommandContext extends MessageContext {
 
 		this.checkSlowchat(room, user);
 
-		if (!user.can('bypassall')) this.checkBanwords(room, user.name);
-		if (user.userMessage && !user.can('bypassall')) this.checkBanwords(room, user.userMessage);
 		if (room && !user.can('mute', null, room)) this.checkBanwords(room, message);
 
 		const gameFilter = this.checkGameFilter();
@@ -1538,6 +1542,7 @@ export const Chat = new class {
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
 	readonly Friends = new FriendsDatabase();
 	readonly PM = PM;
+	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
 
@@ -1799,7 +1804,7 @@ export const Chat = new class {
 	 */
 	database = SQL(module, {
 		file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH,
-		processes: global.Config?.chatdbprocesses || 1,
+		processes: global.Config?.chatdbprocesses,
 	});
 	databaseReadyPromise: Promise<void> | null = null;
 
@@ -1807,7 +1812,7 @@ export const Chat = new class {
 		// PLEASE NEVER ACTUALLY ADD MIGRATIONS
 		// things break in weird ways that are hard to reason about, probably because of subprocesses
 		// it WILL crash and it WILL make your life and that of your users extremely unpleasant until it is fixed
-		if (!PM.isParentProcess) return; // We don't need a database in a subprocess that requires Chat.
+		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
 		const {hasDBInfo} = await this.database.get(
@@ -1837,7 +1842,10 @@ export const Chat = new class {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
-		Chat.destroyHandlers.push(() => void Chat.database?.destroy());
+		Chat.destroyHandlers.push(
+			() => void Chat.database?.destroy(),
+			() => Chat.PrivateMessages.destroy(),
+		);
 	}
 
 	readonly MessageContext = MessageContext;
@@ -1914,14 +1922,6 @@ export const Chat = new class {
 		);
 
 		Monitor.slow(logMessage);
-	}
-	sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
-		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
-		if (onlyRecipient) return onlyRecipient.send(buf);
-		user.send(buf);
-		if (pmTarget !== user) pmTarget.send(buf);
-		pmTarget.lastPM = user.id;
-		user.lastPM = pmTarget.id;
 	}
 
 	packageData: AnyObject = {};
@@ -2578,7 +2578,7 @@ export const Chat = new class {
 	 * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
 	 */
 	maybeNotifyBlocked(blocked: 'pm' | 'challenge' | 'invite', targetUser: User, user: User) {
-		const prefix = `|pm|&|${targetUser.getIdentity()}|/nonotify `;
+		const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
 			if (!targetUser.notified.blockPMs) {
@@ -2597,6 +2597,7 @@ export const Chat = new class {
 			}
 		}
 	}
+
 	readonly formatText = formatText;
 	readonly linkRegex = linkRegex;
 	readonly stripFormatting = stripFormatting;
@@ -2629,6 +2630,7 @@ export const Chat = new class {
 // they're just there so forks have time to slowly transition
 (Chat as any).escapeHTML = Utils.escapeHTML;
 (Chat as any).splitFirst = Utils.splitFirst;
+(Chat as any).sendPM = Chat.PrivateMessages.send.bind(Chat.PrivateMessages);
 (CommandContext.prototype as any).can = CommandContext.prototype.checkCan;
 (CommandContext.prototype as any).canTalk = CommandContext.prototype.checkChat;
 (CommandContext.prototype as any).canBroadcast = CommandContext.prototype.checkBroadcast;
