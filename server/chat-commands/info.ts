@@ -822,7 +822,7 @@ export const commands: Chat.ChatCommands = {
 						allAdjacentFoes: "All Adjacent Opponents",
 						foeSide: "Opposing Side",
 						allySide: "User's Side",
-						allyTeam: "User's Side",
+						allyTeam: "User's Team",
 						allAdjacent: "All Adjacent Pok\u00e9mon",
 						any: "Any Pok\u00e9mon",
 						all: "All Pok\u00e9mon",
