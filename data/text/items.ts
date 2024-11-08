@@ -2270,8 +2270,11 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	utilityumbrella: {
 		name: "Utility Umbrella",
-		desc: "The holder ignores rain- and sun-based effects. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
+		desc: "The holder ignores rain- and sun-based effects, including those of its Ability unless it is Orichalcum Pulse or Protosynthesis. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
 		shortDesc: "The holder ignores rain- and sun-based effects.",
+		gen8: {
+			desc: "The holder ignores rain- and sun-based effects, including those of its Ability. Damage and accuracy calculations from attacks used by the holder are affected by rain and sun, but not attacks used against the holder.",
+		},
 	},
 	venusaurite: {
 		name: "Venusaurite",
