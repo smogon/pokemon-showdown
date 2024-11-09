@@ -129,9 +129,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['knockoff', 'rapidspin', 'toxic'];
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// General incompatibilities
 		const incompatiblePairs = [
