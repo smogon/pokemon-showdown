@@ -103,6 +103,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			Steel: (movePool, moves, abilities, types, counter, species) => (!counter.get('Steel') && species.baseStats.atk >= 100),
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water'),
 		};
+		this.cachedStatusMoves = this.dex.moves.all()
+			.filter(move => move.category === 'Status')
+			.map(move => move.id);
 	}
 
 	cullMovePool(
@@ -196,9 +199,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['defog', 'dragontail', 'haze', 'healbell', 'nuzzle', 'pursuit', 'rapidspin', 'toxic'];
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// General incompatibilities
 		const incompatiblePairs = [
@@ -715,8 +716,14 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		}
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
-			(ability === 'Rough Skin') || (species.id !== 'hooh' &&
-			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
+			(ability === 'Rough Skin') || (
+				species.id !== 'hooh' &&
+				ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2)
+			) || (
+				ability !== 'Regenerator' && !counter.get('setup') && counter.get('recovery') &&
+				this.dex.getEffectiveness('Fighting', species) < 1 &&
+				(species.baseStats.hp + species.baseStats.def) > 200 && this.randomChance(1, 2)
+			)
 		) return 'Rocky Helmet';
 		if (['kingsshield', 'protect', 'spikyshield', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (

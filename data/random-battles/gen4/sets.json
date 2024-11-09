@@ -201,7 +201,7 @@
         ]
     },
     "wigglytuff": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Fast Support",
@@ -837,7 +837,7 @@
         ]
     },
     "aerodactyl": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1027,7 +1027,7 @@
         ]
     },
     "ariados": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1188,13 +1188,13 @@
         "level": 85,
         "sets": [
             {
-                "role": "Staller",
-                "movepool": ["healbell", "moonlight", "payback", "toxic"],
+                "role": "Bulky Support",
+                "movepool": ["curse", "healbell", "moonlight", "payback", "toxic"],
                 "abilities": ["Synchronize"]
             },
             {
-                "role": "Bulky Support",
-                "movepool": ["curse", "payback", "protect", "toxic", "wish"],
+                "role": "Staller",
+                "movepool": ["payback", "protect", "toxic", "wish"],
                 "abilities": ["Synchronize"]
             }
         ]
@@ -1308,7 +1308,7 @@
         ]
     },
     "scizor": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1860,7 +1860,7 @@
         ]
     },
     "slaking": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1997,7 +1997,7 @@
         ]
     },
     "plusle": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2458,7 +2458,7 @@
         ]
     },
     "relicanth": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2726,7 +2726,7 @@
         ]
     },
     "infernape": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2880,7 +2880,7 @@
         ]
     },
     "wormadamtrash": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Staller",
@@ -2936,7 +2936,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aquajet", "bulkup", "icepunch", "return", "substitute", "waterfall"],
+                "movepool": ["bulkup", "icepunch", "return", "substitute", "waterfall"],
                 "abilities": ["Swift Swim"]
             }
         ]
@@ -2962,7 +2962,7 @@
         ]
     },
     "ambipom": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3455,7 +3455,7 @@
         ]
     },
     "rotomwash": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3709,7 +3709,7 @@
         ]
     },
     "shayminsky": {
-        "level": 71,
+        "level": 70,
         "sets": [
             {
                 "role": "Fast Attacker",

@@ -129,9 +129,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['knockoff', 'rapidspin', 'toxic'];
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// General incompatibilities
 		const incompatiblePairs = [
@@ -662,6 +660,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
+
+			// Prevent Shedinja from generating after Tyranitar
+			if (species.name === 'Shedinja' && teamDetails.sand) continue;
 
 			// Limit to one Wobbuffet per battle (not just per team)
 			if (species.name === 'Wobbuffet' && this.battleHasWobbuffet) continue;

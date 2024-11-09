@@ -1957,6 +1957,10 @@ export class BattleActions {
 			pokemon.maxhp = newMaxHP;
 			this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		}
+		if (pokemon.species.baseSpecies === 'Morpeko') {
+			pokemon.baseSpecies = pokemon.species;
+			pokemon.details = pokemon.details.replace('Morpeko', pokemon.species.name);
+		}
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
 

@@ -59,4 +59,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Water 1"],
 		gen: 1,
 	},
+	probosicle: {
+		num: 2005,
+		name: "Probosicle",
+		types: ["Bug", "Ice"],
+		baseStats: {hp: 48, atk: 120, def: 100, spa: 63, spd: 63, spe: 105},
+		abilities: {0: "No Ability"},
+		heightm: 1.6,
+		weightkg: 210,
+		color: "Blue",
+		eggGroups: ["Bug"],
+		gen: 1,
+	},
 };

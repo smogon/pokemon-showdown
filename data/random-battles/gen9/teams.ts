@@ -137,7 +137,7 @@ const DOUBLES_NO_LEAD_POKEMON = [
 ];
 
 const DEFENSIVE_TERA_BLAST_USERS = [
-	'alcremie', 'bellossom', 'comfey', 'fezandipiti', 'florges',
+	'alcremie', 'bellossom', 'comfey', 'fezandipiti', 'florges', 'raikou',
 ];
 
 function sereneGraceBenefits(move: Move) {
@@ -145,7 +145,7 @@ function sereneGraceBenefits(move: Move) {
 }
 
 export class RandomTeams {
-	dex: ModdedDex;
+	readonly dex: ModdedDex;
 	gen: number;
 	factoryTier: string;
 	format: Format;
@@ -163,6 +163,12 @@ export class RandomTeams {
 	 * returns true to try to force the move type, false otherwise.
 	 */
 	moveEnforcementCheckers: {[k: string]: MoveEnforcementChecker};
+
+	/** Used by .getPools() */
+	private poolsCacheKey: [string | undefined, number | undefined, RuleTable | undefined, boolean] | undefined;
+	private cachedPool: number[] | undefined;
+	private cachedSpeciesPool: Species[] | undefined;
+	protected cachedStatusMoves: ID[];
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.formats.get(format);
@@ -222,6 +228,7 @@ export class RandomTeams {
 			},
 			Psychic: (movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles) => {
 				if ((isDoubles || species.id === 'bruxish') && movePool.includes('psychicfangs')) return true;
+				if (species.id === 'hoopaunbound' && movePool.includes('psychic')) return true;
 				if (['Dark', 'Steel', 'Water'].some(m => types.includes(m))) return false;
 				return !counter.get('Psychic');
 			},
@@ -232,6 +239,10 @@ export class RandomTeams {
 			),
 			Water: (movePool, moves, abilities, types, counter) => (!counter.get('Water') && !types.includes('Ground')),
 		};
+		this.poolsCacheKey = undefined;
+		this.cachedPool = undefined;
+		this.cachedSpeciesPool = undefined;
+		this.cachedStatusMoves = this.dex.moves.all().filter(move => move.category === 'Status').map(move => move.id);
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
@@ -475,9 +486,7 @@ export class RandomTeams {
 		}
 
 		// Develop additional move lists
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// Team-based move culls
 		if (teamDetails.screens) {
@@ -1262,7 +1271,7 @@ export class RandomTeams {
 		}
 		if (
 			(role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute') || moves.has('irondefense') ||
-			species.id === 'eternatus' || species.id === 'regigigas'
+			moves.has('coil') || species.id === 'eternatus' || species.id === 'regigigas'
 		) return 'Leftovers';
 		if (species.id === 'sylveon') return 'Pixie Plate';
 		if (ability === 'Intimidate' && this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
@@ -1496,7 +1505,7 @@ export class RandomTeams {
 		const srImmunity = ability === 'Magic Guard' || item === 'Heavy-Duty Boots';
 		let srWeakness = srImmunity ? 0 : this.dex.getEffectiveness('Rock', species);
 		// Crash damage move users want an odd HP to survive two misses
-		if (['axekick', 'highjumpkick', 'jumpkick'].some(m => moves.has(m))) srWeakness = 2;
+		if (['axekick', 'highjumpkick', 'jumpkick', 'supercellslam'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
 			if ((moves.has('substitute') && ['Sitrus Berry', 'Salac Berry'].includes(item)) || species.id === 'minior') {
@@ -1971,19 +1980,18 @@ export class RandomTeams {
 		return team;
 	}
 
-	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
-		// Picks `n` random pokemon--no repeats, even among formes
-		// Also need to either normalize for formes or select formes at random
-		// Unreleased are okay but no CAP
-		if (requiredType && !this.dex.types.get(requiredType).exists) {
-			throw new Error(`"${requiredType}" is not a valid type.`);
-		}
-
+	private getPools(requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
+		// Memoize pool and speciesPool because, at least during tests, they are constructed with the same parameters
+		// hundreds of times and are expensive to compute.
 		const isNotCustom = !ruleTable;
-
-		const pool: number[] = [];
+		let pool: number[] = [];
 		let speciesPool: Species[] = [];
-		if (isNotCustom) {
+		const ck = this.poolsCacheKey;
+		if (ck && this.cachedPool && this.cachedSpeciesPool &&
+			ck[0] === requiredType && ck[1] === minSourceGen && ck[2] === ruleTable && ck[3] === requireMoves) {
+			speciesPool = this.cachedSpeciesPool.slice();
+			pool = this.cachedPool.slice();
+		} else if (isNotCustom) {
 			speciesPool = [...this.dex.species.all()];
 			for (const species of speciesPool) {
 				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
@@ -1997,6 +2005,9 @@ export class RandomTeams {
 				if (num <= 0 || pool.includes(num)) continue;
 				pool.push(num);
 			}
+			this.poolsCacheKey = [requiredType, minSourceGen, ruleTable, requireMoves];
+			this.cachedPool = pool.slice();
+			this.cachedSpeciesPool = speciesPool.slice();
 		} else {
 			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 			const nonexistentBanReason = ruleTable.check('nonexistent');
@@ -2041,7 +2052,23 @@ export class RandomTeams {
 				if (pool.includes(num)) continue;
 				pool.push(num);
 			}
+			this.poolsCacheKey = [requiredType, minSourceGen, ruleTable, requireMoves];
+			this.cachedPool = pool.slice();
+			this.cachedSpeciesPool = speciesPool.slice();
 		}
+		return {pool, speciesPool};
+	}
+
+	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
+		// Picks `n` random pokemon--no repeats, even among formes
+		// Also need to either normalize for formes or select formes at random
+		// Unreleased are okay but no CAP
+		if (requiredType && !this.dex.types.get(requiredType).exists) {
+			throw new Error(`"${requiredType}" is not a valid type.`);
+		}
+
+		const {pool, speciesPool} = this.getPools(requiredType, minSourceGen, ruleTable, requireMoves);
+		const isNotCustom = !ruleTable;
 
 		const hasDexNumber: {[k: string]: number} = {};
 		for (let i = 0; i < n; i++) {

@@ -165,7 +165,7 @@ export class ModdedDex {
 
 	mod(mod: string | undefined): ModdedDex {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
-		return dexes[mod || 'base'];
+		return dexes[mod || 'base'].includeData();
 	}
 
 	forGen(gen: number) {
@@ -535,10 +535,7 @@ export class ModdedDex {
 						delete childTypedData[entryId].inherit;
 
 						// Merge parent into children entry, preserving existing childs' properties.
-						for (const key in parentTypedData[entryId]) {
-							if (key in childTypedData[entryId]) continue;
-							childTypedData[entryId][key] = parentTypedData[entryId][key];
-						}
+						childTypedData[entryId] = {...parentTypedData[entryId], ...childTypedData[entryId]};
 					}
 				}
 			}

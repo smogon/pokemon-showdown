@@ -291,19 +291,19 @@ export abstract class MessageContext {
 	 * for the format/mod, or the default dex if none was found), and
 	 * `targets` (the rest of the array).
 	 */
-	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
+	splitFormat(target: string | string[], atLeastOneTarget?: boolean, allowRules?: boolean) {
 		const targets = typeof target === 'string' ? target.split(',') : target;
 		if (!targets[0].trim()) targets.pop();
 
 		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
-			const {dex, format, isMatch} = this.extractFormat(targets[0].trim());
+			const {dex, format, isMatch} = this.extractFormat(targets[0].trim(), allowRules);
 			if (isMatch) {
 				targets.shift();
 				return {dex, format, targets};
 			}
 		}
 		if (targets.length > 1) {
-			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim());
+			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim(), allowRules);
 			if (isMatch) {
 				targets.pop();
 				return {dex, format, targets};
@@ -311,21 +311,21 @@ export abstract class MessageContext {
 		}
 
 		const room = (this as any as CommandContext).room;
-		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
 		return {dex, format, targets};
 	}
-	extractFormat(formatOrMod?: string): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
+	extractFormat(formatOrMod?: string, allowRules?: boolean): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
 		if (!formatOrMod) {
 			return {dex: Dex.includeData(), format: null, isMatch: false};
 		}
 
 		const format = Dex.formats.get(formatOrMod);
-		if (format.exists) {
+		if (format.effectType === 'Format' || allowRules && format.effectType === 'Rule') {
 			return {dex: Dex.forFormat(format), format: format, isMatch: true};
 		}
 
 		if (toID(formatOrMod) in Dex.dexes) {
-			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
+			return {dex: Dex.mod(toID(formatOrMod)), format: null, isMatch: true};
 		}
 
 		return this.extractFormat();
