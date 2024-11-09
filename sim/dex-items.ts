@@ -200,13 +200,15 @@ export class DexItems {
 				(item as any).isNonstandard = 'Future';
 			}
 			if (this.dex.parentMod) {
+				// If this item is exactly identical to parentMod's item, reuse parentMod's copy
 				const parent = this.dex.mod(this.dex.parentMod);
-				const parentItem = parent.items.getByID(id);
-				if (itemData === parent.data.Items[id] &&
-				    item.isNonstandard === parentItem.isNonstandard &&
-				    item.desc === parentItem.desc &&
-				    item.shortDesc === parentItem.shortDesc) {
-					item = parentItem;
+				if (itemData === parent.data.Items[id]) {
+					const parentItem = parent.items.getByID(id);
+					if (item.isNonstandard === parentItem.isNonstandard &&
+					    item.desc === parentItem.desc &&
+					    item.shortDesc === parentItem.shortDesc) {
+						item = parentItem;
+					}
 				}
 			}
 		} else {
