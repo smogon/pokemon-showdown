@@ -292,7 +292,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		const link = `https://www.smogon.com/tools/connect-ps-account/${user.id}/${name}`;
 		user.send(`|openpage|${link}`);
-		this.sendReply(`|html|If the page failed to open, you may link your Smogon and PS accounts by clcking <a href="${link}">this link.</a>`);
+		this.sendReply(`|html|If the page failed to open, you may link your Smogon and PS accounts by clicking <a href="${link}">this link</a>.`);
 	},
 
 	async msgroom(target, room, user, connection) {
