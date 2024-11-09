@@ -386,8 +386,8 @@ export class Learnset {
 		this.species = species;
 	}
 }
-// TODO: remove below comment before undrafting PR
-// I would keep this inside the function, but it saves ~100/2360 ms
+
+// I would keep this 'require' inside the function, but keeping it outside saves ~100/1540 ms
 const _assertDeepEqual = require('assert').deepStrictEqual;
 function deepStrictEqual(a: AnyObject, b: AnyObject) {
 	try {
@@ -577,9 +577,12 @@ export class DexSpecies {
 			if (this.dex.gen === 3 && this.dex.abilities.get(species.abilities['1']).gen === 4) delete species.abilities['1'];
 
 			if (this.dex.parentMod) {
+				// if this species is exactly identical to parentMod's species, reuse parentMod's copy
 				const parentMod = this.dex.mod(this.dex.parentMod);
 				if (this.dex.data.Pokedex[id] === parentMod.data.Pokedex[id]) {
 					const parentSpecies = parentMod.species.getByID(id);
+					// checking tier cheaply filters out some non-matches.
+					// The construction logic is very complex so we ultimately need to do a deep equality check
 					if (species.tier === parentSpecies.tier && deepStrictEqual(species, parentSpecies)) {
 						species = parentSpecies;
 					}
