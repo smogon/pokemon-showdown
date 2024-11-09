@@ -120,7 +120,7 @@ export const commands: Chat.ChatCommands = {
 			};
 			saveSuspectTests();
 			this.sendReply(`Added a suspect test notice for ${suspectString} in ${format.name}.`);
-			if (reqData.coil) this.sendReply('Remember to add a B value for your test\'s COIL setting with /suspects setcoil.');
+			if (reqData.coil) this.sendReply('Remember to add a B value for your test\'s COIL setting with /suspects setbvalue.');
 		},
 
 		end: 'remove',
@@ -236,7 +236,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Specify a valid COIL B value.`);
 			}
 			if (!toID(formatStr) || !format.exists) {
-				return this.errorReply(`Specify a valid format to set COIL for.`);
+				return this.errorReply(`Specify a valid format to set a COIL B value for. Check spelling?`);
 			}
 			this.sendReply(`Updating...`);
 			const [res, error] = await LoginServer.request('updatecoil', {
@@ -251,12 +251,12 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.globalModlog(`${source ? 'SET' : 'REMOVE'}BVALUE`, null, `${format.id}${bVal ? ` to ${bVal}` : ""}`);
 			this.addGlobalModAction(
-				`${user.name} ${bVal ? `set COIL for ${format.name} to ${bVal}` : `removed COIL values for ${format.name}`}`
+				`${user.name} ${bVal ? `set B value for ${format.name} to ${bVal}` : `removed B value for ${format.name}`}.`
 			);
 			if (source) {
 				return this.sendReply(`COIL B value for ${format.name} set to ${bVal}.`);
 			} else {
-				return this.sendReply(`Removed COIL for ${format.name}.`);
+				return this.sendReply(`Removed COIL B value for ${format.name}.`);
 			}
 		},
 		setbvaluehelp: [
