@@ -74,7 +74,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	icicle: {
 		accuracy: 100,
 		basePower: 70,
-		category: "Physical",
+		category: "Special",
 		shortDesc: "High critical hit ratio.",
 		name: "Icicle",
 		pp: 15,
