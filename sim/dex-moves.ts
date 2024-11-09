@@ -655,6 +655,18 @@ export class DexMoves {
 			if (move.gen > this.dex.gen) {
 				(move as any).isNonstandard = 'Future';
 			}
+			if (this.dex.parentMod) {
+				// If move is exactly identical to parentMod's move, reuse parentMod's copy
+				const parentMod = this.dex.mod(this.dex.parentMod);
+				if (moveData === parentMod.data.Moves[id]) {
+					const parentMove = parentMod.moves.getByID(id);
+					if (move.isNonstandard === parentMove.isNonstandard &&
+					    move.desc === parentMove.desc &&
+					    move.shortDesc === parentMove.shortDesc) {
+						move = parentMove;
+					}
+				}
+			}
 		} else {
 			move = new DataMove({
 				name: id, exists: false,
