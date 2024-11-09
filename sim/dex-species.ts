@@ -1,5 +1,6 @@
 import {assignMissingFields, BasicEffect, toID} from './dex-data';
 import {Utils} from '../lib';
+import {isDeepStrictEqual} from 'node:util';
 
 interface SpeciesAbility {
 	0: string;
@@ -387,17 +388,6 @@ export class Learnset {
 	}
 }
 
-// I would keep this 'require' inside the function, but keeping it outside saves ~100/1540 ms
-const _assertDeepEqual = require('assert').deepStrictEqual;
-function deepStrictEqual(a: AnyObject, b: AnyObject) {
-	try {
-		_assertDeepEqual(a, b);
-		return true;
-	} catch {
-		return false;
-	}
-}
-
 export class DexSpecies {
 	readonly dex: ModdedDex;
 	readonly speciesCache = new Map<ID, Species>();
@@ -583,7 +573,7 @@ export class DexSpecies {
 					const parentSpecies = parentMod.species.getByID(id);
 					// checking tier cheaply filters out some non-matches.
 					// The construction logic is very complex so we ultimately need to do a deep equality check
-					if (species.tier === parentSpecies.tier && deepStrictEqual(species, parentSpecies)) {
+					if (species.tier === parentSpecies.tier && isDeepStrictEqual(species, parentSpecies)) {
 						species = parentSpecies;
 					}
 				}
