@@ -20,18 +20,12 @@ import {Utils} from '../lib';
 * commonly it's used.
 */
 export function toID(text: any): ID {
-	// The sucrase transformation of optional chaining is too expensive to be used in a hot function like this.
-	/* eslint-disable @typescript-eslint/prefer-optional-chain */
-	if (text && text.id) {
-		text = text.id;
-	} else if (text && text.userid) {
-		text = text.userid;
-	} else if (text && text.roomid) {
-		text = text.roomid;
+	if (typeof text !== 'string') {
+		if (text) text = text.id || text.userid || text.roomid || text;
+		if (typeof text === 'number') text = '' + text;
+		else if (typeof text !== 'string') return '';
 	}
-	if (typeof text !== 'string' && typeof text !== 'number') return '';
-	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
-	/* eslint-enable @typescript-eslint/prefer-optional-chain */
+	return text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 }
 
 /**
