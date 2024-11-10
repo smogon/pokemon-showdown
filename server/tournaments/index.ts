@@ -938,23 +938,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.teamLock = teamLock;
 		this.room.add(`|tournament|teamlock|${teamLock ? 'on' : 'off'}`);
 	}
-	showSampleTeams() {
-		if (teamData.teams[this.baseFormat]) {
-			let buf = ``;
-			for (const categoryName in teamData.teams[this.baseFormat]) {
-				if (!Object.keys(teamData.teams[this.baseFormat][categoryName]).length) continue;
-				if (buf) buf += `<hr />`;
-				buf += `<details${Object.keys(teamData.teams[this.baseFormat]).length < 2 ? ` open` : ``}><summary><strong style="letter-spacing:1.2pt">${categoryName.toUpperCase()}</strong></summary>`;
-				for (const [i, teamName] of Object.keys(teamData.teams[this.baseFormat][categoryName]).entries()) {
-					if (i) buf += `<hr />`;
-					buf += SampleTeams.formatTeam(teamName, teamData.teams[this.baseFormat][categoryName][teamName], true);
-				}
-				buf += `</details>`;
-			}
-			if (!buf) return;
-			this.room.add(`|html|<div class="infobox"><center><h3>Sample Teams for ${SampleTeams.getFormatName(this.baseFormat)}</h3></center><hr />${buf}</div>`).update();
-		}
-	}
 
 	async challenge(user: User, targetUserid: ID, output: Chat.CommandContext) {
 		if (!this.isTournamentStarted) {
