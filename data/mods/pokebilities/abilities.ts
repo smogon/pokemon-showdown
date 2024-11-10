@@ -1,58 +1,10 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
-	damp: {
-		inherit: true,
-		onAnyDamage(damage, target, source, effect) {
-			if (effect && (effect.id === 'aftermath' || effect.id === 'ability:aftermath')) {
-				return false;
-			}
-		},
-	},
-	flowerveil: {
-		inherit: true,
-		onAllySetStatus(status, target, source, effect) {
-			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
-				this.debug('interrupting setStatus with Flower Veil');
-				if (effect.id.endsWith('synchronize') || (effect.effectType === 'Move' && !effect.secondaries)) {
-					const effectHolder = this.effectState.target;
-					this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
-				}
-				return null;
-			}
-		},
-	},
-	innerfocus: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', '[of] ' + target);
-			}
-		},
-	},
-	mirrorarmor: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			// Don't bounce self stat changes, or boosts that have already bounced
-			if (target === source || !boost || effect.id === 'mirrorarmor' || effect.id === 'ability:mirrorarmor') return;
-			let b: BoostID;
-			for (b in boost) {
-				if (boost[b]! < 0) {
-					if (target.boosts[b] === -6) continue;
-					const negativeBoost: SparseBoostsTable = {};
-					negativeBoost[b] = boost[b];
-					delete boost[b];
-					this.add('-ability', target, 'Mirror Armor');
-					this.boost(negativeBoost, source, target, null, true);
-				}
-			}
-		},
-	},
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	mummy: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
 			if (target.ability === 'mummy') {
 				const sourceAbility = source.getAbility();
-				if (sourceAbility.isPermanent || sourceAbility.id === 'mummy') {
+				if (sourceAbility.flags['cantsuppress'] || sourceAbility.id === 'mummy') {
 					return;
 				}
 				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
@@ -63,7 +15,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			} else {
 				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
-					.filter(val => !this.dex.abilities.get(val).isPermanent && val !== 'mummy');
+					.filter(val => !this.dex.abilities.get(val).flags['cantsuppress'] && val !== 'mummy');
 				if (!possibleAbilities.length) return;
 				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 					const abil = this.sample(possibleAbilities);
@@ -92,7 +44,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			// Remove setter's innates before the ability starts
 			if (pokemon.m.innates) {
 				for (const innate of pokemon.m.innates) {
-					if (this.dex.abilities.get(innate).isPermanent || innate === 'neutralizinggas') continue;
+					if (this.dex.abilities.get(innate).flags['cantsuppress'] || innate === 'neutralizinggas') continue;
 					pokemon.removeVolatile('ability:' + innate);
 				}
 			}
@@ -106,7 +58,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				if (target.m.innates) {
 					for (const innate of target.m.innates) {
-						if (this.dex.abilities.get(innate).isPermanent) continue;
+						if (this.dex.abilities.get(innate).flags['cantsuppress']) continue;
 						target.removeVolatile('ability:' + innate);
 					}
 				}
@@ -140,30 +92,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-	oblivious: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
-			}
-		},
-	},
-	owntempo: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Tempo', '[of] ' + target);
-			}
-		},
-	},
-	poisontouch: {
-		inherit: true,
-		// Activate after Sheer Force to make interaction determistic. The ordering for this ability is
-		// an arbitary decision, but is modelled on Stench, which is reflective of on-cart behaviour.
-		onModifyMovePriority: -1,
-	},
 	powerofalchemy: {
 		inherit: true,
 		onAllyFaint(ally) {
@@ -172,11 +100,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const isAbility = pokemon.ability === 'powerofalchemy';
 			let possibleAbilities = [ally.ability];
 			if (ally.m.innates) possibleAbilities.push(...ally.m.innates);
-			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', pokemon.ability, ...(pokemon.m.innates || []),
-			];
+			const additionalBannedAbilities = [pokemon.ability, ...(pokemon.m.innates || [])];
 			possibleAbilities = possibleAbilities
-				.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+				.filter(val => !this.dex.abilities.get(val).flags['noreceiver'] && !additionalBannedAbilities.includes(val));
 			if (!possibleAbilities.length) return;
 			const ability = this.dex.abilities.get(possibleAbilities[this.random(possibleAbilities.length)]);
 			this.add('-ability', pokemon, ability, '[from] ability: Power of Alchemy', '[of] ' + ally);
@@ -188,14 +114,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
-	rattled: {
-		inherit: true,
-		onAfterBoost(boost, target, source, effect) {
-			if (effect && (effect.id === 'intimidate' || effect.id === 'ability:intimidate')) {
-				this.boost({spe: 1});
-			}
-		},
-	},
 	receiver: {
 		inherit: true,
 		onAllyFaint(ally) {
@@ -204,11 +122,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const isAbility = pokemon.ability === 'receiver';
 			let possibleAbilities = [ally.ability];
 			if (ally.m.innates) possibleAbilities.push(...ally.m.innates);
-			const additionalBannedAbilities = [
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'wonderguard', pokemon.ability, ...(pokemon.m.innates || []),
-			];
+			const additionalBannedAbilities = [pokemon.ability, ...(pokemon.m.innates || [])];
 			possibleAbilities = possibleAbilities
-				.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+				.filter(val => !this.dex.abilities.get(val).flags['noreceiver'] && !additionalBannedAbilities.includes(val));
 			if (!possibleAbilities.length) return;
 			const ability = this.dex.abilities.get(possibleAbilities[this.random(possibleAbilities.length)]);
 			this.add('-ability', pokemon, ability, '[from] ability: Receiver', '[of] ' + ally);
@@ -217,15 +133,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else {
 				pokemon.removeVolatile("ability:receiver");
 				pokemon.addVolatile("ability:" + ability, pokemon);
-			}
-		},
-	},
-	scrappy: {
-		inherit: true,
-		onBoost(boost, target, source, effect) {
-			if (effect.id === 'intimidate' || effect.id === 'ability:intimidate') {
-				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
 			}
 		},
 	},
@@ -245,12 +152,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				const target = possibleTargets[rand];
 				let possibleAbilities = [target.ability];
 				if (target.m.innates) possibleAbilities.push(...target.m.innates);
-				const additionalBannedAbilities = [
-					// Zen Mode included here for compatability with Gen 5-6
-					'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode', pokemon.ability, ...(pokemon.m.innates || []),
-				];
+				const additionalBannedAbilities = [pokemon.ability, ...(pokemon.m.innates || [])];
 				possibleAbilities = possibleAbilities
-					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+					.filter(val => !this.dex.abilities.get(val).flags['notrace'] && !additionalBannedAbilities.includes(val));
 				if (!possibleAbilities.length) {
 					possibleTargets.splice(rand, 1);
 					continue;
@@ -271,13 +175,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
 			const isAbility = target.ability === 'wanderingspirit';
-			const additionalBannedAbilities = ['hungerswitch', 'illusion', 'neutralizinggas', 'wonderguard'];
 			if (isAbility) {
-				if (source.getAbility().isPermanent || additionalBannedAbilities.includes(source.ability) ||
-					target.volatiles['dynamax']
-				) {
-					return;
-				}
+				if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
 
 				if (this.checkMoveMakesContact(move, source, target)) {
 					const sourceAbility = source.setAbility('wanderingspirit', target);
@@ -292,7 +191,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else {
 				// Make Wandering Spirit replace a random ability
 				const possibleAbilities = [source.ability, ...(source.m.innates || [])]
-					.filter(val => !this.dex.abilities.get(val).isPermanent && !additionalBannedAbilities.includes(val));
+					.filter(val => !this.dex.abilities.get(val).flags['failskillswap']);
 				if (!possibleAbilities.length || target.volatiles['dynamax']) return;
 				if (move.flags['contact']) {
 					const sourceAbility = this.sample(possibleAbilities);

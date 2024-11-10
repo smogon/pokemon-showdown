@@ -231,8 +231,8 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/join view-ranges-${type}`);
 		},
 		viewhelp: [
-			`/ipranges view - View the list of all IP ranges. Requires: hosts manager @ &`,
-			`/ipranges view [type] - View the list of a particular type of IP range ('residential', 'mobile', or 'proxy'). Requires: hosts manager @ &`,
+			`/ipranges view - View the list of all IP ranges. Requires: hosts manager @ ~`,
+			`/ipranges view [type] - View the list of a particular type of IP range ('residential', 'mobile', or 'proxy'). Requires: hosts manager @ ~`,
 		],
 
 		// Originally by Zarel
@@ -269,8 +269,8 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog('IPRANGE ADD', null, formatRange(range, true));
 		},
 		addhelp: [
-			`/ipranges add [type], [low]-[high], [host] - Adds an IP range. Requires: hosts manager &`,
-			`/ipranges widen [type], [low]-[high], [host] - Adds an IP range, allowing a new range to completely cover an old range. Requires: hosts manager &`,
+			`/ipranges add [type], [low]-[high], [host] - Adds an IP range. Requires: hosts manager ~`,
+			`/ipranges widen [type], [low]-[high], [host] - Adds an IP range, allowing a new range to completely cover an old range. Requires: hosts manager ~`,
 			`For example: /ipranges add proxy, 5.152.192.0 - 5.152.223.255, redstation.com`,
 			`Get datacenter info from whois; [low], [high] are the range in the last inetnum; [type] is one of res, proxy, or mobile.`,
 		],
@@ -289,7 +289,7 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog('IPRANGE REMOVE', null, formatRange(range, true));
 		},
 		removehelp: [
-			`/ipranges remove [low IP]-[high IP] - Removes an IP range. Requires: hosts manager &`,
+			`/ipranges remove [low IP]-[high IP] - Removes an IP range. Requires: hosts manager ~`,
 			`Example: /ipranges remove 5.152.192.0-5.152.223.255`,
 		],
 
@@ -316,20 +316,20 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog('IPRANGE RENAME', null, `IP range ${formatRange(toRename, true)} to ${range.host}`);
 		},
 		renamehelp: [
-			`/ipranges rename [type], [low IP]-[high IP], [host] - Changes the host an IP range resolves to.  Requires: hosts manager &`,
+			`/ipranges rename [type], [low IP]-[high IP], [host] - Changes the host an IP range resolves to.  Requires: hosts manager ~`,
 		],
 	},
 
 	iprangeshelp() {
 		const help = [
-			`<code>/ipranges view [type]</code>: view the list of a particular type of IP range (<code>residential</code>, <code>mobile</code>, or <code>proxy</code>). Requires: hosts manager @ &`,
-			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager &</summary><code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ &`,
-			`<code>/ipranges widen [type], [low IP]-[high IP], [host]</code>: add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager &`,
+			`<code>/ipranges view [type]</code>: view the list of a particular type of IP range (<code>residential</code>, <code>mobile</code>, or <code>proxy</code>). Requires: hosts manager @ ~`,
+			`<code>/ipranges add [type], [low IP]-[high IP], [host]</code>: add IP ranges (can be multiline). Requires: hosts manager ~</summary><code>/ipranges view</code>: view the list of all IP ranges. Requires: hosts manager @ ~`,
+			`<code>/ipranges widen [type], [low IP]-[high IP], [host]</code>: add IP ranges, allowing a new range to completely cover an old range. Requires: hosts manager ~`,
 			`For example: <code>/ipranges add proxy, 5.152.192.0-5.152.223.255, redstation.com</code>.`,
 			`Get datacenter info from <code>/whois</code>; <code>[low IP]</code>, <code>[high IP]</code> are the range in the last inetnum.`,
-			`<code>/ipranges remove [low IP]-[high IP]</code>: remove IP range(s). Can be multiline. Requires: hosts manager &`,
+			`<code>/ipranges remove [low IP]-[high IP]</code>: remove IP range(s). Can be multiline. Requires: hosts manager ~`,
 			`For example: <code>/ipranges remove 5.152.192.0, 5.152.223.255</code>.`,
-			`<code>/ipranges rename [type], [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager &`,
+			`<code>/ipranges rename [type], [low IP]-[high IP], [host]</code>: changes the host an IP range resolves to. Requires: hosts manager ~`,
 		];
 		return this.sendReply(`|html|<details class="readmore"><summary>${help.join('<br />')}`);
 	},
@@ -343,8 +343,8 @@ export const commands: Chat.ChatCommands = {
 		return this.parse(`/join view-hosts-${type}`);
 	},
 	viewhostshelp: [
-		`/viewhosts - View the list of hosts. Requires: hosts manager @ &`,
-		`/viewhosts [type] - View the list of a particular type of host. Requires: hosts manager @ &`,
+		`/viewhosts - View the list of hosts. Requires: hosts manager @ ~`,
+		`/viewhosts [type] - View the list of a particular type of host. Requires: hosts manager @ ~`,
 		`Host types are: 'all', 'residential', 'mobile', and 'ranges'.`,
 	],
 
@@ -416,13 +416,13 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`'${type}' isn't one of 'openproxy', 'proxy', 'residential', or 'mobile'.`);
 		}
 		this.privateGlobalModAction(
-			`${user.name} ${removing ? 'removed' : 'added'} ${hosts.length} hosts (${hosts.join(', ')}) to the ${type} category!`
+			`${user.name} ${removing ? 'removed' : 'added'} ${hosts.length} hosts (${hosts.join(', ')}) ${removing ? 'from' : 'to'} the ${type} category`
 		);
 		this.globalModlog(removing ? 'REMOVEHOSTS' : 'ADDHOSTS', null, `${type}: ${hosts.join(', ')}`);
 	},
 	addhostshelp: [
-		`/addhosts [category], host1, host2, ... - Adds hosts to the given category. Requires: hosts manager &`,
-		`/removehosts [category], host1, host2, ... - Removes hosts from the given category. Requires: hosts manager &`,
+		`/addhosts [category], host1, host2, ... - Adds hosts to the given category. Requires: hosts manager ~`,
+		`/removehosts [category], host1, host2, ... - Removes hosts from the given category. Requires: hosts manager ~`,
 		`Categories are: 'openproxy' (which takes IP addresses, not hosts), 'proxy', 'residential', and 'mobile'.`,
 	],
 
@@ -431,7 +431,7 @@ export const commands: Chat.ChatCommands = {
 		return this.parse('/join view-proxies');
 	},
 	viewproxieshelp: [
-		`/viewproxies - View the list of proxies. Requires: hosts manager @ &`,
+		`/viewproxies - View the list of proxies. Requires: hosts manager @ ~`,
 	],
 
 	markshared(target, room, user) {
@@ -471,7 +471,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	marksharedhelp: [
 		`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared.`,
-		`Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @ &`,
+		`Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @ ~`,
 	],
 
 	unmarkshared(target, room, user) {
@@ -501,7 +501,7 @@ export const commands: Chat.ChatCommands = {
 		this.privateGlobalModAction(`The IP '${target}' was unmarked as shared by ${user.name}.`);
 		this.globalModlog('UNSHAREDIP', null, null, target);
 	},
-	unmarksharedhelp: [`/unmarkshared [IP] - Unmarks a shared IP address. Requires @ &`],
+	unmarksharedhelp: [`/unmarkshared [IP] - Unmarks a shared IP address. Requires @ ~`],
 
 	marksharedblacklist: 'nomarkshared',
 	marksharedbl: 'nomarkshared',
@@ -573,10 +573,10 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 	nomarksharedhelp: [
-		`/nomarkshared add [IP], [reason] - Prevents an IP from being marked as shared until it's removed from this list. Requires &`,
+		`/nomarkshared add [IP], [reason] - Prevents an IP from being marked as shared until it's removed from this list. Requires ~`,
 		`Note: Reasons are required.`,
-		`/nomarkshared remove [IP] - Removes an IP from the nomarkshared list. Requires &`,
-		`/nomarkshared view - Lists all IPs prevented from being marked as shared. Requires @ &`,
+		`/nomarkshared remove [IP] - Removes an IP from the nomarkshared list. Requires ~`,
+		`/nomarkshared view - Lists all IPs prevented from being marked as shared. Requires @ ~`,
 	],
 
 	sharedips: 'viewsharedips',
@@ -584,6 +584,6 @@ export const commands: Chat.ChatCommands = {
 		return this.parse('/join view-sharedips');
 	},
 	viewsharedipshelp: [
-		`/viewsharedips — Lists IP addresses marked as shared. Requires: hosts manager @ &`,
+		`/viewsharedips — Lists IP addresses marked as shared. Requires: hosts manager @ ~`,
 	],
 };

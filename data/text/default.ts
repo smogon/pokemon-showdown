@@ -1,4 +1,4 @@
-export const DefaultText: {[k: string]: DefaultText} = {
+export const DefaultText: {[id: IDEntry]: DefaultText} = {
 	default: {
 		startBattle: "Battle started between [TRAINER] and [TRAINER]!",
 		winBattle: "**[TRAINER]** won the battle!",
@@ -294,7 +294,7 @@ export const DefaultText: {[k: string]: DefaultText} = {
 		weatherName: "Snow",
 		start: "  It started to snow!",
 		end: "  The snow stopped.",
-		upkeep: "  (The snow is falling down.)", // TODO: Figure out proper upkeep message (if any)
+		upkeep: "  (The snow is falling down.)",
 	},
 	desolateland: {
 		weatherName: "Intense Sun",

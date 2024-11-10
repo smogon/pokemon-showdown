@@ -41,14 +41,15 @@ describe('Explosion', function () {
 		assert(battle.log.some(line => line.startsWith('|-boost|')));
 
 		// Explosion misses
-		battle = common.gen(1).createBattle({seed: [2, 2, 2, 2]}, [[
-			{species: 'golem', moves: ['splash', 'explosion']},
+		battle = common.gen(1).createBattle([[
+			{species: 'golem', moves: ['explosion']},
 		], [
-			{species: 'aerodactyl', moves: ['sandattack', 'rage']},
+			{species: 'aerodactyl', moves: ['rage']},
 		]]);
-		for (let i = 0; i < 6; i++) {
-			battle.makeChoices();
-		}
+		// Modding accuracy so Explosion always misses
+		battle.onEvent('Accuracy', battle.format, function (accuracy, target, pokemon, move) {
+			return move.id === 'rage';
+		});
 		battle.makeChoices('move explosion', 'move rage');
 		assert(battle.log.some(line => line.startsWith('|-boost|')));
 

@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	absorbbulb: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -15,15 +15,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	beastball: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	berrysweet: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	bindingband: {
+	bignugget: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	beastball: {
+	bindingband: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
@@ -99,7 +103,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Unobtainable",
 		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.isFutureMove) {
+			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;

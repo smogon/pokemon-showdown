@@ -10,14 +10,17 @@ describe('Symbiosis', function () {
 		battle.destroy();
 	});
 
-	it('should share its item with its ally', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[{species: 'Smeargle', ability: 'symbiosis', item: 'enigmaberry', moves: ['snarl']}, {species: 'Latias', ability: 'levitate', item: 'weaknesspolicy', moves: ['snarl']}],
-			[{species: 'Smeargle', moves: ['snarl']}, {species: 'Smeargle', moves: ['snarl']}],
-		]);
-		battle.makeChoices('move snarl, move snarl', 'move snarl, move snarl');
-		assert.equal(battle.p1.active[0].item, '');
-		assert.equal(battle.p1.active[1].item, '');
+	it(`should share its item with its ally`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Smeargle', ability: 'symbiosis', item: 'enigmaberry', moves: ['sleeptalk']},
+			{species: 'Latias', ability: 'levitate', item: 'weaknesspolicy', moves: ['sleeptalk']},
+		], [
+			{species: 'Smeargle', moves: ['crunch']},
+			{species: 'Smeargle', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('auto', 'move crunch 2, auto');
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.equal(battle.p1.active[1].item, 'enigmaberry');
 	});
 
 	it('should not share an item required to change forme', function () {
@@ -58,6 +61,21 @@ describe('Symbiosis', function () {
 
 		assert.equal(battle.p1.active[0].item, '');
 		assert.equal(battle.p1.active[1].item, 'leftovers');
+	});
+
+	it.skip(`should not trigger on an ally using their Eject Pack`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
+			{species: 'wynaut', item: 'ejectpack', moves: ['superpower']},
+			{species: 'corphish', moves: ['sleeptalk']},
+		], [
+			{species: 'wynaut', moves: ['tackle']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+
+		assert.equal(battle.p1.active[0].item, 'leftovers');
+		assert.equal(battle.p1.active[1].item, '');
 	});
 
 	// See Marty's research for many more examples: https://www.smogon.com/forums/threads/battle-mechanics-research.3489239/post-6401506

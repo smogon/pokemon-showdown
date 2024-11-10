@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	anticipation: {
 		inherit: true,
 		onStart(pokemon) {
@@ -21,7 +21,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
 			if (target?.item) {
-				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
+				this.add('-item', pokemon, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
 			}
 		},
 	},
@@ -52,6 +52,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	overcoat: {
 		inherit: true,
 		onTryHit() {},
+		flags: {},
 		rating: 0.5,
 	},
 	sapsipper: {

@@ -65,14 +65,17 @@ describe('Ability Shield', function () {
 	it(`should protect the holder's ability against Mold Breaker`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5},
+			{species: 'gastly', ability: 'levitate', item: 'abilityshield', moves: ['sleeptalk']},
 		], [
-			{species: 'weezinggalar', ability: 'moldbreaker', moves: ['shadowball']},
+			{species: 'weezinggalar', ability: 'moldbreaker', moves: ['shadowball', 'earthpower']},
 		]]);
 
 		assert(battle.log.every(line => !line.includes('Ability Shield')), `Ability Shield should not trigger a block message`);
 
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].hp, 1, `Holder should survive from sturdy`);
+		battle.makeChoices('switch gastly', 'move earthpower');
+		assert.fullHP(battle.p1.active[0], `Holder should be ungrounded through levitate`);
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9403448
@@ -194,6 +197,29 @@ describe('Ability Shield', function () {
 
 		battle.makeChoices();
 		assert.notEqual(battle.p1.active[0].ability, 'levitate', `Holder should not trace ability`);
+	});
+
+	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9635572
+	it(`should not prevent Imposter from changing the holder's ability`, function () {
+		battle = common.createBattle([[
+			{species: 'ditto', ability: 'imposter', item: 'abilityshield', moves: ['transform']},
+		], [
+			{species: 'scorbunny', ability: 'libero', moves: ['agility']},
+		]]);
+
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].ability, 'libero', `Ditto should copy Libero`);
+	});
+
+	it(`should not prevent forme changes from changing the holder's ability`, function () {
+		battle = common.createBattle([[
+			{species: 'ogerpon', ability: 'defiant', item: 'abilityshield', moves: ['sleeptalk']},
+		], [
+			{species: 'scorbunny', ability: 'libero', moves: ['agility']},
+		]]);
+
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		assert.equal(battle.p1.active[0].ability, 'embodyaspectteal', `Ogerpon's ability should change to Embody Aspect`);
 	});
 
 	// TODO Add future tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?

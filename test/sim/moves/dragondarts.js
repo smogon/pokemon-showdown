@@ -35,24 +35,30 @@ describe('Dragon Darts', function () {
 	});
 
 	it(`should hit the other foe twice if it misses against one`, function () {
-		// Seed will make Dragon Darts miss at +6 evasion
-		// (remember to manually update the seed if engine changes mean it doesn't)
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
+		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", item: 'blunderpolicy', moves: ['dragondarts']},
-			{species: "Mew", ability: 'stamina', moves: ['splash']},
+			{species: "Wynaut", ability: 'stamina', moves: ['splash']},
 		], [
 			{species: "Mew", ability: 'stamina', moves: ['splash']},
 			{species: "Shaymin", ability: 'stamina', moves: ['splash']},
 		]]);
 
-		battle.p2.active[0].boostBy({evasion: 6});
+		const ninjask = battle.p1.active[0];
+		const wynaut = battle.p1.active[1];
+		const mew = battle.p2.active[0];
+		const shaymin = battle.p2.active[1];
+
+		// Modding accuracy so Dragon Darts always misses Mew
+		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
+			return target.species.id !== 'mew';
+		});
 
 		battle.makeChoices();
-		assert(!battle.log.includes('|-miss|p1a: Ninjask|p2a: Mew'));
-		assert.statStage(battle.p1.active[0], 'spe', 2);
-		assert.statStage(battle.p1.active[1], 'def', 0);
-		assert.statStage(battle.p2.active[0], 'def', 0);
-		assert.statStage(battle.p2.active[1], 'def', 2);
+		assert.false(battle.log.includes('|-miss|p1a: Ninjask|p2a: Mew'));
+		assert.statStage(ninjask, 'spe', 2);
+		assert.statStage(wynaut, 'def', 0);
+		assert.statStage(mew, 'def', 0);
+		assert.statStage(shaymin, 'def', 2);
 	});
 
 	it(`should hit itself and ally if it targets itself after Ally Switch`, function () {
@@ -141,6 +147,7 @@ describe('Dragon Darts', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 		assert.statStage(battle.p2.active[0], 'def', 2);
+		// Dragon Darts activates the absorption effect despite hitting Arcanine twice
 		assert.statStage(battle.p2.active[1], 'spe', 1);
 	});
 
@@ -151,12 +158,12 @@ describe('Dragon Darts', function () {
 			{species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"]},
 		]});
 		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Flash Fire", moves: ["sleeptalk"]},
+			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
 			{species: "Clefairy", ability: "Ripen", moves: ["sleeptalk"]},
 		]});
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move sleeptalk');
 
-		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.statStage(battle.p2.active[0], 'def', 2);
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
@@ -167,12 +174,12 @@ describe('Dragon Darts', function () {
 			{species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"]},
 		]});
 		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Flash Fire", moves: ["sleeptalk"]},
+			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
 			{species: "Golurk", ability: "Ripen", moves: ["phantomforce"]},
 		]});
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move phantomforce 1');
 
-		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.statStage(battle.p2.active[0], 'def', 2);
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
@@ -183,15 +190,32 @@ describe('Dragon Darts', function () {
 			{species: "Ludicolo", ability: "Dancer", moves: ["sleeptalk"]},
 		]});
 		battle.setPlayer('p2', {team: [
-			{species: "Arcanine", ability: "Flash Fire", moves: ["sleeptalk"]},
+			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
 			{species: "Snom", ability: "Ripen", moves: ["sleeptalk"]},
 		]});
 
 		battle.p2.active[1].faint();
 		battle.makeChoices('move dragondarts 2, move sleeptalk', 'move sleeptalk, move sleeptalk');
 
-		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.statStage(battle.p2.active[0], 'def', 2);
 		assert.equal(battle.p2.active[1].hp, 0);
+	});
+
+	it('should hit one target twice if the other is Dark type and Dragon Darts is Prankster boosted', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: "Dragapult", ability: "Clear Body", moves: ["sleeptalk", "dragondarts"]},
+			{species: "Liepard", ability: "Prankster", moves: ["assist"]},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: "Arcanine", ability: "Stamina", moves: ["sleeptalk"]},
+			{species: "Spiritomb", ability: "Infiltrator", moves: ["sleeptalk"]},
+		]});
+
+		battle.makeChoices();
+
+		assert.statStage(battle.p2.active[0], 'def', 2);
+		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
 	it('should fail if both targets are fainted', function () {

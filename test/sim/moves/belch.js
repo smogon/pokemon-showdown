@@ -10,14 +10,18 @@ describe('Belch', function () {
 		battle.destroy();
 	});
 
-	it('should be disabled if the user has not consumed a berry', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Swalot', ability: 'gluttony', item: 'lumberry', moves: ['belch', 'stockpile']}]});
-		battle.setPlayer('p2', {team: [{species: 'Registeel', ability: 'clearbody', item: 'laggingtail', moves: ['thunderwave']}]});
-		battle.makeChoices('move Stockpile', 'move Thunderwave');
-		assert.equal(battle.p1.active[0].lastMove.id, 'stockpile');
-		battle.makeChoices('move Belch', 'move Thunderwave');
-		assert.equal(battle.p1.active[0].lastMove.id, 'belch');
+	it(`should be disabled if the user has not consumed a berry`, function () {
+		battle = common.createBattle([[
+			{species: 'Swalot', item: 'lumberry', moves: ['belch', 'stockpile']},
+		], [
+			{species: 'Registeel', item: 'laggingtail', moves: ['glare']},
+		]]);
+
+		const swalot = battle.p1.active[0];
+		battle.makeChoices('move stockpile', 'move glare');
+		assert.equal(swalot.lastMove.id, 'stockpile');
+		battle.makeChoices('move belch', 'move glare');
+		assert.equal(swalot.lastMove.id, 'belch');
 	});
 
 	it('should count berries as consumed with Bug Bite or Pluck', function () {

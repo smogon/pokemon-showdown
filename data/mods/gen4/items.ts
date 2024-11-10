@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	adamantorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
@@ -204,7 +204,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			return basePower;
 		},
 		onModifyDamagePhase2(damage, source, target, move) {
-			if (!move.isFutureMove) return damage * 1.3;
+			if (!move.flags['futuremove']) return damage * 1.3;
 		},
 		condition: {
 			duration: 1,

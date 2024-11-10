@@ -72,6 +72,15 @@ describe('Prankster', function () {
 		assert(battle.p2.active[0].volatiles['encore'], `Meowstic should be encored`);
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it('should not leak the ability via hint if the target is immune to the Status move', function () {
+		battle = common.createBattle([
+			[{species: "Sableye", ability: 'prankster', moves: ['willowisp']}],
+			[{species: "Houndoom", ability: 'pressure', moves: ['willowisp']}],
+		]);
+		battle.makeChoices('move willowisp', 'move willowisp');
+		assert.false(battle.log.some(line => line.includes('hint')), `Prankster should not leak the ability via hint`);
+	});
 });
 
 describe('Prankster [Gen 6]', function () {
@@ -79,11 +88,14 @@ describe('Prankster [Gen 6]', function () {
 		battle.destroy();
 	});
 
-	it('should not cause Status moves to fail against Dark Pokémon', function () {
-		battle = common.gen(6).createBattle([
-			[{species: "Sableye", ability: 'prankster', moves: ['willowisp']}],
-			[{species: "Sableye", ability: 'keeneye', moves: ['willowisp']}],
-		]);
-		assert.sets(() => battle.p2.active[0].status, 'brn', () => battle.makeChoices('move willowisp', 'move willowisp'));
+	it(`should not cause Status moves to fail against Dark Pokémon`, function () {
+		battle = common.gen(6).createBattle([[
+			{species: 'Sableye', ability: 'prankster', moves: ['willowisp']},
+		], [
+			{species: 'Sableye', ability: 'noguard', moves: ['willowisp']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].status, 'brn');
+		assert.equal(battle.p2.active[0].status, 'brn');
 	});
 });

@@ -11,20 +11,24 @@ describe(`Serene Grace`, function () {
 	});
 
 	it(`should not stack with Pledge Rainbow for flinches`, function () {
-		// hardcoded RNG seed to not flinch if it was 60% odds
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 5]}, [[
+		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', ability: 'serenegrace', moves: ['bite', 'waterpledge']},
-			{species: 'wobbuffet', ability: 'serenegrace', moves: ['sleeptalk', 'firepledge']},
+			{species: 'wobbuffet', moves: ['sleeptalk', 'firepledge']},
 		], [
-			{species: 'pyukumuku', ability: 'steadfast', moves: ['sleeptalk']},
+			{species: 'pyukumuku', moves: ['sleeptalk']},
 			{species: 'feebas', moves: ['sleeptalk']},
 		]]);
 
+		battle.onEvent('ModifyMove', battle.format, -99, function (move) {
+			if (move.id === 'bite') {
+				for (const secondary of move.secondaries) {
+					assert.equal(secondary.chance, 60, `Bite should not have a quadrupled flinch chance`);
+				}
+			}
+		});
+
 		battle.makeChoices('move waterpledge 1, move firepledge 1', 'auto');
 		battle.makeChoices('move bite 1, move sleeptalk', 'auto');
-
-		const pyuk = battle.p2.active[0];
-		assert.statStage(pyuk, 'spe', 0);
 	});
 
 	it(`[Gen 8] should overflow when quadrupling a stat drop effect with Pledge Rainbow`, function () {

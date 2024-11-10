@@ -8,9 +8,7 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
   [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
 
 [![Build Status](https://github.com/smogon/pokemon-showdown/workflows/Node.js%20CI/badge.svg)](https://github.com/smogon/pokemon-showdown/actions?query=workflow%3A%22Node.js+CI%22)
-[![Dependency Status](https://david-dm.org/smogon/pokemon-showdown.svg)](https://david-dm.org/smogon/pokemon-showdown)
-[![devDependency Status](https://david-dm.org/smogon/pokemon-showdown/dev-status.svg)](https://david-dm.org/smogon/pokemon-showdown?type=dev)
-[![Total Alerts](https://img.shields.io/lgtm/alerts/g/smogon/pokemon-showdown.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/smogon/pokemon-showdown/alerts)
+[![Dependency Status](https://img.shields.io/librariesio/github/smogon/pokemon-showdown)](https://libraries.io/github/smogon/pokemon-showdown)
 
 
 Introduction
@@ -38,7 +36,7 @@ Pokémon Showdown is many things:
 
   - [server/README.md](./server/README.md)
 
-Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 8).
+Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 9).
 
 
 Documentation quick links
@@ -91,8 +89,10 @@ Staff
 - Andrew Werner [HoeenHero] - Development
 - Annika L. [Annika] - Development
 - Chris Monsanto [chaos] - Development, Sysadmin
-- Leonard Craft III - Research (game mechanics)
+- Kris Johnson [dhelmise] - Development
+- Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
+- Mia A [Mia] - Development
 
 Contributors
 

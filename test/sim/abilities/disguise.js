@@ -27,13 +27,14 @@ describe('Disguise', function () {
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
-	it('should block a hit from confusion', function () {
-		battle = common.gen(7).createBattle([[
+	it(`should bust Disguise on self-hit confusion`, function () {
+		battle = common.gen(7).createBattle({forceRandomChance: true}, [[
 			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
 		], [
 			{species: 'Sableye', ability: 'prankster', moves: ['confuseray']},
 		]]);
-		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
+
+		battle.makeChoices();
 		assert(battle.p1.active[0].abilityState.busted);
 	});
 
@@ -97,5 +98,18 @@ describe('Disguise', function () {
 		]]);
 		battle.makeChoices();
 		assert(battle.log.every(line => !line.startsWith('|-crit')));
+	});
+
+	it(`should not work while Transformed`, function () {
+		battle = common.createBattle([[
+			{species: 'Mimikyu', ability: 'disguise', moves: ['transform']},
+		], [
+			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk', 'aerialace']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move aerialace');
+		const transformedMimikyu = battle.p1.active[0];
+		assert.species(transformedMimikyu, 'Mimikyu', `Transformed Mimikyu should not have changed to Mimikyu-busted after taking damage`);
+		assert.false.fullHP(transformedMimikyu);
 	});
 });

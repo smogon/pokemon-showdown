@@ -35,9 +35,9 @@ export const transactions = {
 		const {oldQuestionText, newQuestionText, newAnswers} = args;
 
 		if (newAnswers) {
-			const questionID = env.db
+			const questionID = (env.db
 				.prepare('SELECT question_id FROM trivia_questions WHERE question = ?')
-				.get(oldQuestionText)?.question_id;
+				.get(oldQuestionText) as AnyObject | null)?.question_id;
 			if (!questionID) throw new Error('Question not found');
 			env.db.prepare('DELETE FROM trivia_answers WHERE question_id = ?').run(questionID);
 			const insert = env.db.prepare('INSERT INTO trivia_answers (question_id, answer) VALUES (?, ?)');

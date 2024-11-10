@@ -11,7 +11,7 @@ describe('Confusion', function () {
 	});
 
 	it(`should not be affected by modifiers like Huge Power or Life Orb`, function () {
-		battle = common.createBattle([[
+		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'Deoxys-Attack', ability: 'hugepower', item: 'lifeorb', moves: ['sleeptalk']},
 		], [
 			{species: 'Sableye', ability: 'prankster', moves: ['confuseray']},

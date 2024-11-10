@@ -12,7 +12,7 @@ import {LogViewer} from './chatlog';
 import {roomFaqs, visualizeFaq} from './room-faqs';
 
 const DATA_PATH = 'config/chat-plugins/responder.json';
-const LOG_PATH = 'logs/responder.jsonl';
+const LOG_PATH = Monitor.logPath('responder.jsonl').path;
 
 export let answererData: {[roomid: string]: PluginData} = {};
 
@@ -378,7 +378,7 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(num)) return this.errorReply("Invalid index.");
 			room.responder.tryRemoveRegex(faq, num - 1);
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
-			this.modlog('AUTOFILTER REMOVE', null, index);
+			this.modlog('AUTOFILTER REMOVE', null, `removed regex ${index} for FAQ ${faq}`);
 			const pages = [`keys`, `pairs`];
 			for (const p of pages) {
 				this.refreshPage(`autofilter-${room.roomid}-${p}`);
@@ -421,11 +421,11 @@ export const commands: Chat.ChatCommands = {
 	autoresponderhelp() {
 		const help = [
 			`<code>/autoresponder view [page]</code> - Views the Autoresponder page [page]. (options: keys, stats)`,
-			`<code>/autoresponder toggle [on | off]</code> - Enables or disables the Autoresponder for the current room. Requires: @ # &`,
+			`<code>/autoresponder toggle [on | off]</code> - Enables or disables the Autoresponder for the current room. Requires: @ # ~`,
 			`<code>/autoresponder add [input] => [faq]</code> - Adds regex made from the input string to the current room's Autoresponder, to respond with [faq] to matches.`,
 			`<code>/autoresponder remove [faq], [regex index]</code> - removes the regex matching the [index] from the current room's responses for [faq].`,
 			`Indexes can be found in /autoresponder keys.`,
-			`Requires: @ # &`,
+			`Requires: @ # ~`,
 		];
 		return this.sendReplyBox(help.join('<br/ >'));
 	},

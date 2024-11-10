@@ -185,6 +185,60 @@ describe('Transform', function () {
 		battle.makeChoices('move transform terastallize', 'move sleeptalk terastallize');
 		assert.equal(battle.p1.active[0].getTypes().join('/'), 'Fire');
 	});
+
+	it("should fail against Ogerpon when the user is Terastallized", function () {
+		battle = common.createBattle([[
+			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
+		], [
+			{species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass"},
+		]]);
+		battle.makeChoices('move transform terastallize', 'move sleeptalk');
+		assert.false(battle.p1.active[0].transformed);
+	});
+
+	it("should fail against Ogerpon when Ogerpon is Terastallized", function () {
+		battle = common.createBattle([[
+			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
+		], [
+			{species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass"},
+		]]);
+		battle.makeChoices('move transform', 'move sleeptalk terastallize');
+		assert.false(battle.p1.active[0].transformed);
+	});
+
+	it("should prevent Pokemon transformed into Ogerpon from Terastallizing", function () {
+		battle = common.createBattle([[
+			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
+		], [
+			{species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass"},
+		]]);
+		battle.makeChoices();
+		assert.cantMove(() => battle.choose('p1', 'move sleeptalk terastallize'));
+	});
+
+	it("should not allow Pokemon transformed into Ogerpon to Terastallize later if they couldn't before transforming", function () {
+		battle = common.createBattle({formatid: 'gen9customgame@@@!teampreview,terastalclause'}, [[
+			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
+			{species: "Shedinja", ability: "wonderguard", moves: ['transform'], teraType: "Fire"},
+		], [
+			{species: "Ogerpon", ability: "defiant", moves: ['spikes'], teraType: "Grass"},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('switch 2', 'default');
+		battle.makeChoices();
+		assert.false(battle.p1.active[0].transformed);
+		assert.cantMove(() => battle.choose('p1', 'move transform terastallize'));
+	});
+
+	it(`should not work if the user is Tera Stellar`, function () {
+		battle = common.createBattle([[
+			{species: 'Ditto', ability: 'limber', moves: ['transform'], teraType: 'Stellar'},
+		], [
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move transform terastallize', 'auto');
+		assert.false(battle.p1.active[0].transformed);
+	});
 });
 
 describe('Transform [Gen 5]', function () {
@@ -258,12 +312,15 @@ describe('Transform [Gen 1]', function () {
 	});
 
 	it(`should copy the target's boosted stats`, function () {
-		battle = common.gen(1).createBattle([[
+		battle = common.gen(1).createBattle({forceRandomChance: false}, [[ // disable crits
 			{species: 'Ditto', moves: ['transform']},
 		], [
 			{species: 'Gengar', moves: ['amnesia', 'thunderbolt']},
-			{species: 'Starmie', moves: ['swordsdance']},
+			{species: 'Starmie', moves: ['recover']},
 		]]);
+		// Set all moves to perfect accuracy
+		battle.onEvent('Accuracy', battle.format, true);
+
 		battle.makeChoices();
 		battle.makeChoices('move thunderbolt', 'switch 2');
 		assert.fainted(battle.p2.active[0]);

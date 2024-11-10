@@ -92,10 +92,12 @@ describe('Mirror Coat', function () {
 		battle.destroy();
 	});
 
-	it('should deal damage equal to twice the damage taken from the last Special attack', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Espeon', ability: 'synchronize', moves: ['sonicboom']}]});
-		battle.setPlayer('p2', {team: [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]});
+	it(`should deal damage equal to twice the damage taken from the last Special attack`, function () {
+		battle = common.createBattle([[
+			{species: 'Espeon', ability: 'noguard', moves: ['sonicboom']},
+		], [
+			{species: 'Umbreon', moves: ['mirrorcoat']},
+		]]);
 		assert.hurtsBy(battle.p1.active[0], 40, () => battle.makeChoices());
 	});
 
