@@ -2909,6 +2909,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const possibleTypes = [];
 			const attackType = target.lastMoveUsed.type;
 			for (const type of this.dex.types.all()) {
+				if (type.isNonstandard) continue;
 				if (source.hasType(type.name)) continue;
 				const typeCheck = type.damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
