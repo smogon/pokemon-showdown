@@ -120,7 +120,7 @@ export const commands: Chat.ChatCommands = {
 			};
 			saveSuspectTests();
 			this.sendReply(`Added a suspect test notice for ${suspectString} in ${format.name}.`);
-			if (reqData.coil) this.sendReply('Remember to add a B value for your test\'s COIL setting with /suspects setcoil.');
+			if (reqData.coil) this.sendReply('Remember to add a B value for your test\'s COIL setting with /suspects setbvalue.');
 		},
 
 		end: 'remove',
@@ -219,28 +219,32 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/help suspects');
 		},
 
-		deletecoil: 'setcoil',
-		sc: 'setcoil',
-		dc: 'setcoil',
-		async setcoil(target, room, user, connection, cmd) {
+		deletebvalue: 'setbvalue',
+		deletecoil: 'setbvalue',
+		sbv: 'setbvalue',
+		dbv: 'setbvalue',
+		sc: 'setbvalue',
+		dc: 'setbvalue',
+		setcoil: 'setbvalue',
+		async setbvalue(target, room, user, connection, cmd) {
 			checkPermissions(this);
 			if (!toID(target)) {
 				return this.parse(`/help ${cmd}`);
 			}
-			const [format, source] = this.splitOne(target);
-			const formatid = toID(format);
+			const [formatStr, source] = this.splitOne(target);
+			const format = Dex.formats.get(formatStr);
 			let bVal: number | undefined = parseFloat(source);
 			if (cmd.startsWith('d')) {
 				bVal = undefined;
 			} else if (!source || isNaN(bVal) || bVal < 1) {
 				return this.errorReply(`Specify a valid COIL B value.`);
 			}
-			if (!formatid || !Dex.formats.get(formatid).exists) {
-				return this.errorReply(`Specify a valid format to set COIL for.`);
+			if (!toID(formatStr) || !format.exists) {
+				return this.errorReply(`Specify a valid format to set a COIL B value for. Check spelling?`);
 			}
 			this.sendReply(`Updating...`);
 			const [res, error] = await LoginServer.request('updatecoil', {
-				format: formatid,
+				format: format.id,
 				coil_b: bVal,
 			});
 			if (error) {
@@ -249,18 +253,18 @@ export const commands: Chat.ChatCommands = {
 			if (!res || res.actionerror) {
 				return this.errorReply(res?.actionerror || "The loginserver is currently disabled.");
 			}
-			this.globalModlog(`${source ? 'SET' : 'REMOVE'}COIL`, null, `${formatid}${bVal ? ` to ${bVal}` : ""}`);
+			this.globalModlog(`${source ? 'SET' : 'REMOVE'}BVALUE`, null, `${format.id}${bVal ? ` to ${bVal}` : ""}`);
 			this.addGlobalModAction(
-				`${user.name} ${bVal ? `set COIL for ${formatid} to ${bVal}` : `removed COIL values for ${formatid}`}`
+				`${user.name} ${bVal ? `set B value for ${format.name} to ${bVal}` : `removed B value for ${format.name}`}.`
 			);
 			if (source) {
-				return this.sendReply(`COIL B value for ${formatid} set to ${bVal}`);
+				return this.sendReply(`COIL B value for ${format.name} set to ${bVal}.`);
 			} else {
-				return this.sendReply(`Removed COIL for ${formatid}.`);
+				return this.sendReply(`Removed COIL B value for ${format.name}.`);
 			}
 		},
-		setcoilhelp: [
-			`/suspects setcoil OR /suspects sc [formatid], [B value] - Activate COIL ranking for the given [formatid] with the given [B value].`,
+		setbvaluehelp: [
+			`/suspects setbvalue OR /suspects sbv [formatid], [B value] - Activate COIL ranking for the given [formatid] with the given [B value].`,
 			`Requires: suspect whitelist ~`,
 		],
 	},
@@ -275,7 +279,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/suspects remove [tier]</code>: deletes a suspect test. Requires: ~<br />` +
 			`<code>/suspects whitelist [username]</code>: allows [username] to add suspect tests. Requires: ~<br />` +
 			`<code>/suspects unwhitelist [username]</code>: disallows [username] from adding suspect tests. Requires: ~<br />` +
-			`<code>/suspects setcoil OR /suspects sc [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value].` +
+			`<code>/suspects setbvalue OR /suspects sbv [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value].` +
 			`Requires: suspect whitelist ~`
 		);
 	},
