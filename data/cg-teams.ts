@@ -297,7 +297,7 @@ export default class TeamGenerator {
 			let types = nonStatusMoves.map(move => TeamGenerator.moveType(this.dex.moves.get(move), species));
 			const noStellar = ability === 'Adaptability' || new Set(types).size < 3;
 			if (hasTeraBlast || hasRevelationDance || !nonStatusMoves.length) {
-				types = [...this.dex.types.all().map(t => t.name)];
+				types = [...this.dex.types.names()];
 				if (noStellar) types.splice(types.indexOf('Stellar'));
 			} else {
 				if (!noStellar) types.push('Stellar');
@@ -327,23 +327,23 @@ export default class TeamGenerator {
 	 */
 	protected speciesIsGoodFit(species: Species, stats: TeamStats): boolean {
 		// type check
-		for (const type of this.dex.types.all()) {
-			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
+		for (const typeName of this.dex.types.names()) {
+			const effectiveness = this.dex.getEffectiveness(typeName, species.types);
 			if (effectiveness === 1) { // WEAKNESS!
-				if (stats.typeWeaknesses[type.name] === undefined) {
-					stats.typeWeaknesses[type.name] = 0;
+				if (stats.typeWeaknesses[typeName] === undefined) {
+					stats.typeWeaknesses[typeName] = 0;
 				}
-				if (stats.typeWeaknesses[type.name] >= MAX_WEAK_TO_SAME_TYPE) {
+				if (stats.typeWeaknesses[typeName] >= MAX_WEAK_TO_SAME_TYPE) {
 					// too many weaknesses to this type
 					return false;
 				}
 			}
 		}
 		// species passes; increment counters
-		for (const type of this.dex.types.all()) {
-			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
+		for (const typeName of this.dex.types.names()) {
+			const effectiveness = this.dex.getEffectiveness(typeName, species.types);
 			if (effectiveness === 1) {
-				stats.typeWeaknesses[type.name]++;
+				stats.typeWeaknesses[typeName]++;
 			}
 		}
 		return true;
