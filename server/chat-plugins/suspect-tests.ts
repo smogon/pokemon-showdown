@@ -220,8 +220,12 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		deletebvalue: 'setbvalue',
+		deletecoil: 'setbvalue',
 		sbv: 'setbvalue',
 		dbv: 'setbvalue',
+		sc: 'setbvalue',
+		dc: 'setbvalue',
+		setcoil: 'setbvalue',
 		async setbvalue(target, room, user, connection, cmd) {
 			checkPermissions(this);
 			if (!toID(target)) {
