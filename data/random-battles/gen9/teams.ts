@@ -1971,7 +1971,7 @@ export class RandomTeams {
 				if (this.forceTeraType) {
 					set.teraType = this.forceTeraType;
 				} else {
-					set.teraType = this.sample(this.dex.types.all()).name;
+					set.teraType = this.sample(this.dex.types.names());
 				}
 			}
 			team.push(set);
@@ -2345,7 +2345,7 @@ export class RandomTeams {
 				if (this.forceTeraType) {
 					set.teraType = this.forceTeraType;
 				} else {
-					set.teraType = this.sample(this.dex.types.all()).name;
+					set.teraType = this.sample(this.dex.types.names());
 				}
 			}
 			team.push(set);

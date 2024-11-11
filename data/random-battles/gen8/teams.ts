@@ -526,7 +526,7 @@ export class RandomGen8Teams {
 			};
 			if (this.gen === 9) {
 				// Tera type
-				set.teraType = this.sample(this.dex.types.all()).name;
+				set.teraType = this.sample(this.dex.types.names());
 			}
 			team.push(set);
 		}
@@ -893,7 +893,7 @@ export class RandomGen8Teams {
 			};
 			if (this.gen === 9) {
 				// Random Tera type
-				set.teraType = this.sample(this.dex.types.all()).name;
+				set.teraType = this.sample(this.dex.types.names());
 			}
 			team.push(set);
 		}
