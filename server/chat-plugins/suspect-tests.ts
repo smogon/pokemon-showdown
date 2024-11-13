@@ -88,8 +88,15 @@ export const commands: Chat.ChatCommands = {
 			for (const req of reqs) {
 				let [k, v] = req.split('=');
 				k = toID(k);
+				if (k === 'b') {
+					await this.parse(`/suspects setcoil ${format},${v}`);
+					continue;
+				}
 				if (!['elo', 'gxe', 'coil'].includes(k)) {
 					return this.errorReply(`Invalid requirement type: ${k}. Must be 'coil', 'gxe', or 'elo'.`);
+				}
+				if (k === 'coil' && !reqs.some(x => toID(x.startsWith('b')))) {
+					throw new Chat.ErrorMessage("COIL reqs are specified, but you have not provided a B value (with the argument `b=num`)");
 				}
 				const val = Number(v);
 				if (isNaN(val) || val < 0) {
@@ -237,10 +244,10 @@ export const commands: Chat.ChatCommands = {
 			if (cmd.startsWith('d')) {
 				bVal = undefined;
 			} else if (!source || isNaN(bVal) || bVal < 1) {
-				return this.errorReply(`Specify a valid COIL B value.`);
+				throw new Chat.ErrorMessage(`Specify a valid COIL B value.`);
 			}
 			if (!toID(formatStr) || !format.exists) {
-				return this.errorReply(`Specify a valid format to set a COIL B value for. Check spelling?`);
+				throw new Chat.ErrorMessage(`Specify a valid format to set a COIL B value for. Check spelling?`);
 			}
 			this.sendReply(`Updating...`);
 			const [res, error] = await LoginServer.request('updatecoil', {
@@ -248,10 +255,10 @@ export const commands: Chat.ChatCommands = {
 				coil_b: bVal,
 			});
 			if (error) {
-				return this.errorReply(error.message);
+				throw new Chat.ErrorMessage(error.message);
 			}
 			if (!res || res.actionerror) {
-				return this.errorReply(res?.actionerror || "The loginserver is currently disabled.");
+				throw new Chat.ErrorMessage(res?.actionerror || "The loginserver is currently disabled.");
 			}
 			this.globalModlog(`${source ? 'SET' : 'REMOVE'}BVALUE`, null, `${format.id}${bVal ? ` to ${bVal}` : ""}`);
 			this.addGlobalModAction(
