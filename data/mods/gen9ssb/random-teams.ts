@@ -258,6 +258,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'De Todas las Flores',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', teraType: 'Grass', shiny: true,
 	},
+	Chris: {
+		species: 'Raging Bolt', ability: 'Astrothunder', item: 'Leftovers', gender: 'N',
+		moves: ['Thunder', 'Dragon Pulse', 'Calm Mind'],
+		signatureMove: 'Antidote',
+		evs: {hp: 148, def: 156, spa: 204}, nature: 'Quiet', teraType: 'Steel',
+	},
 	ciran: {
 		species: 'Rapidash', ability: 'Defiant', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Protect', 'Sketch', 'Bitter Blade'],
@@ -305,12 +311,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Swords Dance', 'U-turn', 'Close Combat'],
 		signatureMove: 'Monkey Beat Up',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', shiny: 69,
-	},
-	Daki: {
-		species: 'Raging Bolt', ability: 'Astrothunder', item: 'Leftovers', gender: 'N',
-		moves: ['Thunder', 'Dragon Pulse', 'Calm Mind'],
-		signatureMove: 'Antidote',
-		evs: {hp: 148, def: 156, spa: 204}, nature: 'Quiet', teraType: 'Steel',
 	},
 	'Dawn of Artemis': {
 		species: 'Necrozma', ability: 'Form Change', item: 'Expert Belt', gender: 'F',
@@ -372,12 +372,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Insert boar pun here',
 		// eslint-disable-next-line max-len
 		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant', teraType: ['Fire', 'Water', 'Fighting', 'Electric'], shiny: 50 / 49,
-	},
-	eva: {
-		species: 'Ceruledge', ability: 'Sword of Ruin', item: 'Life Orb', gender: 'N',
-		moves: ['Poltergeist', 'Swords Dance', 'Bitter Blade'],
-		signatureMove: 'A Soul for a Soul',
-		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Fire',
 	},
 	Fame: {
 		species: 'Jumpluff', ability: 'Social Jumpluff Warrior', item: 'Leftovers', gender: 'F',
@@ -480,12 +474,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Roost', 'Knock Off', 'Tidy Up'],
 		signatureMove: '10-20-40',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful', teraType: 'Water',
-	},
-	Irly: {
-		species: 'Spheal', ability: 'The Rolling Spheal', item: 'Choice Band', gender: '',
-		moves: ['Liquidation', 'Collision Course', 'Flip Turn'],
-		signatureMove: 'vruuuuuum',
-		evs: {hp: 8, atk: 252, spd: 4, spe: 244}, nature: 'Jolly', teraType: 'Fighting', shiny: 363,
 	},
 	ironwater: {
 		species: 'Jirachi', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
@@ -619,6 +607,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wrath of Frozen Flames',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Dragon',
 	},
+	Maia: {
+		species: 'Litwick', ability: 'Power Abuse', item: 'Eviolite', gender: 'F',
+		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],
+		signatureMove: 'Body Count',
+		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', teraType: 'Ghost',
+	},
 	'marillvibes ♫': {
 		species: 'Marill', ability: 'Huge Power', item: 'Life Orb', gender: 'M',
 		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],
@@ -654,6 +648,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Dragon Pulse', 'Flash Cannon', ['Aura Sphere', 'Volt Switch', 'Meteor Beam']],
 		signatureMove: 'Time Skip',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid', teraType: 'Steel', shiny: true,
+	},
+	Miojo: {
+		species: 'Spheal', ability: 'The Rolling Spheal', item: 'Choice Band', gender: '',
+		moves: ['Liquidation', 'Collision Course', 'Flip Turn'],
+		signatureMove: 'vruuuuuum',
+		evs: {hp: 8, atk: 252, spd: 4, spe: 244}, nature: 'Jolly', teraType: 'Fighting', shiny: 363,
 	},
 	Monkey: {
 		species: 'Infernape', ability: 'Harambe Hit', item: 'Blunder Policy', gender: 'M',
@@ -696,12 +696,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Freeze-Dry', 'Flamethrower', 'Volt Switch'],
 		signatureMove: ':3',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Naive', teraType: 'Ice',
-	},
-	Nyx: {
-		species: 'Altaria', ability: 'Last Hymn', item: 'Altarianite', gender: 'F',
-		moves: ['Earthquake', 'Amnesia', 'Roost'],
-		signatureMove: 'Cotton Candy Crush',
-		evs: {hp: 248, spd: 164, spe: 96}, nature: 'Careful', shiny: 4,
 	},
 	pants: {
 		species: 'Annihilape', ability: 'Drifting', item: 'Leftovers', gender: 'M',
@@ -750,6 +744,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Spore', 'Extreme Evoboost', 'Substitute'],
 		signatureMove: 'Roulette',
 		evs: {hp: 252, def: 4, spe: 252}, nature: 'Timid', teraType: 'Ghost',
+	},
+	'Princess Autumn': {
+		species: 'Altaria', ability: 'Last Hymn', item: 'Altarianite', gender: 'F',
+		moves: ['Earthquake', 'Amnesia', 'Roost'],
+		signatureMove: 'Cotton Candy Crush',
+		evs: {hp: 248, spd: 164, spe: 96}, nature: 'Careful', shiny: 4,
 	},
 	ptoad: {
 		species: 'Politoed', ability: 'Drizzle', item: 'Leftovers', gender: 'M',
@@ -920,6 +920,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Stink Bomb',
 		evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest', teraType: 'Water',
 	},
+	Syrinix: {
+		species: 'Ceruledge', ability: 'Sword of Ruin', item: 'Life Orb', gender: 'N',
+		moves: ['Poltergeist', 'Swords Dance', 'Bitter Blade'],
+		signatureMove: 'A Soul for a Soul',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Fire',
+	},
 	Teclis: {
 		species: 'Gallade', ability: 'Sharpness', item: 'Life Orb', gender: 'M',
 		moves: ['Sacred Sword', 'Psycho Cut', 'Leaf Blade'],
@@ -931,12 +937,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Precipice Blades', 'Dynamic Punch', 'Rapid Spin'],
 		signatureMove: 'SAND EAT',
 		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Ground', shiny: 10,
-	},
-	Theia: {
-		species: 'Litwick', ability: 'Power Abuse', item: 'Eviolite', gender: 'F',
-		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],
-		signatureMove: 'Body Count',
-		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest', teraType: 'Ghost',
 	},
 	TheJesucristoOsAma: {
 		species: 'Arceus', ability: 'The Grace Of Jesus Christ', gender: 'N',

@@ -505,6 +505,26 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 	},
 
+	// Chris
+	astrothunder: {
+		shortDesc: "Drizzle + Static.",
+		name: "Astrothunder",
+		onStart(source) {
+			for (const action of this.queue) {
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
+				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
+			}
+			this.field.setWeather('raindance');
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('par', target);
+				}
+			}
+		},
+	},
+
 	// Clefable
 	thatshacked: {
 		shortDesc: "Tries to inflict the foe with Torment at the end of each turn.",
@@ -671,26 +691,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: {},
-	},
-
-	// Daki
-	astrothunder: {
-		shortDesc: "Drizzle + Static.",
-		name: "Astrothunder",
-		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
-			this.field.setWeather('raindance');
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
-				if (this.randomChance(3, 10)) {
-					source.trySetStatus('par', target);
-				}
-			}
-		},
 	},
 
 	// Dawn of Artemis
@@ -1090,58 +1090,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {breakable: 1},
 	},
 
-	// Irly
-	therollingspheal: {
-		shortDesc: "1.5x dmg boost for every repeated move use. Up to 5 uses. +1 Spe when use contact.",
-		name: "The Rolling Spheal",
-		onStart(pokemon) {
-			pokemon.addVolatile('therollingspheal');
-		},
-		onSourceHit(target, source, move) {
-			if (move.flags['contact'] && move.category === 'Physical') {
-				this.add('-activate', source, 'ability: The Rolling Spheal');
-				this.boost({spe: 1}, source, source, move);
-			}
-		},
-		condition: {
-			onStart(pokemon) {
-				this.effectState.lastMove = '';
-				this.effectState.numConsecutive = 0;
-			},
-			onTryMovePriority: -2,
-			onTryMove(pokemon, target, move) {
-				if (!pokemon.hasAbility('therollingspheal')) {
-					pokemon.removeVolatile('therollingspheal');
-					return;
-				}
-				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
-					this.effectState.numConsecutive++;
-				} else if (pokemon.volatiles['twoturnmove']) {
-					if (this.effectState.lastMove !== move.id) {
-						this.effectState.numConsecutive = 1;
-					} else {
-						this.effectState.numConsecutive++;
-					}
-				} else {
-					this.effectState.numConsecutive = 0;
-				}
-				this.effectState.lastMove = move.id;
-			},
-			onModifyDamage(damage, source, target, move) {
-				if (this.effectState.numConsecutive > 0) {
-					this.debug(`Current Metronome boost: 6144/4096`);
-					return this.chainModify([6144, 4096]);
-				}
-			},
-			onAfterMove(source, target, move) {
-				if (this.effectState.numConsecutive > 5) {
-					this.effectState.numConsecutive = 0;
-				}
-			},
-		},
-		flags: {},
-	},
-
 	// Irpachuza
 	mimeknowsbest: {
 		shortDesc: "When this Pokemon switches in, it uses a random screen or protect move.",
@@ -1472,6 +1420,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {breakable: 1},
 	},
 
+	// Maia
+	powerabuse: {
+		shortDesc: "Drought + 60% damage reduction + 20% burn after physical move.",
+		name: "Power Abuse",
+		onStart() {
+			this.field.setWeather('sunnyday');
+		},
+		onSourceModifyDamage() {
+			return this.chainModify(0.4);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === "Physical" && this.randomChance(1, 5)) {
+				source.trySetStatus('brn', target);
+			}
+		},
+		flags: {breakable: 1},
+	},
+
 	// maroon
 	builtdifferent: {
 		shortDesc: "Stamina + Normal-type moves get +1 priority.",
@@ -1589,6 +1555,58 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 	},
 
+	// Miojo
+	therollingspheal: {
+		shortDesc: "1.5x dmg boost for every repeated move use. Up to 5 uses. +1 Spe when use contact.",
+		name: "The Rolling Spheal",
+		onStart(pokemon) {
+			pokemon.addVolatile('therollingspheal');
+		},
+		onSourceHit(target, source, move) {
+			if (move.flags['contact'] && move.category === 'Physical') {
+				this.add('-activate', source, 'ability: The Rolling Spheal');
+				this.boost({spe: 1}, source, source, move);
+			}
+		},
+		condition: {
+			onStart(pokemon) {
+				this.effectState.lastMove = '';
+				this.effectState.numConsecutive = 0;
+			},
+			onTryMovePriority: -2,
+			onTryMove(pokemon, target, move) {
+				if (!pokemon.hasAbility('therollingspheal')) {
+					pokemon.removeVolatile('therollingspheal');
+					return;
+				}
+				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
+					this.effectState.numConsecutive++;
+				} else if (pokemon.volatiles['twoturnmove']) {
+					if (this.effectState.lastMove !== move.id) {
+						this.effectState.numConsecutive = 1;
+					} else {
+						this.effectState.numConsecutive++;
+					}
+				} else {
+					this.effectState.numConsecutive = 0;
+				}
+				this.effectState.lastMove = move.id;
+			},
+			onModifyDamage(damage, source, target, move) {
+				if (this.effectState.numConsecutive > 0) {
+					this.debug(`Current Metronome boost: 6144/4096`);
+					return this.chainModify([6144, 4096]);
+				}
+			},
+			onAfterMove(source, target, move) {
+				if (this.effectState.numConsecutive > 5) {
+					this.effectState.numConsecutive = 0;
+				}
+			},
+		},
+		flags: {},
+	},
+
 	// Monkey
 	harambehit: {
 		shortDesc: "Unseen Fist + Punch moves have 1.5x power.",
@@ -1680,29 +1698,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.self?.chance) move.self.chance *= 2;
 		},
 		// Item chances modified in items.js
-	},
-
-	// Nyx
-	lasthymn: {
-		shortDesc: "Weakens incoming attacks by 10% for each Pokemon fainted.",
-		name: "Last Hymn",
-		onStart(pokemon) {
-			if (pokemon.side.totalFainted) {
-				this.add('-activate', pokemon, 'ability: Last Hymn');
-				const fallen = Math.min(pokemon.side.totalFainted, 5);
-				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
-				this.effectState.fallen = fallen;
-			}
-		},
-		onEnd(pokemon) {
-			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
-		},
-		onBasePowerPriority: 21,
-		onFoeBasePower(basePower, attacker, defender, move) {
-			if (this.effectState.fallen) {
-				return this.chainModify([10, (10 + this.effectState.fallen)]);
-			}
-		},
 	},
 
 	// pants
@@ -1802,6 +1797,29 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "I Did It Again",
 		flags: {},
 		// implemented in rulesets.ts
+	},
+
+	// Princess Autumn
+	lasthymn: {
+		shortDesc: "Weakens incoming attacks by 10% for each Pokemon fainted.",
+		name: "Last Hymn",
+		onStart(pokemon) {
+			if (pokemon.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: Last Hymn');
+				const fallen = Math.min(pokemon.side.totalFainted, 5);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onBasePowerPriority: 21,
+		onFoeBasePower(basePower, attacker, defender, move) {
+			if (this.effectState.fallen) {
+				return this.chainModify([10, (10 + this.effectState.fallen)]);
+			}
+		},
 	},
 
 	// Pulse_kS
@@ -2404,24 +2422,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: {},
-	},
-
-	// Theia
-	powerabuse: {
-		shortDesc: "Drought + 60% damage reduction + 20% burn after physical move.",
-		name: "Power Abuse",
-		onStart() {
-			this.field.setWeather('sunnyday');
-		},
-		onSourceModifyDamage() {
-			return this.chainModify(0.4);
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.category === "Physical" && this.randomChance(1, 5)) {
-				source.trySetStatus('brn', target);
-			}
-		},
-		flags: {breakable: 1},
 	},
 
 	// Tico
