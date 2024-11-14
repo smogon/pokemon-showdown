@@ -120,12 +120,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Big Thunder',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
-	flufi: {
-		species: 'Pikachu', ability: 'Force of Will', item: 'Silly Costume', gender: 'M',
-		moves: ['Plasma Fists', 'Thunderous Kick', 'No Retreat'],
-		signatureMove: 'Cranberry Cutter',
-		evs: {atk: 252, spe: 252, spd: 4}, nature: 'Jolly',
-	},
 	Fblthp: {
 		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
 		moves: ['Bouncy Bubble', 'Yawn', 'Helping Hand'],
