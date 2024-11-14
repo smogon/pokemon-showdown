@@ -2125,7 +2125,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (pokemon === target) continue;
 				if (pokemon.hp) possibleTargets.push(pokemon);
 			}
-			if (!possibleTargets) return null;
+			if (!possibleTargets || !possibleTargets.length) return null;
 			const newTarget = this.sample(possibleTargets);
 			let dmg = this.actions.getDamage(source, newTarget, move);
 			if (!dmg) {
