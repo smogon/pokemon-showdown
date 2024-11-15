@@ -95,7 +95,7 @@ export const commands: Chat.ChatCommands = {
 				if (!['elo', 'gxe', 'coil'].includes(k)) {
 					return this.errorReply(`Invalid requirement type: ${k}. Must be 'coil', 'gxe', or 'elo'.`);
 				}
-				if (k === 'coil' && !reqs.some(x => toID(x.startsWith('b')))) {
+				if (k === 'coil' && !reqs.some(x => toID(x).startsWith('b'))) {
 					throw new Chat.ErrorMessage("COIL reqs are specified, but you have not provided a B value (with the argument `b=num`)");
 				}
 				const val = Number(v);
