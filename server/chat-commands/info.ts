@@ -1160,23 +1160,14 @@ export const commands: Chat.ChatCommands = {
 			const immune: string[] = [];
 
 			for (const type in bestCoverage) {
-				switch (bestCoverage[type]) {
-				case 0:
+				if (bestCoverage[type] === 0) {
 					immune.push(type);
-					break;
-				case 0.25:
-				case 0.5:
+				} else if (bestCoverage[type] < 1) {
 					resists.push(type);
-					break;
-				case 1:
-					neutral.push(type);
-					break;
-				case 2:
-				case 4:
+				} else if (bestCoverage[type] > 1) {
 					superEff.push(type);
-					break;
-				default:
-					throw new Error(`/coverage effectiveness of ${bestCoverage[type]} from parameters: ${target}`);
+				} else {
+					neutral.push(type);
 				}
 			}
 			buffer.push(`Coverage for ${sources.join(' + ')}:`);
@@ -1237,23 +1228,14 @@ export const commands: Chat.ChatCommands = {
 							bestEff = Math.pow(2, bestEff);
 						}
 					}
-					switch (bestEff) {
-					case 0:
+					if (bestEff === 0) {
 						cell += `bgcolor=#666666 title="${typing}"><font color=#000000>${bestEff}</font>`;
-						break;
-					case 0.25:
-					case 0.5:
+					} else if (bestEff < 1) {
 						cell += `bgcolor=#AA5544 title="${typing}"><font color=#660000>${bestEff}</font>`;
-						break;
-					case 1:
-						cell += `bgcolor=#6688AA title="${typing}"><font color=#000066>${bestEff}</font>`;
-						break;
-					case 2:
-					case 4:
+					} else if (bestEff > 1) {
 						cell += `bgcolor=#559955 title="${typing}"><font color=#003300>${bestEff}</font>`;
-						break;
-					default:
-						throw new Error(`/coverage effectiveness of ${bestEff} from parameters: ${target}`);
+					} else {
+						cell += `bgcolor=#6688AA title="${typing}"><font color=#000066>${bestEff}</font>`;
 					}
 					cell += '</th>';
 					buffer += cell;
