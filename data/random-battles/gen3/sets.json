@@ -1451,19 +1451,15 @@
         "level": 90,
         "sets": [
             {
-                "role": "Berry Sweeper",
-                "movepool": ["drillpeck", "hiddenpowerfighting", "hiddenpowerground", "shadowball", "substitute"],
-                "abilities": ["Insomnia"]
-            },
-            {
                 "role": "Wallbreaker",
                 "movepool": ["doubleedge", "drillpeck", "hiddenpowerfighting", "hiddenpowerground", "shadowball"],
                 "abilities": ["Insomnia"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["drillpeck", "hiddenpowerfighting", "hiddenpowerground", "shadowball", "thunderwave", "toxic"],
-                "abilities": ["Insomnia"]
+                "movepool": ["drillpeck", "hiddenpowerground", "pursuit", "shadowball", "thunderwave", "toxic"],
+                "abilities": ["Insomnia"],
+                "preferredTypes": ["Ground"]
             }
         ]
     },
@@ -1803,7 +1799,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["drillpeck", "protect", "rest", "spikes", "toxic"],
+                "movepool": ["drillpeck", "protect", "spikes", "toxic"],
                 "abilities": ["Keen Eye"]
             },
             {

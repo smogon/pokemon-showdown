@@ -1076,7 +1076,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		// Minimize confusion damage, including if Foul Play is its only physical attack
 		if (
-			(!counter.get('Physical') || (counter.get('Physical') <= 1 && moves.has('foulplay'))) &&
+			(!counter.get('Physical') || (counter.get('Physical') <= 1 && (moves.has('foulplay') || moves.has('rapidspin')))) &&
 			!moves.has('copycat') && !moves.has('transform')
 		) {
 			evs.atk = 0;

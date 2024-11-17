@@ -807,18 +807,14 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["dracometeor", "flamethrower", "gigadrain", "leafstorm", "trickroom"],
-                "abilities": ["Frisk"]
-            },
-            {
-                "role": "Bulky Attacker",
                 "movepool": ["dracometeor", "flamethrower", "gigadrain", "leafstorm"],
                 "abilities": ["Frisk"]
             },
             {
-                "role": "AV Pivot",
-                "movepool": ["dracometeor", "flamethrower", "gigadrain", "knockoff"],
-                "abilities": ["Frisk"]
+                "role": "Fast Attacker",
+                "movepool": ["dracometeor", "dragontail", "flamethrower", "knockoff", "moonlight", "sleeppowder", "stunspore", "woodhammer"],
+                "abilities": ["Harvest"],
+                "preferredTypes": ["Fire"]
             }
         ]
     },
@@ -1866,7 +1862,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["darkpulse", "fireblast", "hiddenpowergrass", "nastyplot", "suckerpunch"],
+                "movepool": ["darkpulse", "fireblast", "nastyplot", "sludgebomb", "suckerpunch"],
                 "abilities": ["Flash Fire"]
             }
         ]
@@ -1876,7 +1872,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["darkpulse", "fireblast", "hiddenpowergrass", "nastyplot", "taunt"],
+                "movepool": ["darkpulse", "fireblast", "nastyplot", "sludgebomb", "taunt"],
                 "abilities": ["Flash Fire"]
             }
         ]
@@ -3529,6 +3525,16 @@
                 "role": "Setup Sweeper",
                 "movepool": ["bugbuzz", "energyball", "gigadrain", "hiddenpowerground", "hiddenpowerrock", "quiverdance"],
                 "abilities": ["Anticipation", "Overcoat"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["bugbuzz", "hiddenpowerground", "hiddenpowerrock", "leafstorm", "psychic"],
+                "abilities": ["Anticipation", "Overcoat"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["gigadrain", "hiddenpowerground", "protect", "toxic"],
+                "abilities": ["Anticipation", "Overcoat"]
             }
         ]
     },
@@ -3942,8 +3948,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["flashcannon", "hiddenpowerfire", "hiddenpowerice", "thunderbolt", "voltswitch"],
+                "movepool": ["flashcannon", "hiddenpowerground", "thunderbolt", "voltswitch"],
                 "abilities": ["Magnet Pull"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["flashcannon", "protect", "thunderbolt", "toxic"],
+                "abilities": ["Analytic"]
             }
         ]
     },
@@ -5253,13 +5264,8 @@
         "level": 87,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "shadowball", "trickroom"],
-                "abilities": ["Magic Guard"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["focusblast", "psychic", "psyshock", "shadowball", "trickroom"],
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "signalbeam"],
                 "abilities": ["Magic Guard"]
             }
         ]
@@ -5425,7 +5431,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["hiddenpowerfighting", "nastyplot", "psychic", "psyshock", "signalbeam", "thunderbolt", "trick", "trickroom"],
+                "movepool": ["hiddenpowerfighting", "psychic", "psyshock", "recover", "signalbeam", "thunderbolt", "trick", "trickroom"],
                 "abilities": ["Analytic"],
                 "preferredTypes": ["Bug"]
             }
@@ -5713,7 +5719,7 @@
             },
             {
                 "role": "Z-Move user",
-                "movepool": ["calmmind", "focusblast", "gigadrain", "hiddenpowerrock"],
+                "movepool": ["closecombat", "leafblade", "stoneedge", "swordsdance"],
                 "abilities": ["Justified"],
                 "preferredTypes": ["Fighting"]
             }
@@ -6628,7 +6634,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["bugbuzz", "energyball", "roost", "thunderbolt", "voltswitch"],
+                "movepool": ["bugbuzz", "discharge", "energyball", "roost", "toxic", "voltswitch"],
                 "abilities": ["Levitate"],
                 "preferredTypes": ["Bug"]
             }
