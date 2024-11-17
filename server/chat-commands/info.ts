@@ -660,7 +660,7 @@ export const commands: Chat.ChatCommands = {
 					};
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
-					if (gmaxMove && dex.gen >= 8) details["G-Max Move"] = gmaxMove;
+					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
@@ -746,7 +746,9 @@ export const commands: Chat.ChatCommands = {
 						Gen: String(move.gen) || 'CAP',
 					};
 
-					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
+					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
+						(move.isNonstandard === "Gigantamax" && dex.gen !== 8);
+					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForce) details["&#10003; Boosted by Sheer Force"] = "";
 					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
 					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
@@ -804,13 +806,11 @@ export const commands: Chat.ChatCommands = {
 						}
 					}
 
-					if (dex.gen >= 8) {
-						if (move.isMax) {
-							details["&#10003; Max Move"] = "";
-							if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
-						} else if (move.maxMove?.basePower) {
-							details["Dynamax Power"] = String(move.maxMove.basePower);
-						}
+					if (move.isMax) {
+						details["&#10003; Max Move"] = "";
+						if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
+					} else if (dex.gen === 8 && move.maxMove?.basePower) {
+						details["Dynamax Power"] = String(move.maxMove.basePower);
 					}
 
 					const targetTypes: {[k: string]: string} = {
