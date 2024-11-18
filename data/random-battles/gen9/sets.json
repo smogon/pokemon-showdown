@@ -1472,6 +1472,11 @@
                 "movepool": ["Aqua Jet", "Crunch", "Gunk Shot", "Liquidation", "Swords Dance"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Water"]
+            }, {
+                "role": "Setup Sweeper",
+                "movepool": ["Crunch", "Gunk Shot", "Scale Shot", "Swords Dance"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Dragon"]
             }
         ]
     },
@@ -6069,7 +6074,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Body Press", "Crunch", "Heavy Slam", "Iron Defense", "Stone Edge"],
+                "movepool": ["Body Press", "Crunch", "Heavy Slam", "Iron Defense", "Stone Edge", "Substitute"],
                 "abilities": ["Dauntless Shield"],
                 "teraTypes": ["Fighting", "Ghost"]
             }
