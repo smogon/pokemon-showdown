@@ -1449,7 +1449,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (pokemon.species.id === 'rayquaza') {
 					pokemon.canMegaEvo = null;
 					// ability to terastal was determined before the clause activated, causing incorrect behavior
-					pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
+					if (!this.ruleTable.has('terastalclause')) {
+						pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
+					}
 				}
 			}
 		},
