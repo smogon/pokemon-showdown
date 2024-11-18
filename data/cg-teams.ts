@@ -157,7 +157,7 @@ export default class TeamGenerator {
 	}
 
 	protected makeSet(species: Species, teamStats: TeamStats): PokemonSet {
-		const abilityPool = Object.values(species.abilities);
+		const abilityPool: string[] = Object.values(species.abilities);
 		const abilityWeights = abilityPool.map(a => this.getAbilityWeight(this.dex.abilities.get(a)));
 		const ability = this.weightedRandomPick(abilityPool, abilityWeights);
 		const level = this.forceLevel || TeamGenerator.getLevel(species);
@@ -173,7 +173,7 @@ export default class TeamGenerator {
 			nonStatusMoves: 0,
 		};
 
-		let movePool: string[] = [...this.dex.species.getMovePool(species.id)];
+		let movePool: IDEntry[] = [...this.dex.species.getMovePool(species.id)];
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
 
 		// Consider either the top 15 moves or top 30% of moves, whichever is greater.
@@ -190,7 +190,7 @@ export default class TeamGenerator {
 		// this is just a second reference the array because movePool gets set to point to a new array before the old one
 		// gets mutated
 		const movePoolCopy = movePool;
-		let interimMovePool: {move: string, weight: number}[] = [];
+		let interimMovePool: {move: IDEntry, weight: number}[] = [];
 		while (moves.length < 4 && movePool.length) {
 			let weights;
 			if (!movePoolIsTrimmed) {
@@ -356,8 +356,8 @@ export default class TeamGenerator {
 			let types = nonStatusMoves.map(m => TeamGenerator.moveType(this.dex.moves.get(m), species));
 			const noStellar = ability === 'Adaptability' || new Set(types).size < 3;
 			if (hasTeraBlast || hasRevelationDance || !nonStatusMoves.length) {
-				types = [...this.dex.types.all().map(t => t.name)];
-				if (noStellar) types.splice(types.indexOf('Stellar'), 1);
+				types = [...this.dex.types.names()];
+				if (noStellar) types.splice(types.indexOf('Stellar'));
 			} else {
 				if (!noStellar) types.push('Stellar');
 			}
@@ -386,23 +386,23 @@ export default class TeamGenerator {
 	 */
 	protected speciesIsGoodFit(species: Species, stats: TeamStats): boolean {
 		// type check
-		for (const type of this.dex.types.all()) {
-			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
-			if (effectiveness >= 1) { // WEAKNESS!
-				if (stats.typeWeaknesses[type.name] === undefined) {
-					stats.typeWeaknesses[type.name] = 0;
+		for (const typeName of this.dex.types.names()) {
+			const effectiveness = this.dex.getEffectiveness(typeName, species.types);
+			if (effectiveness === 1) { // WEAKNESS!
+				if (stats.typeWeaknesses[typeName] === undefined) {
+					stats.typeWeaknesses[typeName] = 0;
 				}
-				if (stats.typeWeaknesses[type.name] >= MAX_WEAK_TO_SAME_TYPE) {
+				if (stats.typeWeaknesses[typeName] >= MAX_WEAK_TO_SAME_TYPE) {
 					// too many weaknesses to this type
 					return false;
 				}
 			}
 		}
 		// species passes; increment counters
-		for (const type of this.dex.types.all()) {
-			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
-			if (effectiveness >= 1) {
-				stats.typeWeaknesses[type.name]++;
+		for (const typeName of this.dex.types.names()) {
+			const effectiveness = this.dex.getEffectiveness(typeName, species.types);
+			if (effectiveness === 1) {
+				stats.typeWeaknesses[typeName]++;
 			}
 		}
 		return true;
@@ -619,8 +619,8 @@ export default class TeamGenerator {
 		if (move.category === 'Special') powerEstimate *= Math.max(0.5, 1 + specialSetup) / Math.max(0.5, 1 + physicalSetup);
 
 		const abilityBonus = (
-			((ABILITY_MOVE_BONUSES[ability] || {})[move.id] || 1) *
-			((ABILITY_MOVE_TYPE_BONUSES[ability] || {})[moveType] || 1)
+			((ABILITY_MOVE_BONUSES[this.dex.toID(ability)] || {})[move.id] || 1) *
+			((ABILITY_MOVE_TYPE_BONUSES[this.dex.toID(ability)] || {})[moveType] || 1)
 		);
 
 		let weight = powerEstimate * abilityBonus;

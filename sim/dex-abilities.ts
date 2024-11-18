@@ -1,5 +1,6 @@
-import {PokemonEventMethods} from './dex-conditions';
-import {BasicEffect, toID} from './dex-data';
+import type {PokemonEventMethods, ConditionData} from './dex-conditions';
+import {assignMissingFields, BasicEffect, toID} from './dex-data';
+import {Utils} from '../lib';
 
 interface AbilityEventMethods {
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
@@ -8,11 +9,25 @@ interface AbilityEventMethods {
 	onStart?: (this: Battle, target: Pokemon) => void;
 }
 
+/* Possible Ability flags */
+interface AbilityFlags {
+	breakable?: 1; // Can be suppressed by Mold Breaker and related effects
+	cantsuppress?: 1; // Ability can't be suppressed by e.g. Gastro Acid or Neutralizing Gas
+	failroleplay?: 1; // Role Play fails if target has this Ability
+	failskillswap?: 1; // Skill Swap fails if either the user or target has this Ability
+	noentrain?: 1; // Entrainment fails if user has this Ability
+	noreceiver?: 1; // Receiver and Power of Alchemy will not activate if an ally faints with this Ability
+	notrace?: 1; // Trace cannot copy this Ability
+	notransform?: 1; // Disables the Ability if the user is Transformed
+}
+
 export interface AbilityData extends Partial<Ability>, AbilityEventMethods, PokemonEventMethods {
 	name: string;
 }
 
 export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
+export interface AbilityDataTable {[abilityid: IDEntry]: AbilityData}
+export interface ModdedAbilityDataTable {[abilityid: IDEntry]: ModdedAbilityData}
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Ability';
@@ -20,9 +35,8 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	/** Rating from -1 Detrimental to +5 Essential; see `data/abilities.ts` for details. */
 	readonly rating: number;
 	readonly suppressWeather: boolean;
+	readonly flags: AbilityFlags;
 	declare readonly condition?: ConditionData;
-	declare readonly isPermanent?: boolean;
-	declare readonly isBreakable?: boolean;
 
 	constructor(data: AnyObject) {
 		super(data);
@@ -30,6 +44,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 		this.fullname = `ability: ${this.name}`;
 		this.effectType = 'Ability';
 		this.suppressWeather = !!data.suppressWeather;
+		this.flags = data.flags || {};
 		this.rating = data.rating || 0;
 
 		if (!this.gen) {
@@ -49,8 +64,11 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 				this.gen = 3;
 			}
 		}
+		assignMissingFields(this, data);
 	}
 }
+
+const EMPTY_ABILITY = Utils.deepFreeze(new Ability({id: '', name: '', exists: false}));
 
 export class DexAbilities {
 	readonly dex: ModdedDex;
@@ -63,12 +81,12 @@ export class DexAbilities {
 
 	get(name: string | Ability = ''): Ability {
 		if (name && typeof name !== 'string') return name;
-
-		const id = toID(name);
+		const id = toID(name.trim());
 		return this.getByID(id);
 	}
 
 	getByID(id: ID): Ability {
+		if (id === '') return EMPTY_ABILITY;
 		let ability = this.abilityCache.get(id);
 		if (ability) return ability;
 

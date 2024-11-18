@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	growlithehisui: {
 		inherit: true,
 		abilities: {0: "Intimidate", 1: "Flash Fire", H: "Justified"},
@@ -115,5 +115,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	enamorus: {
 		inherit: true,
 		abilities: {0: "Healer", H: "Contrary"},
+	},
+	kitsunoh: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 103, def: 85, spa: 55, spd: 80, spe: 110},
+		abilities: {0: "Frisk", 1: "Limber", H: "Iron Fist"},
 	},
 };

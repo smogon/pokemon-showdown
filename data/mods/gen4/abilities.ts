@@ -1,8 +1,10 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
 		onSwitchIn() {},
-		onStart() {},
+		onStart(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 	},
 	angerpoint: {
 		inherit: true,
@@ -35,7 +37,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	cloudnine: {
 		inherit: true,
 		onSwitchIn() {},
-		onStart() {},
+		onStart(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 	},
 	colorchange: {
 		inherit: true,
@@ -65,6 +69,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('attract', this.effectState.target);
 				}
+			}
+		},
+	},
+	download: {
+		inherit: true,
+		onStart(pokemon) {
+			let totaldef = 0;
+			let totalspd = 0;
+			for (const target of pokemon.foes()) {
+				if (target.volatiles.substitute) continue;
+				totaldef += target.getStat('def', false, true);
+				totalspd += target.getStat('spd', false, true);
+			}
+			if (totaldef && totaldef >= totalspd) {
+				this.boost({spa: 1});
+			} else if (totalspd) {
+				this.boost({atk: 1});
 			}
 		},
 	},
@@ -134,6 +155,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
+		flags: {breakable: 1},
+	},
+	forecast: {
+		inherit: true,
+		flags: {notrace: 1},
 	},
 	forewarn: {
 		inherit: true,
@@ -163,10 +189,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	frisk: {
 		inherit: true,
 		onStart(pokemon) {
-			for (const target of pokemon.foes()) {
-				if (target.item && !target.itemState.knockedOff) {
-					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
-				}
+			const target = pokemon.side.randomFoe();
+			if (target?.item && !target.itemState.knockedOff) {
+				this.add('-item', pokemon, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
 			}
 		},
 	},
@@ -385,7 +410,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts[key]! *= 2;
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Simple",
 		rating: 4,
 		num: 86,
@@ -481,7 +506,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true,
+		flags: {breakable: 1},
 		name: "Thick Fat",
 		rating: 3.5,
 		num: 47,
@@ -513,6 +538,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
 		},
+		flags: {notrace: 1},
 	},
 	unburden: {
 		inherit: true,
@@ -532,7 +558,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onTryHit(target, source, move) {
 			if (move.id === 'firefang') {
-				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.");
+				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.", true, target.side);
 				return;
 			}
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;

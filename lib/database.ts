@@ -14,6 +14,22 @@ export type BasicSQLValue = string | number | null;
 export type SQLRow = {[k: string]: BasicSQLValue};
 export type SQLValue = BasicSQLValue | SQLStatement | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
 
+export function isSQL(value: any): value is SQLStatement {
+	/**
+	 * This addresses a scenario where objects get out of sync due to hotpatching.
+	 * Table A is instantiated, and retains SQLStatement at that specific point in time. Consumer A is also instantiated at
+	 * the same time, and both can interact freely, since consumer A and table A share the same reference to SQLStatement.
+	 * However, when consumer A is hotpatched, consumer A imports a new instance of SQLStatement. Thus, when consumer A
+	 * provides that new SQLStatement, it does not pass the `instanceof SQLStatement` check in Table A,
+	 * since table A is still referencing he old SQLStatement (checking that the new is an instance of the old).
+	 * This does not work. Thus, we're forced to check constructor name instead.
+	 */
+	return value instanceof SQLStatement || (
+		// assorted safety checks to be sure it'll actually work (theoretically preventing certain attacks)
+		value?.constructor.name === 'SQLStatement' && (Array.isArray(value.sql) && Array.isArray(value.values))
+	);
+}
+
 export class SQLStatement {
 	sql: string[];
 	values: BasicSQLValue[];
@@ -25,7 +41,7 @@ export class SQLStatement {
 		}
 	}
 	append(value: SQLValue, nextString = ''): this {
-		if (value instanceof SQLStatement) {
+		if (isSQL(value)) {
 			if (!value.sql.length) return this;
 			const oldLength = this.sql.length;
 			this.sql = this.sql.concat(value.sql.slice(1));

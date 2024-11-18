@@ -19,7 +19,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global driver</strong> - Het bovenstaande en ze kunnen gebruikers locken en alts (nevenaccounts) inzien.",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global moderator</strong> - Het bovenstaande en ze kunnen gebruikers uit de gehele server verbannen.",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global bot</strong> - Hetzelfde als een moderator maar dit symbool maakt duidelijk dat deze gebruiker een bot is.",
-		"&amp; <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global administrator</strong> - Zij kunnen alles doen, zoals veranderen wat hier staat en gebruikers globaal promoveren.",
+		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "~ <strong>Global administrator</strong> - Zij kunnen alles doen, zoals veranderen wat hier staat en gebruikers globaal promoveren.",
 
 		"<strong>Room ranks</strong>": "<strong>Roomrangen</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
@@ -42,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "COMMANDO'S VOOR MODERATORS",
 		"ADMIN COMMANDS": "COMMANDO'S VOOR ADMINS",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(vervang / door ! om het commando uit te zenden. Uitzenden vereist: + % @ # &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(vervang / door ! om het commando uit te zenden. Uitzenden vereist: + % @ # ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>Roomstraffen</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>waarschuwing</strong> - Laat een popup zien met de regels.",

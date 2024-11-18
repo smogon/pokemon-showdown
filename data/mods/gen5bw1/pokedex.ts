@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	weedle: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -43,6 +43,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
+	ditto: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 	snorlax: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -60,6 +64,14 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		unreleasedHidden: true,
 	},
 	heracross: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	lugia: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	hooh: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
@@ -187,6 +199,18 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
+	dialga: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	palkia: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
+	giratina: {
+		inherit: true,
+		unreleasedHidden: true,
+	},
 	patrat: {
 		inherit: true,
 		unreleasedHidden: true,
@@ -195,7 +219,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
-	lillpup: {
+	lillipup: {
 		inherit: true,
 		unreleasedHidden: true,
 	},
@@ -359,7 +383,7 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		unreleasedHidden: true,
 	},
-	lillgant: {
+	lilligant: {
 		inherit: true,
 		unreleasedHidden: true,
 	},

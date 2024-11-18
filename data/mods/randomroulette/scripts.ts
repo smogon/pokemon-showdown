@@ -116,6 +116,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.queue.addChoice({choice: 'start'});
 		this.midTurn = true;
-		if (!this.requestState) this.go();
+		if (!this.requestState) this.turnLoop();
 	},
 };

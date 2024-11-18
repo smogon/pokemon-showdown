@@ -180,7 +180,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
-
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		if (!target.includes('mod=')) {
+			const dex = defaultFormat.dex;
+			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
+		}
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
@@ -227,7 +231,11 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 		if (!qty) targetsBuffer.push("random1");
-
+		const defaultFormat = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		if (!target.includes('mod=')) {
+			const dex = defaultFormat.dex;
+			if (dex) targetsBuffer.push(`mod=${dex.currentMod}`);
+		}
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
@@ -355,7 +363,7 @@ export const commands: Chat.ChatCommands = {
 			`- <code>zmove</code>, <code>max</code>, or <code>gmax</code> as parameters will search for Z-Moves, Max Moves, and G-Max Moves respectively.<br/>` +
 			`- Move targets must be preceded with <code>targets </code>; e.g. <code>targets user</code> searches for moves that target the user.<br/>` +
 			`- Valid move targets are: one ally, user or ally, one adjacent opponent, all Pokemon, all adjacent Pokemon, all adjacent opponents, user and allies, user's side, user's team, any Pokemon, opponent's side, one adjacent Pokemon, random adjacent Pokemon, scripted, and user.<br/>` +
-			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, instruct, mefirst, mimic, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
+			`- Valid flags are: allyanim, bypasssub (bypasses Substitute), bite, bullet, cantusetwice, charge, contact, dance, defrost, distance (can target any Pokemon in Triples), failcopycat, failencore, failinstruct, failmefirst, failmimic, futuremove, gravity, heal, highcrit, instruct, metronome, mimic, mirror (reflected by Mirror Move), mustpressure, multihit, noassist, nonsky, noparentalbond, nosketch, nosleeptalk, ohko, pivot, pledgecombo, powder, priority, protect, pulse, punch, recharge, recovery, reflectable, secondary, slicing, snatch, sound, and wind.<br/>` +
 			`- <code>protection</code> as a parameter will search protection moves like Protect, Detect, etc.<br/>` +
 			`- A search that includes <code>!protect</code> will show all moves that bypass protection.<br/>` +
 			`</details><br/>` +
@@ -387,7 +395,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse('/help itemsearch');
 		target = target.slice(0, 300);
 		const targetGen = parseInt(cmd[cmd.length - 1]);
-		if (targetGen) target += ` maxgen${targetGen}`;
+		if (targetGen) target = `maxgen${targetGen} ${target}`;
 
 		const response = await runSearch({
 			target,
@@ -543,7 +551,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	learnhelp: [
 		`/learn [ruleset], [pokemon], [move, move, ...] - Displays how the Pok\u00e9mon can learn the given moves, if it can at all.`,
-		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # &`,
+		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # ~`,
 		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or "min source gen [number]".`,
 		`A value of 'min source gen [number]' indicates that trading (or Pokémon Bank) from generations before [number] is not allowed.`,
 		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
@@ -1077,11 +1085,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (
 			species.gen <= mod.gen &&
 			(
-				(
-					nationalSearch &&
-					species.isNonstandard &&
-					!["Custom", "Glitch", "Pokestar", "Future"].includes(species.isNonstandard)
-				) ||
+				(nationalSearch && species.natDexTier !== 'Illegal') ||
 				((species.tier !== 'Unreleased' || unreleasedSearch) && species.tier !== 'Illegal')
 			) &&
 			(!species.tier.startsWith("CAP") || capSearch) &&
@@ -1100,8 +1104,22 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		Object.values(search).reduce(accumulateKeyCount, 0)
 	));
 
+	// Prepare move validator and pokemonSource outside the hot loop
+	// but don't prepare them at all if there are no moves to check...
+	// These only ever get accessed if there are moves to filter by.
+	let validator;
+	let pokemonSource;
+	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
+		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
+		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
+		const additionalRules = [];
+		if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
+		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
+		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
+	}
 	for (const alts of searches) {
 		if (alts.skip) continue;
+		const altsMoves = Object.keys(alts.moves).map(x => mod.moves.get(x)).filter(move => move.gen <= mod.gen);
 		for (const mon in dex) {
 			let matched = false;
 			if (alts.gens && Object.keys(alts.gens).length) {
@@ -1131,7 +1149,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
 				// as well as event-only Pokemon that are not eligible for LC despite being the first stage
 				let format = Dex.formats.get('gen' + mod.gen + 'lc');
-				if (!format.exists) format = Dex.formats.get('gen9lc');
+				if (format.effectType !== 'Format') format = Dex.formats.get('gen9lc');
 				if (
 					alts.tiers.LC &&
 					!dex[mon].prevo &&
@@ -1262,20 +1280,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod);
-			const formatStr = format ? format[1].name : 'gen9ou';
-			const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(formatStr));
-			const additionalRules = [];
-			if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
-			if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
-			const validator = TeamValidator.get(`${formatStr}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
-			const pokemonSource = validator.allSources();
-			for (const move of Object.keys(alts.moves).map(x => mod.moves.get(x))) {
-				if (move.gen <= mod.gen && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+			for (const move of altsMoves) {
+				pokemonSource = validator?.allSources();
+				if (validator && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
-				if (!pokemonSource.size()) break;
+				if (pokemonSource && !pokemonSource.size()) break;
 			}
 			if (matched) continue;
 
@@ -1380,8 +1391,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	const allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
 	const allFlags = [
 		'allyanim', 'bypasssub', 'bite', 'bullet', 'cantusetwice', 'charge', 'contact', 'dance', 'defrost', 'distance', 'failcopycat', 'failencore',
-		'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'mirror', 'mustpressure', 'noassist', 'nonsky', 'noparentalbond',
-		'nosleeptalk', 'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing', 'snatch', 'sound', 'wind',
+		'failinstruct', 'failmefirst', 'failmimic', 'futuremove', 'gravity', 'heal', 'metronome', 'mirror', 'mustpressure', 'noassist', 'nonsky',
+		'noparentalbond', 'nosketch', 'nosleeptalk', 'pledgecombo', 'powder', 'protect', 'pulse', 'punch', 'recharge', 'reflectable', 'slicing',
+		'snatch', 'sound', 'wind',
 
 		// Not flags directly from move data, but still useful to sort by
 		'highcrit', 'multihit', 'ohko', 'protection', 'secondary',
@@ -1811,7 +1823,8 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		if (move.gen <= mod.gen) {
 			if (
 				(!nationalSearch && move.isNonstandard && move.isNonstandard !== "Gigantamax") ||
-				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past"].includes(move.isNonstandard))
+				(nationalSearch && move.isNonstandard && !["Gigantamax", "Past", "Unobtainable"].includes(move.isNonstandard)) ||
+				(move.isMax && mod.gen !== 8)
 			) {
 				continue;
 			} else {
@@ -2564,7 +2577,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	while (targets.length) {
 		const targetid = toID(targets[0]);
 		if (targetid === 'pentagon') {
-			if (format.exists) {
+			if (format.effectType === 'Format') {
 				return {error: "'pentagon' can't be used with formats."};
 			}
 			minSourceGen = 6;
@@ -2572,7 +2585,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 			continue;
 		}
 		if (targetid.startsWith('minsourcegen')) {
-			if (format.exists) {
+			if (format.effectType === 'Format') {
 				return {error: "'min source gen' can't be used with formats."};
 			}
 			minSourceGen = parseInt(targetid.slice(12));
@@ -2588,14 +2601,15 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 		break;
 	}
 	let gen;
-	if (!format.exists) {
+	if (format.effectType !== 'Format') {
+		if (!(formatid in Dex.dexes)) {
+			// can happen if you hotpatch formats without hotpatching chat
+			return {error: `"${formatid}" is not a supported format.`};
+		}
 		const dex = Dex.mod(formatid).includeData();
-		// can happen if you hotpatch formats without hotpatching chat
-		if (!dex) return {error: `"${formatid}" is not a supported format.`};
-
 		gen = dex.gen;
 		formatName = `Gen ${gen}`;
-		format = new Dex.Format({mod: formatid});
+		format = new Dex.Format({mod: formatid, effectType: 'Format', exists: true});
 		const ruleTable = dex.formats.getRuleTable(format);
 		if (minSourceGen) {
 			formatName += ` (Min Source Gen = ${minSourceGen})`;

@@ -75,7 +75,7 @@ export const PrivateMessages = new class {
 		case 'none':
 			// drivers+ can override
 			if (!Auth.atLeast(Users.globalAuth.get(from as ID), '%')) {
-				throw new Chat.ErrorMessage(`${to} has indicated that they do not wish to receive offine PMs.`);
+				throw new Chat.ErrorMessage(`${to} has indicated that they do not wish to receive offline PMs.`);
 			}
 			break;
 		default:
@@ -102,7 +102,7 @@ export const PrivateMessages = new class {
 		}
 		if (!(options.isLogin ? user.registered : user.autoconfirmed)) {
 			if (options.forceBool) return false;
-			throw new Chat.ErrorMessage("You must be autoconfirmed to use offine messaging.");
+			throw new Chat.ErrorMessage("You must be autoconfirmed to use offline messaging.");
 		}
 		if (!Users.globalAuth.atLeast(user, Config.usesqlitepms)) {
 			if (options.forceBool) return false;
@@ -122,12 +122,10 @@ export const PrivateMessages = new class {
 		const userid = toID(user);
 		// we only want to send the unseen pms to them when they login - they can replay the rest at will otherwise
 		const messages = await this.fetchUnseen(userid);
-		const serverTimezone = -new Date().getTimezoneOffset() / 60;
-		const gmtStr = serverTimezone >= 0 ? `+${serverTimezone}` : serverTimezone;
 		for (const {message, time, sender} of messages) {
 			user.send(
-				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|` +
-				`${message} __[sent offline, ${Chat.toTimestamp(new Date(time))} GMT ${gmtStr}]__`
+				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|/html ` +
+				`${Utils.escapeHTML(message)} <i>[sent offline, <time>${new Date(time).toISOString()}</time>]</i>`
 			);
 		}
 	}
@@ -142,8 +140,8 @@ export const PrivateMessages = new class {
 		if (!PM.isParentProcess) return null!;
 		const time = Date.now();
 		// even though we expire once a week atm, we check once a day
-		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
-		nextMidnight.setHours(0, 0, 1);
+		const nextMidnight = new Date();
+		nextMidnight.setHours(24, 0, 0, 0);
 		if (this.clearInterval) clearTimeout(this.clearInterval);
 		this.clearInterval = setTimeout(() => {
 			void this.clearOffline();
@@ -153,7 +151,7 @@ export const PrivateMessages = new class {
 		return this.clearInterval;
 	}
 	clearSeen() {
-		return PM.run(statements.clearSeen);
+		return PM.run(statements.clearSeen, [Date.now(), SEEN_EXPIRY_TIME]);
 	}
 	send(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 		const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
@@ -193,7 +191,7 @@ export const PrivateMessages = new class {
 			buf += `<div class="pm-log"><div class="pm-buttonbar">`;
 			for (const {message, time} of messages) {
 				buf += `<div class="chat chatmessage-${toID(sender)}">&nbsp;&nbsp;`;
-				buf += `<small>[${Chat.toTimestamp(new Date(time))}] </small>`;
+				buf += `<small>[<time>${new Date(time).toISOString()}</time>] </small>`;
 				buf += Utils.html`<small>${group}</small>`;
 				buf += Utils.html`<span class="username" data-roomgroup="${group}" data-name="${name}"><username>${name}</username></span>: `;
 				buf += `<em>${message}</em></div>`;
@@ -205,7 +203,7 @@ export const PrivateMessages = new class {
 		return buf;
 	}
 	clearOffline() {
-		return PM.run(statements.clearDated);
+		return PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 	}
 	destroy() {
 		void PM.destroy();
@@ -216,7 +214,7 @@ if (Config.usesqlite) {
 	if (!process.send) {
 		PM.spawn(Config.pmprocesses || 1);
 		// clear super old pms on startup
-		void PM.run(statements.clearDated);
+		void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 	} else if (process.send && process.mainModule === module) {
 		global.Monitor = {
 			crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
@@ -232,4 +230,3 @@ if (Config.usesqlite) {
 		});
 	}
 }
-

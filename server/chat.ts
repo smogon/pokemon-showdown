@@ -87,6 +87,8 @@ interface Handlers {
 	onTicketCreate: (ticket: import('./chat-plugins/helptickets').TicketState, user: User) => void;
 	onChallenge: (user: User, targetUser: User, format: string | ID) => void;
 	onMessageOffline: (context: Chat.CommandContext, message: string, targetUserID: ID) => void;
+	onBattleJoin: (slot: string, user: User, battle: RoomBattle) => void;
+	onPunishUser: (type: string, user: User, room?: Room | null) => void;
 }
 
 export interface ChatPlugin {
@@ -289,19 +291,19 @@ export abstract class MessageContext {
 	 * for the format/mod, or the default dex if none was found), and
 	 * `targets` (the rest of the array).
 	 */
-	splitFormat(target: string | string[], atLeastOneTarget?: boolean) {
+	splitFormat(target: string | string[], atLeastOneTarget?: boolean, allowRules?: boolean) {
 		const targets = typeof target === 'string' ? target.split(',') : target;
 		if (!targets[0].trim()) targets.pop();
 
 		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
-			const {dex, format, isMatch} = this.extractFormat(targets[0].trim());
+			const {dex, format, isMatch} = this.extractFormat(targets[0].trim(), allowRules);
 			if (isMatch) {
 				targets.shift();
 				return {dex, format, targets};
 			}
 		}
 		if (targets.length > 1) {
-			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim());
+			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim(), allowRules);
 			if (isMatch) {
 				targets.pop();
 				return {dex, format, targets};
@@ -309,21 +311,21 @@ export abstract class MessageContext {
 		}
 
 		const room = (this as any as CommandContext).room;
-		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format);
+		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
 		return {dex, format, targets};
 	}
-	extractFormat(formatOrMod?: string): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
+	extractFormat(formatOrMod?: string, allowRules?: boolean): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
 		if (!formatOrMod) {
 			return {dex: Dex.includeData(), format: null, isMatch: false};
 		}
 
 		const format = Dex.formats.get(formatOrMod);
-		if (format.exists) {
+		if (format.effectType === 'Format' || allowRules && format.effectType === 'Rule') {
 			return {dex: Dex.forFormat(format), format: format, isMatch: true};
 		}
 
 		if (toID(formatOrMod) in Dex.dexes) {
-			return {dex: Dex.mod(toID(formatOrMod)).includeData(), format: null, isMatch: true};
+			return {dex: Dex.mod(toID(formatOrMod)), format: null, isMatch: true};
 		}
 
 		return this.extractFormat();
@@ -601,7 +603,8 @@ export class CommandContext extends MessageContext {
 			if (this.handler) {
 				if (this.handler.disabled) {
 					throw new Chat.ErrorMessage(
-						`The command /${this.cmd} is temporarily unavailable due to technical difficulties. Please try again in a few hours.`
+						`The command /${this.fullCmd.trim()} is temporarily unavailable due to technical difficulties. ` +
+						`Please try again in a few hours.`
 					);
 				}
 				message = this.run(this.handler);
@@ -694,9 +697,7 @@ export class CommandContext extends MessageContext {
 			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
 			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
-			if (this.room.game && this.room.game.onLogMessage) {
-				this.room.game.onLogMessage(message, this.user);
-			}
+			this.room.game?.onLogMessage?.(message, this.user);
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
 		}
@@ -779,13 +780,12 @@ export class CommandContext extends MessageContext {
 		}
 		if (!message) return true;
 		if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
-			throw new Chat.ErrorMessage(`Your username, status, or message contained a word banned by this room.`);
+			throw new Chat.ErrorMessage(`Your message contained a word banned by this room.`);
 		}
 		return this.checkBanwords(room.parent as ChatRoom, message);
 	}
 	checkGameFilter() {
-		if (!this.room?.game || !this.room.game.onChatMessage) return;
-		return this.room.game.onChatMessage(this.message, this.user);
+		return this.room?.game?.onChatMessage?.(this.message, this.user);
 	}
 	pmTransform(originalMessage: string, sender?: User, receiver?: User | null | string) {
 		if (!sender) {
@@ -1148,9 +1148,13 @@ export class CommandContext extends MessageContext {
 				}
 				if (room.settings.modchat && !room.auth.atLeast(user, room.settings.modchat)) {
 					if (room.settings.modchat === 'autoconfirmed') {
-						throw new Chat.ErrorMessage(
-							this.tr`Because moderated chat is set, your account must be at least one week old and you must have won at least one ladder game to speak in this room.`
+						this.errorReply(
+							this.tr`Moderated chat is set. To speak in this room, your account must be autoconfirmed, which means being registered for at least one week and winning at least one rated game (any game started through the 'Battle!' button).`
 						);
+						if (!user.registered) {
+							this.sendReply(this.tr`|html|You may register in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu.`);
+						}
+						throw new Chat.Interruption();
 					}
 					if (room.settings.modchat === 'trusted') {
 						throw new Chat.ErrorMessage(
@@ -1242,8 +1246,6 @@ export class CommandContext extends MessageContext {
 
 		this.checkSlowchat(room, user);
 
-		if (!user.can('bypassall')) this.checkBanwords(room, user.name);
-		if (user.userMessage && !user.can('bypassall')) this.checkBanwords(room, user.userMessage);
 		if (room && !user.can('mute', null, room)) this.checkBanwords(room, message);
 
 		const gameFilter = this.checkGameFilter();
@@ -2576,7 +2578,7 @@ export const Chat = new class {
 	 * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
 	 */
 	maybeNotifyBlocked(blocked: 'pm' | 'challenge' | 'invite', targetUser: User, user: User) {
-		const prefix = `|pm|&|${targetUser.getIdentity()}|/nonotify `;
+		const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
 		const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 		if (blocked === 'pm') {
 			if (!targetUser.notified.blockPMs) {
@@ -2595,6 +2597,7 @@ export const Chat = new class {
 			}
 		}
 	}
+
 	readonly formatText = formatText;
 	readonly linkRegex = linkRegex;
 	readonly stripFormatting = stripFormatting;

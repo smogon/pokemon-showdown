@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	allyswitch: {
 		inherit: true,
 		priority: 1,
@@ -201,7 +201,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	rockblast: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1},
 	},
 	sheercold: {
 		inherit: true,

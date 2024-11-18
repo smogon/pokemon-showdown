@@ -3,7 +3,7 @@
  * Some moves have had major changes, such as Bite's typing.
  */
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	acid: {
 		inherit: true,
 		secondary: {
@@ -80,7 +80,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
+		onTryMove(source, target) {
+			if (target.volatiles['mustrecharge']) {
+				target.removeVolatile('mustrecharge');
+				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
+			}
+		},
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -136,7 +141,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
+		onTryMove(source, target) {
+			if (target.volatiles['mustrecharge']) {
+				target.removeVolatile('mustrecharge');
+				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
+			}
+		},
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -207,6 +217,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 			return 2 * this.lastDamage;
 		},
+		flags: {contact: 1, protect: 1, metronome: 1},
 	},
 	crabhammer: {
 		inherit: true,
@@ -235,7 +246,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Disable",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
 		volatileStatus: 'disable',
 		onTryHit(target) {
 			// This function should not return if the checks are met. Adding && undefined ensures this happens.
@@ -313,7 +324,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
+		onTryMove(source, target) {
+			if (target.volatiles['mustrecharge']) {
+				target.removeVolatile('mustrecharge');
+				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
+			}
+		},
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -469,7 +485,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Light Screen",
 		pp: 30,
 		priority: 0,
-		flags: {},
+		flags: {metronome: 1},
 		volatileStatus: 'lightscreen',
 		onTryHit(pokemon) {
 			if (pokemon.volatiles['lightscreen']) {
@@ -484,12 +500,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Psychic",
 	},
-	metronome: {
-		inherit: true,
-		noMetronome: ["Metronome", "Struggle"],
-	},
 	mimic: {
 		inherit: true,
+		flags: {protect: 1, bypasssub: 1, metronome: 1},
 		onHit(target, source) {
 			const moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
@@ -649,7 +662,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Reflect",
 		pp: 20,
 		priority: 0,
-		flags: {},
+		flags: {metronome: 1},
 		volatileStatus: 'reflect',
 		onTryHit(pokemon) {
 			if (pokemon.volatiles['reflect']) {
@@ -802,6 +815,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
+		flags: {metronome: 1},
 		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
@@ -899,7 +913,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		flags: {},
 	},
 	superfang: {
 		inherit: true,
@@ -941,7 +954,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
+		onTryMove(source, target) {
+			if (target.volatiles['mustrecharge']) {
+				target.removeVolatile('mustrecharge');
+				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
+			}
+		},
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2

@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	disguise: {
 		inherit: true,
 		onDamage(damage, target, source, effect) {
@@ -24,20 +24,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	darkaura: {
 		inherit: true,
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 	fairyaura: {
 		inherit: true,
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 	innerfocus: {
 		inherit: true,
 		rating: 1,
 		onTryBoost() {},
-	},
-	intimidate: {
-		inherit: true,
-		rating: 4,
 	},
 	moody: {
 		inherit: true,

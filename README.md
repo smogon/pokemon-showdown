@@ -89,7 +89,7 @@ Staff
 - Andrew Werner [HoeenHero] - Development
 - Annika L. [Annika] - Development
 - Chris Monsanto [chaos] - Development, Sysadmin
-- Kris Johnson [Kris] - Development
+- Kris Johnson [dhelmise] - Development
 - Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - Mia A [Mia] - Development

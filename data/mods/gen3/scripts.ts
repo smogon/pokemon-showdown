@@ -70,12 +70,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			baseDamage = Math.floor(this.battle.runEvent('ModifyDamagePhase2', pokemon, target, move, baseDamage));
 
 			// STAB
-			if (move.forceSTAB || type !== '???' && pokemon.hasType(type)) {
-				// The "???" type never gets STAB
-				// Not even if you Roost in Gen 4 and somehow manage to use
-				// Struggle in the same turn.
-				// (On second thought, it might be easier to get a MissingNo.)
-				baseDamage = this.battle.modify(baseDamage, move.stab || 1.5);
+			// The "???" type never gets STAB
+			// Not even if you Roost in Gen 4 and somehow manage to use
+			// Struggle in the same turn.
+			// (On second thought, it might be easier to get a MissingNo.)
+			if (type !== '???') {
+				let stab: number | [number, number] = 1;
+				if (move.forceSTAB || pokemon.hasType(type)) {
+					stab = 1.5;
+				}
+				stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
+				baseDamage = this.battle.modify(baseDamage, stab);
 			}
 			// types
 			let typeMod = target.runEffectiveness(move);
@@ -110,7 +115,9 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			return Math.floor(baseDamage);
 		},
-		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove) {
+		useMoveInner(moveOrMoveName, pokemon, options) {
+			let sourceEffect = options?.sourceEffect;
+			let target = options?.target;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
 
