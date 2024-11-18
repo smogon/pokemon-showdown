@@ -534,7 +534,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		help: [
 			'/perma nom OR /perma - Open the page to make a nomination for a permanent punishment. Requires: % @ ~',
-			'/perma list - View open nominations. Requires: ~',
+			'/perma list - View open nominations. Requires: % @ ~',
 			'/perma viewnom [userid] - View a nomination for the given [userid]. Requires: ~',
 		],
 	},
