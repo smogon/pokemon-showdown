@@ -56,8 +56,8 @@ async function updateStats(battle: RoomBattle, winner: ID) {
 
 		for (const set of team) {
 			const statsSpecies = getLevelSpeciesID(set, Dex.formats.get(battle.format));
-			await addPokemon?.run([toID(statsSpecies), set.level]);
-			await increment?.run([toID(statsSpecies)]);
+			await addPokemon?.run([statsSpecies, set.level]);
+			await increment?.run([statsSpecies]);
 		}
 	}
 }
