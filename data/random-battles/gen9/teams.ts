@@ -1078,7 +1078,9 @@ export class RandomTeams {
 		if (this.format.gameType === 'freeforall') {
 			if (species.id === 'bellossom') return 'Chlorophyll';
 			if (species.id === 'sinistcha') return 'Heatproof';
-			if (species.id === 'oranguru') return 'Inner Focus';
+			if (abilities.length === 1 && abilities[0] === 'Telepathy') {
+				return species.id === 'oranguru' ? 'Inner Focus' : 'Pressure';
+			}
 			if (species.id === 'duraludon') return 'Light Metal';
 			if (species.id === 'clefairy') return 'Magic Guard';
 			if (species.id === 'blissey') return 'Natural Cure';
