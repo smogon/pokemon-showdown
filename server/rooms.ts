@@ -1031,7 +1031,7 @@ export abstract class BasicRoom {
 			const staffIntro = this.getStaffIntroMessage(user);
 			if (staffIntro) this.sendUser(user, staffIntro);
 		} else if (!user.named) {
-			this.reportJoin('l', oldid, user);
+			this.reportJoin('l', ' ' + oldid, user);
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this) + '|' + oldid, user);
 		}
