@@ -121,7 +121,6 @@ export const commands: Chat.ChatCommands = {
 	viewquotehelp: [
 		`/viewquote [index][, params] - View the quote from the room's quotes.`,
 		`If 'showauthor' is used for the [params] argument, it shows who added the quote and when.`,
-		`Requires: % @ # ~`,
 	],
 
 	viewquotes: 'quotes',
@@ -141,7 +140,7 @@ export const commands: Chat.ChatCommands = {
 		"/removequote [index] - Removes the quote from the room's quotes. Requires: % @ # ~",
 		"/viewquote [index][, params] - View the quote from the room's quotes.",
 		"If 'showauthor' is used for the [params] argument, it shows who added the quote and when.",
-		"Requires: % @ # ~", "/quotes [room] - Shows all quotes for [room]. Defaults the room the command is used in.",
+		"/quotes [room] - Shows all quotes for [room]. Defaults the room the command is used in.",
 	],
 };
 

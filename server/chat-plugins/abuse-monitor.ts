@@ -1769,7 +1769,7 @@ export const commands: Chat.ChatCommands = {
 			`/am respawn - Respawns abuse monitor processes. Requires: whitelist ~`,
 			`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
 			`If a userid is given, searches only logs from that userid. Requires: whitelist ~`,
-			`/am edithistory [user] - Clear specific abuse monitor hit(s) for a user. Requires: @ ~`,
+			`/am edithistory [user] - Clear specific abuse monitor hit(s) for a user. Requires: % @ ~`,
 			`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist ~`,
 			`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist ~`,
 			`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist ~`,
