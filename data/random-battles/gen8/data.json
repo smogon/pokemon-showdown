@@ -928,7 +928,7 @@
     },
     "latias": {
         "level": 80,
-        "moves": ["calmmind", "dracometeor", "healingwish", "mysticalfire", "psychic", "roost"],
+        "moves": ["calmmind", "dracometeor", "healingwish", "mysticalfire", "psyshock", "roost"],
         "doublesLevel": 82,
         "doublesMoves": ["calmmind", "dracometeor", "healpulse", "mysticalfire", "psyshock", "roost", "tailwind"]
     },
@@ -2155,7 +2155,7 @@
     },
     "silvallypoison": {
         "level": 83,
-        "moves": ["defog", "flamethrower", "grasspledge", "multiattack", "partingshot", "toxic"],
+        "moves": ["defog", "flamethrower", "multiattack", "partingshot", "surf", "toxic"],
         "doublesLevel": 88,
         "doublesMoves": ["flamethrower", "grasspledge", "multiattack", "partingshot", "snarl", "tailwind"]
     },
@@ -2263,7 +2263,7 @@
     },
     "buzzwole": {
         "level": 75,
-        "moves": ["closecombat", "darkestlariat", "dualwingbeat", "ironhead", "leechlife", "stoneedge"],
+        "moves": ["closecombat", "darkestlariat", "dualwingbeat", "earthquake", "leechlife", "stoneedge"],
         "doublesLevel": 80,
         "doublesMoves": ["closecombat", "darkestlariat", "dualwingbeat", "ironhead", "leechlife", "stoneedge"],
         "noDynamaxMoves": ["bulkup", "closecombat", "darkestlariat", "leechlife", "poisonjab", "roost", "stoneedge"]

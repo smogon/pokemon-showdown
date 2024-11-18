@@ -10,23 +10,6 @@
             }
         ]
     },
-    "applin": {
-        "level": 9,
-        "sets": [
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Pounce", "Recycle", "Sucker Punch", "Tera Blast"],
-                "abilities": ["Ripen"],
-                "teraTypes": ["Dragon", "Grass"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["Defense Curl", "Pounce", "Recycle", "Rollout"],
-                "abilities": ["Ripen"],
-                "teraTypes": ["Rock"]
-            }
-        ]
-    },
     "arrokuda": {
         "level": 7,
         "sets": [
@@ -1044,14 +1027,14 @@
         "level": 7,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Nasty Plot", "Power Gem", "Shadow Ball", "Substitute"],
+                "role": "Bulky Support",
+                "movepool": ["Nasty Plot", "Power Gem", "Rest", "Shadow Ball", "Sleep Talk"],
                 "abilities": ["Rattled"],
                 "teraTypes": ["Fairy"]
             },
             {
                 "role": "Tera Blast user",
-                "movepool": ["Nasty Plot", "Power Gem", "Shadow Ball", "Substitute", "Tera Blast"],
+                "movepool": ["Nasty Plot", "Power Gem", "Shadow Ball", "Tera Blast"],
                 "abilities": ["Rattled"],
                 "teraTypes": ["Fairy", "Fighting"]
             }
@@ -1191,6 +1174,12 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Drain Punch", "Grassy Glide", "Knock Off", "Swords Dance", "U-turn", "Wood Hammer"],
+                "abilities": ["Grassy Surge"],
+                "teraTypes": ["Grass"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Grassy Glide", "Knock Off", "U-turn", "Wood Hammer"],
                 "abilities": ["Grassy Surge"],
                 "teraTypes": ["Grass"]
             }
@@ -1908,7 +1897,7 @@
         "level": 6,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Bulky Attacker",
                 "movepool": ["First Impression", "Leech Life", "Sucker Punch", "U-turn"],
                 "abilities": ["Tinted Lens"],
                 "teraTypes": ["Bug"]
@@ -1936,7 +1925,7 @@
                 "teraTypes": ["Dark", "Fighting", "Water"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Aqua Jet", "Knock Off", "Liquidation", "Sacred Sword", "Swords Dance"],
                 "abilities": ["Torrent"],
                 "teraTypes": ["Dark", "Fighting", "Water"]

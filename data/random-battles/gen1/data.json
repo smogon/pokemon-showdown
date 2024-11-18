@@ -241,13 +241,12 @@
     },
     "meowth": {
         "level": 85,
-        "moves": ["bodyslam", "bubblebeam", "slash"],
-        "exclusiveMoves": ["thunder", "thunderbolt"]
+        "moves": ["bodyslam", "bubblebeam", "slash", "thunderbolt"]
     },
     "persian": {
         "level": 73,
         "moves": ["bodyslam", "bubblebeam", "slash"],
-        "exclusiveMoves": ["hyperbeam", "hyperbeam", "thunder", "thunderbolt"]
+        "exclusiveMoves": ["hyperbeam", "thunderbolt"]
     },
     "psyduck": {
         "level": 89,
@@ -272,8 +271,8 @@
     },
     "growlithe": {
         "level": 89,
-        "moves": ["agility", "flamethrower", "reflect"],
-        "essentialMoves": ["bodyslam", "fireblast"]
+        "moves": ["agility", "bodyslam", "fireblast"],
+        "exclusiveMoves": ["flamethrower", "reflect"]
     },
     "arcanine": {
         "level": 75,
@@ -288,14 +287,13 @@
     "poliwhirl": {
         "level": 79,
         "moves": ["amnesia", "blizzard", "surf"],
-        "exclusiveMoves": ["counter", "hypnosis", "hypnosis", "hypnosis", "psychic"]
+        "exclusiveMoves": ["hypnosis", "hypnosis", "hypnosis", "psychic"]
     },
     "poliwrath": {
         "level": 74,
-        "moves": ["blizzard", "bodyslam", "earthquake", "submission"],
-        "essentialMoves": ["surf"],
-        "exclusiveMoves": ["hypnosis", "hypnosis", "hypnosis", "psychic"],
-        "comboMoves": ["amnesia", "blizzard"]
+        "moves": ["bodyslam", "earthquake", "hypnosis", "submission"],
+        "essentialMoves": ["blizzard", "surf"],
+        "comboMoves": ["amnesia", "blizzard", "hypnosis", "surf"]
     },
     "abra": {
         "level": 84,
@@ -458,12 +456,12 @@
     "drowzee": {
         "level": 84,
         "moves": ["hypnosis", "psychic", "thunderwave"],
-        "exclusiveMoves": ["counter", "reflect", "rest", "seismictoss", "seismictoss"]
+        "exclusiveMoves": ["counter", "rest", "seismictoss", "seismictoss"]
     },
     "hypno": {
         "level": 72,
         "moves": ["hypnosis", "psychic", "thunderwave"],
-        "exclusiveMoves": ["counter", "reflect", "rest", "rest", "seismictoss", "seismictoss"]
+        "exclusiveMoves": ["counter", "rest", "rest", "seismictoss", "seismictoss"]
     },
     "krabby": {
         "level": 89,
