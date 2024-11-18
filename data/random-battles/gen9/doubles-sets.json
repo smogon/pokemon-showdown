@@ -4354,13 +4354,13 @@
             {
                 "role": "Doubles Fast Attacker",
                 "movepool": ["Draco Meteor", "Flamethrower", "Hurricane", "Protect", "Tailwind"],
-                "abilities": ["Infiltrator"],
+                "abilities": ["Frisk"],
                 "teraTypes": ["Dragon", "Fire", "Steel"]
             },
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Draco Meteor", "Flamethrower", "Hurricane", "Protect", "Tailwind"],
-                "abilities": ["Infiltrator"],
+                "abilities": ["Frisk"],
                 "teraTypes": ["Dragon", "Fire", "Steel"]
             }
         ]
@@ -6646,13 +6646,13 @@
                 "role": "Doubles Support",
                 "movepool": ["Matcha Gotcha", "Rage Powder", "Shadow Ball", "Trick Room"],
                 "abilities": ["Hospitality"],
-                "teraTypes": ["Grass", "Water"]
+                "teraTypes": ["Fairy"]
             },
             {
                 "role": "Bulky Protect",
                 "movepool": ["Calm Mind", "Matcha Gotcha", "Protect", "Shadow Ball"],
                 "abilities": ["Hospitality"],
-                "teraTypes": ["Grass", "Water"]
+                "teraTypes": ["Fairy"]
             }
         ]
     },
@@ -6712,7 +6712,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Follow Me", "Horn Leech", "Knock Off", "Spiky Shield"],
+                "movepool": ["Follow Me", "Ivy Cudgel", "Knock Off", "Spiky Shield"],
                 "abilities": ["Defiant"],
                 "teraTypes": ["Grass"]
             }

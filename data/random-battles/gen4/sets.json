@@ -980,14 +980,19 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["dragondance", "earthquake", "icepunch", "return", "waterfall"],
-                "abilities": ["Torrent"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["dragondance", "earthquake", "icepunch", "waterfall"],
+                "abilities": ["Torrent"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["aquajet", "earthquake", "icepunch", "return", "swordsdance", "waterfall"],
+                "movepool": ["aquajet", "return", "swordsdance", "waterfall"],
                 "abilities": ["Torrent"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["aquajet", "earthquake", "icepunch", "superpower", "waterfall"],
+                "abilities": ["Torrent"],
+                "preferredTypes": ["Ice"]
             }
         ]
     },
@@ -3203,7 +3208,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["explosion", "flashcannon", "hiddenpowerfire", "hiddenpowerice", "thunderbolt"],
+                "movepool": ["explosion", "flashcannon", "hiddenpowerfire", "hiddenpowerground", "hiddenpowerice", "thunderbolt"],
                 "abilities": ["Magnet Pull"]
             },
             {

@@ -477,8 +477,6 @@ export class RandomBabyTeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 
-		if (species.id === 'nymble') return 'Silver Powder';
-
 		if (moves.has('focusenergy')) return 'Scope Lens';
 		if (moves.has('thief')) return '';
 		if (moves.has('trick') || moves.has('switcheroo')) return 'Choice Scarf';

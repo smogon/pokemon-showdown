@@ -1018,14 +1018,19 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["dragondance", "earthquake", "icepunch", "superpower", "waterfall"],
-                "abilities": ["Torrent"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["dragondance", "earthquake", "icepunch", "waterfall"],
+                "abilities": ["Torrent"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["aquajet", "earthquake", "icepunch", "superpower", "swordsdance", "waterfall"],
+                "movepool": ["aquajet", "return", "swordsdance", "waterfall"],
                 "abilities": ["Torrent"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["aquajet", "earthquake", "icepunch", "superpower", "waterfall"],
+                "abilities": ["Torrent"],
+                "preferredTypes": ["Ice"]
             }
         ]
     },
@@ -2882,8 +2887,13 @@
                 "abilities": ["Anticipation", "Overcoat"]
             },
             {
+                "role": "Wallbreaker",
+                "movepool": ["hiddenpowerground", "hiddenpowerrock", "leafstorm", "psychic", "signalbeam"],
+                "abilities": ["Anticipation", "Overcoat"]
+            },
+            {
                 "role": "Staller",
-                "movepool": ["gigadrain", "protect", "signalbeam", "synthesis", "toxic"],
+                "movepool": ["gigadrain", "hiddenpowerground", "protect", "toxic"],
                 "abilities": ["Anticipation", "Overcoat"]
             }
         ]
@@ -3232,8 +3242,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["flashcannon", "hiddenpowerfire", "hiddenpowerice", "thunderbolt", "voltswitch"],
+                "movepool": ["flashcannon", "hiddenpowerfire", "hiddenpowerground", "hiddenpowerice", "thunderbolt", "voltswitch"],
                 "abilities": ["Magnet Pull"]
+            },
+            {
+                "role": "Staller",
+                "movepool": ["hiddenpowerice", "protect", "thunderbolt", "toxic"],
+                "abilities": ["Analytic"]
             }
         ]
     },
@@ -4421,13 +4436,8 @@
         "level": 83,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "signalbeam", "trickroom"],
-                "abilities": ["Magic Guard"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["focusblast", "psychic", "psyshock", "shadowball", "trickroom"],
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "focusblast", "psychic", "psyshock", "recover", "signalbeam"],
                 "abilities": ["Magic Guard"]
             }
         ]
@@ -4581,7 +4591,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["hiddenpowerfighting", "psychic", "signalbeam", "thunderbolt", "trick", "trickroom"],
+                "movepool": ["hiddenpowerfighting", "psychic", "recover", "signalbeam", "thunderbolt", "trick", "trickroom"],
                 "abilities": ["Analytic"]
             }
         ]
