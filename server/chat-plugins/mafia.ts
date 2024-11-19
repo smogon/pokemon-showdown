@@ -141,8 +141,10 @@ function writeFile(path: string, data: AnyObject) {
 	));
 }
 
-function mafiaSearch(entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][],
-	searchTarget: string, searchType: keyof MafiaData) {
+function mafiaSearch(
+	entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][],
+	searchTarget: string, searchType: keyof MafiaData
+) {
 	if (typeof (entries) === 'undefined') return entries;
 	if (searchType === `aliases`) return entries;
 
@@ -191,9 +193,8 @@ function mafiaSearch(entries: [string, MafiaDataAlignment | MafiaDataRole | Mafi
 		entries = entries.filter(([key, data]) => MafiaData[`IDEAs`][alias].roles.map(role =>
 			toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(toID(key)));
 	} else {
-		entries = entries.filter(([key]) => Object.keys((MafiaData[searchType][key]))
-			.filter((newKey: keyof MafiaData[keyof MafiaData]) => (MafiaData[searchType][key])[newKey]
-				.toString().toLowerCase().includes(searchTarget)).length > 0);
+		entries = entries.filter(([key]) => Object.entries(MafiaData[searchType][key])
+			.some(([newKey, value]) => value.toString().toLowerCase().includes(searchTarget)));
 	}
 	return negation ? entriesCopy.filter(element => !entries.includes(element)) : entries;
 }
@@ -4255,7 +4256,7 @@ export const commands: Chat.ChatCommands = {
 				table += entries
 					.map(([key, data]) => searchType === `themes` ?
 						themeRow(MafiaData[searchType][key]) : searchType === `IDEAs` ?
-							ideaRow(MafiaData[searchType][key]) : row(MafiaData[searchType as "roles" | "alignments" | "terms"][key as string]))
+							ideaRow(MafiaData[searchType][key]) : row(MafiaData[searchType as "roles" | "alignments" | "terms"][key]))
 					.join('');
 				table += `</table></div>`;
 				return this.sendReplyBox(table);
