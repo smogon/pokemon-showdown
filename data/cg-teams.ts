@@ -70,11 +70,14 @@ export let levelUpdateInterval: NodeJS.Timeout | null = null;
 // can't import the function cg-teams-leveling.ts uses to this context for some reason
 const useBaseSpecies = [
 	'Pikachu',
+	'Gastrodon',
 	'Magearna',
 	'Dudunsparce',
 	'Maushold',
 	'Keldeo',
 	'Zarude',
+	'Polteageist',
+	'Sinistcha',
 	'Sawsbuck',
 	'Vivillon',
 	'Florges',
