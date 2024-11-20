@@ -1014,6 +1014,12 @@ export default class TeamGenerator {
 	protected static getLevel(species: Species): number {
 		if (['Zacian', 'Zamazenta'].includes(species.name)) {
 			species = Dex.species.get(species.otherFormes![0]);
+		} else if (species.baseSpecies === 'Squawkabilly') {
+			if (['Yellow', 'White'].includes(species.forme)) {
+				species = Dex.species.get('Squawkabilly-Yellow');
+			} else {
+				species = Dex.species.get('Squawkabilly');
+			}
 		} else if (useBaseSpecies.includes(species.baseSpecies)) {
 			species = Dex.species.get(species.baseSpecies);
 		}
