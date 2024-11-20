@@ -113,6 +113,29 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		isNonstandard: "Future",
 	},
+	minimize: {
+		inherit: true,
+		condition: {
+			noCopy: true,
+			onSourceModifyDamage(damage, source, target, move) {
+				const boostedMoves = [
+					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'supercellslam',
+				];
+				if (boostedMoves.includes(move.id)) {
+					return this.chainModify(2);
+				}
+			},
+			onAccuracy(accuracy, target, source, move) {
+				const boostedMoves = [
+					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'supercellslam',
+				];
+				if (boostedMoves.includes(move.id)) {
+					return true;
+				}
+				return accuracy;
+			},
+		},
+	},
 	mistball: {
 		inherit: true,
 		basePower: 70,
