@@ -1272,7 +1272,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onEffectiveness(typeMod, target, type, move) {
-			if (this.effectState.source.species.id !== 'necrozmaultra') return typeMod + this.dex.getEffectiveness('Fire', type);
+			if (move.type === 'Water') return typeMod + this.dex.getEffectiveness('Fire', type);
 		},
 		onHit(target, source, move) {
 			source.side.addSideCondition('waterpledge');
