@@ -6494,7 +6494,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	supercellslam: {
 		name: "Supercell Slam",
-		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage.",
+		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		shortDesc: "User is hurt by 50% of its max HP if it misses.",
 
 		damage: "#crash",
