@@ -1193,43 +1193,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Thunder', source);
 			this.add('-anim', source, 'Agility', source);
 		},
-		onHit(target, source, move) {
-			if (!target.hp) return;
-			target.abilityState.turbochargeStacks = Math.floor((target.hp - 1) / target.maxhp * 10);
-			this.damage(target.hp - 1, target);
-			target.addVolatile('turbocharge');
-			target.addVolatile('protect');
-			this.add('-message', `Level ${target.abilityState.turbochargeStacks} Turbocharge!`);
-			target.abilityState.permdis = true;
+		onHit(pokemon) {
+			pokemon.abilityState.stacks = Math.floor((pokemon.hp - 1) / (pokemon.maxhp / 10));
+			this.damage(pokemon.hp - 1, pokemon, pokemon, this.effect);
+			pokemon.addVolatile('turbocharge');
+			pokemon.addVolatile('protect');
+			this.add('-message', `Level ${pokemon.abilityState.stacks} Turbocharge!`);
+			pokemon.abilityState.permdis = true;
 		},
 		condition: {
-			duration: 0,
+			duration: 9,
 			onModifySpa(spa, pokemon) {
-				if (pokemon.abilityState.turbochargeStacks <= 0) return;
-				return this.chainModify(1+(0.1*pokemon.abilityState.turbochargeStacks));
+				if (pokemon.abilityState.stacks <= 0) return;
+				this.debug(`turbocharge boosting spa by ${1 + (0.1 * pokemon.abilityState.stacks)}`);
+				return this.chainModify(1 + (0.1 * pokemon.abilityState.stacks));
 			},
 			onModifySpe(spe, pokemon) {
-				if (pokemon.abilityState.turbochargeStacks <= 0) return;
-				return this.chainModify(1+(0.1*pokemon.abilityState.turbochargeStacks));
+				if (pokemon.abilityState.stacks <= 0) return;
+				this.debug(`turbocharge boosting spe by ${1 + (0.1 * pokemon.abilityState.stacks)}`);
+				return this.chainModify(1 + (0.1 * pokemon.abilityState.stacks));
 			},
 			onTryHeal(damage, target, source, effect) {
 				if ((effect?.id === 'zpower') || this.effectState.isZ) return damage;
 				return false;
 			},
 			onResidual(pokemon) {
-				pokemon.abilityState.turbochargeStacks--;
-				if (pokemon.abilityState.turbochargeStacks <= 0) {
-					pokemon.abilityState.turbochargeStacks = 0;
+				pokemon.abilityState.stacks--;
+				if (pokemon.abilityState.stacks <= 0) {
+					pokemon.abilityState.stacks = 0;
 					this.add('-message', `${pokemon.name}'s turbocharge wore off!`);
+					pokemon.removeVolatile('turbocharge');
 					return;
 				}
 				this.add('-anim', pokemon, 'Discharge', pokemon);
 				this.add('-message', `${pokemon.name} is turbocharged!`);
 			},
 			onSwitchOut(pokemon) {
-				pokemon.abilityState.turbochargeStacks = 0;
+				pokemon.abilityState.stacks = 0;
 				pokemon.removeVolatile('turbocharge');
-			}
+			},
 		},
 	},
 	// Luminous
