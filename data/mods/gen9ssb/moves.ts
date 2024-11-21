@@ -1670,9 +1670,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// Gather all possible targets into an array
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.hasType('Ground') || ['lightningrod', 'voltabsorb'].includes(pokemon.ability)) continue;
+				if (pokemon.fainted || pokemon.hp <= 0) continue;
 				pokemon.abilityState.btDmg = 0;
 				allPokemon.push(pokemon);
 			}
+			if (!allPokemon.length) return null;
 			// Randomly assign the damage amongst all possible targets
 			for (let i = 0; i <= this.getAllPokemon().length; i++) {
 				this.sample(allPokemon).abilityState.btDmg += 20;
