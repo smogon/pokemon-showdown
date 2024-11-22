@@ -4497,7 +4497,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	orderup: {
 		name: "Order Up",
-		desc: "If an ally Tatsugiri has activated its Commander Ability, this move raises the user's Attack by 1 stage if the Tatsugiri is Curly Form, Defense by 1 stage if Droopy Form, or Speed by 1 stage if Stretchy Form. The effect happens whether or not this move is successful, and even if the Tatsugiri that activated the effect has since fainted.",
+		desc: "If an ally Tatsugiri has activated its Commander Ability, this move raises the user's Attack by 1 stage if the Tatsugiri is Curly Form, Defense by 1 stage if Droopy Form, or Speed by 1 stage if Stretchy Form. The effect happens even if the Tatsugiri that activated the effect has since fainted.",
 		shortDesc: "Curly|Droopy|Stretchy eaten: +1 Atk|Def|Spe.",
 	},
 	originpulse: {
