@@ -1206,11 +1206,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onModifySpa(spa, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
 				this.debug(`turbocharge boosting spa by ${1 + (0.1 * pokemon.abilityState.stacks)}`);
+				this.add('-message', `SPA BOOST: ${1+(0.1*pokemon.abilityState.stacks)}`);
 				return this.chainModify(1 + (0.1 * pokemon.abilityState.stacks));
 			},
 			onModifySpe(spe, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
 				this.debug(`turbocharge boosting spe by ${1 + (0.1 * pokemon.abilityState.stacks)}`);
+				this.add('-message', `SPA BOOST: ${1+(0.1*pokemon.abilityState.stacks)}`);
 				return this.chainModify(1 + (0.1 * pokemon.abilityState.stacks));
 			},
 			onTryHeal(damage, target, source, effect) {
