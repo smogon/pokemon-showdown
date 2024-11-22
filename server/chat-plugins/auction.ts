@@ -820,6 +820,9 @@ export const commands: Chat.ChatCommands = {
 		},
 		settypehelp: [
 			`/auction settype [auction|blind|snake] - Sets the auction type. Requires: # ~ auction owner`,
+			`- auction: Standard auction with credits and bidding.`,
+			`- blind: Same as auction, but bids are hidden until the end of the nomination.`,
+			`- snake: Standard snake draft with no credits or bidding.`,
 		],
 		addowner: 'addowners',
 		addowners(target, room, user) {
@@ -1081,7 +1084,7 @@ export const commands: Chat.ChatCommands = {
 			`- minplayers [amount]: Sets the minimum number of players.<br/>` +
 			`- nomtimer [seconds]: Sets the nomination timer to [seconds] seconds.<br/>` +
 			`- bidtimer [seconds]: Sets the bid timer to [seconds] seconds.<br/>` +
-			`- blindmode [on/off]: Enables or disables blind mode.<br/>` +
+			`- settype [auction|blind|snake]: Sets the auction type.<br/>` +
 			`- addowners [user1], [user2], ...: Adds users as auction owners.<br/>` +
 			`- removeowners [user1], [user2], ...: Removes users as auction owners.<br/>` +
 			`- importplayers [pastebin url]: Imports a list of players from a pastebin.<br/>` +
