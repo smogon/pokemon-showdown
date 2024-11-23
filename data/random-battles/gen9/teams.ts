@@ -2419,7 +2419,7 @@ export class RandomTeams {
 					if (movesLimited[moveId] && teamData.has[movesLimited[moveId]]) continue;
 					allowedMoves.push(m);
 				}
-				if (allowedMoves.length === 0) {
+				if (!allowedMoves.length) {
 					reject = true;
 					break;
 				}
