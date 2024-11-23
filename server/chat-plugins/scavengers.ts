@@ -993,7 +993,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				}
 			} else {
 				// Skip last question if there is no answer
-				if (i + 1 === questionArray.length) { continue; }
+				if (i + 1 === questionArray.length) continue;
 
 				question = question.trim();
 				formattedQuestions[i] = question;
