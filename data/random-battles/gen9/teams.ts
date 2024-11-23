@@ -2388,31 +2388,31 @@ export class RandomTeams {
 			set: BattleFactorySet, moves?: string[], item?: string,
 		}[] = [];
 
-		for (const curSet of setList) {
+		for (const set of setList) {
 			let reject = false;
 
 			// limit to 1 dedicated tera user per team
-			if (curSet.wantsTera && teamData.wantsTeraCount) {
+			if (set.wantsTera && teamData.wantsTeraCount) {
 				continue;
 			}
 
 			// reject disallowed items, specifically a second of any given choice item
 			const allowedItems: string[] = [];
-			for (const itemString of curSet.item) {
+			for (const itemString of set.item) {
 				const item = this.dex.items.get(itemString);
 				if (itemsLimited.includes(item.id) && teamData.has[item.id]) continue;
 				allowedItems.push(itemString);
 			}
-			if (allowedItems.length === 0) continue;
-			const curSetItem = this.sample(allowedItems);
+			if (!allowedItems.length) continue;
+			const item = this.sample(allowedItems);
 
-			const curSetAbility = this.sample(curSet.ability);
+			const curSetAbility = this.sample(set.ability);
 			const ability = this.dex.abilities.get(curSetAbility);
 
 			if (abilitiesLimited[ability.id] && teamData.has[abilitiesLimited[ability.id]]) continue;
 
-			const curSetMoves: string[] = [];
-			for (const move of curSet.moves) {
+			const moves: string[] = [];
+			for (const move of set.moves) {
 				const allowedMoves: string[] = [];
 				for (const m of move) {
 					const moveId = toID(m);
@@ -2423,17 +2423,16 @@ export class RandomTeams {
 					reject = true;
 					break;
 				}
-				curSetMoves.push(this.sample(allowedMoves));
+				moves.push(this.sample(allowedMoves));
 			}
 			if (reject) continue;
-			const set = {set: curSet, moves: curSetMoves, item: curSetItem};
-			effectivePool.push(set);
+			effectivePool.push({set, moves, item});
 		}
 
 		if (!effectivePool.length) {
 			if (!teamData.forceResult) return null;
-			for (const curSet of setList) {
-				effectivePool.push({set: curSet});
+			for (const set of setList) {
+				effectivePool.push({set});
 			}
 		}
 
