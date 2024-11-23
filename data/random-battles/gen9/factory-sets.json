@@ -4826,21 +4826,6 @@
 				"moves": [["Strange Steam"], ["Pain Split"], ["Will-O-Wisp"], ["Defog", "Flamethrower", "Taunt"]]
 			}]
 		},
-		"yanmega": {
-			"weight": 4,
-			"sets": [{
-				"species": "Yanmega",
-				"wantsTera": true,
-				"weight": 100,
-				"item": ["Throat Spray"],
-				"ability": ["Speed Boost"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": ["Modest"],
-				"teraType": ["Ground"],
-				"moves": [["Bug Buzz"], ["Air Slash"], ["Tera Blast"], ["Protect"]]
-			}]
-		},
 		"zoroarkhisui": {
 			"weight": 7,
 			"sets": [{
