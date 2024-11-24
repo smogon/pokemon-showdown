@@ -35,6 +35,7 @@ interface BattleFactorySet {
 	wantsTera?: boolean;
 	evs?: Partial<StatsTable>;
 	ivs?: Partial<StatsTable>;
+	shiny?: boolean;
 }
 interface BSSFactorySet {
 	species: string;
@@ -2399,17 +2400,17 @@ export class RandomTeams {
 			// reject disallowed items, specifically a second of any given choice item
 			const allowedItems: string[] = [];
 			for (const itemString of set.item) {
-				const item = this.dex.items.get(itemString);
-				if (itemsLimited.includes(item.id) && teamData.has[item.id]) continue;
+				const itemId = toID(itemString);
+				if (itemsLimited.includes(itemId) && teamData.has[itemId]) continue;
 				allowedItems.push(itemString);
 			}
 			if (!allowedItems.length) continue;
 			const item = this.sample(allowedItems);
 
-			const curSetAbility = this.sample(set.ability);
-			const ability = this.dex.abilities.get(curSetAbility);
+			const ability = this.sample(set.ability);
+			const abilityId = toID(ability);
 
-			if (abilitiesLimited[ability.id] && teamData.has[abilitiesLimited[ability.id]]) continue;
+			if (abilitiesLimited[abilityId] && teamData.has[abilitiesLimited[abilityId]]) continue;
 
 			const moves: string[] = [];
 			for (const move of set.moves) {
@@ -2466,7 +2467,7 @@ export class RandomTeams {
 			gender:	setData.set.gender || species.gender || (tier === 'OU' ? 'F' : ''), // F for Cute Charm Enamorus
 			item,
 			ability: this.sample(setData.set.ability),
-			shiny: this.randomChance(1, 1024),
+			shiny: setData.set.shiny || this.randomChance(1, 1024),
 			level: this.adjustLevel || (tier === "LC" ? 5 : 100),
 			happiness: 255,
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
@@ -2587,8 +2588,6 @@ export class RandomTeams {
 			}
 			if (!this.forceMonotype && teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 
-			const itemData = this.dex.items.get(set.item);
-
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
@@ -2608,7 +2607,7 @@ export class RandomTeams {
 
 			teamData.baseFormes[species.baseSpecies] = 1;
 
-			teamData.has[itemData.id] = 1;
+			teamData.has[toID(set.item)] = 1;
 
 			if (set.wantsTera) {
 				if (!teamData.wantsTeraCount) teamData.wantsTeraCount = 0;
