@@ -2407,8 +2407,7 @@ export class RandomTeams {
 			if (!allowedItems.length) continue;
 			const item = this.sample(allowedItems);
 
-			const ability = this.sample(set.ability);
-			const abilityId = toID(ability);
+			const abilityId = toID(this.sample(set.ability));
 
 			if (abilitiesLimited[abilityId] && teamData.has[abilitiesLimited[abilityId]]) continue;
 
