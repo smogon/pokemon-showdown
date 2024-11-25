@@ -186,13 +186,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Dominus Lapidis',
 		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
+	/*
 	Mink: {
 		species: 'Venusaur-Mega', ability: 'Putridity', item: 'Corpse Lily', gender: 'M',
 		moves: ['Seed Flare', 'Earth Power', 'Rototiller'],
 		signatureMove: 'Transfuse Toxin',
 		evs: {hp: 252, def: 108, spd: 148}, ivs: {atk: 0}, nature: 'Bold',
 	},
-	/*
  	Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
 		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
