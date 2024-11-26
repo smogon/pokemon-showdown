@@ -1229,25 +1229,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Urabrask
 	praetorsgrasp: {
 		name: "Praetor's Grasp",
-		desc: "While this Pokemon is active, opposing Pokemon must be active for at least 2 turns before switching. This Pokemon's moves of power 80 or greater have 1.2x power and accuracy, and always make contact.",
-		shortDesc: "Foes must be active for 2 turns; 80BP+ Moves: Contact, 1.2x Power/Accuracy.",
+		desc: "Opposing Pokemon that have been active for less than 2 turns are prevented from switching.",
+		shortDesc: "Opposing Pokemon that have been active for less than 2 turns cannot switch.",
 		gen: 9,
 		onFoeTrapPokemon(pokemon) {
 			if (!pokemon.activeTurns || pokemon.activeTurns < 2) pokemon.tryTrap(true);
-		},
-		onBasePowerPriority: 30,
-		onBasePower(basePower, attacker, defender, move) {
-			if (basePower >= 80) {
-				this.debug('Praetor\'s Grasp Boost');
-				return this.chainModify(1.2);
-			}
-		},
-		onModifyAccuracyPriority: 10,
-		onModifyAccuracy(accuracy, target, source, move) {
-			if (move.basePower >= 80) {
-				this.debug('Praetor\'s Grasp Boost');
-				return this.chainModify(1.2);
-			}
 		},
 	},
 	// Sariel
