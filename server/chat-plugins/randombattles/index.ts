@@ -258,7 +258,7 @@ function getLetsGoMoves(species: string | Species) {
 	return data.moves.map(formatMove).sort().join(`, `);
 }
 
-function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen8', isBSS = false) {
+function battleFactorySets(species: string | Species, tier: string | null, gen = 'gen9', isBSS = false) {
 	species = Dex.species.get(species);
 	if (typeof species.battleOnly === 'string') {
 		species = Dex.species.get(species.battleOnly);
@@ -284,9 +284,16 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 			return {e: `${species.name} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`};
 		}
 		const setObj = t[species.id];
+		if (genNum >= 9) {
+			buf += `Species rarity: ${setObj.weight} (higher is more common, max 10)<br />`;
+		}
 		buf += `<span style="color:#999999;">Sets for ${species.name} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
-			buf += `<details><summary>Set ${i + 1}</summary>`;
+			if (genNum >= 9) {
+				buf += `<details><summary>Set ${i + 1} (${set.weight}%)</summary>`;
+			} else {
+				buf += `<details><summary>Set ${i + 1}</summary>`;
+			}
 			buf += `<ul style="list-style-type:none;">`;
 			buf += `<li>${set.species}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
 			buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
@@ -294,6 +301,9 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 			if (set.level && set.level < 100) buf += `<li>Level: ${set.level}</li>`;
 			if (set.shiny) buf += `<li>Shiny: Yes</li>`;
 			if (set.happiness) buf += `<li>Happiness: ${set.happiness}</li>`;
+			if (genNum === 9 && set.teraType) {
+				buf += `<li>Tera Type: ${set.teraType.map(formatType).join(' / ')}</li>`;
+			}
 			if (set.evs) {
 				buf += `<li>EVs: `;
 				const evs: string[] = [];
@@ -620,7 +630,7 @@ export const commands: Chat.ChatCommands = {
 			} else {
 				tier = 'ou';
 			}
-			const mod = args[2] || 'gen8';
+			const mod = args[2] || 'gen9';
 			let bfSets;
 			if (species.name === 'Necrozma-Ultra') {
 				bfSets = battleFactorySets(Dex.species.get('necrozma-dawnwings'), tier, mod);

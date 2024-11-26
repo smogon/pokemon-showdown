@@ -2754,7 +2754,7 @@
 				"ability": ["Sturdy"],
 				"evs": {"hp": 252, "atk": 4, "spd": 252},
 				"nature": "Careful",
-				"moves": [["Earthquake"], ["Heavy Slam"], ["Stealth Rock", "Stealth Rock", "Protect"], ["Toxic"]]
+				"moves": [["Earthquake"], ["Heavy Slam"], ["Stealth Rock", "Protect"], ["Toxic"]]
 			}]
 		},
 		"suicune": {
