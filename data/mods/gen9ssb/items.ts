@@ -597,25 +597,37 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "Protects from contact effects. If held by a Tinkaton with 'Weapon Enhancement', allows the usage of the Z-Move 'Emergency Upgrades'.",
 	},
 	// Urabrask
-	napalmresonator: {
-		name: "Napalm Resonator",
+	braidoffire: {
+		name: "Braid of Fire",
 		onTakeItem: false,
 		onDamagingHitOrder: 2,
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target) && move.basePower >= 100) {
-				this.add('-anim', target, 'Self-Destruct', target);
-				this.damage(target.baseMaxhp / 3, target, target);
-				this.damage(source.baseMaxhp / 3, source, source);
-				this.add('-message', `${target.name}'s Napalm Resonator exploded!`);
-				this.field.setWeather('rainoffire');
-				this.add('-enditem', target, target.getItem(), '[from] item: Napalm Resonator');
-				target.setItem('');
+			if (move.category === 'Physical') {
+				this.add('-anim', target, 'Searing Shot', target);
+				let temp = this.dex.getActiveMove('ember');
+				for (const pokemon of this.getAllActive()) {
+					let burn = this.actions.getDamage(target, pokemon, temp);
+					this.damage(burn, pokemon, target, this.dex.items.get('Braid of Fire'));
+				}
+				this.add('-message', `Braid of Fire scorched the battlefield!`);
+			}
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (move.category === 'Physical') {
+				this.add('-anim', source, 'Searing Shot', source);
+				let temp = this.dex.getActiveMove('ember');
+				for (const pokemon of this.getAllActive()) {
+					let burn = this.actions.getDamage(source, pokemon, temp);
+					this.damage(burn, pokemon, source, this.dex.items.get('Braid of Fire'));
+				}
+				this.add('-message', `Braid of Fire scorched the battlefield!`);
 			}
 		},
 		zMove: "Blasphemous Act",
 		zMoveFrom: "Terrorize the Peaks",
 		itemUser: ["Smokomodo"],
-		shortDesc: "If held by a Smokomodo with Terorrize the Peaks, it can use Blasphemous Act.",
+		desc: "If holder is hit by a physical move or uses a physical move, all active Pokemon are hit with Ember. If held by a Smokomodo with Terorrize the Peaks, it can use Blasphemous Act.",
+		shortDesc: "Damages all Pokemon if holder is hit by/uses a physical move.",
 		gen: 9,
 	},
 	// Mima
