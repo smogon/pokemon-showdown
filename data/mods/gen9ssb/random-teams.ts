@@ -85,7 +85,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Urabrask: {
-		species: 'Smokomodo', ability: 'Praetor\'s Grasp', item: 'Napalm Resonator', gender: 'M',
+		species: 'Smokomodo', ability: 'Praetor\'s Grasp', item: 'Braid of Fire', gender: 'M',
 		moves: ['Fire Lash', 'Headlong Rush', 'Spikes'],
 		signatureMove: 'Terrorize the Peaks',
 		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naive',
