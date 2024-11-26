@@ -88,7 +88,7 @@ export const ssbSets: SSBSets = {
 		species: 'Smokomodo', ability: 'Praetor\'s Grasp', item: 'Napalm Resonator', gender: 'M',
 		moves: ['Fire Lash', 'Headlong Rush', 'Spikes'],
 		signatureMove: 'Terrorize the Peaks',
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naive',
 	},
 	Kozuchi: {
 		species: 'Tinkaton', ability: 'Scrapworker', item: 'Forged Hammer', gender: 'F',
