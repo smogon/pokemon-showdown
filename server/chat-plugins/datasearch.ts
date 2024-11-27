@@ -54,17 +54,6 @@ const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
 const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 
-function escapeHTML(str?: string) {
-	if (!str) return '';
-	return ('' + str)
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&apos;')
-		.replace(/\//g, '&#x2f;');
-}
-
 function toListString(arr: string[]) {
 	if (!arr.length) return '';
 	if (arr.length === 1) return arr[0];
@@ -846,7 +835,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					return {error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.`};
 				}
 				const stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
-				if (!allStats.includes(stat)) return {error: `'${escapeHTML(target)}' did not contain a valid stat.`};
+				if (!allStats.includes(stat)) return {error: `'${target}' did not contain a valid stat.`};
 				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
 				orGroup.skip = true;
 				break;
@@ -1050,11 +1039,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					if (inequalityString.startsWith('<')) directions.push('less');
 					if (inequalityString.startsWith('>')) directions.push('greater');
 				} else {
-					return {error: `No value given to compare with '${escapeHTML(target)}'.`};
+					return {error: `No value given to compare with '${target}'.`};
 				}
 				if (inequalityString.endsWith('=')) directions.push('equal');
 				if (stat in allStatAliases) stat = allStatAliases[stat];
-				if (!allStats.includes(stat)) return {error: `'${escapeHTML(target)}' did not contain a valid stat.`};
+				if (!allStats.includes(stat)) return {error: `'${target}' did not contain a valid stat.`};
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = Object.create(null);
 				for (const direction of directions) {
 					if (orGroup.stats[stat][direction]) return {error: `Invalid stat range for ${stat}.`};
@@ -1062,7 +1051,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				}
 				continue;
 			}
-			return {error: `'${escapeHTML(target)}' could not be found in any of the search categories.`};
+			return {error: `'${target}' could not be found in any of the search categories.`};
 		}
 		if (!orGroup.skip) {
 			searches.push(orGroup);
@@ -1351,7 +1340,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
 	if (results.length > 1) {
 		results.sort();
 		if (sort) {
@@ -1560,7 +1549,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				case 'power': prop = 'basePower'; break;
 				case 'acc': prop = 'accuracy'; break;
 				}
-				if (!allProperties.includes(prop)) return {error: `'${escapeHTML(target)}' did not contain a valid property.`};
+				if (!allProperties.includes(prop)) return {error: `'${target}' did not contain a valid property.`};
 				sort = `${prop}${target.endsWith(' asc') ? '+' : '-'}`;
 				orGroup.skip = true;
 				break;
@@ -1658,7 +1647,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					if (inequalityString.startsWith('<')) directions.push('less');
 					if (inequalityString.startsWith('>')) directions.push('greater');
 				} else {
-					return {error: `No value given to compare with '${escapeHTML(target)}'.`};
+					return {error: `No value given to compare with '${target}'.`};
 				}
 				if (inequalityString.endsWith('=')) directions.push('equal');
 				switch (toID(prop)) {
@@ -1667,7 +1656,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				case 'power': prop = 'basePower'; break;
 				case 'acc': prop = 'accuracy'; break;
 				}
-				if (!allProperties.includes(prop)) return {error: `'${escapeHTML(target)}' did not contain a valid property.`};
+				if (!allProperties.includes(prop)) return {error: `'${target}' did not contain a valid property.`};
 				if (!orGroup.property[prop]) orGroup.property[prop] = Object.create(null);
 				for (const direction of directions) {
 					if (orGroup.property[prop][direction]) return {error: `Invalid property range for ${prop}.`};
@@ -1711,7 +1700,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				case 'evasiveness': target = 'evasion'; break;
 				default: target = target.substr(7);
 				}
-				if (!allBoosts.includes(target)) return {error: `'${escapeHTML(target)}' is not a recognized stat.`};
+				if (!allBoosts.includes(target)) return {error: `'${target}' is not a recognized stat.`};
 				if (isBoost) {
 					if ((orGroup.boost[target] && isNotSearch) || (orGroup.boost[target] === false && !isNotSearch)) {
 						return {error: 'A search cannot both exclude and include a stat boost.'};
@@ -1739,7 +1728,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				case 'evasiveness': target = 'evasion'; break;
 				default: target = target.substr(8);
 				}
-				if (!allBoosts.includes(target)) return {error: `'${escapeHTML(target)}' is not a recognized stat.`};
+				if (!allBoosts.includes(target)) return {error: `'${target}' is not a recognized stat.`};
 				if ((orGroup.zboost[target] && isNotSearch) || (orGroup.zboost[target] === false && !isNotSearch)) {
 					return {error: 'A search cannot both exclude and include a stat boost.'};
 				}
@@ -1780,7 +1769,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				continue;
 			}
 
-			return {error: `'${escapeHTML(oldTarget)}' could not be found in any of the search categories.`};
+			return {error: `'${oldTarget}' could not be found in any of the search categories.`};
 		}
 		if (!orGroup.skip) {
 			searches.push(orGroup);
@@ -2061,7 +2050,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	if (targetMons.length) {
 		resultsStr += `<span style="color:#999999;">Matching moves found in learnset(s) for</span> ${targetMons.map(mon => `${mon.shouldBeExcluded ? "!" : ""}${mon.name}`).join(', ')}:<br />`;
 	} else {
-		resultsStr += (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+		resultsStr += (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
 	}
 	if (randomOutput && randomOutput < results.length) {
 		results = Utils.shuffle(results).slice(0, randomOutput);
@@ -2339,7 +2328,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		}
 	}
 
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
 	if (randomOutput !== 0) {
 		const randomItems = [];
 		if (foundItems.length === 0) {
@@ -2522,7 +2511,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	}
 
 	if (foundAbilities.length === 1) return {dt: foundAbilities[0]};
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
 
 	if (randomOutput !== 0) {
 		const randomAbilities = [];
@@ -2788,7 +2777,7 @@ function runRandtype(target: string, cmd: string, canAll: boolean, message: stri
 		// Add a random type to the output.
 		randTypes.push(Dex.types.names()[Math.floor(Math.random() * Dex.types.names().length)]);
 	}
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
 	resultsStr += randTypes.map(
 		type => icon[type]
 	).join(' ');
