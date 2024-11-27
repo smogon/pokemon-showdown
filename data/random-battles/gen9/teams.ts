@@ -2576,6 +2576,20 @@ export class RandomTeams {
 			}
 			if (skip) continue;
 
+			if (!teamData.forceResult && !this.forceMonotype) {
+				// Limit 3 of any weakness
+				for (const typeName of this.dex.types.names()) {
+					// it's weak to the type
+					if (this.dex.getEffectiveness(typeName, species) > 0 && this.dex.getImmunity(typeName, types)) {
+						if (teamData.weaknesses[typeName] >= 3 * limitFactor) {
+							skip = true;
+							break;
+						}
+					}
+				}
+			}
+			if (skip) continue;
+
 			const set = this.randomFactorySet(species, teamData, this.factoryTier);
 			if (!set) continue;
 
@@ -2626,18 +2640,16 @@ export class RandomTeams {
 			}
 
 			for (const typeName of this.dex.types.names()) {
-				// Cover any major weakness (3+) with at least one resistance
-				if (teamData.resistances[typeName] >= 1) continue;
-				if (resistanceAbilities[ability.id]?.includes(typeName) ||	!this.dex.getImmunity(typeName, types)) {
-					// Heuristic: assume that Pokémon with these abilities don't have (too) negative typing.
-					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
-					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
-					continue;
-				}
 				const typeMod = this.dex.getEffectiveness(typeName, types);
-				if (typeMod < 0) {
-					teamData.resistances[typeName] = (teamData.resistances[typeName] || 0) + 1;
-					if (teamData.resistances[typeName] >= 1) teamData.weaknesses[typeName] = 0;
+				// Track resistances because we will require it for triple weaknesses
+				if (
+					typeMod < 0 ||
+					resistanceAbilities[ability.id]?.includes(typeName) ||
+					!this.dex.getImmunity(typeName, types)
+				) {
+					// We don't care about the number of resistances, so just set to 1
+					teamData.resistances[typeName] = 1;
+				// Track weaknesses
 				} else if (typeMod > 0) {
 					teamData.weaknesses[typeName] = (teamData.weaknesses[typeName] || 0) + 1;
 				}
@@ -2648,6 +2660,8 @@ export class RandomTeams {
 		// Quality control we cannot afford for monotype
 		if (!teamData.forceResult && !this.forceMonotype) {
 			for (const type in teamData.weaknesses) {
+				// We reject if our team is triple weak to any type without having a resist
+				if (teamData.resistances[type]) continue;
 				if (teamData.weaknesses[type] >= 3 * limitFactor) return this.randomFactoryTeam(side, ++depth);
 			}
 		}
