@@ -1395,7 +1395,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyMove(move, pokemon) {
 			const target = this.effectState.target;
 			if (target === pokemon) return;
-			this.add('-message', pokemon.side.lastMove);
+			this.add('-message', pokemon.side.lastMoveUsed);
+			this.add('-message', pokemon.side.lastMoveUsed.id);
 			if (move.type === 'Flying' && pokemon.abilityState.lastMoveUsedResidual) {
 				target.side.addSideCondition('woventogethercohereforever');
 				pokemon.abilityState.imprintedMove = move.id;
