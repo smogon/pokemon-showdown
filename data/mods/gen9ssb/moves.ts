@@ -2281,17 +2281,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Gizmo
 	coinclash: {
 		accuracy: 80,
-		basePower: 20,
+		basePower: 35,
 		category: "Physical",
 		name: "Coin Clash",
-		desc: "Hits 3-5 times. Flings coin at target after use. 50% chance to gain +2 crit ratio and 1.25x evasion until switch/faint. Fails if not holding Inconspicuous Coin.",
-		shortDesc: "See this entry with '/ssb Gizmo'!",
-		pp: 10,
-		noPPBoosts: true,
+		desc: "Hits 4-5 times. Flings coin at target after use. 50% chance to gain +2 crit ratio and 1.25x evasion until switch/faint. Fails if not holding Inconspicuous Coin.",
+		shortDesc: "See '/ssb Gizmo' for more!",
+		pp: 5,
 		flags: {contact: 1},
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
 			if (!pokemon.item) {
+				this.add('-anim', pokemon, 'Splash', pokemon);
 				this.add('-message', `${pokemon.name} couldn't find their coin!`);
 				return false;
 			}
@@ -2300,9 +2300,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!source.item) return;
 			this.add('-anim', source, 'Magnetic Flux', source);
 			this.add('-anim', source, 'Pay Day', target);
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Steel', type);
 		},
 		onAfterMove(source, target, move) {
 			if (!source.item) return;
@@ -2334,10 +2331,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.abilityState.recallActive = false;
 			},
 		},
-		multihit: [3, 5],
+		multihit: [4, 5],
 		secondary: null,
 		target: "normal",
-		type: "Electric",
+		type: "Steel",
 	},
 	// Glint
 	gigameld: {
