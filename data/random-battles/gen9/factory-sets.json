@@ -6593,7 +6593,7 @@
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Ghost"],
-				"moves": [["Tri Attack"], ["Shadow Ball"], ["Trick"], ["Nasty Plot", "Agility", "Recover"]]
+				"moves": [["Tri Attack"], ["Shadow Ball"], ["Trick"], ["Nasty Plot", "Thunderbolt", "Ice Beam", "Recover"]]
 			}, {
 				"species": "Porygon-Z",
 				"weight": 25,
@@ -6603,7 +6603,7 @@
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Ground"],
-				"moves": [["Tera Blast"], ["Shadow Ball"], ["Trick"], ["Nasty Plot", "Agility", "Recover"]]
+				"moves": [["Tera Blast"], ["Shadow Ball"], ["Trick"], ["Nasty Plot", "Ice Beam", "Recover"]]
 			}, {
 				"species": "Porygon-Z",
 				"weight": 5,
