@@ -2640,7 +2640,7 @@ export class RandomTeams {
 			}
 
 			for (const typeName of this.dex.types.names()) {
-				let typeMod = this.dex.getEffectiveness(typeName, types);
+				const typeMod = this.dex.getEffectiveness(typeName, types);
 				// Track resistances because we will require it for triple weaknesses
 				if (
 					typeMod < 0 ||
