@@ -68,7 +68,7 @@ export const ssbSets: SSBSets = {
 	},
 	Gizmo: {
 		species: 'Gimmighoul-Roaming', ability: 'Head-On Battery', item: 'Inconspicuous Coin', gender: 'M',
-		moves: ['Astonish', 'Nuzzle', 'Charge'],
+		moves: ['Shadow Punch', 'Nuzzle', 'Charge'],
 		signatureMove: 'Coin Clash',
 		evs: {hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252}, nature: 'Jolly',
 	},
