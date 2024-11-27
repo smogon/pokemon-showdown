@@ -1393,7 +1393,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Woven Together, Cohere Forever",
 		gen: 9,
 		onModifyMove(move, pokemon) {
+			this.add('-message', pokemon.side.lastMoveUsed);
+			this.add('-message', pokemon.side.lastMoveUsed.id);
+			this.add('-message', 'HELLO?');
 			const target = this.effectState.target;
+			this.add('-message', target.name);
 			if (target === pokemon) return;
 			this.add('-message', pokemon.side.lastMoveUsed);
 			this.add('-message', pokemon.side.lastMoveUsed.id);
