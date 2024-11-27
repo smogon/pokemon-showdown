@@ -280,7 +280,7 @@
 				"evs": {"hp": 248, "atk": 204, "spe": 56},
 				"nature": ["Adamant"],
 				"teraType": ["Fire"],
-				"moves": [["Bulk Up"], ["Extreme Speed"], ["Shadow Claw"], ["Taunt", "Recover"]]
+				"moves": [["Bulk Up"], ["Extreme Speed"], ["Shadow Claw"], ["Recover"]]
 			}]
 		},
 		"arceuswater": {
@@ -331,7 +331,7 @@
 			}, {
 				"species": "Eternatus",
 				"weight": 30,
-				"item": ["Power Herb"],
+				"item": ["Choice Scarf"],
 				"ability": ["Pressure"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
@@ -3893,7 +3893,7 @@
 				"evs": {"hp": 252, "atk": 76, "def": 156, "spe": 24},
 				"nature": ["Impish"],
 				"teraType": ["Ghost"],
-				"moves": [["Liquidation"], ["Leech Life"], ["Sticky Web"], ["Mirror Coat", "Trailblaze"]]
+				"moves": [["Liquidation"], ["Leech Life"], ["Sticky Web"], ["Mirror Coat"]]
 			}]
 		},
 		"donphan": {
@@ -4108,7 +4108,7 @@
 				"weight": 20,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
-				"evs": {"hp": 252, "atk": 4, "spe": 252},
+				"evs": {"hp": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Ghost"],
 				"moves": [["Rapid Spin"], ["Knock Off"], ["U-turn"], ["Taunt", "Double-Edge"]]
@@ -4335,7 +4335,7 @@
 				"weight": 100,
 				"item": ["Leftovers"],
 				"ability": ["Pressure"],
-				"evs": {"hp": 252, "spa": 4, "spe": 252},
+				"evs": {"hp": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Dark", "Fairy"],
@@ -4631,7 +4631,7 @@
 				"weight": 50,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Infiltrator"],
-				"evs": {"hp": 252, "spa": 4, "spe": 252},
+				"evs": {"hp": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Steel"],
@@ -4833,7 +4833,7 @@
 				"weight": 20,
 				"item": ["Choice Specs"],
 				"ability": ["Illusion"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Fairy"],
@@ -4843,7 +4843,7 @@
 				"weight": 10,
 				"item": ["Choice Specs"],
 				"ability": ["Illusion"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": ["Timid"],
 				"teraType": ["Fairy"],
 				"moves": [["Shadow Ball"], ["Tera Blast"], ["Flamethrower"], ["U-turn"]]
@@ -4852,7 +4852,7 @@
 				"weight": 20,
 				"item": ["Choice Specs"],
 				"ability": ["Illusion"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Ghost"],
@@ -4862,7 +4862,7 @@
 				"weight": 10,
 				"item": ["Choice Specs"],
 				"ability": ["Illusion"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": ["Timid"],
 				"teraType": ["Ghost"],
 				"moves": [["Shadow Ball"], ["Hyper Voice"], ["Flamethrower"], ["U-turn"]]
@@ -4871,7 +4871,7 @@
 				"weight": 20,
 				"item": ["Choice Scarf"],
 				"ability": ["Illusion"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Ghost"],
@@ -4881,7 +4881,7 @@
 				"weight": 20,
 				"item": ["Choice Scarf"],
 				"ability": ["Illusion"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": ["Timid"],
 				"teraType": ["Ghost"],
 				"moves": [["Shadow Ball"], ["Hyper Voice"], ["U-turn"], ["Trick"]]
@@ -4896,7 +4896,7 @@
 				"ability": ["Regenerator"],
 				"evs": {"hp": 248, "def": 252, "spd": 8},
 				"ivs": {"atk": 0},
-				"nature": ["Timid"],
+				"nature": ["Bold"],
 				"teraType": ["Fairy", "Water", "Steel"],
 				"moves": [["Stun Spore"], ["Giga Drain"], ["Sludge Bomb"], ["Foul Play", "Toxic"]]
 			}]
@@ -4997,7 +4997,7 @@
 				"weight": 50,
 				"item": ["Life Orb"],
 				"ability": ["Regenerator"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Dark", "Steel"],
 				"moves": [["Close Combat"], ["Knock Off"], ["U-turn"], ["Triple Axel", "Ice Spinner"]]
@@ -5006,7 +5006,7 @@
 				"weight": 50,
 				"item": ["Choice Scarf"],
 				"ability": ["Regenerator"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Dark", "Fighting"],
 				"moves": [["Close Combat"], ["Knock Off"], ["U-turn"], ["Ice Spinner", "Stone Edge"]]
@@ -5167,7 +5167,7 @@
 				"weight": 10,
 				"item": ["Choice Scarf"],
 				"ability": ["Levitate"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Fairy", "Fire"],
@@ -5177,7 +5177,7 @@
 				"weight": 10,
 				"item": ["Choice Scarf"],
 				"ability": ["Levitate"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": ["Timid"],
 				"teraType": ["Fairy", "Fire"],
 				"moves": [["Psyshock"], ["Flamethrower"], ["Dazzling Gleam"], ["U-turn"]]
@@ -5186,7 +5186,7 @@
 				"weight": 10,
 				"item": ["Choice Scarf"],
 				"ability": ["Levitate"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Fairy", "Ghost"],
@@ -5321,7 +5321,7 @@
 				"weight": 50,
 				"item": ["Wide Lens"],
 				"ability": ["Hustle"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Psychic"],
 				"moves": [["Close Combat"], ["Leaf Blade"], ["Victory Dance"], ["Tera Blast"]]
@@ -5330,7 +5330,7 @@
 				"weight": 50,
 				"item": ["Wide Lens"],
 				"ability": ["Hustle"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Ice", "Fighting"],
 				"moves": [["Close Combat"], ["Leaf Blade"], ["Victory Dance"], ["Ice Spinner"]]
@@ -5343,7 +5343,7 @@
 				"weight": 50,
 				"item": ["Choice Band", "Life Orb"],
 				"ability": ["Tough Claws"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Fighting", "Dark"],
 				"moves": [["Close Combat"], ["Accelerock"], ["Crunch"], ["Psychic Fangs", "Stone Edge"]]
@@ -5352,7 +5352,7 @@
 				"weight": 25,
 				"item": ["Life Orb"],
 				"ability": ["Tough Claws"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Fighting"],
 				"moves": [["Close Combat"], ["Swords Dance"], ["Stone Edge"], ["Accelerock"]]
@@ -5361,7 +5361,7 @@
 				"weight": 25,
 				"item": ["Life Orb"],
 				"ability": ["Tough Claws"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Dark"],
 				"moves": [["Close Combat"], ["Swords Dance"], ["Stone Edge"], ["Sucker Punch"]]
@@ -5387,7 +5387,7 @@
 				"weight": 50,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Levitate"],
-				"evs": {"hp": 248, "spa": 8, "spe": 252},
+				"evs": {"hp": 248, "spa": 4, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Water", "Fairy", "Steel"],
@@ -5520,7 +5520,7 @@
 				"weight": 100,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Dancer"],
-				"evs": {"hp": 252, "spa": 4, "spe": 252},
+				"evs": {"hp": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Ground", "Water"],
@@ -5610,7 +5610,7 @@
 				"weight": 40,
 				"item": ["Choice Specs"],
 				"ability": ["Dragon's Maw"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid", "Modest"],
 				"teraType": ["Steel"],
@@ -5631,7 +5631,7 @@
 				"weight": 30,
 				"item": ["Choice Scarf"],
 				"ability": ["Dragon's Maw"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Steel"],
@@ -5645,7 +5645,7 @@
 				"weight": 100,
 				"item": ["Leftovers"],
 				"ability": ["Levitate"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Steel"],
@@ -5870,7 +5870,7 @@
 				"weight": 50,
 				"item": ["Leftovers"],
 				"ability": ["Corrosion"],
-				"evs": {"hp": 248, "spa": 8, "spe": 252},
+				"evs": {"hp": 248, "spa": 4, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Dark"],
@@ -6073,7 +6073,7 @@
 				"weight": 40,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Intimidate"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Adamant", "Jolly"],
 				"teraType": ["Ghost", "Flying", "Poison", "Water", "Dragon", "Fairy"],
 				"moves": [["Knock Off"], ["Flare Blitz"], ["Swords Dance"], ["Earthquake", "U-turn", "Drain Punch"]]
@@ -6082,7 +6082,7 @@
 				"weight": 10,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Intimidate"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Adamant", "Jolly"],
 				"teraType": ["Ghost", "Flying", "Poison", "Grass"],
 				"moves": [["Knock Off"], ["Flare Blitz"], ["Swords Dance"], ["Trailblaze"]]
@@ -6726,7 +6726,7 @@
 				"weight": 50,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Technician"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Electric", "Fighting"],
 				"moves": [["Swords Dance"], ["Dual Wingbeat"], ["Close Combat"], ["Trailblaze"]]
@@ -6735,7 +6735,7 @@
 				"weight": 35,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Technician"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Electric", "Fighting"],
 				"moves": [["Swords Dance"], ["Dual Wingbeat"], ["U-turn"], ["Close Combat", "Defog"]]
@@ -6744,7 +6744,7 @@
 				"weight": 15,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Technician"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Fighting"],
 				"moves": [["Close Combat"], ["Dual Wingbeat"], ["U-turn"], ["Defog"]]
@@ -7448,7 +7448,7 @@
 				"weight": 100,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Levitate"],
-				"evs": {"hp": 248, "spa": 8, "spe": 252},
+				"evs": {"hp": 248, "spa": 4, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": ["Timid"],
 				"teraType": ["Water", "Steel", "Fairy"],
