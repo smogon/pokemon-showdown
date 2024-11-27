@@ -374,8 +374,17 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	futuremove: {
 		// this is a slot condition
 		name: 'futuremove',
-		duration: 3,
+		onStart() {
+			this.effectState.endingTurn = (this.turn - 1) + 2;
+			if (this.effectState.endingTurn >= 254) {
+				this.hint(`In Gen 8+, Future moves will never resolve when used on turn 254 or later.`);
+			}
+		},
 		onResidualOrder: 3,
+		onResidual(side: any) {
+			if (this.getOverflowedTurnCount() < this.effectState.endingTurn) return;
+			side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'futuremove');
+		},
 		onEnd(target) {
 			const data = this.effectState;
 			// time's up; time to hit! :D

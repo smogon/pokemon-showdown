@@ -42,4 +42,22 @@ describe('Wish', function () {
 		battle.makeChoices('auto', 'move thousandarrows');
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it(`should never resolve when used on a turn that is a multiple of 256n - 1`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['sleeptalk', 'wish', 'doubleedge']},
+		], [
+			{species: 'Stakataka', moves: ['sleeptalk']},
+		]]);
+
+		battle.turn = 255; // Showdown turn is +1 from what the games are; this would ordinarily be 254
+		battle.makeChoices('move doubleedge', 'auto');
+		battle.makeChoices('move wish', 'auto');
+		for (let i = 0; i < 5; i++) battle.makeChoices();
+		battle.makeChoices('move wish', 'auto');
+		battle.makeChoices();
+
+		const wynaut = battle.p1.active[0];
+		assert.false.fullHP(wynaut, `Wish should have never resolved.`);
+	});
 });
