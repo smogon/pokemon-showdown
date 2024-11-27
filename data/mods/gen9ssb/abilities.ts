@@ -1335,7 +1335,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	headonbattery: {
 		name: "Head-On Battery",
 		desc: "Allows this Pokemon to use Charge up to three times. Deals (100HP*number of charges) damage to target after reaching three charges. 12.5-25% recoil. Forces user to switch to a random ally. Increases Attack and Speed by 50% for each charge this Pokemon has.",
-		shortDesc: "See this entry with '/ssb Gizmo'!",
+		shortDesc: "See '/ssb Gizmo' for more!",
 		onStart(pokemon) {
 			if (pokemon.abilityState.recallActive && !pokemon.item) {
 				pokemon.setItem('inconspicuouscoin');
@@ -1350,33 +1350,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (move.id === 'charge') {
 				if (!pokemon.abilityState.charges) pokemon.abilityState.charges = 0;
-				if (pokemon.abilityState.charges >= 3) return;
+				if (pokemon.abilityState.charges > 3) return;
 				pokemon.abilityState.charges += 1;
-				if (pokemon.abilityState.charges >= 3) {
+				if (pokemon.abilityState.charges > 3) {
+					this.add('-activate', pokemon, '[from] ability: Head-On Battery');
 					this.add('-message', `${pokemon.name} is overflowing with charge!`);
-					this.add('-message', `${pokemon.name} unleashed Head-On Battery on ${target.name}!`);
+					this.add(`-anim`, pokemon, "Thunderclap", pokemon);
 					this.add(`-anim`, pokemon, "Volt Tackle", target);
 					this.damage(100*pokemon.abilityState.charges, target, pokemon);
 					pokemon.abilityState.charges = 0;
 					this.add('-message', `${pokemon.name} was launched away by the impact!`);
-					this.damage(pokemon.maxhp / this.random(4, 8), pokemon, pokemon);
-					if (pokemon.hp && pokemon.hp > 0) pokemon.forceSwitchFlag = true;
+					if (pokemon.hp && !pokemon.fainted) pokemon.forceSwitchFlag = true;
 					return false;
 				}
-				if (pokemon.abilityState.charges === 1) this.add('-message', `${pokemon.name} is 33% charged!`);
-				if (pokemon.abilityState.charges === 2) this.add('-message', `${pokemon.name} is 67% charged!`);
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
 			if (!pokemon.abilityState.charges) return;
-			// Formula gives 20% (1.2x) boost per charge, 1.2x, 1.4x, 1.6x, etc.
 			this.debug('Charge boost');
 			return this.chainModify(1+(0.5*pokemon.abilityState.charges));
 		},
 		onModifySpe(spe, pokemon) {
 			if (!pokemon.abilityState.charges) return;
-			// Formula gives 20% (1.2x) boost per charge, 1.2x, 1.4x, 1.6x, etc.
 			this.debug('Charge boost');
 			return this.chainModify(1+(0.5*pokemon.abilityState.charges));
 		},
