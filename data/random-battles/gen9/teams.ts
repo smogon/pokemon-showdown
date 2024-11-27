@@ -2643,9 +2643,9 @@ export class RandomTeams {
 			for (const typeName of this.dex.types.names()) {
 				// Track resistances because we will require it for triple weaknesses
 				if (
-					this.dex.getEffectiveness(typeName, types) < 0 || // resists
-				    !this.dex.getImmunity(typeName, types) || // immunities
-					resistanceAbilities[ability.id]?.includes(typeName) // mitigating abilities (assume that it overcomes any weakness)
+					this.dex.getEffectiveness(typeName, types) < 0 ||
+					!this.dex.getImmunity(typeName, types) ||
+					resistanceAbilities[ability.id]?.includes(typeName)
 				) {
 					// Resistance is used as a boolean everywhere, but changing its type requires fixing all bf/bss code
 					// so instead just setting to 1
