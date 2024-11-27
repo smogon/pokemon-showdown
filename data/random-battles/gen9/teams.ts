@@ -2580,7 +2580,7 @@ export class RandomTeams {
 				// Limit 3 of any weakness
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
-					if (this.dex.getEffectiveness(typeName, species) > 0) {
+					if (this.dex.getEffectiveness(typeName, species) > 0 && this.dex.getImmunity(typeName, types)) {
 						if (!teamData.weaknesses[typeName]) teamData.weaknesses[typeName] = 0;
 						if (teamData.weaknesses[typeName] >= 3 * limitFactor) {
 							skip = true;
