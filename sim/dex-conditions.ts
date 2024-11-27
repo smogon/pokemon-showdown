@@ -471,6 +471,7 @@ export interface EventMethods {
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
 	onTrapPokemonPriority?: number;
+	onTryBoostPriority?: number;
 	onTryEatItemPriority?: number;
 	onTryHealPriority?: number;
 	onTryHitPriority?: number;
