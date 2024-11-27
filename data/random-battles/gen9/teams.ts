@@ -2641,17 +2641,15 @@ export class RandomTeams {
 			}
 
 			for (const typeName of this.dex.types.names()) {
+				let typeMod = this.dex.getEffectiveness(typeName, types);
+				if (!this.dex.getImmunity(typeName, types)) typeMod = -1;
 				// Track resistances because we will require it for triple weaknesses
-				if (
-					this.dex.getEffectiveness(typeName, types) < 0 ||
-					!this.dex.getImmunity(typeName, types) ||
-					resistanceAbilities[ability.id]?.includes(typeName)
-				) {
+				if (typeMod < 0 || resistanceAbilities[ability.id]?.includes(typeName)) {
 					// Resistance is used as a boolean everywhere, but changing its type requires fixing all bf/bss code
 					// so instead just setting to 1
 					teamData.resistances[typeName] = 1;
 				// Track weaknesses
-				} else if (this.dex.getEffectiveness(typeName, types) > 0) {
+				} else if (typeMod > 0) {
 					teamData.weaknesses[typeName] = (teamData.weaknesses[typeName] || 0) + 1;
 				}
 			}
