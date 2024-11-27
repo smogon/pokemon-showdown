@@ -511,7 +511,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Azelf', 'Ceruledge', 'Chien-Pao', 'Cinderace', 'Cobalion', 'Corviknight', 'Deoxys-Speed', 'Electrode-Hisui', 'Empoleon', 'Garchomp', 'Gholdengo', 'Great Tusk',
 			'Heatran', 'Iron Boulder', 'Iron Crown', 'Iron Hands', 'Iron Moth', 'Iron Treads', 'Kingambit', 'Latios', 'Manaphy', 'Mandibuzz', 'Meowscarada', 'Moltres-Base',
 			'Ogerpon-Cornerstone', 'Ogerpon-Hearthflame', 'Ogerpon-Wellspring', 'Pecharunt', 'Primarina', 'Roaring Moon', 'Sandy Shocks', 'Scream Tail', 'Skarmory', 'Swampert',
-			'Ting-Lu', 'Volcarona', 'Zamazenta', 'Zapdos',
+			'Ting-Lu', 'Zamazenta', 'Zapdos',
 			// AAA UUBL
 			'Zapdos-Galar', 'Zarude', 'Light Clay',
 		],
