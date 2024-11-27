@@ -2657,6 +2657,9 @@ export const Formats: FormatList = [
 				}
 			}
 		},
+		onHit(target, source, move) {
+			source.side.lastMove = move.id;
+		},
 		onUpdate() {
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair' && !pokemon.hp && !pokemon.abilityState.reviveStarted) {
