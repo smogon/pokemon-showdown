@@ -2581,7 +2581,6 @@ export class RandomTeams {
 				for (const typeName of this.dex.types.names()) {
 					// it's weak to the type
 					if (this.dex.getEffectiveness(typeName, species) > 0 && this.dex.getImmunity(typeName, types)) {
-						if (!teamData.weaknesses[typeName]) teamData.weaknesses[typeName] = 0;
 						if (teamData.weaknesses[typeName] >= 3 * limitFactor) {
 							skip = true;
 							break;
@@ -2642,9 +2641,12 @@ export class RandomTeams {
 
 			for (const typeName of this.dex.types.names()) {
 				let typeMod = this.dex.getEffectiveness(typeName, types);
-				if (!this.dex.getImmunity(typeName, types)) typeMod = -1;
 				// Track resistances because we will require it for triple weaknesses
-				if (typeMod < 0 || resistanceAbilities[ability.id]?.includes(typeName)) {
+				if (
+					typeMod < 0 ||
+					resistanceAbilities[ability.id]?.includes(typeName) ||
+					!this.dex.getImmunity(typeName, types)
+				) {
 					// We don't care about the number of resistances, so just set to 1
 					teamData.resistances[typeName] = 1;
 				// Track weaknesses
