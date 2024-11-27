@@ -2645,8 +2645,7 @@ export class RandomTeams {
 				if (!this.dex.getImmunity(typeName, types)) typeMod = -1;
 				// Track resistances because we will require it for triple weaknesses
 				if (typeMod < 0 || resistanceAbilities[ability.id]?.includes(typeName)) {
-					// Resistance is used as a boolean everywhere, but changing its type requires fixing all bf/bss code
-					// so instead just setting to 1
+					// We don't care about the number of resistances, so just set to 1
 					teamData.resistances[typeName] = 1;
 				// Track weaknesses
 				} else if (typeMod > 0) {
