@@ -24,7 +24,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	// Kusanali
 	akashaseeds: {
 		name: "Akasha Seeds",
-		
+		onStart(pokemon) {
+			this.add('-start', pokemon, 'Akasha Seeds', '[silent]');
+			this.add('-anim', pokemon, 'Leech Seed', pokemon);
+			this.add('-start', `Akasha Seeds were planted under ${pokemon.name}!`);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move.category !== 'Status') {
+				if (!target.hasType('Grass')) target.addType('Grass');
+				this.boost({spe: -2}, target);
+				this.add('-message', `${target.name}'s Akasha Seeds bloomed!`);
+				target.removeVolatile('akashaseeds');
+				this.add('-end', pokemon, 'Akasha Seeds', '[silent]');
+			}
+		},
+		onSwitchOut(pokemon) {
+			pokemon.removeVolatile('akashaseeds');
+			this.add('-end', pokemon, 'Akasha Seeds', '[silent]');
+		},
 	},
 	// Kusanali
 	courtofdreams: {
