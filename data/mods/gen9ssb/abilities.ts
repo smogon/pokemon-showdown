@@ -19,6 +19,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	onallthingsmeditated: {
 		name: "On All Things Meditated",
 		gen: 9,
+		shortDesc: "On switch-in, this Pokemon summons Court of Dreams.",
 		flags: {},
 		onStart(pokemon) {
 			this.add('-activate', pokemon, '[from] ability: On All Things Meditated');
