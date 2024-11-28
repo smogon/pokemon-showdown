@@ -2440,9 +2440,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onTeamPreview() {
 			for (const side of this.sides) {
 				let buf = ``;
-				for (const pokemon of side.pokemon.filter(p => (p.set as any).teraCaptain)) {
+				for (const pokemon of side.pokemon) {
+					if (!(pokemon.set as any).teraCaptain) continue;
 					buf += buf ? ` / ` : `raw|${side.name}'s Tera Captains:<br />`;
-					buf += `<psicon pokemon="${pokemon.species.id}" />`;
+					buf += `<psicon pokemon="${pokemon.species.id}" /><psicon type="${pokemon.teraType}" />`;
 				}
 				this.add(`${buf}`);
 			}
