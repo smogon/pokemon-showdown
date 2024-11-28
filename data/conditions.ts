@@ -377,7 +377,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onStart() {
 			this.effectState.endingTurn = (this.turn - 1) + 2;
 			if (this.effectState.endingTurn >= 254) {
-				this.hint(`In Gen 8+, Future moves will never resolve when used on turn 254 or later.`);
+				this.hint(`In Gen 8+, Future attacks will never resolve when used on the 255th turn or later.`);
 			}
 		},
 		onResidualOrder: 3,

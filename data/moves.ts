@@ -21727,7 +21727,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.hp = source.maxhp / 2;
 				this.effectState.startingTurn = this.getOverflowedTurnCount();
 				if (this.effectState.startingTurn === 255) {
-					this.hint(`In Gen 8+, Wish will never resolve when used on a turn that is a multiple of 256n - 1.`);
+					this.hint(`In Gen 8+, Wish will never resolve when used on the ${this.turn}th turn.`);
 				}
 			},
 			onResidualOrder: 4,
