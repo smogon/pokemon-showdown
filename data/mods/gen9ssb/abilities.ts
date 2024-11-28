@@ -1520,6 +1520,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onStart(pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			target.side.addSideCondition('dynamitearrow');
+			this.add('-anim', pokemon, 'Ember', pokemon);
+			this.add('-message', `${pokemon.name} is preparing Dynamite Arrow!`);
 			pokemon.abilityState.damaged = false;
 			pokemon.abilityState.concentrated = false;
 		},
