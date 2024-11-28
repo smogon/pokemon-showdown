@@ -49,6 +49,9 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (source === this.effectState.sourcePokemon) return;
 			return this.chainModify(1.1);
 		},
+		onResidual() {
+			this.add('-message', `Court of Dreams enchants the battlefield!`);
+		},
 		onSideEnd(side) {
 			this.add('-message', `Court of Dreams faded away!`);
 		},
