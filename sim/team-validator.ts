@@ -2372,17 +2372,17 @@ export class TeamValidator {
 					problems.push(`${name} must be at least level ${minLevel} to be from Pokemon GO.`);
 				}
 				const ivs = set.ivs || TeamValidator.fillStats(null, 31);
-				const postTransferminIVs = minIVs * 2 + 1;
+				const postTransferMinIVs = minIVs * 2 + 1;
 				let IVsTooLow = false;
 				let hasEvenIVs = false;
 				for (const stat in ivs) {
 					if (stat === 'spe') continue;
-					if (ivs[stat as 'hp'] < postTransferminIVs) IVsTooLow = true;
+					if (ivs[stat as 'hp'] < postTransferMinIVs) IVsTooLow = true;
 					if (ivs[stat as 'hp'] % 2 === 0) hasEvenIVs = true;
 				}
 				if (IVsTooLow) {
-					problems.push(`${name} must have at least ${postTransferminIVs} ` +
-						(postTransferminIVs === 1 ? `IV` : `IVs`) + ` in non-Speed stats to be from Pokemon GO.`);
+					problems.push(`${name} must have at least ${postTransferMinIVs} ` +
+						(postTransferMinIVs === 1 ? `IV` : `IVs`) + ` in non-Speed stats to be from Pokemon GO.`);
 				}
 				if (hasEvenIVs) {
 					problems.push(`${name} must have odd non-Speed IVs to be from Pokemon GO.`);
