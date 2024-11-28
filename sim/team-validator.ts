@@ -2377,15 +2377,15 @@ export class TeamValidator {
 				let hasEvenIVs = false;
 				for (const stat in ivs) {
 					if (stat === 'spe') continue;
-					if (!IVsTooLow && ivs[stat as 'hp'] < postTransferminIVs) {
-						problems.push(`${name} must have at least ${postTransferminIVs} ` +
+					if (ivs[stat as 'hp'] < postTransferminIVs) IVsTooLow = true;
+					if (ivs[stat as 'hp'] % 2 === 0) hasEvenIVs = true;
+				}
+				if (IVsTooLow) {
+					problems.push(`${name} must have at least ${postTransferminIVs} ` +
 						(postTransferminIVs === 1 ? `IV` : `IVs`) + ` in non-Speed stats to be from Pokemon GO.`);
-						IVsTooLow = true;
-					}
-					if (!hasEvenIVs && ivs[stat as 'hp'] % 2 === 0) {
-						problems.push(`${name} must have odd non-Speed IVs to be from Pokemon GO.`);
-						hasEvenIVs = true;
-					}
+				}
+				if (hasEvenIVs) {
+					problems.push(`${name} must have odd non-Speed IVs to be from Pokemon GO.`);
 				}
 				const canBottleCap = dex.gen >= 7 && set.level >= (dex.gen < 9 ? 100 : 50);
 				if (ivs.atk !== ivs.spa && !(canBottleCap && (ivs.atk === 31 || ivs.spa === 31))) {
