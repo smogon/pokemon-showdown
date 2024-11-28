@@ -2281,7 +2281,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Gizmo
 	coinclash: {
 		accuracy: 80,
-		basePower: 35,
+		basePower: 30,
 		category: "Physical",
 		name: "Coin Clash",
 		desc: "Hits 4-5 times. Flings coin at target after use. 50% chance to gain +2 crit ratio and 1.25x evasion until switch/faint. Fails if not holding Inconspicuous Coin.",
@@ -2331,7 +2331,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.abilityState.recallActive = false;
 			},
 		},
-		multihit: [4, 5],
+		multihit: [3, 5],
 		secondary: null,
 		target: "normal",
 		type: "Steel",
