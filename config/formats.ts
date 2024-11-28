@@ -2428,6 +2428,27 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 3,
 	},
 	{
+		name: "[Gen 9] Draft Factory",
+		mod: 'gen9',
+		team: 'randomDraftFactory',
+		ruleset: ['Obtainable', 'Team Preview', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (!(pokemon.set as any).teraCaptain) pokemon.canTerastallize = null;
+			}
+		},
+		onTeamPreview() {
+			for (const side of this.sides) {
+				let buf = ``;
+				for (const pokemon of side.pokemon.filter(p => (p.set as any).teraCaptain)) {
+					buf += buf ? ` / ` : `raw|${side.name}'s Tera Captains:<br />`;
+					buf += `<psicon pokemon="${pokemon.species.id}" />`;
+				}
+				this.add(`${buf}`);
+			}
+		}
+	},
+	{
 		name: "[Gen 9] Random Roulette",
 		desc: `Random Battles in a random generation! [Gen 1] Random Battle - [Gen 9] Random Battle.`,
 		mod: 'randomroulette',
