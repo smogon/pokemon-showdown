@@ -2650,7 +2650,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Trey
 	granddelta: {
 		accuracy: true,
-		basePower: 110,
+		basePower: 120,
 		category: "Physical",
 		desc: "User heals equal to half of damage dealt and lowers target's Defense by 1 stage. This move hits again next turn for half damage.",
 		shortDesc: "Heal 1/2 damage and lower Defense by 1 stage; hits again next turn for 0.5x damage.",
@@ -2658,7 +2658,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 1,
 		noPPBoosts: true,
-		priority: 0,
+		priority: 6,
 		isZ: "yoichisbow",
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Thousand Arrows', target);
