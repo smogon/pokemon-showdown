@@ -2660,37 +2660,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: 6,
 		isZ: "yoichisbow",
-		onPrepareHit(target, source) {
+		onTryMove(attacker, defender, move) {
+			attacker.addVolatile('granddelta');
+			attacker.abilityState.target = defender;
+			return null;
+		},
+		onPrepareHit(target, source, move) {
+			if (!source.abilityState.hitDuringCharge) move.critRatio = 6;
 			this.add('-anim', source, 'Thousand Arrows', target);
 			this.add('-anim', source, 'Heal Pulse', target);
 		},
-		onTry(source, target) {
-			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
-			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 2,
-				move: 'granddelta',
-				moveData: {
-					id: 'granddelta',
-					name: 'Grand Delta',
-					accuracy: true,
-					basePower: 55,
-					category: "Physical",
-					priority: 0,
-					flags: {},
-					secondary: {
-						chance: 100,
-						boosts: {
-							def: -1,
-						},
-					},
-					drain: [1, 2],
-					effectType: 'Move',
-					type: 'Flying',
-				},
-			});
-			this.add('-start', source, 'move: Grand Delta');
+		onDamage(damage, target, source, effect) {
+			let newDamage = damage;
+			if (source.abilityState.hitDuringCharge) {
+				newDamage /= 2;
+				this.heal(newDamage, source, source, effect);
+				return newDamage;
+			}
 		},
-		drain: [1, 2],
+		onAfterMove(pokemon) {
+			delete pokemon.abilityState.hitDuringCharge;
+			delete pokemon.abilityState.target;
+		},
+		condition: {
+			duration: 2,
+			onStart(pokemon) {
+				this.add('-start', pokemon, '[from] move: Grand Delta', '[silent]');
+				pokemon.addVolatile('twoturnmove', pokemon.abilityState.target);
+				pokemon.abilityState.hitDuringCharge = false;
+			},
+			onHit(target, source, move) {
+				if (move.category !== 'Status') {
+					this.add('-message', `hit during charge detected; hitDuringCharge = true.`);
+					target.abilityState.hitDuringCharge = true;
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, '[from] move: Grand Delta', '[silent]');
+			},
+		},
 		flags: {},
 		secondary: {
 			chance: 100,
