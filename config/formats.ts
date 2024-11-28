@@ -2446,7 +2446,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 				this.add(`${buf}`);
 			}
-		}
+		},
 	},
 	{
 		name: "[Gen 9] Random Roulette",
