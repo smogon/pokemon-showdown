@@ -2709,7 +2709,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onSideStart(targetSide) {
-				this.add('-sidestart', targetSide, 'Dynamite Arrow');
+				this.add('-sidestart', targetSide, 'Dynamite Arrow', '[silent]');
 			},
 			onSideEnd(targetSide) {
 				const pokemon = targetSide.active[0];
@@ -2719,7 +2719,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const move = this.dex.getActiveMove('dynamitearrow');
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.damage(dmg, pokemon);
-				this.add('-sideend', targetSide, 'Dynamite Arrow');
+				this.boost({def: -1, spe: -1}, pokemon);
+				this.add('-sideend', targetSide, 'Dynamite Arrow', '[silent]');
 			},
 		},
 		secondary: null,
