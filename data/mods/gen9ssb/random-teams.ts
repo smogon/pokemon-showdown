@@ -186,13 +186,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Dominus Lapidis',
 		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
+	/*
 	Kusanali: {
 		species: 'Shaymin', ability: 'On All Things Meditated', item: 'Seed of Stored Knowledge', gender: 'F',
 		moves: ['Seed Flare', 'Earth Power', 'Heat Wave'],
 		signatureMove: 'Happy Hour',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
-	/*
 	Mink: {
 		species: 'Venusaur-Mega', ability: 'Putridity', item: 'Corpse Lily', gender: 'M',
 		moves: ['Seed Flare', 'Earth Power', 'Rototiller'],
