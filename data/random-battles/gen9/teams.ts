@@ -2975,7 +2975,7 @@ export class RandomTeams {
 				evs: set.evs,
 				ivs: set.ivs,
 				item: set.item,
-				level: set.level || 100,
+				level: this.adjustLevel || set.level,
 				shiny: !!set.shiny,
 				nature: set.nature,
 				teraType: set.teraType,
