@@ -21,49 +21,36 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
 
-	// Ace
-	attackcard: {
+	// Kusanali
+	courtofdreams: {
+		name: "Court of Dreams",
 		effectType: 'Condition',
-		duration: 9,
-		onSideStart(side) {
-			this.add('-sidestart', side, 'Attack Card', '[silent]');
+		duration: 5,
+		onSideStart(side, source) {
+			this.add('-sidestart', side, 'Court of Dreams', '[silent]');
+			this.add('-message', `${source.name} summoned Court of Dreams!`);
+			this.effectState.sourcePokemon = source;
 		},
-		onModifyAtk(atk, pokemon) {
-			const source = side.pokemon.filter(pokemon => pokemon.name === 'Ace');
-			const MOD = 1 + source.abilityState.acCount * 0.15;
-			if (MOD > 1) this.add('-message', `${pokemon.name}'s power was strengthed by ${source.name}'s Attack cards!`);
-			return this.chainModify(MOD);
+		onBasePower(basePower, source, target, move) {
+			let totalMod = 1;
+			if (source === this.effectState.sourcePokemon) return;
+			if (target.runEffectiveness(move) > 0) {
+				this.debug(`court of dreams super effective buff`);
+				totalMod += 0.3;
+			}
+			if (move.type === 'Grass') {
+				this.debug(`court of dreams grass buff`);
+				totalMod += 0.3;
+			}
+			return this.chainModify(totalMod);
 		},
-		onModifySpa(spa, pokemon) {
-			const source = side.pokemon.filter(pokemon => pokemon.name === 'Ace');
-			const MOD = 1 + source.abilityState.acCount * 0.15;
-			if (MOD > 1) this.add('-message', `${pokemon.name}'s power was strengthed by ${source.name}'s Attack cards!`);
-			return this.chainModify(MOD);
+		onModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			if (source === this.effectState.sourcePokemon) return;
+			return this.chainModify(1.1);
 		},
 		onSideEnd(side) {
-			this.add('-sideend', side, 'Attack Card', '[silent]');
-		},
-	},
-	defensecard: {
-		effectType: 'Condition',
-		duration: 9,
-		onSideStart(side) {
-			this.add('-sidestart', side, 'Attack Card', '[silent]');
-		},
-		onModifyDef(def, pokemon) {
-			const source = side.pokemon.filter(pokemon => pokemon.name === 'Ace');
-			const MOD = 1 + source.abilityState.dcCount * 0.15;
-			if (MOD > 1) this.add('-message', `${pokemon.name}'s defenses were strengthed by ${source.name}'s Defense cards!`);
-			return this.chainModify(MOD);
-		},
-		onModifySpd(spd, pokemon) {
-			const source = side.pokemon.filter(pokemon => pokemon.name === 'Ace');
-			const MOD = 1 + source.abilityState.dcCount * 0.15;
-			if (MOD > 1) this.add('-message', `${pokemon.name}'s defenses were strengthed by ${source.name}'s Defense cards!`);
-			return this.chainModify(MOD);
-		},
-		onSideEnd(side) {
-			this.add('-sideend', side, 'Attack Card', '[silent]');
+			this.add('-message', `Court of Dreams faded away!`);
 		},
 	},
 	// PokeKart
