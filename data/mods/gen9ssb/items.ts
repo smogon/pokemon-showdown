@@ -1,4 +1,16 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Kusanali
+	seedofstoredknowledge: {
+		name: "Seed of Stored Knowledge",
+		gen: 9,
+		shortDesc: "Inflicts Akasha Seeds upon hitting a Pokemon with a Grass-type move.",
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source !== target && move.type === 'Grass') {
+				this.add('-activate', source, '[from] item: Seed of Stored Knowledge');
+				target.addVolatile('akashaseeds');
+			}
+		},
+	},
 	// Mink
 	corpselily: {
 		name: "Corpse Lily",
