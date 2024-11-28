@@ -189,7 +189,7 @@ export const ssbSets: SSBSets = {
 	Kusanali: {
 		species: 'Shaymin', ability: 'On All Things Meditated', item: 'Seed of Stored Knowledge', gender: 'F',
 		moves: ['Seed Flare', 'Earth Power', 'Heat Wave'],
-		signatureMove: 'All Schemes to Know',
+		signatureMove: 'Happy Hour',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 	},
 	/*
