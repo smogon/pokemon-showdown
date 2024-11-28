@@ -2685,10 +2685,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Grand Delta', '[silent]');
-				if (pokemon.removeVolatile(pokemon.abilityState.move.id)) {
+				if (pokemon.removeVolatile('granddelta')) {
 					return;
 				}
-				this.add('-prepare', pokemon, pokemon.abilityState.move.name);
+				this.add('-prepare', pokemon, 'Grand Delta');
 				if (!this.runEvent('ChargeMove', pokemon, pokemon.abilityState.target, pokemon.abilityState.move)) {
 					return;
 				}
