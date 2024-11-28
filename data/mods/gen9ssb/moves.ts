@@ -2628,7 +2628,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Aeroblast', target);
 		},
-		onDamagePriority: 23,
+		onDamagePriority: 22,
 		onDamage(damage, target, source, effect) {
 			if (target.volatiles['substitute'] || target.volatiles['killingdoll'] || target.volatiles['orbshield']) {
 				this.damage(damage, target, source, effect); 
