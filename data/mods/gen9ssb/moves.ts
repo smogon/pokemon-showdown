@@ -2612,7 +2612,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Trey
 	burstdelta: {
 		accuracy: true,
-		basePower: 80,
+		basePower: 50,
 		category: "Physical",
 		desc: "User heals equal to 1/3 of damage dealt and lowers target's Defense by 1 stage but this move cannot be used twice in a row.",
 		shortDesc: "Heal 1/3 damage and lower Defense by 1 stage but can't use twice in a row.",
@@ -2620,7 +2620,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 5,
 		noPPBoosts: true,
-		priority: 0,
+		priority: 1,
 		flags: {mirror: 1, protect: 1, cantusetwice: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -2628,11 +2628,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Aeroblast', target);
 		},
+		onDamagePriority: 23,
+		onDamage(damage, target, source, effect) {
+			if (target.volatiles['substitute'] || target.volatiles['killingdoll'] || target.volatiles['orbshield']) {
+				this.damage(damage, target, source, effect); 
+			}
+		},
 		drain: [1, 3],
+		critRatio: 2,
 		secondary: {
 			chance: 100,
 			boosts: {
 				def: -1,
+				atk: -1,
+				spa: -1,
 			},
 		},
 		target: "normal",
