@@ -779,9 +779,10 @@ export class TeamValidator {
 			problems.push(`${name} has ${set.moves.length} moves, which is more than the limit of ${ruleTable.maxMoveCount}.`);
 			return problems;
 		}
-
+		
+		const pokemonGoProblems = this.validatePokemonGo(outOfBattleSpecies, set, setSources);
 		if (ruleTable.isBanned('nonexistent')) {
-			problems.push(...this.validateStats(set, species, setSources));
+			problems.push(...this.validateStats(set, species, setSources, pokemonGoProblems));
 		}
 
 		const moveLegalityWhitelist: {[k: string]: true | undefined} = {};
@@ -806,7 +807,6 @@ export class TeamValidator {
 			}
 		}
 
-		const pokemonGoProblems = this.validatePokemonGo(outOfBattleSpecies, set, setSources);
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let isFromRBYEncounter = false;
 		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
@@ -1083,7 +1083,7 @@ export class TeamValidator {
 		return problems;
 	}
 
-	validateStats(set: PokemonSet, species: Species, setSources: PokemonSources) {
+	validateStats(set: PokemonSet, species: Species, setSources: PokemonSources, pokemonGoProblems: string[] | null) {
 		const ruleTable = this.ruleTable;
 		const dex = this.dex;
 
@@ -1147,8 +1147,18 @@ export class TeamValidator {
 				if (set.ivs[stat as 'hp'] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < 3) {
-				const reason = (this.minSourceGen === 6 ? ` and this format requires Gen ${dex.gen} Pokémon` : ` in Gen 6 or later`);
-				problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
+				if (!pokemonGoProblems || (pokemonGoProblems && pokemonGoProblems.length)) {
+					const reason = (this.minSourceGen === 6 ? ` and this format requires Gen ${dex.gen} Pokémon` : ` in Gen 6 or later`);
+					problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
+					if (pokemonGoProblems && pokemonGoProblems.length) {
+						problems.push(`Additionally, it failed to validate as a Pokemon from Pokemon GO because:`);
+						for (const pokemonGoProblem of pokemonGoProblems) {
+							problems.push(pokemonGoProblem);
+						}
+					}
+				} else {
+					setSources.isFromPokemonGo = true;
+				}
 			}
 		}
 
