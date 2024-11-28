@@ -2952,16 +2952,19 @@ export class RandomTeams {
 	}
 
 	randomDraftFactoryMatchups: AnyObject = require("./draft-factory-matchups.json").matchups;
-	randomDraftFactoryMatchupIndex = this.random(0, this.randomDraftFactoryMatchups.length);
-	randomDraftFactoryMatchupSide = this.random(0, 2);
+	rdfMatchupIndex = -1;
+	rdfMatchupSide = -1;
 
 	randomDraftFactoryTeam(side: PlayerOptions): RandomTeamsTypes.RandomDraftFactorySet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const matchup = this.randomDraftFactoryMatchups[this.randomDraftFactoryMatchupIndex];
-		const team = Teams.unpack(matchup[this.randomDraftFactoryMatchupSide]);
-		if (!team) throw new Error(`Invalid team for draft factory matchup ${this.randomDraftFactoryMatchupIndex}`);
-		this.randomDraftFactoryMatchupSide = 1 - this.randomDraftFactoryMatchupSide;
+		if (this.rdfMatchupIndex === -1) this.rdfMatchupIndex = this.random(0, this.randomDraftFactoryMatchups.length);
+		if (this.rdfMatchupSide === -1) this.rdfMatchupSide = this.random(0, 2);
+
+		const matchup = this.randomDraftFactoryMatchups[this.rdfMatchupIndex];
+		const team = Teams.unpack(matchup[this.rdfMatchupSide]);
+		if (!team) throw new Error(`Invalid team for draft factory matchup ${this.rdfMatchupIndex}`);
+		this.rdfMatchupSide = 1 - this.rdfMatchupSide;
 		return team.map(set => (
 			{
 				name: this.dex.species.get(set.species).baseSpecies,
@@ -2972,7 +2975,7 @@ export class RandomTeams {
 				evs: set.evs,
 				ivs: set.ivs,
 				item: set.item,
-				level: set.level,
+				level: set.level || 100,
 				shiny: !!set.shiny,
 				nature: set.nature,
 				teraType: set.teraType,
