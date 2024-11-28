@@ -2671,16 +2671,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Heal Pulse', target);
 		},
 		onDamage(damage, target, source, effect) {
-			let newDamage = damage;
 			if (source.abilityState.hitDuringCharge) {
-				newDamage /= 2;
-				this.heal(newDamage, source, source, effect);
-				return newDamage;
+				return damage / 2;
 			}
 		},
-		onAfterMove(pokemon) {
-			delete pokemon.abilityState.hitDuringCharge;
-			delete pokemon.abilityState.target;
+		onAfterMove(source, target, move) {
+			delete source.abilityState.hitDuringCharge;
+			delete source.abilityState.target;
+			target.side.addSideCondition('deltadrop');
 		},
 		condition: {
 			duration: 2,
@@ -2699,13 +2697,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', pokemon, '[from] move: Grand Delta', '[silent]');
 			},
 		},
+		drain: [1, 1],
 		flags: {},
-		secondary: {
-			chance: 100,
-			boosts: {
-				def: -1,
-			},
-		},
 		target: "normal",
 		type: "Flying",
 	},
