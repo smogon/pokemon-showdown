@@ -779,7 +779,7 @@ export class TeamValidator {
 			problems.push(`${name} has ${set.moves.length} moves, which is more than the limit of ${ruleTable.maxMoveCount}.`);
 			return problems;
 		}
-		
+
 		const pokemonGoProblems = this.validatePokemonGo(outOfBattleSpecies, set, setSources);
 		if (ruleTable.isBanned('nonexistent')) {
 			problems.push(...this.validateStats(set, species, setSources, pokemonGoProblems));
@@ -2383,7 +2383,7 @@ export class TeamValidator {
 						IVsTooLow = true;
 					}
 					if (!hasEvenIVs && ivs[stat as 'hp'] % 2 === 0) {
-						problems.push(`${name} must have odd non-Speed IVs to be from Pokemon GO.`)
+						problems.push(`${name} must have odd non-Speed IVs to be from Pokemon GO.`);
 						hasEvenIVs = true;
 					}
 				}
