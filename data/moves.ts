@@ -19284,12 +19284,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1, metronome: 1},
-		onTry(source) {
+		onTry(source, target, move) {
+			if (move.sourceEffect === 'snatch') return;
 			return !!source.volatiles['stockpile'];
 		},
 		onHit(pokemon) {
+			const layers = pokemon.volatiles['stockpile']?.layers || 1;
 			const healAmount = [0.25, 0.5, 1];
-			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[layers - 1]));
 			if (!success) this.add('-fail', pokemon, 'heal');
 			pokemon.removeVolatile('stockpile');
 			return success || this.NOT_FAIL;
