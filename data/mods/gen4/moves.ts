@@ -1541,6 +1541,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 	},
+	swallow: {
+		inherit: true,
+		onTry(source) {
+			return !!source.volatiles['stockpile'];
+		},
+	},
 	switcheroo: {
 		inherit: true,
 		onTryHit(target, source, move) {

@@ -19285,7 +19285,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1, metronome: 1},
 		onTry(source, target, move) {
-			if (move.sourceEffect === 'snatch' && this.gen >= 5) return;
+			if (move.sourceEffect === 'snatch') return;
 			return !!source.volatiles['stockpile'];
 		},
 		onHit(pokemon) {
