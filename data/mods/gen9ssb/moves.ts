@@ -2661,49 +2661,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 6,
 		isZ: "yoichisbow",
 		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
 			attacker.addVolatile('granddelta');
-			attacker.abilityState.target = defender;
-			attacker.abilityState.move = move;
 			return null;
 		},
 		onPrepareHit(target, source, move) {
-			if (!source.abilityState.hitDuringCharge) move.critRatio = 6;
 			this.add('-anim', source, 'Thousand Arrows', target);
 			this.add('-anim', source, 'Heal Pulse', target);
-		},
-		onDamage(damage, target, source, effect) {
-			if (source.abilityState.hitDuringCharge) {
-				return damage / 2;
+			if (!source.abilityState.chargeInterrupt) {
+				move.critRatio = 5;
+			} else if (source.abilityState.chargeInterrupt) {
+				move.basePower = move.basePower / 2;
 			}
 		},
-		onAfterMove(source, target, move) {
-			delete source.abilityState.hitDuringCharge;
-			delete source.abilityState.target;
-			target.side.addSideCondition('deltadrop');
+		onDamagePriority: 22,
+		onDamage(damage, target, source, effect) {
+			if (target.volatiles['substitute'] || target.volatiles['killingdoll'] || target.volatiles['orbshield']) {
+				this.damage(damage, target, source, effect); 
+			}
 		},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Grand Delta', '[silent]');
-				if (pokemon.removeVolatile('granddelta')) {
-					return;
-				}
-				this.add('-prepare', pokemon, 'Grand Delta');
-				if (!this.runEvent('ChargeMove', pokemon, pokemon.abilityState.target, pokemon.abilityState.move)) {
-					return;
-				}
-				pokemon.addVolatile('twoturnmove', pokemon.abilityState.target);
-				pokemon.abilityState.hitDuringCharge = false;
 			},
 			onHit(target, source, move) {
-				if (move.category !== 'Status') target.abilityState.hitDuringCharge = true;
+				if (move.category !== 'Status') target.abilityState.chargeInterrupt = true;
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'move: Grand Delta', '[silent]');
 			},
 		},
 		drain: [1, 1],
-		flags: {},
+		flags: {charge: 1},
 		target: "normal",
 		type: "Flying",
 	},
