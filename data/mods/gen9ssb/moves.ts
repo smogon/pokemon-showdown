@@ -2663,6 +2663,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTryMove(attacker, defender, move) {
 			attacker.addVolatile('granddelta');
 			attacker.abilityState.target = defender;
+			attacker.abilityState.move = move;
 			return null;
 		},
 		onPrepareHit(target, source, move) {
@@ -2681,20 +2682,24 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.side.addSideCondition('deltadrop');
 		},
 		condition: {
-			duration: 2,
+			duration: 1,
 			onStart(pokemon) {
-				this.add('-start', pokemon, '[from] move: Grand Delta', '[silent]');
+				this.add('-start', pokemon, 'move: Grand Delta', '[silent]');
+				if (pokemon.removeVolatile(pokemon.abilityState.move.id)) {
+					return;
+				}
+				this.add('-prepare', pokemon, pokemon.abilityState.move.name);
+				if (!this.runEvent('ChargeMove', pokemon, pokemon.abilityState.target, pokemon.abilityState.move)) {
+					return;
+				}
 				pokemon.addVolatile('twoturnmove', pokemon.abilityState.target);
 				pokemon.abilityState.hitDuringCharge = false;
 			},
 			onHit(target, source, move) {
-				if (move.category !== 'Status') {
-					this.add('-message', `hit during charge detected; hitDuringCharge = true.`);
-					target.abilityState.hitDuringCharge = true;
-				}
+				if (move.category !== 'Status') target.abilityState.hitDuringCharge = true;
 			},
 			onEnd(pokemon) {
-				this.add('-end', pokemon, '[from] move: Grand Delta', '[silent]');
+				this.add('-end', pokemon, 'move: Grand Delta', '[silent]');
 			},
 		},
 		drain: [1, 1],
