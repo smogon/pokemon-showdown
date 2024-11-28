@@ -22,6 +22,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	// Please keep statuses organized alphabetically based on staff member name!
 
 	// Kusanali
+	akashaseeds: {
+		name: "Akasha Seeds",
+		
+	},
+	// Kusanali
 	courtofdreams: {
 		name: "Court of Dreams",
 		effectType: 'Condition',
