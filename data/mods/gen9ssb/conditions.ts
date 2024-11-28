@@ -21,6 +21,26 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
 
+	// Trey
+	deltadrop: {
+		name: "Delta Drop",
+		effectType: 'Condition',
+		duration: 3,
+		onSideStart(side, source) {
+			this.add('-sidestart', side, 'move: Grand Delta', '[silent]');
+			this.add('-message', `${side.active[0].name} and their allies' Defense and Special Defense sharply dropped!`);
+		},
+		onModifyDef(def, pokemon) {
+			return this.chainModify(0.5);
+		},
+		onModifySpd(spd, pokemon) {
+			return this.chainModify(0.5);
+		},
+		onSideEnd(side) {
+			this.add('-sideend', side, 'move: Grand Delta', '[silent]');
+			this.add('-message', `${side.active[0].name} and their allies' Defense and Special Defense returned to normal!`);
+		},
+	},
 	// Kusanali
 	akashaseeds: {
 		name: "Akasha Seeds",
