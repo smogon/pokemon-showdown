@@ -846,7 +846,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	icyrock: {
 		name: "Icy Rock",
-		shortDesc: "Holder's use of Snow lasts 8 turns instead of 5.",
+		shortDesc: "Holder's use of Snowscape lasts 8 turns instead of 5.",
 		gen8: {
 			shortDesc: "Holder's use of Hail lasts 8 turns instead of 5.",
 		},
