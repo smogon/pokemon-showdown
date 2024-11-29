@@ -1560,7 +1560,7 @@
 			"weight": 8,
 			"sets": [{
 				"species": "Ting-Lu",
-				"weight": 80,
+				"weight": 100,
 				"item": ["Heavy-Duty Boots", "Leftovers"],
 				"ability": ["Vessel of Ruin"],
 				"evs": {"hp": 252, "def": 4, "spd": 252},
