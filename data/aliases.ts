@@ -2172,7 +2172,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	tachifusaguma: "Obstagoon",
 	nyaikingu: "Perrserker",
 	sanigoon: "Cursola",
-	negiganaito: "Sirfetch’d",
+	negiganaito: "Sirfetch'd",
 	barikooru: "Mr. Rime",
 	desubaan: "Runerigus",
 	mahomiru: "Milcery",
