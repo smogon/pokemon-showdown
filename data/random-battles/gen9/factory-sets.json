@@ -3205,7 +3205,7 @@
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": ["Adamant"],
 				"teraType": ["Electric", "Steel"],
-				"moves": [["Aqua Step"], ["Close Combat"], ["Swords Dance"], ["Knock Off"]]
+				"moves": [["Aqua Step"], ["Close Combat"], ["Swords Dance"], ["Knock Off", "Triple Axel"]]
 			}]
 		},
 		"skeledirge": {
