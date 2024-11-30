@@ -188,7 +188,7 @@
 		"zacian": {
 			"weight": 9,
 			"sets": [{
-				"species": "Zacian-Crowned",
+				"species": "Zacian",
 				"weight": 100,
 				"item": ["Rusted Sword"],
 				"ability": ["Intrepid Sword"],
