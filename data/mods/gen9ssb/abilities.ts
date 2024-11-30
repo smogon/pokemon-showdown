@@ -786,26 +786,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return damage / 5;
 		},
 	},
-	// flufi
-	forceofwill: {
-		name: "Force of Will",
+	// Flufi
+	defenseoftheheart: {
+		name: "Defense of the Heart",
 		gen: 9,
-		onResidual(pokemon) {
-			if (pokemon.activeTurns) this.add('-message', `${pokemon.name}'s determination is building!`);
+		shortDesc: "2x Defense; Uses Defense in damage calculation.",
+		desc: "This Pokemon's Defense is doubled. This Pokemon's attacks use its Defense stat in damage calculation instead of Attack or Special Attack.",
+		onModifyDefPriority: 6,
+		onModifyDef(def) {
+			return this.chainModify(2);
 		},
-		onModifyAtk(atk, pokemon) {
-			if (!pokemon.activeTurns) return;
-			this.debug('Force of Will Atk Boost');
-			return this.chainModify(1 + (0.33 * pokemon.activeTurns));
-		},
-		onDamagePriority: -30,
-		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp && effect && effect.effectType === 'Move') {
-				if (this.randomChance(target.side.totalFainted + 1, 10)) {
-					this.add('-ability', target, 'Force of Will');
-					return target.hp - this.random(1, 30);
-				}
-			}
+		onModifyMove(move, pokemon) {
+			move.overrideOffensiveStat = 'def';
 		},
 	},
 	// Quetzalcoatl
