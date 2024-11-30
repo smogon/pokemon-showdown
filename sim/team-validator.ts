@@ -500,7 +500,7 @@ export class TeamValidator {
 		return {species, eventData: learnset.eventData};
 	}
 
-	getValidationSpecies(set: PokemonSet): [Species, Species] {
+	getValidationSpecies(set: PokemonSet): {outOfBattleSpecies: Species, tierSpecies: Species} {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 		const species = dex.species.get(set.species);
@@ -538,7 +538,7 @@ export class TeamValidator {
 			}
 		}
 
-		return [outOfBattleSpecies, tierSpecies];
+		return {outOfBattleSpecies, tierSpecies};
 	}
 
 	validateSet(set: PokemonSet, teamHas: AnyObject): string[] | null {
@@ -633,7 +633,7 @@ export class TeamValidator {
 		item = dex.items.get(set.item);
 		ability = dex.abilities.get(set.ability);
 
-		const [outOfBattleSpecies, tierSpecies] = this.getValidationSpecies(set);
+		const {outOfBattleSpecies, tierSpecies} = this.getValidationSpecies(set);
 		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {
