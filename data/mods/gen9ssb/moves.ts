@@ -2672,6 +2672,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			attacker.addVolatile('deltacharge');
 			return null;
 		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Thousand Arrows', target);
+			this.add('-anim', source, 'Heal Pulse', target);
+		},
 		onDamage(damage, target, source, effect) {
 			if (source.removeVolatile('deltacharge')) this.add('-message', `GRAND DELTA END`);
 		},
