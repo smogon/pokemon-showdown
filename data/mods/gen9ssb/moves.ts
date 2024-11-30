@@ -2660,6 +2660,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: -10,
 		isZ: "yoichisbow",
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
+		},
+		/*
 		beforeMoveCallback(pokemon) {
 			if (pokemon.volatiles['granddelta']) return true;
 		},
@@ -2695,8 +2707,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
+  		*/
 		drain: [1, 1],
-		flags: {},
+		flags: {charge: 1},
 		target: "normal",
 		type: "Flying",
 	},
