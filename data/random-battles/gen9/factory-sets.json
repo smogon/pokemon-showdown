@@ -185,10 +185,10 @@
 				"moves": [["Judgment"], ["Recover"], ["Thunder Wave", "Will-O-Wisp"], ["Stealth Rock", "Taunt", "Dragon Tail"]]
 			}]
 		},
-		"zaciancrowned": {
+		"zacian": {
 			"weight": 9,
 			"sets": [{
-				"species": "Zacian-Crowned",
+				"species": "Zacian",
 				"weight": 100,
 				"item": ["Rusted Sword"],
 				"ability": ["Intrepid Sword"],
@@ -1560,22 +1560,13 @@
 			"weight": 8,
 			"sets": [{
 				"species": "Ting-Lu",
-				"weight": 80,
+				"weight": 100,
 				"item": ["Heavy-Duty Boots", "Leftovers"],
 				"ability": ["Vessel of Ruin"],
 				"evs": {"hp": 252, "def": 4, "spd": 252},
 				"nature": ["Careful"],
 				"teraType": ["Water", "Grass", "Fairy"],
 				"moves": [["Spikes", "Stealth Rock"], ["Earthquake"], ["Whirlwind"], ["Ruination"]]
-			}, {
-				"species": "Ting-Lu",
-				"weight": 20,
-				"item": ["Heavy-Duty Boots", "Leftovers"],
-				"ability": ["Vessel of Ruin"],
-				"evs": {"hp": 252, "def": 4, "spd": 252},
-				"nature": ["Careful"],
-				"teraType": ["Water", "Poison"],
-				"moves": [["Payback"], ["Earthquake"], ["Rest"], ["Sleep Talk"]]
 			}]
 		},
 		"alomomola": {
@@ -1938,7 +1929,7 @@
 				"weight": 100,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Pickpocket"],
-				"evs": {"hp": 252, "spd": 24, "spe": 232},
+				"evs": {"hp": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Ice"],
 				"moves": [["Triple Axel"], ["Knock Off"], ["Ice Shard"], ["Swords Dance", "Low Kick"]]
@@ -3214,7 +3205,7 @@
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": ["Adamant"],
 				"teraType": ["Electric", "Steel"],
-				"moves": [["Aqua Step"], ["Close Combat"], ["Swords Dance"], ["Knock Off"]]
+				"moves": [["Aqua Step"], ["Close Combat"], ["Swords Dance"], ["Knock Off", "Triple Axel"]]
 			}]
 		},
 		"skeledirge": {
@@ -7800,56 +7791,6 @@
 				"moves": [["Tera Blast"], ["Psyshock"], ["Substitute"], ["Calm Mind"]]
 			}]
 		},
-		"scyther": {
-			"weight": 10,
-			"sets": [{
-				"species": "Scyther",
-				"weight": 13,
-				"item": ["Heavy-Duty Boots"],
-				"ability": ["Technician"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Fighting"],
-				"moves": [["Swords Dance"], ["Dual Wingbeat"], ["Close Combat"], ["U-turn"]]
-			}, {
-				"species": "Scyther",
-				"wantsTera": true,
-				"weight": 13,
-				"item": ["Heavy-Duty Boots"],
-				"ability": ["Technician"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Ground"],
-				"moves": [["Swords Dance"], ["Dual Wingbeat"], ["Close Combat"], ["Tera Blast"]]
-			}, {
-				"species": "Scyther",
-				"weight": 12,
-				"item": ["Heavy-Duty Boots"],
-				"ability": ["Technician"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Normal"],
-				"moves": [["Swords Dance"], ["Dual Wingbeat"], ["Close Combat"], ["Quick Attack"]]
-			}, {
-				"species": "Scyther",
-				"weight": 12,
-				"item": ["Heavy-Duty Boots"],
-				"ability": ["Technician"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Fighting", "Grass"],
-				"moves": [["Swords Dance"], ["Dual Wingbeat"], ["Close Combat"], ["Trailblaze"]]
-			}, {
-				"species": "Scyther",
-				"weight": 50,
-				"item": ["Heavy-Duty Boots"],
-				"ability": ["Technician"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Fighting", "Flying", "Ground"],
-				"moves": [["Defog"], ["Dual Wingbeat"], ["Close Combat"], ["U-turn"]]
-			}]
-		},
 		"bombirdier": {
 			"weight": 9,
 			"sets": [{
@@ -8066,7 +8007,7 @@
 			}]
 		},
 		"bellibolt": {
-			"weight": 8,
+			"weight": 7,
 			"sets": [{
 				"species": "Bellibolt",
 				"weight": 100,
@@ -8563,7 +8504,7 @@
 			}]
 		},
 		"coalossal": {
-			"weight": 5,
+			"weight": 4,
 			"sets": [{
 				"species": "Coalossal",
 				"weight": 50,
