@@ -477,7 +477,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				this.add('-activate', pokemon, 'item: EpiPen', '[consumed]');
 				pokemon.side.addSlotCondition(pokemon, 'epipen');
 				pokemon.switchFlag = true;
-			},
+			}
 		},
 		condition: {
 			// implemented in ../scripts.ts
