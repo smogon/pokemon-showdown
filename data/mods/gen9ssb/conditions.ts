@@ -32,8 +32,19 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onHit(target, source, move) {
 			if (move.category !== 'Status') {
+				this.add('-message', `damage taken: true`);
 				this.effectState.damaged = true;
 			}
+		},
+		onModifyMove(move, pokemon) {
+			if (this.effectState.damaged) {
+				move.basePower = move.basePower / 2;
+			} else if (this.effectState.damaged === false) {
+				move.critRatio = 6;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, 'Delta Charge', '[silent]');
 		},
 	},
 	// Trey
