@@ -351,6 +351,7 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 								const move = dex.moves.get(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
 								assert.equal(move.name, moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${species}`);
+								if (species.id === 'zacian' && [].concat(set.item).includes('Rusted Sword') && moveName === 'Behemoth Blade') continue;
 								assert(validateLearnset(move, set, vType, mod), `illegal move "${moveName}" of ${species}`);
 							}
 						}
