@@ -2653,71 +2653,50 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 120,
 		category: "Physical",
 		desc: "User heals equal to half of damage dealt and lowers target's Defense by 1 stage. This move hits again next turn for half damage.",
-		shortDesc: "Heal 1/2 damage and lower Defense by 1 stage; hits again next turn for 0.5x damage.",
+		shortDesc: "Heal 100% damage and lower Defense by 1 stage; hits again next turn for 0.5x damage.",
 		name: "Grand Delta",
 		gen: 9,
 		pp: 1,
 		noPPBoosts: true,
-		priority: -3,
+		priority: -10,
 		isZ: "yoichisbow",
-		beforeTurnCallback(pokemon) {
-			this.add('-message', `beforeTurnCallback triggered`);
-			pokemon.addVolatile('granddelta');
-			this.add('-anim', pokemon, 'Gust', pokemon);
-			this.add('-message', `${pokemon.name} prepares to attack!`);
-		},
 		beforeMoveCallback(pokemon) {
-			this.add('-message', this.activeMove!.name);
 			if (pokemon.volatiles['granddelta']) return true;
 		},
 		onPrepareHit(target, source, move) {
-			this.add('-message', this.effectState.damaged);
+			if (source.abilityState.damaged) {
+				move.basePower = move.basePower / 2;
+			} else if (source.abilityState.damaged === false) {
+				move.critRatio = 5;
+			}
 			this.add('-anim', source, 'Thousand Arrows', target);
 			this.add('-anim', source, 'Heal Pulse', target);
-			/*
-			if (!source.abilityState.chargeInterrupt) {
-				move.critRatio = 5;
-			} else if (source.abilityState.chargeInterrupt) {
-				move.basePower = move.basePower / 2;
-			}
-			*/
 		},
-		onDamagePriority: 22,
 		onDamage(damage, target, source, effect) {
 			if (target.volatiles['substitute'] || target.volatiles['killingdoll'] || target.volatiles['orbshield']) {
 				this.damage(damage, target, source, effect); 
 			}
+		},
+		onAfterMove(pokemon) {
+			delete pokemon.abilityState.damaged;
+			pokemon.removeVolatile('granddelta');
 		},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-message', `condition onStart triggered`);
 				this.add('-singleturn', pokemon, 'move: Grand Delta');
-				this.effectState.damaged = false;
+				pokemon.abilityState.damaged = false;
 			},
 			onHit(pokemon, source, move) {
 				if (move.category !== 'Status') {
 					this.add('-message', `damage taken`);
-					this.effectState.damaged = true;
+					pokemon.abilityState.damaged = true;
 				}
 			},
 		},
-		/*
-		condition: {
-			duration: 1,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'move: Grand Delta', '[silent]');
-			},
-			onHit(target, source, move) {
-				if (move.category !== 'Status') target.abilityState.chargeInterrupt = true;
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'move: Grand Delta', '[silent]');
-			},
-		},
-  		*/
 		drain: [1, 1],
-		flags: {charge: 1},
+		flags: {},
 		target: "normal",
 		type: "Flying",
 	},
