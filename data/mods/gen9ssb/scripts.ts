@@ -364,7 +364,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (move.id === 'wonderwing') return false;
 		return !!move.flags['contact'];
 	},
-	// Fake switch needed for HiZo's Scapegoat
+	// Fake switch needed for Flufi's EpiPen
 	runAction(action) {
 		const pokemonOriginalHP = action.pokemon?.hp;
 		let residualPokemon: (readonly [Pokemon, number])[] = [];
@@ -530,28 +530,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
 		// @ts-ignore I'm sorry but it takes a lot
-		case 'scapegoat':
+		case 'epipen':
 			// @ts-ignore
-			const percent = (action.target.hp / action.target.baseMaxhp) * 100;
-			// @ts-ignore TODO: Client support for custom faint
-			action.target.faint();
-			if (percent > 66) {
-				this.add('message', `Your courage will be greatly rewarded.`);
-				// @ts-ignore
-				this.boost({atk: 3, spa: 3, spe: 3}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat'));
-			} else if (percent > 33) {
-				this.add('message', `Your offering was accepted.`);
-				// @ts-ignore
-				this.boost({atk: 2, spa: 2, spe: 2}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat'));
-			} else {
-				this.add('message', `Coward.`);
-				// @ts-ignore
-				this.boost({atk: 1, spa: 1, spe: 1}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat'));
-			}
+			this.heal(action.target.maxhp / 3, action.target, action.pokemon, this.dex.items.get('epipen'));
 			// @ts-ignore
-			this.add(`c:|${getName((action.pokemon.illusion || action.pokemon).name)}|Don't worry, if this plan fails we can just blame ${action.target.name}`);
+			action.target.cureStatus();
+			this.add('-message', `${action.pokemon.name} used their EpiPen on ${action.target.name}!`);
 			// @ts-ignore
-			action.pokemon.side.removeSlotCondition(action.pokemon, 'scapegoat');
+			action.pokemon.side.removeSlotCondition(action.pokemon, 'epipen');
 			break;
 		case 'runUnnerve':
 			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
@@ -648,7 +634,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
 				for (const pokemon of this.sides[i].active) {
 					if (this.sides[i].slotConditions[pokemon.position]['revivalblessing'] ||
-							this.sides[i].slotConditions[pokemon.position]['scapegoat']) {
+							this.sides[i].slotConditions[pokemon.position]['epipen']) {
 						reviveSwitch = true;
 						continue;
 					}
@@ -658,7 +644,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
 					if (pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						pokemon.switchFlag !== 'scapegoat' && !pokemon.skipBeforeSwitchOutEventFlag) {
+						pokemon.switchFlag !== 'epipen' && !pokemon.skipBeforeSwitchOutEventFlag) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
 						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
@@ -1871,7 +1857,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				case 'instaswitch':
 				case 'revivalblessing':
 				// @ts-ignore custom status falls through
-				case 'scapegoat':
+				case 'epipen':
 					return `switch ${action.target!.position + 1}`;
 				case 'team':
 					return `team ${action.pokemon!.position + 1}`;
@@ -1950,13 +1936,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
 			}
 
-			if (this.slotConditions[pokemon.position]['scapegoat']) {
+			if (this.slotConditions[pokemon.position]['epipen']) {
 				// Should always subtract, but stop at 0 to prevent errors.
 				this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
 				pokemon.switchFlag = false;
 				// @ts-ignore custom request
 				this.choice.actions.push({
-					choice: 'scapegoat',
+					choice: 'epipen',
 					pokemon,
 					target: targetPokemon,
 				} as ChosenAction);
@@ -2017,7 +2003,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					beforeTurn: 4,
 					beforeTurnMove: 5,
 					revivalblessing: 6,
-					scapegoat: 7,
+					epipen: 7,
 
 					runUnnerve: 100,
 					runSwitch: 101,
