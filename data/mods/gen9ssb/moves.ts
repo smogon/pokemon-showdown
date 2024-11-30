@@ -2662,13 +2662,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		isZ: "yoichisbow",
 		priorityChargeCallback(pokemon) {
 			pokemon.addVolatile('granddelta');
+			this.add('-anim', pokemon, 'Gust', pokemon);
+			this.add('-message', `${pokemon.name} prepares to attack!`);
 		},
 		beforeMoveCallback(pokemon) {
 			this.add('-message', this.activeMove!.name);
 			if (pokemon.volatiles['granddelta']) return true;
 		},
 		onPrepareHit(target, source, move) {
-			this.add('-message', `onPrepareHit triggered`);
+			this.add('-message', this.effectState.damaged);
 			this.add('-anim', source, 'Thousand Arrows', target);
 			this.add('-anim', source, 'Heal Pulse', target);
 			/*
@@ -2689,6 +2691,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-singleturn', pokemon, 'move: Grand Delta');
+				this.effectState.damaged = false;
 			},
 			onHit(pokemon, source, move) {
 				if (move.category !== 'Status') {
