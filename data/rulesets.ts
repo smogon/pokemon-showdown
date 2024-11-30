@@ -1722,7 +1722,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	'sketchpostgen7moves': {
 		effectType: 'ValidatorRule',
 		name: 'Sketch Post-Gen 7 Moves',
-		desc: "Allows Pokémon who learn Sketch to learn any Gen 8+ move (normally, Sketch is not usable in Gen 8+).",
+		desc: "Allows Pokémon who learn Sketch to learn any Gen 8+ move (normally, Sketch is not usable in Gen 8 or Gen 9 Pre-DLC2).",
 		// Implemented in sim/team-validator.ts
 	},
 	mimicglitch: {
