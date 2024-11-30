@@ -2658,34 +2658,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 1,
 		noPPBoosts: true,
-		priority: 6,
+		priority: -3,
 		isZ: "yoichisbow",
-		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			attacker.addVolatile('granddelta');
-			return null;
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('granddelta');
+		},
+		beforeMoveCallback(pokemon) {
+			this.add('-message', this.activeMove!.name);
+			if (pokemon.volatiles['granddelta']) return true;
 		},
 		onPrepareHit(target, source, move) {
+			this.add('-message', `onPrepareHit triggered`);
 			this.add('-anim', source, 'Thousand Arrows', target);
 			this.add('-anim', source, 'Heal Pulse', target);
+			/*
 			if (!source.abilityState.chargeInterrupt) {
 				move.critRatio = 5;
 			} else if (source.abilityState.chargeInterrupt) {
 				move.basePower = move.basePower / 2;
 			}
+			*/
 		},
 		onDamagePriority: 22,
 		onDamage(damage, target, source, effect) {
 			if (target.volatiles['substitute'] || target.volatiles['killingdoll'] || target.volatiles['orbshield']) {
 				this.damage(damage, target, source, effect); 
 			}
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Grand Delta');
+			},
+			onHit(pokemon, source, move) {
+				if (move.category !== 'Status') {
+					this.effectState.damaged = true;
+				}
+			},
 		},
 		condition: {
 			duration: 1,
