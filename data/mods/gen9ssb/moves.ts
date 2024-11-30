@@ -2660,8 +2660,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		noPPBoosts: true,
 		priority: -3,
 		isZ: "yoichisbow",
-		priorityChargeCallback(pokemon) {
-			this.add('-message', `priorityChargeCallback triggered`);
+		beforeTurnCallback(pokemon) {
+			this.add('-message', `beforeTurnCallback triggered`);
 			pokemon.addVolatile('granddelta');
 			this.add('-anim', pokemon, 'Gust', pokemon);
 			this.add('-message', `${pokemon.name} prepares to attack!`);
