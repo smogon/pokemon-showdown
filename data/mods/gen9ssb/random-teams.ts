@@ -186,6 +186,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Dominus Lapidis',
 		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
+	Flufi: {
+		species: 'Raichu', ability: 'Defense of the Heart', item: 'EpiPen', gender: 'M',
+		moves: ['Thunderbolt', 'Incinerate', 'Celebrate'],
+		signatureMove: '10,000,000 Volt Thunderbolt',
+		evs: {hp: 248, def: 116, spd: 92, spe: 52}, nature: 'Timid',
+	},
 	/*
 	Kusanali: {
 		species: 'Shaymin', ability: 'On All Things Meditated', item: 'Seed of Stored Knowledge', gender: 'F',
