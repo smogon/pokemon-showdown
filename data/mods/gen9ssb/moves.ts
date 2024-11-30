@@ -2672,8 +2672,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			attacker.addVolatile('deltacharge');
 			return null;
 		},
-		onAfterMove(pokemon) {
-			if (pokemon.removeVolatile('deltacharge')) this.add('-message', `GRAND DELTA END`);
+		onDamage(damage, target, source, effect) {
+			if (source.removeVolatile('deltacharge')) this.add('-message', `GRAND DELTA END`);
 		},
 		/*
 		beforeMoveCallback(pokemon) {
