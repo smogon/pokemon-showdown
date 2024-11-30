@@ -2667,8 +2667,15 @@ export class Battle {
 			if (action.pokemon.fainted) return false;
 			this.swapPosition(action.pokemon, 1);
 			break;
-
 		case 'beforeTurn':
+			// beforeturn charge implementation for Trey's Grand Delta (gen9ssb)
+			// z-moves do not seem to trigger callback functions
+			this.add('-message', action.move.id);
+			if (action.move.id === 'granddelta') {
+				this.add('-anim', action.pokemon, 'Gust', action.pokemon);
+				this.add('-message', `${action.pokemon.name} is preparing to attack!`);
+				action.pokemon.addVolatile('granddelta');
+			}
 			this.eachEvent('BeforeTurn');
 			break;
 		case 'residual':
