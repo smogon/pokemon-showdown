@@ -2696,6 +2696,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			},
 		},
+		/*
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
@@ -2708,6 +2709,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-end', pokemon, 'move: Grand Delta', '[silent]');
 			},
 		},
+  		*/
 		drain: [1, 1],
 		flags: {charge: 1},
 		target: "normal",
