@@ -2652,8 +2652,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 120,
 		category: "Physical",
-		desc: "User heals equal to half of damage dealt and lowers target's Defense by 1 stage. This move hits again next turn for half damage.",
-		shortDesc: "Heal 100% damage and lower Defense by 1 stage; hits again next turn for 0.5x damage.",
+		desc: "Charges, then hits turn 2. If the user is targeted by an attacking move while charging, Grand Delta's base power is halved; If not attacked, always results in a critical hit. User recoves 100% of the damage dealt.",
+		shortDesc: "Charges, then hits turn 2. Halved power if hit during charge; Guaranteed crit if not.",
 		name: "Grand Delta",
 		gen: 9,
 		pp: 1,
@@ -2677,45 +2677,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Heal Pulse', target);
 		},
 		onDamage(damage, target, source, effect) {
-			if (source.removeVolatile('deltacharge')) this.add('-message', `GRAND DELTA END`);
-		},
-		/*
-		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['granddelta']) return true;
-		},
-		onPrepareHit(target, source, move) {
-			if (source.abilityState.damaged) {
-				move.basePower = move.basePower / 2;
-			} else if (source.abilityState.damaged === false) {
-				move.critRatio = 5;
-			}
-			this.add('-anim', source, 'Thousand Arrows', target);
-			this.add('-anim', source, 'Heal Pulse', target);
-		},
-		onDamage(damage, target, source, effect) {
 			if (target.volatiles['substitute'] || target.volatiles['killingdoll'] || target.volatiles['orbshield']) {
 				this.damage(damage, target, source, effect); 
 			}
+			source.removeVolatile('deltacharge');
+			target.side.addSideCondition('deltadrop');
 		},
-		onAfterMove(pokemon) {
-			delete pokemon.abilityState.damaged;
-			pokemon.removeVolatile('granddelta');
-		},
-		condition: {
-			duration: 1,
-			onStart(pokemon) {
-				this.add('-message', `condition onStart triggered`);
-				this.add('-singleturn', pokemon, 'move: Grand Delta');
-				pokemon.abilityState.damaged = false;
-			},
-			onHit(pokemon, source, move) {
-				if (move.category !== 'Status') {
-					this.add('-message', `damage taken`);
-					pokemon.abilityState.damaged = true;
-				}
-			},
-		},
-  		*/
 		drain: [1, 1],
 		flags: {charge: 1},
 		target: "normal",
