@@ -2669,6 +2669,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			attacker.addVolatile('twoturnmove', defender);
+			attacker.addVolatile('deltacharge');
 			return null;
 		},
 		/*
