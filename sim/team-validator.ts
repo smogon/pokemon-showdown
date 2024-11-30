@@ -2389,10 +2389,10 @@ export class TeamValidator {
 				}
 				const canBottleCap = dex.gen >= 7 && set.level >= (dex.gen < 9 ? 100 : 50);
 				if (ivs.atk !== ivs.spa && !(canBottleCap && (ivs.atk === 31 || ivs.spa === 31))) {
-					problems.push(`${name}'s Atk and Spa IVs must match to be from Pokemon GO.`);
+					problems.push(`${name}'s Atk and Sp. Atk IVs must match to be from Pokemon GO.`);
 				}
 				if (ivs.def !== ivs.spd && !(canBottleCap && (ivs.def === 31 || ivs.spd === 31))) {
-					problems.push(`${name}'s Def and Spd IVs must match to be from Pokemon GO.`);
+					problems.push(`${name}'s Def and Sp. Def IVs must match to be from Pokemon GO.`);
 				}
 			}
 		}
