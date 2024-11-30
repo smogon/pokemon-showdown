@@ -185,7 +185,7 @@
 				"moves": [["Judgment"], ["Recover"], ["Thunder Wave", "Will-O-Wisp"], ["Stealth Rock", "Taunt", "Dragon Tail"]]
 			}]
 		},
-		"zaciancrowned": {
+		"zacian": {
 			"weight": 9,
 			"sets": [{
 				"species": "Zacian-Crowned",
@@ -1929,7 +1929,7 @@
 				"weight": 100,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Pickpocket"],
-				"evs": {"hp": 252, "spd": 24, "spe": 232},
+				"evs": {"hp": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Ice"],
 				"moves": [["Triple Axel"], ["Knock Off"], ["Ice Shard"], ["Swords Dance", "Low Kick"]]
