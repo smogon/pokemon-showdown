@@ -469,28 +469,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 		itemUser: ["Hoopa"],
 	},
 	// flufi
-	sillycostume: {
-		name: "Silly Costume",
+	epipen: {
+		name: "EpiPen",
 		gen: 9,
-		onModifyAtk(atk, pokemon) {
-			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify(1.25);
-		},
-		onModifyDef(def, pokemon) {
-			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify(1.25);
-		},
-		onModifySpe(spe, pokemon) {
-			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify(1.25);
-		},
-		onModifyAccuracy(accuracy, pokemon) {
-			if (typeof accuracy !== 'number') return;
-			if (pokemon.species.name === 'Pikachu-Libre') return this.chainModify([3277, 4096]);
-		},
 		onUpdate(pokemon) {
-			if (pokemon.species.name === 'Pikachu') {
-				this.add('-activate', pokemon, 'item: Silly Costume');
-				pokemon.formeChange('Pikachu-Libre');
-				this.add('-message', `${pokemon.name} put on their Silly Costume!`);
-			}
+			if (pokemon.hp <= pokemon.maxhp / 3 && pokemon.useItem()) {
+				this.add('-activate', pokemon, 'item: EpiPen', '[consumed]');
+				pokemon.side.addSlotCondition(pokemon, 'epipen');
+				pokemon.switchFlag = true;
+			},
+		},
+		condition: {
+			// implemented in ../scripts.ts
+			duration: 1,
 		},
 	},
 	// Cyclommatic Cell
