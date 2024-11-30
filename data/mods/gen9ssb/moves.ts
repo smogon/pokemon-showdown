@@ -2742,6 +2742,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onSideEnd(targetSide) {
 				const pokemon = targetSide.active[0];
+				if (pokemon.fainted || !pokemon.hp) {
+					this.add('-sideend', targetSide, 'Dynamite Arrow', '[silent]');
+					return;
+				}
 				this.add('-anim', pokemon, 'Thousand Arrows', pokemon);
 				this.add('-anim', pokemon, 'Self-Destruct', pokemon);
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Trey');
