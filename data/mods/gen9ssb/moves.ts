@@ -2673,7 +2673,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return null;
 		},
 		onAfterMove(pokemon) {
-			pokemon.removeVolatile('deltacharge');
+			if (pokemon.removeVolatile('deltacharge')) this.add('-message', `GRAND DELTA END`);
 		},
 		/*
 		beforeMoveCallback(pokemon) {
