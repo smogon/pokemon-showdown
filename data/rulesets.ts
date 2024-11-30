@@ -2917,12 +2917,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (pokemon.transformed || !pokemon.hp) return;
-			const oldAbilityName = pokemon.getAbility().name;
 			const oldPokemon = pokemon.species;
 			const impersonation = this.dex.species.get(pokemon.set.name);
 			if (pokemon.species.baseSpecies === impersonation.baseSpecies || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
-			pokemon.formeChange(impersonation.name, this.effect, true);
+			const abilitySlot = Object.keys(oldPokemon.abilities).find(x => (
+				(oldPokemon.abilities as any)[x] === pokemon.set.ability
+			)) || "0";
+			pokemon.formeChange(impersonation.name, this.effect, true, abilitySlot);
 			pokemon.baseMaxhp = Math.floor(Math.floor(
 				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
 			) * pokemon.level / 100 + 10);
@@ -2930,13 +2932,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			pokemon.hp = this.clampIntRange(newMaxHP - (pokemon.maxhp - pokemon.hp), 1, newMaxHP);
 			pokemon.maxhp = newMaxHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-			const oldAbilityKey: string = Object.keys(oldPokemon.abilities).find(x => (
-				(oldPokemon.abilities as any)[x] === oldAbilityName
-			)) || "0";
-			const newAbility: string = (impersonation.abilities as any)[oldAbilityKey] || impersonation.abilities["0"];
-			pokemon.setAbility(newAbility, null, true);
-			// Ability persists through switching
-			pokemon.baseAbility = pokemon.ability;
 		},
 	},
 };
