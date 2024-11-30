@@ -1371,7 +1371,7 @@ export class Pokemon {
 	 */
 	formeChange(
 		speciesId: string | Species, source: Effect | null = this.battle.effect,
-		isPermanent?: boolean, message?: string
+		isPermanent?: boolean, abilitySlot = '0', message?: string
 	) {
 		const rawSpecies = this.battle.dex.species.get(speciesId);
 
@@ -1424,10 +1424,11 @@ export class Pokemon {
 			if (this.illusion) {
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
+			const ability = species.abilities[abilitySlot] || species.abilities['0'];
 			// Ogerpon's forme change doesn't override permanent abilities
-			if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(species.abilities['0'], null, true);
+			if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, true);
 			// However, its ability does reset upon switching out
-			this.baseAbility = toID(species.abilities['0']);
+			this.baseAbility = toID(ability);
 		}
 		if (this.terastallized) {
 			this.knownType = true;
