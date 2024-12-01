@@ -2627,7 +2627,7 @@
                 "role": "Wallbreaker",
                 "movepool": ["Body Slam", "Hammer Arm", "Slack Off", "Throat Chop"],
                 "abilities": ["Truant"],
-                "teraTypes": ["Poison", "Ghost"]
+                "teraTypes": ["Ghost", "Poison"]
             }
         ]
     },

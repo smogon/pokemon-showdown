@@ -841,7 +841,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["facade", "flamecharge", "firefang", "superpower"],
+                "movepool": ["facade", "firefang", "flamecharge", "superpower"],
                 "abilities": ["Guts"]
             }
         ]
