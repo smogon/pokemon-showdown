@@ -188,8 +188,8 @@ export const ssbSets: SSBSets = {
 	},
 	Flufi: {
 		species: 'Raichu', ability: 'Defense of the Heart', item: 'EpiPen', gender: 'M',
-		moves: ['Thunderbolt', 'Incinerate', 'Celebrate'],
-		signatureMove: '10,000,000 Volt Thunderbolt',
+		moves: ['Thunderclap', 'Fire Punch', 'Wish'],
+		signatureMove: 'Shock Therapy',
 		evs: {hp: 248, def: 116, spd: 92, spe: 52}, nature: 'Timid',
 	},
 	/*
