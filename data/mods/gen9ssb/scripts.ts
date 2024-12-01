@@ -531,13 +531,26 @@ export const Scripts: ModdedBattleScriptsData = {
 			break;
 		// @ts-ignore I'm sorry but it takes a lot
 		case 'epipen':
+			const newHP = action.target.hp + (action.target.maxhp / 3);
 			// @ts-ignore
-			this.heal(action.target.maxhp / 3, action.target, action.pokemon, this.dex.items.get('epipen'));
+			action.target.hp = newHP;
+			// @ts-ignore
+			action.target.sethp(newHP);
 			// @ts-ignore
 			action.target.cureStatus();
-			this.add('-message', `${action.pokemon.name} used their EpiPen on ${action.target.name}!`);
+			this.add('-heal', action.target, action.target.getHealth, '[from] item: EpiPen');
 			// @ts-ignore
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'epipen');
+			break;
+		case 'shocktherapy':
+			const newHP = action.target.hp + (action.target.maxhp / 10);
+			// @ts-ignore
+			action.target.hp = newHP;
+			// @ts-ignore
+			action.target.sethp(newHP);
+			this.add('-heal', action.target, action.target.getHealth, '[from] move: Shock Therapy');
+			// @ts-ignore
+			action.pokemon.side.removeSlotCondition(action.pokemon, 'shocktherapy');
 			break;
 		case 'runUnnerve':
 			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
