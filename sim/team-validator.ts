@@ -676,7 +676,7 @@ export class TeamValidator {
 		}
 		if (set.hpType) {
 			const type = dex.types.get(set.hpType);
-			if (!type.exists || ['normal', 'fairy'].includes(type.id)) {
+			if (!type.exists || ['normal', 'fairy', 'stellar'].includes(type.id)) {
 				problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
 			} else {
 				set.hpType = type.name;
@@ -780,6 +780,11 @@ export class TeamValidator {
 			return problems;
 		}
 
+		const pokemonGoProblems = this.validatePokemonGo(outOfBattleSpecies, set, setSources);
+		if (ruleTable.isBanned('nonexistent')) {
+			problems.push(...this.validateStats(set, species, setSources, pokemonGoProblems));
+		}
+
 		const moveLegalityWhitelist: {[k: string]: true | undefined} = {};
 		for (const moveName of set.moves) {
 			if (!moveName) continue;
@@ -802,7 +807,6 @@ export class TeamValidator {
 			}
 		}
 
-		const pokemonGoProblems = this.validatePokemonGo(outOfBattleSpecies, set, setSources);
 		const learnsetSpecies = dex.species.getLearnsetData(outOfBattleSpecies.id);
 		let isFromRBYEncounter = false;
 		if (this.gen === 1 && ruleTable.has('obtainablemisc') && !this.ruleTable.has('allowtradeback')) {
@@ -983,10 +987,6 @@ export class TeamValidator {
 					problems.push(pokemonGoProblem);
 				}
 			}
-		}
-
-		if (ruleTable.isBanned('nonexistent')) {
-			problems.push(...this.validateStats(set, species, setSources, pokemonGoProblems));
 		}
 
 		// Attempt move validation again after verifying Pokemon GO origin
@@ -1170,25 +1170,6 @@ export class TeamValidator {
 		} else if (set.hpType) {
 			if (!this.possibleBottleCapHpType(set.hpType, set.ivs)) {
 				problems.push(`${name} has Hidden Power ${set.hpType}, but its IVs don't allow this even with (Bottle Cap) Hyper Training.`);
-			}
-		}
-
-		if (setSources.isFromPokemonGo) {
-			// Pokemon from Pokemon GO must have odd IVs in non-Spe stats
-			// Since the set can be fixed while making minimal changes, it does not force the IVs to be manually fixed
-			for (const stat in set.ivs) {
-				if (set.ivs[stat as 'hp'] % 2 === 0 && stat !== 'spe') {
-					set.ivs[stat as 'hp']++;
-				}
-			}
-			if (set.ivs.atk !== set.ivs.spa && !(canBottleCap && (set.ivs.atk === 31 || set.ivs.spa === 31))) {
-				problems.push(`${name}'s Atk and Spa IVs must match because it is from Pokemon GO.`);
-			}
-			if (set.ivs.def !== set.ivs.spd && !(canBottleCap && (set.ivs.def === 31 || set.ivs.spd === 31))) {
-				problems.push(`${name}'s Def and Spd IVs must match because it is from Pokemon GO.`);
-			}
-			if (set.hpType && set.hpType !== 'Dark' && set.hpType !== 'Ice') {
-				problems.push(`${name} must have Hidden Power Dark or Ice because it is from Pokemon GO.`);
 			}
 		}
 
@@ -2305,7 +2286,7 @@ export class TeamValidator {
 	 * If the Pokemon cannot be obtained from Pokemon GO, returns null
 	 */
 	validatePokemonGo(
-		species: Species, set: Partial<PokemonSet>, setSources: PokemonSources, name: string = species.name,
+		species: Species, set: PokemonSet, setSources: PokemonSources, name: string = species.name,
 	): string[] | null {
 		let problems = [];
 		let minLevel = 50; // maximum level a Pokemon can be in Pokemon GO
@@ -2359,7 +2340,7 @@ export class TeamValidator {
 					minLevel = Math.min(minLevel, 20);
 					minIVs = Math.min(minIVs, 10);
 				}
-				if (species.id === 'mewtwo' && set.level && set.level >= 20) {
+				if (species.id === 'mewtwo' && set.level >= 20) {
 					// A bug allowed Mewtwo to be encountered with an IV floor of 0 from GO Battle League
 					minIVs = Math.min(minIVs, 0);
 				}
@@ -2374,7 +2355,7 @@ export class TeamValidator {
 					*/
 					minLevel = Math.min(minLevel, 8);
 					minIVs = Math.min(minIVs, 1);
-					if (set.level && set.level < 12) setSources.pokemonGoSource = "purified";
+					if (set.level < 12) setSources.pokemonGoSource = "purified";
 				}
 				// Attempt to trade the Pokemon to reduce level and IVs
 				if (!pokemonGoSources.includes('notrade')) {
@@ -2387,16 +2368,31 @@ export class TeamValidator {
 						minIVs = Math.min(minIVs, specialTrade ? 1 : 0);
 					}
 				}
-				if (set.level && set.level < minLevel) {
+				if (set.level < minLevel) {
 					problems.push(`${name} must be at least level ${minLevel} to be from Pokemon GO.`);
 				}
 				const ivs = set.ivs || TeamValidator.fillStats(null, 31);
+				const postTransferMinIVs = minIVs * 2 + 1;
+				let IVsTooLow = false;
+				let hasEvenIVs = false;
 				for (const stat in ivs) {
-					if (Math.floor(ivs[stat as 'hp'] / 2) < minIVs && stat !== 'spe') {
-						problems.push(`${name} must have at least ${minIVs} ` +
-						(minIVs === 1 ? `IV` : `IVs`) + ` in non-Speed stats to be from Pokemon GO.`);
-						break;
-					}
+					if (stat === 'spe') continue;
+					if (ivs[stat as 'hp'] < postTransferMinIVs) IVsTooLow = true;
+					if (ivs[stat as 'hp'] % 2 === 0) hasEvenIVs = true;
+				}
+				if (IVsTooLow) {
+					problems.push(`${name} must have at least ${postTransferMinIVs} ` +
+						(postTransferMinIVs === 1 ? `IV` : `IVs`) + ` in non-Speed stats to be from Pokemon GO.`);
+				}
+				if (hasEvenIVs) {
+					problems.push(`${name} must have odd non-Speed IVs to be from Pokemon GO.`);
+				}
+				const canBottleCap = dex.gen >= 7 && set.level >= (dex.gen < 9 ? 100 : 50);
+				if (ivs.atk !== ivs.spa && !(canBottleCap && (ivs.atk === 31 || ivs.spa === 31))) {
+					problems.push(`${name}'s Atk and Sp. Atk IVs must match to be from Pokemon GO.`);
+				}
+				if (ivs.def !== ivs.spd && !(canBottleCap && (ivs.def === 31 || ivs.spd === 31))) {
+					problems.push(`${name}'s Def and Sp. Def IVs must match to be from Pokemon GO.`);
 				}
 			}
 		}
