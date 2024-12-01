@@ -2934,4 +2934,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 	},
+	twisteddimensionmod: {
+		effectType: 'Rule',
+		name: "Twisted Dimension Mod",
+		desc: `The effects of Trick Room are always active, using Trick Room reverts the field to normal for 5 turns.`,
+		// implemented in Pokemon#getActionSpeed()
+	},
 };
