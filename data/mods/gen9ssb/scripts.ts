@@ -531,11 +531,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			break;
 		// @ts-ignore I'm sorry but it takes a lot
 		case 'epipen':
-			const newHP = action.target.hp + (action.target.maxhp / 3);
+			let eHP = action.target.hp + (action.target.maxhp / 3);
 			// @ts-ignore
-			action.target.hp = newHP;
+			action.target.hp = eHP;
 			// @ts-ignore
-			action.target.sethp(newHP);
+			action.target.sethp(eHP);
 			// @ts-ignore
 			action.target.cureStatus();
 			this.add('-heal', action.target, action.target.getHealth, '[from] item: EpiPen');
@@ -543,11 +543,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'epipen');
 			break;
 		case 'shocktherapy':
-			const newHP = action.target.hp + (action.target.maxhp / 10);
+			let sHP = action.target.hp + (action.target.maxhp / 10);
 			// @ts-ignore
-			action.target.hp = newHP;
+			action.target.hp = sHP;
 			// @ts-ignore
-			action.target.sethp(newHP);
+			action.target.sethp(sHP);
 			this.add('-heal', action.target, action.target.getHealth, '[from] move: Shock Therapy');
 			// @ts-ignore
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'shocktherapy');
