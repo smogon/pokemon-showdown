@@ -536,7 +536,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (species.isNonstandard && !this.ruleTable.has(`+pokemontag:${this.toID(species.isNonstandard)}`)) {
 					return [`${species.baseSpecies} does not exist in gen 9.`];
 				}
-				if ((item.itemUser?.includes(species.name) && !item.megaStone && !item.onPrimal) ||
+				const canUseNativeItem = !item.megaStone && !item.onPrimal &&
+					item.itemUser && (item.itemUser.includes(species.name) ||
+						(species.otherFormes && item.itemUser.includes(species.otherFormes[0])));
+				if (canUseNativeItem ||
 					(natdex && species.name.startsWith('Necrozma-') && item.id === 'ultranecroziumz')) {
 					continue;
 				}
