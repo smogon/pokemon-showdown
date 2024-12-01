@@ -355,4 +355,21 @@ describe('Future Sight', function () {
 		damage = hooh.maxhp - hooh.hp;
 		assert.bounded(damage, [57, 68], `Future Sight should deal damage with +0 Sp. Atk`);
 	});
+
+	it(`should never resolve when used on turn 254 or later`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+		], [
+			{species: 'Stakataka', moves: ['sleeptalk']},
+		]]);
+
+		battle.turn = 255; // Showdown turn is +1 from what the games are; this would ordinarily be 254
+		battle.makeChoices('move futuresight', 'auto');
+		for (let i = 0; i < 5; i++) battle.makeChoices();
+		battle.makeChoices('move futuresight', 'auto');
+		for (let i = 0; i < 5; i++) battle.makeChoices();
+
+		const stak = battle.p2.active[0];
+		assert.fullHP(stak, `Future Sight should have never resolved.`);
+	});
 });
