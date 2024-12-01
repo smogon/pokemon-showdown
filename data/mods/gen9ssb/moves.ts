@@ -1632,7 +1632,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Celebrate', source);
+			this.add('-anim', source, 'Splash', source);
 			this.add('-anim', source, 'Zing Zap', target);
       },
 		onTryHit(source) {
@@ -1641,6 +1641,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-fail', source);
 				return this.NOT_FAIL;
 			}
+		},
+		onHit(target, source, move) {
+			this.heal(target.maxhp / 10, target, source, this.effect);
 		},
 		self: {
 			slotCondition: 'shocktherapy',
