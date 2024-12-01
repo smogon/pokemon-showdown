@@ -7243,7 +7243,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Dark Pulse", "Earth Power", "Meteor Beam", "Hurricane"],
+                "movepool": ["Dark Pulse", "Earth Power", "Hurricane", "Meteor Beam"],
                 "abilities": ["Quark Drive"],
                 "teraTypes": ["Dark", "Ground"]
             }
