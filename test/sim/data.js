@@ -56,6 +56,12 @@ describe('Dex data', function () {
 					}
 				}
 			}
+			if (entry.cosmeticFormes) {
+				for (const forme of entry.cosmeticFormes) {
+					assert.equal(Dex.data.Aliases[toID(forme)], entry.name.replace(/\u0301/g, ""), `Misspelled/nonexistent alias "${forme}" of ${entry.name}`);
+					assert.equal(Dex.data.FormatsData[toID(forme)], undefined, `Cosmetic forme "${forme}" should not have its own tier`);
+				}
+			}
 			if (entry.battleOnly) {
 				const battleOnly = Array.isArray(entry.battleOnly) ? entry.battleOnly : [entry.battleOnly];
 				for (const battleForme of battleOnly) {

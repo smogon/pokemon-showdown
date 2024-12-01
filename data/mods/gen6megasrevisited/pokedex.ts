@@ -14,7 +14,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	lucariomega: {
 		inherit: true,
 		types: ["Fighting", "Steel"],
-		baseStats: {hp: 70, atk: 125, def: 70, spa: 140, spd: 105, spe: 115},
+		baseStats: {hp: 70, atk: 125, def: 70, spa: 140, spd: 94, spe: 126},
 		abilities: {0: "Lightning Rod"},
 	},
 	banettemega: {
@@ -26,8 +26,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	glaliemega: {
 		inherit: true,
 		types: ["Ice", "Steel"],
-		baseStats: {hp: 80, atk: 175, def: 70, spa: 80, spd: 70, spe: 105},
-		abilities: {0: "Strong Jaw"},
+		baseStats: {hp: 80, atk: 160, def: 70, spa: 95, spd: 70, spe: 105},
+		abilities: {0: "Refrigerate"},
 	},
 	venusaurmega: {
 		inherit: true,
@@ -44,7 +44,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	charizardmegay: {
 		inherit: true,
 		types: ["Fire", "Flying"],
-		baseStats: {hp: 78, atk: 109, def: 103, spa: 134, spd: 110, spe: 100},
+		baseStats: {hp: 78, atk: 94, def: 93, spa: 159, spd: 110, spe: 100},
 		abilities: {0: "Dragon's Gale"},
 	},
 	alakazammega: {
@@ -81,20 +81,20 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	altariamega: {
 		inherit: true,
 		types: ["Dragon", "Fairy"],
-		baseStats: {hp: 75, atk: 70, def: 95, spa: 140, spd: 115, spe: 95},
+		baseStats: {hp: 75, atk: 90, def: 90, spa: 140, spd: 115, spe: 80},
 		abilities: {0: "Weather Report"},
 	},
 	sceptilemega: {
 		inherit: true,
 		types: ["Grass", "Dragon"],
-		baseStats: {hp: 75, atk: 95, def: 79, spa: 145, spd: 99, spe: 142},
+		baseStats: {hp: 70, atk: 95, def: 79, spa: 145, spd: 99, spe: 142},
 		abilities: {0: "Armor Tail"},
 	},
 	swampertmega: {
 		inherit: true,
 		types: ["Water", "Poison"],
-		baseStats: {hp: 100, atk: 145, def: 120, spa: 85, spd: 115, spe: 70},
-		abilities: {0: "Poison Touch"},
+		baseStats: {hp: 100, atk: 145, def: 110, spa: 85, spd: 110, spe: 85},
+		abilities: {0: "Toxic Chain"},
 	},
 	manectricmega: {
 		inherit: true,
@@ -128,17 +128,18 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	mawilemega: {
 		inherit: true,
 		types: ["Steel", "Fairy"],
-		baseStats: {hp: 50, atk: 125, def: 125, spa: 55, spd: 95, spe: 30},
-		abilities: {0: "Tough Claws"},
+		baseStats: {hp: 50, atk: 90, def: 125, spa: 70, spd: 95, spe: 50},
+		abilities: {0: "Huge Power"},
 	},
 	abomasnowmega: {
 		inherit: true,
+		types: ["Grass"],
 		abilities: {0: "Ice Scales"},
 	},
 	cameruptmega: {
 		inherit: true,
 		types: ["Fire", "Ground"],
-		baseStats: {hp: 70, atk: 110, def: 110, spa: 135, spd: 115, spe: 20},
+		baseStats: {hp: 70, atk: 80, def: 140, spa: 135, spd: 115, spe: 20},
 		abilities: {0: "Earth Eater"},
 	},
 	slowbromega: {
@@ -156,7 +157,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	ampharosmega: {
 		inherit: true,
 		types: ["Electric", "Dragon"],
-		baseStats: {hp: 90, atk: 95, def: 95, spa: 165, spd: 115, spe: 55},
+		baseStats: {hp: 90, atk: 95, def: 95, spa: 165, spd: 110, spe: 55},
 		abilities: {0: "Mega Launcher"},
 	},
 	gyaradosmega: {
@@ -191,7 +192,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	kangaskhanmega: {
 		inherit: true,
 		types: ["Normal", "Ground"],
-		baseStats: {hp: 105, atk: 135, def: 105, spa: 40, spd: 105, spe: 100},
+		baseStats: {hp: 105, atk: 125, def: 105, spa: 50, spd: 105, spe: 100},
 	},
 	salamencemega: {
 		inherit: true,
@@ -203,7 +204,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Dragon", "Ground"],
 		baseStats: {hp: 108, atk: 150, def: 115, spa: 140, spd: 85, spe: 102},
-		abilities: {0: "Dry Skin"},
+		abilities: {0: "Water Absorb"},
 	},
 	tyranitarmega: {
 		inherit: true,

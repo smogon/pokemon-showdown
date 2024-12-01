@@ -286,8 +286,8 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		if (
 			(!user.isStaff || this.ticket.userid === user.id) && (message.length < 3 || blockedMessages.includes(toID(message)))
 		) {
-			this.room.add(`|c|&Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
-			this.room.add(`|c|&Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
+			this.room.add(`|c|~Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
+			this.room.add(`|c|~Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
 			this.room.update();
 			return false;
 		}
@@ -296,11 +296,11 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			this.activationTime = Date.now();
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
-			this.room.add(`|c|&Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
+			this.room.add(`|c|~Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
 			switch (this.ticket.type) {
 			case 'PM Harassment':
 				this.room.add(
-					`|c|&Staff|Global staff might take more than a few minutes to handle your report. ` +
+					`|c|~Staff|Global staff might take more than a few minutes to handle your report. ` +
 					`If you are being disturbed by another user, you can type \`\`/ignore [username]\`\` in any chat to ignore their messages immediately`
 				).update();
 				break;
@@ -703,12 +703,12 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		const {result, time, by, seen, note} = ticket.resolved as ResolvedTicketInfo;
 		if (seen) return;
 		const timeString = (Date.now() - time) > 1000 ? `, ${Chat.toDurationString(Date.now() - time)} ago.` : '.';
-		user.send(`|pm|&Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
+		user.send(`|pm|~Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
 		if (result?.trim()) {
-			user.send(`|pm|&Staff|${user.getIdentity()}|The result was "${result}"`);
+			user.send(`|pm|~Staff|${user.getIdentity()}|The result was "${result}"`);
 		}
 		if (note?.trim()) {
-			user.send(`|pm|&Staff|${user.getIdentity()}|/raw <small>${note}</small>`);
+			user.send(`|pm|~Staff|${user.getIdentity()}|/raw <small>${note}</small>`);
 		}
 		tickets[userid].resolved!.seen = true;
 		writeTickets();
@@ -759,7 +759,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 
 		if (ticket.needsDelayWarning && !ticket.claimed && delayWarnings[ticket.type]) {
 			ticketRoom.add(
-				`|c|&Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
+				`|c|~Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
 			).update();
 			ticket.needsDelayWarning = false;
 		}
@@ -2472,7 +2472,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			}
 			if (context) {
-				helpRoom.add(`|c|&Staff|${this.tr(context)}`);
+				helpRoom.add(`|c|~Staff|${this.tr(context)}`);
 				helpRoom.update();
 			}
 			if (pmRequestButton) {
@@ -2541,7 +2541,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			return this.parse('/join view-help-tickets');
 		},
-		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
+		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ ~`],
 
 		inapnames: 'massview',
 		usernames: 'massview',
@@ -2560,7 +2560,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			return this.parse('/join view-help-stats');
 		},
-		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
+		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ ~`],
 
 		note: 'addnote',
 		addnote(target, room, user) {
@@ -2584,7 +2584,7 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`HELPTICKET NOTE`, ticket.userid, note);
 		},
 		addnotehelp: [
-			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ &`,
+			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ ~`,
 		],
 		removenote(target, room, user) {
 			this.checkCan('lock');
@@ -2615,7 +2615,7 @@ export const commands: Chat.ChatCommands = {
 		removenotehelp: [
 			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
 			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		ar: 'addresponse',
@@ -2646,7 +2646,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		addresponsehelp: [
 			`/helpticket addresponse [type], [name], [response] - Adds a [response] button to the given ticket [type] with the given [name].`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		rr: 'removeresponse',
@@ -2671,7 +2671,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		removeresponsehelp: [
 			`/helpticket removeresponse [type], [name] - Removes the response button with the given [name] from the given ticket [type].`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		lr: 'listresponses',
@@ -2697,7 +2697,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		listresponseshelp: [
 			`/helpticket listresponses [optional type] - List current response buttons for text tickets. `,
-			`If a [type] is given, lists responses only for that type. Requires: % @ &`,
+			`If a [type] is given, lists responses only for that type. Requires: % @ ~`,
 		],
 
 		close(target, room, user) {
@@ -2732,7 +2732,7 @@ export const commands: Chat.ChatCommands = {
 			ticket.claimed = user.name;
 			this.sendReply(`You closed ${ticket.creator}'s ticket.`);
 		},
-		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
+		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ ~`],
 
 		tb: 'ban',
 		ticketban: 'ban',
@@ -2831,7 +2831,7 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff();
 			return true;
 		},
-		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`],
+		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ ~`],
 
 		unticketban: 'unban',
 		unban(target, room, user) {
@@ -2850,7 +2850,7 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog("UNTICKETBAN", toID(target));
 			Users.get(target)?.popup(`${user.name} has ticket unbanned you.`);
 		},
-		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
+		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ ~`],
 
 		ignore(target, room, user) {
 			this.checkCan('lock');
@@ -2861,7 +2861,7 @@ export const commands: Chat.ChatCommands = {
 			user.update();
 			this.sendReply(this.tr`You are now ignoring help ticket notifications.`);
 		},
-		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
+		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ ~`],
 
 		unignore(target, room, user) {
 			this.checkCan('lock');
@@ -2872,7 +2872,7 @@ export const commands: Chat.ChatCommands = {
 			user.update();
 			this.sendReply(this.tr`You will now receive help ticket notifications.`);
 		},
-		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`],
+		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ ~`],
 
 		delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
@@ -2890,7 +2890,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.sendReply(this.tr`You deleted ${target}'s ticket.`);
 		},
-		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: &`],
+		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: ~`],
 
 		logs(target, room, user) {
 			this.checkCan('lock');
@@ -2902,7 +2902,7 @@ export const commands: Chat.ChatCommands = {
 		logshelp: [
 			`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. `,
 			`If a [month] is given, searches only that month.`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		async private(target, room, user) {
@@ -2927,7 +2927,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} set the ticket logs for '${userid}' on '${date}' to be private.`);
 		},
 		privatehelp: [
-			`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: &`,
+			`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: ~`,
 		],
 		async public(target, room, user) {
 			this.checkCan('bypassall');
@@ -2952,7 +2952,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} set the ticket logs for '${userid}' on '${date}' to be public.`);
 		},
 		publichelp: [
-			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
+			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: ~`,
 		],
 	},
 
@@ -2964,17 +2964,17 @@ export const commands: Chat.ChatCommands = {
 
 	helptickethelp: [
 		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
-		`/helpticket list - Lists all tickets. Requires: % @ &`,
-		`/helpticket close [user] - Closes an open ticket. Requires: % @ &`,
-		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`,
-		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`,
-		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`,
-		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`,
-		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
-		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ &`,
-		`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ &`,
-		`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: &`,
-		`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
+		`/helpticket list - Lists all tickets. Requires: % @ ~`,
+		`/helpticket close [user] - Closes an open ticket. Requires: % @ ~`,
+		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ ~`,
+		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ ~`,
+		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ ~`,
+		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ ~`,
+		`/helpticket delete [user] - Deletes a user's ticket. Requires: ~`,
+		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ ~`,
+		`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ ~`,
+		`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: ~`,
+		`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: ~`,
 	],
 };
 

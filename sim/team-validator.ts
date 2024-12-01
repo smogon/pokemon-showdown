@@ -107,6 +107,11 @@ export class PokemonSources {
 	 */
 	eventOnlyMinSourceGen?: number;
 	/**
+	 * A list of movepools, identified by gen and species, which moves can be pulled from.
+	 * Used to deal with compatibility issues for prevo/evo-exclusive moves
+	 */
+	learnsetDomain?: string[] | null;
+	/**
 	 * Some Pokemon evolve by having a move in their learnset (like Piloswine
 	 * with Ancient Power). These can only carry three other moves from their
 	 * prevo, because the fourth move must be the evo move. This restriction
@@ -265,6 +270,13 @@ export class PokemonSources {
 				this.pomegEggMoves.push(...other.pomegEggMoves);
 			}
 		}
+		if (other.learnsetDomain) {
+			if (!this.learnsetDomain) {
+				this.learnsetDomain = other.learnsetDomain;
+			} else {
+				this.learnsetDomain.filter(source => other.learnsetDomain?.includes(source));
+			}
+		}
 		if (this.possiblyLimitedEggMoves && !this.sourcesBefore) {
 			const eggSources = this.sources.filter(source => source.charAt(1) === 'E');
 			let minEggGen = parseInt(eggSources[0]);
@@ -311,6 +323,9 @@ export class TeamValidator {
 	readonly toID: (str: any) => ID;
 	constructor(format: string | Format, dex = Dex) {
 		this.format = dex.formats.get(format);
+		if (this.format.effectType !== 'Format') {
+			throw new Error(`format should be a 'Format', but was a '${this.format.effectType}'`);
+		}
 		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -453,7 +468,7 @@ export class TeamValidator {
 		}
 
 		for (const rule of ruleTable.keys()) {
-			if ('!+-'.includes(rule.charAt(0))) continue;
+			if ('!+-*'.includes(rule.charAt(0))) continue;
 			const subformat = dex.formats.get(rule);
 			if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateTeam.call(this, team, format, teamHas) || []);
@@ -485,7 +500,7 @@ export class TeamValidator {
 		return {species, eventData: learnset.eventData};
 	}
 
-	getValidationSpecies(set: PokemonSet): [Species, Species] {
+	getValidationSpecies(set: PokemonSet): {outOfBattleSpecies: Species, tierSpecies: Species} {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 		const species = dex.species.get(set.species);
@@ -523,7 +538,7 @@ export class TeamValidator {
 			}
 		}
 
-		return [outOfBattleSpecies, tierSpecies];
+		return {outOfBattleSpecies, tierSpecies};
 	}
 
 	validateSet(set: PokemonSet, teamHas: AnyObject): string[] | null {
@@ -603,7 +618,7 @@ export class TeamValidator {
 		const setSources = this.allSources(species);
 
 		for (const [rule] of ruleTable) {
-			if ('!+-'.includes(rule.charAt(0))) continue;
+			if ('!+-*'.includes(rule.charAt(0))) continue;
 			const subformat = dex.formats.get(rule);
 			if (subformat.onChangeSet && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onChangeSet.call(this, set, format, setHas, teamHas) || []);
@@ -618,7 +633,7 @@ export class TeamValidator {
 		item = dex.items.get(set.item);
 		ability = dex.abilities.get(set.ability);
 
-		const [outOfBattleSpecies, tierSpecies] = this.getValidationSpecies(set);
+		const {outOfBattleSpecies, tierSpecies} = this.getValidationSpecies(set);
 		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {
@@ -672,7 +687,7 @@ export class TeamValidator {
 		}
 		if (set.teraType) {
 			const type = dex.types.get(set.teraType);
-			if (!type.exists) {
+			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
 			} else {
 				set.teraType = type.name;
@@ -829,6 +844,7 @@ export class TeamValidator {
 		let eventOnlyData;
 
 		if ((!setSources.sourcesBefore && setSources.sources.length) || isUnderleveled) {
+			let checkGoLegality = false;
 			let skippedEggSource = true;
 			const legalSources = [];
 			let evoSpecies = species;
@@ -846,17 +862,20 @@ export class TeamValidator {
 					if (evoSpecies.name === isUnderleveled) break;
 					evoSpecies = dex.species.get(evoSpecies.prevo);
 				}
+			} else {
+				checkGoLegality = true;
 			}
 			for (const source of setSources.sources) {
-				if (isUnderleveled && source.charAt(1) !== 'S') continue;
+				if (isUnderleveled && source.charAt(1) !== 'S' && source !== '8V') continue;
 				if (['2E', '3E'].includes(source.substr(0, 2)) && set.level < 5) continue;
 				skippedEggSource = false;
 				if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
 				legalSources.push(source);
 			}
-			if (pokemonGoProblems && !pokemonGoProblems.length) {
+			if (checkGoLegality && !legalSources.includes('8V')) setSources.isFromPokemonGo = false;
+			if (setSources.isFromPokemonGo !== false && pokemonGoProblems && !pokemonGoProblems.length) {
 				if (!legalSources.length) setSources.isFromPokemonGo = true;
-				legalSources.push('8V');
+				if (!legalSources.includes('8V')) legalSources.push('8V');
 			}
 			if (legalSources.length) {
 				setSources.sources = legalSources;
@@ -1030,7 +1049,7 @@ export class TeamValidator {
 		}
 
 		for (const [rule] of ruleTable) {
-			if ('!+-'.includes(rule.charAt(0))) continue;
+			if ('!+-*'.includes(rule.charAt(0))) continue;
 			const subformat = dex.formats.get(rule);
 			if (subformat.onValidateSet && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateSet.call(this, set, format, setHas, teamHas) || []);
@@ -2417,6 +2436,7 @@ export class TeamValidator {
 		const format = this.format;
 		const ruleTable = this.ruleTable;
 		const level = set.level || 100;
+		const canLearnSpecies: ID[] = [];
 
 		let cantLearnReason = null;
 
@@ -2425,6 +2445,7 @@ export class TeamValidator {
 		let blockedHM = false;
 
 		let babyOnly = '';
+		let minLearnGen = dex.gen;
 
 		// This is a pretty complicated algorithm
 
@@ -2465,13 +2486,7 @@ export class TeamValidator {
 				}
 			}
 
-			let formeCantInherit = false;
-			let nextSpecies = dex.species.learnsetParent(baseSpecies);
-			while (nextSpecies) {
-				if (nextSpecies.name === species.name) break;
-				nextSpecies = dex.species.learnsetParent(nextSpecies);
-			}
-			if (checkingPrevo && !nextSpecies) formeCantInherit = true;
+			const formeCantInherit = dex.species.eggMovesOnly(species, baseSpecies);
 			if (formeCantInherit && dex.gen < 9) break;
 
 			let sources = learnset[moveid] || [];
@@ -2508,6 +2523,15 @@ export class TeamValidator {
 				//   teach it, and transfer it to the current gen.)
 
 				const learnedGen = parseInt(learned.charAt(0));
+				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
+				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + species.id) &&
+					(learned.charAt(1) !== 'E' || learnedGen < 8)
+				) {
+					if (!cantLearnReason) {
+						cantLearnReason = `is incompatible with ${(setSources.restrictiveMoves || []).join(', ')}.`;
+					}
+					continue;
+				}
 				if (learnedGen < this.minSourceGen) {
 					if (!cantLearnReason) {
 						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
@@ -2520,11 +2544,6 @@ export class TeamValidator {
 					}
 					continue;
 				}
-
-				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
-
-				// redundant
-				if (learnedGen <= moveSources.sourcesBefore) continue;
 
 				if (
 					baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8 &&
@@ -2550,7 +2569,7 @@ export class TeamValidator {
 					continue;
 				}
 
-				if (!species.isNonstandard) {
+				if (species.isNonstandard !== 'CAP') {
 					// HMs can't be transferred
 					if (dex.gen >= 4 && learnedGen <= 3 && [
 						'cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive',
@@ -2608,7 +2627,7 @@ export class TeamValidator {
 								setSources.babyOnly = babyOnly;
 							}
 						}
-						if (!moveSources.moveEvoCarryCount) return null;
+						if (!moveSources.moveEvoCarryCount && !setSources.babyOnly) return null;
 					}
 					// past-gen level-up, TM, or tutor moves:
 					//   available as long as the source gen was or was before this gen
@@ -2669,6 +2688,11 @@ export class TeamValidator {
 					}
 					moveSources.add(learned);
 				}
+				if (learned.charAt(1) === 'E' && learnedGen >= 8 && !canLearnSpecies.includes(baseSpecies.id)) {
+					canLearnSpecies.push(baseSpecies.id);
+				}
+				if (!canLearnSpecies.includes(species.id)) canLearnSpecies.push(species.id);
+				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
 				// include the Mimic Glitch when checking this mon's learnset
@@ -2751,6 +2775,35 @@ export class TeamValidator {
 						}
 					}
 				}
+			}
+		}
+
+		let nextSpecies;
+		nextSpecies = baseSpecies;
+		let speciesCount = 0;
+		if (!tradebackEligible) {
+			if (!dex.species.getLearnsetData(nextSpecies.id).learnset) {
+				nextSpecies = dex.species.get(nextSpecies.changesFrom || nextSpecies.baseSpecies);
+			}
+			while (nextSpecies) {
+				for (let gen = nextSpecies.gen; gen <= dex.gen; gen++) {
+					/**
+					 * Case 1: The species can learn the move - allow moves of the species from all gens
+					 * Case 2: Both prevo and evo can learn the move - same as case 1
+					 * Case 3: Prevo-only move - allow moves of the species from the min gen and later
+					 * Case 4: Evo-only move - allow moves of the species from the max gen and before
+					*/
+					if (canLearnSpecies.includes(nextSpecies.id) ||
+						(0 < speciesCount && speciesCount < canLearnSpecies.length) ||
+						(speciesCount === 0 && gen >= minLearnGen) ||
+						(speciesCount === canLearnSpecies.length && gen <= moveSources.sourcesBefore)
+					) {
+						if (!moveSources.learnsetDomain) moveSources.learnsetDomain = [];
+						moveSources.learnsetDomain.push(gen + nextSpecies.id);
+					}
+				}
+				if (canLearnSpecies.includes(nextSpecies.id)) speciesCount++;
+				nextSpecies = dex.species.learnsetParent(nextSpecies);
 			}
 		}
 

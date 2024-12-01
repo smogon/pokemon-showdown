@@ -109,7 +109,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						if (this.ruleTable.has(`+move:${move.id}`)) continue;
 						const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
 						if (this.ruleTable.has('omunobtainablemoves')) {
-							const outOfBattleSpecies = this.getValidationSpecies(set)[0];
+							const {outOfBattleSpecies} = this.getValidationSpecies(set);
 							if (!this.omCheckCanLearn(move, outOfBattleSpecies, this.allSources(outOfBattleSpecies), set, problem)) continue;
 						}
 						return [problem];
@@ -690,25 +690,88 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	timerstarting: {
+		effectType: 'Rule',
+		name: 'Timer Starting',
+		desc: "Amount of time given at the start of the battle in seconds",
+		hasValue: 'positive-integer',
+		// hardcoded in server/room-battle.ts
+	},
+	dctimer: {
+		effectType: 'Rule',
+		name: 'DC Timer',
+		desc: "Enables or disables the disconnection timer",
+		// hardcoded in server/room-battle.ts
+	},
+	dctimerbank: {
+		effectType: 'Rule',
+		name: 'DC Timer Bank',
+		desc: "Enables or disables the disconnection timer bank",
+		// hardcoded in server/room-battle.ts
+	},
+	timergrace: {
+		effectType: 'Rule',
+		name: 'Timer Grace',
+		desc: "Grace period between timer activation and when total time starts ticking down.",
+		hasValue: 'positive-integer',
+		// hardcoded in server/room-battle.ts
+	},
+	timeraddperturn: {
+		effectType: 'Rule',
+		name: 'Timer Add Per Turn',
+		desc: "Amount of additional time given per turn in seconds",
+		hasValue: 'integer',
+		// hardcoded in server/room-battle.ts
+	},
+	timermaxperturn: {
+		effectType: 'Rule',
+		name: 'Timer Max Per Turn',
+		desc: "Maximum amount of time allowed per turn in seconds",
+		hasValue: 'positive-integer',
+		// hardcoded in server/room-battle.ts
+	},
+	timermaxfirstturn: {
+		effectType: 'Rule',
+		name: 'Timer Max First Turn',
+		desc: "Maximum amount of time allowed for the first turn in seconds",
+		hasValue: 'positive-integer',
+		// hardcoded in server/room-battle.ts
+	},
+	timeoutautochoose: {
+		effectType: 'Rule',
+		name: 'Timeout Auto Choose',
+		desc: "Enables or disables automatic selection of moves when a player times out",
+		// hardcoded in server/room-battle.ts
+	},
+	timeraccelerate: {
+		effectType: 'Rule',
+		name: 'Timer Accelerate',
+		desc: "Enables or disables timer acceleration",
+		// hardcoded in server/room-battle.ts
+	},
 	blitz: {
 		effectType: 'Rule',
 		name: 'Blitz',
 		// THIS 100% INTENTIONALLY SAYS TEN SECONDS PER TURN
-		// IGNORE maxPerTurn. addPerTurn IS 5, TRANSLATING TO AN INCREMENT OF 10.
+		// IGNORE Max Per Turn. Add Per Turn IS 5, TRANSLATING TO AN INCREMENT OF 10.
 		desc: "Super-fast 'Blitz' timer giving 30 second Team Preview and 10 seconds per turn.",
 		onBegin() {
 			this.add('rule', 'Blitz: Super-fast timer');
 		},
-		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 40, grace: 30},
+		ruleset: [
+			'Timer Starting = 15', 'Timer Grace = 30',
+			'Timer Add Per Turn = 5', 'Timer Max Per Turn = 15', 'Timer Max First Turn = 40',
+		],
 	},
 	vgctimer: {
 		effectType: 'Rule',
 		name: 'VGC Timer',
 		desc: "VGC's timer: 90 second Team Preview, 7 minutes Your Time, 1 minute per turn",
-		timer: {
-			starting: 7 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90,
-			grace: 90, timeoutAutoChoose: true, dcTimerBank: false,
-		},
+		ruleset: [
+			'Timer Starting = 420', 'Timer Grace = 90',
+			'Timer Add Per Turn = 0', 'Timer Max Per Turn = 55', 'Timer Max First Turn = 90',
+			'Timeout Auto Choose', 'DC Timer Bank',
+		],
 	},
 	speciesclause: {
 		effectType: 'ValidatorRule',
@@ -976,6 +1039,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Swagger Clause: Swagger is banned');
 		},
 	},
+	drypassclause: {
+		effectType: 'ValidatorRule',
+		name: 'DryPass Clause',
+		desc: "Stops teams from bringing Pok&eacute;mon with Baton Pass + any form of trapping, residual recovery, boosting, or Substitute.",
+		ruleset: ['Baton Pass Stat Clause', 'Baton Pass Stat Trap Clause'],
+		banlist: ['Baton Pass + Substitute', 'Baton Pass + Ingrain', 'Baton Pass + Aqua Ring', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Jaw Lock'],
+	},
 	batonpassclause: {
 		effectType: 'ValidatorRule',
 		name: 'Baton Pass Clause',
@@ -1145,7 +1215,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				'Charge Beam', 'Cosmic Power', 'Curse', 'Defend Order', 'Defense Curl', 'Dragon Dance', 'Growth', 'Guard Swap', 'Harden', 'Heart Swap', 'Howl',
 				'Iron Defense', 'Ingrain', 'Mean Look', 'Meteor Mash', 'Meditate', 'Metal Claw', 'Nasty Plot', 'Ominous Wind', 'Power Trick', 'Psych Up', 'Rage',
 				'Rock Polish', 'Sharpen', 'Silver Wind', 'Skull Bash', 'Spider Web', 'Steel Wing', 'Stockpile', 'Swords Dance', 'Tail Glow', 'Withdraw', 'Speed Boost',
-				'Apicot Berry', 'Ganlon Berry', 'Liechi Berry', 'Petaya Berry', 'Salac Berry', 'Starf Berry',
+				'Apicot Berry', 'Ganlon Berry', 'Liechi Berry', 'Petaya Berry', 'Salac Berry', 'Starf Berry', 'Kee Berry', 'Maranga Berry', 'Weakness Policy',
+				'Blunder Policy', 'Luminiscent Moss', 'Snowball', 'Throat Spray', 'Mirror Herb', 'Adrenaline Orb',
 			].map(this.toID);
 			for (const set of team) {
 				if (!set.moves.map(this.toID).includes('batonpass' as ID)) continue;
@@ -1378,7 +1449,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (pokemon.species.id === 'rayquaza') {
 					pokemon.canMegaEvo = null;
 					// ability to terastal was determined before the clause activated, causing incorrect behavior
-					pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
+					if (!this.ruleTable.has('terastalclause')) {
+						pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
+					}
 				}
 			}
 		},
@@ -1455,7 +1528,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.dex.getImmunity(move, type)) return 1;
-			return -typeMod;
+			// Ignore normal effectiveness, prevents bug with Tera Shell
+			if (typeMod) return -typeMod;
 		},
 	},
 
@@ -1648,7 +1722,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	'sketchpostgen7moves': {
 		effectType: 'ValidatorRule',
 		name: 'Sketch Post-Gen 7 Moves',
-		desc: "Allows Pokémon who learn Sketch to learn any Gen 8+ move (normally, Sketch is not usable in Gen 8+).",
+		desc: "Allows Pokémon who learn Sketch to learn any Gen 8+ move (normally, Sketch is not usable in Gen 8 or Gen 9 Pre-DLC2).",
 		// Implemented in sim/team-validator.ts
 	},
 	mimicglitch: {
@@ -2843,12 +2917,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (pokemon.transformed || !pokemon.hp) return;
-			const oldAbilityName = pokemon.getAbility().name;
 			const oldPokemon = pokemon.species;
 			const impersonation = this.dex.species.get(pokemon.set.name);
 			if (pokemon.species.baseSpecies === impersonation.baseSpecies || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
-			pokemon.formeChange(impersonation.name, this.effect, true);
+			const abilitySlot = Object.keys(oldPokemon.abilities).find(x => (
+				(oldPokemon.abilities as any)[x] === pokemon.set.ability
+			)) || "0";
+			pokemon.formeChange(impersonation.name, this.effect, true, abilitySlot);
 			pokemon.baseMaxhp = Math.floor(Math.floor(
 				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
 			) * pokemon.level / 100 + 10);
@@ -2856,13 +2932,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			pokemon.hp = this.clampIntRange(newMaxHP - (pokemon.maxhp - pokemon.hp), 1, newMaxHP);
 			pokemon.maxhp = newMaxHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-			const oldAbilityKey: string = Object.keys(oldPokemon.abilities).find(x => (
-				(oldPokemon.abilities as any)[x] === oldAbilityName
-			)) || "0";
-			const newAbility: string = (impersonation.abilities as any)[oldAbilityKey] || impersonation.abilities["0"];
-			pokemon.setAbility(newAbility, null, true);
-			// Ability persists through switching
-			pokemon.baseAbility = pokemon.ability;
 		},
 	},
 };

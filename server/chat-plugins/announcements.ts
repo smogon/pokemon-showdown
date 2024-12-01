@@ -98,7 +98,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('ANNOUNCEMENT');
 			return this.privateModAction(room.tr`An announcement was started by ${user.name}.`);
 		},
-		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # &`],
+		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # ~`],
 
 		htmledit: 'edit',
 		edit(target, room, user, connection, cmd, message) {
@@ -125,7 +125,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateModAction(room.tr`The announcement was edited by ${user.name}.`);
 			this.parse('/announcement display');
 		},
-		edithelp: [`/announcement edit [announcement] - Edits the announcement. Requires: % @ # &`],
+		edithelp: [`/announcement edit [announcement] - Edits the announcement. Requires: % @ # ~`],
 
 		timer(target, room, user) {
 			room = this.requireRoom();
@@ -155,8 +155,8 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		timerhelp: [
-			`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes] minutes. Requires: % @ # &`,
-			`/announcement timer clear - Clears the announcement's timer. Requires: % @ # &`,
+			`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes] minutes. Requires: % @ # ~`,
+			`/announcement timer clear - Clears the announcement's timer. Requires: % @ # ~`,
 		],
 
 		close: 'end',
@@ -170,7 +170,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('ANNOUNCEMENT END');
 			this.privateModAction(room.tr`The announcement was ended by ${user.name}.`);
 		},
-		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
+		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # ~`],
 
 		show: '',
 		display: '',
@@ -191,13 +191,13 @@ export const commands: Chat.ChatCommands = {
 	announcementhelp: [
 		`/announcement allows rooms to run their own announcements. These announcements are limited to one announcement at a time per room.`,
 		`Accepts the following commands:`,
-		`/announcement create [announcement] - Creates a announcement. Requires: % @ # &`,
-		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # &`,
-		`/announcement edit [announcement] - Edits the announcement. Requires: % @ # &`,
-		`/announcement htmledit [announcement] - Edits the announcement, with HTML allowed. Requires: # &`,
-		`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes]. Requires: % @ # &`,
+		`/announcement create [announcement] - Creates a announcement. Requires: % @ # ~`,
+		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # ~`,
+		`/announcement edit [announcement] - Edits the announcement. Requires: % @ # ~`,
+		`/announcement htmledit [announcement] - Edits the announcement, with HTML allowed. Requires: # ~`,
+		`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes]. Requires: % @ # ~`,
 		`/announcement display - Displays the announcement`,
-		`/announcement end - Ends a announcement. Requires: % @ # &`,
+		`/announcement end - Ends a announcement. Requires: % @ # ~`,
 	],
 };
 

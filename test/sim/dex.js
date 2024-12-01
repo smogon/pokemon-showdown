@@ -3,6 +3,14 @@
 const assert = require('./../assert');
 
 describe('Mod loader', function () {
+	it('should always provide accurate gen information', function () {
+		{
+			const Dex = require('./../../dist/sim/dex').Dex;
+			assert.equal(Dex.mod('gen2').gen, 2);
+			assert.equal(Dex.forFormat('gen1randombattle').gen, 1);
+		}
+	});
+
 	it('should work fine in any order', function () {
 		{
 			const Dex = require('./../../dist/sim/dex').Dex;

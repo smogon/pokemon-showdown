@@ -5,6 +5,7 @@
 'use strict';
 
 const assert = require('../assert');
+const common = require('../common');
 const {Utils} = require('../../dist/lib');
 const {testTeam, assertSetValidity, validateLearnset} = require('./tools');
 const {default: Dex} = require('../../dist/sim/dex');
@@ -152,7 +153,7 @@ describe("New set format (slow)", () => {
 			filename: "gen9baby/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Bulky Support", "Fast Support"],
 		},
-		"gen9caprandombattle": {
+		"gen9randombattle@@@+cap": {
 			filename: "gen9cap/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
@@ -160,10 +161,9 @@ describe("New set format (slow)", () => {
 	for (const format of Object.keys(formatInfo)) {
 		const filename = formatInfo[format].filename;
 		const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
-		const mod = filename.split('/')[0];
-		const genNum = parseInt(mod[3]);
+		const dex = common.mod(common.getFormat({formatid: format}).mod).dex; // verifies format exists
+		const genNum = dex.gen;
 		const rounds = 100;
-		const dex = Dex.forFormat(format);
 		it(`${filename}.json should have valid set data`, () => {
 			const validRoles = formatInfo[format].roles;
 			for (const [id, sets] of Object.entries(setsJSON)) {
@@ -295,68 +295,99 @@ describe('randomly generated teams should be valid (slow)', () => {
 });
 
 describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
-	for (const filename of ['gen8/bss-factory-sets', 'gen7/bss-factory-sets', 'gen7/factory-sets', 'gen6/factory-sets']) {
+	for (const filename of ['gen9/factory-sets', 'gen8/factory-sets', 'gen8/bss-factory-sets', 'gen7/bss-factory-sets', 'gen7/factory-sets', 'gen6/factory-sets']) {
 		it(`${filename}.json should contain valid sets`, function () {
 			this.timeout(0);
 			const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
 			const mod = filename.split('/')[0] || 'gen' + Dex.gen;
 			const genNum = isNaN(mod[3]) ? Dex.gen : parseInt(mod[3]);
+			const dex = Dex.mod(mod);
 
 			for (const type in setsJSON) {
 				const typeTable = filename.includes('bss-factory-sets') ? setsJSON : setsJSON[type];
-				const vType = filename.includes('bss-factory-sets') ? `battle${genNum === 8 ? 'stadium' : 'spot'}singles` :
-					type === 'Mono' ? 'monotype' : type.toLowerCase();
+				let vType;
+				if (filename.includes('bss-factory-sets')) {
+					vType = `battle${genNum === 8 ? 'stadium' : 'spot'}singles`;
+				} else if (type === 'Mono') {
+					vType = 'monotype';
+				} else if (type === 'Uber') {
+					vType = 'ubers';
+				} else {
+					vType = type.toLowerCase();
+				}
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
-						const species = Dex.species.get(set.species);
+						const species = dex.species.get(set.species);
 						assert(species.exists, `invalid species "${set.species}" of ${species}`);
 						assert.equal(species.name, set.species, `miscapitalized species "${set.species}" of ${species}`);
 
-						// currently failing due to a Piloswine labeled as a Mamoswine set
 						assert(species.id.startsWith(toID(species.baseSpecies)), `non-matching species "${set.species}" of ${species}`);
 
-						assert(!species.battleOnly, `invalid battle-only forme "${set.species}" of ${species}`);
-
 						for (const itemName of [].concat(set.item)) {
-							if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;
-							const item = Dex.forGen(genNum).items.get(itemName);
+							if (!itemName) continue;
+							const item = dex.items.get(itemName);
 							assert(item.exists, `invalid item "${itemName}" of ${species}`);
 							assert.equal(item.name, itemName, `miscapitalized item "${itemName}" of ${species}`);
 						}
 
 						for (const abilityName of [].concat(set.ability)) {
-							const ability = Dex.forGen(genNum).abilities.get(abilityName);
+							const ability = dex.abilities.get(abilityName);
 							assert(ability.exists, `invalid ability "${abilityName}" of ${species}`);
 							assert.equal(ability.name, abilityName, `miscapitalized ability "${abilityName}" of ${species}`);
+							const allowedAbilities = new Set(Object.values((species.battleOnly && !species.requiredAbility) ? dex.species.get(species.battleOnly).abilities : species.abilities));
+							if (species.unreleasedHidden) allowedAbilities.delete(species.abilities.H);
+							assert(allowedAbilities.has(abilityName), `${species.name} can't have ${abilityName}`);
 						}
 
 						for (const natureName of [].concat(set.nature)) {
-							const nature = Dex.forGen(genNum).natures.get(natureName);
+							const nature = dex.natures.get(natureName);
 							assert(nature.exists, `invalid nature "${natureName}" of ${species}`);
 							assert.equal(nature.name, natureName, `miscapitalized nature "${natureName}" of ${species}`);
 						}
 
 						for (const moveSpec of set.moves) {
 							for (const moveName of [].concat(moveSpec)) {
-								const move = Dex.forGen(genNum).moves.get(moveName);
+								const move = dex.moves.get(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
 								assert.equal(move.name, moveName, `miscapitalized move "${moveName}" ≠ "${move.name}" of ${species}`);
+								if (species.id === 'zacian' && [].concat(set.item).includes('Rusted Sword') && moveName === 'Behemoth Blade') continue;
 								assert(validateLearnset(move, set, vType, mod), `illegal move "${moveName}" of ${species}`);
 							}
 						}
+
+
+						// Check that no moves appear more than once in a set
+						assert.equal(set.moves.flat(1).length, new Set(set.moves.flat(1)).size, `${species} has repeat moves`);
 
 						assert(!!set.evs, `Set of ${species} has no EVs specified`);
 						const keys = Object.keys(set.evs);
 						let totalEVs = 0;
 						for (const ev of keys) {
-							assert(Dex.stats.ids().includes(ev), `Invalid EV key (${ev}) on set of ${species}`);
+							assert(dex.stats.ids().includes(ev), `Invalid EV key (${ev}) on set of ${species}`);
 							totalEVs += set.evs[ev];
 							assert.equal(set.evs[ev] % 4, 0, `EVs of ${ev} not divisible by 4 on ${species}`);
 						}
-						const sortedKeys = Utils.sortBy([...keys], ev => Dex.stats.ids().indexOf(ev));
+						const sortedKeys = Utils.sortBy([...keys], ev => dex.stats.ids().indexOf(ev));
 						assert.deepEqual(keys, sortedKeys, `EVs out of order on set of ${species}, possibly because one of them is for the wrong stat`);
 						assert(totalEVs <= 510, `more than 510 EVs on set of ${species}`);
+
+						if (genNum === 9) {
+							assert(set.teraType, `missing Tera Types on set of ${species}`);
+							for (const type of set.teraType) {
+								const dexType = dex.types.get(type);
+								assert(dexType.exists, `${species} has invalid Tera Type: ${type}`);
+								assert.equal(type, dexType.name, `${species.name} has misformatted Tera Type: ${type}`);
+							}
+						}
+					}
+					if (filename === 'gen9/factory-sets') {
+						// Set weights should add up to 100
+						let totalWeight = 0;
+						for (const set of speciesData.sets) {
+							totalWeight += set.weight;
+						}
+						assert.equal(totalWeight, 100, `Total set weight for ${species} is ${totalWeight < 100 ? 'less' : 'greater'} than 100%`);
 					}
 				}
 			}
@@ -372,7 +403,7 @@ describe('[Gen 9] BSS Factory data should be valid (slow)', () => {
 		const genNum = 9;
 
 		for (const speciesid in setsJSON) {
-			const vType = 'battlestadiumsingles';
+			const vType = 'bssregh';
 			let totalWeight = 0;
 			for (const set of setsJSON[speciesid].sets) {
 				totalWeight += set.weight;

@@ -7,7 +7,7 @@
  * @license MIT license
  */
 
-import {ScavengerHunt, ScavengerHuntPlayer} from './scavengers';
+import {ScavengerHunt, ScavengerHuntPlayer, sanitizeAnswer} from './scavengers';
 import {Utils} from '../../lib';
 
 export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
@@ -355,15 +355,21 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onComplete(player, time, blitz) {
 			const now = Date.now();
-			const takenTime = Chat.toDurationString(now - this.startTimes[player.id], {hhmmss: true});
-			const result = {name: player.name, id: player.id, time: takenTime, blitz};
+			const takenTime = now - this.startTimes[player.id];
+			const result = {
+				name: player.name,
+				id: player.id,
+				time: Chat.toDurationString(takenTime, {hhmmss: true}),
+				duration: takenTime,
+				blitz,
+			};
 			this.completed.push(result);
 			const place = Utils.formatOrder(this.completed.length);
 
 			this.announce(
 				Utils.html`<em>${result.name}</em> is the ${place} player to finish the hunt! (${takenTime}${(blitz ? " - BLITZ" : "")})`
 			);
-			Utils.sortBy(this.completed, entry => entry.time);
+			Utils.sortBy(this.completed, entry => entry.duration);
 
 			player.destroy(); // remove from user.games;
 			return true;
@@ -399,7 +405,7 @@ const TWISTS: {[k: string]: Twist} = {
 			const currentQuestion = player.currentQuestion;
 
 			if (currentQuestion + 1 === this.questions.length) {
-				this.guesses[player.id] = value.split(',').map((part: string) => toID(part));
+				this.guesses[player.id] = value.split(',').map((part: string) => sanitizeAnswer(part));
 
 				this.onComplete(player);
 				return true;
@@ -505,7 +511,7 @@ const TWISTS: {[k: string]: Twist} = {
 			const curr = player.currentQuestion;
 
 			if (!this.guesses[curr][player.id]) this.guesses[curr][player.id] = new Set();
-			this.guesses[curr][player.id].add(toID(value));
+			this.guesses[curr][player.id].add(sanitizeAnswer(value));
 
 			throw new Chat.ErrorMessage("That is not the answer - try again!");
 		},
@@ -554,7 +560,7 @@ const TWISTS: {[k: string]: Twist} = {
 					if (!player) continue;
 					if (!player.mines) player.mines = [];
 					(player.mines as {index: number, mine: string}[]).push(...mines
-						.filter(mine => (guesses as Set<string>).has(toID(mine)))
+						.filter(mine => (guesses as Set<string>).has(sanitizeAnswer(mine)))
 						.map(mine => ({index: q, mine: mine.substr(1)})));
 				}
 			}

@@ -172,7 +172,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 
 	send(content: string | Chat.VNode, isStart = false) {
 		this.room.add(Chat.html`|uhtml|giveaway${this.gaNumber}${this.phase}|${<div {...this.getStyle()}>{content}</div>}`);
-		if (isStart) this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|&|It's ${this.game} giveaway time!`);
+		if (isStart) this.room.add(`|c:|${Math.floor(Date.now() / 1000)}|~|It's ${this.game} giveaway time!`);
 		this.room.update();
 	}
 
@@ -719,7 +719,7 @@ export class LotteryGiveaway extends Giveaway {
 				<p style={{textAlign: 'center'}}>{Chat.count(this.joined.size, 'users')} joined the giveaway.<br />
 				Our lucky winner{Chat.plural(this.winners)}: <b>{winnerNames}</b>!<br />Congratulations!</p>
 			</>));
-			this.room.sendMods(`|c|&|Participants: ${[...this.joined.values()].join(', ')}`);
+			this.room.sendMods(`|c|~|Participants: ${[...this.joined.values()].join(', ')}`);
 			for (const winner of this.winners) {
 				winner.sendTo(
 					this.room,
@@ -1413,8 +1413,8 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		whitelisthelp: [
-			`/giveaway whitelist [user] - Allow the given [user] to make giveaways without staff help. Requires: % @ # &`,
-			`/giveaway unwhitelist [user] - Remove the given user from the giveaway whitelist. Requires: % @ # &`,
+			`/giveaway whitelist [user] - Allow the given [user] to make giveaways without staff help. Requires: % @ # ~`,
+			`/giveaway unwhitelist [user] - Remove the given user from the giveaway whitelist. Requires: % @ # ~`,
 		],
 		whitelisted(target, room, user) {
 			room = this.requireRoom('wifi' as RoomID);
@@ -1482,24 +1482,24 @@ export const commands: Chat.ChatCommands = {
 		const buf = [];
 		if (user.can('show', null, room)) {
 			buf.push(<details><summary>Staff commands</summary>
-				<code>/giveaway create</code> - Pulls up a page to create a giveaway. Requires: + % @ # &amp;<br />
+				<code>/giveaway create</code> - Pulls up a page to create a giveaway. Requires: + % @ # ~<br />
 				<code>
 					/giveaway create question Giver | OT | TID | Game | Question | Answer 1, Answer 2, Answer 3 | IV/IV/IV/IV/IV/IV | Pok&eacute; Ball | Extra Info | Prize
-				</code> - Start a new question giveaway (voices can only host their own). Requires: + % @ # &amp;<br />
+				</code> - Start a new question giveaway (voices can only host their own). Requires: + % @ # ~<br />
 				<code>
 					/giveaway create lottery Giver | OT | TID | Game | # of Winners | IV/IV/IV/IV/IV/IV | Pok&eacute; Ball | Extra Info | Prize
-				</code> - Start a new lottery giveaway (voices can only host their own). Requires: + % @ # &amp;<br />
+				</code> - Start a new lottery giveaway (voices can only host their own). Requires: + % @ # ~<br />
 				<code>
 					/giveaway changequestion/changeanswer
 				</code> - Changes the question/answer of a question giveaway. Requires: Being giveaway host<br />
 				<code>/giveaway viewanswer</code> - Shows the answer of a question giveaway. Requires: Being giveaway host/giver<br />
 				<code>
 					/giveaway ban [user], [reason]
-				</code> - Temporarily bans [user] from entering giveaways. Requires: % @ # &amp;<br />
-				<code>/giveaway end</code> - Forcibly ends the current giveaway. Requires: % @ # &amp;<br />
+				</code> - Temporarily bans [user] from entering giveaways. Requires: % @ # ~<br />
+				<code>/giveaway end</code> - Forcibly ends the current giveaway. Requires: % @ # ~<br />
 				<code>/giveaway count [pokemon]</code> - Shows how frequently a certain Pok&eacute;mon has been given away.<br />
-				<code>/giveaway whitelist [user]</code> - Allow the given [user] to make giveaways. Requires: % @ # &amp;<br />
-				<code>/giveaway unwhitelist [user]</code> - Remove the given user from the giveaway whitelist. Requires: % @ # &amp;
+				<code>/giveaway whitelist [user]</code> - Allow the given [user] to make giveaways. Requires: % @ # ~<br />
+				<code>/giveaway unwhitelist [user]</code> - Remove the given user from the giveaway whitelist. Requires: % @ # ~
 			</details>);
 		}
 		// Giveaway stuff

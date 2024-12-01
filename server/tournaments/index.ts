@@ -2305,7 +2305,7 @@ const commands: Chat.ChatCommands = {
 				`<code>/tour settings scouting &lt;on|off></code> - Specifies whether users can spectate other participants for every tournament.<br />` +
 				`<code>/tour settings recenttours &lt;number|off|forcedelete></code> - Specifies the amount of recent tournaments to list in /recenttours.<br />` +
 				`<code>/tour settings blockrecents &lt;on|off></code> - Toggles blocking tours in /recenttours from being made.<br />` +
-				`Requires: # &`,
+				`Requires: # ~`,
 			);
 		}
 

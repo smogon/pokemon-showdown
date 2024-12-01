@@ -107,7 +107,7 @@ export const SampleTeams = new class SampleTeams {
 
 	sanitizeFormat(formatid: string, checkExists = false) {
 		const format = Dex.formats.get(formatid);
-		if (checkExists && !format.exists) {
+		if (checkExists && format.effectType !== 'Format') {
 			throw new Chat.ErrorMessage(`Format "${formatid.trim()}" not found. Check spelling?`);
 		}
 		if (format.team) {
@@ -432,9 +432,9 @@ export const commands: Chat.ChatCommands = {
 	sampleteamshelp: [
 		`/sampleteams [format] - Lists the sample teams for [format], if there are any.`,
 		`/sampleteams addcategory/removecategory [format], [category] - Adds/removes categories for [format].`,
-		`/sampleteams add - Pulls up the interface to add sample teams. Requires: Room staff in dedicated tier room, &`,
+		`/sampleteams add - Pulls up the interface to add sample teams. Requires: Room staff in dedicated tier room, ~`,
 		`/sampleteams remove [format], [category], [team name] - Removes a sample team for [format] in [category].`,
-		`/sampleteams whitelist add [formatid], [formatid] | [roomid], [roomid], ... - Whitelists room staff for the provided roomids to add sample teams. Requires: &`,
-		`/sampleteams whitelist remove [formatid], [roomid] - Unwhitelists room staff for the provided room to add sample teams. Requires: &`,
+		`/sampleteams whitelist add [formatid], [formatid] | [roomid], [roomid], ... - Whitelists room staff for the provided roomids to add sample teams. Requires: ~`,
+		`/sampleteams whitelist remove [formatid], [roomid] - Unwhitelists room staff for the provided room to add sample teams. Requires: ~`,
 	], */
 };

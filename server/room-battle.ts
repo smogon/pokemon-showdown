@@ -188,9 +188,10 @@ export class RoomBattleTimer {
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
-		const hasLongTurns = Dex.formats.get(battle.format, true).gameType !== 'singles';
+		const format = Dex.formats.get(battle.format, true);
+		const hasLongTurns = format.gameType !== 'singles';
 		const isChallenge = (battle.challengeType === 'challenge');
-		const timerEntry = Dex.formats.getRuleTable(Dex.formats.get(battle.format, true)).timer;
+		const timerEntry = Dex.formats.getRuleTable(format).timer;
 		const timerSettings = timerEntry?.[0];
 
 		// so that Object.assign doesn't overwrite anything with `undefined`
@@ -1100,7 +1101,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	checkForcedUserSettings(user: User) {
 		this.forcedSettings = {
 			modchat: this.forcedSettings.modchat || RoomBattle.battleForcedSetting(user, 'modchat'),
-			privacy: this.forcedSettings.privacy || RoomBattle.battleForcedSetting(user, 'privacy'),
+			privacy: !!this.options.rated && (this.forcedSettings.privacy || RoomBattle.battleForcedSetting(user, 'privacy')),
 		};
 		if (
 			this.players.some(p => p.getUser()?.battleSettings.special) ||

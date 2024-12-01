@@ -417,7 +417,7 @@ export abstract class BasicRoom {
 	 * Like addByUser, but without logging
 	 */
 	sendByUser(user: User | null, text: string) {
-		this.send('|c|' + (user ? user.getIdentity(this) : '&') + '|/log ' + text);
+		this.send('|c|' + (user ? user.getIdentity(this) : '~') + '|/log ' + text);
 	}
 	/**
 	 * Like addByUser, but sends to mods only.
@@ -1031,7 +1031,7 @@ export abstract class BasicRoom {
 			const staffIntro = this.getStaffIntroMessage(user);
 			if (staffIntro) this.sendUser(user, staffIntro);
 		} else if (!user.named) {
-			this.reportJoin('l', oldid, user);
+			this.reportJoin('l', ' ' + oldid, user);
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this) + '|' + oldid, user);
 		}
@@ -1223,7 +1223,7 @@ export class GlobalRoomState {
 				auth: {},
 				creationTime: Date.now(),
 				isPrivate: 'hidden',
-				modjoin: Users.SECTIONLEADER_SYMBOL,
+				modjoin: '%',
 				autojoin: true,
 			}];
 		}
@@ -1372,7 +1372,7 @@ export class GlobalRoomState {
 		this.battlesLoading = true;
 		for (const u of Users.users.values()) {
 			u.send(
-				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
+				`|pm|~|${u.getIdentity()}|/uhtml restartmsg,` +
 				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
 			);
 		}
@@ -1391,7 +1391,7 @@ export class GlobalRoomState {
 			if (this.deserializeBattleRoom(JSON.parse(line))) count++;
 		}
 		for (const u of Users.users.values()) {
-			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
+			u.send(`|pm|~|${u.getIdentity()}|/uhtmlchange restartmsg,`);
 		}
 		await Monitor.logPath('battles.jsonl').unlinkIfExists();
 		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
@@ -1499,9 +1499,8 @@ export class GlobalRoomState {
 			if (!Config.groups[rank] || !rank) continue;
 
 			const tarGroup = Config.groups[rank];
-			let groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
+			const groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
 				'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
-			if (tarGroup.id === 'sectionleader') groupType = 'staff';
 
 			rankList.push({
 				symbol: rank,
@@ -1767,7 +1766,7 @@ export class GlobalRoomState {
 			}
 		}
 		for (const user of Users.users.values()) {
-			user.send(`|pm|&|${user.tempGroup}${user.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
+			user.send(`|pm|~|${user.tempGroup}${user.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
 		}
 
 		this.lockdown = true;
@@ -2051,11 +2050,10 @@ export class GameRoom extends BasicRoom {
 		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
 		if (silent) connection = undefined;
 		const isPrivate = this.settings.isPrivate || this.hideReplay;
-		const hidden = options === 'forpunishment' || options === 'auto' ? 10 :
-			(this as any).unlistReplay ? 2 :
+		const hidden = options === 'auto' ? 10 :
+			options === 'forpunishment' || (this as any).unlistReplay ? 2 :
 			isPrivate ? 1 :
 			0;
-
 		if (isPrivate && hidden === 10) {
 			password = Replays.generatePassword();
 		}

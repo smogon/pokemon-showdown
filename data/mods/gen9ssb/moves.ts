@@ -627,6 +627,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.type = pokemon.m.artemisMoveType;
 			}
 		},
+		self: {
+			boosts: {
+				spa: -2,
+			},
+		},
 		target: "normal",
 		type: "Electric",
 	},
@@ -1361,6 +1366,42 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Grass",
 	},
 
+	// Chris
+	antidote: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Antidote",
+		shortDesc: "Heal 50% HP + 3 turn Magnet Rise.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up. If the user is not currently under the effect of Magnet Rise, it gains the effect of Magnet Rise for 3 turns, causing it to be immune to all Ground-type moves except Thousand Arrows for the duration.",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1, gravity: 1, metronome: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(pokemon) {
+			this.add('-anim', pokemon, 'Recover', pokemon);
+			this.add('-anim', pokemon, 'Magnet Rise', pokemon);
+		},
+		onTry(source, target, move) {
+			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
+
+			// Additional Gravity check for Z-move variant
+			if (this.field.getPseudoWeather('Gravity')) {
+				this.add('cant', source, 'move: Gravity', move);
+				return null;
+			}
+		},
+		onHit(target, source, move) {
+			const success = !!this.heal(this.modify(source.maxhp, 0.25));
+			return source.addVolatile('magnetrise', source, move) || success;
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
+
 	// ciran
 	summonmonsterviiifiendishmonstrouspiplupedecolossal: {
 		accuracy: 90,
@@ -1454,7 +1495,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 100,
 		category: "Special",
 		shortDesc: "Phys if Atk > SpA. Flips user.",
-		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. If this move is successful and the user is an Avalugg, it either gains or loses the Flipped condition, changing its moveset and base stats. When under the Flipped condition, Avalugg's Base Stats are 95/46/44/184/116/95 and its moveset changes to Earth Power, Volt Switch, and Heal Pulse. This move is super effective against Kennedy.",
+		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. This move's type depends on the user's primary type. If this move is successful and the user is an Avalugg, it either gains or loses the Flipped condition, changing its moveset and base stats. When under the Flipped condition, Avalugg's Base Stats are 95/46/44/184/116/95 and its moveset changes to Earth Power, Volt Switch, and Heal Pulse. This move is super effective against Kennedy.",
 		name: "(╯°o°）╯︵ ┻━┻",
 		pp: 10,
 		priority: 0,
@@ -1611,42 +1652,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "normal",
 		type: "Grass",
-	},
-
-	// Daki
-	antidote: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Antidote",
-		shortDesc: "Heal 50% HP + 3 turn Magnet Rise.",
-		desc: "The user restores 1/2 of its maximum HP, rounded half up. If the user is not currently under the effect of Magnet Rise, it gains the effect of Magnet Rise for 3 turns, causing it to be immune to all Ground-type moves except Thousand Arrows for the duration.",
-		pp: 10,
-		priority: 0,
-		flags: {snatch: 1, heal: 1, gravity: 1, metronome: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(pokemon) {
-			this.add('-anim', pokemon, 'Recover', pokemon);
-			this.add('-anim', pokemon, 'Magnet Rise', pokemon);
-		},
-		onTry(source, target, move) {
-			if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
-
-			// Additional Gravity check for Z-move variant
-			if (this.field.getPseudoWeather('Gravity')) {
-				this.add('cant', source, 'move: Gravity', move);
-				return null;
-			}
-		},
-		onHit(target, source, move) {
-			const success = !!this.heal(this.modify(source.maxhp, 0.25));
-			return source.addVolatile('magnetrise', source, move) || success;
-		},
-		secondary: null,
-		target: "self",
-		type: "Normal",
 	},
 
 	// Dawn of Artemis
@@ -2042,35 +2047,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: 'normal',
 		type: "Fighting",
-	},
-
-	// eva
-	asoulforasoul: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Physical",
-		shortDesc: "KOes foe + user if ally was KOed prev. turn.",
-		desc: "If one of the user's party members fainted last turn, this move results in a guaranteed KO for both the target and the user. This move can hit Normal-type Pokemon. Fails if one of the user's party members did not faint last turn.",
-		name: "A Soul for a Soul",
-		pp: 5,
-		priority: 1,
-		flags: {protect: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Explosion', target);
-			this.add('-anim', source, 'Final Gambit', target);
-		},
-		onTry(source, target) {
-			if (!source.side.faintedLastTurn) return false;
-			source.faint(source);
-			target?.faint(source);
-		},
-		ignoreImmunity: true,
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
 	},
 
 	// Fame
@@ -2607,6 +2583,41 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Electric",
 	},
 
+	// Imperial
+	stormshroud: {
+		accuracy: 100,
+		basePower: 95,
+		category: "Special",
+		name: "Storm Shroud",
+		shortDesc: "Physical + contact if stronger.",
+		desc: "This move becomes a physical attack that makes contact if the value of ((((2 * the user's level / 5 + 2) * 90 * X) / Y) / 50), where X is the user's Attack stat and Y is the target's Defense stat, is greater than the same value where X is the user's Special Attack stat and Y is the target's Special Defense stat. No stat modifiers other than stat stage changes are considered for this purpose. If the two values are equal, this move chooses a damage category at random.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Clangorous Soulblaze', target);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (!target) return;
+			const atk = pokemon.getStat('atk', false, true);
+			const spa = pokemon.getStat('spa', false, true);
+			const def = target.getStat('def', false, true);
+			const spd = target.getStat('spd', false, true);
+			const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
+			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
+			if (physical > special || (physical === special && this.random(2) === 0)) {
+				move.category = 'Physical';
+				move.flags.contact = 1;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+	},
+
 	// in the hills
 	"102040": {
 		accuracy: 100,
@@ -2636,32 +2647,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		multihit: 3,
 		target: "normal",
 		type: "Ground",
-	},
-
-	// Irly
-	vruuuuuum: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Super effective on Water.",
-		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
-		name: "vruuuuuum",
-		pp: 20,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Shift Gear', source);
-			this.add('-anim', source, 'Ice Spinner', target);
-		},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Water') return 1;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ice",
 	},
 
 	// ironwater
@@ -3580,6 +3565,28 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Dragon",
 	},
 
+	// Maia
+	bodycount: {
+		accuracy: 100,
+		basePower: 50,
+		basePowerCallback(pokemon, target, move) {
+			return 50 + 50 * pokemon.side.totalFainted;
+		},
+		category: "Special",
+		shortDesc: "+50 power for each time a party member fainted.",
+		desc: "Power is equal to 50+(X*50), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100.",
+		name: "Body Count",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit() {
+			this.attrLastMove('[anim] Core Enforcer');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// marillvibes
 	goodvibesonly: {
 		accuracy: 100,
@@ -3798,6 +3805,32 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Dragon",
+	},
+
+	// Miojo
+	vruuuuuum: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Super effective on Water.",
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+		name: "vruuuuuum",
+		pp: 20,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Shift Gear', source);
+			this.add('-anim', source, 'Ice Spinner', target);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ice",
 	},
 
 	// Monkey
@@ -4050,28 +4083,33 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fairy",
 	},
 
-	// Nyx
-	cottoncandycrush: {
+	// pants
+	eerieapathy: {
 		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		shortDesc: "Uses Sp. Def over Attack in damage calculation.",
-		desc: "Damage is calculated using the user's Special Defense stat as its Attack, including stat stage changes. Other effects that modify the Attack stat are used as normal.",
-		name: "Cotton Candy Crush",
-		overrideOffensiveStat: "spd",
-		gen: 9,
+		basePower: 0,
+		category: "Status",
+		name: "Eerie Apathy",
+		shortDesc: "Wish + Taunts the foe.",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {snatch: 1, heal: 1, protect: 1, reflectable: 1, mirror: 1, bypasssub: 1},
+		self: {
+			slotCondition: 'Wish',
+		},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Fusion Bolt', target);
-			this.add('-anim', source, 'Fleur Cannon', target);
+			this.add('-anim', source, 'Memento', target);
 		},
+		onHit(target, source, move) {
+			if (!target.volatiles['taunt']) {
+				target.addVolatile('taunt', source, move);
+			}
+		},
+		secondary: null,
 		target: "normal",
-		type: "Fairy",
+		type: "Ghost",
 	},
 
 	// PartMan
@@ -4318,6 +4356,30 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "self",
 		type: "Normal",
+	},
+
+	// Princess Autumn
+	cottoncandycrush: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Uses Sp. Def over Attack in damage calculation.",
+		desc: "Damage is calculated using the user's Special Defense stat as its Attack, including stat stage changes. Other effects that modify the Attack stat are used as normal.",
+		name: "Cotton Candy Crush",
+		overrideOffensiveStat: "spd",
+		gen: 9,
+		pp: 15,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Fusion Bolt', target);
+			this.add('-anim', source, 'Fleur Cannon', target);
+		},
+		target: "normal",
+		type: "Fairy",
 	},
 
 	// ptoad
@@ -4680,6 +4742,33 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "all",
 		type: "Psychic",
+	},
+
+	// Rissoux
+	callofthewild: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Call of the Wild",
+		shortDesc: "Boosts Atk, Spe, and accuracy by 1 stage.",
+		pp: 5,
+		priority: 0,
+		flags: {sound: 1},
+		boosts: {
+			atk: 1,
+			spe: 1,
+			accuracy: 1,
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dragon Dance', source);
+			this.add('-anim', source, 'Lock-On', source);
+		},
+		secondary: null,
+		target: "self",
+		type: "Fire",
 	},
 
 	// RSB
@@ -5327,6 +5416,35 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Poison",
 	},
 
+	// Syrinix
+	asoulforasoul: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Physical",
+		shortDesc: "KOes foe + user if ally was KOed prev. turn.",
+		desc: "If one of the user's party members fainted last turn, this move results in a guaranteed KO for both the target and the user. This move can hit Normal-type Pokemon. Fails if one of the user's party members did not faint last turn.",
+		name: "A Soul for a Soul",
+		pp: 5,
+		priority: 1,
+		flags: {protect: 1, contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Explosion', target);
+			this.add('-anim', source, 'Final Gambit', target);
+		},
+		onTry(source, target) {
+			if (!source.side.faintedLastTurn) return false;
+			source.faint(source);
+			target?.faint(source);
+		},
+		ignoreImmunity: true,
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Teclis
 	risingsword: {
 		accuracy: 100,
@@ -5420,28 +5538,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "self",
 		type: "Ground",
-	},
-
-	// Theia
-	bodycount: {
-		accuracy: 100,
-		basePower: 50,
-		basePowerCallback(pokemon, target, move) {
-			return 50 + 50 * pokemon.side.totalFainted;
-		},
-		category: "Special",
-		shortDesc: "+50 power for each time a party member fainted.",
-		desc: "Power is equal to 50+(X*50), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100.",
-		name: "Body Count",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onPrepareHit() {
-			this.attrLastMove('[anim] Core Enforcer');
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
 	},
 
 	// Tico
