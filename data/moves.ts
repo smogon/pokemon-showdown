@@ -6616,7 +6616,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTry(source, target) {
 			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
-				duration: 3,
 				move: 'futuresight',
 				source: source,
 				moveData: {
@@ -21726,11 +21725,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {snatch: 1, heal: 1, metronome: 1},
 		slotCondition: 'Wish',
 		condition: {
-			duration: 2,
 			onStart(pokemon, source) {
 				this.effectState.hp = source.maxhp / 2;
+				this.effectState.startingTurn = this.getOverflowedTurnCount();
+				if (this.effectState.startingTurn === 255) {
+					this.hint(`In Gen 8+, Wish will never resolve when used on the ${this.turn}th turn.`);
+				}
 			},
 			onResidualOrder: 4,
+			onResidual(side: any) {
+				if (this.getOverflowedTurnCount() <= this.effectState.startingTurn) return;
+				side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'wish');
+			},
 			onEnd(target) {
 				if (target && !target.fainted) {
 					const damage = this.heal(this.effectState.hp, target, target);
