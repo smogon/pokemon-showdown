@@ -661,7 +661,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["bulkup", "earthquake", "hiddenpowerghost", "highjumpkick", "machpunch", "rockslide"],
+                "movepool": ["brickbreak", "bulkup", "earthquake", "hiddenpowerghost", "machpunch", "rockslide"],
                 "abilities": ["Limber"],
                 "preferredTypes": ["Ghost"]
             },
@@ -1532,8 +1532,8 @@
         "level": 85,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["batonpass", "calmmind", "crunch", "psychic", "rest", "substitute", "thunderbolt"],
+                "role": "Setup Sweeper",
+                "movepool": ["batonpass", "calmmind", "hiddenpowerfire", "psychic", "rest", "substitute", "thunderbolt"],
                 "abilities": ["Early Bird"]
             },
             {
@@ -1886,7 +1886,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["bulkup", "earthquake", "hiddenpowerghost", "highjumpkick", "machpunch", "rapidspin", "rockslide", "toxic"],
+                "movepool": ["brickbreak", "bulkup", "earthquake", "hiddenpowerghost", "machpunch", "rapidspin", "rockslide", "toxic"],
                 "abilities": ["Intimidate"],
                 "preferredTypes": ["Ghost"]
             }
