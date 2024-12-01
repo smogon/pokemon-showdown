@@ -1616,39 +1616,45 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			target.addVolatile('torment');
 		},
 	},
-	// flufi
-	cranberrycutter: {
-      name: "Cranberry Cutter",
-      category: "Physical",
-		desc: "Combines Psychic in its type effectiveness. 30% chance to flinch. 30% chance to confuse the target.",
-		shortDesc: "+Psychic-type. 30% chance to flinch/confuse.",
-      basePower: 80,
+	// Flufi
+	shocktherapy: {
+      name: "Shock Therapy",
+      category: "Special",
+		desc: "Heals both the target and a selected ally for 1/10 of their max HP after damage is dealt. 30% chance to flinch. Fails if the user has no healthy teammates remaining.",
+		shortDesc: "Heals target/chosen ally; 30% flinch.",
+      basePower: 70,
       accuracy: 95,
-      pp: 8,
-		noPPBoosts: true,
+      pp: 15,
       priority: 0,
-      flags: {contact: 1},
+		selfSwitch: true,
+      flags: {protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Topsy Turvy', target);
-			this.add('-anim', source, 'Seismic Toss', target);
+			this.add('-anim', source, 'Celebrate', source);
+			this.add('-anim', source, 'Zing Zap', target);
       },
-		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Psychic', type);
+		onTryHit(source) {
+			if (!this.canSwitch(source.side)) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
+			}
 		},
-		secondaries: [
-			{
-				chance: 30,
-				volatileStatus: 'flinch',
-			}, {
-				chance: 30,
-				volatileStatus: 'confusion',
-			},
-		],
+		self: {
+			slotCondition: 'shocktherapy',
+		},
+		condition: {
+			duration: 1,
+			// Implemented in ../scripts.ts
+		},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch',
+		},
       target: "normal",
-      type: "Fighting",
+      type: "Electric",
    },
 	// Quetzalcoatl
 	bigthunder: {
@@ -2665,9 +2671,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
+			// @ts-ignore
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
+			// @ts-ignore
 			attacker.addVolatile('twoturnmove', defender);
 			attacker.addVolatile('deltacharge');
 			return null;
