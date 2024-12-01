@@ -1620,9 +1620,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	shocktherapy: {
       name: "Shock Therapy",
       category: "Special",
-		desc: "Heals both the target and a selected ally for 1/10 of their max HP after damage is dealt. 30% chance to flinch. Fails if the user has no healthy teammates remaining.",
-		shortDesc: "Heals target/chosen ally; 30% flinch.",
-      basePower: 70,
+		desc: "Heals both the target and a selected ally for 1/10 of their max HP after damage is dealt. 30% chance to flinch. 30% chance to paralyze the target. Fails if the user has no healthy teammates remaining.",
+		shortDesc: "Heals target/chosen ally; 30% flinch/para.",
+      basePower: 75,
       accuracy: 95,
       pp: 15,
       priority: 0,
@@ -1644,6 +1644,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onHit(target, source, move) {
 			this.heal(target.maxhp / 10, target, source, this.effect);
+			if (this.randomChance(3, 10)) target.trySetStatus('par');
 		},
 		self: {
 			slotCondition: 'shocktherapy',
