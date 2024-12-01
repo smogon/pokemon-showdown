@@ -362,33 +362,38 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 6] Megas Revisited",
-		desc: `A Gen 6 metagame where every Mega Evolution was reevaluated and redesigned.`,
-		mod: 'gen6megasrevisited',
-		ruleset: ['Standard', 'Swagger Clause', 'Mega Data Mod'],
-		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass', 'Blaziken + Speed Boost'],
+		name: "[Gen 9] Little Colosseum LC",
+		desc: `A Little Cup metagame that aims to buff weaker Pokemon and nerf LC Ubers to create a more diverse metagame.`,
+		mod: 'littlecolosseum',
+		ruleset: ['Little Cup', 'Standard'],
+		banlist: [
+			'Aipom', 'Basculin-White-Striped', 'Diglett-Base', 'Dunsparce', 'Duraludon', 'Flittle', 'Girafarig', 'Gligar',
+			'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Qwilfish-Hisui', 'Rufflet', 'Scraggy', 'Scyther', 'Sneasel', 'Sneasel-Hisui',
+			'Snivy', 'Stantler', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Baton Pass', 'Sticky Web',
+		],
 		onBegin() {
-			this.add('-message', `Welcome to Megas Revisited!`);
-			this.add('-message', `This is a Generation 6 OU-based Pet Mod where every existing Mega Evolution has been redesigned.`);
+			this.add('-message', `Welcome to Little Colosseum!`);
+			this.add('-message', `This is a Generation 9 LC-based Pet Mod where multiple Pokemon have been reimagined in order to fit the LC metagame.`);
 			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3713949/`);
-		},
-	},
-	{
-		name: "[Gen 1] RBY CAP",
-		desc: `A Gen 1 metagame where Fakemon are added in a similar fashion to Smogon's official Create-A-Pokemon Project.`,
-		mod: 'gen1rbycap',
-		ruleset: ['Standard'],
-		banlist: ['Uber', 'Camouflage'],
-		onBegin() {
-			this.add('-message', `Welcome to RBY CAP!`);
-			this.add('-message', `This is a Generation 1 OU-based Pet Mod where Fakemon are added in a similar way to the official CAP project.`);
-			this.add('-message', `You can find our thread and participate here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3737699/`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3749020/`);
 		},
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 			pokemon.apparentType = pokemon.getTypes(true).join('/');
+		},
+	},
+	{
+		name: "[Gen 2] GSC Doubles",
+		desc: `A Gen 2 metagame that adds doubles to the game.`,
+		mod: 'gen2doubles',
+		gameType: 'doubles',
+		ruleset: ['Standard Doubles', 'Swagger Clause'],
+		banlist: ['Uber'],
+		onBegin() {
+			this.add('-message', `Welcome to GSC Doubles!`);
+			this.add('-message', `This is a Generation 2 Pet Mod that brings the Doubles game mode introduced in Generation 3 back in time to GSC.`);
+			this.add('-message', `You can find our metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3660004/post-9132049`);
 		},
 	},
 
