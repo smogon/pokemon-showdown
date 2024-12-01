@@ -4245,7 +4245,7 @@
             },
             {
                 "role": "AV Pivot",
-                "movepool": ["Close Combat", "Dragon Tail", "Discharge", "Flamethrower", "Giga Drain", "Knock Off", "U-turn"],
+                "movepool": ["Close Combat", "Discharge", "Dragon Tail", "Flamethrower", "Giga Drain", "Knock Off", "U-turn"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Poison", "Steel"]
             }

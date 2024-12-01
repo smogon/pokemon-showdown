@@ -6662,7 +6662,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Matcha Gotcha", "Life Dew", "Rage Powder", "Trick Room"],
+                "movepool": ["Life Dew", "Matcha Gotcha", "Rage Powder", "Trick Room"],
                 "abilities": ["Hospitality"],
                 "teraTypes": ["Fairy"]
             },
