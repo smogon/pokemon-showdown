@@ -322,7 +322,7 @@
                 "role": "AV Pivot",
                 "movepool": ["Gunk Shot", "Knock Off", "Poison Jab", "Stone Edge", "U-turn", "Wood Hammer"],
                 "abilities": ["Regenerator"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Dark", "Grass"]
             },
             {
                 "role": "Fast Support",

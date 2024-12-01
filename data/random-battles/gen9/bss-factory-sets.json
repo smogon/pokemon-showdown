@@ -1483,7 +1483,7 @@
       "sets": [
           {
               "species": "Dragapult",
-              "weight": 30,
+              "weight": 35,
               "moves": [
                   ["Dragon Darts"],
                   ["U-turn"],
@@ -1516,22 +1516,6 @@
               "species": "Dragapult",
               "weight": 15,
               "moves": [
-                  ["Reflect"],
-                  ["Light Screen"],
-                  ["Curse"],
-                  ["Shadow Ball", "Will-O-Wisp"]
-              ],
-              "item": ["Light Clay"],
-              "nature": "Timid",
-              "evs": {"hp": 244, "def": 12, "spe": 252},
-              "ivs": {"atk": 0},
-              "teraType": ["Ghost", "Normal"],
-              "ability": ["Cursed Body"]
-          },
-          {
-              "species": "Dragapult",
-              "weight": 10,
-              "moves": [
                   ["Dragon Darts"],
                   ["Baton Pass", "Tera Blast"],
                   ["Substitute"],
@@ -1562,7 +1546,7 @@
           },
           {
               "species": "Dragapult",
-              "weight": 15,
+              "weight": 20,
               "moves": [
                   ["Shadow Ball"],
                   ["Draco Meteor"],
@@ -3732,7 +3716,7 @@
               "weight": 65,
               "moves": [
                   ["Bitter Blade"],
-                  ["Close Combat", "Shadow Claw"],
+                  ["Close Combat", "Poltergeist"],
                   ["Shadow Sneak"],
                   ["Destiny Bond", "Swords Dance"]
               ],
