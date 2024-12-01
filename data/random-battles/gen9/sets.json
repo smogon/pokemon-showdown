@@ -1659,7 +1659,7 @@
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Ice Shard", "Ice Spinner", "Knock Off", "Rapid Spin", "Stealth Rock"],
                 "abilities": ["Sturdy"],
-                "teraTypes": ["Ghost", "Grass"]
+                "teraTypes": ["Dragon", "Steel", "Water"]
             }
         ]
     },
