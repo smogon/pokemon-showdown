@@ -909,9 +909,9 @@
             },
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Extreme Speed", "Hurricane", "Protect", "Scale Shot", "Stomping Tantrum", "Tailwind"],
+                "movepool": ["Extreme Speed", "Iron Head", "Protect", "Scale Shot", "Stomping Tantrum", "Tailwind"],
                 "abilities": ["Inner Focus"],
-                "teraTypes": ["Fairy", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
