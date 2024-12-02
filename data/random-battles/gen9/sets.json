@@ -4708,7 +4708,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Encore", "Fire Blast", "Focus Blast", "Grass Knot", "Nasty Plot", "Psyshock"],
+                "movepool": ["Fire Blast", "Focus Blast", "Grass Knot", "Nasty Plot", "Psyshock"],
                 "abilities": ["Blaze"],
                 "teraTypes": ["Fighting", "Fire", "Grass"]
             }
