@@ -19514,6 +19514,18 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Dragon", "Mineral"],
 		gen: 9,
 	},
+	shox: {
+		num: -77,
+		name: "Shox",
+		types: ["Electric", "Normal"],
+		baseStats: {hp: 136, atk: 73, def: 81, spa: 90, spd: 98, spe: 56},
+		abilities: {0: "Electromorphosis", 1: "Sticky Hold"},
+		heightm: 6.2,
+		weightkg: 201.6,
+		color: "Black",
+		eggGroups: ["Dragon", "Mineral"],
+		gen: 9,
+	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {
 		num: -5000,
