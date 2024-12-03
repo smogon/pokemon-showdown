@@ -622,36 +622,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 							basePower: 150,
 							category: "Special",
 							priority: 0,
-							lags: {recharge: 1, metronome: 1, futuremove: 1},
+							flags: {recharge: 1, metronome: 1, futuremove: 1},
 							ignoreImmunity: false,
 							effectType: 'Move',
 							type: 'Dragon',
 						},
 					});
-					this.add('-start', source, 'move: Roar of Time');
+					this.add('-anim', target, 'Cosmic Power', target)
+					this.add('-message', `Freezing Glare was consumed by the Temporal Terrain!`);
+					this.add('-start', source, 'move: Roar of Time', '[silent]');
 					return this.NOT_FAIL;
 				}
 			},
-			onTrapPokemon(pokemon) {
-				pokemon.tryTrap();
+			onBeforeMovePriority: 2,
+			onBeforeMove(pokemon, target, move) {
+				if (move.id === 'roaroftime' && move.flags['futuremove']) {
+					this.add('-anim', pokemon, 'Cosmic Power', pokemon);
+					this.add('-anim', pokemon, 'Roar of Time', target);
+					this.add('-message', `Freezing Glare was unleashed from Temporal Terrain as Roar of Time!`);
+				}
 			},
 			onHit(target, source, move) {
-				if (move.id === 'roaroftime') {
-					this.add('-fieldend', 'move: Temporal Terrain');
+				if (move.id === 'roaroftime' && move.flags['futuremove']) {
+					this.add('-fieldend', 'move: Temporal Terrain', '[silent]');
 					for (const pokemon of this.getAllActive()) {
 						pokemon.forceSwitchFlag = true;
 					}
-					this.add('-message', `Temporal Terrain wiped the battlefield!`);
+				}
+			},
+			onTrapPokemon() {
+				for (const pokemon of this.getAllActive()) {
+					pokemon.tryTrap();
 				}
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
-				this.add('-fieldend', 'move: Temporal Terrain');
+				this.add('-fieldend', 'move: Temporal Terrain', '[silent]');
 				for (const pokemon of this.getAllActive()) {
 					pokemon.forceSwitchFlag = true;
 				}
-				this.add('-message', `Temporal Terrain wiped the battlefield!`);
 			},
 		},
 		secondary: null,
