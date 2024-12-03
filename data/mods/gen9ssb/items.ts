@@ -64,8 +64,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Aevum
 	rewindwatch: {
 		name: "Rewind Watch",
-		shortDesc: "Grass/Steel; If KOd, fully heals. Single use.",
-		desc: "Holder becomes Grass/Steel type. If the holder would be knocked out by an attacking move, survives with at least one HP, then restores back to full health. Cannot be taken or removed. Single use.",
+		shortDesc: "Calyrex: Grass/Steel; If KOd, fully heals.",
+		desc: "Holder becomes Grass/Steel type if held by a Calyrex. If the holder would be knocked out by an attacking move, survives with at least one HP, then restores back to full health. Cannot be taken or removed. Single use.",
 		gen: 9,
 		onTakeItem: false,
 		onStart(pokemon) {
