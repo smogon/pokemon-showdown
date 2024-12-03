@@ -20,6 +20,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Temporal Domain",
 		gen: 9,
 		flags: {},
+		onStart(pokemon) {
+			this.field.setTerrain('temporalterrain');
+		}
 	},
 	// Kusanali
 	onallthingsmeditated: {
