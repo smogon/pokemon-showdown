@@ -11,47 +11,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
-	// Mink
-	corpselily: {
-		name: "Corpse Lily",
-		gen: 9,
-		desc: "Whenever this Pokemon switches out, the ally replacing it is poisoned. At the end of every turn, each adjacent ally has a 30% chance to become poisoned. If held by Mink with Transfuse Toxin, it can use Toxic Deluge.",
-		shortDesc: "On switch-out, the replacement ally is poisoned. 30% chance to poison adjacent allies.",
-		onSwitchOut(pokemon) {
-			pokemon.side.addSideCondition('corpselily');
-		},
-		onResidual(pokemon) {
-			for (const ally of pokemon.adjacentAllies()) {
-				const proc = this.randomChance(3, 10);
-				if (!proc || ally.runImmunity('Poison')) continue;
-				this.add('-anim', pokemon, 'Poison Powder', ally);
-				if (!ally.trySetStatus('psn', pokemon, this.effect)) {
-					this.add('-immune', ally);
-					continue;
-				}
-			}
-		},
-		condition: {
-			onSideStart(side) {
-				this.add('-sidestart', side, 'item: Corpse Lily', '[silent]');
-			},
-			onSideEnd(side) {
-				this.add('-sideend', side, 'item: Corpse Lily', '[silent]');
-			},
-			onSwitchIn(pokemon) {
-				this.add('-anim', pokemon, 'Poison Powder', pokemon);
-				if (pokemon.trySetStatus('psn', pokemon, this.effect)) {
-					pokemon.side.removeSideCondition('corpselily');
-				} else {
-					this.add('-immune', pokemon);
-				}
-			},
-		},
-		onTakeItem: false,
-		zMove: "Toxic Deluge",
-		zMoveFrom: "Transfuse Toxin",
-		itemUser: ["Venusaur-Mega"],
-	},
 	// Morax
 	hadeansoil: {
 		name: "Hadean Soil",
@@ -116,14 +75,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect && effect.effectType === 'Move') {
 				target.itemState.useWatch = true;
-				this.add("-activate", target, "item: Rewind Watch");
+				this.add('-activate', target, 'item: Rewind Watch');
 				return target.hp - 1;
 			}
 		},
 		onAfterMoveSecondary(target, source, move) {
 			if (target.itemState.useWatch) {
 				target.useItem();
-				this.heal(target.maxhp, target, target, 'item: Rewind Watch');
+				this.heal(target.maxhp - target.hp, target, target, 'item: Rewind Watch');
 			}
 		},
 	},
