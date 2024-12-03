@@ -540,15 +540,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	// Aevum
 	genesisray: {
-		accuracy: 80,
+		accuracy: 100,
 		basePower: 60,
 		category: "Special",
 		name: "Genesis Ray",
 		desc: "Traps the target in Genesis Ray, dealing a second hit with double damage if the target uses a contact move or switches, then ending.",
 		shortDesc: "Traps the target in Genesis Ray.",
 		gen: 9,
-		pp: 16,
-		noPPBoosts: true,
+		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
 		onTryMove() {
@@ -565,7 +564,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		volatileStatus: 'genesisray',
 		condition: {
-			duration: 3,
+			duration: 2,
 			onTryMove(pokemon, target, move) {
 				if (move.flags['contact']) {
 					this.add('-anim', pokemon, 'Terrain Pulse', pokemon);
