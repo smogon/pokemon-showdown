@@ -99487,7 +99487,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			encore: ["9M"],
 			endure: ["9M"],
 			facade: ["9M"],
-			flamethrower: ["9M"],
 			flashcannon: ["9M"],
 			gigaimpact: ["9M"],
 			gunkshot: ["9M", "9L58"],

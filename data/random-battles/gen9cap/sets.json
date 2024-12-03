@@ -580,9 +580,9 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Clanging Scales", "Clangorous Soul", "Flamethrower", "Sludge Wave", "Surf"],
+                "movepool": ["Clanging Scales", "Clangorous Soul",  "Sludge Wave", "Surf"],
                 "abilities": ["Armor Tail"],
-                "teraTypes": ["Fire", "Water"]
+                "teraTypes": ["Water"]
             }
         ]
     }
