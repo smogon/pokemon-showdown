@@ -590,6 +590,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Temporal Terrain",
+		desc: "Traps all Pokemon. Forces all Pokemon to switch upon ending. If a Pokemon uses Freezing Glare during Temporal Terrain, it becomes Roar of Time and hits 2 turns later.",
+		shortDesc: "Traps; Forces Pokemon to switch. Freezing Glare -> Roar of Time.",
 		pp: 10,
 		priority: 0,
 		flags: {nonsky: 1, metronome: 1},
