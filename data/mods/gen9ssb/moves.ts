@@ -585,13 +585,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+	// Aevum
 	temporalterrain: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		name: "Temporal Terrain",
-		shortDesc: "Moves are delayed by 2/3/1 turn(s).",
-		desc: "For 5 turns, non-status moves used by any Pokemon are turned into future moves that hit 2, 3, or 1 turn(s) later, in that order.",  
 		pp: 10,
 		priority: 0,
 		flags: {nonsky: 1, metronome: 1},
@@ -610,57 +609,55 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				} else {
 					this.add('-fieldstart', 'move: Temporal Terrain');
 				}
-				this.effectState.domain = 2;
+			},
+			onTryMove(source, target, move) {
+				if (move.id === 'freezingglare') {
+					if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+					Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+						move: 'roaroftime',
+						source: source,
+						moveData: {
+							id: 'roaroftime',
+							name: "Roar of Time",
+							accuracy: 90,
+							basePower: 150,
+							category: "Special",
+							priority: 0,
+							lags: {recharge: 1, metronome: 1, futuremove: 1},
+							ignoreImmunity: false,
+							effectType: 'Move',
+							type: 'Dragon',
+						},
+					});
+					this.add('-start', source, 'move: Roar of Time');
+					return this.NOT_FAIL;
+				}
+			},
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			onHit(target, source, move) {
+				if (move.id === 'roaroftime') {
+					this.add('-fieldend', 'move: Temporal Terrain');
+					for (const pokemon of this.getAllActive()) {
+						pokemon.forceSwitchFlag = true;
+					}
+					this.add('-message', `Temporal Terrain wiped the battlefield!`);
+				}
 			},
 			onFieldResidualOrder: 27,
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Temporal Terrain');
-			},
-			onModifyMove(move, pokemon) {
-				if (move.category === 'Status') return;
-				if (!move.flags['futuremove']) {
-					move.flags['futuremove'] = 1;
-					delete move.flags['protect'];
+				for (const pokemon of this.getAllActive()) {
+					pokemon.forceSwitchFlag = true;
 				}
-				const newDuration = this.effectState.domain + 1;
-				move.onTry = function (source, t) {
-					if (!t.side.addSlotCondition(t, 'futuremove') && !this.effectState.hinted) {
-						this.effectState.hinted = true;
-						this.hint('Future moves fail when the targeted slot already has a future move focused on it.');
-						return false;
-					}
-					const moveData = this.dex.getActiveMove(move.id);
-					if (!moveData.flags['futuremove']) {
-						moveData.flags['futuremove'] = 1;
-						delete moveData.flags['protect'];
-					}
-					Object.assign(t.side.slotConditions[t.position]['futuremove'], {
-						duration: newDuration,
-						move: moveData.id,
-						source: source,
-						moveData: moveData,
-					});
-					this.attrLastMove('[still]');
-					return this.NOT_FAIL;
-				};
-				this.add('-message', `${move.name} entered the Temporal Domain!`);
-				switch (this.effectState.domain) {
-					case 2:
-						this.effectState.domain = 3;
-						break;
-					case 3:
-						this.effectState.domain = 1;
-						break;
-					case 1:
-						this.effectState.domain = 2;
-						break;
-				}
+				this.add('-message', `Temporal Terrain wiped the battlefield!`);
 			},
 		},
 		secondary: null,
 		target: "all",
-		type: "???",
+		type: "Psychic",
 	},
 	// Ace - Attack Card
 	attack: {
