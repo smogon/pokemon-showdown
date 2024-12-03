@@ -18,6 +18,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	// Aevum
 	temporaldomain: {
 		name: "Temporal Domain",
+		desc: "On switch-in, this Pokemon summons Temporal Terrain for 5 turns. Lasts for 8 turns if the user is holding a Terrain Extender.",
 		shortDesc: "On switch-in, this Pokemon summons Temporal Terrain.",
 		gen: 9,
 		flags: {},
