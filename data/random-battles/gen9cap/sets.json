@@ -585,5 +585,28 @@
                 "teraTypes": ["Water"]
             }
         ]
+    },
+    "shox": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Glare", "Ice Beam", "Milk Drink", "Thunderbolt"],
+                "abilities": ["Electromorphosis"],
+                "teraTypes": ["Fairy", "Ghost", "Grass"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Glare", "Ice Beam", "Milk Drink", "Volt Switch"],
+                "abilities": ["Electromorphosis"],
+                "teraTypes": ["Flying", "Ghost"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Discharge", "Ice Beam", "Knock Off", "Milk Drink", "Thunderbolt"],
+                "abilities": ["Electromorphosis"],
+                "teraTypes": ["Fairy", "Ghost", "Grass"]
+            }
+        ]
     }
 }
