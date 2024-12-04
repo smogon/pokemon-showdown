@@ -987,7 +987,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	loadeddice: {
 		name: "Loaded Dice",
-		desc: "Holder's moves that hit 2-5 times hit 4-5 times; Population Bomb hits 4-10 times. Holder's moves that hit 1-3 times and on each hit check accuracy hit 3 times and only checks accuracy on the first hit.",
+		desc: "The holder's moves that normally hit 2 to 5 times instead hit 4 or 5 times. If the first hit is successful, the holder's use of Triple Kick or Triple Axel hits 3 times, and Population Bomb hits 4 to 10 times, at random.",
 		shortDesc: "Holder's moves that hit 2-5 times hit 4-5 times; Population Bomb hits 4-10 times.",
 	},
 	lopunnite: {
