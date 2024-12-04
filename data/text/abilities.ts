@@ -2033,7 +2033,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	toxicchain: {
 		name: "Toxic Chain",
 		desc: "This Pokemon's attacking moves have a 30% chance of badly poisoning. This effect comes after a move's inherent secondary effect chance.",
-		shortDesc: "This Pokemon's attacking moves have a 30% chance of badly poisoning.",
+		shortDesc: "This Pokemon's attacks have a 30% chance of badly poisoning.",
 	},
 	toxicdebris: {
 		name: "Toxic Debris",
