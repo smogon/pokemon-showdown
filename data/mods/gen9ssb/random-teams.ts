@@ -198,13 +198,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Genesis Ray',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	/*
 	Tao: {
 		species: 'Kubfu', ability: 'Shangqing', item: 'Zhuyou', gender: 'M',
 		moves: ['Triple Kick', 'Circle Throw', 'Taiji'],
 		signatureMove: 'Wuji',
 		evs: {atk: 252, def: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
-	/*
 	Kusanali: {
 		species: 'Shaymin', ability: 'On All Things Meditated', item: 'Seed of Stored Knowledge', gender: 'F',
 		moves: ['Seed Flare', 'Earth Power', 'Heat Wave'],
