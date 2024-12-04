@@ -3,6 +3,7 @@ import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {RuleTable} from '../../../sim/dex-formats';
 import {Tags} from './../../tags';
+import {Teams} from '../../../sim/teams';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
@@ -2958,6 +2959,37 @@ export class RandomTeams {
 		}
 
 		return pokemon;
+	}
+
+	randomDraftFactoryMatchups: AnyObject = require("./draft-factory-matchups.json").matchups;
+	rdfMatchupIndex = -1;
+	rdfMatchupSide = -1;
+
+	randomDraftFactoryTeam(side: PlayerOptions): RandomTeamsTypes.RandomDraftFactorySet[] {
+		this.enforceNoDirectCustomBanlistChanges();
+
+		if (this.rdfMatchupIndex === -1) this.rdfMatchupIndex = this.random(0, this.randomDraftFactoryMatchups.length);
+		if (this.rdfMatchupSide === -1) this.rdfMatchupSide = this.random(0, 2);
+
+		const matchup = this.randomDraftFactoryMatchups[this.rdfMatchupIndex];
+		const team = Teams.unpack(matchup[this.rdfMatchupSide]);
+		if (!team) throw new Error(`Invalid team for draft factory matchup ${this.rdfMatchupIndex}`);
+		this.rdfMatchupSide = 1 - this.rdfMatchupSide;
+		return team.map(set => ({
+			name: this.dex.species.get(set.species).baseSpecies,
+			species: set.species,
+			gender: set.gender,
+			moves: set.moves,
+			ability: set.ability,
+			evs: set.evs,
+			ivs: set.ivs,
+			item: set.item,
+			level: this.adjustLevel || set.level,
+			shiny: !!set.shiny,
+			nature: set.nature,
+			teraType: set.teraType,
+			teraCaptain: set.name === 'Tera Captain',
+		}));
 	}
 }
 
