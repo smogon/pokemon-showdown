@@ -2975,21 +2975,30 @@ export class RandomTeams {
 		const team = Teams.unpack(matchup[this.rdfMatchupSide]);
 		if (!team) throw new Error(`Invalid team for draft factory matchup ${this.rdfMatchupIndex}`);
 		this.rdfMatchupSide = 1 - this.rdfMatchupSide;
-		return team.map(set => ({
-			name: this.dex.species.get(set.species).baseSpecies,
-			species: set.species,
-			gender: set.gender,
-			moves: set.moves,
-			ability: set.ability,
-			evs: set.evs,
-			ivs: set.ivs,
-			item: set.item,
-			level: this.adjustLevel || set.level,
-			shiny: !!set.shiny,
-			nature: set.nature,
-			teraType: set.teraType,
-			teraCaptain: set.name === 'Tera Captain',
-		}));
+		return team.map(set => {
+			let species = this.dex.species.get(set.species);
+			if (species.battleOnly) {
+				if (typeof species.battleOnly !== 'string') {
+					throw new Error(`Invalid species ${species.name} for draft factory matchup ${this.rdfMatchupIndex} team ${this.rdfMatchupSide}`);
+				}
+				species = this.dex.species.get(species.battleOnly);
+			}
+			return {
+				name: species.baseSpecies,
+				species: species.name,
+				gender: set.gender,
+				moves: set.moves,
+				ability: set.ability,
+				evs: set.evs,
+				ivs: set.ivs,
+				item: set.item,
+				level: this.adjustLevel || set.level,
+				shiny: !!set.shiny,
+				nature: set.nature,
+				teraType: set.teraType,
+				teraCaptain: set.name === 'Tera Captain',
+			};
+		});
 	}
 }
 
