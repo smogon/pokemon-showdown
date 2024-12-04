@@ -561,6 +561,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onDamage(damage, target, source, effect) {
 			target.abilityState.grDamage = damage * 2;
+			this.add('-message', `hit damage: ${damage}`);
 		},
 		volatileStatus: 'genesisray',
 		condition: {
@@ -577,6 +578,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-anim', pokemon, 'Terrain Pulse', pokemon);
 				this.damage(pokemon.abilityState.grDamage, pokemon);
 				this.add('-message', `${pokemon.name} was assaulted by Genesis Ray!`);
+				this.add('-message', `hit damage: ${pokemon.abilityState.grDamage}`);
 				pokemon.removeVolatile('genesisray');
 			},
 		},
