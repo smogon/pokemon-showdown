@@ -647,9 +647,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(target, source, move) {
 				if (move.id === 'roaroftime' && move.flags['futuremove']) {
 					this.add('-fieldend', 'move: Temporal Terrain', '[silent]');
+					this.add('-anim', source, 'Cosmic Power', source);
+					this.add('-anim', source, 'Roar of Time', target);
+					this.effectState.rotHit = true;
 					for (const pokemon of this.getAllActive()) {
 						pokemon.forceSwitchFlag = true;
 					}
+					this.add('-message', `Freezing Glare was unleashed from Temporal Terrain as Roar of Time!`);
 				}
 			},
 			onTrapPokemon() {
@@ -661,8 +665,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Temporal Terrain', '[silent]');
-				for (const pokemon of this.getAllActive()) {
-					pokemon.forceSwitchFlag = true;
+				if (!this.effectState.rotHit) {
+					for (const pokemon of this.getAllActive()) {
+						pokemon.forceSwitchFlag = true;
+					}
 				}
 			},
 		},
