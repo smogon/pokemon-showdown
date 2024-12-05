@@ -500,6 +500,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		recoil: [1, 3],
 	},
+	fling: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (source.hasAbility('multitype')) return false;
+		},
+	},
 	focuspunch: {
 		inherit: true,
 		priorityChargeCallback() {},
