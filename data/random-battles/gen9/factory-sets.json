@@ -1929,7 +1929,7 @@
 				"weight": 100,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Pickpocket"],
-				"evs": {"hp": 252, "spd": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Ice"],
 				"moves": [["Triple Axel"], ["Knock Off"], ["Ice Shard"], ["Swords Dance", "Low Kick"]]
