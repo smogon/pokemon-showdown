@@ -416,7 +416,7 @@
 				"evs": {"hp": 248, "atk": 8, "def": 252},
 				"nature": ["Impish"],
 				"teraType": ["Fairy", "Water"],
-				"moves": [["Stealth Rock"], ["Earthquake"], ["U-turn"], ["Taunt", "Stone Edge", "Rock Tomb"]]
+				"moves": [["Stealth Rock"], ["Earthquake"], ["U-turn"], ["Stone Edge", "Rock Tomb"]]
 			}, {
 				"species": "Landorus-Therian",
 				"weight": 20,
