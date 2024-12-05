@@ -2800,7 +2800,7 @@
 				"species": "Sandy Shocks",
 				"wantsTera": true,
 				"weight": 100,
-				"item": ["Heavy-Duty Boots", "Leftovers"],
+				"item": ["Heavy-Duty Boots"],
 				"ability": ["Protosynthesis"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
