@@ -502,7 +502,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	fling: {
 		inherit: true,
-		onTryHit(target, source, move) {
+		onPrepareHit(target, source, move) {
 			if (source.hasAbility('multitype')) return false;
 		},
 	},
