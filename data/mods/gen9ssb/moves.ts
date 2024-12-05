@@ -1633,6 +1633,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 	},
 	// Flufi
+	completetheomnivolt: {
+      name: "Complete the Omnivolt",
+      category: "Special",
+      basePower: 220,
+      accuracy: true,
+		shortDesc: "Paralyzes targets. Combines Fire-type in type effectiveness.",
+      pp: 1,
+		isZ: "epipen",
+      priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Plasma Fists', source);
+			this.add('-anim', source, 'Wildbolt Storm', source);
+			this.add('-anim', source, '10,000,000 Volt Thunderbolt', source);
+			this.add('-anim', source, 'Pyro Ball', target);
+      },
+		onEffectiveness(typeMod, target, type, move) {
+			return typeMod + this.dex.getEffectiveness('Fire', type);
+		},
+      flags: {bypasssub: 1},
+		secondary: {
+			chance: 100,
+			status: 'par',
+		},
+      target: "allAdjacent",
+      type: "Electric",
+   },
+	// Flufi
 	shocktherapy: {
       name: "Shock Therapy",
       category: "Special",
