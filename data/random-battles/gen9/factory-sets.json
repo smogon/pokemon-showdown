@@ -2564,7 +2564,7 @@
 			"weight": 3,
 			"sets": [{
 				"species": "Toxapex",
-				"weight": 25,
+				"weight": 50,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 248, "def": 252, "spd": 8},
@@ -2574,7 +2574,7 @@
 				"moves": [["Surf"], ["Toxic"], ["Haze", "Toxic Spikes", "Baneful Bunker"], ["Recover"]]
 			}, {
 				"species": "Toxapex",
-				"weight": 25,
+				"weight": 50,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 248, "def": 8, "spd": 252},
@@ -2582,16 +2582,6 @@
 				"nature": ["Calm"],
 				"teraType": ["Steel", "Grass"],
 				"moves": [["Surf"], ["Toxic"], ["Haze", "Toxic Spikes", "Baneful Bunker"], ["Recover"]]
-			}, {
-				"species": "Toxapex",
-				"weight": 50,
-				"item": ["Assault Vest"],
-				"ability": ["Regenerator"],
-				"evs": {"hp": 248, "spa": 252, "spd": 8},
-				"ivs": {"atk": 0},
-				"nature": ["Modest"],
-				"teraType": ["Steel", "Fairy"],
-				"moves": [["Surf"], ["Sludge Bomb"], ["Ice Beam"], ["Acid Spray"]]
 			}]
 		},
 		"amoonguss": {
