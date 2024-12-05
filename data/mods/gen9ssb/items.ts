@@ -432,6 +432,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	epipen: {
 		name: "EpiPen",
 		gen: 9,
+		onTakeItem: false,
+		zMove: "Complete the Omnivolt",
+		zMoveFrom: "Shock Therapy",
+		itemUser: ["Raichu"],
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 3 && pokemon.useItem()) {
 				this.add('-activate', pokemon, 'item: EpiPen', '[consumed]');
