@@ -335,6 +335,12 @@ export interface UserSettings {
 	hideLogins: boolean;
 }
 
+export interface CachedMMR {
+	elo: number;
+	glickoPoints?: number;
+	glickoDeviation?: number;
+}
+
 // User
 export class User extends Chat.MessageContext {
 	/** In addition to needing it to implement MessageContext, this is also nice for compatibility with Connection. */
@@ -351,7 +357,7 @@ export class User extends Chat.MessageContext {
 	 * `)`
 	 */
 	readonly games: Set<RoomID>;
-	mmrCache: {[format: string]: number};
+	mmrCache: {[format: string]: CachedMMR};
 	guestNum: number;
 	name: string;
 	named: boolean;
@@ -910,7 +916,7 @@ export class User extends Chat.MessageContext {
 			}
 
 			// MMR is different for each userid
-			this.mmrCache = {};
+			this.mmrCache = Object.create(null);
 
 			this.updateGroup(registered);
 		} else if (registered) {

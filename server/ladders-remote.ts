@@ -12,6 +12,7 @@
  * @license MIT
  */
 import {Utils} from '../lib';
+import type {CachedMMR} from 'users';
 
 export class LadderStore {
 	formatid: string;
@@ -33,7 +34,7 @@ export class LadderStore {
 	}
 
 	/**
-	 * Returns a Promise for the Elo rating of a user
+	 * Returns a Promise for the ratings of a user
 	 */
 	async getRating(userid: string) {
 		const formatid = this.formatid;
@@ -41,20 +42,31 @@ export class LadderStore {
 		if (user?.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
-		const [data] = await LoginServer.request('mmr', {
+		const [data] = await LoginServer.request('rating', {
 			format: formatid,
 			user: userid,
 		});
-		let mmr = NaN;
-		if (data && !data.errorip) {
-			mmr = Number(data);
+		if (!data || data.errorip) {
+			return null;
 		}
-		if (isNaN(mmr)) return 1000;
+		const ratings = {
+			elo: Utils.ensureValidNumber(Utils.getNumber(data.elo), 1000),
+			glickoPoints: Utils.ensureValidNumber(Utils.getNumber(data.rpr), 1500),
+			glickoDeviation: Utils.ensureValidNumber(Utils.getNumber(data.rprd), 130),
+		} as CachedMMR;
 
 		if (user && user.id === userid) {
-			user.mmrCache[formatid] = mmr;
+			user.mmrCache[formatid] = ratings;
 		}
-		return mmr;
+		return ratings;
+	}
+
+	/**
+	 * Returns a Promise for the Elo of a user
+	 */
+	async getElo(userid: string) {
+		const ratings = await getRating(userid);
+		return ratings?.elo ?? 1000;
 	}
 
 	/**
@@ -83,7 +95,7 @@ export class LadderStore {
 		});
 
 		// calculate new Elo scores and display to room while loginserver updates the ladder
-		const [p1OldElo, p2OldElo] = (await Promise.all([this.getRating(p1id), this.getRating(p2id)])).map(Math.round);
+		const [p1OldElo, p2OldElo] = (await Promise.all([this.getElo(p1id), this.getElo(p2id)])).map(Math.round);
 		const p1NewElo = Math.round(this.calculateElo(p1OldElo, p1score, p2OldElo));
 		const p2NewElo = Math.round(this.calculateElo(p2OldElo, 1 - p1score, p1OldElo));
 

@@ -14,6 +14,7 @@
  */
 
 import {FS, Utils} from '../lib';
+import type {CachedMMR} from 'users';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
@@ -145,7 +146,7 @@ export class LadderStore {
 	}
 
 	/**
-	 * Returns a Promise for the Elo rating of a user
+	 * Returns a Promise for the ratings of a user
 	 */
 	async getRating(userid: string) {
 		const formatid = this.formatid;
@@ -160,9 +161,17 @@ export class LadderStore {
 			rating = ladder[index][1];
 		}
 		if (user && user.id === userid) {
-			user.mmrCache[formatid] = rating;
+			user.mmrCache[formatid] = {elo: rating} as CachedMMR;
 		}
 		return rating;
+	}
+
+	/**
+	 * Returns a Promise for the Elo of a user
+	 */
+	async getElo(userid: string) {
+		const ratings = await getRating(userid);
+		return ratings?.elo ?? 1000;
 	}
 
 	/**
