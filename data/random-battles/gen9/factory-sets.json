@@ -814,7 +814,7 @@
 			"weight": 10,
 			"sets": [{
 				"species": "Kingambit",
-				"weight": 25,
+				"weight": 20,
 				"item": ["Black Glasses"],
 				"ability": ["Supreme Overlord"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
@@ -823,7 +823,7 @@
 				"moves": [["Kowtow Cleave"], ["Swords Dance"], ["Iron Head", "Low Kick"], ["Sucker Punch"]]
 			}, {
 				"species": "Kingambit",
-				"weight": 25,
+				"weight": 20,
 				"item": ["Air Balloon", "Leftovers"],
 				"ability": ["Supreme Overlord"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
@@ -832,16 +832,16 @@
 				"moves": [["Low Kick"], ["Swords Dance"], ["Iron Head", "Kowtow Cleave"], ["Sucker Punch"]]
 			}, {
 				"species": "Kingambit",
-				"weight": 25,
+				"weight": 20,
 				"item": ["Air Balloon", "Leftovers"],
 				"ability": ["Supreme Overlord"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": ["Adamant", "Jolly"],
+				"nature": ["Adamant"],
 				"teraType": ["Ghost", "Fairy"],
 				"moves": [["Iron Head"], ["Swords Dance"], ["Kowtow Cleave"], ["Sucker Punch"]]
 			}, {
 				"species": "Kingambit",
-				"weight": 25,
+				"weight": 40,
 				"item": ["Leftovers"],
 				"ability": ["Supreme Overlord"],
 				"evs": {"hp": 252, "atk": 252, "spd": 4},
