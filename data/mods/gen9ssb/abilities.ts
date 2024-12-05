@@ -803,12 +803,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		shortDesc: "2x Defense; Uses Defense in damage calculation.",
 		desc: "This Pokemon's Defense is doubled. This Pokemon's attacks use its Defense stat in damage calculation instead of Attack or Special Attack.",
-		onModifyDefPriority: 6,
-		onModifyDef(def) {
+		onModifyDefPriority: 26,
+		onModifyDef(def, pokemon) {
 			return this.chainModify(2);
 		},
-		onModifyMove(move, pokemon) {
-			move.overrideOffensiveStat = 'def';
+		onModifyMove(move, pokemon, target) {
+			if (move.category !== "Status") {
+				move.overrideOffensiveStat = 'def';
+			}
 		},
 	},
 	// Quetzalcoatl
