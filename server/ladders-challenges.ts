@@ -1,4 +1,5 @@
 import type {ChallengeType} from './room-battle';
+import type {CachedMMR} from './users';
 
 /**
  * A bundle of:
@@ -13,14 +14,14 @@ export class BattleReady {
 	readonly userid: ID;
 	readonly formatid: string;
 	readonly settings: User['battleSettings'];
-	readonly rating: number;
+	readonly rating: CachedMMR;
 	readonly challengeType: ChallengeType;
 	readonly time: number;
 	constructor(
 		userid: ID,
 		formatid: string,
 		settings: User['battleSettings'],
-		rating = 0,
+		rating: CachedMMR = {elo: 0},
 		challengeType: ChallengeType = 'challenge'
 	) {
 		this.userid = userid;

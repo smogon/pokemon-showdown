@@ -337,7 +337,7 @@ export interface UserSettings {
 
 export interface CachedMMR {
 	elo: number;
-	glickoPoints?: number;
+	glickoScore?: number;
 	glickoDeviation?: number;
 }
 
@@ -1412,6 +1412,27 @@ export class User extends Chat.MessageContext {
 	}
 	updateSearch(connection: Connection | null = null) {
 		Ladders.updateSearch(this, connection);
+	}
+	updateRatingCache(formatid: string, data: any) {
+		if (!data || !('elo' in data)) return;
+		if (!('rpr' in data)) {
+			this.mmrCache[formatid] = {elo: Utils.ensureValidNumber(Utils.getNumber(data.elo), 1000)};
+		} else {
+			const ratings = {
+				elo: Utils.ensureValidNumber(Utils.getNumber(data.elo), 1000),
+				glickoScore: Utils.ensureValidNumber(Utils.getNumber(data.rpr), 1500),
+				glickoDeviation: Utils.ensureValidNumber(Utils.getNumber(data.rprd), 130),
+			};
+			this.mmrCache[formatid] = ratings;
+		}
+	}
+	updateEloCache(formatid: string, elo: number) {
+		if (!this.mmrCache[formatid]) {
+			this.mmrCache[formatid] = {elo} as CachedMMR;
+			return;
+		} else {
+			this.mmrCache[formatid].elo = elo;
+		}
 	}
 	/**
 	 * Moves the user's connections in a given room to another room.

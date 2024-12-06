@@ -504,7 +504,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	readonly gameType: string | undefined;
 	readonly challengeType: ChallengeType;
 	/**
-	 * The lower player's rating, for searching purposes.
+	 * The lower player's rating, for Elo searching purposes.
 	 * 0 for unrated battles. 1 for unknown ratings.
 	 */
 	readonly rated: number;

@@ -14,7 +14,6 @@
  */
 
 import {FS, Utils} from '../lib';
-import type {CachedMMR} from 'users';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
@@ -156,21 +155,21 @@ export class LadderStore {
 		}
 		const ladder = await this.getLadder();
 		const index = this.indexOfUser(userid);
-		let rating = 1000;
+		const ratings = {elo: 1000};
 		if (index >= 0) {
-			rating = ladder[index][1];
+			ratings.elo = ladder[index][1];
 		}
 		if (user && user.id === userid) {
-			user.mmrCache[formatid] = {elo: rating} as CachedMMR;
+			user.mmrCache[formatid] = ratings;
 		}
-		return rating;
+		return ratings;
 	}
 
 	/**
 	 * Returns a Promise for the Elo of a user
 	 */
 	async getElo(userid: string) {
-		const ratings = await getRating(userid);
+		const ratings = await this.getRating(userid);
 		return ratings?.elo ?? 1000;
 	}
 
@@ -258,9 +257,10 @@ export class LadderStore {
 			}
 
 			const p1 = Users.getExact(p1name);
-			if (p1) p1.mmrCache[formatid] = +p1newElo;
+			if (p1) p1.updateEloCache(formatid, +p1newElo);
 			const p2 = Users.getExact(p2name);
-			if (p2) p2.mmrCache[formatid] = +p2newElo;
+			if (p2) p2.updateEloCache(formatid, +p2newElo);
+
 			void this.save();
 
 			if (!room.battle) {
@@ -288,7 +288,7 @@ export class LadderStore {
 			room.update();
 		}
 
-		return [p1score, p1newElo, p2newElo];
+		return [p1score, {elo: p1newElo}, {elo: p2newElo}];
 	}
 
 	/**
