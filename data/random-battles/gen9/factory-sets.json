@@ -1496,16 +1496,7 @@
 			"weight": 8,
 			"sets": [{
 				"species": "Samurott-Hisui",
-				"weight": 20,
-				"item": ["Focus Sash"],
-				"ability": ["Sharpness"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Ghost"],
-				"moves": [["Ceaseless Edge"], ["Razor Shell", "Aqua Cutter"], ["Aqua Jet", "Sucker Punch"], ["Knock Off", "Taunt", "Encore"]]
-			}, {
-				"species": "Samurott-Hisui",
-				"weight": 30,
+				"weight": 40,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Sharpness"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -1514,7 +1505,7 @@
 				"moves": [["Ceaseless Edge"], ["Razor Shell", "Aqua Cutter"], ["Knock Off"], ["Flip Turn", "Encore"]]
 			}, {
 				"species": "Samurott-Hisui",
-				"weight": 25,
+				"weight": 30,
 				"item": ["Choice Scarf"],
 				"ability": ["Sharpness"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -1523,7 +1514,7 @@
 				"moves": [["Ceaseless Edge"], ["Razor Shell", "Aqua Cutter"], ["Knock Off"], ["Flip Turn", "Sacred Sword"]]
 			}, {
 				"species": "Samurott-Hisui",
-				"weight": 25,
+				"weight": 30,
 				"item": ["Assault Vest"],
 				"ability": ["Sharpness"],
 				"evs": {"hp": 172, "atk": 252, "spe": 84},
@@ -1800,19 +1791,6 @@
 				"nature": ["Timid"],
 				"teraType": ["Fairy", "Ground", "Steel"],
 				"moves": [["Moonblast"], ["Earth Power"], ["Calm Mind"], ["Substitute"]]
-			}]
-		},
-		"glimmora": {
-			"weight": 6,
-			"sets": [{
-				"species": "Glimmora",
-				"weight": 100,
-				"item": ["Focus Sash", "Red Card"],
-				"ability": ["Toxic Debris"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
-				"nature": ["Timid"],
-				"teraType": ["Ghost"],
-				"moves": [["Stealth Rock"], ["Mortal Spin"], ["Power Gem"], ["Earth Power"]]
 			}]
 		},
 		"hatterene": {
@@ -2441,6 +2419,19 @@
 				"moves": [["Leaf Storm"], ["Glare"], ["Tera Blast"], ["Substitute", "Dragon Pulse"]]
 			}]
 		},
+    "slitherwing": {
+			"weight": 1,
+			"sets": [{
+				"species": "Slither Wing",
+				"weight": 100,
+				"item": ["Heavy-Duty Boots"],
+				"ability": ["Protosynthesis"],
+				"evs": {"hp": 252, "atk": 28, "def": 220, "spe": 8},
+				"nature": ["Impish"],
+				"teraType": ["Steel", "Dragon"],
+				"moves": [["First Impression"], ["U-turn"], ["Will-O-Wisp"], ["Morning Sun"]]
+			}]
+		},
 		"skeledirge": {
 			"weight": 4,
 			"sets": [{
@@ -2766,19 +2757,6 @@
 				"nature": ["Adamant", "Jolly"],
 				"teraType": ["Ice"],
 				"moves": [["Earthquake"], ["Icicle Crash"], ["Ice Shard"], ["Knock Off", "Stealth Rock"]]
-			}]
-		},
-		"maushold": {
-			"weight": 1,
-			"sets": [{
-				"species": "Maushold",
-				"weight": 100,
-				"item": ["Wide Lens"],
-				"ability": ["Technician"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Ghost", "Dark"],
-				"moves": [["Tidy Up"], ["Population Bomb"], ["Bite"], ["Encore"]]
 			}]
 		},
 		"sandyshocks": {
