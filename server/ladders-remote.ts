@@ -52,9 +52,9 @@ export class LadderStore {
 		}
 		const ratings = {
 			elo: Utils.ensureValidNumber(Utils.getNumber(data.elo), 1000),
-			glickoPoints: Utils.ensureValidNumber(Utils.getNumber(data.rpr), 1500),
+			glickoScore: Utils.ensureValidNumber(Utils.getNumber(data.rpr), 1500),
 			glickoDeviation: Utils.ensureValidNumber(Utils.getNumber(data.rprd), 130),
-		} as CachedMMR;
+		};
 
 		if (user && user.id === userid) {
 			user.mmrCache[formatid] = ratings;
@@ -66,7 +66,7 @@ export class LadderStore {
 	 * Returns a Promise for the Elo of a user
 	 */
 	async getElo(userid: string) {
-		const ratings = await getRating(userid);
+		const ratings = await this.getRating(userid);
 		return ratings?.elo ?? 1000;
 	}
 
@@ -112,8 +112,8 @@ export class LadderStore {
 
 		room.rated = Math.min(p1NewElo, p2NewElo);
 
-		if (p1) p1.mmrCache[formatid] = +p1NewElo;
-		if (p2) p2.mmrCache[formatid] = +p2NewElo;
+		if (p1) p1.updateEloCache(formatid, +p1NewElo);
+		if (p2) p2.updateEloCache(formatid, +p2NewElo);
 
 		room.update();
 
