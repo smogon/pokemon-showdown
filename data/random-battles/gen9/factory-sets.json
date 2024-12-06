@@ -1156,17 +1156,17 @@
 			}, {
 				"species": "Dragonite",
 				"wantsTera": true,
-				"weight": 20,
+				"weight": 40,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Multiscale"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Adamant"],
 				"teraType": ["Ground"],
-				"moves": [["Earthquake"], ["Dragon Dance"], ["Roost"], ["Ice Spinner"]]
+				"moves": [["Earthquake"], ["Dragon Dance"], ["Roost", "Extreme Speed"], ["Ice Spinner"]]
 			}, {
 				"species": "Dragonite",
 				"wantsTera": true,
-				"weight": 40,
+				"weight": 20,
 				"item": ["Choice Band"],
 				"ability": ["Multiscale"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
