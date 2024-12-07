@@ -416,7 +416,7 @@
 				"evs": {"hp": 248, "atk": 8, "def": 252},
 				"nature": ["Impish"],
 				"teraType": ["Fairy", "Water"],
-				"moves": [["Stealth Rock"], ["Earthquake"], ["U-turn"], ["Taunt", "Stone Edge", "Rock Tomb"]]
+				"moves": [["Stealth Rock"], ["Earthquake"], ["U-turn"], ["Stone Edge", "Rock Tomb"]]
 			}, {
 				"species": "Landorus-Therian",
 				"weight": 20,
@@ -814,7 +814,7 @@
 			"weight": 10,
 			"sets": [{
 				"species": "Kingambit",
-				"weight": 25,
+				"weight": 20,
 				"item": ["Black Glasses"],
 				"ability": ["Supreme Overlord"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
@@ -823,7 +823,7 @@
 				"moves": [["Kowtow Cleave"], ["Swords Dance"], ["Iron Head", "Low Kick"], ["Sucker Punch"]]
 			}, {
 				"species": "Kingambit",
-				"weight": 25,
+				"weight": 20,
 				"item": ["Air Balloon", "Leftovers"],
 				"ability": ["Supreme Overlord"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
@@ -832,16 +832,16 @@
 				"moves": [["Low Kick"], ["Swords Dance"], ["Iron Head", "Kowtow Cleave"], ["Sucker Punch"]]
 			}, {
 				"species": "Kingambit",
-				"weight": 25,
+				"weight": 20,
 				"item": ["Air Balloon", "Leftovers"],
 				"ability": ["Supreme Overlord"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": ["Adamant", "Jolly"],
+				"nature": ["Adamant"],
 				"teraType": ["Ghost", "Fairy"],
 				"moves": [["Iron Head"], ["Swords Dance"], ["Kowtow Cleave"], ["Sucker Punch"]]
 			}, {
 				"species": "Kingambit",
-				"weight": 25,
+				"weight": 40,
 				"item": ["Leftovers"],
 				"ability": ["Supreme Overlord"],
 				"evs": {"hp": 252, "atk": 252, "spd": 4},
@@ -1156,17 +1156,17 @@
 			}, {
 				"species": "Dragonite",
 				"wantsTera": true,
-				"weight": 20,
+				"weight": 40,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Multiscale"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Adamant"],
 				"teraType": ["Ground"],
-				"moves": [["Earthquake"], ["Dragon Dance"], ["Roost"], ["Ice Spinner"]]
+				"moves": [["Earthquake"], ["Dragon Dance"], ["Roost", "Extreme Speed"], ["Ice Spinner"]]
 			}, {
 				"species": "Dragonite",
 				"wantsTera": true,
-				"weight": 40,
+				"weight": 20,
 				"item": ["Choice Band"],
 				"ability": ["Multiscale"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -1496,16 +1496,7 @@
 			"weight": 8,
 			"sets": [{
 				"species": "Samurott-Hisui",
-				"weight": 20,
-				"item": ["Focus Sash"],
-				"ability": ["Sharpness"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Ghost"],
-				"moves": [["Ceaseless Edge"], ["Razor Shell", "Aqua Cutter"], ["Aqua Jet", "Sucker Punch"], ["Knock Off", "Taunt", "Encore"]]
-			}, {
-				"species": "Samurott-Hisui",
-				"weight": 30,
+				"weight": 40,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Sharpness"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -1514,7 +1505,7 @@
 				"moves": [["Ceaseless Edge"], ["Razor Shell", "Aqua Cutter"], ["Knock Off"], ["Flip Turn", "Encore"]]
 			}, {
 				"species": "Samurott-Hisui",
-				"weight": 25,
+				"weight": 30,
 				"item": ["Choice Scarf"],
 				"ability": ["Sharpness"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
@@ -1523,7 +1514,7 @@
 				"moves": [["Ceaseless Edge"], ["Razor Shell", "Aqua Cutter"], ["Knock Off"], ["Flip Turn", "Sacred Sword"]]
 			}, {
 				"species": "Samurott-Hisui",
-				"weight": 25,
+				"weight": 30,
 				"item": ["Assault Vest"],
 				"ability": ["Sharpness"],
 				"evs": {"hp": 172, "atk": 252, "spe": 84},
@@ -1565,7 +1556,7 @@
 				"ability": ["Vessel of Ruin"],
 				"evs": {"hp": 252, "def": 4, "spd": 252},
 				"nature": ["Careful"],
-				"teraType": ["Water", "Grass", "Fairy"],
+				"teraType": ["Poison", "Ghost"],
 				"moves": [["Spikes", "Stealth Rock"], ["Earthquake"], ["Whirlwind"], ["Ruination"]]
 			}]
 		},
@@ -1802,19 +1793,6 @@
 				"moves": [["Moonblast"], ["Earth Power"], ["Calm Mind"], ["Substitute"]]
 			}]
 		},
-		"glimmora": {
-			"weight": 6,
-			"sets": [{
-				"species": "Glimmora",
-				"weight": 100,
-				"item": ["Focus Sash", "Red Card"],
-				"ability": ["Toxic Debris"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
-				"nature": ["Timid"],
-				"teraType": ["Ghost"],
-				"moves": [["Stealth Rock"], ["Mortal Spin"], ["Power Gem"], ["Earth Power"]]
-			}]
-		},
 		"hatterene": {
 			"weight": 6,
 			"sets": [{
@@ -1929,7 +1907,7 @@
 				"weight": 100,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Pickpocket"],
-				"evs": {"hp": 252, "spd": 4, "spe": 252},
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": ["Jolly"],
 				"teraType": ["Ice"],
 				"moves": [["Triple Axel"], ["Knock Off"], ["Ice Shard"], ["Swords Dance", "Low Kick"]]
@@ -2367,7 +2345,7 @@
 			}]
 		},
 		"meowscarada": {
-			"weight": 4,
+			"weight": 3,
 			"sets": [{
 				"species": "Meowscarada",
 				"weight": 100,
@@ -2441,8 +2419,8 @@
 				"moves": [["Leaf Storm"], ["Glare"], ["Tera Blast"], ["Substitute", "Dragon Pulse"]]
 			}]
 		},
-		"slitherwing": {
-			"weight": 2,
+    "slitherwing": {
+			"weight": 1,
 			"sets": [{
 				"species": "Slither Wing",
 				"weight": 100,
@@ -2492,7 +2470,7 @@
 			}]
 		},
 		"volcanion": {
-			"weight": 4,
+			"weight": 3,
 			"sets": [{
 				"species": "Volcanion",
 				"wantsTera": true,
@@ -2564,7 +2542,7 @@
 			"weight": 3,
 			"sets": [{
 				"species": "Toxapex",
-				"weight": 25,
+				"weight": 50,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 248, "def": 252, "spd": 8},
@@ -2574,7 +2552,7 @@
 				"moves": [["Surf"], ["Toxic"], ["Haze", "Toxic Spikes", "Baneful Bunker"], ["Recover"]]
 			}, {
 				"species": "Toxapex",
-				"weight": 25,
+				"weight": 50,
 				"item": ["Heavy-Duty Boots"],
 				"ability": ["Regenerator"],
 				"evs": {"hp": 248, "def": 8, "spd": 252},
@@ -2582,16 +2560,6 @@
 				"nature": ["Calm"],
 				"teraType": ["Steel", "Grass"],
 				"moves": [["Surf"], ["Toxic"], ["Haze", "Toxic Spikes", "Baneful Bunker"], ["Recover"]]
-			}, {
-				"species": "Toxapex",
-				"weight": 50,
-				"item": ["Assault Vest"],
-				"ability": ["Regenerator"],
-				"evs": {"hp": 248, "spa": 252, "spd": 8},
-				"ivs": {"atk": 0},
-				"nature": ["Modest"],
-				"teraType": ["Steel", "Fairy"],
-				"moves": [["Surf"], ["Sludge Bomb"], ["Ice Beam"], ["Acid Spray"]]
 			}]
 		},
 		"amoonguss": {
@@ -2739,7 +2707,7 @@
 			}]
 		},
 		"reuniclus": {
-			"weight": 2,
+			"weight": 1,
 			"sets": [{
 				"species": "Reuniclus",
 				"weight": 100,
@@ -2791,26 +2759,13 @@
 				"moves": [["Earthquake"], ["Icicle Crash"], ["Ice Shard"], ["Knock Off", "Stealth Rock"]]
 			}]
 		},
-		"maushold": {
-			"weight": 1,
-			"sets": [{
-				"species": "Maushold",
-				"weight": 100,
-				"item": ["Wide Lens"],
-				"ability": ["Technician"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Ghost", "Dark"],
-				"moves": [["Tidy Up"], ["Population Bomb"], ["Bite"], ["Encore"]]
-			}]
-		},
 		"sandyshocks": {
 			"weight": 1,
 			"sets": [{
 				"species": "Sandy Shocks",
 				"wantsTera": true,
 				"weight": 100,
-				"item": ["Heavy-Duty Boots", "Leftovers"],
+				"item": ["Heavy-Duty Boots"],
 				"ability": ["Protosynthesis"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
