@@ -1,7 +1,7 @@
 export const ItemsText: {[id: IDEntry]: ItemText} = {
 	abilityshield: {
 		name: "Ability Shield",
-		shortDesc: "Holder's Ability cannot be changed by any effect.",
+		shortDesc: "Holder's Ability cannot be changed, suppressed, or ignored by any effect.",
 
 		block: "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
 	},
