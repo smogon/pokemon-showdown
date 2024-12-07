@@ -367,15 +367,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	skyplate: {
 		inherit: true,
-		onTakeItem: true, 
+		onTakeItem: true,
 	},
 	splashplate: {
 		inherit: true,
-		onTakeItem: true, 
+		onTakeItem: true,
 	},
 	spookyplate: {
 		inherit: true,
-		onTakeItem: true, 
+		onTakeItem: true,
 	},
 	sportball: {
 		inherit: true,
@@ -396,7 +396,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	stoneplate: {
 		inherit: true,
-		onTakeItem: true, 
+		onTakeItem: true,
 	},
 	thickclub: {
 		inherit: true,
@@ -413,7 +413,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	toxicplate: {
 		inherit: true,
-		onTakeItem: true, 
+		onTakeItem: true,
 	},
 	widelens: {
 		inherit: true,
@@ -426,7 +426,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	zapplate: {
 		inherit: true,
-		onTakeItem: true, 
+		onTakeItem: true,
 	},
 	zoomlens: {
 		inherit: true,
