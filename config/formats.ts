@@ -2624,7 +2624,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `Randomized matchups sourced from various 6v6 singles draft leagues.`,
 		mod: 'gen9',
 		team: 'randomDraftFactory',
-		ruleset: ['Standard Draft', '! Team Preview'],
+		ruleset: ['Standard Draft', '!Team Preview'],
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				if (!(pokemon.set as any).teraCaptain) pokemon.canTerastallize = null;
