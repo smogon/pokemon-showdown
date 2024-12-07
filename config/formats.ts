@@ -2301,7 +2301,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		unbanlist: [
 			'Appletun', 'Aurorus', 'Avalugg-Base', 'Banette-Base', 'Cacturne', 'Celebi', 'Cetitan', 'Chandelure', 'Cryogonal', 'Dipplin', 'Garbodor',
-			'Golem-Alola', 'Guzzlord', 'Jolteon', 'Jumpluff', 'Luvdisc', 'Magmortar', 'Mawile-Base', 'Milotic', 'Morpeko', 'Okidogi', 'Pachirisu',
+			'Golem-Alola', 'Guzzlord', 'Jolteon', 'Jumpluff', 'Lokix', 'Luvdisc', 'Magmortar', 'Mawile-Base', 'Milotic', 'Morpeko', 'Pachirisu',
 			'Perrserker', 'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Walrein', 'Wo-Chien', 'Wugtrio',
 			'Yanmega', 'Zoroark-Base',
 		],
