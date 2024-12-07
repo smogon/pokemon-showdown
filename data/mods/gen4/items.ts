@@ -113,14 +113,34 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 	},
+	dracoplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	dreadplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	earthplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	fastball: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	fistplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	flameorb: {
 		inherit: true,
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
+	},
+	flameplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	focussash: {
 		inherit: true,
@@ -156,9 +176,21 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	icicleplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	insectplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	ironball: {
 		inherit: true,
 		onEffectiveness() {},
+	},
+	ironplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	kingsrock: {
 		inherit: true,
@@ -250,6 +282,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 	},
+	meadowplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	mentalherb: {
 		inherit: true,
 		fling: {
@@ -306,6 +342,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			},
 		},
 	},
+	mindplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	moonball: {
 		inherit: true,
 		isNonstandard: null,
@@ -325,6 +365,18 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 	},
+	skyplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	splashplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	spookyplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	sportball: {
 		inherit: true,
 		isNonstandard: null,
@@ -342,6 +394,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
 	},
+	stoneplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	thickclub: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
@@ -355,6 +411,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
 	},
+	toxicplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	widelens: {
 		inherit: true,
 		onSourceModifyAccuracyPriority: 4,
@@ -363,6 +423,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				return accuracy * 1.1;
 			}
 		},
+	},
+	zapplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	zoomlens: {
 		inherit: true,
