@@ -1,12 +1,11 @@
 import {Utils} from '../../lib';
+import type {BracketData, Generator, TournamentPlayer} from './index';
 
 interface ElimTree {
 	root: ElimNode;
 	currentLayerLeafNodes: ElimNode[];
 	nextLayerLeafNodes: ElimNode[];
 }
-
-import type {TournamentPlayer} from './index';
 
 /**
  * There are two types of elim nodes, player nodes
@@ -136,7 +135,7 @@ const nameMap = [
 	// Feel free to add more
 ];
 
-export class Elimination {
+export class Elimination implements Generator {
 	readonly name: string;
 	readonly isDrawingSupported: boolean;
 	isBracketFrozen: boolean;
@@ -169,13 +168,13 @@ export class Elimination {
 		}
 	}
 
-	getPendingBracketData(players: TournamentPlayer[]) {
+	getPendingBracketData(players: TournamentPlayer[]): BracketData {
 		return {
 			type: 'tree',
 			rootNode: null,
 		};
 	}
-	getBracketData() {
+	getBracketData(): BracketData {
 		return {
 			type: 'tree',
 			rootNode: this.treeRoot.toJSON(),
