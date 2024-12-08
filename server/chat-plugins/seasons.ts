@@ -143,14 +143,20 @@ export function generateFormatSchedule() {
 }
 
 export async function getLadderTop(format: string) {
-	try {
-		const results = await Net(`https://${Config.routes.root}/ladder/?format=${toID(format)}&json`).get();
-		const reply = JSON.parse(results);
-		return reply.toplist;
-	} catch (e) {
-		Monitor.crashlog(e, "A season ladder request");
-		return null;
-	}
+    try {
+        const results = await Net(`https://${Config.routes.root}/ladder/?format=${toID(format)}&json`).get();
+        let reply;
+        try {
+            reply = JSON.parse(results);
+        } catch (parseError) {
+            Monitor.crashlog(parseError, "Invalid JSON response from ladder request");
+            return null;
+        }
+        return reply.toplist;
+    } catch (e) {
+        Monitor.crashlog(e, "A season ladder request");
+        return null;
+    }
 }
 
 export async function updateBadgeholders() {
