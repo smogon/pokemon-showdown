@@ -1215,6 +1215,7 @@ export class BattleActions {
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	) {
 		let didAnything: number | boolean | null | undefined = damage.reduce(this.combineResults);
+		targets.sort((a, b) => a && b ? b.speed - a.speed : 0);
 		for (const [i, target] of targets.entries()) {
 			if (target === false) continue;
 			let hitResult;
