@@ -190,9 +190,11 @@ export async function updateBadgeholders() {
 
 		const newHolders: Record<string, string[]> = {};
 		for (const [i, row] of response.entries()) {
-			// Ensure row.userid is safe and a string
-			const userid = Utils.getString(row.userid);
-			if (!userid) {
+			if (!row) {
+				continue;
+			}
+			const userid = toID(row.userid);
+			if (!userid || userid.length > 18) {
 				continue; // skip if userid isn't readable
 			}
 
