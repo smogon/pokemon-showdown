@@ -424,6 +424,9 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		name: "Belly Drum",
 		desc: "Raises the user's Attack by 12 stages in exchange for the user losing 1/2 of its maximum HP, rounded down. Fails if the user would faint or if its Attack stat stage is 6.",
 		shortDesc: "User loses 50% max HP. Maximizes Attack.",
+		gen2: {
+			desc: "The user loses 1/2 of its maximum HP, rounded down, unless the user would faint or its Attack stat stage is 6. If the user did not have enough HP, its Attack is raised by 2 stages. Otherwise, while the user's Attack stat stage is less than 6 it is raised by 2, and if its Attack stat before this step was 999 then the stat stage is lowered by 1 and the loop ends.",
+		},
 
 		boost: "  [POKEMON] cut its own HP and maximized its Attack!",
 	},
