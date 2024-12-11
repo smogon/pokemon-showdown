@@ -344,7 +344,9 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 		});
 		if (result !== false) {
 			// returning false means not to close the 'ticket'
-			if (!cache[room.roomid]) continue;
+			if (!cache[room.roomid]) {
+				return;
+			}
 			const notified = cache[room.roomid].staffNotified;
 			if (notified) {
 				if (typeof notified === 'string') {
