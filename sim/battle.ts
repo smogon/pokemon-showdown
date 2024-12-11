@@ -17,7 +17,7 @@
 import {Dex, toID} from './dex';
 import {Teams} from './teams';
 import {Field} from './field';
-import {Pokemon, EffectState, RESTORATIVE_BERRIES} from './pokemon';
+import {Pokemon, EffectState, RESTORATIVE_BERRIES, DMG_REDUCING_BERRIES} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
 import {State} from './state';
@@ -509,8 +509,10 @@ export class Battle {
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
 			if (handler.callback) {
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, relayVar, handler.callback);
+				if (handler.effectHolder instanceof Pokemon && handler.effectHolder.lastTurnEjected && effect.effectType === 'Item') {
+					this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, relayVar, handler.callback);
+				}
 			}
-
 			this.faintMessages();
 			if (this.ended) return;
 		}
@@ -2138,13 +2140,19 @@ export class Battle {
 
 	chainModify(numerator: number | number[], denominator = 1) {
 		const previousMod = this.trunc(this.event.modifier * 4096);
-
 		if (Array.isArray(numerator)) {
 			denominator = numerator[1];
 			numerator = numerator[0];
 		}
 		const nextMod = this.trunc(numerator * 4096 / denominator);
 		this.event.modifier = ((previousMod * nextMod + 2048) >> 12) / 4096;
+		if (this.event.target.lastTurnEjected && (this.effect.effectType === 'Item' || this.effect.id === 'metronome' ||
+		DMG_REDUCING_BERRIES.has(this.effect.id))) {
+			this.event.modifier *= ((previousMod * nextMod + 2048) >> 12) / 4096;
+		}
+		if (DMG_REDUCING_BERRIES.has(this.effect.id)) {
+			this.event.target.lastTurnEjected = null;
+		}
 	}
 
 	modify(value: number, numerator: number | number[], denominator = 1) {
