@@ -228,7 +228,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Geyser Blast',
 		evs: {def: 4, spa: 252, spe: 252}, nature: 'Modest', teraType: 'Water', shiny: true,
 	},
-	Breadstycks: {
+	Breadey: {
 		species: 'Dachsbun', ability: 'Painful Exit', item: 'Leftovers', gender: '',
 		moves: ['Protect', 'Rest', 'Play Rough'],
 		signatureMove: 'Baker\'s Douze Off',

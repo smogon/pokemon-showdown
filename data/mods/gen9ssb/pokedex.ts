@@ -185,7 +185,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Blitz of Ruin"},
 	},
 
-	// Breadstycks
+	// Breadey
 	dachsbun: {
 		inherit: true,
 		abilities: {0: "Painful Exit"},
