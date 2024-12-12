@@ -476,20 +476,20 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Blitz')}|https://www.youtube.com/watch?v=lPGipwoJiOM`);
 		},
 	},
-	breadstycks: {
+	breadey: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c:|${getName('Breadstycks')}|I loeuf you <3`);
+			this.add(`c:|${getName('Breadey')}|I loeuf you <3`);
 		},
 		// onSwitchOut implemented in ability instead
 		onFaint() {
-			this.add(`c:|${getName('Breadstycks')}|Oh, ma vie... c'est 'pitable'...`);
+			this.add(`c:|${getName('Breadey')}|Oh, ma vie... c'est 'pitable'...`);
 		},
 		onFoeFaint(target, source, effect) {
 			if (source === this.effectState.target && effect?.name === 'Painful Exit') {
-				this.add(`c:|${getName('Breadstycks')}|Ashes to ashes, crust to crust.`);
+				this.add(`c:|${getName('Breadey')}|Ashes to ashes, crust to crust.`);
 			} else {
-				this.add(`c:|${getName('Breadstycks')}|Ope, someone's swallowing fishes.`);
+				this.add(`c:|${getName('Breadey')}|Ope, someone's swallowing fishes.`);
 			}
 		},
 		innateName: "Well-Baked Body",
@@ -1731,7 +1731,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			case 'beowulf':
 				message = 'BEE';
 				break;
-			case 'breadstycks':
+			case 'breadey':
 				message = 'BREADBOWL';
 				break;
 			case 'clerica':
@@ -2041,7 +2041,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onStart(pokemon) {
 			this.add(`c:|${getName('RSB')}|Time to take a bite out of crime!`);
 			const dog = (this.toID(enemyStaff(pokemon)));
-			if (dog === 'rsb' || dog === 'shiloh' || dog === 'valerian' || dog === 'breadstycks' || dog === 'yuki') {
+			if (dog === 'rsb' || dog === 'shiloh' || dog === 'valerian' || dog === 'breadey' || dog === 'yuki') {
 				this.add(`c:|${getName('RSB')}|DOGGO!`);
 			}
 		},
