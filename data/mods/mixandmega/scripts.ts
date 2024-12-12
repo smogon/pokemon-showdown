@@ -490,6 +490,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				ability: string,
 				baseStats: SparseStatsTable,
 				weighthg: number,
+				heightm: number,
 				originalSpecies: string,
 				requiredItem: string | undefined,
 				type?: string,
@@ -498,6 +499,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				ability: formeChangeSpecies.abilities['0'],
 				baseStats: {},
 				weighthg: formeChangeSpecies.weighthg - baseSpecies.weighthg,
+				heightm: formeChangeSpecies.heightm - baseSpecies.heightm,
 				originalSpecies: formeChangeSpecies.name,
 				requiredItem: formeChangeSpecies.requiredItem,
 			};
@@ -508,7 +510,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (formeChangeSpecies.types.length > baseSpecies.types.length) {
 				deltas.type = formeChangeSpecies.types[1];
 			} else if (formeChangeSpecies.types.length < baseSpecies.types.length) {
-				deltas.type = 'mono';
+				deltas.type = this.battle.ruleTable.has('mixandmegaoldaggronite') ? 'mono' : baseSpecies.types[0];
 			} else if (formeChangeSpecies.types[1] !== baseSpecies.types[1]) {
 				deltas.type = formeChangeSpecies.types[1];
 			}
@@ -539,12 +541,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				baseStats[statName] = this.battle.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 			}
 			species.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
+			species.heightm = Math.max(1, species.heightm + deltas.heightm);
 			species.originalSpecies = deltas.originalSpecies;
 			species.requiredItem = deltas.requiredItem;
-			switch (deltas.formeType) {
-			case 'Mega': species.isMega = true; break;
-			case 'Primal': species.isPrimal = true; break;
-			}
+			if (deltas.formeType === 'Mega') species.isMega = true;
+			if (deltas.formeType === 'Primal') species.isPrimal = true;
 			return species;
 		},
 	},

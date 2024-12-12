@@ -2940,4 +2940,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: `The effects of Trick Room are always active, using Trick Room reverts the field to normal for 5 turns.`,
 		// implemented in Pokemon#getActionSpeed()
 	},
+	mixandmegaoldaggronite: {
+		effectType: 'Rule',
+		name: "Mix and Mega Old Aggronite",
+		desc: `Causes Aggronite to no longer give the Steel type in Mix and Mega.`,
+		// implemented in mods/mixandmega/scripts.ts
+	},
 };

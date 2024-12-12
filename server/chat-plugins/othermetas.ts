@@ -11,6 +11,7 @@ interface StoneDeltas {
 	baseStats: {[stat in StatID]: number};
 	bst: number;
 	weighthg: number;
+	heightm: number;
 	type?: string;
 }
 
@@ -135,6 +136,7 @@ export const commands: Chat.ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
+			heightm: megaSpecies.heightm - baseSpecies.heightm,
 			bst: megaSpecies.bst - baseSpecies.bst,
 		};
 		let statId: StatID;
@@ -144,7 +146,7 @@ export const commands: Chat.ChatCommands = {
 		if (megaSpecies.types.length > baseSpecies.types.length) {
 			deltas.type = megaSpecies.types[1];
 		} else if (megaSpecies.types.length < baseSpecies.types.length) {
-			deltas.type = 'mono';
+			deltas.type = dex.gen === 8 ? 'mono' : baseSpecies.types[0];
 		} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 			deltas.type = megaSpecies.types[1];
 		}
@@ -166,6 +168,7 @@ export const commands: Chat.ChatCommands = {
 			mixedSpecies.bst += mixedSpecies.baseStats[statName];
 		}
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
+		mixedSpecies.heightm = Math.max(1, species.heightm + deltas.heightm);
 		mixedSpecies.tier = "MnM";
 		let weighthit = 20;
 		if (mixedSpecies.weighthg >= 2000) {
@@ -272,6 +275,7 @@ export const commands: Chat.ChatCommands = {
 			const deltas: StoneDeltas = {
 				baseStats: Object.create(null),
 				weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
+				heightm: megaSpecies.heightm - baseSpecies.heightm,
 				bst: megaSpecies.bst - baseSpecies.bst,
 			};
 			let statId: StatID;
@@ -281,12 +285,13 @@ export const commands: Chat.ChatCommands = {
 			if (megaSpecies.types.length > baseSpecies.types.length) {
 				deltas.type = megaSpecies.types[1];
 			} else if (megaSpecies.types.length < baseSpecies.types.length) {
-				deltas.type = dex.gen >= 8 ? 'mono' : megaSpecies.types[0];
+				deltas.type = dex.gen === 8 ? 'mono' : megaSpecies.types[0];
 			} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 				deltas.type = megaSpecies.types[1];
 			}
 			const details = {
 				Gen: aStone.gen,
+				Height: (deltas.heightm < 0 ? "" : "+") + deltas.heightm + " m",
 				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
 			};
 			let tier;
