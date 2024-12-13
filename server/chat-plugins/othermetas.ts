@@ -136,7 +136,7 @@ export const commands: Chat.ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
-			heightm: megaSpecies.heightm - baseSpecies.heightm,
+			heightm: ((megaSpecies.heightm * 10) - (baseSpecies.heightm * 10)) / 10,
 			bst: megaSpecies.bst - baseSpecies.bst,
 		};
 		let statId: StatID;
@@ -168,7 +168,7 @@ export const commands: Chat.ChatCommands = {
 			mixedSpecies.bst += mixedSpecies.baseStats[statName];
 		}
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
-		mixedSpecies.heightm = Math.max(1, species.heightm + deltas.heightm);
+		mixedSpecies.heightm = Math.max(0.1, ((species.heightm * 10) + (deltas.heightm * 10)) / 10);
 		mixedSpecies.tier = "MnM";
 		let weighthit = 20;
 		if (mixedSpecies.weighthg >= 2000) {
