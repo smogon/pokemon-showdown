@@ -499,7 +499,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				ability: formeChangeSpecies.abilities['0'],
 				baseStats: {},
 				weighthg: formeChangeSpecies.weighthg - baseSpecies.weighthg,
-				heightm: formeChangeSpecies.heightm - baseSpecies.heightm,
+				heightm: ((formeChangeSpecies.heightm * 10) - (baseSpecies.heightm * 10)) / 10,
 				originalSpecies: formeChangeSpecies.name,
 				requiredItem: formeChangeSpecies.requiredItem,
 			};
@@ -541,7 +541,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				baseStats[statName] = this.battle.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 			}
 			species.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
-			species.heightm = Math.max(1, species.heightm + deltas.heightm);
+			species.heightm = Math.max(0.1, ((species.heightm * 10) + (deltas.heightm * 10)) / 10);
 			species.originalSpecies = deltas.originalSpecies;
 			species.requiredItem = deltas.requiredItem;
 			if (deltas.formeType === 'Mega') species.isMega = true;
