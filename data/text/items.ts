@@ -1620,7 +1620,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	shedshell: {
 		name: "Shed Shell",
-		shortDesc: "Holder may switch out even when trapped by another Pokemon, or by Ingrain.",
+		shortDesc: "Holder cannot be prevented from choosing to switch out by any effect.",
 	},
 	shellbell: {
 		name: "Shell Bell",
