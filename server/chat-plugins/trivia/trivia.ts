@@ -859,8 +859,8 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 				winner => this.room.tr` Second place: ${mapper(winner)} (${winner.player.points} points)`,
 				winner => this.room.tr`, third place: ${mapper(winner)} (${winner.player.points} points)`,
 			];
-			for (let i = 0; i < winners.length; i++) {
-				message += winnerParts[i](winners[i]);
+			for (const [i, winner] of winners.entries()) {
+				message += winnerParts[i](winner);
 			}
 		} else {
 			message = `No participants in the game of ` +
