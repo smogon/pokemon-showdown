@@ -422,7 +422,7 @@ export const Recs = new RecommendationsInterface();
 
 export const commands: Chat.ChatCommands = {
 	lastfmyoutubesearch(target, room, user) {
-		this.checkCan('gdeclare', user);
+		this.checkCan('gdeclare');
 		target = toID(target);
 		if (!target || !['enable', 'disable'].includes(target)) {
 			return this.parse('/help lastfmyoutubesearch');
