@@ -349,54 +349,54 @@ export function deepFreeze<T>(obj: T): T {
 }
 
 export function levenshtein(s: string, t: string, l: number): number {
-    const n = s.length;
-    const m = t.length;
+	const n = s.length;
+	const m = t.length;
 
-    if (n === 0) return m;
-    if (m === 0) return n;
-    if (l && Math.abs(m - n) > l) return Math.abs(m - n);
+	if (n === 0) return m;
+	if (m === 0) return n;
+	if (l && Math.abs(m - n) > l) return Math.abs(m - n);
 
-    // Use a single typed array for d, instead of a 2D array.
-    // d[i][j] is stored at d[i*(m+1)+j].
-    const d = new Uint16Array((n + 1) * (m + 1));
+	// Use a single typed array for d, instead of a 2D array.
+	// d[i][j] is stored at d[i*(m+1)+j].
+	const d = new Uint16Array((n + 1) * (m + 1));
 
-    // Initialize first column: d[i][0] = i
-    for (let i = 0; i <= n; i++) {
-        d[i * (m + 1)] = i;
-    }
+	// Initialize first column: d[i][0] = i
+	for (let i = 0; i <= n; i++) {
+		d[i * (m + 1)] = i;
+	}
 
-    // Initialize first row: d[0][j] = j
-    for (let j = 0; j <= m; j++) {
-        d[j] = j;
-    }
+	// Initialize first row: d[0][j] = j
+	for (let j = 0; j <= m; j++) {
+		d[j] = j;
+	}
 
-    for (let i = 1; i <= n; i++) {
-        const si = s.charAt(i - 1);
-        const rowBase = i * (m + 1);
-        const prevRowBase = (i - 1) * (m + 1);
+	for (let i = 1; i <= n; i++) {
+		const si = s.charAt(i - 1);
+		const rowBase = i * (m + 1);
+		const prevRowBase = (i - 1) * (m + 1);
 
-        for (let j = 1; j <= m; j++) {
-            // Original code performs an early check here after setting d[i][j].
-            // We must compute d[i][j] first, then check.
+		for (let j = 1; j <= m; j++) {
+			// Original code performs an early check here after setting d[i][j].
+			// We must compute d[i][j] first, then check.
 
-            const tj = t.charAt(j - 1);
-            const cost = (si === tj) ? 0 : 1;
+			const tj = t.charAt(j - 1);
+			const cost = (si === tj) ? 0 : 1;
 
-            let mi = d[prevRowBase + j] + 1;         // d[i-1][j] + 1
-            const b = d[rowBase + j - 1] + 1;        // d[i][j-1] + 1
-            const c = d[prevRowBase + j - 1] + cost; // d[i-1][j-1] + cost
+			let mi = d[prevRowBase + j] + 1; // d[i-1][j] + 1
+			const b = d[rowBase + j - 1] + 1; // d[i][j-1] + 1
+			const c = d[prevRowBase + j - 1] + cost; // d[i-1][j-1] + cost
 
-            if (b < mi) mi = b;
-            if (c < mi) mi = c;
+			if (b < mi) mi = b;
+			if (c < mi) mi = c;
 
-            d[rowBase + j] = mi;
+			d[rowBase + j] = mi;
 
-            // Check after assigning d[rowBase + j]:
-            if (i === j && d[rowBase + j] > 4) return n;
-        }
-    }
+			// Check after assigning d[rowBase + j]:
+			if (i === j && d[rowBase + j] > 4) return n;
+		}
+	}
 
-    return d[n * (m + 1) + m];
+	return d[n * (m + 1) + m];
 }
 
 export function waitUntil(time: number): Promise<void> {
