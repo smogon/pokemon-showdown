@@ -40,6 +40,8 @@ interface Recommendation {
 interface Recommendations {
 	suggested: Recommendation[];
 	saved: Recommendation[];
+	// Storing here so I don't need to rewrite the lastfm json
+	youtubeSearchDisabled?: boolean;
 }
 
 const lastfm: {[userid: string]: string} = JSON.parse(FS(LASTFM_DB).readIfExistsSync() || "{}");
@@ -109,12 +111,18 @@ export class LastFMInterface {
 			try {
 				videoIDs = await YouTube.searchVideo(trackName, 1);
 			} catch (e: any) {
-				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				if (!recommendations.youtubeSearchDisabled) {
+					throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				}
 			}
-			if (!videoIDs?.length) {
+			if (!videoIDs?.length && !recommendations.youtubeSearchDisabled) {
 				throw new Chat.ErrorMessage(`Something went wrong with the YouTube API.`);
 			}
-			buf += `<a href="https://youtu.be/${videoIDs[0]}">${Utils.escapeHTML(trackName)}</a>`;
+			if (recommendations.youtubeSearchDisabled) {
+				buf += Utils.escapeHTML(trackName);
+			} else {
+				buf += `<a href="https://youtu.be/${videoIDs![0]}">${Utils.escapeHTML(trackName)}</a>`;
+			}
 			buf += `</td></tr></table>${this.getScrobbleBadge()}`;
 		}
 		return buf;
@@ -183,9 +191,11 @@ export class LastFMInterface {
 			try {
 				videoIDs = await YouTube.searchVideo(searchName, 1);
 			} catch (e: any) {
-				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				if (!recommendations.youtubeSearchDisabled) {
+					throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				}
 			}
-			if (!videoIDs?.length) {
+			if (!videoIDs?.length || recommendations.youtubeSearchDisabled) {
 				buf += searchName;
 			} else {
 				buf += `<a href="https://youtu.be/${videoIDs[0]}">YouTube link</a>`;
@@ -411,6 +421,33 @@ export const LastFM = new LastFMInterface();
 export const Recs = new RecommendationsInterface();
 
 export const commands: Chat.ChatCommands = {
+	lastfmyoutubesearch(target, room, user) {
+		this.checkCan('gdeclare', user);
+		target = toID(target);
+		if (!target || !['enable', 'disable'].includes(target)) {
+			return this.parse('/help lastfmyoutubesearch');
+		}
+		if (target === 'enable') {
+			if (!recommendations.youtubeSearchDisabled) {
+				throw new Chat.ErrorMessage(`The YouTube API is already enabled for Last.fm commands.`);
+			}
+			delete recommendations.youtubeSearchDisabled;
+			saveRecommendations();
+			this.sendReply(`YouTube API enabled for Last.fm commands.`);
+			this.globalModlog(`LASTFM YOUTUBE API`, null, 'enabled');
+		} else {
+			if (recommendations.youtubeSearchDisabled) {
+				throw new Chat.ErrorMessage(`The YouTube API is already disabled for Last.fm commands.`);
+			}
+			recommendations.youtubeSearchDisabled = true;
+			saveRecommendations();
+			this.sendReply(`YouTube API disabled for Last.fm commands.`);
+			this.globalModlog(`LASTFM YOUTUBE API`, null, 'disabled');
+		}
+	},
+	lastfmyoutubesearchhelp: [
+		'/lastfmyoutubesearch [enable|disable] - Enables/disables the YouTube API for Last.fm commands. Requires: ~',
+	],
 	registerlastfm(target, room, user) {
 		if (!target) return this.parse(`/help registerlastfm`);
 		this.checkChat(target);
