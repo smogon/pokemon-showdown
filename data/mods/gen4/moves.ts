@@ -47,6 +47,32 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 	},
+	assist: {
+		inherit: true,
+		onHit(target) {
+			const moves = [];
+			for (const pokemon of target.side.pokemon) {
+				if (pokemon === target) continue;
+				for (const moveSlot of pokemon.moveSlots) {
+					const moveid = moveSlot.id;
+					const move = this.dex.moves.get(moveid);
+					if (move.flags['noassist'] || move.isZ || move.isMax ||
+						(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
+						(target.volatiles['healblock'] && move.flags['heal'])
+					) {
+						continue;
+					}
+					moves.push(moveid);
+				}
+			}
+			let randomMove = '';
+			if (moves.length) randomMove = this.sample(moves);
+			if (!randomMove) {
+				return false;
+			}
+			this.actions.useMove(randomMove, target);
+		},
+	},
 	beatup: {
 		inherit: true,
 		basePower: 10,
@@ -196,6 +222,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 			if (!target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
+		},
+	},
+	copycat: {
+		inherit: true,
+		onHit(pokemon) {
+			let move: Move | ActiveMove | null = this.lastMove;
+			if (!move) return;
+
+			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+			if (move.flags['failcopycat'] || move.isZ || move.isMax ||
+				(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
+				(pokemon.volatiles['healblock'] && move.flags['heal'])
+			) {
+				return false;
+			}
+			this.actions.useMove(move.id, pokemon);
 		},
 	},
 	cottonspore: {
@@ -1007,6 +1049,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	metronome: {
 		inherit: true,
 		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1, failmimic: 1},
+		onHit(pokemon) {
+			const moves = this.dex.moves.all().filter(move => (
+				(![2, 4].includes(this.gen) || !pokemon.moves.includes(move.id)) &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['metronome'] &&
+				!(this.field.pseudoWeather['gravity'] && move.flags['gravity']) &&
+				!(pokemon.volatiles['healblock'] && move.flags['heal'])
+			));
+			let randomMove = '';
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves).id;
+			}
+			if (!randomMove) return false;
+			pokemon.side.lastSelectedMove = this.toID(randomMove);
+			this.actions.useMove(randomMove, pokemon);
+		},
 	},
 	mimic: {
 		inherit: true,
