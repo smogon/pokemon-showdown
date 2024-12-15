@@ -1,237 +1,200 @@
 /**
- * Net - abstraction layer around Node's HTTP/S request system.
- * Advantages:
- * - easier acquiring of data
- * - mass disabling of outgoing requests via Config.
+ * Net - abstraction layer around Fetch.
  */
 
-import * as https from 'https';
-import * as http from 'http';
-import * as url from 'url';
-import * as Streams from './streams';
+import fetch, { Response, HeadersInit } from 'node-fetch'; 
+import * as Streams from './streams'; // Assuming this still provides a compatible Streams.ReadWriteStream
 declare const Config: any;
 
 export interface PostData {
-	[key: string]: string | number;
+    [key: string]: string | number;
 }
-export interface NetRequestOptions extends https.RequestOptions {
-	body?: string | PostData;
-	writable?: boolean;
-	query?: PostData;
+
+export interface NetRequestOptions {
+    method?: string;
+    headers?: { [key: string]: string };
+    body?: string | PostData;
+    writable?: boolean;
+    query?: PostData;
+    timeout?: number;
 }
 
 export class HttpError extends Error {
-	statusCode?: number;
-	body: string;
-	constructor(message: string, statusCode: number | undefined, body: string) {
-		super(message);
-		this.name = 'HttpError';
-		this.statusCode = statusCode;
-		this.body = body;
-		Error.captureStackTrace(this, HttpError);
-	}
+    statusCode?: number;
+    body: string;
+    constructor(message: string, statusCode: number | undefined, body: string) {
+        super(message);
+        this.name = 'HttpError';
+        this.statusCode = statusCode;
+        this.body = body;
+        Error.captureStackTrace(this, HttpError);
+    }
 }
 
 export class NetStream extends Streams.ReadWriteStream {
-	opts: NetRequestOptions | null;
-	uri: string;
-	request: http.ClientRequest;
-	/** will be a Promise before the response is received, and the response itself after */
-	response: Promise<http.IncomingMessage | null> | http.IncomingMessage | null;
-	statusCode: number | null;
-	/** response headers */
-	headers: http.IncomingHttpHeaders | null;
-	state: 'pending' | 'open' | 'timeout' | 'success' | 'error';
+    uri: string;
+    opts: NetRequestOptions;
+    response: Promise<Response | null> | Response | null;
+    statusCode: number | null;
+    headers: HeadersInit | null;
+    state: 'pending' | 'success' | 'error';
+    abortController: AbortController;
 
-	constructor(uri: string, opts: NetRequestOptions | null = null) {
-		super();
-		this.statusCode = null;
-		this.headers = null;
-		this.uri = uri;
-		this.opts = opts;
-		// make request
-		this.response = null;
-		this.state = 'pending';
-		this.request = this.makeRequest(opts);
-	}
-	makeRequest(opts: NetRequestOptions | null) {
-		if (!opts) opts = {};
-		let body = opts.body;
-		if (body && typeof body !== 'string') {
-			if (!opts.headers) opts.headers = {};
-			if (!opts.headers['Content-Type']) {
-				opts.headers['Content-Type'] = 'application/x-www-form-urlencoded';
-			}
-			body = NetStream.encodeQuery(body);
-		}
+    constructor(uri: string, opts: NetRequestOptions = {}) {
+        super();
+        this.uri = uri;
+        this.opts = opts;
+        this.response = null;
+        this.statusCode = null;
+        this.headers = null;
+        this.state = 'pending';
+        this.abortController = new AbortController();
+        this.makeRequest(opts);
+    }
 
-		if (opts.query) {
-			this.uri += (this.uri.includes('?') ? '&' : '?') + NetStream.encodeQuery(opts.query);
-		}
+    static encodeQuery(data: PostData) {
+        const params = new URLSearchParams();
+        for (const key in data) {
+            params.append(key, String(data[key]));
+        }
+        return params.toString();
+    }
 
-		if (body) {
-			if (!opts.headers) opts.headers = {};
-			if (!opts.headers['Content-Length']) {
-				opts.headers['Content-Length'] = Buffer.byteLength(body);
-			}
-		}
+    async makeRequest(opts: NetRequestOptions) {
+        let url = this.uri;
+        if (opts.query) {
+            url += (url.includes('?') ? '&' : '?') + NetStream.encodeQuery(opts.query);
+        }
 
-		const protocol = url.parse(this.uri).protocol as string;
-		const net = protocol === 'https:' ? https : http;
+        let headers: HeadersInit = opts.headers || {};
+        let body: string | undefined;
 
-		let resolveResponse: ((value: http.IncomingMessage | null) => void) | null;
-		this.response = new Promise(resolve => {
-			resolveResponse = resolve;
-		});
+        if (opts.body && typeof opts.body !== 'string') {
+            if (!headers['Content-Type']) {
+                headers['Content-Type'] = 'application/x-www-form-urlencoded';
+            }
+            body = NetStream.encodeQuery(opts.body);
+        } else if (typeof opts.body === 'string') {
+            body = opts.body;
+        }
 
-		const request = net.request(this.uri, opts, response => {
-			this.state = 'open';
-			this.nodeReadableStream = response;
-			this.response = response;
-			this.statusCode = response.statusCode || null;
-			this.headers = response.headers;
+        const method = opts.method || 'GET';
+        const timeout = opts.timeout !== undefined ? opts.timeout : 5000;
+        const requestInit: RequestInit = {
+            method,
+            headers,
+            body,
+            signal: this.abortController.signal,
+        };
 
-			response.setEncoding('utf-8');
-			resolveResponse!(response);
-			resolveResponse = null;
+        const timeoutId = setTimeout(() => {
+            this.state = 'error';
+            this.abortController.abort();
+            this.pushError(new Error("Request timeout"));
+        }, timeout);
 
-			response.on('data', data => {
-				this.push(data);
-			});
-			response.on('end', () => {
-				if (this.state === 'open') this.state = 'success';
-				if (!this.atEOF) this.pushEnd();
-			});
-		});
-		request.on('close', () => {
-			if (!this.atEOF) {
-				this.state = 'error';
-				this.pushError(new Error("Unexpected connection close"));
-			}
-			if (resolveResponse) {
-				this.response = null;
-				resolveResponse(null);
-				resolveResponse = null;
-			}
-		});
-		request.on('error', error => {
-			if (!this.atEOF) this.pushError(error, true);
-		});
-		if (opts.timeout || opts.timeout === undefined) {
-			request.setTimeout(opts.timeout || 5000, () => {
-				this.state = 'timeout';
-				this.pushError(new Error("Request timeout"));
-				request.abort();
-			});
-		}
+        try {
+            const response = await fetch(url, requestInit);
+            clearTimeout(timeoutId);
+            this.response = response;
+            this.statusCode = response.status;
+            this.headers = Object.fromEntries(response.headers.entries());
 
-		if (body) {
-			request.write(body);
-			request.end();
-			if (opts.writable) {
-				throw new Error(`options.body is what you would have written to a NetStream - you must choose one or the other`);
-			}
-		} else if (opts.writable) {
-			this.nodeWritableStream = request;
-		} else {
-			request.end();
-		}
+            const reader = response.body?.getReader();
+            if (!reader) {
+                this.state = 'success';
+                this.pushEnd();
+                return;
+            }
 
-		return request;
-	}
-	static encodeQuery(data: PostData) {
-		let out = '';
-		for (const key in data) {
-			if (out) out += `&`;
-			out += `${key}=${encodeURIComponent('' + data[key])}`;
-		}
-		return out;
-	}
-	_write(data: string | Buffer): Promise<void> | void {
-		if (!this.nodeWritableStream) {
-			throw new Error("You must specify opts.writable to write to a request.");
-		}
-		const result = this.nodeWritableStream.write(data);
-		if (result !== false) return undefined;
-		if (!this.drainListeners.length) {
-			this.nodeWritableStream.once('drain', () => {
-				for (const listener of this.drainListeners) listener();
-				this.drainListeners = [];
-			});
-		}
-		return new Promise(resolve => {
-			this.drainListeners.push(resolve);
-		});
-	}
-	_read() {
-		this.nodeReadableStream?.resume();
-	}
-	_pause() {
-		this.nodeReadableStream?.pause();
-	}
+            // Read the data from the response body and push it into our stream
+            const pump = async () => {
+                const { done, value } = await reader.read();
+                if (done) {
+                    this.state = 'success';
+                    this.pushEnd();
+                    return;
+                }
+                if (value) this.push(value);
+                pump();
+            };
+            pump();
+
+        } catch (err) {
+            clearTimeout(timeoutId);
+            if ((err as Error).name === 'AbortError') {
+                // Already handled as timeout
+            } else {
+                this.pushError(err as Error);
+            }
+        }
+    }
+
+    _write(data: string | Buffer): Promise<void> | void {
+        // With fetch, the request body is typically set once at the start.
+        // Streaming uploads would need a different approach (e.g. a TransformStream passed to fetch).
+        throw new Error("You must specify opts.body before the request. Streaming request bodies are not supported in this example.");
+    }
+
+    _read() {
+        // No-op. Fetch streams are "pull" streams.
+    }
+
+    _pause() {
+        // Not directly supported by fetch's ReadableStream. You'd need more complex handling if truly required.
+    }
 }
+
 export class NetRequest {
-	uri: string;
-	/** Response from last request, made so response stuff is available without being hacky */
-	response?: http.IncomingMessage;
-	constructor(uri: string) {
-		this.uri = uri;
-	}
-	/**
-	 * Makes a http/https get request to the given link and returns a stream.
-	 * The request data itself can be read with ReadStream#readAll().
-	 * The NetStream class also holds headers and statusCode as a property.
-	 *
-	 * @param opts request opts - headers, etc.
-	 * @param body POST body
-	 */
-	getStream(opts: NetRequestOptions = {}) {
-		if (typeof Config !== 'undefined' && Config.noNetRequests) {
-			throw new Error(`Net requests are disabled.`);
-		}
-		const stream = new NetStream(this.uri, opts);
-		return stream;
-	}
+    uri: string;
+    response?: Response;
 
-	/**
-	 * Makes a basic http/https request to the URI.
-	 * Returns the response data.
-	 *
-	 * Will throw if the response code isn't 200 OK.
-	 *
-	 * @param opts request opts - headers, etc.
-	 */
-	async get(opts: NetRequestOptions = {}): Promise<string> {
-		const stream = this.getStream(opts);
-		const response = await stream.response;
-		if (response) this.response = response;
-		if (response && response.statusCode !== 200) {
-			throw new HttpError(response.statusMessage || "Connection error", response.statusCode, await stream.readAll());
-		}
-		return stream.readAll();
-	}
+    constructor(uri: string) {
+        this.uri = uri;
+    }
 
-	/**
-	 * Makes a http/https POST request to the given link.
-	 * @param opts request opts - headers, etc.
-	 * @param body POST body
-	 */
-	post(opts: Omit<NetRequestOptions, 'body'>, body: PostData | string): Promise<string>;
-	/**
-	 * Makes a http/https POST request to the given link.
-	 * @param opts request opts - headers, etc.
-	 */
-	post(opts?: NetRequestOptions): Promise<string>;
-	post(opts: NetRequestOptions = {}, body?: PostData | string) {
-		if (!body) body = opts.body;
-		return this.get({
-			...opts,
-			method: 'POST',
-			body,
-		});
-	}
+    /**
+     * Makes a request and returns a NetStream (readable).
+     */
+    getStream(opts: NetRequestOptions = {}) {
+        if (typeof Config !== 'undefined' && Config.noNetRequests) {
+            throw new Error(`Net requests are disabled.`);
+        }
+        const stream = new NetStream(this.uri, opts);
+        return stream;
+    }
+
+    /**
+     * Makes a GET request and returns the response as a string.
+     * Throws if the status code is not 200.
+     */
+    async get(opts: NetRequestOptions = {}): Promise<string> {
+        const stream = this.getStream(opts);
+        const response = await stream.response;
+        if (response) this.response = response;
+        const status = response ? response.status : 0;
+        const text = await stream.readAll();
+        if (response && status !== 200) {
+            throw new HttpError(response.statusText || "Connection error", status, text);
+        }
+        return text;
+    }
+
+    /**
+     * Makes a POST request and returns the response as a string.
+     */
+    post(opts: Omit<NetRequestOptions, 'body'>, body: PostData | string): Promise<string>;
+    post(opts?: NetRequestOptions): Promise<string>;
+    async post(opts: NetRequestOptions = {}, body?: PostData | string) {
+        if (!body) body = opts.body;
+        return this.get({
+            ...opts,
+            method: 'POST',
+            body,
+        });
+    }
 }
 
 export const Net = Object.assign((path: string) => new NetRequest(path), {
-	NetRequest, NetStream,
+    NetRequest, NetStream,
 });
