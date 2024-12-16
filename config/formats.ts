@@ -175,7 +175,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Doubles OU",
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles'],
+		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: ['DUber', 'Shadow Tag'],
 	},
 	{
@@ -188,7 +188,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Doubles UU",
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['[Gen 9] Doubles OU', 'Evasion Abilities Clause'],
+		ruleset: ['[Gen 9] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
 	},
 	{
