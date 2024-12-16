@@ -470,7 +470,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		getMixedSpecies(originalForme, formeChange, pokemon) {
 			const originalSpecies = this.dex.species.get(originalForme);
 			const formeChangeSpecies = this.dex.species.get(formeChange);
-			if (originalSpecies.baseSpecies === formeChangeSpecies.baseSpecies && !formeChangeSpecies.isMega) {
+			if (originalSpecies.baseSpecies === formeChangeSpecies.baseSpecies &&
+				!formeChangeSpecies.isMega && !formeChangeSpecies.isPrimal) {
 				return formeChangeSpecies;
 			}
 			const deltas = (this as any).getFormeChangeDeltas(formeChangeSpecies, pokemon);
