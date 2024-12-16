@@ -2982,7 +2982,7 @@
               "item": ["Choice Scarf"],
               "nature": "Jolly",
               "evs": {"hp": 4, "atk": 252, "spe": 252},
-              "teraType": ["Dark", "Grass"],
+              "teraType": ["Dark", "Ghost", "Grass"],
               "ability": ["Protean"]
           },
           {
@@ -2997,7 +2997,7 @@
               "item": ["Choice Scarf"],
               "nature": "Jolly",
               "evs": {"hp": 4, "atk": 252, "spe": 252},
-              "teraType": ["Ghost", "Rock"],
+              "teraType": ["Rock"],
               "wantsTera": true,
               "ability": ["Protean"]
           },
@@ -3013,7 +3013,7 @@
               "item": ["Focus Sash"],
               "nature": "Jolly",
               "evs": {"atk": 252, "def": 4, "spe": 252},
-              "teraType": ["Grass"],
+              "teraType": ["Ghost", "Grass"],
               "ability": ["Overgrow"]
           },
           {
@@ -3028,7 +3028,7 @@
               "item": ["Focus Sash"],
               "nature": "Jolly",
               "evs": {"atk": 252, "def": 4, "spe": 252},
-              "teraType": ["Ghost", "Rock"],
+              "teraType": ["Rock"],
               "wantsTera": true,
               "ability": ["Overgrow"]
           },
@@ -3044,7 +3044,7 @@
               "item": ["Choice Band"],
               "nature": "Jolly",
               "evs": {"hp": 4, "atk": 252, "spe": 252},
-              "teraType": ["Grass"],
+              "teraType": ["Ghost", "Grass"],
               "ability": ["Protean"]
           },
           {
@@ -3059,7 +3059,7 @@
               "item": ["Choice Band"],
               "nature": "Jolly",
               "evs": {"hp": 4, "atk": 252, "spe": 252},
-              "teraType": ["Ghost", "Rock"],
+              "teraType": ["Rock"],
               "wantsTera": true,
               "ability": ["Protean"]
           }

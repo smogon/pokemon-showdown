@@ -2029,7 +2029,7 @@
                 "abilities": ["Natural Cure"]
             },
             {
-                "role": "Bulky Support",
+                "role": "Staller",
                 "movepool": ["healbell", "hiddenpowerfire", "hiddenpowergrass", "leechseed", "psychic", "recover", "toxic"],
                 "abilities": ["Natural Cure"]
             }

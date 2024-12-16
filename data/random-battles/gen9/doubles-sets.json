@@ -908,10 +908,10 @@
                 "teraTypes": ["Flying"]
             },
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Extreme Speed", "Iron Head", "Protect", "Scale Shot", "Stomping Tantrum", "Tailwind"],
+                "role": "Bulky Protect",
+                "movepool": ["Fire Blast", "Protect", "Scale Shot", "Tailwind"],
                 "abilities": ["Inner Focus"],
-                "teraTypes": ["Steel"]
+                "teraTypes": ["Fire"]
             }
         ]
     },
@@ -1127,7 +1127,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Acrobatics", "Encore", "Helping Hand", "Pollen Puff", "Rage Powder", "Sleep Powder", "Strength Sap", "Tailwind"],
+                "movepool": ["Acrobatics", "Encore", "Pollen Puff", "Rage Powder", "Sleep Powder", "Strength Sap", "Tailwind"],
                 "abilities": ["Infiltrator"],
                 "teraTypes": ["Steel"]
             }
@@ -6359,7 +6359,7 @@
             },
             {
                 "role": "Choice Item user",
-                "movepool": ["Dazzling Gleam", "Moonblast", "Mystical Fire", "Shadow Ball"],
+                "movepool": ["Dazzling Gleam", "Icy Wind", "Moonblast", "Shadow Ball"],
                 "abilities": ["Protosynthesis"],
                 "teraTypes": ["Fairy"]
             }

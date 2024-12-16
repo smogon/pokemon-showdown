@@ -1292,7 +1292,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"]
+                "movepool": ["explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "reflect", "spikes", "toxic"]
             }
         ]
     },
@@ -1358,7 +1358,11 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["curse", "haze", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
+                "movepool": ["haze", "hydropump", "rest", "sleeptalk", "sludgebomb", "spikes"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
             }
         ]
     },
