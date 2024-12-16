@@ -6359,7 +6359,7 @@
             },
             {
                 "role": "Choice Item user",
-                "movepool": ["Dazzling Gleam", "Moonblast", "Mystical Fire", "Shadow Ball"],
+                "movepool": ["Dazzling Gleam", "Icy Wind", "Moonblast", "Shadow Ball"],
                 "abilities": ["Protosynthesis"],
                 "teraTypes": ["Fairy"]
             }
