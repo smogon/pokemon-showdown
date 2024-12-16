@@ -1889,7 +1889,7 @@ export const Chat = new class {
 	 */
 	parse(message: string, room: Room | null | undefined, user: User, connection: Connection) {
 		Chat.loadPlugins();
-	
+
 		// Early check for non-command messages
 		const firstChar = message.trim().charAt(0);
 		if (firstChar && firstChar !== '/' && firstChar !== '!') {
@@ -1897,11 +1897,11 @@ export const Chat = new class {
 			const initialRoomlogLength = room?.log.getLineCount();
 			const context = new CommandContext({message, room, user, connection});
 			const start = Date.now();
-	
+
 			// Just run checkChat to validate and post message
 			const chatResult = context.checkChat(message);
 			this.logSlowMessage(start, context);
-	
+
 			if (room && room.log.getLineCount() !== initialRoomlogLength) {
 				room.messagesSent++;
 				for (const [handler, numMessages] of room.nthMessageHandlers) {
@@ -1910,7 +1910,7 @@ export const Chat = new class {
 			}
 			return chatResult;
 		}
-	
+
 		// If the above condition fails, it might be a command or empty message, fall back to the original logic
 		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({message, room, user, connection});
