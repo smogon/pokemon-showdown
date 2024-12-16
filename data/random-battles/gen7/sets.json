@@ -2126,7 +2126,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["flareblitz", "highjumpkick", "knockoff", "stoneedge", "swordsdance"],
+                "movepool": ["flareblitz", "highjumpkick", "knockoff", "protect", "stoneedge", "swordsdance"],
                 "abilities": ["Speed Boost"]
             }
         ]
