@@ -56,7 +56,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				for (const moveSlot of pokemon.moveSlots) {
 					const moveid = moveSlot.id;
 					const move = this.dex.moves.get(moveid);
-					if (move.flags['noassist'] || move.isZ || move.isMax ||
+					if (
+						move.flags['noassist'] || move.isZ || move.isMax ||
 						(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
 						(target.volatiles['healblock'] && move.flags['heal'])
 					) {
