@@ -467,12 +467,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			this.battle.runEvent('AfterTerastallization', pokemon);
 		},
-		getMixedSpecies(originalForme, megaForme, pokemon) {
+		getMixedSpecies(originalForme, formeChange, pokemon) {
 			const originalSpecies = this.dex.species.get(originalForme);
-			const megaSpecies = this.dex.species.get(megaForme);
-			// Uncomment if actual megas ever exist again
-			// if (originalSpecies.baseSpecies === megaSpecies.baseSpecies) return megaSpecies;
-			const deltas = (this as any).getFormeChangeDeltas(megaSpecies, pokemon);
+			const formeChangeSpecies = this.dex.species.get(formeChange);
+			if (originalSpecies.baseSpecies === formeChangeSpecies.baseSpecies && !formeChangeSpecies.isMega) {
+				return formeChangeSpecies;
+			}
+			const deltas = (this as any).getFormeChangeDeltas(formeChangeSpecies, pokemon);
 			const species = (this as any).mutateOriginalSpecies(originalSpecies, deltas);
 			return species;
 		},
