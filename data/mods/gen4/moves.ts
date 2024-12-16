@@ -232,7 +232,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!move) return;
 
 			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-			if (move.flags['failcopycat'] || move.isZ || move.isMax ||
+			if (
+				move.flags['failcopycat'] || move.isZ || move.isMax ||
 				(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
 				(pokemon.volatiles['healblock'] && move.flags['heal'])
 			) {
