@@ -186,7 +186,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	abra: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	kadabra: {
 		tier: "UU",
@@ -285,7 +285,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	drowzee: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	hypno: {
 		tier: "UUBL",
@@ -366,7 +366,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	scyther: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	jynx: {
 		tier: "OU",
@@ -375,7 +375,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	magmar: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	pinsir: {
 		tier: "PU",
@@ -411,7 +411,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 	},
 	omanyte: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	omastar: {
 		tier: "UU",
@@ -441,7 +441,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	dragonair: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	dragonite: {
 		tier: "UU",
