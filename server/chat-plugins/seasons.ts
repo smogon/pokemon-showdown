@@ -184,9 +184,6 @@ export async function updateBadgeholders() {
 		const response = await getLadderTop(formatid);
 
 		// Ensure response is an array
-		if (!response || !Array.isArray(response)) {
-			continue;
-		}
 
 		const newHolders: Record<string, string[]> = {};
 		for (const [i, row] of response.entries()) {
