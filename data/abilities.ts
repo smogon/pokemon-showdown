@@ -3248,6 +3248,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			randomTarget.lastItem = '';
 			this.add('-item', pokemon, this.dex.items.get(item), '[from] ability: Pickup');
 			pokemon.setItem(item);
+			if(pokemon.getItem().isBerry){
+				pokemon.eatItem();
+			};
 			pokemon.useItem()
 			pokemon.setItem(oldItem)
 		},
