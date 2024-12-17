@@ -2513,6 +2513,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 42,
 	},
+	malicia: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dark' ) {
+				this.debug('Malicia boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dark' ) {
+				this.debug('Malicia boost');
+				return this.chainModify(1.2);
+			}
+		},
+		flags: {},
+		name: "Malicia",
+		rating: 2,
+		num: 66,
+	},
 	marvelscale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
@@ -3214,7 +3234,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (pokemon.item) return;
+			const oldItem = pokemon.item
 			const pickupTargets = this.getAllActive().filter(target => (
 				target.lastItem && target.usedItemThisTurn && pokemon.isAdjacent(target)
 			));
@@ -3224,6 +3244,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			randomTarget.lastItem = '';
 			this.add('-item', pokemon, this.dex.items.get(item), '[from] ability: Pickup');
 			pokemon.setItem(item);
+			pokemon.useItem()
+			pokemon.setItem(oldItem)
 		},
 		flags: {},
 		name: "Pickup",
@@ -4307,9 +4329,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 202,
 	},
 	sniper: {
-		onModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).crit) {
-				this.debug('Sniper boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bullet']) {
 				return this.chainModify(1.5);
 			}
 		},

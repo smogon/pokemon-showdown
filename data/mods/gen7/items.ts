@@ -90,6 +90,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	butterfreetite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	cameruptite: {
 		inherit: true,
 		isNonstandard: null,
@@ -353,6 +357,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: null,
 	},
 	lycaniumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	machampite: {
 		inherit: true,
 		isNonstandard: null,
 	},
