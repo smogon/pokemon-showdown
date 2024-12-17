@@ -413,6 +413,11 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 		desc: "This Pokemon is immune to Ground-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Ground-type move.",
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ground moves; Ground immunity.",
 	},
+	escudoescama: {
+		name: "Escudo Escama",
+		desc: "Puede envenenar, paralizar y dormir al contacto (33% de posibilidad para cada alteración de estado). Convierte el movimiento Viento Plata en Viento Escama.",
+		shortDesc: "50% chance of poison/paralysis/sleep on others dealing damage",
+	},
 	effectspore: {
 		name: "Effect Spore",
 		desc: "30% chance a Pokemon making contact with this Pokemon will be poisoned, paralyzed, or fall asleep.",

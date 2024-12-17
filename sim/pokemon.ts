@@ -2059,6 +2059,7 @@ export class Pokemon {
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 		if (this.hasAbility('levitate') && !this.battle.suppressingAbility(this)) return null;
+		if (this.hasAbility('surgesurfer') && !this.battle.suppressingAbility(this)) return null;
 		if ('magnetrise' in this.volatiles) return false;
 		if ('telekinesis' in this.volatiles) return false;
 		return item !== 'airballoon';
@@ -2129,8 +2130,10 @@ export class Pokemon {
 			negateImmunity || this.battle.dex.getImmunity(type, this);
 		if (notImmune) return true;
 		if (!message) return false;
-		if (notImmune === null) {
+		if (notImmune === null && this.hasAbility('levitate')) {
 			this.battle.add('-immune', this, '[from] ability: Levitate');
+		} if (notImmune === null && this.hasAbility('surgesurfer')) {
+			this.battle.add('-immune', this, '[from] ability: surgesurfer');
 		} else {
 			this.battle.add('-immune', this);
 		}
