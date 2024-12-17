@@ -136,7 +136,7 @@ export const commands: Chat.ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
-			heightm: megaSpecies.heightm - baseSpecies.heightm,
+			heightm: ((megaSpecies.heightm * 10) - (baseSpecies.heightm * 10)) / 10,
 			bst: megaSpecies.bst - baseSpecies.bst,
 		};
 		let statId: StatID;
@@ -168,7 +168,7 @@ export const commands: Chat.ChatCommands = {
 			mixedSpecies.bst += mixedSpecies.baseStats[statName];
 		}
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
-		mixedSpecies.heightm = Math.max(1, species.heightm + deltas.heightm);
+		mixedSpecies.heightm = Math.max(0.1, ((species.heightm * 10) + (deltas.heightm * 10)) / 10);
 		mixedSpecies.tier = "MnM";
 		let weighthit = 20;
 		if (mixedSpecies.weighthg >= 2000) {
@@ -275,7 +275,7 @@ export const commands: Chat.ChatCommands = {
 			const deltas: StoneDeltas = {
 				baseStats: Object.create(null),
 				weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
-				heightm: megaSpecies.heightm - baseSpecies.heightm,
+				heightm: ((megaSpecies.heightm * 10) - (baseSpecies.heightm * 10)) / 10,
 				bst: megaSpecies.bst - baseSpecies.bst,
 			};
 			let statId: StatID;
@@ -340,7 +340,7 @@ export const commands: Chat.ChatCommands = {
 			buf += `</span>`;
 			buf += `</li>`;
 			this.sendReply(`|raw|<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`);
-			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}</font>`);
+			this.sendReply(`|raw|<font size="1">${Object.entries(details).map(([detail, value]) => `<font color="#686868">${detail}:</font> ${value}`).join("&nbsp;|&ThickSpace;")}</font>`);
 		}
 	},
 	stonehelp: [`/stone <mega stone or other>[, generation] - Shows the changes that a mega stone/orb applies to a Pok\u00e9mon.`],
