@@ -496,7 +496,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Twisted Dimension Mod', 'Adjust Level = 100'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Ho-Oh', 'Giratina-Origin', 'Glastrier', 'Groudon', 'Koraidon', 'Kyogre', 'Kyurem-Black',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Conkeldurr', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Ho-Oh', 'Glastrier', 'Groudon', 'Koraidon', 'Kyogre', 'Kyurem-Black',
 			'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Rayquaza', 'Reshiram', 'Torkoal',
 			'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Iron Ball', 'King\'s Rock', 'Power Anklet', 'Power Band', 'Power Belt', 'Power Bracer', 'Power Lens', 'Power Weight',
 			'Razor Fang', 'Baton Pass', 'Final Gambit', 'Last Respects', 'Shed Tail',
