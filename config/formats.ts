@@ -496,10 +496,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Twisted Dimension Mod', 'Adjust Level = 100'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Ho-Oh', 'Giratina-Origin', 'Glastrier', 'Groudon', 'Koraidon', 'Kyogre', 'Kyurem-Black',
-			'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Rayquaza', 'Reshiram', 'Torkoal',
-			'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Iron Ball', 'King\'s Rock', 'Power Anklet', 'Power Band', 'Power Belt', 'Power Bracer', 'Power Lens', 'Power Weight',
-			'Razor Fang', 'Baton Pass', 'Final Gambit', 'Last Respects', 'Shed Tail',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Conkeldurr', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Ho-Oh', 'Glastrier', 'Groudon', 'Koraidon', 'Kyogre', 'Kyurem-Black',
+			'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Rayquaza', 'Reshiram',
+			'Torkoal', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Iron Ball', 'King\'s Rock', 'Power Anklet', 'Power Band', 'Power Belt', 'Power Bracer', 'Power Lens',
+			'Power Weight', 'Razor Fang', 'Baton Pass', 'Final Gambit', 'Last Respects', 'Shed Tail',
 		],
 	},
 	/*{
@@ -509,11 +509,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard OMs', 'Gravity Sleep Clause', 'Terastal Clause'],
 		banlist: [
-			'Calyrex-Shadow', 'Koraidon', 'Miraidon', 'Moody', 'Shadow Tag', 'Banettite', 'Beedrillite', 'Blazikenite', 'Blue Orb', 'Gengarite',
+			'Calyrex-Shadow', 'Miraidon', 'Moody', 'Shadow Tag', 'Banettite', 'Beedrillite', 'Blazikenite', 'Blue Orb', 'Gengarite',
 			'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Red Orb',
 		],
 		restricted: [
-			'Arceus', 'Calyrex-Ice', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh',
+			'Arceus', 'Calyrex-Ice', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh', 'Koraidon',
 			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza',
 			'Regigigas', 'Reshiram', 'Slaking', 'Solgaleo', 'Ursaluna-Bloodmoon', 'Urshifu-Rapid-Strike', 'Zacian', 'Zamazenta', 'Zekrom',
 		],
@@ -1935,8 +1935,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		unbanlist: [
 			'Appletun', 'Aurorus', 'Avalugg-Base', 'Banette-Base', 'Cacturne', 'Carracosta', 'Celebi', 'Cetitan', 'Chandelure', 'Cryogonal', 'Dipplin',
-			'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Lokix', 'Luvdisc', 'Magmortar', 'Mawile-Base', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
-			'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Walrein', 'Wo-Chien', 'Wugtrio', 'Yanmega', 'Zoroark-Base',
+			'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Luvdisc', 'Magmortar', 'Mawile-Base', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
+			'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Toxicroak', 'Walrein', 'Wo-Chien', 'Wugtrio',
+			'Yanmega', 'Zoroark-Base',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
@@ -3852,7 +3853,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen1',
 		searchShow: false,
 		ruleset: ['[Gen 1] PU'],
-		banlist: ['PU', 'ZUBL'],
+		banlist: ['PU', 'ZUBL', 'Bind', 'Clamp', 'Fire Spin', 'Wrap'],
 	},
 	{
 		name: "[Gen 1] Japanese OU",

@@ -225,7 +225,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	weepinbell: {
-		tier: "ZU",
+		tier: "NFE",
 	},
 	victreebel: {
 		tier: "RU",
@@ -282,7 +282,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	grimer: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	muk: {
 		tier: "UU",
@@ -303,7 +303,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	onix: {
-		tier: "LC",
+		tier: "ZU",
 	},
 	steelix: {
 		tier: "UUBL",
@@ -327,7 +327,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	exeggcute: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	exeggutor: {
 		tier: "UUBL",
@@ -420,7 +420,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	magby: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	magmar: {
 		tier: "RU",
@@ -513,7 +513,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	bayleef: {
-		tier: "ZU",
+		tier: "NFE",
 	},
 	meganium: {
 		tier: "RU",
@@ -531,7 +531,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	croconaw: {
-		tier: "ZU",
+		tier: "NFE",
 	},
 	feraligatr: {
 		tier: "UU",
@@ -912,7 +912,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 	},
 	aron: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	lairon: {
 		tier: "ZUBL",
@@ -960,7 +960,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	wailmer: {
-		tier: "LC",
+		tier: "ZU",
 	},
 	wailord: {
 		tier: "NU",
@@ -975,7 +975,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	spoink: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	grumpig: {
 		tier: "UU",
@@ -1068,7 +1068,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	shuppet: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	banette: {
 		tier: "RU",
