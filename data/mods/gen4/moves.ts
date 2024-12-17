@@ -57,7 +57,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const moveid = moveSlot.id;
 					const move = this.dex.moves.get(moveid);
 					if (
-						move.flags['noassist'] || move.isZ || move.isMax ||
+						move.flags['noassist'] ||
 						(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
 						(target.volatiles['healblock'] && move.flags['heal'])
 					) {
@@ -231,9 +231,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			let move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
 
-			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 			if (
-				move.flags['failcopycat'] || move.isZ || move.isMax ||
+				move.flags['failcopycat'] ||
 				(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
 				(pokemon.volatiles['healblock'] && move.flags['heal'])
 			) {
