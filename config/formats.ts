@@ -2284,8 +2284,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		unbanlist: [
 			'Appletun', 'Aurorus', 'Avalugg-Base', 'Banette-Base', 'Cacturne', 'Carracosta', 'Celebi', 'Cetitan', 'Chandelure', 'Cryogonal', 'Dipplin',
-			'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Lokix', 'Luvdisc', 'Magmortar', 'Mawile-Base', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
-			'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Walrein', 'Wo-Chien', 'Wugtrio', 'Yanmega', 'Zoroark-Base',
+			'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Luvdisc', 'Magmortar', 'Mawile-Base', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
+			'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Toxicroak', 'Walrein', 'Wo-Chien', 'Wugtrio',
+			'Yanmega', 'Zoroark-Base',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
