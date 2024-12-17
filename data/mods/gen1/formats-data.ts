@@ -69,7 +69,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	arbok: {
-		tier: "ZUBL",
+		tier: "ZU",
 	},
 	pikachu: {
 		tier: "LC",
