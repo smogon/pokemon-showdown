@@ -542,23 +542,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 29,
 	},
 	cloudnine: {
-		onSwitchIn(pokemon) {
-			this.effectState.switchingIn = true;
-		},
-		onStart(pokemon) {
-			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
-			pokemon.abilityState.ending = false; // Clear the ending flag
-			if (this.effectState.switchingIn) {
-				this.add('-ability', pokemon, 'Cloud Nine');
-				this.effectState.switchingIn = false;
+		onStart(source) {
+			source.abilityState.ending = true;
+			if (this.field.isWeather('snow')) {
+				this.boost({def: 1});
+			} else if (this.field.isWeather('sunnyday')){
+				this.boost({atk: 1});
+			} else if (this.field.isWeather('raindance')){
+				this.boost({spa: 1});
+			} else if (this.field.isWeather('sandstorm')){
+				this.boost({spd: 1});
 			}
-			this.eachEvent('WeatherChange', this.effect);
+			this.field.clearWeather();
 		},
-		onEnd(pokemon) {
-			pokemon.abilityState.ending = true;
-			this.eachEvent('WeatherChange', this.effect);
-		},
-		suppressWeather: true,
 		flags: {},
 		name: "Cloud Nine",
 		rating: 1.5,
