@@ -372,4 +372,33 @@ describe('Future Sight', function () {
 		const stak = battle.p2.active[0];
 		assert.fullHP(stak, `Future Sight should have never resolved.`);
 	});
+
+	it(`should target particular slots in Doubles`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+			{species: 'Steelix', moves: ['sleeptalk']},
+		], [
+			{species: 'Girafarig', moves: ['sleeptalk', 'recover']},
+			{species: 'Farigiraf', moves: ['sleeptalk', 'recover']},
+		]]);
+
+		battle.makeChoices('move futuresight 2, auto', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		const giraf = battle.p2.active[0];
+		const farig = battle.p2.active[1];
+		assert.false.fullHP(farig, `Farigiraf should have been damaged by the 1st Future Sight.`);
+
+		battle.makeChoices('move futuresight 1, auto', 'move recover, move recover');
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.false.fullHP(giraf, `Girafarig should have been damaged by the 2nd Future Sight.`);
+
+		battle.makeChoices('move futuresight -2, auto', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+
+		const steelix = battle.p1.active[1];
+		assert.false.fullHP(steelix, `Steelix should have been damaged by the 3rd Future Sight`);
+	});
 });
