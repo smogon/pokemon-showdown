@@ -228,7 +228,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	copycat: {
 		inherit: true,
 		onHit(pokemon) {
-			let move: Move | ActiveMove | null = this.lastMove;
+			const move: Move | ActiveMove | null = this.lastMove;
 			if (!move) return;
 
 			if (
