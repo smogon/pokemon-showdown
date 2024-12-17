@@ -2437,5 +2437,14 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 		shortDesc: "If held by a Venomicon, its Poison- and Flying-type attacks have 1.2x power.",
 	},
 
-	//
+	// Nuevo Meta items
+
+	butterfreetite: {
+		name: "Butterfreetite",
+		shortDesc: "If held by a Butterfree, this item allows it to Mega Evolve in battle.",
+	},
+	machampite: {
+		name: "Machampite",
+		shortDesc: "If held by a Machamp, this item allows it to Mega Evolve in battle.",
+	},
 };
