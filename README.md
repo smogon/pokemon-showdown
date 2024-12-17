@@ -14,29 +14,7 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
 Introduction
 ------------------------------------------------------------------------
 
-Pokémon Showdown is many things:
-
-- A **web site** you can use for Pokémon battling
-
-  - http://pokemonshowdown.com/
-
-- A **JavaScript library** for simulating Pokémon battles and getting Pokédex data
-
-  - [sim/README.md](./sim/README.md)
-
-- Some **command-line tools** for simulating Pokémon battles (which can be used in non-JavaScript programs)
-
-  - [COMMANDLINE.md](./COMMANDLINE.md)
-
-- A **web API** for the web site for Pokémon battling
-
-  - [pokemon-showdown-client: WEB-API.md](https://github.com/smogon/pokemon-showdown-client/blob/master/WEB-API.md)
-
-- A **game server** for hosting your own Pokémon Showdown community and game modes
-
-  - [server/README.md](./server/README.md)
-
-Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 9).
+Pokémon Showdown, but with custom moves, mons, etc.
 
 
 Documentation quick links
