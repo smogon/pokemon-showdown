@@ -509,11 +509,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		ruleset: ['Standard OMs', 'Gravity Sleep Clause', 'Terastal Clause'],
 		banlist: [
-			'Calyrex-Shadow', 'Koraidon', 'Miraidon', 'Moody', 'Shadow Tag', 'Banettite', 'Beedrillite', 'Blazikenite', 'Blue Orb', 'Gengarite',
+			'Calyrex-Shadow', 'Miraidon', 'Moody', 'Shadow Tag', 'Banettite', 'Beedrillite', 'Blazikenite', 'Blue Orb', 'Gengarite',
 			'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Red Orb',
 		],
 		restricted: [
-			'Arceus', 'Calyrex-Ice', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh',
+			'Arceus', 'Calyrex-Ice', 'Deoxys-Normal', 'Deoxys-Attack', 'Dialga', 'Dondozo', 'Eternatus', 'Flutter Mane', 'Giratina', 'Groudon', 'Ho-Oh', 'Koraidon',
 			'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza',
 			'Regigigas', 'Reshiram', 'Slaking', 'Solgaleo', 'Ursaluna-Bloodmoon', 'Urshifu-Rapid-Strike', 'Zacian', 'Zamazenta', 'Zekrom',
 		],
