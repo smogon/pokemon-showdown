@@ -270,7 +270,8 @@ export const classifier = new Artemis.RemoteClassifier();
 export async function runActions(user: User, room: GameRoom, message: string, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string, boolean][] = [];
-	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
+	const roomRecord = cache[room.roomid];
+	const prevRecommend = roomRecord?.recommended?.[user.id];
 	for (const punishment of settings.punishments) {
 		if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
 			if (PUNISHMENTS.indexOf(punishment.punishment) <= PUNISHMENTS.indexOf(prevRecommend?.type)) continue;
@@ -322,9 +323,9 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 		}
 		// go by most severe
 		const [punishment, reason] = recommended[0];
-		if (cache[room.roomid]) {
-			if (!cache[room.roomid].recommended) cache[room.roomid].recommended = {};
-			cache[room.roomid].recommended![user.id] = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
+		if (roomRecord) {
+			if (!roomRecord.recommended) roomRecord.recommended = {};
+			roomRecord.recommended[user.id] = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
 		}
 		if (user.trusted) {
 			// force just logging for any sort of punishment. requested by staff
@@ -344,10 +345,10 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 		});
 		if (result !== false) {
 			// returning false means not to close the 'ticket'
-			const notified = cache[room.roomid].staffNotified;
+			const notified = roomRecord?.staffNotified;
 			if (notified) {
 				if (typeof notified === 'string') {
-					if (notified === user.id) delete cache[room.roomid].staffNotified;
+					if (notified === user.id) delete roomRecord.staffNotified;
 				} else {
 					notified.splice(notified.indexOf(user.id), 1);
 					if (!notified.length) {
@@ -361,9 +362,9 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 					}
 				}
 			}
-			delete cache[room.roomid].users[user.id]; // user has been punished, reset their counter
+			delete roomRecord?.users[user.id]; // user has been punished, reset their counter
 			// keep the cache object only if there are other users in it, since they still need to be monitored
-			if (!Object.keys(cache[room.roomid].users).length) {
+			if (roomRecord && !Object.keys(roomRecord.users).length) {
 				delete cache[room.roomid];
 			}
 			notifyStaff();
