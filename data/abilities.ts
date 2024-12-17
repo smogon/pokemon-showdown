@@ -2361,6 +2361,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			return false;
 		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source && boost.spe && boost.spe < 0) {
+				delete boost.spe;
+				if (!(effect as ActiveMove).secondaries) {
+					this.add("-fail", target, "unboost", "Attack", "[from] ability: Run Away", "[of] " + target);
+				}
+			}
+		},
 		flags: {breakable: 1},
 		name: "Limber",
 		rating: 2,
