@@ -1963,11 +1963,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	icebody: {
 		onWeather(target, source, effect) {
 			if (effect.id === 'hail' || effect.id === 'snow') {
-				this.heal(target.baseMaxhp / 16);
+				this.heal(target.baseMaxhp / 8);
 			}
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ice' ) {
+				this.debug('Ice Body boost');
+				return this.chainModify(1.1);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ice' ) {
+				this.debug('Ice Body boost');
+				return this.chainModify(1.1);
+			}
 		},
 		flags: {},
 		name: "Ice Body",
