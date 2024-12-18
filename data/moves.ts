@@ -17057,6 +17057,29 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
+		onTryHit(target, pokemon) {
+			let move = 'silverwind2';
+			if (pokemon.species.name === "Butterfree-Mega") {
+				move = 'silverwind3';
+			}
+			this.actions.useMove(move, pokemon, {target});
+			return null;
+		},
+		callsMove: true,
+		target: "normal",
+		type: "Bug",
+		contestType: "Beautiful",
+	},
+	silverwind2: {
+		num: 318,
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		isNonstandard: "Past",
+		name: "Silver Wind",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
 		secondary: {
 			chance: 10,
 			self: {
@@ -17067,6 +17090,33 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					spd: 1,
 					spe: 1,
 				},
+			},
+		},
+		target: "normal",
+		type: "Bug",
+		contestType: "Beautiful",
+	},
+	silverwind3: {
+		num: 318,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		isNonstandard: "Past",
+		name: "Viento Escama",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
+		secondary: {
+			chance: 100,
+			onHit(target, source) {
+				const result = this.random(3);
+				if (result === 0) {
+					target.trySetStatus('psn', source);
+				} else if (result === 1) {
+					target.trySetStatus('par', source);
+				} else {
+					target.trySetStatus('slp', source);
+				}
 			},
 		},
 		target: "normal",
