@@ -198,6 +198,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Genesis Ray',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	Gadget: {
+		species: 'Gimmighoul', ability: 'Coin Collector', item: '', gender: 'M',
+		moves: ['Anchor Shot', 'Pay Day', 'Withdraw'],
+		signatureMove: 'Capital Cannon',
+		evs: {}, nature: 'Bashful',
+	},
 	/*
 	Tao: {
 		species: 'Kubfu', ability: 'Shangqing', item: 'Zhuyou', gender: 'M',
