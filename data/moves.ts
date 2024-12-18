@@ -11324,7 +11324,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
-	
+
 	maliciousmoonsault: {
 		num: 696,
 		accuracy: true,
@@ -13203,7 +13203,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
-	
+
 	noretreat: {
 		num: 748,
 		accuracy: true,
@@ -22153,7 +22153,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 100,
 			category: "Physical",
 			name: "Malepico",
-			pp: 15,
+			pp: 10,
 			priority: 0,
 			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1, bullet: 1},
 			critRatio: 2,
