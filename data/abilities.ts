@@ -1890,6 +1890,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.cureStatus();
 			}
 		},
+		onBeforeMove(attacker, defender, move) {
+			if (move.type === 'Water' && attacker !== defender) {
+				attacker.cureStatus();
+			}
+		},
 		flags: {},
 		name: "Hydration",
 		rating: 1.5,
