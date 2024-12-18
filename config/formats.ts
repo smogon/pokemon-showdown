@@ -476,6 +476,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Soul Dew'],
 	},
 	{
+		name: "[Gen 4] Draft",
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['Standard Draft', 'Swagger Clause', 'DryPass Clause', '!Team Preview', '!Evasion Clause', 'Evasion Items Clause', 'Evasion Moves Clause'],
+		banlist: ['King\'s Rock', 'Quick Claw', 'Assist', 'Accupressure', 'Sand Stream ++ Sand Veil', 'Snow Warning ++ Snow Cloak'],
+	},
+	{
+		name: "[Gen 4] Draft",
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['Standard Draft', 'Swagger Clause', 'DryPass Clause', '!Team Preview', '!Evasion Clause', 'Evasion Items Clause', 'Evasion Moves Clause'],
+		banlist: ['King\'s Rock', 'Quick Claw', 'Assist', 'Accupressure', 'Sand Stream ++ Sand Veil', 'Snow Warning ++ Snow Cloak'],
+	},
+	{
 		name: "[Gen 3] Draft",
 		mod: 'gen3',
 		searchShow: false,
