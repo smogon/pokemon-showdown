@@ -123,7 +123,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (boosted) {
 				this.debug('Analytic boost');
-				return this.chainModify([5325, 4096]);
+				return this.chainModify(1.3);
+			}
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, pokemon, source) {
+			let boosted2 = true;
+			for (const target of this.getAllActive()) {
+				if (target === source) continue;
+				if (this.queue.willMove(target)) {
+					boosted2 = false;
+					break;
+				}
+			}
+			if (boosted2) {
+				if (typeof accuracy !== 'number') return;
+			this.debug('Analytic - enhancing accuracy');
+			return this.chainModify(5);
 			}
 		},
 		flags: {},
@@ -177,6 +193,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 271,
 	},
 	anticipation: {
+		// todo: Arreglar
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
@@ -188,11 +205,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						move.ohko
 					) {
 						this.add('-ability', pokemon, 'Anticipation');
+						target.addVolatile('Anticipation', this.effectState.target);
 						return;
 					}
 				}
 			}
 		},
+		condition: {
+			noCopy: true,
+			duration: 2,
+			onBeforeMovePriority: 5,
+			onBeforeMove(attacker, defender, move) {
+				if (!move.isZ && !move.isMax && move.id === this.effectState.move) {
+					this.add('cant', attacker, 'Anticipation', move);
+					return false;
+				}
+			},
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.move);
+					if (move.category === 'Status') continue;
+					const moveType = move.id === 'hiddenpower' ? pokemon.hpType : move.type;
+					if (
+						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+						move.ohko
+					){
+						pokemon.disableMove(moveSlot.id);
+					}
+					}
+				},
+			onEnd(target) {
+				this.add('-end', target, 'Anticipation');
+			},
+			},
 		flags: {},
 		name: "Anticipation",
 		rating: 0.5,
@@ -1890,6 +1935,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.cureStatus();
 			}
 		},
+		onBeforeMove(attacker, defender, move) {
+			if (move.type === 'Water' && attacker !== defender) {
+				attacker.cureStatus();
+			}
+		},
 		flags: {},
 		name: "Hydration",
 		rating: 1.5,
@@ -1913,11 +1963,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	icebody: {
 		onWeather(target, source, effect) {
 			if (effect.id === 'hail' || effect.id === 'snow') {
-				this.heal(target.baseMaxhp / 16);
+				this.heal(target.baseMaxhp / 8);
 			}
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Ice' ) {
+				this.debug('Ice Body boost');
+				return this.chainModify(1.1);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Ice' ) {
+				this.debug('Ice Body boost');
+				return this.chainModify(1.1);
+			}
 		},
 		flags: {},
 		name: "Ice Body",
@@ -2187,6 +2251,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 234,
 	},
+	gigantificacion: {
+		onStart(pokemon) {
+			if (pokemon.swordBoost) return;
+			pokemon.swordBoost = true;
+			const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+		},
+		flags: {},
+		name: "Gigantificacion",
+		rating: 4,
+		num: 234,
+	},
 	ironbarbs: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
@@ -2404,14 +2480,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Poison' ) {
 				this.debug('Liquid Ooze boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Poison' ) {
 				this.debug('Liquid Ooze boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 		},
 		flags: {},
@@ -2528,6 +2604,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.knownType || pokemon.hasType('Steel')) {
 				pokemon.maybeTrapped = true;
 			}
+		},
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Magnet Pull');
+		},
+		//todo: no usar ruinedDef
+		onAnyModifyDef(def, target, source, move) {
+			const abilityHolder = this.effectState.target;
+			if (!target.hasType('Steel')) return;
+			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
+			if (move.ruinedDef !== abilityHolder) return;
+			this.debug('Magnet Pull Def drop');
+			return this.chainModify(0.75);
 		},
 		flags: {},
 		name: "Magnet Pull",
@@ -3130,6 +3219,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.removeVolatile('confusion');
 			}
 		},
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Own Tempo');
+			}
+			return false;
+		},
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'confusion') return null;
 		},
@@ -3203,6 +3298,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-block', target, 'ability: Pastel Veil', '[of] ' + effectHolder);
 			}
 			return false;
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Psychic' ) {
+				this.debug('Pastel Veil boost');
+				return this.chainModify(1.1);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Psychic' ) {
+				this.debug('Pastel Veil boost');
+				return this.chainModify(1.1);
+			}
 		},
 		flags: {breakable: 1},
 		name: "Pastel Veil",
@@ -3752,7 +3861,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'raindance' || effect.id === 'primordialsea') {
-				this.heal(target.baseMaxhp / 16);
+				this.heal(target.baseMaxhp / 8);
 			}
 		},
 		flags: {},
@@ -4528,10 +4637,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9,
 	},
 	steadfast: {
-		onFlinch(pokemon) {
-			this.boost({spe: 1});
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') {
+				this.boost({spe: 1}, pokemon);
+				return null;
+			}
 		},
-		flags: {},
+		flags: {breakable: 1},
 		name: "Steadfast",
 		rating: 1,
 		num: 80,
@@ -4590,14 +4702,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Poison' ) {
 				this.debug('Stench boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Poison' ) {
 				this.debug('Stench boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 		},
 		flags: {},
