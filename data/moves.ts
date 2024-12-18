@@ -19560,7 +19560,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Tail Slap",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, tail: 1},
 		multihit: [2, 5],
 		secondary: null,
 		target: "normal",
@@ -20909,7 +20909,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Twineedle",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
 		multihit: 2,
 		secondary: {
 			chance: 30,
