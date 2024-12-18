@@ -200,7 +200,7 @@ export const ssbSets: SSBSets = {
 	},
 	Gadget: {
 		species: 'Gimmighoul', ability: 'Coin Collector', item: '', gender: 'M',
-		moves: ['Anchor Shot', 'Pay Day', 'Withdraw'],
+		moves: ['Heavy Slam', 'Pay Day', 'Withdraw'],
 		signatureMove: 'Capital Cannon',
 		evs: {}, nature: 'Bashful',
 	},
