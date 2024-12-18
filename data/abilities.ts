@@ -132,11 +132,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 148,
 	},
 	angerpoint: {
-		onHit(target, source, move) {
-			if (!target.hp) return;
-			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
-				this.boost({atk: 12}, target, target);
-			}
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({atk: 1});
 		},
 		flags: {},
 		name: "Anger Point",
@@ -2234,9 +2231,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 312,
 	},
 	justified: {
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Dark') {
-				this.boost({atk: 1});
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Dark') {
+				if (!this.boost({atk: 1})) {
+					this.add('-immune', target, '[from] ability: Justified');
+				}
+				return null;
 			}
 		},
 		flags: {},
