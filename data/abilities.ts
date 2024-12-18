@@ -2421,14 +2421,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Poison' ) {
 				this.debug('Liquid Ooze boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Poison' ) {
 				this.debug('Liquid Ooze boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 		},
 		flags: {},
@@ -3220,6 +3220,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-block', target, 'ability: Pastel Veil', '[of] ' + effectHolder);
 			}
 			return false;
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Psychic' ) {
+				this.debug('Pastel Veil boost');
+				return this.chainModify(1.1);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Psychic' ) {
+				this.debug('Pastel Veil boost');
+				return this.chainModify(1.1);
+			}
 		},
 		flags: {breakable: 1},
 		name: "Pastel Veil",
@@ -4607,14 +4621,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Poison' ) {
 				this.debug('Stench boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Poison' ) {
 				this.debug('Stench boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 		},
 		flags: {},
