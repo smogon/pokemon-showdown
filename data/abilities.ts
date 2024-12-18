@@ -3176,6 +3176,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.removeVolatile('confusion');
 			}
 		},
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Own Tempo');
+			}
+			return false;
+		},
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'confusion') return null;
 		},
