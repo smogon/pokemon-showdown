@@ -177,6 +177,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 271,
 	},
 	anticipation: {
+		// todo: Arreglar
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
