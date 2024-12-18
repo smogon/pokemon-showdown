@@ -5267,6 +5267,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
 		},
+
 		flags: {},
 		name: "Unnerve",
 		rating: 1,
@@ -5312,26 +5313,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 162,
 	},
 	vitalspirit: {
-		onUpdate(pokemon) {
-			if (pokemon.status === 'slp') {
-				this.add('-activate', pokemon, 'ability: Vital Spirit');
-				pokemon.cureStatus();
+		onDamagingHit(damage, target, source, move) {
+			if (target.swordBoost) return;
+			if(target.hp <= target.maxhp / 2){
+			target.swordBoost = true;
+			this.heal(target.baseMaxhp / 4, target);
 			}
 		},
-		onSetStatus(status, target, source, effect) {
-			if (status.id !== 'slp') return;
-			if ((effect as Move)?.status) {
-				this.add('-immune', target, '[from] ability: Vital Spirit');
-			}
-			return false;
-		},
-		onTryAddVolatile(status, target) {
-			if (status.id === 'yawn') {
-				this.add('-immune', target, '[from] ability: Vital Spirit');
-				return null;
-			}
-		},
-		flags: {breakable: 1},
+		flags: {},
 		name: "Vital Spirit",
 		rating: 1.5,
 		num: 72,
