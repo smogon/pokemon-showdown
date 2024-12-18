@@ -15,6 +15,63 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Gadget
+	coincollector: {
+		name: "Coin Collector",
+		desc: "Collects coins. Weight and critical hit ratio scale with number of coins stored.",
+		shortDesc: "Collects coins. Weight/CritRate scale with coins.",
+		gen: 9,
+		flags: {},
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'ability: Coin Collector');
+			if (!pokemon.abilityState.coins) pokemon.abilityState.coins = 0;
+			let cc = this.random(51);
+			if (cc === 0) {
+				this.add('-message', `${pokemon.name} boasts... no coins?!`);
+				this.add('-anim', pokemon, 'Splash', pokemon);
+				this.add('-message', 'Aw, man!');
+			} else {
+				this.add('-anim', pokemon, 'Taunt', pokemon);
+				if (cc === 1) {
+					this.add('-message', `${pokemon.name} boasts one coin!`);
+				} else {
+					this.add('-message', `${pokemon.name} boasts ${cc} coins!`);
+				}
+				pokemon.abilityState.coins += cc;
+				this.effectState.coins = pokemon.abilityState.coins;
+			}
+		},
+		onResidual(pokemon) {
+			this.add('-activate', pokemon, 'ability: Coin Collector');
+			if (!pokemon.abilityState.coins) pokemon.abilityState.coins = 0;
+			let cc = this.random(11);
+			if (cc === 0) return;
+			this.add('-anim', pokemon, 'Pay Day', pokemon);
+			this.add('-message', `${pokemon.name} found ${cc} coins!`);
+			pokemon.abilityState.coins += cc;
+			this.effectState.coins = pokemon.abilityState.coins;
+		},
+		onModifyWeight(weighthg) {
+			this.add('-message', `THIS.EFFECTSTATE.COINS = ${this.effectState.coins}`);
+			return weighthg * this.effectState.coins;
+		},
+		onModifyCritRatio(critRatio, source, target) {
+			this.add('-message', `${source.getWeight()}`);
+		},
+		onModifyMove(move, pokemon) {
+			if (move.id === 'payday') {
+				move.type = pokemon.getTypes()[0];
+				this.add('-activate', pokemon, 'ability: Coin Collector');
+				if (!pokemon.abilityState.coins) pokemon.abilityState.coins = 0;
+				let cc = this.random(11);
+				if (cc === 0) return;
+				this.add('-anim', pokemon, 'Celebrate', pokemon);
+				this.add('-message', `${pokemon.name} found ${cc} coins!`);
+				pokemon.abilityState.coins += cc;
+				this.effectState.coins = pokemon.abilityState.coins;
+			}
+		},
+	},
 	// Aevum
 	temporaldomain: {
 		name: "Temporal Domain",
