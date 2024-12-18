@@ -4594,10 +4594,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9,
 	},
 	steadfast: {
-		onFlinch(pokemon) {
-			this.boost({spe: 1});
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'flinch') {
+				this.boost({spe: 1}, pokemon);
+				return null;
+			}
 		},
-		flags: {},
+		flags: {breakable: 1},
 		name: "Steadfast",
 		rating: 1,
 		num: 80,
