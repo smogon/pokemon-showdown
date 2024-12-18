@@ -4824,6 +4824,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// and show messages when activating against it.
 			source.trySetStatus(status, target, {status: status.id, id: 'synchronize'} as Effect);
 		},
+		onTryBoost(boost, target, source, effect) {
+			// Don't bounce self stat changes, or boosts that have already bounced
+			if (!source || target === source || !boost || effect.name === 'Mirror Armor') return;
+			let b: BoostID;
+			for (b in boost) {
+				if (boost[b]! < 0) {
+					if (target.boosts[b] === -6) continue;
+					const negativeBoost: SparseBoostsTable = {};
+					negativeBoost[b] = boost[b];
+					if (source.hp) {
+						this.add('-ability', target, 'Synchronize');
+						this.boost(negativeBoost, source, target, null, true);
+					}
+				}
+			}
+		},
 		flags: {},
 		name: "Synchronize",
 		rating: 2,
