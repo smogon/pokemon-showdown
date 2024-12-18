@@ -11324,6 +11324,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Steel",
 		contestType: "Beautiful",
 	},
+	
 	maliciousmoonsault: {
 		num: 696,
 		accuracy: true,
@@ -13202,6 +13203,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		zMove: {boost: {def: 1}},
 		contestType: "Tough",
 	},
+	
 	noretreat: {
 		num: 748,
 		accuracy: true,
@@ -22142,4 +22144,40 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Ghost",
 		contestType: "Clever",
 	},
+
+		// Nuevo meta moves
+
+		malepico: {
+			num: 0,
+			accuracy: 90,
+			basePower: 100,
+			category: "Physical",
+			name: "Malepico",
+			pp: 15,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1, bullet: 1},
+			critRatio: 2,
+			secondary: null,
+			target: "normal",
+			type: "Dark",
+			contestType: "Cool",
+		},
+		nonallamas: {
+			num: 0,
+			accuracy: 100,
+			basePower: 10,
+			category: "Special",
+			name: "Nonallamas",
+			pp: 5,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1},
+			multihit: 9,
+			secondary: {
+				chance: 10,
+				status: 'brn',
+			},			target: "normal",
+			type: "Fire",
+			zMove: {basePower: 140},
+			maxMove: {basePower: 130},
+		},
 };
