@@ -186,25 +186,25 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Dominus Lapidis',
 		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
 	},
-	Flufi: {
-		species: 'Raichu', ability: 'Defense of the Heart', item: 'EpiPen', gender: 'M',
-		moves: ['Volt Switch', 'Ice Punch', 'Wish'],
-		signatureMove: 'Shock Therapy',
-		evs: {hp: 248, def: 116, spd: 92, spe: 52}, nature: 'Timid',
-	},
 	Aevum: {
 		species: 'Calyrex', ability: 'Temporal Domain', item: 'Rewind Watch', gender: 'M',
 		moves: ['Matcha Gotcha', 'Freezing Glare', 'Earth Power'],
 		signatureMove: 'Genesis Ray',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	/*
+ 	Flufi: {
+		species: 'Raichu', ability: 'Defense of the Heart', item: 'EpiPen', gender: 'M',
+		moves: ['Volt Switch', 'Ice Punch', 'Wish'],
+		signatureMove: 'Shock Therapy',
+		evs: {hp: 248, def: 116, spd: 92, spe: 52}, nature: 'Timid',
+	},
 	Gadget: {
-		species: 'Gimmighoul', ability: 'Coin Collector', item: '', gender: 'M',
-		moves: ['Heavy Slam', 'Pay Day', 'Withdraw'],
+		species: 'Gimmighoul', ability: 'Coin Collector', item: 'Everythingamajig', gender: 'M',
+		moves: ['Heavy Slam', 'Pay Day', 'Iron Defense'],
 		signatureMove: 'Capital Cannon',
 		evs: {}, nature: 'Bashful',
 	},
-	/*
 	Tao: {
 		species: 'Kubfu', ability: 'Shangqing', item: 'Zhuyou', gender: 'M',
 		moves: ['Triple Kick', 'Circle Throw', 'Taiji'],
