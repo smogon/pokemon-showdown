@@ -86,7 +86,15 @@ export const Repl = new class {
 					socket.end();
 					socket.destroy();
 				}).on('error', () => {
-					fs.unlinkSync(pathname);
+					try {
+						fs.unlinkSync(pathname);
+					} catch (err: any) {
+						// If the file doesn't exist, there's nothing to remove.
+						// Only log the error if it's something other than 'ENOENT'.
+						if (err.code !== 'ENOENT') {
+							console.error(`Failed to remove stale socket at ${pathname}:`, err);
+						}
+					}
 				});
 			}
 		}
