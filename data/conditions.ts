@@ -56,7 +56,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				this.add('-status', target, 'slp');
 			}
 			// 1-3 turns
+			if (target.hasAbility('earlybird')) {
+				this.effectState.startTime = 2;
+			} else {
 			this.effectState.startTime = this.random(2, 5);
+		}
 			this.effectState.time = this.effectState.startTime;
 
 			if (target.removeVolatile('nightmare')) {
@@ -65,9 +69,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
-			if (pokemon.hasAbility('earlybird')) {
-				pokemon.statusState.time--;
-			}
 			pokemon.statusState.time--;
 			if (pokemon.statusState.time <= 0) {
 				pokemon.cureStatus();
