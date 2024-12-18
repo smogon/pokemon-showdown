@@ -2591,6 +2591,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.maybeTrapped = true;
 			}
 		},
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Magnet Pull');
+		},
+		//todo: no usar ruinedDef
+		onAnyModifyDef(def, target, source, move) {
+			const abilityHolder = this.effectState.target;
+			if (!target.hasType('Steel')) return;
+			if (!move.ruinedDef?.hasAbility('Sword of Ruin')) move.ruinedDef = abilityHolder;
+			if (move.ruinedDef !== abilityHolder) return;
+			this.debug('Magnet Pull Def drop');
+			return this.chainModify(0.75);
+		},
 		flags: {},
 		name: "Magnet Pull",
 		rating: 4,
