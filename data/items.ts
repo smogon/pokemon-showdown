@@ -3800,21 +3800,30 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			this.effectState.started = true;
+		},
 		onFoeAfterBoost(boost, target, source, effect) {
+			if (!this.started) return;
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
-			const boostPlus: SparseBoostsTable = {};
-			let statsRaised = false;
+			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
+			const boostPlus = this.effectState.boosts;
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! > 0) {
-					boostPlus[i] = boost[i];
-					statsRaised = true;
+					boostPlus[i] = (boostPlus[i] || 0) + boost[i];
+					this.effectState.ready = true;
 				}
 			}
-			if (!statsRaised) return;
-			const pokemon: Pokemon = this.effectState.target;
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.ready || !this.effectState.boosts) return;
 			pokemon.useItem();
-			this.boost(boostPlus, pokemon);
+			this.boost(this.effectState.boosts, pokemon);
+		},
+		onEnd() {
+			delete this.effectState.boosts;
+			delete this.effectState.ready;
 		},
 		num: 1883,
 		gen: 9,
