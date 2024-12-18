@@ -2187,6 +2187,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 234,
 	},
+	gigantificacion: {
+		onStart(pokemon) {
+			if (pokemon.swordBoost) return;
+			pokemon.swordBoost = true;
+			const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+		},
+		flags: {},
+		name: "Gigantificacion",
+		rating: 4,
+		num: 234,
+	},
 	ironbarbs: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
