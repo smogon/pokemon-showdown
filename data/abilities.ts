@@ -2394,7 +2394,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const canOoze = ['drain', 'leechseed', 'strengthsap'];
 			if (canOoze.includes(effect.id)) {
 				this.damage(damage);
+				if (this.randomChance(3, 10)) {
+					target.trySetStatus('tox', source);
+				}
 				return 0;
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Poison' ) {
+				this.debug('Liquid Ooze boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Poison' ) {
+				this.debug('Liquid Ooze boost');
+				return this.chainModify(1.2);
 			}
 		},
 		flags: {},
@@ -5110,6 +5127,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.trySetStatus('tox', source);
 			}
 		},
+
 		flags: {},
 		name: "Toxic Chain",
 		rating: 4.5,
