@@ -40,6 +40,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Rooci Caxa
+	rootreaper: {
+		name: "Root Reaper",
+		basePower: 80,
+		category: "Physical",
+		accuracy: 100,
+		gen: 9,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Horn Leech', target);
+			this.add('-anim', source, 'Forest\'s Curse', target);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				pokemon.addVolatile('laserfocus');
+			}
+		},
+		pp: 10,
+		drain: [3, 4],
+		secondary: {
+			chance: 30,
+			volatileStatus: 'ingrain',
+		},
+		type: "Grass",
+		target: "normal",
+	},
 	// Tao
 	taiji: {
 		name: "Taiji",
