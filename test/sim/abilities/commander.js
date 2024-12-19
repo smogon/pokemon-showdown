@@ -241,7 +241,7 @@ describe('Commander', function () {
 		assert.false.fullHP(shuckle, `Shuckle should have taken damage from Dazzling Gleam`);
 	});
 
-	it.skip(`should activate after hazards run`, function () {
+	it(`should activate after hazards run`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'regieleki', moves: ['toxicspikes']},
 			{species: 'registeel', moves: ['sleeptalk']},
