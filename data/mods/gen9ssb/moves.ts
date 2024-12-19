@@ -1249,6 +1249,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-anim', pokemon, 'Discharge', pokemon);
 				this.add('-message', `${pokemon.name} is turbocharged!`);
+				this.add('-message', `TROUBLESHOOTING: ${pokemon.name} spa: ${pokemon.storedStats.spa} | spe: ${pokemon.storedStats.spe}`);
 			},
 			onSwitchOut(pokemon) {
 				pokemon.abilityState.stacks = 0;
