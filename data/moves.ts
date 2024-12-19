@@ -3296,7 +3296,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
 		ignoreEvasion: true,
 		ignoreDefensive: true,
-		critRatio: 2,
+		secondary: null,
 		target: "normal",
 		type: "Poison",
 		contestType: "Cool",
@@ -22188,7 +22188,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Nonaesquirla",
 			pp: 5,
 			priority: 0,
-			flags: {protect: 1, mirror: 1},
+			flags: {protect: 1, mirror: 1, slicing: 1, bullet: 1},
 			condition: {
 				duration: 9,
 				noCopy: true,
@@ -22286,5 +22286,5 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			maxMove: {basePower: 80},
 			contestType: "Cool",
 		},
-		
+
 };

@@ -1193,8 +1193,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	crosspoison: {
 		name: "Cross Poison",
-		desc: "Has a 10% chance to poison the target and a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio. 10% chance to poison.",
+		desc: "Ignores the target's stat stage changes, including evasiveness.",
+		shortDesc: "Ignores the target's stat stage changes.",
 	},
 	crunch: {
 		name: "Crunch",
@@ -3814,6 +3814,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 
 		activate: "#payday",
 	},
+	malepico: {
+		name: "Malepico",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
+	},
 	maliciousmoonsault: {
 		name: "Malicious Moonsault",
 		desc: "Damage doubles and no accuracy check is done if the target has used Minimize while active.",
@@ -4262,6 +4267,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 			desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a non-volatile status condition. Grounded Pokemon can become affected by Yawn but cannot fall asleep from its effect. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
 		},
 	},
+	monolito: {
+		name: "Monolito",
+		desc: "Has a 50% chance to make the target flinch. If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/2 recoil. 50% chance to flinch.",
+	},
 	moonblast: {
 		name: "Moonblast",
 		desc: "Has a 30% chance to lower the target's Special Attack by 1 stage.",
@@ -4453,6 +4463,19 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		name: "Noble Roar",
 		desc: "Lowers the target's Attack and Special Attack by 1 stage.",
 		shortDesc: "Lowers the target's Attack and Sp. Atk by 1.",
+	},
+	nonallamas: {
+		name: "Nonallamas",
+		desc: "Hits nine times. Has a 10% chance to burn the target.",
+		shortDesc: "10% chance to burn the target. Hits 9 times.",
+	},
+	nonaesquirla: {
+		name: "Nonaesquirla",
+		desc: "For nine turns, causes damage to the target equal to 1/20 of its maximum HP, rounded down, at the end of each turn during effect. This effect ends when the target is no longer active.",
+		shortDesc: "Deals 1/20 max HP each turn for 9 turns.",
+
+		start: "  [POKEMON] is being nonaesquirla!",
+		damage: "  [POKEMON] is hurt by Nonaesquirla!",
 	},
 	noretreat: {
 		name: "No Retreat",
@@ -4674,6 +4697,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		gen1: {
 			desc: "Hits two to five times. Has a 3/8 chance to hit two or three times, and a 1/8 chance to hit four or five times. Damage is calculated once for the first hit and used for every hit. If one of the hits breaks the target's substitute, the move ends.",
 		},
+	},
+	pinzainfecciosa: {
+		name: "Pinza Infecciosa",
+		desc: "Has a 50% chance to lower the target's Defense by 1 stage and a 30% chance to make it fall asleep.",
+		shortDesc: "Target: 50% -1 Defense, 30% sleep.",
 	},
 	plasmafists: {
 		name: "Plasma Fists",
@@ -5306,6 +5334,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		name: "Roar of Time",
 		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
 		shortDesc: "User cannot move next turn.",
+	},
+	rocagalvanizada: {
+		name: "Roca Galvanizada",
+		desc: "Has a 30% chance to paralyze the target.",
+		shortDesc: "30% chance to paralyze the target.",
 	},
 	rockblast: {
 		name: "Rock Blast",
@@ -7100,6 +7133,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 			desc: "For 5 turns, all active Pokemon with lower Speed will move before those with higher Speed, within their priority brackets. If this move is used during the effect, the effect ends.",
 		},
 	},
+	tripico: {
+		name: "Tripico",
+		desc: "Hits three times. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
+		shortDesc: "Hits 3 times. Each hit can miss.",
+	},
 	triplearrows: {
 		name: "Triple Arrows",
 		desc: "Has a 50% chance to lower the target's Defense by 1 stage, a 30% chance to make it flinch, and a higher chance for a critical hit.",
@@ -7147,8 +7185,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	twineedle: {
 		name: "Twineedle",
-		desc: "Hits twice, with each hit having a 20% chance to poison the target. If the first hit breaks the target's substitute, it will take damage for the second hit.",
-		shortDesc: "Hits 2 times. Each hit has 20% chance to poison.",
+		desc: "Hits twice, with each hit having a 30% chance to poison the target. If the first hit breaks the target's substitute, it will take damage for the second hit.",
+		shortDesc: "Hits 2 times. Each hit has 30% chance to poison.",
 		gen4: {
 			desc: "Hits twice, with each hit having a 20% chance to poison the target. If the first hit breaks the target's substitute, it will take damage for the second hit. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
 		},
