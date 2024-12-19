@@ -3,6 +3,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	spiritberry: {
 		name: "Spirit Berry",
 		gen: 9,
+		isBerry: true,
 		onHit(target, source, move) {
 			if (move.type === 'Physical' && target.eatItem()) {
 				if (!source.addType('Ghost')) return false;
