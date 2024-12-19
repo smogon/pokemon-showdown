@@ -2847,6 +2847,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 80,
 		category: "Special",
 		name: "Blissful Breeze",
+		shortDesc: "Cures the party of status ailments.",
 		gen: 9,
 		pp: 16,
 		noPPBoosts: true,
