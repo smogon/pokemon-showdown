@@ -49,6 +49,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		desc: "Recovers 75% of damage dealt in HP. 30% chance to inflict the target with ingrain. If Root Reaper KOs the target, until end of next turn, this Pokemon's moves always crit.",
+		shortDesc: "+75% damage dealt in HP; 30%: Ingrain; Laser Focus if KO.",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
