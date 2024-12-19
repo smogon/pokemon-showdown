@@ -1440,22 +1440,41 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		onModifyMove(move, pokemon, target) {
 			if (move.type === 'Flying' && pokemon.side.lastMoveUsed) {
+				if (!target.side.addSideCondition('woventogethercohereforever')) return;
 				target.side.addSideCondition('woventogethercohereforever');
-				pokemon.abilityState.imprintedMove = move.id;
-				pokemon.abilityState.imprintedType = pokemon.side.lastMoveUsed.type;
+				target.side.sideConditions['woventogethercohereforever'].type = pokemon.side.lastMoveUsed.type;
+				this.add('-message', `SIDES LAST USED TYPE PRECONDITION: ${pokemon.side.lastMoveUsed.type}`);
 			}
 		},
 		condition: {
 			duration: 3,
+			onDamagePriority: 1,
+			onDamage(damage, target, source, effect) {
+				if (effect.effectType === 'Move') {
+					let move = this.dex.getActiveMove(effect.id);
+					if (move.type === this.effectState.type) {
+						this.debug('wtcf 1.4 damage boost due to typing match');
+						return damage * 1.4;
+					}
+				}
+			},
 			onResidual(pokemon) {
-				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
-				let source = sources[0];	
-				let move = this.dex.getActiveMove(source.abilityState.imprintedMove);
-				move.type = source.abilityState.imprintedType;
-				const dmg = this.actions.getDamage(source, pokemon, move);
+				this.add('-message', `ONRESIDUAL INCONDITION THIS.EFFECTSTATE.TYPE: ${this.effectState.type}`);
+				let source = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever')[0];
+				let imprint = this.dex.getActiveMove('blissfulbreeze');
+				const move = {
+					move: imprint.name,
+					id: imprint.id,
+					pp: imprint.pp,
+					type: this.effectState.type,
+					maxpp: imprint.pp,
+					target: imprint.target,
+					disabled: false,
+					used: false,
+				};
 				this.add('-anim', pokemon, 'Geomancy', pokemon);
-				this.damage(dmg*1.4, pokemon, source);
-				this.add('-message', `${pokemon.name} was buffeted by Woven Together, Cohere Forever!`);
+				this.add('-message', `HIT TYPE POSTFUNCTION PREDAMAGE: ${move.type}`);
+				this.damage(this.actions.getDamage(source, pokemon, move) * 1.4, pokemon, source, this.effect);
 			},
 		},
 	},
