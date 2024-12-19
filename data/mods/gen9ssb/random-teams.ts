@@ -38,7 +38,7 @@ export const ssbSets: SSBSets = {
 
 	Finger: {
 		species: 'Reuniclus', ability: 'Absolute Zen', item: 'Matter Mirror', gender: 'M',
-		moves: ['Luster Purge', 'Drain Punch', 'Recover'],
+		moves: ['Luster Purge', 'Teleport', 'Recover'],
 		signatureMove: 'Mega Metronome',
 		evs: { hp: 252, spa: 252, def: 4 }, nature: 'Modest',
 	},
