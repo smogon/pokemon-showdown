@@ -1210,6 +1210,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Agility', source);
 		},
 		onHit(pokemon) {
+			this.add('-message', `TROUBLESHOOTING: hp: ${pokemon.hp} maxhp: ${pokemon.maxhp}`);
+			this.add('-message', `FORMULA: ${pokemon.hp - 1} / ${pokemon.maxhp / 10}`);
 			pokemon.abilityState.stacks = Math.floor((pokemon.hp - 1) / (pokemon.maxhp / 10));
 			this.damage(pokemon.hp - 1, pokemon, pokemon, this.effect);
 			pokemon.addVolatile('turbocharge');
@@ -1221,15 +1223,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			duration: 9,
 			onModifySpa(spa, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
-				this.debug(`turbocharge boosting spa by ${1 + (0.1 * pokemon.abilityState.stacks)}`);
-				this.add('-message', `SPA BOOST: ${1+(0.1*pokemon.abilityState.stacks)}`);
-				return this.chainModify(1+(0.1*pokemon.abilityState.stacks));
+				let boost = 1 + 0.1 * pokemon.abilityState.stacks;
+				this.debug(`turbocharge boosting spa by ${boost}`);
+				this.add('-message', `SPA BOOST: ${boost}`);
+				return this.chainModify(boost);
 			},
 			onModifySpe(spe, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
-				this.debug(`turbocharge boosting spe by ${1 + (0.1 * pokemon.abilityState.stacks)}`);
-				this.add('-message', `SPA BOOST: ${1+(0.1*pokemon.abilityState.stacks)}`);
-				return this.chainModify(1+(0.1*pokemon.abilityState.stacks));
+				let boost = 1 + 0.1 * pokemon.abilityState.stacks;
+				this.debug(`turbocharge boosting spe by ${boost}`);
+				this.add('-message', `SPE BOOST: ${boost}`);
+				return this.chainModify(boost);
 			},
 			onTryHeal(damage, target, source, effect) {
 				if ((effect?.id === 'zpower') || this.effectState.isZ) return damage;
