@@ -1,4 +1,24 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Rooci Caxa
+	spiritberry: {
+		name: "Spirit Berry",
+		gen: 9,
+		onHit(target, source, move) {
+			if (move.type === 'Physical' && target.eatItem()) {
+				if (!source.addType('Ghost')) return false;
+				this.add('-start', source, 'typeadd', 'Ghost', '[from] item: Spirit Berry');
+			}
+		},
+		onChargeMove(pokemon, target, move) {
+			if (pokemon.eatItem() && move.id === 'phantomforce') {
+				this.debug('spirit berry - remove charge turn for ' + move.id);
+				this.attrLastMove('[still]');
+				this.addMove('-anim', pokemon, move.name, target);
+				return false;
+			}
+		},
+		onEat() { },
+	},
 	// Kusanali
 	seedofstoredknowledge: {
 		name: "Seed of Stored Knowledge",
