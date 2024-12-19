@@ -7656,5 +7656,24 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	//el que lo lea es gay
+	test: {
+		name: "Test",
+		spritenum: 390,
+		onSwitchIn(pokemon) {
+			if (pokemon.baseSpecies.otherFormes ) {
+				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+			}
+		},
+		onPrimal(pokemon) {
+			let base = pokemon.species.name
+			pokemon.formeChange(base + '-Totem', this.effect, true);
+		},
+		onTakeItem(item, source) {
+         return false;
+		},
+		itemUser: ["Raticate-Alola", 'Marowak-Alola'],
+		num: -103,
+		gen: 6,
+		isNonstandard: "Past",
+	},
 };
