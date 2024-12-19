@@ -72,6 +72,26 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 	},
+	// Rooci Caxa
+	horrorsoftheforest: {
+		name: "Horrors of the Forest",
+		gen: 9,
+		flags: {},
+		onStart(pokemon) {
+			this.field.setTerrain('grassyterrain');
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (this.field.isTerrain('grassyterrain') || this.randomChance(1, 2)) {
+				if (pokemon.hp && !pokemon.item && this.dex.items.get(pokemon.lastItem).isBerry) {
+					pokemon.setItem(pokemon.lastItem);
+					pokemon.lastItem = '';
+					this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Horrors of the Forest');
+				}
+			}
+		},
+	},
 	// Aevum
 	temporaldomain: {
 		name: "Temporal Domain",
