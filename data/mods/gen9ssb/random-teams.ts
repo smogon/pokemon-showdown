@@ -192,6 +192,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Genesis Ray',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	'Rooci Caxa': {
+		species: 'Trevenant', ability: 'Horrors of the Forest', item: 'Spirit Berry', gender: 'M',
+		moves: ['Strength Sap', 'Phantom Force', 'Sacred Fire'],
+		signatureMove: 'Root Reaper',
+		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
+	},
 	/*
  	Flufi: {
 		species: 'Raichu', ability: 'Defense of the Heart', item: 'EpiPen', gender: 'M',
