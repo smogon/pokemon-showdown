@@ -99,6 +99,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (!target.addVolatile('horrorsoftheforest')) {
 					this.add('-immune', target, '[from] ability: Horrors of the Forest');
 				}
+				if (target.addType('Fire')) {
+					this.add('-start', target, 'typeadd', 'Fire', '[from] ability: Horrors of the Forest');
+				}
 				return null;
 			}
 		},
@@ -109,8 +112,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			noCopy: true,
 			onStart(target) {
 				this.add('-start', target, 'ability: Horrors of the Forest');
-				if (!target.addType('Fire') || target.hasType('Fire')) return false;
-				this.add('-start', target, 'typeadd', 'Fire', '[from] ability: Horrors of the Forest');
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, attacker, defender, move) {
