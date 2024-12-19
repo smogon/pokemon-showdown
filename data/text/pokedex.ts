@@ -107,6 +107,9 @@ export const PokedexText: {[id: IDEntry]: PokedexText} = {
 	fearow: {
 		name: "Fearow",
 	},
+	fearill: {
+		name: "Fearill",
+	},
 	ekans: {
 		name: "Ekans",
 	},
