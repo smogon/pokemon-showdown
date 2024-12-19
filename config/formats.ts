@@ -2549,6 +2549,7 @@ export const Formats: FormatList = [
 			this.add(`raw|<div class='broadcast-blue'><b>The fourth iteration of Super Staff Brothers! Battle with a random team of gooners.<br /><a href="https://docs.google.com/spreadsheets/d/1HGB2YDZ-Pe2MtWa-IX8d24r4j2rxAkvIgP9NeeyNG0Y/edit?gid=200255702#gid=200255702" target="_blank">SEE THE ROSTER</a></b></div>`);
 			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
 		},
+		/*
 		getSharedItems(pokemon) {
 			if (pokemon.item && pokemon.item === 'colossuscarrier' && pokemon.abilityState.carrierItems) {
 				const items = new Set<string>();
@@ -2560,12 +2561,7 @@ export const Formats: FormatList = [
 				return items;
 			}
 		},
-		onModifyCritRatio(critRatio, source, target) {
-			if (source.abilityState.tcbCritBoost) {
-				this.debug(`TCB boosting ${source.name}'s crit ratio`);
-				return critRatio + 1;
-			}
-		},
+  		*/
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
 				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
@@ -2588,6 +2584,7 @@ export const Formats: FormatList = [
 				}
 			}
 		},
+		/*
 		onBeforeSwitchIn(pokemon) {
 			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
 				let format = this.format;
@@ -2602,6 +2599,7 @@ export const Formats: FormatList = [
 				}
 			}
 		},
+  		*/
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			const sMove = this.dex.moves.get(pokemon.moveSlots[3].id);
