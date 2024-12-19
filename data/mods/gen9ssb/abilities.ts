@@ -91,6 +91,43 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				move.accuracy = true;
+				if (!target.addVolatile('horrorsoftheforest')) {
+					this.add('-immune', target, '[from] ability: Horrors of the Forest');
+				}
+				return null;
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('horrorsoftheforest');
+		},
+		condition: {
+			noCopy: true,
+			onStart(target) {
+				this.add('-start', target, 'ability: Horrors of the Forest');
+				if (!target.addType('Fire') || target.hasType('Fire')) return false;
+				this.add('-start', target, 'typeadd', 'Fire', '[from] ability: Horrors of the Forest');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('HOTF fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('HOTF fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onEnd(target) {
+				this.add('-end', target, 'ability: Horrors of the Forest', '[silent]');
+			},
+		},
 	},
 	// Aevum
 	temporaldomain: {
