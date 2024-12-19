@@ -1442,14 +1442,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onBeforeMove(pokemon) {
 			if (!pokemon.side.lastMoveUsed) return;
 			this.effectState.lastMoveType = pokemon.side.lastMoveUsed.type;
-			this.add('-message', `ONBEFOREMOVE TYPE: ${this.effectState.lastMoveType}`);
+			//this.add('-message', `ONBEFOREMOVE TYPE: ${this.effectState.lastMoveType}`);
 		},
 		onModifyMove(move, pokemon, target) {
 			if (move.type === 'Flying' && pokemon.side.lastMoveUsed) {
 				if (!target.side.addSideCondition('woventogethercohereforever')) return;
 				target.side.addSideCondition('woventogethercohereforever');
 				target.side.sideConditions['woventogethercohereforever'].type = this.effectState.lastMoveType;
-				this.add('-message', `SIDES LAST USED TYPE PRECONDITION: ${this.effectState.lastMoveType}`);
+				//this.add('-message', `SIDES LAST USED TYPE PRECONDITION: ${this.effectState.lastMoveType}`);
 			}
 		},
 		condition: {
@@ -1465,26 +1465,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			},
 			onResidual(pokemon) {
-				this.add('-message', `ONRESIDUAL INCONDITION THIS.EFFECTSTATE.TYPE: ${this.effectState.type}`);
+				//this.add('-message', `ONRESIDUAL INCONDITION THIS.EFFECTSTATE.TYPE: ${this.effectState.type}`);
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
 				let source = sources[0];
-				this.add('-message', `${sources[0]}`);
-				const imprint = this.dex.getActiveMove('blissfulbreeze');
-				const move = {
-					move: imprint.name,
-					id: imprint.id,
-					pp: imprint.pp,
-					type: this.effectState.type,
-					maxpp: imprint.pp,
-					target: imprint.target,
-					disabled: false,
-					used: false,
-				};
+				let move = this.dex.getActiveMove('blissfulbreeze');
+				move.type = this.effectState.type;
 				this.add('-message', `NAME: ${move.name}, TYPE: ${move.type}`);
 				this.add('-anim', pokemon, 'Geomancy', pokemon);
-				this.add('-message', `HIT TYPE POSTFUNCTION PREDAMAGE: ${move.type}`);
-				let damage = this.actions.getDamage(source, pokemon, move);
-				this.damage(damage * 1.4, pokemon, source, this.effect);
+				//this.add('-message', `HIT TYPE POSTFUNCTION PREDAMAGE: ${move.type}`);
+				const damage = this.actions.getDamage(source, pokemon, move);
+				this.damage(damage * 1.4, pokemon, source, this.dex.conditions.get('Woven Together, Cohere Forever'));
 			},
 		},
 	},
