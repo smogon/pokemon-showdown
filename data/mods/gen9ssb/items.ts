@@ -4,6 +4,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Spirit Berry",
 		gen: 9,
 		isBerry: true,
+		shortDesc: "Phantom Force: 1 turn; If hit by physical move: Ghost-type added to Target. Single use.",
+		desc: "Completes holder's Phantom Force in one turn. If the holder is hit by a physical move, adds Ghost to the target's type(s).",
 		onHit(target, source, move) {
 			if (move.type === 'Physical' && target.eatItem()) {
 				if (!source.addType('Ghost')) return false;
