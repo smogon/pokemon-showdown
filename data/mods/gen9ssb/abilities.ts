@@ -1460,7 +1460,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			},
 			onResidual(pokemon) {
 				this.add('-message', `ONRESIDUAL INCONDITION THIS.EFFECTSTATE.TYPE: ${this.effectState.type}`);
-				let source = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever')[0];
+				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
+				let source = sources[0];
+				this.add('-message', `${sources[0]}`);
 				const imprint = this.dex.getActiveMove('blissfulbreeze');
 				const move = {
 					move: imprint.name,
