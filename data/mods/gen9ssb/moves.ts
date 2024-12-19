@@ -1221,7 +1221,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 9,
-			onModifySpa(spa, pokemon) {
+			onModifySpAPriority: 5,
+			onModifySpA(spa, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
 				let boost = 1 + 0.1 * pokemon.abilityState.stacks;
 				this.debug(`turbocharge boosting spa by ${boost}`);
@@ -1249,7 +1250,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 				this.add('-anim', pokemon, 'Discharge', pokemon);
 				this.add('-message', `${pokemon.name} is turbocharged!`);
-				this.add('-message', `TROUBLESHOOTING: ${pokemon.name} spa: ${pokemon.storedStats.spa} | spe: ${pokemon.storedStats.spe}`);
+				this.add('-message', `TROUBLESHOOTING: ${pokemon.name} spa: ${pokemon.storedStats.spa}, spe: ${pokemon.storedStats.spe}`);
 			},
 			onSwitchOut(pokemon) {
 				pokemon.abilityState.stacks = 0;
