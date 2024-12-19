@@ -76,6 +76,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	horrorsoftheforest: {
 		name: "Horrors of the Forest",
 		gen: 9,
+		shortDesc: "Harvest (100% in Grassy Terrain) + Flash Fire.",
+		desc: "At the end of each turn, if this Pokemon has no held item, and its last held item was a berry, 50% chance to recover previous held item. 100% chance in Grassy Terrain. This Pokemon's Fire-type attacks do x1.5 damage after being hit by a Fire move; Fire immunity.",
 		flags: {},
 		onStart(pokemon) {
 			this.field.setTerrain('grassyterrain');
