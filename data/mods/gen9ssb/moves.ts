@@ -2851,7 +2851,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 16,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {futuremove: 1, protect: 1},
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2866,26 +2866,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (ally.cureStatus()) success = true;
 			}
 			return success;
-		},
-		sideCondition: 'blissfulbreeze',
-		condition: {
-			duration: 3,
-			onSideStart(targetSide) {
-				this.add('-sidestart', targetSide, 'Blissful Breeze');
-			},
-			onResidual(pokemon) {
-				let target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-				let source =  pokemon.side.foe.pokemon.filter(ally => ally.name === 'Aeri')[0];
-				if (!source) source = target;
-				const move = this.dex.getActiveMove('blissfulbreeze');
-				const dmg = this.actions.getDamage(source, pokemon, move);
-				this.add('-anim', pokemon, 'Gust', pokemon);
-				this.damage(dmg, pokemon, source, this.dex.conditions.get('Blissful Breeze'));
-				this.add('-message', `${pokemon.name} was buffeted by Blissful Breeze!`);
-			},
-			onSideEnd(targetSide) {
-				this.add('-sideend', targetSide, 'Blissful Breeze');
-			},
 		},
 		secondary: null,
 		target: "normal",
