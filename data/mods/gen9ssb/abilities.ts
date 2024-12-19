@@ -1438,18 +1438,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	woventogethercohereforever: {
 		name: "Woven Together, Cohere Forever",
 		gen: 9,
+		shortDesc: "Flying-type moves hit for three turns.",
+		desc: "Whenever this Pokemon uses a Flying-type move, it hits for the next three turns using the typing of your team's last used move before the Flying-type move. Opposing Pokemon take x1.4 damage from attacks of this typing for three turns.",
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			if (!pokemon.side.lastMoveUsed) return;
 			this.effectState.lastMoveType = pokemon.side.lastMoveUsed.type;
-			//this.add('-message', `ONBEFOREMOVE TYPE: ${this.effectState.lastMoveType}`);
 		},
 		onModifyMove(move, pokemon, target) {
 			if (move.type === 'Flying' && pokemon.side.lastMoveUsed) {
 				if (!target.side.addSideCondition('woventogethercohereforever')) return;
 				target.side.addSideCondition('woventogethercohereforever');
 				target.side.sideConditions['woventogethercohereforever'].type = this.effectState.lastMoveType;
-				//this.add('-message', `SIDES LAST USED TYPE PRECONDITION: ${this.effectState.lastMoveType}`);
 			}
 		},
 		condition: {
@@ -1465,14 +1465,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			},
 			onResidual(pokemon) {
-				//this.add('-message', `ONRESIDUAL INCONDITION THIS.EFFECTSTATE.TYPE: ${this.effectState.type}`);
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever');
 				let source = sources[0];
 				let move = this.dex.getActiveMove('blissfulbreeze');
 				move.type = this.effectState.type;
-				this.add('-message', `NAME: ${move.name}, TYPE: ${move.type}`);
 				this.add('-anim', pokemon, 'Geomancy', pokemon);
-				//this.add('-message', `HIT TYPE POSTFUNCTION PREDAMAGE: ${move.type}`);
 				const damage = this.actions.getDamage(source, pokemon, move);
 				this.damage(damage * 1.4, pokemon, source, this.dex.conditions.get('Woven Together, Cohere Forever'));
 			},
