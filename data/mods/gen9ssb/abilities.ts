@@ -1438,12 +1438,18 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	woventogethercohereforever: {
 		name: "Woven Together, Cohere Forever",
 		gen: 9,
+		onBeforeMovePriority: 9,
+		onBeforeMove(pokemon) {
+			if (!pokemon.side.lastMoveUsed) return;
+			this.effectState.lastMoveType = pokemon.side.lastMoveUsed.type;
+			this.add('-message', `ONBEFOREMOVE TYPE: ${this.effectState.lastMoveType}`);
+		},
 		onModifyMove(move, pokemon, target) {
 			if (move.type === 'Flying' && pokemon.side.lastMoveUsed) {
 				if (!target.side.addSideCondition('woventogethercohereforever')) return;
 				target.side.addSideCondition('woventogethercohereforever');
-				target.side.sideConditions['woventogethercohereforever'].type = pokemon.side.lastMoveUsed.type;
-				this.add('-message', `SIDES LAST USED TYPE PRECONDITION: ${pokemon.side.lastMoveUsed.type}`);
+				target.side.sideConditions['woventogethercohereforever'].type = this.effectState.lastMoveType;
+				this.add('-message', `SIDES LAST USED TYPE PRECONDITION: ${this.effectState.lastMoveType}`);
 			}
 		},
 		condition: {
