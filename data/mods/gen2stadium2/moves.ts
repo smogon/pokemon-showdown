@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Belly Drum no longer boosts attack by 2 stages if under 50% health.
 	bellydrum: {
 		inherit: true,

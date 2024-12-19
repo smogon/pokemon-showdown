@@ -129,7 +129,7 @@ export class RoundRobin {
 			this.totalPendingMatches--;
 		}
 
-		user.unlinkUser();
+		user.game.updatePlayer(user, null);
 	}
 
 	getAvailableMatches() {
@@ -164,6 +164,16 @@ export class RoundRobin {
 		match.result = result;
 		match.score = score.slice(0);
 		this.totalPendingMatches--;
+		if (this.matchesPerPlayer) {
+			if (p1.games === this.matchesPerPlayer) {
+				p1.sendRoom(`|tournament|update|{"isJoined":false}`);
+				p1.game.updatePlayer(p1, null);
+			}
+			if (p2.games === this.matchesPerPlayer) {
+				p2.sendRoom(`|tournament|update|{"isJoined":false}`);
+				p2.game.updatePlayer(p2, null);
+			}
+		}
 	}
 
 	isTournamentEnded() {

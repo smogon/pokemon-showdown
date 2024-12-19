@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon, target) {
@@ -25,7 +25,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const move = this.dex.getActiveMove(action.linked?.[0] || action.move);
 				if (move.category !== 'Status' && !move.flags['failmefirst']) {
 					pokemon.addVolatile('mefirst');
-					this.actions.useMove(move, pokemon, target);
+					this.actions.useMove(move, pokemon, {target});
 					return null;
 				}
 			}
@@ -143,7 +143,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!move || !move.flags['mirror'] || move.isZ || move.isMax) {
 				return false;
 			}
-			this.actions.useMove(move.id, pokemon, target);
+			this.actions.useMove(move.id, pokemon, {target});
 			return null;
 		},
 	},
@@ -384,11 +384,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!lastMove) return false;
 			const possibleTypes = [];
 			const attackType = lastMove.type;
-			for (const type in this.dex.data.TypeChart) {
-				if (source.hasType(type)) continue;
-				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
+			for (const typeName of this.dex.types.names()) {
+				if (source.hasType(typeName)) continue;
+				const typeCheck = this.dex.types.get(typeName).damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
-					possibleTypes.push(type);
+					possibleTypes.push(typeName);
 				}
 			}
 			if (!possibleTypes.length) {

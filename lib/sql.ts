@@ -34,7 +34,7 @@ export interface TransactionEnvironment {
 	statements: Map<string, sqlite.Statement>;
 }
 
-type DatabaseQuery = {
+export type DatabaseQuery = {
 	/** Prepare a statement - data is the statement. */
 	type: 'prepare', data: string,
 } | {
@@ -187,6 +187,9 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		}
 		return statement;
 	}
+	registerFunction(key: string, cb: (...args: any) => any) {
+		this.database!.function(key, cb);
+	}
 	private extractStatement(
 		query: DatabaseQuery & {statement: string, noPrepare?: boolean}
 	) {
@@ -207,17 +210,23 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 	}
 
 	loadExtensionFile(extension: string) {
+		return this.handleExtensions(require('../' + extension));
+	}
+	handleExtensions(imports: any) {
 		if (!this.database) return;
 		const {
 			functions,
 			transactions: storedTransactions,
 			statements: storedStatements,
 			onDatabaseStart,
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-		} = require(`../${extension}`);
+		} = imports;
+		// migrations usually are run here, so this needs to be first
+		if (onDatabaseStart) {
+			onDatabaseStart.call(this, this.database);
+		}
 		if (functions) {
 			for (const k in functions) {
-				this.database.function(k, functions[k]);
+				this.registerFunction(k, functions[k]);
 			}
 		}
 		if (storedTransactions) {
@@ -231,9 +240,6 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 				const statement = this.database.prepare(storedStatements[k]);
 				this.state.statements.set(statement.source, statement);
 			}
-		}
-		if (onDatabaseStart) {
-			onDatabaseStart(this.database);
 		}
 	}
 	async query(input: DatabaseQuery) {
@@ -451,5 +457,8 @@ export namespace SQL {
 	export type DatabaseManager = import('./sql').SQLDatabaseManager;
 	export type Statement = import('./sql').Statement;
 	export type Options = import('./sql').SQLOptions;
+	// eslint-disable-next-line @typescript-eslint/no-shadow
+	export type TransactionEnvironment = import('./sql').TransactionEnvironment;
+	export type Query = import('./sql').DatabaseQuery;
 	export type DatabaseTable<T> = import('./sql').DatabaseTable<T>;
 }

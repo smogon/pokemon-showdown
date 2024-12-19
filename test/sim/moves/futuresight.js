@@ -355,4 +355,50 @@ describe('Future Sight', function () {
 		damage = hooh.maxhp - hooh.hp;
 		assert.bounded(damage, [57, 68], `Future Sight should deal damage with +0 Sp. Atk`);
 	});
+
+	it(`should never resolve when used on turn 254 or later`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+		], [
+			{species: 'Stakataka', moves: ['sleeptalk']},
+		]]);
+
+		battle.turn = 255; // Showdown turn is +1 from what the games are; this would ordinarily be 254
+		battle.makeChoices('move futuresight', 'auto');
+		for (let i = 0; i < 5; i++) battle.makeChoices();
+		battle.makeChoices('move futuresight', 'auto');
+		for (let i = 0; i < 5; i++) battle.makeChoices();
+
+		const stak = battle.p2.active[0];
+		assert.fullHP(stak, `Future Sight should have never resolved.`);
+	});
+
+	it(`should target particular slots in Doubles`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+			{species: 'Steelix', moves: ['sleeptalk']},
+		], [
+			{species: 'Girafarig', moves: ['sleeptalk', 'recover']},
+			{species: 'Farigiraf', moves: ['sleeptalk', 'recover']},
+		]]);
+
+		battle.makeChoices('move futuresight 2, auto', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		const giraf = battle.p2.active[0];
+		const farig = battle.p2.active[1];
+		assert.false.fullHP(farig, `Farigiraf should have been damaged by the 1st Future Sight.`);
+
+		battle.makeChoices('move futuresight 1, auto', 'move recover, move recover');
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.false.fullHP(giraf, `Girafarig should have been damaged by the 2nd Future Sight.`);
+
+		battle.makeChoices('move futuresight -2, auto', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+
+		const steelix = battle.p1.active[1];
+		assert.false.fullHP(steelix, `Steelix should have been damaged by the 3rd Future Sight`);
+	});
 });

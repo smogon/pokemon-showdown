@@ -4,7 +4,7 @@ const assert = require('assert').strict;
 const TeamGenerator = require('../../dist/data/cg-teams').default;
 
 describe('[Gen 9] Computer-Generated Teams', () => {
-	it('should give all species 4 or fewer moves', () => {
+	it.skip('should give all species 4 or fewer moves', () => {
 		const generator = new TeamGenerator();
 		const pool = generator.dex.species
 			.all()

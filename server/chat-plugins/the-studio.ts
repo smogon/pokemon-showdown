@@ -2,8 +2,8 @@
  * The Studio room chat-plugin.
  * Supports scrobbling and searching for music from last.fm.
  * Also supports storing and suggesting recommendations.
- * Written by Kris, loosely based on the concept from bumbadadabum.
- * @author Kris
+ * Written by dhelmise, loosely based on the concept from bumbadadabum.
+ * @author dhelmise
  */
 
 import {FS, Net, Utils} from '../../lib';
@@ -40,6 +40,8 @@ interface Recommendation {
 interface Recommendations {
 	suggested: Recommendation[];
 	saved: Recommendation[];
+	// Storing here so I don't need to rewrite the lastfm json
+	youtubeSearchDisabled?: boolean;
 }
 
 const lastfm: {[userid: string]: string} = JSON.parse(FS(LASTFM_DB).readIfExistsSync() || "{}");
@@ -109,12 +111,18 @@ export class LastFMInterface {
 			try {
 				videoIDs = await YouTube.searchVideo(trackName, 1);
 			} catch (e: any) {
-				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				if (!recommendations.youtubeSearchDisabled) {
+					throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				}
 			}
-			if (!videoIDs?.length) {
+			if (!videoIDs?.length && !recommendations.youtubeSearchDisabled) {
 				throw new Chat.ErrorMessage(`Something went wrong with the YouTube API.`);
 			}
-			buf += `<a href="https://youtu.be/${videoIDs[0]}">${Utils.escapeHTML(trackName)}</a>`;
+			if (recommendations.youtubeSearchDisabled) {
+				buf += Utils.escapeHTML(trackName);
+			} else {
+				buf += `<a href="https://youtu.be/${videoIDs![0]}">${Utils.escapeHTML(trackName)}</a>`;
+			}
 			buf += `</td></tr></table>${this.getScrobbleBadge()}`;
 		}
 		return buf;
@@ -183,9 +191,11 @@ export class LastFMInterface {
 			try {
 				videoIDs = await YouTube.searchVideo(searchName, 1);
 			} catch (e: any) {
-				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				if (!recommendations.youtubeSearchDisabled) {
+					throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				}
 			}
-			if (!videoIDs?.length) {
+			if (!videoIDs?.length || recommendations.youtubeSearchDisabled) {
 				buf += searchName;
 			} else {
 				buf += `<a href="https://youtu.be/${videoIDs[0]}">YouTube link</a>`;
@@ -229,7 +239,7 @@ class RecommendationsInterface {
 		if (!YouTube.linkRegex.test(url)) {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
-		url = url.split('&')[0];
+		url = url.split('~')[0];
 		const videoInfo = await YouTube.getVideoData(url);
 		this.checkTags(tags);
 		// JUST in case
@@ -272,7 +282,7 @@ class RecommendationsInterface {
 		if (!YouTube.linkRegex.test(url)) {
 			throw new Chat.ErrorMessage(`Please provide a valid YouTube link.`);
 		}
-		url = url.split('&')[0];
+		url = url.split('~')[0];
 		const videoInfo = await YouTube.getVideoData(url);
 		this.checkTags(tags);
 		const rec: Recommendation = {artist, title, videoInfo, url, description, tags, userData: {name: username}, likes: 0};
@@ -411,6 +421,33 @@ export const LastFM = new LastFMInterface();
 export const Recs = new RecommendationsInterface();
 
 export const commands: Chat.ChatCommands = {
+	lastfmyoutubesearch(target, room, user) {
+		this.checkCan('gdeclare');
+		target = toID(target);
+		if (!target || !['enable', 'disable'].includes(target)) {
+			return this.parse('/help lastfmyoutubesearch');
+		}
+		if (target === 'enable') {
+			if (!recommendations.youtubeSearchDisabled) {
+				throw new Chat.ErrorMessage(`The YouTube API is already enabled for Last.fm commands.`);
+			}
+			delete recommendations.youtubeSearchDisabled;
+			saveRecommendations();
+			this.sendReply(`YouTube API enabled for Last.fm commands.`);
+			this.globalModlog(`LASTFM YOUTUBE API`, null, 'enabled');
+		} else {
+			if (recommendations.youtubeSearchDisabled) {
+				throw new Chat.ErrorMessage(`The YouTube API is already disabled for Last.fm commands.`);
+			}
+			recommendations.youtubeSearchDisabled = true;
+			saveRecommendations();
+			this.sendReply(`YouTube API disabled for Last.fm commands.`);
+			this.globalModlog(`LASTFM YOUTUBE API`, null, 'disabled');
+		}
+	},
+	lastfmyoutubesearchhelp: [
+		'/lastfmyoutubesearch [enable|disable] - Enables/disables the YouTube API for Last.fm commands. Requires: ~',
+	],
 	registerlastfm(target, room, user) {
 		if (!target) return this.parse(`/help registerlastfm`);
 		this.checkChat(target);
@@ -468,7 +505,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog(`RECOMMENDATION`, null, `add: '${toID(title)}' by ${toID(artist)}`);
 	},
 	addrecommendationhelp: [
-		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # &`,
+		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # ~`,
 	],
 
 	delrec: 'removerecommendation',
@@ -487,7 +524,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog(`RECOMMENDATION`, null, `remove: '${toID(title)}' by ${toID(artist)}`);
 	},
 	removerecommendationhelp: [
-		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # &`,
+		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # ~`,
 		`If you added a recommendation, you can remove it on your own without being one of the required ranks.`,
 	],
 
@@ -530,7 +567,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog(`RECOMMENDATION`, null, `approve: '${toID(title)}' by ${toID(artist)} from ${submitter}`);
 	},
 	approvesuggestionhelp: [
-		`/approvesuggestion submitter | artist | strong title - Approve a submitted song recommendation. Requires: % @ * # &`,
+		`/approvesuggestion submitter | artist | strong title - Approve a submitted song recommendation. Requires: % @ * # ~`,
 	],
 
 	denysuggestion(target, room, user) {
@@ -545,7 +582,7 @@ export const commands: Chat.ChatCommands = {
 		this.modlog(`RECOMMENDATION`, null, `deny: '${toID(title)}' by ${toID(artist)} from ${submitter}`);
 	},
 	denysuggestionhelp: [
-		`/denysuggestion submitter | artist | strong title - Deny a submitted song recommendation. Requires: % @ * # &`,
+		`/denysuggestion submitter | artist | strong title - Deny a submitted song recommendation. Requires: % @ * # ~`,
 	],
 
 	rec: 'recommendation',
@@ -580,8 +617,8 @@ export const commands: Chat.ChatCommands = {
 	recommendationhelp: [
 		`/recommendation [key1, key2, key3, ...] - Displays a random recommendation that matches all keys, if one exists.`,
 		`If no arguments are provided, a random recommendation is shown.`,
-		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # &`,
-		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # &`,
+		`/addrecommendation artist | song title | url | description | tag1 | tag2 | ... - Adds a song recommendation. Requires: + % @ * # ~`,
+		`/removerecommendation artist | song title - Removes a song recommendation. Requires: % @ * # ~`,
 		`If you added a recommendation, you can remove it on your own without being one of the required ranks.`,
 		`/suggestrecommendation artist | song title | url | description | tag1 | tag2 | ... - Suggest a song recommendation.`,
 	],
@@ -614,7 +651,7 @@ export const commands: Chat.ChatCommands = {
 		this.parse(`/j view-suggestedrecommendations-${room.roomid}`);
 	},
 	viewsuggestedrecommendationshelp: [
-		`/viewsuggestedrecommendations OR /viewsuggestions - View all suggested recommended songs. Requires: % @ * # &`,
+		`/viewsuggestedrecommendations OR /viewsuggestions - View all suggested recommended songs. Requires: % @ * # ~`,
 	],
 };
 

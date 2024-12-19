@@ -28,11 +28,14 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		assert.equal(bpModifiers.get('fusionflare'), 2);
 	});
 
-	it('should boost the second move if the first was used by the same pokemon', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[{species: 'Victini', item: 'laggingtail', ability: 'victorystar', moves: ['fusionbolt', 'fusionflare']}, {species: 'Oranguru', ability: 'telepathy', moves: ['calmmind', 'instruct']}],
-			[{species: 'Dragonite', ability: 'Multiscale', moves: ['roost']}, {species: 'Lugia', ability: 'Multiscale', moves: ['roost']}],
-		]);
+	it(`should boost the second move if the first was used by the same Pokemon`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Magikarp', item: 'laggingtail', moves: ['fusionbolt', 'fusionflare']},
+			{species: 'Oranguru', moves: ['sleeptalk', 'instruct']},
+		], [
+			{species: 'Dragonite', moves: ['roost']},
+			{species: 'Lugia', moves: ['roost']},
+		]]);
 
 		battle.makeChoices();
 
@@ -46,11 +49,14 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		assert.equal(bpModifiers.get('fusionflare'), 2);
 	});
 
-	it('should not boost the second move if another move was used between them', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[{species: 'Zekrom', ability: 'teravolt', moves: ['fusionbolt']}, {species: 'Reshiram', item: 'laggingtail', ability: 'teravolt', moves: ['fusionflare']}],
-			[{species: 'Dragonite', ability: 'Multiscale', moves: ['roost']}, {species: 'Lugia', ability: 'Multiscale', moves: ['roost']}],
-		]);
+	it(`should not boost the second move if another move was used between them`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Zekrom', moves: ['fusionbolt']},
+			{species: 'Reshiram', item: 'laggingtail', moves: ['fusionflare']},
+		], [
+			{species: 'Dragonite', ability: 'shellarmor', moves: ['roost']},
+			{species: 'Lugia', moves: ['roost']},
+		]]);
 
 		battle.makeChoices();
 
@@ -58,16 +64,19 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		battle.onEvent('BasePower', battle.format, -100, function (bp, attacker, defender, move) {
 			bpModifiers.set(move.id, this.event.modifier);
 		});
-		battle.makeChoices('move fusionbolt 1, move fusionflare 1', 'default');
+		battle.makeChoices('move fusionbolt 1, move fusionflare 1', 'auto');
 
 		assert.equal(bpModifiers.get('fusionflare'), 1);
 	});
 
-	it('should not boost the second move if the first move failed', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
-			[{species: 'Zekrom', ability: 'teravolt', moves: ['fusionbolt'], evs: {spe: 4}}, {species: 'Reshiram', ability: 'teravolt', moves: ['fusionflare']}],
-			[{species: 'Stunfisk', ability: 'Multiscale', moves: ['roost']}, {species: 'Stunfisk', ability: 'Multiscale', moves: ['roost']}],
-		]);
+	it(`should not boost the second move if the first move failed`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Regieleki', moves: ['fusionbolt']},
+			{species: 'Reshiram', moves: ['fusionflare']},
+		], [
+			{species: 'Stunfisk', moves: ['roost']},
+			{species: 'Stunfisk', moves: ['roost']},
+		]]);
 
 		const bpModifiers = new Map();
 		battle.onEvent('BasePower', battle.format, -100, function (bp, attacker, defender, move) {

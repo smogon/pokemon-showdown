@@ -58,8 +58,10 @@ describe('Rooms features', function () {
 			for (const option of options) {
 				room = Rooms.createBattle({
 					format: 'customgame',
-					p1: {user: p1, team: packedTeam},
-					p2: {user: p2, team: packedTeam},
+					players: [
+						{user: p1, team: packedTeam},
+						{user: p2, team: packedTeam},
+					],
 					...option,
 				});
 				assert(room.battle.p1 && room.battle.p2); // Automatically joined
@@ -73,8 +75,10 @@ describe('Rooms features', function () {
 			const p2 = makeUser();
 			room = Rooms.createBattle({
 				format: 'customgame',
-				p1: {user: p1, team: packedTeam},
-				p2: {user: p2, team: packedTeam},
+				players: [
+					{user: p1, team: packedTeam},
+					{user: p2, team: packedTeam},
+				],
 				rated: false,
 				auth: {},
 				tour: {
@@ -95,14 +99,10 @@ describe('Rooms features', function () {
 			administrator.tempGroup = '~';
 			room = Rooms.createBattle({
 				format: 'customgame',
-				p1: {
-					user: p1,
-					team: packedTeam,
-				},
-				p2: {
-					user: p2,
-					team: packedTeam,
-				},
+				players: [
+					{user: p1, team: packedTeam},
+					{user: p2, team: packedTeam},
+				],
 				rated: false,
 				auth: {},
 				tour: {

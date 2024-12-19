@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	absorbbulb: {
 		inherit: true,
 		isNonstandard: "Past",
@@ -15,15 +15,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Past",
 	},
+	beastball: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	berrysweet: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	bindingband: {
+	bignugget: {
 		inherit: true,
 		isNonstandard: "Past",
 	},
-	beastball: {
+	bindingband: {
 		inherit: true,
 		isNonstandard: "Past",
 	},

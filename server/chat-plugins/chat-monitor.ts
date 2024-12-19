@@ -13,8 +13,8 @@ const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 	c: ["c", "ç", "ᑕ", "C", "ⓒ", "Ⓒ", "¢", "͏", "₵", "ċ", "Ċ", "ፈ", "ς", "ḉ", "Ḉ", "Ꮯ", "ƈ", "̾", "ｃ", "Ｃ", "ᴄ", "ɔ", "🅒", "𝐜", "𝐂", "𝘤", "𝘊", "𝙘", "𝘾", "𝒸", "𝓬", "𝓒", "𝕔", "ℂ", "𝔠", "ℭ", "𝖈", "𝕮", "🄲", "🅲", "𝒞", "𝚌", "𝙲", "☾", "с"],
 	d: ["d", "ᗪ", "D", "ⓓ", "Ⓓ", "∂", "Đ", "ď", "Ď", "Ꮄ", "Ḋ", "Ꭰ", "ɖ", "ｄ", "Ｄ", "ᴅ", "🅓", "𝐝", "𝐃", "𝘥", "𝘋", "𝙙", "𝘿", "𝒹", "𝓭", "𝓓", "𝕕", "​", "𝔡", "𝖉", "𝕯", "🄳", "🅳", "𝒟", "ԃ", "𝚍", "𝙳", "◗", "ⅾ"],
 	e: ["e", "3", "é", "ê", "E", "ⓔ", "Ⓔ", "є", "͏", "Ɇ", "ệ", "Ệ", "Ꮛ", "ε", "Σ", "ḕ", "Ḕ", "Ꭼ", "ɛ", "̾", "ｅ", "Ｅ", "ᴇ", "ǝ", "🅔", "𝐞", "𝐄", "𝘦", "𝘌", "𝙚", "𝙀", "ℯ", "𝓮", "𝓔", "𝕖", "𝔻", "𝔢", "𝔇", "𝖊", "𝕰", "🄴", "🅴", "𝑒", "𝐸", "ҽ", "𝚎", "𝙴", "€", "е", "ё", "𝓮"],
-	f: ["f", "ᖴ", "F", "ⓕ", "Ⓕ", "₣", "ḟ", "Ḟ", "Ꭶ", "ғ", "ʄ", "ｆ", "Ｆ", "ɟ", "🅕", "𝐟", "𝐅", "𝘧", "𝘍", "𝙛", "𝙁", "𝒻", "𝓯", "𝓕", "𝕗", "𝔼", "𝔣", "𝔈", "𝖋", "𝕱", "🄵", "🅵", "𝐹", "ϝ", "𝚏", "𝙵", "Ϝ", "f"],
-	g: ["g", "q", "6", "9", "G", "ⓖ", "Ⓖ", "͏", "₲", "ġ", "Ġ", "Ꮆ", "ϑ", "Ḡ", "ɢ", "̾", "ｇ", "Ｇ", "ƃ", "🅖", "𝐠", "𝐆", "𝘨", "𝘎", "𝙜", "𝙂", "ℊ", "𝓰", "𝓖", "𝕘", "𝔽", "𝔤", "𝔉", "𝖌", "𝕲", "🄶", "🅶", "𝑔", "𝒢", "ɠ", "𝚐", "𝙶", "❡", "ց", "𝙶", "𝓰"],
+	f: ["f", "ᖴ", "F", "ⓕ", "Ⓕ", "₣", "ḟ", "Ḟ", "Ꭶ", "ғ", "ʄ", "ｆ", "Ｆ", "ɟ", "🅕", "𝐟", "𝐅", "𝘧", "𝘍", "𝙛", "𝙁", "𝒻", "𝓯", "𝓕", "𝕗", "𝔼", "𝔣", "𝔈", "𝖋", "𝕱", "🄵", "🅵", "𝐹", "ϝ", "𝚏", "𝙵", "Ϝ", "f", "Ƒ"],
+	g: ["g", "q", "6", "9", "G", "ⓖ", "Ⓖ", "͏", "₲", "ġ", "Ġ", "Ꮆ", "ϑ", "Ḡ", "ɢ", "̾", "ｇ", "Ｇ", "ƃ", "🅖", "𝐠", "𝐆", "𝘨", "𝘎", "𝙜", "𝙂", "ℊ", "𝓰", "𝓖", "𝕘", "𝔽", "𝔤", "𝔉", "𝖌", "𝕲", "🄶", "🅶", "𝑔", "𝒢", "ɠ", "𝚐", "𝙶", "❡", "ց", "𝙶", "𝓰", "Ԍ"],
 	h: [
 		"h", "ᕼ", "H", "ⓗ", "Ⓗ", "н", "Ⱨ", "ḧ", "Ḧ", "Ꮒ", "ɦ", "ｈ", "Ｈ", "ʜ", "ɥ", "🅗", "𝐡", "𝐇", "𝘩", "𝘏", "𝙝", "𝙃", "𝒽", "𝓱", "𝓗", "𝕙", "𝔾", "𝔥", "𝔊", "𝖍", "𝕳", "🄷", "🅷", "𝐻", "ԋ", "𝚑", "𝙷", "♄", "h",
 	],
@@ -25,7 +25,7 @@ const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 	m: [
 		"m", "ᗰ", "M", "ⓜ", "Ⓜ", "м", "͏", "₥", "ṃ", "Ṃ", "Ꮇ", "ϻ", "Μ", "ṁ", "Ṁ", "ʍ", "̾", "ｍ", "Ｍ", "ᴍ", "ɯ", "🅜", "𝐦", "𝐌", "𝘮", "𝘔", "𝙢", "𝙈", "𝓂", "𝓶", "𝓜", "𝕞", "𝕂", "𝔪", "𝔍", "𝖒", "𝕸", "🄼", "🅼", "𝑀", "ɱ", "𝚖", "𝙼", "♔", "ⅿ",
 	],
-	n: ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո", "η", "𝙽", "ƞ", "𝓷"],
+	n: ["n", "ñ", "ᑎ", "N", "ⓝ", "Ⓝ", "и", "₦", "ń", "Ń", "Ꮑ", "π", "∏", "Ṇ", "ռ", "ｎ", "Ｎ", "ɴ", "🅝", "𝐧", "𝐍", "𝘯", "𝘕", "𝙣", "𝙉", "𝓃", "𝓷", "𝓝", "𝕟", "𝕃", "𝔫", "𝔎", "𝖓", "𝕹", "🄽", "🅽", "𝒩", "ɳ", "𝚗", "𝙽", "♫", "ո", "η", "𝙽", "ƞ", "𝓷", "Ν"],
 	o: ["o", "0", "ó", "ô", "õ", "ú", "O", "ⓞ", "Ⓞ", "σ", "͏", "Ø", "ö", "Ö", "Ꭷ", "Θ", "ṏ", "Ṏ", "Ꮎ", "օ", "̾", "ｏ", "Ｏ", "ᴏ", "🅞", "𝐨", "𝐎", "𝘰", "𝘖", "𝙤", "𝙊", "ℴ", "𝓸", "𝓞", "𝕠", "𝕄", "𝔬", "𝔏", "𝖔", "𝕺", "🄾", "🅾", "𝑜", "𝒪", "𝚘", "𝙾", "⊙", "ο"],
 	p: ["p", "ᑭ", "P", "ⓟ", "Ⓟ", "ρ", "₱", "ṗ", "Ṗ", "Ꭾ", "Ƥ", "Ꮲ", "ք", "ｐ", "Ｐ", "ᴘ", "🅟", "𝐩", "𝐏", "𝘱", "𝘗", "𝙥", "𝙋", "𝓅", "𝓹", "𝓟", "𝕡", "ℕ", "𝔭", "𝔐", "𝖕", "𝕻", "🄿", "🅿", "𝒫", "𝚙", "𝙿", "р"],
 	q: [
@@ -47,6 +47,7 @@ const EVASION_DETECTION_SUBSTITUTIONS: {[k: string]: string[]} = {
 const filterWords: {[k: string]: Chat.FilterWord[]} = Chat.filterWords;
 
 export const Filters = new class {
+	readonly EVASION_DETECTION_SUBSTITUTIONS = EVASION_DETECTION_SUBSTITUTIONS;
 	readonly EVASION_DETECTION_SUB_STRINGS: {[k: string]: string} = {};
 	constructor() {
 		for (const letter in EVASION_DETECTION_SUBSTITUTIONS) {
@@ -427,7 +428,7 @@ export const namefilter: Chat.NameFilter = (name, user) => {
 	if (Punishments.namefilterwhitelist.has(id)) return name;
 	if (Monitor.forceRenames.has(id)) {
 		if (typeof Monitor.forceRenames.get(id) === 'number') {
-			// we check this for hotpatching reasons, since on the initial chat patch this will still be a Utils.MultiSet
+			// we check this for hotpatching reasons, since on the initial chat patch this will still be a Utils.Multiset
 			// we're gonna assume no one has seen it since that covers people who _haven't_ actually, and those who have
 			// likely will not be attempting to log into it
 			Monitor.forceRenames.set(id, false);
@@ -501,7 +502,7 @@ export const nicknamefilter: Chat.NicknameFilter = (name, user) => {
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
 	for (const list in filterWords) {
-	        if (!Chat.monitors[list]) continue;
+		if (!Chat.monitors[list]) continue;
 		if (Chat.monitors[list].location === 'BATTLES') continue;
 		for (const line of filterWords[list]) {
 			let {regex, word} = line;
@@ -715,9 +716,13 @@ export const commands: Chat.ChatCommands = {
 			const buf = [];
 			for (const monitorName in Chat.monitors) {
 				const monitor = Chat.monitors[monitorName];
-				if (!monitor.monitor) continue;
 				for (const line of Chat.filterWords[monitorName]) {
-					const ret = monitor.monitor.call(this, line, room, user, target, lcMessage, true);
+					let ret;
+					if (monitor.monitor) {
+						ret = monitor.monitor.call(this, line, room, user, target, lcMessage, true);
+					} else {
+						ret = line.regex.exec(target)?.[0];
+					}
 					if (typeof ret === 'string') {
 						buf.push(`${monitorName}: ${ret}`);
 						break;
@@ -735,28 +740,16 @@ export const commands: Chat.ChatCommands = {
 				);
 			}
 		},
-		testhelp(target, room, user) {
-			this.checkCan('lock');
-			if (room && ['staff', 'upperstaff'].includes(room.roomid)) this.runBroadcast(true);
-			const monitorNames = [...Object.keys(Chat.monitors).filter(x => Chat.monitors[x].monitor)];
-			monitorNames.push(
-				...Object.keys(Chat.monitors)
-					.filter(x => Chat.monitors[x].monitor && x.includes('filter'))
-					.map(x => x.replace('filter', ''))
-			);
-			this.sendReplyBox(
-				`<code>/filter test [monitor name] [test string]</code>:<br />` +
-				`Tests whether or not the provided test string would trigger the respective monitor.<br />` +
-				`All usable commands: <code>${monitorNames.sort().map(x => `/filter test ${x}`).join('</code>, <code>')}</code><br />` +
-				`Can only be broadcast in Staff and Upper Staff. Requires: % @ &`
-			);
-		},
+		testhelp: [
+			`/filter test [test string] - Tests whether or not the provided test string would trigger any of the chat monitors.`,
+			`Requires: % @ ~`,
+		],
 	},
 	filterhelp: [
-		`/filter add list, word, reason[, optional public reason] - Adds a word to the given filter list. Requires: &`,
-		`/filter remove list, words - Removes words from the given filter list. Requires: &`,
-		`/filter view - Opens the list of filtered words. Requires: % @ &`,
-		`/filter test - Do "/help filter test" for more information. Requires: % @ &`,
+		`/filter add list, word, reason[, optional public reason] - Adds a word to the given filter list. Requires: ~`,
+		`/filter remove list, words - Removes words from the given filter list. Requires: ~`,
+		`/filter view - Opens the list of filtered words. Requires: % @ ~`,
+		`/filter test [test string] - Tests whether or not the provided test string would trigger any of the chat monitors. Requires: % @ ~`,
 		`You may use / instead of , in /filter add if you want to specify a reason that includes commas.`,
 	],
 	allowname(target, room, user) {

@@ -87,7 +87,7 @@ export abstract class MinorActivity {
 
 			if (pollData.activityid !== 'poll') throw new Error(`Unexpected Minor Activity (${pollData.activityid}) in queue`);
 
-			room.add(`|c|&|/log ${room.tr`The queued poll was started.`}`).update();
+			room.add(`|c|~|/log ${room.tr`The queued poll was started.`}`).update();
 			room.modlog({
 				action: 'POLL',
 				note: '(queued)',

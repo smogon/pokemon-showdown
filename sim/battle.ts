@@ -217,10 +217,9 @@ export class Battle {
 		this.formatData = {id: format.id};
 		this.gameType = (format.gameType || 'singles');
 		this.field = new Field(this);
-		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'freeforall';
-		this.sides = Array(isFourPlayer ? 4 : 2).fill(null) as any;
+		this.sides = Array(format.playerCount).fill(null) as any;
 		this.activePerHalf = this.gameType === 'triples' ? 3 :
-			(isFourPlayer || this.gameType === 'doubles') ? 2 :
+			(format.playerCount > 2 || this.gameType === 'doubles') ? 2 :
 			1;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
@@ -779,9 +778,9 @@ export class Battle {
 				// it's changed; call it off
 				continue;
 			}
-			if (effect.effectType === 'Ability' && effect.isBreakable !== false &&
+			if (effect.effectType === 'Ability' && effect.flags['breakable'] &&
 				this.suppressingAbility(effectHolder as Pokemon)) {
-				if (effect.isBreakable) {
+				if (effect.flags['breakable']) {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');
 					continue;
 				}
@@ -1162,7 +1161,7 @@ export class Battle {
 			}
 			return false;
 		}
-		return move.flags['contact'];
+		return !!move.flags['contact'];
 	}
 
 	getPokemon(fullname: string | Pokemon) {
@@ -1378,7 +1377,7 @@ export class Battle {
 		if (!this.ended && side.requestState) {
 			side.emitRequest({wait: true, side: side.getRequestData()});
 			side.clearChoice();
-			if (this.allChoicesDone()) this.commitDecisions();
+			if (this.allChoicesDone()) this.commitChoices();
 		}
 		return true;
 	}
@@ -1440,7 +1439,7 @@ export class Battle {
 		pokemon.faint(source, effect);
 	}
 
-	nextTurn() {
+	endTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
 
@@ -1503,7 +1502,11 @@ export class Battle {
 				}
 				this.runEvent('DisableMove', pokemon);
 				for (const moveSlot of pokemon.moveSlots) {
-					this.singleEvent('DisableMove', this.dex.getActiveMove(moveSlot.id), null, pokemon);
+					const activeMove = this.dex.getActiveMove(moveSlot.id);
+					this.singleEvent('DisableMove', activeMove, null, pokemon);
+					if (activeMove.flags['cantusetwice'] && pokemon.lastMove?.id === moveSlot.id) {
+						pokemon.disableMove(pokemon.lastMove.id);
+					}
 				}
 
 				// If it was an illusion, it's not any more
@@ -1610,7 +1613,7 @@ export class Battle {
 		// Please remove me once there is client support.
 		if (this.ruleTable.has('crazyhouserule')) {
 			for (const side of this.sides) {
-				let buf = `raw|${side.name}'s team:<br />`;
+				let buf = `raw|${Utils.escapeHTML(side.name)}'s team:<br />`;
 				for (const pokemon of side.pokemon) {
 					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
 					if (pokemon.fainted) {
@@ -1771,11 +1774,11 @@ export class Battle {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
-		if (format.onBegin) format.onBegin.call(this);
+		format.onBegin?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.onBegin) subFormat.onBegin.call(this);
+			subFormat.onBegin?.call(this);
 		}
 
 		if (this.sides.some(side => !side.pokemon[0])) {
@@ -1786,16 +1789,16 @@ export class Battle {
 			this.checkEVBalance();
 		}
 
-		if (format.onTeamPreview) format.onTeamPreview.call(this);
+		format.onTeamPreview?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
-			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
+			subFormat.onTeamPreview?.call(this);
 		}
 
 		this.queue.addChoice({choice: 'start'});
 		this.midTurn = true;
-		if (!this.requestState) this.go();
+		if (!this.requestState) this.turnLoop();
 	}
 
 	restart(send?: (type: string, data: string | string[]) => void) {
@@ -1823,9 +1826,9 @@ export class Battle {
 		effect: Effect | null = null, isSecondary = false, isSelf = false
 	) {
 		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
+			target ||= this.event.target;
+			source ||= this.event.source;
+			effect ||= this.effect;
 		}
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
@@ -1930,7 +1933,7 @@ export class Battle {
 
 			if (this.gen <= 1) {
 				if (this.dex.currentMod === 'gen1stadium' ||
-					!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
+					!['recoil', 'drain', 'leechseed'].includes(effect.id) && effect.effectType !== 'Status') {
 					this.lastDamage = targetDamage;
 				}
 			}
@@ -2014,18 +2017,18 @@ export class Battle {
 		effect: 'drain' | 'recoil' | Effect | null = null, instafaint = false
 	) {
 		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
+			target ||= this.event.target;
+			source ||= this.event.source;
+			effect ||= this.effect;
 		}
 		return this.spreadDamage([damage], [target], source, effect, instafaint)[0];
 	}
 
 	directDamage(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: Effect | null = null) {
 		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
+			target ||= this.event.target;
+			source ||= this.event.source;
+			effect ||= this.effect;
 		}
 		if (!target?.hp) return 0;
 		if (!damage) return 0;
@@ -2075,9 +2078,9 @@ export class Battle {
 
 	heal(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: 'drain' | Effect | null = null) {
 		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
+			target ||= this.event.target;
+			source ||= this.event.source;
+			effect ||= this.effect;
 		}
 		if (effect === 'drain') effect = this.dex.conditions.getByID(effect as ID);
 		if (damage && damage <= 1) damage = 1;
@@ -2133,22 +2136,21 @@ export class Battle {
 		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
 	}
 
-	chainModify(numerator: number | number[], denominator?: number) {
+	chainModify(numerator: number | number[], denominator = 1) {
 		const previousMod = this.trunc(this.event.modifier * 4096);
 
 		if (Array.isArray(numerator)) {
 			denominator = numerator[1];
 			numerator = numerator[0];
 		}
-		const nextMod = this.trunc(numerator * 4096 / (denominator || 1));
+		const nextMod = this.trunc(numerator * 4096 / denominator);
 		this.event.modifier = ((previousMod * nextMod + 2048) >> 12) / 4096;
 	}
 
-	modify(value: number, numerator: number | number[], denominator?: number) {
+	modify(value: number, numerator: number | number[], denominator = 1) {
 		// You can also use:
 		// modify(value, [numerator, denominator])
 		// modify(value, fraction) - assuming you trust JavaScript's floating-point handler
-		if (!denominator) denominator = 1;
 		if (Array.isArray(numerator)) {
 			denominator = numerator[1];
 			numerator = numerator[0];
@@ -2282,6 +2284,9 @@ export class Battle {
 					return target;
 				}
 				if (target.isAlly(pokemon)) {
+					if (move.target === 'adjacentAllyOrSelf' && this.gen !== 5) {
+						return pokemon;
+					}
 					// Target is a fainted ally: attack shouldn't retarget
 					return target;
 				}
@@ -2410,14 +2415,10 @@ export class Battle {
 	}
 
 	checkWin(faintData?: Battle['faintQueue'][0]) {
-		let team1PokemonLeft = this.sides[0].pokemonLeft;
-		let team2PokemonLeft = this.sides[1].pokemonLeft;
+		const team1PokemonLeft = this.sides[0].pokemonLeft + (this.sides[0].allySide?.pokemonLeft || 0);
+		const team2PokemonLeft = this.sides[1].pokemonLeft + (this.sides[1].allySide?.pokemonLeft || 0);
 		const team3PokemonLeft = this.gameType === 'freeforall' && this.sides[2]!.pokemonLeft;
 		const team4PokemonLeft = this.gameType === 'freeforall' && this.sides[3]!.pokemonLeft;
-		if (this.gameType === 'multi') {
-			team1PokemonLeft += this.sides[2]!.pokemonLeft;
-			team2PokemonLeft += this.sides[3]!.pokemonLeft;
-		}
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
@@ -2547,11 +2548,19 @@ export class Battle {
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
-			this.actions.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect,
-				action.zmove, undefined, action.maxMove, action.originalTarget);
+			this.actions.runMove(action.move, action.pokemon, action.targetLoc, {
+				sourceEffect: action.sourceEffect, zMove: action.zmove,
+				maxMove: action.maxMove, originalTarget: action.originalTarget,
+			});
 			break;
 		case 'megaEvo':
 			this.actions.runMegaEvo(action.pokemon);
+			break;
+		case 'megaEvoX':
+			this.actions.runMegaEvoX?.(action.pokemon);
+			break;
+		case 'megaEvoY':
+			this.actions.runMegaEvoY?.(action.pokemon);
 			break;
 		case 'runDynamax':
 			action.pokemon.addVolatile('dynamax');
@@ -2683,7 +2692,7 @@ export class Battle {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
-		} else if (action.choice === 'megaEvo' && this.gen === 7) {
+		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			for (const [i, queuedAction] of this.queue.list.entries()) {
@@ -2733,7 +2742,8 @@ export class Battle {
 				if (!reviveSwitch) switches[i] = false;
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
-					if (pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' && !pokemon.skipBeforeSwitchOutEventFlag) {
+					if (pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
+							!pokemon.skipBeforeSwitchOutEventFlag) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
 						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
@@ -2767,7 +2777,14 @@ export class Battle {
 		return false;
 	}
 
-	go() {
+	/**
+	 * Generally called at the beginning of a turn, to go through the
+	 * turn one action at a time.
+	 *
+	 * If there is a mid-turn decision (like U-Turn), this will return
+	 * and be called again later to resume the turn.
+	 */
+	turnLoop() {
 		this.add('');
 		this.add('t:', Math.floor(Date.now() / 1000));
 		if (this.requestState) this.requestState = '';
@@ -2784,7 +2801,7 @@ export class Battle {
 			if (this.requestState || this.ended) return;
 		}
 
-		this.nextTurn();
+		this.endTurn();
 		this.midTurn = false;
 		this.queue.clear();
 	}
@@ -2796,13 +2813,18 @@ export class Battle {
 	choose(sideid: SideID, input: string) {
 		const side = this.getSide(sideid);
 
-		if (!side.choose(input)) return false;
+		if (!side.choose(input)) {
+			if (!side.choice.error) {
+				side.emitChoiceError(`Unknown error for choice: ${input}. If you're not using a custom client, please report this as a bug.`);
+			}
+			return false;
+		}
 
 		if (!side.isChoiceDone()) {
 			side.emitChoiceError(`Incomplete choice: ${input} - missing other pokemon`);
 			return false;
 		}
-		if (this.allChoicesDone()) this.commitDecisions();
+		if (this.allChoicesDone()) this.commitChoices();
 		return true;
 	}
 
@@ -2819,12 +2841,16 @@ export class Battle {
 				side.autoChoose();
 			}
 		}
-		this.commitDecisions();
+		this.commitChoices();
 	}
 
-	commitDecisions() {
+	commitChoices() {
 		this.updateSpeed();
 
+		// Sometimes you need to make switch choices mid-turn (e.g. U-turn,
+		// fainting). When this happens, the rest of the turn is saved (and not
+		// re-sorted), but the new switch choices are sorted and inserted before
+		// the rest of the turn.
 		const oldQueue = this.queue.list;
 		this.queue.clear();
 		if (!this.allChoicesDone()) throw new Error("Not all choices done");
@@ -2846,7 +2872,9 @@ export class Battle {
 			side.activeRequest = null;
 		}
 
-		this.go();
+		this.turnLoop();
+
+		// workaround for tests
 		if (this.log.length - this.sentLogPos > 500) this.sendUpdates();
 	}
 
@@ -2989,6 +3017,48 @@ export class Battle {
 		return team as PokemonSet[];
 	}
 
+	showOpenTeamSheets() {
+		if (this.turn !== 0) return;
+		for (const side of this.sides) {
+			const team = side.pokemon.map(pokemon => {
+				const set = pokemon.set;
+				const newSet: PokemonSet = {
+					name: '',
+					species: set.species,
+					item: set.item,
+					ability: set.ability,
+					moves: set.moves,
+					nature: '',
+					gender: pokemon.gender,
+					evs: null!,
+					ivs: null!,
+					level: set.level,
+				};
+				if (this.gen === 8) newSet.gigantamax = set.gigantamax;
+				if (this.gen === 9) newSet.teraType = set.teraType;
+				// Only display Hidden Power type if the Pokemon has Hidden Power
+				// This is based on how team sheets were written in past VGC formats
+				if (set.moves.some(m => this.dex.moves.get(m).id === 'hiddenpower')) newSet.hpType = set.hpType;
+				// This is done so the client doesn't flag Zacian/Zamazenta as illusions
+				// when they use their signature move
+				if ((toID(set.species) === 'zacian' && toID(set.item) === 'rustedsword') ||
+					(toID(set.species) === 'zamazenta' && toID(set.item) === 'rustedshield')) {
+					newSet.species = Dex.species.get(set.species + 'crowned').name;
+					const crowned: {[k: string]: string} = {
+						'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
+					};
+					const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
+					if (ironHead >= 0) {
+						newSet.moves[ironHead] = crowned[newSet.species];
+					}
+				}
+				return newSet;
+			});
+
+			this.add('showteam', side.id, Teams.pack(team));
+		}
+	}
+
 	setPlayer(slot: SideID, options: PlayerOptions) {
 		let side;
 		let didSomething = true;
@@ -3070,6 +3140,15 @@ export class Battle {
 
 	getSide(sideid: SideID): Side {
 		return this.sides[parseInt(sideid[1]) - 1];
+	}
+
+	/**
+	 * Currently, we treat Team Preview as turn 0, but the games start counting their turns at turn 0
+	 * There is also overflow that occurs in Gen 8+ that affects moves like Wish / Future Sight
+	 * https://www.smogon.com/forums/threads/10352797
+	 */
+	getOverflowedTurnCount(): number {
+		return this.gen >= 8 ? (this.turn - 1) % 256 : this.turn - 1;
 	}
 
 	destroy() {

@@ -356,7 +356,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse(`/help modlogstats`);
 		return this.parse(`/join view-modlogstats-${target}`);
 	},
-	modlogstatshelp: [`/modlogstats [userid] - Fetch all information on that [userid] from the modlog (IPs, alts, etc). Requires: @ &`],
+	modlogstatshelp: [`/modlogstats [userid] - Fetch all information on that [userid] from the modlog (IPs, alts, etc). Requires: @ ~`],
 };
 
 export const pages: Chat.PageTable = {
@@ -389,7 +389,7 @@ export const pages: Chat.PageTable = {
 				if (entry.ip) {
 					let ipTable = punishmentsByIp.get(entry.ip);
 					if (!ipTable) {
-						ipTable = new Utils.Multiset();
+						ipTable = new Utils.Multiset<string>();
 						punishmentsByIp.set(entry.ip, ipTable);
 					}
 					ipTable.add(entry.action);
@@ -448,7 +448,7 @@ export const pages: Chat.PageTable = {
 			for (const [ip, table] of punishmentsByIp) {
 				buf += `<tr><td><a href="https://whatismyipaddress.com/ip/${ip}">${ip}</a></td>`;
 				for (const key of keys) {
-					buf += `<td>${table.get(key) || 0}</td>`;
+					buf += `<td>${table.get(key)}</td>`;
 				}
 				buf += `</tr>`;
 			}

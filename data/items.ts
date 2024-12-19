@@ -1,7 +1,10 @@
-export const Items: {[itemid: string]: ItemData} = {
+export const Items: import('../sim/dex-items').ItemDataTable = {
 	abilityshield: {
 		name: "Ability Shield",
-		spritenum: 0, // TODO
+		spritenum: 746,
+		fling: {
+			basePower: 30,
+		},
 		ignoreKlutz: true,
 		// Neutralizing Gas protection implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
 		// and in Neutralizing Gas itself within data/abilities.ts
@@ -63,7 +66,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	adamantcrystal: {
 		name: "Adamant Crystal",
-		spritenum: 4, // TODO
+		spritenum: 741,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
@@ -80,7 +83,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Dialga-Origin"],
 		num: 1777,
 		gen: 8,
-		isNonstandard: "Unobtainable",
 	},
 	adamantorb: {
 		name: "Adamant Orb",
@@ -97,7 +99,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Dialga"],
 		num: 135,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	adrenalineorb: {
 		name: "Adrenaline Orb",
@@ -166,7 +167,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 3);
@@ -323,7 +324,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onDisableMove(pokemon) {
 			for (const moveSlot of pokemon.moveSlots) {
-				if (this.dex.moves.get(moveSlot.move).category === 'Status') {
+				const move = this.dex.moves.get(moveSlot.id);
+				if (move.category === 'Status' && move.id !== 'mefirst') {
 					pokemon.disableMove(moveSlot.id);
 				}
 			}
@@ -347,7 +349,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	auspiciousarmor: {
 		name: "Auspicious Armor",
-		spritenum: 0, // TODO
+		spritenum: 753,
+		fling: {
+			basePower: 30,
+		},
 		num: 2344,
 		gen: 9,
 	},
@@ -431,7 +436,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
-				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
+				if (this.runEvent('TryHeal', pokemon, null, this.effect, 20) && pokemon.useItem()) {
 					this.heal(20);
 				}
 			}
@@ -448,7 +453,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1111,
 		gen: 8,
-		isNonstandard: "Past",
+	},
+	bignugget: {
+		name: "Big Nugget",
+		spritenum: 27,
+		fling: {
+			basePower: 130,
+		},
+		num: 581,
+		gen: 5,
 	},
 	bigroot: {
 		name: "Big Root",
@@ -597,9 +610,15 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	boosterenergy: {
 		name: "Booster Energy",
-		spritenum: 0, // TODO
+		spritenum: 745,
+		fling: {
+			basePower: 30,
+		},
+		onStart() {
+			this.effectState.started = true;
+		},
 		onUpdate(pokemon) {
-			if (pokemon.transformed) return;
+			if (!this.effectState.started || pokemon.transformed) return;
 			if (this.queue.peek(true)?.choice === 'runSwitch') return;
 
 			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
@@ -1002,7 +1021,11 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	clearamulet: {
 		name: "Clear Amulet",
-		spritenum: 0, // TODO
+		spritenum: 747,
+		fling: {
+			basePower: 30,
+		},
+		onTryBoostPriority: 1,
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
@@ -1028,7 +1051,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1112,
 		gen: 8,
-		isNonstandard: "Past",
 	},
 	cobaberry: {
 		name: "Coba Berry",
@@ -1078,6 +1100,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 198,
 		gen: 4,
 	},
+	cornerstonemask: {
+		name: "Cornerstone Mask",
+		spritenum: 758,
+		fling: {
+			basePower: 60,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Cornerstone')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		forcedForme: "Ogerpon-Cornerstone",
+		itemUser: ["Ogerpon-Cornerstone"],
+		num: 2406,
+		gen: 9,
+	},
 	cornnberry: {
 		name: "Cornn Berry",
 		spritenum: 81,
@@ -1103,10 +1146,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	covertcloak: {
 		name: "Covert Cloak",
+		spritenum: 750,
 		fling: {
-			basePower: 10,
+			basePower: 30,
 		},
-		spritenum: 0, // TODO
 		onModifySecondaries(secondaries) {
 			this.debug('Covert Cloak prevent secondary');
 			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
@@ -1147,7 +1190,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 210,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	damprock: {
 		name: "Damp Rock",
@@ -1335,7 +1377,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Dragon",
 		num: 311,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	dragonfang: {
 		name: "Dragon Fang",
@@ -1390,7 +1431,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 235,
 		gen: 2,
-		isNonstandard: "Past",
 	},
 	dragoniumz: {
 		name: "Dragonium Z",
@@ -1423,7 +1463,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Dark",
 		num: 312,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	dreamball: {
 		name: "Dream Ball",
@@ -1440,7 +1479,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 324,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	durinberry: {
 		name: "Durin Berry",
@@ -1490,7 +1528,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Ground",
 		num: 305,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	eeviumz: {
 		name: "Eevium Z",
@@ -1565,7 +1602,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 322,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	electricgem: {
 		name: "Electric Gem",
@@ -1647,12 +1683,11 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 4)) return false;
 		},
 		onEat() { },
 		num: 208,
 		gen: 3,
-		isNonstandard: "Unobtainable",
 	},
 	eviolite: {
 		name: "Eviolite",
@@ -1700,6 +1735,21 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 793,
 		gen: 7,
 		isNonstandard: "Past",
+	},
+	fairyfeather: {
+		name: "Fairy Feather",
+		spritenum: 754,
+		fling: {
+			basePower: 10,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move && move.type === 'Fairy') {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		num: 2401,
+		gen: 9,
 	},
 	fairygem: {
 		name: "Fairy Gem",
@@ -1795,7 +1845,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 3);
@@ -1876,7 +1926,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Fighting",
 		num: 303,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	flameorb: {
 		name: "Flame Orb",
@@ -1912,7 +1961,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Fire",
 		num: 298,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	floatstone: {
 		name: "Float Stone",
@@ -1934,7 +1982,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1113,
 		gen: 8,
-		isNonstandard: "Past",
 	},
 	flyinggem: {
 		name: "Flying Gem",
@@ -2077,7 +2124,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1582,
 		gen: 8,
-		isNonstandard: "Unobtainable",
 	},
 	galaricawreath: {
 		name: "Galarica Wreath",
@@ -2087,7 +2133,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1592,
 		gen: 8,
-		isNonstandard: "Unobtainable",
 	},
 	galladite: {
 		name: "Galladite",
@@ -2325,7 +2370,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	griseouscore: {
 		name: "Griseous Core",
-		spritenum: 180, // TODO
+		spritenum: 743,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
@@ -2342,7 +2387,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Giratina-Origin"],
 		num: 1779,
 		gen: 8,
-		isNonstandard: "Unobtainable",
 	},
 	griseousorb: {
 		name: "Griseous Orb",
@@ -2359,7 +2403,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Giratina"],
 		num: 112,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	groundgem: {
 		name: "Ground Gem",
@@ -2463,6 +2506,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 4,
 		isPokeball: true,
 	},
+	hearthflamemask: {
+		name: "Hearthflame Mask",
+		spritenum: 760,
+		fling: {
+			basePower: 60,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Hearthflame')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		forcedForme: "Ogerpon-Hearthflame",
+		itemUser: ["Ogerpon-Hearthflame"],
+		num: 2408,
+		gen: 9,
+	},
 	heatrock: {
 		name: "Heat Rock",
 		spritenum: 193,
@@ -2554,7 +2618,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 3);
@@ -2623,7 +2687,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Ice",
 		num: 302,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	iciumz: {
 		name: "Icium Z",
@@ -2676,7 +2739,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Bug",
 		num: 308,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	ironball: {
 		name: "Iron Ball",
@@ -2715,7 +2777,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Steel",
 		num: 313,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	jabocaberry: {
 		name: "Jaboca Berry",
@@ -2735,7 +2796,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 211,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	jawfossil: {
 		name: "Jaw Fossil",
@@ -2814,7 +2874,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 687,
 		gen: 6,
-		isNonstandard: "Unobtainable",
 	},
 	kelpsyberry: {
 		name: "Kelpsy Berry",
@@ -3093,7 +3152,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	loadeddice: {
 		name: "Loaded Dice",
-		spritenum: 0, // TODO
+		spritenum: 751,
+		fling: {
+			basePower: 30,
+		},
 		// partially implemented in sim/battle-actions.ts:BattleActions#hitStepMoveHitLoop
 		onModifyMove(move) {
 			if (move.multiaccuracy) {
@@ -3132,7 +3194,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1110,
 		gen: 8,
-		isNonstandard: "Past",
 	},
 	lucarionite: {
 		name: "Lucarionite",
@@ -3225,7 +3286,7 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	lustrousglobe: {
 		name: "Lustrous Globe",
-		spritenum: 265, // TODO
+		spritenum: 742,
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
@@ -3242,7 +3303,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Palkia-Origin"],
 		num: 1778,
 		gen: 8,
-		isNonstandard: "Unobtainable",
 	},
 	lustrousorb: {
 		name: "Lustrous Orb",
@@ -3259,7 +3319,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Palkia"],
 		num: 136,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	luxuryball: {
 		name: "Luxury Ball",
@@ -3301,7 +3360,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 323,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	magnet: {
 		name: "Magnet",
@@ -3333,7 +3391,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 3);
@@ -3370,7 +3428,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	maliciousarmor: {
 		name: "Malicious Armor",
-		spritenum: 0, // TODO
+		spritenum: 744,
+		fling: {
+			basePower: 30,
+		},
 		num: 1861,
 		gen: 9,
 	},
@@ -3406,7 +3467,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 688,
 		gen: 6,
-		isNonstandard: "Unobtainable",
 	},
 	marshadiumz: {
 		name: "Marshadium Z",
@@ -3425,6 +3485,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 1,
 		gen: 1,
 		isPokeball: true,
+	},
+	masterpieceteacup: {
+		name: "Masterpiece Teacup",
+		spritenum: 757,
+		fling: {
+			basePower: 80,
+		},
+		num: 2404,
+		gen: 9,
 	},
 	mawilite: {
 		name: "Mawilite",
@@ -3459,7 +3528,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Grass",
 		num: 301,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	medichamite: {
 		name: "Medichamite",
@@ -3527,6 +3595,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	metalalloy: {
+		name: "Metal Alloy",
+		spritenum: 761,
+		num: 2482,
+		gen: 9,
+	},
 	metalcoat: {
 		name: "Metal Coat",
 		spritenum: 286,
@@ -3579,6 +3653,7 @@ export const Items: {[itemid: string]: ItemData} = {
 					pokemon.removeVolatile('metronome');
 					return;
 				}
+				if (move.callsMove) return;
 				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
 					this.effectState.numConsecutive++;
 				} else if (pokemon.volatiles['twoturnmove']) {
@@ -3672,7 +3747,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 209,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	mimikiumz: {
 		name: "Mimikium Z",
@@ -3704,7 +3778,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Psychic",
 		num: 307,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	miracleseed: {
 		name: "Miracle Seed",
@@ -3723,10 +3796,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	mirrorherb: {
 		name: "Mirror Herb",
+		spritenum: 748,
 		fling: {
-			basePower: 10,
+			basePower: 30,
 		},
-		spritenum: 0, // TODO
 		onFoeAfterBoost(boost, target, source, effect) {
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			const boostPlus: SparseBoostsTable = {};
@@ -3956,7 +4029,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, 10)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(10);
@@ -4184,7 +4257,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Fairy",
 		num: 644,
 		gen: 6,
-		isNonstandard: "Unobtainable",
 	},
 	plumefossil: {
 		name: "Plume Fossil",
@@ -4394,7 +4466,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 537,
 		gen: 5,
-		isNonstandard: "Past",
 	},
 	protectivepads: {
 		name: "Protective Pads",
@@ -4414,7 +4485,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 321,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	psychicgem: {
 		name: "Psychic Gem",
@@ -4482,7 +4552,10 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	punchingglove: {
 		name: "Punching Glove",
-		spritenum: 0, // TODO
+		spritenum: 749,
+		fling: {
+			basePower: 30,
+		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
@@ -4518,7 +4591,8 @@ export const Items: {[itemid: string]: ItemData} = {
 	},
 	quickclaw: {
 		onFractionalPriorityPriority: -2,
-		onFractionalPriority(priority, pokemon) {
+		onFractionalPriority(priority, pokemon, target, move) {
+			if (move.category === "Status" && pokemon.hasAbility("myceliummight")) return;
 			if (priority <= 0 && this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
 				return 0.1;
@@ -4625,7 +4699,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 327,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	razzberry: {
 		name: "Razz Berry",
@@ -4648,7 +4721,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 325,
 		gen: 4,
-		isNonstandard: "Past",
 	},
 	redcard: {
 		name: "Red Card",
@@ -4707,7 +4779,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1115,
 		gen: 8,
-		isNonstandard: "Past",
 	},
 	rindoberry: {
 		name: "Rindo Berry",
@@ -4907,7 +4978,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		onEat() { },
 		num: 212,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	rustedshield: {
 		name: "Rusted Shield",
@@ -4921,7 +4991,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Zamazenta-Crowned"],
 		num: 1104,
 		gen: 8,
-		isNonstandard: "Unobtainable",
 	},
 	rustedsword: {
 		name: "Rusted Sword",
@@ -4935,7 +5004,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Zacian-Crowned"],
 		num: 1103,
 		gen: 8,
-		isNonstandard: "Unobtainable",
 	},
 	sablenite: {
 		name: "Sablenite",
@@ -4967,7 +5035,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 5,
 		gen: 1,
 		isPokeball: true,
-		isNonstandard: "Unobtainable",
 	},
 	safetygoggles: {
 		name: "Safety Goggles",
@@ -5237,7 +5304,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 4)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 4);
@@ -5274,7 +5341,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Flying",
 		num: 306,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	slowbronite: {
 		name: "Slowbronite",
@@ -5371,7 +5437,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Latios", "Latias"],
 		num: 225,
 		gen: 3,
-		isNonstandard: "Past",
 	},
 	spelltag: {
 		name: "Spell Tag",
@@ -5420,7 +5485,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Water",
 		num: 299,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	spookyplate: {
 		name: "Spooky Plate",
@@ -5441,7 +5505,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Ghost",
 		num: 310,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	sportball: {
 		name: "Sport Ball",
@@ -5449,7 +5512,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 499,
 		gen: 2,
 		isPokeball: true,
-		isNonstandard: "Unobtainable",
 	},
 	starfberry: {
 		name: "Starf Berry",
@@ -5491,7 +5553,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1114,
 		gen: 8,
-		isNonstandard: "Past",
 	},
 	steelixite: {
 		name: "Steelixite",
@@ -5606,11 +5667,10 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Rock",
 		num: 309,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	strangeball: {
 		name: "Strange Ball",
-		spritenum: 303, // TODO
+		spritenum: 308,
 		num: 1785,
 		gen: 8,
 		isPokeball: true,
@@ -5624,7 +5684,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1109,
 		gen: 8,
-		isNonstandard: "Past",
 	},
 	sunstone: {
 		name: "Sun Stone",
@@ -5657,6 +5716,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1116,
 		gen: 8,
+	},
+	syrupyapple: {
+		name: "Syrupy Apple",
+		spritenum: 755,
+		fling: {
+			basePower: 30,
+		},
+		num: 2402,
+		gen: 9,
 	},
 	tamatoberry: {
 		name: "Tamato Berry",
@@ -5807,7 +5875,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Poison",
 		num: 304,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	tr00: {
 		name: "TR00",
@@ -6856,6 +6923,15 @@ export const Items: {[itemid: string]: ItemData} = {
 		gen: 7,
 		isNonstandard: "Past",
 	},
+	unremarkableteacup: {
+		name: "Unremarkable Teacup",
+		spritenum: 756,
+		fling: {
+			basePower: 80,
+		},
+		num: 2403,
+		gen: 9,
+	},
 	upgrade: {
 		name: "Up-Grade",
 		spritenum: 523,
@@ -6864,7 +6940,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 252,
 		gen: 2,
-		isNonstandard: "Past",
 	},
 	utilityumbrella: {
 		name: "Utility Umbrella",
@@ -7030,6 +7105,27 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 639,
 		gen: 6,
 	},
+	wellspringmask: {
+		name: "Wellspring Mask",
+		spritenum: 759,
+		fling: {
+			basePower: 60,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (user.baseSpecies.name.startsWith('Ogerpon-Wellspring')) {
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
+			return true;
+		},
+		forcedForme: "Ogerpon-Wellspring",
+		itemUser: ["Ogerpon-Wellspring"],
+		num: 2407,
+		gen: 9,
+	},
 	wepearberry: {
 		name: "Wepear Berry",
 		spritenum: 533,
@@ -7122,7 +7218,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 3)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(pokemon.baseMaxhp / 3);
@@ -7191,7 +7287,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		forcedForme: "Arceus-Electric",
 		num: 300,
 		gen: 4,
-		isNonstandard: "Unobtainable",
 	},
 	zoomlens: {
 		name: "Zoom Lens",
@@ -7242,7 +7337,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, 10)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(10);
@@ -7308,7 +7403,7 @@ export const Items: {[itemid: string]: ItemData} = {
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon)) return false;
+			if (!this.runEvent('TryHeal', pokemon, null, this.effect, 30)) return false;
 		},
 		onEat(pokemon) {
 			this.heal(30);

@@ -76,6 +76,34 @@ describe('Snatch', function () {
 		assert.atMost(battle.p1.active[1].hp, weavileHp, 'should not allow Snatch to bypass Heal Block');
 		assert(battle.log[battle.lastMoveLine + 2].startsWith('|cant'), 'should log that Recover failed');
 	});
+
+	it('should not snatch Swallow if the Swallow user has no Stockpiles', () => {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'mandibuzz', moves: ['snatch']},
+			{species: 'accelgor', moves: ['swallow']},
+		], [
+			{species: 'surskit', moves: ['quickattack']},
+			{species: 'wingull', moves: ['quickattack']},
+		]]);
+
+		battle.makeChoices('auto', 'move quickattack 1, move quickattack 2');
+		for (const line of battle.log) {
+			assert(!line.includes('-activate'), `Snatch should not have activated, but found -activate message ${line}`);
+		}
+	});
+
+	it('Snatched Swallow should heal the snatcher by 25% if the snatcher has no Stockpiles', () => {
+		battle = common.createBattle([[
+			{species: 'clefable', moves: ['sleeptalk', 'bellydrum', 'snatch']},
+		], [
+			{species: 'dewgong', moves: ['stockpile', 'swallow']},
+		]]);
+		battle.makeChoices('move bellydrum', 'auto');
+		battle.makeChoices();
+		battle.makeChoices();
+		const targetHP = battle.modify(battle.p1.active[0].maxhp, 0.25);
+		assert.hurtsBy(battle.p1.active[0], -targetHP, () => battle.makeChoices('move snatch', 'move swallow'));
+	});
 });
 
 describe('Snatch [Gen 4]', function () {

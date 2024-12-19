@@ -21,7 +21,7 @@ describe('Mummy', function () {
 		assert.equal(battle.p2.active[0].ability, 'mummy');
 	});
 
-	it(`should not change isPermanent abilities`, function () {
+	it(`should not change abilities that can't be suppressed`, function () {
 		battle = common.createBattle([[
 			{species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk']},
 		], [
