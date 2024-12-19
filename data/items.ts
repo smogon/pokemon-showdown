@@ -7656,8 +7656,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
-	test: {
-		name: "Test",
+	totemgigante: {
+		name: "Totem Gigante",
 		spritenum: 390,
 		onSwitchIn(pokemon) {
 			if (pokemon.baseSpecies.otherFormes ) {
@@ -7671,7 +7671,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem(item, source) {
          return false;
 		},
-		itemUser: ["Raticate-Alola", 'Marowak-Alola'],
+		itemUser: ["Raticate-Alola", 'Marowak-Alola', "Electrode Hisui", "Arcanine-Hisui"],
 		num: -103,
 		gen: 6,
 		isNonstandard: "Past",
