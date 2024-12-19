@@ -1461,7 +1461,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			onResidual(pokemon) {
 				this.add('-message', `ONRESIDUAL INCONDITION THIS.EFFECTSTATE.TYPE: ${this.effectState.type}`);
 				let source = pokemon.side.foe.pokemon.filter(ally => ally.ability === 'woventogethercohereforever')[0];
-				let imprint = this.dex.getActiveMove('blissfulbreeze');
+				const imprint = this.dex.getActiveMove('blissfulbreeze');
 				const move = {
 					move: imprint.name,
 					id: imprint.id,
@@ -1472,9 +1472,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					disabled: false,
 					used: false,
 				};
+				this.add('-message', `NAME: ${move.name}, TYPE: ${move.type}`);
 				this.add('-anim', pokemon, 'Geomancy', pokemon);
 				this.add('-message', `HIT TYPE POSTFUNCTION PREDAMAGE: ${move.type}`);
-				this.damage(this.actions.getDamage(source, pokemon, move) * 1.4, pokemon, source, this.effect);
+				let damage = this.actions.getDamage(source, pokemon, move);
+				this.damage(damage * 1.4, pokemon, source, this.effect);
 			},
 		},
 	},
