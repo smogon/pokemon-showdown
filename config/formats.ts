@@ -2734,12 +2734,6 @@ export const Formats: FormatList = [
 				return items;
 			}
 		},
-		onModifyCritRatio(critRatio, source, target) {
-			if (source.abilityState.tcbCritBoost) {
-				this.debug(`TCB boosting ${source.name}'s crit ratio`);
-				return critRatio + 1;
-			}
-		},
 		onResidual() {
 			for (const pokemon of this.getAllPokemon()) {
 				// Safeguard against moves that hit inactive Pokemon, sometimes causing Pokemon to be at or below 0 HP but not fainted.
