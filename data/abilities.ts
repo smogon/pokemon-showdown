@@ -1121,7 +1121,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	dryskin: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
-				if (!this.heal(target.baseMaxhp / 4)) {
+				if (!this.heal(target.baseMaxhp / 2)) {
 					this.add('-immune', target, '[from] ability: Dry Skin');
 				}
 				return null;
@@ -1313,9 +1313,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	flamebody: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
-				if (this.randomChance(3, 10)) {
 					source.trySetStatus('brn', target);
-				}
 			}
 		},
 		flags: {},
@@ -3400,9 +3398,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
 			if (this.checkMoveMakesContact(move, target, source)) {
-				if (this.randomChance(3, 10)) {
-					target.trySetStatus('psn', source);
-				}
+					target.trySetStatus('tox', source);
 			}
 		},
 		flags: {},
@@ -4562,9 +4558,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	static: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
-				if (this.randomChance(3, 10)) {
 					source.trySetStatus('par', target);
-				}
 			}
 		},
 		flags: {},
