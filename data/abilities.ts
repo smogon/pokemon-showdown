@@ -1167,24 +1167,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: 297,
 	},
-	escudoescama: {
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)  && source.runStatusImmunity('powder')) {
-				const r = this.random(120);
-				if (r < 20) {
-					source.setStatus('slp', target);
-				} else if (r < 40) {
-					source.setStatus('par', target);
-				} else if (r < 60) {
-					source.setStatus('psn', target);
-				}
-			}
-		},
-		flags: {},
-		name: "Escudo Escama",
-		rating: 2,
-		num: 311,
-	},
+
 	effectspore: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target) && !source.status && source.runStatusImmunity('powder')) {
@@ -2251,18 +2234,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 234,
 	},
-	gigantificacion: {
-		onStart(pokemon) {
-			if (pokemon.swordBoost) return;
-			pokemon.swordBoost = true;
-			const bestStat = pokemon.getBestStat(true, true);
-				this.boost({[bestStat]: 1}, pokemon);
-		},
-		flags: {},
-		name: "Gigantificacion",
-		rating: 4,
-		num: 234,
-	},
+
 	ironbarbs: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
@@ -2288,24 +2260,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: 89,
 	},
-	nudillosdepiedra: {
-		onBasePowerPriority: 23,
-		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['punch']) {
-				this.debug('Nudillos De Piedra boost');
-				return this.chainModify(2);
-			}
-		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag) {
-				this.damage(source.baseMaxhp / 6.66, source, source);
-			}
-		},
-		flags: {},
-		name: "Nudillos De Piedra",
-		rating: 3,
-		num: 312,
-	},
+
 	justified: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Dark') {
@@ -2623,26 +2578,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 42,
 	},
-	malicia: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Dark' ) {
-				this.debug('Malicia boost');
-				return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Dark' ) {
-				this.debug('Malicia boost');
-				return this.chainModify(1.2);
-			}
-		},
-		flags: {},
-		name: "Malicia",
-		rating: 2,
-		num: 66,
-	},
+
 	marvelscale: {
 		onModifyDefPriority: 6,
 		onModifyDef(def, pokemon) {
@@ -4807,15 +4743,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: 105,
 	},
-	suertudo: {
-		onModifyCritRatio(critRatio) {
-			return 5;
-		},
-		flags: {},
-		name: "Suertudo",
-		rating: 1.5,
-		num: 313,
-	},
+
 	supersweetsyrup: {
 		onStart(pokemon) {
 			if (pokemon.syrupTriggered) return;
@@ -5853,5 +5781,106 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Persistent",
 		rating: 3,
 		num: -4,
+	},
+
+	// Nuevo Meta
+	escudoescama: {
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)  && source.runStatusImmunity('powder')) {
+				const r = this.random(120);
+				if (r < 20) {
+					source.setStatus('slp', target);
+				} else if (r < 40) {
+					source.setStatus('par', target);
+				} else if (r < 60) {
+					source.setStatus('psn', target);
+				}
+			}
+		},
+		flags: {},
+		name: "Escudo Escama",
+		rating: 2,
+		num: -101,
+	},
+	nudillosdepiedra: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				this.debug('Nudillos De Piedra boost');
+				return this.chainModify(2);
+			}
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag) {
+				this.damage(source.baseMaxhp / 6.66, source, source);
+			}
+		},
+		flags: {},
+		name: "Nudillos De Piedra",
+		rating: 3,
+		num: -102,
+	},
+	suertudo: {
+		onModifyCritRatio(critRatio) {
+			return 5;
+		},
+		flags: {},
+		name: "Suertudo",
+		rating: 1.5,
+		num: -103,
+	},
+	gigantificacion: {
+		onStart(pokemon) {
+			if (pokemon.swordBoost) return;
+			pokemon.swordBoost = true;
+			const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+		},
+		flags: {},
+		name: "Gigantificacion",
+		rating: 4,
+		num: -104,
+	},
+	malicia: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Dark' ) {
+				this.debug('Malicia boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Dark' ) {
+				this.debug('Malicia boost');
+				return this.chainModify(1.2);
+			}
+		},
+		flags: {},
+		name: "Malicia",
+		rating: 2,
+		num: -105,
+	},
+	frubujas: {
+		onSourceModifyDamage(damage, source, target, move) {
+				return this.chainModify(0.9);
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Toxic Chain's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (this.randomChance(10, 10)) {
+				this.boost({spe: -1}, target);
+			}
+		},
+		flags: {breakable: 1},
+		name: "Frubujas",
+		rating: 3.5,
+		num: -106,
+	},
+	colocapantallas: {
+		//aplicado en moves.ts
+		name: "Coloca Pantallas",
+		rating: 3.5,
+		num: -107,
 	},
 };
