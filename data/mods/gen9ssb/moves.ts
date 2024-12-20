@@ -2779,7 +2779,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			onResidual(pokemon) {
 				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Yukari Yakumo');
-				const source = sources[0];
+				let source;
+				if (!sources) {
+					source = pokemon.side.foe.active[0];
+				} else {
+					source = sources[0];
+				}
 				const move = this.dex.getActiveMove('ranyakumo');
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.add('-anim', pokemon, 'Hex', pokemon);
