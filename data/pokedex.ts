@@ -2311,7 +2311,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		changesFrom: "Kingler",
 	},
 	kinglermega: {
-		num: 94,
+		num: 99,
 		name: "Kingler-Mega",
 		baseSpecies: "Kingler",
 		forme: "Mega",
