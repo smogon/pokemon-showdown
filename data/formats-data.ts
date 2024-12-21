@@ -5225,7 +5225,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	palafin: {
-		tier: "Uber",
+		tier: "(OU)",
 		doublesTier: "(DUU)",
 		natDexTier: "Uber",
 	},
