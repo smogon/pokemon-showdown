@@ -5812,8 +5812,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	gigantificacion: {
 		onStart(pokemon) {
-			if (pokemon.swordBoost) return;
-			pokemon.swordBoost = true;
 			const bestStat = pokemon.getBestStat(true, true);
 				this.boost({[bestStat]: 1}, pokemon);
 		},
