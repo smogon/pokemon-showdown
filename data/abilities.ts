@@ -4936,12 +4936,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hp >= target.maxhp) {
+			if (!target.swordBoost) {
 				this.debug('Tangling Hair weaken');
+				target.swordBoost = true;
 				return this.chainModify(0.7);
 			}
 		},
-		flags: {},
+		flags: {breakable: 1},
 		name: "Tangling Hair",
 		rating: 2,
 		num: 221,
