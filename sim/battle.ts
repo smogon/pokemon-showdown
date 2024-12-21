@@ -2725,10 +2725,14 @@ export class Battle {
 			}
 		}
 
-		const switches = this.sides.map(
-			side => side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
-		);
+		const all_started = this.sides.every(
+			side => side.active.every(pokemon => !pokemon || pokemon.isStarted || pokemon.fainted)
+		 );
 
+		const switches = this.sides.map(
+			side => all_started &&
+				side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
+		);
 		for (let i = 0; i < this.sides.length; i++) {
 			let reviveSwitch = false; // Used to ignore the fake switch for Revival Blessing
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
