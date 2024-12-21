@@ -193,7 +193,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 271,
 	},
 	anticipation: {
-		// todo: Arreglar
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
@@ -205,39 +204,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						move.ohko
 					) {
 						this.add('-ability', pokemon, 'Anticipation');
-						target.addVolatile('Anticipation', this.effectState.target);
 						return;
 					}
 				}
 			}
 		},
-		condition: {
-			noCopy: true,
-			duration: 2,
-			onBeforeMovePriority: 5,
-			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && !move.isMax && move.id === this.effectState.move) {
-					this.add('cant', attacker, 'Anticipation', move);
-					return false;
-				}
-			},
-			onDisableMove(pokemon) {
-				for (const moveSlot of pokemon.moveSlots) {
-					const move = this.dex.moves.get(moveSlot.move);
-					if (move.category === 'Status') continue;
-					const moveType = move.id === 'hiddenpower' ? pokemon.hpType : move.type;
-					if (
-						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
-						move.ohko
-					){
-						pokemon.disableMove(moveSlot.id);
-					}
-					}
-				},
-			onEnd(target) {
-				this.add('-end', target, 'Anticipation');
-			},
-			},
 		flags: {},
 		name: "Anticipation",
 		rating: 0.5,
@@ -1540,6 +1511,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const target of pokemon.foes()) {
 				if (target.item) {
 					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
+					this.actions.useMove('embargo', pokemon)
 				}
 			}
 		},
@@ -3836,7 +3808,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.recoil || move.hasCrashDamage) {
 				this.debug('Reckless boost');
-				return this.chainModify([4915, 4096]);
+				return this.chainModify(1.5);
 			}
 		},
 		flags: {},
