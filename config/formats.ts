@@ -2286,28 +2286,37 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Sleep Clause Mod', 'Forme Clause', 'Z-Move Clause', 'Terastal Clause', 'Mega Rayquaza Clause',
 		],
 		banlist: [
-			'ND Uber', 'ND AG', 'ND OU', 'ND UUBL', 'ND UU', 'ND RUBL', 'ND RU', 'ND NFE', 'ND LC',
 			'Battle Bond', 'Moody', 'Shadow Tag', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Acupressure', 'Last Respects',
 		],
-		unbanlist: [
-			'Appletun', 'Aurorus', 'Avalugg-Base', 'Banette-Base', 'Cacturne', 'Carracosta', 'Celebi', 'Cetitan', 'Chandelure', 'Cryogonal', 'Dipplin',
-			'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Luvdisc', 'Magmortar', 'Mawile-Base', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
-			'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Toxicroak', 'Walrein', 'Wo-Chien', 'Wugtrio',
-			'Yanmega', 'Zoroark-Base',
-		],
 		// Stupid hardcode
-		onValidateSet(set, format, setHas, teamHas) {
+		onValidateSet(set) {
+			const allowedPokemon: string[] = [
+				'Appletun', 'Aurorus', 'Avalugg', 'Banette', 'Cacturne', 'Carracosta', 'Celebi', 'Cetitan', 'Chandelure', 'Cryogonal', 'Dipplin',
+				'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Luvdisc', 'Magmortar', 'Mawile', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
+				'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Toxicroak', 'Walrein', 'Wo-Chien', 'Wugtrio',
+				'Yanmega', 'Zoroark',
+			];
+			const problems: string[] = [];
+			// To be called by the client build script.
+			if(this.gen === 0) {
+				if(!allowedPokemon.includes(set.species)) problems.push('bad');
+				return problems.length ? problems : undefined;
+			}
+			const species = this.dex.species.get(set.species);
+			if(!this.ruleTable.has('-pokemontag:allpokemon')) {
+				if(!allowedPokemon.includes(set.species)) problems.push(`${set.species} is not part of this month's roster.`);
+			}
 			if (set.item) {
 				const item = this.dex.items.get(set.item);
 				if (item.megaEvolves && !(this.ruleTable.has(`+item:${item.id}`) || this.ruleTable.has(`+pokemontag:mega`))) {
-					return [`Mega Evolution is banned.`];
+					problems.push(`Mega Evolution is banned.`);
 				}
 			}
-			const species = this.dex.species.get(set.species);
 			if (set.moves.map(x => this.toID(this.dex.moves.get(x).realMove) || x).includes('hiddenpower') &&
 				species.baseSpecies !== 'Unown' && !this.ruleTable.has(`+move:hiddenpower`)) {
-				return [`Hidden Power is banned.`];
+				problems.push(`Hidden Power is banned.`);
 			}
+			if(problems.length) return problems;
 		},
 	},
 	{
