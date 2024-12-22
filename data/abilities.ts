@@ -78,8 +78,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	aftermath: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (!target.hp && this.checkMoveMakesContact(move, source, target, true)) {
-				this.damage(source.baseMaxhp / 4, source, target);
+			if (!target.hp) {
+				this.damage(source.baseMaxhp / 3.33, source, target);
 			}
 		},
 		flags: {},
@@ -557,7 +557,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	cloudnine: {
 		onStart(source) {
 			source.abilityState.ending = true;
-			if (this.field.isWeather('snow')) {
+			if (this.field.isWeather(['snow','hail'])) {
 				this.boost({def: 1});
 			} else if (this.field.isWeather('sunnyday')){
 				this.boost({atk: 1});
@@ -1522,6 +1522,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 132,
 	},
 	frisk: {
+		// crear condicion propia
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				if (target.item) {
@@ -2280,19 +2281,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 103,
 	},
 	leafguard: {
-		onSetStatus(status, target, source, effect) {
-			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
-				if ((effect as Move)?.status) {
-					this.add('-immune', target, '[from] ability: Leaf Guard');
-				}
-				return false;
-			}
-		},
-		onTryAddVolatile(status, target) {
-			if (status.id === 'yawn' && ['sunnyday', 'desolateland'].includes(target.effectiveWeather())) {
-				this.add('-immune', target, '[from] ability: Leaf Guard');
-				return null;
-			}
+		onSourceModifyDamage(damage, source, target, move) {
+			let mod = 1;
+			if (target.hp >= target.maxhp / 2 || (target.hp >= target.maxhp / 4 && this.field.isWeather(['sunnyday', 'desolateland']))) mod *= 0.75;
+			return this.chainModify(mod);
 		},
 		flags: {breakable: 1},
 		name: "Leaf Guard",
@@ -3385,7 +3377,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
 			if (this.checkMoveMakesContact(move, target, source)) {
-					target.trySetStatus('tox', source);
+					target.trySetStatus('psn', source);
 			}
 		},
 		flags: {},
@@ -4130,8 +4122,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					if (side.getSideCondition(sideCondition)) {
 						if (!activated) {
 							this.add('-activate', pokemon, 'ability: Screen Cleaner');
+							// mover this.boost para que se active una sola vez
 							activated = true;
 						}
+						this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, pokemon);
 						side.removeSideCondition(sideCondition);
 					}
 				}
@@ -5496,6 +5490,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-immune', target, '[from] ability: Water Veil');
 			}
 			return false;
+		},
+		onModifyDef(spd) {
+			return this.chainModify(1.2);
 		},
 		flags: {breakable: 1},
 		name: "Water Veil",
