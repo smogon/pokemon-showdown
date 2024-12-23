@@ -2289,8 +2289,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Battle Bond', 'Moody', 'Shadow Tag', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Acupressure', 'Last Respects',
 		],
 		// Stupid hardcode
-		onValidateSet(set) {
-			const allowedPokemon: string[] = [
+		validateSet(set, teamHas) {
+			const allowedPokemonCurrent: string[] = [
 				'Appletun', 'Aurorus', 'Avalugg', 'Banette', 'Cacturne', 'Carracosta', 'Celebi', 'Cetitan', 'Chandelure', 'Cryogonal', 'Dipplin',
 				'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Luvdisc', 'Magmortar', 'Mawile', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
 				'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Toxicroak', 'Walrein', 'Wo-Chien', 'Wugtrio',
@@ -2299,12 +2299,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			const problems: string[] = [];
 			// To be called by the client build script.
 			if(this.gen === 0) {
-				if(!allowedPokemon.includes(set.species)) problems.push('bad');
-				return problems.length ? problems : undefined;
+				if(!allowedPokemonCurrent.includes(set.species)) problems.push('bad');
+				return problems.length ? problems : null;
 			}
-			const species = this.dex.species.get(set.species);
-			if(!this.ruleTable.has('-pokemontag:allpokemon')) {
-				if(!allowedPokemon.includes(set.species)) problems.push(`${set.species} is not part of this month's roster.`);
+			if(this.ruleTable.has('-pokemontag:allpokemon') && this.format.customRules) {
+				const allowedPokemonCustom: string[] = [];
+				for(const tmpName of this.format.customRules) {
+					const tmpSpecies = this.dex.species.get(tmpName);
+					if(tmpSpecies.exists) allowedPokemonCustom.push(tmpSpecies.id);
+				}
+				if(!allowedPokemonCustom.includes(this.toID(set.species))) {
+					problems.push(`${set.species} is not part of this roster.`);
+				}
+			}
+			else if(!allowedPokemonCurrent.includes(set.species)) {
+				problems.push(`${set.species} is not part of this month's roster.`);
 			}
 			if (set.item) {
 				const item = this.dex.items.get(set.item);
@@ -2312,11 +2321,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					problems.push(`Mega Evolution is banned.`);
 				}
 			}
+			const species = this.dex.species.get(set.species);
 			if (set.moves.map(x => this.toID(this.dex.moves.get(x).realMove) || x).includes('hiddenpower') &&
 				species.baseSpecies !== 'Unown' && !this.ruleTable.has(`+move:hiddenpower`)) {
 				problems.push(`Hidden Power is banned.`);
 			}
 			if(problems.length) return problems;
+			const problemsMore = this.validateSet.call(this, set, teamHas);
+			if(problemsMore) problems.push(...problemsMore);
+			return problems.length ? problems : null;
 		},
 	},
 	{
