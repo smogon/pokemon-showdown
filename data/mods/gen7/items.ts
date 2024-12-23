@@ -336,6 +336,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	laprasite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	latiasite: {
 		inherit: true,
 		isNonstandard: null,
