@@ -5860,4 +5860,45 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: -107,
 	},
+	cantohelado: {
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			if (move.flags['sound'] && !pokemon.volatiles['dynamax']) { // hardcode
+				move.type = 'Ice';
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (move.flags['sound']) {
+				if (this.randomChance(3, 10)) {
+					target.trySetStatus('frz', source);
+				}
+			}
+		},
+		flags: {},
+		name: "Canto Helado",
+		rating: 1.5,
+		num: -108,
+	},
+	vatios: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Electric' ) {
+				this.debug('Overgrow boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Electric' ) {
+				this.debug('Overgrow boost');
+				return this.chainModify(1.2);
+			}
+		},
+		flags: {},
+		name: "Vatios",
+		rating: 2,
+		num: 65,
+	},
 };
