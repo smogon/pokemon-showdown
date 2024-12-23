@@ -198,6 +198,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Root Reaper',
 		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 	},
+	'Saint Deli': {
+		species: 'Delibird', ability: 'Generosity', item: 'Gift Sack', gender: 'N',
+		moves: ['Baton Pass', 'Present', 'Life Dew'],
+		signatureMove: 'Gift of Fortune',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+	},
 	/*
  	Flufi: {
 		species: 'Pikachu', ability: 'Defense of the Heart', item: 'EpiPen', gender: 'M',
