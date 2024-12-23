@@ -33,6 +33,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				used: false,
 				virtual: true,
 			};
+			this.add('-activate', pokemon, 'item: Gift Sack');
 			this.add('-anim', pokemon, 'Present', target);
 			this.add('-anim', target, 'Tickle', target);
 			this.add('-message', `${target.name} forgot ${strongestMove.name}, and learned ${randomMove.name}!`);
