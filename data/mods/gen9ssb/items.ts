@@ -4,13 +4,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Gift Sack",
 		gen: 9,
 		onStart(pokemon) {
-			// Selects a random target from present foes
-			const giftTargets = this.getAllActive().filter(target => (target.side !== pokemon.side));
-			if (giftTargets.length) { const target = this.sample(giftTargets);
-			} else { const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position]; }
-
-			// Find and replace target's strongest attack
 			let foeMoves = [];
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			for (const moveSlot of target.moveSlots) {
 				const move = this.dex.moves.get(moveSlot.move);
 				if (move.category === 'Status' || !move.basePower) continue;
