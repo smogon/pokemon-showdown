@@ -2290,31 +2290,32 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		// Stupid hardcode
 		validateSet(set, teamHas) {
-			const allowedPokemonCurrent: string[] = [
+			const allowedPokemon: Set<ID> = new Set([
 				'Appletun', 'Aurorus', 'Avalugg', 'Banette', 'Cacturne', 'Carracosta', 'Celebi', 'Cetitan', 'Chandelure', 'Cryogonal', 'Dipplin',
 				'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Luvdisc', 'Magmortar', 'Mawile', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
 				'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Toxicroak', 'Walrein', 'Wo-Chien', 'Wugtrio',
 				'Yanmega', 'Zoroark',
-			];
+			].map((x) => this.toID(x)));
 			const problems: string[] = [];
-			// To be called by the client build script.
 			if(this.gen === 0) {
-				if(!allowedPokemonCurrent.includes(set.species)) problems.push('bad');
+				// This block is only to be reached by the client build script.
+				if(!allowedPokemon.has(this.toID(set.species))) problems.push('bad');
 				return problems.length ? problems : null;
 			}
-			if(this.ruleTable.has('-pokemontag:allpokemon') && this.format.customRules) {
-				const allowedPokemonCustom: string[] = [];
-				for(const tmpName of this.format.customRules) {
+			if(this.format.customRules){
+				if(this.ruleTable.has('-pokemontag:allpokemon')) allowedPokemon.clear();
+				for(const tmpRule of this.format.customRules) {
+					const tmpName = tmpRule.slice(1);
 					const tmpSpecies = this.dex.species.get(tmpName);
-					if(tmpSpecies.exists) allowedPokemonCustom.push(tmpSpecies.id);
-				}
-				if(!allowedPokemonCustom.includes(this.toID(set.species))) {
-					problems.push(`${set.species} is not part of this roster.`);
+					if(!tmpSpecies.exists) continue;
+					if(tmpRule.charAt(0) === "+") allowedPokemon.add(tmpSpecies.id);
+					else if(tmpRule.charAt(0) === "-") allowedPokemon.delete(tmpSpecies.id);
 				}
 			}
-			else if(!allowedPokemonCurrent.includes(set.species)) {
+			if(!allowedPokemon.has(this.toID(set.species))) {
 				problems.push(`${set.species} is not part of this month's roster.`);
 			}
+			if(problems.length) return problems;
 			if (set.item) {
 				const item = this.dex.items.get(set.item);
 				if (item.megaEvolves && !(this.ruleTable.has(`+item:${item.id}`) || this.ruleTable.has(`+pokemontag:mega`))) {
@@ -2326,7 +2327,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				species.baseSpecies !== 'Unown' && !this.ruleTable.has(`+move:hiddenpower`)) {
 				problems.push(`Hidden Power is banned.`);
 			}
-			if(problems.length) return problems;
 			const problemsMore = this.validateSet.call(this, set, teamHas);
 			if(problemsMore) problems.push(...problemsMore);
 			return problems.length ? problems : null;
