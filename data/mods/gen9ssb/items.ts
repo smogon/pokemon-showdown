@@ -4,17 +4,38 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Gift Sack",
 		gen: 9,
 		onStart(pokemon) {
-			let foeMoves = [];
+			let max = 0;
+			let strongestMove;
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			// Find opposing Pokemon's strongest attack
 			for (const moveSlot of target.moveSlots) {
 				const move = this.dex.moves.get(moveSlot.move);
 				if (move.category === 'Status' || !move.basePower) continue;
-				foeMoves.push(`${move.basePower}:${move.id}`);
+				if (move.basePower > max) {
+					max = move.basePower;
+					strongestMove = move;
+				}
 			}
-			for (const m of foeMoves) {
-				this.add('-message', m);
-			}
-			this.add('-message', foeMoves.sort((a, b) => b - a));
+			const moveIndex = target.moves.indexOf(strongestMove.id);
+			const allMoves = this.dex.moves.all().filter(m => (
+				(!target.moves.includes(m.id)) &&
+				(!m.isNonstandard || m.isNonstandard === 'Unobtainable') &&
+				(!m.isZ) && (!m.isMax)
+			));
+			const randomMove = this.sample(allMoves);
+			target.moveSlots[moveIndex] = {
+				move: randomMove.name,
+				id: randomMove.id,
+				pp: randomMove.pp,
+				maxpp: randomMove.pp,
+				target: randomMove.target,
+				disabled: false,
+				used: false,
+				virtual: true,
+			};
+			this.add('-anim', pokemon, 'Present', target);
+			this.add('-anim', target, 'Tickle', target);
+			this.add('-message', `${target.name} forgot ${strongestMove.name}, and learned ${randomMove.name}!`);
 		},
 	},
 	// Rooci Caxa
