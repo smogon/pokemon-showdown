@@ -745,6 +745,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (item.isBerry && pokemon.addVolatile('cudchew')) {
 				pokemon.volatiles['cudchew'].berry = item;
 			}
+			this.heal(pokemon.baseMaxhp / 4)
 		},
 		onEnd(pokemon) {
 			delete pokemon.volatiles['cudchew'];
@@ -3377,7 +3378,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
 			if (this.checkMoveMakesContact(move, target, source)) {
-					target.trySetStatus('psn', source);
+				const r = this.random(100);
+				if (r < 70) {
+					source.setStatus('psn', target);
+				} else {
+					source.setStatus('tox', target);
+				}
 			}
 		},
 		flags: {},
@@ -5899,6 +5905,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Vatios",
 		rating: 2,
-		num: 65,
+		num: -109,
 	},
 };
