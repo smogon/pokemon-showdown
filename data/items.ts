@@ -3626,6 +3626,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifyDef(def, pokemon) {
 			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
+			} else if (pokemon.baseSpecies.name === 'Ditto' && pokemon.transformed){
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
+				return this.chainModify(2);
+			} else if (pokemon.baseSpecies.name === 'Ditto' && pokemon.transformed){
+				return this.chainModify(1.2);
 			}
 		},
 		itemUser: ["Ditto"],
@@ -4615,6 +4624,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifySpe(spe, pokemon) {
 			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
+			} else if (pokemon.baseSpecies.name === 'Ditto' && pokemon.transformed){
+				return this.chainModify(1.2);
 			}
 		},
 		itemUser: ["Ditto"],
