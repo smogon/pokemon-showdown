@@ -14,7 +14,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			for (const moveSlot of target.moveSlots) {
 				const move = this.dex.moves.get(moveSlot.move);
 				if (move.category === 'Status' || !move.basePower) continue;
-				foeMoves.push(`${move.basePower:${move.id}`);
+				foeMoves.push(`${move.basePower}:${move.id}`);
 			}
 			for (const m of foeMoves) {
 				this.add('-message', m);
