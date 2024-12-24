@@ -22,7 +22,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const allMoves = this.dex.moves.all().filter(m => (
 				(!target.moves.includes(m.id)) &&
 				(!m.isNonstandard || m.isNonstandard === 'Unobtainable') &&
-				(move.flags['metronome'])
+				(m.flags['metronome'])
 			));
 			const randomMove = this.sample(allMoves);
 			target.moveSlots[moveIndex] = {
