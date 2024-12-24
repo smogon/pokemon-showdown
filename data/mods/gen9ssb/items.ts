@@ -55,6 +55,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
+			if (!user.abilityState.sack.length) return;
 			if (user.abilityState.sack.length && move.id === 'giftoffortune') {
 				this.add('-message', `${user.name}'s Gift Sack amplified ${move.name}'s power!`);
 				return this.chainModify(1 + 0.5 * user.abilityState.sack.length);
