@@ -33,9 +33,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.category = 'Special';
 			}
 			if (move.id === 'lifedew') {
-				move.onHit = function (t, s, m) {
-					for (const ally of s.side.pokemon) {
-						if (ally === s) continue;
+				move.onAfterMoveSecondarySelf = function (p, t, m) {
+					for (const ally of p.side.pokemon) {
+						if (ally === p) continue;
 						if (!ally.hp || ally.hp >= ally.maxhp) continue;
 						if (ally.isActive) {
 							this.heal(ally.maxhp / 4, ally, s, this.effect);
