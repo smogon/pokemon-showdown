@@ -18,6 +18,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 					strongestMove = move;
 				}
 			}
+			if (!strongestMove) return;
 			const moveIndex = target.moves.indexOf(strongestMove.id);
 			const allMoves = this.dex.moves.all().filter(m => (
 				(!target.moves.includes(m.id)) &&
