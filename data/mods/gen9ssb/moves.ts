@@ -72,6 +72,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				boost[randomStat] = 1;
 				this.boost(boost);
 			}
+			if (!source.abilityState.sack.length) return;
+			for (const storedMove of source.abilityState.sack) {
+				this.actions.useMove(storedMove, source, target);
+			}
+			source.abilityState.sack = [];
+			this.add('-message', `${source.name} emptied its Gift Sack!`);
 		},
 		critRatio: 2,
 		type: "Water",
