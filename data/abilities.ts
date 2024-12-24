@@ -2026,19 +2026,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 246,
 	},
 	illuminate: {
-		onTryBoost(boost, target, source, effect) {
-			if (source && target === source) return;
-			if (boost.accuracy && boost.accuracy < 0) {
-				delete boost.accuracy;
-				if (!(effect as ActiveMove).secondaries) {
-					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Illuminate", "[of] " + target);
-				}
+		onAnyAccuracy(accuracy, target, source, move) {
+			if (move && (source === this.effectState.target)) {
+				return true;
 			}
+			return accuracy;
 		},
-		onModifyMove(move) {
-			move.ignoreEvasion = true;
-		},
-		flags: {breakable: 1},
+		flags: {},
 		name: "Illuminate",
 		rating: 0.5,
 		num: 35,
