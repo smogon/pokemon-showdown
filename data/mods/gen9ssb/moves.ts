@@ -40,6 +40,43 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Saint Deli
+	giftoffortune: {
+		name: "Gift of Fortune",
+		basePower: 75,
+		category: "Special",
+		accuracy: 100,
+		gen: 9,
+		pp: 10,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Sweet Kiss', source);
+			this.add('-anim', source, 'Present', target);
+		},
+		onHit(target, source, move) {
+			let effectPool = ['miracleeye', 'aquaring', 'focusenergy', 'helpinghand', 'ingrain', 'laserfocus', 'magnetrise', 'substitute', 'stockpile', 'charge', 'destinybond', 'dragoncheer', 'lockon'];
+			let randomEffect = this.sample(effectPool);
+			if (!source.volatiles[randomEffect]) source.addVolatile(randomEffect);
+			const stats: BoostID[] = [];
+			let stat: BoostID;
+			for (stat in target.boosts) {
+				if (target.boosts[stat] < 6) {
+					stats.push(stat);
+				}
+			}
+			if (stats.length) {
+				const randomStat = this.sample(stats);
+				const boost: SparseBoostsTable = {};
+				boost[randomStat] = 1;
+				this.boost(boost);
+			}
+		},
+		critRatio: 2,
+		type: "Water",
+		target: "normal",
+	},
 	// Rooci Caxa
 	rootreaper: {
 		name: "Root Reaper",
