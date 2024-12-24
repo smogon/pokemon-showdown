@@ -2574,7 +2574,7 @@ export const Formats: FormatList = [
 					}
 					const health = pokemon.maxhp * 0.15;
 					pokemon.hp += health;
-					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
+					this.add('-heal', pokemon, pokemon.getHealth);
 				}
 			}
 			for (const pokemon of this.getAllActive()) {
@@ -2736,7 +2736,7 @@ export const Formats: FormatList = [
 					}
 					const health = pokemon.maxhp * 0.15;
 					pokemon.hp += health;
-					this.add('-message', `${pokemon.name}'s HP was restored by ${pokemon.getAbility().name}!`);
+					this.add('-heal', pokemon, pokemon.getHealth);
 				}
 			}
 			for (const pokemon of this.getAllActive()) {
