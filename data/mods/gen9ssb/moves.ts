@@ -74,12 +74,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				boost[randomStat] = 1;
 				this.boost(boost, source);
 			}
-			if (!source.abilityState.sack) return;
-			for (const storedMove of source.abilityState.sack) {
-				this.actions.useMove(storedMove, source, target);
+			if (!source.abilityState.sack) source.abilityState.sack = [];
+			if (source.abilityState.sack.length) {
+				for (const storedMove of source.abilityState.sack) {
+					this.actions.useMove(storedMove, source, target);
+				}
+				source.abilityState.sack = [];
+				this.add('-message', `${source.name} emptied its Gift Sack!`);
 			}
-			source.abilityState.sack = [];
-			this.add('-message', `${source.name} emptied its Gift Sack!`);
 			const newItem = this.dex.items.get('charcoal')
 			target.item = newItem.id;
 			target.setItem(newItem);
