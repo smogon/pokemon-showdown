@@ -57,9 +57,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp) this.add('-activate', target, 'ability: Generosity');
-			this.add('-anim', target, 'Confuse Ray', target);
-			this.actions.useMove('Revival Blessing', target);
+			if (damage >= target.hp) {
+				this.add('-activate', target, 'ability: Generosity');
+				this.add('-anim', target, 'Confuse Ray', target);
+				this.actions.useMove('Revival Blessing', target);
+			}
 		},
 		onFaint(pokemon) {
 			pokemon.side.hhBoost = true;
