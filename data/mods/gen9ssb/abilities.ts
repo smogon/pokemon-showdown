@@ -58,11 +58,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp) this.add('-activate', target, 'ability: Generosity');
+			this.add('-anim', pokemon, 'Confuse Ray', pokemon);
+			this.actions.useMove('Revival Blessing', target);
 		},
 		onFaint(pokemon) {
 			pokemon.side.hhBoost = true;
-			this.add('-anim', pokemon, 'Confuse Ray', pokemon);
-			if (!pokemon.side.addSlotCondition(pokemon, 'revivalblessing')) return;
 		},
 	},
 	// Gadget
