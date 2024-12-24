@@ -51,9 +51,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			let success = false;
 			const allies = [...pokemon.side.pokemon, ...pokemon.side.allySide?.pokemon || []];
 			for (const ally of allies) {
-				if (ally.cureStatus()) success = true;
+				if (ally.status) ally.cureStatus();
 			}
-			return success;
 		},
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp) this.add('-activate', target, 'ability: Generosity');
