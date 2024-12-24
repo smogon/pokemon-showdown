@@ -90,7 +90,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		return result;
 	} catch (e: any) {
 		throttleTime = Date.now();
-		if (e.message.startsWith('Request timeout') || e.code === 429) {
+		if (e.message.startsWith('Request timeout') || e.statusCode === 429) {
 			// request timeout: just ignore this. error on their end not ours.
 			// 429: too many requests, we already freeze for 10s above so. not much more we can do
 			return null;
