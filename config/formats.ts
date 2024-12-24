@@ -2606,18 +2606,6 @@ export const Formats: FormatList = [
   		*/
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
-			const sMove = this.dex.moves.get(pokemon.moveSlots[3].id);
-			const signatureMove = {
-				move: sMove.name,
-				id: sMove.id,
-				pp: sMove.pp,
-				maxpp: sMove.pp,
-				target: sMove.target,
-				disabled: false,
-				used: false,
-			};
-			pokemon.moveSlots[3] = signatureMove;
-			pokemon.baseMoveSlots[3] = signatureMove;
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const ability = target.getAbility();
 			if (pokemon.abilityState.ran) pokemon.addVolatile('shikigamiran');
@@ -2647,6 +2635,8 @@ export const Formats: FormatList = [
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 			}
 
+			if (pokemon.side.hhBoost) pokemon.addVolatile('helpinghand');
+			
 			// Handling Colossus Carrier
 			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
 				let format = this.format;
