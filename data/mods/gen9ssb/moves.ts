@@ -74,7 +74,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				boost[randomStat] = 1;
 				this.boost(boost, source);
 			}
-			if (!source.abilityState.sack.length) return;
+			if (!source.abilityState.sack) return;
 			for (const storedMove of source.abilityState.sack) {
 				this.actions.useMove(storedMove, source, target);
 			}
