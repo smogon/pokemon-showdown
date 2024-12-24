@@ -38,6 +38,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-anim', target, 'Tickle', target);
 			this.add('-message', `${target.name} forgot ${strongestMove.name}, and learned ${randomMove.name}!`);
 		},
+		onTryHit(pokemon, source, move) {
+			if (move.category === 'Special' && pokemon !== source) {
+				if (!pokemon.abilityState.sack) pokemon.abilityState.sack = [];
+				if (pokemon.abilityState.sack.length >= 5) return;
+				this.add('-anim', pokemon, 'Present', pokemon);
+				this.add('-anim', pokemon, 'Tickle', pokemon);
+				this.add('-activate', pokemon, 'item: Gift Sack', move.name);
+				this.add('-message', `${pokemon.name} stored ${move.name} in its Gift Sack!`);
+				if (!pokemon.abilityState.sack) pokemon.abilityState.sack = [];
+				pokemon.abilityState.sack.push(move.name);
+				return null;
+			}
+		},
 	},
 	// Rooci Caxa
 	spiritberry: {
