@@ -15,6 +15,41 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Saint Deli
+	generosity: {
+		name: "Generosity",
+		gen: 9,
+		flags: {},
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies === 'Delibird' && pokemon.setType(['Ice', 'Water'])) {
+				this.add('-start', pokemon, 'typechange', 'Ice/Water', '[from] ability: Generosity');
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (move.id === 'present') {
+				move.type = 'Ice';
+				move.category = 'Special';
+			}
+		},
+		onSwitchOut(pokemon) {
+			this.add('-activate', pokemon, 'ability: Generosity');
+			pokemon.side.addSideCondition('luckychant');
+			let success = false;
+			const allies = [...pokemon.side.pokemon, ...pokemon.side.allySide?.pokemon || []];
+			for (const ally of allies) {
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
+		},
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp) this.add('-activate', target, 'ability: Generosity');
+		},
+		onFaint(pokemon) {
+			pokemon.side.hhBoost = true;
+			this.add('-anim', pokemon, 'Confuse Ray', pokemon);
+			if (!pokemon.side.addSlotCondition(pokemon, 'revivalblessing')) return;
+		},
+	},
 	// Gadget
 	coincollector: {
 		name: "Coin Collector",
