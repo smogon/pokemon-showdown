@@ -30,6 +30,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				move.type = 'Ice';
 				move.category = 'Special';
 			}
+			if (move.id === 'lifedew') {
+				move.onHit = function (t, s, m) {
+					for (const ally of s.side.pokemon) {
+						if (ally === s) continue;
+						if (!ally.hp || ally.hp >= ally.maxhp) continue;
+						if (ally.isActive) {
+							this.heal(ally.maxhp / 4, ally, s, this.effect);
+						} else {
+							ally.hp += ally.maxhp / 4;
+							this.add('-heal', ally, ally.getHealth);
+						}
+					}
+				};
+			}
 		},
 		onSwitchOut(pokemon) {
 			this.add('-activate', pokemon, 'ability: Generosity');
