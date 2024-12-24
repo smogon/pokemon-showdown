@@ -20,6 +20,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Generosity",
 		gen: 9,
 		flags: {},
+		desc: "Ice/Water; Present becomes Ice-type/Special; Life Dew heals unfainted party members 1/4 max HP; On switch out, summons Lucky Chant and cures allies of all status conditions. Upon fainting, summons Revival Blessing and grants permanent Helping Hand to all party members.",
+		shortDesc: "See '/ssb Saint Deli' for more!",
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies === 'Delibird' && pokemon.setType(['Ice', 'Water'])) {
 				this.add('-start', pokemon, 'typechange', 'Ice/Water', '[from] ability: Generosity');
