@@ -102,9 +102,7 @@ export class RandomBabyTeams extends RandomTeams {
 		}
 
 		// Create list of all status moves to be used later
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// Team-based move culls
 		if (teamDetails.screens && movePool.length >= this.maxMoveCount + 2) {
@@ -219,6 +217,12 @@ export class RandomBabyTeams extends RandomTeams {
 		// Enforce Sticky Web
 		if (movePool.includes('stickyweb')) {
 			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce Knock Off on most roles
+		if (movePool.includes('knockoff') && role !== 'Bulky Support') {
+			counter = this.addMove('knockoff', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
 		}
 
@@ -478,8 +482,6 @@ export class RandomBabyTeams extends RandomTeams {
 		if (species.requiredItems) {
 			return this.sample(species.requiredItems);
 		}
-
-		if (species.id === 'nymble') return 'Silver Powder';
 
 		if (moves.has('focusenergy')) return 'Scope Lens';
 		if (moves.has('thief')) return '';

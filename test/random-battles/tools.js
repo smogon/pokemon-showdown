@@ -22,10 +22,11 @@ function testSet(pokemon, options, test) {
 
 	const isDoubles = options.isDoubles || (options.format && options.format.includes('doubles'));
 	const isDynamax = options.isDynamax || !(options.format && options.format.includes('nodmax'));
+	const generator = Teams.getGenerator(options.format, [0, 0, 0, 0]);
 	for (let i = 0; i < rounds; i++) {
 		// If undefined, test lead 1/6 of the time
 		const isLead = options.isLead === undefined ? i % 6 === 2 : options.isLead;
-		const generator = Teams.getGenerator(options.format, options.seed || [i, i, i, i]);
+		generator.setSeed(options.seed || [i, i, i, i]);
 		const set = generator.randomSet(pokemon, {}, isLead, isDoubles, isDynamax);
 		test(set);
 	}
@@ -107,8 +108,9 @@ function testAlwaysHasMove(pokemon, options, move) {
 function testTeam(options, test) {
 	const rounds = options.rounds || 1000;
 
+	const generator = Teams.getGenerator(options.format, [0, 0, 0, 0]);
 	for (let i = 0; i < rounds; i++) {
-		const generator = Teams.getGenerator(options.format, options.seed || [i, i, i, i]);
+		generator.setSeed(options.seed || [i, i, i, i]);
 		const team = generator.getTeam();
 		test(team);
 	}

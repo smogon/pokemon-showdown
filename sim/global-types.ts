@@ -511,6 +511,24 @@ namespace RandomTeamsTypes {
 		wantsTera?: boolean;
 		teraType?: string;
 	}
+	export interface RandomDraftFactorySet {
+		name: string;
+		species: string;
+		gender: string;
+		moves: string[];
+		ability: string;
+		evs: SparseStatsTable;
+		ivs: SparseStatsTable;
+		item: string;
+		level: number;
+		shiny: boolean;
+		nature?: string;
+		happiness?: number;
+		dynamaxLevel?: number;
+		gigantamax?: boolean;
+		teraType?: string;
+		teraCaptain?: boolean;
+	}
 	export interface RandomSetData {
 		role: Role;
 		movepool: string[];

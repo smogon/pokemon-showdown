@@ -660,7 +660,7 @@ export const commands: Chat.ChatCommands = {
 					};
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
-					if (gmaxMove && dex.gen >= 8) details["G-Max Move"] = gmaxMove;
+					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
@@ -746,7 +746,9 @@ export const commands: Chat.ChatCommands = {
 						Gen: String(move.gen) || 'CAP',
 					};
 
-					if (move.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
+					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
+						(move.isNonstandard === "Gigantamax" && dex.gen !== 8);
+					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
 					if (move.secondary || move.secondaries || move.hasSheerForce) details["&#10003; Boosted by Sheer Force"] = "";
 					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
 					if (move.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
@@ -804,13 +806,11 @@ export const commands: Chat.ChatCommands = {
 						}
 					}
 
-					if (dex.gen >= 8) {
-						if (move.isMax) {
-							details["&#10003; Max Move"] = "";
-							if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
-						} else if (move.maxMove?.basePower) {
-							details["Dynamax Power"] = String(move.maxMove.basePower);
-						}
+					if (move.isMax) {
+						details["&#10003; Max Move"] = "";
+						if (typeof move.isMax === "string") details["User"] = `${move.isMax}`;
+					} else if (dex.gen === 8 && move.maxMove?.basePower) {
+						details["Dynamax Power"] = String(move.maxMove.basePower);
 					}
 
 					const targetTypes: {[k: string]: string} = {
@@ -822,7 +822,7 @@ export const commands: Chat.ChatCommands = {
 						allAdjacentFoes: "All Adjacent Opponents",
 						foeSide: "Opposing Side",
 						allySide: "User's Side",
-						allyTeam: "User's Side",
+						allyTeam: "User's Team",
 						allAdjacent: "All Adjacent Pok\u00e9mon",
 						any: "Any Pok\u00e9mon",
 						all: "All Pok\u00e9mon",
@@ -912,40 +912,94 @@ export const commands: Chat.ChatCommands = {
 			targets.pop();
 		}
 
-		let species: {types: string[], [k: string]: any} = dex.species.get(targets[0]);
-		const type1 = dex.types.get(targets[0]);
-		const type2 = dex.types.get(targets[1]);
-		const type3 = dex.types.get(targets[2]);
-
-		if (species.exists) {
-			target = species.name;
-		} else {
-			const types = [];
-			if (type1.exists) {
-				types.push(type1.name);
-				if (type2.exists && type2 !== type1) {
-					types.push(type2.name);
-				}
-				if (type3.exists && type3 !== type1 && type3 !== type2) {
-					types.push(type3.name);
-				}
+		const originalSearch = target;
+		let imperfectMatch = false;
+		let isMatch = false;
+		let species = dex.species.get(targets[0]);
+		let type1 = dex.types.get(targets[0]);
+		let type2 = dex.types.get(targets[1]);
+		let type3 = dex.types.get(targets[2]);
+		if (species.name !== "" && !species.exists && type1.name !== "" && !type1.exists) {
+			const typeSearchResults = dex.dataSearch(targets[0], ['TypeChart']);
+			const speciesSearchResults = dex.dataSearch(targets[0], ['Pokedex']);
+			if (typeSearchResults && typeSearchResults[0].name !== "") {
+				type1 = dex.types.get(typeSearchResults[0].name);
+				imperfectMatch = true;
+			} else if (speciesSearchResults && speciesSearchResults[0].name !== "") {
+				species = dex.species.get(speciesSearchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
 			}
-
-			if (types.length === 0) {
-				return this.sendReplyBox(Utils.html`${target} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
-			}
-			species = {types: types};
-			target = types.join("/");
 		}
 
+		if (type2.name !== "" && !type2.exists) {
+			const searchResults = dex.dataSearch(targets[1], ['TypeChart']);
+			if (searchResults && searchResults[0].name !== "") {
+				type2 = dex.types.get(searchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+			}
+		}
+
+		if (type3.name !== "" && !type3.exists) {
+			const searchResults = dex.dataSearch(targets[2], ['TypeChart']);
+			if (searchResults && searchResults[0].name !== "") {
+				type3 = dex.types.get(searchResults[0].name);
+				imperfectMatch = true;
+			} else {
+				return this.sendReplyBox(Utils.html`${originalSearch} isn't a recognized type or Pokemon${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}.`);
+			}
+		}
+
+		const types = [];
+		if (species.exists) {
+			for (const type of species.types) {
+				types.push(type);
+			}
+			target = species.name;
+			isMatch = true;
+		} else if (type1.exists) {
+			types.push(type1.name);
+			target = type1.name;
+			isMatch = true;
+		}
+
+		let alreadyFoundType2 = false;
+		let alreadyFoundType3 = false;
+		if (types.toString().toLowerCase().includes(type2.name.toLowerCase())) {
+			alreadyFoundType2 = true;
+		}
+		if (types.toString().toLowerCase().includes(type3.name.toLowerCase())) {
+			alreadyFoundType3 = true;
+		}
+
+		if (isMatch) {
+			const searchTarget = [];
+			searchTarget.push(target);
+			if (type2.exists && !alreadyFoundType2) {
+				types.push(type2.name);
+				searchTarget.push(type2.name);
+			}
+			if (type3.exists && !alreadyFoundType3) {
+				types.push(type3.name);
+				searchTarget.push(type3.name);
+			}
+			target = searchTarget.join("/");
+		}
+
+		if (imperfectMatch) {
+			this.sendReply(`No Pok\u00e9mon or type named '${originalSearch}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Searching for '${target}' instead.`);
+		}
 		const weaknesses = [];
 		const resistances = [];
 		const immunities = [];
 		for (const type of dex.types.names()) {
-			const notImmune = dex.getImmunity(type, species);
+			const notImmune = dex.getImmunity(type, types);
 			if (notImmune || isInverse) {
 				let typeMod = !notImmune && isInverse ? 1 : 0;
-				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, species);
+				typeMod += (isInverse ? -1 : 1) * dex.getEffectiveness(type, types);
 				switch (typeMod) {
 				case 1:
 					weaknesses.push(type);
@@ -983,13 +1037,13 @@ export const commands: Chat.ChatCommands = {
 			trapped: "Trapping",
 		};
 		for (const status in statuses) {
-			if (!dex.getImmunity(status, species)) {
+			if (!dex.getImmunity(status, types)) {
 				immunities.push(statuses[status]);
 			}
 		}
 
 		const buffer = [];
-		buffer.push(`${species.exists ? `${species.name} (ignoring abilities):` : `${target}:`}`);
+		buffer.push(`${species.exists ? `${target} (ignoring abilities):` : `${target}:`}`);
 		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<font color=#999999>None</font>'}`);
 		buffer.push(`<span class="message-effect-resist">Resistances</span>: ${resistances.join(', ') || '<font color=#999999>None</font>'}`);
 		buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immunities.join(', ') || '<font color=#999999>None</font>'}`);
@@ -997,9 +1051,11 @@ export const commands: Chat.ChatCommands = {
 	},
 	weaknesshelp: [
 		`/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.`,
-		`/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
-		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # ~`,
-		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # ~`,
+		`/weakness [type 1], [type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
+		`/weakness [pokemon], [type 1], [type 2] - Provides a Pok\u00e9mon's type and type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
+		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
+		`!weakness [type 1], [type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
+		`!weakness [pokemon], [type 1], [type 2] - Shows everyone a Pok\u00e9mon's type and type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # &`,
 	],
 
 	eff: 'effectiveness',
@@ -1160,23 +1216,14 @@ export const commands: Chat.ChatCommands = {
 			const immune: string[] = [];
 
 			for (const type in bestCoverage) {
-				switch (bestCoverage[type]) {
-				case 0:
+				if (bestCoverage[type] === 0) {
 					immune.push(type);
-					break;
-				case 0.25:
-				case 0.5:
+				} else if (bestCoverage[type] < 1) {
 					resists.push(type);
-					break;
-				case 1:
-					neutral.push(type);
-					break;
-				case 2:
-				case 4:
+				} else if (bestCoverage[type] > 1) {
 					superEff.push(type);
-					break;
-				default:
-					throw new Error(`/coverage effectiveness of ${bestCoverage[type]} from parameters: ${target}`);
+				} else {
+					neutral.push(type);
 				}
 			}
 			buffer.push(`Coverage for ${sources.join(' + ')}:`);
@@ -1237,23 +1284,14 @@ export const commands: Chat.ChatCommands = {
 							bestEff = Math.pow(2, bestEff);
 						}
 					}
-					switch (bestEff) {
-					case 0:
+					if (bestEff === 0) {
 						cell += `bgcolor=#666666 title="${typing}"><font color=#000000>${bestEff}</font>`;
-						break;
-					case 0.25:
-					case 0.5:
+					} else if (bestEff < 1) {
 						cell += `bgcolor=#AA5544 title="${typing}"><font color=#660000>${bestEff}</font>`;
-						break;
-					case 1:
-						cell += `bgcolor=#6688AA title="${typing}"><font color=#000066>${bestEff}</font>`;
-						break;
-					case 2:
-					case 4:
+					} else if (bestEff > 1) {
 						cell += `bgcolor=#559955 title="${typing}"><font color=#003300>${bestEff}</font>`;
-						break;
-					default:
-						throw new Error(`/coverage effectiveness of ${bestEff} from parameters: ${target}`);
+					} else {
+						cell += `bgcolor=#6688AA title="${typing}"><font color=#000066>${bestEff}</font>`;
 					}
 					cell += '</th>';
 					buffer += cell;

@@ -109,7 +109,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						if (this.ruleTable.has(`+move:${move.id}`)) continue;
 						const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
 						if (this.ruleTable.has('omunobtainablemoves')) {
-							const outOfBattleSpecies = this.getValidationSpecies(set)[0];
+							const {outOfBattleSpecies} = this.getValidationSpecies(set);
 							if (!this.omCheckCanLearn(move, outOfBattleSpecies, this.allSources(outOfBattleSpecies), set, problem)) continue;
 						}
 						return [problem];
@@ -1449,7 +1449,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				if (pokemon.species.id === 'rayquaza') {
 					pokemon.canMegaEvo = null;
 					// ability to terastal was determined before the clause activated, causing incorrect behavior
-					pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
+					if (!this.ruleTable.has('terastalclause')) {
+						pokemon.canTerastallize = this.actions.canTerastallize(pokemon);
+					}
 				}
 			}
 		},
@@ -1720,7 +1722,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	'sketchpostgen7moves': {
 		effectType: 'ValidatorRule',
 		name: 'Sketch Post-Gen 7 Moves',
-		desc: "Allows Pokémon who learn Sketch to learn any Gen 8+ move (normally, Sketch is not usable in Gen 8+).",
+		desc: "Allows Pokémon who learn Sketch to learn any Gen 8+ move (normally, Sketch is not usable in Gen 8 or Gen 9 Pre-DLC2).",
 		// Implemented in sim/team-validator.ts
 	},
 	mimicglitch: {
@@ -1881,7 +1883,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 		onTeamPreview() {
-			this.showOpenTeamSheets(this.rated === true);
+			this.showOpenTeamSheets();
 		},
 	},
 	aaarestrictedabilities: {
@@ -2915,12 +2917,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (pokemon.transformed || !pokemon.hp) return;
-			const oldAbilityName = pokemon.getAbility().name;
 			const oldPokemon = pokemon.species;
 			const impersonation = this.dex.species.get(pokemon.set.name);
 			if (pokemon.species.baseSpecies === impersonation.baseSpecies || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
-			pokemon.formeChange(impersonation.name, this.effect, true);
+			const abilitySlot = Object.keys(oldPokemon.abilities).find(x => (
+				(oldPokemon.abilities as any)[x] === pokemon.set.ability
+			)) || "0";
+			pokemon.formeChange(impersonation.name, this.effect, true, abilitySlot);
 			pokemon.baseMaxhp = Math.floor(Math.floor(
 				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
 			) * pokemon.level / 100 + 10);
@@ -2928,13 +2932,18 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			pokemon.hp = this.clampIntRange(newMaxHP - (pokemon.maxhp - pokemon.hp), 1, newMaxHP);
 			pokemon.maxhp = newMaxHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-			const oldAbilityKey: string = Object.keys(oldPokemon.abilities).find(x => (
-				(oldPokemon.abilities as any)[x] === oldAbilityName
-			)) || "0";
-			const newAbility: string = (impersonation.abilities as any)[oldAbilityKey] || impersonation.abilities["0"];
-			pokemon.setAbility(newAbility, null, true);
-			// Ability persists through switching
-			pokemon.baseAbility = pokemon.ability;
 		},
+	},
+	twisteddimensionmod: {
+		effectType: 'Rule',
+		name: "Twisted Dimension Mod",
+		desc: `The effects of Trick Room are always active, using Trick Room reverts the field to normal for 5 turns.`,
+		// implemented in Pokemon#getActionSpeed()
+	},
+	mixandmegaoldaggronite: {
+		effectType: 'Rule',
+		name: "Mix and Mega Old Aggronite",
+		desc: `Causes Aggronite to no longer give the Steel type in Mix and Mega.`,
+		// implemented in mods/mixandmega/scripts.ts
 	},
 };

@@ -28,6 +28,7 @@
         ]
     },
     "butterfree": {
+        "level": 85,
         "sets": [
             {
                 "role": "Generalist",
@@ -76,6 +77,7 @@
         ]
     },
     "fearow": {
+        "level": 71,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -151,6 +153,7 @@
         ]
     },
     "nidoking": {
+        "level": 67,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -303,6 +306,7 @@
         ]
     },
     "poliwhirl": {
+        "level": 75,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -713,6 +717,7 @@
         ]
     },
     "magmar": {
+        "level": 71,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -821,6 +826,7 @@
         ]
     },
     "kabutops": {
+        "level": 71,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -849,6 +855,7 @@
         ]
     },
     "snorlax": {
+        "level": 63,
         "sets": [
             {
                 "role": "Generalist",
@@ -905,6 +912,7 @@
         ]
     },
     "mewtwo": {
+        "level": 59,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -961,6 +969,7 @@
         ]
     },
     "furret": {
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -989,6 +998,7 @@
         ]
     },
     "ledian": {
+        "level": 77,
         "sets": [
             {
                 "role": "Generalist",
@@ -998,10 +1008,6 @@
     },
     "ariados": {
         "sets": [
-            {
-                "role": "Generalist",
-                "movepool": ["agility", "batonpass", "sludgebomb", "spiderweb"]
-            },
             {
                 "role": "Bulky Setup",
                 "movepool": ["agility", "batonpass", "growth", "sludgebomb"]
@@ -1013,6 +1019,7 @@
         ]
     },
     "crobat": {
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1066,6 +1073,7 @@
         ]
     },
     "bellossom": {
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1079,6 +1087,7 @@
         ]
     },
     "azumarill": {
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1119,6 +1128,7 @@
         ]
     },
     "jumpluff": {
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1135,6 +1145,7 @@
         ]
     },
     "aipom": {
+        "level": 77,
         "sets": [
             {
                 "role": "Generalist",
@@ -1147,6 +1158,7 @@
         ]
     },
     "sunflora": {
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1199,14 +1211,6 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["batonpass", "growth", "hiddenpowerdark", "moonlight"]
-            },
-            {
-                "role": "Generalist",
-                "movepool": ["batonpass", "meanlook", "moonlight", "sandattack"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["batonpass", "growth", "meanlook", "moonlight"]
             }
         ]
     },
@@ -1232,6 +1236,7 @@
         ]
     },
     "misdreavus": {
+        "level": 67,
         "sets": [
             {
                 "role": "Generalist",
@@ -1267,6 +1272,7 @@
         ]
     },
     "girafarig": {
+        "level": 71,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1286,7 +1292,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "spikes", "toxic"]
+                "movepool": ["explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "reflect", "spikes", "toxic"]
             }
         ]
     },
@@ -1303,6 +1309,7 @@
         ]
     },
     "gligar": {
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1347,10 +1354,15 @@
         ]
     },
     "qwilfish": {
+        "level": 71,
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["curse", "haze", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
+                "movepool": ["haze", "hydropump", "rest", "sleeptalk", "sludgebomb", "spikes"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
             }
         ]
     },
@@ -1451,6 +1463,7 @@
         ]
     },
     "delibird": {
+        "level": 81,
         "sets": [
             {
                 "role": "Thief user",
@@ -1459,6 +1472,7 @@
         ]
     },
     "mantine": {
+        "level": 77,
         "sets": [
             {
                 "role": "Generalist",
@@ -1524,6 +1538,7 @@
         ]
     },
     "stantler": {
+        "level": 71,
         "sets": [
             {
                 "role": "Generalist",
@@ -1535,7 +1550,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["agility", "batonpass", "spiderweb", "spikes", "spore", "swordsdance"]
+                "movepool": ["agility", "batonpass", "spikes", "spore", "swordsdance"]
             }
         ]
     },

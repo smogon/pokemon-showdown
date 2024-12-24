@@ -368,7 +368,8 @@ export const commands: Chat.ChatCommands = {
 
 		const closeHtmlPage = cmd === 'closehtmlpage';
 
-		const {targetUser, rest} = this.requireUser(target);
+		const [targetStr, rest] = this.splitOne(target).map(str => str.trim());
+		const targets = targetStr.split('|').map(u => u.trim());
 		let [pageid, content] = this.splitOne(rest);
 		let selector: string | undefined;
 		if (cmd === 'changehtmlpageselector') {
@@ -381,47 +382,70 @@ export const commands: Chat.ChatCommands = {
 
 		pageid = `${user.id}-${toID(pageid)}`;
 
-		if (targetUser.locked && !this.user.can('lock')) {
-			this.errorReply("This user is currently locked, so you cannot send them HTML.");
-			return false;
-		}
-
-		let targetConnections = [];
-		// find if a connection has specifically requested this page
-		for (const c of targetUser.connections) {
-			if (c.lastRequestedPage === pageid) {
-				targetConnections.push(c);
-			}
-		}
-		if (!targetConnections.length) {
-			// no connection has requested it - verify that we share a room
-			this.checkPMHTML(targetUser);
-			targetConnections = targetUser.connections;
-		}
+		const successes: string[] = [], errors: string[] = [];
 
 		content = this.checkHTML(content);
 
-		for (const targetConnection of targetConnections) {
-			const context = new Chat.PageContext({
-				user: targetUser,
-				connection: targetConnection,
-				pageid: `view-bot-${pageid}`,
-			});
-			if (closeHtmlPage) {
-				context.send(`|deinit|`);
-			} else if (selector) {
-				context.send(`|selectorhtml|${selector}|${content}`);
-			} else {
-				context.title = `[${user.name}] ${pageid}`;
-				context.setHTML(content);
+		targets.forEach(targetUsername => {
+			const targetUser = Users.get(targetUsername);
+			if (!targetUser) return errors.push(`${targetUsername} [offline/misspelled]`);
+
+			if (targetUser.locked && !this.user.can('lock')) {
+				return errors.push(`${targetUser.name} [locked]`);
+			}
+
+			let targetConnections = [];
+			// find if a connection has specifically requested this page
+			for (const c of targetUser.connections) {
+				if (c.lastRequestedPage === pageid) {
+					targetConnections.push(c);
+				}
+			}
+			if (!targetConnections.length) {
+				// no connection has requested it - verify that we share a room
+				try {
+					this.checkPMHTML(targetUser);
+				} catch {
+					return errors.push(`${targetUser.name} [not in room / blocking PMs]`);
+				}
+				targetConnections = targetUser.connections;
+			}
+
+			for (const targetConnection of targetConnections) {
+				const context = new Chat.PageContext({
+					user: targetUser,
+					connection: targetConnection,
+					pageid: `view-bot-${pageid}`,
+				});
+				if (closeHtmlPage) {
+					context.send(`|deinit|`);
+				} else if (selector) {
+					context.send(`|selectorhtml|${selector}|${content}`);
+				} else {
+					context.title = `[${user.name}] ${pageid}`;
+					context.setHTML(content);
+				}
+			}
+			successes.push(targetUser.name);
+		});
+
+		if (closeHtmlPage) {
+			if (successes.length) {
+				this.sendReply(`Closed the bot page ${pageid} for ${Chat.toListString(successes)}.`);
+			}
+			if (errors.length) {
+				this.errorReply(`Unable to close the bot page for ${Chat.toListString(errors)}.`);
+			}
+		} else {
+			if (successes.length) {
+				this.sendReply(`Sent ${Chat.toListString(successes)}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
+			}
+			if (errors.length) {
+				this.errorReply(`Unable to send the bot page ${pageid} to ${Chat.toListString(errors)}.`);
 			}
 		}
 
-		if (closeHtmlPage) {
-			this.sendReply(`Closed the bot page ${pageid} for ${targetUser.name}.`);
-		} else {
-			this.sendReply(`Sent ${targetUser.name}${selector ? ` the selector ${selector} on` : ''} the bot page ${pageid}.`);
-		}
+		if (!successes.length) return false;
 	},
 	sendhtmlpagehelp: [
 		`/sendhtmlpage [userid], [pageid], [html] - Sends [userid] the bot page [pageid] with the content [html]. Requires: * # ~`,
@@ -473,15 +497,8 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('addhtml', null, room);
 
-		const {targetUser, rest} = this.requireUser(target);
-
-		if (targetUser.locked && !this.user.can('lock')) {
-			throw new Chat.ErrorMessage("This user is currently locked, so you cannot send them private HTML.");
-		}
-
-		if (!(targetUser.id in room.users)) {
-			throw new Chat.ErrorMessage("You cannot send private HTML to users who are not in this room.");
-		}
+		const [targetStr, rest] = this.splitOne(target).map(str => str.trim());
+		const targets = targetStr.split('|').map(u => u.trim());
 
 		let html: string;
 		let messageType: string;
@@ -499,13 +516,33 @@ export const commands: Chat.ChatCommands = {
 
 		html = this.checkHTML(html);
 		if (!html) return this.parse('/help sendprivatehtmlbox');
-
 		html = `${Utils.html`<div style="color:#888;font-size:8pt">[Private from ${user.name}]</div>`}${Chat.collapseLineBreaksHTML(html)}`;
 		if (plainHtml) html = `<div class="infobox">${html}</div>`;
 
-		targetUser.sendTo(room, `|${messageType}|${html}`);
+		const successes: string[] = [], errors: string[] = [];
 
-		this.sendReply(`Sent private HTML to ${targetUser.name}.`);
+		targets.forEach(targetUsername => {
+			const targetUser = Users.get(targetUsername);
+
+			if (!targetUser) return errors.push(`${targetUsername} [offline/misspelled]`);
+
+			if (targetUser.locked && !this.user.can('lock')) {
+				return errors.push(`${targetUser.name} [locked]`);
+			}
+
+			if (!(targetUser.id in room!.users)) {
+				return errors.push(`${targetUser.name} [not in room]`);
+			}
+
+			successes.push(targetUser.name);
+			targetUser.sendTo(room, `|${messageType}|${html}`);
+		});
+
+
+		if (successes.length) this.sendReply(`Sent private HTML to ${Chat.toListString(successes)}.`);
+		if (errors.length) this.errorReply(`Unable to send private HTML to ${Chat.toListString(errors)}.`);
+
+		if (!successes.length) return false;
 	},
 	sendprivatehtmlboxhelp: [
 		`/sendprivatehtmlbox [userid], [html] - Sends [userid] the private [html]. Requires: * # ~`,

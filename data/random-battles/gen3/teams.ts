@@ -121,6 +121,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
+		if (teamDetails.spikes && teamDetails.spikes >= 2) {
+			if (movePool.includes('spikes')) this.fastPop(movePool, movePool.indexOf('spikes'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
 		if (teamDetails.statusCure) {
 			if (movePool.includes('aromatherapy')) this.fastPop(movePool, movePool.indexOf('aromatherapy'));
 			if (movePool.includes('healbell')) this.fastPop(movePool, movePool.indexOf('healbell'));
@@ -129,9 +133,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['knockoff', 'rapidspin', 'toxic'];
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// General incompatibilities
 		const incompatiblePairs = [

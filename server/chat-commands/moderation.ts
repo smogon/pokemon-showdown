@@ -1427,7 +1427,10 @@ export const commands: Chat.ChatCommands = {
 
 		this.privateModAction(`${user.name} notes: ${target}`);
 	},
-	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ # ~`],
+	modnotehelp: [
+		`/modnote <note> - Adds a moderator note that can be read through modlog. Requires: % @ # ~`,
+		`/modnote [<userid>] <note> - Adds a moderator note to a user's modlog that can be read through modlog. Requires: % @ # ~`,
+	],
 
 	globalpromote: 'promote',
 	promote(target, room, user, connection, cmd) {

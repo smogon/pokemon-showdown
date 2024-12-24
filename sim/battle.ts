@@ -2284,6 +2284,9 @@ export class Battle {
 					return target;
 				}
 				if (target.isAlly(pokemon)) {
+					if (move.target === 'adjacentAllyOrSelf' && this.gen !== 5) {
+						return pokemon;
+					}
 					// Target is a fainted ally: attack shouldn't retarget
 					return target;
 				}
@@ -3014,7 +3017,7 @@ export class Battle {
 		return team as PokemonSet[];
 	}
 
-	showOpenTeamSheets(hideFromSpectators = false) {
+	showOpenTeamSheets() {
 		if (this.turn !== 0) return;
 		for (const side of this.sides) {
 			const team = side.pokemon.map(pokemon => {
@@ -3051,13 +3054,8 @@ export class Battle {
 				}
 				return newSet;
 			});
-			if (hideFromSpectators) {
-				for (const s of this.sides) {
-					this.addSplit(s.id, ['showteam', side.id, Teams.pack(team)]);
-				}
-			} else {
-				this.add('showteam', side.id, Teams.pack(team));
-			}
+
+			this.add('showteam', side.id, Teams.pack(team));
 		}
 	}
 
@@ -3142,6 +3140,15 @@ export class Battle {
 
 	getSide(sideid: SideID): Side {
 		return this.sides[parseInt(sideid[1]) - 1];
+	}
+
+	/**
+	 * Currently, we treat Team Preview as turn 0, but the games start counting their turns at turn 0
+	 * There is also overflow that occurs in Gen 8+ that affects moves like Wish / Future Sight
+	 * https://www.smogon.com/forums/threads/10352797
+	 */
+	getOverflowedTurnCount(): number {
+		return this.gen >= 8 ? (this.turn - 1) % 256 : this.turn - 1;
 	}
 
 	destroy() {

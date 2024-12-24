@@ -95,7 +95,7 @@ function sereneGraceBenefits(move: Move) {
 }
 
 export class RandomGen8Teams {
-	dex: ModdedDex;
+	readonly dex: ModdedDex;
 	gen: number;
 	factoryTier: string;
 	format: Format;
@@ -115,6 +115,11 @@ export class RandomGen8Teams {
 	 * returns true to reject one of its other moves to try to roll the forced move, false otherwise.
 	 */
 	moveEnforcementCheckers: {[k: string]: MoveEnforcementChecker};
+
+	/** Used by .getPools() */
+	private poolsCacheKey: [string | undefined, number | undefined, RuleTable | undefined, boolean] | undefined;
+	private cachedPool: number[] | undefined;
+	private cachedSpeciesPool: Species[] | undefined;
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		format = Dex.formats.get(format);
@@ -232,6 +237,9 @@ export class RandomGen8Teams {
 				return abilities.includes('Huge Power') && movePool.includes('aquajet');
 			},
 		};
+		this.poolsCacheKey = undefined;
+		this.cachedPool = undefined;
+		this.cachedSpeciesPool = undefined;
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
@@ -518,7 +526,7 @@ export class RandomGen8Teams {
 			};
 			if (this.gen === 9) {
 				// Tera type
-				set.teraType = this.sample(this.dex.types.all()).name;
+				set.teraType = this.sample(this.dex.types.names());
 			}
 			team.push(set);
 		}
@@ -526,19 +534,18 @@ export class RandomGen8Teams {
 		return team;
 	}
 
-	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
-		// Picks `n` random pokemon--no repeats, even among formes
-		// Also need to either normalize for formes or select formes at random
-		// Unreleased are okay but no CAP
-		if (requiredType && !this.dex.types.get(requiredType).exists) {
-			throw new Error(`"${requiredType}" is not a valid type.`);
-		}
-
+	private getPools(requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
+		// Memoize pool and speciesPool because, at least during tests, they are constructed with the same parameters
+		// hundreds of times and are expensive to compute.
 		const isNotCustom = !ruleTable;
-
-		const pool: number[] = [];
+		let pool: number[] = [];
 		let speciesPool: Species[] = [];
-		if (isNotCustom) {
+		const ck = this.poolsCacheKey;
+		if (ck && this.cachedPool && this.cachedSpeciesPool &&
+			ck[0] === requiredType && ck[1] === minSourceGen && ck[2] === ruleTable && ck[3] === requireMoves) {
+			speciesPool = this.cachedSpeciesPool.slice();
+			pool = this.cachedPool.slice();
+		} else if (isNotCustom) {
 			speciesPool = [...this.dex.species.all()];
 			for (const species of speciesPool) {
 				if (species.isNonstandard && species.isNonstandard !== 'Unobtainable') continue;
@@ -552,6 +559,9 @@ export class RandomGen8Teams {
 				if (num <= 0 || pool.includes(num)) continue;
 				pool.push(num);
 			}
+			this.poolsCacheKey = [requiredType, minSourceGen, ruleTable, requireMoves];
+			this.cachedPool = pool.slice();
+			this.cachedSpeciesPool = speciesPool.slice();
 		} else {
 			const EXISTENCE_TAG = ['past', 'future', 'lgpe', 'unobtainable', 'cap', 'custom', 'nonexistent'];
 			const nonexistentBanReason = ruleTable.check('nonexistent');
@@ -596,7 +606,23 @@ export class RandomGen8Teams {
 				if (pool.includes(num)) continue;
 				pool.push(num);
 			}
+			this.poolsCacheKey = [requiredType, minSourceGen, ruleTable, requireMoves];
+			this.cachedPool = pool.slice();
+			this.cachedSpeciesPool = speciesPool.slice();
 		}
+		return {pool, speciesPool};
+	}
+
+	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
+		// Picks `n` random pokemon--no repeats, even among formes
+		// Also need to either normalize for formes or select formes at random
+		// Unreleased are okay but no CAP
+		if (requiredType && !this.dex.types.get(requiredType).exists) {
+			throw new Error(`"${requiredType}" is not a valid type.`);
+		}
+
+		const {pool, speciesPool} = this.getPools(requiredType, minSourceGen, ruleTable, requireMoves);
+		const isNotCustom = !ruleTable;
 
 		const hasDexNumber: {[k: string]: number} = {};
 		for (let i = 0; i < n; i++) {
@@ -867,7 +893,7 @@ export class RandomGen8Teams {
 			};
 			if (this.gen === 9) {
 				// Random Tera type
-				set.teraType = this.sample(this.dex.types.all()).name;
+				set.teraType = this.sample(this.dex.types.names());
 			}
 			team.push(set);
 		}
