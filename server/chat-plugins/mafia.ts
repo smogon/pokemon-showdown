@@ -2045,13 +2045,13 @@ export const pages: Chat.PageTable = {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">No Response</summary>${noResponses}</span></details></p>`;
 			}
 			let previousActions = `<br/>`;
-				for (let i = 0; i < game.dayNum; i++) {
-					previousActions += `<b>Night ${i}</b><br/>`;
-					for (const player of game.players) {
-						previousActions += `<b>${player.safeName}</b>:${player.actionArr[i] ? `${player.actionArr[i]}` : ''}<br/>`;
-					}
-					previousActions += `<br/>`;
+			for (let i = 0; i < game.dayNum; i++) {
+				previousActions += `<b>Night ${i}</b><br/>`;
+				for (const player of game.players) {
+					previousActions += `<b>${player.safeName}</b>:${player.actionArr[i] ? `${player.actionArr[i]}` : ''}<br/>`;
 				}
+				previousActions += `<br/>`;
+			}
 			buf += `<h3>Host options</h3>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">General Options</summary>`;
 			buf += `<h3>General Options</h3>`;
