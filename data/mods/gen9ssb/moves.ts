@@ -45,6 +45,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Gift of Fortune",
 		basePower: 75,
 		category: "Special",
+		shortDesc: "High crit ratio. Random stat boost/volatile.",
+		desc: "High critical hit ratio. This Pokemon receives a random stat boost and positive volatile effect.",
 		accuracy: 100,
 		gen: 9,
 		pp: 10,
