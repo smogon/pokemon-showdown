@@ -72,7 +72,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const randomStat = this.sample(stats);
 				const boost: SparseBoostsTable = {};
 				boost[randomStat] = 1;
-				this.boost(boost);
+				this.boost(boost, source);
 			}
 			if (!source.abilityState.sack.length) return;
 			for (const storedMove of source.abilityState.sack) {
