@@ -204,6 +204,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gift of Fortune',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
+	Ingrid: {
+		species: 'Doublade', ability: 'Caliber Conversion', item: 'Odin\'s Sheath', gender: 'F',
+		moves: ['Smart Strike', 'Shadow Sneak', 'Swords Dance'],
+		signatureMove: 'Equip Spectre',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
+	},
 	/*
  	Flufi: {
 		species: 'Pikachu', ability: 'Defense of the Heart', item: 'EpiPen', gender: 'M',
