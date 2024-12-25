@@ -528,10 +528,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 	epipen: {
 		name: "EpiPen",
 		gen: 9,
+		shortDesc: "2x Defense; At 1/3 or less max HP, cures chosen ally.",
+		desc: "This Pokemon's Defense is doubled. Whenever this Pokemon has 1/3 or less max HP, heals a chosen inactive party member for 75% of their max HP and cures its status conditions. Single use.",
 		onTakeItem: false,
-		zMove: "Complete the Omnivolt",
-		zMoveFrom: "Shock Therapy",
-		itemUser: ["Raichu"],
+		zMove: "Rip Apart",
+		zMoveFrom: "Rip Apart",
+		itemUser: ["Pikachu-Starter"],
+		onModifyDef(def, pokemon) {
+			return this.chainModify(2);
+		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 3 && pokemon.useItem()) {
 				this.add('-activate', pokemon, 'item: EpiPen', '[consumed]');
