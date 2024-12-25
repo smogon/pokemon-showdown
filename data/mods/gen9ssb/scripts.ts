@@ -364,7 +364,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (move.id === 'wonderwing') return false;
 		return !!move.flags['contact'];
 	},
-	// Fake switch needed for Flufi's EpiPen/Shock Therapy
+	// Fake switch needed for Flufi's EpiPen
 	runAction(action) {
 		const pokemonOriginalHP = action.pokemon?.hp;
 		let residualPokemon: (readonly [Pokemon, number])[] = [];
@@ -531,14 +531,15 @@ export const Scripts: ModdedBattleScriptsData = {
 			break;
 		// @ts-ignore I'm sorry but it takes a lot
 		case 'epipen':
-			let eHP = action.target.hp + (action.target.maxhp / 3);
+			let newHP = action.target.hp + (action.target.maxhp * 0.75);
+			if (newHP > action.target.maxhp) newHP = action.target.maxhp;
 			// @ts-ignore
-			action.target.hp = eHP;
+			action.target.hp = newHP;
 			// @ts-ignore
-			action.target.sethp(eHP);
+			action.target.sethp(newHP);
 			// @ts-ignore
 			action.target.cureStatus();
-			this.add('-heal', action.target, action.target.getHealth, '[from] item: EpiPen');
+			this.add('-heal', action.target, action.target.getHealth);
 			// @ts-ignore
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'epipen');
 			break;
