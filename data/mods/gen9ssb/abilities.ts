@@ -15,6 +15,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Flufi
+	forceofwill: {
+		name: "Force of Will",
+		gen: 9,
+		flags: {},
+		shortDesc: "Survives a KO attack with 1 HP. Moves have x1.33 power.",
+		onDamage(damage, target, source, effect) {
+			if (damage >= target.hp && effect && effect.effectType === 'Move' && !target.abilityState.forceActivated) {
+				target.abilityState.forceActivated = true;
+				this.add('-ability', target, 'Force of Will');
+				this.add('-anim', target, 'Inferno', target);
+				return target.hp - 1;
+			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, pokemon, target, move) {
+			return this.chainModify(1.33);
+		},
+	},
 	// Saint Deli
 	generosity: {
 		name: "Generosity",
