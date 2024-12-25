@@ -204,12 +204,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Gift of Fortune',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
-	Ingrid: {
-		species: 'Doublade', ability: 'Caliber Conversion', item: 'Odin\'s Sheath', gender: 'F',
-		moves: ['Smart Strike', 'Shadow Sneak', 'Swords Dance'],
-		signatureMove: 'Equip Spectre',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
-	},
  	Flufi: {
 		species: 'Pikachu-Starter', ability: 'Force of Will', item: 'EpiPen', gender: 'M',
 		moves: ['Plasma Fists', 'Wish', 'No Retreat'],
@@ -217,6 +211,12 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 160, atk: 240, spe: 108}, nature: 'Jolly',
 	},
 	/*
+ 	Ingrid: {
+		species: 'Doublade', ability: 'Caliber Conversion', item: 'Odin\'s Sheath', gender: 'F',
+		moves: ['Smart Strike', 'Shadow Sneak', 'Swords Dance'],
+		signatureMove: 'Equip Spectre',
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
+	},
 	Gadget: {
 		species: 'Gimmighoul', ability: 'Coin Collector', item: 'Everythingamajig', gender: 'M',
 		moves: ['Heavy Slam', 'Pay Day', 'Iron Defense'],
