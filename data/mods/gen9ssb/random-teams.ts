@@ -210,13 +210,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Equip Spectre',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant',
 	},
-	/*
  	Flufi: {
-		species: 'Pikachu', ability: 'Defense of the Heart', item: 'EpiPen', gender: 'M',
-		moves: ['Volt Switch', 'Ice Punch', 'Wish'],
-		signatureMove: 'Shock Therapy',
-		evs: {hp: 248, def: 116, spd: 92, spe: 52}, nature: 'Timid',
+		species: 'Pikachu-Starter', ability: 'Force of Will', item: 'EpiPen', gender: 'M',
+		moves: ['Plasma Fists', 'Wish', 'No Retreat'],
+		signatureMove: 'Cranberry Cutter',
+		evs: {hp: 160, atk: 240, spe: 108}, nature: 'Jolly',
 	},
+	/*
 	Gadget: {
 		species: 'Gimmighoul', ability: 'Coin Collector', item: 'Everythingamajig', gender: 'M',
 		moves: ['Heavy Slam', 'Pay Day', 'Iron Defense'],
