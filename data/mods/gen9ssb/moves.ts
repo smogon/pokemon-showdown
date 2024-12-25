@@ -1635,12 +1635,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 	},
 	// Flufi
-	completetheomnivolt: {
-      name: "Complete the Omnivolt",
-      category: "Special",
-      basePower: 220,
+	ripapart: {
+      name: "Rip Apart",
+      category: "Physical",
+      basePower: 150,
       accuracy: true,
-		shortDesc: "Paralyzes targets. Combines Fire-type in type effectiveness.",
+		shortDesc: "Supereffective against all types. User must recharge.",
       pp: 1,
 		isZ: "epipen",
       priority: 0,
@@ -1648,66 +1648,47 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Plasma Fists', source);
-			this.add('-anim', source, 'Wildbolt Storm', source);
-			this.add('-anim', source, '10,000,000 Volt Thunderbolt', source);
-			this.add('-anim', source, 'Pyro Ball', target);
+			this.add('-anim', source, 'Work Up', source);
+			this.add('-anim', source, 'Bulk Up', source);
+			this.add('-anim', source, 'Fury Swipes', target);
       },
-		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Fire', type);
+		onEffectiveness(typeMod, target, type) {
+			return 1;
 		},
-      flags: {bypasssub: 1},
-		secondary: {
-			chance: 100,
-			status: 'par',
+      flags: {bypasssub: 1, contact: 1},
+		self: {
+			volatileStatus: 'mustrecharge',
 		},
-      target: "allAdjacent",
-      type: "Electric",
+		breaksProtect: true,
+		secondary: null,
+      target: "normal",
+      type: "Fighting",
    },
 	// Flufi
-	shocktherapy: {
+	cranberrycutter: {
       name: "Shock Therapy",
-      category: "Special",
-		desc: "Heals a selected ally for 1/10 of their max HP after damage is dealt. 30% chance to flinch. 30% chance to paralyze the target. Fails if the user has no healthy teammates remaining.",
-		shortDesc: "Heals chosen ally; 30% chance to paralyze/flinch.",
-      basePower: 70,
-      accuracy: 95,
-      pp: 15,
+      category: "Physical",
+		shortDesc: "Always results in a critical hit. Confuses the target.",
+      basePower: 100,
+      accuracy: 90,
+      pp: 10,
       priority: 0,
-		selfSwitch: true,
-      flags: {protect: 1},
+      flags: {protect: 1, contact: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Splash', source);
-			this.add('-anim', source, 'Zing Zap', target);
+			this.add('-anim', source, 'Topsy Turvy', target);
+			this.add('-anim', source, 'Psycho Cut', source);
+			this.add('-anim', source, 'Seismic Toss', target);
       },
-		onTryHit(source) {
-			if (!this.canSwitch(source.side)) {
-				this.attrLastMove('[still]');
-				this.add('-fail', source);
-				return this.NOT_FAIL;
-			}
+		willCrit: true,
+		secondary: {
+			chance: 100,
+			volatileStatus: 'confusion',
 		},
-		self: {
-			slotCondition: 'shocktherapy',
-		},
-		condition: {
-			duration: 1,
-			// Implemented in ../scripts.ts
-		},
-		secondaries: [
-			{
-				chance: 30,
-				volatileStatus: 'flinch',
-			}, {
-				chance: 30,
-				status: 'par',
-			},
-		],
       target: "normal",
-      type: "Electric",
+      type: "Psychic",
    },
 	// Quetzalcoatl
 	bigthunder: {
