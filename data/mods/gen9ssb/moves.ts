@@ -1666,7 +1666,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
    },
 	// Flufi
 	cranberrycutter: {
-      name: "Shock Therapy",
+      name: "Cranberry Cutter",
       category: "Physical",
 		shortDesc: "Always results in a critical hit. Confuses the target.",
       basePower: 100,
