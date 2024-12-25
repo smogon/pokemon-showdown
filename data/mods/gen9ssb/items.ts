@@ -532,7 +532,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "This Pokemon's Defense is doubled. Whenever this Pokemon has 1/3 or less max HP, heals a chosen inactive party member for 75% of their max HP and cures its status conditions. Single use.",
 		onTakeItem: false,
 		zMove: "Rip Apart",
-		zMoveFrom: "Rip Apart",
+		zMoveFrom: "Cranberry Cutter",
 		itemUser: ["Pikachu-Starter"],
 		onModifyDef(def, pokemon) {
 			return this.chainModify(2);
