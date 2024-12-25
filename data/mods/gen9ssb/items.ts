@@ -1,4 +1,13 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Ingrid
+	odinssheath: {
+		name: "Odin's Sheath",
+		gen: 9,
+		onModifySpDPriority: 2,
+		onModifySpD(spd) {
+			return this.chainModify(2);
+		},
+	},
 	// Saint Deli
 	giftsack: {
 		name: "Gift Sack",
