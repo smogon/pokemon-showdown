@@ -135,22 +135,21 @@ export class BattleActions {
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}
+		pokemon.abilityState.effectOrder = this.battle.effectOrder++;
+		pokemon.itemState.effectOrder = this.battle.effectOrder++;
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
 		if (sourceEffect) {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails, '[from] ' + sourceEffect);
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
 		}
-		pokemon.abilityOrder = this.battle.abilityOrder++;
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
 		if (isDrag && this.battle.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
-			this.battle.singleEvent('PreStart', pokemon.getAbility(), pokemon.abilityState, pokemon);
 			this.runSwitch(pokemon);
 		} else {
-			this.battle.queue.insertChoice({choice: 'runUnnerve', pokemon});
 			this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
 		}
 
@@ -170,17 +169,22 @@ export class BattleActions {
 		return true;
 	}
 	runSwitch(pokemon: Pokemon) {
-		this.battle.runEvent('Swap', pokemon);
-
 		if (this.battle.gen >= 5) {
-			this.battle.runEvent('SwitchIn', pokemon);
+			const switchersIn = [pokemon];
+			for (let a = this.battle.queue.peek(); a?.choice === 'runSwitch'; a = this.battle.queue.peek()) {
+				const nextSwitch = this.battle.queue.shift();
+				switchersIn.push(nextSwitch!.pokemon!);
+			}
+			this.battle.fieldEvent('SwitchIn', switchersIn);
+	
+			if (!pokemon.hp) return false;
+			pokemon.isStarted = true;
+			pokemon.draggedIn = null;
+			return true;
 		}
-
 		this.battle.runEvent('EntryHazard', pokemon);
 
-		if (this.battle.gen <= 4) {
-			this.battle.runEvent('SwitchIn', pokemon);
-		}
+		this.battle.runEvent('SwitchIn', pokemon);
 
 		if (this.battle.gen <= 2) {
 			// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
@@ -329,6 +333,7 @@ export class BattleActions {
 			this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
 		}
 
+		// TODO: Refactor to use BattleQueue#prioritizeAction in onAnyAfterMove handlers
 		// Dancer's activation order is completely different from any other event, so it's handled separately
 		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 			const dancers = [];
@@ -343,7 +348,7 @@ export class BattleActions {
 			// but before any multipliers like Agility or Choice Scarf
 			// Ties go to whichever Pokemon has had the ability for the least amount of time
 			dancers.sort(
-				(a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder
+				(a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityState.effectOrder - a.abilityState.effectOrder
 			);
 			const targetOf1stDance = this.battle.activeTarget!;
 			for (const dancer of dancers) {

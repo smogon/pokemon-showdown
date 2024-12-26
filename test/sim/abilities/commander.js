@@ -115,10 +115,10 @@ describe('Commander', function () {
 		const dondozo = battle.p2.active[1];
 
 		assert.statStage(tatsugiri, 'atk', -1);
+		assert.equal(battle.requestState, 'move', 'It should not have switched out on Eject Pack');
 		assert.holdsItem(tatsugiri);
 		assert.statStage(dondozo, 'atk', 1);
 		assert.holdsItem(dondozo);
-		assert.equal(battle.requestState, 'move', 'It should not have switched out on Eject Pack');
 
 		battle.makeChoices('move tackle 2, move trick 2', 'auto');
 		assert.holdsItem(dondozo);
@@ -241,7 +241,7 @@ describe('Commander', function () {
 		assert.false.fullHP(shuckle, `Shuckle should have taken damage from Dazzling Gleam`);
 	});
 
-	it.skip(`should activate after hazards run`, function () {
+	it(`should activate after hazards run`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'regieleki', moves: ['toxicspikes']},
 			{species: 'registeel', moves: ['sleeptalk']},

@@ -26,9 +26,9 @@ export class Field {
 		this.id = '';
 
 		this.weather = '';
-		this.weatherState = {id: ''};
+		this.weatherState = new EffectState({id: ''}, battle);
 		this.terrain = '';
-		this.terrainState = {id: ''};
+		this.terrainState = new EffectState({id: ''}, battle);
 		this.pseudoWeather = {};
 	}
 
@@ -67,7 +67,7 @@ export class Field {
 		const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
-		this.weatherState = {id: status.id};
+		this.weatherState = new EffectState({id: status.id}, this.battle);
 		if (source) {
 			this.weatherState.source = source;
 			this.weatherState.sourceSlot = source.getSlot();
@@ -93,7 +93,7 @@ export class Field {
 		const prevWeather = this.getWeather();
 		this.battle.singleEvent('FieldEnd', prevWeather, this.weatherState, this);
 		this.weather = '';
-		this.weatherState = {id: ''};
+		this.weatherState.clear();
 		this.battle.eachEvent('WeatherChange');
 		return true;
 	}
@@ -138,12 +138,12 @@ export class Field {
 		const prevTerrain = this.terrain;
 		const prevTerrainState = this.terrainState;
 		this.terrain = status.id;
-		this.terrainState = {
+		this.terrainState = new EffectState({
 			id: status.id,
 			source,
 			sourceSlot: source.getSlot(),
 			duration: status.duration,
-		};
+		}, this.battle);
 		if (status.durationCallback) {
 			this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
@@ -161,7 +161,7 @@ export class Field {
 		const prevTerrain = this.getTerrain();
 		this.battle.singleEvent('FieldEnd', prevTerrain, this.terrainState, this);
 		this.terrain = '';
-		this.terrainState = {id: ''};
+		this.terrainState.clear();
 		this.battle.eachEvent('TerrainChange');
 		return true;
 	}
@@ -197,12 +197,12 @@ export class Field {
 			if (!(status as any).onFieldRestart) return false;
 			return this.battle.singleEvent('FieldRestart', status, state, this, source, sourceEffect);
 		}
-		state = this.pseudoWeather[status.id] = {
+		state = this.pseudoWeather[status.id] = new EffectState({
 			id: status.id,
 			source,
 			sourceSlot: source?.getSlot(),
 			duration: status.duration,
-		};
+		}, this.battle);
 		if (status.durationCallback) {
 			if (!source) throw new Error(`setting fieldcond without a source`);
 			state.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);

@@ -94,7 +94,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			 * about to end its partial trapping.
 			 **/
 			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
+				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration! > 1) {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}
@@ -155,7 +155,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			 * about to end its partial trapping.
 			 **/
 			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
+				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration! > 1) {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}
@@ -338,7 +338,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			 * about to end its partial trapping.
 			 **/
 			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
+				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration! > 1) {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}
@@ -968,7 +968,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			 * about to end its partial trapping.
 			 **/
 			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
+				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration! > 1) {
 					target.volatiles['partiallytrapped'].duration = 2;
 				}
 			}

@@ -382,9 +382,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onResidualOrder: 3,
-		onResidual(side: any) {
+		onResidual(target: Pokemon) {
 			if (this.getOverflowedTurnCount() < this.effectState.endingTurn) return;
-			side.removeSlotCondition(this.getAtSlot(this.effectState.targetSlot), 'futuremove');
+			target.side.removeSlotCondition(this.getAtSlot(this.effectState.targetSlot), 'futuremove');
 		},
 		onEnd(target) {
 			const data = this.effectState;

@@ -178,7 +178,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onUpdate() {},
 		onStart(pokemon) {
-			if (!pokemon.isStarted) return;
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();

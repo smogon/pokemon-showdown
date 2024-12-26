@@ -193,7 +193,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			this.add('-enditem', target, 'Air Balloon');
 			target.item = '';
-			target.itemState = {id: '', target};
+			target.itemState.clear();
 			this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 		},
 		onAfterSubDamage(damage, target, source, effect) {
@@ -201,7 +201,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (effect.effectType === 'Move') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
-				target.itemState = {id: '', target};
+				target.itemState.clear();
 				this.runEvent('AfterUseItem', target, null, null, this.dex.items.get('airballoon'));
 			}
 		},
@@ -568,19 +568,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	blueorb: {
 		name: "Blue Orb",
 		spritenum: 41,
+		onSwitchInPriority: -1,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre') {
-				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre' && !pokemon.transformed) {
+				pokemon.formeChange('Kyogre-Primal', this.effect, true);
 			}
-		},
-		onPrimal(pokemon) {
-			pokemon.formeChange('Kyogre-Primal', this.effect, true);
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Kyogre') return false;
 			return true;
 		},
 		itemUser: ["Kyogre"],
+		isPrimalOrb: true,
 		num: 535,
 		gen: 6,
 		isNonstandard: "Past",
@@ -614,12 +613,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onStart() {
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
 			this.effectState.started = true;
+			this.singleEvent('Update', this.effect, this.effectState, pokemon);
 		},
 		onUpdate(pokemon) {
 			if (!this.effectState.started || pokemon.transformed) return;
-			if (this.queue.peek(true)?.choice === 'runSwitch') return;
 
 			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
 				pokemon.addVolatile('protosynthesis');
@@ -1639,6 +1639,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain')) {
 				pokemon.useItem();
@@ -2323,6 +2324,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain')) {
 				pokemon.useItem();
@@ -3800,11 +3802,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onStart(pokemon) {
-			this.effectState.started = true;
-		},
 		onFoeAfterBoost(boost, target, source, effect) {
-			if (!this.started) return;
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
 			const boostPlus = this.effectState.boosts;
@@ -3816,9 +3814,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			}
 		},
-		onUpdate(pokemon) {
+		onAnySwitchInPriority: -3,
+		onAnySwitchIn() {
 			if (!this.effectState.ready || !this.effectState.boosts) return;
-			pokemon.useItem();
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onAnyAfterMove() {
+			if (!this.effectState.ready || !this.effectState.boosts) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!this.effectState.ready || !this.effectState.boosts) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onUse(pokemon) {
 			this.boost(this.effectState.boosts, pokemon);
 		},
 		onEnd() {
@@ -3834,6 +3844,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain')) {
 				pokemon.useItem();
@@ -4531,6 +4542,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain')) {
 				pokemon.useItem();
@@ -4756,19 +4768,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	redorb: {
 		name: "Red Orb",
 		spritenum: 390,
+		onSwitchInPriority: -1,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon') {
-				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon' && !pokemon.transformed) {
+				pokemon.formeChange('Groudon-Primal', this.effect, true);
 			}
-		},
-		onPrimal(pokemon) {
-			pokemon.formeChange('Groudon-Primal', this.effect, true);
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.baseSpecies === 'Groudon') return false;
 			return true;
 		},
 		itemUser: ["Groudon"],
+		isPrimalOrb: true,
 		num: 534,
 		gen: 6,
 		isNonstandard: "Past",
@@ -4902,6 +4913,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.getPseudoWeather('trickroom')) {
 				pokemon.useItem();
@@ -7178,6 +7190,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					this.add('-clearnegativeboost', pokemon, '[silent]');
 				}
 			},
+		},
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
+			this.singleEvent('Update', this.effect, this.effectState, pokemon);
 		},
 		onUpdate(pokemon) {
 			let activate = false;

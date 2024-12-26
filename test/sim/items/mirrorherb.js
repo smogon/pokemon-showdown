@@ -26,6 +26,7 @@ describe("Mirror Herb", () => {
 			{species: 'Primeape', ability: 'Anger Point', moves: ['sleeptalk']},
 			{species: 'Gyarados', ability: 'Intimidate', moves: ['sleeptalk']},
 		]]);
+		assert.statStage(battle.p1.active[0], 'atk', -1);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', -1 + 6);
 	});
@@ -38,14 +39,14 @@ describe("Mirror Herb", () => {
 			{species: 'Primeape', ability: 'Defiant', item: 'Weakness Policy', moves: ['sleeptalk', 'haze']},
 			{species: 'Annihilape', ability: 'Defiant', item: 'Weakness Policy', moves: ['sleeptalk', 'howl']},
 		]]);
-		assert.statStage(battle.p1.active[0], 'atk', 4);
+		assert.statStage(battle.p1.active[0], 'atk', 4, `Mirror Herb should have copied both Defiant boosts but only boosted atk by ${battle.p1.active[0].boosts.atk}`);
 		battle.makeChoices('auto', 'move haze, move howl');
-		assert.statStage(battle.p1.active[0], 'atk', 2);
+		assert.statStage(battle.p1.active[0], 'atk', 2, `Mirror Herb should have copied both Howl boosts but only boosted atk by ${battle.p1.active[0].boosts.atk}`);
 		battle.makeChoices('move recycle, move air cutter', 'auto');
-		assert.statStage(battle.p1.active[0], 'spa', 4);
+		assert.statStage(battle.p1.active[0], 'spa', 4, `Mirror Herb should have copied all Weakness Policy boosts but only boosted spa by ${battle.p1.active[0].boosts.spa}`);
 	});
 
-	it.skip("should wait for most entrance abilities before copying all their (opposing) boosts", () => {
+	it("should wait for most entrance abilities before copying all their (opposing) boosts", () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Electrode', item: 'Mirror Herb', moves: ['recycle']},
 			{species: 'Gyarados', ability: 'Intimidate', moves: ['sleeptalk']},
@@ -53,7 +54,6 @@ describe("Mirror Herb", () => {
 			{species: 'Zacian', ability: 'Intrepid Sword', moves: ['sleeptalk']},
 			{species: 'Annihilape', ability: 'Defiant', moves: ['sleeptalk']},
 		]]);
-		common.saveReplay(battle);
 		assert.statStage(battle.p1.active[0], 'atk', 3);
 	});
 });

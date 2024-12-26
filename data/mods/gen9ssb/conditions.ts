@@ -38,7 +38,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 	},
 	aegiibpmsg: {
-		onSwap(target, source) {
+		onSwitchIn(target) {
 			if (!target.fainted) {
 				this.add(`c:|${getName('aegii')}|~yes ${target.name}`);
 				target.side.removeSlotCondition(target, 'aegiibpmsg');
@@ -637,7 +637,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 				this.add(`c:|${getName('Clementine')}|I fucking love air-conditioning.`);
 			}
 		},
-		onFoeSwitchIn(pokemon) {
+		onAnySwitchIn(pokemon) {
 			if ((pokemon.illusion || pokemon).name === 'Kennedy') {
 				this.add(`c:|${getName('Clementine')}|yikes`);
 			}
@@ -1204,7 +1204,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onSwitchOut() {
 			this.add(`c:|${getName('Kennedy')}|Stream some Taylor Swift whilst I'm gone!`); // TODO replace
 		},
-		onFoeSwitchIn(pokemon) {
+		onAnySwitchIn(pokemon) {
 			switch ((pokemon.illusion || pokemon).name) {
 			case 'Clementine':
 				this.add(`c:|${getName('Kennedy')}|Not the Fr*nch....`);
@@ -1802,7 +1802,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint() {
 			this.add(`c:|${getName('PartMan')}|Okay weeb`);
 		},
-		onFoeSwitchIn(pokemon) {
+		onAnySwitchIn(pokemon) {
 			if (pokemon.name === 'Hydrostatics') {
 				this.add(`c:|${getName('PartMan')}|LUAAAAA!`);
 				this.add(`c:|${getName('PartMan')}|/me pats`);
