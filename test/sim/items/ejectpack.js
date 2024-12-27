@@ -110,6 +110,7 @@ describe(`Eject Pack`, function () {
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
+		assert.statStage(battle.p2.active[1], 'atk', -1, "Attack should be dropped before switching.");
 		battle.makeChoices();
 		assert.species(battle.p2.active[0], 'Zeraora', `Zeraora should not have switched out with its Eject Pack.`);
 		assert.species(battle.p2.active[1], 'Wynaut', `Mew should have switched out with its Eject Button.`);
@@ -145,6 +146,8 @@ describe(`Eject Pack`, function () {
 		assert.equal(battle.p2.requestState, 'switch');
 	});
 
+	// This is barely an eject pack bug, this switches should be determined by slot, not pokemon. This requires revamping that system
+	// Out of scope of this PR.
 	it.skip(`should not prohibit switchins if a switch has already resolved to a slot replaced by Eject Pack`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Pheromosa', moves: ['sleeptalk']},
@@ -156,8 +159,28 @@ describe(`Eject Pack`, function () {
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices('switch 3, move sleeptalk', 'move sleeptalk, switch 3');
+		assert.species(battle.p2.active[1], 'Mew');
 		battle.makeChoices();
 		assert.species(battle.p2.active[0], 'Wynaut');
-		assert.species(battle.p2.active[0], 'Morelull');
+		assert.species(battle.p2.active[1], 'Morelull');
+	});
+
+	it(`Should be able to switch back in if ejected`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Typhlosion', moves: ['eruption']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Smeargle', ability: 'moody', moves: ['protect'], item: 'ejectpack'},
+			{species: 'Shedinja', moves: ['sleeptalk']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		// Eruption
+		battle.makeChoices();
+		// Switch Smeargle -> Wynaut
+		battle.makeChoices();
+		// Switch Shedinja -> Smeargle
+		battle.makeChoices();
+		assert.species(battle.p2.active[0], 'Wynaut', 'Should be switched in by eject pack');
+		assert.species(battle.p2.active[1], 'Smeargle', 'Should be switched in by Shedinja fainting');
 	});
 });

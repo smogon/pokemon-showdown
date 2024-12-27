@@ -2725,14 +2725,24 @@ export class Battle {
 			}
 		}
 
-		const all_started = this.sides.every(
+		const allStarted = this.sides.every(
 			side => side.active.every(pokemon => !pokemon || pokemon.isStarted || pokemon.fainted)
 		 );
 
 		const switches = this.sides.map(
-			side => all_started &&
+			side => allStarted &&
 				side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
 		);
+
+		const allActive = this.sides.map(side => side.active).flat();
+		const aliveSwitches = allActive.filter(pokemon => !!pokemon?.switchFlag && !pokemon.fainted);
+		if (aliveSwitches.length > 1) {
+			const sortedSwitches = aliveSwitches.sort((a, b) => a && b ? b.speed - a.speed : 0);
+			for (let i = 1; i < sortedSwitches.length; i++) {
+				sortedSwitches[i].switchFlag = false;
+			}
+		}
+
 		for (let i = 0; i < this.sides.length; i++) {
 			let reviveSwitch = false; // Used to ignore the fake switch for Revival Blessing
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
