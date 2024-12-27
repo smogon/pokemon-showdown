@@ -175,8 +175,9 @@ export class BattleActions {
 				const nextSwitch = this.battle.queue.shift();
 				switchersIn.push(nextSwitch!.pokemon!);
 			}
+			this.battle.prng.shuffle(this.battle.speedTieResolution);
 			this.battle.fieldEvent('SwitchIn', switchersIn);
-	
+
 			if (!pokemon.hp) return false;
 			pokemon.isStarted = true;
 			pokemon.draggedIn = null;

@@ -174,6 +174,7 @@ export class Battle {
 	lastDamage: number;
 	effectOrder: number;
 	quickClawRoll: boolean;
+	speedTieResolution: number[];
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
 
@@ -261,6 +262,10 @@ export class Battle {
 		this.lastDamage = 0;
 		this.effectOrder = 0;
 		this.quickClawRoll = false;
+		this.speedTieResolution = [];
+		for (let i = 0; i < this.activePerHalf * 2; i++) {
+			this.speedTieResolution.push(i / (this.activePerHalf * 2));
+		}
 
 		this.teamGenerator = null;
 
@@ -950,6 +955,14 @@ export class Battle {
 		}
 		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
 			handler.speed = (handler.effectHolder as Pokemon).speed;
+			if (callbackName.endsWith('SwitchIn')) {
+				// Pokemon speeds including ties are resolved before all onSwitchIn handlers and aren't re-sorted in-between
+				// so we add a fractional speed to each Pokemon's respective event handlers by using their unique field position
+				// to index a randomly shuffled array of sequential numbers
+				const allSlots = 'abcdef';
+				const speedTieIndex = allSlots.indexOf((handler.effectHolder as Pokemon).getSlot().charAt(2));
+				handler.speed += this.speedTieResolution[speedTieIndex];
+			}
 		}
 		return handler;
 	}
