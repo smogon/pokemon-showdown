@@ -169,38 +169,43 @@ export class BattleActions {
 		return true;
 	}
 	runSwitch(pokemon: Pokemon) {
-		if (this.battle.gen >= 5) {
+		const battle = this.battle;
+		if (battle.gen >= 5) {
 			const switchersIn = [pokemon];
-			for (let a = this.battle.queue.peek(); a?.choice === 'runSwitch'; a = this.battle.queue.peek()) {
-				const nextSwitch = this.battle.queue.shift();
+			for (let a = battle.queue.peek(); a?.choice === 'runSwitch'; a = battle.queue.peek()) {
+				const nextSwitch = battle.queue.shift();
 				switchersIn.push(nextSwitch!.pokemon!);
 			}
-			this.battle.prng.shuffle(this.battle.speedTieResolution);
-			this.battle.fieldEvent('SwitchIn', switchersIn);
+			const allActive = battle.getAllActive(true);
+			battle.speedSort(allActive);
+			battle.speedOrder = allActive.map((a) => a.side.n * battle.sides.length + a.position);
+			battle.fieldEvent('SwitchIn', switchersIn);
 
-			if (!pokemon.hp) return false;
-			pokemon.isStarted = true;
-			pokemon.draggedIn = null;
+			for (const poke of allActive) {
+				if (!poke.hp) continue;
+				poke.isStarted = true;
+				poke.draggedIn = null;
+			}
 			return true;
 		}
-		this.battle.runEvent('EntryHazard', pokemon);
+		battle.runEvent('EntryHazard', pokemon);
 
-		this.battle.runEvent('SwitchIn', pokemon);
+		battle.runEvent('SwitchIn', pokemon);
 
-		if (this.battle.gen <= 2) {
+		if (battle.gen <= 2) {
 			// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
-			for (const poke of this.battle.getAllActive()) poke.lastMove = null;
-			if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
-				this.battle.runEvent('AfterSwitchInSelf', pokemon);
+			for (const poke of battle.getAllActive()) poke.lastMove = null;
+			if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== battle.turn) {
+				battle.runEvent('AfterSwitchInSelf', pokemon);
 			}
 		}
 		if (!pokemon.hp) return false;
 		pokemon.isStarted = true;
 		if (!pokemon.fainted) {
-			this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-			this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
+			battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+			battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
 		}
-		if (this.battle.gen === 4) {
+		if (battle.gen === 4) {
 			for (const foeActive of pokemon.foes()) {
 				foeActive.removeVolatile('substitutebroken');
 			}
