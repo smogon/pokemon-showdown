@@ -602,8 +602,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('Update', this.effect, this.effectState, target);
 		},
 		onUpdate(pokemon) {
-			if (this.gameType !== 'doubles' || !this.effectState.started) return;
 			const ally = pokemon.allies()[0];
+			if (this.gameType !== 'doubles' || !this.effectState.started || pokemon.switchFlag || ally?.switchFlag) return;
 			if (!ally || pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
 				// Handle any edge cases
 				if (pokemon.getVolatile('commanding')) pokemon.removeVolatile('commanding');

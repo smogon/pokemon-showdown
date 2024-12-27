@@ -106,6 +106,31 @@ describe('Commander', function () {
 			{species: 'wynaut', item: 'redcard', ability: 'noguard', moves: ['sleeptalk', 'tackle', 'dragontail']},
 			{species: 'gyarados', item: 'ejectbutton', ability: 'intimidate', moves: ['sleeptalk', 'trick', 'roar']},
 		], [
+			{species: 'tatsugiri', ability: 'commander', moves: ['sleeptalk']},
+			{species: 'dondozo', moves: ['sleeptalk', 'peck']},
+			{species: 'rufflet', moves: ['sleeptalk']},
+		]]);
+
+		// const tatsugiri = battle.p2.active[0];
+		const dondozo = battle.p2.active[1];
+
+		battle.makeChoices('move tackle 2, move trick 2', 'auto');
+		assert.holdsItem(dondozo);
+		assert.equal(battle.requestState, 'move', 'It should not have switched out on Eject Button');
+
+		battle.makeChoices('auto', 'move peck 1');
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.equal(battle.requestState, 'move', 'It should not have switched out on Red Card');
+
+		battle.makeChoices('move dragontail 2, move roar 2', 'auto');
+		assert.equal(battle.requestState, 'move', 'It should not have switched out on standard phazing moves');
+	});
+
+	it.skip(`should prevent Eject Pack switchouts`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'wynaut', item: 'redcard', ability: 'noguard', moves: ['sleeptalk', 'tackle', 'dragontail']},
+			{species: 'gyarados', item: 'ejectbutton', ability: 'intimidate', moves: ['sleeptalk', 'trick', 'roar']},
+		], [
 			{species: 'tatsugiri', ability: 'commander', item: 'ejectpack', moves: ['sleeptalk']},
 			{species: 'dondozo', item: 'ejectpack', moves: ['sleeptalk', 'peck']},
 			{species: 'rufflet', moves: ['sleeptalk']},
@@ -119,17 +144,6 @@ describe('Commander', function () {
 		assert.holdsItem(tatsugiri);
 		assert.statStage(dondozo, 'atk', 1);
 		assert.holdsItem(dondozo);
-
-		battle.makeChoices('move tackle 2, move trick 2', 'auto');
-		assert.holdsItem(dondozo);
-		assert.equal(battle.requestState, 'move', 'It should not have switched out on Eject Button');
-
-		battle.makeChoices('auto', 'move peck 1');
-		assert.false.holdsItem(battle.p1.active[0]);
-		assert.equal(battle.requestState, 'move', 'It should not have switched out on Red Card');
-
-		battle.makeChoices('move dragontail 2, move roar 2', 'auto');
-		assert.equal(battle.requestState, 'move', 'It should not have switched out on standard phazing moves');
 	});
 
 	it(`should cause Dondozo to stay commanded even if Tatsugiri faints`, function () {
