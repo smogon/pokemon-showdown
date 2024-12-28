@@ -4,6 +4,7 @@
   "version": "0.11.9",
   "main": "dist/sim/index.js",
   "dependencies": {
+    "@ngrok/ngrok": "^1.4.1",
     "esbuild": "^0.16.10",
     "mysql2": "^3.9.7",
     "pokemon-showdown": "file:",
@@ -22,7 +23,7 @@
     "permessage-deflate": "^0.1.7",
     "pg": "^8.11.3",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^3.0.6",
+    "sqlite": "^5.1.1",
     "sucrase": "^3.15.0"
   },
   "secretDependencies": {
@@ -46,23 +47,17 @@
     "full-test-ci": "eslint --no-error-on-unmatched-pattern ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
     "postinstall": "npm run build postinstall"
   },
-  "bin": "./pokemon-showdown",
+  "bin": {
+    "pokemon-showdown": "pokemon-showdown"
+  },
   "homepage": "http://pokemonshowdown.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/smogon/pokemon-showdown.git"
+    "url": "git+https://github.com/smogon/pokemon-showdown.git"
   },
-  "author": {
-    "name": "Guangcong Luo",
-    "email": "guangcongluo@gmail.com",
-    "url": "http://guangcongluo.com"
-  },
+  "author": "Guangcong Luo <guangcongluo@gmail.com> (http://guangcongluo.com)",
   "contributors": [
-    {
-      "name": "Bill Meltsner",
-      "email": "bill@meltsner.com",
-      "url": "http://www.meltsner.com"
-    }
+    "Bill Meltsner <bill@meltsner.com> (http://www.meltsner.com)"
   ],
   "license": "MIT",
   "devDependencies": {
@@ -76,8 +71,16 @@
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
     "eslint": "8.5.0",
-    "mocha": "^8.2.0",
+    "mocha": "^11.0.1",
     "smogon": "^3.0.0",
     "typescript": "^5.0.4"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/smogon/pokemon-showdown/issues"
+  },
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "keywords": []
 }

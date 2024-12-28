@@ -3374,9 +3374,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.checkMoveMakesContact(move, target, source)) {
 				const r = this.random(100);
 				if (r < 70) {
-					source.setStatus('psn', target);
+					target.trySetStatus('psn', source);
 				} else {
-					source.setStatus('tox', target);
+					target.trySetStatus('tox', source);
 				}
 			}
 		},
