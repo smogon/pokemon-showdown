@@ -80,15 +80,16 @@ export class LogReaderRoom {
 				SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}
 			`);
 			return resolvedDates.map(x => x.month);
-		}
-		try {
-			const listing = await Monitor.logPath(`chat/${this.roomid}`).readdir();
-			return listing.filter(file => /^[0-9][0-9][0-9][0-9]-[0-9][0-9]$/.test(file));
-		} catch {
-			return [];
+		} else {
+			try {
+				const listing = await Monitor.logPath(`chat/${this.roomid}`).readdir();
+				return listing.filter(file => /^[0-9][0-9][0-9][0-9]-[0-9][0-9]$/.test(file));
+			} catch {
+				return [];
+			}
 		}
 	}
-
+	
 	async listDays(month: string) {
 		if (roomlogTable) {
 			const resolvedDates = await safeQuery(() => roomlogTable.query<any>()`
@@ -96,12 +97,13 @@ export class LogReaderRoom {
 				WHERE roomid = ${this.roomid} AND month = ${month}
 			`);
 			return resolvedDates.map(x => x.date);
-		}
-		try {
-			const listing = await Monitor.logPath(`chat/${this.roomid}/${month}`).readdir();
-			return listing.filter(file => file.endsWith(".txt")).map(file => file.slice(0, -4));
-		} catch {
-			return [];
+		} else {
+			try {
+				const listing = await Monitor.logPath(`chat/${this.roomid}/${month}`).readdir();
+				return listing.filter(file => file.endsWith(".txt")).map(file => file.slice(0, -4));
+			} catch {
+				return [];
+			}
 		}
 	}
 
