@@ -75,7 +75,7 @@ export class LogReaderRoom {
 	}
 
 	async listMonths() {
-		if (roomlogTable) {
+		if (roomlogTable && roomlogTable != null) {
 			const resolvedDates = await safeQuery(() => roomlogTable.query<any>()`
 				SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}
 			`);
@@ -91,7 +91,7 @@ export class LogReaderRoom {
 	}
 
 	async listDays(month: string) {
-		if (roomlogTable) {
+		if (roomlogTable && roomlogTable != null) {
 			const resolvedDates = await safeQuery(() => roomlogTable.query<any>()`
 				SELECT DISTINCT date FROM roomlog_dates
 				WHERE roomid = ${this.roomid} AND month = ${month}
@@ -108,7 +108,7 @@ export class LogReaderRoom {
 	}
 
 	async getLog(day: string) {
-		if (roomlogTable) {
+		if (roomlogTable && roomlogTable != null) {
 			const [dayStart, dayEnd] = LogReader.dayToRange(day);
 			const logs = await safeQuery(() =>
 				roomlogTable.selectAll(['log', 'time'])`WHERE roomid = ${this.roomid} 
@@ -142,7 +142,7 @@ export const LogReader = new class {
 	}
 
 	async list() {
-		if (roomlogTable) {
+		if (roomlogTable && roomlogTable != null) {
 			const roomids = await safeQuery(() => roomlogTable.query()`SELECT DISTINCT roomid FROM roomlogs`);
 			return roomids.map(x => x.roomid) as RoomID[];
 		}
