@@ -3100,7 +3100,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		types: ["Electric"],
 		genderRatio: {M: 0.875, F: 0.125},
 		baseStats: {hp: 65, atk: 65, def: 60, spa: 110, spd: 95, spe: 130},
-		abilities: {0: "Vatio", H: "Lightning Rod"},
+		abilities: {0: "Vatios", H: "Lightning Rod"},
 		heightm: 0.8,
 		weightkg: 24.5,
 		color: "Yellow",
