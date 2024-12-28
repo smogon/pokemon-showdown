@@ -3626,6 +3626,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifyDef(def, pokemon) {
 			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
+			} else if (pokemon.baseSpecies.name === 'Ditto' && pokemon.transformed){
+				return this.chainModify(1.2);
+			}
+		},
+		onModifySpD(spd, pokemon) {
+			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
+				return this.chainModify(2);
+			} else if (pokemon.baseSpecies.name === 'Ditto' && pokemon.transformed){
+				return this.chainModify(1.2);
 			}
 		},
 		itemUser: ["Ditto"],
@@ -4615,6 +4624,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifySpe(spe, pokemon) {
 			if (pokemon.species.name === 'Ditto' && !pokemon.transformed) {
 				return this.chainModify(2);
+			} else if (pokemon.baseSpecies.name === 'Ditto' && pokemon.transformed){
+				return this.chainModify(1.2);
 			}
 		},
 		itemUser: ["Ditto"],
@@ -7673,6 +7684,34 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		itemUser: ["Raticate-Alola", 'Marowak-Alola', "Electrode Hisui", "Arcanine-Hisui"],
 		num: -103,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	kinglerite: {
+		name: "Kinglerite",
+		spritenum: 599,
+		megaStone: "Kingler-Mega",
+		megaEvolves: "Kingler",
+		itemUser: ["Kingler"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -104,
+		gen: 6,
+		isNonstandard: "Past",
+	},
+	laprasite: {
+		name: "Laprasite",
+		spritenum: 599,
+		megaStone: "Lapras-Mega",
+		megaEvolves: "Lapras",
+		itemUser: ["Lapras"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -104,
 		gen: 6,
 		isNonstandard: "Past",
 	},

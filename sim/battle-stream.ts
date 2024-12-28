@@ -225,7 +225,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			this.push(`requesteddata\n${team}`);
 			break;
 		case 'show-openteamsheets':
-			this.battle!.showOpenTeamSheets(this.battle!.rated === true);
+			this.battle!.showOpenTeamSheets();
 			break;
 		case 'version':
 		case 'version-origin':

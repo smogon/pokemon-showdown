@@ -2447,4 +2447,12 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 		name: "Machampite",
 		shortDesc: "If held by a Machamp, this item allows it to Mega Evolve in battle.",
 	},
+	totemgigante: {
+		name: "Totem Gigante",
+		shortDesc: "Transforms its user into their totem form.",
+	},
+	kinglerite: {
+		name: "Kinglerite",
+		shortDesc: "If held by a Kingler, this item allows it to Mega Evolve in battle.",
+	},
 };

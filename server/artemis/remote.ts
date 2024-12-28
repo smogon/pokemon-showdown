@@ -57,7 +57,7 @@ let throttleTime: number | null = null;
 export const limiter = new Limiter(800);
 export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
 	if (isCommon(text) || !limiter.shouldRequest()) return null;
-	if (throttleTime && (Date.now() - throttleTime < 10000)) {
+	if (throttleTime && ((Date.now() - throttleTime) < 10000)) {
 		return null;
 	}
 	if (throttleTime) throttleTime = null;
@@ -90,9 +90,9 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		return result;
 	} catch (e: any) {
 		throttleTime = Date.now();
-		if (e.message.startsWith('Request timeout')) {
-			// just ignore this. error on their end not ours.
-			// todo maybe stop sending requests for a bit?
+		if (e.message.startsWith('Request timeout') || e.statusCode === 429) {
+			// request timeout: just ignore this. error on their end not ours.
+			// 429: too many requests, we already freeze for 10s above so. not much more we can do
 			return null;
 		}
 		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});

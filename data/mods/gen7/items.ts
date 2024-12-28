@@ -328,7 +328,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	kinglerite: {
+		inherit: true,
+		isNonstandard: null,
+	},
 	kommoniumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	laprasite: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -606,6 +614,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		isNonstandard: null,
 	},
 	tapuniumz: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	totemgigante: {
 		inherit: true,
 		isNonstandard: null,
 	},
