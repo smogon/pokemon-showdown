@@ -528,20 +528,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 	epipen: {
 		name: "EpiPen",
 		gen: 9,
-		shortDesc: "2x Defense; At 1/3 or less max HP, cures chosen ally.",
-		desc: "This Pokemon's Defense is doubled. Whenever this Pokemon has 1/3 or less max HP, heals a chosen inactive party member for 75% of their max HP and cures its status conditions. Single use.",
+		shortDesc: "1.5x Defense; 1/3 or less max HP: Heals chosen ally.",
+		desc: "This Pokemon's Defense is 1.5x. Whenever this Pokemon has 1/3 or less max HP, heals a selected inactive party member for 75% of their max HP and cures its status conditions. If held by a Pikachu-Starter with Cranberry Cutter, it can use Rip Apart. Single use.",
 		onTakeItem: false,
 		zMove: "Rip Apart",
 		zMoveFrom: "Cranberry Cutter",
 		itemUser: ["Pikachu-Starter"],
 		onModifyDef(def, pokemon) {
-			return this.chainModify(2);
+			return this.chainModify(1.5);
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 3 && pokemon.useItem()) {
-				this.add('-activate', pokemon, 'item: EpiPen', '[consumed]');
+			if (pokemon.hp <= pokemon.maxhp / 3 && !this.effectState.epiUsed) {
+				this.add('-activate', pokemon, 'item: EpiPen');
 				pokemon.side.addSlotCondition(pokemon, 'epipen');
 				pokemon.switchFlag = true;
+				this.effectState.epiUsed = true;
 			}
 		},
 		condition: {
