@@ -76,10 +76,9 @@ export class LogReaderRoom {
 
 	async listMonths() {
 		if (roomlogTable) {
-			const dates = await safeQuery(() => roomlogTable.query<any>()`
+			const resolvedDates = await safeQuery(() => roomlogTable.query<any>()`
 				SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}
 			`);
-			const resolvedDates = await dates;
 			return resolvedDates.map(x => x.month);
 		}
 		try {
@@ -90,14 +89,12 @@ export class LogReaderRoom {
 		}
 	}
 
-
 	async listDays(month: string) {
 		if (roomlogTable) {
-			const dates = await safeQuery(() => roomlogTable.query<any>()`
+			const resolvedDates = await safeQuery(() => roomlogTable.query<any>()`
 				SELECT DISTINCT date FROM roomlog_dates
 				WHERE roomid = ${this.roomid} AND month = ${month}
 			`);
-			const resolvedDates = await dates;
 			return resolvedDates.map(x => x.date);
 		}
 		try {
@@ -108,11 +105,12 @@ export class LogReaderRoom {
 		}
 	}
 
-
 	async getLog(day: string) {
 		if (roomlogTable) {
 			const [dayStart, dayEnd] = LogReader.dayToRange(day);
-			const logs = await safeQuery(() => roomlogTable.selectAll(['log', 'time'])`WHERE roomid = ${this.roomid} AND time BETWEEN ${dayStart}::int::timestamp AND ${dayEnd}::int::timestamp`);
+			const logs = await safeQuery(() =>
+				roomlogTable.selectAll(['log', 'time'])`WHERE roomid = ${this.roomid} AND time BETWEEN ${dayStart}::int::timestamp AND ${dayEnd}::int::timestamp`
+			);
 			return new Streams.ObjectReadStream<string>({
 				read(this: Streams.ObjectReadStream<string>) {
 					for (const {log, time} of logs) {
