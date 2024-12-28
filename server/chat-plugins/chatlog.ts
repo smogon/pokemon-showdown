@@ -108,9 +108,12 @@ export class LogReaderRoom {
 	async getLog(day: string) {
 		if (roomlogTable) {
 			const [dayStart, dayEnd] = LogReader.dayToRange(day);
-			const logs = await safeQuery(() =>
-				roomlogTable.selectAll(['log', 'time'])`WHERE roomid = ${this.roomid} AND time BETWEEN ${dayStart}::int::timestamp AND ${dayEnd}::int::timestamp`
-			);
+			const logs = await safeQuery(() => {
+				return roomlogTable.selectAll(['log', 'time'])
+				`WHERE roomid = ${this.roomid} 
+				AND time BETWEEN ${dayStart}::int::timestamp 
+				AND ${dayEnd}::int::timestamp`;
+			});
 			return new Streams.ObjectReadStream<string>({
 				read(this: Streams.ObjectReadStream<string>) {
 					for (const {log, time} of logs) {
