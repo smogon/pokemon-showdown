@@ -89,7 +89,7 @@ export class LogReaderRoom {
 			}
 		}
 	}
-	
+
 	async listDays(month: string) {
 		if (roomlogTable) {
 			const resolvedDates = await safeQuery(() => roomlogTable.query<any>()`
