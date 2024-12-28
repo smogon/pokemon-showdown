@@ -20,18 +20,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Force of Will",
 		gen: 9,
 		flags: {},
-		shortDesc: "Survives a KO attack with 1 HP. Moves have x1.33 power.",
+		shortDesc: "Survives a KO attack with 1 HP. Moves have 1.33x/2x power.",
+		desc: "If this Pokemon would be knocked out by an attack, it survives at 1 HP. Once per battle. This Pokemon's moves have 1.33x power, or 2x power if this Pokemon has 1 HP remaining.",
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect && effect.effectType === 'Move' && !target.abilityState.forceActivated) {
 				target.abilityState.forceActivated = true;
 				this.add('-ability', target, 'Force of Will');
 				this.add('-anim', target, 'Inferno', target);
+				this.add('-message', `${target.name} isn't backing down!`);
 				return target.hp - 1;
 			}
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon, target, move) {
-			return this.chainModify(1.33);
+			if (pokemon.hp === 1) {
+				return this.chainModify(2);
+			} else {
+				return this.chainModify(1.33);
+			}
 		},
 	},
 	// Saint Deli
