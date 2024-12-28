@@ -1648,8 +1648,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Growth', source);
 			this.add('-anim', source, 'Work Up', source);
-			this.add('-anim', source, 'Bulk Up', source);
 			this.add('-anim', source, 'Fury Swipes', target);
       },
 		onEffectiveness(typeMod, target, type) {
