@@ -75,9 +75,8 @@ export class LogReaderRoom {
 	}
 
 	async listMonths() {
-		const table = roomlogTable;
-		if (table) {
-			const resolvedDates = await safeQuery(() => table.query<any>()`
+		if (roomlogTable) {
+			const resolvedDates = await safeQuery(() => roomlogTable!.query<any>()`
 				SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}
 			`);
 			return resolvedDates.map(x => x.month);
