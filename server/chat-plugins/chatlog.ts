@@ -15,6 +15,23 @@ const MAX_TOPUSERS = 100;
 
 const UPPER_STAFF_ROOMS = ['upperstaff', 'adminlog', 'slowlog'];
 
+/**
+ * Generic helper function to retry queries on any error.
+ */
+async function safeQuery<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
+	for (let i = 1; i <= attempts; i++) {
+		try {
+			return await fn();
+		} catch (err) {
+			if (i < attempts) {
+				continue;
+			}
+			throw err;
+		}
+	}
+	throw new Error('Max retries reached.');
+}
+
 interface ChatlogSearch {
 	raw?: boolean;
 	search: string;
@@ -59,8 +76,12 @@ export class LogReaderRoom {
 
 	async listMonths() {
 		if (roomlogTable) {
-			const dates = await roomlogTable.query<any>()`SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}`;
-			return dates.map(x => x.month);
+			const dates = await safeQuery(async () => {
+				return roomlogTable.query<any>()`
+					SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}
+				`;
+			});
+			return (await dates).map(x => x.month);
 		}
 		try {
 			const listing = await Monitor.logPath(`chat/${this.roomid}`).readdir();
@@ -72,10 +93,13 @@ export class LogReaderRoom {
 
 	async listDays(month: string) {
 		if (roomlogTable) {
-			const dates = await (
-				roomlogTable.query<any>()`SELECT DISTINCT date FROM roomlog_dates WHERE roomid = ${this.roomid} AND month = ${month}`
-			);
-			return dates.map(x => x.date);
+			const dates = await safeQuery(async () => {
+				return roomlogTable.query<any>()`
+					SELECT DISTINCT date FROM roomlog_dates
+					WHERE roomid = ${this.roomid} AND month = ${month}
+				`;
+			});
+			return (await dates).map(x => x.date);
 		}
 		try {
 			const listing = await Monitor.logPath(`chat/${this.roomid}/${month}`).readdir();
@@ -88,9 +112,10 @@ export class LogReaderRoom {
 	async getLog(day: string) {
 		if (roomlogTable) {
 			const [dayStart, dayEnd] = LogReader.dayToRange(day);
-			const logs = await roomlogTable.selectAll(
-				['log', 'time']
-			)`WHERE roomid = ${this.roomid} AND time BETWEEN ${dayStart}::int::timestamp AND ${dayEnd}::int::timestamp`;
+			const logs = await safeQuery(async () => {
+				return roomlogTable.selectAll(['log', 'time'])
+				`WHERE roomid = ${this.roomid} AND time BETWEEN ${dayStart}::int::timestamp AND ${dayEnd}::int::timestamp`;
+			});
 			return new Streams.ObjectReadStream<string>({
 				read(this: Streams.ObjectReadStream<string>) {
 					for (const {log, time} of logs) {
@@ -119,7 +144,9 @@ export const LogReader = new class {
 
 	async list() {
 		if (roomlogTable) {
-			const roomids = await roomlogTable.query()`SELECT DISTINCT roomid FROM roomlogs`;
+			const roomids = await safeQuery(async () => {
+				return roomlogTable.query()`SELECT DISTINCT roomid FROM roomlogs`;
+			});
 			return roomids.map(x => x.roomid) as RoomID[];
 		}
 		const listing = await Monitor.logPath(`chat`).readdir();
