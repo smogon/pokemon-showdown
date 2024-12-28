@@ -111,8 +111,8 @@ export class LogReaderRoom {
 			const logs = await safeQuery(() =>
 				roomlogTable.selectAll(['log', 'time'])`WHERE roomid = ${this.roomid} 
 			AND time BETWEEN ${dayStart}::int::timestamp 
-			AND ${dayEnd}::int::timestamp`
-			);
+			AND ${dayEnd}::int::timestamp`);
+
 			return new Streams.ObjectReadStream<string>({
 				read(this: Streams.ObjectReadStream<string>) {
 					for (const {log, time} of logs) {
