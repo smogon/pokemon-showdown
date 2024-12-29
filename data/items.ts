@@ -7669,7 +7669,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	totemgigante: {
 		name: "Totem Gigante",
-		spritenum: 390,
+		spritenum: 758,
 		onSwitchIn(pokemon) {
 			if (pokemon.baseSpecies.otherFormes ) {
 				this.queue.insertChoice({choice: 'runPrimal', pokemon: pokemon});
