@@ -5901,4 +5901,35 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: -109,
 	},
+	mineralizacion: {
+		onTryHit(target, source, move) {
+			if (target !== source && (move.type === 'Rock' || move.type === 'Steel')) {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Mineralizacion');
+				}
+				return null;
+			}
+		},
+		onStart(pokemon){
+			let success = false;
+			for (const active of this.getAllActive()) {
+				if (active.removeVolatile('substitute')) success = true;
+			}
+			const removeAll = ['stealthrock'];
+			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
+			for (const side of sides) {
+				for (const sideCondition of removeAll) {
+					if (side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name);
+						success = true;
+					}
+				}
+			}
+
+		},
+		flags: {breakable: 1},
+		name: "Mineralizacion",
+		rating: 3.5,
+		num: -110,
+	},
 };
