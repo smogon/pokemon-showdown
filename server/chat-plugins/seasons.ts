@@ -299,7 +299,7 @@ export const pages: Chat.PageTable = {
 			);
 			for (const s of seasonsDesc) {
 				buf += `<h3>Season ${s}</h3><hr />`;
-				for (const f in data.badgeholders[season]) {
+				for (const f in data.badgeholders[s]) {
 					buf += `<a class="button" name="send" target="replace" href="/view-seasonladder-${f}-${s}">${Dex.formats.get(f).name}</a>`;
 				}
 				buf += `<br />`;
