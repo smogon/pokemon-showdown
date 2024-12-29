@@ -5955,4 +5955,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: -111,
 	},
+	llamasiniestra: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && effect.type === "Dark") {
+				this.boost({spa: length}, source);
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (!this.checkMoveMakesContact(move, target, source) && move.type === "Dark") {
+					target.trySetStatus('brn', source);
+			}
+		},
+		flags: {},
+		name: "Llama Siniestra",
+		rating: 3,
+		num: -112,
+	},
 };
