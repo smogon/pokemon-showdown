@@ -151,6 +151,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	raticatealolatotem: {
 		isNonstandard: "Past",
 		tier: "Illegal",
+		natDexTier: "RU",
 	},
 	spearow: {
 		isNonstandard: "Past",
@@ -487,6 +488,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
+	arcaninehisuitotem: {
+		tier: "UU",
+		doublesTier: "DUU",
+		natDexTier: "RU",
+	},
 	poliwag: {
 		tier: "LC",
 	},
@@ -782,6 +788,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	electrodehisuitotem: {
+		tier: "ZUBL",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
 	exeggcute: {
 		tier: "LC",
 	},
@@ -813,6 +824,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	marowakalolatotem: {
 		isNonstandard: "Past",
 		tier: "Illegal",
+		natDexTier: "RU",
 	},
 	tyrogue: {
 		tier: "LC",
@@ -1046,6 +1058,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "UUBL",
 	},
 	lapras: {
+		tier: "ZU",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
+	laprasmega: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",

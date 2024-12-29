@@ -308,6 +308,9 @@ export const PokedexText: {[id: IDEntry]: PokedexText} = {
 	arcaninehisui: {
 		name: "Arcanine-Hisui",
 	},
+	arcaninehisuitotem: {
+		name: "Arcanine-Hisui-Totem",
+	},
 	poliwag: {
 		name: "Poliwag",
 	},
@@ -337,6 +340,9 @@ export const PokedexText: {[id: IDEntry]: PokedexText} = {
 	},
 	machamp: {
 		name: "Machamp",
+	},
+	machampmega: {
+		name: "Machamp-Mega",
 	},
 	machampgmax: {
 		name: "Machamp-Gmax",
@@ -488,6 +494,9 @@ export const PokedexText: {[id: IDEntry]: PokedexText} = {
 	electrodehisui: {
 		name: "Electrode-Hisui",
 	},
+	electrodehisuitotem: {
+		name: "Electrode-Hisui-Totem",
+	},
 	exeggcute: {
 		name: "Exeggcute",
 	},
@@ -601,6 +610,9 @@ export const PokedexText: {[id: IDEntry]: PokedexText} = {
 	},
 	lapras: {
 		name: "Lapras",
+	},
+	laprasmega: {
+		name: "Lapras-Mega",
 	},
 	laprasgmax: {
 		name: "Lapras-Gmax",
