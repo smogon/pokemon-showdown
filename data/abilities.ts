@@ -5987,6 +5987,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Inteligencia Asertiva",
 		rating: 3,
-		num: 104,
+		num: -113,
+	},
+	inteligenciaartificial: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk) {
+			return this.modify(atk, 1.4);
+		},
+		onModifySpA(spa) {
+			return this.modify(spa, 1.4);
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy === 'number') {
+				return this.chainModify(0.95);
+			}
+		},
+		flags: {},
+		name: "Inteligencia Artificial",
+		rating: 3,
+		num: -114,
 	},
 };
