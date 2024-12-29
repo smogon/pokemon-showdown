@@ -5932,4 +5932,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: -110,
 	},
+	mentefria: {
+		onModifyTypePriority: -1,
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.category === 'Special' && !move.flags['contact']) {
+				return this.chainModify(1.15);
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (!this.checkMoveMakesContact(move, target, source) && move.category === 'Special') {
+				const r = this.random(100);
+				if (r < 30) {
+					target.trySetStatus('frz', source);
+				} 
+			}
+		},
+		flags: {},
+		name: "Mente Fria",
+		rating: 1.5,
+		num: -111,
+	},
 };
