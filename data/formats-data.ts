@@ -521,7 +521,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	alakazammega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	machop: {
 		isNonstandard: "Past",
@@ -721,7 +721,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	gengarmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "AG",
+		natDexTier: "OU",
 	},
 	gengargmax: {
 		isNonstandard: "Past",
@@ -1209,17 +1209,17 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	mewtwo: {
 		tier: "Uber",
 		doublesTier: "DUber",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	mewtwomegax: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	mewtwomegay: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	mew: {
 		tier: "NUBL",
