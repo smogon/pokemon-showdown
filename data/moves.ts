@@ -17101,7 +17101,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Viento Escama",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1, nosketch: 1},
 		secondary: {
 			chance: 100,
 			onHit(target, source) {
