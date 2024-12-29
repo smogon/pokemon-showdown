@@ -984,7 +984,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	colmilloburbuja: {
 		name: "Colmillo Burbuja",
 		desc: "Has a 20% chance to lower the target's Speed by 1 stage and a 10% chance to make it flinch.",
-		shortDesc: "20% chance to lower the foe Speed by 1. 10% chance to flinch.",
+		shortDesc: "20% -1 Spe. 10% chance to flinch.",
 	},
 	combattorque: {
 		name: "Combat Torque",
@@ -4310,7 +4310,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	mordidadragon:{
 		name: "Mordida Dragon",
 		desc: "Has a 10% chance to lower the target's Defense by 1 stage and a 10% chance to make it flinch.",
-		shortDesc: "10% chance to lower the foe Defense by 1. 10% chance to flinch.",
+		shortDesc: "10% -1 Def. 10% chance to flinch.",
 	},
 	morningsun: {
 		name: "Morning Sun",
