@@ -12691,6 +12691,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			workup: ["7M", "5M"],
 			bulletseed: ["9M"],
 			pinmissile: ["9M"],
+			tripico: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 34, moves: ["batonpass", "drillpeck", "agility", "triattack"]},
