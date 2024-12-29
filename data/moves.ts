@@ -5524,7 +5524,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	firefang: {
 		num: 424,
 		accuracy: 95,
-		basePower: 65,
+		basePower: 70,
 		category: "Physical",
 		name: "Fire Fang",
 		pp: 15,
@@ -9660,7 +9660,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	icefang: {
 		num: 423,
 		accuracy: 95,
-		basePower: 65,
+		basePower: 70,
 		category: "Physical",
 		name: "Ice Fang",
 		pp: 15,
@@ -20305,7 +20305,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thunderfang: {
 		num: 422,
 		accuracy: 95,
-		basePower: 65,
+		basePower: 70,
 		category: "Physical",
 		name: "Thunder Fang",
 		pp: 15,
@@ -22280,5 +22280,52 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			maxMove: {basePower: 80},
 			contestType: "Cool",
 		},
-
+		colmilloburbuja: {
+			num: 0,
+			accuracy: 95,
+			basePower: 70,
+			category: "Physical",
+			name: "Colmillo Burbuja",
+			pp: 10,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1},
+			secondaries: [
+				{
+					chance: 20,
+					boosts: {
+						spe: -1,
+					},
+				}, {
+					chance: 10,
+					volatileStatus: 'flinch',
+				},
+			],
+			target: "normal",
+			type: "Water",
+			contestType: "Cool",
+		},
+		mordidadragon: {
+			num: 0,
+			accuracy: 95,
+			basePower: 85,
+			category: "Physical",
+			name: "Mordida Dragon",
+			pp: 10,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1},
+			secondaries: [
+				{
+					chance: 10,
+					boosts: {
+						def: -1,
+					},
+				}, {
+					chance: 10,
+					volatileStatus: 'flinch',
+				},
+			],
+			target: "normal",
+			type: "Dragon",
+			contestType: "Cool",
+		},
 };
