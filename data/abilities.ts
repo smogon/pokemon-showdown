@@ -5973,4 +5973,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: -112,
 	},
+	inteligenciaasertiva: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Inteligencia Asertiva');
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+			delete move.flags['protect'];
+			move.ignoreImmunity = true;
+			move.ignoreEvasion = true;
+			move.ignoreDefensive = true;
+		},
+		flags: {},
+		name: "Inteligencia Asertiva",
+		rating: 3,
+		num: 104,
+	},
 };
