@@ -5766,12 +5766,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	escudoescama: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)  && source.runStatusImmunity('powder')) {
-				const r = this.random(120);
-				if (r < 20) {
+				const r = this.random(100);
+				if (r < 11) {
 					source.setStatus('slp', target);
-				} else if (r < 40) {
+				} else if (r < 22) {
 					source.setStatus('par', target);
-				} else if (r < 60) {
+				} else if (r < 33) {
 					source.setStatus('psn', target);
 				}
 			}
