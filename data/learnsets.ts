@@ -2796,7 +2796,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		learnset: {
 			flyingpress: ["6R"],
 			machpunch: ["9M"],
-			plasmafist: ["9M"],
+			plasmafists: ["9M"],
 		},
 		eventOnly: true,
 	},
