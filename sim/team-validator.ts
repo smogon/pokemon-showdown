@@ -827,12 +827,14 @@ export class TeamValidator {
 			}
 		}
 		let isUnderleveled;
+		let requiredLevel;
 		if (!isFromRBYEncounter && ruleTable.has('obtainablemisc')) {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			let evoSpecies = species;
 			while (evoSpecies.prevo) {
 				if (set.level < (evoSpecies.evoLevel || 0)) {
 					isUnderleveled = evoSpecies.name;
+					requiredLevel = evoSpecies.evoLevel;
 					break;
 				}
 				evoSpecies = dex.species.get(evoSpecies.prevo);
@@ -851,8 +853,8 @@ export class TeamValidator {
 			let checkGoLegality = false;
 			let skippedEggSource = true;
 			const legalSources = [];
-			let evoSpecies = species;
 			if (isUnderleveled && !setSources.sources.length) {
+				let evoSpecies = species;
 				while (evoSpecies.prevo) {
 					const eventData = dex.species.getLearnsetData(evoSpecies.id).eventData;
 					if (eventData) {
@@ -884,7 +886,7 @@ export class TeamValidator {
 			if (legalSources.length) {
 				setSources.sources = legalSources;
 			} else if (isUnderleveled) {
-				problems.push(`${name} must be at least level ${evoSpecies.evoLevel} to be evolved.`);
+				problems.push(`${name} must be at least level ${requiredLevel} to be evolved.`);
 				const firstEventSource = setSources.sources.filter(source => source.charAt(1) === 'S')[0];
 				if (firstEventSource) {
 					const eventProblems = this.validateSource(
@@ -892,7 +894,7 @@ export class TeamValidator {
 					);
 					if (eventProblems) problems.push(...eventProblems);
 				}
-				if (pokemonGoProblems) {
+				if (pokemonGoProblems && pokemonGoProblems.length) {
 					problems.push(`It failed to validate as a Pokemon from Pokemon GO because:`);
 					for (const pokemonGoProblem of pokemonGoProblems) {
 						problems.push(pokemonGoProblem);
