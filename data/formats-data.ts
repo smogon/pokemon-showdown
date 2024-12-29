@@ -58,7 +58,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	blastoisemega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "Uber",
+		natDexTier: "OU",
 	},
 	blastoisegmax: {
 		isNonstandard: "Past",
