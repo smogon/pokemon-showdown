@@ -2999,7 +2999,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Lapras-Mega",
 		baseSpecies: "Lapras",
 		forme: "Mega",
-		types: ["Water", "Dark"],
+		types: ["Water", "Ice"],
 		baseStats: {hp: 130, atk: 105, def: 100, spa: 125, spd: 105, spe: 70},
 		abilities: {0: "Canto Helado"},
 		heightm: 2.5,

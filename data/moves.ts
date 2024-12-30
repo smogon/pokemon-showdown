@@ -562,7 +562,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	armthrust: {
 		num: 292,
 		accuracy: 100,
-		basePower: 15,
+		basePower: 25,
 		category: "Physical",
 		name: "Arm Thrust",
 		pp: 20,
@@ -3265,7 +3265,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	crosschop: {
 		num: 238,
-		accuracy: 80,
+		accuracy: 85,
 		basePower: 100,
 		category: "Physical",
 		name: "Cross Chop",
@@ -4050,12 +4050,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	doublekick: {
 		num: 24,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 40,
 		category: "Physical",
 		name: "Double Kick",
 		pp: 30,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, kick:1},
 		multihit: 2,
 		secondary: null,
 		target: "normal",
@@ -4495,7 +4495,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	dynamicpunch: {
 		num: 223,
-		accuracy: 50,
+		accuracy: 70,
 		basePower: 100,
 		category: "Physical",
 		name: "Dynamic Punch",
@@ -6127,13 +6127,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	flyingpress: {
 		num: 560,
 		accuracy: 95,
-		basePower: 100,
+		basePower: 90,
 		category: "Physical",
 		name: "Flying Press",
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1, metronome: 1},
-		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Flying', type);
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Grass' || type ==='Bug' || type ==='Fighting') return 1;
 		},
 		priority: 0,
 		secondary: null,
@@ -6144,17 +6144,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	focusblast: {
 		num: 411,
-		accuracy: 70,
-		basePower: 120,
+		accuracy: true,
+		basePower: 100,
 		category: "Special",
 		name: "Focus Blast",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
-		secondary: {
-			chance: 10,
+		self: {
 			boosts: {
-				spd: -1,
+				spa: -2,
 			},
 		},
 		target: "normal",
@@ -6194,34 +6193,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	focuspunch: {
 		num: 264,
-		accuracy: 100,
-		basePower: 150,
+		accuracy: true,
+		basePower: 100,
 		category: "Physical",
 		name: "Focus Punch",
 		pp: 20,
 		priority: -3,
-		flags: {contact: 1, protect: 1, punch: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
-		priorityChargeCallback(pokemon) {
-			pokemon.addVolatile('focuspunch');
-		},
-		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['focuspunch']?.lostFocus) {
-				this.add('cant', pokemon, 'Focus Punch', 'Focus Punch');
-				return true;
-			}
-		},
-		condition: {
-			duration: 1,
-			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Focus Punch');
-			},
-			onHit(pokemon, source, move) {
-				if (move.category !== 'Status') {
-					this.effectState.lostFocus = true;
-				}
-			},
-			onTryAddVolatile(status, pokemon) {
-				if (status.id === 'flinch') return null;
+		flags: {contact: 1, protect: 1, punch: 1},
+		self: {
+			boosts: {
+				atk: -2,
 			},
 		},
 		secondary: null,
@@ -12119,16 +12100,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	meteorassault: {
 		num: 794,
 		accuracy: 100,
-		basePower: 150,
+		basePower: 50,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Meteor Assault",
 		pp: 5,
 		priority: 0,
-		flags: {recharge: 1, protect: 1, mirror: 1, failinstruct: 1},
-		self: {
-			volatileStatus: 'mustrecharge',
-		},
+		flags: {protect: 1, mirror: 1, contact:1},
+		critRatio: 2,
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -13381,36 +13360,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	octolock: {
 		num: 753,
 		accuracy: 100,
-		basePower: 0,
-		category: "Status",
+		basePower: 80,
+		category: "Physical",
 		isNonstandard: "Past",
 		name: "Octolock",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		onTryImmunity(target) {
-			return this.dex.getImmunity('trapped', target);
-		},
-		volatileStatus: 'octolock',
-		condition: {
-			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'move: Octolock', '[of] ' + source);
-			},
-			onResidualOrder: 14,
-			onResidual(pokemon) {
-				const source = this.effectState.source;
-				if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns)) {
-					delete pokemon.volatiles['octolock'];
-					this.add('-end', pokemon, 'Octolock', '[partiallytrapped]', '[silent]');
-					return;
-				}
-				this.boost({def: -1, spd: -1}, pokemon, source, this.dex.getActiveMove('octolock'));
-			},
-			onTrapPokemon(pokemon) {
-				if (this.effectState.source && this.effectState.source.isActive) pokemon.tryTrap();
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1,
+				spd: -1,
 			},
 		},
-		secondary: null,
 		target: "normal",
 		type: "Fighting",
 	},
@@ -15809,9 +15772,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: {
-			chance: 50,
+			chance: 100,
 			boosts: {
-				def: -1,
+				def: -2,
 			},
 		},
 		target: "normal",
@@ -15897,14 +15860,46 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	rollingkick: {
 		num: 27,
-		accuracy: 85,
-		basePower: 60,
+		accuracy: 95,
+		basePower: 50,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Rolling Kick",
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onAfterHit(target, pokemon, move) {
+			if (!move.hasSheerForce) {
+				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+				}
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				for (const condition of sideConditions) {
+					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+					}
+				}
+				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+					pokemon.removeVolatile('partiallytrapped');
+				}
+			}
+		},
+		onAfterSubDamage(damage, target, pokemon, move) {
+			if (!move.hasSheerForce) {
+				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+				}
+				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				for (const condition of sideConditions) {
+					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+					}
+				}
+				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+					pokemon.removeVolatile('partiallytrapped');
+				}
+			}
+		},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -17348,8 +17343,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	skyuppercut: {
 		num: 327,
-		accuracy: 90,
-		basePower: 85,
+		accuracy: 95,
+		basePower: 90,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Sky Uppercut",
@@ -18897,15 +18892,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	submission: {
 		num: 66,
-		accuracy: 80,
-		basePower: 80,
-		category: "Physical",
+		accuracy: 90,
+		basePower: 90,
+		category: "Special",
 		isNonstandard: "Past",
 		name: "Submission",
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		recoil: [1, 4],
+		recoil: [1, 6],
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
@@ -20726,9 +20721,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	triplekick: {
 		num: 167,
 		accuracy: 90,
-		basePower: 10,
+		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
-			return 10 * move.hit;
+			return 20 * move.hit;
 		},
 		category: "Physical",
 		name: "Triple Kick",
@@ -20896,7 +20891,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	upperhand: {
 		num: 918,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 120,
 		category: "Physical",
 		name: "Upper Hand",
 		pp: 15,
@@ -21125,12 +21120,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	vitalthrow: {
 		num: 233,
 		accuracy: true,
-		basePower: 70,
+		basePower: 80,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Vital Throw",
 		pp: 10,
-		priority: -1,
+		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: null,
 		target: "normal",
@@ -21187,9 +21182,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		onHit(target) {
-			if (target.status === 'slp') target.cureStatus();
-		},
 		secondary: null,
 		target: "normal",
 		type: "Fighting",
