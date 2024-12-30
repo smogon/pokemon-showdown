@@ -6008,4 +6008,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: -114,
 	},
+	comealmas: {
+		onStart(pokemon) {
+			if (pokemon.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: Come Almas');
+				const fallen = Math.min(pokemon.side.totalFainted + pokemon.side.foe.totalFainted, 10);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effectState.fallen) {
+				const powMod = [4096, 4301, 4506, 4710, 4915, 5120, 5325, 5530, 5734, 5939, 6144];
+				this.debug(`Come Almas boost: ${powMod[this.effectState.fallen]}/4096`);
+				return this.chainModify([powMod[this.effectState.fallen], 4096]);
+			}
+		},
+		flags: {},
+		name: "Come Almas",
+		rating: 4,
+		num: 293,
+	},
 };
