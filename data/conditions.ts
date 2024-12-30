@@ -59,7 +59,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (target.hasAbility('earlybird')) {
 				this.effectState.startTime = 2;
 			} else {
-			this.effectState.startTime = this.random(2, 5);
+			this.effectState.startTime = this.random(3, 3);
 		}
 			this.effectState.time = this.effectState.startTime;
 
