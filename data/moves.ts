@@ -17056,7 +17056,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		onTryHit(target, pokemon) {
 			let move = 'silverwind2';
-			if (pokemon.species.name === "Butterfree-Mega") {
+			if (pokemon.hasAbility("Escudo Escama")) {
 				move = 'silverwind3';
 			}
 			this.actions.useMove(move, pokemon, {target});
