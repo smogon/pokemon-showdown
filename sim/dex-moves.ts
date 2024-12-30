@@ -64,6 +64,9 @@ interface MoveFlags {
 	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
 	wind?: 1; // Activates the Wind Power and Wind Rider Abilities.
 	tail?: 1; // Movimientos que usan la cola(s) del pokemon
+	head?: 1; //Movimientos que usan la cabeza del pokemon
+	wing?: 1; //Movmientos que usan el ala del pokemon
+	kick?: 1; //Movimientos que usan las patas del pokémon
 }
 
 export interface HitEffect {

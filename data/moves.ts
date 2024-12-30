@@ -513,7 +513,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Aqua Step",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, dance: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, dance: 1, metronome: 1, kick:1},
 		secondary: {
 			chance: 100,
 			self: {
@@ -534,7 +534,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Aqua Tail",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, tail:1},
 		secondary: null,
 		target: "normal",
 		type: "Water",
@@ -1074,7 +1074,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Barb Barrage",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, slicing:1},
 		onBasePower(basePower, pokemon, target) {
 			if (target.status === 'psn' || target.status === 'tox') {
 				return this.chainModify(2);
@@ -2840,7 +2840,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	constrict: {
 		num: 132,
 		accuracy: 100,
-		basePower: 10,
+		basePower: 60,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Constrict",
@@ -2850,7 +2850,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 10,
 			boosts: {
-				spe: -1,
+				spe: -2,
 			},
 		},
 		target: "normal",
@@ -3195,7 +3195,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	covet: {
 		num: 343,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 80,
 		category: "Physical",
 		name: "Covet",
 		pp: 25,
@@ -3220,7 +3220,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Fairy",
 		contestType: "Cute",
 	},
 	crabhammer: {
@@ -3322,15 +3322,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	crushclaw: {
 		num: 306,
-		accuracy: 95,
+		accuracy: 100,
 		basePower: 75,
 		category: "Physical",
 		name: "Crush Claw",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing:1},
 		secondary: {
-			chance: 50,
+			chance: 100,
 			boosts: {
 				def: -1,
 			},
@@ -3539,7 +3539,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {snatch: 1, metronome: 1},
 		boosts: {
-			def: 1,
+			def: 2,
 		},
 		volatileStatus: 'defensecurl',
 		condition: {
@@ -3920,7 +3920,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	dizzypunch: {
 		num: 146,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 75,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Dizzy Punch",
@@ -4021,13 +4021,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	doublehit: {
 		num: 458,
-		accuracy: 90,
-		basePower: 35,
+		accuracy: 100,
+		basePower: 40,
 		category: "Physical",
 		name: "Double Hit",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, punch:1},
 		multihit: 2,
 		secondary: null,
 		target: "normal",
@@ -5079,7 +5079,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Esper Wing",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, wing:1},
 		critRatio: 2,
 		secondary: {
 			chance: 100,
@@ -10054,7 +10054,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Iron Head",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, head:1},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -10071,7 +10071,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Iron Tail",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, tail:1},
 		secondary: {
 			chance: 30,
 			boosts: {
@@ -12081,7 +12081,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Metal Claw",
 		pp: 35,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing:1},
 		secondary: {
 			chance: 100,
 			self: {
@@ -16806,7 +16806,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Shell Side Arm",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, bullet:1},
 		onPrepareHit(target, source, move) {
 			if (!source.isAlly(target)) {
 				this.attrLastMove('[anim] Shell Side Arm ' + move.category);
@@ -17648,7 +17648,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Smack Down",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1, bullet:1},
 		volatileStatus: 'smackdown',
 		condition: {
 			noCopy: true,
@@ -18643,7 +18643,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Steel Wing",
 		pp: 25,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, wing:1},
 		secondary: {
 			chance: 10,
 			self: {
@@ -20844,7 +20844,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Triple Dive",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, head:1},
 		multihit: 3,
 		secondary: null,
 		target: "normal",
@@ -22055,7 +22055,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Zen Headbutt",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, head:1},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
