@@ -6033,4 +6033,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: 293,
 	},
+	inteligenciaavanzada: {
+		onModifyMove(move, pokemon, target) {
+			if (target.getStat('spd', false, true) > target.getStat('def', false, true)){
+				move.overrideDefensiveStat = 'def';
+			} 
+		},
+		flags: {},
+		name: "Inteligencia Avanzada",
+		rating: 3,
+		num: -114,
+	},
 };
