@@ -995,7 +995,7 @@ export class BattleActions {
 		if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
 			const hpBeforeRecoil = pokemon.hp;
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
-			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
+			if (pokemon.hp <= pokemon.maxhp / 4 && hpBeforeRecoil > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 			}
 		}

@@ -679,8 +679,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	astonish: {
 		num: 310,
-		accuracy: 100,
-		basePower: 30,
+		accuracy: true,
+		basePower: 60,
 		category: "Physical",
 		name: "Astonish",
 		pp: 15,
@@ -697,7 +697,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	astralbarrage: {
 		num: 825,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 100,
 		category: "Special",
 		name: "Astral Barrage",
 		pp: 5,
@@ -3394,7 +3394,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			this.directDamage(source.maxhp / 2, source, source);
+			this.directDamage(source.maxhp / 4, source, source);
 		},
 		condition: {
 			onStart(pokemon, source) {
@@ -8156,14 +8156,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	grudge: {
 		num: 288,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
 		isNonstandard: "Past",
 		name: "Grudge",
 		pp: 5,
 		priority: 0,
-		flags: {bypasssub: 1, metronome: 1},
+		flags: {bypasssub: 1, metronome: 1, contact:1},
 		volatileStatus: 'grudge',
 		condition: {
 			onStart(pokemon) {
@@ -9870,16 +9870,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	infernalparade: {
 		num: 844,
 		accuracy: 100,
-		basePower: 60,
-		basePowerCallback(pokemon, target, move) {
-			if (target.status || target.hasAbility('comatose')) return move.basePower * 2;
-			return move.basePower;
-		},
+		basePower: 90,
 		category: "Special",
 		name: "Infernal Parade",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, dance:1},
 		secondary: {
 			chance: 30,
 			status: 'brn',
@@ -10447,7 +10443,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 50,
 		basePowerCallback(pokemon, target, move) {
-			return 50 + 50 * pokemon.side.totalFainted;
+			return 50 + 25 * pokemon.side.totalFainted;
 		},
 		category: "Physical",
 		name: "Last Respects",
@@ -10631,7 +10627,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	lick: {
 		num: 122,
 		accuracy: 100,
-		basePower: 30,
+		basePower: 20,
 		category: "Physical",
 		name: "Lick",
 		pp: 30,
@@ -10639,7 +10635,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: {
 			chance: 30,
-			status: 'par',
+			status: 'Curse',
 		},
 		target: "normal",
 		type: "Ghost",
@@ -13132,27 +13128,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	nightmare: {
 		num: 171,
 		accuracy: 100,
-		basePower: 0,
-		category: "Status",
+		basePower: 75,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status === 'slp' || target.hasAbility('comatose')) {
+				this.debug('BP doubled from status condition');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+		category: "Special",
 		isNonstandard: "Past",
 		name: "Nightmare",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		volatileStatus: 'nightmare',
-		condition: {
-			noCopy: true,
-			onStart(pokemon) {
-				if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) {
-					return false;
-				}
-				this.add('-start', pokemon, 'Nightmare');
-			},
-			onResidualOrder: 11,
-			onResidual(pokemon) {
-				this.damage(pokemon.baseMaxhp / 4);
-			},
-		},
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
@@ -13767,7 +13756,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	phantomforce: {
 		num: 566,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 110,
 		category: "Physical",
 		name: "Phantom Force",
 		pp: 10,
@@ -15111,7 +15100,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 50,
 		basePowerCallback(pokemon) {
-			return Math.min(350, 50 + 50 * pokemon.timesAttacked);
+			return Math.min(200, 50 + 25 * pokemon.timesAttacked);
 		},
 		category: "Physical",
 		name: "Rage Fist",
@@ -16627,7 +16616,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	shadowbone: {
 		num: 708,
 		accuracy: 100,
-		basePower: 85,
+		basePower: 100,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Shadow Bone",
@@ -16652,8 +16641,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Shadow Claw",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		critRatio: 2,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing:1},
+		willCrit: true,
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
@@ -16692,7 +16681,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	shadowpunch: {
 		num: 325,
 		accuracy: true,
-		basePower: 60,
+		basePower: 75,
 		category: "Physical",
 		name: "Shadow Punch",
 		pp: 20,
@@ -18341,8 +18330,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	spiritshackle: {
 		num: 662,
 		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
+		basePower: 90,
+		category: "Special",
 		name: "Spirit Shackle",
 		pp: 10,
 		priority: 0,
@@ -18384,12 +18373,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	spite: {
 		num: 180,
 		accuracy: 100,
-		basePower: 0,
-		category: "Status",
+		basePower: 75,
+		category: "Special",
 		name: "Spite",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
 		onHit(target) {
 			let move: Move | ActiveMove | null = target.lastMove;
 			if (!move || move.isZ) return false;
