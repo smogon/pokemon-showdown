@@ -231,11 +231,13 @@ export class BattleActions {
 		const maxMove = options?.maxMove;
 		const externalMove = options?.externalMove;
 		const originalTarget = options?.originalTarget;
+		let dualSelect = false;
 		let sourceEffect = options?.sourceEffect;
 		let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 		let baseMove = this.dex.getActiveMove(moveOrMoveName);
 		const priority = baseMove.priority;
 		const pranksterBoosted = baseMove.pranksterBoosted;
+		if (pokemon.species.id === 'syclant') dualSelect = true;
 		if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
 			const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, baseMove);
 			if (changedMove && changedMove !== true) {
@@ -253,7 +255,10 @@ export class BattleActions {
 		}
 
 		move.isExternal = externalMove;
-
+		if (dualSelect) {
+			let secondMove = this.battle.queue.insertChoice({choice: 'move', pokemon});
+			this.add('-message', secondMove);
+		}
 		this.battle.setActiveMove(move, pokemon, target);
 
 		/* if (pokemon.moveThisTurn) {
