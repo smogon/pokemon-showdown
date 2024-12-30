@@ -21,13 +21,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	absorb: {
 		num: 71,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 50,
 		category: "Special",
 		name: "Absorb",
 		pp: 25,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1, metronome: 1},
-		drain: [1, 2],
+		drain: [3, 4],
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -1815,13 +1815,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	branchpoke: {
 		num: 785,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: "Physical",
 		name: "Branch Poke",
 		pp: 40,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		secondary: null,
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -2,
+			},
+		},
 		target: "normal",
 		type: "Grass",
 	},
@@ -4442,7 +4447,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	drumbeating: {
 		num: 778,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 100,
 		category: "Physical",
 		name: "Drum Beating",
 		pp: 10,
@@ -7904,7 +7909,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	grasswhistle: {
 		num: 320,
-		accuracy: 55,
+		accuracy: 75,
 		basePower: 0,
 		category: "Status",
 		isNonstandard: "Past",
@@ -9946,7 +9951,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 7,
 			onResidual(pokemon) {
-				this.heal(pokemon.baseMaxhp / 16);
+				this.heal(pokemon.baseMaxhp / 6);
 			},
 			onTrapPokemon(pokemon) {
 				pokemon.tryTrap();
@@ -10196,7 +10201,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {heal: 1, bypasssub: 1, allyanim: 1},
 		onHit(pokemon) {
-			const success = !!this.heal(this.modify(pokemon.maxhp, 0.25));
+			const success = !!this.heal(this.modify(pokemon.maxhp, 0.5));
 			return pokemon.cureStatus() || success;
 		},
 		secondary: null,
@@ -10477,7 +10482,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		name: "Leafage",
 		pp: 40,
-		priority: 0,
+		priority: 1,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		secondary: null,
 		target: "normal",
@@ -11028,7 +11033,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		secondary: null,
+		secondary: {
+			chance: 100,
+			boosts: {
+				spa: -1,
+			},
+		},
 		target: "normal",
 		type: "Grass",
 		contestType: "Beautiful",
@@ -11951,13 +11961,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	megadrain: {
 		num: 72,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 90,
 		category: "Special",
 		name: "Mega Drain",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1, metronome: 1},
-		drain: [1, 2],
+		drain: [1, 4],
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -13721,7 +13731,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	petalblizzard: {
 		num: 572,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 95,
 		category: "Physical",
 		name: "Petal Blizzard",
 		pp: 15,
@@ -15272,14 +15282,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	razorleaf: {
 		num: 75,
-		accuracy: 95,
-		basePower: 55,
+		accuracy: 100,
+		basePower: 60,
 		category: "Physical",
 		name: "Razor Leaf",
 		pp: 25,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, slicing: 1},
-		critRatio: 2,
+		willCrit: true,
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Grass",
@@ -18156,11 +18166,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		boosts: {
-			atk: 2,
+			atk: 3,
 			def: -2,
+			spa: 3,
+			spd: -3,
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Grass",
 	},
 	spiderweb: {
@@ -19521,8 +19533,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	syrupbomb: {
 		num: 903,
-		accuracy: 85,
-		basePower: 60,
+		accuracy: 90,
+		basePower: 100,
 		category: "Special",
 		name: "Syrup Bomb",
 		pp: 10,
@@ -20608,7 +20620,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	trailblaze: {
 		num: 885,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 60,
 		category: "Physical",
 		name: "Trailblaze",
 		pp: 20,
@@ -20872,8 +20884,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	tropkick: {
 		num: 688,
-		accuracy: 100,
-		basePower: 70,
+		accuracy: 90,
+		basePower: 130,
 		category: "Physical",
 		name: "Trop Kick",
 		pp: 15,
@@ -21222,12 +21234,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	vinewhip: {
 		num: 22,
 		accuracy: 100,
-		basePower: 45,
+		basePower: 40,
 		category: "Physical",
 		name: "Vine Whip",
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		multihit: 2,
 		secondary: null,
 		target: "normal",
 		type: "Grass",
