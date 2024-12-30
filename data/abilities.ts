@@ -6031,7 +6031,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Come Almas",
 		rating: 4,
-		num: 293,
+		num: -115,
 	},
 	inteligenciaavanzada: {
 		onModifyMove(move, pokemon, target) {
@@ -6046,6 +6046,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Inteligencia Avanzada",
 		rating: 3,
-		num: -114,
+		num: -116,
 	},
 };
