@@ -22328,4 +22328,31 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			type: "Dragon",
 			contestType: "Cool",
 		},
+		bombapegajosa: {
+			num: 0,
+			accuracy: 95,
+			basePower: 65,
+			category: "Physical",
+			name: "Bomba Pegajosa",
+			pp: 5,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1},
+			onAfterHit(target, source, move) {
+				if (!move.hasSheerForce && source.hp) {
+					for (const side of source.side.foeSidesWithConditions()) {
+						side.addSideCondition('stickyweb');
+					}
+				}
+			},
+			onAfterSubDamage(damage, target, source, move) {
+				if (!move.hasSheerForce && source.hp) {
+					for (const side of source.side.foeSidesWithConditions()) {
+						side.addSideCondition('stickyweb');
+					}
+				}
+			},
+			secondary: {}, // Sheer Force-boosted
+			target: "normal",
+			type: "Bug",
+		},
 };
