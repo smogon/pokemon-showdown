@@ -981,6 +981,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		desc: "Damage is multiplied by 1.3333 if this move is super effective against the target.",
 		shortDesc: "Deals 1.3333x damage with supereffective hits.",
 	},
+	colmilloburbuja: {
+		name: "Colmillo Burbuja",
+		desc: "Has a 20% chance to lower the target's Speed by 1 stage and a 10% chance to make it flinch.",
+		shortDesc: "20% -1 Spe. 10% chance to flinch.",
+	},
 	combattorque: {
 		name: "Combat Torque",
 		desc: "Has a 30% chance to paralyze the target.",
@@ -4301,6 +4306,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		gen2: {
 			desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, all of its HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Rain Dance or Sandstorm, all rounded down.",
 		},
+	},
+	mordidadragon:{
+		name: "Mordida Dragon",
+		desc: "Has a 10% chance to lower the target's Defense by 1 stage and a 10% chance to make it flinch.",
+		shortDesc: "10% -1 Def. 10% chance to flinch.",
 	},
 	morningsun: {
 		name: "Morning Sun",

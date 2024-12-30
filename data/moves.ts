@@ -5524,7 +5524,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	firefang: {
 		num: 424,
 		accuracy: 95,
-		basePower: 65,
+		basePower: 70,
 		category: "Physical",
 		name: "Fire Fang",
 		pp: 15,
@@ -9660,7 +9660,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	icefang: {
 		num: 423,
 		accuracy: 95,
-		basePower: 65,
+		basePower: 70,
 		category: "Physical",
 		name: "Ice Fang",
 		pp: 15,
@@ -17102,7 +17102,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Viento Escama",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1, nosketch: 1},
 		secondary: {
 			chance: 100,
 			onHit(target, source) {
@@ -18538,7 +18538,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onEntryHazard(pokemon) {
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility("Oblivious")) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility("Oblivious") || pokemon.hasAbility("Mineralizacion")) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},
@@ -20306,7 +20306,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thunderfang: {
 		num: 422,
 		accuracy: 95,
-		basePower: 65,
+		basePower: 70,
 		category: "Physical",
 		name: "Thunder Fang",
 		pp: 15,
@@ -22281,5 +22281,79 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			maxMove: {basePower: 80},
 			contestType: "Cool",
 		},
-
+		colmilloburbuja: {
+			num: 0,
+			accuracy: 95,
+			basePower: 70,
+			category: "Physical",
+			name: "Colmillo Burbuja",
+			pp: 10,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1},
+			secondaries: [
+				{
+					chance: 20,
+					boosts: {
+						spe: -1,
+					},
+				}, {
+					chance: 10,
+					volatileStatus: 'flinch',
+				},
+			],
+			target: "normal",
+			type: "Water",
+			contestType: "Cool",
+		},
+		mordidadragon: {
+			num: 0,
+			accuracy: 95,
+			basePower: 85,
+			category: "Physical",
+			name: "Mordida Dragon",
+			pp: 10,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1},
+			secondaries: [
+				{
+					chance: 10,
+					boosts: {
+						def: -1,
+					},
+				}, {
+					chance: 10,
+					volatileStatus: 'flinch',
+				},
+			],
+			target: "normal",
+			type: "Dragon",
+			contestType: "Cool",
+		},
+		bombapegajosa: {
+			num: 0,
+			accuracy: 95,
+			basePower: 65,
+			category: "Physical",
+			name: "Bomba Pegajosa",
+			pp: 5,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bullet: 1},
+			onAfterHit(target, source, move) {
+				if (!move.hasSheerForce && source.hp) {
+					for (const side of source.side.foeSidesWithConditions()) {
+						side.addSideCondition('stickyweb');
+					}
+				}
+			},
+			onAfterSubDamage(damage, target, source, move) {
+				if (!move.hasSheerForce && source.hp) {
+					for (const side of source.side.foeSidesWithConditions()) {
+						side.addSideCondition('stickyweb');
+					}
+				}
+			},
+			secondary: {}, // Sheer Force-boosted
+			target: "normal",
+			type: "Bug",
+		},
 };

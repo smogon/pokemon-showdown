@@ -5766,12 +5766,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	escudoescama: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)  && source.runStatusImmunity('powder')) {
-				const r = this.random(120);
-				if (r < 20) {
+				const r = this.random(100);
+				if (r < 11) {
 					source.setStatus('slp', target);
-				} else if (r < 40) {
+				} else if (r < 22) {
 					source.setStatus('par', target);
-				} else if (r < 60) {
+				} else if (r < 33) {
 					source.setStatus('psn', target);
 				}
 			}
@@ -5900,5 +5900,137 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Vatios",
 		rating: 2,
 		num: -109,
+	},
+	mineralizacion: {
+		onTryHit(target, source, move) {
+			if (target !== source && (move.type === 'Rock' || move.type === 'Steel')) {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Mineralizacion');
+				}
+				return null;
+			}
+		},
+		onStart(pokemon){
+			let success = false;
+			for (const active of this.getAllActive()) {
+				if (active.removeVolatile('substitute')) success = true;
+			}
+			const removeAll = ['stealthrock'];
+			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
+			for (const side of sides) {
+				for (const sideCondition of removeAll) {
+					if (side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name);
+						success = true;
+					}
+				}
+			}
+
+		},
+		flags: {breakable: 1},
+		name: "Mineralizacion",
+		rating: 3.5,
+		num: -110,
+	},
+	mentefria: {
+		onModifyTypePriority: -1,
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.category === 'Special' && !move.flags['contact']) {
+				return this.chainModify(1.15);
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (!this.checkMoveMakesContact(move, target, source) && move.category === 'Special') {
+				const r = this.random(100);
+				if (r < 30) {
+					target.trySetStatus('frz', source);
+				} 
+			}
+		},
+		flags: {},
+		name: "Mente Fria",
+		rating: 1.5,
+		num: -111,
+	},
+	llamasiniestra: {
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && effect.type === "Dark") {
+				this.boost({spa: length}, source);
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (!this.checkMoveMakesContact(move, target, source) && move.type === "Dark") {
+					target.trySetStatus('brn', source);
+			}
+		},
+		flags: {},
+		name: "Llama Siniestra",
+		rating: 3,
+		num: -112,
+	},
+	inteligenciaasertiva: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Inteligencia Asertiva');
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+			delete move.flags['protect'];
+			move.ignoreImmunity = true;
+			move.ignoreEvasion = true;
+			move.ignoreDefensive = true;
+		},
+		flags: {},
+		name: "Inteligencia Asertiva",
+		rating: 3,
+		num: -113,
+	},
+	inteligenciaartificial: {
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk) {
+			return this.modify(atk, 1.4);
+		},
+		onModifySpA(spa) {
+			return this.modify(spa, 1.4);
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy === 'number') {
+				return this.chainModify(0.95);
+			}
+		},
+		flags: {},
+		name: "Inteligencia Artificial",
+		rating: 3,
+		num: -114,
+	},
+	comealmas: {
+		onStart(pokemon) {
+			if (pokemon.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: Come Almas');
+				const fallen = Math.min(pokemon.side.totalFainted + pokemon.side.foe.totalFainted, 10);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.effectState.fallen) {
+				const powMod = [4096, 4301, 4506, 4710, 4915, 5120, 5325, 5530, 5734, 5939, 6144];
+				this.debug(`Come Almas boost: ${powMod[this.effectState.fallen]}/4096`);
+				return this.chainModify([powMod[this.effectState.fallen], 4096]);
+			}
+		},
+		flags: {},
+		name: "Come Almas",
+		rating: 4,
+		num: 293,
 	},
 };
