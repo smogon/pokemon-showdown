@@ -1687,8 +1687,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	boneclub: {
 		num: 125,
-		accuracy: 85,
-		basePower: 65,
+		accuracy: 100,
+		basePower: 80,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Bone Club",
@@ -1696,7 +1696,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		secondary: {
-			chance: 10,
+			chance: 30,
 			volatileStatus: 'flinch',
 		},
 		target: "normal",
@@ -1705,7 +1705,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	bonemerang: {
 		num: 155,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
 		isNonstandard: "Past",
@@ -1722,7 +1722,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	bonerush: {
 		num: 198,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 25,
 		category: "Physical",
 		name: "Bone Rush",
@@ -3700,7 +3700,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	dig: {
 		num: 91,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 120,
 		category: "Physical",
 		name: "Dig",
 		pp: 10,
@@ -10341,8 +10341,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	landswrath: {
 		num: 616,
-		accuracy: 100,
-		basePower: 90,
+		accuracy: 110,
+		basePower: 100,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Land's Wrath",
@@ -12800,8 +12800,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	mudbomb: {
 		num: 426,
-		accuracy: 85,
-		basePower: 65,
+		accuracy: 100,
+		basePower: 60,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Mud Bomb",
@@ -12809,9 +12809,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
 		secondary: {
-			chance: 30,
+			chance: 100,
 			boosts: {
-				accuracy: -1,
+				atk: -1,
 			},
 		},
 		target: "normal",
@@ -12820,19 +12820,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	mudshot: {
 		num: 341,
-		accuracy: 95,
-		basePower: 55,
+		accuracy: 100,
+		basePower: 80,
 		category: "Special",
 		name: "Mud Shot",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		secondary: {
-			chance: 100,
-			boosts: {
-				spe: -1,
-			},
-		},
+		critRatio: 2,
+		secondary: null,
 		target: "normal",
 		type: "Ground",
 		contestType: "Tough",
@@ -12840,7 +12836,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	mudslap: {
 		num: 189,
 		accuracy: 100,
-		basePower: 20,
+		basePower: 40,
 		category: "Special",
 		name: "Mud-Slap",
 		pp: 10,
@@ -12849,7 +12845,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 100,
 			boosts: {
-				accuracy: -1,
+				atk: -2,
 			},
 		},
 		target: "normal",
@@ -16392,7 +16388,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	scorchingsands: {
 		num: 815,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 80,
 		category: "Special",
 		name: "Scorching Sands",
 		pp: 10,
@@ -18778,7 +18774,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	stompingtantrum: {
 		num: 707,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 80,
 		basePowerCallback(pokemon, target, move) {
 			if (pokemon.moveLastTurnResult === false) {
 				this.debug('doubling Stomping Tantrum BP due to previous move failure');
