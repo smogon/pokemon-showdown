@@ -5947,7 +5947,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const r = this.random(100);
 				if (r < 30) {
 					target.trySetStatus('frz', source);
-				} 
+				}
 			}
 		},
 		flags: {},
@@ -6047,5 +6047,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Inteligencia Avanzada",
 		rating: 3,
 		num: -116,
+	},
+	inteligenciaantigua: {
+		onModifyMove(move, pokemon, target) {
+			if(typeof move.accuracy === 'number' ){
+			 let change = 100 - move.accuracy
+			 move.accuracy += change
+			 move.basePower -= change*0.5
+			}
+		},
+		flags: {},
+		name: "Inteligencia Antigua",
+		rating: 3,
+		num: -117,
 	},
 };
