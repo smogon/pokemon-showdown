@@ -1455,15 +1455,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	blastburn: {
 		num: 307,
-		accuracy: 90,
-		basePower: 150,
+		accuracy: 100,
+		basePower: 120,
 		category: "Special",
 		name: "Blast Burn",
 		pp: 5,
 		priority: 0,
-		flags: {recharge: 1, protect: 1, mirror: 1, metronome: 1},
-		self: {
-			volatileStatus: 'mustrecharge',
+		flags: {charge: 1, protect: 1, mirror: 1, metronome: 1},
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) {
+				return;
+			}
+			this.add('-prepare', attacker, move.name);
+			this.boost({spa: 1}, attacker, attacker, move);
+			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
+				return;
+			}
+			attacker.addVolatile('twoturnmove', defender);
+			return null;
 		},
 		secondary: null,
 		target: "normal",
@@ -1600,15 +1609,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	blueflare: {
 		num: 551,
-		accuracy: 85,
+		accuracy: 90,
 		basePower: 130,
 		category: "Special",
 		name: "Blue Flare",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, cantusetwice: 1},
 		secondary: {
-			chance: 20,
+			chance: 30,
 			status: 'brn',
 		},
 		target: "normal",
@@ -2117,7 +2126,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	burningjealousy: {
 		num: 807,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 80,
 		category: "Special",
 		name: "Burning Jealousy",
 		pp: 5,
@@ -2138,7 +2147,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	burnup: {
 		num: 682,
 		accuracy: 100,
-		basePower: 130,
+		basePower: 150,
 		category: "Special",
 		isNonstandard: "Unobtainable",
 		name: "Burn Up",
@@ -2156,6 +2165,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.setType(pokemon.getTypes(true).map(type => type === "Fire" ? "???" : type));
 				this.add('-start', pokemon, 'typechange', pokemon.getTypes().join('/'), '[from] move: Burn Up');
 			},
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+				move.category = 'Physical';
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -4851,7 +4865,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		secondary: {
-			chance: 10,
+			chance: 100,
 			status: 'brn',
 		},
 		target: "normal",
@@ -5739,7 +5753,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Flame Burst",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: {mirror: 1, metronome: 1, bypasssub: 1},
 		onHit(target, source, move) {
 			for (const ally of target.adjacentAllies()) {
 				this.damage(ally.baseMaxhp / 16, ally, source, this.dex.conditions.get('Flame Burst'));
@@ -5758,7 +5772,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	flamecharge: {
 		num: 488,
 		accuracy: 100,
-		basePower: 50,
+		basePower: 60,
 		category: "Physical",
 		name: "Flame Charge",
 		pp: 20,
@@ -5786,7 +5800,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, defrost: 1, metronome: 1},
 		secondary: {
-			chance: 10,
+			chance: 30,
 			status: 'brn',
 		},
 		target: "normal",
@@ -9830,10 +9844,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		onHit(pokemon, source) {
-			const item = pokemon.getItem();
-			if ((item.isBerry || item.isGem) && pokemon.takeItem(source)) {
-				this.add('-enditem', pokemon, item.name, '[from] move: Incinerate');
+		onBasePower(basePower, source, target, move) {
+			const item = target.getItem();
+			if (!this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return;
+			if (item.id) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAfterHit(target, source) {
+			if (source.hp) {
+				const item = target.takeItem();
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] move: Incinerate', '[of] ' + source);
+				}
 			}
 		},
 		secondary: null,
@@ -9859,8 +9882,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	inferno: {
 		num: 517,
-		accuracy: 50,
-		basePower: 100,
+		accuracy: 70,
+		basePower: 90,
 		category: "Special",
 		name: "Inferno",
 		pp: 5,
@@ -11144,7 +11167,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	magmastorm: {
 		num: 463,
-		accuracy: 75,
+		accuracy: 80,
 		basePower: 100,
 		category: "Special",
 		name: "Magma Storm",
@@ -12257,7 +12280,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	mindblown: {
 		num: 720,
 		accuracy: 100,
-		basePower: 150,
+		basePower: 120,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Mind Blown",
@@ -12268,8 +12291,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onAfterMove(pokemon, target, move) {
 			if (move.mindBlownRecoil && !move.multihit) {
 				const hpBeforeRecoil = pokemon.hp;
-				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
+				this.damage(Math.round(pokemon.maxhp / 4), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
+				if (pokemon.hp <= pokemon.maxhp / 4 && hpBeforeRecoil > pokemon.maxhp / 4) {
 					this.runEvent('EmergencyExit', pokemon, pokemon);
 				}
 			}
@@ -16835,40 +16858,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	shelltrap: {
 		num: 704,
-		accuracy: 100,
-		basePower: 150,
+		accuracy: 90,
+		basePower: 100,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Shell Trap",
 		pp: 5,
 		priority: -3,
-		flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
-		priorityChargeCallback(pokemon) {
-			pokemon.addVolatile('shelltrap');
-		},
-		onTryMove(pokemon) {
-			if (!pokemon.volatiles['shelltrap']?.gotHit) {
-				this.attrLastMove('[still]');
-				this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
-				return null;
-			}
-		},
-		condition: {
-			duration: 1,
-			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Shell Trap');
-			},
-			onHit(pokemon, source, move) {
-				if (!pokemon.isAlly(source) && move.category === 'Physical') {
-					this.effectState.gotHit = true;
-					const action = this.queue.willMove(pokemon);
-					if (action) {
-						this.queue.prioritizeAction(action);
-					}
-				}
+		flags: {protect: 1, mirror:1, metronome:1},
+		secondary: {
+			chance: 100,
+			onHit(target, source, move) {
+				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 			},
 		},
-		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Fire",
 		contestType: "Tough",
@@ -19834,7 +19837,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	temperflare: {
 		num: 915,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 80,
 		basePowerCallback(pokemon, target, move) {
 			if (pokemon.moveLastTurnResult === false) {
 				this.debug('doubling Temper Flare BP due to previous move failure');
