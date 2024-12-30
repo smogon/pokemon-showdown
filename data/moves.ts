@@ -17061,7 +17061,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		onTryHit(target, pokemon) {
 			let move = 'silverwind2';
-			if (pokemon.species.name === "Butterfree-Mega") {
+			if (pokemon.hasAbility("Escudo Escama")) {
 				move = 'silverwind3';
 			}
 			this.actions.useMove(move, pokemon, {target});
@@ -21170,8 +21170,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 		onHit(target, source, move) {
-			if (target.status === 'psn' || target.status === 'tox') {
-				return !!this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
+			if (target.status === 'psn') {
+				return !!this.boost({atk: -1, spa: -1, spe: -1, def: -1, spd: -1}, target, source, move);
+			} else if (target.status === 'tox'){
+				return !!this.boost({atk: -2, spa: -2, spe: -2, def: -2, spd: -2}, target, source, move);
 			}
 			return false;
 		},

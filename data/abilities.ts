@@ -5839,15 +5839,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -105,
 	},
 	frubujas: {
-		onSourceModifyDamage(damage, source, target, move) {
-				return this.chainModify(0.9);
-		},
 		onSourceDamagingHit(damage, target, source, move) {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Toxic Chain's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
 			if (this.randomChance(10, 10)) {
-				this.boost({spe: -1}, target);
+				this.boost({spe: -1}, target, source);
 			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+				return this.chainModify(0.9);
 		},
 		flags: {breakable: 1},
 		name: "Frubujas",
