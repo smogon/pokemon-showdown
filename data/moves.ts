@@ -832,14 +832,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	aurorabeam: {
 		num: 62,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 60,
 		category: "Special",
 		name: "Aurora Beam",
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		secondary: {
-			chance: 10,
+			chance: 100,
 			boosts: {
 				atk: -1,
 			},
@@ -6463,7 +6463,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	frostbreath: {
 		num: 524,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 60,
 		category: "Special",
 		name: "Frost Breath",
@@ -6838,12 +6838,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	glaciallance: {
 		num: 824,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 100,
 		category: "Physical",
 		name: "Glacial Lance",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, slicing:1},
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Ice",
@@ -6851,7 +6851,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	glaciate: {
 		num: 549,
 		accuracy: 95,
-		basePower: 65,
+		basePower: 85,
 		category: "Special",
 		name: "Glaciate",
 		pp: 10,
@@ -9682,7 +9682,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	icehammer: {
 		num: 665,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
 		name: "Ice Hammer",
@@ -9755,7 +9755,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	iciclecrash: {
 		num: 556,
-		accuracy: 90,
+		accuracy: 95,
 		basePower: 85,
 		category: "Physical",
 		name: "Icicle Crash",
@@ -12784,7 +12784,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	mountaingale: {
 		num: 836,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
 		name: "Mountain Gale",
@@ -14177,7 +14177,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		secondary: {
-			chance: 10,
+			chance: 100,
 			status: 'frz',
 		},
 		target: "allAdjacentFoes",
