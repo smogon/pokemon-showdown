@@ -175,7 +175,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	aerialace: {
 		num: 332,
 		accuracy: true,
-		basePower: 60,
+		basePower: 75,
 		category: "Physical",
 		name: "Aerial Ace",
 		pp: 20,
@@ -188,7 +188,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	aeroblast: {
 		num: 177,
-		accuracy: 95,
+		accuracy: 100,
 		basePower: 100,
 		category: "Special",
 		name: "Aeroblast",
@@ -246,14 +246,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	aircutter: {
 		num: 314,
-		accuracy: 95,
+		accuracy: true,
 		basePower: 60,
 		category: "Special",
 		name: "Air Cutter",
 		pp: 25,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, slicing: 1, wind: 1},
-		critRatio: 2,
+		willCrit: true,
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Flying",
@@ -261,7 +261,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	airslash: {
 		num: 403,
-		accuracy: 95,
+		accuracy: 100,
 		basePower: 75,
 		category: "Special",
 		name: "Air Slash",
@@ -1153,7 +1153,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	beakblast: {
 		num: 690,
 		accuracy: 100,
-		basePower: 100,
+		basePower: 120,
 		category: "Physical",
 		name: "Beak Blast",
 		pp: 15,
@@ -1753,41 +1753,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	bounce: {
 		num: 340,
-		accuracy: 85,
+		accuracy: 100,
 		basePower: 85,
 		category: "Physical",
 		name: "Bounce",
 		pp: 5,
 		priority: 0,
 		flags: {
-			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
-			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
-		},
-		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
-		},
-		condition: {
-			duration: 2,
-			onInvulnerability(target, source, move) {
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
-					return;
-				}
-				return false;
-			},
-			onSourceBasePower(basePower, target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
-					return this.chainModify(2);
-				}
-			},
-		},
+			contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
+			metronome: 1,},
 		secondary: {
 			chance: 30,
 			status: 'par',
@@ -2436,7 +2410,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	chatter: {
 		num: 448,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 90,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Chatter",
@@ -3889,11 +3863,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (attacker.removeVolatile(move.id)) {
 				return;
 			}
-			if (attacker.hasAbility('gulpmissile') && attacker.species.name === 'Cramorant' && !attacker.transformed) {
-				const forme = attacker.hp <= attacker.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
-				attacker.formeChange(forme, move);
-			}
 			this.add('-prepare', attacker, move.name);
+			this.boost({atk: 1}, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -4424,6 +4395,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1},
+		critRatio: 2,
 		secondary: null,
 		target: "any",
 		type: "Flying",
@@ -4481,7 +4453,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	dualwingbeat: {
 		num: 814,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
 		name: "Dual Wingbeat",
@@ -5347,10 +5319,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, dance: 1, allyanim: 1, metronome: 1},
 		boosts: {
-			atk: -2,
+			spa: 1,
+			spe: 1,
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Flying",
 		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
@@ -6096,8 +6069,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	fly: {
 		num: 19,
-		accuracy: 95,
-		basePower: 90,
+		accuracy: 100,
+		basePower: 120,
 		category: "Physical",
 		name: "Fly",
 		pp: 15,
@@ -6111,6 +6084,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
+			this.boost({spe: 1}, attacker, attacker, move);
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				return;
 			}
@@ -8317,7 +8291,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Special",
 		name: "Gust",
 		pp: 35,
-		priority: 0,
+		priority: 1,
 		flags: {protect: 1, mirror: 1, distance: 1, metronome: 1, wind: 1},
 		secondary: null,
 		target: "any",
@@ -13660,11 +13634,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	peck: {
 		num: 64,
 		accuracy: 100,
-		basePower: 35,
+		basePower: 40,
 		category: "Physical",
 		name: "Peck",
 		pp: 35,
-		priority: 0,
+		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1},
 		secondary: null,
 		target: "any",
@@ -13894,7 +13868,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	pluck: {
 		num: 365,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 80,
 		category: "Physical",
 		name: "Pluck",
 		pp: 20,
@@ -17332,27 +17306,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	skyattack: {
 		num: 143,
 		accuracy: 90,
-		basePower: 140,
+		basePower: 130,
 		category: "Physical",
 		name: "Sky Attack",
 		pp: 5,
 		priority: 0,
 		flags: {charge: 1, protect: 1, mirror: 1, distance: 1, metronome: 1, nosleeptalk: 1, failinstruct: 1},
 		critRatio: 2,
-		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
-		},
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch',
+		self: {
+			boosts: {
+				atk: -2,
+			},
 		},
 		target: "any",
 		type: "Flying",
@@ -17361,114 +17325,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	skydrop: {
 		num: 507,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 80,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Sky Drop",
 		pp: 10,
 		priority: 0,
 		flags: {
-			contact: 1, charge: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
-			metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1,
+			contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1,
+			metronome: 1,
 		},
-		onModifyMove(move, source) {
-			if (!source.volatiles['skydrop']) {
-				move.accuracy = true;
-				delete move.flags['contact'];
-			}
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion',
 		},
-		onMoveFail(target, source) {
-			if (source.volatiles['twoturnmove'] && source.volatiles['twoturnmove'].duration === 1) {
-				source.removeVolatile('skydrop');
-				source.removeVolatile('twoturnmove');
-				if (target === this.effectState.target) {
-					this.add('-end', target, 'Sky Drop', '[interrupt]');
-				}
-			}
-		},
-		onTry(source, target) {
-			return !target.fainted;
-		},
-		onTryHit(target, source, move) {
-			if (source.removeVolatile(move.id)) {
-				if (target !== source.volatiles['twoturnmove'].source) return false;
-
-				if (target.hasType('Flying')) {
-					this.add('-immune', target);
-					return null;
-				}
-			} else {
-				if (target.volatiles['substitute'] || target.isAlly(source)) {
-					return false;
-				}
-				if (target.getWeight() >= 2000) {
-					this.add('-fail', target, 'move: Sky Drop', '[heavy]');
-					return null;
-				}
-
-				this.add('-prepare', source, move.name, target);
-				source.addVolatile('twoturnmove', target);
-				return null;
-			}
-		},
-		onHit(target, source) {
-			if (target.hp) this.add('-end', target, 'Sky Drop');
-		},
-		condition: {
-			duration: 2,
-			onAnyDragOut(pokemon) {
-				if (pokemon === this.effectState.target || pokemon === this.effectState.source) return false;
-			},
-			onFoeTrapPokemonPriority: -15,
-			onFoeTrapPokemon(defender) {
-				if (defender !== this.effectState.source) return;
-				defender.trapped = true;
-			},
-			onFoeBeforeMovePriority: 12,
-			onFoeBeforeMove(attacker, defender, move) {
-				if (attacker === this.effectState.source) {
-					attacker.activeMoveActions--;
-					this.debug('Sky drop nullifying.');
-					return null;
-				}
-			},
-			onRedirectTargetPriority: 99,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target) return;
-				if (this.effectState.source.fainted) return;
-				return this.effectState.source;
-			},
-			onAnyInvulnerability(target, source, move) {
-				if (target !== this.effectState.target && target !== this.effectState.source) {
-					return;
-				}
-				if (source === this.effectState.target && target === this.effectState.source) {
-					return;
-				}
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows'].includes(move.id)) {
-					return;
-				}
-				return false;
-			},
-			onAnyBasePower(basePower, target, source, move) {
-				if (target !== this.effectState.target && target !== this.effectState.source) {
-					return;
-				}
-				if (source === this.effectState.target && target === this.effectState.source) {
-					return;
-				}
-				if (move.id === 'gust' || move.id === 'twister') {
-					this.debug('BP doubled on midair target');
-					return this.chainModify(2);
-				}
-			},
-			onFaint(target) {
-				if (target.volatiles['skydrop'] && target.volatiles['twoturnmove'].source) {
-					this.add('-end', target.volatiles['twoturnmove'].source, 'Sky Drop', '[interrupt]');
-				}
-			},
-		},
-		secondary: null,
 		target: "any",
 		type: "Flying",
 		contestType: "Tough",
@@ -21761,7 +21631,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Wing Attack",
 		pp: 35,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1},
+		flags: {contact: 1, mirror: 1, distance: 1, metronome: 1, wing:1, bypasssub:1},
 		secondary: null,
 		target: "any",
 		type: "Flying",
