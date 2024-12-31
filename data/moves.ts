@@ -612,10 +612,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {bypasssub: 1, metronome: 1},
 		boosts: {
-			spd: 1,
+			spd: 2,
+		},
+		onHit(pokemon) {
+			if (['', 'slp', 'frz'].includes(pokemon.status)) return false;
+			pokemon.cureStatus();
 		},
 		secondary: null,
-		target: "adjacentAlly",
+		target: "self",
 		type: "Fairy",
 		zMove: {boost: {spd: 2}},
 		contestType: "Beautiful",
@@ -3233,32 +3237,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	craftyshield: {
 		num: 578,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		overrideDefensiveStat: 'spd',
 		isNonstandard: "Past",
 		name: "Crafty Shield",
 		pp: 10,
-		priority: 3,
-		flags: {},
+		priority: 0,
+		flags: {contact:1, protect:1},
 		sideCondition: 'craftyshield',
-		onTry() {
-			return !!this.queue.willAct();
-		},
-		condition: {
-			duration: 1,
-			onSideStart(target, source) {
-				this.add('-singleturn', source, 'Crafty Shield');
-			},
-			onTryHitPriority: 3,
-			onTryHit(target, source, move) {
-				if (['self', 'all'].includes(move.target) || move.category !== 'Status') return;
-				this.add('-activate', target, 'move: Crafty Shield');
-				return this.NOT_FAIL;
-			},
-		},
 		secondary: null,
-		target: "allySide",
+		target: "normal",
 		type: "Fairy",
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
@@ -3494,13 +3484,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Decorate",
 		pp: 15,
 		priority: 0,
-		flags: {allyanim: 1},
+		flags: {allyanim: 1, snatch:1},
 		secondary: null,
 		boosts: {
 			atk: 2,
 			spa: 2,
 		},
-		target: "normal",
+		target: "self",
 		type: "Fairy",
 	},
 	defendorder: {
@@ -3814,7 +3804,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
-		secondary: null,
+		secondary: {
+			chance: 100,
+			status: 'attract',
+		},
 		target: "allAdjacentFoes",
 		type: "Fairy",
 		contestType: "Cute",
@@ -5215,12 +5208,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	fairylock: {
 		num: 587,
 		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		basePower: 80,
+		category: "Special",
 		name: "Fairy Lock",
 		pp: 10,
 		priority: 0,
-		flags: {mirror: 1, bypasssub: 1, metronome: 1},
+		flags: {mirror: 1, bypasssub: 1, metronome: 1, protect:1},
 		pseudoWeather: 'fairylock',
 		condition: {
 			duration: 2,
@@ -5230,6 +5223,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onTrapPokemon(pokemon) {
 				pokemon.tryTrap();
 			},
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Fairy' || type ==='Ice' || type ==='Rock') return 1;
 		},
 		secondary: null,
 		target: "all",
@@ -5244,7 +5240,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Special",
 		name: "Fairy Wind",
 		pp: 30,
-		priority: 0,
+		priority: 1,
 		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
 		secondary: null,
 		target: "normal",
@@ -6011,21 +6007,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1, allyanim: 1, metronome: 1},
-		onHit(target, source) {
-			let success = false;
-			if (this.field.isTerrain('grassyterrain')) {
-				success = !!this.heal(this.modify(target.baseMaxhp, 0.667));
-			} else {
-				success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
+		heal: [1, 2],
+		onHitField() {
+			this.add('-clearanegativeboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
 			}
-			if (success && !target.isAlly(source)) {
-				target.staleness = 'external';
-			}
-			if (!success) {
-				this.add('-fail', target, 'heal');
-				return this.NOT_FAIL;
-			}
-			return success;
 		},
 		secondary: null,
 		target: "normal",
@@ -12533,18 +12520,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	mistyexplosion: {
 		num: 802,
 		accuracy: 100,
-		basePower: 100,
+		basePower: 120,
 		category: "Special",
 		name: "Misty Explosion",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		selfdestruct: "always",
-		onBasePower(basePower, source) {
-			if (this.field.isTerrain('mistyterrain') && source.isGrounded()) {
-				this.debug('misty terrain boost');
-				return this.chainModify(1.5);
-			}
+		self: {
+			boosts: {
+				def: -1,
+				spd: -1,
+			},
 		},
 		secondary: null,
 		target: "allAdjacent",
@@ -13834,8 +13820,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	playrough: {
 		num: 583,
-		accuracy: 90,
-		basePower: 90,
+		accuracy: 100,
+		basePower: 85,
 		category: "Physical",
 		name: "Play Rough",
 		pp: 10,
@@ -19221,7 +19207,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	sweetkiss: {
 		num: 186,
-		accuracy: 75,
+		accuracy: 100,
 		basePower: 0,
 		category: "Status",
 		name: "Sweet Kiss",
