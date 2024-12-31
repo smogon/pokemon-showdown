@@ -11088,13 +11088,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	magnetbomb: {
 		num: 443,
 		accuracy: true,
-		basePower: 60,
+		basePower: 80,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Magnet Bomb",
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		onHit(target, source, move) {
+			if(target.hasType('Steel'))
+			target.addVolatile('trapped', source, move, 'trapper');
+		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
