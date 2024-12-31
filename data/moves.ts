@@ -674,7 +674,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		name: "Assurance",
 		pp: 10,
-		priority: 0,
+		priority: -1,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: null,
 		target: "normal",
@@ -1189,22 +1189,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	beatup: {
 		num: 251,
 		accuracy: 100,
-		basePower: 0,
+		basePower: 140,
 		basePowerCallback(pokemon, target, move) {
-			const currentSpecies = move.allies!.shift()!.species;
-			const bp = 5 + Math.floor(currentSpecies.baseStats.atk / 10);
-			this.debug('BP for ' + currentSpecies.name + ' hit: ' + bp);
-			return bp;
+			return 140 - 20 * pokemon.side.totalFainted;
 		},
 		category: "Physical",
 		name: "Beat Up",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, allyanim: 1, metronome: 1},
-		onModifyMove(move, pokemon) {
-			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || !ally.fainted && !ally.status);
-			move.multihit = move.allies.length;
-		},
+		flags: {protect: 1, mirror: 1, allyanim: 1, metronome: 1, contact:1},
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -1914,7 +1907,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		secondary: null,
+		secondary: {
+			chance: 100,
+			boosts: {
+				atk: -1,
+			},
+		},
 		target: "allAdjacent",
 		type: "Dark",
 		contestType: "Tough",
@@ -5347,13 +5345,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	feintattack: {
 		num: 185,
-		accuracy: true,
-		basePower: 60,
+		accuracy: 100,
+		basePower: 40,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Feint Attack",
 		pp: 20,
-		priority: 0,
+		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: null,
 		target: "normal",
@@ -13062,7 +13060,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	nightdaze: {
 		num: 539,
 		accuracy: 95,
-		basePower: 85,
+		basePower: 90,
 		category: "Special",
 		name: "Night Daze",
 		pp: 10,
@@ -13071,7 +13069,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 40,
 			boosts: {
-				accuracy: -1,
+				atk: -1,
 			},
 		},
 		target: "normal",
@@ -13561,20 +13559,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	payback: {
 		num: 371,
 		accuracy: 100,
-		basePower: 50,
-		basePowerCallback(pokemon, target, move) {
-			if (target.newlySwitched || this.queue.willMove(target)) {
-				this.debug('Payback NOT boosted');
-				return move.basePower;
-			}
-			this.debug('Payback damage boost');
-			return move.basePower * 2;
-		},
+		basePower: 60,
 		category: "Physical",
 		name: "Payback",
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		willCrit: true,
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -17622,8 +17613,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	snarl: {
 		num: 555,
-		accuracy: 95,
-		basePower: 55,
+		accuracy: true,
+		basePower: 60,
 		category: "Special",
 		name: "Snarl",
 		pp: 15,
@@ -17641,14 +17632,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	snatch: {
 		num: 289,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		accuracy: 95,
+		basePower: 70,
+		category: "Physical",
 		isNonstandard: "Past",
 		name: "Snatch",
 		pp: 10,
-		priority: 4,
-		flags: {bypasssub: 1, mustpressure: 1, noassist: 1, failcopycat: 1},
+		priority: 0,
+		flags: {bypasssub: 1, protect:1, contact:1},
 		volatileStatus: 'snatch',
 		condition: {
 			duration: 1,
