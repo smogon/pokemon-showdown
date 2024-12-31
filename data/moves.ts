@@ -6625,12 +6625,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				target.hasAbility(['plus', 'minus']) &&
 				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
 			));
-			if (!targets.length) return false;
+			const targets2 = side.allies().filter(target => (
+				!target.hasAbility(['plus', 'minus']) &&
+				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
+			));
+			if (!targets.length && !targets2.length) return false;
 			let didSomething = false;
 			for (const target of targets) {
-				didSomething = this.boost({atk: 1, spa: 1}, target, source, move, false, true) || didSomething;
+				if (target.hasAbility(['plus', 'minus']))
+				this.boost({atk: 2, spa: 2}, target, source, move, false, true);
 			}
-			return didSomething;
+			for (const target2 of targets2) {
+				if (!target2.hasAbility(['plus', 'minus']))
+			this.boost({atk: 1, spa: 1}, target2, source, move, false, true)
+			}
 		},
 		secondary: null,
 		target: "allySide",
