@@ -1070,20 +1070,29 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	barbbarrage: {
 		num: 839,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			if (!pokemon.volatiles['barbbarrage'] || move.hit === 1) {
+				pokemon.addVolatile('barbbarrage');
+			}
+			const bp = this.clampIntRange(move.basePower + pokemon.volatiles['barbbarrage'].increase, 1, 150);
+			this.debug('BP: ' + bp);
+			return bp;
+		},
 		category: "Physical",
 		name: "Barb Barrage",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, slicing:1},
-		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'psn' || target.status === 'tox') {
-				return this.chainModify(2);
-			}
-		},
-		secondary: {
-			chance: 50,
-			status: 'psn',
+		condition: {
+			onStart() {
+				this.effectState.increase = 10;
+			},
+			onRestart() {
+				if (this.effectState.increase < 80) {
+					this.effectState.increase += 10;
+				}
+			},
 		},
 		target: "normal",
 		type: "Poison",
