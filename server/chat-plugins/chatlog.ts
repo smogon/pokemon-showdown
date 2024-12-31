@@ -1182,6 +1182,10 @@ export const commands: Chat.ChatCommands = {
 			roomName = `battle-${roomName.slice(Config.routes.replays.length + 1)}`;
 		}
 		if (roomName.startsWith('psim.us/')) roomName = roomName.slice(8);
+		const queryStringStart = roomName.indexOf('?');
+		if (queryStringStart > -1) {
+			roomName = roomName.slice(0, queryStringStart);
+		}
 		const roomid = roomName.toLowerCase().replace(/[^a-z0-9-]+/g, '') as RoomID;
 		if (!roomid) return this.parse('/help getbattlechat');
 		const userid = toID(userName);
