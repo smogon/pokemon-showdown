@@ -340,7 +340,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Beedrill",
 		types: ["Bug", "Poison"],
 		baseStats: {hp: 55, atk: 100, def: 60, spa: 65, spd: 95, spe: 95},
-		abilities: {0: "Swarm", H: "Sniper"},
+		abilities: {0: "Swarm", H: "Run Away"},
 		heightm: 1,
 		weightkg: 29.5,
 		color: "Yellow",
