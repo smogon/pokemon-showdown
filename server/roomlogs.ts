@@ -275,14 +275,25 @@ export class Roomlog {
 			void this.roomlogStream.write(timestamp + message + '\n');
 		}
 	}
-	private async insertLog(query: SQLStatement, ignoreFailure = false): Promise<void> {
+	private async insertLog(query: SQLStatement, ignoreFailure = false, retries = 3): Promise<void> {
 		try {
 			await this.roomlogTable?.query(query);
 		} catch (e: any) {
 			if (e?.code === '42P01') { // table not found
 				await roomlogDB!._query(FS('databases/schemas/roomlogs.sql').readSync(), []);
-				return this.insertLog(query, ignoreFailure);
+				return this.insertLog(query, ignoreFailure, retries);
 			}
+			// connection terminated / transient errors
+			if (
+				!ignoreFailure &&
+				retries > 0 &&
+				e.message?.includes('Connection terminated unexpectedly')
+			) {
+				// delay before retrying
+				await new Promise(resolve => setTimeout(resolve, 2000));
+				return this.insertLog(query, ignoreFailure, retries - 1);
+			}
+			// crashlog for all other errors
 			const [q, vals] = roomlogDB!._resolveSQL(query);
 			Monitor.crashlog(e, 'a roomlog database query', {
 				query: q, values: vals,
