@@ -674,7 +674,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		name: "Assurance",
 		pp: 10,
-		priority: 0,
+		priority: -1,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: null,
 		target: "normal",
@@ -1189,22 +1189,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	beatup: {
 		num: 251,
 		accuracy: 100,
-		basePower: 0,
+		basePower: 140,
 		basePowerCallback(pokemon, target, move) {
-			const currentSpecies = move.allies!.shift()!.species;
-			const bp = 5 + Math.floor(currentSpecies.baseStats.atk / 10);
-			this.debug('BP for ' + currentSpecies.name + ' hit: ' + bp);
-			return bp;
+			return 140 - 20 * pokemon.side.totalFainted;
 		},
 		category: "Physical",
 		name: "Beat Up",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, allyanim: 1, metronome: 1},
-		onModifyMove(move, pokemon) {
-			move.allies = pokemon.side.pokemon.filter(ally => ally === pokemon || !ally.fainted && !ally.status);
-			move.multihit = move.allies.length;
-		},
+		flags: {protect: 1, mirror: 1, allyanim: 1, metronome: 1, contact:1},
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -1683,15 +1676,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	boltstrike: {
 		num: 550,
-		accuracy: 85,
+		accuracy: 90,
 		basePower: 130,
 		category: "Physical",
 		name: "Bolt Strike",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, cantusetwice:1},
 		secondary: {
-			chance: 20,
+			chance: 30,
 			status: 'par',
 		},
 		target: "normal",
@@ -1914,7 +1907,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		secondary: null,
+		secondary: {
+			chance: 100,
+			boosts: {
+				atk: -1,
+			},
+		},
 		target: "allAdjacent",
 		type: "Dark",
 		contestType: "Tough",
@@ -2388,15 +2386,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	chargebeam: {
 		num: 451,
-		accuracy: 90,
-		basePower: 50,
+		accuracy: 100,
+		basePower: 40,
 		category: "Special",
 		name: "Charge Beam",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		secondary: {
-			chance: 70,
+			chance: 100,
 			self: {
 				boosts: {
 					spa: 1,
@@ -4059,7 +4057,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	doubleshock: {
 		num: 892,
 		accuracy: 100,
-		basePower: 120,
+		basePower: 150,
 		category: "Physical",
 		name: "Double Shock",
 		pp: 5,
@@ -4287,7 +4285,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	dragonpulse: {
 		num: 406,
 		accuracy: 100,
-		basePower: 85,
+		basePower: 90,
 		category: "Special",
 		name: "Dragon Pulse",
 		pp: 10,
@@ -4301,14 +4299,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	dragonrage: {
 		num: 82,
 		accuracy: 100,
-		basePower: 0,
-		damage: 40,
+		basePower: 70,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Dragon Rage",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
+		ignoreImmunity: true,
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -4316,7 +4314,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	dragonrush: {
 		num: 407,
-		accuracy: 75,
+		accuracy: 90,
 		basePower: 100,
 		category: "Physical",
 		name: "Dragon Rush",
@@ -4443,7 +4441,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	dualchop: {
 		num: 530,
-		accuracy: 90,
+		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
 		isNonstandard: "Past",
@@ -4728,19 +4726,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	electroball: {
 		num: 486,
 		accuracy: 100,
-		basePower: 0,
-		basePowerCallback(pokemon, target) {
-			let ratio = Math.floor(pokemon.getStat('spe') / target.getStat('spe'));
-			if (!isFinite(ratio)) ratio = 0;
-			const bp = [40, 60, 80, 120, 150][Math.min(ratio, 4)];
-			this.debug('BP: ' + bp);
-			return bp;
-		},
+		basePower: 100,
 		category: "Special",
 		name: "Electro Ball",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		overrideOffensiveStat: 'spe',
 		secondary: null,
 		target: "normal",
 		type: "Electric",
@@ -5078,17 +5070,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	eternabeam: {
 		num: 795,
-		accuracy: 90,
-		basePower: 160,
+		accuracy: 95,
+		basePower: 150,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Eternabeam",
 		pp: 5,
 		priority: 0,
-		flags: {recharge: 1, protect: 1, mirror: 1},
-		self: {
-			volatileStatus: 'mustrecharge',
-		},
+		flags: {protect: 1, mirror: 1, cantusetwice: 1},
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -5356,13 +5345,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	feintattack: {
 		num: 185,
-		accuracy: true,
-		basePower: 60,
+		accuracy: 100,
+		basePower: 40,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Feint Attack",
 		pp: 20,
-		priority: 0,
+		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: null,
 		target: "normal",
@@ -13078,7 +13067,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	nightdaze: {
 		num: 539,
 		accuracy: 95,
-		basePower: 85,
+		basePower: 90,
 		category: "Special",
 		name: "Night Daze",
 		pp: 10,
@@ -13087,7 +13076,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 40,
 			boosts: {
-				accuracy: -1,
+				atk: -1,
 			},
 		},
 		target: "normal",
@@ -13576,20 +13565,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	payback: {
 		num: 371,
 		accuracy: 100,
-		basePower: 50,
-		basePowerCallback(pokemon, target, move) {
-			if (target.newlySwitched || this.queue.willMove(target)) {
-				this.debug('Payback NOT boosted');
-				return move.basePower;
-			}
-			this.debug('Payback damage boost');
-			return move.basePower * 2;
-		},
+		basePower: 60,
 		category: "Physical",
 		name: "Payback",
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		willCrit: true,
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -15669,16 +15651,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	roaroftime: {
 		num: 459,
-		accuracy: 90,
-		basePower: 150,
+		accuracy: 100,
+		basePower: 130,
 		category: "Special",
 		name: "Roar of Time",
 		pp: 5,
 		priority: 0,
-		flags: {recharge: 1, protect: 1, mirror: 1, metronome: 1},
-		self: {
-			volatileStatus: 'mustrecharge',
-		},
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		recoil: [1, 2],
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -16907,7 +16887,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		secondary: null,
+		secondary: {
+			chance: 10,
+			status: 'par',
+		},
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
@@ -17636,8 +17619,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	snarl: {
 		num: 555,
-		accuracy: 95,
-		basePower: 55,
+		accuracy: true,
+		basePower: 60,
 		category: "Special",
 		name: "Snarl",
 		pp: 15,
@@ -17655,14 +17638,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	snatch: {
 		num: 289,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		accuracy: 95,
+		basePower: 70,
+		category: "Physical",
 		isNonstandard: "Past",
 		name: "Snatch",
 		pp: 10,
-		priority: 4,
-		flags: {bypasssub: 1, mustpressure: 1, noassist: 1, failcopycat: 1},
+		priority: 0,
+		flags: {bypasssub: 1, protect:1, contact:1},
 		volatileStatus: 'snatch',
 		condition: {
 			duration: 1,
@@ -17908,10 +17891,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		secondary: {
-			chance: 30,
-			status: 'par',
-		},
+		willCrit: true,
+		secondary: null,
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
@@ -19050,16 +19031,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	supercellslam: {
 		num: 916,
-		accuracy: 95,
-		basePower: 100,
+		accuracy: 100,
+		basePower: 120,
 		category: "Physical",
 		name: "Supercell Slam",
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		hasCrashDamage: true,
-		onMoveFail(target, source, move) {
-			this.damage(source.baseMaxhp / 2, source, source, this.dex.conditions.get('Supercell Slam'));
+		self: {
+			boosts: {
+				def: -1,
+				spd: -1,
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -20232,7 +20215,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Special",
 		name: "Thunder Shock",
 		pp: 30,
-		priority: 0,
+		priority: 1,
 		flags: {protect: 1, mirror: 1, metronome: 1},
 		secondary: {
 			chance: 10,
@@ -20855,12 +20838,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Special",
 		name: "Twister",
 		pp: 20,
-		priority: 0,
+		priority: 1,
 		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
-		secondary: {
-			chance: 20,
-			volatileStatus: 'flinch',
-		},
 		target: "allAdjacentFoes",
 		type: "Dragon",
 		contestType: "Cool",
@@ -21890,8 +21869,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	zapcannon: {
 		num: 192,
-		accuracy: 50,
-		basePower: 120,
+		accuracy: 70,
+		basePower: 90,
 		category: "Special",
 		name: "Zap Cannon",
 		pp: 5,
@@ -21941,8 +21920,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	zippyzap: {
 		num: 729,
-		accuracy: 100,
-		basePower: 80,
+		accuracy: 95,
+		basePower: 60,
 		category: "Physical",
 		isNonstandard: "LGPE",
 		name: "Zippy Zap",
@@ -21953,7 +21932,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			chance: 100,
 			self: {
 				boosts: {
-					evasion: 1,
+					spe: -1,
 				},
 			},
 		},
