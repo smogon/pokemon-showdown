@@ -5958,7 +5958,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	llamasiniestra: {
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.type === "Dark") {
-				this.boost({spa: length}, source);
+				this.boost({spa: 2}, source);
 			}
 		},
 		onSourceDamagingHit(damage, target, source, move) {

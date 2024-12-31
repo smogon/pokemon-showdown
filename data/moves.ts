@@ -2527,15 +2527,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	clamp: {
 		num: 128,
-		accuracy: 85,
-		basePower: 35,
+		accuracy: 95,
+		basePower: 15,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Clamp",
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		volatileStatus: 'partiallytrapped',
+		multihit: [2, 5],
 		secondary: null,
 		target: "normal",
 		type: "Water",
@@ -9307,14 +9307,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	hydrocannon: {
 		num: 308,
 		accuracy: 90,
-		basePower: 150,
+		basePower: 130,
 		category: "Special",
 		name: "Hydro Cannon",
 		pp: 5,
 		priority: 0,
-		flags: {recharge: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, pulse: 1, bullet: 1},
 		self: {
-			volatileStatus: 'mustrecharge',
+			boosts: {
+				spa: -2,
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -10604,7 +10606,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1, bypasssub: 1},
-		heal: [1, 4],
+		heal: [1, 2],
+		onTry(source, target, move) {
+			if(this.gameType === 'doubles'){
+				move.heal = [1, 4]
+			}
+		},
 		secondary: null,
 		target: "allies",
 		type: "Water",
@@ -12852,7 +12859,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	muddywater: {
 		num: 330,
-		accuracy: 85,
+		accuracy: 90,
 		basePower: 90,
 		category: "Special",
 		name: "Muddy Water",
@@ -12862,7 +12869,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 30,
 			boosts: {
-				accuracy: -1,
+				atk: -1,
 			},
 		},
 		target: "allAdjacentFoes",
@@ -13320,8 +13327,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	octazooka: {
 		num: 190,
-		accuracy: 85,
-		basePower: 65,
+		accuracy: 100,
+		basePower: 70,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Octazooka",
@@ -13329,9 +13336,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
 		secondary: {
-			chance: 50,
 			boosts: {
-				accuracy: -1,
+				evasion: -1,
 			},
 		},
 		target: "normal",
