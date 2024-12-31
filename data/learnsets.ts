@@ -2133,7 +2133,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			snore: ["7T", "7V", "6T", "5T", "4T", "3T"],
 			spikecannon: ["9M"],
 			steelwing: ["7M", "7V", "6M", "4M", "3M"],
-			stompingtamtrum: ["9M"],
+			stompingtantrum: ["9M"],
 			substitute: ["8V", "7M", "7V", "6M", "5M", "4M", "3T"],
 			sunnyday: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			superpower: ["9M"],
