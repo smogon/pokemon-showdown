@@ -2337,7 +2337,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		onTryHit(target, source) {
+			if (source.side.foe.faintedLastTurn){
 			this.add('-activate', target, 'move: Celebrate');
+			this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, source)
+			}
 		},
 		secondary: null,
 		target: "self",
