@@ -67,6 +67,8 @@ interface MoveFlags {
 	head?: 1; //Movimientos que usan la cabeza del pokemon
 	wing?: 1; //Movmientos que usan el ala del pokemon
 	kick?: 1; //Movimientos que usan las patas del pokémon
+	light?: 1; //Movimientos basados en luz
+	beam?: 1; //Movimientos basados en rayos
 }
 
 export interface HitEffect {
