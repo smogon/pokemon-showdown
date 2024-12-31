@@ -17849,6 +17849,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
+	
+		onHit(target, source, move) {
+			if (source.isAlly(target)) {
+				if (!this.heal(Math.floor(target.baseMaxhp * 0.25))) {
+					if (target.volatiles['healblock'] && target.hp !== target.maxhp) {
+						this.attrLastMove('[still]');
+						// Wrong error message, correct one not supported yet
+						this.add('cant', source, 'move: Heal Block', move);
+					} else {
+						this.add('-immune', target);
+					}
+					return this.NOT_FAIL;
+				}
+			}
+		},
 		target: "allAdjacent",
 		type: "Water",
 		contestType: "Tough",
