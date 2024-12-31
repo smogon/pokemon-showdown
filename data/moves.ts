@@ -408,7 +408,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	ancientpower: {
 		num: 246,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
 		category: "Special",
 		name: "Ancient Power",
 		pp: 5,
@@ -7961,9 +7961,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
-					return 7;
+				if (source?.hasItem('dimencionador')) {
+					return 8;
 				}
 				return 5;
 			},
@@ -11038,9 +11037,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
-					return 7;
+				if (source?.hasItem('dimencionador')) {
+					return 8;
 				}
 				return 5;
 			},
@@ -20576,9 +20574,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
-					return 7;
+				if (source?.hasItem('dimencionador')) {
+					return 8;
 				}
 				return 5;
 			},
@@ -21625,9 +21622,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Wonder Room');
-					return 7;
+				if (source?.hasItem('dimencionador')) {
+					return 8;
 				}
 				return 5;
 			},
