@@ -1237,16 +1237,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	belch: {
 		num: 562,
-		accuracy: 90,
-		basePower: 120,
+		accuracy: 100,
+		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			if (!pokemon.item) {
+				this.debug("BP doubled for no item");
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
 		category: "Special",
 		name: "Belch",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1, sound: 1,},
-		onDisableMove(pokemon) {
-			if (!pokemon.ateBerry) pokemon.disableMove('belch');
-		},
+		/*onDisableMove(pokemon) {
+			if (!pokemon.item) pokemon.disableMove('belch');
+		},*/
 		secondary: null,
 		target: "normal",
 		type: "Poison",
