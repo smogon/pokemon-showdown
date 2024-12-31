@@ -409,23 +409,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 246,
 		accuracy: 100,
 		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			let bp = move.basePower;
+			 if (pokemon.species.baseSpecies === 'Aerodactyl' || pokemon.species.baseSpecies === 'Kabutops' || pokemon.species.baseSpecies === 'Cradily'
+				 || pokemon.species.baseSpecies === 'Armaldo' || pokemon.species.baseSpecies === 'Rampardos' || pokemon.species.baseSpecies === 'Omastar'
+				  || pokemon.species.baseSpecies === 'Bastiodon' || pokemon.species.baseSpecies === 'Carracosta' || pokemon.species.baseSpecies === 'Archeops'
+				  || pokemon.species.baseSpecies === 'Tyrantrum' || pokemon.species.baseSpecies === 'Aurorus' || pokemon.species.baseSpecies === 'Dracozolt'
+				  || pokemon.species.baseSpecies === 'Dracovish' || pokemon.species.baseSpecies === 'Arctozolt' || pokemon.species.baseSpecies === 'Arctovish' ){
+				bp *= 50
+			 }
+			 return bp;
+		},
 		category: "Special",
 		name: "Ancient Power",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		secondary: {
-			chance: 10,
-			self: {
-				boosts: {
-					atk: 1,
-					def: 1,
-					spa: 1,
-					spd: 1,
-					spe: 1,
-				},
-			},
-		},
+		secondary: null,
 		target: "normal",
 		type: "Rock",
 		contestType: "Tough",
