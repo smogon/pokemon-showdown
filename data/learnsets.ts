@@ -2097,6 +2097,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hyperbeam: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			laserfocus: ["7T"],
 			leer: ["8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
+			malepico: ["9M"],
 			mimic: ["7V", "3T"],
 			mirrormove: ["8V", "7L18", "7V", "6L23", "5L23", "4L23", "3L32"],
 			mudslap: ["7V", "4T", "3T"],
