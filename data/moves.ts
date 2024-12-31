@@ -11024,7 +11024,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "Magic Powder",
 		pp: 20,
-		priority: 0,
+		priority: 1,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1, powder: 1},
 		onHit(target) {
 			if (target.getTypes().join() === 'Psychic' || !target.setType('Psychic')) return false;
@@ -20517,7 +20517,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Trick-or-Treat",
 		pp: 20,
-		priority: 0,
+		priority: 1,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1},
 		onHit(target) {
 			if (target.hasType('Ghost')) return false;
