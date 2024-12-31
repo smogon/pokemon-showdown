@@ -17828,6 +17828,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	//TODO: fix damage
 	sparklingaria: {
 		num: 664,
 		accuracy: 100,
@@ -17849,7 +17850,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
-	
+
 		onHit(target, source, move) {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.25))) {
@@ -21113,67 +21114,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 518,
 		accuracy: 100,
 		basePower: 80,
-		basePowerCallback(target, source, move) {
-			if (['firepledge', 'grasspledge'].includes(move.sourceEffect)) {
-				this.add('-combine');
-				return 150;
-			}
-			return move.basePower;
-		},
 		category: "Special",
 		name: "Water Pledge",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1, pledgecombo: 1},
-		onPrepareHit(target, source, move) {
-			for (const action of this.queue) {
-				if (action.choice !== 'move') continue;
-				const otherMove = action.move;
-				const otherMoveUser = action.pokemon;
-				if (
-					!otherMove || !action.pokemon || !otherMoveUser.isActive ||
-					otherMoveUser.fainted || action.maxMove || action.zmove
-				) {
-					continue;
-				}
-				if (otherMoveUser.isAlly(source) && ['firepledge', 'grasspledge'].includes(otherMove.id)) {
-					this.queue.prioritizeAction(action, move);
-					this.add('-waiting', source, otherMoveUser);
-					return null;
-				}
-			}
-		},
-		onModifyMove(move) {
-			if (move.sourceEffect === 'grasspledge') {
-				move.type = 'Grass';
-				move.forceSTAB = true;
-				move.sideCondition = 'grasspledge';
-			}
-			if (move.sourceEffect === 'firepledge') {
-				move.type = 'Water';
-				move.forceSTAB = true;
-				move.self = {sideCondition: 'waterpledge'};
-			}
-		},
+		pseudoWeather: 'waterpledge',
 		condition: {
-			duration: 4,
-			onSideStart(targetSide) {
-				this.add('-sidestart', targetSide, 'Water Pledge');
+			duration: 1,
+			onFieldStart(field, source) {
+				this.add('-fieldstart', 'move: Water Pledge', '[of] ' + source);
 			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 7,
-			onSideEnd(targetSide) {
-				this.add('-sideend', targetSide, 'Water Pledge');
-			},
-			onModifyMove(move, pokemon) {
-				if (move.secondaries && move.id !== 'secretpower') {
-					this.debug('doubling secondary chance');
-					for (const secondary of move.secondaries) {
-						if (pokemon.hasAbility('serenegrace') && secondary.volatileStatus === 'flinch') continue;
-						if (secondary.chance) secondary.chance *= 2;
-					}
-					if (move.self?.chance) move.self.chance *= 2;
+			onBasePowerPriority: 1,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('water pledge weaken');
+					return this.chainModify([1352, 4096]);
 				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 3,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Water Pledge');
 			},
 		},
 		secondary: null,
@@ -21228,29 +21190,47 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Water Sport",
 		pp: 15,
-		priority: 0,
-		flags: {nonsky: 1, metronome: 1},
-		pseudoWeather: 'watersport',
+		priority: 4,
+		flags: {noassist: 1, failcopycat: 1},
+		stallingMove: true,
+		volatileStatus: 'watersport',
+		onPrepareHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
 		condition: {
-			duration: 5,
-			onFieldStart(field, source) {
-				this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Water Sport');
 			},
-			onBasePowerPriority: 1,
-			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Fire') {
-					this.debug('water sport weaken');
-					return this.chainModify([1352, 4096]);
+			onTryHitPriority: 1,
+			onTryHit(target, source, move) {
+				if (move.type !== "Fire") {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
 				}
-			},
-			onFieldResidualOrder: 27,
-			onFieldResidualSubOrder: 3,
-			onFieldEnd() {
-				this.add('-fieldend', 'move: Water Sport');
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					const bestStat = target.getBestStat(true, true);
+					this.boost({[bestStat]: 1} , target)
+					this.add('-activate', target, 'move: Water Sport');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return this.NOT_FAIL;
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "self",
 		type: "Water",
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
