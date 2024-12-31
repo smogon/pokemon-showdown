@@ -19545,6 +19545,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (type !== target.getTypes()[0]) return;
 				return typeMod + 1;
 			},
+			onSourceModifyDamage(damage, source, target, move) {
+				return this.chainModify(1.5);
+			},
 		},
 		boosts: {
 			spe: -1,
