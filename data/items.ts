@@ -7720,4 +7720,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 6,
 		isNonstandard: "Past",
 	},
+	dimencionador: {
+		name: "Dimencionador",
+		spritenum: 662,
+		fling: {
+			basePower: 60,
+		},
+		num: -105,
+		gen: 7,
+	},
 };

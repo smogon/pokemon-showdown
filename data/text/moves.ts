@@ -7359,9 +7359,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		desc: "If one of the user's allies chose to use Fire Pledge or Grass Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Water Pledge with 150 power and a rainbow appears on the user's side for 4 turns, which doubles secondary effect chances and stacks with the Serene Grace Ability, except effects that cause flinching can only have their chance doubled once. If combined with Grass Pledge, the ally uses Grass Pledge with 150 power and a swamp appears on the target's side for 4 turns, which quarters the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Water Gem, and cannot be redirected by the Storm Drain Ability.",
 		shortDesc: "Use with Grass or Fire Pledge for added effect.",
 
-		activate: "  [POKEMON] is waiting for [TARGET]'s move...",
-		start: "  A rainbow appeared in the sky on [TEAM]'s side!",
-		end: "  The rainbow on [TEAM]'s side disappeared!",
+		start: "  Fire's power was weakened!",
+		end: "  The effects of Water Pledge have faded.",
 	},
 	waterpulse: {
 		name: "Water Pulse",

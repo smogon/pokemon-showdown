@@ -408,7 +408,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	ancientpower: {
 		num: 246,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
 		category: "Special",
 		name: "Ancient Power",
 		pp: 5,
@@ -6637,12 +6637,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				target.hasAbility(['plus', 'minus']) &&
 				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
 			));
-			if (!targets.length) return false;
+			const targets2 = side.allies().filter(target => (
+				!target.hasAbility(['plus', 'minus']) &&
+				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
+			));
+			if (!targets.length && !targets2.length) return false;
 			let didSomething = false;
 			for (const target of targets) {
-				didSomething = this.boost({atk: 1, spa: 1}, target, source, move, false, true) || didSomething;
+				if (target.hasAbility(['plus', 'minus']))
+				this.boost({atk: 2, spa: 2}, target, source, move, false, true);
 			}
-			return didSomething;
+			for (const target2 of targets2) {
+				if (!target2.hasAbility(['plus', 'minus']))
+			this.boost({atk: 1, spa: 1}, target2, source, move, false, true)
+			}
 		},
 		secondary: null,
 		target: "allySide",
@@ -7965,9 +7973,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
-					return 7;
+				if (source?.hasItem('dimencionador')) {
+					return 8;
 				}
 				return 5;
 			},
@@ -11040,9 +11047,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Magic Room');
-					return 7;
+				if (source?.hasItem('dimencionador')) {
+					return 8;
 				}
 				return 5;
 			},
@@ -11090,13 +11096,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	magnetbomb: {
 		num: 443,
 		accuracy: true,
-		basePower: 60,
+		basePower: 80,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Magnet Bomb",
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		onHit(target, source, move) {
+			if(target.hasType('Steel'))
+			target.addVolatile('trapped', source, move, 'trapper');
+		},
 		secondary: null,
 		target: "normal",
 		type: "Steel",
@@ -15807,67 +15817,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	rollout: {
 		num: 205,
-		accuracy: 90,
-		basePower: 30,
+		accuracy: 100,
+		basePower: 120,
 		basePowerCallback(pokemon, target, move) {
 			let bp = move.basePower;
-			const rolloutData = pokemon.volatiles['rollout'];
-			if (rolloutData?.hitCount) {
-				bp *= Math.pow(2, rolloutData.contactHitCount);
-			}
-			if (rolloutData && pokemon.status !== 'slp') {
-				rolloutData.hitCount++;
-				rolloutData.contactHitCount++;
-				if (rolloutData.hitCount < 5) {
-					rolloutData.duration = 2;
-				}
-			}
 			if (pokemon.volatiles['defensecurl']) {
-				bp *= 2;
+				bp += 30;
 			}
-			this.debug("BP: " + bp);
 			return bp;
 		},
 		category: "Physical",
 		name: "Rollout",
 		pp: 20,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, failinstruct: 1, noparentalbond: 1},
-		onModifyMove(move, pokemon, target) {
-			if (pokemon.volatiles['rollout'] || pokemon.status === 'slp' || !target) return;
-			pokemon.addVolatile('rollout');
-			if (move.sourceEffect) pokemon.lastMoveTargetLoc = pokemon.getLocOf(target);
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, failinstruct: 1},
+		self: {
+			volatileStatus: 'lockedmove',
 		},
-		onAfterMove(source, target, move) {
-			const rolloutData = source.volatiles["rollout"];
-			if (
-				rolloutData &&
-				rolloutData.hitCount === 5 &&
-				rolloutData.contactHitCount < 5
-				// this conditions can only be met in gen7 and gen8dlc1
-				// see `disguise` and `iceface` abilities in the resp mod folders
-			) {
-				source.addVolatile("rolloutstorage");
-				source.volatiles["rolloutstorage"].contactHitCount =
-					rolloutData.contactHitCount;
+		onAfterMove(pokemon) {
+			if (pokemon.volatiles['lockedmove'] && pokemon.volatiles['lockedmove'].duration === 1) {
+				pokemon.removeVolatile('lockedmove');
 			}
 		},
-		condition: {
-			duration: 1,
-			onLockMove: 'rollout',
-			onStart() {
-				this.effectState.hitCount = 0;
-				this.effectState.contactHitCount = 0;
-			},
-			onResidual(target) {
-				if (target.lastMove && target.lastMove.id === 'struggle') {
-					// don't lock
-					delete target.volatiles['rollout'];
-				}
-			},
-		},
 		secondary: null,
-		target: "normal",
+		target: "randomNormal",
 		type: "Rock",
 		contestType: "Cute",
 	},
@@ -16787,12 +16760,50 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "Shelter",
 		pp: 10,
-		priority: 0,
-		flags: {snatch: 1, metronome: 1},
-		boosts: {
-			def: 2,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'shelter',
+		onPrepareHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
-		secondary: null,
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') {
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (this.checkMoveMakesContact(move, source, target)) {
+					this.boost({def: 1}, target, target, this.dex.getActiveMove("Shelter"));
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+					this.boost({def: 1}, target, target, this.dex.getActiveMove("Shelter"));
+				}
+			},
+		},
 		target: "self",
 		type: "Steel",
 	},
@@ -17835,6 +17846,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		type: "Electric",
 		contestType: "Cool",
 	},
+	//TODO: fix damage
 	sparklingaria: {
 		num: 664,
 		accuracy: 100,
@@ -17856,7 +17868,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
-	
+
 		onHit(target, source, move) {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.25))) {
@@ -18410,14 +18422,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	steelroller: {
 		num: 798,
 		accuracy: 100,
-		basePower: 130,
+		basePower: 85,
 		category: "Physical",
 		name: "Steel Roller",
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		onTry() {
-			return !this.field.isTerrain('');
+		onTry(source, target, move) {
+			 if(!this.field.isTerrain('')){
+				move.basePower = 130;
+				return;
+			 };
 		},
 		onHit() {
 			this.field.clearTerrain();
@@ -19537,6 +19552,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (type !== target.getTypes()[0]) return;
 				return typeMod + 1;
 			},
+			onSourceModifyDamage(damage, source, target, move) {
+				return this.chainModify(1.5);
+			},
 		},
 		boosts: {
 			spe: -1,
@@ -20529,9 +20547,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Trick Room');
-					return 7;
+				if (source?.hasItem('dimencionador')) {
+					return 8;
 				}
 				return 5;
 			},
@@ -21120,67 +21137,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 518,
 		accuracy: 100,
 		basePower: 80,
-		basePowerCallback(target, source, move) {
-			if (['firepledge', 'grasspledge'].includes(move.sourceEffect)) {
-				this.add('-combine');
-				return 150;
-			}
-			return move.basePower;
-		},
 		category: "Special",
 		name: "Water Pledge",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1, pledgecombo: 1},
-		onPrepareHit(target, source, move) {
-			for (const action of this.queue) {
-				if (action.choice !== 'move') continue;
-				const otherMove = action.move;
-				const otherMoveUser = action.pokemon;
-				if (
-					!otherMove || !action.pokemon || !otherMoveUser.isActive ||
-					otherMoveUser.fainted || action.maxMove || action.zmove
-				) {
-					continue;
-				}
-				if (otherMoveUser.isAlly(source) && ['firepledge', 'grasspledge'].includes(otherMove.id)) {
-					this.queue.prioritizeAction(action, move);
-					this.add('-waiting', source, otherMoveUser);
-					return null;
-				}
-			}
-		},
-		onModifyMove(move) {
-			if (move.sourceEffect === 'grasspledge') {
-				move.type = 'Grass';
-				move.forceSTAB = true;
-				move.sideCondition = 'grasspledge';
-			}
-			if (move.sourceEffect === 'firepledge') {
-				move.type = 'Water';
-				move.forceSTAB = true;
-				move.self = {sideCondition: 'waterpledge'};
-			}
-		},
+		pseudoWeather: 'waterpledge',
 		condition: {
-			duration: 4,
-			onSideStart(targetSide) {
-				this.add('-sidestart', targetSide, 'Water Pledge');
+			duration: 1,
+			onFieldStart(field, source) {
+				this.add('-fieldstart', 'move: Water Pledge', '[of] ' + source);
 			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 7,
-			onSideEnd(targetSide) {
-				this.add('-sideend', targetSide, 'Water Pledge');
-			},
-			onModifyMove(move, pokemon) {
-				if (move.secondaries && move.id !== 'secretpower') {
-					this.debug('doubling secondary chance');
-					for (const secondary of move.secondaries) {
-						if (pokemon.hasAbility('serenegrace') && secondary.volatileStatus === 'flinch') continue;
-						if (secondary.chance) secondary.chance *= 2;
-					}
-					if (move.self?.chance) move.self.chance *= 2;
+			onBasePowerPriority: 1,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					this.debug('water pledge weaken');
+					return this.chainModify([1352, 4096]);
 				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 3,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Water Pledge');
 			},
 		},
 		secondary: null,
@@ -21235,29 +21213,47 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Water Sport",
 		pp: 15,
-		priority: 0,
-		flags: {nonsky: 1, metronome: 1},
-		pseudoWeather: 'watersport',
+		priority: 4,
+		flags: {noassist: 1, failcopycat: 1},
+		stallingMove: true,
+		volatileStatus: 'watersport',
+		onPrepareHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
 		condition: {
-			duration: 5,
-			onFieldStart(field, source) {
-				this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Water Sport');
 			},
-			onBasePowerPriority: 1,
-			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Fire') {
-					this.debug('water sport weaken');
-					return this.chainModify([1352, 4096]);
+			onTryHitPriority: 1,
+			onTryHit(target, source, move) {
+				if (move.type !== "Fire") {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
 				}
-			},
-			onFieldResidualOrder: 27,
-			onFieldResidualSubOrder: 3,
-			onFieldEnd() {
-				this.add('-fieldend', 'move: Water Sport');
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					const bestStat = target.getBestStat(true, true);
+					this.boost({[bestStat]: 1} , target)
+					this.add('-activate', target, 'move: Water Sport');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return this.NOT_FAIL;
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "self",
 		type: "Water",
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
@@ -21596,9 +21592,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', '[move] Wonder Room');
-					return 7;
+				if (source?.hasItem('dimencionador')) {
+					return 8;
 				}
 				return 5;
 			},
