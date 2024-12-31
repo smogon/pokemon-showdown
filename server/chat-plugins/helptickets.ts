@@ -2408,7 +2408,8 @@ export const commands: Chat.ChatCommands = {
 			const staffMessage = [
 				`<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}`,
 				`<button class="button" name="send" value="/modlog room=global, user='${ticket.userid}'"><small>Global Modlog for ${ticket.creator}</small></button>`,
-				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`,
+				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button>`,
+				`<button class="button" name="send" value="/am edithistory ${ticket.userid}"><small>Artemis History for ${ticket.creator}</small></button></p></details>`
 			].join('<br />');
 			const staffHint = staffContexts[ticketType] || '';
 			let reportTargetInfo = '';
