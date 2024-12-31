@@ -4187,7 +4187,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		boosts: {
 			atk: 1,
-		}, 
+		},
 		target: "adjacentAlly",
 		type: "Dragon",
 	},
@@ -19279,19 +19279,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	synchronoise: {
 		num: 485,
-		accuracy: 100,
-		basePower: 120,
+		accuracy: 90,
+		basePower: 100,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Synchronoise",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
-		onTryImmunity(target, source) {
-			return target.hasType(source.getTypes());
+		flags: {protect: 1, mirror: 1, sound: 1, metronome: 1},
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
 		},
 		secondary: null,
-		target: "allAdjacent",
+		target: "normal",
 		type: "Psychic",
 		contestType: "Clever",
 	},
