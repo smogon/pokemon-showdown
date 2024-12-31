@@ -1111,7 +1111,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				`Punish <strong>${ticket.userid}</strong> (reporter)`,
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`,
 			);
-			buf += `<strong>Reported user:</strong> ${reportUserid} </strong>`;
+			buf += `<strong>Reported user:</strong> <span class="username">${reportUserid}</span> </strong>`;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${reportUserid}'">Global Modlog</button><br />`;
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
@@ -1229,7 +1229,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			);
 			const opp = getReportedUser(ticket) || (await listOpponentsFrom(ticket))[0];
 			if (opp) {
-				buf += `<br /><strong>Reported user:</strong> ${opp} `;
+				buf += `<br /><strong>Reported user:</strong> <span class="username">${opp}</span> `;
 				buf += `<button class="button" name="send" value="/modlog room=global,user='${opp}'">Global Modlog</button><br />`;
 				buf += HelpTicket.displayPunishmentList(
 					opp,
