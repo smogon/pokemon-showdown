@@ -18454,14 +18454,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	steelroller: {
 		num: 798,
 		accuracy: 100,
-		basePower: 130,
+		basePower: 85,
 		category: "Physical",
 		name: "Steel Roller",
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		onTry() {
-			return !this.field.isTerrain('');
+		onTry(source, target, move) {
+			 if(!this.field.isTerrain('')){
+				move.basePower = 130;
+				return;
+			 };
 		},
 		onHit() {
 			this.field.clearTerrain();
