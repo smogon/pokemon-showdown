@@ -7729,4 +7729,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: -105,
 		gen: 7,
 	},
+	snorlaxite: {
+		name: "Snorlaxite",
+		spritenum: 599,
+		megaStone: "Snorlax-Mega",
+		megaEvolves: "Snorlax",
+		itemUser: ["Snorlax"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -106,
+		gen: 6,
+		isNonstandard: "Past",
+	},
 };
