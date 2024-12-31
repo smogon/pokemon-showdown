@@ -545,7 +545,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Armor Cannon",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, pulse: 1,},
 		self: {
 			boosts: {
 				def: -1,
@@ -4469,7 +4469,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Dynamax Cannon",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, failencore: 1, nosleeptalk: 1, failcopycat: 1, failmimic: 1, failinstruct: 1, noparentalbond: 1},
+		flags: {protect: 1, failencore: 1, nosleeptalk: 1, failcopycat: 1, failmimic: 1, failinstruct: 1, noparentalbond: 1, pulse: 1,},
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -5830,7 +5830,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Flash Cannon",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, light: 1, beam: 1,},
+		flags: {protect: 1, mirror: 1, metronome: 1, light: 1, beam: 1, pulse: 1,},
 		secondary: {
 			chance: 10,
 			boosts: {
@@ -5868,7 +5868,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Fleur Cannon",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, bullet: 1,},
+		flags: {protect: 1, mirror: 1, bullet: 1, pulse: 1,},
 		self: {
 			boosts: {
 				spa: -2,
@@ -21801,7 +21801,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Zap Cannon",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1, pulse: 1,},
 		secondary: {
 			chance: 100,
 			status: 'par',
