@@ -14746,16 +14746,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1, metronome: 1},
-		onHit(target, source) {
-			if (!target.cureStatus()) {
-				this.add('-fail', source);
-				this.attrLastMove('[still]');
-				return this.NOT_FAIL;
+		onHitSide(side, source, move) {
+			const targets = side.allies().filter(target => (
+				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
+			));
+			const targets2 = side.allies().filter(target => (
+				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
+			));
+			for (const target of targets) {
+				this.heal(Math.ceil(target.baseMaxhp * 0.33), target);
+				target.cureStatus();
 			}
-			this.heal(Math.ceil(source.maxhp * 0.5), source);
 		},
 		secondary: null,
-		target: "normal",
+		target: "allySide",
 		type: "Poison",
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Beautiful",
