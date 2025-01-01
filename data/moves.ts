@@ -2508,6 +2508,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 498,
 		accuracy: 100,
 		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			 if(target.getStat('def', true, true) < target.getStat('def', false, true) || target.getStat('spd', true, true) < target.getStat('spd', false, true)){
+				return move.basePower *= 2;
+			}
+				return move.basePower;
+		},
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Chip Away",
