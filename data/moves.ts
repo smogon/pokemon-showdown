@@ -4119,11 +4119,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "Double Team",
 		pp: 15,
-		priority: 0,
-		flags: {snatch: 1, metronome: 1},
-		boosts: {
-			evasion: 1,
+		priority: +1,
+		flags: {metronome: 1},
+		onTry(source) {
+			return !!this.canSwitch(source.side);
 		},
+		selfSwitch: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
