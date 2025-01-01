@@ -978,7 +978,7 @@
         ]
     },
     "typhlosionhisui": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -1643,7 +1643,7 @@
         ]
     },
     "pelipper": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1876,7 +1876,7 @@
         ]
     },
     "altaria": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1987,7 +1987,7 @@
         ]
     },
     "glalie": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2466,7 +2466,7 @@
         ]
     },
     "lucario": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2594,7 +2594,7 @@
         ]
     },
     "magmortar": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -2633,7 +2633,7 @@
         ]
     },
     "glaceon": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -2823,7 +2823,7 @@
         ]
     },
     "uxie": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3433,7 +3433,7 @@
         ]
     },
     "lilligant": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -4161,7 +4161,7 @@
         ]
     },
     "gogoat": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -4300,7 +4300,7 @@
         ]
     },
     "goodrahisui": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -4312,7 +4312,7 @@
                 "role": "Doubles Bulky Setup",
                 "movepool": ["Acid Armor", "Body Press", "Heavy Slam", "Life Dew", "Protect"],
                 "abilities": ["Sap Sipper"],
-                "teraTypes": ["Fighting"] 
+                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -4378,7 +4378,7 @@
         ]
     },
     "diancie": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -4395,7 +4395,7 @@
         ]
     },
     "hoopa": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -4506,7 +4506,7 @@
         ]
     },
     "vikavolt": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -5341,7 +5341,7 @@
         ]
     },
     "duraludon": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -5414,7 +5414,7 @@
         ]
     },
     "zamazentacrowned": {
-        "level": 68,
+        "level": 67,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -5459,7 +5459,7 @@
         ]
     },
     "urshifurapidstrike": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -6338,7 +6338,7 @@
         ]
     },
     "screamtail": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Support",
