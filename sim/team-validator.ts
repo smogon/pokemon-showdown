@@ -1763,6 +1763,13 @@ export class TeamValidator {
 			}
 		}
 
+		if (isTotem) {
+			banReason = ruleTable.check('pokemontag:totem', setHas);
+			if (banReason) {
+				return `Totems are ${banReason}.`;
+			}
+		}
+
 		if (isGmax) {
 			banReason = ruleTable.check('pokemon:' + tierSpecies.id + 'gmax');
 			if (banReason) {
