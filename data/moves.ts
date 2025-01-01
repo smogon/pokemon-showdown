@@ -2514,9 +2514,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
-		onTry(source, target, move) {
-			 if(target.boosts)
-		},
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		secondary: null,
