@@ -8375,6 +8375,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		boosts: {
 			def: 1,
 		},
+		volatileStatus: 'harden',
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'move: Harden'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
+			},
+			onCriticalHit: false,
+			onResidualOrder: 26,
+			onResidualSubOrder: 6,
+			onEnd(target) {
+				this.add('-end', target, 'move: Harden'); // "[side.name]'s team's Lucky Chant wore off!"
+			},
+		},
 		secondary: null,
 		target: "self",
 		type: "Normal",
