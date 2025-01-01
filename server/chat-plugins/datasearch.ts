@@ -1081,6 +1081,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			) &&
 			(!species.tier.startsWith("CAP") || capSearch) &&
 			megaSearchResult &&
+			totemSearchResult &&
 			gmaxSearchResult &&
 			fullyEvolvedSearchResult
 		) {
