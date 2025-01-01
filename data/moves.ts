@@ -8324,11 +8324,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: {metronome: 1},
-		onTryHit(target, source) {
-			this.add('-activate', target, 'move: Happy Hour');
+		slotCondition: 'Happy Hour',
+		condition: {
+			onStart(pokemon, source) {
+				this.effectState.startingTurn = this.getOverflowedTurnCount();
+			},
+			onResidualOrder: 4,
+			onResidual(side: any) {
+				if (this.getOverflowedTurnCount() <= this.effectState.startingTurn + 1) return;
+				side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'happyhour');
+			},
+			onEnd(target) {
+				if (target.hp ===  target.baseMaxhp) {
+					this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, target)
+					this.add('-activate', target, 'move: Happy Hour');
+				}
+			},
 		},
 		secondary: null,
-		target: "allySide",
+		target: "self",
 		type: "Normal",
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
