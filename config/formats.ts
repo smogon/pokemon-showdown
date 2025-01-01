@@ -19,6 +19,20 @@ The column value will be ignored for repeat sections.
 
 export const Formats: import('../sim/dex-formats').FormatList = [
 
+	// Nuevo Meta Singles
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Nuevo Meta Singles",
+	},
+	{
+		name: "[NM] OU",
+		mod: 'gen9',
+		ruleset: ['Standard NM', 'Species Clause', 'Sleep Clause Mod', 'Terastal Clause'],
+		banlist: ['Baton Pass'],
+	},
+
+
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 

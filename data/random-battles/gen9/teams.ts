@@ -722,7 +722,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		movePool: string[],
 		teraType: string,
-		role: RandomTeamsTypes.Role,
+		role: RandomTeamsTypes.Role, 
 	): Set<string> {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species, teraType, abilities);
