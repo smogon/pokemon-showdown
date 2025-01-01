@@ -135,6 +135,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: -8,
 		flags: {contact: 1, protect: 1, punch: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 		pp: 5,
+		breaksProtect: true,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -146,15 +147,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			pokemon.addVolatile('taiji');
 		},
 		onModifyMove(move, pokemon) {
+			this.add('-message', `onModifyMove TRIGGERED`);
 			if (!pokemon.volatiles['taiji']?.damaged) {
 				move.willCrit = true;
-				move.onHit = function (foe) {
-					foe.addVolatile('mustrecharge');
+				move.onHit = function (t, s, m) {
+					t.addVolatile('mustrecharge');
 				};
 			} 
-		},
-		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['taiji']?.damaged) return true;
 		},
 		condition: {
 			duration: 1,
@@ -163,35 +162,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-anim', pokemon, 'Laser Focus', pokemon);
 				this.add('-message', `${pokemon.name} tightened their focus!`);
 			},
-			onFoeBeforeMovePriority: 6,
-			onFoeBeforeMove(attacker, defender, move) {
-				if (
-					attacker !== defender &&
-					move.category !== 'Status' &&
-					this.actions.getDamage(attacker, defender, move)
-				) {
-					const moveTemp = this.dex.moves.get('taiji');
-					const moveMod = {
-						move: moveTemp.name,
-						id: moveTemp.id,
-						basePower: moveTemp.basePower / 2,
-						pp: moveTemp.pp,
-						maxpp: moveTemp.pp,
-						target: moveTemp.target,
-						disabled: false,
-						used: false,
-					};
-					this.queue.prioritizeAction(this.queue.resolveAction({
-						choice: 'move',
-						pokemon: defender,
-						move: moveMod,
-						targetLoc: defender.getLocOf(attacker),
-					})[0] as MoveAction);
+			onDamage(damage, target, source, move) {
+				if (target !== source && move && move.category !== 'Status') {
 					this.effectState.damaged = true;
 				}
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'move: Taiji', '[silent]');
 			},
 		},
 		secondary: null,
