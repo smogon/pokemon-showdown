@@ -21,7 +21,6 @@
                 "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-<<<<<<< HEAD
                 "items": ["Black Sludge"]
             },
             {
@@ -44,9 +43,6 @@
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
                 "items": ["Venasaurite"]
-=======
-                "items": "Black Sludge"
->>>>>>> 0741df05cfe4e3f7710430070ad6ce69b517d344
             }
         ]
     },
