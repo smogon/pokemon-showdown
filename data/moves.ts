@@ -3486,7 +3486,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	dazzlinggleam: {
 		num: 605,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 85,
 		category: "Special",
 		name: "Dazzling Gleam",
 		pp: 10,
@@ -21961,7 +21961,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Nonallamas",
 			pp: 5,
 			priority: 0,
-			flags: {contact: 1, protect: 1, mirror: 1},
+			flags: {protect: 1, mirror: 1},
 			multihit: 9,
 			secondary: {
 				chance: 10,

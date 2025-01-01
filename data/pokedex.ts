@@ -549,7 +549,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 24,
 		name: "Arbok",
 		types: ["Poison"],
-		baseStats: {hp: 74, atk: 95, def: 71, spa: 65, spd: 85, spe: 80},
+		baseStats: {hp: 74, atk: 95, def: 71, spa: 55, spd: 115, spe: 80},
 		abilities: {0: "Intimidate", 1: "Shed Skin", H: "Unnerve"},
 		heightm: 3.5,
 		weightkg: 65,
