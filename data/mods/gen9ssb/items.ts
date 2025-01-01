@@ -53,7 +53,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onTryHit(pokemon, source, move) {
 			if (move.category === 'Special' && pokemon !== source) {
 				if (!pokemon.abilityState.sack) pokemon.abilityState.sack = [];
-				if (pokemon.abilityState.sack.length >= 5) return;
+				if (pokemon.abilityState.sack.length >= 3) return;
 				this.add('-anim', pokemon, 'Present', pokemon);
 				this.add('-anim', pokemon, 'Tickle', pokemon);
 				this.add('-activate', pokemon, 'item: Gift Sack', move.name);
