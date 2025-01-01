@@ -186,7 +186,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra") {
+				if (pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.isTotem || pokemon.species.forme === "Ultra") {
 					pokemon.canTerastallize = null;
 				}
 			}

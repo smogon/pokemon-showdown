@@ -34,6 +34,10 @@ export const Tags: {[id: IDEntry]: TagData} = {
 		name: "Mega",
 		speciesFilter: species => !!species.isMega,
 	},
+	totem: {
+		name: "Totem"
+		speciesFilter: species => !!species.isTotem,
+	},
 	mythical: {
 		name: "Mythical",
 		speciesFilter: species => species.tags.includes("Mythical"),

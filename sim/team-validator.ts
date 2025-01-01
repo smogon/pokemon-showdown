@@ -1706,6 +1706,15 @@ export class TeamValidator {
 			}
 		}
 
+		let isTotem = false;
+		if (tierSpecies !== species) {
+			setHas['pokemon:' + tierSpecies.id] = true;
+			if (tierSpecies.isTotem || tierSpecies.isPrimal) {
+				setHas['pokemontag:totem'] = true;
+				isTotem = true;
+			}
+		}
+
 		let isGmax = false;
 		if (tierSpecies.canGigantamax && set.gigantamax) {
 			setHas['pokemon:' + tierSpecies.id + 'gmax'] = true;

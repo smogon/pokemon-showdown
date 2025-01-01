@@ -665,6 +665,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let showAll = false;
 	let sort = null;
 	let megaSearch = null;
+	let totemSearch = null;
 	let gmaxSearch = null;
 	let tierSearch = null;
 	let capSearch: boolean | null = null;
@@ -1069,6 +1070,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	const dex: {[k: string]: Species} = {};
 	for (const species of mod.species.all()) {
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
+		const totemSearchResult = totemSearch === null || totemSearch === !!species.isTotem;
 		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
 		if (

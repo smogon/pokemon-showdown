@@ -28,7 +28,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[NM] OU",
 		mod: 'gen9',
-		ruleset: ['Standard', /*'Species Clause', 'Sleep Clause Mod',*/ 'Terastal Clause'],
+		ruleset: ['Standard NatDex', /*'Species Clause', 'Sleep Clause Mod',*/ 'Terastal Clause'],
 		banlist: ['Baton Pass'],
 	},
 

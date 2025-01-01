@@ -217,6 +217,8 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly mother?: string;
 	/** True if a pokemon is mega. */
 	readonly isMega?: boolean;
+	/** True if a pokemon is totem. */
+	readonly isTotem?: boolean;
 	/** True if a pokemon is primal. */
 	declare readonly isPrimal?: boolean;
 	/** Name of its Gigantamax move, if a pokemon is capable of gigantamaxing. */
@@ -318,6 +320,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
+		this.isTotem = !!(this.forme && ['Alola-Totem', 'Totem', 'Hisui-Totem'].includes(this.forme)) || undefined;
 		this.canGigantamax = data.canGigantamax || undefined;
 		this.gmaxUnreleased = !!data.gmaxUnreleased;
 		this.cannotDynamax = !!data.cannotDynamax;
