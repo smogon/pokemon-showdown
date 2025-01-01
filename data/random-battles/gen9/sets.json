@@ -8,6 +8,10 @@
                 "abilities": ["Chlorophyll"],
                 "teraTypes": ["Ground"],
                 "items": "Life Orb",
+                "nature": "Modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
                 "spaEVs": 252,
                 "spdEVs": 4,
                 "speEVs": 252
@@ -18,6 +22,10 @@
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
                 "items": "Assault Vest",
+                "nature": "Timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
                 "spaEVs": 252,
                 "spdEVs": 4,
                 "speEVs": 252
@@ -28,9 +36,13 @@
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
                 "items": "Black Sludge",
+                "nature": "Calm",
                 "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
                 "spaEVs": 8,
-                "spdEVs": 252
+                "spdEVs": 252,
+                "speEVs": 252
             },
             {
                 "role": "Physically Defensive",

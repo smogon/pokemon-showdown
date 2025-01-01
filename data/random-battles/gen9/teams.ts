@@ -1496,6 +1496,8 @@ export class RandomTeams {
 		const items = set.items!;
 		let item = undefined;
 
+		let nature = set.nature;
+
 		const hpEVs = set.hpEVs!;
 		const atkEVs = set.atkEVs!;
 		const defEVs = set.defEVs!;
@@ -1595,6 +1597,7 @@ export class RandomTeams {
 			level,
 			moves: shuffledMoves,
 			ability,
+			nature,
 			evs,
 			ivs,
 			item,

@@ -536,6 +536,7 @@ namespace RandomTeamsTypes {
 		teraTypes?: string[];
 		preferredTypes?: string[];
 		items?: string;
+		nature?: string;
 		hpEVs?: number;
 		atkEVs?: number;
 		defEVs?: number;
