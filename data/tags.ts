@@ -35,7 +35,7 @@ export const Tags: {[id: IDEntry]: TagData} = {
 		speciesFilter: species => !!species.isMega,
 	},
 	totem: {
-		name: "Totem"
+		name: "Totem",
 		speciesFilter: species => !!species.isTotem,
 	},
 	mythical: {
