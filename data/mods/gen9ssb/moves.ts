@@ -127,7 +127,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	taiji: {
 		name: "Taiji",
 		shortDesc: "User focuses, then hits last at varying power.",
-		desc: "User focuses, then moves last. If the user is not damaged by an attacking move while focusing, this move always results in a critical hit and forces the target to recharge. If the user is targeted by an attacking move while focusing, this move will hit first at halved power.",
+		desc: "User focuses, then moves last. If the user is not damaged by an attacking move while focusing, this move always results in a critical hit and forces the target to recharge; Otherwise, it hits at halved power.",
 		basePower: 80,
 		category: "Physical",
 		accuracy: true,
@@ -147,18 +147,21 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			pokemon.addVolatile('taiji');
 		},
 		onModifyMove(move, pokemon) {
-			this.add('-message', `onModifyMove TRIGGERED`);
 			if (!pokemon.volatiles['taiji']?.damaged) {
+				this.debug('not hit while focusing; Taiji will crit and force recharge');
 				move.willCrit = true;
 				move.onHit = function (t, s, m) {
 					t.addVolatile('mustrecharge');
 				};
-			} 
+			} else {
+				this.debug('hit while focusing; Taiji power halved');
+				move.basePower = move.basePower / 2;
+			}
 		},
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Taiji', '[silent]');
+				this.add('-singleturn', pokemon, 'Taiji', '[silent]');
 				this.add('-anim', pokemon, 'Laser Focus', pokemon);
 				this.add('-message', `${pokemon.name} tightened their focus!`);
 			},
