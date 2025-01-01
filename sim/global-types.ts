@@ -536,6 +536,13 @@ namespace RandomTeamsTypes {
 		teraTypes?: string[];
 		preferredTypes?: string[];
 		items?: string;
+		hpEVs?: number;
+		atkEVs?: number;
+		defEVs?: number;
+		spaEVs?: number;
+		spdEVs?: number;
+		speEVs?: number;
+
 	}
 	export interface RandomSpeciesData {
 		level?: number;

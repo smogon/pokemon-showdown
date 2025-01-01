@@ -7,21 +7,30 @@
                 "movepool": ["Growth", "Earth Power", "Mega Drain", "Sludge Bomb"],
                 "abilities": ["Chlorophyll"],
                 "teraTypes": ["Ground"],
-                "items": "Life Orb"
+                "items": "Life Orb",
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             },
             {
                 "role": "Fast Special Sweeper",
                 "movepool": ["Earth Power", "Mega Drain", "Razor Wind", "Sludge Bomb"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Assault Vest"
+                "items": "Assault Vest",
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             },
             {
                 "role": "Specially Defensive",
                 "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
                 "abilities": ["Chlorophyll", "Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Black Sludge"
+                "items": "Black Sludge",
+                "hpEVs": 248,
+                "spaEVs": 8,
+                "spdEVs": 252
             }
         ]
     },

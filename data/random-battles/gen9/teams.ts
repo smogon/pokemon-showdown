@@ -1496,11 +1496,19 @@ export class RandomTeams {
 		const items = set.items!;
 		let item = undefined;
 
-		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
+		const hpEVs = set.hpEVs!;
+		const atkEVs = set.atkEVs!;
+		const defEVs = set.defEVs!;
+		const spaEVs = set.spaEVs!;
+		const spdEVs = set.hpEVs!;
+		const speEVs = set.hpEVs!;
+
+		let evs = {hp: hpEVs, atk: atkEVs, def: defEVs, spa: spaEVs, spd: spdEVs, spe: speEVs};
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 
 		const types = species.types;
 		const abilities = set.abilities!;
+
 
 		// Get moves
 		const moves = this.randomMoveset(types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
@@ -1594,6 +1602,8 @@ export class RandomTeams {
 			role,
 		};
 	}
+
+
 
 	getPokemonPool(
 		type: string,
