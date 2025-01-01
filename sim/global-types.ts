@@ -535,6 +535,7 @@ namespace RandomTeamsTypes {
 		abilities?: string[];
 		teraTypes?: string[];
 		preferredTypes?: string[];
+		items?: string;
 	}
 	export interface RandomSpeciesData {
 		level?: number;

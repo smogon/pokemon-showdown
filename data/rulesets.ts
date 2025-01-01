@@ -7,7 +7,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 	// Rulesets
 	///////////////////////////////////////////////////////////////////
-	standardnuevometa: {
+	/*standardnuevometa: {
 		effectType: 'ValidatorRule',
 		name: 'Standard NM',
 		desc: "The standard ruleset for all Nuevo Meta tiers",
@@ -62,7 +62,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 			}
 		},
-	},
+	},*/
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
