@@ -722,7 +722,7 @@ export class RandomTeams {
 		isDoubles: boolean,
 		movePool: string[],
 		teraType: string,
-		role: RandomTeamsTypes.Role, 
+		role: RandomTeamsTypes.Role,
 	): Set<string> {
 		const moves = new Set<string>();
 		let counter = this.queryMoves(moves, species, teraType, abilities);
@@ -1327,7 +1327,11 @@ export class RandomTeams {
 		isLead: boolean,
 		teraType: string,
 		role: RandomTeamsTypes.Role,
+		items: string,
 	): string {
+		if (items !== null){
+			return items;
+		}
 		if (
 			species.id !== 'jirachi' && (counter.get('Physical') >= 4) &&
 			['dragontail', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
@@ -1489,6 +1493,7 @@ export class RandomTeams {
 		let teraType = this.sampleIfArray(teraTypes);
 
 		let ability = '';
+		const items = set.items!;
 		let item = undefined;
 
 		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
@@ -1506,13 +1511,12 @@ export class RandomTeams {
 
 		// Get items
 		// First, the priority items
-		item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);
+		item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role, items);
 		if (item === undefined) {
 			if (isDoubles) {
 				item = this.getDoublesItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
 			} else {
-				item = this.getItem(ability, types, moves, counter, teamDetails, species, isLead, teraType, role);
-			}
+				item = this.getPriorityItem(ability, types, moves, counter, teamDetails, species, isLead, isDoubles, teraType, role);			}
 		}
 
 		// Get level
