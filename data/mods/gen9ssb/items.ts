@@ -1,4 +1,32 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Tao
+	zhuyou: {
+		name: "Zhuyou",
+		gen: 9,
+		onModifySpD(spd, pokemon) {
+			return this.chainModify(1.1);
+		},
+		onModifyDef(def, pokemon) {
+			return this.chainModify(1.1);
+		},
+		onModifyAtk(atk, pokemon) {
+			return this.chainModify(1.1);
+		},
+		onModifySpA(spa, pokemon) {
+			return this.chainModify(1.1);
+		},
+		onModifySpe(spe, pokemon) {
+			return this.chainModify(1.1);
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source.getMoveHitData(move).crit) {
+				this.heal(source.maxhp / 4, source);
+			}
+		},
+		onResidual(pokemon) {
+			if (pokemon.status) pokemon.cureStatus();
+		},
+	},
 	// Ingrid
 	odinssheath: {
 		name: "Odin's Sheath",
