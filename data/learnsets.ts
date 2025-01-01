@@ -2811,8 +2811,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	pikachuphd: {
 		learnset: {
 			electricterrain: ["6R"],
-			thundercage: ["9M"],
-			psyshock: ["9M"],
+			zingzap: ["9M"],
+			zenheabbutt: ["9M"],
 		},
 		eventOnly: true,
 	},
