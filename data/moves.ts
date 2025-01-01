@@ -4556,13 +4556,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	echoedvoice: {
 		num: 497,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 70,
 		basePowerCallback(pokemon, target, move) {
-			let bp = move.basePower;
-			if (this.field.pseudoWeather.echoedvoice) {
-				bp = move.basePower * this.field.pseudoWeather.echoedvoice.multiplier;
+			if (!pokemon.volatiles['echoedvoice'] || move.hit === 1) {
+				pokemon.addVolatile('echoedvoice');
 			}
-			this.debug('BP: ' + move.basePower);
+			const bp = this.clampIntRange(move.basePower + pokemon.volatiles['echoedvoice'].increase, 1, 600);
+			this.debug('BP: ' + bp);
 			return bp;
 		},
 		category: "Special",
@@ -4570,20 +4570,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
-		onTry() {
-			this.field.addPseudoWeather('echoedvoice');
-		},
 		condition: {
-			duration: 2,
-			onFieldStart() {
-				this.effectState.multiplier = 1;
+			onStart() {
+				this.effectState.increase = 10;
 			},
-			onFieldRestart() {
-				if (this.effectState.duration !== 2) {
-					this.effectState.duration = 2;
-					if (this.effectState.multiplier < 5) {
-						this.effectState.multiplier++;
-					}
+			onRestart() {
+				if (this.effectState.increase < 80) {
+					this.effectState.increase += 10;
 				}
 			},
 		},
@@ -6251,29 +6244,33 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 193,
 		accuracy: true,
 		basePower: 120,
-		category: "Status",
+		category: "Special",
 		isNonstandard: "Past",
 		name: "Foresight",
 		pp: 40,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1},
-		volatileStatus: 'foresight',
-		onTryHit(target) {
-			if (target.volatiles['miracleeye']) return false;
-		},
-		condition: {
-			noCopy: true,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'Foresight');
-			},
-			onNegateImmunity(pokemon, type) {
-				if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
-			},
-			onModifyBoost(boosts) {
-				if (boosts.evasion && boosts.evasion > 0) {
-					boosts.evasion = 0;
-				}
-			},
+		flags: {allyanim: 1, metronome: 1, futuremove: 1},
+		ignoreImmunity: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				move: 'foresight',
+				source: source,
+				moveData: {
+					id: 'foresight',
+					name: "Foresight",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: {allyanim: 1, metronome: 1, futuremove: 1},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					type: 'Normal',
+				},
+			});
+			this.add('-start', source, 'move: Future Sight');
+			return this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "normal",
