@@ -102,7 +102,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 	},
 	fairy: {
 		damageTaken: {
-			Bug: 0,
+			Bug: 2,
 			Dark: 2,
 			Dragon: 3,
 			Electric: 0,
@@ -283,7 +283,7 @@ export const TypeChart: import('../sim/dex-data').TypeDataTable = {
 			frz: 3,
 			Bug: 0,
 			Dark: 0,
-			Dragon: 2,
+			Dragon: 0,
 			Electric: 0,
 			Fairy: 0,
 			Fighting: 1,

@@ -1,18 +1,27 @@
 {
     "venusaur": {
-        "level": 84,
+        "level": 100,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Giga Drain", "Leech Seed", "Sleep Powder", "Sludge Bomb", "Substitute"],
-                "abilities": ["Chlorophyll", "Overgrow"],
-                "teraTypes": ["Steel", "Water"]
+                "role": "Fast Special Sweeper",
+                "movepool": ["Growth", "Earth Power", "Mega Drain", "Sludge Bomb"],
+                "abilities": ["Chlorophyll"],
+                "teraTypes": ["Ground"],
+                "items": ["Life Orb"]
             },
             {
-                "role": "Bulky Attacker",
-                "movepool": ["Earth Power", "Energy Ball", "Knock Off", "Sleep Powder", "Sludge Bomb", "Synthesis", "Toxic"],
+                "role": "Fast Special Sweeper",
+                "movepool": ["Earth Power", "Mega Drain", "Razor Wind", "Sludge Bomb"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Water"],
+                "items": ["Assault Vest"]
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
                 "abilities": ["Chlorophyll", "Overgrow"],
-                "teraTypes": ["Dark", "Steel", "Water"]
+                "teraTypes": ["Water"],
+                "items": ["Black Sludge"]
             }
         ]
     },
