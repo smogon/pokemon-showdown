@@ -210,6 +210,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Cranberry Cutter',
 		evs: {hp: 160, atk: 240, spe: 108}, nature: 'Jolly',
 	},
+	Tao: {
+		species: 'Kubfu', ability: 'Shangqing', item: 'Zhuyou', gender: 'M',
+		moves: ['Triple Kick', 'Circle Throw', 'Taiji'],
+		signatureMove: 'Wuji',
+		evs: {atk: 252, def: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
+	},
 	/*
  	Ingrid: {
 		species: 'Doublade', ability: 'Caliber Conversion', item: 'Odin\'s Sheath', gender: 'F',
@@ -222,12 +228,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Heavy Slam', 'Pay Day', 'Iron Defense'],
 		signatureMove: 'Capital Cannon',
 		evs: {}, nature: 'Bashful',
-	},
-	Tao: {
-		species: 'Kubfu', ability: 'Shangqing', item: 'Zhuyou', gender: 'M',
-		moves: ['Triple Kick', 'Circle Throw', 'Taiji'],
-		signatureMove: 'Wuji',
-		evs: {atk: 252, def: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
 	Kusanali: {
 		species: 'Shaymin', ability: 'On All Things Meditated', item: 'Seed of Stored Knowledge', gender: 'F',
