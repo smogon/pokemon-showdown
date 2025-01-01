@@ -164,7 +164,7 @@ export const ssbSets: SSBSets = {
 	},
 	Emerl: {
 		species: 'Genesect', ability: 'Perfect Copy', item: 'Choice Scarf', gender: 'N',
-		moves: ['U-Turn', 'Leech Life', 'Flash Cannon'],
+		moves: ['U-turn', 'Leech Life', 'Flash Cannon'],
 		signatureMove: 'Awakened Mode',
 		evs: {atk: 252, spa: 252, spe: 4}, nature: 'Hasty',
 	},
@@ -176,7 +176,7 @@ export const ssbSets: SSBSets = {
 	},
 	'Suika Ibuki': {
 		species: 'Ogerpon', ability: 'Density Manipulation', item: 'Ibuki Gourd', gender: 'F',
-		moves: ['U-Turn', 'Switcheroo', 'Drain Punch'],
+		moves: ['U-turn', 'Switcheroo', 'Drain Punch'],
 		signatureMove: 'Demi',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
