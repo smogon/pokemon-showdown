@@ -18571,7 +18571,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	stokedsparksurfer: {
 		num: 700,
 		accuracy: true,
-		basePower: 175,
+		basePower: 185,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Stoked Sparksurfer",
@@ -18581,7 +18581,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isZ: "aloraichiumz",
 		secondary: {
 			chance: 100,
-			status: 'par',
+			self: {
+				onHit() {
+					this.field.setTerrain('electricterrain');
+				},
+			},
 		},
 		target: "normal",
 		type: "Electric",

@@ -227,7 +227,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 655,
 		onTakeItem: false,
 		zMove: "Stoked Sparksurfer",
-		zMoveFrom: "Thunderbolt",
+		zMoveFrom: "Electro Ball",
 		itemUser: ["Raichu-Alola"],
 		num: 803,
 		gen: 7,
