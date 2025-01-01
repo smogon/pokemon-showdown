@@ -184,6 +184,44 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: -8,
 		flags: {contact: 1, protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
 		pp: 5,
+		willCrit: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Detect', source);
+			this.add('-anim', source, 'Sky Uppercut', target);
+		},
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('wuji');
+		},
+		beforeMoveCallback(pokemon) {
+			if (!pokemon.volatiles['wuji']?.damaged) {
+				this.add('cant', pokemon, 'Wuji', 'Wuji');
+				return true;
+			}
+		},
+		onHit(target, source, move) {
+			target.addVolatile('mustrecharge');
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'Wuji', '[silent]');
+				this.add('-anim', pokemon, 'Bulk Up', pokemon);
+				this.add('-message', `${pokemon.name} stanced up!`);
+			},
+			onDamage(damage, target, source, move) {
+				if (target !== source && move && move.category !== 'Status') {
+					this.effectState.damaged = true;
+					if (move.category === 'Physical') {
+						return 0;
+					} else if (move.category === 'Special') {
+						return damage / 2;
+					}
+				}
+			},
+		},
 		secondary: null,
 		type: "Fighting",
 		target: "normal",
