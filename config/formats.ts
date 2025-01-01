@@ -2256,10 +2256,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Appletun', 'Aurorus', 'Avalugg-Base', 'Banette-Base', 'Cacturne', 'Carracosta', 'Celebi', 'Cetitan', 'Chandelure', 'Cryogonal', 'Dipplin',
-			'Garbodor', 'Golem-Alola', 'Guzzlord', 'Jumpluff', 'Luvdisc', 'Magmortar', 'Mawile-Base', 'Milotic', 'Morpeko', 'Pachirisu', 'Perrserker',
-			'Primarina', 'Pupitar', 'Pyukumuku', 'Ribombee', 'Roserade', 'Rotom-Frost', 'Scovillain', 'Toxicroak', 'Walrein', 'Wo-Chien', 'Wugtrio',
-			'Yanmega', 'Zoroark-Base',
+			'Absol-Base', 'Alcremie', 'Bellibolt', 'Clodsire', 'Comfey', 'Crawdaunt', 'Cursola', 'Dachsbun', 'Donphan', 'Flapple', 'Golurk',
+			'Goodra-Base', 'Houndoom-Base', 'Infernape', 'Jynx', 'Kecleon', 'Kingdra', 'Mesprit', 'Oricorio-Pom-Pom ', 'Probopass', 'Reuniclus',
+			'Sawsbuck', 'Scyther', 'Shaymin-Land', 'Shiftry', 'Slowbro-Base', 'Spiritob', 'Swanna', 'Toedscruel', 'Torkoal', 'Type: Null',
+			'Unown', 'Vileplume', 'Virizion', 'Wugtrio',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
