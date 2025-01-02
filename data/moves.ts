@@ -4089,9 +4089,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: +1,
 		flags: {metronome: 1},
 		onTry(source) {
+			source.clearBoosts()
 			return !!this.canSwitch(source.side);
 		},
-		selfSwitch: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -9195,10 +9195,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Unobtainable",
 		name: "Hold Hands",
 		pp: 40,
-		priority: 0,
+		priority: 1,
 		flags: {bypasssub: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		secondary: null,
-		target: "adjacentAlly",
+		onTry(source, target) {
+			let foe = source.foes(true)[0] 
+			let move = foe.lastMove?.realMove
+			if (source.activeMoveActions > 1  || source.baseMaxhp > source.hp) {
+				this.hint("Hold Hands only works on your first turn out, at full health.");
+				return false;
+			}
+		},
+		boosts: {
+			def: 1,
+			spd: 1,
+			atk: 1,
+			spa: 1,
+			spe: 1,
+		},
+		target: "self",
 		type: "Normal",
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
@@ -9286,6 +9301,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 40,
 		priority: 0,
 		flags: {snatch: 1, sound: 1, metronome: 1},
+		heal: [1, 4],
 		boosts: {
 			atk: 1,
 		},
@@ -10354,16 +10370,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onTry(source) {
-			if (source.moveSlots.length < 2) return false; // Last Resort fails unless the user knows at least 2 moves
-			let hasLastResort = false; // User must actually have Last Resort for it to succeed
-			for (const moveSlot of source.moveSlots) {
-				if (moveSlot.id === 'lastresort') {
-					hasLastResort = true;
-					continue;
-				}
-				if (!moveSlot.used) return false;
-			}
-			return hasLastResort;
+			if (source.hp >= source.baseMaxhp) return false; // Last Resort fails unless the user knows at least 2 moves
 		},
 		secondary: null,
 		target: "normal",
@@ -10710,6 +10717,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onSourceAccuracy(accuracy, target, source, move) {
 				if (move && source === this.effectState.target && target === this.effectState.source) return true;
+			},
+			onSourceModifyDamage(relayVar, source, target, move) {
+				 this.chainModify(1.5);
 			},
 		},
 		secondary: null,

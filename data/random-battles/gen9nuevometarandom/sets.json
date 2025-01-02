@@ -1,0 +1,218 @@
+{
+    "venusaur": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Growth", "Earth Power", "Mega Drain", "Sludge Bomb"],
+                "abilities": ["Chlorophyll"],
+                "teraTypes": ["Ground"],
+                "items": "Life Orb",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Earth Power", "Mega Drain", "Razor Wind", "Sludge Bomb"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "calm",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 8,
+                "spdEVs": 252,
+                "speEVs": 252
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Water"],
+                "items": "Venusaurite"
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Leech Seed", "Synthesis", "Earth Power", "Mega Drain"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Water"],
+                "items": "Venusaurite"
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Razor Wind", "Sludge Bomb", "Earth Power", "Mega Drain"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Water"],
+                "items": "Venusaurite"
+            }
+        ]
+    },
+    "charizard": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Earthquake", "Flamethrower", "Focus Blast", "Hurricane", "Will-O-Wisp"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Dragon", "Fire", "Ground"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Flare Blitz", "Outrage", "Swords Dance"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Dragon", "Ground"]
+            }
+        ]
+    },
+    "blastoise": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Earthquake", "Hydro Pump", "Ice Beam", "Shell Smash"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Ground", "Steel", "Water"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Hydro Pump", "Ice Beam", "Shell Smash", "Tera Blast"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Electric", "Grass"]
+            }
+        ]
+    },
+    "arbok": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Earthquake", "Glare", "Gunk Shot", "Knock Off", "Sucker Punch", "Toxic Spikes"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Dark", "Ground"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Coil", "Earthquake", "Gunk Shot", "Trailblaze"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Grass", "Ground"]
+            },
+            {
+                "role": "Fast Bulky Setup",
+                "movepool": ["Coil", "Earthquake", "Gunk Shot", "Sucker Punch"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Dark", "Ground"]
+            }
+        ]
+    },
+    "pikachu": {
+        "level": 93,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Fake Out", "Knock Off", "Play Rough", "Surf", "Volt Switch", "Volt Tackle"],
+                "abilities": ["Lightning Rod"],
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "raichu": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Alluring Voice", "Encore", "Focus Blast", "Grass Knot", "Knock Off", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Lightning Rod"],
+                "teraTypes": ["Grass", "Water"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Encore", "Focus Blast", "Nasty Plot", "Surf", "Tera Blast", "Thunderbolt"],
+                "abilities": ["Lightning Rod"],
+                "teraTypes": ["Ice"]
+            }
+        ]
+    },
+    "raichualola": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Psychic", "Psyshock", "Surf", "Thunderbolt", "Volt Switch"],
+                "abilities": ["Surge Surfer"],
+                "teraTypes": ["Fairy", "Fighting", "Grass", "Water"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Nasty Plot", "Psyshock", "Surf", "Thunderbolt"],
+                "abilities": ["Surge Surfer"],
+                "teraTypes": ["Fairy", "Fighting", "Grass", "Water"]
+            }
+        ]
+    },
+    "sandslash": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Knock Off", "Rapid Spin", "Spikes", "Stone Edge", "Swords Dance"],
+                "abilities": ["Sand Rush"],
+                "teraTypes": ["Dragon", "Steel", "Water"]
+            }
+        ]
+    },
+    "sandslashalola": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Iron Head", "Knock Off", "Rapid Spin", "Spikes", "Triple Axel"],
+                "abilities": ["Slush Rush"],
+                "teraTypes": ["Flying", "Water"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Earthquake", "Ice Shard", "Knock Off", "Rapid Spin", "Swords Dance", "Triple Axel"],
+                "abilities": ["Slush Rush"],
+                "teraTypes": ["Ground"]
+            }
+        ]
+    },
+    "clefable": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Fire Blast", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
+                "abilities": ["Magic Guard", "Unaware"],
+                "teraTypes": ["Poison", "Steel"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Fire Blast", "Moonblast", "Moonlight"],
+                "abilities": ["Magic Guard", "Unaware"],
+                "teraTypes": ["Fire", "Steel"]
+            }
+        ]
+    }
+
+}
