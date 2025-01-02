@@ -51,7 +51,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	beedrillmega: {
-
+		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	pidgey: {
@@ -65,7 +65,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	pidgeotmega: {
-
+		isNonstandard: "Past",
 		tier: "Illegal",
 	},
 	rattata: {
@@ -1842,6 +1842,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	// Because it's marked as Unobtainable in the main file for some reason
 	eternatuseternamax: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 };

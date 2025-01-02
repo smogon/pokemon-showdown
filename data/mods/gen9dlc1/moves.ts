@@ -2,7 +2,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	aeroblast: {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, distance: 1, metronome: 1},
-
+		isNonstandard: "Past",
 	},
 	alluringvoice: {
 		inherit: true,
@@ -10,7 +10,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	beakblast: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	bitterblade: {
 		inherit: true,
@@ -18,11 +18,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	blueflare: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	boltstrike: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	burningbulwark: {
 		inherit: true,
@@ -30,15 +30,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	conversion: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	conversion2: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	crushgrip: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	darkvoid: {
 		inherit: true,
@@ -46,7 +46,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	decorate: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	dragoncheer: {
 		inherit: true,
@@ -54,7 +54,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	dragonhammer: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	electroshot: {
 		inherit: true,
@@ -66,23 +66,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	floralhealing: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	freezeshock: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	fusionbolt: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	fusionflare: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	glaciate: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	hardpress: {
 		inherit: true,
@@ -94,12 +94,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	iceburn: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	lusterpurge: {
 		inherit: true,
 		basePower: 70,
-
+		isNonstandard: "Past",
 	},
 	malignantchain: {
 		inherit: true,
@@ -116,19 +116,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mistball: {
 		inherit: true,
 		basePower: 70,
-
+		isNonstandard: "Past",
 	},
 	moongeistbeam: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	photongeyser: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	prismaticlaser: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	psychicnoise: {
 		inherit: true,
@@ -136,7 +136,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	psychoboost: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	revivalblessing: {
 		inherit: true,
@@ -144,27 +144,27 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	rockwrecker: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	sacredfire: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	secretsword: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	sketch: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	sparklingaria: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	sunsteelstrike: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	supercellslam: {
 		inherit: true,
@@ -184,11 +184,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	topsyturvy: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	triplekick: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	upperhand: {
 		inherit: true,

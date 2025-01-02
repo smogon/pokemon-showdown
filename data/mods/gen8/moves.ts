@@ -28,7 +28,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	beakblast: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	belch: {
 		inherit: true,
@@ -125,7 +125,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	darkvoid: {
 		inherit: true,
-
+		isNonstandard: "Past",
 		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 	},
 	doubleironbash: {
@@ -220,7 +220,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	heartswap: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	holdback: {
 		inherit: true,
@@ -233,20 +233,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	hyperspacefury: {
 		inherit: true,
-
+		isNonstandard: "Past",
 		flags: {mirror: 1, bypasssub: 1},
 	},
 	hyperspacehole: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	icehammer: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	judgment: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	kinesis: {
 		inherit: true,
@@ -437,7 +437,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	psychoboost: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	psychoshift: {
 		inherit: true,
@@ -453,7 +453,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	relicsong: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	rest: {
 		inherit: true,
@@ -461,7 +461,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	revelationdance: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	revenge: {
 		inherit: true,
@@ -481,7 +481,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	seedflare: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	shadowbone: {
 		inherit: true,
@@ -497,7 +497,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sketch: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	skullbash: {
 		inherit: true,
@@ -546,7 +546,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	tailglow: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	technoblast: {
 		inherit: true,
@@ -562,7 +562,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	toxicthread: {
 		inherit: true,
-
+		isNonstandard: "Past",
 	},
 	trickortreat: {
 		inherit: true,
