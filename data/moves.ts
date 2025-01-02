@@ -13345,25 +13345,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	ominouswind: {
 		num: 466,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			if (target.hasType('Flying')) {
+				this.debug('BP doubled from status condition');
+				return move.basePower * 1.5;
+			}
+			return move.basePower;
+		},
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Ominous Wind",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1,},
-		secondary: {
-			chance: 10,
-			self: {
-				boosts: {
-					atk: 1,
-					def: 1,
-					spa: 1,
-					spd: 1,
-					spe: 1,
-				},
-			},
-		},
 		target: "normal",
 		type: "Ghost",
 		contestType: "Beautiful",
