@@ -89,7 +89,7 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Alluring Voice", "Encore", "Focus Blast", "Grass Knot", "Knock Off", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Alluring Voice", "Encore", "Focus Blast", "Grass Knot", "Knock Off", "Nasty Plot", "Surf", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Lightning Rod"],
                 "teraTypes": ["Grass", "Water"]
             },
@@ -1824,6 +1824,12 @@
                 "movepool": ["Aeroblast", "Calm Mind", "Earth Power", "Recover"],
                 "abilities": ["Multiscale"],
                 "teraTypes": ["Ground", "Steel"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Aeroblast", "Calm Mind", "Psychic Noise", "Recover"],
+                "abilities": ["Multiscale"],
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -2665,9 +2671,15 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Brave Bird", "Close Combat", "Double-Edge", "Quick Attack", "U-turn"],
+                "movepool": ["Brave Bird", "Close Combat", "Double-Edge", "U-turn"],
                 "abilities": ["Reckless"],
-                "teraTypes": ["Fighting", "Flying"]
+                "teraTypes": ["Fighting", "Flying", "Normal"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Brave Bird", "Close Combat", "Double-Edge", "Quick Attack"],
+                "abilities": ["Reckless"],
+                "teraTypes": ["Fighting", "Flying", "Normal"]
             }
         ]
     },
@@ -4722,6 +4734,12 @@
                 "movepool": ["Dark Pulse", "Grass Knot", "Gunk Shot", "Hydro Pump", "Ice Beam", "Toxic Spikes", "U-turn"],
                 "abilities": ["Protean"],
                 "teraTypes": ["Dark", "Poison", "Water"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Grass Knot", "Gunk Shot", "Hydro Pump", "Ice Beam", "Spikes", "U-turn"],
+                "abilities": ["Protean"],
+                "teraTypes": ["Poison"]
             }
         ]
     },
@@ -7508,13 +7526,13 @@
         "sets": [
             {
                 "role": "AV Pivot",
-                "movepool": ["Beat Up", "Gunk Shot", "Heat Wave", "Play Rough", "U-turn"],
+                "movepool": ["Beat Up", "Gunk Shot", "Heat Wave", "Moonblast", "U-turn"],
                 "abilities": ["Toxic Chain"],
                 "teraTypes": ["Dark", "Steel", "Water"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Beat Up", "Gunk Shot", "Play Rough", "Roost", "U-turn"],
+                "movepool": ["Beat Up", "Gunk Shot", "Moonblast", "Roost", "U-turn"],
                 "abilities": ["Toxic Chain"],
                 "teraTypes": ["Dark", "Steel", "Water"]
             },

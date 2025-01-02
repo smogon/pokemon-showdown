@@ -393,7 +393,12 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["earthquake", "memento", "stealthrock", "stoneedge", "suckerpunch"],
+                "movepool": ["earthquake", "honeclaws", "stealthrock", "stoneedge", "suckerpunch"],
+                "abilities": ["Arena Trap"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["doubleedge", "earthquake", "stoneedge", "suckerpunch"],
                 "abilities": ["Arena Trap"]
             }
         ]
@@ -3773,7 +3778,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["boomburst", "chatter", "heatwave", "nastyplot", "substitute"],
+                "movepool": ["boomburst", "chatter", "heatwave", "nastyplot"],
                 "abilities": ["Tangled Feet"]
             }
         ]
@@ -5374,7 +5379,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["knockoff", "protect", "scald", "toxic", "wish"],
+                "movepool": ["protect", "scald", "toxic", "wish"],
                 "abilities": ["Regenerator"]
             }
         ]
@@ -6125,7 +6130,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["darkpulse", "rest", "return", "thunderwave", "toxic", "uturn"],
+                "movepool": ["rest", "return", "thunderwave", "toxic", "uturn"],
                 "abilities": ["Fur Coat"]
             },
             {
