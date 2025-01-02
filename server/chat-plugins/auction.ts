@@ -917,7 +917,7 @@ export const commands: Chat.ChatCommands = {
 			this.addModAction(`${user.name} added player ${player.name} to the auction.`);
 		},
 		addplayerhelp: [
-			`/auction addplayer [name], [tierPlayed1], [tierPlayed2] ; [tierNotPlayed1], [tierNotPlayed2] ... - Adds a player to the auction. Requires: # ~ auction owner`,
+			`/auction addplayer [name], [tierPlayed1], [tierPlayed2], ... ; [tierNotPlayed1], [tierNotPlayed2], ... - Adds a player to the auction. Requires: # ~ auction owner`,
 		],
 		removeplayer(target, room, user) {
 			const auction = this.requireGame(Auction);
