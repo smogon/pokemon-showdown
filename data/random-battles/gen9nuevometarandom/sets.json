@@ -308,6 +308,25 @@
             }
         ]
     },
+    "raticatealola": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["U-Turn", "Knock Off", "Toxic", "Double-Edge"],
+                "abilities": ["Hustle"],
+                "teraTypes": ["Poison"],
+                "items": "Totem Gigante",
+                "nature": "careful",
+                "hpEVs": 248,
+                "atkEVs": 8,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
     "arbok": {
         "level": 100,
         "sets": [
@@ -418,6 +437,268 @@
                 "movepool": ["Calm Mind", "Fire Blast", "Moonblast", "Moonlight"],
                 "abilities": ["Magic Guard", "Unaware"],
                 "teraTypes": ["Fire", "Steel"]
+            }
+        ]
+    },
+    "vivillon": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Bulky Setup",
+                "movepool": ["Bug Buzz", "Hurricane", "Quiver Dance", "Sleep Powder"],
+                "abilities": ["Compound Eyes"],
+                "teraTypes": ["Flying"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Hurricane", "Quiver Dance", "Sleep Powder", "Tera Blast"],
+                "abilities": ["Compound Eyes"],
+                "teraTypes": ["Ground"]
+            }
+        ]
+    },
+    "pyroar": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Dark Pulse", "Fire Blast", "Hyper Voice", "Taunt", "Will-O-Wisp", "Work Up"],
+                "abilities": ["Unnerve"],
+                "teraTypes": ["Fire"]
+            }
+        ]
+    },
+    "florges": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Moonblast", "Protect", "Wish"],
+                "abilities": ["Flower Veil"],
+                "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Calm Mind", "Moonblast", "Synthesis", "Tera Blast"],
+                "abilities": ["Flower Veil"],
+                "teraTypes": ["Ground"]
+            }
+        ]
+    },
+    "gogoat": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Bulk Up", "Earthquake", "Horn Leech", "Milk Drink", "Rock Slide"],
+                "abilities": ["Sap Sipper"],
+                "teraTypes": ["Ground", "Water"]
+            }
+        ]
+    },
+    "meowstic": {
+        "level": 89,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Alluring Voice", "Light Screen", "Psychic Noise", "Reflect", "Thunder Wave", "Yawn"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Fairy"]
+            }
+        ]
+    },
+    "meowsticf": {
+        "level": 89,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Alluring Voice", "Dark Pulse", "Nasty Plot", "Psychic", "Psyshock", "Thunderbolt"],
+                "abilities": ["Competitive"],
+                "teraTypes": ["Dark", "Electric", "Fairy"]
+            }
+        ]
+    },
+    "malamar": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Knock Off", "Rest", "Sleep Talk", "Superpower"],
+                "abilities": ["Contrary"],
+                "teraTypes": ["Fighting", "Poison", "Steel"]
+            },
+            {
+                "role": "Fast Bulky Setup",
+                "movepool": ["Knock Off", "Psycho Cut", "Rest", "Superpower"],
+                "abilities": ["Contrary"],
+                "teraTypes": ["Fighting", "Poison", "Steel"]
+            }
+        ]
+    },
+    "dragalge": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Draco Meteor", "Dragon Tail", "Flip Turn", "Focus Blast", "Sludge Wave", "Toxic", "Toxic Spikes"],
+                "abilities": ["Adaptability"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "clawitzer": {
+        "level": 87,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "U-turn", "Water Pulse"],
+                "abilities": ["Mega Launcher"],
+                "teraTypes": ["Dark", "Dragon", "Fighting"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "U-turn", "Water Pulse"],
+                "abilities": ["Mega Launcher"],
+                "teraTypes": ["Dragon"]
+            }
+        ]
+    },
+    "sylveon": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Hyper Voice", "Protect", "Wish"],
+                "abilities": ["Pixilate"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    },
+    "hawlucha": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Acrobatics", "Brave Bird", "Close Combat", "Encore", "Stone Edge", "Swords Dance", "Throat Chop"],
+                "abilities": ["Unburden"],
+                "teraTypes": ["Fighting", "Flying"]
+            }
+        ]
+    },
+    "dedenne": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Dazzling Gleam", "Nuzzle", "Super Fang", "Thunderbolt", "U-turn"],
+                "abilities": ["Cheek Pouch"],
+                "teraTypes": ["Electric", "Flying"]
+            }
+        ]
+    },
+    "carbink": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Fast Bulky Setup",
+                "movepool": ["Body Press", "Iron Defense", "Moonblast", "Rest", "Rock Polish"],
+                "abilities": ["Clear Body", "Sturdy"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "goodra": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Draco Meteor", "Dragon Tail", "Earthquake", "Fire Blast", "Knock Off", "Power Whip", "Scald", "Sludge Bomb"],
+                "abilities": ["Sap Sipper"],
+                "teraTypes": ["Fire", "Grass", "Ground", "Poison", "Water"]
+            }
+        ]
+    },
+    "goodrahisui": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Draco Meteor", "Dragon Tail", "Earthquake", "Fire Blast", "Heavy Slam", "Hydro Pump", "Knock Off", "Thunderbolt"],
+                "abilities": ["Sap Sipper"],
+                "teraTypes": ["Dragon", "Flying", "Ground", "Water"]
+            }
+        ]
+    },
+    "klefki": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Magnet Rise", "Play Rough", "Spikes", "Thunder Wave"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Water"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Dazzling Gleam", "Foul Play", "Spikes", "Thunder Wave"],
+                "abilities": ["Prankster"],
+                "teraTypes": ["Flying", "Water"]
+            }
+        ]
+    },
+    "trevenant": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Drain Punch", "Horn Leech", "Poltergeist", "Rest", "Trick Room", "Will-O-Wisp", "Wood Hammer"],
+                "abilities": ["Natural Cure"],
+                "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Drain Punch", "Poltergeist", "Protect", "Toxic"],
+                "abilities": ["Harvest"],
+                "teraTypes": ["Dark", "Fairy", "Fighting", "Steel"]
+            }
+        ]
+    },
+    "avalugg": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Avalanche", "Body Press", "Curse", "Rapid Spin", "Recover"],
+                "abilities": ["Sturdy"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "avalugghisui": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Avalanche", "Body Press", "Rapid Spin", "Recover", "Stone Edge"],
+                "abilities": ["Sturdy"],
+                "teraTypes": ["Flying", "Ghost", "Poison"]
+            }
+        ]
+    },
+    "noivern": {
+        "level": 82,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Boomburst", "Draco Meteor", "Flamethrower", "Hurricane", "Roost", "U-turn"],
+                "abilities": ["Infiltrator"],
+                "teraTypes": ["Normal"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Defog", "Draco Meteor", "Flamethrower", "Hurricane", "Roost", "U-turn"],
+                "abilities": ["Infiltrator"],
+                "teraTypes": ["Fire"]
             }
         ]
     }
