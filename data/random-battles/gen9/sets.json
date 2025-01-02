@@ -5188,12 +5188,6 @@
                 "movepool": ["Double-Edge", "Earthquake", "Knock Off", "U-turn"],
                 "abilities": ["Adaptability", "Stakeout"],
                 "teraTypes": ["Ground"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Double-Edge", "Earthquake", "Knock Off", "Trailblaze"],
-                "abilities": ["Adaptability"],
-                "teraTypes": ["Ground"]
             }
         ]
     },
