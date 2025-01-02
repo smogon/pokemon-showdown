@@ -49,21 +49,42 @@
                 "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Venusaurite"
+                "items": "Venusaurite",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 0
             },
             {
                 "role": "Specially Defensive",
                 "movepool": ["Leech Seed", "Synthesis", "Earth Power", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Venusaurite"
+                "items": "Venusaurite",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
             },
             {
                 "role": "Fast Special Sweeper",
                 "movepool": ["Razor Wind", "Sludge Bomb", "Earth Power", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Venusaurite"
+                "items": "Venusaurite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
@@ -85,21 +106,19 @@
         ]
     },
     "blastoise": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
-                "role": "Physically Defensive",
-                "movepool": ["Flip Turn", "Haze", "Rapid Spin", "Scald"],
-                "abilities": ["Rain Dish"],
-                "teraTypes": ["Water"],
-                "items": "Leftovers",
-                "nature": "bold",
-                "hpEVs": 252,
-                "atkEVs": 0,
-                "defEVs": 252,
-                "spaEVs": 4,
-                "spdEVs": 0,
-                "speEVs": 0
+                "role": "Setup Sweeper",
+                "movepool": ["Earthquake", "Hydro Pump", "Ice Beam", "Shell Smash"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Ground", "Steel", "Water"]
+            },
+            {
+                "role": "Tera Blast user",
+                "movepool": ["Hydro Pump", "Ice Beam", "Shell Smash", "Tera Blast"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Electric", "Grass"]
             }
         ]
     },
