@@ -11303,7 +11303,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				let copied = this.dex.getActiveMove(source.move.id);
+				/*let copied = this.dex.getActiveMove(source.move.id);*/
 				this.boost({def: 1}, target, target, this.dex.getActiveMove("Shelter"));
 				return this.NOT_FAIL;
 			},
@@ -13162,6 +13162,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		condition: {
+			duration: 3,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: No Retreat');
 			},
