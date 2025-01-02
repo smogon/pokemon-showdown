@@ -20502,14 +20502,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	triattack: {
 		num: 161,
 		accuracy: 100,
-		basePower: 80,
+		basePower: 30,
 		category: "Special",
 		name: "Tri Attack",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
+		multihit: 3,
 		secondary: {
-			chance: 20,
+			chance: 10,
 			onHit(target, source) {
 				const result = this.random(3);
 				if (result === 0) {
@@ -20744,40 +20745,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	trumpcard: {
 		num: 376,
 		accuracy: true,
-		basePower: 0,
-		basePowerCallback(source, target, move) {
-			const callerMoveId = move.sourceEffect || move.id;
-			const moveSlot = callerMoveId === 'instruct' ? source.getMoveData(move.id) : source.getMoveData(callerMoveId);
-			let bp;
-			if (!moveSlot) {
-				bp = 40;
-			} else {
-				switch (moveSlot.pp) {
-				case 0:
-					bp = 200;
-					break;
-				case 1:
-					bp = 80;
-					break;
-				case 2:
-					bp = 60;
-					break;
-				case 3:
-					bp = 50;
-					break;
-				default:
-					bp = 40;
-					break;
-				}
-			}
-
-			this.debug('BP: ' + bp);
-			return bp;
-		},
+		basePower: 200,
 		category: "Special",
 		isNonstandard: "Past",
 		name: "Trump Card",
-		pp: 5,
+		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
