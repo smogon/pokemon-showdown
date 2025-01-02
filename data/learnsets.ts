@@ -14725,6 +14725,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		learnset: {
 			agility: ["9M"],
 			bide: ["7V"],
+			burningjealousy: ["9M"],
 			charge: ["9M", "9L1", "7L1", "6L1", "5L1", "4L1", "3L1"],
 			chargebeam: ["9M", "9L16", "7M", "7L16", "6M", "6L16", "5M", "5L22", "4M", "4L26"],
 			confide: ["7M", "6M"],
@@ -14808,6 +14809,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		learnset: {
 			agility: ["9M"],
 			bulletseed: ["9M", "9L9"],
+			burningjealousy: ["9M"],
 			charge: ["9M", "9L1"],
 			chargebeam: ["9M", "9L16"],
 			chloroblast: ["9L0"],
@@ -15373,6 +15375,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			gigaimpact: ["8M", "7M", "6M", "5M", "4M"],
 			growl: ["8L1", "8V", "7L1", "7V", "6L1", "5L1", "4L1", "3L1"],
 			headbutt: ["8L12", "8V", "7L1", "7V", "6L1", "5L1", "4T", "4L1", "3L1"],
+			headsmash: ["8M"],
 			hiddenpower: ["7M", "7V", "6M", "5M", "4M", "3M"],
 			hyperbeam: ["8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			icebeam: ["8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
@@ -15431,6 +15434,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["8V", "7M", "7V", "6M", "5M", "4M", "3M"],
 			uproar: ["8M", "7T", "6T", "5T", "4T"],
 			watergun: ["7V"],
+			wildcharge: ["8M"],
 		},
 		eventData: [
 			{generation: 3, level: 44, moves: ["sing", "earthquake", "swordsdance", "rockslide"]},
