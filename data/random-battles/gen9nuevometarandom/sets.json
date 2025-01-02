@@ -49,21 +49,21 @@
                 "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Venasaurite"
+                "items": "Venusaurite"
             },
             {
                 "role": "Specially Defensive",
                 "movepool": ["Leech Seed", "Synthesis", "Earth Power", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Venasaurite"
+                "items": "Venusaurite"
             },
             {
                 "role": "Fast Special Sweeper",
                 "movepool": ["Razor Wind", "Sludge Bomb", "Earth Power", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Black Sludge"
+                "items": "Venusaurite"
             }
         ]
     },
