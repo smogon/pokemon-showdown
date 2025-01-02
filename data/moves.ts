@@ -19714,27 +19714,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {bypasssub: 1, metronome: 1},
-		onHitField(target, source, move) {
-			const targets: Pokemon[] = [];
-			for (const pokemon of this.getAllActive()) {
-				if (this.runEvent('Invulnerability', pokemon, source, move) === false) {
-					this.add('-miss', source, pokemon);
-				} else if (this.runEvent('TryHit', pokemon, source, move) && pokemon.getItem().isBerry) {
-					targets.push(pokemon);
-				}
-			}
-			this.add('-fieldactivate', 'move: Teatime');
-			if (!targets.length) {
-				this.add('-fail', source, 'move: Teatime');
-				this.attrLastMove('[still]');
-				return this.NOT_FAIL;
-			}
-			for (const pokemon of targets) {
-				pokemon.eatItem(true);
+		onTryHit(source, target, move) {
+			this.effectState.startingTurn = this.getOverflowedTurnCount();
+			if (this.effectState.startingTurn === 2 || this.effectState.startingTurn === 4){
+				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, target)
+			} else {
+				return false;
 			}
 		},
 		secondary: null,
-		target: "all",
+		target: "self",
 		type: "Normal",
 	},
 	technoblast: {
