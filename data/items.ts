@@ -619,7 +619,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			this.singleEvent('Update', this.effect, this.effectState, pokemon);
 		},
 		onUpdate(pokemon) {
-			if (!this.effectState.started || pokemon.transformed) return;
+			if (!this.effectState.started && !pokemon.isStarted || pokemon.transformed) return;
 
 			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
 				pokemon.addVolatile('protosynthesis');
