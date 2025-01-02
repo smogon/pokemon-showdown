@@ -176,8 +176,8 @@
     },
     "jigglypuff": {
         "level": 89,
-        "moves": ["blizzard", "bodyslam", "seismictoss"],
-        "essentialMoves": ["thunderwave"],
+        "moves": ["blizzard", "bodyslam"],
+        "essentialMoves": ["thunderwave", "seismictoss"],
         "exclusiveMoves": ["counter", "sing", "thunderwave"]
     },
     "wigglytuff": {
