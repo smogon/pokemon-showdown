@@ -19,7 +19,7 @@
         "sets": [
             {
                 "role": "Generalist",
-                "movepool": ["icebeam", "rest", "sleeptalk", "surf", "zapcannon"]
+                "movepool": ["icebeam", "rest", "sleeptalk", "surf"]
             },
             {
                 "role": "Bulky Support",
@@ -1007,6 +1007,7 @@
         ]
     },
     "ariados": {
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Setup",

@@ -2112,7 +2112,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["bellydrum", "extremespeed", "hiddenpowerfighting", "shadowball"],
+                "movepool": ["bellydrum", "extremespeed", "hiddenpowerground", "shadowball"],
                 "abilities": ["Pickup"]
             },
             {

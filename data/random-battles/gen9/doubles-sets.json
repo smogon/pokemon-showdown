@@ -595,9 +595,15 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Fire Blast", "Gunk Shot", "Haze", "Poison Gas", "Protect", "Strange Steam", "Taunt", "Will-O-Wisp"],
+                "movepool": ["Gunk Shot", "Poison Gas", "Protect", "Strange Steam", "Taunt", "Will-O-Wisp"],
                 "abilities": ["Levitate", "Neutralizing Gas"],
                 "teraTypes": ["Dark", "Steel"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Dazzling Gleam", "Fire Blast", "Gunk Shot", "Protect"],
+                "abilities": ["Levitate", "Neutralizing Gas"],
+                "teraTypes": ["Fire"]
             }
         ]
     },
@@ -1150,7 +1156,7 @@
             {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Helping Hand", "High Horsepower", "Icy Wind", "Liquidation", "Recover", "Yawn"],
-                "abilities": ["Unaware"],
+                "abilities": ["Unaware", "Water Absorb"],
                 "teraTypes": ["Fire", "Poison", "Steel"]
             }
         ]
