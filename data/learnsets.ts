@@ -10026,6 +10026,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			dig: ["8M", "8V", "7V", "6M", "6S2", "5M", "4M", "3M"],
 			doubleedge: ["8L66", "7V", "7S3", "3T"],
 			doubleteam: ["7M", "7V", "6M", "5M", "4M", "3M"],
+			drainpunch: ["9M"],
 			dualchop: ["8L36", "7T", "7L33", "6T", "6L33", "5T"],
 			dynamicpunch: ["8L54", "7L57", "7V", "6L55", "6S1", "6S2", "5L55", "4L51", "3T", "3L59"],
 			earthquake: ["8M", "8V", "7M", "7V", "6M", "5M", "4M", "3M"],
