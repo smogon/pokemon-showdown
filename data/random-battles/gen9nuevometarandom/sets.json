@@ -213,6 +213,25 @@
                 "teraTypes": ["Fire", "Steel"]
             }
         ]
+    },
+    "raticate-alola": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["U-Turn", "Knock Off", "Toxic", "Double-Edge"],
+                "abilities": ["Hustle"],
+                "teraTypes": ["Poison"],
+                "items": "Totem Gigante",
+                "nature": "careful",
+                "hpEVs": 248,
+                "atkEVs": 8,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
     }
 
 }
