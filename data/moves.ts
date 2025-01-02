@@ -11274,18 +11274,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 1,
 		flags: {snatch: 1, nonsky: 1, noassist: 1, failcopycat: 1},
 		stallingMove: true,
-		sideCondition: 'matblock',
-		onTry(source) {
-			if (source.activeMoveActions > 1) {
-				this.hint("Mat Block only works on your first turn out.");
-				return false;
-			}
-			return !!this.queue.willAct();
+		volatileStatus: 'matblock',
+		onPrepareHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
 		},
 		condition: {
 			duration: 1,
-			onSideStart(target, source) {
-				this.add('-singleturn', source, 'Mat Block');
+			onStart(target) {
+				this.add('-singleturn', target, 'move: Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -11294,8 +11293,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
 					return;
 				}
-				if (move && (move.target === 'self' || move.category === 'Status')) return;
-				this.add('-activate', target, 'move: Mat Block', move.name);
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -11303,18 +11305,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				/*let copied = this.dex.getActiveMove(source.move.id);*/
-				this.boost({def: 1}, target, target, this.dex.getActiveMove("Shelter"));
+				if (this.checkMoveMakesContact(move, source, target)) {
+					this.damage(move.basePower / 4, source, target);
+				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
 				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					this.boost({def: 1}, target, target, this.dex.getActiveMove("Shelter"));
+					this.damage(move.basePower / 4, source, target);
 				}
 			},
 		},
 		secondary: null,
-		target: "allySide",
+		target: "self",
 		type: "Fighting",
 		zMove: {boost: {def: 1}},
 		contestType: "Cool",
