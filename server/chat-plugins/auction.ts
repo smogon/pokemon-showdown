@@ -558,9 +558,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 			const notifyMsg = Utils.html`|notify|${this.room.title} Auction|${player.name} has been nominated!`;
 			for (const currManager of this.managers.values()) {
 				if (currManager.team === this.nominatingTeam) continue;
-				const user = Users.getExact(currManager.id);
-				user?.sendTo(this.room, notifyMsg);
-				user?.sendTo(this.room, `|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of <b>5000</b>)!`);
+				const curUser = Users.getExact(currManager.id);
+				curUser?.sendTo(this.room, notifyMsg);
+				curUser?.sendTo(this.room,
+					`|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of <b>5000</b>)!`);
 			}
 			this.sendBidInfo();
 			this.startBidTimer();
