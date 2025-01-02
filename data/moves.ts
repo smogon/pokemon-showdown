@@ -12341,22 +12341,31 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	mirrormove: {
 		num: 119,
 		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		isNonstandard: "Past",
+		basePower: 70,
+		category: "Physical",
 		name: "Mirror Move",
 		pp: 20,
 		priority: 0,
-		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
-		onTryHit(target, pokemon) {
-			const move = target.lastMove;
-			if (!move?.flags['mirror'] || move.isZ || move.isMax) {
-				return false;
+		flags: {contact: 1, protect: 1, mirror: 1, bypasssub: 1},
+		onHit(target, source) {
+			let i: BoostID;
+			for (i in target.boosts) {
+				source.boosts[i] = target.boosts[i];
 			}
-			this.actions.useMove(move.id, pokemon, {target});
-			return null;
+
+			const volatilesToCopy = ['dragoncheer', 'focusenergy', 'gmaxchistrike', 'laserfocus'];
+			// we need to remove all crit stage volatiles first; otherwise copying e.g. dragoncheer onto a mon with focusenergy
+			// will crash the server (since addVolatile fails due to overlap, leaving the source mon with no hasDragonType to set)
+			for (const volatile of volatilesToCopy) source.removeVolatile(volatile);
+			for (const volatile of volatilesToCopy) {
+				if (target.volatiles[volatile]) {
+					source.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') source.volatiles[volatile].layers = target.volatiles[volatile].layers;
+					if (volatile === 'dragoncheer') source.volatiles[volatile].hasDragonType = target.volatiles[volatile].hasDragonType;
+				}
+			}
+			this.add('-copyboost', source, target, '[from] move: Mirror Move');
 		},
-		callsMove: true,
 		secondary: null,
 		target: "normal",
 		type: "Flying",
@@ -16567,7 +16576,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	shadowforce: {
 		num: 467,
-		accuracy: 100,
+		accuracy: 95,
 		basePower: 120,
 		category: "Physical",
 		name: "Shadow Force",
@@ -16575,21 +16584,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
 		breaksProtect: true,
-		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
-		},
-		condition: {
-			duration: 2,
-			onInvulnerability: false,
-		},
+		recoil: [1, 2],
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
