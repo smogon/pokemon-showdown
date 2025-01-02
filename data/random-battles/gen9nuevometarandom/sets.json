@@ -145,17 +145,6 @@
             }
         ]
     },
-    "pikachu": {
-        "level": 93,
-        "sets": [
-            {
-                "role": "Fast Attacker",
-                "movepool": ["Fake Out", "Knock Off", "Play Rough", "Surf", "Volt Switch", "Volt Tackle"],
-                "abilities": ["Lightning Rod"],
-                "teraTypes": ["Water"]
-            }
-        ]
-    },
     "raichu": {
         "level": 88,
         "sets": [
@@ -187,51 +176,6 @@
                 "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Nasty Plot", "Psyshock", "Surf", "Thunderbolt"],
                 "abilities": ["Surge Surfer"],
                 "teraTypes": ["Fairy", "Fighting", "Grass", "Water"]
-            }
-        ]
-    },
-    "sandslash": {
-        "level": 88,
-        "sets": [
-            {
-                "role": "Bulky Support",
-                "movepool": ["Earthquake", "Knock Off", "Rapid Spin", "Spikes", "Stone Edge", "Swords Dance"],
-                "abilities": ["Sand Rush"],
-                "teraTypes": ["Dragon", "Steel", "Water"]
-            }
-        ]
-    },
-    "sandslashalola": {
-        "level": 88,
-        "sets": [
-            {
-                "role": "Bulky Support",
-                "movepool": ["Earthquake", "Iron Head", "Knock Off", "Rapid Spin", "Spikes", "Triple Axel"],
-                "abilities": ["Slush Rush"],
-                "teraTypes": ["Flying", "Water"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Ice Shard", "Knock Off", "Rapid Spin", "Swords Dance", "Triple Axel"],
-                "abilities": ["Slush Rush"],
-                "teraTypes": ["Ground"]
-            }
-        ]
-    },
-    "clefable": {
-        "level": 83,
-        "sets": [
-            {
-                "role": "Bulky Support",
-                "movepool": ["Fire Blast", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
-                "abilities": ["Magic Guard", "Unaware"],
-                "teraTypes": ["Poison", "Steel"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Fire Blast", "Moonblast", "Moonlight"],
-                "abilities": ["Magic Guard", "Unaware"],
-                "teraTypes": ["Fire", "Steel"]
             }
         ]
     },
