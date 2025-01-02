@@ -663,6 +663,11 @@ const OFFICIAL_AVATARS_SELENA = new Set([
 	'kris',
 ]);
 
+const CUSTOM_AVATARS_NGAMMER = new Set([
+	'juansssss',
+	'ngammer'
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
@@ -673,6 +678,7 @@ for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HORO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of CUSTOM_AVATARS_NGAMMER) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
