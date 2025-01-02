@@ -21694,6 +21694,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1, metronome: 1},
+		onTryHit(source, target, move) {
+			 if (source.hp <= (source.baseMaxhp / 2)){
+			 this.boost({atk: 1, spa: 1}, target)
+			 }
+		},
 		boosts: {
 			atk: 1,
 			spa: 1,
