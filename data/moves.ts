@@ -3807,7 +3807,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
 		secondary: {
 			chance: 100,
-			status: 'infatuation',
+			status: 'attract',
 		},
 		target: "allAdjacentFoes",
 		type: "Fairy",
