@@ -9768,7 +9768,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	incinerate: {
 		num: 510,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 65,
 		category: "Special",
 		name: "Incinerate",
 		pp: 15,
@@ -19744,7 +19744,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 477,
 		accuracy: 100,
 		basePower: 120,
-		category: "Status",
+		category: "Special",
 		isNonstandard: "Past",
 		name: "Telekinesis",
 		pp: 15,
