@@ -49,55 +49,281 @@
                 "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Venusaurite"
+                "items": "Venusaurite",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 0
             },
             {
                 "role": "Specially Defensive",
                 "movepool": ["Leech Seed", "Synthesis", "Earth Power", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Venusaurite"
+                "items": "Venusaurite",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
             },
             {
                 "role": "Fast Special Sweeper",
                 "movepool": ["Razor Wind", "Sludge Bomb", "Earth Power", "Mega Drain"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Water"],
-                "items": "Venusaurite"
+                "items": "Venusaurite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
     "charizard": {
-        "level": 85,
+        "level": 100,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Earthquake", "Flamethrower", "Focus Blast", "Hurricane", "Will-O-Wisp"],
+                "role": "Specially Defensive",
+                "movepool": ["Ember", "Defog", "Roost", "Tailwind"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Dragon", "Fire", "Ground"]
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Dragon Dance", "Earthquake", "Flare Blitz", "Outrage", "Swords Dance"],
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Dual Wingbeat"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Dragon", "Ground"]
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Overheat", "Focus Blast", "Scorching Sands", "Air Slash"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Eject Pack",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Solar Beam", "Scorching Sands", "Air Cutter", "Weather Ball"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Roost", "Ember", "Weather Ball", "Defog"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "calm",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 8,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Roost", "Weather Ball", "Solar Beam", "Scorching Sands"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "modest",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 8,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Outrage"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Dragon Rush", "Temper Flare", "Roost"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Dragon Rush"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
     "blastoise": {
-        "level": 80,
+        "level": 100,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Hydro Pump", "Ice Beam", "Shell Smash"],
-                "abilities": ["Torrent"],
-                "teraTypes": ["Ground", "Steel", "Water"]
+                "role": "Physically Defensive",
+                "movepool": ["Flip Turn", "Haze", "Rapid Spin", "Scald"],
+                "abilities": ["Rain Dish"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 0
             },
             {
-                "role": "Tera Blast user",
-                "movepool": ["Hydro Pump", "Ice Beam", "Shell Smash", "Tera Blast"],
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Focus Blast", "Hydro Cannon", "Ice Beam", "Flip Turn"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shell Smash", "Hydro Pump", "Ice Beam", "Aura Sphere"],
                 "abilities": ["Torrent"],
-                "teraTypes": ["Electric", "Grass"]
+                "teraTypes": ["Water"],
+                "items": "White Herb",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Flip Turn", "Hydro Cannon", "Flash Cannon", "Aura Sphere"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shell Smash", "Water Pulse", "Flash Cannon", "Dark Pulse"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shell Smash", "Water Pulse", "Flash Cannon", "Aura Sphere"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "raticatealola": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["U-Turn", "Knock Off", "Toxic", "Double-Edge"],
+                "abilities": ["Hustle"],
+                "teraTypes": ["Poison"],
+                "items": "Totem Gigante",
+                "nature": "careful",
+                "hpEVs": 248,
+                "atkEVs": 8,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
             }
         ]
     },
@@ -213,25 +439,5 @@
                 "teraTypes": ["Fire", "Steel"]
             }
         ]
-    },
-    "raticatealola": {
-        "level": 100,
-        "sets": [
-            {
-                "role": "Bulky Support",
-                "movepool": ["U-Turn", "Knock Off", "Toxic", "Double-Edge"],
-                "abilities": ["Hustle"],
-                "teraTypes": ["Poison"],
-                "items": "Totem Gigante",
-                "nature": "careful",
-                "hpEVs": 248,
-                "atkEVs": 8,
-                "defEVs": 0,
-                "spaEVs": 0,
-                "spdEVs": 252,
-                "speEVs": 0
-            }
-        ]
     }
-
 }
