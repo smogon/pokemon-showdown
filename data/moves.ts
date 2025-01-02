@@ -811,15 +811,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				},
 			},
 		},
-		onTry(source) {
-			if (source.species.baseSpecies === 'Morpeko') {
-				return;
-			}
-			this.attrLastMove('[still]');
-			this.add('-fail', source, 'move: Aura Wheel');
-			this.hint("Only a Pokemon whose form is Morpeko or Morpeko-Hangry can use this move.");
-			return null;
-		},
 		onModifyType(move, pokemon) {
 			if (pokemon.species.name === 'Morpeko-Hangry') {
 				move.type = 'Dark';
@@ -5987,10 +5978,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		 
 		name: "Flower Shield",
 		pp: 10,
-		priority: 0,
+		priority: 4,
 		flags: {distance: 1, metronome: 1},
 		stallingMove: true,
 		volatileStatus: 'flowershield',
