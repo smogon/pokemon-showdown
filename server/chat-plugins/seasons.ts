@@ -182,9 +182,6 @@ export async function updateBadgeholders() {
 	for (const formatName of scheduledFormats) {
 		const formatid = `gen${Dex.gen}${formatName}`;
 		const response = await getLadderTop(formatid);
-
-		// Ensure response is an array
-
 		const newHolders: Record<string, string[]> = {};
 		for (const [i, row] of response.entries()) {
 			if (!row) {
