@@ -10718,6 +10718,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSourceAccuracy(accuracy, target, source, move) {
 				if (move && source === this.effectState.target && target === this.effectState.source) return true;
 			},
+			onSourceModifyDamage(relayVar, source, target, move) {
+				 this.chainModify(1.5);
+			},
 		},
 		secondary: null,
 		target: "normal",
