@@ -13162,7 +13162,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		condition: {
-			duration: 3,
+			duration: 4,
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: No Retreat');
 			},
