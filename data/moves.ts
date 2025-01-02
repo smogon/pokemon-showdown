@@ -5992,26 +5992,51 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {distance: 1, metronome: 1},
-		onHitField(t, source, move) {
-			const targets: Pokemon[] = [];
-			for (const pokemon of this.getAllActive()) {
-				if (
-					pokemon.hasType('Grass') &&
-					(!pokemon.volatiles['maxguard'] ||
-					  this.runEvent('TryHit', pokemon, source, move))
-				  ) {
-					// This move affects every Grass-type Pokemon in play.
-					targets.push(pokemon);
-				  }
-			}
-			let success = false;
-			for (const target of targets) {
-				success = this.boost({def: 1}, target, source, move) || success;
-			}
-			return success;
+		stallingMove: true,
+		volatileStatus: 'flowershield',
+		onPrepareHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (!this.checkMoveMakesContact(move, source, target)) {
+					this.boost({spa: -1}, source, target, this.dex.getActiveMove("Flower Shield"));
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered && !this.checkMoveMakesContact(move, source, target)) {
+					this.boost({spa: -1}, source, target, this.dex.getActiveMove("Flower Shield"));
+				}
+			},
 		},
 		secondary: null,
-		target: "all",
+		target: "self",
 		type: "Fairy",
 		zMove: {boost: {def: 1}},
 		contestType: "Beautiful",
@@ -10165,8 +10190,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 588,
 		accuracy: true,
 		basePower: 0,
-		category: "Status",
-		 
+		category: "Status", 
 		name: "King's Shield",
 		pp: 10,
 		priority: 4,
