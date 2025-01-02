@@ -791,8 +791,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDamagingHit(damage, target, source, move) {
 			if (source.volatiles['disable']) return;
 			if (!move.isMax && !move.flags['futuremove'] && move.id !== 'struggle') {
-				if (this.randomChance(3, 10)) {
-					source.addVolatile('disable', this.effectState.target);
+				if (this.randomChance(5, 10)) {
+					source.addVolatile('curse', this.effectState.target);
 				}
 			}
 		},
@@ -1300,7 +1300,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	flamebody: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(5, 10)) {
 					source.trySetStatus('brn', target);
+				}
 			}
 		},
 		flags: {},
