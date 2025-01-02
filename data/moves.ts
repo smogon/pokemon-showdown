@@ -12785,29 +12785,47 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Mud Sport",
 		pp: 15,
-		priority: 0,
-		flags: {nonsky: 1, metronome: 1},
-		pseudoWeather: 'mudsport',
+		priority: 4,
+		flags: {noassist: 1, failcopycat: 1},
+		stallingMove: true,
+		volatileStatus: 'mudsport',
+		onPrepareHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
 		condition: {
-			duration: 5,
-			onFieldStart(field, source) {
-				this.add('-fieldstart', 'move: Mud Sport', '[of] ' + source);
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Mud Sport');
 			},
-			onBasePowerPriority: 1,
-			onBasePower(basePower, attacker, defender, move) {
-				if (move.type === 'Electric') {
-					this.debug('mud sport weaken');
-					return this.chainModify([1352, 4096]);
+			onTryHitPriority: 1,
+			onTryHit(target, source, move) {
+				if (move.type !== "Ground") {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
 				}
-			},
-			onFieldResidualOrder: 27,
-			onFieldResidualSubOrder: 4,
-			onFieldEnd() {
-				this.add('-fieldend', 'move: Mud Sport');
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					const bestStat = target.getBestStat(true, true);
+					this.boost({[bestStat]: 1} , target)
+					this.add('-activate', target, 'move: Mud Sport');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				return this.NOT_FAIL;
 			},
 		},
 		secondary: null,
-		target: "all",
+		target: "self",
 		type: "Ground",
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
