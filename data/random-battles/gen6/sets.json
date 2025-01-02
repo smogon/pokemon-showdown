@@ -963,7 +963,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["aquajet", "knockoff", "liquidation", "stoneedge", "swordsdance"],
+                "movepool": ["aquajet", "knockoff", "stoneedge", "swordsdance", "waterfall"],
                 "abilities": ["Weak Armor"]
             }
         ]

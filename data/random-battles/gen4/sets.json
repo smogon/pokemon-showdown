@@ -3448,7 +3448,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["painsplit", "shadowball", "thunderbolt", "thudnerwave", "willowisp"],
+                "movepool": ["painsplit", "shadowball", "thunderbolt", "thunderwave", "willowisp"],
                 "abilities": ["Levitate"]
             }
         ]
