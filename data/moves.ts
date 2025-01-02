@@ -11271,7 +11271,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Mat Block",
 		pp: 10,
-		priority: 0,
+		priority: 1,
 		flags: {snatch: 1, nonsky: 1, noassist: 1, failcopycat: 1},
 		stallingMove: true,
 		sideCondition: 'matblock',
@@ -11303,7 +11303,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
+				let copied = this.dex.getActiveMove(source.move.id);
+				this.boost({def: 1}, target, target, this.dex.getActiveMove("Shelter"));
 				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+					this.boost({def: 1}, target, target, this.dex.getActiveMove("Shelter"));
+				}
 			},
 		},
 		secondary: null,
