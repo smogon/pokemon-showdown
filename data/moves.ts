@@ -12912,7 +12912,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	naturalgift: {
 		num: 363,
 		accuracy: 100,
-		basePower: 0,
+		basePower: 100,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Natural Gift",
@@ -12928,9 +12928,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onPrepareHit(target, pokemon, move) {
 			if (pokemon.ignoringItem()) return false;
 			const item = pokemon.getItem();
-			if (!item.naturalGift) return false;
-			move.basePower = item.naturalGift.basePower;
-			this.debug('BP: ' + move.basePower);
+			if (!item.naturalGift && item.name !== '') return false;
 			pokemon.setItem('');
 			pokemon.lastItem = item.id;
 			pokemon.usedItemThisTurn = true;
@@ -12945,29 +12943,43 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	naturepower: {
 		num: 267,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
 		isNonstandard: "Past",
 		name: "Nature Power",
 		pp: 20,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
-		onTryHit(target, pokemon) {
-			let move = 'triattack';
+		onModifyMove(move, pokemon) {
+			if (this.field.isTerrain('')) return;
+			move.secondaries = [];
 			if (this.field.isTerrain('electricterrain')) {
-				move = 'thunderbolt';
+				move.type = 'Electric';
+				move.basePower *= 2;
 			} else if (this.field.isTerrain('grassyterrain')) {
-				move = 'energyball';
+				move.type = 'Grass';
+				move.basePower *= 2;
 			} else if (this.field.isTerrain('mistyterrain')) {
-				move = 'moonblast';
+				move.type = 'Fairy';
+				move.basePower *= 2;
 			} else if (this.field.isTerrain('psychicterrain')) {
-				move = 'psychic';
+				move.type = 'Psychic';
+				move.basePower *= 2;
+			} else if (this.field.isWeather('sandstorm')) {
+				move.type = 'Rock';
+				move.basePower *= 2;
+			} else if (this.field.isWeather('snow') || this.field.isWeather('hail')) {
+				move.type = 'Ice';
+				move.basePower *= 2;
+			} else if (this.field.isWeather('sunnyday') || this.field.isWeather('desolateland')) {
+				move.type = 'Fire';
+				move.basePower *= 2;
+			} else if (this.field.isWeather('raindance') || this.field.isWeather('primordialsea')) {
+				move.type = 'Water';
+				move.basePower *= 2;
 			}
-			this.actions.useMove(move, pokemon, {target});
-			return null;
 		},
-		callsMove: true,
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -14018,12 +14030,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	pound: {
 		num: 1,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 20,
 		category: "Physical",
 		name: "Pound",
-		pp: 35,
-		priority: 0,
+		pp: 35, 
+		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onTryHit(pokemon) {
+			// will shatter screens through sub, before you hit
+			pokemon.side.removeSideCondition('reflect');
+			pokemon.side.removeSideCondition('lightscreen');
+			pokemon.side.removeSideCondition('auroraveil');
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -14299,24 +14317,38 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	present: {
 		num: 217,
-		accuracy: 90,
-		basePower: 0,
+		accuracy: 100,
+		basePower: 90,
 		category: "Physical",
 		name: "Present",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1},
-		onModifyMove(move, pokemon, target) {
-			const rand = this.random(10);
-			if (rand < 2) {
-				move.heal = [1, 4];
+		flags: {protect: 1, mirror: 1, allyanim: 1, metronome: 1, bullet: 1},
+		onTryHit(target, source, move) {
+			if (source.isAlly(target)) {
+				move.basePower = 0;
 				move.infiltrates = true;
-			} else if (rand < 6) {
-				move.basePower = 40;
-			} else if (rand < 9) {
-				move.basePower = 80;
-			} else {
-				move.basePower = 120;
+			}
+		},
+		onTryMove(source, target, move) {
+			if (source.isAlly(target) && source.volatiles['healblock']) {
+				this.attrLastMove('[still]');
+				this.add('cant', source, 'move: Heal Block', move);
+				return false;
+			}
+		},
+		onHit(target, source, move) {
+			if (source.isAlly(target)) {
+				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
+					if (target.volatiles['healblock'] && target.hp !== target.maxhp) {
+						this.attrLastMove('[still]');
+						// Wrong error message, correct one not supported yet
+						this.add('cant', source, 'move: Heal Block', move);
+					} else {
+						this.add('-immune', target);
+					}
+					return this.NOT_FAIL;
+				}
 			}
 		},
 		secondary: null,
@@ -16367,7 +16399,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	secretpower: {
 		num: 290,
 		accuracy: 100,
-		basePower: 70,
+		basePower: 40,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Secret Power",
@@ -16378,35 +16410,32 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (this.field.isTerrain('')) return;
 			move.secondaries = [];
 			if (this.field.isTerrain('electricterrain')) {
-				move.secondaries.push({
-					chance: 30,
-					status: 'par',
-				});
+				move.type = 'Electric';
+				move.basePower *= 2;
 			} else if (this.field.isTerrain('grassyterrain')) {
-				move.secondaries.push({
-					chance: 30,
-					status: 'slp',
-				});
+				move.type = 'Grass';
+				move.basePower *= 2;
 			} else if (this.field.isTerrain('mistyterrain')) {
-				move.secondaries.push({
-					chance: 30,
-					boosts: {
-						spa: -1,
-					},
-				});
+				move.type = 'Fairy';
+				move.basePower *= 2;
 			} else if (this.field.isTerrain('psychicterrain')) {
-				move.secondaries.push({
-					chance: 30,
-					boosts: {
-						spe: -1,
-					},
-				});
+				move.type = 'Psychic';
+				move.basePower *= 2;
+			} else if (this.field.isWeather('sandstorm')) {
+				move.type = 'Rock';
+				move.basePower *= 2;
+			} else if (this.field.isWeather('snow') || this.field.isWeather('hail')) {
+				move.type = 'Ice';
+				move.basePower *= 2;
+			} else if (this.field.isWeather('sunnyday') || this.field.isWeather('desolateland')) {
+				move.type = 'Fire';
+				move.basePower *= 2;
+			} else if (this.field.isWeather('raindance') || this.field.isWeather('primordialsea')) {
+				move.type = 'Water';
+				move.basePower *= 2;
 			}
 		},
-		secondary: {
-			chance: 30,
-			status: 'par',
-		},
+		secondary: null,
 		target: "normal",
 		type: "Normal",
 		contestType: "Clever",
@@ -18243,14 +18272,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {gravity: 1, metronome: 1},
 		onTry(source, target, move) {
-			// Additional Gravity check for Z-move variant
-			if (this.field.getPseudoWeather('Gravity')) {
-				this.add('cant', source, 'move: Gravity', move);
-				return null;
+			if(source.species.prevo){
+				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, source)
 			}
-		},
-		onTryHit(target, source) {
-			this.add('-nothing');
 		},
 		secondary: null,
 		target: "self",
