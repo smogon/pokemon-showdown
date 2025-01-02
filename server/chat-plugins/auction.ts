@@ -333,14 +333,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 			const tiersNotPlayed = [];
 			const [name, ...tierData] = row.split('\t');
 			for (let i = 0; i < tierData.length; i++) {
-				switch (tierData[i].trim()) {
+				switch (tierData[i].trim().toLowerCase()) {
 				case 'y':
-				case 'Y':
 					if (!tierNames[i]) throw new Chat.ErrorMessage(`Invalid tier data found in the pastebin.`);
 					tiersPlayed.push(tierNames[i]);
 					break;
 				case 'n':
-				case 'N':
 					if (!tierNames[i]) throw new Chat.ErrorMessage(`Invalid tier data found in the pastebin.`);
 					tiersNotPlayed.push(tierNames[i]);
 					break;
