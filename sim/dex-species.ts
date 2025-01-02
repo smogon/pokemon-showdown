@@ -64,7 +64,7 @@ export interface PokemonGoDataTable {[speciesid: IDEntry]: PokemonGoData}
  * First character is a generation number, 1-9.
  * Second character is a source ID, one of:
  *
- * - M = TM/HM
+ * - M = TM/HM 
  * - T = tutor
  * - L = start or level-up, 3rd char+ is the level
  * - R = restricted (special moves like Rotom moves)
