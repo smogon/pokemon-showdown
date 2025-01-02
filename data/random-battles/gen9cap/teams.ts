@@ -56,7 +56,7 @@ export class RandomCAPTeams extends RandomTeams {
 		// Generate Non-CAP Pokemon using the regular randomSet() method
 		if (species.num > 0) return this.randomSet(s, teamDetails, isLead, isDoubles);
 		const forme = this.getForme(species);
-		const sets = this.randomCAPSets[species.id]["sets"];
+		const sets = this.randomCAPSets[species.id]["sets"]; 
 		const possibleSets = [];
 
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
