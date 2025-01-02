@@ -4542,7 +4542,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.increase = 10;
 			},
 			onRestart() {
-				if (this.effectState.increase < 80) {
+				if (this.effectState.increase < 530) {
 					this.effectState.increase += 10;
 				}
 			},
@@ -20012,15 +20012,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thousandwaves: {
 		num: 615,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			if (!pokemon.volatiles['thousandwaves'] || move.hit === 1) {
+				pokemon.addVolatile('thousandwaves');
+			}
+			const bp = this.clampIntRange(move.basePower + pokemon.volatiles['thousandwaves'].increase, 1, 130);
+			this.debug('BP: ' + bp);
+			return bp;
+		},
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Thousand Waves",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
-		onHit(target, source, move) {
-			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+		condition: {
+			onStart() {
+				this.effectState.increase = 15;
+			},
+			onRestart() {
+				if (this.effectState.increase < 60) {
+					this.effectState.increase += 15;
+				}
+			},
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
