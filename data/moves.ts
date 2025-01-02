@@ -2657,13 +2657,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Coaching",
 		pp: 10,
 		priority: 0,
-		flags: {bypasssub: 1, allyanim: 1, metronome: 1},
+		flags: {bypasssub: 1, allyanim: 1, metronome: 1, sound: 1},
 		secondary: null,
-		boosts: {
-			atk: 1,
-			def: 1,
+		onTry(source, target, move) {
+			 if(target.hp <= (target.baseMaxhp / 2)){
+				this.boost({atk: 2, def: 2}, target)
+			 } else {
+				return false;
+			 }
 		},
-		target: "adjacentAlly",
+		target: "adjacentAllyOrSelf",
 		type: "Fighting",
 	},
 	coil: {
@@ -3629,12 +3632,48 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 4,
 		flags: {noassist: 1, failcopycat: 1},
 		stallingMove: true,
+		slotCondition: 'Detect',
 		volatileStatus: 'protect',
 		onPrepareHit(pokemon) {
 			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		onHit(pokemon) {
 			pokemon.addVolatile('stall');
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') {
+					if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (this.checkMoveMakesContact(move, source, target)) {
+					this.boost({spe: 1}, target, target, this.dex.getActiveMove("Detect"));
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+					this.boost({spe: 1}, target, target, this.dex.getActiveMove("Detect"));
+				}
+			},
 		},
 		secondary: null,
 		target: "self",
@@ -5522,59 +5561,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 519,
 		accuracy: 100,
 		basePower: 80,
-		basePowerCallback(target, source, move) {
-			if (['grasspledge', 'waterpledge'].includes(move.sourceEffect)) {
-				this.add('-combine');
-				return 150;
-			}
-			return move.basePower;
-		},
 		category: "Special",
 		name: "Fire Pledge",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1, pledgecombo: 1},
-		onPrepareHit(target, source, move) {
-			for (const action of this.queue.list as MoveAction[]) {
-				if (
-					!action.move || !action.pokemon?.isActive ||
-					action.pokemon.fainted || action.maxMove || action.zmove
-				) {
-					continue;
-				}
-				if (action.pokemon.isAlly(source) && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
-					this.queue.prioritizeAction(action, move);
-					this.add('-waiting', source, action.pokemon);
-					return null;
-				}
-			}
-		},
-		onModifyMove(move) {
-			if (move.sourceEffect === 'waterpledge') {
-				move.type = 'Water';
-				move.forceSTAB = true;
-				move.self = {sideCondition: 'waterpledge'};
-			}
-			if (move.sourceEffect === 'grasspledge') {
-				move.type = 'Fire';
-				move.forceSTAB = true;
-				move.sideCondition = 'firepledge';
-			}
-		},
+		pseudoWeather: 'firepledge',
 		condition: {
-			duration: 4,
-			onSideStart(targetSide) {
-				this.add('-sidestart', targetSide, 'Fire Pledge');
+			duration: 1,
+			onFieldStart(field, source) {
+				this.add('-fieldstart', 'move: Fire Pledge', '[of] ' + source);
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 1,
-			onResidual(pokemon) {
-				if (!pokemon.hasType('Fire')) this.damage(pokemon.baseMaxhp / 8, pokemon);
+			onBasePowerPriority: 1,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Grass') {
+					this.debug('fire pledge weaken');
+					return this.chainModify([1352, 4096]);
+				}
 			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 8,
-			onSideEnd(targetSide) {
-				this.add('-sideend', targetSide, 'Fire Pledge');
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 3,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Fire Pledge');
 			},
 		},
 		secondary: null,
@@ -12341,22 +12349,31 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	mirrormove: {
 		num: 119,
 		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		isNonstandard: "Past",
+		basePower: 70,
+		category: "Physical",
 		name: "Mirror Move",
 		pp: 20,
 		priority: 0,
-		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
-		onTryHit(target, pokemon) {
-			const move = target.lastMove;
-			if (!move?.flags['mirror'] || move.isZ || move.isMax) {
-				return false;
+		flags: {contact: 1, protect: 1, mirror: 1, bypasssub: 1},
+		onHit(target, source) {
+			let i: BoostID;
+			for (i in target.boosts) {
+				source.boosts[i] = target.boosts[i];
 			}
-			this.actions.useMove(move.id, pokemon, {target});
-			return null;
+
+			const volatilesToCopy = ['dragoncheer', 'focusenergy', 'gmaxchistrike', 'laserfocus'];
+			// we need to remove all crit stage volatiles first; otherwise copying e.g. dragoncheer onto a mon with focusenergy
+			// will crash the server (since addVolatile fails due to overlap, leaving the source mon with no hasDragonType to set)
+			for (const volatile of volatilesToCopy) source.removeVolatile(volatile);
+			for (const volatile of volatilesToCopy) {
+				if (target.volatiles[volatile]) {
+					source.addVolatile(volatile);
+					if (volatile === 'gmaxchistrike') source.volatiles[volatile].layers = target.volatiles[volatile].layers;
+					if (volatile === 'dragoncheer') source.volatiles[volatile].hasDragonType = target.volatiles[volatile].hasDragonType;
+				}
+			}
+			this.add('-copyboost', source, target, '[from] move: Mirror Move');
 		},
-		callsMove: true,
 		secondary: null,
 		target: "normal",
 		type: "Flying",
@@ -16567,7 +16584,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	shadowforce: {
 		num: 467,
-		accuracy: 100,
+		accuracy: 95,
 		basePower: 120,
 		category: "Physical",
 		name: "Shadow Force",
@@ -16575,21 +16592,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, charge: 1, mirror: 1, metronome: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
 		breaksProtect: true,
-		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) {
-				return;
-			}
-			this.add('-prepare', attacker, move.name);
-			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				return;
-			}
-			attacker.addVolatile('twoturnmove', defender);
-			return null;
-		},
-		condition: {
-			duration: 2,
-			onInvulnerability: false,
-		},
+		recoil: [1, 2],
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
