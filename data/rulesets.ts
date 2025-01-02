@@ -306,7 +306,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	},
 	kantopokedex: {
 		effectType: 'ValidatorRule',
-		name: 'Kanto+ Pokedex',
+		name: 'Kanto Pokedex',
 		desc: "Only allows Pok&eacute;mon native to the Kanto region",
 		onValidateSet(set, format) {
 			const kantoDex = [

@@ -1312,74 +1312,38 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	bide: {
 		num: 117,
 		accuracy: true,
-		basePower: 0,
+		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			const damagedByTarget = pokemon.attackedBy.some(
+				p => p.source === target && p.damage > 0 && p.thisTurn
+			);
+			if (damagedByTarget) {
+				this.debug('BP doubled for getting hit by ' + target);
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
 		category: "Physical",
-		isNonstandard: "Past",
 		name: "Bide",
 		pp: 10,
-		priority: 1,
-		flags: {contact: 1, protect: 1, metronome: 1, nosleeptalk: 1, failinstruct: 1},
-		volatileStatus: 'bide',
-		ignoreImmunity: true,
-		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['bide']) return true;
-		},
-		condition: {
-			duration: 3,
-			onLockMove: 'bide',
-			onStart(pokemon) {
-				this.effectState.totalDamage = 0;
-				this.add('-start', pokemon, 'move: Bide');
-			},
-			onDamagePriority: -101,
-			onDamage(damage, target, source, move) {
-				if (!move || move.effectType !== 'Move' || !source) return;
-				this.effectState.totalDamage += damage;
-				this.effectState.lastDamageSource = source;
-			},
-			onBeforeMove(pokemon, target, move) {
-				if (this.effectState.duration === 1) {
-					this.add('-end', pokemon, 'move: Bide');
-					target = this.effectState.lastDamageSource;
-					if (!target || !this.effectState.totalDamage) {
-						this.attrLastMove('[still]');
-						this.add('-fail', pokemon);
-						return false;
-					}
-					if (!target.isActive) {
-						const possibleTarget = this.getRandomTarget(pokemon, this.dex.moves.get('pound'));
-						if (!possibleTarget) {
-							this.add('-miss', pokemon);
-							return false;
-						}
-						target = possibleTarget;
-					}
-					const moveData: Partial<ActiveMove> = {
-						id: 'bide' as ID,
-						name: "Bide",
-						accuracy: true,
-						damage: this.effectState.totalDamage * 2,
-						category: "Physical",
-						priority: 1,
-						flags: {contact: 1, protect: 1},
-						effectType: 'Move',
-						type: 'Normal',
-					};
-					this.actions.tryMoveHit(target, pokemon, moveData as ActiveMove);
-					pokemon.removeVolatile('bide');
-					return false;
-				}
-				this.add('-activate', pokemon, 'move: Bide');
-			},
-			onMoveAborted(pokemon) {
-				pokemon.removeVolatile('bide');
-			},
-			onEnd(pokemon) {
-				this.add('-end', pokemon, 'move: Bide', '[silent]');
-			},
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			if(pokemon.types[1]){
+			let type = types[1];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[0]) type = types[0];
+			move.type = type;
+			} else if (pokemon.types[0]){
+				let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
+			}
 		},
 		secondary: null,
-		target: "self",
+		target: "normal",
 		type: "Normal",
 		contestType: "Tough",
 	},
@@ -2335,7 +2299,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Celebrate",
 		pp: 40,
 		priority: 0,
-		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
+		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1, dance: 1},
 		onTryHit(target, source) {
 			if (source.side.foe.faintedLastTurn){
 			this.add('-activate', target, 'move: Celebrate');
@@ -2508,6 +2472,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 498,
 		accuracy: 100,
 		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			 if(target.getStat('def', true, true) < target.getStat('def', false, true) || target.getStat('spd', true, true) < target.getStat('spd', false, true)){
+				return move.basePower *= 2;
+			}
+				return move.basePower;
+		},
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Chip Away",
@@ -3416,17 +3386,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	cut: {
 		num: 15,
-		accuracy: 95,
-		basePower: 50,
+		accuracy: 100,
+		basePower: 75,
 		category: "Physical",
-		isNonstandard: "Unobtainable",
 		name: "Cut",
 		pp: 30,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
+		onTryHit(pokemon) {
+			// will shatter screens through sub, before you hit
+			pokemon.side.removeSideCondition('reflect');
+			pokemon.side.removeSideCondition('lightscreen');
+			pokemon.side.removeSideCondition('auroraveil');
+			pokemon.side.removeSideCondition('safeguard');
+		},
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Steel",
 		contestType: "Cool",
 	},
 	darkestlariat: {
@@ -4110,11 +4086,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "Double Team",
 		pp: 15,
-		priority: 0,
-		flags: {snatch: 1, metronome: 1},
-		boosts: {
-			evasion: 1,
+		priority: +1,
+		flags: {metronome: 1},
+		onTry(source) {
+			return !!this.canSwitch(source.side);
 		},
+		selfSwitch: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -4546,13 +4523,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	echoedvoice: {
 		num: 497,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 70,
 		basePowerCallback(pokemon, target, move) {
-			let bp = move.basePower;
-			if (this.field.pseudoWeather.echoedvoice) {
-				bp = move.basePower * this.field.pseudoWeather.echoedvoice.multiplier;
+			if (!pokemon.volatiles['echoedvoice'] || move.hit === 1) {
+				pokemon.addVolatile('echoedvoice');
 			}
-			this.debug('BP: ' + move.basePower);
+			const bp = this.clampIntRange(move.basePower + pokemon.volatiles['echoedvoice'].increase, 1, 600);
+			this.debug('BP: ' + bp);
 			return bp;
 		},
 		category: "Special",
@@ -4560,20 +4537,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
-		onTry() {
-			this.field.addPseudoWeather('echoedvoice');
-		},
 		condition: {
-			duration: 2,
-			onFieldStart() {
-				this.effectState.multiplier = 1;
+			onStart() {
+				this.effectState.increase = 10;
 			},
-			onFieldRestart() {
-				if (this.effectState.duration !== 2) {
-					this.effectState.duration = 2;
-					if (this.effectState.multiplier < 5) {
-						this.effectState.multiplier++;
-					}
+			onRestart() {
+				if (this.effectState.increase < 80) {
+					this.effectState.increase += 10;
 				}
 			},
 		},
@@ -6241,29 +6211,33 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 193,
 		accuracy: true,
 		basePower: 120,
-		category: "Status",
+		category: "Special",
 		isNonstandard: "Past",
 		name: "Foresight",
 		pp: 40,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1},
-		volatileStatus: 'foresight',
-		onTryHit(target) {
-			if (target.volatiles['miracleeye']) return false;
-		},
-		condition: {
-			noCopy: true,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'Foresight');
-			},
-			onNegateImmunity(pokemon, type) {
-				if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
-			},
-			onModifyBoost(boosts) {
-				if (boosts.evasion && boosts.evasion > 0) {
-					boosts.evasion = 0;
-				}
-			},
+		flags: {allyanim: 1, metronome: 1, futuremove: 1},
+		ignoreImmunity: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				move: 'foresight',
+				source: source,
+				moveData: {
+					id: 'foresight',
+					name: "Foresight",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: {allyanim: 1, metronome: 1, futuremove: 1},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					type: 'Normal',
+				},
+			});
+			this.add('-start', source, 'move: Future Sight');
+			return this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "normal",
@@ -8350,11 +8324,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: {metronome: 1},
-		onTryHit(target, source) {
-			this.add('-activate', target, 'move: Happy Hour');
+		slotCondition: 'Happy Hour',
+		condition: {
+			onStart(pokemon, source) {
+				this.effectState.startingTurn = this.getOverflowedTurnCount();
+			},
+			onResidualOrder: 4,
+			onResidual(side: any) {
+				if (this.getOverflowedTurnCount() <= this.effectState.startingTurn + 1) return;
+				side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'happyhour');
+			},
+			onEnd(target) {
+				if (target.hp ===  target.baseMaxhp) {
+					this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, target)
+					this.add('-activate', target, 'move: Happy Hour');
+				}
+			},
 		},
 		secondary: null,
-		target: "allySide",
+		target: "self",
 		type: "Normal",
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
@@ -8370,6 +8358,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {snatch: 1, metronome: 1},
 		boosts: {
 			def: 1,
+		},
+		volatileStatus: 'harden',
+		condition: {
+			onStart(target) {
+				this.add('-start', target, 'move: Harden'); // "The Lucky Chant shielded [side.name]'s team from critical hits!"
+			},
+			onCriticalHit: false,
+			onResidualOrder: 26,
+			onResidualSubOrder: 6,
+			onEnd(target) {
+				this.add('-end', target, 'move: Harden'); // "[side.name]'s team's Lucky Chant wore off!"
+			},
 		},
 		secondary: null,
 		target: "self",
