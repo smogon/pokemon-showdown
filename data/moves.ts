@@ -10351,7 +10351,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onBasePower(basePower, source) {
-			if (source.statsLowered) {
+			if (source.statsLoweredThisTurn) {
 				this.debug('lashout buff');
 				return this.chainModify(2);
 			}
