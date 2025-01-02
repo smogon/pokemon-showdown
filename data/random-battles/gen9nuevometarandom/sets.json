@@ -328,7 +328,7 @@
         ]
     },
     "arbok": {
-        "level": 87,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Support",
@@ -351,7 +351,7 @@
         ]
     },
     "pikachu": {
-        "level": 93,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -362,7 +362,7 @@
         ]
     },
     "raichu": {
-        "level": 88,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Support",
@@ -379,7 +379,7 @@
         ]
     },
     "raichualola": {
-        "level": 87,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -396,7 +396,7 @@
         ]
     },
     "sandslash": {
-        "level": 88,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -407,7 +407,7 @@
         ]
     },
     "sandslashalola": {
-        "level": 88,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -424,7 +424,7 @@
         ]
     },
     "clefable": {
-        "level": 83,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
