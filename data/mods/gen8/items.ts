@@ -49,7 +49,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	dracoplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	dragonmemory: {
 		inherit: true,
@@ -61,7 +61,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	dreadplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	dubiousdisc: {
 		inherit: true,
@@ -69,7 +69,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	earthplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	electirizer: {
 		inherit: true,
@@ -97,11 +97,11 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	fistplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	flameplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	flowersweet: {
 		inherit: true,
@@ -164,15 +164,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	icicleplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	insectplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	ironplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	jabocaberry: {
 		inherit: true,
@@ -212,7 +212,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	meadowplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	metalpowder: {
 		inherit: true,
@@ -224,7 +224,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	mindplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	oddincense: {
 		inherit: true,
@@ -248,7 +248,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	razorfang: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	ribbonsweet: {
 		inherit: true,
@@ -284,15 +284,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	skyplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	splashplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	spookyplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	starsweet: {
 		inherit: true,
@@ -300,7 +300,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	stoneplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	strawberrysweet: {
 		inherit: true,
@@ -320,7 +320,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	toxicplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 	tr00: {
 		inherit: true,
@@ -740,6 +740,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	zapplate: {
 		inherit: true,
-		isNonstandard: "Past",
+
 	},
 };

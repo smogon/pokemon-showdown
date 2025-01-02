@@ -34,7 +34,7 @@ Ratings and how they work:
 
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	noability: {
-		isNonstandard: "Past",
+		 
 		flags: {},
 		name: "No Ability",
 		rating: 0.1,
