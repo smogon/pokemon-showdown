@@ -145,6 +145,10 @@ describe("New set format (slow)", () => {
 			filename: "gen9/sets",
 			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
 		},
+		"gen9nuevometarandom": {
+			filename: "gen9nuevometarandom/sets",
+			roles: ["Fast Attacker", "Setup Sweeper", "Wallbreaker", "Tera Blast user", "Bulky Attacker", "Bulky Setup", "Fast Bulky Setup", "Bulky Support", "Fast Support", "AV Pivot"],
+		},
 		"gen9randomdoublesbattle": {
 			filename: "gen9/doubles-sets",
 			roles: ["Doubles Fast Attacker", "Doubles Setup Sweeper", "Doubles Wallbreaker", "Tera Blast user", "Doubles Bulky Attacker", "Doubles Bulky Setup", "Offensive Protect", "Bulky Protect", "Doubles Support", "Choice Item user"],
