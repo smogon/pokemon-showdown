@@ -68,66 +68,38 @@
         ]
     },
     "charizard": {
-        "level": 100,
+        "level": 85,
         "sets": [
             {
-                "role": "Specially Defensive",
-                "movepool": ["Ember", "Defog", "Roost", "Tailwind"],
+                "role": "Fast Attacker",
+                "movepool": ["Earthquake", "Flamethrower", "Focus Blast", "Hurricane", "Will-O-Wisp"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Water"],
-                "items": "Heavy-Duty Boots",
-                "nature": "bold",
-                "hpEVs": 252,
-                "atkEVs": 0,
-                "defEVs": 0,
-                "spaEVs": 4,
-                "spdEVs": 252,
-                "speEVs": 0
+                "teraTypes": ["Dragon", "Fire", "Ground"]
             },
             {
-                "role": "Fast Physical Sweeper",
-                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Dual Wingbeat"],
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Flare Blitz", "Outrage", "Swords Dance"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Water"],
-                "items": "Heavy-Duty Boots",
-                "nature": "adamant",
-                "hpEVs": 0,
-                "atkEVs": 252,
-                "defEVs": 0,
-                "spaEVs": 0,
-                "spdEVs": 4,
-                "speEVs": 252
-            },
-            {
-                "role": "Fast Special Sweeper",
-                "movepool": ["Overheat", "Focus Blast", "Scorching Sands", "Air Slash"],
-                "abilities": ["Blaze"],
-                "teraTypes": ["Water"],
-                "items": "Eject Pack",
-                "nature": "timid",
-                "hpEVs": 0,
-                "atkEVs": 0,
-                "defEVs": 0,
-                "spaEVs": 252,
-                "spdEVs": 4,
-                "speEVs": 252
+                "teraTypes": ["Dragon", "Ground"]
             }
         ]
     },
     "blastoise": {
-        "level": 80,
+        "level": 100,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Hydro Pump", "Ice Beam", "Shell Smash"],
-                "abilities": ["Torrent"],
-                "teraTypes": ["Ground", "Steel", "Water"]
-            },
-            {
-                "role": "Tera Blast user",
-                "movepool": ["Hydro Pump", "Ice Beam", "Shell Smash", "Tera Blast"],
-                "abilities": ["Torrent"],
-                "teraTypes": ["Electric", "Grass"]
+                "role": "Physically Defensive",
+                "movepool": ["Flip Turn", "Haze", "Rapid Spin", "Scald"],
+                "abilities": ["Rain Dish"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 0
             }
         ]
     },
