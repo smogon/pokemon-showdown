@@ -2484,7 +2484,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				'Water Absorb', 'Water Bubble', 'Wonder Guard',
 			];
 			let buf = `<b>Every Pok&eacute;mon's ability is randomly selected from the following pool:</b><br>`;
-			buf += `<details><summary><b>Click to expand</b></summary>`
+			buf += `<details><summary><b>Click to expand</b></summary>`;
 			buf += POWERFUL_ABILITIES.sort().join(', ');
 			buf += '</details>';
 			this.add(`raw|<div class="broadcast-blue">${buf}</div>`);
