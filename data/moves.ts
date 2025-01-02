@@ -17607,17 +17607,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	snaptrap: {
 		num: 779,
 		accuracy: 100,
-		basePower: 35,
+		basePower: 80,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Snap Trap",
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		volatileStatus: 'partiallytrapped',
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
+		},
 		secondary: null,
 		target: "normal",
-		type: "Grass",
+		type: "Steel",
 	},
 	snarl: {
 		num: 555,
