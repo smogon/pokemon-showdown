@@ -181,7 +181,7 @@ export class BattleActions {
 			battle.speedOrder = allActive.map((a) => a.side.n * battle.sides.length + a.position);
 			battle.fieldEvent('SwitchIn', switchersIn);
 
-			for (const poke of allActive) {
+			for (const poke of switchersIn) {
 				if (!poke.hp) continue;
 				poke.isStarted = true;
 				poke.draggedIn = null;
