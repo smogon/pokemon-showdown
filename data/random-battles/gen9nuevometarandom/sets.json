@@ -89,24 +89,138 @@
         ]
     },
     "charizard": {
-        "level": 85,
+        "level": 100,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Earthquake", "Flamethrower", "Focus Blast", "Hurricane", "Will-O-Wisp"],
+                "role": "Specially Defensive",
+                "movepool": ["Ember", "Defog", "Roost", "Tailwind"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Dragon", "Fire", "Ground"]
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Dragon Dance", "Earthquake", "Flare Blitz", "Outrage", "Swords Dance"],
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Dual Wingbeat"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Dragon", "Ground"]
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Overheat", "Focus Blast", "Scorching Sands", "Air Slash"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Eject Pack",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Solar Beam", "Scorching Sands", "Air Cutter", "Weather Ball"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Roost", "Ember", "Weather Ball", "Defog"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "calm",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 8,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Roost", "Weather Ball", "Solar Beam", "Scorching Sands"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "modest",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 8,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Outrage"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Dragon Rush", "Temper Flare", "Roost"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Dragon Rush"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
     "blastoise": {
-        "level": 80,
+        "level": 100,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -195,7 +309,7 @@
         ]
     },
     "arbok": {
-        "level": 87,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Support",
@@ -218,7 +332,7 @@
         ]
     },
     "pikachu": {
-        "level": 93,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -229,7 +343,7 @@
         ]
     },
     "raichu": {
-        "level": 88,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Support",
@@ -246,7 +360,7 @@
         ]
     },
     "raichualola": {
-        "level": 87,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -263,7 +377,7 @@
         ]
     },
     "sandslash": {
-        "level": 88,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -274,7 +388,7 @@
         ]
     },
     "sandslashalola": {
-        "level": 88,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -291,7 +405,7 @@
         ]
     },
     "clefable": {
-        "level": 83,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
