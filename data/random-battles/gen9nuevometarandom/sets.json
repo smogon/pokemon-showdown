@@ -68,19 +68,49 @@
         ]
     },
     "charizard": {
-        "level": 85,
+        "level": 100,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Earthquake", "Flamethrower", "Focus Blast", "Hurricane", "Will-O-Wisp"],
+                "role": "Specially Defensive",
+                "movepool": ["Ember", "Defog", "Roost", "Tailwind"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Dragon", "Fire", "Ground"]
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Dragon Dance", "Earthquake", "Flare Blitz", "Outrage", "Swords Dance"],
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Dual Wingbeat"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Dragon", "Ground"]
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Overheat", "Focus Blast", "Scorching Sands", "Air Slash"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Eject Pack",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
