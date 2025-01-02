@@ -9195,10 +9195,25 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Unobtainable",
 		name: "Hold Hands",
 		pp: 40,
-		priority: 0,
+		priority: 1,
 		flags: {bypasssub: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		secondary: null,
-		target: "adjacentAlly",
+		onTry(source, target) {
+			let foe = source.foes(true)[0] 
+			let move = foe.lastMove?.realMove
+			if (source.activeMoveActions > 1  || source.baseMaxhp > source.hp) {
+				this.hint("Hold Hands only works on your first turn out, at full health.");
+				return false;
+			}
+		},
+		boosts: {
+			def: 1,
+			spd: 1,
+			atk: 1,
+			spa: 1,
+			spe: 1,
+		},
+		target: "self",
 		type: "Normal",
 		zMove: {boost: {atk: 1, def: 1, spa: 1, spd: 1, spe: 1}},
 		contestType: "Cute",
