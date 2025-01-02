@@ -9199,7 +9199,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {bypasssub: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
 		secondary: null,
 		onTry(source, target) {
-			let foe = source.foes(true)[0] 
+			let foe = source.foes(true)[0]
 			let move = foe.lastMove?.realMove
 			if (source.activeMoveActions > 1  || source.baseMaxhp > source.hp) {
 				this.hint("Hold Hands only works on your first turn out, at full health.");
@@ -14033,7 +14033,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 20,
 		category: "Physical",
 		name: "Pound",
-		pp: 35, 
+		pp: 35,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onTryHit(pokemon) {
@@ -18346,29 +18346,43 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isNonstandard: "Past",
 		name: "Spotlight",
 		pp: 15,
-		priority: 3,
-		flags: {protect: 1, reflectable: 1, allyanim: 1, noassist: 1, failcopycat: 1, light: 1,},
+		priority: 2,
+		flags: {noassist: 1, failcopycat: 1},
 		volatileStatus: 'spotlight',
-		onTryHit(target) {
-			if (this.activePerHalf === 1) return false;
+		onTry(source) {
+			return this.activePerHalf > 1;
 		},
 		condition: {
 			duration: 1,
-			noCopy: true, // doesn't get copied by Baton Pass
-			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Spotlight');
+			onStart(target, source, effect) {
+				if (effect?.id === 'zpower') {
+					this.add('-singleturn', target, 'move: Spotlight', '[zeffect]');
+				} else {
+					this.add('-singleturn', target, 'move: Spotlight');
+				}
 			},
-			onFoeRedirectTargetPriority: 2,
+			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget(target, source, source2, move) {
-				if (this.validTarget(this.effectState.target, source, move.target)) {
+				if (!this.effectState.target.isSkyDropped() && this.validTarget(this.effectState.target, source, move.target)) {
+					if (move.smartTarget) move.smartTarget = false;
 					this.debug("Spotlight redirected target of move");
 					return this.effectState.target;
 				}
 			},
+			onTryHit(target, source, move) {
+				if (this.checkMoveMakesContact(move, source, target)) {
+					source.trySetStatus('par', target);
+				}
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+					source.trySetStatus('par', target);
+				}
+			},
 		},
 		secondary: null,
-		target: "normal",
-		type: "Normal",
+		target: "self",
+		type: "Electric",
 		zMove: {boost: {spd: 1}},
 		contestType: "Cute",
 	},
