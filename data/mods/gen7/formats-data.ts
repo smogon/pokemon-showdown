@@ -820,7 +820,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	meganium: {
-		tier: "ZU",
+		tier: "Illegal",
 		doublesTier: "(DUU)",
 	},
 	cyndaquil: {
