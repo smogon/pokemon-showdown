@@ -1,23 +1,23 @@
 export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	berrysweet: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	cloversweet: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	dragonscale: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	dubiousdisc: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	electirizer: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	eviolite: {
 		inherit: true,
@@ -34,15 +34,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	flowersweet: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	lovesweet: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	magmarizer: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	metalalloy: {
 		inherit: true,
@@ -50,26 +50,26 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	},
 	protector: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	ribbonsweet: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	souldew: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	starsweet: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	strawberrysweet: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 	upgrade: {
 		inherit: true,
-		isNonstandard: "Past",
+		 
 	},
 };
