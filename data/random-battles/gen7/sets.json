@@ -6797,11 +6797,6 @@
                 "role": "Staller",
                 "movepool": ["banefulbunker", "recover", "scald", "toxic"],
                 "abilities": ["Regenerator"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["knockoff", "recover", "scald", "toxic"],
-                "abilities": ["Regenerator"]
             }
         ]
     },
