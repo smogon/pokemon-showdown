@@ -18272,8 +18272,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {gravity: 1, metronome: 1},
 		onTry(source, target, move) {
-			// TODO: agregar nuevo tag para primera evo
-			if(source.species.nfe){
+			if(source.species.prevo){
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, source)
 			}
 		},
