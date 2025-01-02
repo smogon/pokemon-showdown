@@ -4089,9 +4089,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: +1,
 		flags: {metronome: 1},
 		onTry(source) {
+			source.clearBoosts()
 			return !!this.canSwitch(source.side);
 		},
-		selfSwitch: true,
 		secondary: null,
 		target: "self",
 		type: "Normal",
@@ -10370,16 +10370,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onTry(source) {
-			if (source.moveSlots.length < 2) return false; // Last Resort fails unless the user knows at least 2 moves
-			let hasLastResort = false; // User must actually have Last Resort for it to succeed
-			for (const moveSlot of source.moveSlots) {
-				if (moveSlot.id === 'lastresort') {
-					hasLastResort = true;
-					continue;
-				}
-				if (!moveSlot.used) return false;
-			}
-			return hasLastResort;
+			if (source.hp >= source.baseMaxhp) return false; // Last Resort fails unless the user knows at least 2 moves
 		},
 		secondary: null,
 		target: "normal",
