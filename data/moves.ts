@@ -4542,7 +4542,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.increase = 10;
 			},
 			onRestart() {
-				if (this.effectState.increase < 80) {
+				if (this.effectState.increase < 530) {
 					this.effectState.increase += 10;
 				}
 			},
@@ -7778,57 +7778,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 520,
 		accuracy: 100,
 		basePower: 80,
-		basePowerCallback(target, source, move) {
-			if (['waterpledge', 'firepledge'].includes(move.sourceEffect)) {
-				this.add('-combine');
-				return 150;
-			}
-			return move.basePower;
-		},
 		category: "Special",
 		name: "Grass Pledge",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1, metronome: 1, pledgecombo: 1},
-		onPrepareHit(target, source, move) {
-			for (const action of this.queue.list as MoveAction[]) {
-				if (
-					!action.move || !action.pokemon?.isActive ||
-					action.pokemon.fainted || action.maxMove || action.zmove
-				) {
-					continue;
-				}
-				if (action.pokemon.isAlly(source) && ['waterpledge', 'firepledge'].includes(action.move.id)) {
-					this.queue.prioritizeAction(action, move);
-					this.add('-waiting', source, action.pokemon);
-					return null;
-				}
-			}
-		},
-		onModifyMove(move) {
-			if (move.sourceEffect === 'waterpledge') {
-				move.type = 'Grass';
-				move.forceSTAB = true;
-				move.sideCondition = 'grasspledge';
-			}
-			if (move.sourceEffect === 'firepledge') {
-				move.type = 'Fire';
-				move.forceSTAB = true;
-				move.sideCondition = 'firepledge';
-			}
-		},
+		pseudoWeather: 'grasspledge',
 		condition: {
-			duration: 4,
-			onSideStart(targetSide) {
-				this.add('-sidestart', targetSide, 'Grass Pledge');
+			duration: 1,
+			onFieldStart(field, source) {
+				this.add('-fieldstart', 'move: Grass Pledge', '[of] ' + source);
 			},
-			onSideResidualOrder: 26,
-			onSideResidualSubOrder: 9,
-			onSideEnd(targetSide) {
-				this.add('-sideend', targetSide, 'Grass Pledge');
+			onBasePowerPriority: 1,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Water') {
+					this.debug('grass pledge weaken');
+					return this.chainModify([1352, 4096]);
+				}
 			},
-			onModifySpe(spe, pokemon) {
-				return this.chainModify(0.25);
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 3,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Grass Pledge');
 			},
 		},
 		secondary: null,
@@ -17636,17 +17607,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	snaptrap: {
 		num: 779,
 		accuracy: 100,
-		basePower: 35,
+		basePower: 80,
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Snap Trap",
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		volatileStatus: 'partiallytrapped',
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
+		},
 		secondary: null,
 		target: "normal",
-		type: "Grass",
+		type: "Steel",
 	},
 	snarl: {
 		num: 555,
@@ -20012,15 +19989,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thousandwaves: {
 		num: 615,
 		accuracy: 100,
-		basePower: 90,
+		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			if (!pokemon.volatiles['thousandwaves'] || move.hit === 1) {
+				pokemon.addVolatile('thousandwaves');
+			}
+			const bp = this.clampIntRange(move.basePower + pokemon.volatiles['thousandwaves'].increase, 1, 130);
+			this.debug('BP: ' + bp);
+			return bp;
+		},
 		category: "Physical",
 		isNonstandard: "Past",
 		name: "Thousand Waves",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
-		onHit(target, source, move) {
-			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+		condition: {
+			onStart() {
+				this.effectState.increase = 15;
+			},
+			onRestart() {
+				if (this.effectState.increase < 60) {
+					this.effectState.increase += 15;
+				}
+			},
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
