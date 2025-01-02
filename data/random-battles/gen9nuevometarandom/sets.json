@@ -109,16 +109,88 @@
         "level": 80,
         "sets": [
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Hydro Pump", "Ice Beam", "Shell Smash"],
-                "abilities": ["Torrent"],
-                "teraTypes": ["Ground", "Steel", "Water"]
+                "role": "Physically Defensive",
+                "movepool": ["Flip Turn", "Haze", "Rapid Spin", "Scald"],
+                "abilities": ["Rain Dish"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 0
             },
             {
-                "role": "Tera Blast user",
-                "movepool": ["Hydro Pump", "Ice Beam", "Shell Smash", "Tera Blast"],
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Focus Blast", "Hydro Cannon", "Ice Beam", "Flip Turn"],
+                "abilities": ["Overgrow"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shell Smash", "Hydro Pump", "Ice Beam", "Aura Sphere"],
                 "abilities": ["Torrent"],
-                "teraTypes": ["Electric", "Grass"]
+                "teraTypes": ["Water"],
+                "items": "White Herb",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Flip Turn", "Hydro Cannon", "Flash Cannon", "Aura Sphere"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shell Smash", "Water Pulse", "Flash Cannon", "Dark Pulse"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shell Smash", "Water Pulse", "Flash Cannon", "Aura Sphere"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
@@ -142,6 +214,17 @@
                 "movepool": ["Coil", "Earthquake", "Gunk Shot", "Sucker Punch"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Dark", "Ground"]
+            }
+        ]
+    },
+    "pikachu": {
+        "level": 93,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Fake Out", "Knock Off", "Play Rough", "Surf", "Volt Switch", "Volt Tackle"],
+                "abilities": ["Lightning Rod"],
+                "teraTypes": ["Water"]
             }
         ]
     },
@@ -179,24 +262,49 @@
             }
         ]
     },
-    "raticatealola": {
-        "level": 100,
+    "sandslash": {
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["U-Turn", "Knock Off", "Toxic", "Double-Edge"],
-                "abilities": ["Hustle"],
-                "teraTypes": ["Poison"],
-                "items": "Totem Gigante",
-                "nature": "careful",
-                "hpEVs": 248,
-                "atkEVs": 8,
-                "defEVs": 0,
-                "spaEVs": 0,
-                "spdEVs": 252,
-                "speEVs": 0
+                "movepool": ["Earthquake", "Knock Off", "Rapid Spin", "Spikes", "Stone Edge", "Swords Dance"],
+                "abilities": ["Sand Rush"],
+                "teraTypes": ["Dragon", "Steel", "Water"]
+            }
+        ]
+    },
+    "sandslashalola": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Earthquake", "Iron Head", "Knock Off", "Rapid Spin", "Spikes", "Triple Axel"],
+                "abilities": ["Slush Rush"],
+                "teraTypes": ["Flying", "Water"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Earthquake", "Ice Shard", "Knock Off", "Rapid Spin", "Swords Dance", "Triple Axel"],
+                "abilities": ["Slush Rush"],
+                "teraTypes": ["Ground"]
+            }
+        ]
+    },
+    "clefable": {
+        "level": 83,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Fire Blast", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
+                "abilities": ["Magic Guard", "Unaware"],
+                "teraTypes": ["Poison", "Steel"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Calm Mind", "Fire Blast", "Moonblast", "Moonlight"],
+                "abilities": ["Magic Guard", "Unaware"],
+                "teraTypes": ["Fire", "Steel"]
             }
         ]
     }
-
 }
