@@ -1015,7 +1015,7 @@
                 "abilities": ["Surge Surfer"],
                 "teraTypes": ["Water"],
                 "items": "Aloraichium Z",
-                "nature": "jolly",
+                "nature": "timid",
                 "hpEVs": 0,
                 "atkEVs": 0,
                 "defEVs": 0,
@@ -1528,7 +1528,7 @@
         "sets": [
             {
                 "role": "Bulky Band",
-                "movepool": ["Pinza Infecciosa", "Knock Off", "Leech Life", "Brick Breakt"],
+                "movepool": ["Pinza Infecciosa", "Knock Off", "Leech Life", "Brick Break"],
                 "abilities": ["Damp"],
                 "teraTypes": ["Water"],
                 "items": "Choice Band",
@@ -1542,7 +1542,7 @@
             },
             {
                 "role": "Bulky Physical Sweeper",
-                "movepool": ["Pinza Infecciosa", "Knock Off", "Leech Life", "Brick Breakt"],
+                "movepool": ["Pinza Infecciosa", "Knock Off", "Leech Life", "Brick Break"],
                 "abilities": ["Damp"],
                 "teraTypes": ["Water"],
                 "items": "Assault Vest",
@@ -1661,6 +1661,213 @@
                 "spaEVs": 0,
                 "spdEVs": 4,
                 "speEVs": 252
+            }
+        ]
+    },
+    "dugtrioalola": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Iron Head", "Earthquake", "Stealth Rock", "Toxic"],
+                "abilities": ["Tangling Hair"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Band",
+                "movepool": ["Beat Up", "Stone Edge", "Iron Head", "Earthquake"],
+                "abilities": ["Sand Force"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Stealth Rock", "Sand Attack", "Iron Head", "Earthquake"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "persian": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Band",
+                "movepool": ["Retaliate", "U-turn", "Covet", "Knock Off"],
+                "abilities": ["Limber"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Slash", "Bite", "Fake Out", "U-turn"],
+                "abilities": ["Technician"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Band",
+                "movepool": ["Curse", "Take Down", "Odor Sleuth", "Knock Off"],
+                "abilities": ["Limber"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "persianalola": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Bulky Support",
+                "movepool": ["Fake Out", "Parting Shot", "Knock Off", "Dark Pulse"],
+                "abilities": ["Fur Coat"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "timid",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Snarl", "Icy Wind", "Hidden Power Flying"],
+                "abilities": ["Technician"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Bulky Support",
+                "movepool": ["Toxic", "Dark Pulse", "Taunt", "Parting Shot"],
+                "abilities": ["Fur Coat"],
+                "teraTypes": ["Water"],
+                "items": "Darkinium Z",
+                "nature": "timid",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 252
+            }
+        ]
+    },
+    "golduck": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Flip Turn", "Ice Beam", "Psyshock", "Hydro Pump"],
+                "abilities": ["Neuroforce"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Flip Turn", "Ice Beam", "Psyshock", "Hydro Pump"],
+                "abilities": ["Cloud Nine"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Ice Beam", "Psyshock", "Surf"],
+                "abilities": ["Swift Swim"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "primeape": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Bulk Up", "Beat Up", "Drain Punch", "Rage Fist"],
+                "abilities": ["Anger Point"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
             }
         ]
     }
