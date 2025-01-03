@@ -60,7 +60,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			if (target.getMoveHitData(move).crit && !this.effectState.ziranUsed) {
 				this.effectState.ziranUsed = true;
-				this.actions.useMove('Ziran', target);
+				this.actions.useMove('Ziran', source, target);
 			}
 		},
 	},
