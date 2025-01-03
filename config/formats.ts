@@ -2576,6 +2576,11 @@ export const Formats: FormatList = [
 					pokemon.hp += health;
 					this.add('-heal', pokemon, pokemon.getHealth);
 				}
+				if (pokemon.getItem().id === 'zhuyou') {
+					if (pokemon.isActive || !pokemon.status) continue;
+					this.add('-curestatus', pokemon, pokemon.status, '[from] item: Zhuyou');
+					pokemon.clearStatus();
+				}
 			}
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.species.id === 'mimikyubusted') {
