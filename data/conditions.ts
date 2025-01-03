@@ -21,6 +21,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'par',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			this.effectState.time = 1;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
 			} else {
@@ -38,8 +39,10 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
-			if (this.randomChance(1, 4)) {
+			pokemon.statusState.time += 1;
+			if (pokemon.statusState.time >= 4) {
 				this.add('cant', pokemon, 'par');
+				pokemon.statusState.time = 1;
 				return false;
 			}
 		},
@@ -59,7 +62,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (target.hasAbility('earlybird')) {
 				this.effectState.startTime = 2;
 			} else {
-			this.effectState.startTime = this.random(3, 3);
+			this.effectState.startTime = 3;
 		}
 			this.effectState.time = this.effectState.startTime;
 
