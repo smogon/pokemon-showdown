@@ -88,6 +88,53 @@
             }
         ]
     },
+        "venusaurmega": {
+            "level": 100,
+            "sets": [
+                {
+                    "role": "Physically Defensive",
+                    "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain"],
+                    "abilities": ["Overgrow"],
+                    "teraTypes": ["Water"],
+                    "items": "Venusaurite",
+                    "nature": "bold",
+                    "hpEVs": 252,
+                    "atkEVs": 0,
+                    "defEVs": 252,
+                    "spaEVs": 4,
+                    "spdEVs": 0,
+                    "speEVs": 0
+                },
+                {
+                    "role": "Specially Defensive",
+                    "movepool": ["Leech Seed", "Synthesis", "Earth Power", "Mega Drain"],
+                    "abilities": ["Overgrow"],
+                    "teraTypes": ["Water"],
+                    "items": "Venusaurite",
+                    "nature": "calm",
+                    "hpEVs": 252,
+                    "atkEVs": 0,
+                    "defEVs": 0,
+                    "spaEVs": 4,
+                    "spdEVs": 252,
+                    "speEVs": 0
+                },
+                {
+                    "role": "Fast Special Sweeper",
+                    "movepool": ["Razor Wind", "Sludge Bomb", "Earth Power", "Mega Drain"],
+                    "abilities": ["Overgrow"],
+                    "teraTypes": ["Water"],
+                    "items": "Venusaurite",
+                    "nature": "timid",
+                    "hpEVs": 0,
+                    "atkEVs": 0,
+                    "defEVs": 0,
+                    "spaEVs": 252,
+                    "spdEVs": 4,
+                    "speEVs": 252
+                }
+            ]
+        },
     "charizard": {
         "level": 100,
         "sets": [
@@ -175,6 +222,100 @@
                 "spdEVs": 8,
                 "speEVs": 0
             },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Outrage"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Dragon Rush", "Temper Flare", "Roost"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Dragon Rush"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite X",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "charizardmegay": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Solar Beam", "Scorching Sands", "Air Cutter", "Weather Ball"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Roost", "Ember", "Weather Ball", "Defog"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "calm",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 8,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Roost", "Weather Ball", "Solar Beam", "Scorching Sands"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Charizardite Y",
+                "nature": "modest",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 8,
+                "speEVs": 0
+            }
+        ]
+    },
+    "charizardmegax": {
+        "level": 100,
+        "sets": [
             {
                 "role": "Fast Physical Sweeper",
                 "movepool": ["Dragon Dance", "Flare Blitz", "Earthquake", "Outrage"],
@@ -854,16 +995,46 @@
         "level": 88,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Earthquake", "Iron Head", "Knock Off", "Rapid Spin", "Spikes", "Triple Axel"],
-                "abilities": ["Slush Rush"],
-                "teraTypes": ["Flying", "Water"]
+                "role": "Physically Defensive Support",
+                "movepool": ["Stealth Rock", "Spikes", "Rapid Spin", "Earthquake"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 0,
+                "speEVs": 0
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Earthquake", "Ice Shard", "Knock Off", "Rapid Spin", "Swords Dance", "Triple Axel"],
-                "abilities": ["Slush Rush"],
-                "teraTypes": ["Ground"]
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Rapid Spin", "Stone Edge", "Earthquake"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Earthquake", "Stone Edge", "Leech Life"],
+                "abilities": ["Sand Rush"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },

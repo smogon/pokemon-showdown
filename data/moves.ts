@@ -6,7 +6,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 195,
 		category: "Special",
-		 
 		name: "10,000,000 Volt Thunderbolt",
 		pp: 1,
 		priority: 0,
