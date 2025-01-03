@@ -1448,11 +1448,6 @@ export class RandomTeams {
 			return this.sample([species.name].concat(species.otherFormes!));
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
-		if (species.baseSpecies === 'Pikachu') {
-			return 'Pikachu' + this.sample(
-				['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']
-			);
-		}
 		return species.name;
 	}
 
@@ -1501,8 +1496,8 @@ export class RandomTeams {
 		const atkEVs = set.atkEVs!;
 		const defEVs = set.defEVs!;
 		const spaEVs = set.spaEVs!;
-		const spdEVs = set.hpEVs!;
-		const speEVs = set.hpEVs!;
+		const spdEVs = set.spdEVs!;
+		const speEVs = set.speEVs!;
 
 		let evs = {hp: hpEVs, atk: atkEVs, def: defEVs, spa: spaEVs, spd: spdEVs, spe: speEVs};
 		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
@@ -2297,6 +2292,7 @@ export class RandomTeams {
 
 			// Random EVs
 			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+
 			if (this.gen === 9) {
 				let evpool = 510;
 				do {
