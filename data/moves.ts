@@ -11182,7 +11182,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		condition: {
-			duration: 5,
 			onStart(target) {
 				this.add('-start', target, 'Magnet Rise');
 			},
@@ -11319,14 +11318,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				if (this.checkMoveMakesContact(move, source, target)) {
-					this.damage(move.basePower / 4, source, target);
-				}
+					this.damage(move.basePower, source, target);
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
-				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					this.damage(move.basePower / 4, source, target);
+				if (move.isZOrMaxPowered) {
+					this.damage(move.basePower, source, target);
 				}
 			},
 		},
