@@ -42,7 +42,7 @@
                 "defEVs": 0,
                 "spaEVs": 8,
                 "spdEVs": 252,
-                "speEVs": 252
+                "speEVs": 0
             }
         ]
     },
@@ -917,8 +917,8 @@
         "sets": [
             {
                 "role": "Physically Defensive Support",
-                "movepool": ["Stealth Rock", "Spikes", "Rapid Spin", "Earthquake"],
-                "abilities": ["Sand Veil"],
+                "movepool": ["Stealth Rock", "Chilly Reception", "Rapid Spin", "Icicle Crash"],
+                "abilities": ["Snow Cloak"],
                 "teraTypes": ["Water"],
                 "items": "Leftovers",
                 "nature": "impish",
@@ -931,22 +931,22 @@
             },
             {
                 "role": "Fast Physical Sweeper",
-                "movepool": ["Swords Dance", "Rapid Spin", "Stone Edge", "Earthquake"],
-                "abilities": ["Sand Veil"],
+                "movepool": ["Swords Dance", "Rapid Spin", "Icicle Crash", "Iron Tail"],
+                "abilities": ["Snow Cloak"],
                 "teraTypes": ["Water"],
                 "items": "Leftovers",
-                "nature": "jolly",
-                "hpEVs": 0,
+                "nature": "adamant",
+                "hpEVs": 252,
                 "atkEVs": 252,
                 "defEVs": 0,
                 "spaEVs": 0,
                 "spdEVs": 4,
-                "speEVs": 252
+                "speEVs": 0
             },
             {
                 "role": "Fast Physical Sweeper",
-                "movepool": ["Swords Dance", "Earthquake", "Stone Edge", "Leech Life"],
-                "abilities": ["Sand Rush"],
+                "movepool": ["Swords Dance", "Earthquake", "Icicle Crash", "Iron Tail"],
+                "abilities": ["Slush Rush"],
                 "teraTypes": ["Water"],
                 "items": "Leftovers",
                 "nature": "adamant",
@@ -959,20 +959,379 @@
             }
         ]
     },
-    "clefable": {
-        "level": 83,
+    "Nidoqueen": {
+        "level": 100,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Fire Blast", "Knock Off", "Moonblast", "Moonlight", "Stealth Rock", "Thunder Wave"],
-                "abilities": ["Magic Guard", "Unaware"],
-                "teraTypes": ["Poison", "Steel"]
+                "role": "Physically Defensive",
+                "movepool": ["Toxic Spikes", "Stealth Rock", "Earthquake", "Shore Up"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 0,
+                "speEVs": 0
             },
             {
-                "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Fire Blast", "Moonblast", "Moonlight"],
-                "abilities": ["Magic Guard", "Unaware"],
-                "teraTypes": ["Fire", "Steel"]
+                "role": "Physically Defensive",
+                "movepool": ["Poison Tail", "Stealth Rock", "Earthquake", "Shore Up"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Mud Shot", "Stealth Rock", "Incinerate", "Shore Up"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "nidoking": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Poison Jab", "Ice Punch"],
+                "abilities": ["Sheer Force"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Substitute", "Sludge Wave", "Earth Power", "Ice Beam"],
+                "abilities": ["Berserk"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Special Scarf",
+                "movepool": ["Earth Power", "Thunderbolt", "Sludge Wave", "Ice Beam"],
+                "abilities": ["Sheer Force"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "clefable": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Wish", "Protect", "Moonblast", "Stealth Rock"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Cosmic Power", "Charge Beam", "Stored Power", "Soft-Boiled"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Moonblast", "Stealth Rock", "Soft-Boiled", "Incinerate"],
+                "abilities": ["Unaware"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "ninetales": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nonallamas", "Hex", "Solar Beam", "Solar Beam"],
+                "abilities": ["Drought"],
+                "teraTypes": ["Water"],
+                "items": "Heat Rock",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nonallamas", "Scorching Sands", "Solar Beam", "Taunt"],
+                "abilities": ["Drought"],
+                "teraTypes": ["Water"],
+                "items": "Heat Rock",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nonallamas", "Hex", "Solar Beam", "Taunt"],
+                "abilities": ["Drought"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "ninetalesalola": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nonaesquirla", "Substitute", "Moonblast", "Nasty Plot"],
+                "abilities": ["Snow Cloak"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Freeze-Dry", "Aurora Veil", "Encore", "Moonblast"],
+                "abilities": ["Snow Warning"],
+                "teraTypes": ["Water"],
+                "items": "Light Clay",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Heal Bell", "Moonblast", "Blizzard", "Aurora Veil"],
+                "abilities": ["Snow Warning"],
+                "teraTypes": ["Water"],
+                "items": "Light Clay",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "wigglytuff": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Wish", "Protect", "Stealth Rock", "Alluring Voice"],
+                "abilities": ["Cute Charm"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Wish", "Protect", "Incinerate", "Alluring Voice"],
+                "abilities": ["Frisk"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "sassy",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Nasty Plot", "Incinerate", "Draining Kiss", "Tri Attack"],
+                "abilities": ["Competitive"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "Golbat": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Toxic", "Roost", "Defog", "U-turn"],
+                "abilities": ["Infiltrator"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "jolly",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Coil", "Roost", "Dual Wingbeat", "Poison Fang"],
+                "abilities": ["Inner Focus"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["U-turn", "Roost", "Defog", "Brave Bird"],
+                "abilities": ["Inner Focus"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "vileplume": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Acid", "Strength Sap", "Sleep Powder", "Leech Seed"],
+                "abilities": ["Effect Spore"],
+                "teraTypes": ["Water"],
+                "items": "Rocky Helmet",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Acid Spray", "Corrosive Gas", "Strength Sap", "Leech Seed"],
+                "abilities": ["Effect Spore"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Acid", "Moonblast", "Mega Drain", "Growth"],
+                "abilities": ["Chlorophyll"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
             }
         ]
     }
