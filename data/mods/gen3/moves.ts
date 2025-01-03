@@ -209,7 +209,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noCopy: true,
 			onStart(pokemon) {
 				if (!this.queue.willMove(pokemon)) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				}
 				if (!pokemon.lastMove) {
 					return false;

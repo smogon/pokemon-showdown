@@ -43,7 +43,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-fail', source);
 				return null;
 			}
-			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration < 2) {
+			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration! < 2) {
 				// Duration may not be lower than 2 if Sucker Punch is used as a low-priority move
 				// i.e. if Sucker Punch is linked with a negative priority move
 				this.attrLastMove('[still]');
@@ -160,7 +160,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.queue.willMove(pokemon) ||
 					(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
 				) {
-					this.effectState.duration--;
+					this.effectState.duration!--;
 				}
 				if (!lastMove) {
 					this.debug('pokemon hasn\'t moved yet');
@@ -235,7 +235,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.effectState.move = linkedMoves;
 				}
 				if (!this.queue.willMove(target)) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				}
 			},
 			onOverrideAction(pokemon, target, move) {

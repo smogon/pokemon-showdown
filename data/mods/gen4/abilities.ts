@@ -526,7 +526,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted) return;
+			if (!this.effectState.seek) return;
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
