@@ -4631,7 +4631,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 90,
 		basePower: 100,
 		category: "Physical",
-
 		name: "Egg Bomb",
 		pp: 10,
 		priority: 0,
@@ -4705,7 +4704,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-
 		name: "Electrify",
 		pp: 20,
 		priority: 0,
@@ -4824,8 +4822,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	embargo: {
 		num: 373,
 		accuracy: 100,
-		basePower: 0,
-		category: "Status",
+		basePower: 80,
+		category: "Physical",
 
 		name: "Embargo",
 		pp: 15,
