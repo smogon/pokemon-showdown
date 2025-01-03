@@ -4828,7 +4828,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 		volatileStatus: 'embargo',
 		condition: {
-			duration: 5;
+			duration: 5,
 			durationCallback(target, source, effect) {
 				 if(source.hasAbility('Frisk')){
 					return 8;

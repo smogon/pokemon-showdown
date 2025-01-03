@@ -2546,6 +2546,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move' && target.status) {
+				if (effect.effectType === 'Ability') this.add('-activate', target, 'ability: ' + effect.name);
+				return false;
+			}
+		},
 		flags: {breakable: 1},
 		name: "Marvel Scale",
 		rating: 2.5,
@@ -4527,7 +4533,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	static: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(5, 10)) {
 					source.trySetStatus('par', target);
+				}
 			}
 		},
 		flags: {},
