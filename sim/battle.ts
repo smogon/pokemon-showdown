@@ -94,6 +94,7 @@ interface EventListener extends EventListenerWithoutPriority {
 	order: number | false;
 	priority: number;
 	subOrder: number;
+	effectOrder?: number;
 	speed?: number;
 }
 
@@ -407,7 +408,7 @@ export class Battle {
 			((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
 			-((b.subOrder || 0) - (a.subOrder || 0)) ||
-			-((b.state?.effectOrder || 0) - (a.state?.effectOrder || 0)) ||
+			-((b.effectOrder || 0) - (a.effectOrder || 0)) ||
 			0;
 	}
 
@@ -952,6 +953,13 @@ export class Battle {
 					handler.subOrder = 9;
 				}
 			}
+		}
+		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget')) {
+			// If multiple hazards are present on one side, their event handlers all perfectly tie in speed, priority,
+			// and subOrder. They should activate in the order they were created, which is where effectOrder comes in.
+			// This also applies to speed ties for which ability like Lightning Rod redirects moves.
+			// TODO: In-game, other events are also sorted this way, but that's an implementation for another refactor
+			handler.effectOrder = handler.state?.effectOrder;
 		}
 		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
 			const pokemon = (handler.effectHolder as Pokemon);

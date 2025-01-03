@@ -36,10 +36,12 @@ export class EffectState {
 	duration?: number;
 	[k: string]: any;
 
-	constructor(data: AnyObject, battle: Battle) {
+	constructor(data: AnyObject, battle: Battle, effectOrder?: number) {
 		this.id = data.id || '';
 		Object.assign(this, data);
-		if (this.id && this.target && (!(this.target instanceof Pokemon) || this.target.isActive)) {
+		if (effectOrder !== undefined) {
+			this.effectOrder = effectOrder;
+		} else if (this.id && this.target && (!(this.target instanceof Pokemon) || this.target.isActive)) {
 			this.effectOrder = battle.effectOrder++;
 		} else {
 			this.effectOrder = 0;
