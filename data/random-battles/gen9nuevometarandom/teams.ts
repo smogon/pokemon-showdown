@@ -1448,11 +1448,6 @@ export class RandomTeams {
 			return this.sample([species.name].concat(species.otherFormes!));
 		}
 		if (species.baseSpecies === 'Basculin') return 'Basculin' + this.sample(['', '-Blue-Striped']);
-		if (species.baseSpecies === 'Pikachu') {
-			return 'Pikachu' + this.sample(
-				['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner', '-World']
-			);
-		}
 		return species.name;
 	}
 
