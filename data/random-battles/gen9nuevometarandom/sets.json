@@ -436,6 +436,53 @@
             }
         ]
     },
+    "fearill": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["U-turn", "Beat Up", "Drill Run", "Sky Attack"],
+                "abilities": ["Keen Eye"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["U-turn", "Beat Up", "Pursuit", "Roost"],
+                "abilities": ["Malicia"],
+                "teraTypes": ["Water"],
+                "items": "Black Glasses",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Malepico", "U-turn", "Rock Wrecker", "Sky Attack"],
+                "abilities": ["Sniper"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
     "arbok": {
         "level": 100,
         "sets": [
