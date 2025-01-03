@@ -155,7 +155,7 @@
             {
                 "role": "Bulky Special Sweeper",
                 "movepool": ["Focus Blast", "Hydro Cannon", "Ice Beam", "Flip Turn"],
-                "abilities": ["Overgrow"],
+                "abilities": ["Torrent"],
                 "teraTypes": ["Water"],
                 "items": "Assault Vest",
                 "nature": "calm",
@@ -282,7 +282,7 @@
             {
                 "role": "Bulky Physical Sweeper",
                 "movepool": ["Roost", "Substitute", "Swords Dance", "Brave Bird"],
-                "abilities": ["Shield Dust"],
+                "abilities": ["Tangled Feet"],
                 "teraTypes": ["Water"],
                 "items": "Heavy-Duty Boots",
                 "nature": "bold",
@@ -404,7 +404,7 @@
             {
                 "role": "Bulky Physical Sweeper",
                 "movepool": ["Bulk Up", "Sucker Punch", "Covet", "Hyper Fang"],
-                "abilities": ["Guts"],
+                "abilities": ["Hustle"],
                 "teraTypes": ["Water"],
                 "items": "Leftovers",
                 "nature": "adamant",
