@@ -626,47 +626,143 @@
         ]
     },
     "raichu": {
-        "level": 88,
+        "level": 100,
         "sets": [
             {
-                "role": "Fast Support",
-                "movepool": ["Alluring Voice", "Encore", "Focus Blast", "Grass Knot", "Knock Off", "Nasty Plot", "Nuzzle", "Surf", "Thunderbolt", "Volt Switch"],
-                "abilities": ["Lightning Rod"],
-                "teraTypes": ["Grass", "Water"]
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Zing Zap", "Extreme Speed", "Play Rough", "Trailblaze"],
+                "abilities": ["Static"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
             },
             {
-                "role": "Tera Blast user",
-                "movepool": ["Encore", "Focus Blast", "Nasty Plot", "Surf", "Tera Blast", "Thunderbolt"],
+                "role": "Fast Special Sweeper",
+                "movepool": ["Electro Shot", "Surf", "Roca Galvanizada", "Grass Knot"],
                 "abilities": ["Lightning Rod"],
-                "teraTypes": ["Ice"]
+                "teraTypes": ["Water"],
+                "items": "Power Herb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Thunderbolt", "Grass Knot", "Signal Beam"],
+                "abilities": ["Lightning Rod"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
     "raichualola": {
-        "level": 87,
+        "level": 100,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Psychic", "Psyshock", "Surf", "Thunderbolt", "Volt Switch"],
+                "role": "Fast Special Sweeper",
+                "movepool": ["Electro Ball", "Grass Knot", "Psyshock", "Nasty Plot"],
                 "abilities": ["Surge Surfer"],
-                "teraTypes": ["Fairy", "Fighting", "Grass", "Water"]
+                "teraTypes": ["Water"],
+                "items": "Aloraichium Z",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Nasty Plot", "Psyshock", "Surf", "Thunderbolt"],
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Grass Knot", "Electro Ball", "Psyshock"],
                 "abilities": ["Surge Surfer"],
-                "teraTypes": ["Fairy", "Fighting", "Grass", "Water"]
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Volt Switch", "Psyshock", "Grass Knot", "Electro Ball"],
+                "abilities": ["Surge Surfer"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
     "sandslash": {
-        "level": 88,
+        "level": 100,
         "sets": [
             {
-                "role": "Bulky Support",
-                "movepool": ["Earthquake", "Knock Off", "Rapid Spin", "Spikes", "Stone Edge", "Swords Dance"],
+                "role": "Physically Defensive Support",
+                "movepool": ["Stealth Rock", "Spikes", "Rapid Spin", "Earthquake"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 0,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Rapid Spin", "Stone Edge", "Earthquake"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Earthquake", "Stone Edge", "Leech Life"],
                 "abilities": ["Sand Rush"],
-                "teraTypes": ["Dragon", "Steel", "Water"]
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
