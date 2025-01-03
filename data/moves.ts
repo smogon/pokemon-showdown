@@ -14092,6 +14092,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 1,
 		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, powder: 1},
 		volatileStatus: 'powder',
+		//TODO terminar
 		condition: {
 			duration: 5,
 			onStart(target) {
