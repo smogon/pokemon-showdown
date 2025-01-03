@@ -11182,7 +11182,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		condition: {
-			duration: 5,
 			onStart(target) {
 				this.add('-start', target, 'Magnet Rise');
 			},
