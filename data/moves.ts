@@ -14087,14 +14087,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-
 		name: "Powder",
 		pp: 20,
 		priority: 1,
 		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, powder: 1},
 		volatileStatus: 'powder',
 		condition: {
-			duration: 1,
+			duration: 5,
 			onStart(target) {
 				this.add('-singleturn', target, 'Powder');
 			},
@@ -14109,7 +14108,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "foeSide",
 		type: "Bug",
 		zMove: {boost: {spd: 2}},
 		contestType: "Clever",
@@ -17048,8 +17047,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 318,
 		accuracy: 100,
 		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			if (target.hasType('Fairy')) {
+				this.debug('BP doubled from status condition');
+				return move.basePower * 1.5;
+			}
+			return move.basePower;
+		},
 		category: "Special",
-
 		name: "Silver Wind",
 		pp: 5,
 		priority: 0,
@@ -18471,18 +18476,22 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	steamroller: {
 		num: 537,
-		accuracy: 100,
-		basePower: 65,
+		accuracy: 90,
+		basePower: 70,
 		category: "Physical",
-
 		name: "Steamroller",
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1,},
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch',
-		},
+		secondaries: [
+			{
+				chance: 30,
+				volatileStatus: 'flinch',
+			}, {
+				chance: 30,
+				sideCondition: 'spikes',
+			},
+		],
 		target: "normal",
 		type: "Bug",
 		contestType: "Tough",
