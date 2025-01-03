@@ -15463,11 +15463,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 			// insomnia and vital spirit checks are separate so that the message is accurate in multi-ability mods
 			if (source.hasAbility('insomnia')) {
-				this.add('-fail', source, '[from] ability: Insomnia', '[of] ' + source);
-				return null;
-			}
-			if (source.hasAbility('vitalspirit')) {
-				this.add('-fail', source, '[from] ability: Vital Spirit', '[of] ' + source);
+				this.heal(source.baseMaxhp / 2, source, source)
 				return null;
 			}
 		},
