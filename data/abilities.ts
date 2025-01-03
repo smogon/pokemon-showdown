@@ -1900,16 +1900,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 93,
 	},
 	hypercutter: {
-		onTryBoost(boost, target, source, effect) {
-			if (source && target === source) return;
-			if (boost.atk && boost.atk < 0) {
-				delete boost.atk;
-				if (!(effect as ActiveMove).secondaries) {
-					this.add("-fail", target, "unboost", "Attack", "[from] ability: Hyper Cutter", "[of] " + target);
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (move.flags['slicing']) {
+				const r = this.random(100);
+				if (r < 50) {
+					this.boost({def: -1}, target, source, null, true, false);
 				}
 			}
 		},
-		flags: {breakable: 1},
+		flags: {},
 		name: "Hyper Cutter",
 		rating: 1.5,
 		num: 52,
@@ -5351,7 +5351,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.swordBoost) return;
 			if(target.hp <= target.maxhp / 2){
 			target.swordBoost = true;
-			this.heal(target.baseMaxhp / 4, target);
+			this.heal(target.baseMaxhp / 4, target, source);
 			}
 		},
 		flags: {},
@@ -5827,7 +5827,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Toxic Chain's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
 			if (this.randomChance(10, 10)) {
-				this.boost({spe: -1}, target, source);
+				this.boost({spe: -1}, target, source, null, true, false);
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
