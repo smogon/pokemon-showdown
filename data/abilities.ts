@@ -5363,7 +5363,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.swordBoost) return;
 			if(target.hp <= target.maxhp / 2){
 			target.swordBoost = true;
-			this.heal(target.baseMaxhp / 4, target, source);
+			this.heal(target.baseMaxhp / 4, target, target);
 			}
 		},
 		flags: {},
