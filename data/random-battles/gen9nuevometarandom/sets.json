@@ -1293,7 +1293,7 @@
         "sets": [
             {
                 "role": "Fast Special Sweeper",
-                "movepool": ["Nonallamas", "Hex", "Solar Beam", "Solar Beam"],
+                "movepool": ["Nonallamas", "Hex", "Solar Beam", "Nasty Plot"],
                 "abilities": ["Drought"],
                 "teraTypes": ["Water"],
                 "items": "Heat Rock",
@@ -1514,12 +1514,153 @@
                 "teraTypes": ["Water"],
                 "items": "Black Sludge",
                 "nature": "modest",
-                "hpEVs": 252,
+                "hpEVs": 0,
                 "atkEVs": 0,
                 "defEVs": 0,
                 "spaEVs": 252,
                 "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "parasect": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Band",
+                "movepool": ["Pinza Infecciosa", "Knock Off", "Leech Life", "Brick Breakt"],
+                "abilities": ["Damp"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "adamant",
+                "hpEVs": 248,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 8,
                 "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Pinza Infecciosa", "Knock Off", "Leech Life", "Brick Breakt"],
+                "abilities": ["Damp"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "adamant",
+                "hpEVs": 248,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Pinza Infecciosa", "Knock Off", "Leech Life", "Spore"],
+                "abilities": ["Damp"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "adamant",
+                "hpEVs": 248,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            }
+        ]
+    },
+    "venomoth": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Quiver Dance", "Sludge Wave", "Bug Buzz", "Mega Drain"],
+                "abilities": ["Tinted Lens"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["U-turn", "Toxic Spikes", "Sludge Bomb", "Roost"],
+                "abilities": ["Tinted Lens"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "calm",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 8,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Quiver Dance", "Bug Buzz", "Mega Drain", "Sludge Wave"],
+                "abilities": ["Tinted Lens"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "dugtrio": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Beat Up", "Stone Edge", "Earthquake", "Sucker Punch"],
+                "abilities": ["Arena Trap"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Band",
+                "movepool": ["Beat Up", "Stone Edge", "Cut", "Earthquake"],
+                "abilities": ["Sand Force"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Stealth Rock", "Toxic", "Stone Edge", "Earthquake"],
+                "abilities": ["Arena Trap"],
+                "teraTypes": ["Water"],
+                "items": "Focus Sash",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     }
