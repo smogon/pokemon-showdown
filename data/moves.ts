@@ -1186,7 +1186,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 140,
 		basePowerCallback(pokemon, target, move) {
-			return 140 - 20 * pokemon.side.totalFainted;
+			return 140 - (20 * pokemon.side.totalFainted);
 		},
 		category: "Physical",
 		name: "Beat Up",
