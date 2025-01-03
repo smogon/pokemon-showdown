@@ -2737,29 +2737,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	comeuppance: {
 		num: 894,
 		accuracy: 100,
-		basePower: 0,
-		damageCallback(pokemon) {
-			const lastDamagedBy = pokemon.getLastDamagedBy(true);
-			if (lastDamagedBy !== undefined) {
-				return (lastDamagedBy.damage * 1.5) || 1;
-			}
-			return 0;
-		},
+		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			if(target.getStat('def', true, true) < target.getStat('def', false, true) || target.getStat('spd', true, true) < target.getStat('spd', false, true) ||
+				target.getStat('atk', true, true) < target.getStat('atk', false, true) || target.getStat('spa', true, true) < target.getStat('spa', false, true)
+				|| target.getStat('spe', true, true) < target.getStat('spe', false, true)){
+			  return move.basePower *= 2;
+		  }
+			  return move.basePower;
+	  },
 		category: "Physical",
 		name: "Comeuppance",
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1},
-		onTry(source) {
-			const lastDamagedBy = source.getLastDamagedBy(true);
-			if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
-		},
-		onModifyTarget(targetRelayVar, source, target, move) {
-			const lastDamagedBy = source.getLastDamagedBy(true);
-			if (lastDamagedBy) {
-				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
-			}
-		},
 		secondary: null,
 		target: "scripted",
 		type: "Dark",
@@ -10074,6 +10065,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1},
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			if(pokemon.types[1]){
+			let type = types[1];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[0]) type = types[0];
+			move.type = type;
+			} else if (pokemon.types[0]){
+				let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
+			}
+		},
 		onHit(target, source, move) {
 			source.addVolatile('trapped', target, move, 'trapper');
 			target.addVolatile('trapped', source, move, 'trapper');
