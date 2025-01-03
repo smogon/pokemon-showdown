@@ -323,6 +323,53 @@
             }
         ]
     },
+    "blastoisemega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Flip Turn", "Hydro Cannon", "Flash Cannon", "Aura Sphere"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shell Smash", "Water Pulse", "Flash Cannon", "Dark Pulse"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shell Smash", "Water Pulse", "Flash Cannon", "Aura Sphere"],
+                "abilities": ["Torrent"],
+                "teraTypes": ["Water"],
+                "items": "Blastoisinite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
     "butterfree": {
         "level": 100,
         "sets": [
