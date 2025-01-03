@@ -10354,7 +10354,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	lashout: {
 		num: 808,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 70,
 		category: "Physical",
 		name: "Lash Out",
 		pp: 5,
