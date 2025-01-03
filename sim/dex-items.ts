@@ -48,12 +48,16 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	 * undefined, if not a mega stone.
 	 */
 	readonly megaStone?: string;
+
+	readonly pseudoMegaStone?: boolean;
+
 	/**
 	 * If this is a mega stone: The name (e.g. Charizard) of the
 	 * forme this allows transformation from.
 	 * undefined, if not a mega stone.
 	 */
 	readonly megaEvolves?: string;
+
 	/**
 	 * If this is a Z crystal: true if the Z Crystal is generic
 	 * (e.g. Firium Z). If species-specific, the name

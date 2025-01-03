@@ -10,6 +10,7 @@ export interface TeamData {
 	typeComboCount: {[k: string]: number};
 	baseFormes: {[k: string]: number};
 	megaCount?: number;
+	totemCount?: number;
 	zCount?: number;
 	wantsTeraCount?: number;
 	has: {[k: string]: number};
@@ -1653,6 +1654,7 @@ export class RandomTeams {
 
 		const baseFormes: {[k: string]: number} = {};
 		let hasMega = false;
+		let hasTotem = false;
 
 		const typeCount: {[k: string]: number} = {};
 		const typeComboCount: {[k: string]: number} = {};
@@ -1685,6 +1687,20 @@ export class RandomTeams {
 					if (canMega && !species.isMega) continue;
 					currentSpeciesPool.push(species);
 				}
+
+				let canTotem = false;
+				for (const poke of pokemonPool[baseSpecies]) {
+					const species = this.dex.species.get(poke);
+					if (!hasTotem && species.isTotem) canTotem = true;
+				}
+				for (const poke of pokemonPool[baseSpecies]) {
+					const species = this.dex.species.get(poke);
+					// Prevent multiple totems
+					if (hasTotem && species.isTotem) continue;
+					// Prevent base forme, if a totem is available
+					if (canTotem && !species.isTotem) continue;
+					currentSpeciesPool.push(species);
+				}
 				const species = this.sample(currentSpeciesPool);
 
 				if (!species.exists) continue;
@@ -1694,6 +1710,8 @@ export class RandomTeams {
 
 				// Limit one Mega per team
 				if (hasMega && species.isMega) continue;
+
+				if (hasTotem && species.isTotem) continue;
 
 				const types = species.types;
 				const typeCombo = types.slice().sort().join();
@@ -1819,6 +1837,7 @@ export class RandomTeams {
 
 				// Track what the team has
 				if (item.megaStone || species.name === 'Rayquaza-Mega') hasMega = true;
+				if (item.pseudoMegaStone) hasTotem = true;
 				if (item.zMove) teamDetails.zMove = 1;
 				if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails.hail = 1;
 				if (set.moves.includes('raindance') || set.ability === 'Drizzle' && !item.onPrimal) teamDetails.rain = 1;
@@ -2048,7 +2067,7 @@ export class RandomTeams {
 				if (banReason) continue;
 				if (banReason !== '') {
 					if (species.isMega && ruleTable.check('pokemontag:mega')) continue;
-
+					if (species.isTotem && ruleTable.check('pokemontag:totem')) continue;
 					banReason = ruleTable.check('basepokemon:' + toID(species.baseSpecies));
 					if (banReason) continue;
 					if (banReason !== '' || this.dex.species.get(species.baseSpecies).isNonstandard !== species.isNonstandard) {
