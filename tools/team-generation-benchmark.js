@@ -1,7 +1,7 @@
 'use strict';
 
-const {Teams} = require('../sim');
-const {Dex} = require('../sim/dex');
+const {Teams} = require('../dist/sim');
+const {Dex} = require('../dist/sim/dex');
 
 
 if (!process.argv[2]) {
