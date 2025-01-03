@@ -3525,11 +3525,9 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DOU",
 	},
 	meltan: {
-		isNonstandard: "LGPE",
-		tier: "Illegal",
+ 		tier: "Illegal",
 	},
 	melmetal: {
-		isNonstandard: "LGPE",
-		tier: "Illegal",
+ 		tier: "Illegal",
 	},
 };

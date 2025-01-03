@@ -244,8 +244,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		natDexTier: "RU",
 	},
 	pikachustarter: {
-		isNonstandard: "LGPE",
-		tier: "Illegal",
+ 		tier: "Illegal",
 	},
 	pikachugmax: {
 		isNonstandard: "Gigantamax",
@@ -1030,8 +1029,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	eeveestarter: {
-		isNonstandard: "LGPE",
-		tier: "Illegal",
+ 		tier: "Illegal",
 	},
 	eeveegmax: {
 		isNonstandard: "Gigantamax",

@@ -163,8 +163,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	doubleironbash: {
 		inherit: true,
-		isNonstandard: "LGPE",
-	},
+ 	},
 	doubleslap: {
 		inherit: true,
 		isNonstandard: null,
