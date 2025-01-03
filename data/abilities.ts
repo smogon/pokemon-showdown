@@ -373,7 +373,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 217,
 	},
 	battlearmor: {
-		onCriticalHit: false,
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.activeTurns <= 1){
+				return this.chainModify(0.5);
+			}
+		},
 		flags: {breakable: 1},
 		name: "Battle Armor",
 		rating: 1,
@@ -1512,7 +1516,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			for (const target of pokemon.foes()) {
 				if (target.item) {
 					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
-					this.actions.useMove('embargo', pokemon)
+					target.addVolatile("embargo")
 				}
 			}
 		},
