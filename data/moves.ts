@@ -6464,13 +6464,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	furycutter: {
 		num: 210,
-		accuracy: 95,
-		basePower: 40,
+		accuracy: 100,
+		basePower: 70,
 		basePowerCallback(pokemon, target, move) {
 			if (!pokemon.volatiles['furycutter'] || move.hit === 1) {
 				pokemon.addVolatile('furycutter');
 			}
-			const bp = this.clampIntRange(move.basePower * pokemon.volatiles['furycutter'].multiplier, 1, 160);
+			const bp = this.clampIntRange(move.basePower + pokemon.volatiles['furycutter'].increase, 1, 150);
 			this.debug('BP: ' + bp);
 			return bp;
 		},
@@ -6480,15 +6480,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
 		condition: {
-			duration: 2,
 			onStart() {
-				this.effectState.multiplier = 1;
+				this.effectState.increase = 15;
 			},
 			onRestart() {
-				if (this.effectState.multiplier < 4) {
-					this.effectState.multiplier <<= 1;
+				if (this.effectState.increase < 80) {
+					this.effectState.increase += 15;
 				}
-				this.effectState.duration = 2;
 			},
 		},
 		secondary: null,
@@ -19972,6 +19970,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
+		//TODO usar objeto
 		onAfterHit(target, source, move) {
 			if (source.item || source.volatiles['gem']) {
 				return;
