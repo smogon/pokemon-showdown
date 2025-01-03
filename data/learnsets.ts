@@ -2812,7 +2812,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		learnset: {
 			electricterrain: ["9R"],
 			zingzap: ["9M"],
-			zenheabbutt: ["9M"],
+			zenheadbutt: ["9M"],
 		},
 		eventOnly: true,
 	},
