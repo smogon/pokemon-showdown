@@ -530,7 +530,7 @@
             }
         ]
     },
-    "pikachu-belle": {
+    "pikachubelle": {
         "level": 100,
         "sets": [
             {
@@ -549,7 +549,7 @@
             }
         ]
     },
-    "pikachu-libre": {
+    "pikachulibre": {
         "level": 100,
         "sets": [
             {
@@ -568,7 +568,7 @@
             }
         ]
     },
-    "pikachu-phd": {
+    "pikachuphd": {
         "level": 100,
         "sets": [
             {
@@ -587,7 +587,7 @@
             }
         ]
     },
-    "pikachu-pop-star": {
+    "pikachupopstar": {
         "level": 100,
         "sets": [
             {
@@ -606,7 +606,7 @@
             }
         ]
     },
-    "pikachu-rock-star": {
+    "pikachurockstar": {
         "level": 100,
         "sets": [
             {
