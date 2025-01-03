@@ -421,7 +421,7 @@
         "level": 100,
         "sets": [
             {
-                "role": "Fast Physical Sweeper",
+                "role": "Fast Support",
                 "movepool": ["Toxic", "Roost", "Defog", "U-turn"],
                 "abilities": ["Keen Eye"],
                 "teraTypes": ["Water"],
@@ -440,7 +440,7 @@
         "level": 100,
         "sets": [
             {
-                "role": "Physical Scarf",
+                "role": "Fast Physical Sweeper",
                 "movepool": ["U-turn", "Beat Up", "Drill Run", "Sky Attack"],
                 "abilities": ["Keen Eye"],
                 "teraTypes": ["Water"],
@@ -484,25 +484,49 @@
         ]
     },
     "arbok": {
-        "level": 87,
+        "level": 100,
         "sets": [
             {
-                "role": "Fast Support",
-                "movepool": ["Earthquake", "Glare", "Gunk Shot", "Knock Off", "Sucker Punch", "Toxic Spikes"],
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Coil", "Gunk Shot", "Shadow Sneak", "Crunch"],
                 "abilities": ["Intimidate"],
-                "teraTypes": ["Dark", "Ground"]
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
             },
             {
-                "role": "Setup Sweeper",
-                "movepool": ["Coil", "Earthquake", "Gunk Shot", "Trailblaze"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Grass", "Ground"]
+                "role": "Specially Defensive",
+                "movepool": ["Toxic Spikes", "Knock Off", "Poison Tail", "Earthquake"],
+                "abilities": ["Shed Skin"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
             },
             {
-                "role": "Fast Bulky Setup",
-                "movepool": ["Coil", "Earthquake", "Gunk Shot", "Sucker Punch"],
-                "abilities": ["Intimidate"],
-                "teraTypes": ["Dark", "Ground"]
+                "role": "Physically Defensive",
+                "movepool": ["Toxic Spikes", "Knock Off", "Poison Tail", "Haze"],
+                "abilities": ["Unnerve"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
             }
         ]
     },
