@@ -292,6 +292,23 @@ export const State = new class {
 		return move;
 	}
 
+	// EffectState is a class in the first place so its constructor can manage effectOrder
+	// the Battle object itself also has an effectOrder property, though, so we need to filter that out
+	isEffectState(obj: AnyObject): obj is EffectState {
+		return obj.hasOwnProperty('effectOrder') && !obj.hasOwnProperty('prngSeed');
+	}
+
+	serializeEffectState(effectState: EffectState, battle: Battle): /* EffectState */ AnyObject {
+		return this.serialize(effectState, new Set(['clear']), battle);
+	}
+
+	deserializeEffectState(state: /* EffectState */ AnyObject, battle: Battle): EffectState {
+		const effectOrder: EffectState['effectOrder'] = state.effectOrder;
+		delete state.effectOrder;
+		const effectState = new EffectState(this.deserializeWithRefs(state, battle), battle, effectOrder);
+		return effectState;
+	}
+
 	serializeWithRefs(obj: unknown, battle: Battle): unknown {
 		switch (typeof obj) {
 		case 'function':
@@ -312,6 +329,7 @@ export const State = new class {
 			}
 
 			if (this.isActiveMove(obj)) return this.serializeActiveMove(obj, battle);
+			if (this.isEffectState(obj)) return this.serializeEffectState(obj, battle);
 			if (this.isReferable(obj)) return this.toRef(obj);
 			if (obj.constructor !== Object) {
 				// If we're getting this error, some 'special' field has been added to
@@ -352,6 +370,7 @@ export const State = new class {
 			}
 
 			if (this.isActiveMove(obj)) return this.deserializeActiveMove(obj, battle);
+			if (this.isEffectState(obj)) return this.deserializeEffectState(obj, battle);
 
 			const o: any = {};
 			for (const [key, value] of Object.entries(obj)) {
@@ -368,8 +387,8 @@ export const State = new class {
 		// NOTE: see explanation on the declaration above for why this must be defined lazily.
 		if (!this.REFERABLE) {
 			this.REFERABLE = new Set([
-				Battle, Field, Side, Pokemon, EffectState,
-				Dex.Condition, Dex.Ability, Dex.Item, Dex.Move, Dex.Species,
+				Battle, Field, Side, Pokemon, Dex.Condition,
+				Dex.Ability, Dex.Item, Dex.Move, Dex.Species,
 			]);
 		}
 		return this.REFERABLE.has(obj.constructor);
