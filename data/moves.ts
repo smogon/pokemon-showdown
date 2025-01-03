@@ -14943,7 +14943,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "Quash",
 		pp: 15,
-		priority: 0,
+		priority: 5,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
 			if (this.activePerHalf === 1) return false; // fails in singles
@@ -19959,12 +19959,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thief: {
 		num: 168,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 50,
 		category: "Physical",
 		name: "Thief",
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
+		onBasePower(basePower, source, target, move) {
+			const item = target.getItem();
+			if (!this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return;
+			if (item.id) {
+				return this.chainModify(1.5);
+			}
+		},
 		onAfterHit(target, source, move) {
 			if (source.item || source.volatiles['gem']) {
 				return;
